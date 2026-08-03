@@ -48,7 +48,7 @@ const report = await runUnifiedMatrix({
   rulesConfigurations,
   comparisonKind: args["comparison-kind"],
   profileOverrides: profileOverrideReports,
-  seed: args.seed || "m3t4-unified-matrix",
+  seed: args.seed || "mandate-2038-unified-matrix",
   preRegistrationId: args["pre-registration-id"],
   projection: args.projection,
   workers: args.workers === undefined ? undefined : Number(args.workers),

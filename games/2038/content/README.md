@@ -1,21 +1,38 @@
-# M3T4 2038 Semantic Content Graph
+# Mandate 2038 Semantic Content Graph
 
-Everything a player reads is authored under this directory. Files outside this
-directory are generated projections or implementation code.
+The content graph composes separately owned mechanics and player copy.
 
 ## Edit here
 
-- `variables.json` owns shared names, terminology, and reusable facts.
-- `physical/` owns every baseline physical-playtest copy source: How to Play,
-  the world companion, cards, player aids, faction boards, board components,
-  and box/world text. Deferred module rules remain under `physical/optional/`.
+- `copy/` owns component, box, player-aid, and player-document prose.
+- `copy/core-rules.md`, `copy/map-reference.md`,
+  `copy/component-reference.md`, and `copy/card-reference.md` are the
+  required Default Game Play Kit. `copy/advanced-play.md` and
+  `copy/world-and-institutions.md` are separate Advanced Play and setting
+  companions; `copy/rule-change-register.md` records the profile decisions.
+- The JSON files under `data/` own mechanics and stable identity.
 - `runtime/` owns browser UI, simulation, and player-strategy copy.
-- `deferred/` owns modules excluded from the baseline physical game.
-- `templates/` owns browser HTML composition.
 - `graph.json` declares every generated artifact.
+- `player-copy-contract.json` binds every player-copy subtree to its actual
+  box, document, component, or browser surface.
+
+Player-copy JSON is a sparse overlay. IDs bind the prose to a mechanical
+record; all other values in its `content` object are player-facing. The
+compiler performs a fail-closed keyed merge and rejects unknown identities or
+incompatible shapes. Every player-copy file must be declared by a generated
+artifact.
+
+## Player documents
+
+Author a printable player document in `copy/<name>.md`, then declare a text
+artifact in `graph.json` with target `dist/docs/<name>.md`. The compiler owns
+that target. `npm run docs:html` discovers every Markdown projection in
+`dist/docs/` and renders it into the Documentation reader and deployed review
+site. Do not create or edit Markdown directly in `dist/docs/`. The artifact
+declaration is the authoritative inventory of generated player documents.
 
 References use deterministic `${path.to.value}` interpolation. The compiler
-does not know any M3T4-specific names or fields.
+does not know any Mandate 2038-specific names or fields.
 
 For example, changing:
 
@@ -45,8 +62,9 @@ npm run content:lint:provenance
 Never hand-edit generated files listed as targets in `graph.json`. The release
 gate rejects drift between the semantic sources and those outputs.
 
-The real-name satirical cast is canonical. Stable faction IDs remain internal
-compatibility keys, while player-facing names live in `physical/variables.json`.
+The fictional institutions and fictional CEO characters are canonical. Stable
+faction IDs remain internal compatibility keys, while player-facing names live
+in `data/variables.json` and `copy/factions.json`.
 
 Numbers with design or balance implications are registered in
 `provenance/numbers.json` as either a hypothesis or evidence attributed to a
@@ -62,3 +80,7 @@ An exact placeholder may resolve to a scalar, array, or object. A placeholder
 embedded inside prose must resolve to a scalar. Unknown references, circular
 references, duplicate targets, project-root escapes, and unresolved
 placeholders fail closed.
+
+`npm run content:check:boundaries` rejects player-copy fields without a
+declared player surface, internal-only fields in mechanics or player copy, and
+internal-only fields leaked into generated component data.

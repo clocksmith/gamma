@@ -1,4 +1,4 @@
-const copyUrl = new URL("../../generated/simulation-copy.json", import.meta.url);
+const copyUrl = new URL("../../dist/runtime/simulation-copy.json", import.meta.url);
 
 async function readJson(url) {
   if (url.protocol === "file:") {

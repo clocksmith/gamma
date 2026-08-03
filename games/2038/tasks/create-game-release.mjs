@@ -8,12 +8,13 @@ import {
   sha256
 } from "../lab/versioning/game-identity.js";
 import { canonicalRulesVariant } from "../lab/environment/rules-variant.js";
+import { contentSourceFiles as declaredContentSourceFiles } from "./content/source-files.mjs";
 
 const arguments_ = process.argv.slice(2);
 if (arguments_.includes("--help")) {
   process.stdout.write(
     "Usage: node tasks/create-game-release.mjs [--verify]\n" +
-    "Without --verify, writes the version declared by release/game-version.json.\n"
+    "Without --verify, writes the version declared by versions/current-release.json.\n"
   );
   process.exit(0);
 }
@@ -23,21 +24,16 @@ if (unknownArguments.length) {
 }
 const verify = arguments_.includes("--verify");
 const versionDocument = JSON.parse(
-  await readFile(resolve(projectRoot, "release/game-version.json"), "utf8")
+  await readFile(resolve(projectRoot, "versions/current-release.json"), "utf8")
 );
 const config = JSON.parse(
-  await readFile(resolve(projectRoot, "generated/game-config.json"), "utf8")
+  await readFile(resolve(projectRoot, "dist/runtime/game-config.json"), "utf8")
 );
 const contentGraphPath = "content/graph.json";
 const contentGraphDocument = JSON.parse(
   await readFile(resolve(projectRoot, contentGraphPath), "utf8")
 );
-const contentSourceFiles = [
-  contentGraphPath,
-  contentGraphDocument.variables,
-  "content/provenance/numbers.json",
-  ...contentGraphDocument.artifacts.map((artifact) => artifact.source)
-].filter((path, index, paths) => paths.indexOf(path) === index);
+const contentSourceFiles = declaredContentSourceFiles(contentGraphDocument);
 const identity = await loadGameIdentity({
   root: projectRoot,
   rulesVariant: canonicalRulesVariant(config)

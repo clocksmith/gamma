@@ -3,7 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   addScrutiny,
+  availableHeadlines,
   applyBoardMotion,
+  axialDistance,
   calculateAuditDraws,
   castRealignmentVote,
   commitAction,
@@ -13,6 +15,7 @@ import {
   networkedFacilityIds,
   publicMandateAwards,
   resolveBlindRealignmentVote,
+  resolvePlayProfile,
   resolveTieByInitiative,
   resolveSelectedAction,
   simulateTrainingRun
@@ -21,9 +24,9 @@ import {
 const root = new URL("../", import.meta.url);
 const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), "utf8"));
 const load = async () => Promise.all([
-  readJson("generated/game-config.json"),
-  readJson("generated/factions.json"),
-  readJson("generated/headlines.json")
+  readJson("dist/runtime/game-config.json"),
+  readJson("dist/runtime/factions.json"),
+  readJson("dist/runtime/headlines.json")
 ]);
 
 test("board generation is deterministic by seed", async () => {
@@ -35,6 +38,42 @@ test("board generation is deterministic by seed", async () => {
   assert.notDeepEqual(first, different);
   assert.equal(first[0], "frontier-1");
   assert.equal(first.length, 13);
+});
+
+test("play profiles compose declared rule modules without exposing ad hoc player profiles", async () => {
+  const [config] = await load();
+  assert.deepEqual(resolvePlayProfile(config, "default-game"), {
+    ...config.playProfiles.defaultGame,
+    ...config.playRuleDefaults,
+    immediateTradeCounteroffers: true
+  });
+  assert.deepEqual(resolvePlayProfile(config, "advanced-play"), {
+    ...config.playProfiles.advancedPlay,
+    immediateTradeCounteroffers: true,
+    immediateTradeThirdPartyClaims: true,
+    powerPurchaseRequests: 2,
+    realignmentEnabled: true,
+    networkInfrastructureEnabled: true,
+    headlinePersistentEffectsEnabled: true,
+    headlinePublicProceduresEnabled: true,
+    headlineVolatilityEnabled: true
+  });
+  const invalid = structuredClone(config);
+  invalid.playProfiles.advancedPlay.moduleIds = ["third-party-trade-claims"];
+  assert.throws(() => resolvePlayProfile(invalid, "advanced-play"), /require trade counteroffers/);
+});
+
+test("Default Game excludes Advanced-only Headline procedures while Advanced Play restores them", async () => {
+  const [config, , headlines] = await load();
+  const defaultProfile = resolvePlayProfile(config, "default-game");
+  const advancedProfile = resolvePlayProfile(config, "advanced-play");
+  for (const round of [1, 2, 3, 4]) {
+    const defaultDeck = availableHeadlines(headlines, round, defaultProfile);
+    const advancedDeck = availableHeadlines(headlines, round, advancedProfile);
+    assert.ok(defaultDeck.length >= 3, `Default Game has three Headline cards in Era ${round}`);
+    assert.ok(defaultDeck.every((card) => !card.requiredRuleModules?.length));
+    assert.equal(advancedDeck.length, 6);
+  }
 });
 
 test("board is a sixfold-symmetric thirteen-hex layout with balanced ring pools", async () => {
@@ -53,6 +92,55 @@ test("board is a sixfold-symmetric thirteen-hex layout with balanced ring pools"
     ["capital", "chip", "cloud", "energy", "research", "talent"]
   );
   assert.equal(byDistance[2].filter((tile) => tile.category === "consumer").length, 1);
+});
+
+test("sparse board topology and duplicated ring resources remain exact", async () => {
+  const [config] = await load();
+  const board = generateBoard(config, "sparse-topology-contract");
+  const edges = board.flatMap((left, leftIndex) =>
+    board.slice(leftIndex + 1)
+      .filter((right) => axialDistance(left, right) === 1)
+      .map((right) => [left, right])
+  );
+  const degree = (tile) => edges.filter((edge) => edge.includes(tile)).length;
+
+  assert.equal(edges.length, 24);
+  assert.deepEqual(
+    board.map((tile) => degree(tile)).sort((left, right) => left - right),
+    [2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 6]
+  );
+  assert.ok(!edges.some(([left, right]) =>
+    left.placementRing === "outer" && right.placementRing === "outer"
+  ));
+
+  for (const id of ["research", "cloud"]) {
+    const copies = board.filter((tile) => tile.id === id);
+    assert.deepEqual(copies.map((tile) => tile.placementRing).sort(), ["inner", "outer"]);
+    for (const field of ["category", "visit", "production", "facilitySpaces"]) {
+      assert.equal(copies[0][field], copies[1][field], `${id} copies share ${field}`);
+    }
+  }
+
+  for (const start of board) {
+    const distances = new Map([[start.instanceId, 0]]);
+    const queue = [start];
+    while (queue.length) {
+      const current = queue.shift();
+      for (const next of board.filter((tile) => axialDistance(current, tile) === 1)) {
+        if (!distances.has(next.instanceId)) {
+          distances.set(next.instanceId, distances.get(current.instanceId) + 1);
+          queue.push(next);
+        }
+      }
+    }
+    for (const destination of board) {
+      assert.equal(
+        distances.get(destination.instanceId),
+        axialDistance(start, destination),
+        `${start.instanceId} to ${destination.instanceId} preserves graph distance`
+      );
+    }
+  }
 });
 
 test("Realignment rotates full rings, carries tile identity, and changes cross-ring adjacency", async () => {
@@ -234,7 +322,7 @@ test("Loopfold AI's starting Customer is Customer one", async () => {
   assert.ok(state.log.some((entry) => /Customer 2 needs Capability 4/.test(entry)));
 });
 
-test("Network reach uses the first Facility, visible adjacency, and bounded Links", async () => {
+test("Advanced Networks use the first Facility, visible adjacency, and bounded Links", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "network-contract", "coalition_lab");
   const [first, adjacent, remote] = state.board.filter((tile) =>
@@ -256,6 +344,25 @@ test("Network reach uses the first Facility, visible adjacency, and bounded Link
     Math.abs((-first.q - first.r) - (-adjacent.q - adjacent.r))
   ) <= 1) assert.ok(connected.has("adjacent"));
   assert.equal(config.playerSupply.linkTokens, 2);
+});
+
+test("Default Game local Power ignores Links and does not propagate through Facilities", async () => {
+  const [config, factions, headlines] = await load();
+  const state = createGame(config, factions, headlines, "local-power-contract", "coalition_lab");
+  const [first, adjacent, remote] = state.board.filter((tile) =>
+    ["frontier", "research", "consumer"].includes(tile.id)
+  );
+  state.player.facilities = [
+    { id: "first", tileId: first.instanceId, powered: false },
+    { id: "adjacent", tileId: adjacent.instanceId, powered: false },
+    { id: "remote", tileId: remote.instanceId, powered: false }
+  ];
+  state.player.startingGridConnection.assignedFacilityId = "first";
+  state.player.links = ["remote"];
+  const local = networkedFacilityIds(state.board, state.player, {
+    networkInfrastructureEnabled: false
+  });
+  assert.deepEqual([...local], ["first"]);
 });
 
 test("Customer, Capability, and Trust Mandate are visible and awarded once", async () => {

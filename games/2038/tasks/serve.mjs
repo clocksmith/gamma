@@ -68,7 +68,7 @@ function authorizeApiRequest(request, response) {
   if (
     origin &&
     remoteOrigins.has(origin) &&
-    !tokenMatches(request.headers["x-m3t4-bridge-token"])
+    !tokenMatches(request.headers["x-mandate-2038-bridge-token"])
   ) {
     json(response, 401, { error: "Local bridge pairing token is missing or invalid." });
     return false;
@@ -90,7 +90,7 @@ function preflight(request, response) {
   response.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
   response.setHeader(
     "access-control-allow-headers",
-    "Content-Type, X-M3T4-Bridge-Token"
+    "Content-Type, X-Mandate-2038-Bridge-Token"
   );
   response.setHeader("access-control-max-age", "600");
   if (request.headers["access-control-request-private-network"] === "true") {
@@ -430,7 +430,7 @@ createServer(async (request, response) => {
   if (request.method === "GET" && url.pathname === "/api/bridge") {
     json(response, 200, {
       connected: true,
-      service: "m3t4-local-bridge",
+      service: "mandate-2038-local-bridge",
       interactiveBackends: [
         "weighted",
         "greedy",
@@ -517,15 +517,17 @@ createServer(async (request, response) => {
     return;
   }
   const requested = url.pathname === "/"
-    ? "/web/index.html"
+    ? "/dist/site/index.html"
+    : url.pathname === "/first-game-guide"
+      ? "/dist/site/first-game-guide.html"
     : url.pathname === "/lab"
-      ? "/web/simulation.html"
+      ? "/dist/site/simulation.html"
       : url.pathname === "/docs/"
-        ? "/build/docs/index.html"
+        ? "/dist/site/docs/index.html"
         : url.pathname.startsWith("/docs/")
-          ? `/build${url.pathname}`
+          ? `/dist/site${url.pathname}`
         : url.pathname === "/gallery" || url.pathname === "/gallery/"
-          ? "/build/gallery.html"
+          ? "/dist/site/gallery.html"
           : url.pathname;
   const relative = normalize(decodeURIComponent(requested)).replace(/^(\.\.[/\\])+/, "");
   const filePath = join(projectRoot, relative);
@@ -540,14 +542,15 @@ createServer(async (request, response) => {
   });
   createReadStream(filePath).pipe(response);
 }).listen(port, "127.0.0.1", () => {
-  process.stdout.write(`M3T4 2038 prototype:      http://localhost:${port}/\n`);
-  process.stdout.write(`M3T4 2038 simulation lab: http://localhost:${port}/lab\n`);
-  process.stdout.write(`M3T4 2038 docs reader:    http://localhost:${port}/docs\n`);
-  process.stdout.write(`M3T4 2038 content gallery: http://localhost:${port}/gallery\n`);
+  process.stdout.write(`Mandate 2038 prototype:      http://localhost:${port}/\n`);
+  process.stdout.write(`Mandate 2038 first game guide: http://localhost:${port}/first-game-guide\n`);
+  process.stdout.write(`Mandate 2038 simulation lab: http://localhost:${port}/lab\n`);
+  process.stdout.write(`Mandate 2038 docs reader:    http://localhost:${port}/docs\n`);
+  process.stdout.write(`Mandate 2038 content gallery: http://localhost:${port}/gallery\n`);
   process.stdout.write(
-    `M3T4 2038 deployed bridge: ${[...remoteOrigins].join(", ")}\n`
+    `Mandate 2038 deployed bridge: ${[...remoteOrigins].join(", ")}\n`
   );
-  process.stdout.write(`M3T4 2038 bridge token: ${bridgeToken}\n`);
+  process.stdout.write(`Mandate 2038 bridge token: ${bridgeToken}\n`);
   process.stdout.write(
     `Interactive LLM cap: ${interactiveLlmDecisionLimit} decisions per opponent\n`
   );

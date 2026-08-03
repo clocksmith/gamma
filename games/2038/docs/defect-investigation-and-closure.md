@@ -1,6 +1,6 @@
-# M3T4 2038 Defect Investigation and Closure
+# Mandate 2038 Defect Investigation and Closure
 
-This guide governs how M3T4 2038 findings are investigated, repaired, and
+This guide governs how Mandate 2038 findings are investigated, repaired, and
 reported. It does not replace the canonical physical rules in
 [`core-rules.md`](core-rules.md), the evidence protocol in
 [`playtesting-and-evidence.md`](playtesting-and-evidence.md), or the simulation
@@ -118,7 +118,7 @@ Long-running Lab jobs and interactive games must invalidate stale work before a
 reset, new game, cancellation, replacement, or disposal. Async work captures
 its current generation and rechecks it after every `await` before publishing
 state, receipts, reports, archives, progress updates, replay frames, or UI.
-Each decision also binds its match, round, turn, seat, and decision identity.
+Each decision also binds its match, Era, turn, seat, and decision identity.
 Terminal settlement is single-flight for that generation. A delayed response
 from a cancelled match must not publish into a newer match with the same seed
 or seat order.

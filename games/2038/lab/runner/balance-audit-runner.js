@@ -88,7 +88,7 @@ export async function runBalanceAudit({
   runsPerMatchup = 8,
   generations = 2,
   population = 3,
-  seed = "m3t4-balance-audit",
+  seed = "mandate-2038-balance-audit",
   magnitude = 0.45,
   rulesVariant,
   onProgress

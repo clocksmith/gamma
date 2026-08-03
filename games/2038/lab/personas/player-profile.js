@@ -1,4 +1,4 @@
-export const defaultProfilesUrl = new URL("../../generated/player-strategies.json", import.meta.url);
+export const defaultProfilesUrl = new URL("../../dist/runtime/player-strategies.json", import.meta.url);
 
 function requireObject(value, label) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {

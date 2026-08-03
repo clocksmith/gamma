@@ -700,7 +700,8 @@ function outcomeSummary(observations) {
   const factionMandateSources = {};
   const factionStandingTotals = {};
   let declarations = 0;
-  let genuineAgi = 0;
+  let agiEmergence = 0;
+  let openContinuity = 0;
   let auditHits = 0;
   let forcedNoOps = 0;
   let actionOpportunities = 0;
@@ -708,7 +709,12 @@ function outcomeSummary(observations) {
   for (const observation of observations) {
     actionOpportunities += observation.standings.length * 12;
     declarations += observation.declarations;
-    genuineAgi += Number(observation.worldEndingId === "genuine_agi");
+    agiEmergence += Number(
+      observation.worldEndingId === "singularity" || observation.worldEndingId === "closed_loop"
+    );
+    openContinuity += Number(
+      observation.worldEndingId === "singularity" || observation.worldEndingId === "plural_future"
+    );
     for (const entry of observation.agiFunnel || []) {
       agiFunnel.playerOpportunities += 1;
       for (const stage of [
@@ -958,7 +964,8 @@ function outcomeSummary(observations) {
   return {
     matches: observations.length,
     declarationRate: observations.length ? declarations / observations.length : 0,
-    genuineAgiRate: observations.length ? genuineAgi / observations.length : 0,
+    agiEmergenceRate: observations.length ? agiEmergence / observations.length : 0,
+    openContinuityRate: observations.length ? openContinuity / observations.length : 0,
     meanAuditHitsPerMatch: observations.length ? auditHits / observations.length : 0,
     forcedNoOps,
     forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0,
@@ -1609,7 +1616,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
   const cellOptions = (cell, runs) => ({
     runs,
     playerCount: cell.playerCount,
-    seed: `${options.seed || "m3t4-unified-matrix"}:${cell.pairingId}:offset:${cell.runs}`,
+    seed: `${options.seed || "mandate-2038-unified-matrix"}:${cell.pairingId}:offset:${cell.runs}`,
     sampleReplays: 0,
     profileIds: cell.profileIds,
     profileOverrides: profiles,
@@ -1799,7 +1806,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       profiles,
       runs: adversarialRuns,
       population: adversarialPopulation,
-      seed: `${options.seed || "m3t4-unified-matrix"}:adversarial`,
+      seed: `${options.seed || "mandate-2038-unified-matrix"}:adversarial`,
       rulesVariant: options.rulesVariant || {},
       studyLaunchIdentity,
       projection,
@@ -1909,7 +1916,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     reportType: "unified_matrix_audit",
     evidenceLabel: "simulation",
     generatedAt: new Date().toISOString(),
-    seed: String(options.seed || "m3t4-unified-matrix"),
+    seed: String(options.seed || "mandate-2038-unified-matrix"),
     playerCount: 4,
     playerCounts,
     runs: executedMatches,

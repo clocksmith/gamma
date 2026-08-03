@@ -19,8 +19,8 @@ import {
 
 const seatColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
 const [profilesDocument, uiCopy] = await Promise.all([
-  fetch("/generated/player-strategies.json").then((response) => response.json()),
-  fetch("/generated/ui-copy.json").then((response) => response.json())
+  fetch("/dist/runtime/player-strategies.json").then((response) => response.json()),
+  fetch("/dist/runtime/ui-copy.json").then((response) => response.json())
 ]);
 const profiles = profilesDocument.profiles;
 const copy = uiCopy.simulation;
@@ -395,6 +395,7 @@ async function cancelActiveJob() {
 }
 
 function formatPercent(value) {
+  if (!Number.isFinite(value)) return "—";
   return `${(value * 100).toFixed(1)}%`;
 }
 
@@ -636,9 +637,14 @@ function renderSummary() {
     summaryCard(copy.labels.highestPersonaShare, formatPercent(best.winShare), best.profileId),
     summaryCard(copy.labels.agiEligibility, formatPercent(eligibility), copy.notes.meanAcrossSeats),
     summaryCard(
-      copy.labels.genuineAgi,
-      formatPercent(report.diagnostics.genuineAgiRate),
-      "shared World Ending"
+      copy.labels.agiEmergence,
+      formatPercent(report.diagnostics.agiEmergenceRate),
+      "qualified declaration"
+    ),
+    summaryCard(
+      copy.labels.openContinuity,
+      formatPercent(report.diagnostics.openContinuityRate),
+      "Collective Trust and Systemic Risk"
     ),
     summaryCard(
       copy.labels.nonDeclaringWins,

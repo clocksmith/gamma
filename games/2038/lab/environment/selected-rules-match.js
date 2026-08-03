@@ -60,13 +60,21 @@ function edgeKey(left, right) {
   return [left, right].sort().join("::");
 }
 
-export function immediateTradePacketCeiling(playerCount) {
+export function immediateTradePacketCeiling(playerCount, {
+  counteroffers = false,
+  thirdPartyClaims = false
+} = {}) {
   if (!Number.isInteger(playerCount) || playerCount < 2) {
     throw new RangeError("Immediate-trade packet ceiling requires at least two players.");
   }
-  // Per resolution: active offer/pass, named response, n - 1 claims, and
-  // counteroffer-maker selection: n + 2 formal packets.
-  return ACTION_RESOLUTIONS_PER_PLAYER * playerCount * (playerCount + 2);
+  // A counteroffer adds the original offer-maker's direct accept/reject.
+  // Third-party claims add up to n - 1 claim packets and claimant selection.
+  const packetsPerResolution = counteroffers && thirdPartyClaims
+    ? playerCount + 2
+    : counteroffers
+      ? 3
+      : 2;
+  return ACTION_RESOLUTIONS_PER_PLAYER * playerCount * packetsPerResolution;
 }
 
 function permutations(values) {
@@ -97,7 +105,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     models = [],
     reasoningEfforts = [],
     headlines,
-    wildActions,
+    escalations,
     tactics,
     mandates,
     objectives,
@@ -129,7 +137,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.scope = SELECTED_RULES_COVERAGE;
     this.factions = factions;
     this.headlineDocument = headlines;
-    this.wildDocument = wildActions;
+    this.escalationDocument = escalations;
     this.tacticDocument = tactics;
     this.mandateDocument = mandates;
     this.objectiveDocument = objectives;
@@ -175,7 +183,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.activeImmediateTradeSeat = null;
     this.immediateTradeDecisionWindows = new Set();
     this.immediateTradePackets = 0;
-    this.immediateTradePacketCeiling = immediateTradePacketCeiling(playerCount);
+    this.immediateTradePacketCeiling = immediateTradePacketCeiling(playerCount, {
+      counteroffers: this.rulesVariant.immediateTradeCounteroffers,
+      thirdPartyClaims: this.rulesVariant.immediateTradeThirdPartyClaims
+    });
     this.contractSerial = 0;
     this.contracts = [];
     this.megaClusters = [];
@@ -188,7 +199,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       headlines: {},
       headlineOutcomes: {},
       mandates: {},
-      wildActions: {},
+      escalations: {},
       tactics: {},
       realignments: {},
       systemicRiskCreated: 0,
@@ -219,7 +230,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.config.rounds.map(({ number: round }) => [
         round,
         shuffled(
-          this.headlineDocument.headlines.filter((card) => card.round === round),
+          this.headlineDocument.headlines.filter((card) => this.headlineAvailable(card, round)),
           `${seed}:headlines:${round}`
         ).slice(0, 3)
       ])
@@ -247,7 +258,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
       player.teamsInSupply = config.playerSupply.teams - deployedTeams;
       player.escalation = 0;
-      player.wildUsed = [];
+      player.escalationsUsed = [];
       player.tactics = [];
       player.objectiveId = null;
       player.links = [];
@@ -263,7 +274,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.tacticModifiers = {};
       player.history = {
         deployRounds: [],
-        wildRounds: [],
+        escalationRounds: [],
         cumulativeScrutiny: player.scrutiny,
         jointVenturePartners: [],
         openWeightsCapabilitySnapshot: null,
@@ -272,7 +283,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       };
       player.roundMetrics = {};
       player.metrics.headlines = {};
-      player.metrics.wildActions = {};
+      player.metrics.escalations = {};
       player.metrics.tactics = {};
       player.metrics.mandatesWon = {};
       player.metrics.objectiveCompleted = false;
@@ -727,7 +738,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       self: {
         ...base.self,
         escalation: player.escalation,
-        wildUsed: [...player.wildUsed],
+        escalationsUsed: [...player.escalationsUsed],
         tactics: [...player.tactics],
         objectiveId: player.objectiveId,
         teamsInSupply: player.teamsInSupply,
@@ -764,7 +775,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         players: this.players.map((candidate) => ({
           ...this.publicPlayerState(candidate),
           escalation: candidate.escalation,
-          wildUsed: [...candidate.wildUsed],
+          escalationsUsed: [...candidate.escalationsUsed],
           factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
           teamsInSupply: candidate.teamsInSupply,
           links: [...candidate.links],
@@ -1192,30 +1203,30 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       !safety.factionAbilityUsed.emergencyPause &&
       safety.runway >= 1
     ) {
-      const unlocked = this.config.rounds[this.round - 1].wildActions;
-      const choice = await this.choose(policies, safety.seat, "emergency_pause_timing", [
+      const unlocked = this.config.rounds[this.round - 1].escalations;
+      const choice = await this.choose(policies, safety.seat, "emergency_pause_escalation_timing", [
         {
-          decisionId: "emergency_pause_wait",
+          decisionId: "emergency_pause_escalation_wait",
           label: decisionLabel("emergencyPauseWait"),
           actionId: "faction"
         },
-        ...unlocked.map((wildId) => ({
-          decisionId: `emergency_pause_${wildId}`,
-          label: decisionLabel("pauseWildAction", { action: wildId }),
+        ...unlocked.map((escalationId) => ({
+          decisionId: `emergency_pause_escalation_${escalationId}`,
+          label: decisionLabel("pauseEscalation", { action: escalationId }),
           actionId: "faction",
-          parameters: { wildId }
+          parameters: { escalationId }
         }))
       ]);
-      if (choice.parameters?.wildId) {
+      if (choice.parameters?.escalationId) {
         const trustBefore = safety.trust;
         this.spendRunway(safety, 1, { cause: "emergency_pause" });
         this.addResource(safety, "trust", 2);
-        this.regime.cycle.disabledWild = choice.parameters.wildId;
+        this.regime.cycle.disabledEscalation = choice.parameters.escalationId;
         safety.factionAbilityUsed.emergencyPause = true;
         this.recordFactionAbility(safety, "emergency_pause", {
           runwaySpent: 1,
           trustGained: safety.trust - trustBefore,
-          wildActionsBlocked: 1
+          escalationsBlocked: 1
         });
       }
     }
@@ -1327,6 +1338,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return choice.parameters.outcomeId;
   }
 
+  headlineAvailable(card, round) {
+    if (card.round !== round) return false;
+    const enabledModules = new Set(this.rulesVariant.moduleIds || []);
+    return (card.requiredRuleModules || []).every((moduleId) =>
+      enabledModules.has(moduleId)
+    );
+  }
+
   async prepareHeadline(policies) {
     this.activeHeadline = this.headlineDecks[this.round][this.cycle - 1];
     const coalition = this.players.find((player) =>
@@ -1337,7 +1356,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (coalition) {
       const unused = shuffled(
         this.headlineDocument.headlines.filter((card) =>
-          card.round === this.round &&
+          this.headlineAvailable(card, this.round) &&
           card.id !== this.activeHeadline.id &&
           !this.matchMetrics.headlines[card.id]
         ),
@@ -1465,17 +1484,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       })));
       this.regime.cycle.incentivizedAction = choice.parameters.actionId;
       this.regime.cycle.lawController = this.controller("government");
-    } else if (id === "open_weight_non_aligned") {
+    } else if (id === "quantum_advantage_procurement") {
       const choices = await this.chooseAll(policies, id, () => [
         {
-          decisionId: `${id}_join`,
-          label: decisionLabel("joinBloc"),
+          decisionId: `${id}_adopt`,
+          label: decisionLabel("adoptQuantumStandard"),
           actionId: "headline",
           parameters: { join: true }
         },
         {
-          decisionId: `${id}_refuse`,
-          label: decisionLabel("refuseBloc"),
+          decisionId: `${id}_defer`,
+          label: decisionLabel("deferQuantumStandard"),
           actionId: "headline",
           parameters: { join: false }
         }
@@ -1492,14 +1511,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             actionId: "faction"
           },
           {
-            decisionId: "own_feed_join",
-            label: decisionLabel("ownFeedJoin"),
+            decisionId: "own_feed_adopt",
+            label: decisionLabel("ownFeedAdopt"),
             actionId: "faction",
             parameters: { join: true }
           },
           {
-            decisionId: "own_feed_refuse",
-            label: decisionLabel("ownFeedRefuse"),
+            decisionId: "own_feed_defer",
+            label: decisionLabel("ownFeedDefer"),
             actionId: "faction",
             parameters: { join: false }
           }
@@ -1734,34 +1753,34 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   legalActionSelections(seat) {
     const player = this.players[seat];
     const core = super.legalActionSelections(seat);
-    const unlocked = new Set(this.config.rounds[this.round - 1].wildActions);
-    const wild = this.wildDocument.wildActions
+    const unlocked = new Set(this.config.rounds[this.round - 1].escalations);
+    const escalation = this.escalationDocument.escalations
       .filter((action) => unlocked.has(action.id))
-      .filter((action) => !player.wildUsed.includes(action.id))
-      .filter((action) => action.id !== this.regime.cycle?.disabledWild)
+      .filter((action) => !player.escalationsUsed.includes(action.id))
+      .filter((action) => action.id !== this.regime.cycle?.disabledEscalation)
       .filter((action) =>
         player.escalation > 0 ||
         (action.id === "agent_swarm" && this.regime.cycle?.id === "agent_swarm_escapes_scope")
       )
-      .filter((action) => this.legalWildResolutions(seat, action.id).length > 0)
+      .filter((action) => this.legalEscalationResolutions(seat, action.id).length > 0)
       .map((action) => ({
-        decisionId: `select_wild_${action.id}`,
+        decisionId: `select_escalation_${action.id}`,
         label: renderSimulationCopy(
           simulationCopy.decisions.selectAction,
           { action: action.name }
         ),
         actionId: action.id,
-        consequences: { wildAction: true, escalation: action.id === "agent_swarm" &&
+        consequences: { isEscalation: true, escalation: action.id === "agent_swarm" &&
           this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 0 : -1 }
       }));
-    if (wild.some((decision) => decision.actionId === "declare_agi")) {
+    if (escalation.some((decision) => decision.actionId === "declare_agi")) {
       this.markAgiFunnel(
         player,
         "legalDeclarationWindow",
         "action_selection"
       );
     }
-    return [...core, ...wild];
+    return [...core, ...escalation];
   }
 
   legalFactionActions(seat) {
@@ -1811,22 +1830,22 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addScrutiny(player, 2);
       player.factionAbilityUsed.orbitalCompute = true;
     } else if (id === "emergency_pause" && this.isEmergencyPauseEnabled(player)) {
-      const unlocked = this.config.rounds[this.round - 1].wildActions;
-      const choice = await this.choose(policies, seat, "emergency_pause", unlocked.map((wildId) => ({
-        decisionId: `pause_${wildId}`,
-        label: decisionLabel("pauseWildAction", { action: wildId }),
+      const unlocked = this.config.rounds[this.round - 1].escalations;
+      const choice = await this.choose(policies, seat, "emergency_pause", unlocked.map((escalationId) => ({
+        decisionId: `pause_${escalationId}`,
+        label: decisionLabel("pauseEscalation", { action: escalationId }),
         actionId: "faction",
-        parameters: { wildId }
+        parameters: { escalationId }
       })));
       const trustBefore = player.trust;
       this.spendRunway(player, 1, { cause: "emergency_pause" });
       this.addResource(player, "trust", 2);
-      this.regime.cycle.disabledWild = choice.parameters.wildId;
+      this.regime.cycle.disabledEscalation = choice.parameters.escalationId;
       player.factionAbilityUsed.emergencyPause = true;
       this.recordFactionAbility(player, "emergency_pause", {
         runwaySpent: 1,
         trustGained: player.trust - trustBefore,
-        wildActionsBlocked: 1
+        escalationsBlocked: 1
       });
     } else if (id === "everybody_gpu") {
       for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
@@ -2080,7 +2099,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
       }
     }
-    if (actionId === "build" && this.round >= 2 && player.linkSupply > 0) {
+    if (
+      actionId === "build" &&
+      this.rulesVariant.networkInfrastructureEnabled &&
+      this.round >= 2 &&
+      player.linkSupply > 0
+    ) {
       const cost = this.regime.cycle?.superconductor === "replicates" ? 0 : 1;
       if (player.runway + Number(player.buildDiscounts > 0) >= cost) {
         decisions.push(...this.movementVariants(player, (piece, destination) =>
@@ -2344,7 +2368,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return result;
   }
 
-  legalWildResolutions(seat, id) {
+  legalEscalationResolutions(seat, id) {
     const player = this.players[seat];
     const globalMoves = (builder) => this.movementVariants(
       player,
@@ -2362,7 +2386,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
                 destinations.some((tile) => tile.instanceId === candidate.tileId)
               )) {
                 pairs.push({
-                  decisionId: `wild_mega_cluster_${left.id}_${right.id}_${piece.id}_${host.id}`,
+                  decisionId: `escalation_mega_cluster_${left.id}_${right.id}_${piece.id}_${host.id}`,
                   label: decisionLabel("constructMegaCluster", {
                     left: left.id,
                     right: right.id
@@ -2392,7 +2416,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             )) {
               pairs.push({
                 decisionId:
-                  `wild_mega_cluster_joint_${left.id}_${partner.seat}_${right.id}_${piece.id}`,
+                  `escalation_mega_cluster_joint_${left.id}_${partner.seat}_${right.id}_${piece.id}`,
                 label: decisionLabel("jointMegaCluster", { seat: partner.seat + 1 }),
                 actionId: id,
                 parameters: {
@@ -2412,7 +2436,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (id === "reorganization") {
       return globalMoves((piece, destination) => [
         {
-          decisionId: `wild_reorganization_move_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_reorganization_move_${piece.id}_${destination.instanceId}`,
           label: decisionLabel("reorganizeMove"),
           actionId: id,
           parameters: {
@@ -2422,7 +2446,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           }
         },
         ...(player.pieces.some((candidate) => candidate.kind === "team") ? [{
-          decisionId: `wild_reorganization_return_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_reorganization_return_${piece.id}_${destination.instanceId}`,
           label: decisionLabel("reorganizeReturn"),
           actionId: id,
           parameters: {
@@ -2435,7 +2459,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (id === "open_weights") {
       return globalMoves((piece, destination) => [{
-        decisionId: `wild_open_weights_${piece.id}_${destination.instanceId}`,
+        decisionId: `escalation_open_weights_${piece.id}_${destination.instanceId}`,
         label: decisionLabel("openWeights"),
         actionId: id,
         parameters: { pieceId: piece.id, destinationId: destination.instanceId }
@@ -2444,7 +2468,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (id === "narrative_capture") {
       return globalMoves((piece, destination) => [
         {
-          decisionId: `wild_narrative_scrutiny_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_narrative_scrutiny_${piece.id}_${destination.instanceId}`,
           label: decisionLabel("narrativeScrutiny"),
           actionId: id,
           parameters: {
@@ -2454,7 +2478,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           }
         },
         {
-          decisionId: `wild_narrative_runway_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_narrative_runway_${piece.id}_${destination.instanceId}`,
           label: decisionLabel("narrativeRunway"),
           actionId: id,
           parameters: {
@@ -2465,7 +2489,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         },
         ...this.players.filter((rival) => rival.customers > player.customers).map((rival) => ({
           decisionId:
-            `wild_narrative_target_${rival.seat}_${piece.id}_${destination.instanceId}`,
+            `escalation_narrative_target_${rival.seat}_${piece.id}_${destination.instanceId}`,
           label: decisionLabel("narrativeRival", { seat: rival.seat + 1 }),
           actionId: id,
           parameters: {
@@ -2480,7 +2504,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (id === "agent_swarm") {
       return player.actionsUsed.length <= 4
         ? globalMoves((piece, destination) => [{
-          decisionId: `wild_agent_swarm_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_agent_swarm_${piece.id}_${destination.instanceId}`,
           label: simulationCopy.decisions.releaseAgentSwarm,
           actionId: id,
           parameters: { pieceId: piece.id, destinationId: destination.instanceId }
@@ -2490,7 +2514,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (id === "declare_agi") {
       return this.isAgiEligible(player)
         ? globalMoves((piece, destination) => [{
-          decisionId: `wild_declare_agi_${piece.id}_${destination.instanceId}`,
+          decisionId: `escalation_declare_agi_${piece.id}_${destination.instanceId}`,
           label: simulationCopy.decisions.declareAgi,
           actionId: id,
           parameters: { pieceId: piece.id, destinationId: destination.instanceId }
@@ -2506,7 +2530,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         .filter((piece) => this.legalDestinations(player, piece)
           .some((tile) => tile.instanceId === grid.instanceId))
         .map((piece) => ({
-          decisionId: `wild_fusion_${piece.id}`,
+          decisionId: `escalation_fusion_${piece.id}`,
           label: renderSimulationCopy(simulationCopy.decisions.constructAdvancedGeneration, {
             piece: piece.id
           }),
@@ -2756,6 +2780,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       return;
     }
     if (decision.actionId === "build" && decision.parameters?.buildMode === "link") {
+      if (!this.rulesVariant.networkInfrastructureEnabled) {
+        throw new Error("Links are unavailable outside Advanced Play.");
+      }
       this.spendRunway(player, decision.parameters.actualRunwayCost, {
         cause: "build_link",
         conversionEligible: true
@@ -3203,7 +3230,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     markScenarioDeclaration(this, player);
     player.history.declarations += 1;
     this.matchMetrics.declarations += 1;
-    this.markAgiFunnel(player, "declared", "wild_action_resolved", {
+    this.markAgiFunnel(player, "declared", "escalation_resolved", {
       supportingSeats: readiness.supportingSeats
     });
     this.addScrutiny(player, 3 + (player.seat === this.spotlightSeat ? 1 : 0));
@@ -3217,21 +3244,21 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
   }
 
-  async applyWild(policies, seat, id, decision) {
+  async applyEscalation(policies, seat, id, decision) {
     const player = this.players[seat];
     if (
       id === "mega_cluster" &&
       this.megaClusters.length >= this.config.sharedSupply.megaClusterPairs
     ) return;
-    this.beginRunwayConversionContext(player, decision, "wild_action");
+    this.beginRunwayConversionContext(player, decision, "escalation");
     this.movePiece(player, decision.parameters || {});
     const tokenFree = id === "agent_swarm" &&
       this.regime.cycle?.id === "agent_swarm_escapes_scope";
     if (!tokenFree) player.escalation -= 1;
-    player.wildUsed.push(id);
-    if (!player.history.wildRounds.includes(this.round)) player.history.wildRounds.push(this.round);
-    increment(player.metrics.wildActions, id);
-    increment(this.matchMetrics.wildActions, id);
+    player.escalationsUsed.push(id);
+    if (!player.history.escalationRounds.includes(this.round)) player.history.escalationRounds.push(this.round);
+    increment(player.metrics.escalations, id);
+    increment(this.matchMetrics.escalations, id);
 
     if (id === "mega_cluster") {
       const partner = decision.parameters.partnerSeat === undefined
@@ -3270,7 +3297,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.beginRunwayConversionContext(partner, {
           actionId: "mega_cluster",
           decisionId: "mega_cluster_accept"
-        }, "wild_action_partner");
+        }, "escalation_partner");
         this.spendRunway(partner, 1, {
           cause: "mega_cluster_partner",
           conversionEligible: true
@@ -3392,9 +3419,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.history.fusionBuilt = true;
       this.addScrutiny(player, 3);
     }
-    this.recordEligibility(player, "after_wild_action");
+    this.recordEligibility(player, "after_escalation");
     this.recordEvent(
-      "wild_action_resolved",
+      "escalation_resolved",
       seat,
       renderSimulationCopy(simulationCopy.events.resolved, {
         faction: player.factionName,
@@ -3410,6 +3437,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       startingGridConnection: {
         assignedFacilityId: player.facilities[0]?.id || null
       }
+    }, {
+      networkInfrastructureEnabled: this.rulesVariant.networkInfrastructureEnabled
     });
     const connectedGenerators = player.generators.filter((generator) => {
       const generatorTile = this.board.find((tile) => tile.instanceId === generator.tileId);
@@ -3575,7 +3604,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const buyerSeat of this.initiativeOrder()) {
       if (this.round < 3) break;
       const buyer = this.players[buyerSeat];
-      for (let purchase = 0; purchase < 2 && buyer.runway > 0; purchase += 1) {
+      for (
+        let purchase = 0;
+        purchase < this.rulesVariant.powerPurchaseRequests && buyer.runway > 0;
+        purchase += 1
+      ) {
         const suppliers = this.players.filter((supplier) =>
           supplier.seat !== buyerSeat &&
           !suppliersUsed.has(supplier.seat) &&
@@ -3821,6 +3854,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         await this.produceFacility(policies, player, facility);
       }
       if (
+        this.rulesVariant.networkInfrastructureEnabled &&
         this.round >= 2 &&
         player.facilities.filter((facility) => facility.powered).length >= 2
       ) {
@@ -4069,7 +4103,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (id === "credible_denial") return player.capability >= 8 && player.customers <= 1;
     if (id === "history_will_call") return player.history.cumulativeScrutiny >= 6 && player.trust >= 4;
     if (id === "fusion_press_cycle") return player.history.fusionBuilt && player.agiDeclared;
-    if (id === "perfectly_normal_quarter") return player.history.wildRounds.length >= 2;
+    if (id === "perfectly_normal_quarter") return player.history.escalationRounds.length >= 2;
     return false;
   }
 
@@ -4095,8 +4129,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   selectedActionResolutions(seat) {
     const player = this.players[seat];
     if (!player.selectedAction) return [];
-    if (player.selectedAction.startsWith("wild_")) {
-      return this.legalWildResolutions(seat, player.selectedAction.slice(5));
+    if (player.selectedAction.startsWith("escalation_")) {
+      return this.legalEscalationResolutions(seat, player.selectedAction.slice(11));
     }
     if (player.selectedAction.startsWith("faction_")) return [];
     return this.legalResolutions(seat, player.selectedAction);
@@ -4280,7 +4314,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (!offer) return false;
     this.activeImmediateTradeSeat = seat;
     const partner = this.players[offer.partnerSeat];
-    const counters = this.immediateTradeCounterDecisions(seat, offer);
+    const counters = this.rulesVariant.immediateTradeCounteroffers
+      ? this.immediateTradeCounterDecisions(seat, offer)
+      : [];
     const response = await this.choose(policies, partner.seat, "immediate_trade_response", [
       {
         decisionId: "trade_reject",
@@ -4300,6 +4336,29 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (!response.parameters?.counterMakerSeat) return false;
 
     const counterOffer = response.parameters;
+    if (!this.rulesVariant.immediateTradeThirdPartyClaims) {
+      const directResponse = await this.choose(
+        policies,
+        seat,
+        "immediate_trade_counter_response",
+        [
+          {
+            decisionId: "trade_counter_reject",
+            label: decisionLabel("tradeCounterReject"),
+            actionId: "trade"
+          },
+          {
+            decisionId: "trade_counter_accept",
+            label: decisionLabel("tradeCounterAccept", counterOffer),
+            actionId: "trade"
+          }
+        ]
+      );
+      return directResponse.decisionId === "trade_counter_accept"
+        ? this.completeImmediateTrade(partner.seat, seat, counterOffer)
+        : false;
+    }
+
     const claimants = this.players.filter((candidate) =>
       candidate.seat !== partner.seat &&
       this.canCompleteImmediateTrade(partner.seat, candidate.seat, counterOffer)
@@ -4369,9 +4428,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.selectedAction = null;
       return;
     }
-    if (player.selectedAction.startsWith("wild_")) {
-      const id = player.selectedAction.slice(5);
-      let legal = this.legalWildResolutions(seat, id);
+    if (player.selectedAction.startsWith("escalation_")) {
+      const id = player.selectedAction.slice(11);
+      let legal = this.legalEscalationResolutions(seat, id);
       if (orbitalUsed) {
         legal = legal.filter((decision) => {
           const piece = player.pieces.find(
@@ -4383,9 +4442,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       if (!legal.length) {
         this.recordEvent(
-          "wild_action_blocked",
+          "escalation_blocked",
           seat,
-          renderSimulationCopy(simulationCopy.events.wildBlocked, {
+          renderSimulationCopy(simulationCopy.events.escalationBlocked, {
             faction: player.factionName,
             action: id
           })
@@ -4393,9 +4452,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.selectedAction = null;
         return;
       }
-      const decision = await this.choose(policies, seat, `resolve_wild_${id}`, legal);
+      const decision = await this.choose(policies, seat, `resolve_escalation_${id}`, legal);
       const computeBeforeAction = player.compute;
-      await this.applyWild(policies, seat, id, decision);
+      await this.applyEscalation(policies, seat, id, decision);
       this.rewardFoundryComputeSpend(
         seat,
         computeBeforeAction - player.compute
@@ -4714,7 +4773,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     await this.produceAll(policies);
     this.audit();
     this.scoreMandate();
-    if (this.round === 3) await this.resolveRealignment(policies);
+    if (this.round === 3 && this.rulesVariant.realignmentEnabled) {
+      await this.resolveRealignment(policies);
+    }
     this.recordEvent(
       "round_settled",
       null,
@@ -4936,8 +4997,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (!this.rulesVariant) return base;
     return {
       ...base,
+      playProfileId: this.rulesVariant.playProfileId,
       activeHeadline: this.activeHeadline
-        ? { id: this.activeHeadline.id, name: this.activeHeadline.name }
+        ? {
+          id: this.activeHeadline.id,
+          name: this.activeHeadline.name,
+          strapline: this.activeHeadline.strapline,
+          newswire: this.activeHeadline.newswire,
+          text: this.activeHeadline.text,
+          quote: this.activeHeadline.quote
+        }
         : null,
       roundMandate: this.roundMandate?.id || null,
       systemicRisk: this.systemicRisk,
@@ -4946,7 +5015,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         return {
           ...snapshot,
           escalation: player.escalation,
-          wildUsed: [...(player.wildUsed || [])],
+          escalationsUsed: [...(player.escalationsUsed || [])],
           tactics: [...(player.tactics || [])],
           objectiveId: player.objectiveId,
           links: [...(player.links || [])],
@@ -5014,13 +5083,25 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const collectiveTrust = this.players.reduce((sum, player) => sum + player.trust, 0);
     const qualifyingDeclarers = this.players.filter(
       (player) => player.agiDeclared &&
-        player.capability >= this.config.worldEnding.genuineAgi.declarerCapability
+        player.capability >= this.config.worldEnding.agiEmergence.declarerCapability
     ).length;
-    const genuineAgi = qualifyingDeclarers >=
-        this.config.worldEnding.genuineAgi.minimumQualifiedDeclarers &&
-      collectiveTrust >= setupCollectiveTrust +
-        this.playerCount * this.config.worldEnding.genuineAgi.collectiveTrustOffsetPerPlayer &&
-      this.systemicRisk < this.playerCount;
+    const agiEmerges = qualifyingDeclarers >=
+        this.config.worldEnding.agiEmergence.minimumQualifiedDeclarers;
+    const requiredCollectiveTrust = setupCollectiveTrust +
+      this.playerCount * this.config.worldEnding.openContinuity.collectiveTrustOffsetPerPlayer;
+    const systemicRiskBounded = !this.config.worldEnding.openContinuity
+      .systemicRiskMustBeBelowPlayerCount || this.systemicRisk < this.playerCount;
+    const openContinuity = collectiveTrust >= requiredCollectiveTrust && systemicRiskBounded;
+    const outcomeId = agiEmerges
+      ? (openContinuity ? "singularity" : "closed_loop")
+      : (openContinuity ? "plural_future" : "assured_continuity");
+    const outcomeNames = this.config.worldEnding.outcomes;
+    const outcomeName = {
+      singularity: outcomeNames.singularity,
+      closed_loop: outcomeNames.closedLoop,
+      plural_future: outcomeNames.pluralFuture,
+      assured_continuity: outcomeNames.assuredContinuity
+    }[outcomeId];
     return {
       schemaVersion: 1,
       evidenceLabel: "simulation",
@@ -5035,14 +5116,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       },
       futureTimeline: clone(this.matchMetrics.futureTimeline),
       worldEnding: {
-        id: genuineAgi ? "genuine_agi" : "closed_loop",
-        name: genuineAgi
-          ? this.config.worldEnding.genuineName
-          : this.config.worldEnding.closedLoopName,
+        id: outcomeId,
+        name: outcomeName,
+        agiEmerges,
+        openContinuity,
         qualifyingDeclarers,
         collectiveTrust,
-        requiredCollectiveTrust: setupCollectiveTrust + this.playerCount,
-        unresolvedSystemicRisk: this.systemicRisk
+        requiredCollectiveTrust,
+        unresolvedSystemicRisk: this.systemicRisk,
+        systemicRiskExclusiveCeiling: this.playerCount
       },
       standings,
       winnerSeats,

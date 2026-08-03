@@ -15,8 +15,9 @@ import { promisify } from "node:util";
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dirname, "..");
 const gammaRoot = resolve(projectRoot, "../..");
-const defaultOutputRoot = resolve(gammaRoot, "web/m3t4-2038");
-const publicBase = "/m3t4-2038";
+const defaultOutputRoot = resolve(gammaRoot, "web/mandate-2038");
+const legacyOutputRoot = resolve(gammaRoot, "web/m3t4-2038");
+const publicBase = "/mandate-2038";
 
 export const crawlerMeta = [
   '<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">',
@@ -59,8 +60,12 @@ export function rewritePrototypeHtml(html, { kind }) {
     .replaceAll('href="/web/', `href="${publicBase}/web/`)
     .replaceAll('src="/web/', `src="${publicBase}/web/`)
     .replaceAll('href="/docs/', `href="${publicBase}/docs/`)
-    .replaceAll('href="/lab"', `href="${publicBase}/lab.html"`);
-  if (kind === "simulation") {
+    .replaceAll('href="/lab"', `href="${publicBase}/lab.html"`)
+    .replaceAll('href="/first-game-guide"', `href="${publicBase}/first-game-guide.html"`)
+    .replaceAll('src="/?guide=first-game"', `src="${publicBase}/web/index.html?guide=first-game"`)
+    .replaceAll('href="/?guide=first-game"', `href="${publicBase}/web/index.html?guide=first-game"`)
+    .replaceAll('"/?guide=first-game"', `"${publicBase}/web/index.html?guide=first-game"`);
+  if (kind === "simulation" || kind === "guide") {
     rewritten = rewritten.replace('href="/"', `href="${publicBase}/web/index.html"`);
   }
   return rewritten;
@@ -68,7 +73,7 @@ export function rewritePrototypeHtml(html, { kind }) {
 
 export function rewritePrototypeModule(source) {
   return source
-    .replaceAll('fetch("/generated/', `fetch("${publicBase}/generated/`)
+    .replaceAll('fetch("/dist/runtime/', `fetch("${publicBase}/dist/runtime/`)
     .replaceAll('from "/lab/', `from "${publicBase}/lab/`);
 }
 
@@ -87,19 +92,65 @@ function pageListItem(page) {
 </li>`;
 }
 
-export function buildIndexHtml({ identity, pages }) {
+const publicGroupOrder = [
+  "Start here",
+  "Required Default Game Play Kit",
+  "Learn the game",
+  "Optional play",
+  "Development and evidence",
+  "Component review"
+];
+
+const defaultGamePlayKitOrder = new Map([
+  ["Core Rules", 0],
+  ["Map Reference", 1],
+  ["Component Reference", 2],
+  ["Card Reference", 3]
+]);
+
+function renderPageGroups(pages) {
+  const grouped = new Map(publicGroupOrder.map((group) => [group, []]));
+  for (const page of pages) {
+    const group = grouped.has(page.group) ? page.group : "Development and evidence";
+    grouped.get(group).push(page);
+  }
+  return publicGroupOrder
+    .filter((group) => grouped.get(group).length)
+    .map((group) => {
+      const entries = grouped.get(group);
+      if (group === "Required Default Game Play Kit") {
+        entries.sort((left, right) =>
+          defaultGamePlayKitOrder.get(left.title) - defaultGamePlayKitOrder.get(right.title)
+        );
+      }
+      return `<section class="page-group"><h2>${escapeHtml(group)}</h2><ul class="page-list">
+${entries.map(pageListItem).join("\n")}
+</ul></section>`;
+    })
+    .join("\n");
+}
+
+export function buildIndexHtml({ identity, pages, library = false }) {
+  const title = library ? "Mandate 2038 · Supporting material" : "Mandate 2038 · Default Game Play Kit";
+  const introduction = library
+    ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
+    : "The four documents required to set up and play Default Game.";
+  const routeLink = library
+    ? '<p><a href="../">Return to the Default Game Play Kit.</a></p>'
+    : "";
   return protectHtml(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>M3T4 2038 · All pages</title>
+  <title>${title}</title>
   <style>
     :root { color-scheme: dark; --ink:#eeeae0; --muted:#a9afa7; --line:#3b443b; --accent:#e4b553; }
     * { box-sizing: border-box; }
     body { margin:0; background:#121712; color:var(--ink); font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; }
     main { width:min(760px,calc(100% - 2rem)); margin:0 auto; padding:3rem 0 5rem; }
     h1 { margin:0 0 .5rem; font:700 clamp(2.4rem,8vw,4.5rem)/1 Georgia,serif; }
+    h2 { margin:2.5rem 0 .7rem; color:var(--accent); font:700 1rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; text-transform:uppercase; }
     p { margin:.5rem 0 2rem; color:var(--muted); }
     ul { margin:0; padding:0; list-style:none; border-top:1px solid var(--line); }
     li { padding:1rem 0; border-bottom:1px solid var(--line); }
@@ -112,11 +163,10 @@ export function buildIndexHtml({ identity, pages }) {
 </head>
 <body>
 <main>
-  <h1>M3T4 2038</h1>
-  <p>Everything currently available:</p>
-  <ul class="page-list">
-    ${pages.map(pageListItem).join("\n")}
-  </ul>
+  <h1>Mandate 2038</h1>
+  <p>${introduction}</p>
+  ${renderPageGroups(pages)}
+  ${routeLink}
   <footer>
     Rules <code>${escapeHtml(identity.rulesVersion)}</code> ·
     Executable <code>${escapeHtml(identity.executableVersion)}</code> ·
@@ -136,7 +186,7 @@ async function sourceIdentity() {
   });
   const { stdout: dirtyOutput } = await execFileAsync(
     "git",
-    ["status", "--porcelain", "--", "games/frontier-2038", "web", ".gitignore"],
+    ["status", "--porcelain", "--", "games/2038", "web", ".gitignore"],
     { cwd: gammaRoot }
   );
   return {
@@ -174,23 +224,33 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     throw new RangeError("Refusing to replace a repository or Firebase web root.");
   }
   for (const required of [
-    "build/docs/index.html",
-    "build/gallery.html",
-    "build/gallery-baseline.html",
-    "web/index.html",
-    "web/simulation.html"
+    "dist/site/docs/index.html",
+    "dist/site/gallery.html",
+    "dist/site/gallery-baseline.html",
+    "dist/site/index.html",
+    "dist/site/first-game-guide.html",
+    "dist/site/simulation.html"
   ]) {
     const file = resolve(projectRoot, required);
     if (!(await stat(file)).isFile()) throw new Error(`Missing generated input: ${required}`);
   }
 
+  if (outputRoot === defaultOutputRoot) {
+    await rm(legacyOutputRoot, { recursive: true, force: true });
+  }
   await rm(outputRoot, { recursive: true, force: true });
   await mkdir(outputRoot, { recursive: true });
   const identity = await sourceIdentity();
   const pages = [];
 
-  const docsSource = resolve(projectRoot, "build/docs");
+  const docsSource = resolve(projectRoot, "dist/site/docs");
   const docsTarget = resolve(outputRoot, "docs");
+  const defaultGamePlayKit = new Set([
+    "core-rules.html",
+    "map-reference.html",
+    "component-reference.html",
+    "card-reference.html"
+  ]);
   await mkdir(docsTarget, { recursive: true });
   for (const name of await htmlFiles(docsSource)) {
     await copyProtectedHtml(resolve(docsSource, name), resolve(docsTarget, name));
@@ -200,17 +260,41 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
         (word) => word[0].toUpperCase() + word.slice(1)
       ).join(" ");
     pages.push({
-      group: "Rules and design record",
-      kind: name === "index.html" ? "Index" : "Document",
+      group: defaultGamePlayKit.has(name)
+        ? "Required Default Game Play Kit"
+        : name === "world-and-institutions.html"
+        ? "Learn the game"
+        : name === "optional-tactics.html"
+          ? "Optional play"
+          : name === "component-spec.html" || name === "component-inventory.html"
+            ? "Component review"
+          : "Development and evidence",
+      kind: defaultGamePlayKit.has(name)
+        ? "Required play-kit document"
+        : name === "index.html"
+        ? "Index"
+        : name === "component-spec.html" || name === "component-inventory.html"
+          ? "Physical specification"
+          : "Document",
       title,
       href: `docs/${name}`,
       description: name === "core-rules.html"
-        ? "How to play the controlled physical-test rules candidate."
+        ? "Complete setup, Eras, Actions, and scoring reference."
+        : name === "map-reference.html"
+          ? "The 13-district jurisdiction, adjacency, movement, and location effects."
+          : name === "component-reference.html"
+            ? "Every Default Game component, its purpose, and its setup location."
+            : name === "card-reference.html"
+              ? "Printable canonical faces for every Default Game card type."
         : name === "world-and-institutions.html"
           ? "Setting, tone, Era fiction, and ending narratives."
-          : name === "optional-tactics.html"
-            ? "The excluded Tactic module’s complete optional rules."
-        : "Generated from the canonical Markdown documentation."
+        : name === "optional-tactics.html"
+            ? "An optional module for players who know the Default Play loop."
+            : name === "component-spec.html"
+              ? "What every physical component is and how its state is made visible."
+              : name === "component-inventory.html"
+                ? "Default Game box contents and Advanced-only exclusions."
+        : "Design, testing, and implementation record."
     });
   }
 
@@ -229,11 +313,11 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     ]
   ]) {
     await copyProtectedHtml(
-      resolve(projectRoot, "build", sourceName),
+      resolve(projectRoot, "dist/site", sourceName),
       resolve(outputRoot, targetName)
     );
     pages.push({
-      group: "Component surfaces",
+      group: "Component review",
       kind: "Gallery",
       title,
       href: targetName,
@@ -244,13 +328,16 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   await cp(resolve(projectRoot, "web"), resolve(outputRoot, "web"), {
     recursive: true
   });
-  await rm(resolve(outputRoot, "web/simulation.html"));
   const prototypeIndex = await readFile(
-    resolve(projectRoot, "web/index.html"),
+    resolve(projectRoot, "dist/site/index.html"),
     "utf8"
   );
   const simulationIndex = await readFile(
-    resolve(projectRoot, "web/simulation.html"),
+    resolve(projectRoot, "dist/site/simulation.html"),
+    "utf8"
+  );
+  const firstGameGuide = await readFile(
+    resolve(projectRoot, "dist/site/first-game-guide.html"),
     "utf8"
   );
   await writeFile(
@@ -261,17 +348,22 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     resolve(outputRoot, "lab.html"),
     `${rewritePrototypeHtml(simulationIndex, { kind: "simulation" })}\n`
   );
-  for (const moduleName of ["app.js", "simulation-app.js"]) {
+  await writeFile(
+    resolve(outputRoot, "first-game-guide.html"),
+    `${rewritePrototypeHtml(firstGameGuide, { kind: "guide" })}\n`
+  );
+  for (const moduleName of ["app.js", "first-game-guide.js", "simulation-app.js"]) {
     const source = await readFile(resolve(projectRoot, "web", moduleName), "utf8");
     await writeFile(
       resolve(outputRoot, "web", moduleName),
       rewritePrototypeModule(source)
     );
   }
-  await cp(resolve(projectRoot, "generated"), resolve(outputRoot, "generated"), {
+  await cp(resolve(projectRoot, "dist/runtime"), resolve(outputRoot, "dist/runtime"), {
     recursive: true
   });
   const publishedSimulationModules = [
+    "cancellation.js",
     "content/simulation-copy.js",
     "contracts/decision-contract.js",
     "contracts/report-migrations.js",
@@ -282,7 +374,8 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     "policies/weighted-policy.js",
     "rules/declaration-readiness.js",
     "runtime/create-browser-interactive-game.js",
-    "runtime/interactive-game-core.js"
+    "runtime/interactive-game-core.js",
+    "scenarios/agi-declaration-window.js"
   ];
   for (const relative of publishedSimulationModules) {
     const target = resolve(outputRoot, "lab", relative);
@@ -291,14 +384,21 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   }
   pages.unshift(
     {
-      group: "Executable review surfaces",
+      group: "Start here",
+      kind: "Teaching interface",
+      title: "First Game Guide",
+      href: "first-game-guide.html",
+      description: "A fixed first-Era Default Play lesson using the canonical game components."
+    },
+    {
+      group: "Start here",
       kind: "Playable interface",
       title: "Play the game",
       href: "web/index.html",
       description: "Play against browser-native deterministic opponents; the local bridge is optional for Claude or Codex."
     },
     {
-      group: "Executable review surfaces",
+      group: "Development and evidence",
       kind: "Simulation interface",
       title: "Simulation lab",
       href: "lab.html",
@@ -306,8 +406,30 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     }
   );
 
-  const indexHtml = buildIndexHtml({ identity, pages });
-  await writeFile(resolve(outputRoot, "index.html"), `${indexHtml}\n`);
+  const playKitPages = pages.filter(
+    (page) => page.group === "Required Default Game Play Kit"
+  );
+  const libraryPages = pages
+    .filter((page) => page.group !== "Required Default Game Play Kit")
+    .map((page) => ({ ...page, href: `../${page.href}` }));
+  const rootRedirect = protectHtml(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=docs/">
+  <link rel="canonical" href="docs/">
+  <title>Mandate 2038</title>
+</head>
+<body>
+  <p><a href="docs/">Open the Default Game Play Kit.</a></p>
+  <script>location.replace("docs/");</script>
+</body>
+</html>`);
+  await writeFile(resolve(outputRoot, "index.html"), `${rootRedirect}\n`);
+  const libraryHtml = buildIndexHtml({ identity, pages: libraryPages, library: true });
+  await mkdir(resolve(outputRoot, "library"), { recursive: true });
+  await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);
   const manifest = {
     schemaVersion: 1,
     artifactKind: "firebase-static-review-site",

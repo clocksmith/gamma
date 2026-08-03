@@ -4,7 +4,7 @@ import { createPlayerPolicy } from "../policies/policy-factory.js";
 import { createInteractiveGameCore } from "./interactive-game-core.js";
 
 const readJson = (path) => readFile(
-  new URL(`../../generated/${path}`, import.meta.url),
+  new URL(`../../dist/runtime/${path}`, import.meta.url),
   "utf8"
 ).then(JSON.parse);
 export async function createInteractiveGame(options = {}, onPending) {
@@ -12,7 +12,7 @@ export async function createInteractiveGame(options = {}, onPending) {
     config,
     factions,
     headlines,
-    wildActions,
+    escalations,
     tactics,
     mandates,
     objectives,
@@ -21,7 +21,7 @@ export async function createInteractiveGame(options = {}, onPending) {
     readJson("game-config.json"),
     readJson("factions.json"),
     readJson("headlines.json"),
-    readJson("wild-actions.json"),
+    readJson("escalations.json"),
     readJson("tactics.json"),
     readJson("mandates.json"),
     readJson("secret-objectives.json"),
@@ -32,7 +32,7 @@ export async function createInteractiveGame(options = {}, onPending) {
       config,
       factions,
       headlines,
-      wildActions,
+      escalations,
       tactics,
       mandates,
       objectives,

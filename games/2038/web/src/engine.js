@@ -352,7 +352,7 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     mandateAwards: [],
     escalation: 0,
     actionsUsed: [],
-    wildActionsUsed: [],
+    escalationsUsed: [],
     pieces: [
       { id: "ceo", name: "CEO", kind: "ceo", tileId: frontierTileId },
       ...Array.from({ length: 1 }, (_, index) => ({
@@ -374,8 +374,17 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
   };
 }
 
-export function createGame(config, factions, headlines, seed, factionId, playerCount = 4) {
+export function createGame(
+  config,
+  factions,
+  headlines,
+  seed,
+  factionId,
+  playerCount = 4,
+  { playProfileId = config.playProfiles?.defaultGame?.id ?? "default-game" } = {}
+) {
   const board = generateBoard(config, seed);
+  const profile = resolvePlayProfile(config, playProfileId);
   const faction = factions.factions.find((entry) => entry.id === factionId) || factions.factions[0];
   const frontier = board.find((tile) => tile.id === "frontier");
   const boundedPlayerCount = Number(playerCount);
@@ -389,6 +398,7 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
   }
   const state = {
     seed: String(seed),
+    playProfileId,
     playerCount: boundedPlayerCount,
     round: config.rounds[0].number,
     cycle: 1,
@@ -403,7 +413,7 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
     board,
     player: createPlayer(config, faction, frontier.instanceId, boundedPlayerCount),
     headlines: shuffle(
-      headlines.headlines.filter((entry) => entry.round === 1),
+      availableHeadlines(headlines, 1, profile),
       createRng(`${seed}:headlines:1`)
     ),
     metrics: {
@@ -416,22 +426,56 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
     },
     log: [
       `Era I begins. ${faction.name} enters the Frontier.`,
-      `${boundedPlayerCount}-player Audit profile selected; this browser records one active seat.`,
-      config.board.prototypeNote
+      `${boundedPlayerCount}-player Audit profile selected; this browser records one active seat.`
     ]
   };
   synchronizePublicMandate(config, state, "setup");
   return state;
 }
 
+export function resolvePlayProfile(
+  config,
+  profileId = config.playProfiles?.defaultGame?.id ?? "default-game"
+) {
+  const profile = Object.values(config.playProfiles || {}).find(
+    (candidate) => candidate.id === profileId
+  );
+  if (!profile) throw new Error(`Unknown play profile: ${profileId}.`);
+
+  const settings = { ...(config.playRuleDefaults || {}) };
+  for (const moduleId of profile.moduleIds || []) {
+    const module = config.playRuleModules?.[moduleId];
+    if (!module) {
+      throw new Error(`Play profile ${profileId} names unknown rule module: ${moduleId}.`);
+    }
+    Object.assign(settings, module.settings || {});
+  }
+  if (settings.immediateTradeThirdPartyClaims && !settings.immediateTradeCounteroffers) {
+    throw new Error("Third-party trade claims require trade counteroffers.");
+  }
+  return { ...profile, ...settings };
+}
+
+function playProfile(config, state) {
+  return resolvePlayProfile(config, state.playProfileId);
+}
+
+export function availableHeadlines(headlineDocument, round, profile) {
+  const enabledModules = new Set(profile.moduleIds || []);
+  return headlineDocument.headlines.filter((headline) =>
+    headline.round === round &&
+    (headline.requiredRuleModules || []).every((moduleId) => enabledModules.has(moduleId))
+  );
+}
+
 export function availableCoreActions(config, state) {
   return config.actions.filter((action) => !state.player.actionsUsed.includes(action.id));
 }
 
-export function availableWildActions(wildActions, state) {
-  return wildActions.wildActions.filter((action) =>
+export function availableEscalations(escalations, state) {
+  return escalations.escalations.filter((action) =>
     action.unlockedRound <= state.round &&
-    !state.player.wildActionsUsed.includes(action.id) &&
+    !state.player.escalationsUsed.includes(action.id) &&
     state.player.escalation > 0
   );
 }
@@ -510,7 +554,7 @@ function resolveCore(config, state, actionId, destination, options) {
     if (venture) {
       addScrutiny(config, player, 2);
     }
-    return venture ? "Venture round: +4 Runway, +2 Scrutiny." : "Conservative round: +2 Runway.";
+    return venture ? "Venture funding: +4 Runway, +2 Scrutiny." : "Conservative funding: +2 Runway.";
   }
 
   if (actionId === "research") {
@@ -563,7 +607,7 @@ function resolveCore(config, state, actionId, destination, options) {
       return `Facility constructed at ${destination.name}; it requires delivered Power.`;
     }
     if (mode === "generator") {
-      if (state.round < 2) return "Generator failed: industrial Power unlocks in The Scale.";
+      if (state.round < 2) return "Generator failed: industrial Power unlocks in Capacity.";
       const source = config.powerSources.find((entry) => entry.id === options.powerSource);
       if (destination.category !== "energy") return "Generator failed: acting piece must end on an Energy location.";
       if (!source || source.round > state.round) return "Generator failed: selected source is unavailable.";
@@ -582,7 +626,10 @@ function resolveCore(config, state, actionId, destination, options) {
       return `${source.name} constructed at ${destination.name}: ${source.capacity} Power.`;
     }
     if (mode === "link") {
-      if (state.round < 2) return "Link failed: Networks unlock in The Scale.";
+      if (!playProfile(config, state).networkInfrastructureEnabled) {
+        return "Link failed: Links are an Advanced Play infrastructure rule.";
+      }
+      if (state.round < 2) return "Link failed: Networks unlock in Capacity.";
       const facility = player.facilities.find(
         (entry) => entry.tileId === destination.instanceId && !player.links.includes(entry.id)
       );
@@ -620,7 +667,7 @@ function resolveCore(config, state, actionId, destination, options) {
   return `${actionId} is recorded but not automated in this study.`;
 }
 
-function allocatePower(state) {
+function allocatePower(config, state) {
   const player = state.player;
   const startingFacility = player.facilities.find(
     (facility) => facility.id === player.startingGridConnection.assignedFacilityId
@@ -630,7 +677,9 @@ function allocatePower(state) {
     : 0;
   const generatedCapacity = player.generators.reduce((sum, item) => sum + item.capacity, 0);
   const generation = startingGridCapacity + generatedCapacity;
-  const networked = networkedFacilityIds(state.board, player);
+  const networked = networkedFacilityIds(state.board, player, {
+    networkInfrastructureEnabled: playProfile(config, state).networkInfrastructureEnabled
+  });
   let available = generation;
   let powered = 0;
   for (const facility of player.facilities) {
@@ -651,11 +700,14 @@ function allocatePower(state) {
   };
 }
 
-export function networkedFacilityIds(board, player) {
+export function networkedFacilityIds(
+  board,
+  player,
+  { networkInfrastructureEnabled = true } = {}
+) {
   const result = new Set();
   const startingId = player.startingGridConnection?.assignedFacilityId;
   if (startingId) result.add(startingId);
-  for (const id of player.links || []) result.add(id);
   for (const facility of player.facilities) {
     const tile = board.find((entry) => entry.instanceId === facility.tileId);
     if (player.generators.some((generator) => {
@@ -663,6 +715,8 @@ export function networkedFacilityIds(board, player) {
       return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
     })) result.add(facility.id);
   }
+  if (!networkInfrastructureEnabled) return result;
+  for (const id of player.links || []) result.add(id);
   let changed = true;
   while (changed) {
     changed = false;
@@ -683,7 +737,7 @@ export function networkedFacilityIds(board, player) {
 }
 
 function finishRound(config, headlines, state) {
-  const power = allocatePower(state);
+  const power = allocatePower(config, state);
   state.metrics.poweredFacilityRounds.push({
     round: state.round,
     powered: power.powered,
@@ -718,7 +772,7 @@ function finishRound(config, headlines, state) {
     round: state.round,
     finalRound: state.round === config.rounds.at(-1).number
   };
-  if (state.round === 3) {
+  if (state.round === 3 && playProfile(config, state).realignmentEnabled) {
     state.phase = "realign";
     state.log.unshift(
       "Mandate scoring complete. Every institution now submits its one secret Jurisdictional Realignment ballot."
@@ -736,17 +790,20 @@ function advanceAfterRealignment(config, headlines, state) {
     state.player.actionsUsed = [];
     state.player.escalation = config.rounds[state.round - 1].escalationTokens;
     state.headlines = shuffle(
-      headlines.headlines.filter((entry) => entry.round === state.round),
+      availableHeadlines(headlines, state.round, playProfile(config, state)),
       createRng(`${state.seed}:headlines:${state.round}`)
     );
     state.log.unshift(`Era ${state.round} begins: ${config.rounds[state.round - 1].name}.`);
   } else {
     state.phase = "complete";
-    state.log.unshift("Round IV settled. Final scoring is ready for manual review.");
+    state.log.unshift("Era IV settled. Final scoring is ready for manual review.");
   }
 }
 
 export function castRealignmentVote(config, headlines, state, motionId) {
+  if (!playProfile(config, state).realignmentEnabled) {
+    throw new Error("Jurisdictional Realignment is available only in Advanced Play.");
+  }
   if (state.phase !== "realign" || !state.pendingRoundSettlement) {
     throw new Error("No Jurisdictional Realignment vote is waiting.");
   }
@@ -769,7 +826,9 @@ export function castRealignmentVote(config, headlines, state, motionId) {
   );
   const winner = motions.find((motion) => motion.id === result.winningMotionId);
   const movement = applyBoardMotion(state.board, winner);
-  const networked = networkedFacilityIds(state.board, state.player);
+  const networked = networkedFacilityIds(state.board, state.player, {
+    networkInfrastructureEnabled: playProfile(config, state).networkInfrastructureEnabled
+  });
   for (const facility of state.player.facilities) {
     if (!networked.has(facility.id)) facility.gridReady = false;
   }
@@ -805,7 +864,7 @@ export function commitAction(state, actionId, kind = "core") {
     kind
   });
   state.phase = "move";
-  state.log.unshift(`${kind === "wild" ? "Wild" : "Core"} Action revealed: ${actionId}. Acting piece remains undeclared.`);
+  state.log.unshift(`${kind === "escalation" ? "Escalation" : "Core"} Action revealed: ${actionId}. Acting piece remains undeclared.`);
 }
 
 export function resolveSelectedAction(config, headlines, state, pieceId, tileId, options = {}) {
@@ -824,8 +883,8 @@ export function resolveSelectedAction(config, headlines, state, pieceId, tileId,
   } else {
     if (state.player.escalation < 1) throw new Error("No Escalation token is available.");
     state.player.escalation -= 1;
-    state.player.wildActionsUsed.push(state.selectedAction.id);
-    summary = `${state.selectedAction.id} committed at ${destination.name}; detailed Wild Action resolution is recorded for manual study.`;
+    state.player.escalationsUsed.push(state.selectedAction.id);
+    summary = `${state.selectedAction.id} committed at ${destination.name}; detailed Escalation resolution is recorded for manual study.`;
   }
 
   state.log.unshift(summary);

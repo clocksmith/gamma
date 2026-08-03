@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Deterministic rules and spatial-power study for ${game.title}.">
-    <title>${game.title} — Prototype</title>
+    <meta name="description" content="Deterministic rules and spatial-power study for ${content.worldCopy.title}.">
+    <title>${content.worldCopy.title} — Prototype</title>
     <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/web/styles.css">
   </head>
@@ -12,43 +12,28 @@
     <header class="masthead">
       <div class="brand-lockup">
         <p class="eyebrow">Institutional strategy study · build ${game.executableVersion}</p>
-        <h1>${game.shortTitle} <span>2038</span></h1>
+        <h1>${content.worldCopy.title}</h1>
         <p class="dek">${terms.actions.build}. ${terms.actions.deploy}. Regulate. Plausibly declare.</p>
       </div>
       <div class="status-block header-rail">
-        <span class="status">rc.5-test executable baseline</span>
+        <span class="status">${game.executableVersion} executable baseline</span>
+        <a href="/first-game-guide">First Game Guide</a>
         <a href="/lab">Simulation lab</a>
         <a href="/docs/core-rules.html">Canonical rules</a>
       </div>
     </header>
 
     <main class="game-shell">
-      <section id="bridge-panel" class="panel bridge-panel" hidden>
-        <div>
-          <p class="eyebrow">Optional local execution bridge</p>
-          <h2>Connect only for Claude, Codex, or hybrid opponents</h2>
-          <p>
-            Weighted and greedy opponents run entirely in this browser. To use
-            an installed CLI, run <code>npm run dev</code>, paste the private
-            token printed by Node, then allow Chrome local-network access.
-          </p>
-        </div>
-        <label>Pairing token<input id="bridge-token" type="password" autocomplete="off" spellcheck="false"></label>
-        <button id="connect-bridge" type="button">Connect local bridge</button>
-        <p id="bridge-status" class="bridge-status" role="status">Not connected.</p>
-      </section>
-
       <section id="setup" class="command-panel panel" aria-label="Game setup">
         <div class="section-heading command-heading">
           <div>
             <p class="eyebrow">Match command</p>
             <h2>Set the table</h2>
           </div>
-          <p class="setup-note">One browser tab hosts the full deterministic match. Choose the institution, field, and opponents before committing the first round.</p>
         </div>
         <div class="command-fields">
           <label>Play as<select id="faction"></select></label>
-          <label>Game seed<input id="seed" value="frontier-2038" spellcheck="false"></label>
+          <label>Game seed<input id="seed" value="mandate-2038" spellcheck="false"></label>
           <label>Players
             <select id="player-count">
               <option value="2">2 players · exploratory</option>
@@ -58,38 +43,12 @@
               <option value="6">6 players · exploratory</option>
             </select>
           </label>
+          <label>Rules profile
+            <select id="play-profile"></select>
+          </label>
           <button id="start-game" type="button">Start complete game</button>
         </div>
         <p id="game-status">Choose personas and start immediately with deterministic browser opponents. A local bridge is optional for Claude or Codex.</p>
-      </section>
-
-      <section class="panel opponent-setup" aria-label="Opponent setup">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Opposing institutions</p>
-            <h2>Personas and decision backends</h2>
-          </div>
-          <small>Weighted and greedy run in this browser with no server. Claude, Codex, and hybrid seats use the optional local bridge.</small>
-        </div>
-        <div id="opponent-config" class="seat-config"></div>
-        <details class="llm-controls">
-          <summary>Metered CLI-opponent controls</summary>
-          <label class="check-label">
-            <input id="allow-llm" type="checkbox">
-            Authorize Claude/Codex calls for this game
-          </label>
-          <div class="form-grid compact-grid">
-            <label>
-              Maximum LLM decisions per opponent
-              <input id="max-llm-decisions" type="number" min="1" max="24" value="12">
-            </label>
-            <label>
-              Optional model override
-              <input id="model" placeholder="Use provider default">
-            </label>
-          </div>
-          <p class="muted">Each LLM seat has its own budget. When exhausted—or if its CLI fails—that seat falls back to its deterministic persona.</p>
-        </details>
       </section>
 
       <section class="game-layout">
@@ -101,7 +60,7 @@
           <div class="board-window">
             <div id="board" class="board" aria-label="Hex board"></div>
           </div>
-          <p class="board-note">Districts, pieces, Facilities, Generators, Power state, and Round III Realignment are rendered from the live match.</p>
+          <p class="board-note">Districts, pieces, Facilities, Generators, and Power state are rendered from the live match. Advanced Play additionally renders Era III Realignment.</p>
         </div>
         <aside class="institution-panel panel">
           <div class="section-heading institution-heading">
@@ -113,9 +72,12 @@
           </div>
           <div id="players" class="player-roster"></div>
           <div class="headline">
-            <p class="eyebrow">Current ${terms.systems.headline}</p>
+            <p class="eyebrow" id="headline-label">Current ${terms.systems.headline}</p>
             <h3 id="headline-name">Not revealed</h3>
-            <p id="headline-text"></p>
+            <p id="headline-strapline" class="headline-strapline"></p>
+            <p id="headline-newswire" class="headline-news"></p>
+            <p id="headline-consequence" class="headline-consequence"></p>
+            <p id="headline-quote" class="headline-quote"></p>
           </div>
         </aside>
       </section>
@@ -136,6 +98,29 @@
         </div>
         <ol id="log" class="log"></ol>
       </section>
+
+      <details id="advanced-controls" class="panel llm-controls">
+        <summary>Advanced controls: local CLI opponents</summary>
+        <section class="opponent-setup" aria-label="Opponent setup">
+          <div class="section-heading"><div><p class="eyebrow">Opposing institutions</p><h2>Personas and decision backends</h2></div></div>
+          <div id="opponent-config" class="seat-config"></div>
+          <details class="llm-controls">
+            <summary>Metered CLI-opponent controls</summary>
+            <label class="check-label"><input id="allow-llm" type="checkbox">Authorize Claude/Codex calls for this game</label>
+            <div class="form-grid compact-grid"><label>Maximum LLM decisions per opponent<input id="max-llm-decisions" type="number" min="1" max="24" value="12"></label><label>Optional model override<input id="model" placeholder="Use provider default"></label></div>
+          </details>
+        </section>
+        <section id="bridge-panel" class="bridge-panel" hidden>
+          <div>
+            <p class="eyebrow">Optional local execution bridge</p>
+            <h2>Connect only for Claude, Codex, or hybrid opponents</h2>
+            <p>Weighted and greedy opponents run entirely in this browser. To use an installed CLI, run <code>npm run dev</code>, paste the private token printed by Node, then allow Chrome local-network access.</p>
+          </div>
+          <label>Pairing token<input id="bridge-token" type="password" autocomplete="off" spellcheck="false"></label>
+          <button id="connect-bridge" type="button">Connect local bridge</button>
+          <p id="bridge-status" class="bridge-status" role="status">Not connected.</p>
+        </section>
+      </details>
     </main>
 
     <footer>

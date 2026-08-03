@@ -17,7 +17,7 @@ const report = await runBalanceAudit({
   runsPerMatchup: Number(args.runs || args["runs-per-matchup"] || 8),
   generations: Number(args.generations || 2),
   population: Number(args.population || 3),
-  seed: args.seed || "m3t4-balance-audit",
+  seed: args.seed || "mandate-2038-balance-audit",
   magnitude: args.magnitude === undefined ? undefined : Number(args.magnitude),
   onProgress: ({ phase, completed, total }) => {
     process.stderr.write(`\r${phase}: ${completed}/${total}`);

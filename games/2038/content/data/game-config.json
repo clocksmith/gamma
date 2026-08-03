@@ -1,0 +1,539 @@
+{
+  "schemaVersion": 2,
+  "gameId": "frontier-2038",
+  "players": {
+    "min": 2,
+    "max": 6,
+    "balanceAuthority": 4,
+    "playableCounts": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "supportedCounts": [
+      3,
+      4,
+      5
+    ],
+    "historicalOnlyCounts": [
+      2,
+      6
+    ],
+    "firstTestCount": 4
+  },
+  "tieRule": {
+    "id": "initiative_clockwise"
+  },
+  "playRuleDefaults": {
+    "immediateTradeCounteroffers": false,
+    "immediateTradeThirdPartyClaims": false,
+    "powerPurchaseRequests": 1,
+    "realignmentEnabled": false,
+    "networkInfrastructureEnabled": false,
+    "headlinePersistentEffectsEnabled": false,
+    "headlinePublicProceduresEnabled": false,
+    "headlineVolatilityEnabled": false
+  },
+  "playRuleModules": {
+    "trade-counteroffers": {
+      "id": "trade-counteroffers",
+      "settings": {
+        "immediateTradeCounteroffers": true
+      }
+    },
+    "third-party-trade-claims": {
+      "id": "third-party-trade-claims",
+      "settings": {
+        "immediateTradeThirdPartyClaims": true
+      }
+    },
+    "second-power-request": {
+      "id": "second-power-request",
+      "settings": {
+        "powerPurchaseRequests": 2
+      }
+    },
+    "jurisdictional-realignment": {
+      "id": "jurisdictional-realignment",
+      "settings": {
+        "realignmentEnabled": true
+      }
+    },
+    "network-infrastructure": {
+      "id": "network-infrastructure",
+      "settings": {
+        "networkInfrastructureEnabled": true
+      }
+    },
+    "headline-persistence": {
+      "id": "headline-persistence",
+      "settings": {
+        "headlinePersistentEffectsEnabled": true
+      }
+    },
+    "headline-public-procedures": {
+      "id": "headline-public-procedures",
+      "settings": {
+        "headlinePublicProceduresEnabled": true
+      }
+    },
+    "headline-volatility": {
+      "id": "headline-volatility",
+      "settings": {
+        "headlineVolatilityEnabled": true
+      }
+    }
+  },
+  "playProfiles": {
+    "defaultGame": {
+      "id": "default-game",
+      "moduleIds": [
+        "trade-counteroffers"
+      ]
+    },
+    "advancedPlay": {
+      "id": "advanced-play",
+      "moduleIds": [
+        "trade-counteroffers",
+        "third-party-trade-claims",
+        "second-power-request",
+        "jurisdictional-realignment",
+        "network-infrastructure",
+        "headline-persistence",
+        "headline-public-procedures",
+        "headline-volatility"
+      ]
+    }
+  },
+  "factionRules": {
+    "imperial": {
+      "peerValidation": "${facts.shared.factions.imperial.peerValidation}"
+    },
+    "vertical": {
+      "industrialVelocityMandate": "${facts.shared.factions.vertical.industrialVelocityMandate}"
+    },
+    "foundry": {
+      "startingCompute": "${facts.shared.factions.foundry.startingCompute}",
+      "shovelsPerRound": "${facts.shared.factions.foundry.shovelsPerRound}",
+      "allocationWindow": "${facts.shared.factions.foundry.allocationWindow}",
+      "newArchitectureCompute": "${facts.shared.factions.foundry.newArchitectureCompute}",
+      "newArchitectureDemandCoupling": "${facts.shared.factions.foundry.newArchitectureDemandCoupling}",
+      "everybodyGpuRivalsPerMandate": "${facts.shared.factions.foundry.everybodyGpuRivalsPerMandate}"
+    }
+  },
+  "audit": {
+    "scaling": "round(baseDraws * playerCount / 4)",
+    "minimumDraws": 1,
+    "scrutinySupplyPerPlayer": 10
+  },
+  "rounds": [
+    {
+      "number": 1,
+      "id": "demo",
+      "cycles": 3,
+      "auditBaseDraws": 2,
+      "escalationTokens": 0
+    },
+    {
+      "number": 2,
+      "id": "scale",
+      "cycles": 3,
+      "auditBaseDraws": 3,
+      "escalationTokens": 1
+    },
+    {
+      "number": 3,
+      "id": "narrative",
+      "cycles": 3,
+      "auditBaseDraws": 4,
+      "escalationTokens": 1
+    },
+    {
+      "number": 4,
+      "id": "claim",
+      "cycles": 3,
+      "auditBaseDraws": 5,
+      "escalationTokens": 2
+    }
+  ],
+  "actions": [
+    {
+      "id": "fund"
+    },
+    {
+      "id": "research"
+    },
+    {
+      "id": "build"
+    },
+    {
+      "id": "organize"
+    },
+    {
+      "id": "deploy"
+    },
+    {
+      "id": "influence"
+    }
+  ],
+  "resources": {
+    "runway": {
+      "min": 0,
+      "cap": 12
+    },
+    "compute": {
+      "min": 0,
+      "cap": 10
+    },
+    "capability": {
+      "min": 0,
+      "cap": 12
+    },
+    "customers": {
+      "min": 0,
+      "cap": 5
+    },
+    "trust": {
+      "min": 0,
+      "cap": 6
+    },
+    "safety": {
+      "min": 0,
+      "cap": 3
+    }
+  },
+  "playerSupply": {
+    "ceos": 1,
+    "teams": 3,
+    "facilities": 4,
+    "generators": 2,
+    "linkTokens": 2,
+    "networkMarkers": 1,
+    "influenceCubes": 8,
+    "scrutinyCubes": 10,
+    "customerMarkers": 5,
+    "escalationTokens": 4,
+    "coreActionCards": 6,
+    "escalationCards": 7,
+    "realignmentBallots": 3,
+    "agiDeclarationMarkers": 1,
+    "jointVentureMarkers": 2,
+    "megaClusterMarkers": 1,
+    "startingGridMarkers": 1
+  },
+  "sharedSupply": {
+    "jointVenturePairs": "${facts.shared.components.jointVenturePairs}",
+    "megaClusterPairs": "${facts.shared.components.megaClusterPairs}"
+  },
+  "board": {
+    "selectedTileCount": 13,
+    "prototypeTileCount": 13,
+    "geometry": {
+      "radius": 2,
+      "centerSlots": 1,
+      "innerSlots": 6,
+      "outerSlots": 6,
+      "movementRange": 2,
+      "maximumDistance": 4
+    },
+    "realignment": {
+      "motions": [
+        {
+          "id": "consolidate_core",
+          "innerSteps": 1,
+          "outerSteps": 0
+        },
+        {
+          "id": "expand_periphery",
+          "innerSteps": 0,
+          "outerSteps": 1
+        },
+        {
+          "id": "counter_cycle",
+          "innerSteps": 1,
+          "outerSteps": -1
+        }
+      ]
+    },
+    "facilitySpacesPerHex": 2,
+    "startingGridConnection": {
+      "capacity": 1,
+      "requiresLink": false
+    },
+    "tiles": [
+      {
+        "id": "frontier",
+        "category": "frontier",
+        "count": 1,
+        "placement": {
+          "center": 1,
+          "inner": 0,
+          "outer": 0
+        },
+        "facilitySpaces": 0
+      },
+      {
+        "id": "research",
+        "category": "research",
+        "count": 2,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 1
+        }
+      },
+      {
+        "id": "cloud",
+        "category": "cloud",
+        "count": 2,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 1
+        }
+      },
+      {
+        "id": "consumer",
+        "category": "consumer",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        }
+      },
+      {
+        "id": "foundry",
+        "category": "chip",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        }
+      },
+      {
+        "id": "capital",
+        "category": "capital",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        }
+      },
+      {
+        "id": "talent",
+        "category": "talent",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        }
+      },
+      {
+        "id": "media",
+        "category": "media",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        }
+      },
+      {
+        "id": "government",
+        "category": "government",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        }
+      },
+      {
+        "id": "grid_reactor",
+        "category": "energy",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        }
+      },
+      {
+        "id": "renewable_basin",
+        "category": "energy",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        }
+      }
+    ]
+  },
+  "trainingDeck": {
+    "reshuffleWhenEmpty": true,
+    "cards": [
+      {
+        "id": "code",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "science",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "web",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "books",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "images",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "video",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "synthetic",
+        "kind": "domain",
+        "count": 5
+      },
+      {
+        "id": "curated_corpus",
+        "kind": "special",
+        "count": 3
+      },
+      {
+        "id": "benchmark_leak",
+        "kind": "special",
+        "count": 3
+      },
+      {
+        "id": "licensed_dataset",
+        "kind": "special",
+        "count": 3
+      },
+      {
+        "id": "synthetic_loop",
+        "kind": "special",
+        "count": 3
+      },
+      {
+        "id": "human_evaluation",
+        "kind": "special",
+        "count": 3
+      }
+    ]
+  },
+  "powerSources": [
+    {
+      "id": "clean_infrastructure",
+      "round": 2,
+      "runwayCost": 3,
+      "capacity": 3,
+      "trust": 1,
+      "scrutinyPerUse": 0
+    },
+    {
+      "id": "emergency_infrastructure",
+      "round": 2,
+      "runwayCost": 2,
+      "capacity": 4,
+      "trust": 0,
+      "scrutinyPerUse": 1
+    },
+    {
+      "id": "fusion_demonstrator",
+      "round": "${facts.shared.rounds}",
+      "runwayCost": "${facts.shared.advancedGeneration.runwayCost}",
+      "capacity": "${facts.shared.advancedGeneration.power}",
+      "mandate": "${facts.shared.advancedGeneration.mandate}",
+      "scrutinyOnBuild": "${facts.shared.advancedGeneration.scrutiny}",
+      "isEscalation": true,
+      "location": "grid_reactor"
+    }
+  ],
+  "agiDeclaration": {
+    "capability": "${facts.executable.agi.capability}",
+    "customers": "${facts.executable.agi.customers}",
+    "facilities": "${facts.executable.agi.facilities}",
+    "trust": "${facts.executable.agi.trust}",
+    "computeCost": "${facts.executable.agi.computeCost}",
+    "firstMandate": "${facts.executable.agi.firstMandate}",
+    "laterMandate": "${facts.executable.agi.laterMandate}",
+    "scrutiny": "${facts.executable.agi.scrutiny}"
+  },
+  "scoring": {
+    "mode": "public_event_track",
+    "customerMandate": "${facts.shared.scoring.customerMandate.baseMandate}",
+    "customerMandateSchedule": "${facts.shared.scoring.customerMandate}",
+    "capabilityThresholds": [
+      {
+        "value": 3,
+        "mandate": 2
+      },
+      {
+        "value": 6,
+        "mandate": 2
+      },
+      {
+        "value": 9,
+        "mandate": 2
+      },
+      {
+        "value": 12,
+        "mandate": 2
+      }
+    ],
+    "trustThresholds": [
+      {
+        "value": 2,
+        "mandate": 2
+      },
+      {
+        "value": 4,
+        "mandate": 2
+      },
+      {
+        "value": 6,
+        "mandate": 2
+      }
+    ],
+    "finalOnly": {
+      "secretObjectiveMandate": 0,
+      "offlineFacilityPenalty": 1
+    },
+    "automaticFacilityMandate": 0,
+    "automaticControlMandate": 0
+  },
+  "baselineModules": {
+    "tactics": false,
+    "secretObjectives": false
+  },
+  "worldEnding": {
+    "agiEmergence": {
+      "minimumQualifiedDeclarers": 1,
+      "declarerCapability": 9
+    },
+    "openContinuity": {
+      "collectiveTrustOffsetPerPlayer": 1,
+      "systemicRiskMustBeBelowPlayerCount": true
+    }
+  }
+}

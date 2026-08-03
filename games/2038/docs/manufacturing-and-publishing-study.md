@@ -7,7 +7,7 @@ authorization, or manufacturing commitment
 
 ## How to read this document
 
-This document records a recommendation for how M3T4 2038 might be
+This document records a recommendation for how Mandate 2038 might be
 prototyped, quoted, published, and commercially positioned. It does **not**
 define the game and does not supersede the selected rules in
 [`core-rules.md`](core-rules.md) or the decision statuses in
@@ -20,14 +20,14 @@ publishing paths, legal precautions, and next actions remain recommendations
 until the user explicitly selects them. Time-sensitive figures must be
 rechecked before use.
 
-M3T4 2038 materially changes the manufacturing estimate from a lightweight
+Mandate 2038 materially changes the manufacturing estimate from a lightweight
 card game. It is currently a medium-box hobby strategy design: 3–5 players,
-four rounds, simultaneous action selection, a modular thirteen-hex economy,
+four Eras, simultaneous action selection, a modular thirteen-hex economy,
 six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.5.0-rc.35-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.8.35`. That synchronization is
+Rules `0.6.0-rc.1-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.9.0`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -36,7 +36,7 @@ materials, packaging, and production files remain unresolved.
 
 Recommended positioning for testing:
 
-> **M3T4 2038**
+> **Mandate 2038**
 > A 3–5 player strategy game about building, deploying, regulating, and
 > eventually declaring AGI.
 > **75–100 minutes at four players, ages 14+, medium-weight strategy.**
@@ -50,7 +50,8 @@ Likely commercial format:
 - No conventional folding board
 - Thirteen thick modular hex tiles
 - Six faction/player boards
-- Approximately 190 baseline cards plus final player-reference aids
+- Approximately 163 Default Game cards, or 189 with the Advanced Play cards,
+  plus final player-reference aids
 - Stock wooden pieces and cubes
 - Several punchboard sheets
 - One opaque Scrutiny bag
@@ -72,49 +73,46 @@ locked component specification.
 | Modular hex tiles | 13, double-sided, 80–90 mm, 2 mm greyboard | selected sixfold-symmetric footprint |
 | Faction/player boards | 6, ideally dual-layer or recessed | strong recommendation |
 | Core Action cards | 36, six per player | confirmed |
-| Wild Action cards | 42, seven per player | confirmed |
-| Realignment ballot cards | 18, three per player | confirmed |
-| Headline cards | 24 | confirmed |
+| Escalation cards | 42, seven per player | confirmed |
+| Realignment ballot cards | 18, three per player | Advanced Play only |
+| Headline cards | 24: 16 Default plus 8 Advanced | confirmed profile split |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
 | Training cards | 50 | confirmed test contract |
 | Power Source references | 3 shared cards: two ordinary sources plus Fusion | selected; availability unlimited |
 | Mandate cards | 12 | selected wording; balance provisional |
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
 | Era cards | 4 | selected |
-| Player references | 4 | synchronized draft copy; final layout unresolved |
-| Total baseline cards | approximately 188 plus player references | quote placeholder |
+| Player references | 4 designs; production copy count unresolved | synchronized draft copy; final layout and per-player duplication unresolved |
+| Total cards | approximately 163 Default or 189 with Advanced, plus player references | quote placeholder |
 | CEO pieces | 6 | confirmed concept |
 | Team pieces | 18 | three per faction |
 | Facility pieces | 24 | four per faction |
-| Generator pieces | 12 | two per faction |
-| Link tokens | 12 | two per faction |
-| Network markers | 6 | one per faction; capacity is tracked on the player board |
+| Generator pieces | 12 | two per faction; source encoding remains open |
+| Power Source selectors | up to 12 | only if Generators are not source-specific or reversible |
+| Link tokens | 12 | Advanced Play only; two per faction |
+| Network markers | 6 | Advanced Play only; one per faction with capacity tracked on the player board |
 | Starting-grid markers | 6 | one per faction; travels with its designated Facility |
-| Grid-Ready markers | 24 | four per faction; records demonstrated Production |
+| Grid-Ready markers | up to 24 | only if Facilities do not encode Grid-Ready on their reverse |
 | Track markers | at least 30 | final track implementation unresolved |
 | Influence cubes | 48 | eight per faction |
-| Scrutiny cubes | 60 player-colored plus Systemic Risk | ten per faction |
-| Customer markers | 30 | five per faction |
-| Escalation tokens | 24 | four per faction |
+| Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
+| Customer markers | up to 30 | only if Customers do not use a player-board track |
+| Escalation tokens | up to 24 | only if Escalation does not use a player-board track |
+| AGI Declaration markers | up to 6 | only if Declare AGI cards do not encode the declared state |
 | Shared punchboard tokens | use exact `core-rules.md` inventory | selected counts; layout unresolved |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Scrutiny bag | 1 opaque cloth bag | confirmed concept |
-| Volatility die | 1 stock d6 | confirmed concept |
+| Volatility die | 1 stock d6 | Advanced Play only |
 | Rulebook | 24–32 pages | expected |
 | Box | rigid two-piece box with cardboard insert | recommendation |
 
-Preferred physical strategy:
+Physical component form, state encoding, and the supported-box inventory are
+owned by [`physical/`](../physical/README.md). This study may evaluate the
+cost and availability of those choices, but does not select them.
 
-- Wooden CEOs, Teams, Facilities, and possibly Generators
-- Punchboard or wooden Link tokens, subject to quote comparison
-- Small stock cubes for Influence, Scrutiny, and tracks
-- Punchboard Customers, Safety, Joint Ventures, Mega-Clusters, Policy Shields,
-  Experts, Grants, Spotlight, Initiative, and Systemic Risk
-- Player-board tracks for Runway, Compute, Capability, Customers, and Trust
-- No custom plastic
-- No miniatures
-- No custom molded insert
-- No custom die in the first edition
+No manufactured spare allowance is selected. Replacement cards, punchboard
+overage, spare cubes, and spare wooden pieces remain quote variables until
+prototype loss, wear, and blind-play evidence establishes what must be packed.
 
 ## Recommended resolution before a real RFQ
 
@@ -141,11 +139,11 @@ be included in the first prototype quote.
 
 The selected rule is:
 
-> To perform an unlocked Wild Action, spend one Escalation token. Unspent
-> tokens expire at the end of the round.
+> To perform an unlocked Escalation, spend one Escalation token. Unspent
+> tokens expire at the end of the Era.
 
 Each player receives four tokens over the game and has seven once-per-game
-Wild Action cards.
+Escalation cards.
 
 ### Resolved: player component maxima
 
@@ -158,20 +156,21 @@ The selected thirteen-tile map contains one fixed Frontier, six shuffled
 operational-ring locations, and six shuffled public-ring locations in a
 sixfold-symmetric footprint. It uses two Research, two Cloud, and one each of
 Consumer, Chip, Capital, Talent, Media, Government, Grid, and Renewable.
-Six factions require eighteen Realignment ballots, but the vote occurs only
-after Round III.
+Advanced Play adds eighteen Realignment ballots for six factions; Default Game
+uses none. Its vote occurs only after Era III.
 
 ### Drafted: Mandates and references
 
 The baseline contains twelve Era-specific Mandates and four Era cards. Mandate
-balance remains provisional. Existing player-reference drafts describe an
-older rules release and must be rebuilt before quoting their physical format.
+balance remains provisional. Player-reference copy is synchronized with the
+current profile split; its production duplication and layout remain unresolved.
 
 ### Resolved rules, unresolved production format
 
-Four shared ordinary Power Source references have unlimited availability;
-Generator pieces and Energy slots create scarcity. Fusion uses one dedicated
-shared marker. Shared token quantities are exact in the rulebook.
+Three shared Power Source references—two ordinary sources plus Fusion—have
+unlimited availability. Generator pieces and Energy slots create scarcity.
+Fusion uses one dedicated shared marker. Shared token quantities are exact in
+the rulebook.
 
 The remaining manufacturing decisions are material, dimensions, player-board
 tracking, card sizing, Link and Generator format, punchboard organization, and
@@ -200,7 +199,7 @@ For comparison only, the cited PrintNinja snapshot publishes a Catan-style
 instructions
 at $14,385.21, or $28.77 per unit. It also states that a more straightforward
 game may cost $8–$15 per unit at quantities of at least 1,500. Those examples
-are not quotes for M3T4 2038. M3T4 2038 still has substantially more
+are not quotes for Mandate 2038. Mandate 2038 still has substantially more
 cards than that reference, so it must not inherit the reference price. See
 [PrintNinja’s Catan-style example](https://printninja.com/custom-board-games/custom-settlers-of-catan/)
 and
@@ -398,7 +397,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.5.0-rc.35-test` physical test.
+1. Run the controlled four-player `0.6.0-rc.1-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.

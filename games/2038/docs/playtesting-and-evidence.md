@@ -1,6 +1,6 @@
-# M3T4 2038 Playtesting And Evidence
+# Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.35-test`
+**Rules under review:** `0.6.0-rc.1-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -11,7 +11,7 @@ a session cannot be planned separately from the ruleset that produced it.
 ## Win condition
 
 The first rules pass succeeds when unfamiliar players can set up, finish four
-rounds, reconstruct scoring, and explain why both the institution and the world
+Eras, reconstruct scoring, and explain why both the institution and the world
 reached their outcomes without designer intervention.
 
 The provisional duration is 75–100 minutes at four players. It remains a
@@ -48,7 +48,7 @@ Current selected automated evidence:
   historical preregistered common-seed evidence for the GPU scoring divisor
   and rejected New Architecture and starting-Compute levers. Its balance
   authority is withdrawn because executable `0.7.0` did not apply Shovels to
-  qualifying Wild Actions.
+  qualifying Escalations.
 - [`Foundry Shovels executable correction`](../evidence/studies/simulation/2026-07-27-foundry-shovels-executable-correction.md):
   owns the discovered simulator mismatch, invalidated reports, regression, and
   corrected evidence boundary.
@@ -81,7 +81,7 @@ equivalence.
 
 | Identity | Authority |
 | --- | --- |
-| Game version | `release/game-version.json` |
+| Game version | `versions/current-release.json` |
 | Ruleset fingerprint | generated release manifest |
 | Playtest-kit fingerprint | generated release manifest |
 | Engine identity and fingerprint | generated release manifest |
@@ -92,7 +92,7 @@ equivalence.
 
 ### Semantic version rules
 
-- **Major:** incompatible architecture such as round structure, victory model,
+- **Major:** incompatible architecture such as Era structure, victory model,
   map topology, or Core Actions.
 - **Minor:** selected mechanical or content change that can alter play.
 - **Patch:** wording or diagrams that cannot alter outcomes.
@@ -103,11 +103,12 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.35-test`. Executable
-game `0.8.35` implements it under `three-to-five-grid-ready-v1`. New automated reports
-may therefore carry lean-candidate attribution when their release and engine
-fingerprints match. That implementation proof does not transfer simulation
-outcomes into human-play evidence.
+`dist/docs/core-rules.md` is a review draft at `0.6.0-rc.1-test`. Executable
+game `0.9.0` implements its Default Game profile under
+`three-to-five-profiles-v1`. New automated reports must name either
+`default-game` or `advanced-play`; historical `0.8.35` reports describe the
+former full rules and do not qualify Default Game. Implementation proof does
+not transfer simulation outcomes into human-play evidence.
 
 The two full-progress Codex reports that recorded a changed ruleset fingerprint
 under `0.8.23` remain immutable but are descriptive historical evidence only.
@@ -117,7 +118,7 @@ records their exclusion from exact comparison and promotion evidence.
 Executable `0.8.20` retains write-only decision capture and paired read-only
 replay to the provider boundary, revalidates joint Mega-Cluster contributions
 at acceptance, and applies Foundry’s Shovels royalty after any selected Core,
-Wild, or Faction Action that spends at least two Compute. The rc.18 candidate
+Escalation, or Faction Action that spends at least two Compute. The rc.18 candidate
 adds no playable physical-rule delta from rc.17. It synchronizes the promoted
 Trust Governor and Power Broker profiles, the corrected homogeneous-backend
 allocation and inference gate, and evolved-profile fingerprints with
@@ -157,7 +158,7 @@ precommitted Foundry starting-Compute probe are recorded in
 
 To refresh the currently declared executable and physical-candidate artifacts:
 
-1. Update the appropriate version declaration in `release/game-version.json`.
+1. Update the appropriate version declaration in `versions/current-release.json`.
 2. Generate both attributed bundles with `npm run game:release`.
 3. Verify them with `npm run game:release:verify`.
 4. Commit the release artifacts with their source changes.
@@ -201,23 +202,23 @@ diagnostics rather than balance-authority evidence.
 - rules version and fingerprints;
 - component revision and mixed-revision disclosure;
 - player count, factions, board seed, and session type;
-- setup, cycle, round, Production, Audit, scoring, and total duration;
+- setup, cycle, Era, Production, Audit, scoring, and total duration;
 - facilitator interventions, deviations, and unresolved questions.
 
 ### Actions and movement
 
-- every Core and Wild Action selection, including blocked Actions;
+- every Core and Escalation selection, including blocked Actions;
 - acting piece, destination, and distance;
 - action-resolution and rules-lookup time;
 - Initiative effects and illegal-state recovery;
-- end-of-round occupancy.
+- end-of-Era occupancy.
 
 ### Research and deployment
 
 - provisional and banked Capability for every Research;
 - crash and protection source;
 - separate Mirevanta Works, Research-campus, and all-other Research cohorts;
-- Customers and Capability after every round;
+- Customers and Capability after every Era;
 - each Customer’s immediate Mandate award and continuing Production income;
 - Mirevanta Works’ Capability-nine and Capability-twelve Peer Validation awards;
 - earliest grid-ready AGI eligibility and every declaration.
@@ -236,11 +237,11 @@ diagnostics rather than balance-authority evidence.
   refusal threat changes the deal, and whether participants describe the
   bargain as strategic, coerced, or kingmaking;
 - whether a Power supplier whose imported unit is counterfactually necessary
-  for an eventual declaration enters Round IV within a competitive score
+  for an eventual declaration enters Era IV within a competitive score
   range and finishes in the top half;
 - whether an institution that prepares unsuccessfully for AGI remains
   competitive;
-- all three Grid-slot occupancy before Round IV;
+- all three Grid-slot occupancy before Era IV;
 - whether Fusion was built, declined, blocked, or denied by occupied slots;
 - immediate trades and persistent agreements.
 
@@ -256,12 +257,12 @@ diagnostics rather than balance-authority evidence.
   self-Compute gain;
 - every Industrial Velocity discount, whether it reduced the final paid cost
   of a completed Facility, and any Mandate awarded;
-- Round Mandate qualification and result;
+- Era Mandate qualification and result;
 - final institutional winner and shared World Ending.
 
-### Realignment and narrative
+### Advanced Play Realignment and narrative
 
-- every secret ballot and winning motion;
+- when Advanced Play is selected, every secret ballot and winning motion;
 - discussion and voting time, followed separately by physical rotation and
   Network-recalculation time;
 - rules questions caused by Realignment;
@@ -272,7 +273,7 @@ diagnostics rather than balance-authority evidence.
 - all twelve Future Timeline Headlines;
 - whether each Headline changed at least one intended action;
 - auctions, blocs, votes, and Volatility outcomes;
-- player recall of faction, Headline, Wild Action, and location identities;
+- player recall of faction, Headline, Escalation, and location identities;
 - moments described as surprising, funny, excessive, confusing, or flat.
 
 ### Strategy pressure
@@ -291,9 +292,10 @@ completion, memory, and faction-correlation measures.
 1. Twelve decisions create a complete engine without filler.
 2. Four Eras reach the absurd climax without exhausting the table.
 3. The smaller map creates scarcity while preserving viable strategies.
-4. One Round III Realignment creates adaptation without arbitrary final loss.
+4. Default Game preserves satisfying spatial adaptation without a Era III
+   interruption; Advanced Play earns its extra Realignment procedure.
 5. Research remains tense after players understand its probabilities.
-6. Audit creates meaningful exposure, including in Round IV.
+6. Audit creates meaningful exposure, including in Era IV.
 7. AGI is dramatic and optional rather than expected graduation.
 8. Infrastructure, Narrative, Trust, and Customer strategies can win.
 9. Faction powers create identity without deciding outcomes.

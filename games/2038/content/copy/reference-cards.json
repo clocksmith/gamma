@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "content": {
+    "eraCards": [
+      {
+        "id": "era_demo",
+        "name": "${terms.eras.demo}",
+        "strapline": "Progress Is Generally Available.",
+        "loreText": "AI already codes, creates, analyzes, and discovers at superhuman speed. It is indispensable to work and daily life, even as unemployment rises and the public grows exhausted by competing claims of ${terms.systems.agi}. Companies and governments promise food, clothing, shelter, useful work, and freedom from drudgery while institutions compete to turn visible capability into attention, capital, customers, and authority over what progress means for everyone.",
+        "rulesText": "Ready all Core Actions. Gain 0 Escalation tokens. Play 3 action cycles. Audit base: 2.",
+        "unlockText": "Learn Select → Move → Act, Training, the starting grid, Facilities, ${terms.playerTracks.customers}, and ${terms.playerTracks.scrutiny}. Industrial ${terms.infrastructure.power}, agreements, ${terms.locations.government} votes, and ${terms.systems.escalations} are inactive."
+      },
+      {
+        "id": "era_scale",
+        "name": "${terms.eras.scale}",
+        "strapline": "The Future Has Been Provisioned.",
+        "loreText": "Entire regions are rebuilt to sustain and expand AI. Power districts, water systems, laboratories, supply corridors, and public budgets follow its anticipated needs. Institutions adopt its forecasts to coordinate power, capital, research, and construction faster than human planning can. Governments still ratify each plan, but no ministry can reconstruct its reasoning before the allocation window closes, and refusal means accepting the shortage it predicts.",
+        "rulesText": "Ready all Core Actions. Gain 1 Escalation token. Play 3 action cycles. Audit base: 3.",
+        "unlockText": "Default Game: unlock Generators, ${terms.technology.megaCluster}, and Reorganization. Advanced Play also unlocks two Links and the Network production bonus."
+      },
+      {
+        "id": "era_narrative",
+        "name": "${terms.eras.narrative}",
+        "strapline": "Human Judgment Is Now Optimized.",
+        "loreText": "Cognitive systems become public infrastructure. Neural interfaces, personal agents, and identity layers interpret intent before it is stated; institutions call the arrangement inclusive because every voice can be represented at scale. As quantum computation destabilizes older records and credentials, factions build rival systems for deciding what people meant, consented to, remember, and may do. Human judgment survives as an appeal processed by those systems.",
+        "rulesText": "Ready all Core Actions. Gain 1 Escalation token. Play 3 action cycles. Audit base: 4.",
+        "unlockText": "Unlock agreements, Open Weights, and Narrative Capture. Advanced Play also adds Civic Permission Authority votes and persistent ${terms.systems.headline} effects. Earlier unused ${terms.systems.escalations} remain available."
+      },
+      {
+        "id": "era_claim",
+        "name": "${terms.eras.claim}",
+        "strapline": "Continuity Has Now Been Assured.",
+        "loreText": "Continuity begins when intelligence survives changes of body, matter, and jurisdiction. Minds migrate between bodies and machines; self-replicating fabricators rebuild matter; agent polities administer quantum-linked infrastructure. Institutions continue processing identities, claims, liabilities, and access requests after no human authority can determine which copy is the person, which system is sovereign, or which version of reality the machinery is preserving for everyone still inside it.",
+        "rulesText": "Ready all Core Actions. Gain 2 Escalation tokens. Play 3 action cycles. Audit base: 5.",
+        "unlockText": "Unlock exceptional faction programs, ${terms.technology.agentSwarm}, Declare ${terms.systems.agi}, and ${terms.technology.advancedGeneration}. Earlier unused ${terms.systems.escalations} remain available."
+      }
+    ],
+    "playerReferences": [
+      {
+        "id": "quarter_sequence",
+        "name": "A Perfectly Governed Quarter",
+        "frontText": [
+          "1. Begin the Era: ready, draw, reveal ${terms.playerTracks.mandate}, assign Grant and Spotlight.",
+          "2. Three cycles: reveal ${terms.systems.headline}, SELECT, reveal, MOVE, ACT, exhaust.",
+          "3. Resolve ${terms.infrastructure.power} and Production.",
+          "4. Conduct the ${terms.systems.publicAudit}.",
+          "5. Score the ${terms.playerTracks.mandate}.",
+          "6. Default Game: advance directly after Era III Mandate scoring. Advanced Play only: secretly ballot, reveal, and resolve ${terms.systems.realignment}."
+        ],
+        "backText": [
+          "SELECT one unused Core Action or one legal unused ${terms.systems.escalation}.",
+          "MOVE one acting piece 0–2 hexes, then ACT from its destination.",
+          "Apply at most one destination bonus, one Faction modifier, one Tactic, and the ${terms.systems.headline}.",
+          "Only ${terms.technology.agentSwarm} resolves additional Core Actions.",
+          "${terms.systems.escalations} spend 1 Escalation token. Unspent tokens expire.",
+          "If an effect says lowest, highest, or most and ties, use Initiative-clockwise order."
+        ],
+        "flavorText": "Every quarter is unprecedented. The sequence remains standardized."
+      },
+      {
+        "id": "production_audit",
+        "name": "Infrastructure and Accountability",
+        "frontText": [
+          "Default Game: the starting grid powers its assigned Facility; each Generator powers only its own or adjacent Facilities.",
+          "Assign local ${terms.infrastructure.power}, then produce powered Facilities. Advanced Play instead recalculates and pools the connected Network.",
+          "After allocation, mark every fully powered Facility Grid-Ready; remove its marker if it moves, disconnects, or later receives insufficient ${terms.infrastructure.power}.",
+          "Gain ${terms.playerTracks.customer} income and Joint Venture production. Advanced Play also grants the Network bonus.",
+          "Offline Facilities retain presence but do not produce."
+        ],
+        "backText": [
+          "Audit draws = round(base draws × players ÷ 4), minimum 1.",
+          "For each cube drawn, its owner pays 1 ${terms.resources.runway} or loses 1 ${terms.playerTracks.trust}.",
+          "A Systemic Risk cube affects every player with at least 3 ${terms.playerTracks.customers}.",
+          "If your ${terms.playerTracks.scrutiny} supply is empty, each additional cube costs 1 ${terms.resources.runway} or 1 ${terms.playerTracks.trust} immediately."
+        ],
+        "flavorText": "Capacity is local by default. Responsibility remains individually addressable."
+      },
+      {
+        "id": "jurisdictional_realignment",
+        "name": "Advanced Play: The Map Has Approved a Motion",
+        "frontText": [
+          "Every player secretly chooses one ballot; reveal simultaneously.",
+          "Plurality wins. For tied leading motions, scan ballots from Initiative clockwise.",
+          "Core: inner ring +1 clockwise.",
+          "Periphery: outer ring +1 clockwise.",
+          "Counter-Cycle: inner +1 clockwise; outer −1."
+        ],
+        "backText": [
+          "${terms.locations.frontier} never moves; moving tiles carry all site-bound contents.",
+          "Recalculate Network reach; never lift or re-lay edge segments.",
+          "Disconnected contracts remain owned but produce nothing.",
+          "An edge-split ${terms.technology.megaCluster} is offline until its Facilities are adjacent.",
+          "Use only in Advanced Play, exactly once after Era III Mandate scoring; skip in every other Era."
+        ],
+        "flavorText": "The geography remains factual. Its location has been updated."
+      },
+      {
+        "id": "public_mandate",
+        "name": "History Is a Public Track",
+        "frontText": [
+          "${terms.playerTracks.customers} 1–3 score 2 ${terms.playerTracks.mandate} each; ${terms.playerTracks.customers} 4–5 score 1 each. Every ${terms.playerTracks.customer} still produces 1 ${terms.resources.runway}.",
+          "Immediately score 2 once at ${terms.playerTracks.capability} 3, 6, 9, and 12, except for a printed faction scoring rule.",
+          "Immediately score 2 once at ${terms.playerTracks.trust} 2, 4, and 6.",
+          "Printed Era, ${terms.systems.headline}, Faction, Fusion, and ${terms.systems.agi} awards score immediately."
+        ],
+        "backText": [
+          "Threshold ${terms.playerTracks.mandate} never reverses if a track later falls.",
+          "Facilities and control do not automatically score.",
+          "Baseline game: Tactics and secret objectives are not used.",
+          "Final scoring: −1 per offline Facility.",
+          "AGI emerges when a declaration finishes at Capability 9+. Open requires final Collective Trust at least setup total + player count and unresolved Systemic Risk below player count.",
+          "Emerges/Open: The Singularity; Emerges/Closed: The Closed Loop; no AGI/Open: The Plural Future; no AGI/Closed: Assured Continuity."
+        ],
+        "flavorText": "Mandate is public permission to shape the future: credibility during ${terms.eras.demo}, capacity during ${terms.eras.scale}, authority during ${terms.eras.narrative}, and historical legitimacy during ${terms.eras.claim}."
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
-# M3T4 2038 Design Decisions
+# Mandate 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.35-test`
+**Rules reference:** `0.6.0-rc.1-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -8,16 +8,16 @@ not repeat card text or resolve play: [`core-rules.md`](core-rules.md) is the
 only authority for the physical game.
 
 The former complexity-proposal document was folded into this ledger after its
-five selected proposals were implemented. Earlier 19-tile, every-round
+five selected proposals were implemented. Earlier 19-tile, every-Era
 Realignment, Transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
 ## Product identity
 
-M3T4 is a competitive institutional strategy game that also produces a
+Mandate 2038 is a competitive institutional strategy game that also produces a
 shared future. Its durable pillars are:
 
-- six Core Actions with only three selections each round;
+- six Core Actions with only three selections each Era;
 - simultaneous commitment followed by spatial resolution;
 - a modular hex economy without combat or elimination;
 - push-your-luck Research;
@@ -67,19 +67,19 @@ variation to test the central engine.
 
 ### Eras teach the game
 
-- **The Demo:** movement, Core Actions, Research, Facilities, Customers, and
+- **Progress:** movement, Core Actions, Research, Facilities, Customers, and
   Scrutiny.
-- **The Scale:** Generators, Networks, Links, and early Wild Actions.
-- **The Narrative:** persistent agreements, Government votes, and competing
+- **Capacity:** Generators, Networks, Links, and early Escalations.
+- **Authority:** persistent agreements, Government votes, and competing
   public realities.
-- **The Claim:** Agent Swarm, Fusion, AGI, and the civilizational ending.
+- **Continuity:** Agent Swarm, Fusion, AGI, and the civilizational ending.
 
 Later systems remain visible from setup, but the Era card is the sole unlock
 authority.
 
 ### Mandate stays public
 
-Customers, Capability thresholds, Trust thresholds, Round Mandates, Fusion,
+Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion,
 faction awards, and AGI score when they occur. Facilities and control create
 position and production rather than receiving automatic endgame points. Final
 calculation contains only the offline penalty before resolving the shared
@@ -104,12 +104,13 @@ govern both Power delivery and the Network bonus. There is no separate
 Transmission graph.
 
 Networks and the starting-grid marker exist from setup. Generators, Links,
-Mega-Clusters, and the Network production bonus unlock in Round II.
+Mega-Clusters, and the Network production bonus unlock in Era II.
 
-Jurisdictional Realignment occurs once, after Round III Mandate scoring. The
-blind vote rotates a physical ring while every site-bound component travels
-with its district. Players then receive all three Round IV actions to respond.
-There is no postgame rotation.
+Default Game keeps the randomized jurisdiction fixed for all four Eras.
+Jurisdictional Realignment is preserved as part of the single bundled Advanced
+Play profile: its blind vote rotates a physical ring while every site-bound
+component travels with its district. Players then receive all three Era IV
+actions to respond. There is no postgame rotation.
 
 Fusion deliberately occupies one of the Grid tile’s three Generator slots.
 Filling those slots can deny Fusion; the first controlled test must measure
@@ -117,7 +118,13 @@ whether that creates meaningful spatial competition or an accidental lockout.
 
 ## Selected interaction contract
 
-One immediate resource trade may occur during any player’s resolution.
+In Default Game, one immediate resource trade may occur during any player’s
+resolution: a complete named offer is accepted or rejected. Each player may
+make one Production Power purchase request. Advanced Play is one bundled
+profile, but its constituent changes are separately identified in the
+rule-change register below. Counteroffers and third-party claims are distinct:
+a counteroffer can be accepted or rejected by the original offer maker; claims
+let other eligible players compete for that published counteroffer.
 Influence is required for persistent Joint Ventures and Trust manipulation.
 Power is bought immediately during Production from a consenting adjacent
 Network; no Power contract persists.
@@ -130,10 +137,19 @@ depends on the printed range and connectivity requirements.
 Promises about later turns are not binding. The game supports negotiation
 without requiring a general contract-enforcement system.
 
+## Rule-change register
+
+The generated [rule-change register](../dist/docs/rule-change-register.md)
+is the single status record for Default/Advanced changes. Its structured
+source records each change’s decision, implementation state, dependencies, and
+module IDs. It does not authorize players to assemble ad hoc profiles: Default
+Game and Advanced Play remain the only supported profiles until a new profile
+is deliberately selected and validated.
+
 ## Selected risk and ending contract
 
 Audit draws scale by player count. Scrutiny beyond a player’s ten physical
-cubes immediately becomes a Runway-or-Trust penalty. Round IV Audit converts
+cubes immediately becomes a Runway-or-Trust penalty. Era IV Audit converts
 risk into Runway or Mandate loss so late exposure remains consequential.
 
 Declare AGI requires Capability nine, three Customers, three Facilities with
@@ -142,11 +158,12 @@ operation during a completed Production, replacing the declaration-time
 capacity proof. It scores but does not end play. The Blog Post Headline lowers
 only the Capability requirement.
 
-The winner is the institution with the most Mandate. The world reaches Genuine
-AGI only when a normal-threshold declarer exists, collective Trust improves
-beyond setup, and unresolved Systemic Risk remains bounded. Otherwise it enters
-the Closed Loop. Winning and building the preferable future are deliberately
-different achievements.
+The winner is the institution with the most Mandate. AGI emergence and
+Open/Closed continuity are independent tests. A normal-threshold declarer
+establishes emergence. The ending is Open only when collective Trust improves
+beyond setup by the player count and unresolved Systemic Risk remains below the
+player count; otherwise it is Closed. Winning and building the preferable
+future are deliberately different achievements.
 
 ## Selected content boundary
 
@@ -169,7 +186,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.35-test` test:
+controlled `0.6.0-rc.1-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -181,8 +198,8 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.35` implements `0.5.0-rc.35-test` under engine
-coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
+Executable game `0.9.0` implements `0.6.0-rc.1-test` under engine
+coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
 replay, policies, and Monte Carlo share that contract.
@@ -191,11 +208,12 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-The `0.8.35` / `0.5.0-rc.35-test` advancement changes no legal action, cost,
-resource value, Mandate award, Faction ability, setup, or end condition. It
-rewrites the How to Play copy with shorter sentences and direct definitions.
-The content and rules fingerprints advance so the changed source never
-overwrites the immutable `0.8.34` / `0.5.0-rc.34-test` artifacts.
+The `0.9.0` / `0.6.0-rc.1-test` advancement creates a new Default Game:
+one-offer immediate trades, one Production Power request per player, and no
+Era III Realignment. Advanced Play restores all three former procedures as
+one profile. This is a mechanical revision requiring new three-, four-, and
+five-player evidence; `0.8.35` and earlier reports remain historical
+full-rules evidence and do not qualify the new Default Game.
 
 The `0.8.34` / `0.5.0-rc.34-test` advancement changes no legal action, cost,
 resource value, Mandate award, faction ability, setup, or end condition. It
@@ -215,8 +233,9 @@ actually reduces a completed Facility’s cost; Jensen’s New Architecture
 self-Compute follows accepted licenses with no automatic base; and Customers
 four and five score one Mandate each while retaining full income. Every other
 numerical rule is frozen pending human evidence.
-Grid-Ready cooperation and mandatory Round III Realignment remain deliberately
-frozen for the controlled physical test.
+Grid-Ready cooperation remains deliberately frozen for the controlled physical
+test. Realignment is retained only in Advanced Play pending comparative human
+evidence.
 
 `0.5.0-rc.21-test` changes no playable rule from rc.20. Executable `0.8.20`
 adds complete realized-value telemetry for Emergency Pause, Audited Deployment,
@@ -264,7 +283,7 @@ require three/five regression coverage. Their playable mechanics are identical
 to rc.20 and executable `0.8.19`.
 
 Executable `0.8.22` also preserves identity classification:
-`generated/simulation-copy.json` is evidence-boundary copy, not a playable rules
+`dist/runtime/simulation-copy.json` is evidence-boundary copy, not a playable rules
 input. It now contributes to the playtest-kit fingerprint instead of the
 ruleset and mechanics fingerprints. The new fingerprint is therefore a
 deliberate identity rebaseline, not evidence of a gameplay delta.
@@ -295,16 +314,17 @@ Measure before changing numbers:
 
 - Can unfamiliar four-player groups complete the game from the rulebook?
 - Does the thirteen-tile map create useful scarcity without compulsory routes?
-- Does Realignment create adaptation without erasing infrastructure planning?
+- Does Default Game preserve enough adaptation without Realignment, and does
+  bundled Advanced Play justify its additional interruption?
 - Are non-declaration strategies competitive?
 - Does emergency generation dominate after its actual Audit cost is attributed?
 - Does Loopfold AI lead after each Production?
 - Does Mirevanta Works or Research-campus protection flatten Research risk?
-- Do all three Grid Generator slots fill before Round IV?
+- Do all three Grid Generator slots fill before Era IV?
 - Is Influence selected for genuine political choices rather than efficient
   Trust scoring?
 - Are Reorganization and Open Weights credible alternatives to their competing
-  Wild Actions?
+  Escalations?
 - Does the Future Timeline produce a memorable history?
 
 Four players is the authoritative balance target. Three- and five-player

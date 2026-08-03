@@ -11,7 +11,7 @@ const root = new URL("../", import.meta.url);
 const projectRoot = root.pathname;
 
 test("playtest receipts carry the frozen rules, executable, and source commit", async () => {
-  const outputRoot = await mkdtemp(join(tmpdir(), "m3t4-playtest-receipt-"));
+  const outputRoot = await mkdtemp(join(tmpdir(), "mandate-2038-playtest-receipt-"));
   try {
     const current = JSON.parse(
       await readFile(new URL("versions/current.json", root), "utf8")
@@ -88,7 +88,7 @@ test("baseline gallery excludes every deferred physical module", async () => {
     { cwd: projectRoot }
   );
   const html = await readFile(
-    new URL("build/gallery-baseline.html", root),
+    new URL("dist/site/gallery-baseline.html", root),
     "utf8"
   );
   for (const id of ["tactics", "objectives", "specialists"]) {

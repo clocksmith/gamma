@@ -55,7 +55,7 @@ const sourceCommit = sourceCommitOutput.trim();
 const selectedRelease = current.rulesCandidate || current;
 const kitManifestPath = input["kit-manifest"]
   ? resolve(input["kit-manifest"])
-  : resolve(projectRoot, "build/physical-kit/current.json");
+  : resolve(projectRoot, "dist/physical-kit/current.json");
 let physicalKitManifest;
 try {
   physicalKitManifest = JSON.parse(await readFile(kitManifestPath, "utf8"));
@@ -154,10 +154,10 @@ Replace the unassigned faction placeholders in \`receipt.json\`.
 ## Timing
 
 - Setup:
-- Round I:
-- Round II:
-- Round III:
-- Round IV:
+- Era I:
+- Era II:
+- Era III:
+- Era IV:
 - Final scoring:
 
 ## Rules questions and interventions

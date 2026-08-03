@@ -24,19 +24,19 @@ test("published executable surfaces are path-safe and make the paired bridge opt
     '<html><head></head><body><a href="/lab">Lab</a><script src="/web/app.js"></script></body></html>',
     { kind: "game" }
   );
-  assert.match(html, /href="\/m3t4-2038\/lab\.html"/);
-  assert.match(html, /src="\/m3t4-2038\/web\/app\.js"/);
+  assert.match(html, /href="\/mandate-2038\/lab\.html"/);
+  assert.match(html, /src="\/mandate-2038\/web\/app\.js"/);
   assert.match(html, /Deterministic play runs entirely in this browser/i);
   assert.match(html, /bridge is optional for Claude, Codex/i);
   assert.doesNotMatch(html, /start-game[^]*disabled = true/i);
   const module = rewritePrototypeModule(
-    'import x from "/lab/contracts/x.js"; fetch("/generated/factions.json");'
+    'import x from "/lab/contracts/x.js"; fetch("/dist/runtime/factions.json");'
   );
-  assert.match(module, /\/m3t4-2038\/lab\/contracts\/x\.js/);
-  assert.match(module, /\/m3t4-2038\/generated\/factions\.json/);
+  assert.match(module, /\/mandate-2038\/lab\/contracts\/x\.js/);
+  assert.match(module, /\/mandate-2038\/dist\/runtime\/factions\.json/);
 });
 
-test("review index is one plain list containing every supplied surface and exact identity", () => {
+test("review index clusters public game material before development surfaces", () => {
   const html = buildIndexHtml({
     identity: {
       rulesVersion: "rules-test",
@@ -45,14 +45,14 @@ test("review index is one plain list containing every supplied surface and exact
     },
     pages: [
       {
-        group: "Rules",
+        group: "Learn the game",
         kind: "Document",
         title: "Core rules",
         href: "docs/core-rules.html",
         description: "Rules."
       },
       {
-        group: "Components",
+        group: "Component review",
         kind: "Gallery",
         title: "Cards",
         href: "gallery.html",
@@ -65,21 +65,22 @@ test("review index is one plain list containing every supplied surface and exact
   assert.match(html, /commit-test/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
-  assert.match(html, /<ul class="page-list">/);
+  assert.match(html, /<h2>Learn the game<\/h2>/);
+  assert.match(html, /<h2>Component review<\/h2>/);
   assert.equal((html.match(/<li>/g) ?? []).length, 2);
   assert.doesNotMatch(html, /class="surface"/);
   assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
 
-test("Firebase blocks cooperative crawlers only for the M3T4 review path", async () => {
+test("Firebase blocks cooperative crawlers only for the Mandate 2038 review path", async () => {
   const robots = await readFile(resolve(gammaRoot, "web/robots.txt"), "utf8");
   assert.match(robots, /User-agent: \*/);
-  assert.match(robots, /Disallow: \/m3t4-2038\//);
+  assert.match(robots, /Disallow: \/mandate-2038\//);
   const firebase = JSON.parse(
     await readFile(resolve(gammaRoot, "web/firebase.json"), "utf8")
   );
   const protectedHeaders = firebase.hosting.headers.find(
-    (entry) => entry.source === "/m3t4-2038/**"
+    (entry) => entry.source === "/mandate-2038/**"
   );
   assert.ok(protectedHeaders);
   assert.equal(

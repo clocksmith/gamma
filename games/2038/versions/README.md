@@ -1,22 +1,23 @@
 # Versioned Releases
 
-FRONTIER tracks two independently attributable artifacts:
+Mandate 2038 tracks two independently attributable artifacts:
 
 1. **Executable game releases** preserve machine-readable rules, engine
    identity, replay contracts, and simulation inputs.
-2. **Physical rules candidates** preserve the canonical rulebook, its review
-   protocol, and whether an executable version implements it.
+2. **Physical rules candidates** preserve the canonical player documents,
+   their review protocol, and whether an executable version implements them.
 
-Generate and verify both from `data/game-version.json`:
+`versions/current-release.json` is the mutable declaration for the next
+release. Generate and verify the declared artifacts with:
 
 ```bash
 npm run game:release
 npm run game:release:verify
 ```
 
-`versions/current.json` keeps the executable release in its backward-compatible
-top-level fields and records the active physical candidate under
-`rulesCandidate`.
+`versions/current.json` is the generated compatibility pointer consumed by
+older runtime and physical-kit tooling. New release decisions belong in
+`versions/current-release.json`; do not edit `current.json` by hand.
 
 An executable `manifest.json` contains ruleset, kit, engine, variant, and
 contract fingerprints. It also fingerprints every canonical semantic-content

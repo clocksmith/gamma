@@ -12,17 +12,17 @@ import { createHash } from "node:crypto";
 
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dirname, "..");
-const buildRoot = resolve(projectRoot, "build", "physical-kit");
+const buildRoot = resolve(projectRoot, "dist/physical-kit");
 
 const sourceDataFiles = [
-  "generated/content-manifest.json",
-  "generated/factions.json",
-  "generated/game-config.json",
-  "generated/headlines.json",
-  "generated/mandates.json",
-  "generated/reference-cards.json",
-  "generated/wild-actions.json",
-  "generated/world-copy.json"
+  "dist/runtime/content-manifest.json",
+  "dist/runtime/factions.json",
+  "dist/runtime/game-config.json",
+  "dist/runtime/headlines.json",
+  "dist/runtime/mandates.json",
+  "dist/runtime/reference-cards.json",
+  "dist/runtime/escalations.json",
+  "dist/runtime/world-copy.json"
 ];
 
 function sha256(value) {
@@ -160,7 +160,7 @@ const identity = {
 const kitId = `${identity.rulesVersion}-${sourceCommit.slice(0, 8)}`;
   const outputRoot = resolve(buildRoot, kitId);
 if (!outputRoot.startsWith(`${buildRoot}/`)) {
-  throw new Error("Resolved physical-kit output escapes build/physical-kit.");
+  throw new Error("Resolved physical-kit output escapes dist/physical-kit.");
 }
 
 await rm(outputRoot, { recursive: true, force: true });
@@ -169,15 +169,15 @@ await mkdir(resolve(outputRoot, "release"), { recursive: true });
 await mkdir(resolve(outputRoot, "contracts"), { recursive: true });
 
 const rulebook = labeledRulebook(
-  await readFile(resolve(projectRoot, "docs/core-rules.md"), "utf8"),
+  await readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
   identity
 );
 const worldGuide = labeledRulebook(
-  await readFile(resolve(projectRoot, "docs/world-and-institutions.md"), "utf8"),
+  await readFile(resolve(projectRoot, "dist/docs/world-and-institutions.md"), "utf8"),
   identity
 );
 const gallery = labeledGallery(
-  await readFile(resolve(projectRoot, "build/gallery-baseline.html"), "utf8"),
+  await readFile(resolve(projectRoot, "dist/site/gallery-baseline.html"), "utf8"),
   identity
 );
 await writeFile(resolve(outputRoot, "core-rules.md"), rulebook);
@@ -192,7 +192,7 @@ await writeFile(
 for (const path of sourceDataFiles) {
   await copyFile(
     resolve(projectRoot, path),
-    resolve(outputRoot, "source-data", path.slice("generated/".length))
+    resolve(outputRoot, "source-data", path.slice("dist/runtime/".length))
   );
 }
 await copyFile(
@@ -208,7 +208,7 @@ await copyFile(
   resolve(outputRoot, "contracts", "playtest-receipt.schema.json")
 );
 
-const readme = `# M3T4 2038 controlled physical kit
+const readme = `# Mandate 2038 controlled physical kit
 
 Rules ${identity.rulesVersion}
 
@@ -237,7 +237,7 @@ const relativeFiles = [
   "playtest-protocol.md",
   "release/executable-manifest.json",
   "release/rules-candidate-manifest.json",
-  ...sourceDataFiles.map((path) => `source-generated/${path.slice("generated/".length)}`)
+  ...sourceDataFiles.map((path) => `source-dist/runtime/${path.slice("dist/runtime/".length)}`)
 ].sort();
 const files = {};
 for (const path of relativeFiles) {
@@ -263,8 +263,8 @@ const manifest = {
     "Core Actions",
     "Eras",
     "Headlines",
-    "Round Mandates",
-    "Wild Actions",
+    "Era Mandates",
+    "Escalations",
     "Power Sources",
     "Reference Cards",
     "Faction boards",

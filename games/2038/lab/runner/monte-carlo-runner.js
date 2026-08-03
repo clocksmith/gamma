@@ -43,7 +43,7 @@ function normalizedEntropy(counts) {
 
 function summarizeEntries(entries, wins) {
   const actionCounts = {};
-  const wildActionCounts = {};
+  const escalationCounts = {};
   const providerCounts = {};
   const mandateCounts = {};
   let auditHits = 0;
@@ -64,7 +64,7 @@ function summarizeEntries(entries, wins) {
     powerSold += entry.metrics.powerSold || 0;
     powerTradeRunway += entry.metrics.powerTradeRunway || 0;
     mergeCounts(actionCounts, entry.metrics.actions);
-    mergeCounts(wildActionCounts, entry.metrics.wildActions);
+    mergeCounts(escalationCounts, entry.metrics.escalations);
     mergeCounts(providerCounts, entry.metrics.policyProviders);
     mergeCounts(mandateCounts, entry.metrics.mandatesWon);
     if (entry.metrics.earliestAgiEligibility) {
@@ -93,7 +93,7 @@ function summarizeEntries(entries, wins) {
       : null,
     actionCounts,
     actionDiversity: normalizedEntropy(actionCounts),
-    wildActionCounts,
+    escalationCounts,
     mandateCounts,
     providerCounts,
     policyFallbacks: fallbacks
@@ -264,7 +264,7 @@ function aggregateMatchMetrics(outcomes) {
     headlines: {},
     headlineOutcomes: {},
     mandates: {},
-    wildActions: {},
+    escalations: {},
     tactics: {},
     realignments: {},
     systemicRiskCreated: 0,
@@ -301,7 +301,7 @@ function aggregateMatchMetrics(outcomes) {
       "headlines",
       "headlineOutcomes",
       "mandates",
-      "wildActions",
+      "escalations",
       "tactics",
       "realignments"
     ]) {
@@ -446,7 +446,7 @@ function createSummaryAccumulator() {
     powerTradeRunway: 0,
     policyFallbacks: 0,
     actionCounts: {},
-    wildActionCounts: {},
+    escalationCounts: {},
     providerCounts: {},
     mandateCounts: {}
   };
@@ -467,7 +467,7 @@ function addSummaryEntry(accumulator, entry, winCredit) {
   accumulator.powerSold += entry.metrics.powerSold || 0;
   accumulator.powerTradeRunway += entry.metrics.powerTradeRunway || 0;
   mergeCounts(accumulator.actionCounts, entry.metrics.actions);
-  mergeCounts(accumulator.wildActionCounts, entry.metrics.wildActions);
+  mergeCounts(accumulator.escalationCounts, entry.metrics.escalations);
   mergeCounts(accumulator.providerCounts, entry.metrics.policyProviders);
   mergeCounts(accumulator.mandateCounts, entry.metrics.mandatesWon);
   if (entry.metrics.earliestAgiEligibility) {
@@ -499,7 +499,7 @@ function summarizeAccumulator(accumulator) {
       : null,
     actionCounts: accumulator.actionCounts,
     actionDiversity: normalizedEntropy(accumulator.actionCounts),
-    wildActionCounts: accumulator.wildActionCounts,
+    escalationCounts: accumulator.escalationCounts,
     mandateCounts: accumulator.mandateCounts,
     providerCounts: accumulator.providerCounts,
     policyFallbacks: accumulator.policyFallbacks
@@ -567,7 +567,7 @@ class BatchAccumulator {
     this.roundLeaders = new Map();
     this.integrity = { details: [], policyFallbacks: 0, forcedNoOps: 0, actionOpportunities: 0 };
     this.metrics = {
-      headlines: {}, headlineOutcomes: {}, mandates: {}, wildActions: {}, tactics: {}, realignments: {},
+      headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {}, realignments: {},
       systemicRiskCreated: 0, declarations: 0, declarationPpaIterations: 0, declarationCapacityOps: 0,
       agiFunnel: {
         playerOpportunities: 0, coreRequirementsMet: 0, neededExternalPower: 0,
@@ -671,7 +671,7 @@ class BatchAccumulator {
   addMetrics(outcome) {
     const totals = this.metrics;
     const metrics = outcome.matchMetrics || {};
-    for (const key of ["headlines", "headlineOutcomes", "mandates", "wildActions", "tactics", "realignments"]) {
+    for (const key of ["headlines", "headlineOutcomes", "mandates", "escalations", "tactics", "realignments"]) {
       mergeCounts(totals[key], metrics[key]);
     }
     totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;
@@ -813,7 +813,12 @@ class BatchAccumulator {
       integrity,
       agiEligibilityRate: mean(seats.map((seat) => seat.agiEligibilityRate)),
       agiDeclarationRate: mean(seats.map((seat) => seat.agiDeclarationRate)),
-      genuineAgiRate: (metrics.worldEndings.genuine_agi || 0) / runs,
+      agiEmergenceRate: (
+        (metrics.worldEndings.singularity || 0) + (metrics.worldEndings.closed_loop || 0)
+      ) / runs,
+      openContinuityRate: (
+        (metrics.worldEndings.singularity || 0) + (metrics.worldEndings.plural_future || 0)
+      ) / runs,
       nonDeclaringWinRate: metrics.nonDeclaringWins / runs
     };
     diagnostics.alerts = [
@@ -822,7 +827,7 @@ class BatchAccumulator {
       ...(diagnostics.actionDiversity < 0.72 ? [{ id: "action_collapse", severity: "high", value: diagnostics.actionDiversity }] : []),
       ...(diagnostics.agiDeclarationRate < 0.1 ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiDeclarationRate }] : []),
       ...(diagnostics.agiDeclarationRate > 0.7 ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiDeclarationRate }] : []),
-      ...(diagnostics.genuineAgiRate === 0 ? [{ id: "closed_loop_only", severity: "medium", value: diagnostics.genuineAgiRate }] : [])
+      ...(diagnostics.openContinuityRate === 0 ? [{ id: "closed_continuity_only", severity: "medium", value: diagnostics.openContinuityRate }] : [])
     ];
     return {
       schemaVersion: 2,
@@ -1005,8 +1010,9 @@ export async function runMonteCarlo({
     integrity: integritySummary(outcomes),
     agiEligibilityRate: mean(seats.map((seat) => seat.agiEligibilityRate)),
     agiDeclarationRate: mean(seats.map((seat) => seat.agiDeclarationRate)),
-    genuineAgiRate:
-      outcomes.filter((outcome) => outcome.worldEnding?.id === "genuine_agi").length /
+    agiEmergenceRate: outcomes.filter((outcome) => outcome.worldEnding?.agiEmerges).length /
+      outcomes.length,
+    openContinuityRate: outcomes.filter((outcome) => outcome.worldEnding?.openContinuity).length /
       outcomes.length,
     nonDeclaringWinRate: outcomes.filter((outcome) =>
       outcome.winnerSeats.some((seat) =>
@@ -1030,8 +1036,8 @@ export async function runMonteCarlo({
     ...(diagnostics.agiDeclarationRate > 0.7
       ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiDeclarationRate }]
       : []),
-    ...(diagnostics.genuineAgiRate === 0
-      ? [{ id: "closed_loop_only", severity: "medium", value: diagnostics.genuineAgiRate }]
+    ...(diagnostics.openContinuityRate === 0
+      ? [{ id: "closed_continuity_only", severity: "medium", value: diagnostics.openContinuityRate }]
       : [])
   ];
 

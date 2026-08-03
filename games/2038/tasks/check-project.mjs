@@ -5,9 +5,9 @@ const root = resolve(import.meta.dirname, "..");
 const required = [
   "AGENTS.md",
   "README.md",
-  "docs/core-rules.md",
-  "docs/world-and-institutions.md",
-  "docs/optional-tactics.md",
+  "dist/docs/core-rules.md",
+  "dist/docs/world-and-institutions.md",
+  "dist/docs/optional-tactics.md",
   "docs/design-decisions.md",
   "docs/manufacturing-and-publishing-study.md",
   "docs/playtesting-and-evidence.md",
@@ -15,36 +15,36 @@ const required = [
   "docs/balance-and-exploitability.md",
   "content/README.md",
   "content/graph.json",
-  "physical/variables.json",
+  "content/data/variables.json",
   "content/provenance/numbers.json",
-  "physical/game-config.json",
-  "physical/factions.json",
-  "physical/headlines.json",
-  "physical/core-rules.md",
-  "physical/world-and-institutions.md",
-  "physical/optional/tactics-rules.md",
+  "content/data/game-config.json",
+  "content/data/factions.json",
+  "content/data/headlines.json",
+  "content/copy/core-rules.md",
+  "content/copy/world-and-institutions.md",
+  "experimental/tactics-rules.md",
   "content/runtime/ui-copy.json",
   "content/runtime/simulation-copy.json",
   "web/templates/prototype.html",
   "web/templates/simulation.html",
-  "release/game-version.json",
-  "generated/game-config.json",
-  "generated/factions.json",
-  "generated/headlines.json",
-  "generated/tactics.json",
-  "generated/wild-actions.json",
-  "generated/player-strategies.json",
-  "generated/content-manifest.json",
-  "generated/mandates.json",
-  "generated/reference-cards.json",
-  "generated/reserve-specialists.json",
-  "generated/secret-objectives.json",
-  "generated/simulation-copy.json",
-  "generated/ui-copy.json",
-  "generated/world-copy.json",
+  "versions/current-release.json",
+  "dist/runtime/game-config.json",
+  "dist/runtime/factions.json",
+  "dist/runtime/headlines.json",
+  "dist/runtime/tactics.json",
+  "dist/runtime/escalations.json",
+  "dist/runtime/player-strategies.json",
+  "dist/runtime/content-manifest.json",
+  "dist/runtime/mandates.json",
+  "dist/runtime/reference-cards.json",
+  "dist/runtime/reserve-specialists.json",
+  "dist/runtime/secret-objectives.json",
+  "dist/runtime/simulation-copy.json",
+  "dist/runtime/ui-copy.json",
+  "dist/runtime/world-copy.json",
   "docs/thematic-content-bible.md",
-  "web/index.html",
-  "web/simulation.html",
+  "dist/site/index.html",
+  "dist/site/simulation.html",
   "web/simulation-app.js",
   "web/simulation.css",
   "web/app.js",
@@ -275,11 +275,11 @@ for (const file of files) {
   jsonCount += 1;
 }
 
-const config = JSON.parse(await readFile(resolve(root, "generated/game-config.json"), "utf8"));
+const config = JSON.parse(await readFile(resolve(root, "dist/runtime/game-config.json"), "utf8"));
 const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
 if (trainingCount !== 50) throw new Error(`Training deck must contain 50 cards, found ${trainingCount}.`);
 
-const contentManifest = JSON.parse(await readFile(resolve(root, "generated/content-manifest.json"), "utf8"));
+const contentManifest = JSON.parse(await readFile(resolve(root, "dist/runtime/content-manifest.json"), "utf8"));
 const missingWriting = contentManifest.surfaces.filter((surface) => (
   surface.status !== "production_layout_missing"
   && surface.status !== "final_art_missing"
@@ -289,7 +289,7 @@ if (missingWriting.length > 0) {
   throw new Error(`Content manifest has unowned writing surfaces: ${missingWriting.map((item) => item.id).join(", ")}.`);
 }
 
-const html = await readFile(resolve(root, "web/index.html"), "utf8");
+const html = await readFile(resolve(root, "dist/site/index.html"), "utf8");
 for (const id of [
   "board",
   "players",
@@ -306,7 +306,7 @@ if (!html.includes('href="/lab"')) {
   throw new Error("Playable prototype must link to the external Simulation Lab route.");
 }
 
-const simulationHtml = await readFile(resolve(root, "web/simulation.html"), "utf8");
+const simulationHtml = await readFile(resolve(root, "dist/site/simulation.html"), "utf8");
 for (const id of [
   "simulation-form",
   "experiment-mode",
@@ -357,7 +357,7 @@ if (packageDocument.scripts?.dev !== "npm run build:all && npm start") {
 }
 
 const gameVersion = JSON.parse(
-  await readFile(resolve(root, "release/game-version.json"), "utf8")
+  await readFile(resolve(root, "versions/current-release.json"), "utf8")
 );
 if (packageDocument.version !== gameVersion.gameVersion) {
   throw new Error(
@@ -373,9 +373,9 @@ if (
 }
 const candidate = gameVersion.rulesCandidate;
 const requiredCandidateDocuments = [
-  "docs/core-rules.md",
-  "docs/world-and-institutions.md",
-  "docs/optional-tactics.md"
+  "dist/docs/core-rules.md",
+  "dist/docs/world-and-institutions.md",
+  "dist/docs/optional-tactics.md"
 ];
 const candidateStatusValid = candidate?.implementationStatus === "not-synchronized"
   ? candidate.implementedByGameVersion === null
