@@ -16,6 +16,7 @@ import {
   connectBridge,
   getBridgeToken
 } from "./api-client.js";
+import { flatTopAxialPosition } from "./src/hex-layout.js";
 
 const seatColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
 const [profilesDocument, uiCopy] = await Promise.all([
@@ -1002,14 +1003,16 @@ function renderDistributions() {
 
 function replayPosition(tile) {
   const size = window.innerWidth <= 680 ? 96 : 122;
-  const width = size * 0.76;
-  const height = size * 0.86;
   const originX = window.innerWidth <= 680 ? 245 : 385;
   const originY = window.innerWidth <= 680 ? 250 : 285;
   return {
     size,
-    left: originX + width * (tile.q + tile.r / 2) - size / 2,
-    top: originY + height * tile.r - (size * 0.87) / 2
+    ...flatTopAxialPosition(tile, {
+      width: size,
+      height: size * 0.87,
+      originX,
+      originY
+    })
   };
 }
 
