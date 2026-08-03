@@ -7425,3 +7425,31 @@ still supplies its graph, ranks, coder, source, framing, and termination for
 free. It can authorize only the separately paid Q0 after at least 60,000
 byte-equivalent overall, 5,000 B/M on every split, and the frozen control
 margins. It receives zero forecast credit.
+
+## 2026-08-03: exact WIKIGRAPH co-link target ceiling rejected
+
+Candidate `wikigraph_causal_colink_target_qm1_v1` completed canonical opening
+10M in `2,112.509` seconds with return code zero. Every input, parent payload,
+WRT/raw inverse, page receipt, Q256 table, frozen donor, strictly-earlier
+source, pre-target opportunity, exact-program identity, legal terminator,
+capacity, shuffle injectivity, trailing-page, and repeated parser/graph/
+candidate/control/total digest gate passed.
+
+The prefix-built graph contained `64,382` incoming keys and `66,395` distinct
+exact target programs. Of `68,529` nonempty graph opportunities, matched
+controls left `6,720` active opportunities. G0 hit `392` exact target programs
+and displaced only `414.292480` free byte-equivalent, or `41.429248 B/M`,
+against the `60,000`-byte gate. Development, selection, and opened confirmation
+were `26.195336`, `59.120247`, and `79.329635 B/M`, all below `5,000 B/M`.
+G0 beat every matched control, with its smallest total margin `279.375` bytes
+over Cfreq, but all margins missed the required `10,000` bytes.
+
+Decision: `REJECT`, zero score credit, no paid Q0, native integration,
+forecast movement, or full-1G authorization. Retire the exact
+`current title <- prior linking page -> other target` composition, 64-entry
+exact-program language, ranking, event universe, and controls without graph-
+walk, relation, alias, redirect, normalization, capacity, support, or score
+sweeps. All four WIKI graph-lexicon sources are now terminal negative, so
+WIKI-JOINT has no paying antecedent and remains unmaterialized. Forecast
+`109,389,323`, debt `1,389,323`, and verified full-1G `unknown` are unchanged.
+Receipt: `results/wikigraph_causal_colink_target_qm1_v1/decision.json`.
