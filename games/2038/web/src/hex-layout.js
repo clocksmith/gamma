@@ -1,6 +1,8 @@
-export const FLAT_TOP_HEX_WIDTH_FACTOR = 0.75;
+// CSS draws point-top hexes. The board's q/r coordinates use the matching
+// point-top axial projection: q steps are down-right and r steps are down.
+export const POINTY_TOP_HEX_WIDTH_FACTOR = 0.75;
 
-export function flatTopAxialPosition(tile, {
+export function pointyTopAxialPosition(tile, {
   width,
   height,
   originX,
@@ -13,7 +15,7 @@ export function flatTopAxialPosition(tile, {
     if (!Number.isFinite(value)) throw new TypeError(`${name} must be finite.`);
   }
   return {
-    left: originX + width * FLAT_TOP_HEX_WIDTH_FACTOR * (tile.q + tile.r / 2) - width / 2,
-    top: originY + height * tile.r - height / 2
+    left: originX + width * POINTY_TOP_HEX_WIDTH_FACTOR * tile.q - width / 2,
+    top: originY + height * (tile.r + tile.q / 2) - height / 2
   };
 }

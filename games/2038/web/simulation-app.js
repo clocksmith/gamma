@@ -16,7 +16,7 @@ import {
   connectBridge,
   getBridgeToken
 } from "./api-client.js";
-import { flatTopAxialPosition } from "./src/hex-layout.js";
+import { pointyTopAxialPosition } from "./src/hex-layout.js";
 
 const seatColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
 const [profilesDocument, uiCopy] = await Promise.all([
@@ -1007,7 +1007,7 @@ function replayPosition(tile) {
   const originY = window.innerWidth <= 680 ? 250 : 285;
   return {
     size,
-    ...flatTopAxialPosition(tile, {
+    ...pointyTopAxialPosition(tile, {
       width: size,
       height: size * 0.87,
       originX,
