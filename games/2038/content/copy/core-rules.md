@@ -193,8 +193,7 @@ A zero-to-six track affecting regulation, Joint Ventures, safety, and the
 final declaration. Zero ${terms.playerTracks.trust} does not eliminate a player.
 
 **${terms.playerTracks.mandate}** is the score used to determine the winner (victory points).
-In ${content.worldCopy.title}, Mandate represents public legitimacy: institutions that score it gain
-permission to define what comes next.
+It is the public authority you have gained to define outcomes.
 It represents the recognized right to shape the future: credibility in Progress,
 capacity in Capacity, authority in Authority, and historical legitimacy in
 Continuity.
