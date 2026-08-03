@@ -605,6 +605,81 @@ function renderTradeDecisions(packet, stage) {
   return false;
 }
 
+function pieceName(pieceId) {
+  if (pieceId === "ceo" || pieceId?.endsWith("-ceo")) return "CEO";
+  const number = pieceId?.match(/team-(\d+)$/)?.[1];
+  return number ? `Team ${number}` : pieceId;
+}
+
+function tileName(tileId) {
+  return game?.state?.board?.find((tile) => tile.instanceId === tileId)?.name || tileId;
+}
+
+function renderMoveDecisions(packet, stage) {
+  if (stage !== "resolve") return false;
+  const decisions = packet.legalDecisions;
+  if (!decisions.length || !decisions.every((decision) =>
+    decision.parameters?.pieceId && decision.parameters?.destinationId
+  )) return false;
+
+  const builder = document.createElement("section");
+  builder.className = "move-builder";
+  builder.innerHTML = "<h3>Set the move</h3><p>Choose a piece and destination. The final field preserves every legal action outcome at that location.</p>";
+  const fields = document.createElement("div");
+  fields.className = "trade-fields";
+  const piece = document.createElement("select");
+  const destination = document.createElement("select");
+  const outcome = document.createElement("select");
+  const addField = (label, control) => {
+    const field = document.createElement("label");
+    field.textContent = label;
+    field.append(control);
+    fields.append(field);
+  };
+  addField("Move", piece);
+  addField("To district", destination);
+  addField("Action", outcome);
+
+  const summary = document.createElement("p");
+  summary.className = "trade-summary";
+  const actions = document.createElement("div");
+  actions.className = "trade-actions";
+  const submit = document.createElement("button");
+  submit.type = "button";
+  submit.textContent = "Confirm move";
+  actions.append(submit);
+
+  const refresh = () => {
+    const pieces = [...new Set(decisions.map((decision) => decision.parameters.pieceId))];
+    replaceOptions(piece, pieces, pieceName);
+    const forPiece = decisions.filter((decision) => decision.parameters.pieceId === piece.value);
+    const destinations = [...new Set(forPiece.map((decision) => decision.parameters.destinationId))];
+    replaceOptions(destination, destinations, tileName);
+    const atDestination = forPiece.filter((decision) =>
+      decision.parameters.destinationId === destination.value
+    );
+    replaceOptions(outcome, atDestination.map((decision) => decision.decisionId), (id) =>
+      atDestination.find((decision) => decision.decisionId === id)?.label || id
+    );
+    const selected = atDestination.find((decision) => decision.decisionId === outcome.value);
+    submit.disabled = !selected;
+    summary.textContent = selected?.label || "No legal action matches this move.";
+    submit.onclick = selected
+      ? () => submitDecision(selected.decisionId).catch((error) => {
+        elements["game-status"].textContent = error.message;
+        renderDecisions();
+      })
+      : null;
+  };
+  for (const control of [piece, destination, outcome]) {
+    control.addEventListener("change", refresh);
+  }
+  builder.append(fields, summary, actions);
+  refresh();
+  elements.decisions.append(builder);
+  return true;
+}
+
 function renderDecisions() {
   elements.decisions.replaceChildren();
   const packet = game?.pending;
@@ -634,6 +709,7 @@ function renderDecisions() {
     });
   const stage = packet.requestId?.split(":").at(-2);
   if (renderTradeDecisions(packet, stage)) return;
+  if (renderMoveDecisions(packet, stage)) return;
   for (const [index, decision] of packet.legalDecisions.entries()) {
     elements.decisions.append(decisionButton(decision, index));
   }
