@@ -7481,3 +7481,28 @@ miss retires this exact key/backend/source-envelope combination without order,
 model, PGO, or memory rescue sweeps. External-parent status means zero Gamma
 forecast credit in every Qm0 outcome. Frozen plan:
 `docs/cmix_obias_geometry_order_substitution_qm0_plan.md`.
+
+## 2026-08-03: cmix-obias geometry Qm0 v1 malformed; host-repacked v2 frozen
+
+Job `20260803T020929Z_31a36cad90` stopped before corpus scoring. The public
+as-built executable decoded the embedded order and dictionary streams to their
+expected lengths on this host, but `reorder()` then encountered a non-integer
+order line and aborted in `stoi`. No parent payload, candidate payload, or
+archive comparison exists, so this is not a scientific rejection.
+
+The strict memory guard passed during the failing bootstrap: maximum sampled
+single-process RSS was `7,984,788 KiB`, maximum sampled tree RSS was
+`7,992,936 KiB`, and the decimal-10GB excess was zero. The failure matches the
+donor's documented CPU/build arithmetic-dialect warning for precompressed
+assets.
+
+Infrastructure successor `cmix_obias_geometry_order_host_repacked_qm0_v2`
+changes only that bootstrap. It recompresses the exact `411,996`-byte raw
+dictionary (`4c8568cc...`) and `1,094,862`-byte raw public order
+(`eecd462c...`) locally with the same exact raw executable used by all arms.
+The dictionary stream must repeat byte-identically. The opening-10M order
+hypothesis, B0/G0/T0 definitions, conditional execution, `5,000`-byte gross
+gate, source allowance, and kill neighborhood remain frozen. Since local
+repacking may shift the parent, v2 proves B0 by exact bare roundtrip instead of
+requiring the donor machine's documented archive length. Plan:
+`docs/cmix_obias_geometry_order_host_repacked_qm0_v2_plan.md`.
