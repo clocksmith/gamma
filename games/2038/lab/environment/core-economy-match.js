@@ -363,8 +363,7 @@ export class CoreEconomyMatch {
             resolvableWithoutTrade: currentResolutionCount > 0
           }
         };
-      })
-      .filter((decision) => decision.consequences.resolvableWithoutTrade);
+      });
   }
 
   currentResolutionCountForSelection(seat, actionId) {

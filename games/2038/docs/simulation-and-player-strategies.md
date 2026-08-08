@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.9.0` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.6.0-rc.1-test`
+**Executable game:** `0.9.1` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.6.0-rc.2-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -76,6 +76,13 @@ alias; the caller resolves that alias to the canonical ID and rejects an
 unknown alias. The environment alone mutates state. Player-owned movement, Headline choices,
 Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
+
+Selection packets retain every unused Core Action and every unlocked, unspent
+Escalation, including a choice with no resolution from current public state.
+Each choice reports its current resolution count. Deterministic policies
+strongly discount a currently blocked choice but may still make a speculative
+or deliberate no-effect commitment. If the choice remains blocked when it
+resolves, it exhausts normally; a blocked Escalation also spends its token.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 

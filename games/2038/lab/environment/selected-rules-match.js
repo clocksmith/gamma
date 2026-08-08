@@ -1762,18 +1762,32 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.escalation > 0 ||
         (action.id === "agent_swarm" && this.regime.cycle?.id === "agent_swarm_escapes_scope")
       )
-      .filter((action) => this.legalEscalationResolutions(seat, action.id).length > 0)
-      .map((action) => ({
-        decisionId: `select_escalation_${action.id}`,
-        label: renderSimulationCopy(
-          simulationCopy.decisions.selectAction,
-          { action: action.name }
-        ),
-        actionId: action.id,
-        consequences: { isEscalation: true, escalation: action.id === "agent_swarm" &&
-          this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 0 : -1 }
-      }));
-    if (escalation.some((decision) => decision.actionId === "declare_agi")) {
+      .map((action) => {
+        const currentResolutionCount = this.legalEscalationResolutions(
+          seat,
+          action.id
+        ).length;
+        return {
+          decisionId: `select_escalation_${action.id}`,
+          label: renderSimulationCopy(
+            simulationCopy.decisions.selectAction,
+            { action: action.name }
+          ),
+          actionId: action.id,
+          consequences: {
+            stage: "action_selection",
+            currentResolutionCount,
+            resolvableWithoutTrade: currentResolutionCount > 0,
+            isEscalation: true,
+            escalation: action.id === "agent_swarm" &&
+              this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 0 : -1
+          }
+        };
+      });
+    if (escalation.some((decision) =>
+      decision.actionId === "declare_agi" &&
+      decision.consequences.resolvableWithoutTrade
+    )) {
       this.markAgiFunnel(
         player,
         "legalDeclarationWindow",
@@ -3250,15 +3264,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       id === "mega_cluster" &&
       this.megaClusters.length >= this.config.sharedSupply.megaClusterPairs
     ) return;
+    this.commitEscalationSelection(player, id);
     this.beginRunwayConversionContext(player, decision, "escalation");
     this.movePiece(player, decision.parameters || {});
-    const tokenFree = id === "agent_swarm" &&
-      this.regime.cycle?.id === "agent_swarm_escapes_scope";
-    if (!tokenFree) player.escalation -= 1;
-    player.escalationsUsed.push(id);
-    if (!player.history.escalationRounds.includes(this.round)) player.history.escalationRounds.push(this.round);
-    increment(player.metrics.escalations, id);
-    increment(this.matchMetrics.escalations, id);
 
     if (id === "mega_cluster") {
       const partner = decision.parameters.partnerSeat === undefined
@@ -3366,30 +3374,52 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const swarmDestination = decision.parameters.destinationId;
       const swarmPiece = decision.parameters.pieceId;
       for (let index = 0; index < 2; index += 1) {
+        const swarmResolutions = (actionId) => {
+          let resolutions = this.legalResolutions(seat, actionId)
+            .filter((candidate) =>
+              candidate.parameters?.destinationId === swarmDestination &&
+              candidate.parameters?.pieceId === swarmPiece
+            );
+          if (index === 1) {
+            resolutions = resolutions
+              .map((candidate) =>
+                this.suppressAgentSwarmDestinationBonus(player, candidate)
+              )
+              .filter(Boolean);
+          }
+          return resolutions;
+        };
         const selections = this.config.actions
           .filter((action) => !player.actionsUsed.includes(action.id))
-          .filter((action) => this.legalResolutions(seat, action.id).length > 0)
-          .map((action) => ({
-            decisionId: `agent_select_${action.id}`,
-            label: decisionLabel("agentSwarmSelects", { action: action.name }),
-            actionId: action.id,
-            parameters: { actionId: action.id }
-          }));
+          .map((action) => {
+            const currentResolutionCount = swarmResolutions(action.id).length;
+            return {
+              decisionId: `agent_select_${action.id}`,
+              label: decisionLabel("agentSwarmSelects", { action: action.name }),
+              actionId: action.id,
+              parameters: { actionId: action.id },
+              consequences: {
+                stage: "action_selection",
+                currentResolutionCount,
+                resolvableWithoutTrade: currentResolutionCount > 0
+              }
+            };
+          });
         if (!selections.length) break;
         const selection = await this.choose(policies, seat, `agent_swarm_${index + 1}`, selections);
-        let legal = this.legalResolutions(seat, selection.parameters.actionId)
-          .filter((candidate) =>
-            candidate.parameters?.destinationId === swarmDestination &&
-            candidate.parameters?.pieceId === swarmPiece
-          );
-        if (index === 1) {
-          legal = legal
-            .map((candidate) =>
-              this.suppressAgentSwarmDestinationBonus(player, candidate)
-            )
-            .filter(Boolean);
+        let legal = swarmResolutions(selection.parameters.actionId);
+        if (!legal.length) {
+          player.metrics.forcedNoOps += 1;
+          legal = [{
+            decisionId: `forced_noop_${selection.parameters.actionId}`,
+            label: decisionLabel("noLegalResolution", {
+              action: selection.parameters.actionId
+            }),
+            actionId: selection.parameters.actionId,
+            parameters: {},
+            consequences: { noOp: true }
+          }];
         }
-        if (!legal.length) break;
         const resolution = clone(
           await this.choose(policies, seat, `agent_resolve_${index + 1}`, legal)
         );
@@ -3533,6 +3563,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addResource(player, "compute", 1);
       player.roundMetrics.computeProduced += 1;
     }
+  }
+
+  commitEscalationSelection(player, id) {
+    if (player.escalationsUsed.includes(id)) return;
+    const tokenFree = id === "agent_swarm" &&
+      this.regime.cycle?.id === "agent_swarm_escapes_scope";
+    if (!tokenFree) player.escalation -= 1;
+    player.escalationsUsed.push(id);
+    if (!player.history.escalationRounds.includes(this.round)) {
+      player.history.escalationRounds.push(this.round);
+    }
+    increment(player.metrics.escalations, id);
+    increment(this.matchMetrics.escalations, id);
   }
 
   async produceAll(policies) {
@@ -4441,6 +4484,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         });
       }
       if (!legal.length) {
+        player.metrics.forcedNoOps += 1;
         this.recordEvent(
           "escalation_blocked",
           seat,
@@ -4890,6 +4934,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (decision) => decision.decisionId === result.decision.decisionId
       );
       player.selectedAction = legal.decisionId.replace(/^select_/, "");
+      if (player.selectedAction.startsWith("escalation_")) {
+        this.commitEscalationSelection(
+          player,
+          player.selectedAction.slice("escalation_".length)
+        );
+      }
       selections[seat] = player.selectedAction;
       this.recordEvent(
         "action_selected",
