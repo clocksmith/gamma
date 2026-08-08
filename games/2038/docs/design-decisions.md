@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.6.0-rc.1-test`
+**Rules reference:** `0.6.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -186,7 +186,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.6.0-rc.1-test` test:
+controlled `0.6.0-rc.2-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -198,7 +198,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.9.0` implements `0.6.0-rc.1-test` under engine
+Executable game `0.9.1` implements `0.6.0-rc.2-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -207,6 +207,16 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.9.1` / `0.6.0-rc.2-test` advancement changes no physical rule. It
+corrects the executable selection contract so every unused Core Action and
+every unlocked, unspent Escalation remains legally selectable even when it has
+no current resolution. Resolution metadata lets deterministic policies avoid
+known dead choices without deleting them. A blocked selection exhausts, and a
+blocked Escalation spends its token, exactly as the physical commitment rule
+requires. Because legal decision packets and deterministic sampling change,
+earlier simulation remains historical evidence rather than balance authority
+for this executable.
 
 The `0.9.0` / `0.6.0-rc.1-test` advancement creates a new Default Game:
 one-offer immediate trades, one Production Power request per player, and no

@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.6.0-rc.1-test`
+**Rules under review:** `0.6.0-rc.2-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -103,12 +103,18 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.6.0-rc.1-test`. Executable
-game `0.9.0` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.6.0-rc.2-test`. Executable
+game `0.9.1` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
+
+Candidate `0.6.0-rc.2-test` changes no physical rule from rc.1. Executable
+`0.9.1` restores every unused Core Action and unlocked, unspent Escalation to
+the legal selection packet, labels current resolvability for policy scoring,
+and makes a blocked Escalation consume its committed token. Earlier simulation
+uses a narrower decision set and cannot qualify this executable.
 
 The two full-progress Codex reports that recorded a changed ruleset fingerprint
 under `0.8.23` remain immutable but are descriptive historical evidence only.

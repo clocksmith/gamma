@@ -1861,7 +1861,7 @@ test("Production earns Grid-Ready markers and infrastructure changes revoke them
   assert.equal(match.declarationReadiness(player).gridReadyFacilities, 2);
 });
 
-test("action selection omits Core Actions without a current legal resolution", async () => {
+test("action selection retains every unused Action and labels current resolvability", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "six-core-actions" },
     () => {}
@@ -1871,25 +1871,39 @@ test("action selection omits Core Actions without a current legal resolution", a
     .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   assert.deepEqual(
     selections.map((decision) => decision.actionId),
-    ["fund", "research", "build", "organize", "influence"]
+    ["fund", "research", "build", "organize", "deploy", "influence"]
   );
-  assert.ok(selections.every(
-    (decision) =>
-      decision.consequences.currentResolutionCount > 0 &&
-      decision.consequences.resolvableWithoutTrade
+  const deploy = selections.find((decision) => decision.actionId === "deploy");
+  assert.equal(deploy.consequences.currentResolutionCount, 0);
+  assert.equal(deploy.consequences.resolvableWithoutTrade, false);
+  assert.ok(selections.filter((decision) => decision !== deploy).every(
+    (decision) => decision.consequences.currentResolutionCount > 0
   ));
-  assert.equal(
-    selections.some((decision) => decision.actionId === "deploy"),
-    false
-  );
 
   runtime.match.players[0].compute = 0;
   selections = runtime.match.legalActionSelections(0)
     .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
-  assert.equal(
-    selections.some((decision) => decision.actionId === "research"),
-    false
+  const research = selections.find((decision) => decision.actionId === "research");
+  assert.equal(research.consequences.currentResolutionCount, 0);
+  assert.equal(research.consequences.resolvableWithoutTrade, false);
+
+  runtime.match.round = 2;
+  runtime.match.players[0].escalation = 1;
+  const megaCluster = runtime.match.legalActionSelections(0).find(
+    (decision) => decision.actionId === "mega_cluster"
   );
+  assert.ok(megaCluster);
+  assert.equal(megaCluster.consequences.currentResolutionCount, 0);
+  assert.equal(megaCluster.consequences.resolvableWithoutTrade, false);
+
+  const player = runtime.match.players[0];
+  const forcedNoOpsBefore = player.metrics.forcedNoOps;
+  runtime.match.commitEscalationSelection(player, "mega_cluster");
+  player.selectedAction = "escalation_mega_cluster";
+  await runtime.match.resolveSelectedSeat(runtime.policies, 0);
+  assert.equal(player.escalation, 0);
+  assert.ok(player.escalationsUsed.includes("mega_cluster"));
+  assert.equal(player.metrics.forcedNoOps, forcedNoOpsBefore + 1);
 });
 
 test("pre-Act choices preserve the selected action's legal resolution", async () => {
@@ -3184,7 +3198,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.9.0");
+  assert.equal(first.game.version, "0.9.1");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3762,7 +3776,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.9.0");
+  assert.equal(first.game.version, "0.9.1");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
