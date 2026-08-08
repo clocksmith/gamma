@@ -6,7 +6,7 @@ Claim rule:
 
 ```text
 A row is artifact-backed only for its measured scope.
-No prefix row proves 10.95%.
+No prefix row proves 10.5%.
 No forecast or inherited metadata is included here.
 ```
 
@@ -15,7 +15,7 @@ No forecast or inherited metadata is included here.
 - Result JSON files scanned: `9`
 - Roundtrip-passing rows: `5`
 - Verified full `1G` rows in this checkout: `0`
-- `10.95%` target reached by this matrix: `False`
+- `10.5%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
 
 ## Best Exact Score By Scope

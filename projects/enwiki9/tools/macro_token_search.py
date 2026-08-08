@@ -1,4 +1,4 @@
-"""Search macro-residual token additions under the enwiki9 heavy lock.
+"""Search macro-residual token additions with an isolated output receipt.
 
 This is a Lane B helper for the XML scaffold macro candidates. It evaluates
 candidate token additions against a parent program that exposes a module-level
@@ -8,7 +8,6 @@ S token list and reports archive-size deltas for the transformed LZMA stream.
 from __future__ import annotations
 
 import argparse
-import fcntl
 import importlib.util
 import json
 import lzma
@@ -21,7 +20,6 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
 PROGRAMS_DIR = ROOT / "programs"
 DATA_DEFAULT = ROOT / "data" / "enwik9"
-LOCK_DEFAULT = pathlib.Path("/tmp/enwiki9-heavy.lock")
 PRESET = 9 | lzma.PRESET_EXTREME
 
 
@@ -178,17 +176,6 @@ def greedy_select(
     }
 
 
-def acquire_lock(lock_path: pathlib.Path):
-    lock_path.parent.mkdir(parents=True, exist_ok=True)
-    handle = lock_path.open("a")
-    try:
-        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-        handle.close()
-        raise SystemExit(f"heavy lock busy: {lock_path}")
-    return handle
-
-
 def read_token_file(path: pathlib.Path) -> list[str]:
     tokens: list[str] = []
     for line in path.read_text().splitlines():
@@ -205,8 +192,6 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int, default=1_000_000)
     parser.add_argument("--token", action="append", default=[])
     parser.add_argument("--token-file", type=pathlib.Path)
-    parser.add_argument("--lock-path", type=pathlib.Path, default=LOCK_DEFAULT)
-    parser.add_argument("--no-lock", action="store_true")
     parser.add_argument("--greedy", action="store_true")
     parser.add_argument("--max-additions", type=int, default=8)
     parser.add_argument("--min-net-gain", type=int, default=1)
@@ -221,7 +206,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.data.exists():
         raise SystemExit(f"missing data: {args.data}")
 
-    lock_handle = None if args.no_lock else acquire_lock(args.lock_path)
+    lock_handle = None
     try:
         parent_tokens = load_parent_tokens(args.parent)
         candidate_strings = list(DEFAULT_TOKENS)
@@ -263,9 +248,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
     finally:
-        if lock_handle is not None:
-            fcntl.flock(lock_handle, fcntl.LOCK_UN)
-            lock_handle.close()
+        pass
 
 
 if __name__ == "__main__":

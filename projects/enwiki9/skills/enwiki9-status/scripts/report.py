@@ -10,7 +10,6 @@ import re
 from pathlib import Path
 import subprocess
 import shlex
-import fcntl
 from typing import Any
 
 
@@ -198,46 +197,6 @@ def _resolve_candidate_path(project_root: Path, raw_path: str) -> Path | None:
         if path.exists():
             return path
     return None
-
-
-def _heavy_lock_state(lock_path: Path) -> dict[str, Any]:
-    lock_path = Path(lock_path)
-    if not lock_path.exists():
-        return {"path": str(lock_path), "held": False, "holders": []}
-    held = False
-    try:
-        with lock_path.open("r+") as handle:
-            try:
-                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError:
-                held = True
-            else:
-                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
-    except OSError:
-        pass
-    proc = subprocess.run(
-        ["pgrep", "-af", str(lock_path)],
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    holders: list[int] = []
-    for line in proc.stdout.splitlines():
-        parts = line.strip().split(maxsplit=1)
-        if len(parts) != 2:
-            continue
-        pid_text, raw_args = parts
-        if "flock" not in raw_args:
-            continue
-        try:
-            holders.append(int(pid_text))
-        except ValueError:
-            pass
-    return {
-        "path": str(lock_path),
-        "held": held,
-        "holders": sorted(set(holders)),
-    }
 
 
 def _load_live_observation(project_root: Path) -> dict[str, Any]:
@@ -479,7 +438,6 @@ def validate_and_normalize(
                 "generated_at_utc": operational.get("generated_at_utc"),
                 "active_gate": operational.get("active_gate"),
                 "active_processes": operational.get("active_processes"),
-                "heavy_lock": operational.get("heavy_lock"),
                 "operator_action": operational.get("operator_action"),
                 "live_observation": live_observation,
             },
@@ -509,7 +467,6 @@ def fmt_point_distance(byte_distance: Any, input_bytes: int = 1_000_000_000) -> 
 def render_live_state(status: dict[str, Any]) -> list[str]:
     lines: list[str] = ["## Live Run State", ""]
     live = status["operational"].get("live_observation") or {}
-    lock_state = status["operational"].get("heavy_lock") or {}
     if live:
         decimal_limit = live.get("official_decimal_limit_kib")
         over_limit = live.get("official_decimal_over_limit_kib")
@@ -542,18 +499,8 @@ def render_live_state(status: dict[str, Any]) -> list[str]:
         if isinstance(decimal_limit, int):
             lines.append(f"- Decimal guard limit: `{fmt_int(decimal_limit)}` KiB.")
             lines.append(f"- Official decimal over-limit KiB: `{fmt_int(over_limit)}`.")
-        lines.append(
-            f"- Heavy lock: `{lock_state.get('path', '/tmp/enwiki9-heavy.lock')}` "
-            f"held: `{bool(lock_state.get('held'))}`, holder pids `{lock_state.get('holders', [])}`."
-        )
     else:
-        lines.append(f"- Heavy lock held: `{bool(lock_state.get('held'))}`.")
-        lines.append(f"- Heavy lock path: `{lock_state.get('path', '/tmp/enwiki9-heavy.lock')}`.")
-        lock_holders = lock_state.get("holders", [])
-        if lock_holders:
-            lines.append(f"- Lock holder pids: `{lock_holders}`.")
-        else:
-            lines.append("- Lock holder pids: `[]`.")
+        lines.append("- No live resource-guarded run was observed.")
     lines.append("")
     return lines
 
@@ -683,7 +630,7 @@ def render_markdown(status: dict[str, Any]) -> str:
         [
             "",
             "Only an exact 1,000,000,000-byte replay with complete accounting, "
-            "roundtrip, and score at or below 108,000,000 is a win.",
+            "roundtrip, and score at or below 105,000,000 is a win.",
         ]
     )
     if official["won"]:
@@ -748,9 +695,6 @@ def main() -> int:
                     "scope_bytes": handoff.get("scope_bytes"),
                     "guard_status": "unknown",
                 }
-    if isinstance(operational, dict):
-        operational = dict(operational)
-        operational["heavy_lock"] = _heavy_lock_state(Path("/tmp/enwiki9-heavy.lock"))
     live_observation = (
         live_observation if isinstance(live_observation, dict) else None
     )

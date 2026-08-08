@@ -1,6 +1,6 @@
 ---
 name: enwiki9-status
-description: Produce a source-bound Hutter Prize status for Gamma enwiki9, including verified full-corpus proof, closest counted forecast, active and retired candidates, measured gains, code-cost economics, live gate state, and quarantined evidence. Use when asked how close enwiki9 is to 10.95%, what the latest Hutter results or candidates are, what is running, whether a result is real versus forecast/shadow, or when recording a new decisive compression result.
+description: Produce a source-bound Hutter Prize status for Gamma enwiki9, including verified full-corpus proof, closest counted forecast, active and retired candidates, measured gains, code-cost economics, live gate state, and quarantined evidence. Use when asked how close enwiki9 is to the current 10.5% target, what the latest Hutter results or candidates are, what is running, whether a result is real versus forecast/shadow, or when recording a new decisive compression result.
 ---
 
 # enwiki9 Status
@@ -19,7 +19,7 @@ missing required evidence, arithmetic drift, and invalid evidence tiers.
 ## Workflow
 
 1. Read the nearest `AGENTS.md` files.
-2. Inspect the process table and `/tmp/enwiki9-heavy.lock` for a live-status
+2. Inspect the process table and host resource availability for a live-status
    request. Refresh `docs/status_receipt.json` only when its underlying gate or
    process state changed.
 3. Run the reporter. Treat its JSON as the normalized answer and its Markdown

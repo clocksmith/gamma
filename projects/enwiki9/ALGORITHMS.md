@@ -271,7 +271,7 @@ section explains why prefix results do not scale linearly on `enwik9`.
 
 ## Current Target Strategy Register
 
-This section tracks the strategies currently relevant to the `10.95%` target.
+This section tracks the strategies currently relevant to the `10.5%` target.
 It is separate from the benchmark snapshot because several rows are live
 research lanes, not measured full-corpus results.
 

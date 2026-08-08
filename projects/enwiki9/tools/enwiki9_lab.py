@@ -541,7 +541,6 @@ def enqueue_job(
     candidate_id: str,
     gate_size: int,
     priority: int | None,
-    heavy: bool | None,
     archive_ceiling: int | None,
     purpose: str,
     force: bool,
@@ -561,7 +560,6 @@ def enqueue_job(
         )
     priority_value = default_priority(gate_size) if priority is None else priority
     job_id = f"{compact_utc()}_{uuid.uuid4().hex[:10]}"
-    use_heavy_lock = gate_size >= 10_000_000 if heavy is None else heavy
     job = {
         "schema": "enwiki9_adaptive_job_v1",
         "job_id": job_id,
@@ -569,7 +567,6 @@ def enqueue_job(
         "gate_size": gate_size,
         "priority": priority_value,
         "purpose": purpose,
-        "respect_heavy_lock": use_heavy_lock,
         "state": "pending",
         "tags": sorted(set(tags)),
         "submitted_at": utc_now(),
@@ -588,7 +585,6 @@ def enqueue_tool_job(
     tool_args: list[str],
     gate_size: int,
     priority: int | None,
-    heavy: bool | None,
     purpose: str,
     force: bool,
     tags: list[str],
@@ -605,7 +601,6 @@ def enqueue_tool_job(
         candidate_id=candidate_id,
         gate_size=gate_size,
         priority=priority,
-        heavy=heavy,
         archive_ceiling=None,
         purpose=purpose,
         force=force,
@@ -680,7 +675,6 @@ def discover_candidates(
             "candidate_id": candidate_id,
             "gate_size": gate,
             "status": status,
-            "respect_heavy_lock": gate >= 10_000_000,
         }
         discovered.append(proposal)
         if not dry_run:
@@ -688,7 +682,6 @@ def discover_candidates(
                 candidate_id=candidate_id,
                 gate_size=gate,
                 priority=None,
-                heavy=None,
                 archive_ceiling=None,
                 purpose="adaptive_discovery",
                 force=False,
@@ -820,8 +813,6 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
         ):
             raise ValueError("queued tool_args must be a list of strings")
         command = [sys.executable, str(tool_path), *tool_args]
-        if job.get("respect_heavy_lock") is True:
-            command = ["flock", "/tmp/enwiki9-heavy.lock", *command]
     else:
         command = [
             sys.executable,
@@ -847,8 +838,6 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
                     f"{gate_size}:{archive_ceiling}",
                 ]
             )
-        if job.get("respect_heavy_lock") is True:
-            command.append("--respect-heavy-lock")
 
     started = time.monotonic()
     with log_path.open("w") as log:
@@ -1058,7 +1047,6 @@ def set_job_hold(job_id: str, *, held: bool, reason: str | None) -> dict[str, An
 def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--gate-size", type=int, default=1_024)
     parser.add_argument("--priority", type=int)
-    parser.add_argument("--heavy", action=argparse.BooleanOptionalAction, default=None)
     parser.add_argument("--archive-ceiling", type=int)
     parser.add_argument("--purpose", default="manual")
     parser.add_argument("--tag", action="append", default=[])
@@ -1315,7 +1303,6 @@ def main() -> int:
                     candidate_id=args.candidate_id,
                     gate_size=args.gate_size,
                     priority=args.priority,
-                    heavy=args.heavy,
                     archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
@@ -1343,7 +1330,6 @@ def main() -> int:
                     candidate_id=args.candidate_id,
                     gate_size=args.gate_size,
                     priority=args.priority,
-                    heavy=args.heavy,
                     archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
@@ -1356,7 +1342,6 @@ def main() -> int:
                 candidate_id=args.candidate_id,
                 gate_size=args.gate_size,
                 priority=args.priority,
-                heavy=args.heavy,
                 archive_ceiling=args.archive_ceiling,
                 purpose=args.purpose,
                 force=args.force,
@@ -1371,7 +1356,6 @@ def main() -> int:
                 tool_args=args.tool_arg,
                 gate_size=args.gate_size,
                 priority=args.priority,
-                heavy=args.heavy,
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,

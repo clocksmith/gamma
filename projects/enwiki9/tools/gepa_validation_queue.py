@@ -19,14 +19,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
 PROGRAMS = ROOT / "programs"
 TRIAGE = ROOT / "tools" / "candidate_triage.py"
-DEFAULT_LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
 DEFAULT_BASELINE = "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1"
-FLOCK_BUSY_CODE = 75
 ACTIVE_PATTERN = (
     "bench.py|projects/enwiki9/lib/driver.py|lib/driver.py|cmix|qm_context|"
-    "enwiki9-heavy.lock|fx2_core_tune_queue.py|fx2_core_tune_package.py"
+    "fx2_core_tune_queue.py|fx2_core_tune_package.py"
 )
-RESPECT_HEAVY_LOCK_DEFAULT = False
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -271,38 +268,11 @@ def active_processes() -> list[str]:
     return active
 
 
-def lock_is_free(lock_path: pathlib.Path) -> bool:
-    proc = subprocess.run(
-        ["flock", "-n", "-E", str(FLOCK_BUSY_CODE), str(lock_path), "true"],
-        cwd=REPO_ROOT,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    return proc.returncode == 0
-
-
-def wait_for_clear(lock_path: pathlib.Path, *, wait: bool, poll_interval: float) -> dict[str, Any]:
-    while True:
-        active = active_processes()
-        lock_free = lock_is_free(lock_path)
-        if not active and lock_free:
-            return {"status": "clear", "active_processes": [], "lock_free": True}
-        blocked = {
-            "status": "blocked",
-            "active_processes": active,
-            "lock_free": lock_free,
-        }
-        if not wait:
-            return blocked
-        time.sleep(poll_interval)
-
-
 def run_triage_gate(
     candidate_id: str,
     *,
     gate_size: int,
     baseline: str,
-    lock_path: pathlib.Path,
     update_meta: bool,
     archive_ceiling: int | None,
 ) -> dict[str, Any]:
@@ -390,22 +360,10 @@ def run_queue(args: argparse.Namespace, candidates: list[dict[str, Any]]) -> dic
         for gate_size in args.gate_size:
             if not should_continue:
                 break
-            if args.respect_heavy_lock:
-                clear = wait_for_clear(
-                    args.lock_path,
-                    wait=args.wait,
-                    poll_interval=args.poll_interval,
-                )
-                if clear["status"] != "clear":
-                    candidate_result["blocked"] = clear
-                    results.append(candidate_result)
-                    return {"status": "blocked", "results": results}
-
             run = run_triage_gate(
                 candidate["id"],
                 gate_size=gate_size,
                 baseline=args.baseline,
-                lock_path=args.lock_path,
                 update_meta=not args.no_update_meta,
                 archive_ceiling=args.archive_ceilings.get(gate_size),
             )
@@ -451,18 +409,6 @@ def main() -> int:
     )
     parser.add_argument("--advance-after-gate", type=int, default=250000)
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
-    parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK)
-    parser.add_argument("--poll-interval", type=float, default=30.0)
-    parser.add_argument(
-        "--respect-heavy-lock",
-        action="store_true",
-        default=RESPECT_HEAVY_LOCK_DEFAULT,
-        help=(
-            "wait for /tmp/enwiki9-heavy.lock and matching active-process silence "
-            "before launching queued gates (off by default)."
-        ),
-    )
-    parser.add_argument("--wait", action="store_true")
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--no-update-meta", action="store_true")
     parser.add_argument("--dedupe-order-sha", action=argparse.BooleanOptionalAction, default=True)
@@ -524,9 +470,6 @@ def main() -> int:
         "gate_sizes": args.gate_size,
         "advance_after_gate": args.advance_after_gate,
         "archive_ceilings": args.archive_ceilings,
-        "lock_path": str(args.lock_path),
-        "respect_heavy_lock": args.respect_heavy_lock,
-        "wait": args.wait,
         "selected": candidates,
     }
 
@@ -537,7 +480,7 @@ def main() -> int:
     outcome = run_queue(args, candidates)
     plan.update(outcome)
     print(json.dumps(plan, indent=2, sort_keys=True))
-    return 0 if outcome.get("status") == "complete" else FLOCK_BUSY_CODE
+    return 0 if outcome.get("status") == "complete" else 1
 
 
 if __name__ == "__main__":

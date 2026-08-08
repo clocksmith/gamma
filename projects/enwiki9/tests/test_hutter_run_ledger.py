@@ -21,7 +21,7 @@ def fixture(tmp_path: Path) -> dict:
         "schema": "enwiki9_hutter_frontier_v1",
         "target": {
             "input_bytes": 1_000_000_000,
-            "score_bytes": 108_000_000,
+            "score_bytes": 105_000_000,
             "required_roundtrip": True,
         },
         "candidates": [
@@ -76,7 +76,7 @@ def test_expands_scopes_and_computes_forecast(tmp_path: Path) -> None:
     assert ledger["summary"]["runs_by_scope"] == {"1000000": 1, "10000000": 1}
     primary = next(row for row in ledger["runs"] if row["primary_frontier_run"])
     assert primary["forecast_percent"] == 10.94
-    assert primary["forecast_margin_bytes"] == 100_000
+    assert primary["forecast_margin_bytes"] == -4_400_000
     additional = next(row for row in ledger["runs"] if not row["primary_frontier_run"])
     assert additional["population"] == "opening_prefix"
     assert additional["archive_bytes"] == 90

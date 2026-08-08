@@ -6,7 +6,7 @@ Claim rule:
 
 ```text
 Rows here are artifact-backed only for their measured scope.
-No prefix row proves 10.80%.
+No prefix row proves 10.5%.
 No forecast or metadata-inherited row is included.
 ```
 

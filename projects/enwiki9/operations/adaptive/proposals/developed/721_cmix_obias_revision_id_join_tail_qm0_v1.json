@@ -1,0 +1,34 @@
+{
+  "candidate_id": "cmix_obias_revision_id_join_tail_qm0_v1",
+  "claimed_at": "2026-08-08T18:44:07+00:00",
+  "created_at": "2026-08-08T18:44:07+00:00",
+  "developed_at": "2026-08-08T18:44:07+00:00",
+  "evidence": [
+    "docs/research_register.md#2026-08-08-cmix-obias-title-order-join-rejected-revision-id-join-isolated",
+    "results/cmix_lex_payload_transfer_v1_retry2/decision.json",
+    "results/cmix_obias_title_join_tail_qm0_v1/decision.json"
+  ],
+  "expected_savings_bytes": 346948,
+  "hypothesis": "The public P0 metadata stream can remain byte-identical while its embedded first revision IDs uniquely join every decoded block to an already decoded page, eliminating the R1ORD3 occurrence permutation.",
+  "interfaces_exposed": [
+    "decoded page revision IDs -> public metadata blocks without transmitted occurrence permutation"
+  ],
+  "kill_condition": "Reject this exact join on any artifact mismatch, duplicate or missing revision ID, ID-set mismatch, public P0 payload mismatch, inverse mismatch, replacement permutation, or counted source delta of 346948 bytes or more.",
+  "max_program_bytes": 16384,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 260,
+  "promotion_condition": "All 243425 page and public-block revision IDs are unique with identical sets; the byte-identical public P0 regime rebuilds and revision-ID inversion exactly restores the original regime; then authorize one source-bound child.",
+  "proposal_id": "cmix_obias_revision_id_join_tail_qm0_v1",
+  "retired_neighborhoods": [
+    "bytewise-title order, rotated-title order, Gamma geometry-order substitution, unchanged payload_lex transfer"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 278,
+  "state": "developed",
+  "title": "cmix-obias side-free revision-ID metadata join"
+}

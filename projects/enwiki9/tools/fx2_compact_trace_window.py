@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import fcntl
 import hashlib
 import json
 import os
@@ -30,7 +29,6 @@ DEFAULT_OUT = (
 DEFAULT_DICTIONARY = ROOT / "external" / "fx2-cmix" / "dictionary" / "english.dic"
 DEFAULT_SOURCE_PATCH = ROOT / "external" / "fx2-cmix.local.patch"
 DEFAULT_GUARD = ROOT / "tools" / "run_with_rss_guard.py"
-HEAVY_LOCK = Path("/tmp/enwiki9-heavy.lock")
 LOCAL_10GIB_KIB = 10_485_760
 DECIMAL_10GB_KIB = 9_765_625
 
@@ -179,20 +177,12 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
     ]
     trace_env = dict(os.environ)
     trace_env["FX2_COMPACT_PROB_TRACE_PATH"] = str(trace_path)
-    lock_handle = HEAVY_LOCK.open("a+")
-    try:
-        try:
-            fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise RuntimeError("enwiki9 heavy lock is held") from exc
-        compression = run_logged(
-            guarded_command,
-            cwd=args.cmix.parent,
-            log_path=compression_log,
-            env=trace_env,
-        )
-    finally:
-        lock_handle.close()
+    compression = run_logged(
+        guarded_command,
+        cwd=args.cmix.parent,
+        log_path=compression_log,
+        env=trace_env,
+    )
     guard = read_guard(guard_path)
     if compression.returncode != 0 or not guard or guard.get("status") != "complete":
         raise RuntimeError(

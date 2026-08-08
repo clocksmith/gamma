@@ -255,15 +255,9 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
         active_processes = (
             active_processes if isinstance(active_processes, dict) else {}
         )
-        heavy_lock = status.get("heavy_lock")
-        heavy_lock = heavy_lock if isinstance(heavy_lock, dict) else {}
         if active_processes.get("active_scorer_observed") is not True:
             findings.append(
                 Finding(status_path, "live speedlab gate has no observed scorer")
-            )
-        if heavy_lock.get("held") is not True:
-            findings.append(
-                Finding(status_path, "live speedlab gate does not hold the heavy lock")
             )
         if not isinstance(status_gate, dict):
             findings.append(Finding(status_path, "live speedlab gate missing active gate row"))
@@ -307,7 +301,6 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
             "scope_bytes",
             "gate_verdict",
             "gate_next_action",
-            "heavy_lock_held",
             "active_scorer_observed",
             "active_cmix_mode",
             "driver_result_present",
@@ -318,7 +311,7 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
             "single_rss_margin_kib",
             "max_sampled_single_decimal_10gb_margin_kib",
             "latest_sample_single_decimal_10gb_margin_kib",
-            "safe_to_launch_heavy_gate",
+            "safe_to_launch_gate",
             "terminal_verdict_present",
             "command_source",
             "has_full_corpus_constructive_result",
@@ -397,14 +390,6 @@ def check_status_live_process_fields(findings: list[Finding]) -> None:
             findings.append(Finding(status_md_path, "Markdown status receipt is missing parsed controller scope"))
         if "driver command is authoritative for the active gate scope" not in status_md:
             findings.append(Finding(status_md_path, "Markdown status receipt is missing controller scope note"))
-    active_rows = active_processes.get("active_rows")
-    if isinstance(active_rows, list) and any(
-        isinstance(row, dict)
-        and "flock" in str(row.get("args", ""))
-        and "enwiki9-heavy.lock" in str(row.get("args", ""))
-        for row in active_rows
-    ) and "`lock_wrapper`" not in status_md:
-        findings.append(Finding(status_md_path, "Markdown status receipt does not label heavy-lock flock as lock_wrapper"))
     if isinstance(active_processes.get("active_temp_io"), dict):
         for label in (
             "Temp input path",
@@ -565,7 +550,7 @@ def check_status_handoff(findings: list[Finding]) -> None:
         "gate_verdict",
         "gate_next_action",
         "terminal_verdict_present",
-        "heavy_gate_mutation_allowed",
+        "gate_mutation_allowed",
         "recommended_action",
         "command_source",
         "claim_rule",
@@ -576,8 +561,8 @@ def check_status_handoff(findings: list[Finding]) -> None:
     if isinstance(gate_decision, dict) and gate_decision.get("verdict") == "running":
         if handoff.get("terminal_verdict_present") is not False:
             findings.append(Finding(status_path, "running handoff must not mark terminal verdict present"))
-        if handoff.get("heavy_gate_mutation_allowed") is not False:
-            findings.append(Finding(status_path, "running handoff must not allow heavy gate mutation"))
+        if handoff.get("gate_mutation_allowed") is not False:
+            findings.append(Finding(status_path, "running handoff must not allow gate mutation"))
     if (
         handoff.get("terminal_verdict_present") is True
         and handoff.get("gate_verdict") in DECIDER_APPLY_COMMAND_VERDICTS

@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """Emit a compact enwiki9 status receipt from current artifacts.
 
-This is a lock-safe operator view. It does not launch compression. It combines
+This is a read-only operator view. It does not launch compression. It combines
 the conservative upper-bound certificate, cmix21 gate receipts, and current
-process/lock state into one JSON/Markdown receipt.
+process/resource state into one JSON/Markdown receipt.
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
-import fcntl
 import hashlib
 import json
 import os
@@ -29,7 +28,6 @@ REPO_ROOT = ROOT.parent.parent
 CERT_PATH = ROOT / "upper_bound_certificate.json"
 OUT_JSON = ROOT / "docs" / "status_receipt.json"
 OUT_MD = ROOT / "docs" / "status_receipt.md"
-HEAVY_LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
 LATEST_DELAYED_STATUS_LOG = ROOT / "run_logs" / "enwiki9_delayed_status_latest.log"
 LOCAL_RSS_GUARD_KIB = 10_485_760
 DECIMAL_10GB_GUARD_KIB = 10_000_000_000 // 1024
@@ -91,21 +89,6 @@ def top_status_by_label(cert: dict[str, Any]) -> dict[str, dict[str, Any]]:
         if isinstance(row, dict) and isinstance(row.get("label"), str):
             out[row["label"]] = row
     return out
-
-
-def lock_state() -> dict[str, Any]:
-    HEAVY_LOCK.touch(exist_ok=True)
-    with HEAVY_LOCK.open("w") as handle:
-        try:
-            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            return {"path": str(HEAVY_LOCK), "held": True}
-        finally:
-            try:
-                fcntl.flock(handle, fcntl.LOCK_UN)
-            except OSError:
-                pass
-    return {"path": str(HEAVY_LOCK), "held": False}
 
 
 def operator_logs_state() -> dict[str, Any]:
@@ -850,7 +833,6 @@ def gate_liveness_state(
     gate: dict[str, Any] | None,
     process_state: dict[str, Any],
     adaptive_state: dict[str, Any],
-    heavy_lock: dict[str, Any],
 ) -> dict[str, Any]:
     gate = gate if isinstance(gate, dict) else {}
     verdict = gate.get("verdict")
@@ -876,7 +858,6 @@ def gate_liveness_state(
         and row.get("gate_size") == scope
     ]
     driver_observed = observed_gate.get("active_gate_command_observed") is True
-    lock_held = heavy_lock.get("held") is True
     live_worker_job = any(
         row.get("worker_pid_live") is True for row in matching_jobs
     )
@@ -884,7 +865,6 @@ def gate_liveness_state(
         driver_observed
         or bool(matching_controllers)
         or live_worker_job
-        or (bool(matching_jobs) and lock_held)
     )
     if not persisted_running:
         classification = "not_persisted_running"
@@ -892,8 +872,6 @@ def gate_liveness_state(
         classification = "live_observed_owner"
     elif matching_jobs:
         classification = "registered_running_job_without_live_owner"
-    elif lock_held:
-        classification = "orphaned_running_receipt_with_unattributed_lock"
     else:
         classification = "orphaned_running_receipt"
     return {
@@ -906,12 +884,9 @@ def gate_liveness_state(
         "matching_controller_count": len(matching_controllers),
         "matching_adaptive_job_count": len(matching_jobs),
         "matching_adaptive_worker_live": live_worker_job,
-        "heavy_lock_held": lock_held,
-        "heavy_lock_is_supporting_only": True,
         "claim_rule": (
             "A persisted running receipt is live only with an exact driver, an "
-            "owning controller, or a matching adaptive worker PID and command. "
-            "The host-local heavy lock alone never identifies a gate."
+            "owning controller, or a matching adaptive worker PID and command."
         ),
     }
 
@@ -1196,67 +1171,38 @@ def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | 
 
 
 def operator_action(
-    heavy_lock: dict[str, Any],
     process_state: dict[str, Any],
     gate: dict[str, Any] | None,
 ) -> dict[str, Any]:
     gate = gate if isinstance(gate, dict) else {}
-    lock_held = heavy_lock.get("held") is True
-    active_scorer = process_state.get("active_scorer_observed") is True
     verdict = gate.get("verdict")
     next_action = gate.get("next_action")
 
     if verdict == "orphaned_running_receipt":
         return {
-            "safe_to_launch_heavy_gate": False,
+            "safe_to_launch_gate": False,
             "action": "reconcile_orphaned_gate_receipt",
             "reason": (
                 "persisted running state has no live owner and must be cleared or "
-                "terminalized before another heavy gate is launched"
+                "terminalized before this candidate is advanced"
             ),
             "allowed_work": [
                 "inspect and repair the orphaned receipt",
-                "run non-heavy oracle and shadow experiments",
-                "claim and publish independent non-heavy work",
+                "run independent oracle and shadow experiments",
+                "claim and publish independent work",
             ],
-            "forbidden_work": ["report the orphaned receipt as active", "launch another heavy gate"],
-        }
-    if lock_held and active_scorer:
-        return {
-            "safe_to_launch_heavy_gate": False,
-            "action": "wait_for_current_gate_receipts",
-            "reason": "the serialized scorer lane is already owned by an observed guarded process",
-            "allowed_work": [
-                "refresh status receipt",
-                "inspect driver and RSS receipts",
-                "update documentation and accounting ledgers",
-                "work on shadow-coder specs from cached logs",
-            ],
-            "forbidden_work": [
-                "launch another compression gate",
-                "package a fallback candidate",
-                "run result-corpus forecast scans",
-                "change active candidate source",
-            ],
-        }
-    if lock_held:
-        return {
-            "safe_to_launch_heavy_gate": False,
-            "action": "inspect_lock_owner",
-            "reason": "the heavy lock is held but no guarded scorer was observed in the process scan",
-            "allowed_work": ["inspect process table", "inspect receipts", "avoid new scorer launch"],
-            "forbidden_work": ["launch another compression gate"],
+            "forbidden_work": ["report the orphaned receipt as active", "advance this candidate"],
         }
     if verdict == "pass":
         if not is_ppmd_cmix_candidate(gate.get("candidate")):
             return {
-                "safe_to_launch_heavy_gate": False,
+                "safe_to_launch_gate": False,
                 "action": "record_pass_then_apply_candidate_promotion_rule",
                 "reason": "non-cmix candidate passed; apply the candidate metadata promotion rule before launching another gate",
                 "record_command": gate.get("record_command"),
             }
         return {
-            "safe_to_launch_heavy_gate": False,
+            "safe_to_launch_gate": False,
             "action": "record_pass_then_promote",
             "reason": "the gate passed; metadata and ledgers must be updated before the next scope launch",
             "record_command": gate.get("record_command"),
@@ -1265,37 +1211,37 @@ def operator_action(
     if verdict == "rss_fail":
         if not is_ppmd_cmix_candidate(gate.get("candidate")):
             return {
-                "safe_to_launch_heavy_gate": False,
+                "safe_to_launch_gate": False,
                 "action": "record_rss_failure_then_retire_or_repackage_candidate",
                 "reason": "non-cmix RSS failure has no PPMD lower-memory bracket",
                 "record_command": gate.get("record_rss_failure_command"),
             }
         if next_action == "launch_lower_prefix_gate":
             return {
-                "safe_to_launch_heavy_gate": True,
+                "safe_to_launch_gate": True,
                 "action": "launch_lower_prefix_gate",
                 "reason": "RSS failure is recorded and the lower memory-valve candidate is packaged",
                 "next_gate_command": gate.get("lower_prefix_gate_command"),
             }
         return {
-            "safe_to_launch_heavy_gate": False,
+            "safe_to_launch_gate": False,
             "action": "record_rss_failure_then_package_lower_candidate",
             "reason": "RSS failure must be recorded before the next memory-valve candidate is built",
             "lower_memory_suggestion": gate.get("lower_memory_suggestion"),
         }
     if verdict in {"roundtrip_fail", "determinism_fail", "guard_returncode_fail"}:
         return {
-            "safe_to_launch_heavy_gate": False,
+            "safe_to_launch_gate": False,
             "action": "record_failure_and_stop_promotion",
             "reason": "a failed constructive gate cannot be promoted",
         }
     if verdict == "cancelled_no_result":
         return {
-            "safe_to_launch_heavy_gate": True,
+            "safe_to_launch_gate": True,
             "action": "inspect_queue_before_launch",
             "reason": (
                 "the previous guard was explicitly cancelled without a scored "
-                "driver result and no longer owns the heavy lane"
+                "driver result and no longer owns an active candidate run"
             ),
         }
     if (
@@ -1306,7 +1252,7 @@ def operator_action(
         and isinstance(gate.get("scope_bytes"), int)
     ):
         return {
-            "safe_to_launch_heavy_gate": True,
+            "safe_to_launch_gate": True,
             "action": "launch_active_gate",
             "reason": "the active candidate and scope have no guard or driver receipt yet",
             "next_gate_command": cmix21_gate_decider.command_for_gate(
@@ -1320,14 +1266,14 @@ def operator_action(
         "wait_for_gate_completion",
     }:
         return {
-            "safe_to_launch_heavy_gate": False,
+            "safe_to_launch_gate": False,
             "action": "wait_for_gate_receipts",
             "reason": "the gate state is incomplete and cannot drive a mutation yet",
         }
     return {
-        "safe_to_launch_heavy_gate": True,
+        "safe_to_launch_gate": True,
         "action": "inspect_queue_before_launch",
-        "reason": "no lock owner or terminal gate receipt blocks the next queue decision",
+        "reason": "no terminal receipt blocks the next candidate queue decision",
     }
 
 
@@ -1362,7 +1308,6 @@ def handoff_state(
     *,
     candidate: str | None,
     scope: int | None,
-    heavy_lock: dict[str, Any],
     process_state: dict[str, Any],
     gate: dict[str, Any] | None,
     action: dict[str, Any],
@@ -1386,9 +1331,8 @@ def handoff_state(
         "gate_verdict": verdict,
         "gate_next_action": gate.get("next_action"),
         "terminal_verdict_present": terminal,
-        "heavy_lock_held": heavy_lock.get("held"),
         "active_scorer_observed": process_state.get("active_scorer_observed"),
-        "heavy_gate_mutation_allowed": False,
+        "gate_mutation_allowed": False,
         "recommended_action": action.get("action"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
@@ -1397,31 +1341,21 @@ def handoff_state(
     if isinstance(apply_command, list):
         out["apply_terminal_command"] = apply_command
         out["command_source"] = "cmix21_gate_decider.apply_terminal_command"
-        out["heavy_gate_mutation_allowed"] = True
+        out["gate_mutation_allowed"] = True
     elif isinstance(action.get("next_gate_command"), list):
         out["next_gate_command"] = action.get("next_gate_command")
         out["command_source"] = "operator_action.next_gate_command"
-        out["heavy_gate_mutation_allowed"] = (
-            heavy_lock.get("held") is not True
-            and process_state.get("active_scorer_observed") is not True
-        )
+        out["gate_mutation_allowed"] = True
     elif isinstance(gate.get("lower_prefix_gate_command"), list):
         out["next_gate_command"] = gate.get("lower_prefix_gate_command")
         out["command_source"] = "cmix21_gate_decider.lower_prefix_gate_command"
-        out["heavy_gate_mutation_allowed"] = (
-            heavy_lock.get("held") is not True
-            and process_state.get("active_scorer_observed") is not True
-        )
+        out["gate_mutation_allowed"] = True
     elif verdict == "cancelled_no_result":
         out["command_source"] = (
             "terminal operator cancellation; inspect queue before selecting "
             "new work"
         )
-        out["heavy_gate_mutation_allowed"] = (
-            action.get("safe_to_launch_heavy_gate") is True
-            and heavy_lock.get("held") is not True
-            and process_state.get("active_scorer_observed") is not True
-        )
+        out["gate_mutation_allowed"] = action.get("safe_to_launch_gate") is True
     elif terminal:
         out["command_source"] = "terminal verdict lacks apply command; inspect cmix21_gate_decider before acting"
     else:
@@ -1434,7 +1368,6 @@ def operator_summary_state(
     candidate: str | None,
     scope: int | None,
     proof: dict[str, Any],
-    heavy_lock: dict[str, Any],
     process_state: dict[str, Any],
     gate: dict[str, Any] | None,
     action: dict[str, Any],
@@ -1453,7 +1386,6 @@ def operator_summary_state(
         "scope_bytes": scope,
         "gate_verdict": gate.get("verdict"),
         "gate_next_action": gate.get("next_action"),
-        "heavy_lock_held": heavy_lock.get("held"),
         "active_scorer_observed": process_state.get("active_scorer_observed"),
         "active_cmix_mode": process_state.get("active_cmix_mode"),
         "driver_result_present": gate.get("driver_result_json_present"),
@@ -1481,9 +1413,9 @@ def operator_summary_state(
         "active_process_tree_margin_kib": process_state.get("active_tree_margin_kib"),
         "active_process_tree_decimal_10gb_margin_kib": process_state.get("active_tree_decimal_10gb_margin_kib"),
         "operator_action": action.get("action"),
-        "safe_to_launch_heavy_gate": action.get("safe_to_launch_heavy_gate"),
+        "safe_to_launch_gate": action.get("safe_to_launch_gate"),
         "terminal_verdict_present": handoff.get("terminal_verdict_present"),
-        "heavy_gate_mutation_allowed": handoff.get("heavy_gate_mutation_allowed"),
+        "gate_mutation_allowed": handoff.get("gate_mutation_allowed"),
         "command_source": handoff.get("command_source"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
@@ -1518,7 +1450,6 @@ def receipt() -> dict[str, Any]:
     labels = top_status_by_label(cert)
     proof = cert.get("proof_status", {}) if isinstance(cert.get("proof_status"), dict) else {}
     target = cert.get("target", {}) if isinstance(cert.get("target"), dict) else {}
-    heavy_lock = lock_state()
     process_state = active_process_state()
     adaptive_state = adaptive_running_jobs_state()
     candidate, scope = active_candidate_from_cert(cert)
@@ -1567,18 +1498,16 @@ def receipt() -> dict[str, Any]:
         gate,
         process_state,
         adaptive_state,
-        heavy_lock,
     )
     gate = reconcile_gate_liveness(gate, liveness)
     orphaned = gate is not None and gate.get("verdict") == "orphaned_running_receipt"
     live_candidate = None if orphaned else candidate
     live_scope = None if orphaned else scope
     add_active_decode_progress(process_state, gate)
-    action = operator_action(heavy_lock, process_state, gate)
+    action = operator_action(process_state, gate)
     handoff = handoff_state(
         candidate=live_candidate,
         scope=live_scope,
-        heavy_lock=heavy_lock,
         process_state=process_state,
         gate=gate,
         action=action,
@@ -1588,7 +1517,6 @@ def receipt() -> dict[str, Any]:
         candidate=live_candidate,
         scope=live_scope,
         proof=proof,
-        heavy_lock=heavy_lock,
         process_state=process_state,
         gate=gate,
         action=action,
@@ -1640,7 +1568,6 @@ def receipt() -> dict[str, Any]:
         ),
         "blocker": blocker_status_state(certificate_blocker, gate, action),
         "certificate_blocker": certificate_blocker,
-        "heavy_lock": heavy_lock,
         "operator_logs": operator_logs_state(),
         "candidate_audit": candidate_audit_summary_state(),
         "active_candidate_recent_artifacts": active_candidate_recent_artifacts(live_candidate),
@@ -1684,8 +1611,6 @@ def process_role(args: Any) -> str:
     text = str(args)
     if "cmix21_gate_decider.py" in text:
         return "gate_decider"
-    if "flock" in text and "enwiki9-heavy.lock" in text:
-        return "lock_wrapper"
     if "run_with_rss_guard.py" in text:
         return "rss_guard"
     if "projects/enwiki9/lib/driver.py" in text:
@@ -1716,7 +1641,7 @@ def render_md(data: dict[str, Any]) -> str:
     lines = [
         "# enwiki9 Status Receipt",
         "",
-        "Generated from the current certificate, gate receipts, lock state, and process table.",
+        "Generated from the current certificate, gate receipts, resource guards, and process table.",
         "",
         f"- Generated at UTC: `{data.get('generated_at_utc', 'unknown')}`",
         "",
@@ -1732,7 +1657,6 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Scope bytes: `{fmt_int(summary.get('scope_bytes'))}`",
         f"- Gate verdict: `{summary.get('gate_verdict', 'unknown')}`",
         f"- Gate next action: `{summary.get('gate_next_action', 'unknown')}`",
-        f"- Heavy lock held: `{fmt_bool(summary.get('heavy_lock_held'))}`",
         f"- Active scorer observed: `{fmt_bool(summary.get('active_scorer_observed'))}`",
         f"- Active cmix mode: `{summary.get('active_cmix_mode') or 'n/a'}`",
         f"- Driver result present: `{fmt_bool(summary.get('driver_result_present'))}`",
@@ -1746,7 +1670,7 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Tightest decimal single-process margin KiB: `{fmt_int(summary.get('max_sampled_single_decimal_10gb_margin_kib'))}`",
         f"- Latest binary single-process margin KiB: `{fmt_int(summary.get('latest_sample_single_rss_margin_kib'))}`",
         f"- Latest decimal single-process margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
-        f"- Safe to launch heavy gate: `{fmt_bool(summary.get('safe_to_launch_heavy_gate'))}`",
+        f"- Safe to launch candidate gate: `{fmt_bool(summary.get('safe_to_launch_gate'))}`",
         f"- Terminal verdict present: `{fmt_bool(summary.get('terminal_verdict_present'))}`",
         f"- Pending adaptive jobs: `{fmt_int(summary.get('pending_adaptive_jobs'))}`",
         f"- Held pending adaptive jobs: `{fmt_int(summary.get('held_pending_adaptive_jobs'))}`",
@@ -1760,7 +1684,6 @@ def render_md(data: dict[str, Any]) -> str:
             else "## Active Gate"
         ),
         "",
-        f"- Heavy lock held: `{fmt_bool(data.get('heavy_lock', {}).get('held'))}`",
         f"- Gate verdict: `{gate.get('verdict', 'unknown')}`",
         f"- Next action: `{gate.get('next_action', 'unknown')}`",
         f"- Candidate: `{gate.get('candidate', 'unknown')}`",
@@ -1928,7 +1851,7 @@ def render_md(data: dict[str, Any]) -> str:
                 "",
                 "## Operator Action",
                 "",
-                f"- Safe to launch heavy gate: `{fmt_bool(action.get('safe_to_launch_heavy_gate'))}`",
+                f"- Safe to launch candidate gate: `{fmt_bool(action.get('safe_to_launch_gate'))}`",
                 f"- Action: `{action.get('action', 'unknown')}`",
                 f"- Reason: `{action.get('reason', 'unknown')}`",
                 f"- Allowed work: `{fmt_list(action.get('allowed_work'))}`",
@@ -1943,7 +1866,7 @@ def render_md(data: dict[str, Any]) -> str:
                 "## Handoff",
                 "",
                 f"- Terminal verdict present: `{fmt_bool(handoff.get('terminal_verdict_present'))}`",
-                f"- Heavy gate mutation allowed: `{fmt_bool(handoff.get('heavy_gate_mutation_allowed'))}`",
+                f"- Gate mutation allowed: `{fmt_bool(handoff.get('gate_mutation_allowed'))}`",
                 f"- Recommended action: `{handoff.get('recommended_action', 'unknown')}`",
                 f"- Command source: `{handoff.get('command_source', 'unknown')}`",
                 f"- Claim rule: `{handoff.get('claim_rule', 'unknown')}`",
@@ -2194,7 +2117,6 @@ def main() -> int:
             "project",
             "target_score_10_95",
             "has_10_95_constructive_upper_bound",
-            "heavy_lock",
             "active_processes",
             "operator_logs",
             "candidate_audit",

@@ -938,13 +938,13 @@ def render_md(summary: dict[str, Any]) -> str:
                 lines.extend(["```bash", command, "```", ""])
         lines.extend(
             [
-                "The lock-aware continuation helper selects this queue first:",
+                "The continuation helper selects this queue first:",
                 "",
                 "```bash",
                 "python3 projects/enwiki9/tools/streaming_retrieval_continue_shadow.py --refresh-audit",
                 "```",
                 "",
-                "Add `--run` only after it reports that the cmix heavy lock is clear.",
+                "Add `--run` to execute the selected isolated replay.",
                 "",
             ]
         )
@@ -995,7 +995,7 @@ def render_md(summary: dict[str, Any]) -> str:
                 "python3 projects/enwiki9/tools/streaming_retrieval_continue_shadow.py --refresh-audit",
                 "```",
                 "",
-                "Add `--run` only when the helper reports that the cmix heavy lock is clear.",
+                "Add `--run` to execute the selected isolated replay.",
                 "",
             ]
         )

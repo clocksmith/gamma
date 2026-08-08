@@ -1,14 +1,14 @@
 # enwiki9 Status Receipt
 
-Generated from the current certificate, gate receipts, lock state, and process table.
+Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-04T14:54:02+00:00`
+- Generated at UTC: `2026-08-08T22:05:17+00:00`
 
 ## Target State
 
-- `10.8000000%` target score: `108,000,000`
+- `10.5000000%` target score: `105,000,000`
 - Full-corpus constructive result present: `false`
-- `10.8000000%` constructive upper bound present: `false`
+- `10.5000000%` constructive upper bound present: `false`
 
 ## Operator Summary
 
@@ -16,7 +16,6 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Scope bytes: `n/a`
 - Gate verdict: `None`
 - Gate next action: `None`
-- Heavy lock held: `false`
 - Active scorer observed: `false`
 - Active cmix mode: `n/a`
 - Driver result present: `unknown`
@@ -30,17 +29,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch heavy gate: `true`
+- Safe to launch candidate gate: `true`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
 - Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
+- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
 ## Active Gate
 
-- Heavy lock held: `false`
 - Gate verdict: `unknown`
 - Next action: `unknown`
 - Candidate: `unknown`
@@ -55,7 +53,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
-- Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
+- Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command.`
 
 ## Gate Evidence Status
 
@@ -91,19 +89,19 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `true`
+- Safe to launch candidate gate: `true`
 - Action: `inspect_queue_before_launch`
-- Reason: `no lock owner or terminal gate receipt blocks the next queue decision`
+- Reason: `no terminal receipt blocks the next candidate queue decision`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
 ## Handoff
 
 - Terminal verdict present: `false`
-- Heavy gate mutation allowed: `false`
+- Gate mutation allowed: `false`
 - Recommended action: `inspect_queue_before_launch`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
+- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
 ## Operator Logs
 
@@ -114,11 +112,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `666`
-- Registered programs: `273`
-- Untracked nonignored entries: `18`
-- Modified tracked entries: `22`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=24, measured_negative=100, retired=491`
+- Program directories: `691`
+- Registered programs: `275`
+- Untracked nonignored entries: `136`
+- Modified tracked entries: `46`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=24, measured_negative=100, retired=499, track_source_before_evolution=17`
 
 ## Active Runner Process Table
 
@@ -142,4 +140,4 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Claim Rule
 
-No prefix row proves the `10.8000000%` full-corpus target.
+No prefix row proves the `10.5000000%` full-corpus target.

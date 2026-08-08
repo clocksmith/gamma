@@ -25,7 +25,7 @@ python3 projects/enwiki9/tools/enwiki9_lab.py status
 sed -n '1,200p' projects/enwiki9/docs/status_receipt.md
 ```
 
-Inspect live processes before source changes or heavy work:
+Inspect live processes before source changes or resource-intensive work:
 
 ```bash
 pgrep -af 'enwiki9_lab|candidate_triage|run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21'
@@ -37,9 +37,8 @@ pgrep -af 'enwiki9_lab|candidate_triage|run_with_rss_guard|projects/enwiki9/lib/
 2. Claim the highest-value proposal and materialize a unique candidate.
 3. Change one attributable mechanism per candidate when practical.
 4. Queue the smallest missing exact gate.
-5. Run independent small gates in parallel.
-6. Serialize `10M`, `100M`, and `1G` work through
-   `/tmp/enwiki9-heavy.lock`.
+5. Run independent gates in parallel when host resources permit.
+6. Give every run a unique job ID, output path, and explicit resource guard.
 7. Let terminal batches refresh candidate inventory and reporting views.
 8. Promote exact winners, explicitly retry infrastructure failures, mutate
    promising parents, and retire decisive misses.
@@ -109,7 +108,7 @@ unless `python3 tools/atlas_clockwork_seal.py verify --require-bound` reports
 ## Cross-Device Handoff
 
 Git synchronizes durable research state; it does not synchronize live
-processes, RAM, logs still being written, or `/tmp/enwiki9-heavy.lock`.
+processes, RAM, or logs still being written.
 
 Before beginning work on another device:
 
@@ -120,9 +119,9 @@ cd gamma
 python3 projects/enwiki9/tools/enwiki9_lab.py status
 ```
 
-Before launching a heavy gate, pull first, claim and queue the unique proposal
-or candidate, and publish that ownership before another device can claim the
-same work. Treat each host's heavy lock as local, not cluster-wide.
+Before launching a resource-intensive gate, pull first, claim and queue the
+unique proposal or candidate, and publish that ownership before another device
+can claim the same work. Inspect host resources and use a unique output path.
 
 After a decisive run or research decision:
 
@@ -139,7 +138,7 @@ inspect that host directly.
 
 ## Safety
 
-- Do not launch competing heavy work without the heavy lock.
+- Bound each concurrent run with explicit memory, process, and output paths.
 - Do not mutate candidate source beneath an active proof gate.
 - Quarantine evidence with broken alignment, causality, replay, or provenance.
 - Do not manufacture or silently drop missing receipt artifacts.

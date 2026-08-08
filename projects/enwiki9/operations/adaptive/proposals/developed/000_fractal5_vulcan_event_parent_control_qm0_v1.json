@@ -1,0 +1,35 @@
+{
+  "candidate_id": "fractal5_vulcan_event_parent_control_qm0_v1",
+  "claimed_at": "2026-08-08T20:55:15+00:00",
+  "created_at": "2026-08-08T20:54:11+00:00",
+  "developed_at": "2026-08-08T20:55:16+00:00",
+  "evidence": [
+    "results/vulcan_event_ppm_v1/2026-07-26T155531.json",
+    "results/fractal2_endpoint428_trace_10m_v1/decision.json"
+  ],
+  "expected_savings_bytes": 10000000,
+  "hypothesis": "VULCAN order-2 exact-event PPM can encode the canonical 10M WRT stream within 250000 bytes of the receipt-matched Endpoint428 archive while roundtripping exactly, leaving a plausible gap for FORM-conditioned event contexts to recover.",
+  "interfaces_exposed": [
+    "constructive_wrt_event_archive",
+    "event_ppm_parent_gap",
+    "exact_event_roundtrip"
+  ],
+  "kill_condition": "Retire the VULCAN-FORM integration route if the constructive flat event control exceeds Endpoint428 by more than 250000 bytes, fails exact roundtrip or determinism, or requires external event tables.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": "vulcan_event_ppm_v1",
+  "parent_proposal_id": "vulcan_event_ppm_v1",
+  "priority": 1000,
+  "promotion_condition": "Exact WRT and raw roundtrip; deterministic second archive; counted event archive no more than 250000 bytes above Endpoint428 10M archive; source package reported; event-decision reduction >=50 percent.",
+  "proposal_id": "fractal5_vulcan_event_parent_control_qm0_v1",
+  "retired_neighborhoods": [
+    "fractal4_slot_sleeping_trie_qm2"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1020,
+  "state": "developed",
+  "title": "FRACTAL-5 constructive VULCAN event parent control"
+}

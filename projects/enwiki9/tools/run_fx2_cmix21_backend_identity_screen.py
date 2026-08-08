@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import fcntl
+import contextlib
 import hashlib
 import json
 import math
@@ -268,7 +268,6 @@ def main() -> int:
         type=Path,
         default=Path("projects/enwiki9/tools/run_with_rss_guard.py"),
     )
-    parser.add_argument("--lock", type=Path, default=Path("/tmp/enwiki9-heavy.lock"))
     args = parser.parse_args()
 
     if args.candidate_mode == "pareto":
@@ -294,11 +293,7 @@ def main() -> int:
 
     runs: list[dict[str, Any]] = []
     binaries = {"reference": args.reference, "candidate": args.candidate}
-    with args.lock.open("a+") as lock_stream:
-        try:
-            fcntl.flock(lock_stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as error:
-            raise RuntimeError("enwiki9 heavy lock is already held") from error
+    with contextlib.nullcontext():
         for index, role in enumerate(RUN_ORDER, start=1):
             archive = args.output_dir / f"{index:02d}_{role}.comp"
             guard_path = args.output_dir / f"{index:02d}_{role}_guard.json"

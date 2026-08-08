@@ -1,0 +1,36 @@
+{
+  "candidate_id": "fractal6_structural_residual_selector_qn0_v1",
+  "claimed_at": "2026-08-08T21:08:00+00:00",
+  "created_at": "2026-08-08T21:05:24+00:00",
+  "developed_at": "2026-08-08T21:08:00+00:00",
+  "evidence": [
+    "results/mixregret_component_union_opening_1m_v1/decision.json",
+    "results/fractal2_endpoint428_trace_10m_v1/decision.json"
+  ],
+  "expected_savings_bytes": 6000000,
+  "hypothesis": "Routing Endpoint428 existing 28 component probabilities through an eight-bin residual mixer context derived from already-paid sidecar state saves at least 1500 archive bytes on canonical 250K and beats a capacity-matched byte-history context by at least 500 bytes without exceeding decimal 10GB.",
+  "interfaces_exposed": [
+    "native_sidecar_residual_context",
+    "matched_blind_capacity_control",
+    "existing_endpoint_recomposition"
+  ],
+  "kill_condition": "Retire if J0 misses either archive margin, any arm fails roundtrip or determinism, decimal RSS fails, or the source delta exceeds 20000 bytes. Do not sweep structural bin counts or activation thresholds.",
+  "max_program_bytes": 20000,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "codex-root",
+  "parent": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "parent_proposal_id": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "priority": 1000,
+  "promotion_condition": "Native 250K J0 archive beats exact parent B0 by >=1500 bytes and blind-capacity C0 by >=500 bytes; all arms exact roundtrip and deterministic re-encode; decimal 10GB passes; compressed source delta <=20000 bytes.",
+  "proposal_id": "fractal6_structural_residual_selector_qn0_v1",
+  "retired_neighborhoods": [
+    "mixregret_cert_component_union_v1",
+    "fractal4_static_slot_logit_qm1"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1010,
+  "state": "developed",
+  "title": "FRACTAL-6 native structural residual endpoint selector"
+}

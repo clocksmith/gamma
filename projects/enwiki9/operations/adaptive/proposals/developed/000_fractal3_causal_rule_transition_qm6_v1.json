@@ -1,0 +1,34 @@
+{
+  "candidate_id": "fractal3_causal_rule_transition_qm6_v1",
+  "claimed_at": "2026-08-08T20:29:21+00:00",
+  "created_at": "2026-08-08T20:27:34+00:00",
+  "developed_at": "2026-08-08T20:29:21+00:00",
+  "evidence": [
+    "results/fractal3_shortest_unique_trigger_qm5_v1/decision.json"
+  ],
+  "expected_savings_bytes": 10000000,
+  "hypothesis": "Online deterministic rule-transition state can correctly predict enough next FORM identities from completed prefix history to recover at least 100000 correct-parent J0 bytes while retaining a material margin over a no-transition arm.",
+  "interfaces_exposed": [
+    "online_rule_transition",
+    "full_first_terminal_prediction",
+    "no_transition_control"
+  ],
+  "kill_condition": "Retire if causal transition predictions add below 10000 bytes, J0 remains below 100000 bytes, a split is nonpositive, or a required control margin fails.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": "fractal3_shortest_unique_trigger_qm5_v1",
+  "parent_proposal_id": "fractal3_shortest_unique_trigger_qm5_v1",
+  "priority": 1000,
+  "promotion_condition": "Correct-parent free J0 >=100000 bytes; all thirds positive; J0 exceeds F0, E0, C0, S0 by >=20000 bytes and no-transition T0 by >=10000 bytes; predictions occur on at least three pages; exact WRT/raw alignment.",
+  "proposal_id": "fractal3_causal_rule_transition_qm6_v1",
+  "retired_neighborhoods": [
+    "fractal3_unique_prefix_trie_qm5"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1010,
+  "state": "developed",
+  "title": "FRACTAL-3 causal rule-transition macro ceiling"
+}

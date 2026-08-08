@@ -40,7 +40,7 @@ materialize a new candidate, queue the smallest missing exact gate, and record
 the terminal conclusion in `docs/research_register.md`. Never edit a measured
 or running candidate.
 
-All 10M, 100M, and 1G work must use `/tmp/enwiki9-heavy.lock`. Inspect process
+All 10M, 100M, and 1G work must use unique job and output paths. Inspect process
 ownership before launch. After terminal work, run:
 
 ```bash

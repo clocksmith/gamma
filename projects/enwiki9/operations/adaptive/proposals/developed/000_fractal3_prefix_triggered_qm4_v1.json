@@ -1,0 +1,35 @@
+{
+  "candidate_id": "fractal3_prefix_triggered_qm4_v1",
+  "claimed_at": "2026-08-08T20:18:17+00:00",
+  "created_at": "2026-08-08T20:16:48+00:00",
+  "developed_at": "2026-08-08T20:18:17+00:00",
+  "evidence": [
+    "results/fractal2_endpoint428_recursive_punct_qm3_v1/decision.json",
+    "results/fractal2_endpoint428_paid_mdl_qp1_v1/decision.json"
+  ],
+  "expected_savings_bytes": 10000000,
+  "hypothesis": "After decoding each learned rule first terminal normally, deterministic online macro state can still bypass at least 100000 Endpoint428 bytes across later FORM terminals plus structural-slot ECHO spans on canonical 10M.",
+  "interfaces_exposed": [
+    "causal_prefix_trigger",
+    "tail_form_macro",
+    "online_slot_history"
+  ],
+  "kill_condition": "Retire if removing every first FORM terminal drops J0 below 100000 bytes, a split is nonpositive, or a control margin is below 20000 bytes.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "parent_proposal_id": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "priority": 1000,
+  "promotion_condition": "Correct-parent free ceiling >=100000 bytes; all thirds positive; J0 exceeds tail-FORM, ordinary-path ECHO, flat-copy, and shuffled-slot controls by >=20000 bytes; rules span at least three pages; exact WRT/raw alignment.",
+  "proposal_id": "fractal3_prefix_triggered_qm4_v1",
+  "retired_neighborhoods": [
+    "fractal3_explicit_collective_ledger_qp2"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1018,
+  "state": "developed",
+  "title": "FRACTAL-3 causal prefix-triggered macro ceiling"
+}

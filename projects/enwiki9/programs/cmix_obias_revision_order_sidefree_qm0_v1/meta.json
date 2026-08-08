@@ -1,0 +1,42 @@
+{
+  "added": "2026-08-08",
+  "deps": [],
+  "description": "cmix-obias revision-ordered pages for causal side-free P0",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Tool-only external-donor article-order oracle; not a standalone compressor candidate."
+  },
+  "family": "cmix_obias_payload_tail_representation",
+  "hypothesis": "Ordering non-redirect page bodies by first revision ID before PHDA9 makes the original metadata-block order recoverable by sorting the visible D86 IDs after P0 decode, eliminating R1ORD3 without a circular decoder lookup.",
+  "id": "cmix_obias_revision_order_sidefree_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "pre-PHDA9 page revision order -> post-arithmetic visible D86 sort inverse"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "cmix_obias_revision_order_sidefree_qm0_v1",
+    "retired_neighborhoods": [
+      "decoder-stage revision-ID join, bytewise-title block order, Gamma geometry article order"
+    ]
+  },
+  "oracle_result": {
+    "archive_damage_10m_bytes": 17278,
+    "decision_path": "results/cmix_obias_revision_order_sidefree_qm0_v1/decision.json",
+    "decision_sha256": "c14aea2e6bd80f56f432734a941b21a54d2033d446def5f08b022eca256eb408",
+    "roundtrip_ok": true,
+    "score_credit_bytes": 0,
+    "ten_m_archive_damage_ceiling_bytes": 3141,
+    "verdict": "REJECT"
+  },
+  "qm0_contract": {
+    "decision_path": "results/cmix_obias_revision_order_sidefree_qm0_v1/decision.json",
+    "population": "canonical opening 10M donor article-order substitution",
+    "score_credit_bytes": 0,
+    "source_reserve_bytes": 32768,
+    "ten_m_archive_damage_ceiling_bytes": 3141,
+    "tool": "tools/cmix_obias_revision_order_sidefree_qm0.py"
+  },
+  "status": "retired",
+  "verdict": "Exact revision-ID article order roundtripped but lost 17278 archive bytes at 10M versus a 3141-byte ceiling; retire without nearby order sweeps."
+}
