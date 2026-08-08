@@ -223,6 +223,13 @@ lanes unless all model/index bytes are counted.
 | `macro_token_search.py` | Searches macro-token candidates. |
 | `macro_residual_package.py` | Packages macro-residual variants. |
 | `online_bpe_gate.py` | Screens online BPE gates. |
+| `text3_structural_joint_shadow_qm0.py` | Prices prefix-causal TEXT3-style structural coordinates against the exact Endpoint428 P1 trace with KT, matched controls, and an exact-parent Bayesian fallback. |
+| `far_history_cdc_copy_qm0.cpp` | Scans the canonical full 1G corpus for collision-verified, chronologically legal content-defined matches whose sources are more than 100M bytes behind the target. |
+| `far_history_cdc_copy_qm0.py` | Repeats the full-corpus far-history scan, verifies deterministic summaries, prices canonical distance/length commands, and emits the zero-credit promotion decision. |
+| `far_history_cdc_collective_ledger_qm1.cpp` | Emits QM0's frozen full-1G copy population as exact columnar literal-gap, source-distance, and length streams. |
+| `far_history_cdc_collective_ledger_qm1.py` | Repeats, parses, collectively compresses, and target-prices the exact far-history side ledger with deterministic and memory receipts. |
+| `far_history_residual_container_qc0.py` | Materializes QM1's frozen full-1G residual, verifies a second derivation digest, and reconstructs canonical enwiki9 exactly from the residual and paid ledger. |
+| `cmix_obias_postwrt_far_history_cdc_qm0.py` | Prices collision-verified paid copies beyond cmix-obias's 60M history ring on its receipt-bound 587,138,826-byte modeled stream. |
 | `segmented_split_probe.py` | Probes segmented split strategies. |
 | `wrt_codeword_split.py` | WRT codeword split experiments. |
 | `wrt_plane_split.py` | WRT plane split experiments. |
@@ -255,10 +262,69 @@ lanes unless all model/index bytes are counted.
 ## Maintenance Rules
 
 - Add a tool here when adding it to `tools/`.
-- If a tool launches a compressor, document whether it must respect
-  `/tmp/enwiki9-heavy.lock`.
-- If a tool only reads cached logs, label it as safe parallel work in the
+- If a tool launches a compressor, document its CPU set, memory guard, and
+  owned output directory. Concurrent isolated runs are allowed.
+- If a tool only reads cached logs, label it as observation-only in the
   relevant design doc.
 - If a tool graduates a measured result, link the result JSON from
   `ALGORITHMS.md`, `CMIX21_LOCK_SAFE_QUEUE.md`, or `UPPER_BOUND_CERTIFICATE.md`
   as appropriate.
+
+### FRACTAL-2 tools added 2026-08-08
+
+- `tools/fractal2_form_echo_joint_qm1.py`: exact-WRT/parent-P1 Gate -1 scorer for FORM/ECHO and B0/F0/E0/C0/S0/J0 controls; diagnostic only, launches no compressor.
+- `tools/fractal2_recursive_punct_forest_qm2.py`: materially new recursive punctuation-forest partition layered over frozen QM1 scoring; diagnostic only, launches no compressor.
+- `tools/fractal2_endpoint428_recursive_punct_qm3.py`: frozen QM2 repricing wrapper bound to the archive-identical Endpoint428 10M P1 receipt; diagnostic only, launches no compressor.
+## `fractal2_endpoint428_paid_mdl_qp1.py`
+
+- Candidate: `fractal2_endpoint428_paid_mdl_qp1_v1` (retired).
+- Function: exact paid 10M FORM/ECHO selection, independent paid controls, finite side stream, Endpoint428 residual range stream, deterministic second encode, exact WRT replay, and official raw inverse.
+- Measured result: no command was individually profitable; every arm was 1,634,559 bytes before the common 27,348-byte source charge.
+- Durable output: `results/fractal2_endpoint428_paid_mdl_qp1_v1/decision.json`.
+## FRACTAL QP1 unfiltered-ledger diagnostic
+
+- Reused the immutable QP1 generators through runtime overrides; no measured candidate file was changed.
+- J0 diagnostic: 708,455 selected fragments, 114,825.615 gross bytes, 3,049,038 raw ledger bytes, 780,964 LZMA ledger bytes.
+- This is negative mechanism evidence only and is not a codec or score claim.
+## `fractal3_prefix_triggered_qm4.py`
+
+- Candidate: `fractal3_prefix_triggered_qm4_v1` (retired realization).
+- Function: correct Endpoint428 P1 ceiling with each FORM first terminal left in the parent stream, later FORM terminals free, and matched ECHO controls on the same population.
+- Durable output: `results/fractal3_prefix_triggered_qm4_v1/decision.json`.
+## `fractal3_shortest_unique_trigger_qm5.py`
+
+- Candidate: `fractal3_shortest_unique_trigger_qm5_v1` (retired realization).
+- Function: exact-event prefix trie over learned FORM first terminals, retaining only uniquely dispatchable suffixes.
+- Durable output: `results/fractal3_shortest_unique_trigger_qm5_v1/decision.json`.
+## `fractal3_causal_rule_transition_qm6.py`
+
+- Candidate: `fractal3_causal_rule_transition_qm6_v1` (retired realization).
+- Function: online order-2 transition learning over completed non-overlapping FORM rules, shortest-unique fallback, and an explicit no-transition control.
+- Durable output: `results/fractal3_causal_rule_transition_qm6_v1/decision.json`.
+## Compact final-P1 trace and causal transfer tools
+
+- `tools/materialize_compact_final_p1_trace.py`: hash-bound isolated-source materializer adding only an observation hook for compact's final WRT P1; trace-on/reference identity is mandatory.
+- `tools/fractal2_compact_replacement_transfer_qm4.py`: rejected tombstone; the frozen QM3 universe failed decoder-causality review and must not be run.
+- `tools/fractal3_compact_shortest_unique_transfer_qc0.py`: one-shot repricing of QM5's frozen causal spans on the receipt-bound compact trace; terminal zero-credit rejection at `89,993.155` displaced bytes.
+- Durable outputs: `results/fractal2_compact_trace_10m_v1/decision.json` and `results/fractal3_compact_shortest_unique_transfer_qc0_v1/decision.json`.
+## `wrt_page_trie_implicit_copy_qm0.py`
+
+- Candidate: `wrt_page_trie_implicit_copy_qm0_v1` (retired realization).
+- Function: one-pass paid-qbit screen over decoder-derived exact WRT event suffixes, implicit unique sources, adaptive copy selectors, power-of-two length symbols, and typed/untyped/shuffled controls.
+- Result: T0 `-283,348.140` net bytes at canonical `10M`; every chronological third negative; peak guarded RSS `2,088,104` KiB.
+- Durable output: `results/wrt_page_trie_implicit_copy_qm0_v1/decision.json`.
+## `fractal4_slot_residual_quotient_qm1.py`
+
+- Candidate: `fractal4_slot_residual_quotient_qm1_v1` (retired realization).
+- Function: exact Q16 online Bayesian logit quotient over non-overlapping FORM slot values with ordinary, flat, and capacity-matched shuffled controls.
+- Durable output: `results/fractal4_slot_residual_quotient_qm1_v1/decision.json`.
+## `fractal4_slot_sleeping_trie_qm2.py`
+
+- Candidate: `fractal4_slot_sleeping_trie_qm2_v1` (retired realization).
+- Function: causal KT continuation probabilities keyed by FORM slot, two completed WRT bytes, and bit position under a global exact-parent Bayesian fallback.
+- Durable output: `results/fractal4_slot_sleeping_trie_qm2_v1/decision.json`.
+## `fractal5_vulcan_event_parent_control_qm0.py`
+
+- Candidate: `fractal5_vulcan_event_parent_control_qm0_v1` (retired route).
+- Function: constructive VULCAN event-PPM encode, exact decode, deterministic second encode, source packaging, and direct Endpoint428 archive-gap accounting on canonical 10M WRT.
+- Durable output: `results/fractal5_vulcan_event_parent_control_qm0_v1/decision.json`.

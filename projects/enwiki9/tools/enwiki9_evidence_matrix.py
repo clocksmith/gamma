@@ -253,7 +253,7 @@ def render(rows: list[Row], top_limit: int) -> str:
         "",
         "```text",
         "A row is artifact-backed only for its measured scope.",
-        "No prefix row proves 10.95%.",
+        "No prefix row proves 10.5%.",
         "No forecast or inherited metadata is included here.",
         "```",
         "",
@@ -262,7 +262,7 @@ def render(rows: list[Row], top_limit: int) -> str:
         f"- Result JSON files scanned: `{len(rows)}`",
         f"- Roundtrip-passing rows: `{len(exact)}`",
         f"- Verified full `1G` rows in this checkout: `{len(full)}`",
-        f"- `10.95%` target reached by this matrix: `{str(hit)}`",
+        f"- `10.5%` target reached by this matrix: `{str(hit)}`",
     ]
     if best_full is None:
         lines.append("- Best full `1G` score: `none present`")

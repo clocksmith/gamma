@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import fcntl
 import hashlib
 import json
 import os
@@ -37,8 +36,6 @@ CANDIDATE_PACKAGE = CANDIDATE_DIR / "cmix"
 RESULTS_DIR = ROOT / "results" / CANDIDATE_ID
 RECORD = ROOT / "tools" / "record_driver_result.py"
 RSS_GUARD = ROOT / "tools" / "run_with_rss_guard.py"
-LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
-BUSY_CODE = 75
 
 FULL_ENWIK9_BYTES = 1_000_000_000
 OFFICIAL_DECIMAL_10GB_KIB = 10_000_000_000 // 1024
@@ -160,7 +157,7 @@ def prepare_from_root_binary() -> dict[str, Any]:
     if missing:
         raise SystemExit("missing source asset(s): " + ", ".join(rel(path) for path in missing))
 
-    with HeavyLock("fx2 public root-binary package preparation"):
+    with DirectRunScope():
         CANDIDATE_DIR.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="fx2-public-package-") as td:
             root = pathlib.Path(td)
@@ -265,26 +262,12 @@ def run_command(command: list[str], cwd: pathlib.Path) -> subprocess.CompletedPr
     )
 
 
-class HeavyLock:
-    def __init__(self, label: str) -> None:
-        self.label = label
-        self.handle: Any = None
-
-    def __enter__(self) -> "HeavyLock":
-        LOCK.parent.mkdir(parents=True, exist_ok=True)
-        self.handle = LOCK.open("w")
-        try:
-            fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise SystemExit(
-                f"heavy lock is busy; {self.label} must not compete with the active scorer"
-            ) from exc
+class DirectRunScope:
+    def __enter__(self) -> "DirectRunScope":
         return self
 
     def __exit__(self, exc_type: object, exc: object, tb: object) -> None:
-        if self.handle is not None:
-            fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
-            self.handle.close()
+        return None
 
 
 def run_pack_command(command: list[str], cwd: pathlib.Path) -> subprocess.CompletedProcess[str]:
@@ -459,11 +442,6 @@ def run_full(save: bool, record: bool, check_determinism: bool) -> dict[str, Any
 def run_guarded(check_determinism: bool) -> int:
     guard_json = RESULTS_DIR / "lane0_full_rss_guard.json"
     command = [
-        "flock",
-        "-n",
-        "-E",
-        str(BUSY_CODE),
-        str(LOCK),
         sys.executable,
         str(RSS_GUARD),
         "--limit-kib",

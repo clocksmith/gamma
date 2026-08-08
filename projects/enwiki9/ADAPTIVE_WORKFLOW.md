@@ -229,8 +229,7 @@ python3 projects/enwiki9/tools/enwiki9_lab.py enqueue-tool <candidate_id> \
   --tool tools/<tool.py> \
   --tool-arg <argument> \
   --purpose oracle \
-  --gate-size 1000000 \
-  --heavy
+  --gate-size 1000000
 ```
 
 Tool paths are restricted to `projects/enwiki9/tools/`. Tool jobs cannot use a
@@ -325,9 +324,9 @@ python3 projects/enwiki9/tools/enwiki9_lab.py run \
 ```
 
 The runner adapts to current one-minute system load and available memory before
-claiming a batch. Small independent gates may run in parallel. Gates at `10M`
-or larger default to `--respect-heavy-lock` and serialize through
-`/tmp/enwiki9-heavy.lock`.
+claiming a batch. Independent gates may run concurrently up to the configured
+worker and resource limits. Every job uses its own durable ID, log, and output
+paths.
 
 After each terminal batch, the runner serially refreshes:
 
@@ -368,8 +367,8 @@ terminal job records remain durable.
 
 ## Cross-Device Operation
 
-Git is the replication layer for algorithms and evidence. Active processes and
-`/tmp/enwiki9-heavy.lock` are host-local.
+Git is the replication layer for algorithms and evidence. Active processes,
+resource usage, and logs still being written are host-local.
 
 Before work on a device:
 
@@ -380,12 +379,12 @@ cd gamma
 python3 projects/enwiki9/tools/enwiki9_lab.py status
 ```
 
-Before a heavy run:
+Before a resource-intensive run:
 
 1. Pull current state.
 2. Claim the proposal and queue a unique candidate-and-scope gate.
 3. Push the ownership record before another host begins related work.
-4. Inspect the selected host's process table and local heavy lock.
+4. Inspect the selected host's process table and available memory and storage.
 
 After a terminal result or decisive research conclusion:
 

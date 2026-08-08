@@ -1,0 +1,34 @@
+{
+  "candidate_id": "cmix_obias_revision_order_sidefree_qm0_v1",
+  "claimed_at": "2026-08-08T18:51:35+00:00",
+  "created_at": "2026-08-08T18:51:35+00:00",
+  "developed_at": "2026-08-08T18:51:36+00:00",
+  "evidence": [
+    "docs/research_register.md#2026-08-08-causally-valid-revision-order-side-free-successor-frozen",
+    "results/cmix_obias_revision_id_join_tail_qm0_v1/decision.json",
+    "results/cmix_obias_geometry_order_host_repacked_qm0_v2/decision.json"
+  ],
+  "expected_savings_bytes": 346948,
+  "hypothesis": "Ordering non-redirect page bodies by first revision ID before PHDA9 makes the original metadata-block order recoverable by sorting the visible D86 IDs after P0 decode, eliminating R1ORD3 without a circular decoder lookup.",
+  "interfaces_exposed": [
+    "pre-PHDA9 page revision order -> post-arithmetic visible D86 sort inverse"
+  ],
+  "kill_condition": "Reject on duplicate revision IDs, artifact mismatch, roundtrip or memory failure, R0 archive loss above 3141 bytes at opening 10M, repeat mismatch, or a source child that retains any occurrence permutation.",
+  "max_program_bytes": 32768,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 275,
+  "promotion_condition": "B0 and R0 opening-10M arms roundtrip within the decimal-memory ceiling; revision IDs are unique; R0 archive is at most 3141 bytes larger than B0; and the conditional R0 repeat is byte-identical. Then authorize exactly one source child.",
+  "proposal_id": "cmix_obias_revision_order_sidefree_qm0_v1",
+  "retired_neighborhoods": [
+    "decoder-stage revision-ID join, bytewise-title block order, Gamma geometry article order"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 293,
+  "state": "developed",
+  "title": "cmix-obias revision-ordered pages for causal side-free P0"
+}

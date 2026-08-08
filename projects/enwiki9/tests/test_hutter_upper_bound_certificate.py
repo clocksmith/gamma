@@ -30,9 +30,9 @@ class BestForecastRecordTests(unittest.TestCase):
                         "scope": {"raw_bytes": 10_000_000},
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_695,
-                            "conservative_projected_margin_bytes": -1_557_404,
+                            "conservative_projected_margin_bytes": -4_557_404,
                             "conservative_projected_score_bytes": 109_557_404,
-                            "target_score_bytes": 108_000_000,
+                            "target_score_bytes": 105_000_000,
                         },
                         "decision": {"verdict": "retire_economics_miss"},
                     }
@@ -43,7 +43,7 @@ class BestForecastRecordTests(unittest.TestCase):
 
         self.assertEqual(selected["program_id"], "endpoint428")
         self.assertEqual(selected["projected_score"], 109_557_404)
-        self.assertEqual(selected["projected_margin_bytes"], -57_404)
+        self.assertEqual(selected["projected_margin_bytes"], -4_557_404)
         self.assertEqual(selected["scope_bytes"], 10_000_000)
         self.assertIn("retire_economics_miss", selected["evidence"])
 
@@ -59,7 +59,7 @@ class BestForecastRecordTests(unittest.TestCase):
                         "scope": {"raw_bytes": 1_000_000},
                         "economics": {
                             "conservative_projected_score_bytes": 108_000_000,
-                            "target_score_bytes": 108_000_000,
+                            "target_score_bytes": 105_000_000,
                         },
                         "decision": {"verdict": "opening_pass"},
                     }
@@ -83,7 +83,7 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_524_268,
-                            "provisional_target_margin_bytes": -24_268,
+                            "provisional_target_margin_bytes": -4_524_268,
                         },
                         "decision": {
                             "verdict": "retire_unchanged_exact_10m_economics_miss"
@@ -96,7 +96,7 @@ class BestForecastRecordTests(unittest.TestCase):
 
         self.assertEqual(selected["program_id"], "endpoint428_pair_layer0")
         self.assertEqual(selected["projected_score"], 109_524_268)
-        self.assertEqual(selected["projected_margin_bytes"], -24_268)
+        self.assertEqual(selected["projected_margin_bytes"], -4_524_268)
         self.assertEqual(selected["archive_bytes"], 1_635_174)
 
     def test_lzma_replay_projection_supersedes_bzip2_miss(self) -> None:
@@ -112,7 +112,7 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_524_268,
-                            "provisional_target_margin_bytes": -24_268,
+                            "provisional_target_margin_bytes": -4_524_268,
                         },
                         "decision": {"verdict": "bzip2_economics_miss"},
                     }
@@ -130,8 +130,8 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
-                            "provisional_target_margin_bytes": -1_452_151,
-                            "target_score_bytes": 108_000_000,
+                            "provisional_target_margin_bytes": -4_452_151,
+                            "target_score_bytes": 105_000_000,
                         },
                         "proof": {"roundtrip_ok": False, "determinism_ok": False},
                         "decision": {"verdict": "replay_pending"},
@@ -150,8 +150,8 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
-                            "provisional_target_margin_bytes": -1_452_151,
-                            "target_score_bytes": 108_000_000,
+                            "provisional_target_margin_bytes": -4_452_151,
+                            "target_score_bytes": 105_000_000,
                         },
                         "decision": {
                             "verdict": "constructive_exact_10m_lzma_pass"
@@ -167,7 +167,7 @@ class BestForecastRecordTests(unittest.TestCase):
             selected["program_id"], "endpoint428_pair_layer0_lzma_replay"
         )
         self.assertEqual(selected["projected_score"], 109_452_151)
-        self.assertEqual(selected["projected_margin_bytes"], 47_849)
+        self.assertEqual(selected["projected_margin_bytes"], -4_452_151)
         self.assertIs(selected["codec_replay_complete"], True)
 
 

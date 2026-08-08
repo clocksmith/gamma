@@ -170,7 +170,9 @@ def parse_regime(data: bytes) -> tuple[list[bytes], list[bytes], list[bytes]]:
             end = next_start
         else:
             end = min(start + 7, next_start)
-            if end < next_start and is_ascii_number_line(lines[end]):
+            if end < next_start and re.fullmatch(rb"N-?[0-9]+", body(lines[end])):
+                end += 1
+            elif end < next_start and is_ascii_number_line(lines[end]):
                 end += 1
                 if end < next_start and lines[end] != BLOCK_MARKER:
                     candidate = body(lines[end])

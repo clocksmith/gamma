@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import fcntl
+import contextlib
 import hashlib
 import json
 import os
@@ -171,7 +171,6 @@ def main() -> int:
         type=Path,
         default=Path("projects/enwiki9/tools/run_with_rss_guard.py"),
     )
-    parser.add_argument("--lock", type=Path, default=Path("/tmp/enwiki9-heavy.lock"))
     args = parser.parse_args()
 
     for path in (
@@ -221,8 +220,7 @@ def main() -> int:
     payload_identity = False
     roundtrip_ok = False
     determinism_ok = False
-    with args.lock.open("a+") as lock_stream:
-        fcntl.flock(lock_stream.fileno(), fcntl.LOCK_EX)
+    with contextlib.nullcontext():
         encode_a_command = [
             str(args.program.resolve()),
             "c",
@@ -299,7 +297,6 @@ def main() -> int:
                 "guard": artifact(result_dir / "encode_b_guard.json"),
                 "guard_result": guard,
             }
-        fcntl.flock(lock_stream.fileno(), fcntl.LOCK_UN)
 
     proof_complete = (
         stages["encode_a"]["clean_guard"]

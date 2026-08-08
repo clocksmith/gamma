@@ -18,7 +18,7 @@ import forecast_frontier
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT_DEFAULT = ROOT / "results" / "frontier_target"
-DEFAULT_TARGET_PERCENT = 10.95
+DEFAULT_TARGET_PERCENT = 10.5
 HUTTER_RECORD_TARGET = 109_685_197
 
 

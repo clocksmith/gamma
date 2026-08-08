@@ -18,8 +18,6 @@ PACKAGE = ROOT / "tools" / "fx2_core_tune_package.py"
 RECORD = ROOT / "tools" / "record_driver_result.py"
 DRIVER = ROOT / "lib" / "driver.py"
 PROGRAMS = ROOT / "programs"
-LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
-BUSY_CODE = 75
 
 
 @dataclass(frozen=True)
@@ -108,11 +106,6 @@ def build_command(spec: SoftSpec) -> list[str]:
 
 def driver_command(spec: SoftSpec, limit: int, archive_ceiling: int | None = None) -> list[str]:
     command = [
-        "flock",
-        "-n",
-        "-E",
-        str(BUSY_CODE),
-        str(LOCK),
         sys.executable,
         str(DRIVER),
         spec.candidate_id,

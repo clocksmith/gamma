@@ -44,22 +44,6 @@ def process_identity(pid: int) -> tuple[bool, str | None]:
     return True, command.replace(b"\0", b" ").decode(errors="replace").strip()
 
 
-def lock_is_held(path: Path) -> bool | None:
-    if not path.exists():
-        return False
-    result = subprocess.run(
-        ["flock", "-n", str(path), "true"],
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    if result.returncode == 0:
-        return False
-    if result.returncode == 1:
-        return True
-    return None
-
-
 def sha256(path: Path) -> str | None:
     if not path.is_file():
         return None
@@ -101,7 +85,6 @@ def observe(args: argparse.Namespace) -> dict[str, Any]:
         "pid_alive": alive,
         "command": command,
         "identity_ok": bool(command and args.identity_token in command),
-        "heavy_lock_held": lock_is_held(args.lock_path),
         "progress_percent": progress,
         "progress_milestone": milestone_for(progress, args.milestone_step),
         "archive_bytes_provisional": archive_bytes if not terminal else None,
@@ -139,7 +122,6 @@ def event_reasons(
         ("official_decimal_over_limit_kib", "decimal_guard_state"),
         ("memory_band", "memory_boundary"),
         ("identity_ok", "candidate_identity"),
-        ("heavy_lock_held", "heavy_lock_state"),
         ("pid_alive", "process_state"),
         ("guard_status", "guard_status"),
     ):
@@ -165,7 +147,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--guard-json", type=Path, required=True)
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--state", type=Path, required=True)
-    parser.add_argument("--lock-path", type=Path, default=Path("/tmp/enwiki9-heavy.lock"))
     parser.add_argument("--milestone-step", type=int, default=5)
     parser.add_argument("--poll-seconds", type=float, default=60.0)
     parser.add_argument(

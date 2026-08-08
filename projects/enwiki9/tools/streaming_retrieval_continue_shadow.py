@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Continue SRSTC shadow proof work from the receipt audit queues.
 
-This script is deliberately conservative. By default it will not run a
-block-posterior or complete-block SRSTC replay while the cmix21 heavy lock is
-held, because the active proof gate must not be perturbed.
+This script selects and optionally runs the next isolated SRSTC shadow replay.
 """
 
 from __future__ import annotations
@@ -19,7 +17,6 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
 AUDIT_JSON = ROOT / "docs" / "streaming_retrieval_receipt_audit.json"
-HEAVY_LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -28,17 +25,6 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
     except (OSError, json.JSONDecodeError):
         return {}
     return payload if isinstance(payload, dict) else {}
-
-
-def heavy_lock_held() -> bool:
-    result = subprocess.run(
-        ["flock", "-n", "-E", "75", str(HEAVY_LOCK), "true"],
-        cwd=REPO_ROOT,
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    return result.returncode == 75
 
 
 def refresh_audit() -> None:
@@ -87,13 +73,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--refresh-audit", action="store_true")
     parser.add_argument("--run", action="store_true")
-    parser.add_argument("--allow-while-heavy-lock", action="store_true")
     args = parser.parse_args()
 
     if args.refresh_audit:
         refresh_audit()
 
-    lock_held = heavy_lock_held()
     audit = load_json(AUDIT_JSON)
     selected = pick_queue_row(audit)
     row, command_field, queue_kind = selected if selected else (None, None, None)
@@ -103,10 +87,7 @@ def main() -> int:
     decision: dict[str, Any] = {
         "receipt_type": "streaming_retrieval_continue_shadow_decision",
         "audit_json": AUDIT_JSON.resolve().relative_to(REPO_ROOT).as_posix(),
-        "heavy_lock": str(HEAVY_LOCK),
-        "heavy_lock_held": lock_held,
         "run_requested": args.run,
-        "allow_while_heavy_lock": args.allow_while_heavy_lock,
         "selected_receipt": row.get("path") if row else None,
         "selected_queue_kind": queue_kind,
         "selected_net_saved_bytes": row.get("net_saved_bytes") if row else None,
@@ -123,11 +104,6 @@ def main() -> int:
 
     if row is None or not isinstance(command, str):
         decision["verdict"] = "no_shadow_rerun_available"
-        print(json.dumps(decision, indent=2, sort_keys=True))
-        return 0
-    if lock_held and not args.allow_while_heavy_lock:
-        decision["verdict"] = "blocked_by_heavy_lock"
-        decision["next_action"] = "wait_for_cmix_gate"
         print(json.dumps(decision, indent=2, sort_keys=True))
         return 0
     if not args.run:

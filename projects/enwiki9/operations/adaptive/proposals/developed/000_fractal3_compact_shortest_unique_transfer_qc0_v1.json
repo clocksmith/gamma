@@ -1,0 +1,40 @@
+{
+  "candidate_id": "fractal3_compact_shortest_unique_transfer_qc0_v1",
+  "claimed_at": "2026-08-08T20:30:00+00:00",
+  "created_at": "2026-08-08T20:30:00+00:00",
+  "developed_at": "2026-08-08T20:39:30+00:00",
+  "evidence": [
+    "results/fractal2_compact_trace_10m_v1/decision.json",
+    "results/fractal3_shortest_unique_trigger_qm5_v1/decision.json",
+    "results/fractal3_compact_shortest_unique_transfer_qc0_v1/decision.json",
+    "docs/fractal3_compact_shortest_unique_transfer_qc0_plan.md"
+  ],
+  "expected_savings_bytes": 6000000,
+  "hypothesis": "QM5's decoder-causal shortest-unique trigger spans are at least 10000 bytes more expensive under compact's final P1 distribution and cross the frozen 100000-byte ceiling.",
+  "interfaces_exposed": [
+    "archive_identical_compact_final_p1",
+    "shortest_unique_event_prefix",
+    "causal_macro_dispatch"
+  ],
+  "kill_condition": "Retire if archive identity or memory proof fails, compact J0 is below 100000 bytes, substrate uplift over Endpoint428 QM5 is below 10000 bytes, any chronological split is nonpositive, or any required control margin is below 20000 bytes; do not tune the frozen universe.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "change_substrate",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "codex-root",
+  "parent": "fractal3_shortest_unique_trigger_qm5_v1",
+  "parent_proposal_id": "fractal3_shortest_unique_trigger_qm5_v1",
+  "priority": 1000,
+  "promotion_condition": "Compact correct-parent free J0 >=100000 bytes; uplift over Endpoint428 QM5 >=10000 bytes; all thirds positive; J0 exceeds F0, E0, C0, S0 by >=20000 bytes; then one paid compact replay must retain >=60000 net 10M bytes after complete accounting.",
+  "proposal_id": "fractal3_compact_shortest_unique_transfer_qc0_v1",
+  "result_summary": "Terminal zero-credit rejection: compact J0 89993.1552734375 bytes, uplift 55.7529296875 bytes, with exact archive identity and clean guards.",
+  "retired_neighborhoods": [
+    "noncausal QM3 compact transfer",
+    "rule or trigger tuning during cross-substrate transfer",
+    "compact replay of this shortest-unique span universe"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1018,
+  "state": "developed",
+  "title": "FRACTAL-3 causal shortest-unique transfer to compact"
+}

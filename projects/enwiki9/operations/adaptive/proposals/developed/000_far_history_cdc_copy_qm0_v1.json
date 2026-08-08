@@ -1,0 +1,32 @@
+{
+  "candidate_id": "far_history_cdc_copy_qm0_v1",
+  "claimed_at": "2026-08-08T21:16:01+00:00",
+  "created_at": "2026-08-08T21:16:01+00:00",
+  "developed_at": "2026-08-08T21:18:17+00:00",
+  "evidence": [
+    "programs/dedup_v1/meta.json tested fixed 256-byte chunks only at 1K and 250K; docs/complete_prior_factor_cover_solution.md; external/cmix21-sidecar/src/context-manager.cpp fixes direct history at 100,000,000 bytes; docs/hutter_frontier.json forecast 109,389,323 and current debt 4,389,323."
+  ],
+  "expected_savings_bytes": 8800000,
+  "hypothesis": "The full enwiki9 corpus contains maximal exact repeats whose prior source is more than 100,000,000 bytes behind the target, outside Endpoint428 direct match history; content-defined anchors plus maximal extension can expose at least 8,800,000 average-rate-equivalent bytes after explicit distance and length commands.",
+  "interfaces_exposed": [
+    "Full canonical 1,000,000,000-byte raw corpus -> deterministic collision-verified nonoverlapping COPY(distance,length)/LITERAL cover; no future source and no external dictionary."
+  ],
+  "kill_condition": "Retire the exact 32-byte content-defined anchor, 64-byte minimum match, 100M minimum distance, earliest-source, maximal-extension realization if average-rate-equivalent net is below 8,800,000 bytes, copied coverage is below 100,000,000 bytes, any corpus third is empty, exact collision verification fails, or deterministic repeat summaries differ.",
+  "max_program_bytes": 32768,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "owner": "root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1040,
+  "promotion_condition": "On exact full 1G, collision-verified nonoverlapping far-copy spans cover at least 100,000,000 raw bytes and retain at least 8,800,000 bytes after multiplying copied bytes by the current source-bound archive-only average rate and subtracting canonical tag/distance/length command bytes; all corpus thirds must contribute positively and a 128-bit repeat hash/control scan must agree.",
+  "proposal_id": "far_history_cdc_copy_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from dedup_v1 fixed aligned 256-byte chunks and opening-prefix triage; distinct from WRT explicit-copy/QP1 per-fragment local screens because it targets full-corpus sources beyond the parent 100M direct history."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1060,
+  "state": "developed",
+  "title": "Full-1G content-defined far-history copy ceiling"
+}

@@ -54,5 +54,5 @@ The detailed per-file catalog and lock-safety notes are in
 - Put handoff artifacts in `../docs/handoffs/`.
 - Put runtime logs and transient status snapshots in `../run_logs/`.
 - Add every new tool to `docs/tooling_inventory.md`.
-- State whether a tool can launch a compressor and whether it must respect
-  `/tmp/enwiki9-heavy.lock`.
+- State whether a tool can launch a compressor and which memory, process, and
+  output-path guards it uses.

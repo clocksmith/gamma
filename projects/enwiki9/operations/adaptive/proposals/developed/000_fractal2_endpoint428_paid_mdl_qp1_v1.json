@@ -1,0 +1,35 @@
+{
+  "candidate_id": "fractal2_endpoint428_paid_mdl_qp1_v1",
+  "claimed_at": "2026-08-08T19:52:23+00:00",
+  "created_at": "2026-08-08T19:50:47+00:00",
+  "developed_at": "2026-08-08T20:00:30+00:00",
+  "evidence": [
+    "projects/enwiki9/results/fractal2_endpoint428_recursive_punct_qm3_v1/decision.json",
+    "projects/enwiki9/results/fractal2_endpoint428_trace_10m_v1/decision.json"
+  ],
+  "expected_savings_bytes": 6000000,
+  "hypothesis": "Deterministic MDL selection over the frozen Endpoint428-priced QM3 universe can serialize FORM definitions/invocations and causal ECHO ranks/spans within 76004 bytes on 10M, leaving at least 60000 bytes net.",
+  "interfaces_exposed": [
+    "endpoint428_paid_form_rule_ledger",
+    "endpoint428_paid_echo_source_stream",
+    "exact_wrt_command_replay"
+  ],
+  "kill_condition": "Retire this serialization if paid net is below 60000 bytes, rule/command bytes exceed 40 percent of displaced Endpoint428 bytes, a paid control matches J0, or exact replay/determinism fails.",
+  "max_program_bytes": 250000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "coder",
+  "owner": "codex-root",
+  "parent": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "parent_proposal_id": "fractal2_endpoint428_recursive_punct_qm3_v1",
+  "priority": 1000,
+  "promotion_condition": "Fully paid 10M net gain >=60000 bytes; every chronological split positive; exact WRT/raw replay; deterministic archive; complete rule, command, source, framing, and source accounting; J0 beats all paid controls.",
+  "proposal_id": "fractal2_endpoint428_paid_mdl_qp1_v1",
+  "retired_neighborhoods": [
+    "wrong_parent_paid_serialization"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1018,
+  "state": "developed",
+  "title": "FRACTAL-2 Endpoint428 paid rule and ECHO replay"
+}

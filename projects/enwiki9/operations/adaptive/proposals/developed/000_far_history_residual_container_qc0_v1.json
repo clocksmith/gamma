@@ -1,0 +1,32 @@
+{
+  "candidate_id": "far_history_residual_container_qc0_v1",
+  "claimed_at": "2026-08-08T21:34:28+00:00",
+  "created_at": "2026-08-08T21:34:28+00:00",
+  "developed_at": "2026-08-08T21:36:12+00:00",
+  "evidence": [
+    "QM1 decision 1768802b... proves a deterministic 3,296,268-byte ledger for 64,526,086 exact copied bytes. At the published NNCP archive rate this population has a 3,578,265-byte net proxy before integration, but no exact residual artifact or inverse is sealed."
+  ],
+  "expected_savings_bytes": 3578265,
+  "hypothesis": "QM1s frozen 584,693-command ledger can be turned into a deterministic substrate-independent residual stream whose decoder reconstructs canonical enwik9 exactly from only the residual, compressed ledger, and decoder-visible prior output.",
+  "interfaces_exposed": [
+    "Frozen compressed far-history ledger plus residual raw stream -> exact canonical 1G reconstruction using only prior decoded output."
+  ],
+  "kill_condition": "Retire the transform implementation if residual derivation is nondeterministic, ledger parsing differs from QM1, any command is invalid, canonical reconstruction fails, or compressed source exceeds 32768 bytes. This gate grants no backend score.",
+  "max_program_bytes": 32768,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "owner": "root",
+  "parent": "far_history_cdc_collective_ledger_qm1_v1",
+  "parent_proposal_id": "far_history_cdc_collective_ledger_qm1_v1",
+  "priority": 1060,
+  "promotion_condition": "Canonical full 1G reconstructs byte-exactly from one residual stream and the frozen compressed ledger; a second independent residual digest matches; all 584,693 commands are prior, fully closed, in range, and consumed exactly; source package is deterministic and <=32768 bytes.",
+  "proposal_id": "far_history_residual_container_qc0_v1",
+  "retired_neighborhoods": [
+    "Does not change copy selection or recode the QM1 ledger; it materializes the exact residual/inverse contract required before testing any compression substrate."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1080,
+  "state": "developed",
+  "title": "Exact far-history residual container and inverse"
+}

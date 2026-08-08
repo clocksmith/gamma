@@ -228,14 +228,14 @@ def block_posterior_section() -> str:
             queue_lines = ["No target-closing block-posterior replay is currently queued."]
     else:
         queue_lines = [
-            "The lock-aware queue pins the target-closing replay:",
+            "The durable queue pins the target-closing replay:",
             "",
             "```bash",
             str(queued.get("block_posterior_rerun_command") or ""),
             "```",
             "",
             "`streaming_retrieval_continue_shadow.py` selects this command first",
-            "and by default refuses to launch it while `/tmp/enwiki9-heavy.lock` is held.",
+            "and runs it with its own receipt and output paths.",
         ]
     return "\n".join(
         [

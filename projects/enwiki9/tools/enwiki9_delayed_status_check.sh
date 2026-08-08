@@ -46,16 +46,12 @@ OUT="$OUT_DIR/enwiki9_delayed_status_${STAMP}.log"
   echo "[git_status]"
   git -C "$REPO_ROOT" status --short --branch || true
   echo
-  echo "[heavy_lock]"
-  flock -n -E 75 /tmp/enwiki9-heavy.lock true
-  echo "lock_rc=$?"
-  echo
   echo "[runner_processes]"
-  pgrep -af 'projects/enwiki9/lib/driver.py|cmix21-mmap|enwiki9-heavy.lock|run_with_rss_guard' || true
+  pgrep -af 'projects/enwiki9/lib/driver.py|cmix21-mmap|run_with_rss_guard' || true
   echo
   echo "[runner_process_table]"
   ps -eo pid,ppid,pgid,sid,stat,rss,args \
-    | grep -E 'projects/enwiki9/lib/driver.py|cmix21-mmap|enwiki9-heavy.lock|run_with_rss_guard' \
+    | grep -E 'projects/enwiki9/lib/driver.py|cmix21-mmap|run_with_rss_guard' \
     | grep -v grep || true
   echo
   echo "[active_rss_margin]"

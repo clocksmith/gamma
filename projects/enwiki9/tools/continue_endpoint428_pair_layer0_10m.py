@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import fcntl
 import json
 from pathlib import Path
 import subprocess
@@ -30,17 +29,6 @@ def wait_for_terminal_guard(path: Path, poll_seconds: float) -> dict[str, Any]:
         if guard.get("status") in TERMINAL_GUARD_STATES:
             return guard
         time.sleep(poll_seconds)
-
-
-def acquire_lock(path: Path, poll_seconds: float):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    handle = path.open("a+")
-    while True:
-        try:
-            fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            return handle
-        except BlockingIOError:
-            time.sleep(poll_seconds)
 
 
 def require_absent(paths: list[Path]) -> None:
@@ -138,7 +126,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-guard", type=Path, required=True)
     parser.add_argument("--sealer", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--lock-path", type=Path, default=Path("/tmp/enwiki9-heavy.lock"))
     parser.add_argument("--poll-seconds", type=float, default=60.0)
     args = parser.parse_args()
     if args.poll_seconds <= 0:
@@ -179,7 +166,6 @@ def main() -> int:
             args.final_receipt,
         ]
     )
-    lock = acquire_lock(args.lock_path, args.poll_seconds)
     try:
         subprocess.run(
             guard_command(
@@ -210,8 +196,7 @@ def main() -> int:
             check=True,
         )
     finally:
-        fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
-        lock.close()
+        pass
 
     subprocess.run(sealer_command(args, final=True), check=True)
     print(args.final_receipt.read_text(), end="", flush=True)
