@@ -26,15 +26,15 @@ The current source-bound frontier is endpoint428 with a counted minified source
 package of `261,125` bytes. Against the canonical target:
 
 ```text
-target_score_bytes                         108,000,000
+target_score_bytes                         105,000,000
 counted_minified_source_package_bytes          261,125
-maximum_full_corpus_archive_payload_bytes  107,738,875
+maximum_full_corpus_archive_payload_bytes  104,738,875
 best_counted_forecast                      109,389,323
-remaining_forecast_debt                      1,389,323
+remaining_forecast_debt                      4,389,323
 ```
 
 This is source-bound forecast accounting, not a full-corpus score. A child must
-save at least `1,389,323 + added_program_bytes + added_framing_bytes` at full
+save at least `4,389,323 + added_program_bytes + added_framing_bytes` at full
 scope relative to the forecast parent, with additional transfer safety before
 full-1G authorization.
 
@@ -200,10 +200,10 @@ needs a package-level audit of the exact submitted compressor/archive path.
 
 ## Claim Rule
 
-Do not write that a candidate hits `10.8000000%` unless:
+Do not write that a candidate hits `10.5000000%` unless:
 
 ```text
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
-official_score_bytes <= 108,000,000
+official_score_bytes <= 105,000,000
 ```

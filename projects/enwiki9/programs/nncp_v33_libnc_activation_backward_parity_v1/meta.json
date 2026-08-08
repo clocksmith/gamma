@@ -11,6 +11,22 @@
   "hypothesis": "A mismatched GELU backward primitive explains the diffuse first-update gradient disagreement despite frozen forward parity.",
   "id": "nncp_v33_libnc_activation_backward_parity_v1",
   "kill_gate": "Retire GELU backward if neither exact nor tanh PyTorch GELU matches LibNC gradients within 2e-6, or if the selected contract fails the corrected bound miniature full-gradient gate.",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-08-04T14:53:27+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: contract_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-08-04T14:53:27+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: contract_failure at 1024."
+      }
+    ]
+  },
   "omega": {
     "interfaces_exposed": [
       "LibNC nc_gelu forward/backward primitive -> exact PyTorch autograd contract"
@@ -22,7 +38,6 @@
       "Generic PyTorch-autograd reproduction without primitive-level LibNC backward parity"
     ]
   },
-  "parent": null,
   "outcome": {
     "libnc_stdout_sha256": "30c7050c349156e7b5973986f627414229ff40b3b339c243b87d34778e576f6f",
     "matching_contract": "libnc_unfused_f32_tanh_formula",
@@ -33,5 +48,7 @@
     "score_credit_bytes": 0,
     "verdict": "PASS_PRIMITIVE"
   },
-  "status": "candidate"
+  "parent": null,
+  "status": "retired",
+  "verdict": "retired: contract_failure at 1024."
 }

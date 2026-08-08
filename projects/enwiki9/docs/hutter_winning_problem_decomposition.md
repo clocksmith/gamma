@@ -11,10 +11,10 @@ a winning compressor into independent theorem problems such that solving any
 one necessarily supplies target-bearing archive savings.
 
 ```text
-target                         108,000,000 bytes
+target                         105,000,000 bytes
 verified full-1G score         unknown
 best counted forecast          109,389,323 bytes
-remaining forecast debt          1,389,323 bytes
+remaining forecast debt          4,389,323 bytes
 new score credit                         0 bytes
 runtime eligibility            unresolved
 ```
@@ -24,8 +24,8 @@ counted bytes. It has no located committee receipt and its reported RSS exceeds
 the project's strict decimal-10GB interpretation, so it does not change the
 canonical target or frontier. If accepted unchanged, its next one-percent
 ceiling would be `107,407,896`; the current forecast would be `1,981,427` bytes
-above that contingency and the standing `108,000,000` target would miss it by
-`592,104` bytes. Evidence and mechanism audit:
+above that contingency while the standing `105,000,000` target would clear it
+by `2,407,896` bytes. Evidence and mechanism audit:
 `docs/cmix_obias_external_candidate_audit.md`.
 
 Two supporting decomposition levels must not be confused with a winning
@@ -152,7 +152,7 @@ The score condition is:
 
 ```text
 full-corpus archive gain
-  >= 1,389,323
+  >= 4,389,323
     + incremental source
     + incremental framing
     + incremental tables and models
@@ -181,7 +181,7 @@ Victory requires one self-contained receipt satisfying:
 scope_bytes          == 1,000,000,000
 roundtrip_ok         == true
 determinism_ok       == true
-counted_score_bytes  <= 108,000,000
+counted_score_bytes  <= 105,000,000
 runtime_ok           == true
 memory_ok            == true
 ```
@@ -235,7 +235,7 @@ The present order remains:
 6. Compile positive information into counted native children and clear
    disjoint, 10M, 100M, resource, and full-1G gates. At 100M, freeze a safety
    reserve `R` and require
-   `10 * g_100 - delta_P >= 1,389,323 + R`.
+   `10 * g_100 - delta_P >= 4,389,323 + R`.
 
 The missing competition problem is therefore not another abstract theorem. It
 is the empirical obligation to find a causal information source that survives

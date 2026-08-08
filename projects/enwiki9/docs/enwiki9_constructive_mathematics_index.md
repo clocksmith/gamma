@@ -13,7 +13,7 @@ inheritance. It cannot create predictive gain or resource eligibility.
 - `NATIVE_QUEUED`: an exact native gate is durably queued.
 - `NATIVE_VERIFIED`: roundtrip, determinism, and the stated resource gate pass.
 - `SCORE_VERIFIED`: a complete counted score receipt supports the stated delta.
-- `OFFICIAL_WIN`: exact full-1G total is at most `108000000` and all official
+- `OFFICIAL_WIN`: exact full-1G total is at most `105000000` and all official
   resource rules pass.
 
 Only `OFFICIAL_WIN` completes the project objective.

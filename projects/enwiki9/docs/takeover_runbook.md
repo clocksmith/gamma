@@ -24,7 +24,7 @@ queue or guard receipt is not live without an owning process.
 The only winning receipt has all three properties:
 
 ```text
-score <= 108,000,000 bytes
+score <= 105,000,000 bytes
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
 ```
@@ -58,7 +58,7 @@ returns `VALID_BOUND`.
 ## Current Decision Boundary
 
 The verified full-1G score is unknown. The source-bound planning forecast is
-`109,389,323`, which is `1,389,323` bytes above the design target and is not a
+`109,389,323`, which is `4,389,323` bytes above the design target and is not a
 proof. Route D timestamp-envelope Q0 is terminal negative. Route C is blocked
 until an independently reproducible under-target full-corpus teacher exists
 with complete eligibility evidence. The generated status receipt supersedes
