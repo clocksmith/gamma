@@ -6,6 +6,7 @@
 ## Play profiles
 
 **Default Game** is authoritative in this book, the browser, and simulation.
+Use the browser **First Game Guide** for an accelerated Default Game.
 [**Advanced Play**](/docs/advanced-play.html) is an extension layer with additional complexity.
 **Advanced Play** is selected before setup and must be used for the entire game or not used at all.
 
@@ -16,7 +17,7 @@ the [**Advanced Play supplement**](/docs/advanced-play.html).
 The separately printed [**World and Institutions**](/docs/world-and-institutions.html) companion contains setting
 and ending narratives.
 
-## How to play
+## How to Play
 
 Default Game lasts four Eras. The institution with the most ${terms.playerTracks.mandate} wins; resolve that winner and the shared World Ending separately. Follow the numbered sections in order.
 
@@ -714,6 +715,8 @@ even if you place or relocate no cubes:
 - Remove one ${terms.playerTracks.scrutiny}.
 - Create a Joint Venture with an eligible rival.
 - Terminate one named Joint Venture you share.
+
+## Rules Reference
 
 ## 8. ${terms.infrastructure.power} Source cards
 
