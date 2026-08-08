@@ -7563,3 +7563,25 @@ only `21,026` above the public parent's `492,825`-byte distance to the standing
 target. The gate is consequently strict: title joining must preserve at least
 P0-level sampled economics. Plan:
 `docs/cmix_obias_title_join_tail_qm0_plan.md`.
+
+## 2026-08-08: canonical design target tightened to 105,000,000
+
+The standing user objective is now an exact, self-contained, officially
+eligible full-1G score at or below `105,000,000` bytes (`10.5000000%`). The
+`109,000,000` engineering and `108,500,000` prize-competitive checkpoints
+remain progress diagnostics, not stopping conditions. This supersedes the
+2026-07-25 `108,000,000` design target for new proposals, promotion economics,
+status reporting, and victory claims.
+
+Against the source-bound endpoint428 forecast of `109,389,323`, the new debt is
+`4,389,323` bytes before incremental source, model, table, framing, or transfer
+reserve. With the counted `261,125`-byte package, the maximum full-corpus
+archive payload is `104,738,875` bytes. A new 100M admission receipt must use a
+precommitted reserve `R` and satisfy
+`10 * g_100 - delta_P >= 4,389,323 + R`.
+
+Historical receipts, frozen candidates, sealed Atlas/Clockwork commitments,
+and terminal decisions retain their original target fields for provenance.
+They may inform the new search but cannot be relabeled as 105M-qualified.
+Active proposals whose frozen economics only address 108M require a new
+target-bearing successor rather than in-place mutation.

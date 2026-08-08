@@ -383,8 +383,8 @@ def validate_and_normalize(
     target = ledger.get("target", {})
     target_score = target.get("score_bytes")
     target_input = target.get("input_bytes")
-    if target_score != 108_000_000 or target_input != 1_000_000_000:
-        errors.append("target must be exact full enwik9 at score 108000000")
+    if target_score != 105_000_000 or target_input != 1_000_000_000:
+        errors.append("target must be exact full enwik9 at score 105000000")
     if operational.get("target_score_10_95") != target_score:
         errors.append("operational receipt and frontier target disagree")
 

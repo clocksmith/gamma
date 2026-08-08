@@ -4,7 +4,7 @@
 
 Discover, implement, falsify, refine, and certify a deterministic lossless
 compressor for the exact one-billion-byte `enwik9` corpus whose complete
-counted score is at most `108,000,000` bytes (`10.8000000%`). Count the archive,
+counted score is at most `105,000,000` bytes (`10.5000000%`). Count the archive,
 decompressor, reconstructive source, tables, dictionaries, models, framing,
 and every nonstandard runtime dependency.
 
@@ -14,7 +14,7 @@ Current boundary:
 verified full-1G score     unknown
 best counted forecast     109,389,323
 forecast evidence tier    constructive_prefix
-remaining design debt       1,389,323
+remaining design debt       4,389,323
 new score credit                     0
 runtime eligibility        unresolved
 ```
@@ -23,10 +23,10 @@ External competitive claims are tracked separately from this source-bound
 boundary. A 2026-08-02 `cmix-obias` artifact self-reports `108,492,825` counted
 bytes but has no located committee verification and exceeds this project's
 strict decimal-10GB RSS interpretation. If it is accepted unchanged, the next
-one-percent prize ceiling becomes `107,407,896`, so `108,000,000` would cease
-to be prize-winning even though it would be a smaller archive. Until that
-external claim is authoritative, preserve `108,000,000` as the standing user
-target and track the tighter value as a contingency. See
+one-percent prize ceiling becomes `107,407,896`; the `105,000,000` target would
+still clear that contingency by `2,407,896` bytes. Preserve `105,000,000` as
+the standing user target and continue tracking record movement before claiming
+prize eligibility. See
 `docs/cmix_obias_external_candidate_audit.md`.
 
 A forecast, proxy, teacher, oracle, shadow, prefix, or free-description
@@ -83,22 +83,22 @@ and framing accounting.
 
 A 100M candidate must round-trip, reproduce its archive byte-for-byte, remain
 inside the official resource limits, and retain enough package-adjusted gain to
-forecast below `108,000,000` with a transfer cushion. That forecast authorizes
+forecast below `105,000,000` with a transfer cushion. That forecast authorizes
 the full-1G proof; it is not the proof.
 
 For measured 100M archive gain `g_100`, incremental counted program cost
 `delta_P`, and a safety reserve `R` frozen before the run, require:
 
 ```text
-10 * g_100 - delta_P >= 1,389,323 + R
+10 * g_100 - delta_P >= 4,389,323 + R
 ```
 
-Equivalently, `g_100 >= (1,389,323 + delta_P + R) / 10`. Do not choose `R`
+Equivalently, `g_100 >= (4,389,323 + delta_P + R) / 10`. Do not choose `R`
 after observing the 100M result. The receipt must report the projected counted
 score and signed margins to both:
 
 ```text
-standing design target       108,000,000
+standing design target       105,000,000
 competitive contingency      107,407,896
 ```
 
@@ -111,7 +111,7 @@ The preferred portfolio has multiple independent 100M-qualified descendants:
 one representation-changing codec, one improved predictive substrate, and one
 fresh joint composition. Continue until at least one CPU-eligible,
 self-contained implementation reconstructs all one billion bytes and produces
-a complete counted score at or below `108,000,000`. If an intervening verified
+a complete counted score at or below `105,000,000`. If an intervening verified
 record makes that score insufficient for the minimum prize, tighten the final
 admission boundary rather than declaring victory against a stale target.
 
