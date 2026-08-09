@@ -213,6 +213,14 @@ or unrelated host path is visible inside the sandbox. Exact opening SHA-256,
 return code, scratch cleanup, and the decimal memory guard must pass. This is
 an isolation preflight with zero score credit, not another codec experiment.
 
+Job `20260809T231106Z_cf04ecd339` passed that preflight. The sealed archive
+returned `0` and reconstructed exactly `1,000,000` bytes with SHA-256
+`369b6889...52cad`; the scratch directory was removed. Peak sampled
+single/tree RSS was `8,344,420`/`8,369,176 KiB`, with no strict decimal
+violation. This authorizes the identical sealed-filesystem contract for the
+second full-corpus external decode after the first full decode succeeds. It
+does not prove a full-corpus inverse, archive determinism, or a counted score.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL

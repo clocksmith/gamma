@@ -71,10 +71,10 @@ is deliberately split so one success cannot inherit an unproved antecedent:
 | Gate | Current evidence | Status |
 | --- | --- | --- |
 | first full-1G bare decode | job `20260809T220237Z_6e7fd20876`; live guard `results/cmix_obias_full1g_bare_decode_qm0_guard_v1.json` | running |
-| second isolated full-1G decode | fresh sealed filesystem view and independent receipt | not started |
+| second isolated full-1G decode | opening-1M sealed-filesystem preflight passed exactly under job `20260809T231106Z_cf04ecd339`; full scope waits for the first decode | authorized, not started |
 | clean source build | q2 produced a `491,483`-byte program package, deterministic `464,298`-byte opening archives, and an exact bare inverse | opening qualification passed |
 | clean build repeat identity | q3 reproduced q2's program, head, payload, and opening archive byte-for-byte | passed on current host/toolchain |
-| full encode reproduction | isolated arms A/B each perform a full encode and exact bare inverse, followed by archive comparison | queued |
+| full encode reproduction | isolated arms A/B each perform a full encode and exact bare inverse, followed by archive comparison | running |
 | final submission accounting | exact submitted files, instructions, option bytes, source publication, runtime, RAM, and disk | incomplete |
 
 The external source snapshot claims that `archive9` contains the matching
