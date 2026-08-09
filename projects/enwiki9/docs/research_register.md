@@ -1978,6 +1978,17 @@ not an additive independently reset block stream. The final boundary must
 equal the actual terminated archive arithmetic count, and an observer-enabled
 repeat must reproduce the observer-disabled archive byte-for-byte.
 
+Physical-byte correction from direct `arith.c` inspection: `put_bit_flush()`
+returns the minimum number of bits sufficient for decoding, while the counted
+archive stores every final byte delivered to the write callback. These values
+can differ by the unused tail bits of the last byte. The cloned observer must
+therefore record both (a) the return value from `put_bit_flush()` and (b) the
+cloned state's `byte_count` after flushing. Chronological promotion and archive
+equality use physical arithmetic bytes from (b), plus the fixed header bytes;
+(a) is diagnostic only. At the final boundary, cloned physical bytes must
+equal the live archive's arithmetic-byte extent exactly. Comparing rounded or
+fractional minimum-bit counts to file size would be an accounting error.
+
 ## 2026-08-09 - Native midpoint attribution byte gates frozen
 
 The strict exact-native population binds parent `P=44,786` bytes and full
