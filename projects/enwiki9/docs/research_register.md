@@ -360,6 +360,16 @@ not authorize a victory claim. Evidence:
 `results/nncp_libnc_midsegment32_cpu_xz_package_qm1_guard_v1.json`, and job
 `20260809T130931Z_069decf804`.
 
+Official-rule audit preserves one remaining accounting condition. A submitted
+source ZIP is accepted, but separate compressor/decompressor accounting is
+`comp + 2*decomp + archive`; the program multiplier falls to one only when
+the submitted compressor and decompressor are the same program. Command-line
+option length is also counted. The q1 normalization therefore assumes this
+single shared wrapper and conservatively charges its uncompressed candidate
+directory; a final submission must replace that proxy with the actual source
+ZIP and option-byte measurements. Authority:
+`https://prize.hutter1.net/hrules.htm`.
+
 ## 2026-08-09 - Adaptive-worker liveness prevents duplicate mature launch
 
 The generated status receipt incorrectly labeled the active mature NNCP retry
