@@ -2027,3 +2027,34 @@ same-object attribution can identify which portion belongs to midpoint state
 refresh, output-head adaptation, deep adaptation, or generic extra optimizer
 capacity. This audit receives zero score credit and does not alter the active
 job or either threshold.
+
+## 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics
+
+Read-only source and binary inspection resolves the native implementation
+contract for conditional arm `O`. The transformer computes its symbol logits
+only after the final hidden state, through `embed_out` and `out_bias`; neither
+parameter feeds attention keys, values, persistent memory, or later hidden
+states. LibNC invokes `sgd_opt_update_var()` from the backward callback only
+for parameter variables reached by the current graph. The subsequent
+`nc_sgd_opt_update()` advances the optimizer's shared step and bias-correction
+coordinate. Thus a detached-hidden helper graph containing only the real
+`embed_out`, `out_bias`, softmax, and first-half truth loss performs an exact
+head-only midpoint Adam update while retaining the same extra global optimizer
+step as full arm `F`; it does not silently update deep parameters.
+
+Arm `O` must preserve the original first-half transformer graph while the
+detached head helper backpropagates, then code states 32--63 using the updated
+head and the unchanged first-half keys/values. Arm `OK` discards and rebuilds
+states 0--31 after the same head update. Because the head is downstream of all
+hidden and key/value state, the rebuilt transformer state is identical to the
+preserved state; `O` and `OK` must therefore produce byte-identical archives
+and model trajectories. Any divergence is an implementation failure, not a
+new compression effect. Similarly, `K` must be identical to `P` when it
+performs the same discard/rebuild without an optimizer update.
+
+The helper must copy final hidden values into distinct no-graph tensors; a
+LibNC tensor duplication only increments a reference and does not detach.
+Backward must still use the real head parameters so their existing Adam
+moments advance, followed by exactly one global optimizer-step advance. This
+is a frozen implementation invariant for `P/K/O/OK/F/S`, receives zero score
+credit, and remains unauthorized until the mature antecedent passes.
