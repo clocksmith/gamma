@@ -462,3 +462,78 @@ members. Evidence:
 `results/nncp_libnc_open_source_eligibility_audit_qm3_v1/decision.json`.
 Authorities: `https://prize.hutter1.net/hrules.htm` and
 `https://bellard.org/libnc/`.
+
+## 2026-08-09 - Midpoint gain is specifically concentrated on recent symbol recurrence
+
+Zero-credit diagnostic
+`nncp_midpoint_decoder_visible_recurrence_qm0_v1` consumed the exact faithful
+and full-midpoint branch traces for the receipt-bound `262,144`-symbol
+production-alphabet population. It reproduced the registered
+`17,185.333882` ideal-byte gain and all three original-coordinate gains to
+within `1e-9` bytes. Every recurrence feature was computed from earlier
+decoded symbols in the same native stream. A control rotated the gain field by
+exactly seventeen complete `64`-symbol segments within each stream, preserving
+stream, phase, position, population, and total gain while breaking the
+target-specific alignment.
+
+Targets whose true symbol occurred in the preceding `32` same-stream symbols
+were `21.559906%` of the population but carried `6,929.109722` bytes, or
+`40.319902%`, of the teacher gain. Their phase-preserving rotated control
+carried `3,767.427585` bytes, leaving a specificity margin of
+`3,161.682137` bytes (`18.397560%` of total gain). Genuine recent-32 gains were
+positive in every original-coordinate third: `2,334.787036`, `1,974.073257`,
+and `2,620.249429` bytes.
+
+The sharper causal subsets agree. Same-segment repeats carried
+`6,640.906514` bytes (`38.642872%`) with a `3,163.712517`-byte control margin.
+Second-half targets already present in that segment's first half were only
+`6.835938%` of events but carried `3,496.907707` bytes (`20.348209%`) and a
+`2,167.805919`-byte margin. The guarded diagnostic completed at `2,916 KiB`
+sampled process-tree RSS; its compressed source was `5,704` bytes.
+
+Conclusion: the midpoint teacher's gain is not uniformly distributed and
+bounded episodic recurrence is a real causal coordinate. This does not show
+that an explicit cache probability improves a coder, does not transfer NNCP
+gain to Endpoint or WRT, and does not make LibNC eligible. It authorizes one
+same-symbol-domain, independently terminated cache-mixture replay against the
+faithful trace with a capacity-matched decoder-visible control. A miss retires
+that compact realization without cache-window, lag, blend, or bucket sweeps.
+Evidence:
+`results/nncp_midpoint_decoder_visible_recurrence_qm0_v1/decision.json` and
+job `20260809T135330Z_a7381ef259`.
+
+## 2026-08-09 - Addressless cache-32 marginal recovers 9,073 actual teacher bytes
+
+Candidate `nncp_symbol_cache32_marginal_qm0_v1` converted the preceding
+diagnostic into an exact same-symbol-domain arithmetic replay. At each symbol,
+it formed a decoder-rebuilt empirical distribution from the preceding `32`
+same-stream symbols and marginalized that cache with the faithful distribution
+using frozen prior mass `16:1`. Bayesian prefix updates remove incompatible
+cache candidates after every decoded branch, so a novel symbol pays the cache
+prior once per symbol rather than once per branch. It transmits no source,
+distance, length, selector, or cache contents.
+
+On the receipt-bound `262,144`-symbol population, the same range coder exactly
+reproduced the faithful `341,558`-byte archive and SHA-256
+`99c7d04d...ec8c6`. The cache archive is `332,485` bytes: an actual
+`9,073`-byte gain. A capacity-matched cache from stream `(s+17) mod 32` produced
+`343,207` bytes and lost `1,649` bytes, giving the genuine cache a
+`10,722`-byte specificity margin. Independently terminated
+original-coordinate thirds gain `3,262`, `2,607`, and `3,204` bytes.
+
+The candidate repeat archive is byte-identical, and its arithmetic decoder
+reconstructs all `262,144` symbols across `3,670,169` branches. The guarded
+run sampled `50,180 KiB` maximum process-tree RSS; compressed source is `6,884`
+bytes. Every frozen condition passes. This simple causal cache recovers
+`52.795017%` of the full midpoint teacher's `17,185.333882` ideal-byte gain
+without changing model parameters or update cadence.
+
+This is the first target-rate causal mechanism in the current Agent B lane,
+but it remains zero-credit: the faithful probabilities are supplied by a
+receipt-bound teacher trace, not rebuilt by an eligible decoder, and closed
+LibNC remains outside the submission boundary. The pass authorizes an
+unchanged larger mature trace replay and then one open same-object backend
+port; it does not authorize WRT transfer, cache parameter sweeps, forecast
+credit, or a victory claim. Evidence:
+`results/nncp_symbol_cache32_marginal_qm0_v1/decision.json` and job
+`20260809T140233Z_2b0702ad8a`.
