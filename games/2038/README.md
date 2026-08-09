@@ -143,6 +143,11 @@ npm run simulate:audit -- --maximum-matches 480 --initial-runs 2 --batch-size 2
 npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
 ```
 
+The separately preregistered `npm run simulate:codex-session` path records a
+complete LLM-simulated session from frozen-kit inspection and rules questions
+through gameplay and postgame reconstruction. It never counts as a physical or
+blind human playtest.
+
 ## Optional CLI automation
 
 Claude and Codex decision scripts receive the shared decision packet. Their

@@ -172,6 +172,18 @@ const rulebook = labeledRulebook(
   await readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
   identity
 );
+const mapReference = labeledRulebook(
+  await readFile(resolve(projectRoot, "dist/docs/map-reference.md"), "utf8"),
+  identity
+);
+const componentReference = labeledRulebook(
+  await readFile(resolve(projectRoot, "dist/docs/component-reference.md"), "utf8"),
+  identity
+);
+const cardReference = labeledRulebook(
+  await readFile(resolve(projectRoot, "dist/docs/card-reference.md"), "utf8"),
+  identity
+);
 const worldGuide = labeledRulebook(
   await readFile(resolve(projectRoot, "dist/docs/world-and-institutions.md"), "utf8"),
   identity
@@ -181,6 +193,9 @@ const gallery = labeledGallery(
   identity
 );
 await writeFile(resolve(outputRoot, "core-rules.md"), rulebook);
+await writeFile(resolve(outputRoot, "map-reference.md"), mapReference);
+await writeFile(resolve(outputRoot, "component-reference.md"), componentReference);
+await writeFile(resolve(outputRoot, "card-reference.md"), cardReference);
 await writeFile(resolve(outputRoot, "world-and-institutions.md"), worldGuide);
 await writeFile(resolve(outputRoot, "component-masters.html"), gallery);
 await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity));
@@ -217,8 +232,8 @@ Executable reference ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
 
 This is a derived controlled-test kit, not a manufacturing package. It contains
-the frozen How to Play document, its world companion, baseline component
-masters, exact source data, release manifests, receipt contract, and
+the four frozen Default Game documents, the world companion, baseline
+component masters, exact source data, release manifests, receipt contract, and
 two-session protocol. Deferred Tactics, secret objectives, and Reserve
 Specialists are excluded from the component masters.
 
@@ -230,14 +245,17 @@ await writeFile(resolve(outputRoot, "README.md"), readme);
 const relativeFiles = [
   "KIT-LABEL.txt",
   "README.md",
+  "card-reference.md",
   "component-masters.html",
+  "component-reference.md",
   "contracts/playtest-receipt.schema.json",
   "core-rules.md",
+  "map-reference.md",
   "world-and-institutions.md",
   "playtest-protocol.md",
   "release/executable-manifest.json",
   "release/rules-candidate-manifest.json",
-  ...sourceDataFiles.map((path) => `source-dist/runtime/${path.slice("dist/runtime/".length)}`)
+  ...sourceDataFiles.map((path) => `source-data/${path.slice("dist/runtime/".length)}`)
 ].sort();
 const files = {};
 for (const path of relativeFiles) {
