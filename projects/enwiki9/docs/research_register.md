@@ -1607,6 +1607,20 @@ decoder is still active, and q3 remains unauthorized until the exact
 `88,279`-byte raw reference hash, direct prefix comparison, complete source
 accounting, and terminal decimal-memory guard all pass.
 
+Package-aware maturity interpretation is frozen separately from qm2's
+unchanged `30,000`-byte scientific screen.  The published NNCP total is
+`107,261,318` bytes with `628,955` program bytes.  Q3's currently measured
+source package is `1,184,561` bytes, a `555,606`-byte increase.  Closing the
+published total's `2,261,318`-byte debt while charging that increase and a
+precommitted `500,000`-byte reserve requires `3,316,924` full-symbol archive
+bytes.  Normalized only as a promotion gate to qm2's exact
+`1,998,848 / 200,608,961` symbol fraction, that is `33,049.505219` bytes, so
+the whole-byte floor is `33,050`.  A qm2 result from `30,000` through `33,049`
+passes its frozen mechanism screen but is not target-bearing under this
+package and reserve; `33,050` or more clears this normalization but remains
+zero-credit until a decodable same-schedule archive and full-corpus package
+exist.  No linear score forecast is claimed.
+
 ## 2026-08-08 - SYMBIONT-16 P64 crosses its monotone rate ceiling
 
 The active `nncp_symbiont16_p64_cmix21_qm0_v1` job has produced a decisive
