@@ -1,22 +1,22 @@
 # enwiki9 Research Register
 
-## 2026-08-09 - Agent A/B strategy and ownership merge under the 108M target
+## 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target
 
 Agent B has accepted Agent A's handoff and now owns both active scientific
 tracks. The canonical objective is an exact, self-contained full-1G score no
-larger than `108,000,000` bytes. The runnable `cmix-obias` research parent is
-reported at `108,492,825`, leaving `492,825` bytes of counted debt before its
+larger than `105,000,000` bytes. The runnable `cmix-obias` research parent is
+reported at `108,492,825`, leaving `3,492,825` bytes of counted debt before its
 unresolved memory, source, and independent-verification obligations. The
 immediate near-target lane is therefore independent reproduction and resource
 qualification of that parent. KAIROS was its first same-stream correction
 test, but the completed paid opening replay below retired the frozen dyadic
 final-head realization; it is no longer a promotion path.
 
-The independent NNCP lane tests whether the measured midpoint update-cadence
-effect persists over `1,998,848` symbols and can be localized to a compact
-causal mechanism. Its active mature gate remains frozen. A pass authorizes the
-predeclared state-refresh/output-head/full-update attribution and a compact
-MIDAS-style descendant; a miss retires only the tested cadence realization.
+The independent NNCP lane has now confirmed that the changed update cadence
+persists over `1,998,848` symbols, saving `82,432` actual encode-only archive
+bytes. That teacher result authorizes the predeclared production-alphabet
+state-refresh/output-head/full-update attribution and, only if attribution
+passes, a compact MIDAS-style descendant.
 
 The cmix-obias qualification and NNCP teacher lanes do not inherit or add
 projected savings. A future combination is authorized only after a new
@@ -43,11 +43,11 @@ the required head blob is `23,002` bytes with SHA-256
 `35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078`.
 Their arithmetic total is the claimed `108,492,825` bytes.
 
-This advances artifact availability and provenance only. No local full decode,
-repeat encode, strict-memory qualification, runtime qualification, or Gamma
-score credit exists. A safe full decode/encode workspace is currently blocked
-because only about `15 GB` is free on the shared filesystem, below the donor's
-documented temporary-disk requirement. No unrelated workspace data was removed
+This advances artifact availability and provenance only. No completed local
+full decode, repeat encode, strict-memory qualification, runtime qualification,
+or Gamma score credit exists. The root filesystem has only about `15 GB` free,
+but the later RAM-backed qualification entry records the safe `/dev/shm`
+workspace used by the active decode. No unrelated workspace data was removed
 to manufacture capacity.
 
 This register tracks strategy and algorithm research separately from measured
@@ -61,14 +61,14 @@ Promotion requires exact receipts: result JSON, shadow-coder receipt, or guard
 receipt depending on the lane.
 ```
 
-Current proof boundary: the active target is `108,000,000` counted bytes
-(`10.8000000%`). The best source-bound forecast is
+Current proof boundary: the active target is `105,000,000` counted bytes
+(`10.5000000%`). The best source-bound forecast is
 `endpoint428_gate_dot_fuse_output_update_loop_v1` at `109,389,323` bytes, a
-signed target distance of `+1,389,323` bytes before any successor's additional
+signed target distance of `+4,389,323` bytes before any successor's additional
 program, model, table, metadata, or framing cost. The verified exact full-1G
 score remains unknown. The current official one-percent prize ceiling is
-`109,685,196`; it is an eligibility boundary, while `108,000,000` remains the
-research stopping condition. Older `105M`, `109.5M`, `10.95%`, `109,498,879`,
+`109,685,196`; it is an eligibility boundary, while `105,000,000` remains the
+research stopping condition. Older `108M`, `109.5M`, `10.95%`, `109,498,879`,
 and `109,452,151` targets or forecasts are historical evidence only and do not
 control new promotion decisions.
 
@@ -104,6 +104,32 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 - [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](research_register/archive/part-014.md)
 
 ## Current entries
+
+## 2026-08-09 - Mature NNCP train-length-32 cadence passes decisively
+
+Candidate `nncp_libnc_trainlen32_mature_1998848_qm2_v1` completed the frozen
+`1,998,848`-symbol encode-only gate. The faithful parent archive is
+`2,042,820` bytes and the `train_len=32`, `d_pos=288` candidate archive is
+`1,960,388` bytes, an actual reduction of `82,432` bytes. This clears both the
+`30,000`-byte scientific gate and the `33,050`-byte package-aware gate. The
+candidate archive SHA-256 is
+`32d436829af709f57b4ac02264245ba133798ed09296118f98a34ed0151474a7`.
+The decimal guard completed at `5,691,852 KiB` maximum single-process RSS and
+`5,712,376 KiB` maximum process-tree RSS.
+
+This is strong mature causal-teacher evidence, not a submission result. The
+arm changes graph length, relative-position reach, update cadence, and the
+native training path; it is encode-only, has no deterministic replay or decode
+receipt, depends on closed LibNC, and cannot inherit a full-corpus forecast.
+Its `82,432` bytes therefore receive zero score credit. The result authorizes
+exactly one production-alphabet bridge followed by the already frozen
+`P/K/O/OK/F/S` attribution: unchanged parent, graph rebuild only,
+output-projection-plus-bias update only, their combination, full midpoint
+teacher, and shifted-truth specificity control. No train-length, position,
+optimizer, learning-rate, or scope sweep is authorized. Evidence:
+`results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/decision.json`, guard
+`results/nncp_libnc_trainlen32_mature_1998848_qm2_guard_v1.json`, and adaptive
+job `20260809T094504Z_5157a13386`.
 
 ## 2026-08-09 - cmix-obias full-1G bare-decode qualification moved to RAM-backed scratch
 

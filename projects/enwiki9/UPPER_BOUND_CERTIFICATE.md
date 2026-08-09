@@ -7,15 +7,15 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 ## Target
 
 - Full input bytes: `1,000,000,000`
-- 10.8000000% target score: `108,000,000`
+- 10.5000000% target score: `105,000,000`
 - Calibrated baseline score: `110,181,114`
-- Required net gain from calibrated baseline: `2,181,114` bytes
-- Required archive slope before program cost: `0.017448912` bits/byte
+- Required net gain from calibrated baseline: `5,181,114` bytes
+- Required archive slope before program cost: `0.041448912` bits/byte
 
 ## Proof Status
 
 - Full-corpus constructive result present: `False`
-- 10.8000000% constructive upper bound present: `False`
+- 10.5000000% constructive upper bound present: `False`
 
 ## Top Status
 
@@ -26,9 +26,9 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `nncp_libnc_trainlen32_mature_1998848_qm2_v1` | 1,998,848 | n/a | active 1,998,848 byte replay is running; no constructive result is present for this candidate yet | running gate |
-| blocker | `n/a` | n/a | n/a | active 1,998,848 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `nncp_libnc_trainlen32_mature_1998848_qm2_v1` | 1,998,848 | n/a | unchanged 1,998,848 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active candidate | `cmix_obias_full1g_bare_decode_qm0_v1` | 1,000,000,000 | n/a | active 1,000,000,000 byte replay is running; no constructive result is present for this candidate yet | running gate |
+| blocker | `n/a` | n/a | n/a | active 1,000,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `cmix_obias_full1g_bare_decode_qm0_v1` | 1,000,000,000 | n/a | unchanged 1,000,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
@@ -56,5 +56,5 @@ No verified full-corpus result JSON is present in this workspace.
 
 - Prefix results prove upper bounds only for that prefix, not for enwik9.
 - Projected 1GB scores are search evidence and are excluded from proof_status.
-- A 10.8000000% proof requires a full 1GB result with score <= 108000000.
+- A 10.5000000% proof requires a full 1GB result with score <= 105000000.
 - Canonical proof rows include only Git-tracked result JSON files; ignored host-local artifacts are noncanonical.

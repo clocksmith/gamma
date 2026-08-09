@@ -31,7 +31,7 @@ OUT_JSON_DEFAULT = ROOT / "upper_bound_certificate.json"
 OUT_MD_DEFAULT = ROOT / "UPPER_BOUND_CERTIFICATE.md"
 
 FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 108_000_000  # Legacy schema name retained for compatibility.
+TARGET_10_95 = 105_000_000  # Legacy schema name retained for compatibility.
 CALIBRATED_BASELINE_SCORE = 110_181_114
 
 METADATA_INHERITED_100M = {
@@ -1001,7 +1001,7 @@ def build_certificate(
         "notes": [
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
-            "A 10.8000000% proof requires a full 1GB result with score <= 108000000.",
+            "A 10.5000000% proof requires a full 1GB result with score <= 105000000.",
             (
                 "Canonical proof rows include only Git-tracked result JSON files; "
                 "ignored host-local artifacts are noncanonical."
@@ -1025,7 +1025,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "## Target",
         "",
         f"- Full input bytes: `{target['input_size']:,}`",
-        f"- 10.8000000% target score: `{target['target_score_10_95']:,}`",
+        f"- 10.5000000% target score: `{target['target_score_10_95']:,}`",
         f"- Calibrated baseline score: `{target['calibrated_baseline_score']:,}`",
         "- Required net gain from calibrated baseline: "
         f"`{target['required_net_gain_from_calibrated_baseline']:,}` bytes",
@@ -1036,7 +1036,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "",
         "- Full-corpus constructive result present: "
         f"`{status['has_full_corpus_constructive_result']}`",
-        "- 10.8000000% constructive upper bound present: "
+        "- 10.5000000% constructive upper bound present: "
         f"`{status['has_10_95_constructive_upper_bound']}`",
         "",
     ]

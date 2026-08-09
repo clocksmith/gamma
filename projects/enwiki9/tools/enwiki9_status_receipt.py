@@ -1374,7 +1374,7 @@ def handoff_state(
         "recommended_action": action.get("action"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves the 10.8000000% full-corpus target.",
+        "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     }
     if isinstance(apply_command, list):
         out["apply_terminal_command"] = apply_command
@@ -1457,7 +1457,7 @@ def operator_summary_state(
         "command_source": handoff.get("command_source"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves the 10.8000000% full-corpus target.",
+        "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     }
     if isinstance(max_sampled_single_rss_kib, int):
         summary["max_sampled_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_single_rss_kib
@@ -1576,7 +1576,7 @@ def receipt() -> dict[str, Any]:
         "project": "enwiki9",
         "generated_at_utc": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "operator_summary": operator_summary,
-        "target_score_10_95": target.get("target_score_10_95", 108_000_000),
+        "target_score_10_95": target.get("target_score_10_95", 105_000_000),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
         "best_exact_10m": labels.get("best exact 10M"),
@@ -1685,9 +1685,9 @@ def render_md(data: dict[str, Any]) -> str:
         "",
         "## Target State",
         "",
-        f"- `10.8000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
+        f"- `10.5000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
-        f"- `10.8000000%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
+        f"- `10.5000000%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
         "",
         "## Operator Summary",
         "",
@@ -1784,7 +1784,7 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Program bytes: `{fmt_int(gate.get('program_size'))}`",
                 f"- Local score: `{fmt_int(gate.get('local_score'))}`",
                 f"- Archive b/B: `{fmt_float(gate.get('archive_bpb'), 7)}`",
-                f"- Required full archive bytes for the `10.8000000%` target: `{fmt_int(gate.get('required_full_archive_bytes_for_10_95'))}`",
+                f"- Required full archive bytes for the `10.5000000%` target: `{fmt_int(gate.get('required_full_archive_bytes_for_10_95'))}`",
                 f"- Linear archive projection score: `{fmt_int(gate.get('linear_archive_projection_score'))}`",
                 "- Diagnostic note: `linear projection is not a proof; use it only to compare slope pressure`",
             ]
@@ -2134,7 +2134,7 @@ def render_md(data: dict[str, Any]) -> str:
             f"score `{fmt_int(row.get('hutter_score', row.get('projected_score')) )}`"
         )
     lines.extend(
-        ["", "## Claim Rule", "", "No prefix row proves the `10.8000000%` full-corpus target."]
+        ["", "## Claim Rule", "", "No prefix row proves the `10.5000000%` full-corpus target."]
     )
     lines.append("")
     return "\n".join(lines)
