@@ -99,3 +99,23 @@ test("baseline gallery excludes every deferred physical module", async () => {
     assert.ok(html.includes(`section id="${id}"`));
   }
 });
+
+test("physical-kit manifest hashes the source-data paths it actually copies", async () => {
+  const source = await readFile(
+    new URL("tasks/create-physical-kit.mjs", root),
+    "utf8"
+  );
+  assert.match(
+    source,
+    /sourceDataFiles\.map\(\(path\) => `source-data\/\$\{path\.slice\("dist\/runtime\/"\.length\)\}`\)/
+  );
+  assert.doesNotMatch(source, /source-dist\/runtime/);
+  for (const document of [
+    "core-rules.md",
+    "map-reference.md",
+    "component-reference.md",
+    "card-reference.md"
+  ]) {
+    assert.match(source, new RegExp(`resolve\\(outputRoot, "${document.replace(".", "\\.")}"\\)`));
+  }
+});

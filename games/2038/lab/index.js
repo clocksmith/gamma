@@ -1,4 +1,9 @@
-export { ClaudeCliCaller, CodexCliCaller, CliProcessError } from "./callers/index.js";
+export {
+  ClaudeCliCaller,
+  CodexCliCaller,
+  CodexCliRunner,
+  CliProcessError
+} from "./callers/index.js";
 export {
   buildDecisionPrompt,
   buildProviderDecisionPrompt,

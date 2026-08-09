@@ -381,6 +381,31 @@ Provider use is deliberately narrow and metered. It does not sweep the matrix.
 A one-match holdout proves the pipeline and exposes a behavioral trace; it does
 not estimate balance or compare providers.
 
+## Recorded Codex controlled session
+
+The controlled-session runner extends the same strict `CodexCliCaller`
+decision path with a receipt-bearing `CodexCliRunner` for pre-play and postgame
+stages. It records emulated unboxing and sorting, independent reading of all
+four frozen Default Game documents, participant questions, source-grounded
+facilitator answers, follow-up questions, every game decision, and postgame
+winner and World Ending reconstruction.
+
+The preregistration must be committed and the exact physical kit must already
+be frozen. Provider use is explicit:
+
+```bash
+npm run simulate:codex-session -- \
+  --preregistration evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v1.json \
+  --kit-manifest dist/physical-kit/<kit-id>/physical-kit.json \
+  --output-dir evidence/studies/simulation/codex-sessions/<session-id> \
+  --allow-llm
+```
+
+Stage journals survive an interrupted run. The final directory contains the
+complete session, gameplay report, and readable receipt. These artifacts are
+LLM simulation evidence: text-grounded unboxing is not physical handling, and
+provider latency cannot estimate human setup, teaching, or play duration.
+
 ## Other automation
 
 ```bash
