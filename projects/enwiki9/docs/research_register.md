@@ -1541,3 +1541,28 @@ endian order, block length, plane width, dictionary size, or backend. The
 planned `TID/TEXP` CMIX16 descendant is unauthorized. This is a zero-credit
 prefix-screen rejection and does not change the `109,389,323` forecast or the
 `4,389,323`-byte debt to the active `105,000,000` target.
+
+## 2026-08-08 - Mature train-length-32 first-block diagnostic
+
+The active `nncp_libnc_trainlen32_mature_1998848_qm2_v1` encode completed its
+first exact `499,712`-symbol native block and loaded the second block. A
+read-only `/proc` observer recorded input position `1,998,848` bytes
+(`999,424` symbols loaded) while the candidate archive descriptor remained at
+`573,440` bytes. The next observed write was `638,976` bytes after second-block
+processing had begun. These live sizes are buffered cumulative output and are
+not an exact terminated first-block payload.
+
+The receipt-bound faithful-parent native trace prices the identical first
+block at `618,776` actual range-coder bytes. Its four independently terminated
+Q16 shadow blocks are `618,778`, `504,341`, `453,176`, and `414,513` bytes.
+The full shadow payload is `1,990,806` bytes, while the native parent archive
+is `2,042,820`; the final native trace counter is `1,990,804` coder bytes, so
+the native archive carries `52,016` non-coder bytes. This establishes strong
+early diagnostic benefit for train length 32, but stdio buffering and the
+unterminated candidate stream forbid subtracting the live descriptor from the
+parent block as an exact gain.
+
+The frozen decision remains unchanged: only the final candidate archive can
+pass the `30,000`-byte mature gate, and a pass authorizes a repeated decodable
+confirmation with marginal chronological evidence. No score, forecast, or
+compact-midpoint descendant credit is granted by this block observation.
