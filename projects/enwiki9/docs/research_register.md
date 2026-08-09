@@ -125,6 +125,20 @@ zero score; failure rejects only this exact build realization and does not
 alter the separately hash-bound external archive claim. No compression model,
 memory budget, source coefficient, or transform is changed.
 
+Job `20260809T222602Z_86205dabaf` failed before compilation because
+`git archive` exported the tracked Git-LFS pointer for
+`pgo_data_asbuilt/default.profdata`, not its `127,664`-byte materialized
+object. The pointer correctly names SHA-256
+`51413209...1e52`, and that object is present in the local LFS store. This is
+zero compression evidence and does not reject the source tree.
+
+Unique successor `cmix_obias_source_1m_roundtrip_qm1_v1` changes only that
+export boundary: after the clean archive extraction, it obtains the pointer
+from `git show`, runs the local Git-LFS smudge filter, and verifies the exact
+materialized SHA-256 before executing q0's unchanged build, package, repeat,
+bare-inverse, and resource gates. No fallback to an untracked working-tree
+profile is permitted.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL
