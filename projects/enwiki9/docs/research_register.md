@@ -1301,3 +1301,19 @@ but receives no forecast credit. A pass authorizes compact symbol-bias transfer
 to a runnable substrate. A miss retires this exact bias-only mechanism without
 parameter-group, split, optimizer, learning-rate, or scope sweeps; the full
 midpoint result remains separate evidence.
+
+Terminal result: **REJECT**. Both independent arithmetic encodes produced
+`97,746` bytes and the identical complete-state SHA-256
+`687722a02a7ce708707a130dd0a5b439de367cfc89191523e41806caf6c77316`.
+The faithful parent is `96,142` bytes, so output-bias-only midpoint adaptation
+loses `1,604` actual bytes. Aligned ideal gain is also negative in every
+chronological third: `-559.703219`, `-516.453129`, and `-528.749002` bytes.
+Independent arithmetic decode, decoded-symbol identity, branch-frequency and
+loss identity, complete-state identity, and the official NNCP raw inverse all
+pass. The incremental compressed source is `6,056` bytes. The external RSS
+guard passes at `3,868,856` KiB sampled tree RSS, while NNCP reports
+`9,052,210,176` peak allocated bytes and `10,068,426,752` peak reserved bytes;
+the latter fails the strict decimal reservation criterion. This exact scalar
+symbol-bias realization is retired. It does not adjudicate a distinct
+output-projection-plus-KV interaction gate, which is authorized only if both
+the exact native and mature cadence antecedents pass.

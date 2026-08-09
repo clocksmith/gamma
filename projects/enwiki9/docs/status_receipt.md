@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T02:19:59+00:00`
+- Generated at UTC: `2026-08-09T02:31:16+00:00`
 
 ## Target State
 
@@ -115,9 +115,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `712`
 - Registered programs: `280`
-- Untracked nonignored entries: `5`
-- Modified tracked entries: `3`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=29, measured_negative=100, retired=531, track_source_before_evolution=1`
+- Untracked nonignored entries: `1`
+- Modified tracked entries: `5`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=29, measured_negative=100, retired=532`
 
 ## Active Runner Process Table
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `rss_guard` | 3,459,586 | 3,459,502 | 16,840 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `process` | 3,581,156 | 2,229,505 | 21,644 | `python3 tools/enwiki9_lab.py run --candidate nncp_symbiont16_p64_cmix21_qm0_v1 --max-workers 1 --min-free-mib 12000` |
 | `rss_guard` | 3,581,248 | 3,581,156 | 16,740 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 1,768,319 | 1,768,314 | 8,927,628 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
+| `process` | 1,768,319 | 1,768,314 | 8,746,196 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
 | `process` | 2,427,832 | 2,427,829 | 20,440 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
-| `process` | 2,427,873 | 2,427,832 | 5,686,692 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
+| `process` | 2,427,873 | 2,427,832 | 5,691,312 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 | `process` | 3,459,587 | 3,459,586 | 21,040 | `python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py` |
 | `process` | 3,459,798 | 3,459,587 | 5,778,764 | `/tmp/nncp-exact-midsegment32-65536-ybc819hu/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --preprocess 16384,512 --max_size 65536 c /home/x/enwiki9...` |
 | `process` | 3,581,255 | 3,581,248 | 35,500 | `python3 tools/nncp_symbiont16_p64_cmix21_qm0.py` |
-| `process` | 3,581,334 | 3,581,255 | 9,439,864 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out` |
+| `process` | 3,581,334 | 3,581,255 | 9,496,500 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out` |
 
 ## Active Candidate Recent Artifacts
 
@@ -149,22 +149,22 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Max cmix PID: `3581334`
 - Active cmix mode: `no_preprocess_compress`
-- Max cmix RSS KiB: `9,439,864`
-- Active process tree RSS KiB: `30,045,996`
+- Max cmix RSS KiB: `9,496,500`
+- Active process tree RSS KiB: `29,925,820`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,045,896`
-- Single-process decimal margin KiB: `325,761`
-- Active process tree margin KiB (binary): `-19,560,236`
-- Active process tree decimal margin KiB: `-20,280,371`
+- Single-process binary margin KiB: `989,260`
+- Single-process decimal margin KiB: `269,125`
+- Active process tree margin KiB (binary): `-19,440,060`
+- Active process tree decimal margin KiB: `-20,160,195`
 - Temp input path: `/tmp/symbiont-I16-1-6l3upl5d/in`
 - Temp output path: `/tmp/symbiont-I16-1-6l3upl5d/out`
 - Temp output staging path: `/tmp/symbiont-I16-1-6l3upl5d/out.cmix.temp`
 - Temp input bytes: `2,097,152`
-- Temp output bytes: `172,032`
+- Temp output bytes: `335,872`
 - Temp output staging bytes: `2,097,157`
 - Temp input modified UTC: `2026-08-09T02:09:19+00:00`
-- Temp output modified UTC: `2026-08-09T02:19:40+00:00`
+- Temp output modified UTC: `2026-08-09T02:31:06+00:00`
 - Temp output staging modified UTC: `2026-08-09T02:09:19+00:00`
 - Process read bytes: `0`
 - Process write bytes: `0`
