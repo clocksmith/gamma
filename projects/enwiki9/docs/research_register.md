@@ -1362,3 +1362,33 @@ arithmetic replay. The output matrix itself is `33,570,816` bytes in bfloat16;
 one float32 second-moment surface is `67,141,632` bytes. A compact descendant
 must reuse or replace those parent surfaces rather than count them as free new
 state.
+
+## 2026-08-08 - NNCP midpoint phase persistence attributed exactly
+
+Diagnostic: `nncp_midpoint_phase_attribution_qm0_v1`. Epistemic tier: exact
+trace attribution with zero score and forecast credit.
+
+The receipt consumes all `917,527` balanced-branch frequencies from the
+receipt-bound faithful, full-midpoint, and bias-only traces over the identical
+`65,536` symbols. All input hashes, branch populations, registered totals,
+registered chronological thirds, and the unchanged first half of segment zero
+match exactly. The full midpoint's `4,790.561037` ideal bytes decompose into
+`2,081.894044` bytes in positions `0-31` and `2,708.666993` bytes in positions
+`32-63`: `43.458251%` versus `56.541749%`. Segment zero contributes exactly
+zero before its first midpoint and `53.206193` bytes afterward. All eight
+position octets, all four segment quarters, and all `32` segment totals are
+positive; segment-quarter gains are `1,289.544721`, `1,328.820558`,
+`1,107.472339`, and `1,064.723420` bytes.
+
+The bias-only trace instead loses `1,604.905350` ideal bytes, split
+`-810.080613` before and `-794.824737` after the midpoint. Its quarter losses
+worsen from `-162.026946` to `-595.796653` bytes. The diagnostic source package
+is `4,580` bytes and the guarded process completes below its `1 GiB` limit.
+
+Conclusion: the full midpoint mechanism creates a persistent beneficial model
+trajectory, not only a stateless correction to the immediately following 32
+states. A compact child must reproduce a causal persistent-state effect.
+Second-half-only savings are an upper bound on immediate plus accumulated
+effects, not transferable MIDAS credit. This receipt does not identify a
+sufficient parameter subset, authorize `K/O/OK/F/S` before both exact-native
+and mature antecedents pass, or support a full-corpus forecast.
