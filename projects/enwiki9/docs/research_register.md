@@ -1197,3 +1197,72 @@ Decision SHA-256:
 `443facb7caf6e9c73de07d6d51403965c52d77e6fc5f91a6c6711196d344319e`;
 guard SHA-256:
 `11f631a2e130a47f8caf215f4eed3e920f7ff3a8c43818b7134660c3c3c31785`.
+
+## 2026-08-08 - exact source-native NNCP 32/32 schedule authorized
+
+Candidate: `nncp_libnc_exact_midsegment32_qm2_v1`. Epistemic tier: exact
+source-native 10,000-symbol constructive codec; score and full-corpus forecast
+credit remain zero.
+
+The source patch serializes an explicit `midsegment32` archive flag. It codes
+states 0-31, completes LibNC's fixed 64-state gradient graph with causally
+irrelevant zero future inputs, restricts the first loss to states 0-31,
+updates Adam without shifting persistent memory, rebuilds the first-half
+key/value graph under the new coefficients, codes states 32-63, applies the
+second-half loss, and only then shifts memory. Both online updates use the
+faithful parent's segment-level learning-rate coordinate. The enwik9 retrain
+path retains its independent `retrain_train_step` and original full-segment
+update.
+
+After one clean-source build failure exposed trace-only calls inherited from a
+locally instrumented donor, the canonical source-tar patch was corrected
+mechanically; no compression parameter changed. Two clean-source encodes then
+produced byte-identical `8,422`-byte archives, SHA-256
+`882185c36f42ef837b31770d30731dd01a9f3cddb08b89cc5f2d27c0c8abac1e`.
+The identical faithful archive is `9,246` bytes, so actual gain is `824` bytes
+against the frozen `500`-byte gate. The patched decoder reconstructed the
+exact `13,310`-byte raw prefix, SHA-256
+`a6ea11e7cb1674925943c9f8f3ecfd81f88a44bf59568c2564664602d02feebe`.
+The version-2 header proves batch `32`, segment `64`, and `midsegment32=1`.
+
+The receipt-bound source tar is `1,180,969` bytes and the patch compresses to
+`3,592` bytes, yielding a complete `1,184,561`-byte source package under the
+`1,300,000`-byte gate. Peak sampled single-process and process-tree RSS were
+`5,764,328` and `5,784,936` KiB, below decimal 10 GB.
+
+Disposition: authorize one exact source-native maturity gate on a larger
+identical population. Do not inherit the published NNCP score, linearly
+project the opening gain, claim Endpoint428 composability, or vary the split,
+optimizer, learning rate, segment length, or stream count. Decision SHA-256:
+`71032efdb387c62dd09057d843041b7a838fe53a9b2cb5ea3d0b3862025283f3`;
+guard SHA-256:
+`391410a1ded379a95259c5402f00c573325322d5daa455a247b09e69252a26d0`.
+
+## 2026-08-08 - SYMBIONT-16 P64 crossing screen frozen
+
+Candidate: `nncp_symbiont16_p64_cmix21_qm0_v1`. Epistemic tier before
+execution: planned exact same-backend representation control; score and
+forecast credit zero.
+
+Earlier candidates fed official NNCP big-endian U16 symbols directly into the
+byte-native B2 cmix21 backend. On `250,000` raw input bytes, text and binary
+backend modes produced `56,905` and `56,930` byte archives and missed the
+frozen `44,678`-byte ceiling. Those receipts close direct interleaved U16BE,
+but they did not test byte-plane layout, alignment specificity, or native
+symbol decisions.
+
+This screen binds the first `1,048,576` symbols of the full-corpus NNCP
+artifact, whose complete `401,217,922`-byte file has SHA-256
+`c82bfca1b4fb8e31d31ded609de579dc55dd12153411961a7ae0cc9b9f9605a5`.
+Three identical-backend arms are frozen: original interleaved bytes (`I16`),
+64-symbol high-then-low planes (`P64`), and a cyclic one-block low-plane
+rotation (`P64R`). All layouts must invert exactly after cmix decode, and P64
+must reproduce byte-identically.
+
+Promotion requires P64 at or below `4.30` actual payload bits per symbol and
+strictly smaller than both I16 and P64R under the same cmix binary. This is the
+predeclared `0.15` bits/symbol engineering distance from the approximately
+`4.14`-`4.16` all-in target band. A pass authorizes exactly one native CMIX16
+branch-tree design, not a score forecast. A miss retires this byte-layout
+crossing without endian, block-size, plane-width, dictionary, or backend
+parameter sweeps. SABLE, copies, tries, and event-source models remain closed.

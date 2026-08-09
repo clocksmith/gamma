@@ -1,0 +1,88 @@
+{
+  "added": "2026-08-08",
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386567,
+      "nncp_cpu_source.tar.gz": 311289,
+      "program.py": 5878
+    },
+    "payload_sha256": {
+      "cmix.bin.gz": "7cfb71c21b6eccf3eeb6fb11df7e00024c37cdcd46730724c61c046bcc0596df",
+      "nncp_cpu_source.tar.gz": "79e5e7152ef2b419528157ae86e14570b0a87a4cb12765628963d415522f0102",
+      "program.py": "6a99b6b96a500dc2b7827d65433972ed11b329403ce358647e632bad26f68259"
+    },
+    "program_size": 703734
+  },
+  "deps": [
+    "C++ runtime",
+    "make",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "SYMBIONT-16 P64 NNCP symbol frontend by cmix crossing screen",
+  "family": "composed_reversible_representation",
+  "hypothesis": "On the same first 1048576 receipt-bound full-corpus NNCP symbols, 64-symbol high-byte/low-byte plane transposition will beat interleaved U16BE and a one-block-rotated low-plane control under the identical byte-native cmix backend, while reaching at most 4.30 actual payload bits per symbol.",
+  "id": "nncp_symbiont16_p64_cmix21_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Receipt-bound NNCP U16BE symbols -> reversible 64-symbol byte-plane layout -> unchanged cmix21 no-preprocess backend -> inverse layout -> exact NNCP symbols"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_symbiont16_p64_cmix21_qm0_v1",
+    "retired_neighborhoods": [
+      "No copy, trie, SABLE, event, endian, block-size, plane-width, dictionary-size, or backend-parameter sweep."
+    ]
+  },
+  "parent": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "nncp_pc",
+        "stream": "symbols",
+        "to": "u16be_p64"
+      },
+      {
+        "from": "u16be_p64",
+        "stream": "bytes",
+        "to": "b2_cmix21"
+      },
+      {
+        "from": "dictionary_frame",
+        "stream": "inverse_dictionary",
+        "to": "nncp_pc"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "nncp_pc",
+        "type": "reversible_transform"
+      },
+      {
+        "id": "u16be_p64",
+        "type": "symbol_layout"
+      },
+      {
+        "id": "b2_cmix21",
+        "type": "codec"
+      },
+      {
+        "id": "dictionary_frame",
+        "type": "side_information"
+      }
+    ]
+  },
+  "source": {
+    "backend_mode": "-n",
+    "backend_parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+    "binary": "projects/enwiki9/programs/nncp_pc_u16be_cmix21_assoc10_nopre_v1/cmix.bin.gz",
+    "dictionary_policy": "none",
+    "layout": "64-symbol high-byte plane followed by low-byte plane",
+    "nncp_cpu_source": "projects/enwiki9/programs/nncp_pc_u16be_cmix21_assoc10_nopre_v1/nncp_cpu_source.tar.gz",
+    "preprocess": "16384,512",
+    "trees": [
+      "projects/enwiki9/external/cmix21-sidecar",
+      "official NNCP source tar 7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119"
+    ]
+  },
+  "status": "candidate"
+}
