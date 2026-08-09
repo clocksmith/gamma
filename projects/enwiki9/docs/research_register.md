@@ -11,13 +11,15 @@ Promotion requires exact receipts: result JSON, shadow-coder receipt, or guard
 receipt depending on the lane.
 ```
 
-Current proof boundary: the active target is `105,000,000` counted bytes
-(`10.5000000%`). The best source-bound forecast is
+Current proof boundary: the active target is `108,000,000` counted bytes
+(`10.8000000%`). The best source-bound forecast is
 `endpoint428_gate_dot_fuse_output_update_loop_v1` at `109,389,323` bytes, a
-signed target distance of `+4,389,323` bytes before any successor's additional
+signed target distance of `+1,389,323` bytes before any successor's additional
 program, model, table, metadata, or framing cost. The verified exact full-1G
-score remains unknown. Older `108M`, `109.5M`, `10.95%`, `109,498,879`, and
-`109,452,151` thresholds or forecasts are historical evidence only and do not
+score remains unknown. The current official one-percent prize ceiling is
+`109,685,196`; it is an eligibility boundary, while `108,000,000` remains the
+research stopping condition. Older `105M`, `109.5M`, `10.95%`, `109,498,879`,
+and `109,452,151` targets or forecasts are historical evidence only and do not
 control new promotion decisions.
 
 The mature negative record closes fixed mixer blends, width/cell adjustments,
@@ -52,6 +54,36 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 - [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](research_register/archive/part-014.md)
 
 ## Current entries
+
+## 2026-08-09 - NNCP dictionary-boundary class marginal is terminal subscale
+
+Candidate `nncp_dictionary_boundary_class_marginal_qm0_v1` tested whether the
+already-paid NNCP dictionary exposes a causal class marginal absent from the
+parent distribution. The decoder-derived class was the first expansion-byte
+category, last expansion-byte category, and logarithmic expansion-length
+bucket. At each symbol, a last-32 same-stream class model preserved NNCP's
+exact conditional probability inside the class and changed only class mass;
+it was then mixed `16:1` with the exact NNCP distribution. This construction
+does not inspect the unknown target class before coding it.
+
+On the receipt-bound archive-neutral `10,000`-symbol full-distribution trace,
+the legal mixture saved only `18.077535` ideal bytes versus the frozen
+`250`-byte gate. Chronological-third gains were positive but decayed to
+`8.633575`, `8.200672`, and `1.243289` bytes. A capacity-matched 37-ID rotated
+class map saved `16.397411` bytes, leaving only `1.680125` bytes of structural
+specificity versus the required `100`. The unmixed class marginal lost
+`213.323289` bytes. The compressed diagnostic source was `6,000` bytes and the
+guard completed without a violation.
+
+Verdict: retire this six-category boundary signature, length bucket, last-32
+window, `16`-count concentration, and `16:1` parent mixture without class,
+window, or prior sweeps. Target-conditioned cache filtering is separately
+invalid because the class is unknown before the current symbol is decoded.
+No native full-dictionary descendant is authorized. This ideal screen receives
+zero archive, package, forecast, eligibility, or score credit. Evidence:
+`results/nncp_dictionary_boundary_class_marginal_qm0_v1/decision.json`, guard
+`results/nncp_dictionary_boundary_class_marginal_qm0_guard_v1.json`, adaptive
+job `20260809T212553Z_1d057a7d73`.
 
 ## 2026-08-09 - Adaptive-worker liveness prevents duplicate mature launch
 

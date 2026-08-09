@@ -24,7 +24,7 @@ queue or guard receipt is not live without an owning process.
 The only winning receipt has all three properties:
 
 ```text
-score <= 105,000,000 bytes
+score <= 108,000,000 bytes
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
 ```

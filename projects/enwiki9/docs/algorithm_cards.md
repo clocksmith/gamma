@@ -14,9 +14,9 @@ without requiring them to read every lane report first.
 
 Canonical current authority is `docs/hutter_frontier.json` for the counted
 frontier and `docs/status_receipt.md` for live execution. Older cards below are
-historical mechanism references. As of 2026-08-08 the design target is
-`105,000,000`, the verified full-1G result is unknown, the best counted
-forecast is endpoint428 at `109,389,323`, the remaining debt is `4,389,323`,
+historical mechanism references. As of 2026-08-09 the design target is
+`108,000,000`, the verified full-1G result is unknown, the best counted
+forecast is endpoint428 at `109,389,323`, the remaining debt is `1,389,323`,
 and runtime eligibility is unresolved.
 
 ## Score Legend
@@ -33,9 +33,9 @@ and runtime eligibility is unresolved.
 Claim rule:
 
 ```text
-No prefix result proves 10.5000000%.
-No forecast proves 10.5000000%.
-Only full 1G official accounting can prove 10.5000000%.
+No prefix result proves 10.8000000%.
+No forecast proves 10.8000000%.
+Only full 1G official accounting can prove 10.8000000%.
 ```
 
 ## How To Read This File
@@ -78,7 +78,7 @@ successors. No lane changes the forecast without exact native counted replay.
 | Retired WRT specialist | token-span causal selector | sealed `399,992`-byte holdout | lost `1` exact byte; random control also lost `1` | causal sealed-holdout shadow | Retire this selector/context shape; do not infer that all future WRT endpoints are impossible. |
 | Retired sidecar gate | `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` | canonical `10,000,000` lower bound | native output `1,641,762`; ceiling `1,631,581` | terminal ceiling abort | Archive slope failed; memory was healthy, and no completed archive/roundtrip/score is claimed. |
 | Primary novel strategy | SRSTC / Streaming Retrieval Mixer | `65,536K` block-posterior shadow receipt: `916,540` held-out bytes saved, `900,464` net bytes after code estimate, all `4,000` blocks positive | exact shadow evidence only | Target-closing at the shadow boundary by `219,350` bytes; not a compressor result until the paying component is integrated and replayed. |
-| Best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | projected `1G` | projected S `109,389,323`; debt `4,389,323` | constructive-prefix forecast only | Exact 10M and package identity support the forecast; full-1G score remains unknown. |
+| Best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | projected `1G` | projected S `109,389,323`; debt `1,389,323` | constructive-prefix forecast only | Exact 10M and package identity support the forecast; full-1G score remains unknown. |
 | Best full `1G` proof | none in this checkout | `1,000,000,000` | none | not verified | This is the blocker. |
 
 ## Novelty And Implementation Labels
@@ -95,7 +95,7 @@ successors. No lane changes the forecast without exact native counted replay.
 
 ## Current Hutter-Target Candidates
 
-These are historical and current candidates relevant to the `105,000,000` target. They are
+These are historical and current candidates relevant to the `108,000,000` target. They are
 not full-corpus proofs yet.
 
 Plain-English candidate map:

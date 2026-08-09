@@ -23,7 +23,7 @@ REPO_ROOT = ROOT.parent.parent
 RESULTS_DIR = ROOT / "results"
 OUT_MD = ROOT / "docs" / "evidence_matrix.md"
 FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 105_000_000
+TARGET_10_95 = 108_000_000  # Legacy schema name retained for compatibility.
 
 
 @dataclass(frozen=True)

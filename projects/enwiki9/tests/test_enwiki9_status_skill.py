@@ -25,7 +25,7 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
         "schema": "enwiki9_hutter_frontier_v1",
         "target": {
             "input_bytes": 1_000_000_000,
-            "score_bytes": 105_000_000,
+            "score_bytes": 108_000_000,
             "required_roundtrip": True,
         },
         "canonical_best_forecast_id": "candidate",
@@ -48,7 +48,7 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
         "quarantine": [],
     }
     operational = {
-        "target_score_10_95": 105_000_000,
+        "target_score_10_95": 108_000_000,
         "best_forecast": {"projected_score": 109_557_404},
         "best_full_1g": {"status": "not verified"},
         "has_10_95_constructive_upper_bound": False,
@@ -65,9 +65,9 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
 
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is False
-    assert status["canonical_forecast"]["forecast_margin_bytes"] == -4_557_404
+    assert status["canonical_forecast"]["forecast_margin_bytes"] == -1_557_404
     markdown = MODULE.render_markdown(status)
-    assert "Target score: `105,000,000` bytes (`10.5000000%`)" in markdown
+    assert "Target score: `108,000,000` bytes (`10.8000000%`)" in markdown
     assert "Verified official full-1G score: `unknown`" in markdown
     assert "Best counted forecast: `109,557,404` (`10.9557404%`)" in markdown
     assert "distance above target `4,557,404`" in markdown
@@ -226,5 +226,5 @@ def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
 
 
 def test_score_percentage_uses_full_corpus_denominator() -> None:
-    assert MODULE.fmt_score_percent(105_000_000) == "10.5000000%"
+    assert MODULE.fmt_score_percent(108_000_000) == "10.8000000%"
     assert MODULE.fmt_score_percent(109_492_151) == "10.9492151%"

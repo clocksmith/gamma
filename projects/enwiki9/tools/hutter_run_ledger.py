@@ -161,7 +161,7 @@ def normalize_row(row: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]
 def build_ledger(project_root: Path, frontier: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     target = frontier.get("target", {})
-    if target.get("input_bytes") != 1_000_000_000 or target.get("score_bytes") != 105_000_000:
+    if target.get("input_bytes") != 1_000_000_000 or target.get("score_bytes") != 108_000_000:
         errors.append("frontier target is not the canonical enwiki9 target")
 
     rows: list[dict[str, Any]] = []
