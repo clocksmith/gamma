@@ -1,0 +1,87 @@
+diff --git a/src/coder/encoder.h b/src/coder/encoder.h
+--- a/src/coder/encoder.h
++++ b/src/coder/encoder.h
+@@ -45,9 +45,10 @@ class Encoder {
+-  //   enc.<pid>.<seq>.res   : one fixed 56-byte record per CODED bit, written
+-  //                           ONLY from Encode() (EncodeRawBit / ObserveKnownBit
+-  //                           never write). Record k aligns 1:1 with coded bit k.
++  //   enc.<pid>.<seq>.res   : one fixed 56-byte record per ARITHMETIC bit,
++  //                           written from Encode() and EncodeRawBit(). Record k
++  //                           aligns 1:1 with arithmetic-coder call k.
+   //                           { u16 final_p; u8 flags (bit0=coded bit,
+-  //                             bit1=lstm/byte-mixer override active); u8 rsvd;
++  //                             bit1=lstm/byte-mixer override active,
++  //                             bit2=raw/unmodeled); u8 rsvd;
+@@ -61,6 +62,7 @@ class Encoder {
+   void KhOpen();
+   void KhWriteRes(int bit, unsigned int final_p);
++  void KhWriteRaw(int bit, unsigned int final_p);
+   void KhFail(const char* why);
+diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
+--- a/src/coder/encoder.cpp
++++ b/src/coder/encoder.cpp
+@@ -50,8 +50,8 @@ Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
+ #pragma pack(push, 1)
+ struct KhResRecord {
+-  uint16_t final_p;    // the exact Discretize(Predict()) value used by the coder
+-  uint8_t  flags;      // bit0 = coded bit; bit1 = lstm/byte-mixer override
++  uint16_t final_p;    // the exact post-head value used by the coder
++  uint8_t  flags;      // bit0=truth; bit1=override; bit2=raw/unmodeled
+@@ -130,8 +130,8 @@ void Encoder::KhOpen() {
+-        "layout=off0:u16 final_p; off2:u8 flags(bit0=coded_bit,"
+-        "bit1=lstm_override); off3:u8 reserved; off4:f16[26] "
++        "layout=off0:u16 final_p; off2:u8 flags(bit0=coded_bit,"
++        "bit1=lstm_override,bit2=raw_unmodeled); off3:u8 reserved; off4:f16[26] "
+@@ -162,6 +162,18 @@ void Encoder::KhWriteRes(int bit, unsigned int final_p) {
+   ++kh_bit_index_;
+ }
++
++void Encoder::KhWriteRaw(int bit, unsigned int final_p) {
++  KhResRecord r;
++  r.final_p = (uint16_t)final_p;
++  r.flags = (uint8_t)((bit & 1) | 0x04u);
++  r.reserved = 0;
++  for (int i = 0; i < 26; ++i) r.half[i] = 0;
++  std::fwrite(&r, sizeof(r), 1, kh_res_f_);
++  ++kh_bit_index_;
++}
+@@ -201,18 +213,6 @@ unsigned int Encoder::Discretize(float p) {
+ void Encoder::Encode(int bit) {
+   unsigned int p = Discretize(p_->Predict());
+-#ifdef KH_TRACE
+-  if (kh_on_) {
+-    // -log2 P(actual bit) using the SAME discretized p the coder uses below, so
+-    // the per-byte cost sum tracks the true compressed size closely.
+-    // (If KH_BITLSTM32 is also active the trace records the BASE probability,
+-    // i.e. the head's input, not its corrected output.)
+-    const double p1 = p / 65536.0;
+-    double pc = bit ? p1 : (1.0 - p1);
+-    if (pc < 1e-12) pc = 1e-12;
+-    kh_cur_bits_ += -std::log2(pc);
+-    KhWriteRes(bit, p);
+-  }
+-#endif
+ #ifdef KH_BITLSTM32
+   if (bitlstm_) {
+@@ -223,6 +223,17 @@ void Encoder::Encode(int bit) {
+   }
+ #endif
++#ifdef KH_TRACE
++  if (kh_on_) {
++    // Observe the exact post-BitLSTM probability consumed below. This remains
++    // observation-only and does not enter Predictor or BitLSTM state updates.
++    const double p1 = p / 65536.0;
++    double pc = bit ? p1 : (1.0 - p1);
++    if (pc < 1e-12) pc = 1e-12;
++    kh_cur_bits_ += -std::log2(pc);
++    KhWriteRes(bit, p);
++  }
++#endif
+   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
+@@ -247,6 +258,9 @@ void Encoder::EncodeRawBit(int bit, unsigned int p) {
+   if (p < 1) p = 1;
+   if (p > 65534) p = 65534;
++#ifdef KH_TRACE
++  if (kh_on_) KhWriteRaw(bit, p);
++#endif
+   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
