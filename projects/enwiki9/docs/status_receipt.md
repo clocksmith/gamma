@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T22:36:40+00:00`
+- Generated at UTC: `2026-08-09T22:50:51+00:00`
 
 ## Target State
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `408`
+- RSS samples: `578`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `8,348,724`
@@ -56,9 +56,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `969`
-- RSS guard JSON modified UTC: `2026-08-09T22:36:37+00:00`
-- RSS guard JSON SHA-256: `3ded95d8db305e1c59cc27fb726ac7255be244f91c16b810444862d5b0282310`
-- RSS samples: `408`
+- RSS guard JSON modified UTC: `2026-08-09T22:50:48+00:00`
+- RSS guard JSON SHA-256: `9927070b095e76413defcf0e0ac43e79fb5239e6ab1c4b6e33331994981cf632`
+- RSS samples: `578`
 - Max sampled single RSS KiB: `8,348,724`
 - Max sampled tree RSS KiB: `8,368,816`
 - Single-process RSS margin KiB: `2,137,036`
@@ -129,11 +129,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `740`
-- Registered programs: `298`
+- Program directories: `741`
+- Registered programs: `299`
 - Untracked nonignored entries: `5`
-- Modified tracked entries: `6`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=45, measured_negative=100, retired=543, track_source_before_evolution=1`
+- Modified tracked entries: `8`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=46, measured_negative=100, retired=543, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -152,7 +152,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/decode.log` | 366,382 | `2026-08-09T22:36:40+00:00` |
+| `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/decode.log` | 368,526 | `2026-08-09T22:50:50+00:00` |
 | `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/scratch_state.txt` | 62 | `2026-08-09T22:02:42+00:00` |
 
 ## Active RSS
