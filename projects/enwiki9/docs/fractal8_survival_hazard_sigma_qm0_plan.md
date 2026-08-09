@@ -9,11 +9,12 @@ new and mature source states shared the same reliability contract. FRACTAL-8
 adds one decoder-visible variable: consecutive bit-survival age for each
 latent source.
 
-A bounded KT table predicts whether the weighted source majority is correct
-from dominant survival age, source support, vote agreement, and bit position.
-That proper hazard probability becomes ECHO. A separate sleeping mixture
-combines ECHO with the exact Endpoint428 probability. All tables update only
-after the current truth bit.
+A bounded beta-binomial table with one correct and one wrong pseudo-count
+predicts whether the weighted source majority is correct from dominant
+survival age, source support, vote agreement, and bit position. That proper
+hazard probability becomes ECHO. A separate sleeping mixture combines ECHO
+with the exact Endpoint428 probability. All tables update only after the
+current truth bit.
 
 RECENCY, SHUFFLED, and BYTE8 controls receive identical hazard and mixture
 capacity. Exact 2/4/8-event suffixes, source indexes, injection mass, state cap,
