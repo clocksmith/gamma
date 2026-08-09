@@ -203,6 +203,16 @@ full archive hashes. Concurrent timing is diagnostic; isolated timing remains
 a later eligibility gate. Neither arm receives score credit before terminal
 full-scope receipts exist.
 
+Candidate `cmix_obias_sealedfs_1m_decode_qm0_v1` freezes the filesystem-
+isolation mechanism for the later second external full decode. It runs the
+q3 opening archive through bubblewrap with all namespaces unshared, no network,
+an empty outer environment, a writable `/work`, private `/tmp` and `/dev`,
+procfs only for the decoder's causal RSS residency control, and read-only
+`/usr`, `/bin`, `/lib`, and `/lib64`. No corpus, donor tree, dictionary, head,
+or unrelated host path is visible inside the sandbox. Exact opening SHA-256,
+return code, scratch cleanup, and the decimal memory guard must pass. This is
+an isolation preflight with zero score credit, not another codec experiment.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL
