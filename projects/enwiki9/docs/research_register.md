@@ -662,3 +662,38 @@ forecast, package, or score credit. Evidence:
 `results/nncp_branch_residual_cache32_qm0_v1/decision.json`, guard
 `results/nncp_branch_residual_cache32_qm0_guard_v1.json`, and job
 `20260809T143215Z_cab6534165`.
+
+## 2026-08-09 - Historical FRACTAL-8 survival-hazard result recovered and retired
+
+Adaptive activation of `fractal8_survival_hazard_sigma_qm0_v1` exposed a
+pre-existing guarded August 8 result that had not been entered in the shared
+register or adaptive proposal index. The no-overwrite retry failed before
+scientific execution and receives no compression evidence. The preserved
+historical decision and guard remain authoritative.
+
+FRACTAL-8 added consecutive source-survival age, support, vote agreement, and
+bit position as decoder-visible reliability coordinates over FRACTAL-7's
+persistent addressless sources. A bounded beta-binomial hazard and sleeping
+Endpoint428 mixture were applied identically to Sigma, recency,
+shuffled-source, and byte-8 arms on `6,251,852` WRT bytes, `5,139,821` events,
+and `50,014,816` exact parent rows.
+
+The Sigma hindsight ceiling remains `325,190.856` bytes and its minimum ceiling
+margin remains `28,016.905`, passing both frozen ceiling gates. Causal gain is
+instead `-109.946` bytes, with chronological thirds `-35.129`, `-36.813`, and
+`-38.004`. The minimum causal control margin is `-74.485` bytes. Peak sampled
+single-process RSS was `538,640 KiB`; the guard completed without violation.
+
+The emitted decision schema incorrectly names FRACTAL-7. This is a preserved
+clerical source bug, not rewritten evidence: the directory, guard label,
+`SIGMA_HAZARD` arm, measured binary, and source hash bind the result to
+FRACTAL-8 in `historical_binding.json`. The exact measured C++ source identity
+is restored rather than patched beneath the receipt.
+
+Verdict: retire survival age, support, agreement, bit-position hazard, frozen
+priors, mixture share, suffixes, and state cap without sweeps. Source survival
+does not explain the gap between hindsight redundancy and causal prediction.
+Score and forecast credit remain zero. Evidence:
+`results/fractal8_survival_hazard_sigma_qm0_v1/decision.json`,
+`results/fractal8_survival_hazard_sigma_qm0_v1/guard.json`, and
+`results/fractal8_survival_hazard_sigma_qm0_v1/historical_binding.json`.
