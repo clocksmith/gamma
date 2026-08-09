@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T03:07:53+00:00`
+- Generated at UTC: `2026-08-09T03:21:46+00:00`
 
 ## Target State
 
@@ -116,7 +116,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Program directories: `714`
 - Registered programs: `282`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `1`
+- Modified tracked entries: `0`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=31, measured_negative=100, retired=532`
 
 ## Active Runner Process Table
@@ -126,18 +126,18 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `rss_guard` | 1,768,216 | 2,193,714 | 3,576 | `/bin/bash -lc set -euo pipefail CAND=/home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1 PKG=/home/x/enwiki9-nonproof/cmix-ob...` |
 | `rss_guard` | 1,768,314 | 1,768,216 | 9,892 | `python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760...` |
 | `process` | 2,427,744 | 2,229,505 | 10,144 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
-| `rss_guard` | 2,427,829 | 2,427,744 | 10,220 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
+| `rss_guard` | 2,427,829 | 2,427,744 | 10,224 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `process` | 3,459,502 | 2,229,505 | 10,412 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_exact_midsegment32_65536_qm3_v1 --max-workers 1 --min-free-mib 12000` |
 | `rss_guard` | 3,459,586 | 3,459,502 | 10,488 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `process` | 3,581,156 | 2,229,505 | 10,328 | `python3 tools/enwiki9_lab.py run --candidate nncp_symbiont16_p64_cmix21_qm0_v1 --max-workers 1 --min-free-mib 12000` |
-| `rss_guard` | 3,581,248 | 3,581,156 | 10,444 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 1,768,319 | 1,768,314 | 8,897,964 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
+| `rss_guard` | 3,581,248 | 3,581,156 | 10,476 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
+| `process` | 1,768,319 | 1,768,314 | 8,328,920 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
 | `process` | 2,427,832 | 2,427,829 | 12,572 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
-| `process` | 2,427,873 | 2,427,832 | 5,677,800 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
+| `process` | 2,427,873 | 2,427,832 | 5,677,924 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 | `process` | 3,459,587 | 3,459,586 | 15,948 | `python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py` |
-| `process` | 3,581,255 | 3,581,248 | 13,164 | `python3 tools/nncp_symbiont16_p64_cmix21_qm0.py` |
-| `process` | 3,581,334 | 3,581,255 | 8,222,756 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out` |
+| `process` | 3,581,255 | 3,581,248 | 18,492 | `python3 tools/nncp_symbiont16_p64_cmix21_qm0.py` |
 | `process` | 4,080,933 | 3,459,587 | 5,764,416 | `/tmp/nncp-exact-midsegment32-65536-ybc819hu/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --preprocess 16384,512 --midsegment32 --max_size 65536 c ...` |
+| `process` | 208,576 | 3,581,255 | 9,357,456 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-1-ywtf65tz/in /tmp/symbiont-P64-1-ywtf65tz/out` |
 
 ## Active Candidate Recent Artifacts
 
@@ -147,26 +147,26 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active RSS
 
-- Max cmix PID: `3581334`
+- Max cmix PID: `208576`
 - Active cmix mode: `no_preprocess_compress`
-- Max cmix RSS KiB: `8,222,756`
-- Active process tree RSS KiB: `28,680,124`
+- Max cmix RSS KiB: `9,357,456`
+- Active process tree RSS KiB: `29,251,268`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `2,263,004`
-- Single-process decimal margin KiB: `1,542,869`
-- Active process tree margin KiB (binary): `-18,194,364`
-- Active process tree decimal margin KiB: `-18,914,499`
-- Temp input path: `/tmp/symbiont-I16-1-6l3upl5d/in`
-- Temp output path: `/tmp/symbiont-I16-1-6l3upl5d/out`
-- Temp output staging path: `/tmp/symbiont-I16-1-6l3upl5d/out.cmix.temp`
+- Single-process binary margin KiB: `1,128,304`
+- Single-process decimal margin KiB: `408,169`
+- Active process tree margin KiB (binary): `-18,765,508`
+- Active process tree decimal margin KiB: `-19,485,643`
+- Temp input path: `/tmp/symbiont-P64-1-ywtf65tz/in`
+- Temp output path: `/tmp/symbiont-P64-1-ywtf65tz/out`
+- Temp output staging path: `/tmp/symbiont-P64-1-ywtf65tz/out.cmix.temp`
 - Temp input bytes: `2,097,152`
-- Temp output bytes: `868,352`
+- Temp output bytes: `90,112`
 - Temp output staging bytes: `2,097,157`
-- Temp input modified UTC: `2026-08-09T02:09:19+00:00`
-- Temp output modified UTC: `2026-08-09T03:07:46+00:00`
-- Temp output staging modified UTC: `2026-08-09T02:09:19+00:00`
-- Process read bytes: `30,715,904`
+- Temp input modified UTC: `2026-08-09T03:17:39+00:00`
+- Temp output modified UTC: `2026-08-09T03:21:35+00:00`
+- Temp output staging modified UTC: `2026-08-09T03:17:39+00:00`
+- Process read bytes: `0`
 - Process write bytes: `0`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
 

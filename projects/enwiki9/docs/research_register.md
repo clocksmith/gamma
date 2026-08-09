@@ -1483,6 +1483,8 @@ expected SHA-256     a5daeae040c2575ae1c2fd5f3284d73caafa0fcd48c3f546e199ab7c5f1
 
 Those two independent artifacts are byte-identical and consume the first
 65,536 big-endian symbols from the receipt-bound NNCP preprocessed stream.
+The independent full-corpus `symbol_raw_map.bin` also binds map row `65,535`
+to `raw_end=322,978`; its header declares `200,608,961` total symbol rows.
 The native gate declares the identical built-in `16384,512` symbol
 population. Its candidate decode must therefore match the expected artifact
 in length, SHA-256, and direct byte comparison; the serialized mode header,
