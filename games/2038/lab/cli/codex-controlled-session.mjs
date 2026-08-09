@@ -110,6 +110,9 @@ try {
     async onParticipantComplete(entry) {
       await journal({ kind: "participant", ...entry });
     },
+    async onProviderAttempt(entry) {
+      await journal({ kind: "provider-attempt-failure", ...entry });
+    },
     async onStageComplete(entry) {
       await journal({ kind: "stage", ...entry });
     }
