@@ -47,9 +47,10 @@ Harness source: \`${session.gameplayIdentity.provenance.sourceCommit}\`
 ## Recorded path
 
 - Emulated unboxing and component sorting: ${session.stages.unboxing.length} participant records.
-- Independent reading of the four frozen Default Game documents: ${session.stages.rulesReading.length} records.
+- Independent reading of the four frozen Default Game documents: ${Object.values(session.stages.documentReadings).reduce((total, records) => total + records.length, 0)} records.
+- Cross-document rules synthesis: ${session.stages.rulesReading.length} participant records.
 - Initial participant questions: ${session.stages.initialQuestions.length}.
-- Source-grounded facilitator answers: ${session.stages.initialFacilitation.output.answers.length}.
+- Source-grounded facilitator answers: ${session.stages.initialFacilitation.synthesis.output.answers.length}.
 - Remaining follow-up questions: ${session.stages.remainingQuestions.length}.
 - Complete Codex gameplay decisions: ${session.gameplayIdentity.usedLlmDecisions}.
 - Postgame winner, World Ending, and rules reconstruction: ${session.stages.postgame.length} records.

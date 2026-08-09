@@ -5,6 +5,7 @@ import { CodexCliRunner } from "../lab/callers/codex-cli-runner.js";
 import {
   followupResponseSchema,
   postgameResponseSchema,
+  rulesDocumentResponseSchema,
   rulesResponseSchema,
   unboxingResponseSchema,
   validateCodexSessionRegistration
@@ -41,7 +42,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v2.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v3.json",
       root
     ),
     "utf8"
@@ -66,6 +67,8 @@ test("controlled-session registration freezes four unique Codex seats and the re
 test("controlled-session schemas cover the complete recorded path", () => {
   assert.ok(unboxingResponseSchema.properties.immediateConfusions);
   assert.ok(rulesResponseSchema.properties.questions);
+  assert.ok(rulesDocumentResponseSchema.properties.keyRules);
+  assert.ok(rulesDocumentResponseSchema.properties.crossReferencesNeeded);
   assert.ok(followupResponseSchema.properties.readyToPlay);
   assert.ok(postgameResponseSchema.properties.winnerExplanation);
   assert.ok(postgameResponseSchema.properties.worldEndingExplanation);

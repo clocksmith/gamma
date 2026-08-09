@@ -44,6 +44,13 @@ export const rulesResponseSchema = objectSchema({
   questions: questionArray(2, 8)
 });
 
+export const rulesDocumentResponseSchema = objectSchema({
+  summary: { type: "string", minLength: 1 },
+  keyRules: stringArray(2, 12),
+  crossReferencesNeeded: stringArray(0, 6),
+  questions: questionArray(0, 4)
+});
+
 export const followupResponseSchema = objectSchema({
   summary: { type: "string", minLength: 1 },
   resolvedUnderstanding: stringArray(2),
@@ -90,6 +97,21 @@ function facilitatorResponseSchema(questions, documents) {
       })
     },
     unresolved: stringArray(0, questions.length)
+  });
+}
+
+function facilitatorEvidenceSchema(questions, document) {
+  return objectSchema({
+    findings: {
+      type: "array",
+      minItems: 0,
+      maxItems: questions.length,
+      items: objectSchema({
+        questionId: { enum: questions.map((question) => question.id) },
+        evidence: { type: "string", minLength: 1 },
+        heading: { enum: document.headings }
+      })
+    }
   });
 }
 
@@ -252,15 +274,24 @@ function questionsFrom(results, field, prefix) {
   });
 }
 
-function facilitatorPrompt(questions, documents, label) {
+function facilitatorEvidencePrompt(questions, document, label) {
+  return [
+    `You are collecting source evidence for a recorded Mandate 2038 ${label}.`,
+    "Do not answer from memory and do not use tools. Read only the one embedded frozen document.",
+    "For each question this document materially helps answer, record concise evidence and the exact Markdown heading. Omit questions this document does not resolve.",
+    `Questions:\n${JSON.stringify(questions, null, 2)}`,
+    fencedSources([document])
+  ].join("\n\n");
+}
+
+function facilitatorSynthesisPrompt(questions, sourceEvidence, label) {
   return [
     `You are the rules facilitator for a recorded Mandate 2038 ${label}.`,
-    "Answer only from the frozen sources below. Do not change a rule, invent intent, or smooth over an ambiguity.",
-    "Every answer must cite an exact source id and exact Markdown heading supplied in the sources.",
-    "If the frozen sources genuinely do not resolve something, say that in the answer and add its question id to unresolved.",
-    "Questions:",
-    JSON.stringify(questions, null, 2),
-    fencedSources(documents)
+    "Answer only from the source-evidence packets below. Do not use tools, outside knowledge, or invent intent.",
+    "Preserve the exact source id and Markdown heading attached to every cited packet.",
+    "If the packets genuinely do not resolve something, say so and add its question id to unresolved.",
+    `Questions:\n${JSON.stringify(questions, null, 2)}`,
+    `Source-evidence packets:\n${JSON.stringify(sourceEvidence, null, 2)}`
   ].join("\n\n");
 }
 
@@ -323,6 +354,29 @@ export async function runCodexControlledSession({
     onProgress?.({ phase: "session_stage", id, status: "completed" });
     return result;
   };
+  const facilitate = async (stagePrefix, questions, label) => {
+    const sourceEvidence = {};
+    for (const document of kit.documents) {
+      const sourceStageId = `${stagePrefix}-${document.id}`;
+      sourceEvidence[document.id] = await stage(sourceStageId, () => runner.run({
+        requestId: `${registration.id}:${sourceStageId}`,
+        responseSchema: facilitatorEvidenceSchema(questions, document),
+        signal,
+        prompt: facilitatorEvidencePrompt(questions, document, label)
+      }));
+    }
+    const synthesis = await stage(`${stagePrefix}-synthesis`, async () => validateFacilitator(
+      await runner.run({
+        requestId: `${registration.id}:${stagePrefix}:synthesis`,
+        responseSchema: facilitatorResponseSchema(questions, kit.documents),
+        signal,
+        prompt: facilitatorSynthesisPrompt(questions, sourceEvidence, label)
+      }),
+      questions,
+      kit.documents
+    ));
+    return { sourceEvidence, synthesis };
+  };
 
   const unboxing = await stage("unboxing", () => mapWithConcurrency(
     participants,
@@ -334,6 +388,7 @@ export async function runCodexControlledSession({
       prompt: [
         "You are emulating a first-time participant opening a frozen Mandate 2038 prototype kit.",
         "This is an LLM simulation, not a claim about physical handling. Inspect the inventory before reading the rules.",
+        "Do not use tools or inspect the filesystem; the complete allowed inventory source is embedded below.",
         participantContext(participant),
         "Record what you believe is present, how you would sort it, and concrete questions caused by the components alone.",
         `Kit identity:\n${JSON.stringify(kit.manifest, null, 2)}`,
@@ -348,46 +403,69 @@ export async function runCodexControlledSession({
     })
   ));
 
-  const rulesReading = await stage("rules-reading", () => mapWithConcurrency(
+  const documentReadings = {};
+  for (const document of kit.documents) {
+    const stageId = `rules-reading-${document.id}`;
+    documentReadings[document.id] = await stage(stageId, () => mapWithConcurrency(
+      participants,
+      registration.provider.maxConcurrent,
+      (participant, index) => runner.run({
+        requestId: `${registration.id}:${stageId}:seat-${participant.seat + 1}`,
+        responseSchema: rulesDocumentResponseSchema,
+        signal,
+        prompt: [
+          `You are a first-time Mandate 2038 participant reading ${document.fileName} without facilitator help.`,
+          "Do not use tools or inspect the filesystem; the complete document is embedded below.",
+          participantContext(participant),
+          `Your earlier unboxing notes:\n${JSON.stringify(unboxing[index].output, null, 2)}`,
+          "Record the rules this document contributes, explicit cross-references you still need, and concrete questions. Do not use outside knowledge or Advanced Play procedures.",
+          fencedSources([document])
+        ].join("\n\n")
+      }),
+      (participant, _index, result) => onParticipantComplete?.({
+        stageId,
+        seat: participant.seat,
+        completedAt: new Date().toISOString(),
+        result
+      })
+    ));
+  }
+  const rulesReading = await stage("rules-synthesis", () => mapWithConcurrency(
     participants,
     registration.provider.maxConcurrent,
     (participant, index) => runner.run({
-      requestId: `${registration.id}:rules-reading:seat-${participant.seat + 1}`,
+      requestId: `${registration.id}:rules-synthesis:seat-${participant.seat + 1}`,
       responseSchema: rulesResponseSchema,
       signal,
       prompt: [
-        "You are a first-time Mandate 2038 participant reading the complete frozen Default Game Play Kit without facilitator help.",
+        "You are the same first-time participant after reading all four frozen Default Game documents.",
+        "Do not use tools or outside knowledge. Synthesize only the recorded document-reading notes below.",
         participantContext(participant),
-        `Your earlier unboxing notes:\n${JSON.stringify(unboxing[index].output, null, 2)}`,
-        "Reconstruct setup, cycle play, End-of-Era Resolution, scoring, and ending. Ask specific questions you would ask before play.",
-        "Do not use outside knowledge or Advanced Play procedures.",
-        fencedSources(kit.documents)
+        `Document-reading records:\n${JSON.stringify(Object.fromEntries(
+          Object.entries(documentReadings).map(([id, results]) => [id, results[index].output])
+        ), null, 2)}`,
+        "Reconstruct setup, cycle play, End-of-Era Resolution, scoring, and ending. Ask the specific questions you would ask before play."
       ].join("\n\n")
     }),
     (participant, _index, result) => onParticipantComplete?.({
-      stageId: "rules-reading",
+      stageId: "rules-synthesis",
       seat: participant.seat,
       completedAt: new Date().toISOString(),
       result
     })
   ));
   const initialQuestions = questionsFrom(rulesReading, "questions", "rules");
-  const initialFacilitation = await stage("initial-facilitation", async () => validateFacilitator(
-    await runner.run({
-      requestId: `${registration.id}:facilitator:initial`,
-      responseSchema: facilitatorResponseSchema(initialQuestions, kit.documents),
-      signal,
-      prompt: facilitatorPrompt(initialQuestions, kit.documents, "pre-play rules session")
-    }),
+  const initialFacilitation = await facilitate(
+    "initial-facilitation",
     initialQuestions,
-    kit.documents
-  ));
+    "pre-play rules session"
+  );
 
   const followup = await stage("participant-followup", () => mapWithConcurrency(
     participants,
     registration.provider.maxConcurrent,
     (participant, index) => {
-      const answers = initialFacilitation.output.answers.filter((answer) =>
+      const answers = initialFacilitation.synthesis.output.answers.filter((answer) =>
         initialQuestions.find((question) => question.id === answer.questionId)?.seat === participant.seat
       );
       return runner.run({
@@ -412,16 +490,11 @@ export async function runCodexControlledSession({
   ));
   const remainingQuestions = questionsFrom(followup, "remainingQuestions", "followup");
   const followupFacilitation = remainingQuestions.length
-    ? await stage("followup-facilitation", async () => validateFacilitator(
-      await runner.run({
-        requestId: `${registration.id}:facilitator:followup`,
-        responseSchema: facilitatorResponseSchema(remainingQuestions, kit.documents),
-        signal,
-        prompt: facilitatorPrompt(remainingQuestions, kit.documents, "follow-up rules session")
-      }),
+    ? await facilitate(
+      "followup-facilitation",
       remainingQuestions,
-      kit.documents
-    ))
+      "follow-up rules session"
+    )
     : null;
 
   const gameReport = await stage("gameplay", () => simulationFactory({
@@ -499,6 +572,7 @@ export async function runCodexControlledSession({
       participants,
       stages: {
         unboxing,
+        documentReadings,
         rulesReading,
         initialQuestions,
         initialFacilitation,
