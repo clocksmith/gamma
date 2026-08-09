@@ -6,15 +6,18 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import mmap
 from pathlib import Path
 import struct
 
 
 HEADER = struct.Struct("<8sQQQQ")
-ROW = struct.Struct("<QQQQQQQHHBBB")
+ROW_V3 = struct.Struct("<QQQQQQQHHBBB")
+ROW_V4 = struct.Struct("<QQQQQQQQHHBBB")
 BRANCH = struct.Struct("<HB")
 U16 = struct.Struct("<H")
-MAGIC = b"NNNTR3\0\0"
+MAGIC_V3 = b"NNNTR3\0\0"
+MAGIC_V4 = b"NNNTR4\0\0"
 PROBABILITY_TOTAL = 32768
 
 
@@ -73,6 +76,16 @@ def main() -> int:
     parser.add_argument("--decoded", required=True, type=Path)
     parser.add_argument("--expected-raw", required=True, type=Path)
     parser.add_argument("--environment", required=True, type=Path)
+    parser.add_argument(
+        "--required-execution-status",
+        default="NVIDIA_READY",
+        help="required environment execution_status (default preserves legacy receipts)",
+    )
+    parser.add_argument(
+        "--expected-symbols",
+        type=Path,
+        help="big-endian uint16 truth stream required for indexed NNNTR4 traces",
+    )
     parser.add_argument("--symbol-map-receipt", type=Path)
     parser.add_argument("--receipt", required=True, type=Path)
     args = parser.parse_args()
@@ -81,8 +94,24 @@ def main() -> int:
     if len(raw) < HEADER.size:
         raise ValueError("truncated trace")
     magic, rows, branches, trees, checkpoint_rows = HEADER.unpack_from(raw)
-    if magic != MAGIC:
+    if magic not in (MAGIC_V3, MAGIC_V4):
         raise ValueError("trace magic mismatch")
+    indexed = magic == MAGIC_V4
+    row_struct = ROW_V4 if indexed else ROW_V3
+
+    expected_symbols_file = None
+    expected_symbols_map = None
+    seen = None
+    if indexed:
+        if args.expected_symbols is None:
+            raise ValueError("NNNTR4 verification requires --expected-symbols")
+        if args.expected_symbols.stat().st_size < rows * 2:
+            raise ValueError("expected symbol stream is shorter than indexed trace")
+        expected_symbols_file = args.expected_symbols.open("rb")
+        expected_symbols_map = mmap.mmap(
+            expected_symbols_file.fileno(), 0, access=mmap.ACCESS_READ
+        )
+        seen = bytearray((rows + 7) // 8)
 
     offset = HEADER.size
     observed_branches = 0
@@ -92,23 +121,56 @@ def main() -> int:
     prior_bits: int | None = None
     prior_bytes: int | None = None
     for index in range(rows):
-        if offset + ROW.size > len(raw):
+        if offset + row_struct.size > len(raw):
             raise ValueError("truncated symbol row")
-        (
-            execution,
-            before_bits,
-            after_bits,
-            before_bytes,
-            after_bytes,
-            exact_archive_bits,
-            exact_archive_bytes,
-            symbol,
-            vocabulary,
-            branch_count,
-            has_tree,
-            checkpoint,
-        ) = ROW.unpack_from(raw, offset)
-        offset += ROW.size
+        row = row_struct.unpack_from(raw, offset)
+        offset += row_struct.size
+        if indexed:
+            (
+                original_index,
+                execution,
+                before_bits,
+                after_bits,
+                before_bytes,
+                after_bytes,
+                exact_archive_bits,
+                exact_archive_bytes,
+                symbol,
+                vocabulary,
+                branch_count,
+                has_tree,
+                checkpoint,
+            ) = row
+            if seen is None or expected_symbols_map is None:
+                raise RuntimeError("indexed trace state was not initialized")
+            if original_index >= rows:
+                raise ValueError("indexed original ordinal is outside trace population")
+            byte_index = original_index >> 3
+            bit_mask = 1 << (original_index & 7)
+            if seen[byte_index] & bit_mask:
+                raise ValueError("indexed original ordinal is duplicated")
+            seen[byte_index] |= bit_mask
+            symbol_offset = original_index * 2
+            expected_symbol = int.from_bytes(
+                expected_symbols_map[symbol_offset : symbol_offset + 2], "big"
+            )
+            if symbol != expected_symbol:
+                raise ValueError("indexed symbol differs from expected truth stream")
+        else:
+            (
+                execution,
+                before_bits,
+                after_bits,
+                before_bytes,
+                after_bytes,
+                exact_archive_bits,
+                exact_archive_bytes,
+                symbol,
+                vocabulary,
+                branch_count,
+                has_tree,
+                checkpoint,
+            ) = row
         if execution != index:
             raise ValueError("nonconsecutive execution ordinal")
         if vocabulary < 2 or symbol >= vocabulary:
@@ -149,6 +211,8 @@ def main() -> int:
             probabilities.append(probability)
         observed_branches += branch_count
 
+        if has_tree not in (0, 1):
+            raise ValueError("invalid tree flag")
         if has_tree:
             if offset + U16.size > len(raw):
                 raise ValueError("truncated tree count")
@@ -168,12 +232,15 @@ def main() -> int:
             if tree_path(values, symbol, vocabulary) != probabilities:
                 raise ValueError("derived tree disagrees with consumed path")
             observed_trees += 1
-        elif has_tree != 0:
-            raise ValueError("invalid tree flag")
         if checkpoint not in (0, 1):
             raise ValueError("invalid checkpoint flag")
         prior_bits = after_bits
         prior_bytes = after_bytes
+
+    if expected_symbols_map is not None:
+        expected_symbols_map.close()
+    if expected_symbols_file is not None:
+        expected_symbols_file.close()
 
     if offset != len(raw):
         raise ValueError("trailing trace bytes")
@@ -189,8 +256,10 @@ def main() -> int:
         raise ValueError("decoded output differs from expected raw input")
 
     environment = json.loads(args.environment.read_text())
-    if environment.get("execution_status") != "NVIDIA_READY":
-        raise ValueError("environment is not a bound NVIDIA execution")
+    if environment.get("execution_status") != args.required_execution_status:
+        raise ValueError(
+            "environment execution status does not match the required binding"
+        )
 
     receipt = {
         "archive_identity": True,
@@ -199,9 +268,24 @@ def main() -> int:
         "derived_tree_rows": trees,
         "environment": environment,
         "exact_consumed_integer_probabilities": True,
+        "indexed_original_identity": indexed,
         "probability_total": PROBABILITY_TOTAL,
-        "schema": "nncp_native_trace_cert_v1",
+        "required_execution_status": args.required_execution_status,
+        "schema": (
+            "nncp_native_indexed_trace_cert_v2"
+            if indexed
+            else "nncp_native_trace_cert_v1"
+        ),
         "score_credit_bytes": 0,
+        "expected_symbols": (
+            {
+                "bytes": args.expected_symbols.stat().st_size,
+                "path": str(args.expected_symbols),
+                "sha256": sha256(args.expected_symbols),
+            }
+            if args.expected_symbols
+            else None
+        ),
         "symbol_map_receipt": (
             {
                 "path": str(args.symbol_map_receipt),
@@ -213,6 +297,7 @@ def main() -> int:
         "symbol_rows": rows,
         "trace": {
             "bytes": args.trace.stat().st_size,
+            "format": magic.rstrip(b"\0").decode("ascii"),
             "sha256": sha256(args.trace),
         },
         "trace_off_archive": {

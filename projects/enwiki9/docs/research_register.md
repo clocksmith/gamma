@@ -568,3 +568,30 @@ This closes source-composition and build-context risk for the conditional
 production-dictionary bridge. It does not execute an encode, establish trace
 neutrality, authorize the bridge before the mature antecedent terminalizes,
 or grant archive, forecast, eligibility, or score credit.
+
+## 2026-08-09 - Indexed native trace verifier binds production bridge receipts
+
+The shared `verify_nncp_native_trace.py` verifier previously accepted only the
+legacy `NNNTR3` execution-order trace and hard-coded `NVIDIA_READY`. The frozen
+production-dictionary bridge emits `NNNTR4`, whose additional original ordinal
+is required to recover chronological identity from NNCP's stream-major encode
+order. Without verifier support, the clean observer build could not produce a
+standalone bound receipt.
+
+The verifier now detects both formats. Legacy `NNNTR3` calls retain their v1
+schema and default NVIDIA execution binding. `NNNTR4` calls require the exact
+big-endian uint16 symbol stream, verify every original ordinal is unique and
+inside the trace population, verify each traced symbol against its indexed
+truth, and emit an indexed v2 schema. Execution status is explicit through
+`--required-execution-status`, so a future CPU bridge cannot inherit a GPU
+environment assertion. The existing archive identity, raw decode identity,
+range-count continuity, branch truth/probability, checkpoint, and optional
+derived-tree checks remain active. Invalid tree flags are now rejected before
+payload parsing.
+
+Synthetic one-row receipts passed for both compatibility paths: `NNNTR3` under
+`NVIDIA_READY` and indexed `NNNTR4` under `CPU_READY`. This is verifier
+infrastructure only. It does not run the conditional production bridge, prove
+observer neutrality on NNCP, establish compression gain, or grant score,
+forecast, source-eligibility, or runtime credit. The active mature antecedent
+must terminalize before the bridge is materialized.
