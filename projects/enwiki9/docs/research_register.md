@@ -1421,3 +1421,21 @@ cannot realize the full teacher mechanism. Any later `O/OK` or low-rank child
 must carry a deterministic state across segment boundaries and must be priced
 through a new joint replay. The separate exact-native and mature source-native
 gates still control descendant authorization.
+
+Conditional attribution graph audit: both the LibNC `enwik9` profile and the
+faithful ROCm model use an untied input embedding and output embedding
+(`tied_embed=0`). The hidden path is input embedding, twenty Transformer
+blocks, and final normalization; only then do the output embedding and output
+bias produce logits. Neither output-head tensor feeds keys, values, hidden
+states, or persistent memories.
+
+Consequently, under an output-head-only midpoint update, rebuilding first-half
+KV state cannot change any probability: the proposed `O` and `OK` arms must be
+byte- and probability-identical. Rebuilding KV with no parameter update also
+makes `K` identical to the parent. These arms remain useful integrity controls;
+any difference proves implementation or replay drift. The substantive compact
+comparison is therefore persistent exact output-head adaptation versus the
+full deep update and shifted-truth control. A head update can still explain
+later first-half gains because its weights and Adam second-moment state persist
+across segments, but it does not require a KV rebuild. This structural result
+does not authorize the gate before both active antecedents pass.
