@@ -1392,3 +1392,32 @@ Second-half-only savings are an upper bound on immediate plus accumulated
 effects, not transferable MIDAS credit. This receipt does not identify a
 sufficient parameter subset, authorize `K/O/OK/F/S` before both exact-native
 and mature antecedents pass, or support a full-corpus forecast.
+
+## 2026-08-08 - NNCP midpoint persistence replicated at 262,144 symbols
+
+Diagnostic: `nncp_midpoint_phase_attribution_262144_qm1_v1`. Epistemic tier:
+exact larger-scope trace attribution with zero score and forecast credit.
+
+The receipt consumes the fresh faithful-parent and full-midpoint traces for all
+`262,144` symbols and `3,670,169` branch frequencies. It reproduces the
+registered `17,185.333882` ideal bytes and every chronological third exactly.
+The gain splits into `7,613.926179` bytes before current midpoint updates and
+`9,571.407703` bytes afterward, or `44.304791%` versus `55.695209%`. The
+pre-midpoint share differs from the exact `65,536`-symbol receipt by only
+`0.846539` percentage points.
+
+Every second half is positive. Two first halves and one combined segment are
+nonpositive; the minimum is segment `3` at `-47.498210` bytes. All `16`
+consecutive eight-segment blocks are positive. Most importantly, the final
+`32` segments gain `4,242.888556` bytes: `1,847.051537` before and
+`2,395.837019` after their midpoint updates, with every tail segment positive.
+All hashes, registered totals and thirds, branch populations, first-segment
+identity, persistence-share replication, and tail conditions pass. The source
+package is `5,568` bytes and the guarded process stays below `1 GiB`.
+
+Conclusion: persistent trajectory benefit is stable at four times the exact
+population and remains strong in the tail. A stateless within-segment adapter
+cannot realize the full teacher mechanism. Any later `O/OK` or low-rank child
+must carry a deterministic state across segment boundaries and must be priced
+through a new joint replay. The separate exact-native and mature source-native
+gates still control descendant authorization.
