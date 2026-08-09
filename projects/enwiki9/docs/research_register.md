@@ -2102,3 +2102,35 @@ partial score or pass credit. The frozen terminal gates remain candidate
 archive at most `2,012,820` bytes for the `30,000`-byte scientific threshold
 and at most `2,009,770` bytes for the `33,050`-byte package-aware threshold.
 No candidate source, command, population, or threshold was changed.
+
+## 2026-08-09 - NNCP chronology must follow original coordinates
+
+Read-only audit of `process_block()` corrects the chronology contract for the
+conditional observer. NNCP divides each native block into 32 contiguous corpus
+streams, then codes one local state from every stream before advancing to the
+next state. Consequently, the first third of `write_sym()` calls is not the
+first chronological third of the corpus. A cloned-coder checkpoint selected
+only by execution-row count would silently mix positions from all 32 corpus
+regions and cannot support a chronological-third claim.
+
+For the active mature population, the four complete native blocks provide the
+clean exact solution. A cloned live coder flushed after each completed
+`499,712`-symbol block yields same-stream physical archive prefixes at original
+coordinates `499,712`, `999,424`, `1,499,136`, and `1,998,848`. These are valid
+chronological quartile boundaries because every block is completed before the
+next block is read. The observer must trigger from `process_block()` completion,
+not merely from a global count of symbol-write calls.
+
+The exact `65,536`-symbol `P/K/O/OK/F/S` population fits inside one native
+block, so execution-prefix checkpoints cannot produce raw chronological
+thirds. Its archive-neutral observer must carry the already decoder-visible
+original symbol index into the symbol writer and route each consumed integer
+branch probability and truth bit into one of three independent count-only
+shadow arithmetic coders by original-coordinate third. Flushing those shadow
+coders gives exact physical arithmetic bytes for each third with matched
+termination overhead, while the single live coder and model trajectory remain
+unchanged. Whole-archive promotion still uses the actual live archive; the
+three shadows are attribution evidence only. The candidate must retain at
+least `80%` of `F`'s gain in each matched shadow stream and remain positive in
+all three. An observer-enabled repeat must remain byte-identical to the
+observer-disabled live archive.
