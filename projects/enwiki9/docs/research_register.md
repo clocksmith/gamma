@@ -2134,3 +2134,30 @@ three shadows are attribution evidence only. The candidate must retain at
 least `80%` of `F`'s gain in each matched shadow stream and remain positive in
 all three. An observer-enabled repeat must remain byte-identical to the
 observer-disabled live archive.
+
+## 2026-08-09 - Attribution identity excludes the schedule header byte
+
+The proposed single versioned `P/K/O/OK/F/S` schedule enum creates an exact
+but important distinction between control identity and whole-file identity.
+If each arm serializes its schedule so the same decoder binary can reproduce
+the correct update path, `K` and `P` necessarily differ in that header byte;
+likewise `OK` and `O`. Requiring those complete archive files to be
+byte-identical would contradict the self-describing archive contract.
+
+The frozen implementation invariant is therefore:
+
+```text
+K versus P    same archive length, parsed arithmetic payload byte-identical,
+              model/optimizer trajectory byte-identical after every segment
+OK versus O   same archive length, parsed arithmetic payload byte-identical,
+              model/optimizer trajectory byte-identical after every segment
+```
+
+The parser must identify the exact one-byte schedule field and the arithmetic
+payload offset rather than comparing hand-selected suffixes. Every arm must
+still decode independently under its serialized schedule and reproduce the
+exact symbol population and raw prefix. Each arm's repeated encode must be
+whole-file byte-identical to itself. Archive scoring counts the full file,
+including the schedule byte; the cross-arm payload comparison is only a
+correctness and attribution invariant. This correction changes no frozen gain,
+source-package, chronology, memory, or shifted-control threshold.
