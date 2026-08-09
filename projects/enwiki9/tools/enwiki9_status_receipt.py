@@ -542,7 +542,7 @@ def active_candidate_from_process(process_state: dict[str, Any]) -> tuple[str | 
 def live_speedlab_gate_from_process(
     process_state: dict[str, Any],
 ) -> dict[str, Any] | None:
-    """Recover a quarantined speedlab gate directly from its live RSS guard."""
+    """Recover a live guarded gate directly from its RSS-guard process."""
 
     rows = process_state.get("active_rows")
     if not isinstance(rows, list):
@@ -574,10 +574,19 @@ def live_speedlab_gate_from_process(
         # Do not let that wrapper shadow the child's concrete live receipt.
         if "$" in guard_path_text:
             continue
+        process_cwd: pathlib.Path | None = None
+        pid = row.get("pid")
+        if isinstance(pid, int) and not isinstance(pid, bool):
+            try:
+                process_cwd = pathlib.Path(f"/proc/{pid}/cwd").resolve()
+            except OSError:
+                process_cwd = None
         guard_path = pathlib.Path(guard_path_text)
+        if not guard_path.is_absolute():
+            guard_path = (process_cwd or REPO_ROOT) / guard_path
         label = parts[label_index + 1]
         command = parts[command_index + 1 :]
-        if len(command) < 3:
+        if not command:
             continue
         candidate = label
         driver_marker = "projects/enwiki9/lib/driver.py"
@@ -585,8 +594,16 @@ def live_speedlab_gate_from_process(
             driver_index = command.index(driver_marker)
             if driver_index + 1 < len(command):
                 candidate = command[driver_index + 1]
-        input_path = pathlib.Path(command[-2])
-        output_path = pathlib.Path(command[-1])
+        input_path: pathlib.Path | None = None
+        output_path: pathlib.Path | None = None
+        if len(command) >= 3:
+            input_path = pathlib.Path(command[-2])
+            output_path = pathlib.Path(command[-1])
+            if process_cwd is not None:
+                if not input_path.is_absolute():
+                    input_path = process_cwd / input_path
+                if not output_path.is_absolute():
+                    output_path = process_cwd / output_path
         scope: int | None = None
         if "--limit" in command:
             limit_index = command.index("--limit")
@@ -597,7 +614,7 @@ def live_speedlab_gate_from_process(
                     scope = None
         if scope is None:
             scope = scope_from_gate_label(label)
-        if scope is None:
+        if scope is None and input_path is not None:
             try:
                 scope = input_path.stat().st_size
             except OSError:
@@ -642,12 +659,14 @@ def live_speedlab_gate_from_process(
                 if isinstance(guard.get("latest_sample"), dict)
                 else None
             ),
-            "input_path": str(input_path),
-            "output_path": str(output_path),
             "command": command,
             "promotion_authorized": False,
             "claim_rule": "A speedlab prefix is not a constructive 1G score.",
         }
+        if input_path is not None:
+            gate["input_path"] = str(input_path)
+        if output_path is not None:
+            gate["output_path"] = str(output_path)
         try:
             guard_stat = guard_path.stat()
         except OSError:
@@ -732,12 +751,17 @@ def bind_guard_to_adaptive_job(
     bound = dict(gate)
     bound["guard_label_candidate"] = gate.get("candidate")
     bound["guard_inferred_scope_bytes"] = gate.get("scope_bytes")
-    bound["candidate"] = job.get("candidate_id")
+    candidate = job.get("candidate_id")
+    bound["candidate"] = candidate
     bound["scope_bytes"] = job.get("gate_size")
     bound["adaptive_job_id"] = job.get("job_id")
     bound["adaptive_job_path"] = job.get("path")
     bound["adaptive_worker_pid"] = job.get("worker_pid")
     bound["source"] = "live_adaptive_tool_rss_guard"
+    if isinstance(candidate, str) and candidate:
+        decision_path = ROOT / "results" / candidate / "decision.json"
+        bound["driver_result_json"] = logical_rel(decision_path)
+        bound["driver_result_json_present"] = decision_path.is_file()
     bound["claim_rule"] = (
         "A nested RSS guard inherits candidate and scope from its verified live "
         "adaptive worker; the guard supplies resource and terminal metrics only."

@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T14:59:23+00:00`
+- Generated at UTC: `2026-08-09T15:15:55+00:00`
 
 ## Target State
 
@@ -19,16 +19,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active scorer observed: `true`
 - Active cmix mode: `n/a`
 - Driver result present: `false`
-- RSS guard status: `n/a`
-- RSS samples: `n/a`
+- RSS guard status: `running`
+- RSS samples: `3,969`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `n/a`
-- Latest sampled single RSS KiB: `n/a`
-- Tightest binary single-process margin KiB: `n/a`
-- Tightest decimal single-process margin KiB: `n/a`
-- Latest binary single-process margin KiB: `n/a`
-- Latest decimal single-process margin KiB: `n/a`
+- Max sampled single RSS KiB: `5,691,344`
+- Latest sampled single RSS KiB: `5,691,344`
+- Tightest binary single-process margin KiB: `4,794,416`
+- Tightest decimal single-process margin KiB: `4,074,281`
+- Latest binary single-process margin KiB: `4,794,416`
+- Latest decimal single-process margin KiB: `4,074,281`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
@@ -43,10 +43,10 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Next action: `wait_for_gate_completion`
 - Candidate: `nncp_libnc_trainlen32_mature_1998848_qm2_v1`
 - Scope bytes: `1,998,848`
-- Driver result JSON: `not present`
+- Driver result JSON: `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/decision.json`
 - Driver result present: `false`
-- RSS guard JSON: `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json`
-- RSS guard present: `false`
+- RSS guard JSON: `/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_guard_v1.json`
+- RSS guard present: `true`
 - Active scorer observed: `true`
 - Live gate: `true`
 - Liveness classification: `live_observed_owner`
@@ -54,15 +54,31 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
-- Live guard note: `guard JSON is absent while the scorer is observed; keep waiting for final receipts and use process-table RSS meanwhile`
+- RSS guard status: `running`
+- RSS guard JSON bytes: `991`
+- RSS guard JSON modified UTC: `2026-08-09T15:15:53+00:00`
+- RSS guard JSON SHA-256: `0bd125e4a6afb78d15590cab3bf6486eb127c6acbdfbf3c56c1f998f36be9df7`
+- RSS samples: `3,969`
+- Max sampled single RSS KiB: `5,691,344`
+- Max sampled tree RSS KiB: `5,711,868`
+- Single-process RSS margin KiB: `4,794,416`
+- Single-process decimal `10GB` margin KiB: `4,074,281`
+- Tree RSS margin KiB: `4,773,892`
+- Tree decimal `10GB` margin KiB: `4,053,757`
+- Latest sampled single RSS KiB: `5,691,344`
+- Latest sampled tree RSS KiB: `5,711,868`
+- Latest sampled single-process margin KiB: `4,794,416`
+- Latest sampled single-process decimal `10GB` margin KiB: `4,074,281`
+- Latest sampled tree margin KiB: `4,773,892`
+- Latest sampled tree decimal `10GB` margin KiB: `4,053,757`
 
 ## Gate Evidence Status
 
-- Claim status: `awaiting_gate_receipts`
+- Claim status: `live_guard_monitor_only`
 - Driver result terminal: `false`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
-- Live guard only: `false`
+- Live guard only: `true`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
@@ -115,9 +131,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `728`
 - Registered programs: `291`
-- Untracked nonignored entries: `7`
-- Modified tracked entries: `6`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=38, measured_negative=100, retired=538, track_source_before_evolution=1`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `4`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=39, measured_negative=100, retired=538`
 
 ## Active Runner Process Table
 

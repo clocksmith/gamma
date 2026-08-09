@@ -475,3 +475,21 @@ Evidence: `results/nncp_successor_cache32_qm0_v1/decision.json`, guard
 - Claim boundary: no decode/inverse replay, isolated timing, full-corpus transfer, or score credit is claimed because the fully paid encode is already negative.
 - Receipt defect: `results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/decision.json` contains the final backend fields but retains its pre-backend claim-boundary text and epistemic tier. The terminal authority is `results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual_backend_receipt.json`; the stale fields are preserved pending explicit approval to correct them.
 - Next action: Agent A stops representation invention and becomes independent packaging and eligibility adjudicator for Agent B's first mature compact exact candidate. SYMBIONT P64 is already retired; the exact 65,536-symbol midpoint candidate passed, while the 1,998,848-symbol maturity gate remains active.
+
+## 2026-08-09 - Adaptive tool guards are visible in the shared status receipt
+
+The active mature NNCP retry runs a two-token nested command under
+`run_with_rss_guard.py` and writes its guard through a path relative to the
+project working directory. The status parser previously required at least
+three nested command tokens and resolved relative guard paths against the
+status caller, so it displayed verified live memory evidence as absent.
+
+`enwiki9_status_receipt.py` now accepts any nonempty guarded command, resolves
+relative paths from the guard process's actual `/proc/<pid>/cwd`, and emits
+input/output fields only when those operands exist. The guard is then bound to
+its uniquely verified adaptive owner, preserving the durable candidate and
+scope rather than the retry label. Live validation recovered candidate
+`nncp_libnc_trainlen32_mature_1998848_qm2_v1`, scope `1,998,848`, running
+status, `5,691,344 KiB` peak single-process RSS, and `5,711,868 KiB` peak
+process-tree RSS. This is monitoring correctness only and receives zero
+compression, forecast, or score credit.
