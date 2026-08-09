@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.1-test`
+**Rules reference:** `0.7.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -99,12 +99,15 @@ The game uses thirteen tiles:
 Every non-Frontier tile has two Facility spaces. The smaller board restores
 scarcity while keeping all action categories reachable.
 
-Each player has one Infrastructure Network. Adjacency and two Link tokens
-govern both Power delivery and the Network bonus. There is no separate
+Power delivery is profile-specific. Default Game uses local Power: a Generator
+can power its owner's Facilities on its own hex or an adjacent hex. Advanced
+Play gives each player one Infrastructure Network; adjacency and two Link
+tokens govern pooled Power delivery and the Network bonus. There is no separate
 Transmission graph.
 
-Networks and the starting-grid marker exist from setup. Generators, Links,
-Mega-Clusters, and the Network production bonus unlock in Era II.
+The integrated starting-grid identity exists from setup. Generators and
+Mega-Clusters unlock in Era II. Links and the Network production bonus are
+Advanced Play additions that also unlock in Era II.
 
 Default Game keeps the randomized jurisdiction fixed for all four Eras.
 Jurisdictional Realignment is preserved as part of the single bundled Advanced
@@ -197,7 +200,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.1-test` test:
+controlled `0.7.0-rc.2-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -209,8 +212,8 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.10.0` implements `0.7.0-rc.1-test` under engine
-coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
+Executable game `0.10.1` implements `0.7.0-rc.2-test` under engine
+coverage `three-to-five-profiles-v1`. Grid-Ready faces are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
 replay, policies, and Monte Carlo share that contract.
@@ -218,6 +221,14 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.10.1` / `0.7.0-rc.2-test` precision patch changes no mechanic or
+number. It prints final Generator prices on their only legal Energy districts,
+removes the obsolete Energy discounts, describes Faction programs and Power
+eligibility without assuming the Advanced Network profile, and uses
+Escalation availability on one faction-board track everywhere. It also removes
+duplicate loose-component descriptions created by the selected double-sided
+and track-based physical forms.
 
 This synchronized rules candidate promotes the accepted simplification
 package. It removes one Generator and all Influence cubes from every faction
@@ -234,7 +245,7 @@ corrects the executable selection contract so every unused Core Action and
 every unlocked, unspent Escalation remains legally selectable even when it has
 no current resolution. Resolution metadata lets deterministic policies avoid
 known dead choices without deleting them. A blocked selection exhausts, and a
-blocked Escalation spends its token, exactly as the physical commitment rule
+blocked Escalation spends its availability, exactly as the physical commitment rule
 requires. Because legal decision packets and deterministic sampling change,
 earlier simulation remains historical evidence rather than balance authority
 for this executable.

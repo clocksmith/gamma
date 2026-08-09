@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.1-test`
+**Rules under review:** `0.7.0-rc.2-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -103,14 +103,14 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.1-test`. Executable
-game `0.10.0` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.2-test`. Executable
+game `0.10.1` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
 
-Candidate `0.7.0-rc.1-test` and executable `0.10.0` establish the simplified
+Candidate `0.7.0-rc.2-test` and executable `0.10.1` establish the simplified
 baseline selected on 2026-08-08: one location-defined Generator, two programs
 per Faction, presence-only politics, removal of seven stored-token families,
 and the tightened Default/Advanced boundary. The earlier single-Generator
@@ -127,7 +127,7 @@ Candidate `0.6.0-rc.2-test` changed no physical rule from rc.1.
 Executable
 `0.9.1` restores every unused Core Action and unlocked, unspent Escalation to
 the legal selection packet, labels current resolvability for policy scoring,
-and makes a blocked Escalation consume its committed token. Earlier simulation
+and makes a blocked Escalation consume its committed availability. Earlier simulation
 uses a narrower decision set and cannot qualify this executable.
 
 The two full-progress Codex reports that recorded a changed ruleset fingerprint
@@ -232,6 +232,11 @@ diagnostics rather than balance-authority evidence.
 - action-resolution and rules-lookup time;
 - Initiative effects and illegal-state recovery;
 - end-of-Era occupancy.
+- every Influence selection and chosen effect;
+- control changes at Media, Government, and Capital;
+- whether Teams or Facilities are used to hold political positions; and
+- whether players describe politics as strategic positioning or incidental
+  movement.
 
 ### Research and deployment
 
@@ -246,13 +251,17 @@ diagnostics rather than balance-authority evidence.
 ### Infrastructure and negotiation
 
 - Facilities, powered Facilities, and total satisfied demand after Production;
-- every Generator source, its Scrutiny, and its realized Audit cost;
+- when every Generator is built, its clean or emergency source, its Scrutiny,
+  and its realized Audit cost;
+- every Build selection and whether Energy-slot Initiative causes frustration;
 - Links, Network reach, and stranded Facilities;
 - Joint Ventures, immediate Power purchases, Mega-Clusters, payments, and
   suspensions;
 - every supplier’s requested and accepted compensation, including Runway,
   reciprocal resources, Joint Ventures, Realignment promises, political
   commitments, and other bundled terms;
+- every Power request, demanded price, acceptance, and refusal, plus whether
+  the one-Generator limit creates bargaining or merely removes surplus;
 - whether a supplier forgoes Power needed by its own Facilities, whether a
   refusal threat changes the deal, and whether participants describe the
   bargain as strategic, coerced, or kingmaking;
@@ -261,6 +270,7 @@ diagnostics rather than balance-authority evidence.
   range and finishes in the top half;
 - whether an institution that prepares unsuccessfully for AGI remains
   competitive;
+- the earliest three-Grid-Ready state and first legal AGI window;
 - all three Grid-slot occupancy before Era IV;
 - whether Fusion was built, declined, blocked, or denied by occupied slots;
 - immediate trades and persistent agreements.
@@ -271,6 +281,10 @@ diagnostics rather than balance-authority evidence.
 - Systemic Risk added, drawn, and remaining;
 - Audit penalties by player and source;
 - Trust and Mandate changes with causes;
+- every player's Mandate position after each Era, whether the Era I leader
+  ultimately wins, and whether the fourth-place player recovers;
+- whether a leader can pursue aggressive Deploy or Research paths without
+  enough pressure from contested Mandates, Audit, and opponent response;
 - Loopfold AI’s lead after every Production;
 - Corthaven’s Shovels income;
 - every Allocation Window offer, counteroffer, acceptance, and Corthaven
@@ -302,6 +316,12 @@ diagnostics rather than balance-authority evidence.
 - whether a non-declaring infrastructure strategy wins;
 - perceived agency, runaway leaders, and negotiation quality;
 - decisions that felt compulsory or irrelevant.
+
+After the session, ask each player: “What was your institution uniquely good
+at, and what was its signature moment?” Record whether Dovetalis Labs and
+Corthaven produce answers as readily as the other four Factions. Improve an
+existing program or its presentation if they do not; do not restore additional
+programs merely to create more text.
 
 Do not capture Tactics or secret objectives in baseline evidence. If a later
 variant enables either module, state that variant and collect its separate

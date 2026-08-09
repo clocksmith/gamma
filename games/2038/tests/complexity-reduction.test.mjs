@@ -51,6 +51,45 @@ test("single-generator contract is canonical in both play profiles", async () =>
   ));
 });
 
+test("precision patch prints final Generator prices and consolidated state", async () => {
+  const [config, factions, mapReference, coreRules, componentReference] = await Promise.all([
+    readJson("dist/runtime/game-config.json"),
+    readJson("dist/runtime/factions.json"),
+    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
+    readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
+    readFile(new URL("dist/docs/component-reference.md", root), "utf8")
+  ]);
+  const locations = new Map(config.board.tiles.map((location) => [
+    location.id,
+    location
+  ]));
+
+  assert.equal(
+    locations.get("grid_reactor").visit,
+    "Build Emergency Power Complex here for 1 Runway."
+  );
+  assert.equal(
+    locations.get("renewable_basin").visit,
+    "Build Civic Heat Battery here for 2 Runway."
+  );
+  assert.match(mapReference, /Power Corridor \| Build Emergency Power Complex here for one Runway/);
+  assert.match(mapReference, /Thermal and Water Basin \| Build Civic Heat Battery here for two Runway/);
+  assert.doesNotMatch(mapReference, /Infrastructure Build costs one less/);
+  assert.doesNotMatch(mapReference, /Civic Heat Battery costs one less/);
+
+  assert.match(coreRules, /four double-sided\s+Facilities/);
+  assert.match(coreRules, /one persistent institutional identity and one\s+signature program/);
+  assert.doesNotMatch(coreRules, /Escalation token/);
+  assert.doesNotMatch(componentReference, /\n- Four Facilities\n/);
+  assert.match(componentReference, /Gain, spend, and lose Escalation availability/);
+
+  const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
+  const vertical = factions.factions.find((faction) => faction.id === "vertical_empire");
+  assert.match(coalition.abilities[1].text, /both fixed host Facilities are powered and within 2 hexes/);
+  assert.match(vertical.abilities[1].text, /legal Power eligibility under the selected profile/);
+  assert.doesNotMatch(vertical.abilities[1].text, /Recalculate its Network/);
+});
+
 test("single-generator contract fails explicitly when incomplete", async () => {
   const config = await readJson("dist/runtime/game-config.json");
   const invalid = structuredClone(config.singleGeneratorRule);

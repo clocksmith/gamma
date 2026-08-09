@@ -73,8 +73,8 @@ it.
 | ${terms.locations.talent} | Recruit costs one less ${terms.resources.runway} | Move one Team one hex during Production | ${terms.resources.runway} |
 | ${terms.locations.media} | ${terms.actions.influence} may remove one additional ${terms.playerTracks.scrutiny} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
 | ${terms.locations.government} | ${terms.actions.influence} may gain one additional ${terms.playerTracks.trust} | Gain one ${terms.playerTracks.trust} | ${terms.resources.runway} |
-| ${terms.locations.grid} | Infrastructure ${terms.actions.build} costs one less | Gain one ${terms.resources.compute} | ${terms.resources.compute} |
-| ${terms.locations.renewable} | ${terms.technology.cleanInfrastructure} costs one less ${terms.resources.runway} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
+| ${terms.locations.grid} | Build ${terms.technology.emergencyInfrastructure} here for one ${terms.resources.runway} | Gain one ${terms.resources.compute} | ${terms.resources.compute} |
+| ${terms.locations.renewable} | Build ${terms.technology.cleanInfrastructure} here for two ${terms.resources.runway} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
 | ${terms.locations.frontier} | After Act, you may gain one ${terms.resources.runway} and add one ${terms.playerTracks.scrutiny} | No Facility spaces | None |
 
 Resolve ${terms.locations.frontier}’s optional ${terms.resources.runway} after the Action, once per acting player

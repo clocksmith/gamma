@@ -26,8 +26,8 @@ four Eras, simultaneous action selection, a modular thirteen-hex economy,
 six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.7.0-rc.1-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.10.0`. That synchronization is
+Rules `0.7.0-rc.2-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.10.1`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -90,13 +90,13 @@ locked component specification.
 | Generator pieces | 6 | one per faction; Energy location determines source |
 | Link tokens | 12 | Advanced Play only; two per faction |
 | Network markers | 6 | Advanced Play only; one per faction with capacity tracked on the player board |
-| Starting-grid markers | 6 | one per faction; travels with its designated Facility |
-| Grid-Ready markers | up to 24 | only if Facilities do not encode Grid-Ready on their reverse |
-| Track markers | at least 30 | final track implementation unresolved |
+| Starting-grid identifiers | 6 | integrated into each faction's first Facility |
+| Separate Grid-Ready markers | 0 | each Facility's reverse encodes Grid-Ready |
+| Generic resource and track markers | exact stock unresolved | excludes the selected Customer and Escalation markers below |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
-| Customer markers | up to 30 | only if Customers do not use a player-board track |
-| Escalation tokens | up to 24 | only if Escalation does not use a player-board track |
-| AGI Declaration markers | up to 6 | only if Declare AGI cards do not encode the declared state |
+| Customer-track markers | 6 | one per faction board; zero to five Customers |
+| Escalation-track markers | 6 | one per faction board; zero to two availability |
+| Separate AGI Declaration markers | 0 | each Declare AGI card has an undeclared / declared reverse |
 | Shared punchboard tokens | use exact `core-rules.md` inventory | selected counts; layout unresolved |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Scrutiny bag | 1 opaque cloth bag | confirmed concept |
@@ -137,10 +137,11 @@ be included in the first prototype quote.
 
 The selected rule is:
 
-> To perform an unlocked Escalation, spend one Escalation token. Unspent
-> tokens expire at the end of the Era.
+> To perform an unlocked Escalation, spend one Escalation availability on your
+> faction-board track. Unspent availability expires at the end of the Era.
 
-Each player receives four tokens over the game and has seven once-per-game
+Each player gains four Escalation availability over the game and records it
+with one faction-board track marker. Each player has seven once-per-game
 Escalation cards.
 
 ### Resolved: player component maxima
@@ -395,7 +396,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.7.0-rc.1-test` physical test.
+1. Run the controlled four-player `0.7.0-rc.2-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.

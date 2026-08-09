@@ -10,10 +10,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.10.0");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.1-test");
+  assert.equal(current.gameVersion, "0.10.1");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.2-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.10.0");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.10.1");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -75,8 +75,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.1-test",
-    "synchronized with executable game 0.10.0",
+    "**Rules version:** 0.7.0-rc.2-test",
+    "synchronized with executable game 0.10.1",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
@@ -99,7 +99,7 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "A **grid-ready Facility** has its Grid-Ready face showing",
     "Do not run a second Production calculation",
     "Every Headline card is eligible",
-    "same four-row reading order",
+    "Every Faction has one persistent institutional identity and one signature program",
     "There is no hidden or deferred conversion",
     "There is no other endgame scoring"
   ]) {
@@ -247,7 +247,7 @@ test("Faction boards project into Card Reference without duplicating their card 
     }
   }
 
-  assert.match(rules, /same four-row reading order/);
+  assert.match(rules, /one persistent institutional identity and one\s+signature program/);
   assert.match(rules, /use each Faction board’s printed starts/);
   assert.doesNotMatch(rules, /Scientific Method:/);
   assert.doesNotMatch(rules, /Industrial Velocity:/);
