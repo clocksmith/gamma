@@ -139,6 +139,23 @@ materialized SHA-256 before executing q0's unchanged build, package, repeat,
 bare-inverse, and resource gates. No fallback to an untracked working-tree
 profile is permitted.
 
+Job `20260809T222840Z_795238cee4` proved that repair sufficient to reach the
+real pinned PGO/LTO build, strip, UPX, dictionary package, article-order
+package, and header-generation stages. It then failed before either opening-1M
+encode because q0 expected `scratch_usage_before_cleanup` on all three package
+receipts while the header-generation receipt did not contain that telemetry
+field. Peak sampled single-process RSS was `7,886,856 KiB` and the strict
+decimal guard did not fire. This is an accounting-infrastructure failure and
+provides zero compression evidence.
+
+Unique successor `cmix_obias_source_1m_roundtrip_qm2_v1` retains q1's exact
+Git-LFS materialization and changes only the receipt schema. It calls the
+unchanged packaging function, observes the same unique scratch tree for any
+receipt missing `scratch_usage_before_cleanup`, and then continues through the
+unchanged program-size, repeat-encode, bare-inverse, and resource gates. It
+does not change source revision, build flags, assets, modeled input, package,
+archive, memory policy, or score accounting.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL
