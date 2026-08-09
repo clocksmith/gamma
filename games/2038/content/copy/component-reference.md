@@ -35,7 +35,6 @@ Each faction receives:
 
 - One CEO
 - Three Teams
-- Four Facilities
 - Four double-sided Facilities: normal / Grid-Ready
 - One Generator
 - One integrated starting-grid identifier on the first Facility
@@ -47,6 +46,8 @@ Each faction receives:
 - One ${terms.systems.agi} Declaration card with an undeclared / declared reverse
 
 Generators do not count against the Facility limit.
+
+Gain, spend, and lose Escalation availability on the faction-board track.
 
 The shared supply contains:
 

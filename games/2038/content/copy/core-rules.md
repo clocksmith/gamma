@@ -34,13 +34,14 @@ Default Game lasts four Eras. The institution with the most ${terms.playerTracks
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside the
    matching Era card.
-4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.customer}, ${terms.resources.safety}, ${terms.playerTracks.scrutiny}, Systemic Risk,
-   Grid-Ready, ${terms.infrastructure.power} Source, Joint Venture,
-   ${terms.technology.megaCluster}, Initiative, and Audit bag components
-   within reach.
+4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.resources.safety}, ${terms.playerTracks.scrutiny}, Systemic Risk,
+   Joint Venture, ${terms.technology.megaCluster}, Initiative, and Audit bag
+   components within reach. Place the ${terms.infrastructure.power} Source reference cards nearby.
 5. Each player chooses or receives one Faction. Take its board, six Core
-   Actions, seven ${terms.systems.escalations}, CEO, three Teams, four Facilities, one
-   Generator, markers, and starting resources.
+   Actions, seven ${terms.systems.escalations}, CEO, three Teams, four double-sided
+   Facilities, one Generator, one ${terms.playerTracks.customer}-track marker, one
+   Escalation-track marker, one reversible Declare ${terms.systems.agi} card,
+   remaining track markers, and starting resources.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
    supply. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
    and ${terms.resources.safety} to its printed starting values.
@@ -73,8 +74,8 @@ unused unless an ability readies one.
 ### The complete ordinary turn: Select → Move → Act
 
 1. Reveal one ${terms.systems.headline}.
-2. Every player secretly selects one unused Core Action, or spends one Escalation
-   token to select one unlocked Escalation.
+2. Every player secretly selects one unused Core Action, or spends one
+   Escalation availability to select one unlocked Escalation.
 3. Reveal every selected action simultaneously.
 4. Resolve clockwise from Initiative.
 5. **Select:** the revealed Action is the only Action this turn.
@@ -140,10 +141,11 @@ resolves first and who wins unresolved ties; it cannot be traded or retained.
 
 ### Escalation availability and ${terms.systems.escalations}
 
-Spend one available Escalation to select an Era-unlocked Escalation:
+Gain, spend, and lose **Escalation availability** on your faction-board track.
+Spend one availability to select an Era-unlocked Escalation:
 
 - Select an ${terms.systems.escalation} instead of a Core Action.
-- Commit and reduce the Escalation track by one.
+- Commit and reduce the Escalation availability track by one.
 - Flip the ${terms.systems.escalation} after resolution.
 - Each named ${terms.systems.escalation} is usable once per player per game.
 - Unspent Escalation availability expires at Era end.
@@ -152,7 +154,7 @@ Spend one available Escalation to select an Era-unlocked Escalation:
 **Global after movement** means the acting piece moves normally, then the
 Action resolves without a destination restriction.
 
-| Era | Tokens | Newly available ${terms.systems.escalations} |
+| Era | Availability gained | Newly available ${terms.systems.escalations} |
 | --- | ---: | --- |
 | I — ${terms.eras.demo} | 0 | None |
 | II — ${terms.eras.scale} | 1 | ${terms.technology.megaCluster}, Reorganization |
@@ -747,12 +749,11 @@ or the matching physical card. Card text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
 
 All Factions and CEOs are fictional and imply no real-world claim or
-endorsement. Faction abilities unlock in their named Era. Timing is
-**passive**, **once per Era**, **once when unlocked**, or **once per game**.
-“Persists” remains available; “named Era only” expires at Era end. Every
-faction board uses the same four-row reading order: Core identity, Scale
-program, Narrative program, then Claim program. Those rows modify named timing
-windows; they add no phase.
+endorsement. Every Faction has one persistent institutional identity and one
+signature program. Timing is **passive**, **once per Era**, **once when
+unlocked**, or **once per game**. “Persists” remains available; “named Era
+only” expires at Era end. Faction abilities modify named timing windows; they
+add no phase.
 
 During setup, use each Faction board’s printed starts and place its already
 earned public ${terms.playerTracks.mandate}. Award that ${terms.playerTracks.mandate} once; never score it
