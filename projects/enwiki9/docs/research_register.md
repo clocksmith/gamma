@@ -22,6 +22,31 @@ through a new exact joint coder replay with complete package and memory
 accounting. The XML-safe far-history/copy family remains terminally closed by
 the negative QM4 matched-parent result.
 
+## 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound
+
+The previously external-only cmix-obias evidence is now present locally under
+`/home/x/enwiki9-nonproof/cmix-obias-donor`. The tracked outer repository is
+clean at commit `51488a0c1228dbeab7c1be837fc90ceaed351728`; its tracked
+`cmix-obias` subtree has Git tree
+`23de249ff899db5ba84dd3514a6a1bb52a83d0f5`. Untracked entries are confined to
+the locally provisioned Clang, LLD, compatibility-library, and UPX tools.
+
+The local `final/archive9` is exactly `108,009,834` bytes with SHA-256
+`664823c5d9f167bda342745d7b34a3ccb98fd7108723ba83643d9d09bf693900`,
+matching the public submission claim. The local packaged compressor is
+`459,989` bytes with SHA-256
+`eee69c879f4bbd58015efd4d34f55c6dc986ec818fa68c2f32a9ee5ab5568f68`;
+the required head blob is `23,002` bytes with SHA-256
+`35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078`.
+Their arithmetic total is the claimed `108,492,825` bytes.
+
+This advances artifact availability and provenance only. No local full decode,
+repeat encode, strict-memory qualification, runtime qualification, or Gamma
+score credit exists. A safe full decode/encode workspace is currently blocked
+because only about `15 GB` is free on the shared filesystem, below the donor's
+documented temporary-disk requirement. No unrelated workspace data was removed
+to manufacture capacity.
+
 This register tracks strategy and algorithm research separately from measured
 candidate proof. It is a map from idea to local implementation, not a scoreboard.
 
