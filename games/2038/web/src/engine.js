@@ -799,7 +799,7 @@ function advanceAfterRealignment(config, headlines, state) {
     state.round += 1;
     state.cycle = 1;
     state.player.actionsUsed = [];
-    state.player.escalation = config.rounds[state.round - 1].escalationTokens;
+    state.player.escalation = config.rounds[state.round - 1].escalationAvailability;
     state.headlines = shuffle(
       availableHeadlines(headlines, state.round, playProfile(config, state)),
       createRng(`${state.seed}:headlines:${state.round}`)

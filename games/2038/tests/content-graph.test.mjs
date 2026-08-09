@@ -184,6 +184,18 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.ok(rules.includes(`#### ${advancedName}`));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
+  assert.match(
+    simulation.coverage.selectedRules.automated.join("\n"),
+    /Default local Power, Advanced Networks and Links/
+  );
+  assert.match(
+    simulation.coverage.selectedRules.modeledAbstractions.join("\n"),
+    /Default Game recalculates local Power eligibility.*Advanced Play instead recalculates Network reach/
+  );
+  assert.doesNotMatch(
+    simulation.coverage.selectedRules.automated.join("\n"),
+    /adjacency Networks/
+  );
   assert.ok(rulesSource.includes("${terms.technology.advancedGeneration}"));
   assert.ok(rulesSource.includes("${facts.shared.roundsWord | capitalize}"));
   assert.match(rules, /\*\*Standard game:\*\* Four Eras, three turns per player per Era/);

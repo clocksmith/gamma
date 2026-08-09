@@ -924,7 +924,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const player of this.players) {
       player.actionsUsed = [];
       player.selectedAction = null;
-      player.escalation = this.config.rounds[this.round - 1].escalationTokens;
+      player.escalation = this.config.rounds[this.round - 1].escalationAvailability;
       player.tacticModifiers = {};
       player.roundMetrics = {
         capabilityStart: player.capability,

@@ -1533,7 +1533,7 @@ test("declaration readiness is pure, diagnostic, and UI-ready", async () => {
   assert.equal(blocked.failingRequirement, "capability");
 });
 
-test("Production earns Grid-Ready markers and infrastructure changes revoke them", async () => {
+test("Production earns Grid-Ready Facility states and infrastructure changes revoke them", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -2983,7 +2983,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.10.1");
+  assert.equal(first.game.version, "0.10.2");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3561,7 +3561,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.10.1");
+  assert.equal(first.game.version, "0.10.2");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

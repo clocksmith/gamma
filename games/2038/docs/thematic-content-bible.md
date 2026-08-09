@@ -93,9 +93,10 @@ or overage allowance has been selected yet.
 | Power Source reference cards | 2 ordinary designs; production copy count unresolved | Each explains one Energy location | Not declared |
 | Modular map tiles | 13 | All 13 | Not declared |
 | CEOs / Teams / Facilities | 6 / 18 / 24 | 5 / 15 / 20 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Grid-Ready / Generator / Link pieces | 24 / 6 / 12 | 20 / 5 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Scrutiny / Customer markers | 60 / 30 | 50 / 25 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Escalation / AGI Declaration markers | 24 / 6 | 20 / 5 at the supported maximum; all at 6-player exploratory play | Not declared |
+| Generator / Advanced Link pieces | 6 / 12 | 5 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
+| Scrutiny cubes / Customer-track markers | 60 / 6 | 50 / 5 at the supported maximum; all at 6-player exploratory play | Not declared |
+| Escalation-track markers / separate AGI Declaration pieces | 6 / 0 | 5 / 0 at the supported maximum; all track markers at 6-player exploratory play | Not declared |
+| Integrated Grid-Ready faces / starting-grid identities | 24 / 6 Facilities carry these states | 20 / 5 at the supported maximum; all at 6-player exploratory play | Not applicable; these are not separate pieces |
 | Joint Venture / Mega-Cluster pairs | 6 / 6 shared pairs | All 6 pairs of either type may be committed | Not declared |
 | Fusion Demonstrator | 1 shared marker | 1 | Not declared |
 | Other shared markers and tokens | 18 Systemic Risk | All may enter the Audit bag | Not declared |

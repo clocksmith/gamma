@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.10.1` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.2-test`
+**Executable game:** `0.10.2` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.7.0-rc.3-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -119,8 +119,8 @@ The registered `agi_declaration_window_v1` scenario deliberately creates an
 AGI decision instead of waiting for rare natural coverage. Immediately before
 the first Era IV action selection, both common-seed arms receive the same
 focal Capability, Customers, Trust, Compute, Facilities, faction, seat,
-opponents, and policy state. The eligible arm has three Grid-Ready markers;
-the blocked control has two. Scenario configuration is part of the strategy
+opponents, and policy state. The eligible arm has three Grid-Ready Facility
+states; the blocked control has two. Scenario configuration is part of the strategy
 and launch identity, and each observation records the injected state, legal
 window, declaration, and final focal state.
 
@@ -395,8 +395,8 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 ## Current coverage and limits
 
 `three-to-five-profiles-v1` covers the thirteen-tile board, four Eras, all baseline
-Headlines and Escalations, factions, Training, two-source Power, Links,
-Networks, Grid-Ready markers, immediate Power trades, Joint Ventures, Audit,
+Headlines and Escalations, factions, Training, two-source Power, Default local
+Power, Advanced Links and Networks, Grid-Ready Facility states, immediate Power trades, Joint Ventures, Audit,
 Realignment, visible scoring, declarations, and the shared ending. Tactics and
 secret objectives remain deferred.
 
