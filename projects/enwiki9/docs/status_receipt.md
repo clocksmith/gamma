@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T14:13:39+00:00`
+- Generated at UTC: `2026-08-09T14:23:17+00:00`
 
 ## Target State
 
@@ -113,11 +113,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `724`
-- Registered programs: `287`
-- Untracked nonignored entries: `6`
+- Program directories: `726`
+- Registered programs: `289`
+- Untracked nonignored entries: `11`
 - Modified tracked entries: `5`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=35, measured_negative=100, retired=537, track_source_before_evolution=1`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=36, measured_negative=100, retired=538, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -130,7 +130,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `process` | 510,895 | 510,888 | 20,524 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
 | `process` | 510,946 | 510,895 | 5,691,344 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 | `process` | 590,985 | 590,984 | 19,116 | `python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py` |
-| `process` | 591,016 | 590,985 | 8,673,452 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
+| `process` | 591,016 | 590,985 | 9,128,984 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
 
 ## Active Candidate Recent Artifacts
 
@@ -143,13 +143,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `14,481,496`
+- Active process tree RSS KiB: `14,937,028`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-3,995,736`
-- Active process tree decimal margin KiB: `-4,715,871`
+- Active process tree margin KiB (binary): `-4,451,268`
+- Active process tree decimal margin KiB: `-5,171,403`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
 
 ## Contingencies
