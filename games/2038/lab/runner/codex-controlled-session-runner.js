@@ -112,7 +112,7 @@ export function chunkRulesDocument(document, maximumCharacters = 8000) {
   return chunks.map((chunk) => ({ ...chunk, parts: chunks.length }));
 }
 
-function facilitatorResponseSchema(questions, documents) {
+export function facilitatorResponseSchema(questions, documents) {
   return objectSchema({
     answers: {
       type: "array",
@@ -125,12 +125,12 @@ function facilitatorResponseSchema(questions, documents) {
           type: "array",
           minItems: 1,
           maxItems: 4,
-          items: objectSchema({
-            sourceId: { enum: documents.map((document) => document.id) },
-            heading: {
-              enum: [...new Set(documents.flatMap((document) => document.headings))]
-            }
-          })
+          items: {
+            anyOf: documents.map((document) => objectSchema({
+              sourceId: { const: document.id },
+              heading: { enum: document.headings }
+            }))
+          }
         }
       })
     },
