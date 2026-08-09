@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T21:27:48+00:00`
+- Generated at UTC: `2026-08-09T21:54:03+00:00`
 
 ## Target State
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `8,427`
+- RSS samples: `8,742`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `5,691,852`
@@ -56,9 +56,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `991`
-- RSS guard JSON modified UTC: `2026-08-09T21:27:44+00:00`
-- RSS guard JSON SHA-256: `672a2200769f80b0f2998a6b6dfbe586d1c7590c5f93cfc5fb416b6718532edc`
-- RSS samples: `8,427`
+- RSS guard JSON modified UTC: `2026-08-09T21:54:00+00:00`
+- RSS guard JSON SHA-256: `ea1d43d755dd6acc717ba149fec744cdf0d9fa41f8288f44c9e8bc0307642d2d`
+- RSS samples: `8,742`
 - Max sampled single RSS KiB: `5,691,852`
 - Max sampled tree RSS KiB: `5,712,376`
 - Single-process RSS margin KiB: `4,793,908`
@@ -129,11 +129,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `731`
+- Program directories: `735`
 - Registered programs: `293`
-- Untracked nonignored entries: `8`
-- Modified tracked entries: `18`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=40, measured_negative=100, retired=539, track_source_before_evolution=1`
+- Untracked nonignored entries: `25`
+- Modified tracked entries: `5`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=41, measured_negative=100, retired=539, track_source_before_evolution=4`
 
 ## Active Runner Process Table
 
@@ -148,7 +148,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,687,552 | `2026-08-09T21:18:03+00:00` |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,884,160 | `2026-08-09T21:53:07+00:00` |
 
 ## Active RSS
 

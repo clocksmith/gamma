@@ -1,0 +1,74 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py", "--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/kairos108_final_head_dyadic_qm1_guard_v1.json", "--label", "kairos108_final_head_dyadic_qm1_v1", "--", "python3", "tools/kairos108_final_head_dyadic_qm1.py"], "job": {"candidate_id": "kairos108_final_head_dyadic_qm1_v1", "gate_size": 1000000, "job_id": "20260809T213434Z_ea8ad27191", "priority": 1296, "purpose": "oracle", "schema": "enwiki9_adaptive_job_v1", "started_at": "2026-08-09T21:34:44+00:00", "state": "running", "submitted_at": "2026-08-09T21:34:34+00:00", "tags": ["cmix-obias", "dyadic", "final-head", "infrastructure-repair", "kairos108"], "tool": "tools/run_with_rss_guard.py", "tool_args": ["--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/kairos108_final_head_dyadic_qm1_guard_v1.json", "--label", "kairos108_final_head_dyadic_qm1_v1", "--", "python3", "tools/kairos108_final_head_dyadic_qm1.py"]}}
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos108_final_head_dyadic_qm1.py", line 45, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos108_final_head_dyadic_qm1.py", line 41, in main
+    return core.main()
+           ~~~~~~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos105_final_head_dyadic_qm0.py", line 863, in main
+    observer_binary, build_receipts = build_observer(build)
+                                      ~~~~~~~~~~~~~~^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos105_final_head_dyadic_qm0.py", line 210, in build_observer
+    run_command(
+    ~~~~~~~~~~~^
+        [
+        ^
+    ...<8 lines>...
+        cwd=build,
+        ^^^^^^^^^^
+    )
+    ^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos105_final_head_dyadic_qm0.py", line 134, in run_command
+    raise RuntimeError(json.dumps(receipt, indent=2))
+RuntimeError: {
+  "command": [
+    "make",
+    "prof_use",
+    "CC=clang++-17",
+    "CFLAGS_DEFINES=-DSEED=923 -DUPDATE_LIMIT=3000 -DLSTM_NUM_CELLS=256 -DKH_BITLSTM32 -DKH_OBIAS -DKH_OBIAS_CONST_GATE=0.15f",
+    "KH_BITLSTM32_ARCHIVE=1",
+    "KH_TRACE=1",
+    "-j4"
+  ],
+  "cwd": "/home/x/enwiki9-nonproof/results/kairos108_final_head_dyadic_qm1_v1/build",
+  "elapsed_seconds_diagnostic": 0.006379676051437855,
+  "returncode": 2,
+  "output_sha256": "e8206efd022a001bf57fbdf505be479d9d4c06c038a13f1fd6664106d6527d67",
+  "output_tail": "native used\nrm -f *.o\nclang++-17 -DSEED=923 -DUPDATE_LIMIT=3000 -DLSTM_NUM_CELLS=256 -DKH_BITLSTM32 -DKH_OBIAS -DKH_OBIAS_CONST_GATE=0.15f -DKH_TRACE -DKH_BITLSTM32_ARCHIVE -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format  -march=native -mtune=native -O3 -fdata-sections -ffunction-sections -fprofile-use=/home/x/enwiki9-nonproof/results/kairos108_final_head_dyadic_qm1_v1/build/pgo_data -flto src/coder/decoder.cpp src/coder/encoder.cpp src/context-manager.cpp src/contexts/bit-context.cpp src/contexts/bracket-context.cpp src/contexts/combined-context.cpp src/contexts/context-hash.cpp src/contexts/indirect-hash.cpp src/contexts/interval-hash.cpp src/contexts/interval.cpp src/contexts/sparse.cpp src/models/bracket.cpp src/models/byte-model.cpp src/models/direct-hash.cpp src/models/direct.cpp src/models/indirect.cpp src/models/match.cpp src/models/fxcmv1.cpp src/models/ppmd.cpp src/states/nonstationary.cpp src/states/run-map.cpp src/mixer/byte-mixer.cpp src/mixer/mixer-input.cpp src/mixer/mixer.cpp src/mixer/sigmoid.cpp src/mixer/sse.cpp -c src/predictor.cpp\nmake: clang++-17: No such file or directory\nmake: *** [makefile:143: fast] Error 127\nmake: *** Waiting for unfinished jobs....\nrm -f cmix\nrm -f remap\n"
+}
+{
+  "rss_guard": {
+    "label": "kairos108_final_head_dyadic_qm1_v1",
+    "command": [
+      "python3",
+      "tools/kairos108_final_head_dyadic_qm1.py"
+    ],
+    "limit_kib": 9765625,
+    "limit_mode": "max_single",
+    "official_decimal_limit_kib": 9765625,
+    "official_decimal_over_limit_kib": 0,
+    "max_sampled_single_rss_kib": 2448,
+    "max_sampled_tree_rss_kib": 2448,
+    "peak_sample": {
+      "processes": [
+        {
+          "pid": 187819,
+          "rss_kib": 2448
+        }
+      ],
+      "max_single_rss_kib": 2448,
+      "tree_rss_kib": 2448
+    },
+    "latest_sample": {
+      "processes": [],
+      "max_single_rss_kib": 0,
+      "tree_rss_kib": 0
+    },
+    "sample_count": 2,
+    "rss_guard_exceeded": false,
+    "returncode": 1,
+    "status": "complete",
+    "elapsed_s": 5.0026
+  }
+}
