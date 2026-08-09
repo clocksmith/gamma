@@ -11,46 +11,25 @@ Promotion requires exact receipts: result JSON, shadow-coder receipt, or guard
 receipt depending on the lane.
 ```
 
-Strategy pivot: the calibrated `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
-forecast remains the prize-facing baseline. The unchanged FXCM2/full-buffer
-`cmix21` package and fixed PAQ-free `96x2` endpoint are both retired from the
-promotion queue by exact archive economics. The PAQ-free result changes the
-mechanism priority: its bounded substrate remains useful, but the next lane
-must add new causal information. The old CMIX21 complement used original
-article order and is not additive to geometry `96x2`. The corrected
-archive-neutral matched replay is terminal: its best exact full-endpoint blend
-retained `290 B/1M` overall and `355 B/1M` on internal holdout, below the
-`500 B/1M` integration screen. Individual mixer interactions and continuously
-evolved 160/200-cell probes also miss the screen. A separate standalone
-`200x2` construction saves `1,149 B/1M` at the first `1M`, but retains only
-`370 B/1M` on the offset-`500M` reset slice against its `762.424 B/1M` floor.
-The terminal `112+80` wrapper is similarly narrow: it retains only `4 B/1M`
-over native `112` and `353 B/1M` total on that slice. A reproducible
-`264,646`-byte source package saves `23,619` counted
-bytes and moves the same tail forecast to `109,498,879`, but does not repair
-the disjoint failure. A static WRT dictionary boundary swap is separately
-retired after worsening the exact `10M` archive by `1,140` bytes. Recurrent
-capacity remains teacher evidence while selector and width
-work over the recorded geometry endpoints is retired. The exact explicit
-WRT phrase-copy macro is also terminal: every active development configuration
-lost bytes and the frozen holdout action was abstention. A newly matched
-original-order replacement screen is stronger: exact FX2 plus compact `200`
-saves `1,345 B/1M` overall and `1,325 B/1M` on internal holdout with zero
-holdout regressions. That signal is not additive to geometry ordering and the
-two probability streams are not yet a counted one-process decoder. The resulting
-counted pair/layer-0 online residual mixer first failed its immutable BZip2
-accounting screen: its exact cumulative `10M` archive saved `521` bytes
-(`52.1 B/1M`) and missed that frozen archive ceiling by `363` bytes. A
-separately reconstructed `278,825`-byte direct-entry LZMA source ZIP then saved
-`72,117` package bytes without changing the codec. Its counted forecast is
-`109,452,151` (`10.9452151%`), `47,849` bytes below target. Exact decode and
-independent deterministic re-encode now pass under clean decimal memory guards,
-so the frozen candidate is active for the official full-`1G` gate. SRSTC
-remains relevant only when a new WRT-native form supplies independent
-probability against that substrate. `cmix21`,
-`fx2`, residual/SSE, schema tries, embedding
-teachers, MWCC, and I-SSA remain teacher lanes or components; they are not
-promoted without counted target-substrate receipts.
+Current proof boundary: the active target is `105,000,000` counted bytes
+(`10.5000000%`). The best source-bound forecast is
+`endpoint428_gate_dot_fuse_output_update_loop_v1` at `109,389,323` bytes, a
+signed target distance of `+4,389,323` bytes before any successor's additional
+program, model, table, metadata, or framing cost. The verified exact full-1G
+score remains unknown. Older `108M`, `109.5M`, `10.95%`, `109,498,879`, and
+`109,452,151` thresholds or forecasts are historical evidence only and do not
+control new promotion decisions.
+
+The mature negative record closes fixed mixer blends, width/cell adjustments,
+simple residual calibration, explicit phrase-copy commands, and metadata-heavy
+semantic partitions as primary routes. Current work therefore requires a new
+decoder-visible information source or reversible representation with
+million-byte leverage, plus an open self-contained CPU realization. NNCP
+midpoint receipts remain causal teacher evidence but are not prize-facing
+while they depend on closed LibNC and an ineligible runtime. Native promotion
+still requires exact same-object replay, complete package accounting,
+determinism, raw reconstruction, decimal-memory compliance, and eventually an
+official full-1G receipt at or below the active target.
 
 
 ## Archived entries
