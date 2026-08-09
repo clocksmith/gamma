@@ -1346,3 +1346,19 @@ backend sweep is allowed. Midpoint and CMIX16 gains remain non-additive until
 one exact same-object joint replay proves complementarity. No fourth Agent B
 family is authorized before these descendants either reach an exact `100M`
 result or retire.
+
+Conditional MIDAS exactness audit, before materialization: the faithful NNCP
+head is an untied `16,392 x 1,024` bfloat16 output embedding plus a
+`16,392`-entry bias. The first-half cross-entropy gradient of that matrix is a
+sum of at most `32` residual/hidden outer products and therefore has rank at
+most `32` before optimization. The production profile, however, uses Adam
+with `beta1=0`, `beta2=0.9999`, epsilon `1e-8`, and per-parameter clipping.
+Its elementwise second-moment normalization depends on the existing dense
+optimizer state and does not preserve the raw gradient's rank in general.
+Therefore an exact MIDAS child cannot inherit a rank-32 parameter-delta claim.
+The exact `O/OK` arms must first measure the existing head update. A later
+low-rank episodic correction is an approximation requiring its own joint
+arithmetic replay. The output matrix itself is `33,570,816` bytes in bfloat16;
+one float32 second-moment surface is `67,141,632` bytes. A compact descendant
+must reuse or replace those parent surfaces rather than count them as free new
+state.
