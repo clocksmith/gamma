@@ -1799,3 +1799,30 @@ boundaries differ. Only the terminal candidate archive may be compared with
 the `2,042,820`-byte native parent and the frozen `30,000` scientific or
 `33,050` package-aware gain thresholds. This boundary receives zero score and
 does not yet authorize `P/K/O/OK/F/S`.
+
+## 2026-08-09 - SYMBIONT-16 terminal receipt retires layout crossing
+
+Candidate `nncp_symbiont16_p64_cmix21_qm0_v1` completed every frozen encode,
+repeat, and decode control on the exact `1,048,576`-symbol population. `I16`
+is `1,000,845` bytes (`7.635841369628906` bits/symbol), `P64` is `1,458,972`
+bytes (`11.131072998046875` bits/symbol), and `P64R` is `1,459,780` bytes
+(`11.137237548828125` bits/symbol). Every decoded layout exactly reproduced
+its `2,097,152`-byte serialized input. The second `P64` encode reproduced the
+same `1,458,972` bytes and SHA-256
+`d71caa89c87468efbb96e277344b2af48c11b06060c413dc6d28f9c0ebdb2d37`.
+
+Thus the small `808`-byte alignment value is deterministic, but `P64` is
+`458,127` bytes worse than `I16` and `895,363` bytes above the largest whole
+archive allowed by the `4.30`-bits/symbol gate. Peak sampled single-process
+and process-tree RSS were `9,639,156` and `9,669,788` KiB, leaving only
+`126,469` and `95,837` KiB beneath the `9,765,625` KiB decimal limit. The
+guard returned zero without exceeding the limit; timing is diagnostic because
+the host was shared.
+
+Terminal decision: retire NNCP-symbol byte-plane crossing, 64-symbol plane
+transposition, and this unchanged byte-native CMIX backend. Do not sweep
+endian order, block size, plane width, dictionary size, or backend. `TID`,
+`TEXP`, and all CMIX16 descendants are unauthorized. This exact negative
+receipt receives zero score and does not change the `109,389,323` forecast or
+the `4,389,323`-byte debt to `105,000,000`. Receipt:
+`results/nncp_symbiont16_p64_cmix21_qm0_v1/decision.json`.
