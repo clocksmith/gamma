@@ -103,67 +103,28 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 - [part-013.md: 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected through 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics](research_register/archive/part-013.md)
 - [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](research_register/archive/part-014.md)
 - [part-015.md: 2026-08-09 - Exact decision-ID coverage reconciled across the shared register through 2026-08-09 - Exact KAIROS opening retires the final-head dyadic realization](research_register/archive/part-015.md)
+- [part-016.md: 2026-08-09 - GGML output-head gradient and update parity proposed through 2026-08-09 - GGML head q1 exposes the direct-optimizer API boundary](research_register/archive/part-016.md)
 
 ## Current entries
 
-## 2026-08-09 - GGML output-head gradient and update parity proposed
+## 2026-08-09 - Open GGML output-head gradient and update parity passes
 
-Candidate `nncp_ggml_output_head_update_parity_qm0_v1` is the smallest
-NNCP-shaped descendant of the passed open GGML substrate. It does not port the
-transformer. Instead, it binds the frozen four-state LibNC miniature's teacher
-probabilities, initial output matrix and bias, exact named output gradients,
-and final output matrix and bias after one source-native update.
+Candidate `nncp_ggml_output_head_update_parity_qm2_v1` completed GGML's
+two-step accumulator using two identical copies of the same four-state logical
+batch. Duplicating the batch preserves its mean gradient while satisfying the
+optimizer API contract. GGML then matched LibNC's output-matrix gradient within
+`2.98e-8`, bias gradient within `1.50e-8`, final weights within `2.84e-7`, and
+final bias within `2.80e-7`, with zero gradient sign mismatches.
 
-The four post-final-normalization hidden states are reconstructed from the
-identity `G_W = R H / 4`, where `R` is the teacher
-`probability-minus-onehot` matrix and `G_W` is the captured LibNC output-matrix
-gradient. A reconstruction residual gate prevents this proof fixture from
-claiming information it does not contain. GGML then evaluates only
-`hidden -> output projection + bias -> cross entropy`, obtains both parameter
-gradients through its CPU backward graph, and applies the frozen LibNC
-per-tensor L2 clipping and first Adam update in small counted scalar code.
-
-Promotion requires fixture hash identity, hidden-gradient reconstruction error
-at most `2e-6`, GGML output-matrix and bias gradient errors at most `2e-6`
-with zero sign mismatches, final updated head errors at most `2e-5`,
-byte-identical repeated outputs, no uncounted GGML or accelerator dependency,
-compressed source closure at most `2,000,000` bytes, and decimal-memory pass.
-Any miss kills this exact head graph, reduction, clipping, and update contract
-without optimizer or tolerance sweeps. A pass authorizes the open implementation
-substrate for conditional native arm `O` after the production-alphabet bridge
-passes; it grants no compression, mature-transfer, or full-model parity credit.
-
-## 2026-08-09 - GGML head q0 isolates an optimizer-period normalization defect
-
-Candidate `nncp_ggml_output_head_update_parity_qm0_v1` reconstructed the frozen
-four-state hidden fixture within `2.98e-8` and reproduced the LibNC first Adam
-head update within `2.84e-7`. Repeated outputs were byte-identical; the MIT
-source closure was `1,170,500` bytes, had no forbidden dynamic dependency, and
-used at most `895,304 KiB` sampled process-tree RSS.
-
-The gradient gate failed because the probe set GGML `opt_period=2` but supplied
-one physical batch. GGML therefore exposed exactly one-half of the LibNC mean
-gradient: diagnostic nonzero-element median ratios were `0.5` for both matrix
-and bias, with no sign mismatches. The update still matched because the frozen
-first clipped Adam step is invariant to a uniform positive gradient scale.
-
-Verdict: q0 receives zero compression credit and is preserved as a failed
-normalization receipt. One immutable q1 child may change only `opt_period` from
-`2` to `1` and rerun the complete parity gate. Evidence:
-`results/nncp_ggml_output_head_update_parity_qm0_v1/decision.json`, guard
-`results/nncp_ggml_output_head_update_parity_qm0_guard_v1.json`, and job
-`20260809T234726Z_df6daaf1af`.
-
-## 2026-08-09 - GGML head q1 exposes the direct-optimizer API boundary
-
-Candidate `nncp_ggml_output_head_update_parity_qm1_v1` changed only
-`opt_period` from `2` to `1`. GGML then built and executed its direct optimizer
-graph, for which `ggml_opt_grad_acc` returned null; the probe exited `12` before
-emitting a scientific decision. This is zero compression evidence and does not
-reject head parity. One q2 infrastructure child may restore period `2`, submit
-the identical logical batch twice, and read the completed accumulator. Evidence:
-guard `results/nncp_ggml_output_head_update_parity_qm1_guard_v1.json`, log
-`run_logs/adaptive/20260809T235307Z_b80d31c199.log`.
+Repeated outputs were byte-identical. The MIT source closure is `1,170,504`
+bytes with no forbidden dynamic dependency; peak sampled process-tree RSS was
+`833,376 KiB`, below the decimal guard. Verdict: authorize this open CPU
+output-head/update substrate for a compact midpoint descendant if the active
+production-alphabet bridge passes. It proves no compression gain, deep-layer
+parity, mature transfer, or full-model eligibility and receives zero score
+credit. Evidence: `results/nncp_ggml_output_head_update_parity_qm2_v1/decision.json`,
+guard `results/nncp_ggml_output_head_update_parity_qm2_guard_v1.json`, and job
+`20260809T235458Z_763d5e50cf`.
 
 ## 2026-08-09 - GGML open CPU kernel-closure feasibility gate proposed
 
