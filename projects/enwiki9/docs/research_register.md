@@ -2081,3 +2081,24 @@ Backward must still use the real head parameters so their existing Adam
 moments advance, followed by exactly one global optimizer-step advance. This
 is a frozen implementation invariant for `P/K/O/OK/F/S`, receives zero score
 credit, and remains unauthorized until the mature antecedent passes.
+
+## 2026-08-09 - Mature train-length retry crosses first block boundary
+
+The infrastructure retry for
+`nncp_libnc_trainlen32_mature_1998848_qm2_v1` remains live and has now crossed
+its first authoritative input boundary. The NNCP input descriptor advanced
+from `999,424` to `1,998,848` physical bytes. Because the receipt-bound symbol
+artifact is big-endian `uint16`, those positions correspond to `499,712` and
+`999,424` loaded symbols respectively. This proves forward progress through
+the first native block and its intervening compute path; it supersedes any
+interpretation of the earlier stable descriptor as a stalled process.
+
+At the observation, PID `510946` remained compute-active at approximately
+`294%` CPU with `5,691,344 KiB` RSS. The guard reported a healthy running state,
+`5,691,344 KiB` maximum single-process RSS, `5,711,868 KiB` maximum process-tree
+RSS, and no limit violation against `9,765,625 KiB`. The output descriptor
+remained `573,440` physical bytes, which is buffered live state and receives no
+partial score or pass credit. The frozen terminal gates remain candidate
+archive at most `2,012,820` bytes for the `30,000`-byte scientific threshold
+and at most `2,009,770` bytes for the `33,050`-byte package-aware threshold.
+No candidate source, command, population, or threshold was changed.
