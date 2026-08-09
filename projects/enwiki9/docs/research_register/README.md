@@ -3,6 +3,15 @@
 The canonical append target is [research_register.md](../research_register.md).
 Archived files preserve complete H2 records.
 
+## Partition contract
+
+- Keep the current register and every archive part at or below 800 lines.
+- Partition only immediately before an H2 record; never divide one record.
+- Name archive parts monotonically and preserve record order.
+- Update this index, the current register, and the archive index in the same change.
+- Treat the current register as the sole append target; repartition when its next
+  complete record would cross the line ceiling.
+
 ## Archive parts
 
 - [archive/part-001.md: Novelty Portfolio Contract through 2026-07-26 VULCAN V0 event-control result](archive/part-001.md)
@@ -15,3 +24,6 @@ Archived files preserve complete H2 records.
 - [archive/part-008.md: 2026-08-02: LibNC FF2 residual-adjoint replay frozen through 2026-08-02: MÖBIUS-2 JANUS parity token-fill ceiling frozen](archive/part-008.md)
 - [archive/part-009.md: 2026-08-02: MÖBIUS-2 JANUS parity token-fill ceiling is terminal negative through 2026-08-02: endpoint428 runtime-eligibility boundary re-audited](archive/part-009.md)
 - [archive/part-010.md: 2026-08-02: WIKIFORWARD prior-destination lexical ceiling proposed through 2026-08-03: corrected WIKISECTION exact-heading ceiling rejected](archive/part-010.md)
+- [archive/part-011.md: 2026-08-03: WIKIFORWARD prior-destination lexicon QM1 materialized through 2026-08-08 - HELICAL direct-WRT far-history QM3 closure](archive/part-011.md)
+- [archive/part-012.md: 2026-08-08 - NNCP/Endpoint common-raw-block routing closure through 2026-08-08 - NNCP midpoint persistence replicated at 262,144 symbols](archive/part-012.md)
+- [archive/part-013.md: 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected through 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics](archive/part-013.md)
