@@ -2005,3 +2005,25 @@ authorizes the predeclared scalar-state `MIDAS-G1024` approximation. That
 compact descendant separately retains the existing `80%` gain, `128 MiB`
 incremental RSS, `15%` runtime, shifted-control, exact decode, and deterministic
 repeat conditions.
+
+## 2026-08-09 - Native source audit limits mature train-length inheritance
+
+Read-only inspection of the receipt-bound NNCP source establishes that the
+active `train_len=32` surrogate is not merely the exact 64-symbol model with
+one extra optimizer call. `process_block()` sets `n_states` from `seg_len`,
+evaluates and differentiates one complete `n_states` population, calls the
+optimizer, then advances the transformer memory by `train_len`. Consequently,
+changing the native option from 64 to 32 jointly changes graph length,
+attention/memory advancement, and update cadence. The arithmetic predictions
+and learned trajectory all change together.
+
+This gives the terminal mature result a strict interpretation. A pass at
+`30,000` actual bytes proves only that the native 32-symbol realization remains
+useful at the frozen population. A pass at the separately frozen `33,050`
+package-aware gate establishes target-scale authorization under its stated
+normalization. Neither result transfers archive bytes to the exact
+segment-64 midpoint candidate. Only the already frozen `P/K/O/OK/F/S`
+same-object attribution can identify which portion belongs to midpoint state
+refresh, output-head adaptation, deep adaptation, or generic extra optimizer
+capacity. This audit receives zero score credit and does not alter the active
+job or either threshold.
