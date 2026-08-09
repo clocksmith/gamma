@@ -106,6 +106,34 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-09 - GGML open CPU kernel-closure feasibility gate proposed
+
+Candidate `nncp_ggml_open_cpu_kernel_closure_qm0_v1` tests a source-eligibility
+successor to the closed LibNC boundary without claiming NNCP probability or
+archive parity. The frozen donor is the clean local `llama.cpp` repository at
+commit `f4884293809b5227d7307140a942f1bc4176a603`; its GGML implementation and
+top-level license are MIT-licensed source. The candidate exports a reproducible
+source closure, builds a CPU-only static GGML backend, and runs a small fixed
+graph containing matrix multiplication, normalization, nonlinear activation,
+cross-entropy backward propagation, and AdamW state updates twice from fresh
+processes.
+
+Promotion requires successful source-only builds, byte-identical repeated
+final tensor and optimizer-state output, finite values, no dynamic dependency
+on an uncounted GGML or accelerator library, compressed source closure at most
+`2,000,000` bytes, and strict decimal-memory compliance. Any build failure,
+nondeterministic output, missing required primitive, non-finite state,
+uncounted runtime dependency, source-package excess, or memory violation kills
+this exact GGML kernel closure. A pass authorizes an NNCP-shaped miniature
+forward/update parity probe; it does not authorize a full NNCP port, mature
+compression forecast, or score credit.
+
+This is materially distinct from the retired PyTorch/LibNC parity neighborhood:
+it tests a complete open source runtime substrate rather than fitting PyTorch
+operators to undocumented LibNC gradients. Evidence:
+`results/nncp_libnc_open_source_eligibility_audit_qm3_v1/decision.json` and the
+current production-alphabet midpoint bridge.
+
 ## 2026-08-09 - Clean-source cmix-obias opening roundtrip is frozen
 
 Candidate `cmix_obias_source_1m_roundtrip_qm0_v1` closes a qualification gap
