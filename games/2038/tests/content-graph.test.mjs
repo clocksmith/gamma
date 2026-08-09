@@ -371,7 +371,7 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(mapReference, /Each public\s+district touches exactly two operational districts/);
   assert.match(mapReference, /## District effects/);
   assert.match(componentReference, /### Training deck: 50 cards/);
-  assert.match(componentReference, /One starting-grid marker/);
+  assert.match(componentReference, /integrated starting-grid identifier/);
   assert.match(componentReference, /## Defined markers and effects/);
   assert.match(advanced, /## Connected infrastructure/);
   assert.match(advanced, /## Immediate resource trades/);

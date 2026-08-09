@@ -229,7 +229,7 @@ _${content.gameConfig.actions.5.flavorText}_
 
 ## Escalation cards
 
-Spend one Escalation token to select an unlocked card. Each is once per player per game.
+Spend one Escalation availability to select an unlocked card. Each is once per player per game.
 
 ### ${content.escalations.byId.mega_cluster.name} — ${content.escalations.byId.mega_cluster.displayName}
 
@@ -631,4 +631,3 @@ ${content.gameConfig.powerSources.1.publicClaim}
 **${content.gameConfig.powerSources.2.tagline}**
 
 ${content.gameConfig.powerSources.2.publicClaim}
-

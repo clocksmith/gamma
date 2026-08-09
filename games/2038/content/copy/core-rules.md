@@ -83,7 +83,7 @@ unused unless an ability readies one.
    hexes.
 7. **Act:** read the chosen Action card from top to bottom and resolve it from
    the destination.
-8. Exhaust the Core Action, or spend the Escalation token and flip the Escalation.
+8. Exhaust the Core Action, or spend one Escalation availability and flip the Escalation.
 9. Pass Initiative clockwise before the next cycle.
 
 Selection commits the Action card; choose the piece, path, target, and payment
@@ -139,15 +139,15 @@ all tied players, overrides this rule.
 Initiative is an order, not a resource. Passing it after each cycle changes who
 resolves first and who wins unresolved ties; it cannot be traded or retained.
 
-### Escalation tokens and ${terms.systems.escalations}
+### Escalation availability and ${terms.systems.escalations}
 
-Spend one token to select an Era-unlocked Escalation:
+Spend one available Escalation to select an Era-unlocked Escalation:
 
 - Select an ${terms.systems.escalation} instead of a Core Action.
-- Commit and spend one Escalation token.
+- Commit and reduce the Escalation track by one.
 - Flip the ${terms.systems.escalation} after resolution.
 - Each named ${terms.systems.escalation} is usable once per player per game.
-- Unspent Escalation tokens expire at Era end.
+- Unspent Escalation availability expires at Era end.
 - Previously unlocked unused ${terms.systems.escalations} remain available later.
 
 **Global after movement** means the acting piece moves normally, then the
@@ -293,10 +293,10 @@ ${terms.infrastructure.power} is Production capacity and cannot be stored.
   powers that player’s first Facility, requires no recurring payment,
   and cannot supply the additional demand of ${terms.technology.megaCluster}. It is
   dedicated capacity and cannot be sold. Place the
-  player’s starting-grid marker on that first Facility.
+  player’s starting-grid state on that first Facility.
 - Every Facility needs one delivered ${terms.infrastructure.power} to produce.
 - A ${terms.technology.megaCluster} needs two additional ${terms.infrastructure.power}.
-- The starting-grid marker and each Generator’s own or
+- The starting-grid state and each Generator’s own or
   adjacent Facilities are the only legal recipients. A Generator does not need
   to be connected to the starting-grid Facility.
 
@@ -318,14 +318,14 @@ it online.
 - Three turns per player
 - Only Core Actions
 - Beneficial or mildly disruptive ${terms.systems.headlines}
-- No Escalation tokens
+- No Escalation availability
 
 Era I activates movement, Core Actions, Training, the starting grid,
 Facilities, Customers, and Scrutiny.
 
 ### Era II — ${terms.eras.scale} ◆
 
-Each player receives one Escalation token and unlocks:
+Each player receives one Escalation availability and unlocks:
 
 - Generators
 - Mega-Clusters
@@ -364,7 +364,7 @@ Reorganization never resolves or readies another Action.
 
 ### Era III — ${terms.eras.narrative}
 
-Each player receives one Escalation token. Previous ${terms.systems.escalations} remain
+Each player receives one Escalation availability. Previous ${terms.systems.escalations} remain
 unlocked. Joint Ventures and immediate ${terms.infrastructure.power} purchases now enter play.
 
 #### Open Weights
@@ -391,7 +391,7 @@ Then choose one:
 
 ### Era IV — ${terms.eras.claim}
 
-Each player receives two Escalation tokens.
+Each player receives two Escalation availability.
 
 Agent Swarms, ${terms.systems.agi} declarations, Fusion, and exceptional faction programs now
 enter play.
@@ -415,13 +415,13 @@ Requirements:
 Declare ${terms.systems.agi} is global after movement. Check every requirement when it
 resolves.
 
-A **grid-ready Facility** has a Grid-Ready marker earned during a completed
-Production. After allocating Power, place one on each Facility receiving its
-complete Facility demand. Return it immediately if that Facility relocates or
-loses its legal Power connection, or during any Production when it lacks full
-Power.
+A **grid-ready Facility** has its Grid-Ready face showing after earning it
+during a completed Production. After allocating Power, flip each Facility
+receiving its complete Facility demand to Grid-Ready. Flip it back immediately
+if that Facility relocates or loses its legal Power connection, or during any
+Production when it lacks full Power.
 
-To declare ${terms.systems.agi}, check three existing markers. Do not run a second Production
+To declare ${terms.systems.agi}, check three existing Grid-Ready faces. Do not run a second Production
 calculation. A Facility built, moved, linked, or reconnected after the most
 recent Production must operate successfully in a later Production before
 receiving or regaining one. A Facility built in Era IV cannot support a
@@ -452,7 +452,7 @@ blocks construction.
 - Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
 - Ready all six Core Actions.
-- Award Escalation tokens.
+- Award Escalation availability.
 - The lowest-scoring player receives one Public ${terms.actions.research} Grant, spendable as
   one ${terms.resources.runway} or one ${terms.resources.compute}.
 - The highest-scoring player receives the Spotlight:
@@ -519,8 +519,8 @@ every player before advancing to the next box:
    capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
 3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
    allocate it only to legal local Facilities and Mega-Clusters.
-   Place a Grid-Ready marker on every Facility receiving its complete demand;
-   return the marker from every Facility that does not.
+   Flip every Facility receiving its complete demand to Grid-Ready; flip every
+   Facility that does not back to its normal face.
 4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number
@@ -685,7 +685,7 @@ Choose:
 - Move one Facility at the acting piece’s destination to an adjacent legal
   Facility space for one ${terms.resources.runway}.
 
-A moved Facility carries its starting-grid marker, contract halves, and
+A moved Facility carries its starting-grid state, contract halves, and
 ${terms.technology.megaCluster} host token. Recalculate Power eligibility and
 contract activity after movement. Its contract-host identity stays fixed.
 
