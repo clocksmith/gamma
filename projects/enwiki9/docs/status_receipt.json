@@ -7,54 +7,56 @@
     "scope_bytes": 1998848,
     "status": "running gate"
   },
-  "active_candidate_recent_artifacts": [],
+  "active_candidate_recent_artifacts": [
+    {
+      "bytes": 1097728,
+      "mtime_utc": "2026-08-09T05:14:34+00:00",
+      "path": "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp"
+    }
+  ],
   "active_gate": {
     "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
-    "driver_result_json": "receipt.json",
+    "driver_result_json": null,
     "driver_result_json_present": false,
-    "evidence": "gate decision is receipt_incomplete; wait for terminal receipts",
+    "evidence": "gate decision is incomplete; wait for terminal receipts",
     "label": "active gate",
-    "latest_sample_max_single_rss_kib": null,
-    "latest_sample_tree_rss_kib": null,
-    "max_sampled_single_rss_kib": null,
-    "max_sampled_tree_rss_kib": null,
     "next_action": "wait_for_gate_receipts",
-    "program_id": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
-    "returncode": null,
-    "rss_guard_json": "encode.guard.json",
+    "program_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "rss_guard_json": "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
+    "rss_guard_json_bytes": null,
+    "rss_guard_json_mtime_utc": null,
     "rss_guard_json_present": false,
-    "rss_guard_status": null,
-    "sample_count": null,
+    "rss_guard_json_sha256": null,
     "scope_bytes": 1998848,
-    "source": "live_speedlab_rss_guard",
-    "status": "receipt_incomplete"
+    "source": "gate_decision",
+    "status": "incomplete"
   },
   "active_processes": {
     "active_cmix_mode": "no_preprocess_compress",
     "active_proc_io": {
       "cancelled_write_bytes": 0,
-      "rchar": 4332065,
+      "rchar": 5405086,
       "read_bytes": 0,
-      "syscr": 796,
-      "syscw": 1131,
-      "wchar": 2196988,
+      "syscr": 927,
+      "syscw": 6335,
+      "wchar": 3037163,
       "write_bytes": 0
     },
     "active_rows": [
       {
-        "args": "/bin/bash -lc set -euo pipefail CAND=/home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1 PKG=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/run/cmix.head_assets HEAD=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/models/bitlstm32/refit_golden256_fp16.blob mkdir -p \"$CAND/backend/baseline\" \"$CAND/backend/residual\" cp \"$PKG\" \"$CAND/backend/baseline/cmix\"; chmod +x \"$CAND/backend/baseline/cmix\" cp \"$PKG\" \"$CAND/backend/residual/cmix\"; chmod +x \"$CAND/backend/residual/cmix\" cp \"$HEAD\" \"$CAND/head.blob\" df -B1 --output=avail \"$CAND\" | tail -n 1 cd \"$CAND/backend/baseline\" KH_BITLSTM32=\"$CAND/head.blob\" CMIX_PPM_RSS_MB=8500 python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json encode.guard.json -- ./cmix -e \"$CAND/original.bin\" out.cmix sha256sum out.cmix archive9 stat -c '%n %s' out.cmix archive9",
-        "pgid": 1768216,
-        "pid": 1768216,
+        "args": "python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate cmix_obias_helical_xmlsafe_residual_backend_qm4_v1 --max-workers 1",
+        "pgid": 2013691,
+        "pid": 2013691,
         "ppid": 2193714,
-        "rss_kib": 3576,
-        "stat": "Ss"
+        "rss_kib": 21716,
+        "stat": "Ssl"
       },
       {
-        "args": "python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json encode.guard.json -- ./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix",
-        "pgid": 1768216,
-        "pid": 1768314,
-        "ppid": 1768216,
-        "rss_kib": 9892,
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json results/cmix_obias_helical_xmlsafe_residual_backend_qm4_guard_v1.json --label cmix_obias_helical_xmlsafe_residual_backend_qm4_v1 -- python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py",
+        "pgid": 2013691,
+        "pid": 2013778,
+        "ppid": 2013691,
+        "rss_kib": 16836,
         "stat": "S"
       },
       {
@@ -74,22 +76,6 @@
         "stat": "S+"
       },
       {
-        "args": "python3 tools/enwiki9_lab.py run --candidate nncp_libnc_exact_midsegment32_65536_qm3_v1 --max-workers 1 --min-free-mib 12000",
-        "pgid": 3459502,
-        "pid": 3459502,
-        "ppid": 2229505,
-        "rss_kib": 10412,
-        "stat": "Ssl"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json results/nncp_libnc_exact_midsegment32_65536_qm3_guard_v1.json --label nncp_libnc_exact_midsegment32_65536_qm3_v1 -- python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py",
-        "pgid": 3459502,
-        "pid": 3459586,
-        "ppid": 3459502,
-        "rss_kib": 10488,
-        "stat": "S"
-      },
-      {
         "args": "python3 tools/enwiki9_lab.py run --candidate nncp_symbiont16_p64_cmix21_qm0_v1 --max-workers 1 --min-free-mib 12000",
         "pgid": 3581156,
         "pid": 3581156,
@@ -102,23 +88,31 @@
         "pgid": 3581156,
         "pid": 3581248,
         "ppid": 3581156,
-        "rss_kib": 10476,
+        "rss_kib": 10500,
         "stat": "S+"
       },
       {
-        "args": "./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix",
-        "pgid": 1768319,
-        "pid": 1768319,
-        "ppid": 1768314,
-        "rss_kib": 8328920,
-        "stat": "Rs"
+        "args": "python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py",
+        "pgid": 2013786,
+        "pid": 2013786,
+        "ppid": 2013778,
+        "rss_kib": 19120,
+        "stat": "Ss"
+      },
+      {
+        "args": "./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix",
+        "pgid": 2013786,
+        "pid": 2013815,
+        "ppid": 2013786,
+        "rss_kib": 8493628,
+        "stat": "R"
       },
       {
         "args": "python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py",
         "pgid": 2427832,
         "pid": 2427832,
         "ppid": 2427829,
-        "rss_kib": 12572,
+        "rss_kib": 12576,
         "stat": "Ss"
       },
       {
@@ -126,84 +120,68 @@
         "pgid": 2427832,
         "pid": 2427873,
         "ppid": 2427832,
-        "rss_kib": 5677924,
+        "rss_kib": 5679244,
         "stat": "Rl"
-      },
-      {
-        "args": "python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py",
-        "pgid": 3459587,
-        "pid": 3459587,
-        "ppid": 3459586,
-        "rss_kib": 15948,
-        "stat": "Ss"
       },
       {
         "args": "python3 tools/nncp_symbiont16_p64_cmix21_qm0.py",
         "pgid": 3581255,
         "pid": 3581255,
         "ppid": 3581248,
-        "rss_kib": 18492,
+        "rss_kib": 23420,
         "stat": "Ss"
       },
       {
-        "args": "/tmp/nncp-exact-midsegment32-65536-ybc819hu/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --preprocess 16384,512 --midsegment32 --max_size 65536 c /home/x/enwiki9-nonproof/results/fx2_full_attribution_trace_1m_v1.restored /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_exact_midsegment32_65536_qm3_v1/candidate.nncp",
-        "pgid": 3459587,
-        "pid": 4080933,
-        "ppid": 3459587,
-        "rss_kib": 5764416,
-        "stat": "Sl"
-      },
-      {
-        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-1-ywtf65tz/in /tmp/symbiont-P64-1-ywtf65tz/out",
+        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-2-9f97oftb/in /tmp/symbiont-P64-2-9f97oftb/out",
         "pgid": 3581255,
-        "pid": 208576,
+        "pid": 1774751,
         "ppid": 3581255,
-        "rss_kib": 9357456,
+        "rss_kib": 9629576,
         "stat": "R"
       }
     ],
     "active_scorer_observed": true,
     "active_temp_io": {
       "input_bytes": 2097152,
-      "input_mtime_utc": "2026-08-09T03:17:39+00:00",
-      "input_path": "/tmp/symbiont-P64-1-ywtf65tz/in",
-      "output_bytes": 90112,
-      "output_mtime_utc": "2026-08-09T03:21:35+00:00",
-      "output_path": "/tmp/symbiont-P64-1-ywtf65tz/out",
+      "input_mtime_utc": "2026-08-09T05:30:20+00:00",
+      "input_path": "/tmp/symbiont-P64-2-9f97oftb/in",
+      "output_bytes": 843776,
+      "output_mtime_utc": "2026-08-09T06:06:05+00:00",
+      "output_path": "/tmp/symbiont-P64-2-9f97oftb/out",
       "output_temp_bytes": 2097157,
-      "output_temp_mtime_utc": "2026-08-09T03:17:39+00:00",
-      "output_temp_path": "/tmp/symbiont-P64-1-ywtf65tz/out.cmix.temp"
+      "output_temp_mtime_utc": "2026-08-09T05:30:20+00:00",
+      "output_temp_path": "/tmp/symbiont-P64-2-9f97oftb/out.cmix.temp"
     },
-    "active_tree_decimal_10gb_margin_kib": -19485643,
-    "active_tree_decimal_10gb_over_kib": 19485643,
-    "active_tree_margin_kib": -18765508,
-    "active_tree_rss_kib": 29251268,
-    "active_tree_rss_over_guard_kib": 18765508,
+    "active_tree_decimal_10gb_margin_kib": -14171687,
+    "active_tree_decimal_10gb_over_kib": 14171687,
+    "active_tree_margin_kib": -13451552,
+    "active_tree_rss_kib": 23937312,
+    "active_tree_rss_over_guard_kib": 13451552,
     "active_tree_rss_warning": "active process tree RSS crossed the local numeric guard; the running kill guard is single-process",
     "cmix_rows": [
       {
-        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-1-ywtf65tz/in /tmp/symbiont-P64-1-ywtf65tz/out",
+        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-2-9f97oftb/in /tmp/symbiont-P64-2-9f97oftb/out",
         "pgid": 3581255,
-        "pid": 208576,
+        "pid": 1774751,
         "ppid": 3581255,
-        "rss_kib": 9357456,
+        "rss_kib": 9629576,
         "stat": "R"
       }
     ],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "max_cmix_process": {
-      "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-1-ywtf65tz/in /tmp/symbiont-P64-1-ywtf65tz/out",
+      "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-2-9f97oftb/in /tmp/symbiont-P64-2-9f97oftb/out",
       "pgid": 3581255,
-      "pid": 208576,
+      "pid": 1774751,
       "ppid": 3581255,
-      "rss_kib": 9357456,
+      "rss_kib": 9629576,
       "stat": "R"
     },
     "research_rows": [],
     "rss_guard_kib": 10485760,
-    "single_process_decimal_10gb_margin_kib": 408169,
-    "single_process_margin_kib": 1128304
+    "single_process_decimal_10gb_margin_kib": 136049,
+    "single_process_margin_kib": 856184
   },
   "adaptive_jobs": {
     "claimable_pending_job_count": 0,
@@ -222,16 +200,6 @@
         "worker_pid_live": true
       },
       {
-        "candidate_id": "nncp_libnc_exact_midsegment32_65536_qm3_v1",
-        "gate_size": 65536,
-        "job_id": "20260809T015851Z_f0f7c41ba9",
-        "path": "projects/enwiki9/operations/adaptive/running/000_20260809T015851Z_f0f7c41ba9.json",
-        "started_at": "2026-08-09T01:58:55+00:00",
-        "state": "running",
-        "worker_pid": 3459586,
-        "worker_pid_live": true
-      },
-      {
         "candidate_id": "nncp_symbiont16_p64_cmix21_qm0_v1",
         "gate_size": 1048576,
         "job_id": "20260809T020913Z_92be967fba",
@@ -239,6 +207,16 @@
         "started_at": "2026-08-09T02:09:19+00:00",
         "state": "running",
         "worker_pid": 3581248,
+        "worker_pid_live": true
+      },
+      {
+        "candidate_id": "cmix_obias_helical_xmlsafe_residual_backend_qm4_v1",
+        "gate_size": 249407080,
+        "job_id": "20260809T055112Z_b3d4d1e586",
+        "path": "projects/enwiki9/operations/adaptive/running/000_20260809T055112Z_b3d4d1e586.json",
+        "started_at": "2026-08-09T05:51:12+00:00",
+        "state": "running",
+        "worker_pid": 2013778,
         "worker_pid_live": true
       }
     ]
@@ -323,13 +301,14 @@
         "blocked_dependency": 33,
         "candidate": 31,
         "measured_negative": 100,
-        "retired": 532
+        "retired": 532,
+        "track_source_before_evolution": 3
       },
-      "directories": 1719,
-      "file_entries": 8072,
-      "ignored_entries": 4089,
-      "modified_tracked_entries": 0,
-      "program_directories": 714,
+      "directories": 1724,
+      "file_entries": 8100,
+      "ignored_entries": 4106,
+      "modified_tracked_entries": 4,
+      "program_directories": 717,
       "registered_programs": 282,
       "top_level_file_entries": {
         ".claude": 1,
@@ -338,21 +317,21 @@
         "agents": 5,
         "contracts": 9,
         "data": 7,
-        "docs": 371,
+        "docs": 374,
         "enwiki9_segment_bundle": 6,
         "external": 174,
         "lib": 4,
-        "operations": 894,
+        "operations": 897,
         "patches": 36,
-        "programs": 2239,
-        "results": 3165,
-        "run_logs": 605,
+        "programs": 2242,
+        "results": 3178,
+        "run_logs": 608,
         "skills": 4,
         "tests": 58,
-        "tools": 472
+        "tools": 475
       },
       "tracked_entries": 4520,
-      "untracked_nonignored_entries": 0
+      "untracked_nonignored_entries": 13
     }
   },
   "certificate_active_candidate": {
@@ -376,43 +355,36 @@
     "label": "blocker",
     "status": "open"
   },
-  "contingencies": null,
+  "contingencies": {
+    "if_passes": {
+      "action": "record pass and apply candidate target-gate promotion rule",
+      "next_scope_bytes": null,
+      "reason": "non-cmix candidates may need archive ceilings, target-gate metadata, or candidate-specific guard labels"
+    },
+    "if_roundtrip_or_determinism_fails": {
+      "action": "record failure and do not promote",
+      "reason": "compression evidence is not a deterministic constructive upper-bound row"
+    },
+    "if_rss_fails": {
+      "action": "record RSS failure and retire or repackage this integration shape",
+      "lower_memory_suggestion": null
+    }
+  },
   "gate_decision": {
-    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
-    "claim_rule": "A speedlab prefix is not a constructive 1G score.",
-    "command": [
-      "./cmix",
-      "-e",
-      "$CAND/original.bin",
-      "out.cmix",
-      "sha256sum",
-      "out.cmix",
-      "archive9",
-      "stat",
-      "-c",
-      "%n %s",
-      "out.cmix",
-      "archive9"
-    ],
-    "driver_result_json": "receipt.json",
+    "candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "driver_result_json": null,
+    "driver_result_json_bytes": null,
+    "driver_result_json_mtime_utc": null,
     "driver_result_json_present": false,
-    "guard_pid": 1768216,
-    "input_path": "out.cmix",
-    "latest_sample_max_single_rss_kib": null,
-    "latest_sample_tree_rss_kib": null,
-    "max_sampled_single_rss_kib": null,
-    "max_sampled_tree_rss_kib": null,
+    "driver_result_json_sha256": null,
     "next_action": "wait_for_gate_receipts",
-    "output_path": "archive9",
-    "promotion_authorized": false,
-    "returncode": null,
-    "rss_guard_json": "encode.guard.json",
+    "rss_guard_json": "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
+    "rss_guard_json_bytes": null,
+    "rss_guard_json_mtime_utc": null,
     "rss_guard_json_present": false,
-    "rss_guard_status": null,
-    "sample_count": null,
-    "scope_bytes": null,
-    "source": "live_speedlab_rss_guard",
-    "verdict": "receipt_incomplete"
+    "rss_guard_json_sha256": null,
+    "scope_bytes": 1998848,
+    "verdict": "incomplete"
   },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
@@ -425,30 +397,51 @@
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
+    "candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
     "claim_rule": "A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command.",
     "classification": "not_persisted_running",
     "is_live": false,
-    "matching_adaptive_job_count": 0,
-    "matching_adaptive_worker_live": false,
+    "matching_adaptive_job_count": 1,
+    "matching_adaptive_worker_live": true,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
     "persisted_running": false,
-    "scope_bytes": null
+    "scope_bytes": 1998848
   },
-  "generated_at_utc": "2026-08-09T03:21:46+00:00",
+  "generated_at_utc": "2026-08-09T06:06:11+00:00",
   "handoff": {
     "active_scorer_observed": true,
-    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
+    "candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
-    "command_source": "none while gate is non-terminal",
-    "gate_mutation_allowed": false,
+    "command_source": "operator_action.next_gate_command",
+    "gate_mutation_allowed": true,
     "gate_next_action": "wait_for_gate_receipts",
-    "gate_verdict": "receipt_incomplete",
+    "gate_verdict": "incomplete",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "wait_for_gate_receipts",
-    "scope_bytes": null,
+    "next_gate_command": [
+      "python3",
+      "projects/enwiki9/tools/run_with_rss_guard.py",
+      "--limit-kib",
+      "10485760",
+      "--official-decimal-limit-kib",
+      "9765625",
+      "--sample-interval",
+      "1",
+      "--guard-json",
+      "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
+      "--label",
+      "cmix21_gate_fxcmrcm20_1998848_determinism",
+      "--",
+      "python3",
+      "projects/enwiki9/lib/driver.py",
+      "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+      "--limit",
+      "1998848",
+      "--check-determinism"
+    ],
+    "recommended_action": "launch_active_gate",
+    "scope_bytes": 1998848,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
@@ -464,22 +457,43 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
-    "expected_active_scope_bytes": null,
+    "expected_active_candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "expected_active_scope_bytes": 1998848,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
-    "expected_scope_bytes": null,
+    "expected_candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "expected_scope_bytes": 1998848,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "wait_for_gate_receipts",
-    "reason": "the gate state is incomplete and cannot drive a mutation yet",
-    "safe_to_launch_gate": false
+    "action": "launch_active_gate",
+    "next_gate_command": [
+      "python3",
+      "projects/enwiki9/tools/run_with_rss_guard.py",
+      "--limit-kib",
+      "10485760",
+      "--official-decimal-limit-kib",
+      "9765625",
+      "--sample-interval",
+      "1",
+      "--guard-json",
+      "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
+      "--label",
+      "cmix21_gate_fxcmrcm20_1998848_determinism",
+      "--",
+      "python3",
+      "projects/enwiki9/lib/driver.py",
+      "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+      "--limit",
+      "1998848",
+      "--check-determinism"
+    ],
+    "reason": "the active candidate and scope have no guard or driver receipt yet",
+    "safe_to_launch_gate": true
   },
   "operator_logs": {
     "latest_delayed_status_log": "projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log",
@@ -487,26 +501,26 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_decimal_10gb_margin_kib": 408169,
+    "active_cmix_decimal_10gb_margin_kib": 136049,
     "active_cmix_mode": "no_preprocess_compress",
-    "active_cmix_pid": 208576,
-    "active_cmix_rss_kib": 9357456,
-    "active_cmix_single_process_margin_kib": 1128304,
-    "active_process_tree_decimal_10gb_margin_kib": -19485643,
-    "active_process_tree_margin_kib": -18765508,
-    "active_process_tree_rss_kib": 29251268,
+    "active_cmix_pid": 1774751,
+    "active_cmix_rss_kib": 9629576,
+    "active_cmix_single_process_margin_kib": 856184,
+    "active_process_tree_decimal_10gb_margin_kib": -14171687,
+    "active_process_tree_margin_kib": -13451552,
+    "active_process_tree_rss_kib": 23937312,
     "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
+    "candidate": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     "claimable_pending_adaptive_jobs": 0,
-    "command_source": "none while gate is non-terminal",
+    "command_source": "operator_action.next_gate_command",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": "receipt.json",
+    "driver_result_json": null,
     "driver_result_present": false,
-    "gate_mutation_allowed": false,
+    "gate_mutation_allowed": true,
     "gate_next_action": "wait_for_gate_receipts",
-    "gate_verdict": "receipt_incomplete",
+    "gate_verdict": "incomplete",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 27,
@@ -521,15 +535,36 @@
     "max_sampled_single_rss_kib": null,
     "max_sampled_tree_decimal_10gb_margin_kib": null,
     "max_sampled_tree_decimal_10gb_safe": null,
-    "operator_action": "wait_for_gate_receipts",
+    "next_gate_command": [
+      "python3",
+      "projects/enwiki9/tools/run_with_rss_guard.py",
+      "--limit-kib",
+      "10485760",
+      "--official-decimal-limit-kib",
+      "9765625",
+      "--sample-interval",
+      "1",
+      "--guard-json",
+      "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
+      "--label",
+      "cmix21_gate_fxcmrcm20_1998848_determinism",
+      "--",
+      "python3",
+      "projects/enwiki9/lib/driver.py",
+      "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+      "--limit",
+      "1998848",
+      "--check-determinism"
+    ],
+    "operator_action": "launch_active_gate",
     "pending_adaptive_jobs": 27,
-    "rss_guard_json": "encode.guard.json",
+    "rss_guard_json": "projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json",
     "rss_guard_json_sha256": null,
     "rss_guard_present": false,
     "rss_guard_status": null,
     "rss_samples": null,
-    "safe_to_launch_gate": false,
-    "scope_bytes": null,
+    "safe_to_launch_gate": true,
+    "scope_bytes": 1998848,
     "single_rss_margin_kib": null,
     "terminal_verdict_present": false
   },

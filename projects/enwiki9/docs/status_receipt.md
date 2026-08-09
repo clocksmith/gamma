@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T03:21:46+00:00`
+- Generated at UTC: `2026-08-09T06:06:11+00:00`
 
 ## Target State
 
@@ -12,9 +12,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `cmix_obias_helical_xmlsafe_qm4_baseline_encode`
-- Scope bytes: `n/a`
-- Gate verdict: `receipt_incomplete`
+- Candidate: `nncp_libnc_trainlen32_mature_1998848_qm2_v1`
+- Scope bytes: `1,998,848`
+- Gate verdict: `incomplete`
 - Gate next action: `wait_for_gate_receipts`
 - Active scorer observed: `true`
 - Active cmix mode: `no_preprocess_compress`
@@ -29,28 +29,28 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch candidate gate: `false`
+- Safe to launch candidate gate: `true`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
 - Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
-- Command source: `none while gate is non-terminal`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
 ## Active Gate
 
-- Gate verdict: `receipt_incomplete`
+- Gate verdict: `incomplete`
 - Next action: `wait_for_gate_receipts`
-- Candidate: `cmix_obias_helical_xmlsafe_qm4_baseline_encode`
-- Scope bytes: `n/a`
-- Driver result JSON: `receipt.json`
+- Candidate: `nncp_libnc_trainlen32_mature_1998848_qm2_v1`
+- Scope bytes: `1,998,848`
+- Driver result JSON: `not present`
 - Driver result present: `false`
-- RSS guard JSON: `encode.guard.json`
+- RSS guard JSON: `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json`
 - RSS guard present: `false`
 - Active scorer observed: `true`
 - Live gate: `false`
 - Liveness classification: `not_persisted_running`
-- Matching adaptive jobs: `0`
+- Matching adaptive jobs: `1`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command.`
@@ -67,8 +67,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `cmix_obias_helical_xmlsafe_qm4_baseline_encode`
-- Expected scope bytes: `n/a`
+- Expected candidate: `nncp_libnc_trainlen32_mature_1998848_qm2_v1`
+- Expected scope bytes: `1,998,848`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -79,8 +79,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `cmix_obias_helical_xmlsafe_qm4_baseline_encode`
-- Expected active scope bytes: `n/a`
+- Expected active candidate: `nncp_libnc_trainlen32_mature_1998848_qm2_v1`
+- Expected active scope bytes: `1,998,848`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -90,19 +90,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Action
 
-- Safe to launch candidate gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Safe to launch candidate gate: `true`
+- Action: `launch_active_gate`
+- Reason: `the active candidate and scope have no guard or driver receipt yet`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
 ## Handoff
 
 - Terminal verdict present: `false`
-- Gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
-- Command source: `none while gate is non-terminal`
+- Gate mutation allowed: `true`
+- Recommended action: `launch_active_gate`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
+- Next gate command:
+```bash
+python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/gate_1998848_determinism_rss_guard.json --label cmix21_gate_fxcmrcm20_1998848_determinism -- python3 projects/enwiki9/lib/driver.py nncp_libnc_trainlen32_mature_1998848_qm2_v1 --limit 1998848 --check-determinism
+```
 
 ## Operator Logs
 
@@ -113,62 +117,68 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `714`
+- Program directories: `717`
 - Registered programs: `282`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=31, measured_negative=100, retired=532`
+- Untracked nonignored entries: `13`
+- Modified tracked entries: `4`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=31, measured_negative=100, retired=532, track_source_before_evolution=3`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `rss_guard` | 1,768,216 | 2,193,714 | 3,576 | `/bin/bash -lc set -euo pipefail CAND=/home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1 PKG=/home/x/enwiki9-nonproof/cmix-ob...` |
-| `rss_guard` | 1,768,314 | 1,768,216 | 9,892 | `python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760...` |
+| `process` | 2,013,691 | 2,193,714 | 21,716 | `python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate cmix_obias_helical_xmlsafe_residual_backend_qm4_v1 --max-workers 1` |
+| `rss_guard` | 2,013,778 | 2,013,691 | 16,836 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
 | `process` | 2,427,744 | 2,229,505 | 10,144 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
 | `rss_guard` | 2,427,829 | 2,427,744 | 10,224 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 3,459,502 | 2,229,505 | 10,412 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_exact_midsegment32_65536_qm3_v1 --max-workers 1 --min-free-mib 12000` |
-| `rss_guard` | 3,459,586 | 3,459,502 | 10,488 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `process` | 3,581,156 | 2,229,505 | 10,328 | `python3 tools/enwiki9_lab.py run --candidate nncp_symbiont16_p64_cmix21_qm0_v1 --max-workers 1 --min-free-mib 12000` |
-| `rss_guard` | 3,581,248 | 3,581,156 | 10,476 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 1,768,319 | 1,768,314 | 8,328,920 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
-| `process` | 2,427,832 | 2,427,829 | 12,572 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
-| `process` | 2,427,873 | 2,427,832 | 5,677,924 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
-| `process` | 3,459,587 | 3,459,586 | 15,948 | `python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py` |
-| `process` | 3,581,255 | 3,581,248 | 18,492 | `python3 tools/nncp_symbiont16_p64_cmix21_qm0.py` |
-| `process` | 4,080,933 | 3,459,587 | 5,764,416 | `/tmp/nncp-exact-midsegment32-65536-ybc819hu/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --preprocess 16384,512 --midsegment32 --max_size 65536 c ...` |
-| `process` | 208,576 | 3,581,255 | 9,357,456 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-1-ywtf65tz/in /tmp/symbiont-P64-1-ywtf65tz/out` |
+| `rss_guard` | 3,581,248 | 3,581,156 | 10,500 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
+| `process` | 2,013,786 | 2,013,778 | 19,120 | `python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py` |
+| `process` | 2,013,815 | 2,013,786 | 8,493,628 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
+| `process` | 2,427,832 | 2,427,829 | 12,576 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
+| `process` | 2,427,873 | 2,427,832 | 5,679,244 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
+| `process` | 3,581,255 | 3,581,248 | 23,420 | `python3 tools/nncp_symbiont16_p64_cmix21_qm0.py` |
+| `process` | 1,774,751 | 3,581,255 | 9,629,576 | `/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-P64-2-9f97oftb/in /tmp/symbiont-P64-2-9f97oftb/out` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,097,728 | `2026-08-09T05:14:34+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `208576`
+- Max cmix PID: `1774751`
 - Active cmix mode: `no_preprocess_compress`
-- Max cmix RSS KiB: `9,357,456`
-- Active process tree RSS KiB: `29,251,268`
+- Max cmix RSS KiB: `9,629,576`
+- Active process tree RSS KiB: `23,937,312`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,128,304`
-- Single-process decimal margin KiB: `408,169`
-- Active process tree margin KiB (binary): `-18,765,508`
-- Active process tree decimal margin KiB: `-19,485,643`
-- Temp input path: `/tmp/symbiont-P64-1-ywtf65tz/in`
-- Temp output path: `/tmp/symbiont-P64-1-ywtf65tz/out`
-- Temp output staging path: `/tmp/symbiont-P64-1-ywtf65tz/out.cmix.temp`
+- Single-process binary margin KiB: `856,184`
+- Single-process decimal margin KiB: `136,049`
+- Active process tree margin KiB (binary): `-13,451,552`
+- Active process tree decimal margin KiB: `-14,171,687`
+- Temp input path: `/tmp/symbiont-P64-2-9f97oftb/in`
+- Temp output path: `/tmp/symbiont-P64-2-9f97oftb/out`
+- Temp output staging path: `/tmp/symbiont-P64-2-9f97oftb/out.cmix.temp`
 - Temp input bytes: `2,097,152`
-- Temp output bytes: `90,112`
+- Temp output bytes: `843,776`
 - Temp output staging bytes: `2,097,157`
-- Temp input modified UTC: `2026-08-09T03:17:39+00:00`
-- Temp output modified UTC: `2026-08-09T03:21:35+00:00`
-- Temp output staging modified UTC: `2026-08-09T03:17:39+00:00`
+- Temp input modified UTC: `2026-08-09T05:30:20+00:00`
+- Temp output modified UTC: `2026-08-09T06:06:05+00:00`
+- Temp output staging modified UTC: `2026-08-09T05:30:20+00:00`
 - Process read bytes: `0`
 - Process write bytes: `0`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
+
+## Contingencies
+
+- If current gate passes: `record pass and apply candidate target-gate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 
