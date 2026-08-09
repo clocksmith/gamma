@@ -2234,3 +2234,45 @@ least `ceil(0.10 * G_F)`, and every matched original-coordinate shadow stream
 must be positive. This is not a fourth family or a parameter sweep; it closes
 the missing backend-by-alphabet cell before spending evidence on a compact
 production head.
+
+## 2026-08-09 - Full-dictionary native bridge contract bound
+
+Direct source audit closes the bridge's preprocessing and inverse semantics.
+For command `c`, supplying `--dict` sets NNCP's preprocessing flag, treats the
+input as an already-preprocessed big-endian U16 symbol stream, embeds a
+compressed copy of the supplied dictionary in the archive, and records the
+preprocessed symbol count. Ordinary command `d` extracts that embedded
+dictionary, arithmetic-decodes the U16 symbols, and invokes `word_decode()` to
+produce raw output. The bridge decoder therefore requires no external
+dictionary; the dictionary bytes are present and counted in both `P` and `F`.
+
+The frozen production bridge population is now byte-bound:
+
+```text
+full preprocessed artifact SHA-256   c82bfca1...f9605a5
+dictionary SHA-256                   950683b4...5a0a1
+modeled symbols                      65,536
+modeled U16 bytes                    131,072
+modeled U16 prefix SHA-256           6e4e2e7d...e4cb
+expected raw bytes                   322,978
+expected raw SHA-256                 a5daeae0...b7e9
+```
+
+The expected raw artifact already exists under the receipt-bound
+`nncp_midsegment32_update_qm0_v1` result and passes a direct `cmp` against the
+first `322,978` canonical corpus bytes. The native commands must be exactly the
+same except for the candidate's serialized midpoint schedule:
+
+```text
+P: --profile enwik9 --n_symb 16392 --dict DICTIONARY --max_size 65536
+F: --profile enwik9 --n_symb 16392 --dict DICTIONARY --midsegment32
+   --max_size 65536
+```
+
+Both use train length 64 and `d_pos=320` from the unchanged profile. Bridge
+evidence requires one clean-source parent encode, two patched candidate
+encodes, one patched candidate decode, parsed vocabulary `16,392` and schedule
+header, candidate repeat identity, exact `322,978`-byte raw identity, fully
+counted source package, and the decimal-memory guard. Cross-arm size comparison
+is valid because both archives embed the identical dictionary; no dictionary
+byte may be subtracted as common free information.
