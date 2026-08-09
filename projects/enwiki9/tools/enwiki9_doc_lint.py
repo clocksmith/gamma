@@ -225,6 +225,29 @@ def check_research_register_partition(findings: list[Finding]) -> None:
             findings.append(Finding(archive_index, f"archive link {name!r} must appear exactly once"))
 
 
+def check_research_register_result_coverage(findings: list[Finding]) -> None:
+    """Require every materialized candidate decision to name its exact ID."""
+    parts = sorted(RESEARCH_REGISTER_ARCHIVE.glob("part-*.md"))
+    if not RESEARCH_REGISTER.exists() or not all(path.exists() for path in parts):
+        return
+
+    logical_register = "\n".join(
+        [RESEARCH_REGISTER.read_text(), *(path.read_text() for path in parts)]
+    )
+    programs = ROOT / "programs"
+    results = ROOT / "results"
+    for meta_path in sorted(programs.glob("*/meta.json")):
+        candidate_id = meta_path.parent.name
+        decision_path = results / candidate_id / "decision.json"
+        if decision_path.exists() and candidate_id not in logical_register:
+            findings.append(
+                Finding(
+                    decision_path,
+                    "materialized decision candidate ID is absent from the logical research register",
+                )
+            )
+
+
 def check_obsolete_and_duration_phrases(findings: list[Finding]) -> None:
     for path, text in live_doc_text():
         for snippet in OBSOLETE_SNIPPETS:
@@ -866,6 +889,7 @@ def main() -> int:
     findings: list[Finding] = []
     check_required_docs(findings)
     check_research_register_partition(findings)
+    check_research_register_result_coverage(findings)
     check_obsolete_and_duration_phrases(findings)
     check_certificate_and_status(findings)
     check_status_live_process_fields(findings)

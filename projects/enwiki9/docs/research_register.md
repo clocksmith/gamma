@@ -697,3 +697,38 @@ Score and forecast credit remain zero. Evidence:
 `results/fractal8_survival_hazard_sigma_qm0_v1/decision.json`,
 `results/fractal8_survival_hazard_sigma_qm0_v1/guard.json`, and
 `results/fractal8_survival_hazard_sigma_qm0_v1/historical_binding.json`.
+
+## 2026-08-09 - Exact decision-ID coverage reconciled across the shared register
+
+A whole-ledger audit now reads the current append surface plus every numbered
+archive partition before comparing materialized program decisions. It found six
+exact candidate IDs that were represented only by family records, corrected
+children, or successor audits. Their existing receipts remain unchanged; this
+entry binds their exact identities and conclusions into the shared register.
+
+- `cmix_obias_postwrt_far_history_cdc_qm0_v1` found `5,953,246` copied
+  post-WRT bytes, but its average-rate-equivalent net was only `662,236` bytes
+  against the frozen `4,500,000`-byte floor. The explicit post-WRT copy route
+  remains retired with zero score credit.
+- `far_history_residual_container_qc0_v1` exactly removed `64,526,086` raw
+  bytes into a `935,473,914`-byte residual and reconstructed canonical enwik9.
+  It authorized backend integration only; no compressed backend exists in the
+  receipt, so it remains a reversible-transform proof with zero score credit.
+- `nncp_libnc_open_source_eligibility_audit_qm2_v1` found no complete LibNC
+  source and no written exception. Its teacher-only eligibility conclusion was
+  later independently strengthened by QM3; QM2 itself receives zero credit.
+- `nncp_midpoint_cache32_joint_qm0_v1` measured a `6,229`-byte incremental
+  cache gain but failed faithful-parent identity because of a frozen expected
+  hash error. Its immutable QM1 correction is authoritative; QM0 stays retired.
+- `nncp_postpreprocess_aligned_copy_qm0_v1` found only `2,991,540` copied bytes
+  and `606,435` average-rate-equivalent net bytes against a `4,000,000` floor.
+  The NNCP aligned-copy realization remains retired with zero score credit.
+- `nncp_v33_libnc_rmsnorm_backward_order_parity_v1` passed its finite parity
+  lemma: the LibNC output-order backward formula had maximum absolute gradient
+  error `5.960464477539063e-8`, below `1e-7`. This authorized its historical
+  bound-update child but contributes no archive or score credit itself.
+
+`enwiki9_doc_lint.py` now rejects any `programs/<id>/meta.json` having a
+materialized `results/<id>/decision.json` unless that exact ID appears somewhere
+in the logical register. The current register remains the sole append target;
+semantic H2 partitioning and the `800`-line ceiling remain unchanged.
