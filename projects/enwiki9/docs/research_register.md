@@ -133,6 +133,27 @@ without optimizer or tolerance sweeps. A pass authorizes the open implementation
 substrate for conditional native arm `O` after the production-alphabet bridge
 passes; it grants no compression, mature-transfer, or full-model parity credit.
 
+## 2026-08-09 - GGML head q0 isolates an optimizer-period normalization defect
+
+Candidate `nncp_ggml_output_head_update_parity_qm0_v1` reconstructed the frozen
+four-state hidden fixture within `2.98e-8` and reproduced the LibNC first Adam
+head update within `2.84e-7`. Repeated outputs were byte-identical; the MIT
+source closure was `1,170,500` bytes, had no forbidden dynamic dependency, and
+used at most `895,304 KiB` sampled process-tree RSS.
+
+The gradient gate failed because the probe set GGML `opt_period=2` but supplied
+one physical batch. GGML therefore exposed exactly one-half of the LibNC mean
+gradient: diagnostic nonzero-element median ratios were `0.5` for both matrix
+and bias, with no sign mismatches. The update still matched because the frozen
+first clipped Adam step is invariant to a uniform positive gradient scale.
+
+Verdict: q0 receives zero compression credit and is preserved as a failed
+normalization receipt. One immutable q1 child may change only `opt_period` from
+`2` to `1` and rerun the complete parity gate. Evidence:
+`results/nncp_ggml_output_head_update_parity_qm0_v1/decision.json`, guard
+`results/nncp_ggml_output_head_update_parity_qm0_guard_v1.json`, and job
+`20260809T234726Z_df6daaf1af`.
+
 ## 2026-08-09 - GGML open CPU kernel-closure feasibility gate proposed
 
 Candidate `nncp_ggml_open_cpu_kernel_closure_qm0_v1` tests a source-eligibility
