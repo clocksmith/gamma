@@ -6,9 +6,11 @@ Agent B has accepted Agent A's handoff and now owns both active scientific
 tracks. The canonical objective is an exact, self-contained full-1G score no
 larger than `108,000,000` bytes. The runnable `cmix-obias` research parent is
 reported at `108,492,825`, leaving `492,825` bytes of counted debt before its
-unresolved memory, source, and independent-verification obligations. KAIROS is
-the near-target lane: a paid, decoder-visible dyadic correction of the exact
-post-head probability surface, judged only by same-stream arithmetic replay.
+unresolved memory, source, and independent-verification obligations. The
+immediate near-target lane is therefore independent reproduction and resource
+qualification of that parent. KAIROS was its first same-stream correction
+test, but the completed paid opening replay below retired the frozen dyadic
+final-head realization; it is no longer a promotion path.
 
 The independent NNCP lane tests whether the measured midpoint update-cadence
 effect persists over `1,998,848` symbols and can be localized to a compact
@@ -16,11 +18,12 @@ causal mechanism. Its active mature gate remains frozen. A pass authorizes the
 predeclared state-refresh/output-head/full-update attribution and a compact
 MIDAS-style descendant; a miss retires only the tested cadence realization.
 
-These lanes do not inherit or add projected savings. Combination is authorized
-only after each mechanism independently passes its paid gate, and then only
-through a new exact joint coder replay with complete package and memory
-accounting. The XML-safe far-history/copy family remains terminally closed by
-the negative QM4 matched-parent result.
+The cmix-obias qualification and NNCP teacher lanes do not inherit or add
+projected savings. A future combination is authorized only after a new
+mechanism independently passes its paid gate, and then only through a new
+exact joint coder replay with complete package and memory accounting. The
+XML-safe far-history/copy family and the measured KAIROS dyadic realization
+remain terminally closed.
 
 ## 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound
 
