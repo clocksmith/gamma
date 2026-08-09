@@ -514,3 +514,30 @@ bundled LibNC binary. No source-release claim, exception, archive score,
 forecast, or prize credit is granted. Endpoint428 is not an automatic cadence
 port: its two independent FXCM experts already update once per decoded truth
 bit, and the existing snapshot-freeze campaign covers reduced update work.
+
+## 2026-08-09 - LibNC replacement surface is not a compact compatibility shim
+
+A read-only static inventory of the receipt-bound normalized CPU package
+clarifies the scale of the remaining source-eligibility debt. Across
+`nncp.c`, `arith.c`, and `preprocess.c`, the codec references `95` distinct
+`nc_*` API names at `531` source sites. Restricting the inventory to the
+transformer implementation used by the `enwik9` profile still leaves about
+`71` distinct LibNC calls.
+
+The reachable surface is not limited to allocation and matrix multiplication.
+It includes automatic differentiation, graph-parent rewriting, concatenation
+optimization, Adam state and step updates, tensor aliases and copies,
+relative-position shifts, attention masking, normalization, activation,
+device conversion, and deterministic initialization. The packaged
+`libnc.h` declares the interface, but the counted package contains only the
+closed `libnc.so` implementation.
+
+This is a static source-surface census, not a lower-bound theorem: dead branches
+and profile-specialization could reduce a deliberately rewritten backend.
+It does rule out treating an open LibNC replacement as a small header shim or
+granting source eligibility from the existing `253,913`-byte binary package.
+The active mature gate and conditional production-dictionary bridge remain
+teacher experiments. A prize-facing descendant must either distill the
+measured mechanism into an independently open compact model or deliberately
+replace the required forward, backward, optimizer, and tensor semantics and
+charge that complete source. No archive, forecast, or score credit is granted.
