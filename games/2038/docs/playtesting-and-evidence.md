@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.3-test`
+**Rules under review:** `0.7.0-rc.4-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -33,6 +33,10 @@ is never proof that the physical rules are teachable.
 
 Current selected automated evidence:
 
+- [`Selection, trade, and persona contract correction`](../evidence/studies/simulation/2026-08-09-selection-persona-contract-correction.md):
+  records the impossible-choice and immediate-trade defects exposed by the v10
+  Codex session, the rejected deterministic calibration, the selected runner
+  contract, and the remaining AGI-route evidence gap.
 - [`Lean balance and cooperative-AGI study`](../evidence/studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md):
   historical targeted and diverse cohorts supporting the selected faction
   adjustments; its schema-v3 supplier-conditioned metrics are withdrawn.
@@ -103,20 +107,30 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.3-test`. Executable
-game `0.10.2` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.4-test`. Executable
+game `0.11.0` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
 
-Candidate `0.7.0-rc.3-test` and executable `0.10.2` establish the simplified
+Candidate `0.7.0-rc.3-test` and executable `0.10.2` established the simplified
 baseline selected on 2026-08-08: one location-defined Generator, two programs
 per Faction, presence-only politics, removal of seven stored-token families,
 and the tightened Default/Advanced boundary. The earlier single-Generator
 matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
+
+Candidate `0.7.0-rc.4-test` and executable `0.11.0` correct action eligibility
+and immediate-trade timing after the controlled Codex session exposed a
+knowingly impossible AGI commitment. A selectable Action must resolve now or
+become resolvable through one legal accepted pre-Act trade. A rejected required
+trade or a target consumed after simultaneous reveal can still block the
+commitment. The same executable makes declared persona partner, placement, and
+resource preferences operational and records trade-required selections and
+post-commitment blocks. These are implementation and simulation claims, not
+human teachability or balance evidence.
 
 This candidate changes no mechanic or number from `0.7.0-rc.2-test`. It
 corrects the machine-readable component and round vocabulary, separates

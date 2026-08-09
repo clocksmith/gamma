@@ -78,6 +78,7 @@ test("player personas load as reusable provider-neutral strategy profiles", asyn
   assert.equal(promptProfile.id, profiles[0].id);
   assert.ok(promptProfile.persona.worldview.length > 0);
   assert.ok(promptProfile.objectives.length > 0);
+  assert.ok(promptProfile.resourceValues.compute > 0);
 });
 
 test("World Ending crosses AGI emergence with both Open-continuity gates", async () => {
@@ -1646,7 +1647,7 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
   assert.equal(match.declarationReadiness(player).gridReadyFacilities, 2);
 });
 
-test("action selection retains every unused Action and labels current resolvability", async () => {
+test("action selection excludes impossible commitments and labels trade-dependent choices", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "six-core-actions" },
     () => {}
@@ -1656,30 +1657,33 @@ test("action selection retains every unused Action and labels current resolvabil
     .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   assert.deepEqual(
     selections.map((decision) => decision.actionId),
-    ["fund", "research", "build", "organize", "deploy", "influence"]
+    ["fund", "research", "build", "organize", "influence"]
   );
-  const deploy = selections.find((decision) => decision.actionId === "deploy");
-  assert.equal(deploy.consequences.currentResolutionCount, 0);
-  assert.equal(deploy.consequences.resolvableWithoutTrade, false);
-  assert.ok(selections.filter((decision) => decision !== deploy).every(
+  assert.ok(selections.every(
     (decision) => decision.consequences.currentResolutionCount > 0
   ));
 
   runtime.match.players[0].compute = 0;
+  runtime.match.players[1].compute = 1;
   selections = runtime.match.legalActionSelections(0)
     .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   const research = selections.find((decision) => decision.actionId === "research");
   assert.equal(research.consequences.currentResolutionCount, 0);
   assert.equal(research.consequences.resolvableWithoutTrade, false);
+  assert.equal(research.consequences.resolvableWithImmediateTrade, true);
+  assert.equal(research.consequences.status, "trade_required");
+
+  for (const opponent of runtime.match.players.slice(1)) opponent.compute = 0;
+  selections = runtime.match.legalActionSelections(0)
+    .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
+  assert.equal(selections.some((decision) => decision.actionId === "research"), false);
 
   runtime.match.round = 2;
   runtime.match.players[0].escalation = 1;
   const megaCluster = runtime.match.legalActionSelections(0).find(
     (decision) => decision.actionId === "mega_cluster"
   );
-  assert.ok(megaCluster);
-  assert.equal(megaCluster.consequences.currentResolutionCount, 0);
-  assert.equal(megaCluster.consequences.resolvableWithoutTrade, false);
+  assert.equal(megaCluster, undefined);
 
   const player = runtime.match.players[0];
   const forcedNoOpsBefore = player.metrics.forcedNoOps;
@@ -1691,7 +1695,7 @@ test("action selection retains every unused Action and labels current resolvabil
   assert.equal(player.metrics.forcedNoOps, forcedNoOpsBefore + 1);
 });
 
-test("pre-Act choices preserve the selected action's legal resolution", async () => {
+test("pre-Act offers preserve the selected action after the complete exchange", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "preserve-selected-action" },
     () => {}
@@ -1706,18 +1710,23 @@ test("pre-Act choices preserve the selected action's legal resolution", async ()
   partner.compute = 0;
   assert.deepEqual(
     match.immediateTradeGiveAmounts(0, partner, "compute"),
-    [1]
+    [1, 2]
   );
+  assert.ok(match.immediateTradeDecisions(0, "before")
+    .filter((decision) => decision.parameters?.giveResource === "compute")
+    .every((decision) => decision.parameters.giveAmount === 1));
   player.compute = 1;
   assert.deepEqual(
     match.immediateTradeGiveAmounts(0, partner, "compute"),
-    []
+    [1]
   );
+  assert.equal(match.immediateTradeDecisions(0, "before")
+    .some((decision) => decision.parameters?.giveResource === "compute"), false);
   partner.selectedAction = "research";
   partner.compute = 1;
   assert.deepEqual(
     match.immediateTradeReceiveAmounts(0, partner, "compute"),
-    []
+    [1]
   );
 
   player.selectedAction = "deploy";
@@ -1762,7 +1771,7 @@ test("immediate trades skip impossible turns and package each offer", async () =
       throw new Error("An impossible trade must not create a decision packet.");
     }
   }));
-  assert.equal(await match.chooseImmediateTrade(unavailablePolicies, 0), null);
+  assert.equal(await match.chooseImmediateTrade(unavailablePolicies, 0, "before"), null);
 
   const player = match.players[0];
   const partner = match.players[1];
@@ -1784,8 +1793,8 @@ test("immediate trades skip impossible turns and package each offer", async () =
       };
     }
   }));
-  const offer = await match.chooseImmediateTrade(policies, player.seat);
-  assert.deepEqual(stages, ["immediate_trade"]);
+  const offer = await match.chooseImmediateTrade(policies, player.seat, "before");
+  assert.deepEqual(stages, ["immediate_trade_before"]);
   assert.ok(offer);
   assert.equal(offer.partnerSeat, partner.seat);
   const resourcesBeforeTrade = match.players.map((candidate) => ({
@@ -1794,7 +1803,7 @@ test("immediate trades skip impossible turns and package each offer", async () =
     safety: candidate.safety
   }));
   assert.equal(await match.settleImmediateTrade(policies, player.seat, offer), true);
-  assert.deepEqual(stages, ["immediate_trade", "immediate_trade_response"]);
+  assert.deepEqual(stages, ["immediate_trade_before", "immediate_trade_response"]);
   for (const resource of ["runway", "compute", "safety"]) {
     const dealFlowBonus = resource === "runway" && player.factionId === "coalition_lab" ? 1 : 0;
     assert.equal(
@@ -1858,20 +1867,20 @@ test("Deal Flow can be paused without suppressing the underlying trade", async (
 test("immediate-trade packet ceiling is rule-derived and formal windows cannot repeat", async () => {
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount)),
-    [48, 72, 96, 120, 144]
+    [72, 108, 144, 180, 216]
   );
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
       counteroffers: true
     })),
-    [72, 108, 144, 180, 216]
+    [96, 144, 192, 240, 288]
   );
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
       counteroffers: true,
       thirdPartyClaims: true
     })),
-    [96, 180, 288, 420, 576]
+    [120, 216, 336, 480, 648]
   );
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "immediate-trade-window-ledger" },
@@ -1884,7 +1893,7 @@ test("immediate-trade packet ceiling is rule-derived and formal windows cannot r
     /formal window repeated/
   );
   assert.equal(match.immediateTradePackets, 1);
-  assert.equal(match.immediateTradePacketCeiling, 108);
+  assert.equal(match.immediateTradePacketCeiling, 144);
 });
 
 test("counteroffer makers choose among simultaneous immediate-trade claimants", async () => {
@@ -1931,11 +1940,11 @@ test("counteroffer makers choose among simultaneous immediate-trade claimants", 
       };
     }
   }));
-  const offer = await match.chooseImmediateTrade(policies, active.seat);
+  const offer = await match.chooseImmediateTrade(policies, active.seat, "before");
   assert.ok(offer);
   assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), true);
   assert.deepEqual(stages, [
-    "immediate_trade",
+    "immediate_trade_before",
     "immediate_trade_response",
     "immediate_trade_claim",
     "immediate_trade_claim",
@@ -1975,11 +1984,13 @@ test("a counteroffer can settle directly when third-party claims are disabled", 
     async decide(packet) {
       const stage = packet.requestId.split(":").at(-2);
       stages.push(stage);
-      const selected = packet.legalDecisions.find(
-        (decision) => decision.parameters?.counterMakerSeat !== undefined
-      ) || packet.legalDecisions.find(
-        (decision) => decision.decisionId === "trade_counter_accept"
-      ) || packet.legalDecisions[0];
+      const selected = stage === "immediate_trade_counter_response"
+        ? packet.legalDecisions.find(
+          (decision) => decision.decisionId === "trade_counter_accept"
+        )
+        : packet.legalDecisions.find(
+          (decision) => decision.parameters?.counterMakerSeat !== undefined
+        ) || packet.legalDecisions[0];
       return {
         decision: { decisionId: selected.decisionId },
         receipt: { provider: "fixture" }
@@ -2157,6 +2168,82 @@ test("deterministic policies preserve legal commitment while avoiding known dead
   assert.ok(
     policy.score(packet, packet.legalDecisions[0]) <
       policy.score(packet, packet.legalDecisions[1])
+  );
+});
+
+test("deterministic personas execute partner, placement, and resource preferences", async () => {
+  const profiles = await loadPlayerProfiles();
+  const profile = profiles.find((candidate) => candidate.id === "power_broker");
+  const policy = new WeightedPlayerPolicy(profile, {
+    selection: "greedy",
+    rosterProfileIds: ["power_broker", "agi_candidate", "balanced_operator"]
+  });
+  const packet = {
+    observation: {
+      self: { facilities: 0 },
+      board: [
+        {
+          tileId: "target",
+          q: 0,
+          r: 0,
+          components: [{ type: "piece", ownerSeat: 1 }]
+        },
+        { tileId: "near", q: 1, r: 0, components: [] },
+        { tileId: "far", q: 3, r: 0, components: [] }
+      ]
+    }
+  };
+  const promiseCandidate = {
+    decisionId: "negotiation_power_1",
+    actionId: "negotiation",
+    parameters: { targetSeat: 1 }
+  };
+  const ordinaryPromise = {
+    decisionId: "negotiation_power_2",
+    actionId: "negotiation",
+    parameters: { targetSeat: 2 }
+  };
+  assert.equal(
+    policy.score(packet, promiseCandidate),
+    policy.score(packet, ordinaryPromise) * 15
+  );
+
+  const nearBuild = {
+    decisionId: "build_facility_near",
+    actionId: "build",
+    parameters: { destinationId: "near" }
+  };
+  const farBuild = {
+    decisionId: "build_facility_far",
+    actionId: "build",
+    parameters: { destinationId: "far" }
+  };
+  assert.equal(
+    policy.score(packet, nearBuild),
+    policy.score(packet, farBuild) * 20
+  );
+
+  const favorableComputeTrade = {
+    decisionId: "trade_accept",
+    actionId: "trade",
+    parameters: {
+      giveResource: "runway",
+      giveAmount: 1,
+      receiveResource: "compute",
+      receiveAmount: 2
+    }
+  };
+  const unfavorableComputeTrade = {
+    ...favorableComputeTrade,
+    parameters: {
+      ...favorableComputeTrade.parameters,
+      giveAmount: 2,
+      receiveAmount: 1
+    }
+  };
+  assert.ok(
+    policy.score(packet, favorableComputeTrade) >
+      policy.score(packet, unfavorableComputeTrade)
   );
 });
 
@@ -2983,7 +3070,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.10.2");
+  assert.equal(first.game.version, "0.11.0");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3561,7 +3648,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.10.2");
+  assert.equal(first.game.version, "0.11.0");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

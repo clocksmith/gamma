@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.3-test`
+**Rules reference:** `0.7.0-rc.4-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -211,7 +211,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.3-test` test:
+controlled `0.7.0-rc.4-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -223,7 +223,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.10.2` implements `0.7.0-rc.3-test` under engine
+Executable game `0.11.0` implements `0.7.0-rc.4-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready faces are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -232,6 +232,16 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.11.0` / `0.7.0-rc.4-test` correction makes eligibility explicit:
+select only an Action that resolves from current state or can become legal
+through one accepted immediate trade before Act. Simultaneous target loss and
+a rejected required trade still create real commitment risk. Purely impossible
+choices no longer masquerade as strategy. The same executable evaluates an
+immediate trade as one complete exchange, creates post-Act offers from the
+post-action resource state, and executes declared persona partner, placement,
+and resource preferences. The v10 Codex session motivated this correction but
+does not establish balance or human teachability.
 
 The `0.10.2` / `0.7.0-rc.3-test` alignment patch changes no mechanic or
 number. It makes the selected integrated physical state authoritative in the

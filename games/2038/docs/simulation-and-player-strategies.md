@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.10.2` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.3-test`
+**Executable game:** `0.11.0` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.7.0-rc.4-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -26,8 +26,10 @@ A simulated player combines:
 
 Profiles in
 [`../dist/runtime/player-strategies.json`](../dist/runtime/player-strategies.json) define goals,
-risk posture, action weights, conditional rules, and explicit promise,
-fulfillment, betrayal, and reciprocity weights. Backends are seeded weighted,
+risk posture, action weights, conditional rules, relative resource values,
+preferred partners and placement when declared, and explicit promise,
+fulfillment, betrayal, and reciprocity weights. These declared fields are
+executable policy inputs rather than prompt-only description. Backends are seeded weighted,
 deterministic greedy, Claude CLI, Codex CLI, or a hybrid shortlist.
 
 Backend is a first-class experiment axis. It rotates across seats and factions
@@ -77,12 +79,14 @@ unknown alias. The environment alone mutates state. Player-owned movement, Headl
 Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
-Selection packets retain every unused Core Action and every unlocked, unspent
-Escalation, including a choice with no resolution from current public state.
-Each choice reports its current resolution count. Deterministic policies
-strongly discount a currently blocked choice but may still make a speculative
-or deliberate no-effect commitment. If the choice remains blocked when it
-resolves, it exhausts normally; a blocked Escalation also spends its token.
+Selection packets contain every unused Core Action and unlocked, unspent
+Escalation that has a legal resolution now or can gain one through one legal
+accepted pre-Act trade. Each choice reports `resolvable_now` or
+`trade_required`, its current resolution count, and whether an immediate trade
+is required. A later target conflict or rejected required trade may still block
+the committed choice; it then exhausts normally, and a blocked Escalation has
+already spent its availability. A choice that cannot possibly resolve is not a
+legal decision and is never sent to deterministic or CLI-backed players.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 

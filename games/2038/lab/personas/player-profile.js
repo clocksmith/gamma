@@ -69,6 +69,19 @@ export function validatePlayerProfile(profile) {
       }
     }
   }
+  if (profile.strategy.resourceValues !== undefined) {
+    requireObject(
+      profile.strategy.resourceValues,
+      `Player profile ${profile.id} resourceValues`
+    );
+    for (const resource of ["runway", "compute", "safety"]) {
+      if (!(profile.strategy.resourceValues[resource] > 0)) {
+        throw new TypeError(
+          `Player profile ${profile.id} resource value for ${resource} must be positive.`
+        );
+      }
+    }
+  }
   if (profile.strategy.spatialPreference !== undefined) {
     requireObject(
       profile.strategy.spatialPreference,
@@ -122,6 +135,9 @@ export function profileForPrompt(profile) {
     description: profile.description || "",
     persona: profile.persona,
     objectives: profile.strategy.objectives || [],
-    operatingRules: profile.strategy.rules
+    operatingRules: profile.strategy.rules,
+    resourceValues: profile.strategy.resourceValues || null,
+    partnerWeights: profile.strategy.partnerWeights || {},
+    spatialPreference: profile.strategy.spatialPreference || null
   };
 }

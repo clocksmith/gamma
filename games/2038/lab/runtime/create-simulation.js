@@ -355,7 +355,8 @@ export async function createSimulation(options = {}, onProgress) {
       policyTreatment: policyTreatments[seat],
       decisionCache,
       cacheMode,
-      llmStages: options.llmStages
+      llmStages: options.llmStages,
+      rosterProfileIds: selectedProfiles.map((candidate) => candidate.id)
     })
   );
   const seed = String(options.seed || "frontier-monte-carlo");

@@ -228,6 +228,11 @@ function integritySummary(outcomes) {
   const details = [];
   let policyFallbacks = 0;
   let forcedNoOps = 0;
+  let tradeRequiredSelections = 0;
+  let requiredTradeOffers = 0;
+  let requiredTradeAcceptances = 0;
+  let requiredTradeFailures = 0;
+  let blockedAfterCommitment = 0;
   let actionOpportunities = 0;
   for (const [matchIndex, outcome] of outcomes.entries()) {
     actionOpportunities += outcome.standings.length * 12;
@@ -239,6 +244,11 @@ function integritySummary(outcomes) {
       seats.add(entry.seat);
       policyFallbacks += entry.metrics.policyFallbacks || 0;
       forcedNoOps += entry.metrics.forcedNoOps || 0;
+      tradeRequiredSelections += entry.metrics.selectionAvailability?.tradeRequired || 0;
+      requiredTradeOffers += entry.metrics.requiredTradeOffers || 0;
+      requiredTradeAcceptances += entry.metrics.requiredTradeAcceptances || 0;
+      requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
+      blockedAfterCommitment += entry.metrics.blockedAfterCommitment || 0;
       for (const key of ["score", "trust", "customers", "compute", "capability", "facilities"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
@@ -255,7 +265,12 @@ function integritySummary(outcomes) {
     details: details.slice(0, 100),
     policyFallbacks,
     forcedNoOps,
-    forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0
+    forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0,
+    tradeRequiredSelections,
+    requiredTradeOffers,
+    requiredTradeAcceptances,
+    requiredTradeFailures,
+    blockedAfterCommitment
   };
 }
 
@@ -524,6 +539,11 @@ function compactObservation(outcome, matchIndex) {
       openingActions: entry.metrics.openingActions,
       actions: entry.metrics.actions,
       forcedNoOps: entry.metrics.forcedNoOps,
+      selectionAvailability: entry.metrics.selectionAvailability,
+      requiredTradeOffers: entry.metrics.requiredTradeOffers,
+      requiredTradeAcceptances: entry.metrics.requiredTradeAcceptances,
+      requiredTradeFailures: entry.metrics.requiredTradeFailures,
+      blockedAfterCommitment: entry.metrics.blockedAfterCommitment,
       policyFallbacks: entry.metrics.policyFallbacks,
       auditHits: entry.metrics.auditHits,
       mandateEvents: entry.metrics.mandateEvents,
@@ -565,7 +585,17 @@ class BatchAccumulator {
     this.winningPathCounts = {};
     this.scores = [];
     this.roundLeaders = new Map();
-    this.integrity = { details: [], policyFallbacks: 0, forcedNoOps: 0, actionOpportunities: 0 };
+    this.integrity = {
+      details: [],
+      policyFallbacks: 0,
+      forcedNoOps: 0,
+      actionOpportunities: 0,
+      tradeRequiredSelections: 0,
+      requiredTradeOffers: 0,
+      requiredTradeAcceptances: 0,
+      requiredTradeFailures: 0,
+      blockedAfterCommitment: 0
+    };
     this.metrics = {
       headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {}, realignments: {},
       systemicRiskCreated: 0, declarations: 0, declarationPpaIterations: 0, declarationCapacityOps: 0,
@@ -633,6 +663,14 @@ class BatchAccumulator {
       if (credit) increment(this.winningPathCounts, classifyWinningPath(entry), credit);
       this.integrity.policyFallbacks += entry.metrics.policyFallbacks || 0;
       this.integrity.forcedNoOps += entry.metrics.forcedNoOps || 0;
+      this.integrity.tradeRequiredSelections +=
+        entry.metrics.selectionAvailability?.tradeRequired || 0;
+      this.integrity.requiredTradeOffers += entry.metrics.requiredTradeOffers || 0;
+      this.integrity.requiredTradeAcceptances +=
+        entry.metrics.requiredTradeAcceptances || 0;
+      this.integrity.requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
+      this.integrity.blockedAfterCommitment +=
+        entry.metrics.blockedAfterCommitment || 0;
       for (const key of ["score", "trust", "customers", "compute", "capability", "facilities"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           this.integrity.details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
@@ -770,7 +808,12 @@ class BatchAccumulator {
       forcedNoOps: this.integrity.forcedNoOps,
       forcedNoOpRate: this.integrity.actionOpportunities
         ? this.integrity.forcedNoOps / this.integrity.actionOpportunities
-        : 0
+        : 0,
+      tradeRequiredSelections: this.integrity.tradeRequiredSelections,
+      requiredTradeOffers: this.integrity.requiredTradeOffers,
+      requiredTradeAcceptances: this.integrity.requiredTradeAcceptances,
+      requiredTradeFailures: this.integrity.requiredTradeFailures,
+      blockedAfterCommitment: this.integrity.blockedAfterCommitment
     };
     const metrics = this.metrics;
     const matchMetrics = {

@@ -2,7 +2,8 @@ import { createRng } from "../../web/src/engine.js";
 import { validateDecisionPacket, validateDecisionResponse } from "../contracts/decision-contract.js";
 import { validatePlayerProfile } from "../personas/player-profile.js";
 
-export const UNRESOLVABLE_SELECTION_WEIGHT = 0.02;
+export const TRADE_REQUIRED_SELECTION_WEIGHT = 0.02;
+export const BLOCKED_SELECTION_WEIGHT = 0.02;
 export const supportedPolicyTreatments = new Set([
   null,
   "coalition_conversion_v1"
@@ -47,12 +48,85 @@ function ruleTargets(decision, target) {
 export class WeightedPlayerPolicy {
   constructor(profile, {
     selection = profile.strategy.selection,
-    treatment = null
+    treatment = null,
+    rosterProfileIds = []
   } = {}) {
     this.profile = validatePlayerProfile(profile);
     this.selection = selection;
     this.treatment = validatePolicyTreatment(treatment);
+    this.rosterProfileIds = [...rosterProfileIds];
     this.kind = "deterministic";
+  }
+
+  partnerMultiplier(decision) {
+    const targetSeat = decision.parameters?.targetSeat ??
+      decision.parameters?.partnerSeat;
+    if (!Number.isInteger(targetSeat)) return 1;
+    const targetProfileId = this.rosterProfileIds[targetSeat];
+    return this.profile.strategy.partnerWeights?.[targetProfileId] || 1;
+  }
+
+  spatialMultiplier(packet, decision) {
+    const preference = this.profile.strategy.spatialPreference;
+    const destinationId = decision.parameters?.destinationId;
+    if (!preference || !destinationId) return 1;
+    if (
+      preference.applyUntilFacilities &&
+      packet.observation.self.facilities >= preference.applyUntilFacilities
+    ) return 1;
+    const targetSeats = this.rosterProfileIds
+      .map((profileId, seat) => ({ profileId, seat }))
+      .filter((entry) => entry.profileId === preference.targetProfileId)
+      .map((entry) => entry.seat);
+    if (!targetSeats.length) return 1;
+    const destination = packet.observation.board.find(
+      (tile) => tile.tileId === destinationId
+    );
+    if (!destination) return 1;
+    const targetTileIds = new Set(packet.observation.board
+      .filter((tile) => tile.components.some((component) =>
+        targetSeats.includes(component.ownerSeat) &&
+        ["piece", "facility", "generator"].includes(component.type)
+      ))
+      .map((tile) => tile.tileId));
+    const distance = (left, right) => Math.max(
+      Math.abs(left.q - right.q),
+      Math.abs(left.r - right.r),
+      Math.abs((-left.q - left.r) - (-right.q - right.r))
+    );
+    const nearest = Math.min(...packet.observation.board
+      .filter((tile) => targetTileIds.has(tile.tileId))
+      .map((tile) => distance(destination, tile)));
+    return nearest === preference.preferredDistance
+      ? preference.multiplier
+      : 1;
+  }
+
+  tradeMultiplier(decision) {
+    const parameters = decision.parameters;
+    if (!parameters?.giveResource || !parameters?.receiveResource) return 1;
+    const values = this.profile.strategy.resourceValues || {
+      runway: 1,
+      compute: 1,
+      safety: 1
+    };
+    const responder = parameters.tradePerspective === "responder";
+    const giveResource = responder
+      ? parameters.receiveResource
+      : parameters.giveResource;
+    const giveAmount = responder
+      ? parameters.receiveAmount
+      : parameters.giveAmount;
+    const receiveResource = responder
+      ? parameters.giveResource
+      : parameters.receiveResource;
+    const receiveAmount = responder
+      ? parameters.giveAmount
+      : parameters.receiveAmount;
+    const netValue =
+      (values[receiveResource] || 1) * receiveAmount -
+      (values[giveResource] || 1) * giveAmount;
+    return Math.max(0.05, 1 + netValue * 0.4);
   }
 
   treatmentMultiplier(packet, decision) {
@@ -93,20 +167,37 @@ export class WeightedPlayerPolicy {
     const negotiation = strategy.negotiation;
     if (decision.decisionId === "negotiation_none") return 1;
     if (decision.decisionId.startsWith("negotiation_power_")) {
-      return negotiation.promiseWeight;
+      return negotiation.promiseWeight * this.partnerMultiplier(decision);
     }
-    if (decision.decisionId === "trade_none") return 4;
-    if (decision.decisionId === "trade_before" || decision.decisionId === "trade_after") {
-      return 0.45;
+    if (decision.decisionId === "trade_none") {
+      return decision.consequences?.selectedActionCurrentlyResolvable === false
+        ? 0.01
+        : 2;
     }
-    if (decision.decisionId.startsWith("trade_offer_")) return 0.7;
-    if (decision.decisionId === "trade_reject") return 2;
-    let weight = strategy.actionWeights[decision.actionId] || 1;
     if (
-      decision.consequences?.stage === "action_selection" &&
-      decision.consequences.resolvableWithoutTrade === false
+      decision.decisionId.startsWith("trade_offer_") ||
+      decision.decisionId.startsWith("trade_counter_before_") ||
+      decision.decisionId.startsWith("trade_counter_after_")
     ) {
-      weight *= UNRESOLVABLE_SELECTION_WEIGHT;
+      const enablesAction = decision.consequences?.enablesSelectedAction ? 8 : 1;
+      return 1.2 * enablesAction * this.tradeMultiplier(decision) *
+        this.partnerMultiplier(decision);
+    }
+    if (
+      decision.decisionId === "trade_accept" ||
+      decision.decisionId === "trade_counter_accept"
+    ) return this.tradeMultiplier(decision);
+    if (
+      decision.decisionId === "trade_reject" ||
+      decision.decisionId === "trade_counter_reject"
+    ) return 1;
+    let weight = strategy.actionWeights[decision.actionId] || 1;
+    if (decision.consequences?.stage === "action_selection") {
+      if (decision.consequences.status === "trade_required") {
+        weight *= TRADE_REQUIRED_SELECTION_WEIGHT;
+      } else if (decision.consequences.resolvableWithoutTrade === false) {
+        weight *= BLOCKED_SELECTION_WEIGHT;
+      }
     }
     for (const [prefix, multiplier] of Object.entries(strategy.decisionWeights || {})) {
       if (decision.decisionId.startsWith(prefix)) weight *= multiplier;
@@ -134,6 +225,8 @@ export class WeightedPlayerPolicy {
       if (typeof value === "number") consequenceValue += value * multiplier;
     }
     weight *= Math.max(0.01, 1 + consequenceValue);
+    weight *= this.partnerMultiplier(decision);
+    weight *= this.spatialMultiplier(packet, decision);
     for (const rule of strategy.rules) {
       if (
         ruleTargets(decision, rule.target) &&

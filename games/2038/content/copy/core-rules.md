@@ -43,7 +43,9 @@ Default Game lasts four Eras. The institution with the most ${terms.playerTracks
    Escalation-track marker, one reversible Declare ${terms.systems.agi} card,
    remaining track markers, and starting resources.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
-   supply. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
+   supply. Keep all four Facilities and the Generator in supply; no Facility
+   begins on the board. The first Facility a player constructs carries that
+   Faction's integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
    and ${terms.resources.safety} to its printed starting values.
 7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
    printed on its Faction board. Put every player’s ten ${terms.playerTracks.scrutiny}
@@ -74,8 +76,10 @@ unused unless an ability readies one.
 ### The complete ordinary turn: Select → Move → Act
 
 1. Reveal one ${terms.systems.headline}.
-2. Every player secretly selects one unused Core Action, or spends one
-   Escalation availability to select one unlocked Escalation.
+2. Every player secretly selects one eligible unused Core Action, or spends one
+   Escalation availability to select one eligible unlocked Escalation. A choice
+   is eligible only when it has a legal resolution now or could gain one through
+   one legal accepted immediate resource trade before Act.
 3. Reveal every selected action simultaneously.
 4. Resolve clockwise from Initiative.
 5. **Select:** the revealed Action is the only Action this turn.
@@ -166,8 +170,10 @@ different unused Core Actions.
 
 ### A committed Action that becomes blocked
 
-After reveal, choose any legal piece, movement, mode, target, payment, and
-immediate trade, but never replace the selected Action.
+At selection, the Action must have a legal resolution or one legal pre-Act
+trade that would create one. After reveal, choose any legal piece, movement,
+mode, target, payment, and immediate trade, but never replace the selected
+Action. If the required trade is rejected, the Action becomes blocked.
 
 If an earlier player consumes every legal Facility space, Generator slot,
 contract token, or other required target, movement still resolves and the
@@ -412,6 +418,12 @@ Requirements:
 
 Declare ${terms.systems.agi} is global after movement. Check every requirement when it
 resolves.
+
+Selecting Declare ${terms.systems.agi} schedules an attempt; it is not itself a
+declaration. The selection is eligible only if every requirement is already
+met or one legal accepted pre-Act trade could supply the missing
+${terms.resources.compute}. Score and flip the declaration card only when the
+Escalation resolves successfully.
 
 A **grid-ready Facility** has its Grid-Ready face showing after earning it
 during a completed Production. After allocating Power, flip each Facility

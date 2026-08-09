@@ -70,11 +70,12 @@ export function immediateTradePacketCeiling(playerCount, {
   }
   // A counteroffer adds the original offer-maker's direct accept/reject.
   // Third-party claims add up to n - 1 claim packets and claimant selection.
+  // Declining the pre-Act window may add one later post-Act offer packet.
   const packetsPerResolution = counteroffers && thirdPartyClaims
-    ? playerCount + 2
+    ? playerCount + 3
     : counteroffers
-      ? 3
-      : 2;
+      ? 4
+      : 3;
   return ACTION_RESOLUTIONS_PER_PLAYER * playerCount * packetsPerResolution;
 }
 
@@ -297,6 +298,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.metrics.promisesMade = 0;
       player.metrics.promisesFulfilled = 0;
       player.metrics.promisesBroken = 0;
+      player.metrics.selectionAvailability = {
+        resolvableNow: 0,
+        tradeRequired: 0
+      };
+      player.metrics.requiredTradeOffers = 0;
+      player.metrics.requiredTradeAcceptances = 0;
+      player.metrics.requiredTradeFailures = 0;
+      player.metrics.blockedAfterCommitment = 0;
       player.mandateAwards = [];
       this.synchronizePublicMandate(player, "setup");
     }
@@ -1537,10 +1546,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (action.id === "agent_swarm" && this.regime.cycle?.id === "agent_swarm_escapes_scope")
       )
       .map((action) => {
-        const currentResolutionCount = this.legalEscalationResolutions(
-          seat,
-          action.id
-        ).length;
+        const availability = this.selectionAvailability(seat, action.id, {
+          isEscalation: true
+        });
+        if (availability.status === "blocked") return null;
         return {
           decisionId: `select_escalation_${action.id}`,
           label: renderSimulationCopy(
@@ -1550,14 +1559,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           actionId: action.id,
           consequences: {
             stage: "action_selection",
-            currentResolutionCount,
-            resolvableWithoutTrade: currentResolutionCount > 0,
+            ...availability,
             isEscalation: true,
             escalation: action.id === "agent_swarm" &&
               this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 0 : -1
           }
         };
-      });
+      })
+      .filter(Boolean);
     if (escalation.some((decision) =>
       decision.actionId === "declare_agi" &&
       decision.consequences.resolvableWithoutTrade
@@ -1569,6 +1578,32 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
     }
     return [...core, ...escalation];
+  }
+
+  selectionResolutionCount(seat, actionId, { isEscalation = false } = {}) {
+    return isEscalation
+      ? this.legalEscalationResolutions(seat, actionId).length
+      : this.currentResolutionCountForSelection(seat, actionId);
+  }
+
+  selectionAvailability(seat, actionId, { isEscalation = false } = {}) {
+    const currentResolutionCount = this.selectionResolutionCount(
+      seat,
+      actionId,
+      { isEscalation }
+    );
+    const resolvableWithImmediateTrade = currentResolutionCount === 0 &&
+      this.canResolveSelectionAfterImmediateTrade(seat, actionId, { isEscalation });
+    return {
+      currentResolutionCount,
+      resolvableWithoutTrade: currentResolutionCount > 0,
+      resolvableWithImmediateTrade,
+      status: currentResolutionCount > 0
+        ? "resolvable_now"
+        : resolvableWithImmediateTrade
+          ? "trade_required"
+          : "blocked"
+    };
   }
 
   legalFactionActions(seat) {
@@ -3811,24 +3846,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return this.legalResolutions(seat, player.selectedAction);
   }
 
-  preservesSelectedActionResolution(seat, resource, amount) {
-    const player = this.players[seat];
-    if (!player.selectedAction) return true;
-    const before = player[resource];
-    player[resource] -= amount;
-    const remainsResolvable = this.selectedActionResolutions(seat).length > 0;
-    player[resource] = before;
-    return remainsResolvable;
-  }
-
   immediateTradeGiveAmounts(seat, partner, resource) {
     const player = this.players[seat];
     const partnerCap = resource === "safety" && partner.factionId === "safety_laboratory"
       ? 4
       : this.config.resources[resource].cap;
     const maximumGive = Math.min(player[resource], partnerCap - partner[resource]);
-    return Array.from({ length: maximumGive }, (_, index) => index + 1)
-      .filter((amount) => this.preservesSelectedActionResolution(seat, resource, amount));
+    return Array.from({ length: maximumGive }, (_, index) => index + 1);
   }
 
   immediateTradeReceiveAmounts(seat, partner, resource) {
@@ -3837,19 +3861,50 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       ? 4
       : this.config.resources[resource].cap;
     const maximumReceive = Math.min(partner[resource], playerCap - player[resource]);
-    return Array.from({ length: maximumReceive }, (_, index) => index + 1)
-      .filter((amount) =>
-        this.preservesSelectedActionResolution(partner.seat, resource, amount)
-      );
+    return Array.from({ length: maximumReceive }, (_, index) => index + 1);
   }
 
-  immediateTradeDecisions(seat) {
+  provisionalTradeResolvesSelection(seat, offer, actionId, {
+    isEscalation = false
+  } = {}) {
     const player = this.players[seat];
-    const decisions = [{
-      decisionId: "trade_none",
-      label: decisionLabel("tradeNone"),
-      actionId: "trade"
-    }];
+    const partner = this.players[offer.partnerSeat];
+    const snapshots = [player, partner].map((participant) => ({
+      participant,
+      runway: participant.runway,
+      compute: participant.compute,
+      safety: participant.safety
+    }));
+    player[offer.giveResource] -= offer.giveAmount;
+    partner[offer.giveResource] += offer.giveAmount;
+    partner[offer.receiveResource] -= offer.receiveAmount;
+    player[offer.receiveResource] += offer.receiveAmount;
+    if (
+      player.factionId === "coalition_lab" &&
+      !this.isFactionAbilityPaused(player, "deal_flow") &&
+      !player.roundMetrics?.dealFlowUsed
+    ) {
+      player.runway = Math.min(
+        this.config.resources.runway.cap,
+        player.runway + 1
+      );
+    }
+    const resolves = this.selectionResolutionCount(
+      seat,
+      actionId,
+      { isEscalation }
+    ) > 0;
+    for (const snapshot of snapshots) {
+      snapshot.participant.runway = snapshot.runway;
+      snapshot.participant.compute = snapshot.compute;
+      snapshot.participant.safety = snapshot.safety;
+    }
+    return resolves;
+  }
+
+  immediateTradeOffers(seat, timing) {
+    const player = this.players[seat];
+    const offers = [];
     for (const partner of this.players.filter((candidate) => candidate.seat !== seat)) {
       const giveResources = this.tradableResources(player, partner).filter(
         (resource) => this.immediateTradeGiveAmounts(seat, partner, resource).length > 0
@@ -3865,66 +3920,125 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
               partner,
               receiveResource
             )) {
-              for (const timing of ["before", "after"]) {
-                decisions.push({
-                  decisionId: [
-                    "trade_offer",
-                    timing,
-                    partner.seat,
-                    giveResource,
-                    giveAmount,
-                    receiveResource,
-                    receiveAmount
-                  ].join("_"),
-                  label: decisionLabel("tradeOffer", {
-                    timing: timing === "before"
-                      ? decisionLabel("tradeTimingBefore")
-                      : decisionLabel("tradeTimingAfter"),
-                    giveAmount,
-                    giveResource,
-                    partner: partner.factionName,
-                    receiveAmount,
-                    receiveResource
-                  }),
-                  actionId: "trade",
-                  parameters: {
-                    timing,
-                    partnerSeat: partner.seat,
-                    targetSeat: partner.seat,
-                    giveResource,
-                    giveAmount,
-                    receiveResource,
-                    receiveAmount
-                  }
-                });
-              }
+              offers.push({
+                timing,
+                partnerSeat: partner.seat,
+                targetSeat: partner.seat,
+                giveResource,
+                giveAmount,
+                receiveResource,
+                receiveAmount
+              });
             }
           }
         }
       }
     }
+    return offers;
+  }
+
+  canResolveSelectionAfterImmediateTrade(seat, actionId, options = {}) {
+    return this.immediateTradeOffers(seat, "before").some((offer) =>
+      this.provisionalTradeResolvesSelection(seat, offer, actionId, options)
+    );
+  }
+
+  immediateTradeDecisions(seat, timing = "before") {
+    const player = this.players[seat];
+    const selectedAction = player.selectedAction;
+    const selectedEscalation = selectedAction?.startsWith("escalation_");
+    const selectedActionId = selectedEscalation
+      ? selectedAction.slice("escalation_".length)
+      : selectedAction;
+    const selectedCurrentlyResolvable = selectedAction
+      ? this.selectedActionResolutions(seat).length > 0
+      : true;
+    const offers = this.immediateTradeOffers(seat, timing).filter((offer) =>
+      timing === "after" ||
+      !selectedActionId ||
+      this.provisionalTradeResolvesSelection(seat, offer, selectedActionId, {
+        isEscalation: selectedEscalation
+      })
+    );
+    const decisions = [{
+      decisionId: "trade_none",
+      label: decisionLabel("tradeNone"),
+      actionId: "trade",
+      consequences: {
+        timing,
+        selectedActionCurrentlyResolvable: selectedCurrentlyResolvable
+      }
+    }];
+    for (const offer of offers) {
+      decisions.push({
+        decisionId: [
+          "trade_offer",
+          timing,
+          offer.partnerSeat,
+          offer.giveResource,
+          offer.giveAmount,
+          offer.receiveResource,
+          offer.receiveAmount
+        ].join("_"),
+        label: decisionLabel("tradeOffer", {
+          timing: timing === "before"
+            ? decisionLabel("tradeTimingBefore")
+            : decisionLabel("tradeTimingAfter"),
+          giveAmount: offer.giveAmount,
+          giveResource: offer.giveResource,
+          partner: this.players[offer.partnerSeat].factionName,
+          receiveAmount: offer.receiveAmount,
+          receiveResource: offer.receiveResource
+        }),
+        actionId: "trade",
+        parameters: offer,
+        consequences: {
+          timing,
+          enablesSelectedAction: timing === "before" && !selectedCurrentlyResolvable
+        }
+      });
+    }
     return decisions;
   }
 
-  async chooseImmediateTrade(policies, seat) {
-    const decisions = this.immediateTradeDecisions(seat);
+  async chooseImmediateTrade(policies, seat, timing) {
+    const decisions = this.immediateTradeDecisions(seat, timing);
     if (decisions.length === 1) return null;
-    const choice = await this.choose(policies, seat, "immediate_trade", decisions);
+    const choice = await this.choose(
+      policies,
+      seat,
+      `immediate_trade_${timing}`,
+      decisions
+    );
     return choice.parameters?.partnerSeat === undefined ? null : choice.parameters;
   }
 
   canCompleteImmediateTrade(seat, partnerSeat, offer) {
     const partner = this.players[partnerSeat];
-    return this.immediateTradeGiveAmounts(seat, partner, offer.giveResource).includes(
+    const resourcesAvailable = this.immediateTradeGiveAmounts(
+      seat,
+      partner,
+      offer.giveResource
+    ).includes(
       offer.giveAmount
     ) && this.immediateTradeReceiveAmounts(seat, partner, offer.receiveResource).includes(
       offer.receiveAmount
     );
+    if (!resourcesAvailable || offer.timing !== "before") return resourcesAvailable;
+    const selectedAction = this.players[seat].selectedAction;
+    if (!selectedAction) return resourcesAvailable;
+    const isEscalation = selectedAction.startsWith("escalation_");
+    const actionId = isEscalation
+      ? selectedAction.slice("escalation_".length)
+      : selectedAction;
+    return this.provisionalTradeResolvesSelection(seat, offer, actionId, {
+      isEscalation
+    });
   }
 
   immediateTradeCounterDecisions(seat, offer) {
     const counterMaker = this.players[offer.partnerSeat];
-    return this.immediateTradeDecisions(counterMaker.seat)
+    return this.immediateTradeDecisions(counterMaker.seat, offer.timing)
       .filter((decision) =>
         decision.parameters?.partnerSeat === seat &&
         decision.parameters.timing === offer.timing
@@ -3996,12 +4110,24 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       {
         decisionId: "trade_reject",
         label: decisionLabel("tradeReject", offer),
-        actionId: "trade"
+        actionId: "trade",
+        parameters: {
+          ...offer,
+          partnerSeat: seat,
+          targetSeat: seat,
+          tradePerspective: "responder"
+        }
       },
       {
         decisionId: "trade_accept",
         label: decisionLabel("tradeAccept", offer),
-        actionId: "trade"
+        actionId: "trade",
+        parameters: {
+          ...offer,
+          partnerSeat: seat,
+          targetSeat: seat,
+          tradePerspective: "responder"
+        }
       },
       ...counters
     ]);
@@ -4020,12 +4146,24 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           {
             decisionId: "trade_counter_reject",
             label: decisionLabel("tradeCounterReject"),
-            actionId: "trade"
+            actionId: "trade",
+            parameters: {
+              ...counterOffer,
+              partnerSeat: partner.seat,
+              targetSeat: partner.seat,
+              tradePerspective: "responder"
+            }
           },
           {
             decisionId: "trade_counter_accept",
             label: decisionLabel("tradeCounterAccept", counterOffer),
-            actionId: "trade"
+            actionId: "trade",
+            parameters: {
+              ...counterOffer,
+              partnerSeat: partner.seat,
+              targetSeat: partner.seat,
+              tradePerspective: "responder"
+            }
           }
         ]
       );
@@ -4086,8 +4224,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async resolveSelectedSeat(policies, seat) {
     const player = this.players[seat];
-    const trade = await this.chooseImmediateTrade(policies, seat);
-    if (trade?.timing === "before") await this.settleImmediateTrade(policies, seat, trade);
+    const beforeTrade = await this.chooseImmediateTrade(policies, seat, "before");
+    const beforeTradeAccepted = beforeTrade
+      ? await this.settleImmediateTrade(policies, seat, beforeTrade)
+      : false;
+    if (player.selectionRequiredTrade) {
+      player.metrics.requiredTradeOffers += Number(Boolean(beforeTrade));
+      player.metrics.requiredTradeAcceptances += Number(beforeTradeAccepted);
+    }
     const orbitalUsed = await this.maybeUseOrbitalCompute(policies, seat);
     if (player.selectedAction.startsWith("faction_")) {
       const computeBeforeAction = player.compute;
@@ -4117,6 +4261,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       if (!legal.length) {
         player.metrics.forcedNoOps += 1;
+        player.metrics.blockedAfterCommitment += 1;
+        player.metrics.requiredTradeFailures += Number(
+          player.selectionRequiredTrade && !beforeTradeAccepted
+        );
         this.recordEvent(
           "escalation_blocked",
           seat,
@@ -4126,6 +4274,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           })
         );
         player.selectedAction = null;
+        player.selectionRequiredTrade = false;
         return;
       }
       const decision = await this.choose(policies, seat, `resolve_escalation_${id}`, legal);
@@ -4136,8 +4285,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         computeBeforeAction - player.compute
       );
       await this.resolveFrontierBridge(policies, seat, decision);
-      if (trade?.timing === "after") await this.settleImmediateTrade(policies, seat, trade);
+      if (!beforeTrade) {
+        const afterTrade = await this.chooseImmediateTrade(policies, seat, "after");
+        if (afterTrade) await this.settleImmediateTrade(policies, seat, afterTrade);
+      }
       player.selectedAction = null;
+      player.selectionRequiredTrade = false;
       return;
     }
     let legal = this.legalResolutions(seat, player.selectedAction);
@@ -4151,6 +4304,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (!legal.length) {
       player.metrics.forcedNoOps += 1;
+      player.metrics.blockedAfterCommitment += 1;
+      player.metrics.requiredTradeFailures += Number(
+        player.selectionRequiredTrade && !beforeTradeAccepted
+      );
       legal = [{
         decisionId: `forced_noop_${player.selectedAction}`,
         label: decisionLabel("noLegalResolution", { action: player.selectedAction }),
@@ -4170,8 +4327,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       computeBeforeAction - player.compute
     );
     await this.resolveFrontierBridge(policies, seat, decision);
-    if (trade?.timing === "after") await this.settleImmediateTrade(policies, seat, trade);
+    if (!beforeTrade) {
+      const afterTrade = await this.chooseImmediateTrade(policies, seat, "after");
+      if (afterTrade) await this.settleImmediateTrade(policies, seat, afterTrade);
+    }
     player.selectedAction = null;
+    player.selectionRequiredTrade = false;
   }
 
   async maybeUseOrbitalCompute(policies, seat) {
@@ -4417,6 +4578,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (decision) => decision.decisionId === result.decision.decisionId
       );
       player.selectedAction = legal.decisionId.replace(/^select_/, "");
+      player.selectionRequiredTrade = legal.consequences?.status === "trade_required";
+      const availabilityKey = player.selectionRequiredTrade
+        ? "tradeRequired"
+        : "resolvableNow";
+      player.metrics.selectionAvailability[availabilityKey] += 1;
       if (player.selectedAction.startsWith("escalation_")) {
         this.commitEscalationSelection(
           player,
