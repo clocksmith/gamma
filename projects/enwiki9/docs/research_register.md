@@ -1317,3 +1317,32 @@ the latter fails the strict decimal reservation criterion. This exact scalar
 symbol-bias realization is retired. It does not adjudicate a distinct
 output-projection-plus-KV interaction gate, which is authorized only if both
 the exact native and mature cadence antecedents pass.
+
+## 2026-08-08 - Agent B convergence protocol frozen
+
+Agent B owns causal predictive discovery and compact NNCP/symbol-domain
+realization. Agent A owns representation legality, full-corpus backend
+adjudication, packaging, inversion, and submission proof. Agent B will not
+duplicate Agent A's far-history or transform work, and concurrent-job timing
+is diagnostic rather than qualifying.
+
+The three unchanged Agent B gates form a triangulation. The exact native
+`65,536`-symbol midpoint gate and the mature `1,998,848`-symbol cadence gate
+must both pass before one nested `K/O/OK/F/S` causal attribution is authorized.
+That descendant must isolate unchanged-parameter KV rebuild, exact
+output-projection-plus-bias update, their interaction, the full update, and a
+shifted-residual control. The already rejected scalar-bias child supplies a
+separate negative control and is not reopened. A compact midpoint realization
+must retain at least `80%` of the full gain, add at most `15%` parent runtime
+and `128 MiB` resident memory, keep every chronological third positive, beat
+the shifted control, and decode exactly.
+
+The P64 crossing must pass its frozen `4.30` bits/symbol, I16, P64R, inverse,
+determinism, and memory conditions before one larger unchanged-layout maturity
+gate. Only a second pass authorizes one memory-substitutive native CMIX16
+comparison: balanced numeric-ID tree (`TID`) versus a canonical trie over exact
+dictionary expansions (`TEXP`). No endian, block, plane, dictionary, or
+backend sweep is allowed. Midpoint and CMIX16 gains remain non-additive until
+one exact same-object joint replay proves complementarity. No fourth Agent B
+family is authorized before these descendants either reach an exact `100M`
+result or retire.
