@@ -87,22 +87,51 @@ const outputDirectory = resolve(args["output-dir"]);
 await mkdir(resolve(outputDirectory, ".."), { recursive: true });
 await mkdir(outputDirectory, { recursive: false });
 const journalPath = resolve(outputDirectory, "stage-journal.jsonl");
+let journalQueue = Promise.resolve();
+const journal = (entry) => {
+  journalQueue = journalQueue.then(() => appendFile(journalPath, `${JSON.stringify(entry)}\n`));
+  return journalQueue;
+};
 
-const { session, gameReport } = await runCodexControlledSession({
-  preRegistrationPath: args.preregistration,
-  kitManifestPath: args["kit-manifest"],
-  allowLlm: true,
-  onProgress(progress) {
-    if (progress.phase === "match_progress") {
-      process.stderr.write(`${JSON.stringify(progress)}\n`);
-      return;
+let completed;
+try {
+  completed = await runCodexControlledSession({
+    preRegistrationPath: args.preregistration,
+    kitManifestPath: args["kit-manifest"],
+    allowLlm: true,
+    onProgress(progress) {
+      if (progress.phase === "match_progress") {
+        process.stderr.write(`${JSON.stringify(progress)}\n`);
+        return;
+      }
+      process.stderr.write(`codex-session ${progress.id} ${progress.status}\n`);
+    },
+    async onParticipantComplete(entry) {
+      await journal({ kind: "participant", ...entry });
+    },
+    async onStageComplete(entry) {
+      await journal({ kind: "stage", ...entry });
     }
-    process.stderr.write(`codex-session ${progress.id} ${progress.status}\n`);
-  },
-  async onStageComplete(entry) {
-    await appendFile(journalPath, `${JSON.stringify(entry)}\n`);
-  }
-});
+  });
+} catch (error) {
+  await journalQueue;
+  await writeFile(
+    resolve(outputDirectory, "failure.json"),
+    `${JSON.stringify({
+      schemaVersion: 1,
+      artifactKind: "codex-controlled-session-failure",
+      failedAt: new Date().toISOString(),
+      errorClass: error?.name || "Error",
+      errorMessage: error?.message || "Unknown session failure.",
+      providerExitCode: Number.isInteger(error?.details?.code) ? error.details.code : null,
+      providerTimeoutMs: error?.details?.timeoutMs || null
+    }, null, 2)}\n`,
+    { flag: "wx" }
+  );
+  throw error;
+}
+const { session, gameReport } = completed;
+await journalQueue;
 
 const sessionText = `${JSON.stringify(session, null, 2)}\n`;
 const gameplayText = `${JSON.stringify(gameReport, null, 2)}\n`;
