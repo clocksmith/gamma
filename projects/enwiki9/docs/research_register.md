@@ -1460,3 +1460,33 @@ graph. `K=P` and `O=OK` probability/state hashes are mandatory implementation
 checks. Any state reset, missing graph reference, or equality failure kills
 that realization rather than authorizing a workaround. This is a source-level
 plan only until both active antecedents pass.
+
+## 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected
+
+The running `nncp_libnc_exact_midsegment32_65536_qm3_v1` driver leaves its
+candidate source unchanged, but its post-decode Boolean is insufficient for
+promotion. It currently accepts any nonempty decoded byte string for which
+the one-million-byte raw input `startswith(restored_bytes)`. A truncated raw
+prefix could therefore satisfy the recorded field
+`raw_prefix_decode_exact=true`.
+
+The gate must not be promoted from that Boolean alone. After the job
+terminalizes, an independent audit must require exact equality with the
+receipt-bound first-65,536-symbol raw inverse already reproduced by both
+`nncp_midsegment32_update_qm0_v1` and
+`nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1`:
+
+```text
+expected raw bytes   322,978
+expected SHA-256     a5daeae040c2575ae1c2fd5f3284d73caafa0fcd48c3f546e199ab7c5f1ab7e9
+```
+
+Those two independent artifacts are byte-identical and consume the first
+65,536 big-endian symbols from the receipt-bound NNCP preprocessed stream.
+The native gate declares the identical built-in `16384,512` symbol
+population. Its candidate decode must therefore match the expected artifact
+in length, SHA-256, and direct byte comparison; the serialized mode header,
+archive size, source package, and external memory guard remain separately
+mandatory. A mismatch quarantines the native result and forbids descendant
+authorization. This audit changes no active process and grants zero score or
+forecast credit.
