@@ -28,3 +28,4 @@ Archived files preserve complete H2 records.
 - [archive/part-012.md: 2026-08-08 - NNCP/Endpoint common-raw-block routing closure through 2026-08-08 - NNCP midpoint persistence replicated at 262,144 symbols](archive/part-012.md)
 - [archive/part-013.md: 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected through 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics](archive/part-013.md)
 - [archive/part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](archive/part-014.md)
+- [archive/part-015.md: 2026-08-09 - Exact decision-ID coverage reconciled across the shared register through 2026-08-09 - Exact KAIROS opening retires the final-head dyadic realization](archive/part-015.md)
