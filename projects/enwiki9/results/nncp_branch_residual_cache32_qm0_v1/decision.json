@@ -1,0 +1,104 @@
+{
+  "arithmetic": {
+    "gain_over_base_bytes": {
+      "rotated": 8744,
+      "uniform": 9073,
+      "weighted": 9198
+    },
+    "ideal_bits": {
+      "base": 2732463.444551305,
+      "rotated": 2662511.220818182,
+      "uniform": 2659876.987918804,
+      "weighted": 2658876.4347925596
+    },
+    "payload_bytes": {
+      "base": 341558,
+      "rotated": 332814,
+      "uniform": 332485,
+      "weighted": 332360
+    },
+    "payload_sha256": {
+      "base": "99c7d04d174f7ba1a30ae5b4af5c5b5d248cf33225713c1de2ed28862b5ec8c6",
+      "rotated": "e4cd21e639debc2e9efe424335842cf96c3b6e3c16fb54f0bc1963fce767aebc",
+      "uniform": "2f1c3c9a340c31eca85714af3c523a04abb02795a77520e8a7242387439ac4dc",
+      "weighted": "381dbf55c175ede58516592392f68cb477d3c097df9b7a7bd46403d84279e42b"
+    },
+    "weighted_margin_bytes": {
+      "over_rotated": 454,
+      "over_uniform": 125
+    },
+    "weighted_minus_uniform_chronological_third_bytes": [
+      40,
+      46,
+      39
+    ],
+    "weighted_repeat_sha256": "381dbf55c175ede58516592392f68cb477d3c097df9b7a7bd46403d84279e42b"
+  },
+  "artifacts": {
+    "incremental_source_package": {
+      "bytes": 10444,
+      "limit_bytes": 65536,
+      "path": "results/nncp_branch_residual_cache32_qm0_v1/incremental_source_package.lzma",
+      "sha256": "261c964e18fc119dc658a4d641d4c4b1e0a73dbc5b34efc641c63f5c808b5b74"
+    }
+  },
+  "candidate_id": "nncp_branch_residual_cache32_qm0_v1",
+  "claim_boundary": "The residual weights are causal and decoder-visible given the teacher trace, but this program does not rebuild the faithful model and closed LibNC receives no score eligibility.",
+  "conditions": {
+    "all_incremental_thirds_positive": true,
+    "arithmetic_decode_exact": true,
+    "base_payload_reproduced": true,
+    "branch_population_exact": true,
+    "margin_over_rotated_at_least_1000": false,
+    "margin_over_uniform_at_least_1000": false,
+    "repeat_payload_identical": true,
+    "source_at_most_65536": true,
+    "weighted_gain_at_least_10000": false
+  },
+  "decision": {
+    "forecast_bytes": 109389323,
+    "mature_shadow_authorized": false,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "decode": {
+    "branches": 3670169,
+    "decoded_sha256": "3b69153ef2b0d96a86e281da36d057ed312581951091b06d6deb21f63045c6ad",
+    "symbols_exact": true
+  },
+  "epistemic_tier": "teacher_trace_exact_arithmetic_shadow_zero_score_credit",
+  "inputs": {
+    "driver_sha256": "5116c35741bac0b4900df5d1465053f05222ae1c4c0ed5fd7bf6f18c34d72664",
+    "faithful_trace": {
+      "path": "results/nncp_midsegment32_update_262144_qm1_v1/faithful_baseline_trace.bin",
+      "sha256": "8c37f952fab1242743366b99083243263cb7eb5309cd10f45a36e99188a0a706"
+    },
+    "joint_antecedent_sha256": "ad65512e2c18286a2f2229207d0a9b0b126326a67bd40978a1664435dda5f051",
+    "symbols": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin",
+      "sha256": "c82bfca1b4fb8e31d31ded609de579dc55dd12153411961a7ae0cc9b9f9605a5"
+    }
+  },
+  "model": {
+    "base_prior_mass": 16.0,
+    "cache_prior_mass": 1.0,
+    "cache_window": 32,
+    "residual": "sum(32768-realized_faithful_branch_mass)",
+    "rotated_control": "next cache occurrence weight cyclically",
+    "transmitted_state": false
+  },
+  "population": {
+    "branches": 3670169,
+    "streams": 32,
+    "symbols": 262144,
+    "symbols_per_stream": 8192,
+    "vocabulary": 16392
+  },
+  "resource": {
+    "max_rss_kib": 116004
+  },
+  "schema": "enwiki9_nncp_branch_residual_cache32_qm0_v1",
+  "score_credit_bytes": 0,
+  "status": "CAUSAL_SHADOW_COMPLETE",
+  "verdict": "retire_branch_residual_cache32"
+}
