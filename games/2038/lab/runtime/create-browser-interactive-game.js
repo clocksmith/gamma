@@ -53,13 +53,16 @@ export async function createBrowserInteractiveGame(options = {}, onPending) {
     },
     options,
     onPending,
-    policyFactory(profile, backend) {
+    policyFactory(profile, backend, policyOptions = {}) {
       if (!deterministicInteractiveBackends.has(backend)) {
         throw new Error(
           `Browser-native play supports weighted and greedy opponents; ${backend} requires the optional local bridge.`
         );
       }
-      return new WeightedPlayerPolicy(profile, { selection: backend });
+      return new WeightedPlayerPolicy(profile, {
+        selection: backend,
+        rosterProfileIds: policyOptions.rosterProfileIds
+      });
     }
   });
 }

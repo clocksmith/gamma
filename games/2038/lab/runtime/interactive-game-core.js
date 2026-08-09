@@ -156,7 +156,8 @@ export function createInteractiveGameCore({
         model: options.model,
         timeoutMs: options.timeoutMs,
         shortlistSize: options.shortlistSize,
-        llmStages: options.llmStages
+        llmStages: options.llmStages,
+        rosterProfileIds: selectedProfiles.map((candidate) => candidate.id)
       })
     };
   });

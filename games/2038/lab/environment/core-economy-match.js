@@ -338,10 +338,8 @@ export class CoreEconomyMatch {
     return this.config.actions
       .filter((action) => !player.actionsUsed.includes(action.id))
       .map((action) => {
-        const currentResolutionCount = this.currentResolutionCountForSelection(
-          seat,
-          action.id
-        );
+        const availability = this.selectionAvailability(seat, action.id);
+        if (availability.status === "blocked") return null;
         return {
           decisionId: `select_${action.id}`,
           label: renderSimulationCopy(
@@ -351,11 +349,24 @@ export class CoreEconomyMatch {
           actionId: action.id,
           consequences: {
             stage: "action_selection",
-            currentResolutionCount,
-            resolvableWithoutTrade: currentResolutionCount > 0
+            ...availability
           }
         };
-      });
+      })
+      .filter(Boolean);
+  }
+
+  selectionAvailability(seat, actionId) {
+    const currentResolutionCount = this.currentResolutionCountForSelection(
+      seat,
+      actionId
+    );
+    return {
+      currentResolutionCount,
+      resolvableWithoutTrade: currentResolutionCount > 0,
+      resolvableWithImmediateTrade: false,
+      status: currentResolutionCount > 0 ? "resolvable_now" : "blocked"
+    };
   }
 
   currentResolutionCountForSelection(seat, actionId) {

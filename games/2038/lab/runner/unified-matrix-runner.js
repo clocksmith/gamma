@@ -704,6 +704,11 @@ function outcomeSummary(observations) {
   let openContinuity = 0;
   let auditHits = 0;
   let forcedNoOps = 0;
+  let tradeRequiredSelections = 0;
+  let requiredTradeOffers = 0;
+  let requiredTradeAcceptances = 0;
+  let requiredTradeFailures = 0;
+  let blockedAfterCommitment = 0;
   let actionOpportunities = 0;
   let fallbacks = 0;
   for (const observation of observations) {
@@ -742,6 +747,11 @@ function outcomeSummary(observations) {
     for (const [index, standing] of observation.standings.entries()) {
       auditHits += standing.auditHits || 0;
       forcedNoOps += standing.forcedNoOps || 0;
+      tradeRequiredSelections += standing.selectionAvailability?.tradeRequired || 0;
+      requiredTradeOffers += standing.requiredTradeOffers || 0;
+      requiredTradeAcceptances += standing.requiredTradeAcceptances || 0;
+      requiredTradeFailures += standing.requiredTradeFailures || 0;
+      blockedAfterCommitment += standing.blockedAfterCommitment || 0;
       fallbacks += standing.policyFallbacks || 0;
       const standingTotals = factionStandingTotals[standing.factionId] || {
         appearances: 0,
@@ -969,6 +979,11 @@ function outcomeSummary(observations) {
     meanAuditHitsPerMatch: observations.length ? auditHits / observations.length : 0,
     forcedNoOps,
     forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0,
+    tradeRequiredSelections,
+    requiredTradeOffers,
+    requiredTradeAcceptances,
+    requiredTradeFailures,
+    blockedAfterCommitment,
     policyFallbacks: fallbacks,
     actionDiversity: normalizedEntropy(actionCounts),
     openingDiversity: concentration(openingCounts),

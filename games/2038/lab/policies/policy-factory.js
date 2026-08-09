@@ -26,7 +26,8 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
   if (backend === "weighted" || backend === "greedy") {
     return new WeightedPlayerPolicy(profile, {
       selection: backend,
-      treatment: validatePolicyTreatment(options.policyTreatment)
+      treatment: validatePolicyTreatment(options.policyTreatment),
+      rosterProfileIds: options.rosterProfileIds
     });
   }
   if (options.policyTreatment) {
@@ -36,7 +37,9 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
     throw new Error(`Backend ${backend} requires --allow-llm.`);
   }
 
-  const fallback = new WeightedPlayerPolicy(profile);
+  const fallback = new WeightedPlayerPolicy(profile, {
+    rosterProfileIds: options.rosterProfileIds
+  });
   const callerOptions = {
     ...(options.callerOptions || {}),
     model: options.model,
