@@ -1490,3 +1490,31 @@ archive size, source package, and external memory guard remain separately
 mandatory. A mismatch quarantines the native result and forbids descendant
 authorization. This audit changes no active process and grants zero score or
 forecast credit.
+
+Conditional head-only graph implementation audit: the current full-midpoint
+patch completes 32 dummy future states because ordinary
+`trf_eval_gradient()` factorizes and consumes all key/value graph nodes up to
+`graph_len=64`; it then rebuilds states `0..31` after the deep update. A
+compact output-head arm should not inherit that path unchanged.
+
+The exact attributable route is a dedicated first-half head-gradient helper.
+During states `0..31`, detach only the final normalized hidden tensor with
+`nc_stop_grad()` immediately before `embed_out`, while retaining every
+decoder key/value node. Concatenate and backpropagate only those 32 detached
+head outputs, release only their output tensors, and leave the deep key/value
+references alive. Then apply the shared Adam update and continue coding states
+`32..63` directly; the ordinary second-half deep gradient can consume the
+complete 64-state key/value graph. This removes both dummy future evaluation
+and first-half replay from the proposed `O` realization without changing its
+coded probabilities.
+
+Receipt-bound disassembly confirms that `nc_stop_grad()` consumes its tensor:
+for a multiply referenced tensor it allocates and copies a detached value,
+then frees the supplied reference; for a single reference it frees the graph
+node in place. The implementation must therefore pass it an intentionally
+owned reference at the head boundary. `O=OK` remains an exact probability and
+state control: an optional unchanged-deep first-half replay may recreate graph
+references, but it must not alter the second-half probabilities. Any missing
+key/value reference, output mismatch, or optimizer-state reset kills the arm.
+This is still conditional source design with zero credit; no child is
+authorized before both active midpoint antecedents pass.
