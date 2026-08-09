@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T15:41:54+00:00`
+- Generated at UTC: `2026-08-09T15:55:11+00:00`
 
 ## Target State
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `4,281`
+- RSS samples: `4,440`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `5,691,344`
@@ -56,9 +56,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `991`
-- RSS guard JSON modified UTC: `2026-08-09T15:41:54+00:00`
-- RSS guard JSON SHA-256: `d30ed05d7188eb48fa6d13e3802f27d26dd6b65fea9740d72b46c656c9d21f39`
-- RSS samples: `4,281`
+- RSS guard JSON modified UTC: `2026-08-09T15:55:10+00:00`
+- RSS guard JSON SHA-256: `ca91cc9a35c522008b12beb1bf01e3e421e8aa7a9bbe42de2097f1709b976a5e`
+- RSS samples: `4,440`
 - Max sampled single RSS KiB: `5,691,344`
 - Max sampled tree RSS KiB: `5,711,868`
 - Single-process RSS margin KiB: `4,794,416`
@@ -129,11 +129,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `728`
-- Registered programs: `291`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=39, measured_negative=100, retired=538`
+- Program directories: `729`
+- Registered programs: `292`
+- Untracked nonignored entries: `6`
+- Modified tracked entries: `5`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=39, measured_negative=100, retired=538, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 

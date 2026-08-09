@@ -595,3 +595,56 @@ infrastructure only. It does not run the conditional production bridge, prove
 observer neutrality on NNCP, establish compression gain, or grant score,
 forecast, source-eligibility, or runtime credit. The active mature antecedent
 must terminalize before the bridge is materialized.
+
+## 2026-08-09 - Midpoint first-half tree-node calibration frozen
+
+Candidate `nncp_midpoint_tree_node_calibration_qm0_v1` tests a compact causal
+explanation of the exact midpoint teacher gain without touching the active
+native encoder. On each 64-state segment it codes states 0--31 faithfully,
+pools their realized branches across 32 streams by exact balanced-tree node,
+and uses the resulting KT node probabilities only for states 32--63. The
+complete node expert is marginalized with the faithful symbol distribution at
+frozen `16:1` prior mass, with posterior updates after each decoded branch.
+All counts are decoder-rebuilt and reset at the next segment; no selector,
+node ID, count, address, distance, or model parameter is transmitted.
+
+Matched controls pool the same current first-half branches only by depth or
+reuse exact-node counts from the preceding segment. Promotion requires an
+independently terminated gain of at least `7,500` actual bytes on the exact
+`262,144`-symbol population, positive original-coordinate thirds, at least
+`1,000` bytes over both controls, repeat identity, exact arithmetic decode,
+the complete branch population, and at most `65,536` compressed source bytes.
+A miss retires this exact pooling, KT law, mixture, and reset schedule without
+concentration, grouping, or persistence sweeps.
+
+This is a zero-credit same-object attribution. The faithful probabilities are
+still a receipt-bound closed-LibNC teacher trace, so even a pass cannot inherit
+NNCP eligibility, archive score, or a full-corpus forecast. Proposal:
+`operations/adaptive/proposals/developed/000_nncp_midpoint_tree_node_calibration_qm0_v1.json`.
+
+## 2026-08-09 - Midpoint tree-node calibration is terminal subscale
+
+Candidate `nncp_midpoint_tree_node_calibration_qm0_v1` completed on the exact
+`262,144`-symbol, `3,670,169`-branch population. The faithful base arithmetic
+payload was `341,558` bytes. Exact first-half node pooling produced `341,066`
+bytes, a gain of only `492` bytes against the frozen `7,500`-byte gate. The
+depth-only control produced `342,000` bytes and the prior-segment node control
+produced `341,513` bytes, leaving node margins of `934` and `447` bytes; both
+missed the required `1,000`-byte specificity margin. Original-coordinate
+thirds were nevertheless positive at `179`, `136`, and `178` bytes.
+
+Arithmetic decoding reproduced every symbol and the complete branch
+population. The repeated node payload was byte-identical at SHA-256
+`d16ad37dea5bde65ffb632b045f56c13953c521ef6356c74367f50acb7333874`.
+The compressed incremental source was `6,172` bytes, and the guard completed
+without a violation at `50,396` KiB maximum sampled process-tree RSS.
+
+Verdict: retire this exact first-half node pooling, KT law, `16:1` mixture, and
+segment-reset schedule without concentration, grouping, or persistence
+sweeps. Exact node locality is causal and slightly positive, but it explains
+too little of the native midpoint effect to authorize an open port. This
+closed-LibNC shadow receives zero archive, forecast, eligibility, and score
+credit. Evidence:
+`results/nncp_midpoint_tree_node_calibration_qm0_v1/decision.json`, guard
+`results/nncp_midpoint_tree_node_calibration_qm0_guard_v1.json`, adaptive job
+`20260809T155220Z_5a0202d849`.
