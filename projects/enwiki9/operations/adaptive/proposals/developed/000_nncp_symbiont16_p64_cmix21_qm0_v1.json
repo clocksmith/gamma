@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_symbiont16_p64_cmix21_qm0_v1",
+  "claimed_at": "2026-08-09T02:06:01+00:00",
+  "created_at": "2026-08-09T02:06:01+00:00",
+  "developed_at": "2026-08-09T02:06:01+00:00",
+  "evidence": [
+    "results/nncp_pc_u16be_cmix21_assoc10_nopre_v1/2026-07-27T212933.json; /home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin; docs/research_register.md"
+  ],
+  "expected_savings_bytes": 4389323,
+  "hypothesis": "On the same first 1048576 receipt-bound full-corpus NNCP symbols, 64-symbol high-byte/low-byte plane transposition will beat interleaved U16BE and a one-block-rotated low-plane control under the identical byte-native cmix backend, while reaching at most 4.30 actual payload bits per symbol.",
+  "interfaces_exposed": [
+    "Receipt-bound NNCP U16BE symbols -> reversible 64-symbol byte-plane layout -> unchanged cmix21 no-preprocess backend -> inverse layout -> exact NNCP symbols"
+  ],
+  "kill_condition": "Any provenance, determinism, inverse, or memory failure, P64 above 4.30 bits/symbol, or I16/P64R matching or beating P64 retires SYMBIONT byte-layout crossing without block-size, endian, plane-width, or layout sweeps.",
+  "max_program_bytes": 1200000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "root",
+  "parent": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+  "parent_proposal_id": null,
+  "priority": 1280,
+  "promotion_condition": "Exact symbol identity and inverse; deterministic archives; P64 payload <=4.30 bits/symbol; P64 strictly smaller than I16 and P64R; decimal-memory pass. Only then authorize one native CMIX16 design.",
+  "proposal_id": "nncp_symbiont16_p64_cmix21_qm0_v1",
+  "retired_neighborhoods": [
+    "No copy, trie, SABLE, event, endian, block-size, plane-width, dictionary-size, or backend-parameter sweep."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1298,
+  "state": "developed",
+  "title": "SYMBIONT-16 P64 NNCP symbol frontend by cmix crossing screen"
+}

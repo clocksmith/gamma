@@ -30,6 +30,16 @@
     "status": "receipt_incomplete"
   },
   "active_processes": {
+    "active_cmix_mode": "no_preprocess_compress",
+    "active_proc_io": {
+      "cancelled_write_bytes": 0,
+      "rchar": 4225582,
+      "read_bytes": 0,
+      "syscr": 783,
+      "syscw": 627,
+      "wchar": 2107164,
+      "write_bytes": 0
+    },
     "active_rows": [
       {
         "args": "/bin/bash -lc set -euo pipefail CAND=/home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1 PKG=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/run/cmix.head_assets HEAD=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/models/bitlstm32/refit_golden256_fp16.blob mkdir -p \"$CAND/backend/baseline\" \"$CAND/backend/residual\" cp \"$PKG\" \"$CAND/backend/baseline/cmix\"; chmod +x \"$CAND/backend/baseline/cmix\" cp \"$PKG\" \"$CAND/backend/residual/cmix\"; chmod +x \"$CAND/backend/residual/cmix\" cp \"$HEAD\" \"$CAND/head.blob\" df -B1 --output=avail \"$CAND\" | tail -n 1 cd \"$CAND/backend/baseline\" KH_BITLSTM32=\"$CAND/head.blob\" CMIX_PPM_RSS_MB=8500 python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json encode.guard.json -- ./cmix -e \"$CAND/original.bin\" out.cmix sha256sum out.cmix archive9 stat -c '%n %s' out.cmix archive9",
@@ -64,11 +74,43 @@
         "stat": "S+"
       },
       {
+        "args": "python3 tools/enwiki9_lab.py run --candidate nncp_libnc_exact_midsegment32_65536_qm3_v1 --max-workers 1 --min-free-mib 12000",
+        "pgid": 3459502,
+        "pid": 3459502,
+        "ppid": 2229505,
+        "rss_kib": 21660,
+        "stat": "Ssl"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json results/nncp_libnc_exact_midsegment32_65536_qm3_guard_v1.json --label nncp_libnc_exact_midsegment32_65536_qm3_v1 -- python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py",
+        "pgid": 3459502,
+        "pid": 3459586,
+        "ppid": 3459502,
+        "rss_kib": 16840,
+        "stat": "S"
+      },
+      {
+        "args": "python3 tools/enwiki9_lab.py run --candidate nncp_symbiont16_p64_cmix21_qm0_v1 --max-workers 1 --min-free-mib 12000",
+        "pgid": 3581156,
+        "pid": 3581156,
+        "ppid": 2229505,
+        "rss_kib": 21644,
+        "stat": "Ssl+"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json results/nncp_symbiont16_p64_cmix21_qm0_guard_v1.json --label nncp_symbiont16_p64_cmix21_qm0_v1 -- python3 tools/nncp_symbiont16_p64_cmix21_qm0.py",
+        "pgid": 3581156,
+        "pid": 3581248,
+        "ppid": 3581156,
+        "rss_kib": 16740,
+        "stat": "S+"
+      },
+      {
         "args": "./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix",
         "pgid": 1768319,
         "pid": 1768319,
         "ppid": 1768314,
-        "rss_kib": 9016996,
+        "rss_kib": 8460056,
         "stat": "Rs"
       },
       {
@@ -84,29 +126,90 @@
         "pgid": 2427832,
         "pid": 2427873,
         "ppid": 2427832,
-        "rss_kib": 4697500,
+        "rss_kib": 5686692,
         "stat": "Rl"
+      },
+      {
+        "args": "python3 tools/nncp_libnc_exact_midsegment32_65536_qm3.py",
+        "pgid": 3459587,
+        "pid": 3459587,
+        "ppid": 3459586,
+        "rss_kib": 21040,
+        "stat": "Ss"
+      },
+      {
+        "args": "/tmp/nncp-exact-midsegment32-65536-ybc819hu/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --preprocess 16384,512 --max_size 65536 c /home/x/enwiki9-nonproof/results/fx2_full_attribution_trace_1m_v1.restored /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_exact_midsegment32_65536_qm3_v1/baseline.nncp",
+        "pgid": 3459587,
+        "pid": 3459798,
+        "ppid": 3459587,
+        "rss_kib": 5778764,
+        "stat": "Sl"
+      },
+      {
+        "args": "python3 tools/nncp_symbiont16_p64_cmix21_qm0.py",
+        "pgid": 3581255,
+        "pid": 3581255,
+        "ppid": 3581248,
+        "rss_kib": 35500,
+        "stat": "Ss"
+      },
+      {
+        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out",
+        "pgid": 3581255,
+        "pid": 3581334,
+        "ppid": 3581255,
+        "rss_kib": 8179364,
+        "stat": "R"
       }
     ],
     "active_scorer_observed": true,
-    "active_tree_decimal_10gb_margin_kib": -4028495,
-    "active_tree_decimal_10gb_over_kib": 4028495,
-    "active_tree_margin_kib": -3308360,
-    "active_tree_rss_kib": 13794120,
-    "active_tree_rss_over_guard_kib": 3308360,
+    "active_temp_io": {
+      "input_bytes": 2097152,
+      "input_mtime_utc": "2026-08-09T02:09:19+00:00",
+      "input_path": "/tmp/symbiont-I16-1-6l3upl5d/in",
+      "output_bytes": 8192,
+      "output_mtime_utc": "2026-08-09T02:09:45+00:00",
+      "output_path": "/tmp/symbiont-I16-1-6l3upl5d/out",
+      "output_temp_bytes": 2097157,
+      "output_temp_mtime_utc": "2026-08-09T02:09:19+00:00",
+      "output_temp_path": "/tmp/symbiont-I16-1-6l3upl5d/out.cmix.temp"
+    },
+    "active_tree_decimal_10gb_margin_kib": -18552299,
+    "active_tree_decimal_10gb_over_kib": 18552299,
+    "active_tree_margin_kib": -17832164,
+    "active_tree_rss_kib": 28317924,
+    "active_tree_rss_over_guard_kib": 17832164,
     "active_tree_rss_warning": "active process tree RSS crossed the local numeric guard; the running kill guard is single-process",
-    "cmix_rows": [],
+    "cmix_rows": [
+      {
+        "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out",
+        "pgid": 3581255,
+        "pid": 3581334,
+        "ppid": 3581255,
+        "rss_kib": 8179364,
+        "stat": "R"
+      }
+    ],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
-    "max_cmix_process": null,
+    "max_cmix_process": {
+      "args": "/tmp/symbiont-cmix-bin-orq4hvyw/cmix -n /tmp/symbiont-I16-1-6l3upl5d/in /tmp/symbiont-I16-1-6l3upl5d/out",
+      "pgid": 3581255,
+      "pid": 3581334,
+      "ppid": 3581255,
+      "rss_kib": 8179364,
+      "stat": "R"
+    },
     "research_rows": [],
-    "rss_guard_kib": 10485760
+    "rss_guard_kib": 10485760,
+    "single_process_decimal_10gb_margin_kib": 1586261,
+    "single_process_margin_kib": 2306396
   },
   "adaptive_jobs": {
     "claimable_pending_job_count": 0,
     "held_pending_job_count": 27,
     "pending_job_count": 27,
-    "running_job_count": 1,
+    "running_job_count": 3,
     "running_jobs": [
       {
         "candidate_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
@@ -116,6 +219,26 @@
         "started_at": "2026-08-09T00:27:52+00:00",
         "state": "running",
         "worker_pid": 2427829,
+        "worker_pid_live": true
+      },
+      {
+        "candidate_id": "nncp_libnc_exact_midsegment32_65536_qm3_v1",
+        "gate_size": 65536,
+        "job_id": "20260809T015851Z_f0f7c41ba9",
+        "path": "projects/enwiki9/operations/adaptive/running/000_20260809T015851Z_f0f7c41ba9.json",
+        "started_at": "2026-08-09T01:58:55+00:00",
+        "state": "running",
+        "worker_pid": 3459586,
+        "worker_pid_live": true
+      },
+      {
+        "candidate_id": "nncp_symbiont16_p64_cmix21_qm0_v1",
+        "gate_size": 1048576,
+        "job_id": "20260809T020913Z_92be967fba",
+        "path": "projects/enwiki9/operations/adaptive/running/000_20260809T020913Z_92be967fba.json",
+        "started_at": "2026-08-09T02:09:19+00:00",
+        "state": "running",
+        "worker_pid": 3581248,
         "worker_pid_live": true
       }
     ]
@@ -200,14 +323,15 @@
         "blocked_dependency": 33,
         "candidate": 27,
         "measured_negative": 100,
-        "retired": 531
+        "retired": 531,
+        "track_source_before_evolution": 2
       },
-      "directories": 1705,
-      "file_entries": 8016,
-      "ignored_entries": 4055,
-      "modified_tracked_entries": 1,
-      "program_directories": 709,
-      "registered_programs": 277,
+      "directories": 1710,
+      "file_entries": 8038,
+      "ignored_entries": 4065,
+      "modified_tracked_entries": 4,
+      "program_directories": 711,
+      "registered_programs": 279,
       "top_level_file_entries": {
         ".claude": 1,
         ".codex-reminders": 4,
@@ -215,21 +339,21 @@
         "agents": 5,
         "contracts": 9,
         "data": 7,
-        "docs": 368,
+        "docs": 370,
         "enwiki9_segment_bundle": 6,
         "external": 174,
         "lib": 4,
-        "operations": 884,
+        "operations": 888,
         "patches": 36,
-        "programs": 2226,
-        "results": 3145,
-        "run_logs": 600,
+        "programs": 2233,
+        "results": 3150,
+        "run_logs": 602,
         "skills": 4,
         "tests": 58,
-        "tools": 467
+        "tools": 469
       },
       "tracked_entries": 4489,
-      "untracked_nonignored_entries": 1
+      "untracked_nonignored_entries": 15
     }
   },
   "certificate_active_candidate": {
@@ -313,7 +437,7 @@
     "persisted_running": false,
     "scope_bytes": null
   },
-  "generated_at_utc": "2026-08-09T01:55:44+00:00",
+  "generated_at_utc": "2026-08-09T02:10:06+00:00",
   "handoff": {
     "active_scorer_observed": true,
     "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
@@ -364,10 +488,14 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": -4028495,
-    "active_process_tree_margin_kib": -3308360,
-    "active_process_tree_rss_kib": 13794120,
+    "active_cmix_decimal_10gb_margin_kib": 1586261,
+    "active_cmix_mode": "no_preprocess_compress",
+    "active_cmix_pid": 3581334,
+    "active_cmix_rss_kib": 8179364,
+    "active_cmix_single_process_margin_kib": 2306396,
+    "active_process_tree_decimal_10gb_margin_kib": -18552299,
+    "active_process_tree_margin_kib": -17832164,
+    "active_process_tree_rss_kib": 28317924,
     "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
     "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
