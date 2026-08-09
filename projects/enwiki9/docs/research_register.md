@@ -493,3 +493,24 @@ scope rather than the retry label. Live validation recovered candidate
 status, `5,691,344 KiB` peak single-process RSS, and `5,711,868 KiB` peak
 process-tree RSS. This is monitoring correctness only and receives zero
 compression, forecast, or score credit.
+
+## 2026-08-09 - Official source recheck keeps LibNC midpoint teacher-only
+
+The current official Hutter rules and FAQ were rechecked against the current
+LibNC publication surface. The contest requires documented source for the
+compressor and every relevant file to be publicly available under an
+OSI-approved license before payment. LibNC's official documentation still
+offers only binary libraries, states that the binary is free to use, and says
+to contact the author for source access. The official NNCP download continues
+to use that binary library.
+
+Sources: `https://prize.hutter1.net/hrules.htm`,
+`https://prize.hutter1.net/hfaq.htm`, `https://bellard.org/libnc/`, and
+`https://bellard.org/libnc/libnc.html`.
+
+Conclusion: the active native midpoint gate can establish compression science
+and guide an open replacement, but cannot inherit prize eligibility from the
+bundled LibNC binary. No source-release claim, exception, archive score,
+forecast, or prize credit is granted. Endpoint428 is not an automatic cadence
+port: its two independent FXCM experts already update once per decoded truth
+bit, and the existing snapshot-freeze campaign covers reduced update work.
