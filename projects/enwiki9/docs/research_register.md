@@ -221,6 +221,15 @@ violation. This authorizes the identical sealed-filesystem contract for the
 second full-corpus external decode after the first full decode succeeds. It
 does not prove a full-corpus inverse, archive determinism, or a counted score.
 
+The official option-accounting audit now binds the compressor invocation as
+`KH_BITLSTM32=head.blob ./cmix -e enwik9 out.cmix` (`48` bytes without a
+newline), while the self-extracting archive needs no argument. Charging that
+entire line conservatively produces `108,492,873` bytes for the external claim,
+still `1,192,323` bytes below the published prize ceiling but `3,492,873`
+bytes above Gamma's `105,000,000` target. The exact committee-facing surcharge
+remains a final-package question; this upper bound prevents option ambiguity
+from contaminating the current qualification campaign.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL

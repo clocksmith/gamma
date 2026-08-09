@@ -49,20 +49,20 @@ identifies source snapshot `60c499e`.
 ## Contingent prize arithmetic
 
 This self-report does not change the still-listed official record or Gamma's
-standing `108,000,000` design target. If `108,492,825` were accepted as the
+standing `105,000,000` design target. If `108,492,825` were accepted as the
 record, however, the maximum integer score satisfying a subsequent one-percent
 improvement would be:
 
 ```text
 floor(0.99 * 108,492,825)           107,407,896 bytes
 Gamma forecast distance               1,981,427 bytes above
-108,000,000 target distance              592,104 bytes above
-108,000,000 improvement over record          0.4542466%
+105,000,000 target distance            2,407,896 bytes below
+105,000,000 improvement over record          3.2194064%
 ```
 
-Therefore `108,000,000` would still set a smaller record but would not meet the
-minimum one-percent prize claim after this hypothetical reset. Track
-`107,407,896` as a contingency only until authoritative verification exists.
+Therefore the active `105,000,000` target would still clear the next
+one-percent prize threshold after this hypothetical reset. Track `107,407,896`
+as a contingency only until authoritative verification exists.
 
 ## Mechanism audit
 

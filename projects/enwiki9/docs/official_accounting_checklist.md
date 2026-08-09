@@ -59,10 +59,12 @@ from a unique directory. The claimed arithmetic is:
 S1 = 459,989 + 23,002 =      482,991
 S2 =                         108,009,834
 S  = S1 + S2 =               108,492,825
+conservative full invocation =           48
+conservative charged total =    108,492,873
 published prize ceiling =    109,685,196
-ceiling margin =               1,192,371
+conservative ceiling margin =   1,192,323
 Gamma target =               105,000,000
-Gamma target debt =            3,492,825
+conservative target debt =      3,492,873
 ```
 
 This is still zero-credit external accounting. The exact qualification ladder
@@ -80,11 +82,14 @@ is deliberately split so one success cannot inherit an unproved antecedent:
 The external source snapshot claims that `archive9` contains the matching
 decode stub, compressed dictionary, head asset, payload, and framing. The
 compressor still consumes the separately counted head through
-`KH_BITLSTM32`. Before any official-score promotion, determine whether the
-required invocation contributes option/instruction bytes under the detailed
-rules and include them if applicable. Do not infer full encode reproducibility
-from a successful external-archive decode or from an opening-prefix source
-roundtrip.
+`KH_BITLSTM32`. The exact operational line is
+`KH_BITLSTM32=head.blob ./cmix -e enwik9 out.cmix`, which is `48` bytes without
+a trailing newline; the self-extracting archive needs no option. The detailed
+rules explicitly add necessary execution or compilation option lengths. The
+ledger therefore carries the entire compressor invocation as a conservative
+upper bound until the committee-facing package form fixes the exact surcharge.
+Do not infer full encode reproducibility from a successful external-archive
+decode or from an opening-prefix source roundtrip.
 
 ## External Rule Boundary
 
