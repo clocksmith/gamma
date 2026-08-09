@@ -1610,6 +1610,11 @@ The preceding I16 arm completed at `1,000,845` bytes, or
 `7.63584136962890625` bits/symbol. The driver remains untouched so it can
 produce its full exact controls, determinism, inverse, and external memory
 receipt, but those fields can no longer authorize a native CMIX16 child.
+The P64 arm subsequently terminalized at `1,458,972` bytes, or
+`11.131072998046875` bits/symbol: `895,363` bytes above the largest whole
+archive allowed by the frozen rate gate and `458,127` bytes worse than I16.
+Its matched P64R, repeat, and decode stages continue unchanged so the driver
+can emit the complete control receipt; they cannot reverse the rate failure.
 Decision boundary: retire NNCP-symbol byte-plane crossing, 64-symbol
 transposition, and this unchanged byte-native CMIX backend. Do not sweep
 endian order, block length, plane width, dictionary size, or backend. The
