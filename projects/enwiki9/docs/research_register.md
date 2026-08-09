@@ -1575,6 +1575,27 @@ persistent memories.  A mismatch kills the implementation.  This refinement
 changes no active source, authorizes no job before both antecedents pass, and
 receives zero score and forecast credit.
 
+The conditional shifted-truth control is frozen before either antecedent
+terminalizes.  At each midpoint and independently within each of the 32
+streams, `S` pairs hidden state `i` with the already decoded first-half target
+at `(i + 1) mod 32`.  This one-position cyclic permutation preserves the exact
+target multiset, update count, graph size, optimizer calls, learning-rate
+coordinate, and timing shape while destroying correct hidden/target
+alignment.  Its second-half truths and update are unchanged.  `S` therefore
+controls generic extra optimization capacity without importing future data.
+No shift distance or permutation sweep is allowed.
+
+The `K` integrity arm performs no midpoint optimizer step: it discards the
+first-half graph, rebuilds the same first-half states under unchanged
+parameters, then retains the parent's ordinary full-segment truth and update.
+It must be byte-, parameter-, optimizer-, and memory-identical to `P`.  The
+`O` and `OK` arms instead use true first-half targets for the head-only
+midpoint step and the true second-half-only deep update at segment end, exactly
+matching `F`'s two loss populations.  `OK` consumes and rebuilds the first-half
+deep graph; `O` preserves it through the detached-head helper.  These frozen
+definitions prevent a favorable terminal result from selecting the control
+or update semantics post hoc.
+
 ## 2026-08-08 - SYMBIONT-16 P64 crosses its monotone rate ceiling
 
 The active `nncp_symbiont16_p64_cmix21_qm0_v1` job has produced a decisive
