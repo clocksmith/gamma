@@ -15,3 +15,4 @@
 - [part-011.md: 2026-08-03: WIKIFORWARD prior-destination lexicon QM1 materialized through 2026-08-08 - HELICAL direct-WRT far-history QM3 closure](part-011.md)
 - [part-012.md: 2026-08-08 - NNCP/Endpoint common-raw-block routing closure through 2026-08-08 - NNCP midpoint persistence replicated at 262,144 symbols](part-012.md)
 - [part-013.md: 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected through 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics](part-013.md)
+- [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](part-014.md)
