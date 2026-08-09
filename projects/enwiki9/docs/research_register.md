@@ -105,6 +105,32 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
+
+The local donor snapshot contains `127` tracked files, including the GPL
+license, complete predictor and transform sources, dictionary, article order,
+`23,002`-byte neural-head blob, PGO profile, build instructions, and packaging
+scripts. This resolves local source availability, not independent build or
+contest eligibility. The submitted compressor remains `459,989` bytes plus the
+separately counted head blob, while the exact archive remains `108,009,834`
+bytes.
+
+The donor's disk-backed PPM model already exposes an output-neutral residency
+control. `src/models/ppmd.cpp` keeps its `14,680,064,000`-byte heap in
+`ppm.temp`; once process RSS reaches `CMIX_PPMD_RSS_BUDGET_MB`, it applies
+`MADV_DONTNEED` to the stable shared mapping. The model bytes and pointer values
+remain unchanged and later faults reload the same state. The submitted default
+is `9216` MiB, and the current bare archive accepts no environment override
+because qualification intentionally runs with an empty environment.
+
+If the exact bare decode succeeds but violates the strict decimal limit, one
+unique source-built successor is authorized with only the compiled default
+changed to `8500` MiB. It must reproduce the same modeled payload and exact raw
+output, count any changed packed compressor/decode-stub bytes, and demonstrate
+both encode and decode below `9,765,625 KiB`. No PPM-model-size reduction is
+authorized by this audit. Until an independent build and roundtrip exist, this
+successor and the reported `108,492,825` total retain zero Gamma score credit.
+
 ## 2026-08-09 - Mature NNCP train-length-32 cadence passes decisively
 
 Candidate `nncp_libnc_trainlen32_mature_1998848_qm2_v1` completed the frozen
