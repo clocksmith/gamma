@@ -2017,6 +2017,18 @@ changing the native option from 64 to 32 jointly changes graph length,
 attention/memory advancement, and update cadence. The arithmetic predictions
 and learned trajectory all change together.
 
+The mature run also exercises a mechanism absent from the finite 65,536-symbol
+exact gate. The `enwik9` profile sets `retrain_period=1`; after `process_block()`
+codes a nonterminal native block, `encode_file()` calls `retrain_block()` over
+the decoder-visible retrain buffer before reading the next block. That pass
+uses the same configured `seg_len`, performs full evaluate/gradient/update
+cycles, and maintains a separate retrain learning-rate step. The live retry's
+stable `573,440`-byte descriptor, unchanged `999,424`-physical-byte input
+position, and RSS rise from about `4.70` to `5.69` GB identify this post-block
+retraining phase; they do not establish a terminated block payload. The
+65,536-symbol q3 population reaches end-of-file after its sole block and skips
+this path entirely.
+
 This gives the terminal mature result a strict interpretation. A pass at
 `30,000` actual bytes proves only that the native 32-symbol realization remains
 useful at the frozen population. A pass at the separately frozen `33,050`
