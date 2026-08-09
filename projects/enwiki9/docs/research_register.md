@@ -184,6 +184,25 @@ corpus encode ladder; a mismatch blocks that ladder until the build variance
 is explicitly accounted. It changes no codec mechanism and receives zero
 score credit.
 
+Job `20260809T225035Z_9e9c6108c7` passed. Its fresh build reproduced q2's
+`cmix`, head, opening payload, and opening archive byte-for-byte. The repeated
+compressor SHA-256 is `4ba53d36...f1d2a`; the repeated payload and archive
+hashes are `a723ca62...70db7` and `9065eaf5...8ccc4`. The bare inverse again
+reconstructed the exact opening population. Peak sampled single/tree RSS was
+`8,349,372`/`8,377,216 KiB`, within the strict decimal boundary. Clean-build
+identity is therefore established for this host-bound source realization.
+
+Candidates `cmix_obias_source_full1g_roundtrip_a_qm0_v1` and
+`cmix_obias_source_full1g_roundtrip_b_qm0_v1` are the authorized full-corpus
+determinism pair. Each uses the exact `491,483`-byte q2/q3 program package in a
+unique scratch namespace, encodes the canonical billion-byte input, preserves
+the payload and self-extracting archive, then bare-decodes and byte-compares the
+result. Each enforces the strict decimal RSS guard and a `100,000,000,000`-byte
+temporary-disk ceiling. Promotion requires both exact inverses and identical
+full archive hashes. Concurrent timing is diagnostic; isolated timing remains
+a later eligibility gate. Neither arm receives score credit before terminal
+full-scope receipts exist.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL
