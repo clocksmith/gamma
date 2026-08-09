@@ -1349,13 +1349,16 @@ result or retire.
 
 Conditional MIDAS exactness audit, before materialization: the faithful NNCP
 head is an untied `16,392 x 1,024` bfloat16 output embedding plus a
-`16,392`-entry bias. The first-half cross-entropy gradient of that matrix is a
-sum of at most `32` residual/hidden outer products and therefore has rank at
-most `32` before optimization. The production profile, however, uses Adam
-with `beta1=0`, `beta2=0.9999`, epsilon `1e-8`, and per-parameter clipping.
-Its elementwise second-moment normalization depends on the existing dense
-optimizer state and does not preserve the raw gradient's rank in general.
-Therefore an exact MIDAS child cannot inherit a rank-32 parameter-delta claim.
+`16,392`-entry bias. The first-half cross-entropy gradient is not rank `32`:
+the native midpoint loss contains `32` positions in each of `32` streams, so
+it is a sum of `1,024` residual/hidden outer products and has rank at most
+`1,024` before optimization. Earlier rank-32 wording omitted the batch/stream
+dimension and is superseded by this correction. The production profile uses
+Adam with `beta1=0`, `beta2=0.9999`, epsilon `1e-8`, and per-parameter
+clipping. Its elementwise second-moment normalization depends on the existing
+dense optimizer state and does not preserve even the corrected raw-gradient
+rank in general. Therefore an exact MIDAS child cannot inherit a low-rank
+parameter-delta claim from the teacher.
 The exact `O/OK` arms must first measure the existing head update. A later
 low-rank episodic correction is an approximation requiring its own joint
 arithmetic replay. The output matrix itself is `33,570,816` bytes in bfloat16;
@@ -1851,3 +1854,41 @@ and `_retry1`. Canonical receipts and the successful `_retry2` artifact remain
 intact. Available filesystem capacity rose to `13,214,461,952` bytes. Agent B
 may retry the unchanged mature gate after removing its partial output
 directory; Agent A retains ownership of any QM4 residual retry.
+
+## 2026-08-09 - Conditional MIDAS-1024-1 episodic factor replay frozen
+
+Considered descendant: `MIDAS-1024-1`. Epistemic tier: unmaterialized causal
+midpoint descendant with zero score and forecast credit. It remains
+unauthorized until the exact native and mature cadence antecedents both pass.
+
+The corrected midpoint population contains `32 x 32 = 1,024` decoded examples.
+For hidden vectors `h_i`, realized symbols `y_i`, and parent distributions
+`p_i`, an unnormalized output-head SGD step changes a later logit vector by
+
+```text
+delta_z(h) = eta * sum_i (onehot(y_i) - p_i) * dot(h_i, h)
+```
+
+All factors are decoder-visible after the first half. Store one complete BF16
+factor cache: `1,024 x 1,024` hidden values plus `16,392 x 1,024` residual
+values, totaling `35,667,968` bytes before small framing. Apply the current
+first-half cache to its second half and retain it through the next segment's
+first half; replace it only after the next midpoint is decoded. This gives a
+causal one-segment persistent correction without changing model weights,
+transmitting data, or inheriting Adam's non-low-rank update claim.
+
+The exact finite operation count per coded position for a 32-stream batch is
+`33,554,432` multiply-accumulates for hidden similarities plus `537,133,056`
+for residual projection. Actual runtime, not this count, controls the frozen
+`15%` incremental-runtime gate. The factor cache is below the `128 MiB`
+incremental-memory ceiling; it must still be included in process-tree RSS.
+
+If attribution authorizes materialization, compare the faithful parent, the
+aligned one-cache factor replay, the full midpoint teacher, and an identical
+capacity control formed by cyclically shifting first-half truths by one
+position within each stream before residual construction. Require exact
+arithmetic decode, deterministic repeat, every chronological third positive,
+the shifted control materially worse, at least `80%` of the teacher's actual
+gain, at most `128 MiB` added resident memory, and at most `15%` added parent
+runtime. Do not sweep cache depth, factor precision, learning rate, shift,
+kernel, or sparsity around a miss.
