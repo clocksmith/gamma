@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-08",
+  "deps": [
+    "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1"
+  ],
+  "description": "Exact NNCP high/low-byte CP-rank-8 output-readout representation gate.",
+  "family": "nncp_output_representation",
+  "hypothesis": "A CP8 high/low symbol readout improves the exact 65,536-symbol archive while removing most output and Adam state.",
+  "id": "nncp_cp8_symbol_readout_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "NNCP final hidden state -> independent high-byte and low-byte projections plus rank-8 CP high/low interaction -> exact 16392 symbol logits -> unchanged branch arithmetic and official inverse."
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_cp8_symbol_readout_qm0_v1",
+    "retired_neighborhoods": [
+      "Distinct from tied embeddings and hierarchical PPM: input and output remain independent; exact neural probability is factorized before the unchanged symbol coder."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "status": "candidate"
+}

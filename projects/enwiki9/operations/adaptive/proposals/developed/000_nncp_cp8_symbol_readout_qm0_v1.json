@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_cp8_symbol_readout_qm0_v1",
+  "claimed_at": "2026-08-08T23:35:04+00:00",
+  "created_at": "2026-08-08T23:35:04+00:00",
+  "developed_at": "2026-08-08T23:36:57+00:00",
+  "evidence": [
+    "results/nncp_tied_bf16_embedding_qm0_v1/decision.json; tools/nncp_v33_rocm_constructive_one_update_q0.py"
+  ],
+  "expected_savings_bytes": 2450000,
+  "hypothesis": "Replacing NNCPs independent 16392x1024 output matrix with decoder-rebuilt high-byte, low-byte, and rank-8 CP interaction factors preserves exact symbol identity while sharing statistical strength, saving at least 800 actual bytes on the exact 65536-symbol construction and materially reducing parameter and Adam memory.",
+  "interfaces_exposed": [
+    "NNCP final hidden state -> independent high-byte and low-byte projections plus rank-8 CP high/low interaction -> exact 16392 symbol logits -> unchanged branch arithmetic and official inverse."
+  ],
+  "kill_condition": "Retire the fixed high=i>>8, low=i&255, CP-rank-8 readout without rank, partition, dtype, bias, initialization, or interaction-form sweeps if actual gain is below 800 bytes, any ideal third is nonpositive, exact identity fails, memory fails, or source exceeds 65536 bytes.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1170,
+  "promotion_condition": "Two encoders and one decoder reproduce exact symbols and complete state; archive is at least 800 bytes smaller than faithful 96142 bytes; every true chronological third has positive aligned ideal gain; peak allocated and reserved memory remain below decimal 10GB; compressed incremental source is at most 65536 bytes.",
+  "proposal_id": "nncp_cp8_symbol_readout_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from tied embeddings and hierarchical PPM: input and output remain independent; exact neural probability is factorized before the unchanged symbol coder."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1188,
+  "state": "developed",
+  "title": "NNCP CP8 high/low symbol readout"
+}

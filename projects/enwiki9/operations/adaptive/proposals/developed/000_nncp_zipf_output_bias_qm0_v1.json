@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_zipf_output_bias_qm0_v1",
+  "claimed_at": "2026-08-08T22:49:43+00:00",
+  "created_at": "2026-08-08T22:49:43+00:00",
+  "developed_at": "2026-08-08T22:50:46+00:00",
+  "evidence": [
+    "docs/research_register.md"
+  ],
+  "expected_savings_bytes": 4500000,
+  "hypothesis": "Initializing the existing NNCP trainable output bias to the decoder-derived law -0.435*log(symbol_id+1) saves at least 800 actual bytes on the exact 65536-symbol construction without adding parameters, tables, or resident memory.",
+  "interfaces_exposed": [
+    "Vocabulary ID -> decoder-derived Zipf log prior -> existing trainable NNCP output bias -> unchanged symbol arithmetic alphabet."
+  ],
+  "kill_condition": "Retire the fixed alpha=0.435 rank-law initialization without exponent, offset, piecewise-law, or frequency-table sweeps if actual gain is below 800 bytes, any ideal third is nonpositive, exact identity fails, memory fails, or source exceeds 65536 bytes.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1150,
+  "promotion_condition": "Two encoders and one decoder reproduce exact symbols and identical state; archive is at least 800 bytes smaller than faithful 96142 bytes; every true chronological third has positive aligned ideal branch gain; allocated and reserved memory stay below decimal 10GB; compressed incremental source is at most 65536 bytes.",
+  "proposal_id": "nncp_zipf_output_bias_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from symbol PPM, Compact5, teacher quotients, and hidden-memory compression: it changes only the zero-table initial categorical prior before unchanged online learning."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1160,
+  "state": "developed",
+  "title": "NNCP zero-table Zipf output-bias initialization"
+}

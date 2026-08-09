@@ -1,0 +1,32 @@
+{
+  "candidate_id": "cmix_richstate_lstm128_ceiling_qm0_v1",
+  "claimed_at": "2026-08-08T23:13:29+00:00",
+  "created_at": "2026-08-08T23:13:21+00:00",
+  "developed_at": "2026-08-08T23:13:30+00:00",
+  "evidence": [
+    "docs/cmix_obias_external_candidate_audit.md; /tmp/cmix-obias-audit-FN98cC/repo/cmix-obias/TRACE_FORMAT.md; /tmp/cmix-obias-audit-FN98cC/repo/cmix-obias/BITLSTM32_SPEC.md"
+  ],
+  "expected_savings_bytes": 4588897,
+  "hypothesis": "On an exact cmix golden-256 res_v3 trajectory, one frozen 128-cell 64-bit-reset head over the donor 92-feature causal state improves held-out same-object codelength over an identically trained 32-cell control by at least 7816 bytes per modeled MB, enough after replacing the paid 32-cell blob, charging both model copies, and reserving 500000 bytes to close the 105M debt.",
+  "interfaces_exposed": [
+    "Exact donor final_p/truth/25-stage1+m1raw res_v3 trace -> fixed 92-feature builder -> paired H32/H128 frozen causal logits -> same-object entropy and finite range replay."
+  ],
+  "kill_condition": "Retire the wider rich-state residual-head neighborhood if trace provenance fails, H128-H32 confirmation gain is below 7816 B/MB, any confirmation third is nonpositive, or minimum counted model/source bytes erase the projected margin. No hidden-width, reset, optimizer, feature, or epoch rescue sweep.",
+  "max_program_bytes": 600000,
+  "mechanism_change": "parameter_tuning",
+  "mechanism_change_bonus": -20,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 820,
+  "promotion_condition": "Exact trace identity passes; frozen confirmation improvement H128-H32 >= 7816 bytes per 1000000 modeled bytes; all confirmation thirds positive; projected full gain minus twice incremental blob bytes >= 3992825 (3492825 debt plus 500000 reserve).",
+  "proposal_id": "cmix_richstate_lstm128_ceiling_qm0_v1",
+  "retired_neighborhoods": [
+    "Blind LSTM width sweeps, CHIRON/JANUS residual retries, feature/reset/optimizer/epoch rescue neighborhoods."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 800,
+  "state": "developed",
+  "title": "cmix-obias rich-state LSTM128 replacement ceiling"
+}

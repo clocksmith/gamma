@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_tied_bf16_embedding_qm0_v1",
+  "claimed_at": "2026-08-08T22:59:05+00:00",
+  "created_at": "2026-08-08T22:59:05+00:00",
+  "developed_at": "2026-08-08T23:00:11+00:00",
+  "evidence": [
+    "docs/research_register.md"
+  ],
+  "expected_savings_bytes": 4500000,
+  "hypothesis": "Using one shared BF16 Parameter for NNCP input lookup and output projection saves at least 800 actual bytes on the exact 65536-symbol construction while removing 67141632 parameter bytes before optimizer and gradient effects.",
+  "interfaces_exposed": [
+    "Decoded symbol ID -> shared BF16 input/output embedding Parameter -> unchanged Transformer and symbol arithmetic alphabet."
+  ],
+  "kill_condition": "Retire the exact tied-BF16 representation without dtype, partial-tying, scale, or projection sweeps if actual gain is below 800 bytes, any ideal third is nonpositive, exact identity fails, memory fails, or source exceeds 65536 bytes.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1160,
+  "promotion_condition": "Two encoders and one decoder reproduce exact symbols and identical state; archive is at least 800 bytes smaller than faithful 96142 bytes; every true chronological third has positive aligned ideal branch gain; allocated and reserved memory stay below decimal 10GB; compressed incremental source is at most 65536 bytes.",
+  "proposal_id": "nncp_tied_bf16_embedding_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from output-prior, PPM, teacher quotient, and hidden-memory candidates: it couples learned input and output symbol geometry and removes a full matrix."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1178,
+  "state": "developed",
+  "title": "NNCP tied BF16 symbol embedding"
+}

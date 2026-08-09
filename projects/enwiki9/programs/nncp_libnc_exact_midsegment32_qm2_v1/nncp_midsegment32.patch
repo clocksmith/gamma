@@ -1,0 +1,398 @@
+--- a/nncp.c
++++ b/nncp.c
+@@ -141,6 +141,7 @@
+     BOOL use_cuda;
+     BOOL use_bf16;
+     BOOL seq_eval;
++    BOOL midsegment32;
+     int batch_size;
+     int seg_len;
+     uint32_t seed;
+@@ -175,6 +176,7 @@
+     int seg_len;
+     uint32_t seed;
+     int n_symbols;
++    BOOL midsegment32;
+ 
+     InterpParams block_len;
+     InterpParams lr;
+@@ -257,6 +259,9 @@
+     float dropout_prob;
+     float dropout_att_prob;
+     BOOL use_sparse_grad;
++    int gradient_start;
++    int gradient_len;
++    int gradient_graph_len;
+ } TransformerModel;
+ 
+ static void var_init(NCTensor *x, float range, NCRNDState *rnd_state)
+@@ -334,6 +339,9 @@
+     s->n_states = np->seg_len;
+     
+     s->use_sparse_grad = p->use_sparse_grad;
++    s->gradient_start = 0;
++    s->gradient_len = s->train_len;
++    s->gradient_graph_len = s->train_len;
+     
+     nc_param_list_init(m, &s->param_list);
+ 
+@@ -1095,11 +1103,23 @@
+ }
+ 
+ /* evaluate the gradient and return the loss (not averaged) */
++static void trf_set_gradient_range(NNCPModelState *s1, int start, int len,
++                                   int graph_len)
++{
++    TransformerModel *s = (TransformerModel *)s1;
++
++    assert(start >= 0 && len > 0 && start + len <= s->train_len);
++    assert(graph_len >= start + len && graph_len <= s->train_len);
++    s->gradient_start = start;
++    s->gradient_len = len;
++    s->gradient_graph_len = graph_len;
++}
++
+ static float trf_eval_gradient(NNCPModelState *s1, const NCTensor *expected_output1)
+ {
+     TransformerModel *s = (TransformerModel *)s1;
+     NCContext *m = s->common.model;
+-    int i, layer_idx;
++    int i, layer_idx, loss_start, loss_len, graph_len;
+     TransformerLayer *tl;
+     NCTensor *loss, *expected_output, *output;
+     float ret_loss;
+@@ -1107,6 +1127,9 @@
+     prof_start(PROF_GRAD);
+ 
+     expected_output = nc_tensor_to_device(nc_dup_tensor(expected_output1), s->common.device);
++    loss_start = s->gradient_start;
++    loss_len = s->gradient_len;
++    graph_len = s->gradient_graph_len;
+     if (s->seq_eval) {
+         NCNode *n, *n1, *tab_n[2], **tab_nodes;
+         size_t *tab_size, tab_size2[2];
+@@ -1117,37 +1140,37 @@
+         for(layer_idx = 0; layer_idx < s->n_layer; layer_idx++) {
+             tl = &s->layers[layer_idx];
+ 
+-            tab_size = nc_malloc(sizeof(tab_size[0]) * s->train_len);
+-            for(i = 0; i < s->train_len; i++)
++            tab_size = nc_malloc(sizeof(tab_size[0]) * graph_len);
++            for(i = 0; i < graph_len; i++)
+                 tab_size[i] = 1;
+             tab_size2[0] = s->mem_len;
+-            tab_size2[1] = s->train_len;
++            tab_size2[1] = graph_len;
+             
+             /* factorize the 'key*t(query)' matrix multiplication */
+-            n = nc_concat_node(m, tl->key_nodes + 1, s->train_len, 1, tab_size);
++            n = nc_concat_node(m, tl->key_nodes + 1, graph_len, 1, tab_size);
+             tab_n[0] = tl->key_nodes[0];
+             tab_n[1] = n;
+             n1 = nc_concat_node(m, tab_n, 2, 1, tab_size2);
+-            for(i = 0; i < s->train_len + 1; i++) {
++            for(i = 0; i < graph_len + 1; i++) {
+                 nc_free_node(tl->key_nodes[i]);
+                 tl->key_nodes[i] = NULL;
+             }
+-            for(i = 0; i < s->train_len; i++)
++            for(i = 0; i < graph_len; i++)
+                 nc_node_set_parent(tl->kq_nodes[i], 0, n1);
+             nc_free_node(n);
+             nc_free_node(n1);
+             tab_nodes[node_count++] = n;
+             
+             /* factorize the 'value*att' matrix multiplication */
+-            n = nc_concat_node(m, tl->value_nodes + 1, s->train_len, 1, tab_size);
++            n = nc_concat_node(m, tl->value_nodes + 1, graph_len, 1, tab_size);
+             tab_n[0] = tl->value_nodes[0];
+             tab_n[1] = n;
+             n1 = nc_concat_node(m, tab_n, 2, 1, tab_size2);
+-            for(i = 0; i < s->train_len + 1; i++) {
++            for(i = 0; i < graph_len + 1; i++) {
+                 nc_free_node(tl->value_nodes[i]);
+                 tl->value_nodes[i] = NULL;
+             }
+-            for(i = 0; i < s->train_len; i++)
++            for(i = 0; i < graph_len; i++)
+                 nc_node_set_parent(tl->va_nodes[i], 0, n1);
+             nc_free_node(n);
+             nc_free_node(n1);
+@@ -1156,8 +1179,8 @@
+             nc_free(tab_size);
+         }
+         
+-        output = nc_concat(s->outputs, s->train_len, 2);
+-        for(i = 0; i < s->train_len; i++)
++        output = nc_concat(s->outputs + loss_start, loss_len, 2);
++        for(i = loss_start; i < loss_start + loss_len; i++)
+             s->outputs[i] = NULL; /* fail safe */
+         tab_nodes[node_count++] = nc_get_node(output);
+         nc_concat_optimization(m, tab_nodes, node_count);
+@@ -1166,12 +1189,15 @@
+         output = s->outputs[0];
+         s->outputs[0] = NULL; /* fail safe */
+     }
++    expected_output = nc_slice(expected_output, 1, loss_start,
++                               loss_start + loss_len);
+     loss = nc_indexed_log(output, nc_dup_tensor(expected_output));
+     nc_free_tensor(expected_output);
+     
+     loss = nc_sum(loss);
+     ret_loss = nc_get_scalar_f32(loss);
+-    loss = nc_mul(loss, nc_new_f32(nc_get_tensor_device(loss), -1.0f / (s->train_len * s->n_streams)));
++    loss = nc_mul(loss, nc_new_f32(nc_get_tensor_device(loss),
++                                   -1.0f / (loss_len * s->n_streams)));
+ 
+     //    nc_dump_graph(loss); exit(1);
+ 
+@@ -1186,6 +1212,24 @@
+            sqrt(grad_sum), sqrt(grad_sum / grad_count));
+ #endif
+     nc_free_tensor(loss);
++
++    /* Output nodes outside the selected loss can still be retained because
++       their key/value paths feed later selected states. Backward is complete,
++       so release every remaining reference before rebuilding a half segment. */
++    for(i = 0; i < s->train_len; i++) {
++        nc_free_tensor(s->outputs[i]);
++        s->outputs[i] = NULL;
++    }
++    for(layer_idx = 0; layer_idx < s->n_layer; layer_idx++) {
++        tl = &s->layers[layer_idx];
++        nc_free_tensor(tl->tmp_w_r);
++        tl->tmp_w_r = NULL;
++        nc_free_tensor(tl->tmp_b_r);
++        tl->tmp_b_r = NULL;
++    }
++    s->gradient_start = 0;
++    s->gradient_len = s->train_len;
++    s->gradient_graph_len = s->train_len;
+     
+     prof_end(PROF_GRAD);
+     return ret_loss;
+@@ -1220,6 +1264,16 @@
+ }
+ 
+ /* update with coefficients */
++static void trf_param_update(NNCPModelState *s1)
++{
++    TransformerModel *s = (TransformerModel *)s1;
++    prof_start(PROF_UPDATE);
++
++    nc_sgd_opt_update(s->sgd_opt);
++
++    prof_end(PROF_UPDATE);
++}
++
+ static void trf_update(NNCPModelState *s1)
+ {
+     TransformerModel *s = (TransformerModel *)s1;
+@@ -2639,9 +2693,9 @@
+ 
+ static void nncp_dump_params(FILE *f, NNCPModelState *s, const NNCPModelParams *p)
+ {
+-    fprintf(f, "model=%s bf16=%d batch_size=%d seg_len=%d n_symb=%d",
++    fprintf(f, "model=%s bf16=%d batch_size=%d seg_len=%d n_symb=%d midsegment32=%d",
+             p->model_class->name, p->use_bf16,
+-            p->batch_size, p->seg_len, p->n_symbols);
++            p->batch_size, p->seg_len, p->n_symbols, p->midsegment32);
+     fprintf(f, " block_len=");
+     dump_interp_param(f, &p->block_len);
+     fprintf(f, " lr=");
+@@ -2659,7 +2713,7 @@
+ }
+ 
+ #define NNCP_FILE_MAGIC   0xb727ac58
+-#define NNCP_FILE_VERSION 1
++#define NNCP_FILE_VERSION 2
+ 
+ static void nncp_write_file_header(FILE *f, const NNCPModelParams *p)
+ {
+@@ -2672,6 +2726,7 @@
+     fput_be16(f, p->seg_len);
+     fput_be16(f, p->n_symbols);
+     fput_be32(f, p->seed);
++    fput_u8(f, p->midsegment32);
+ 
+     fput_interp_params(f, &p->lr);
+     fput_interp_params(f, &p->block_len);
+@@ -2726,6 +2781,10 @@
+     if (fget_be32(f, &p->seed))
+         return -1;
+ 
++    if (fget_u8(f, &v8))
++        return -1;
++    p->midsegment32 = v8;
++
+     if (fget_interp_params(f, &p->lr))
+         return -1;
+     
+@@ -2764,6 +2823,10 @@
+     NCContext *m;
+     NCDevice *d;
+     
++    if (p->midsegment32 &&
++        (p->model_class != &trf_model || p->seg_len != 64))
++        fatal_error("midsegment32 requires the transformer and train_len=64\n");
++
+     s = nc_mallocz(p->model_class->instance_size);
+ 
+     m = nc_context_init(nb_threads);
+@@ -2782,6 +2845,7 @@
+     s->seg_len = p->seg_len;
+     s->seed = p->seed;
+     s->n_symbols = p->n_symbols;
++    s->midsegment32 = p->midsegment32;
+     
+     s->lr = p->lr;
+     s->retrain_period = p->retrain_period;
+@@ -2991,7 +3055,106 @@
+     block_idx = 0;
+     while ((block_idx + n_states) <= block_stride) {
+         prof_start(PROF_TOTAL);
+-        if (!use_encode_only) {
++        if (s->midsegment32) {
++            assert(n_states == 64);
++
++            /* Code the first half using the incoming model and memory. */
++            for(cur_state = 0; cur_state < 32; cur_state++) {
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
++                    nc_set1_i32_2d(input, stream_idx, cur_state,
++                                   get_symb(block_buf, block_stride, block_rem,
++                                            stream_idx,
++                                            block_idx + cur_state - 1));
++                }
++
++                output_host = s->model_class->model_eval(s, cur_state, input);
++                output_host = nc_tensor_to_cpu_device(output_host);
++                output = nc_tensor_get_ptr(output_host, &stride);
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
++                    prof_start(PROF_WRITE_SYM);
++                    if (!is_decode) {
++                        c = get_symb(block_buf, block_stride, block_rem,
++                                     stream_idx, block_idx + cur_state);
++                        write_sym(pb, output + stream_idx * stride,
++                                  s->n_symbols, c);
++                    } else {
++                        c = read_sym(gb, output + stream_idx * stride,
++                                     s->n_symbols);
++                        put_symb(block_buf, block_stride, block_rem,
++                                 stream_idx, block_idx + cur_state, c);
++                    }
++                    prof_end(PROF_WRITE_SYM);
++                    nc_set1_i32_2d(expected_output, stream_idx, cur_state, c);
++                }
++                nc_free_tensor(output_host);
++            }
++
++            /* Complete the fixed 64-state graph with causally irrelevant
++               zero inputs. The first-half loss cannot depend on these future
++               nodes, but LibNC's factorized backward contract requires the
++               complete segment geometry. */
++            for(cur_state = 32; cur_state < n_states; cur_state++) {
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++)
++                    nc_set1_i32_2d(input, stream_idx, cur_state, 0);
++                output_host = s->model_class->model_eval(s, cur_state, input);
++                nc_free_tensor(output_host);
++            }
++
++            /* Both half updates use the parent segment's learning-rate
++               coordinate. Persistent memory is intentionally not shifted. */
++            lr = get_interp_param(&s->lr, s->train_step / 2);
++            st->last_lr = lr;
++            s->model_class->model_set_lr(s, lr);
++            trf_set_gradient_range(s, 0, 32, 64);
++            s->model_class->model_eval_gradient(s, expected_output);
++            trf_param_update(s);
++            s->train_step++;
++
++            /* Rebuild states 0..31 under the updated coefficients. Their
++               probabilities are not coded a second time. */
++            for(cur_state = 0; cur_state < 32; cur_state++) {
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
++                    nc_set1_i32_2d(input, stream_idx, cur_state,
++                                   get_symb(block_buf, block_stride, block_rem,
++                                            stream_idx,
++                                            block_idx + cur_state - 1));
++                }
++                output_host = s->model_class->model_eval(s, cur_state, input);
++                nc_free_tensor(output_host);
++            }
++
++            /* Code the second half against the rebuilt key/value history. */
++            for(cur_state = 32; cur_state < n_states; cur_state++) {
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
++                    nc_set1_i32_2d(input, stream_idx, cur_state,
++                                   get_symb(block_buf, block_stride, block_rem,
++                                            stream_idx,
++                                            block_idx + cur_state - 1));
++                }
++
++                output_host = s->model_class->model_eval(s, cur_state, input);
++                output_host = nc_tensor_to_cpu_device(output_host);
++                output = nc_tensor_get_ptr(output_host, &stride);
++                for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
++                    prof_start(PROF_WRITE_SYM);
++                    if (!is_decode) {
++                        c = get_symb(block_buf, block_stride, block_rem,
++                                     stream_idx, block_idx + cur_state);
++                        write_sym(pb, output + stream_idx * stride,
++                                  s->n_symbols, c);
++                    } else {
++                        c = read_sym(gb, output + stream_idx * stride,
++                                     s->n_symbols);
++                        put_symb(block_buf, block_stride, block_rem,
++                                 stream_idx, block_idx + cur_state, c);
++                    }
++                    prof_end(PROF_WRITE_SYM);
++                    nc_set1_i32_2d(expected_output, stream_idx, cur_state, c);
++                }
++                nc_free_tensor(output_host);
++            }
++            trf_set_gradient_range(s, 32, 32, 64);
++        } else if (!use_encode_only) {
+             for(cur_state = 0; cur_state < n_states; cur_state++) {
+                 for(stream_idx = 0; stream_idx < n_streams; stream_idx++) {
+                     nc_set1_i32_2d(input, stream_idx, cur_state, 
+@@ -3044,7 +3207,10 @@
+             nc_free_tensor(output_host);
+         }
+ 
+-        lr = get_interp_param(&s->lr, s->train_step);
++        if (s->midsegment32)
++            lr = get_interp_param(&s->lr, s->train_step / 2);
++        else
++            lr = get_interp_param(&s->lr, s->train_step);
+         st->last_lr = lr;
+         s->model_class->model_set_lr(s, lr);
+         
+@@ -3689,6 +3855,7 @@
+     { "cuda", 0, "enable CUDA support" },
+     { "bf16", CMD_HAS_ARG, "enable bf16 processing", "[0|1]" },
+     { "encode_only", 0, "faster encode only mode (output cannot be decompressed)" },
++    { "midsegment32", 0, "update after each half of a 64-symbol transformer segment" },
+ 
+     { "batch_size", CMD_HAS_ARG, "batch size" },
+     { "seed", CMD_HAS_ARG, "random number seed" },
+@@ -3797,6 +3964,7 @@
+         nncp_init_params(p, r);
+ 
+         p->use_cuda = use_cuda;
++        p->midsegment32 = cmdopt_has(co, "midsegment32");
+         
+         ep->max_size = cmdopt_get_int(co, "max_size", -1);
+ 
+@@ -3850,6 +4018,12 @@
+         p->use_bf16 = cmdopt_get_int(co, "bf16", p->use_bf16);
+         
+         ep->model_params.model_class->model_parse_options(p, co);
++
++        if (p->midsegment32 && use_encode_only)
++            cmd_error("midsegment32 is incompatible with encode_only");
++        if (p->midsegment32 &&
++            (p->model_class != &trf_model || p->seg_len != 64))
++            cmd_error("midsegment32 requires the transformer and train_len=64");
+         
+         encode_file(argv[optind + 1], out_filename, debug_dir, ep, argc, argv);
+     } else if (!strcmp(cmd, "d")) {

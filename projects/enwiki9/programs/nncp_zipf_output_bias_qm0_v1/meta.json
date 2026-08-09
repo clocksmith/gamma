@@ -1,0 +1,39 @@
+{
+  "candidate_id": "nncp_zipf_output_bias_qm0_v1",
+  "description": "Decoder-derived fixed Zipf initialization of the existing trainable NNCP output bias.",
+  "entrypoint": "tools/nncp_zipf_output_bias_qm0.py",
+  "epistemic_tier": "exact_65536_symbol_constructive_child_zero_credit",
+  "omega": {
+    "interfaces_exposed": [
+      "Vocabulary ID -> decoder-derived Zipf log prior -> existing trainable NNCP output bias -> unchanged symbol arithmetic alphabet."
+    ],
+    "mechanism_change": "add_state_coordinate",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_zipf_output_bias_qm0_v1",
+    "retired_neighborhoods": [
+      "Distinct from symbol PPM, Compact5, teacher quotients, and hidden-memory compression: it changes only the zero-table initial categorical prior before unchanged online learning."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "proposal_id": "nncp_zipf_output_bias_qm0_v1",
+  "status": "retired",
+  "measured_result": {
+    "faithful_archive_bytes": 96142,
+    "candidate_archive_bytes": 96357,
+    "actual_gain_bytes": -215,
+    "aligned_ideal_gain_bytes": -215.27884912582655,
+    "chronological_third_gain_bytes": [
+      -227.91535409345255,
+      188.67237925508798,
+      -176.03587428746755
+    ],
+    "incremental_source_package_bytes": 5392,
+    "peak_allocated_bytes": 8632796160,
+    "peak_reserved_bytes": 9271508992,
+    "decision_path": "results/nncp_zipf_output_bias_qm0_v1/decision.json",
+    "decision_sha256": "0f5c036a92ff3327ccdda538f6316e0f308fb4f324b9f26c555a3bd0492cf76b",
+    "guard_path": "results/nncp_zipf_output_bias_qm0_guard_v1.json",
+    "guard_sha256": "4a6a236054dbb07bd5264b1c7d1d975b9aca71fd57316776ee9c265d66a948ff",
+    "verdict": "retire_zipf_output_bias"
+  }
+}

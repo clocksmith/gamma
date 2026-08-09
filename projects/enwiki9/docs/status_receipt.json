@@ -1,10 +1,100 @@
 {
-  "active_candidate": null,
+  "active_candidate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+    "evidence": "active 1,998,848 byte replay is running; no constructive result is present for this candidate yet",
+    "label": "active candidate",
+    "program_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "scope_bytes": 1998848,
+    "status": "running gate"
+  },
   "active_candidate_recent_artifacts": [],
-  "active_gate": null,
+  "active_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+    "driver_result_json": "receipt.json",
+    "driver_result_json_present": false,
+    "evidence": "gate decision is receipt_incomplete; wait for terminal receipts",
+    "label": "active gate",
+    "latest_sample_max_single_rss_kib": null,
+    "latest_sample_tree_rss_kib": null,
+    "max_sampled_single_rss_kib": null,
+    "max_sampled_tree_rss_kib": null,
+    "next_action": "wait_for_gate_receipts",
+    "program_id": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
+    "returncode": null,
+    "rss_guard_json": "encode.guard.json",
+    "rss_guard_json_present": false,
+    "rss_guard_status": null,
+    "sample_count": null,
+    "scope_bytes": 1998848,
+    "source": "live_speedlab_rss_guard",
+    "status": "receipt_incomplete"
+  },
   "active_processes": {
-    "active_rows": [],
-    "active_scorer_observed": false,
+    "active_rows": [
+      {
+        "args": "/bin/bash -lc set -euo pipefail CAND=/home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1 PKG=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/run/cmix.head_assets HEAD=/home/x/enwiki9-nonproof/cmix-obias-native-build-v1/models/bitlstm32/refit_golden256_fp16.blob mkdir -p \"$CAND/backend/baseline\" \"$CAND/backend/residual\" cp \"$PKG\" \"$CAND/backend/baseline/cmix\"; chmod +x \"$CAND/backend/baseline/cmix\" cp \"$PKG\" \"$CAND/backend/residual/cmix\"; chmod +x \"$CAND/backend/residual/cmix\" cp \"$HEAD\" \"$CAND/head.blob\" df -B1 --output=avail \"$CAND\" | tail -n 1 cd \"$CAND/backend/baseline\" KH_BITLSTM32=\"$CAND/head.blob\" CMIX_PPM_RSS_MB=8500 python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json encode.guard.json -- ./cmix -e \"$CAND/original.bin\" out.cmix sha256sum out.cmix archive9 stat -c '%n %s' out.cmix archive9",
+        "pgid": 1768216,
+        "pid": 1768216,
+        "ppid": 2193714,
+        "rss_kib": 3928,
+        "stat": "Ss"
+      },
+      {
+        "args": "python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json encode.guard.json -- ./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix",
+        "pgid": 1768216,
+        "pid": 1768314,
+        "ppid": 1768216,
+        "rss_kib": 16836,
+        "stat": "S"
+      },
+      {
+        "args": "python3 tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000",
+        "pgid": 2427744,
+        "pid": 2427744,
+        "ppid": 2229505,
+        "rss_kib": 21636,
+        "stat": "Ssl+"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json results/nncp_libnc_trainlen32_mature_1998848_qm2_guard_v1.json --label nncp_libnc_trainlen32_mature_1998848_qm2_v1 -- python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py",
+        "pgid": 2427744,
+        "pid": 2427829,
+        "ppid": 2427744,
+        "rss_kib": 16784,
+        "stat": "S+"
+      },
+      {
+        "args": "./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix",
+        "pgid": 1768319,
+        "pid": 1768319,
+        "ppid": 1768314,
+        "rss_kib": 8921972,
+        "stat": "Rs"
+      },
+      {
+        "args": "python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py",
+        "pgid": 2427832,
+        "pid": 2427832,
+        "ppid": 2427829,
+        "rss_kib": 20440,
+        "stat": "Ss"
+      },
+      {
+        "args": "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/dictionary.bin --train_len 32 --d_pos 288 --max_size 1998848 c /home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp",
+        "pgid": 2427832,
+        "pid": 2427873,
+        "ppid": 2427832,
+        "rss_kib": 4697500,
+        "stat": "Rl"
+      }
+    ],
+    "active_scorer_observed": true,
+    "active_tree_decimal_10gb_margin_kib": -3933471,
+    "active_tree_decimal_10gb_over_kib": 3933471,
+    "active_tree_margin_kib": -3213336,
+    "active_tree_rss_kib": 13699096,
+    "active_tree_rss_over_guard_kib": 3213336,
+    "active_tree_rss_warning": "active process tree RSS crossed the local numeric guard; the running kill guard is single-process",
     "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
@@ -16,8 +106,19 @@
     "claimable_pending_job_count": 0,
     "held_pending_job_count": 27,
     "pending_job_count": 27,
-    "running_job_count": 0,
-    "running_jobs": []
+    "running_job_count": 1,
+    "running_jobs": [
+      {
+        "candidate_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+        "gate_size": 1998848,
+        "job_id": "20260809T002749Z_e3dd8c43dc",
+        "path": "projects/enwiki9/operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+        "started_at": "2026-08-09T00:27:52+00:00",
+        "state": "running",
+        "worker_pid": 2427829,
+        "worker_pid_live": true
+      }
+    ]
   },
   "best_exact_100m": {
     "compressed_size": 14857781,
@@ -86,24 +187,28 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": null,
+  "blocker": {
+    "evidence": "active 1,998,848 byte deterministic replay has not produced terminal driver and RSS receipts yet",
+    "label": "blocker",
+    "status": "open"
+  },
   "candidate_audit": {
     "returncode": 0,
     "summary": {
       "candidate_status_counts": {
         "active": 18,
         "blocked_dependency": 33,
-        "candidate": 24,
+        "candidate": 25,
         "measured_negative": 100,
-        "retired": 499,
-        "track_source_before_evolution": 17
+        "retired": 525,
+        "track_source_before_evolution": 8
       },
-      "directories": 1659,
-      "file_entries": 7683,
-      "ignored_entries": 3811,
-      "modified_tracked_entries": 46,
-      "program_directories": 691,
-      "registered_programs": 275,
+      "directories": 1704,
+      "file_entries": 8009,
+      "ignored_entries": 4049,
+      "modified_tracked_entries": 9,
+      "program_directories": 709,
+      "registered_programs": 277,
       "top_level_file_entries": {
         ".claude": 1,
         ".codex-reminders": 4,
@@ -111,34 +216,82 @@
         "agents": 5,
         "contracts": 9,
         "data": 7,
-        "docs": 350,
+        "docs": 368,
         "enwiki9_segment_bundle": 6,
         "external": 174,
         "lib": 4,
-        "operations": 844,
+        "operations": 883,
         "patches": 36,
-        "programs": 2200,
-        "results": 2938,
-        "run_logs": 581,
+        "programs": 2226,
+        "results": 3140,
+        "run_logs": 599,
         "skills": 4,
         "tests": 58,
-        "tools": 444
+        "tools": 467
       },
-      "tracked_entries": 4246,
-      "untracked_nonignored_entries": 136
+      "tracked_entries": 4383,
+      "untracked_nonignored_entries": 106
     }
   },
   "certificate_active_candidate": {
-    "active_source": "no live adaptive worker",
-    "evidence": "no live adaptive worker or directly observed scorer is present",
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+    "evidence": "active 1,998,848 byte replay is running; no constructive result is present for this candidate yet",
     "label": "active candidate",
-    "program_id": null,
-    "status": "idle"
+    "program_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "scope_bytes": 1998848,
+    "status": "running gate"
   },
-  "certificate_active_gate": null,
-  "certificate_blocker": null,
+  "certificate_active_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+    "evidence": "unchanged 1,998,848 byte RSS-guarded determinism replay; wait for terminal receipts",
+    "label": "active gate",
+    "program_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "scope_bytes": 1998848,
+    "status": "pending"
+  },
+  "certificate_blocker": {
+    "evidence": "active 1,998,848 byte deterministic replay has not produced terminal driver and RSS receipts yet",
+    "label": "blocker",
+    "status": "open"
+  },
   "contingencies": null,
-  "gate_decision": null,
+  "gate_decision": {
+    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
+    "claim_rule": "A speedlab prefix is not a constructive 1G score.",
+    "command": [
+      "./cmix",
+      "-e",
+      "$CAND/original.bin",
+      "out.cmix",
+      "sha256sum",
+      "out.cmix",
+      "archive9",
+      "stat",
+      "-c",
+      "%n %s",
+      "out.cmix",
+      "archive9"
+    ],
+    "driver_result_json": "receipt.json",
+    "driver_result_json_present": false,
+    "guard_pid": 1768216,
+    "input_path": "out.cmix",
+    "latest_sample_max_single_rss_kib": null,
+    "latest_sample_tree_rss_kib": null,
+    "max_sampled_single_rss_kib": null,
+    "max_sampled_tree_rss_kib": null,
+    "next_action": "wait_for_gate_receipts",
+    "output_path": "archive9",
+    "promotion_authorized": false,
+    "returncode": null,
+    "rss_guard_json": "encode.guard.json",
+    "rss_guard_json_present": false,
+    "rss_guard_status": null,
+    "sample_count": null,
+    "scope_bytes": null,
+    "source": "live_speedlab_rss_guard",
+    "verdict": "receipt_incomplete"
+  },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     "claim_status": "awaiting_gate_receipts",
@@ -150,7 +303,7 @@
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": null,
+    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
     "claim_rule": "A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command.",
     "classification": "not_persisted_running",
     "is_live": false,
@@ -161,28 +314,35 @@
     "persisted_running": false,
     "scope_bytes": null
   },
-  "generated_at_utc": "2026-08-08T22:05:17+00:00",
+  "generated_at_utc": "2026-08-09T01:18:19+00:00",
   "handoff": {
-    "active_scorer_observed": false,
-    "candidate": null,
+    "active_scorer_observed": true,
+    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_receipts",
+    "gate_verdict": "receipt_incomplete",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "inspect_queue_before_launch",
+    "recommended_action": "wait_for_gate_receipts",
     "scope_bytes": null,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
   "has_full_corpus_constructive_result": false,
-  "next_gate": null,
+  "next_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/000_20260809T002749Z_e3dd8c43dc.json",
+    "evidence": "unchanged 1,998,848 byte RSS-guarded determinism replay; wait for terminal receipts",
+    "label": "active gate",
+    "program_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+    "scope_bytes": 1998848,
+    "status": "pending"
+  },
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": null,
+    "expected_active_candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
     "expected_active_scope_bytes": null,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
@@ -190,14 +350,14 @@
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": null,
+    "expected_candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
     "expected_scope_bytes": null,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "inspect_queue_before_launch",
-    "reason": "no terminal receipt blocks the next candidate queue decision",
-    "safe_to_launch_gate": true
+    "action": "wait_for_gate_receipts",
+    "reason": "the gate state is incomplete and cannot drive a mutation yet",
+    "safe_to_launch_gate": false
   },
   "operator_logs": {
     "latest_delayed_status_log": "projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log",
@@ -206,21 +366,21 @@
   },
   "operator_summary": {
     "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": null,
-    "active_process_tree_margin_kib": null,
-    "active_process_tree_rss_kib": null,
-    "active_scorer_observed": false,
+    "active_process_tree_decimal_10gb_margin_kib": -3933471,
+    "active_process_tree_margin_kib": -3213336,
+    "active_process_tree_rss_kib": 13699096,
+    "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": null,
+    "candidate": "cmix_obias_helical_xmlsafe_qm4_baseline_encode",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     "claimable_pending_adaptive_jobs": 0,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": null,
-    "driver_result_present": null,
+    "driver_result_json": "receipt.json",
+    "driver_result_present": false,
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_receipts",
+    "gate_verdict": "receipt_incomplete",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 27,
@@ -235,14 +395,14 @@
     "max_sampled_single_rss_kib": null,
     "max_sampled_tree_decimal_10gb_margin_kib": null,
     "max_sampled_tree_decimal_10gb_safe": null,
-    "operator_action": "inspect_queue_before_launch",
+    "operator_action": "wait_for_gate_receipts",
     "pending_adaptive_jobs": 27,
-    "rss_guard_json": null,
+    "rss_guard_json": "encode.guard.json",
     "rss_guard_json_sha256": null,
-    "rss_guard_present": null,
+    "rss_guard_present": false,
     "rss_guard_status": null,
     "rss_samples": null,
-    "safe_to_launch_gate": true,
+    "safe_to_launch_gate": false,
     "scope_bytes": null,
     "single_rss_margin_kib": null,
     "terminal_verdict_present": false

@@ -1,0 +1,39 @@
+{
+  "candidate_id": "nncp_evicted_ema_memory_qm0_v1",
+  "description": "One fixed decoder-built EMA summary replaces the oldest exact NNCP hidden-memory slot.",
+  "entrypoint": "tools/nncp_evicted_ema_memory_qm0.py",
+  "epistemic_tier": "exact_65536_symbol_constructive_child_zero_credit",
+  "omega": {
+    "interfaces_exposed": [
+      "Completed per-layer NNCP hidden states -> one decoder-built EMA summary in the oldest memory slot -> unchanged attention and arithmetic alphabet."
+    ],
+    "mechanism_change": "add_state_coordinate",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_evicted_ema_memory_qm0_v1",
+    "retired_neighborhoods": [
+      "Distinct from longer-memory parameter sweeps and symbol PPM: it replaces one existing hidden state with a recurrent compressed summary, adds no parameter, and holds the 256-slot memory allocation fixed."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "proposal_id": "nncp_evicted_ema_memory_qm0_v1",
+  "status": "retired",
+  "measured_result": {
+    "faithful_archive_bytes": 96142,
+    "candidate_archive_bytes": 96129,
+    "actual_gain_bytes": 13,
+    "aligned_ideal_gain_bytes": 12.113872063614465,
+    "chronological_third_gain_bytes": [
+      3.473889842127789,
+      6.032210343919817,
+      2.607771877566859
+    ],
+    "incremental_source_package_bytes": 4768,
+    "peak_allocated_bytes": 8884454400,
+    "peak_reserved_bytes": 9525264384,
+    "decision_path": "results/nncp_evicted_ema_memory_qm0_v1/decision.json",
+    "decision_sha256": "4b8801b250f6e2dc7d382b74064227f7f0e306983414a189232f9945c8b6efce",
+    "guard_path": "results/nncp_evicted_ema_memory_qm0_guard_v1.json",
+    "guard_sha256": "3f389587e2aff8dae887439d75c09ebc9403fc13e93a7af191bdef72ad0dd815",
+    "verdict": "retire_evicted_ema_memory"
+  }
+}

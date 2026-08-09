@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_evicted_ema_memory_qm0_v1",
+  "claimed_at": "2026-08-08T22:22:38+00:00",
+  "created_at": "2026-08-08T22:22:38+00:00",
+  "developed_at": "2026-08-08T22:26:12+00:00",
+  "evidence": [
+    "results/nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2450000,
+  "hypothesis": "Replacing one oldest exact hidden-memory slot with a decoder-built half-life-one-segment EMA of each evicted 64-state segment saves at least 800 actual bytes on the exact 65536-symbol NNCP construction without additional parameters or resident memory.",
+  "interfaces_exposed": [
+    "Completed per-layer NNCP hidden states -> one decoder-built EMA summary in the oldest memory slot -> unchanged attention and arithmetic alphabet."
+  ],
+  "kill_condition": "Retire the one-slot decay-0.5 evicted-segment summary without decay, slot-count, pooling, or context-length sweeps if actual gain is below 800 bytes, any ideal third is nonpositive, exact identity fails, memory fails, or source exceeds 65536 bytes.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1120,
+  "promotion_condition": "Two encoders and one decoder reproduce exact symbols and identical candidate state; the candidate archive is at least 800 bytes smaller than the faithful 96142-byte NNCP archive, every chronological third has positive aligned ideal branch gain, allocated and reserved memory remain below decimal 10GB, and compressed source is at most 65536 bytes.",
+  "proposal_id": "nncp_evicted_ema_memory_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from longer-memory parameter sweeps and symbol PPM: it replaces one existing hidden state with a recurrent compressed summary, adds no parameter, and holds the 256-slot memory allocation fixed."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1130,
+  "state": "developed",
+  "title": "NNCP evicted-segment EMA memory summary"
+}

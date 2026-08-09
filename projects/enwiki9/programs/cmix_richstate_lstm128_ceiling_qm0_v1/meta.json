@@ -1,0 +1,20 @@
+{
+  "added": "2026-08-08",
+  "deps": [],
+  "description": "cmix-obias rich-state LSTM128 replacement ceiling",
+  "family": "cmix_richstate_residual_capacity",
+  "hypothesis": "On an exact cmix golden-256 res_v3 trajectory, one frozen 128-cell 64-bit-reset head over the donor 92-feature causal state improves held-out same-object codelength over an identically trained 32-cell control by at least 7816 bytes per modeled MB, enough after replacing the paid 32-cell blob, charging both model copies, and reserving 500000 bytes to close the 105M debt.",
+  "id": "cmix_richstate_lstm128_ceiling_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Exact donor final_p/truth/25-stage1+m1raw res_v3 trace -> fixed 92-feature builder -> paired H32/H128 frozen causal logits -> same-object entropy and finite range replay."
+    ],
+    "mechanism_change": "parameter_tuning",
+    "parent_proposal_id": null,
+    "proposal_id": "cmix_richstate_lstm128_ceiling_qm0_v1",
+    "retired_neighborhoods": [
+      "Blind LSTM width sweeps, CHIRON/JANUS residual retries, feature/reset/optimizer/epoch rescue neighborhoods."
+    ]
+  },
+  "status": "diagnostic_candidate"
+}

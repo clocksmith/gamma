@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+  "claimed_at": "2026-08-09T00:26:37+00:00",
+  "created_at": "2026-08-09T00:26:37+00:00",
+  "developed_at": "2026-08-09T00:27:49+00:00",
+  "evidence": [
+    "results/nncp_libnc_trainlen32_surrogate_qm1_v1/decision.json;results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/decision.json"
+  ],
+  "expected_savings_bytes": 30000,
+  "hypothesis": "The source-native train_len=32,d_pos=288 cadence surrogate saves at least 30000 actual bytes against the exact 2042820-byte faithful encode-only archive on the identical 1998848-symbol mature population.",
+  "interfaces_exposed": [
+    "Exact source-native 1998848-symbol faithful encode-only archive -> coupled train_len32,d_pos288 archive -> finite byte delta."
+  ],
+  "kill_condition": "If actual mature archive gain is <30000 bytes, provenance fails, or memory fails, retire mature promotion of the built-in train_len=32 surrogate without train-length or profile sweeps; do not kill the distinct exact KV-rebuild mechanism.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "coder",
+  "owner": "root",
+  "parent": "nncp_libnc_trainlen32_surrogate_qm1_v1",
+  "parent_proposal_id": null,
+  "priority": 1240,
+  "promotion_condition": "One guarded source-native encode-only archive on the exact 1998848-symbol population is <=2012820 bytes, input/binary/dictionary/baseline hashes match, and decimal 10GB memory passes; this authorizes repeated and decodable confirmation only.",
+  "proposal_id": "nncp_libnc_trainlen32_mature_1998848_qm2_v1",
+  "retired_neighborhoods": [
+    "No train-length, d_pos, batch, learning-rate, retrain, thread, or neighboring-population sweep."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1255,
+  "state": "developed",
+  "title": "Source-native NNCP train_len=32 mature 1998848-symbol screen"
+}

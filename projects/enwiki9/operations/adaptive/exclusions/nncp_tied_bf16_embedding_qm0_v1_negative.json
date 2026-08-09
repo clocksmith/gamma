@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "results/nncp_tied_bf16_embedding_qm0_v1/decision.json"
+  ],
+  "exclusion_id": "nncp_tied_bf16_embedding_qm0_v1_negative",
+  "failure": "Candidate lost 4934 actual archive bytes and 4934.703 aligned ideal bytes with every true chronological third negative, despite removing 67141632 parameter bytes.",
+  "mechanism": "One shared BF16 Parameter for NNCP input symbol lookup and output projection, replacing independent float32 input and BF16 output matrices",
+  "population": "Exact 65536-symbol constructive incremental-KV NNCP prefix with two encoders, one decoder, official inverse, and faithful 96142-byte baseline",
+  "recorded_at": "2026-08-08T23:06:47+00:00",
+  "retired_dimensions": [
+    "Do not sweep dtype, partial tying, scale, or projection around the tied-embedding construction."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "A changed coded representation or independently strong learned parent remains distinct; preserve the measured memory reduction only as architecture evidence."
+  ]
+}
