@@ -1875,21 +1875,29 @@ G_W = mean_i((p_i - onehot(y_i)) outer h_i)
 G_b = mean_i(p_i - onehot(y_i))
 ```
 
-Update the existing output matrix and bias in place. Replace Adam's dense
-elementwise midpoint state with one persistent second-moment scalar per tensor:
+Update the existing output matrix and bias in place. LibNC disassembly shows
+that `gradient_clip=0.05` caps the L2 norm of each complete parameter gradient,
+not individual elements. Let `clip(g)=g*min(1,0.05/||g||_2)`. Replace Adam's
+dense elementwise midpoint state with one persistent second-moment scalar per
+tensor and one shared midpoint counter:
 
 ```text
-v_W <- beta2 * v_W + (1 - beta2) * mean(G_W ** 2)
-v_b <- beta2 * v_b + (1 - beta2) * mean(G_b ** 2)
-W   <- W - lr * G_W / (sqrt(v_W) + epsilon)
-b   <- b - lr * G_b / (sqrt(v_b) + epsilon)
+t   <- t + 1
+g_W <- clip(G_W)
+g_b <- clip(G_b)
+v_W <- beta2 * v_W + (1 - beta2) * mean(g_W ** 2)
+v_b <- beta2 * v_b + (1 - beta2) * mean(g_b ** 2)
+W   <- W - lr * g_W / (sqrt(v_W / (1 - beta2 ** t)) + epsilon)
+b   <- b - lr * g_b / (sqrt(v_b / (1 - beta2 ** t)) + epsilon)
 ```
 
 Use the parent's fixed `beta2=0.9999`, epsilon `1e-8`, learning-rate
-coordinate, and per-tensor gradient clipping. The ordinary full parent Adam
-update still occurs after state 63; its persistent surfaces are unchanged.
-The midpoint update therefore adds two scalar states, no archive data, and no
-forward-time expert. A full float32 `G_W` temporary is `67,141,632` bytes;
+coordinate, and L2 cap. `beta1=0` requires no scalar first moment. The ordinary
+full parent Adam update still occurs after state 63; its persistent surfaces
+and step counter are not advanced by the compact midpoint update. The midpoint
+mechanism therefore adds two scalar moments and one integer counter, no archive
+data, and no forward-time expert. A full float32 `G_W` temporary is
+`67,141,632` bytes;
 the first-half hidden population is `4,194,304` bytes, keeping the intended
 increment below `128 MiB` before allocator overhead. Actual process-tree RSS
 controls eligibility.
