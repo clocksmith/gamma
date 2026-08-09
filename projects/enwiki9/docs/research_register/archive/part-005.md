@@ -5,7 +5,7 @@
 ## 2026-07-28 - ROCm batched causal teacher - REJECTED
 
 A corrected shifted-input audit proved the batched ROCm model causal: changing target 8 changed shifted input 9, while outputs 0 through 8 remained exactly identical. Q0 then produced a deterministic 90,931-byte teacher payload through 322,978 raw bytes with exact symbol replay and official inversion. It nevertheless trailed Gamma by 32,369.610 bytes. Q1 extended the identical architecture to 500,000 raw bytes and again passed causality, symbol replay, and official inversion, but the shared-boundary deficit grew to 51,043.031 bytes. The marginal 177,008-byte band lost 18,673.421 bytes, or -105,494.788 B/M, versus the +3,000 B/M authorization gate. The 1M extension and quotient student are not authorized. The lane receives zero score credit. See `docs/nncp_rocm_batched_teacher_decision.md`.
-# 2026-07-28: JANUS paid fixed-population residual MDL Q0
+## 2026-07-28: JANUS paid fixed-population residual MDL Q0
 
 `janus_paid_residual_mdl_q0_v1` tested a legal two-part fixed-corpus mechanism
 that was not covered by CHIRON's failed chronological-transfer experiment. A
@@ -29,7 +29,7 @@ length, optimizer, or quantization after failure.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v1/decision.json`
-# 2026-07-28: JANUS Q0 authorization withdrawn pending exact repair
+## 2026-07-28: JANUS Q0 authorization withdrawn pending exact repair
 
 Review found that the first `janus_paid_residual_mdl_q0_v1` receipt terminated
 complete-block substreams separately, omitted the imported oracle dependency
@@ -43,7 +43,7 @@ canonical paid serialization, J1/J2 total selection, and deterministic duplicate
 training. The already queued 10M endpoint trace is retained as zero-credit,
 archive-identity-gated infrastructure only. No 10M JANUS training may begin
 until the corrected Q0 passes.
-# 2026-07-28: Exact endpoint428 10M P1 trace infrastructure
+## 2026-07-28: Exact endpoint428 10M P1 trace infrastructure
 
 The zero-credit trace gate for corrected JANUS completed on the canonical 10M
 population. The observation-enabled archive is byte-identical to the existing
@@ -57,7 +57,7 @@ does not authorize 10M JANUS training until corrected Q0 passes.
 
 Receipt:
 `results/endpoint428_pair_layer0_online_native_trace_10m_v1/decision.json`
-# 2026-07-28: Corrected JANUS Q0 v2 superseded by null repair
+## 2026-07-28: Corrected JANUS Q0 v2 superseded by null repair
 
 The first repaired Q0 proved exact parent payload identity, full candidate and
 J1 arithmetic decode, WRT/raw inverse binding, tail fallback, canonical
@@ -73,7 +73,7 @@ score credit and does not authorize 10M.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v2/decision.json`
-# 2026-07-28: Corrected JANUS paid MDL Q0 v3 authorizes 10M
+## 2026-07-28: Corrected JANUS paid MDL Q0 v3 authorizes 10M
 
 The repaired `janus_paid_residual_mdl_q0_v1` Q0 now uses one full-stream range
 coder, preserves the exact parent P1 on the 166-byte WRT tail, emits and
@@ -96,7 +96,7 @@ GRU.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v3/decision.json`
-# 2026-07-29: JANUS paid recurrent residual is terminal negative at 10M
+## 2026-07-29: JANUS paid recurrent residual is terminal negative at 10M
 
 The unchanged canonical-10M `janus_paid_residual_mdl_q0_v1` screen completed
 with every exactness and determinism gate intact. J0 was 1,635,137 payload
@@ -118,7 +118,7 @@ a target-scale upper bound before native work.
 
 Receipt:
 `results/janus_paid_residual_mdl_10m_v1/decision.json`
-# 2026-07-29: FXCM dense-budget capacity passes 250K construction gate
+## 2026-07-29: FXCM dense-budget capacity passes 250K construction gate
 
 `fxcm_budget_preserving_capacity_v1` completed its previously cancelled exact
 250K gate. The archive is 45,179 bytes, roundtrip is exact, and the second
@@ -698,4 +698,3 @@ Evidence:
 - `results/mobius2_noema_binary_carry_headroom_qh0_v1/decision.json`
 - `run_logs/adaptive/20260801T225624Z_3987dcc6e8.log`
 - `docs/mobius2_noema_causal_replay_contract.md`
-

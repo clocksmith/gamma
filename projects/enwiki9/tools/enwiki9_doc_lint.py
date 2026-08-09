@@ -18,6 +18,10 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
+RESEARCH_REGISTER = ROOT / "docs" / "research_register.md"
+RESEARCH_REGISTER_DIR = ROOT / "docs" / "research_register"
+RESEARCH_REGISTER_ARCHIVE = RESEARCH_REGISTER_DIR / "archive"
+RESEARCH_REGISTER_LINE_LIMIT = 800
 
 LIVE_DOCS = [
     ROOT / "README.md",
@@ -158,6 +162,67 @@ def check_required_docs(findings: list[Finding]) -> None:
     for path in REQUIRED_DOCS:
         if not path.exists():
             findings.append(Finding(path, "required orientation document is missing"))
+
+
+def check_research_register_partition(findings: list[Finding]) -> None:
+    """Keep the shared register bounded, ordered, and semantically partitioned."""
+    current = RESEARCH_REGISTER
+    register_index = RESEARCH_REGISTER_DIR / "README.md"
+    archive_index = RESEARCH_REGISTER_ARCHIVE / "README.md"
+    parts = sorted(RESEARCH_REGISTER_ARCHIVE.glob("part-*.md"))
+
+    for path in (current, register_index, archive_index):
+        if not path.exists():
+            findings.append(Finding(path, "research-register partition file is missing"))
+            return
+
+    expected_names = [f"part-{number:03d}.md" for number in range(1, len(parts) + 1)]
+    actual_names = [path.name for path in parts]
+    if actual_names != expected_names:
+        findings.append(
+            Finding(
+                archive_index,
+                f"archive parts must be contiguous and monotonic: expected {expected_names!r}, got {actual_names!r}",
+            )
+        )
+
+    bounded_files = [current, *parts]
+    for path in bounded_files:
+        lines = path.read_text().splitlines()
+        if len(lines) > RESEARCH_REGISTER_LINE_LIMIT:
+            findings.append(
+                Finding(
+                    path,
+                    f"research-register partition has {len(lines)} lines; limit is {RESEARCH_REGISTER_LINE_LIMIT}",
+                )
+            )
+
+    for path in parts:
+        lines = path.read_text().splitlines()
+        if len(lines) < 5 or not lines[0].startswith("# Research Register Archive "):
+            findings.append(Finding(path, "archive part is missing its partition title"))
+            continue
+        if not lines[2].startswith("[Register index]"):
+            findings.append(Finding(path, "archive part is missing its navigation row"))
+        if not lines[4].startswith("## "):
+            findings.append(Finding(path, "archive content must begin at an H2 record boundary"))
+        for line_number, line in enumerate(lines[1:], start=2):
+            if line.startswith("# "):
+                findings.append(
+                    Finding(path, f"line {line_number} uses H1 inside an archive; records must use H2")
+                )
+
+    current_text = current.read_text()
+    index_text = register_index.read_text()
+    archive_text = archive_index.read_text()
+    for name in actual_names:
+        current_link = f"research_register/archive/{name}"
+        if current_text.count(current_link) != 1:
+            findings.append(Finding(current, f"archive link {name!r} must appear exactly once"))
+        if index_text.count(f"](archive/{name})") != 1:
+            findings.append(Finding(register_index, f"archive link {name!r} must appear exactly once"))
+        if archive_text.count(f"({name})") != 1:
+            findings.append(Finding(archive_index, f"archive link {name!r} must appear exactly once"))
 
 
 def check_obsolete_and_duration_phrases(findings: list[Finding]) -> None:
@@ -800,6 +865,7 @@ def check_streaming_retrieval_mixer(findings: list[Finding]) -> None:
 def main() -> int:
     findings: list[Finding] = []
     check_required_docs(findings)
+    check_research_register_partition(findings)
     check_obsolete_and_duration_phrases(findings)
     check_certificate_and_status(findings)
     check_status_live_process_fields(findings)

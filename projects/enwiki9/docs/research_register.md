@@ -370,6 +370,23 @@ directory; a final submission must replace that proxy with the actual source
 ZIP and option-byte measurements. Authority:
 `https://prize.hutter1.net/hrules.htm`.
 
+## 2026-08-09 - Shared research-register partition is lint-enforced
+
+The research register is one logical shared ledger with one bounded append
+surface, not an unstructured oversized Markdown file. The current append file
+has `412` lines before this entry. Its thirteen semantic archive parts range
+from `622` to `754` lines, all below the frozen `800`-line ceiling. Parts are
+numbered contiguously from `part-001.md` through `part-013.md`; the current
+register, register index, and archive index each link every part once.
+
+`enwiki9_doc_lint.py` now enforces the partition instead of relying on operator
+memory. It rejects an oversized current file or archive part, missing or
+noncontiguous part numbers, missing archive titles/navigation, archive content
+that does not start on an H2 boundary, nested H1 records, or drift among the
+three indexes. Seven historical JANUS/FXCM records in `part-005.md` were
+normalized from H1 to H2 without changing their text or order. This is durable
+shared-state correctness only and receives zero compression score credit.
+
 ## 2026-08-09 - Adaptive-worker liveness prevents duplicate mature launch
 
 The generated status receipt incorrectly labeled the active mature NNCP retry
@@ -385,3 +402,28 @@ gate view is reconciled to `running`, `live_observed_owner`, and
 receipt identifies job `20260809T094504Z_5157a13386` as the active source.
 This is operational correctness only and receives zero compression credit. The
 temporary refresh log used to verify the change was deleted.
+
+## 2026-08-09 - Native midpoint remains a teacher until CPU replacement exists
+
+Exact q3 timing makes the eligibility boundary explicit. On the same 65,536
+symbol population, the native four-thread parent encoded at `21.122685`
+symbols/second. The full midpoint child encoded at `11.038255`
+symbols/second and decoded at `11.626835` symbols/second; midpoint encoding
+was `1.913589x` the parent's elapsed time. These are observed receipt values,
+not full-corpus runtime forecasts, and the concurrent-host timing is
+diagnostic rather than qualifying.
+
+The existing incremental-KV runtime receipt does not close this debt. It
+reduced a one-segment ROCm diagnostic by `81.333783%`, but used a prohibited
+GPU, retained `313,000,456` parameters, and changed the branch/archive stream.
+It proves an implementation opportunity, not an eligible CPU codec.
+
+Consequently, a mature compression pass still authorizes the frozen
+production-alphabet bridge and `P/K/O/OK/F/S` causal attribution, but it does
+not authorize a full-model NNCP submission. The route can become prize-facing
+only if the measured midpoint gain is retained in a compact CPU replacement
+model; output-head adaptation that continues to execute the complete NNCP
+transformer is insufficient. The exact CPU package result remains valuable for
+reproducible teacher work and package arithmetic, but receives zero score and
+runtime-eligibility credit. Official resource authority:
+`https://prize.hutter1.net/hrules.htm`.
