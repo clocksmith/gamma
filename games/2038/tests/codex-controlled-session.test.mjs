@@ -5,6 +5,7 @@ import { CodexCliRunner } from "../lab/callers/codex-cli-runner.js";
 import {
   chunkRulesDocument,
   facilitatorResponseSchema,
+  finalReadinessPrompt,
   finalReadinessResponseSchema,
   followupResponseSchema,
   postgameResponseSchema,
@@ -46,7 +47,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v9.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v10.json",
       root
     ),
     "utf8"
@@ -95,6 +96,27 @@ test("controlled sessions fail closed until every participant confirms readiness
     ]),
     /engine seats 3/
   );
+});
+
+test("final readiness receives authoritative shared-session facts that resolve false blockers", () => {
+  const prompt = finalReadinessPrompt({
+    participant: {
+      seat: 3,
+      factionName: "Loopfold AI",
+      factionId: "platform_empire",
+      profileId: "market_maximalist"
+    },
+    playerCount: 4,
+    followup: { readyToPlay: false },
+    answers: [],
+    unresolved: []
+  });
+  assert.match(prompt, /registered faction is exactly Loopfold AI \(platform_empire\)/);
+  assert.match(prompt, /No Facility is placed during setup/);
+  assert.match(prompt, /Headline changes only its named rule/);
+  assert.match(prompt, /black Systemic Risk cube applies the current Era's colored-cube Audit penalty/);
+  assert.match(prompt, /complete legal choices are exposed/);
+  assert.match(prompt, /Do not retain a blocker that an authoritative session fact above resolves/);
 });
 
 test("facilitator citations pair each source only with its own headings", () => {

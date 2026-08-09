@@ -311,6 +311,31 @@ function participantContext(participant) {
   return `Human seat ${participant.seat + 1} (engine seat ${participant.seat}); faction ${participant.factionName} (${participant.factionId}); decision profile ${participant.profileId}.`;
 }
 
+export function finalReadinessPrompt({
+  participant,
+  playerCount,
+  followup,
+  answers,
+  unresolved
+}) {
+  return [
+    "Continue as the same first-time Mandate 2038 participant after the final facilitator response.",
+    participantContext(participant),
+    `Your follow-up record:\n${JSON.stringify(followup, null, 2)}`,
+    `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
+    `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
+    "The following operational session facts are authoritative and resolve any conflicting inference in your follow-up record:",
+    `- This is a ${playerCount}-player Default Game. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card Reference do not apply to you.`,
+    `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
+    "- No Facility is placed during setup. All four begin in supply; the first Facility has the integrated starting-grid identifier and receives that Power after it is legally constructed.",
+    "- Core Rules are the baseline authority. A Headline changes only its named rule while that specific Headline is currently revealed and active; unrelated Headline variants are not simultaneous alternatives.",
+    "- A black Systemic Risk cube applies the current Era's colored-cube Audit penalty to every player with at least three Customers.",
+    "- The shuffled board, Initiative, revealed Headline, current Mandate, legal targets, costs, applicable card text, and complete legal choices are exposed by the game state and legal-choice packet when each decision occurs.",
+    "- You may rely on those visible legal choices during play, but not on hidden simulator state.",
+    "State whether every question that blocks legal play is resolved. List only genuinely blocking questions. Do not retain a blocker that an authoritative session fact above resolves. You may be ready even when future shuffled cards are not yet revealed."
+  ].join("\n\n");
+}
+
 export function validateFinalReadiness(results) {
   if (!Array.isArray(results) || results.length !== 4) {
     throw new Error("Final readiness requires exactly four participant records.");
@@ -668,19 +693,13 @@ export async function runCodexControlledSession({
           requestId: `${registration.id}:final-readiness:seat-${participant.seat + 1}`,
           responseSchema: finalReadinessResponseSchema,
           signal,
-          prompt: [
-            "Continue as the same first-time Mandate 2038 participant after the final facilitator response.",
-            participantContext(participant),
-            `Your follow-up record:\n${JSON.stringify(followup[index].output, null, 2)}`,
-            `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
-            `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
-            "Session facts, which are operational context rather than rulebook citations:",
-            `- This is a ${registration.playerCount}-player Default Game.`,
-            `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
-            "- The shuffled board, revealed Headline, current Mandate, legal targets, costs, and applicable card text are exposed by the game state and legal-choice packet when each decision occurs.",
-            "- You may rely on those visible legal choices during play, but not on hidden simulator state.",
-            "State whether every question that blocks legal play is resolved. List only genuinely blocking questions. You may be ready even when future shuffled cards are not yet revealed."
-          ].join("\n\n")
+          prompt: finalReadinessPrompt({
+            participant,
+            playerCount: registration.playerCount,
+            followup: followup[index].output,
+            answers,
+            unresolved
+          })
         });
       },
       (participant, _index, result) => onParticipantComplete?.({
