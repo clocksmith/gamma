@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T14:52:11+00:00`
+- Generated at UTC: `2026-08-09T14:59:23+00:00`
 
 ## Target State
 
@@ -113,11 +113,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `727`
-- Registered programs: `290`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=38, measured_negative=100, retired=538`
+- Program directories: `728`
+- Registered programs: `291`
+- Untracked nonignored entries: `7`
+- Modified tracked entries: `6`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=38, measured_negative=100, retired=538, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -125,12 +125,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 |---|---:|---:|---:|---|
 | `process` | 510,791 | 2,229,505 | 21,656 | `python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
 | `rss_guard` | 510,888 | 510,791 | 16,848 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 590,898 | 2,193,714 | 21,700 | `python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate cmix_obias_helical_xmlsafe_residual_backend_qm4_v1 --max-workers 1` |
-| `rss_guard` | 590,984 | 590,898 | 16,856 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
 | `process` | 510,895 | 510,888 | 20,524 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
 | `process` | 510,946 | 510,895 | 5,691,344 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
-| `process` | 590,985 | 590,984 | 19,116 | `python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py` |
-| `process` | 591,016 | 590,985 | 8,603,264 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
 
 ## Active Candidate Recent Artifacts
 
@@ -143,14 +139,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `14,411,308`
+- Active process tree RSS KiB: `5,750,372`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-3,925,548`
-- Active process tree decimal margin KiB: `-4,645,683`
-- Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
+- Active process tree margin KiB (binary): `4,735,388`
+- Active process tree decimal margin KiB: `4,015,253`
 
 ## Contingencies
 

@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_successor_cache32_qm0_v1",
+  "claimed_at": "2026-08-09T14:55:02+00:00",
+  "created_at": "2026-08-09T14:55:01+00:00",
+  "developed_at": "2026-08-09T14:55:02+00:00",
+  "evidence": [
+    "results/nncp_symbol_cache32_marginal_qm0_v1/decision.json;results/nncp_midpoint_decoder_visible_recurrence_qm0_v1/decision.json;results/nncp_symbol_hierppm_mix_qm0_v1/decision.json;docs/research_register.md"
+  ],
+  "expected_savings_bytes": 3500000,
+  "hypothesis": "A decoder-rebuilt last-32 successor posterior conditioned on the immediately preceding same-stream symbol saves at least 10000 actual bytes over the faithful NNCP trace and at least 1000 bytes beyond the unconditional cache while remaining positive in every original-coordinate third.",
+  "interfaces_exposed": [
+    "Faithful same-symbol branch probabilities plus decoded predecessor and last-32 same-stream pairs -> addressless successor posterior -> exact arithmetic stream"
+  ],
+  "kill_condition": "Any identity failure, gain below 10000 bytes, nonpositive third, either control margin below 1000 bytes, or source excess retires last-32 immediate-successor marginal without window, lag, prior, reset, or blend sweeps.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "agent-b",
+  "parent": "nncp_symbol_cache32_marginal_qm0_v1",
+  "parent_proposal_id": null,
+  "priority": 1324,
+  "promotion_condition": "Two independently terminated successor streams are byte-identical, decode every exact symbol, save at least 10000 actual bytes versus faithful, beat unconditional cache by at least 1000 bytes and lag-17 context by at least 1000 bytes, remain positive in all thirds, and compressed source is at most 65536 bytes.",
+  "proposal_id": "nncp_successor_cache32_qm0_v1",
+  "retired_neighborhoods": [
+    "Do not inherit score from NNCP or midpoint; do not vary cache geometry or mixture priors after this exact gate."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1334,
+  "state": "developed",
+  "title": "NNCP addressless successor-cache marginal"
+}

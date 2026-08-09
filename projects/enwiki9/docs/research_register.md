@@ -49,322 +49,9 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 - [part-011.md: 2026-08-03: WIKIFORWARD prior-destination lexicon QM1 materialized through 2026-08-08 - HELICAL direct-WRT far-history QM3 closure](research_register/archive/part-011.md)
 - [part-012.md: 2026-08-08 - NNCP/Endpoint common-raw-block routing closure through 2026-08-08 - NNCP midpoint persistence replicated at 262,144 symbols](research_register/archive/part-012.md)
 - [part-013.md: 2026-08-08 - Exact native 65,536-symbol raw-proof guard corrected through 2026-08-09 - Exact output-head attribution maps to LibNC optimizer semantics](research_register/archive/part-013.md)
+- [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](research_register/archive/part-014.md)
 
 ## Current entries
-
-## 2026-08-09 - Mature train-length retry crosses first block boundary
-
-The infrastructure retry for
-`nncp_libnc_trainlen32_mature_1998848_qm2_v1` remains live and has now crossed
-its first authoritative input boundary. The NNCP input descriptor advanced
-from `999,424` to `1,998,848` physical bytes. Because the receipt-bound symbol
-artifact is big-endian `uint16`, those positions correspond to `499,712` and
-`999,424` loaded symbols respectively. This proves forward progress through
-the first native block and its intervening compute path; it supersedes any
-interpretation of the earlier stable descriptor as a stalled process.
-
-At the observation, PID `510946` remained compute-active at approximately
-`294%` CPU with `5,691,344 KiB` RSS. The guard reported a healthy running state,
-`5,691,344 KiB` maximum single-process RSS, `5,711,868 KiB` maximum process-tree
-RSS, and no limit violation against `9,765,625 KiB`. The output descriptor
-remained `573,440` physical bytes, which is buffered live state and receives no
-partial score or pass credit. The frozen terminal gates remain candidate
-archive at most `2,012,820` bytes for the `30,000`-byte scientific threshold
-and at most `2,009,770` bytes for the `33,050`-byte package-aware threshold.
-No candidate source, command, population, or threshold was changed.
-
-## 2026-08-09 - NNCP chronology must follow original coordinates
-
-Read-only audit of `process_block()` corrects the chronology contract for the
-conditional observer. NNCP divides each native block into 32 contiguous corpus
-streams, then codes one local state from every stream before advancing to the
-next state. Consequently, the first third of `write_sym()` calls is not the
-first chronological third of the corpus. A cloned-coder checkpoint selected
-only by execution-row count would silently mix positions from all 32 corpus
-regions and cannot support a chronological-third claim.
-
-For the active mature population, the four complete native blocks provide the
-clean exact solution. A cloned live coder flushed after each completed
-`499,712`-symbol block yields same-stream physical archive prefixes at original
-coordinates `499,712`, `999,424`, `1,499,136`, and `1,998,848`. These are valid
-chronological quartile boundaries because every block is completed before the
-next block is read. The observer must trigger from `process_block()` completion,
-not merely from a global count of symbol-write calls.
-
-The exact `65,536`-symbol `P/K/O/OK/F/S` population fits inside one native
-block, so execution-prefix checkpoints cannot produce raw chronological
-thirds. Its archive-neutral observer must carry the already decoder-visible
-original symbol index into the symbol writer and route each consumed integer
-branch probability and truth bit into one of three independent count-only
-shadow arithmetic coders by original-coordinate third. Flushing those shadow
-coders gives exact physical arithmetic bytes for each third with matched
-termination overhead, while the single live coder and model trajectory remain
-unchanged. Whole-archive promotion still uses the actual live archive; the
-three shadows are attribution evidence only. The candidate must retain at
-least `80%` of `F`'s gain in each matched shadow stream and remain positive in
-all three. An observer-enabled repeat must remain byte-identical to the
-observer-disabled live archive.
-
-## 2026-08-09 - Attribution identity excludes the schedule header byte
-
-The proposed single versioned `P/K/O/OK/F/S` schedule enum creates an exact
-but important distinction between control identity and whole-file identity.
-If each arm serializes its schedule so the same decoder binary can reproduce
-the correct update path, `K` and `P` necessarily differ in that header byte;
-likewise `OK` and `O`. Requiring those complete archive files to be
-byte-identical would contradict the self-describing archive contract.
-
-The frozen implementation invariant is therefore:
-
-```text
-K versus P    same archive length, parsed arithmetic payload byte-identical,
-              model/optimizer trajectory byte-identical after every segment
-OK versus O   same archive length, parsed arithmetic payload byte-identical,
-              model/optimizer trajectory byte-identical after every segment
-```
-
-The parser must identify the exact one-byte schedule field and the arithmetic
-payload offset rather than comparing hand-selected suffixes. Every arm must
-still decode independently under its serialized schedule and reproduce the
-exact symbol population and raw prefix. Each arm's repeated encode must be
-whole-file byte-identical to itself. Archive scoring counts the full file,
-including the schedule byte; the cross-arm payload comparison is only a
-correctness and attribution invariant. This correction changes no frozen gain,
-source-package, chronology, memory, or shifted-control threshold.
-
-## 2026-08-09 - Mature train-length screen includes relative-position geometry
-
-Read-only command and source parity audit identifies one more strict boundary
-on the active mature surrogate. Its faithful baseline uses the unmodified
-`enwik9` profile with `train_len=64`, `mem_len=256`, and `d_pos=320`. The active
-candidate explicitly uses `train_len=32`, `mem_len=256`, and `d_pos=288`.
-Both therefore preserve full relative-position coverage
-`d_pos = mem_len + train_len`, but the comparison does not hold the learned
-parameter geometry fixed.
-
-With 20 layers, 8 heads, and `d_key=128`, reducing `d_pos` by 32 removes
-exactly `20 * 8 * 128 * 32 = 655,360` untied `w_r` weights, in addition to the
-smaller graph and key/value state schedule. The different `w_r` tensor sizes
-also consume different numbers of seeded initialization draws before later
-parameters are initialized, so equal seed `123` does not imply coefficient
-identity for the remaining model. The lower live RSS is consequently a joint
-effect of shorter graph geometry and a smaller relative-position parameter
-set, not pure update cadence.
-
-This does not change the already-running command or its frozen `30,000` and
-`33,050` terminal thresholds. A pass remains an authorization screen when
-combined with the separate exact same-geometry midpoint success; it transfers
-no archive bytes or parameter-level attribution to that candidate. A miss
-retires this frozen mature `train_len=32,d_pos=288` realization under the
-no-sweep contract, but must not be stated as a mathematical impossibility
-result for every fixed-geometry midpoint schedule. Only the conditional
-`P/K/O/OK/F/S` exact-native gate can attribute the measured midpoint mechanism
-while holding the 64-state model geometry fixed.
-
-## 2026-08-09 - Production alphabet requires a native midpoint bridge
-
-Cross-receipt audit reveals that the two midpoint antecedents do not share an
-alphabet. The exact source-native q3 archive serialized vocabulary `336`,
-generated by applying the local `16384,512` preprocessor to the first-1M raw
-input. The active mature screen consumes the receipt-bound full-corpus symbol
-artifact with fixed vocabulary `16,392` and external dictionary
-`950683b4...5a0a1`. These are distinct coded objects and output-head shapes.
-
-Strong production-alphabet evidence already exists, but in the separate ROCm
-constructive backend. On the exact full-dictionary population,
-`nncp_midsegment32_update_qm0_v1` reduced the 65,536-symbol archive from
-`96,142` to `91,351` bytes, an actual `4,791`-byte gain with all thirds
-positive. Its 262,144-symbol successor reduced `341,558` to `324,373`, an
-actual `17,185`-byte gain with positive mature tail evidence. Those receipts
-prove a causal full-vocabulary mechanism in that implementation; they do not
-prove that the patched CPU LibNC source produces the same probabilities,
-rounding trajectory, archive, or gain.
-
-Consequently, the small-vocabulary q3 values `P=44,786`, `F=41,564`, and
-`G_F=3,222` remain valid only for their local-vocabulary source-transfer gate.
-They cannot set production-head `O` retention thresholds or authorize
-`MIDAS-G1024` over a `16,392 x 1,024` head. The previously frozen whole-byte
-`O <= 42,208` and aligned-versus-shifted `323` thresholds are superseded for
-the production realization.
-
-After the active mature screen terminalizes, the next exact source bridge—if
-the midpoint route remains authorized—must run native parent `P` and full
-midpoint `F` on the identical first 65,536 symbols of
-`preprocessed.bin`, using the receipt-bound external dictionary and
-`n_symb=16,392`. It must independently decode those symbols, apply the official
-dictionary inverse to the exact raw boundary, repeat byte-identically, parse
-the serialized schedule, and pass the decimal-memory guard. Require at least
-`3,000` actual native bytes and positive original-coordinate thirds; otherwise
-retire native full-dictionary transfer.
-
-Only a passing bridge may materialize `K/O/OK/S` on that same full-dictionary
-population. Its thresholds are derived from the bridge's newly measured native
-`G_F`: aligned `O` must retain `ceil(0.80 * G_F)`, shifted `S` must trail by at
-least `ceil(0.10 * G_F)`, and every matched original-coordinate shadow stream
-must be positive. This is not a fourth family or a parameter sweep; it closes
-the missing backend-by-alphabet cell before spending evidence on a compact
-production head.
-
-## 2026-08-09 - Full-dictionary native bridge contract bound
-
-Direct source audit closes the bridge's preprocessing and inverse semantics.
-For command `c`, supplying `--dict` sets NNCP's preprocessing flag, treats the
-input as an already-preprocessed big-endian U16 symbol stream, embeds a
-compressed copy of the supplied dictionary in the archive, and records the
-preprocessed symbol count. Ordinary command `d` extracts that embedded
-dictionary, arithmetic-decodes the U16 symbols, and invokes `word_decode()` to
-produce raw output. The bridge decoder therefore requires no external
-dictionary; the dictionary bytes are present and counted in both `P` and `F`.
-
-The frozen production bridge population is now byte-bound:
-
-```text
-full preprocessed artifact SHA-256   c82bfca1...f9605a5
-dictionary SHA-256                   950683b4...5a0a1
-modeled symbols                      65,536
-modeled U16 bytes                    131,072
-modeled U16 prefix SHA-256           6e4e2e7d...e4cb
-expected raw bytes                   322,978
-expected raw SHA-256                 a5daeae0...b7e9
-```
-
-The expected raw artifact already exists under the receipt-bound
-`nncp_midsegment32_update_qm0_v1` result and passes a direct `cmp` against the
-first `322,978` canonical corpus bytes. The native commands must be exactly the
-same except for the candidate's serialized midpoint schedule:
-
-```text
-P: --profile enwik9 --n_symb 16392 --dict DICTIONARY --max_size 65536
-F: --profile enwik9 --n_symb 16392 --dict DICTIONARY --midsegment32
-   --max_size 65536
-```
-
-Both use train length 64 and `d_pos=320` from the unchanged profile. Bridge
-evidence requires one clean-source parent encode, two patched candidate
-encodes, one patched candidate decode, parsed vocabulary `16,392` and schedule
-header, candidate repeat identity, exact `322,978`-byte raw identity, fully
-counted source package, and the decimal-memory guard. Cross-arm size comparison
-is valid because both archives embed the identical dictionary; no dictionary
-byte may be subtracted as common free information.
-
-## 2026-08-09 - Indexed native observer scalar-site bug fixed
-
-Temporary source-composition audit found a correctness defect in
-`materialize_nncp_native_indexed_trace_observer.py`. The clean NNCP source has
-two identical scalar `write_sym()` call strings. The materializer replaced the
-first occurrence with text that still contained the same call string, then
-performed the same one-occurrence replacement again. The second replacement
-therefore inserted a duplicate original-index setter at the first site and
-left the true second scalar/remainder site uninstrumented. Its final count of
-four setter calls passed despite incomplete coverage.
-
-This does not invalidate the prior complete-block encode-only receipts: their
-paying path uses the separately instrumented vector call, and their frozen
-populations have no remainder. It does invalidate any claim that the old
-materializer generically covered every scalar/remainder encoder path.
-
-The tracked tool now requires exactly two clean-source scalar sites and
-replaces both atomically. An altered call graph therefore fails rather than
-silently producing a partial trace. The midpoint patch has four matching
-scalar sites—two new paying midpoint calls plus the ordinary and remainder
-paths—so the corrected clean-source materializer deliberately rejects it. The
-future full-dictionary bridge needs a dedicated combined materializer that
-indexes every midpoint paying call and proves trace-on versus trace-off archive
-identity. Offline chronology may then replay the exact recorded integer
-branches into three original-coordinate shadow arithmetic coders; no live
-model or archive trajectory needs to change.
-
-## 2026-08-09 - Midpoint indexed observer composition materialized
-
-The dedicated source-only materializer
-`materialize_nncp_midsegment32_indexed_trace_observer.py` now composes the
-exact midpoint schedule with the archive-neutral original-coordinate observer.
-It requires the midpoint patch up front, indexes both new first/second-half
-paying calls, both inherited scalar paths, and both encode-only vector paths,
-and fails unless all six setters are present.
-
-A clean temporary extraction of the receipt-bound NNCP source accepted the
-frozen q3 midpoint patch and produced a 14,687-byte combined observer patch
-with SHA-256
-`23d0428c9bdd687e270847f3914ec94e9ae676d18a75628475db2906a5b4a235`.
-The source audit found exactly six indexed writes and one `NNNTR4` trace
-header. No NNCP encode, decode, compression comparison, or score claim was
-executed; the temporary extraction and generated patch were deleted after the
-audit.
-
-This closes the previously identified source-composition gap but does not
-authorize the production-alphabet bridge. The running mature train-length gate
-remains its antecedent. A future bridge still must prove trace-on versus
-trace-off archive identity before using indexed branches for exact
-original-coordinate thirds.
-
-## 2026-08-09 - Exact CPU-only midpoint package reduces the target-bearing gate
-
-Package candidate `nncp_libnc_midsegment32_cpu_xz_package_qm0_v1` exposed an
-invalid verifier condition rather than a codec failure. NNCP is compiled with
-`-g`; q3's raw ELF therefore embeds its random temporary build directory and
-a path-derived GNU build ID. The q0 certificate correctly failed when it
-required a different-directory rebuild to reproduce that path-specific ELF.
-Job `20260809T130601Z_c472791b18` is an infrastructure failure and provides no
-compression verdict.
-
-Its unique successor
-`nncp_libnc_midsegment32_cpu_xz_package_qm1_v1` fixes the proof object without
-weakening it. The donor and CPU-only source subset are built sequentially at
-one identical path, using the same initial build, exact midpoint patch, and
-relink sequence. All sixteen retained CPU source/library files match the
-receipt-bound donor byte-for-byte; the only omitted files are `Changelog`,
-`readme.txt`, and the unused `libnc_cuda.so`. The two raw normalized-path
-ELFs are byte-identical, SHA-256
-`6462dd93bbc2f6914d2059b3c1a94efe6f3d132226cbfb73baaa3b5bdca21903`,
-and the self-contained wrapper independently rebuilds that same ELF.
-
-The complete counted candidate directory is `253,913` bytes, below its
-`260,000` gate. It saves `930,648` bytes versus q3's `1,184,561`-byte
-package and is `375,042` bytes smaller than the published NNCP package. With
-the external published archive held only as a planning normalization,
-`106,632,363 + 253,913 = 106,886,276`; the debt to 105M is `1,886,276`.
-Adding the frozen `500,000` reserve requires `2,386,276` full-symbol archive
-bytes, or `23,777` bytes on the exact `1,998,848 / 200,608,961` mature
-population. This supersedes the earlier `33,050` package-aware screen for
-this exact package child; the running `30,000` scientific gate is therefore
-already target-bearing under the reduced package normalization.
-
-The guarded certificate passed with `64,676 KiB` maximum single-process RSS,
-`93,908 KiB` maximum tree RSS, exact parent patch/archive provenance, and no
-failed conditions. This is package-only evidence with zero score credit. It
-does not inherit the published NNCP archive as a local full-1G result and does
-not authorize a victory claim. Evidence:
-`results/nncp_libnc_midsegment32_cpu_xz_package_qm1_v1/decision.json`,
-`results/nncp_libnc_midsegment32_cpu_xz_package_qm1_guard_v1.json`, and job
-`20260809T130931Z_069decf804`.
-
-Official-rule audit preserves one remaining accounting condition. A submitted
-source ZIP is accepted, but separate compressor/decompressor accounting is
-`comp + 2*decomp + archive`; the program multiplier falls to one only when
-the submitted compressor and decompressor are the same program. Command-line
-option length is also counted. The q1 normalization therefore assumes this
-single shared wrapper and conservatively charges its uncompressed candidate
-directory; a final submission must replace that proxy with the actual source
-ZIP and option-byte measurements. Authority:
-`https://prize.hutter1.net/hrules.htm`.
-
-## 2026-08-09 - Shared research-register partition is lint-enforced
-
-The research register is one logical shared ledger with one bounded append
-surface, not an unstructured oversized Markdown file. The current append file
-has `412` lines before this entry. Its thirteen semantic archive parts range
-from `622` to `754` lines, all below the frozen `800`-line ceiling. Parts are
-numbered contiguously from `part-001.md` through `part-013.md`; the current
-register, register index, and archive index each link every part once.
-
-`enwiki9_doc_lint.py` now enforces the partition instead of relying on operator
-memory. It rejects an oversized current file or archive part, missing or
-noncontiguous part numbers, missing archive titles/navigation, archive content
-that does not start on an H2 boundary, nested H1 records, or drift among the
-three indexes. Seven historical JANUS/FXCM records in `part-005.md` were
-normalized from H1 to H2 without changing their text or order. This is durable
-shared-state correctness only and receives zero compression score credit.
 
 ## 2026-08-09 - Adaptive-worker liveness prevents duplicate mature launch
 
@@ -732,3 +419,46 @@ entry binds their exact identities and conclusions into the shared register.
 materialized `results/<id>/decision.json` unless that exact ID appears somewhere
 in the logical register. The current register remains the sole append target;
 semantic H2 partitioning and the `800`-line ceiling remain unchanged.
+
+## 2026-08-09 - Addressless NNCP successor-cache marginal frozen
+
+Candidate `nncp_successor_cache32_qm0_v1` asks whether the midpoint teacher's
+remaining gain is short episodic transition memory rather than an unconditional
+symbol-frequency shift. For each target, the decoder uses the immediately
+preceding same-stream symbol as a key, searches only the preceding 32 decoded
+positions, and marginalizes the symbols that followed earlier occurrences.
+No source address, selector, distance, match length, or alternate alphabet is
+transmitted.
+
+The exact same arithmetic coder emits faithful base, the already measured
+unconditional cache-32 control, the successor arm, and a lag-17 context-query
+control. Promotion requires exact decode and repeat identity, at least `10,000`
+actual bytes over faithful, at least `1,000` bytes over both controls, positive
+original-coordinate thirds, and at most `65,536` compressed source bytes. Any
+miss retires this exact window, prior, lag, and blend without sweeps. It is a
+trace-bound causal shadow with zero score, forecast, and LibNC eligibility
+credit. Proposal: `operations/adaptive/proposals/developed/000_nncp_successor_cache32_qm0_v1.json`.
+
+## 2026-08-09 - Addressless NNCP successor-cache marginal is terminal negative
+
+The frozen `nncp_successor_cache32_qm0_v1` gate completed on the exact
+`262,144`-symbol, `3,670,169`-branch population. Faithful base identity
+reproduced at `341,558` bytes and unconditional cache-32 identity reproduced at
+`332,485` bytes. The successor arm produced `333,314` bytes, saving `8,244`
+bytes over faithful but losing `829` bytes to the simpler unconditional cache.
+It therefore missed both the `10,000`-byte gain gate and the `1,000`-byte
+incremental control margin.
+
+The original-coordinate thirds were positive at `3,003`, `2,390`, and `2,851`
+bytes. A lag-17 context-query control lost `1,247` bytes to faithful, so the
+correct predecessor relationship was specific by `9,491` bytes. Exact
+arithmetic decode and repeated-payload identity passed. The compressed source
+was `7,876` bytes; peak sampled guarded RSS was `49,860 KiB` with no violation.
+
+Verdict: retire the exact immediate-successor posterior, window 32, lag-17
+control, prior masses, and branch mixture without sweeps. Short transition
+specificity is causal, but the unconditional recent-symbol marginal prices this
+population better. Score, forecast, and LibNC eligibility credit remain zero.
+Evidence: `results/nncp_successor_cache32_qm0_v1/decision.json`, guard
+`results/nncp_successor_cache32_qm0_guard_v1.json`, and job
+`20260809T145728Z_9357a5aeaf`.
