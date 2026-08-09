@@ -46,7 +46,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v8.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v9.json",
       root
     ),
     "utf8"
@@ -107,8 +107,14 @@ test("facilitator citations pair each source only with its own headings", () => 
   );
   const branches = schema.properties.answers.items.properties.citations.items.anyOf;
   assert.deepEqual(branches.map((branch) => branch.properties), [
-    { sourceId: { const: "rules" }, heading: { enum: ["Setup", "Actions"] } },
-    { sourceId: { const: "cards" }, heading: { enum: ["Era cards"] } }
+    {
+      sourceId: { type: "string", const: "rules" },
+      heading: { type: "string", enum: ["Setup", "Actions"] }
+    },
+    {
+      sourceId: { type: "string", const: "cards" },
+      heading: { type: "string", enum: ["Era cards"] }
+    }
   ]);
 });
 
