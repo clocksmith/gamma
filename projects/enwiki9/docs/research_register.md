@@ -1266,3 +1266,28 @@ predeclared `0.15` bits/symbol engineering distance from the approximately
 branch-tree design, not a score forecast. A miss retires this byte-layout
 crossing without endian, block-size, plane-width, dictionary, or backend
 parameter sweeps. SABLE, copies, tries, and event-source models remain closed.
+
+## 2026-08-08 - NNCP output-bias-only midpoint attribution frozen
+
+Candidate: `nncp_midpoint_bias_only_qm0_v1`. Epistemic tier before execution:
+planned exact 65,536-symbol causal attribution child; score and forecast credit
+zero.
+
+The exact full-parameter 32/32 schedule saves `4,791` bytes at `65,536`
+symbols and `17,185` bytes at `262,144` symbols. This child isolates whether
+that information gain is primarily a compact symbol-rate correction. It keeps
+the faithful model and its full-parameter update after state 63, but inserts
+one midpoint Adam step whose gradients are restricted to the existing
+`16,392`-entry output bias. The second-half keys and values are rebuilt under
+the updated bias state. No parameter, table, or archive field is added.
+
+Promotion requires at least `1,600` actual bytes against the identical
+faithful `96,142`-byte archive, positive chronological thirds, exact repeated
+archives and complete state, independent decode, official raw inversion,
+decimal-memory compliance, and at most `65,536` compressed incremental source
+bytes. The `1,600`-byte floor is approximately one third of the full midpoint
+gain and scales to target-debt magnitude over the receipt-bound symbol count,
+but receives no forecast credit. A pass authorizes compact symbol-bias transfer
+to a runnable substrate. A miss retires this exact bias-only mechanism without
+parameter-group, split, optimizer, learning-rate, or scope sweeps; the full
+midpoint result remains separate evidence.
