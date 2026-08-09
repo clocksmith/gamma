@@ -4,6 +4,7 @@ import test from "node:test";
 import { CodexCliRunner } from "../lab/callers/codex-cli-runner.js";
 import {
   chunkRulesDocument,
+  facilitatorResponseSchema,
   finalReadinessResponseSchema,
   followupResponseSchema,
   postgameResponseSchema,
@@ -45,7 +46,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v7.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v8.json",
       root
     ),
     "utf8"
@@ -94,6 +95,21 @@ test("controlled sessions fail closed until every participant confirms readiness
     ]),
     /engine seats 3/
   );
+});
+
+test("facilitator citations pair each source only with its own headings", () => {
+  const schema = facilitatorResponseSchema(
+    [{ id: "q1" }],
+    [
+      { id: "rules", headings: ["Setup", "Actions"] },
+      { id: "cards", headings: ["Era cards"] }
+    ]
+  );
+  const branches = schema.properties.answers.items.properties.citations.items.anyOf;
+  assert.deepEqual(branches.map((branch) => branch.properties), [
+    { sourceId: { const: "rules" }, heading: { enum: ["Setup", "Actions"] } },
+    { sourceId: { const: "cards" }, heading: { enum: ["Era cards"] } }
+  ]);
 });
 
 test("rules documents split into bounded lossless source chunks", () => {
