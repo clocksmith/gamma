@@ -1470,28 +1470,45 @@ the one-million-byte raw input `startswith(restored_bytes)`. A truncated raw
 prefix could therefore satisfy the recorded field
 `raw_prefix_decode_exact=true`.
 
-The gate must not be promoted from that Boolean alone. After the job
-terminalizes, an independent audit must require exact equality with the
-receipt-bound first-65,536-symbol raw inverse already reproduced by both
-`nncp_midsegment32_update_qm0_v1` and
-`nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1`:
+An initial audit incorrectly selected the `322,978`-byte raw inverse from the
+receipt-bound full-corpus dictionary population. Direct comparison disproves
+that population identity: q3's locally built first-1M `16384,512` dictionary
+changes preprocessed byte zero. The first `131,072` bytes have hashes
+`6c5e26cbd314c8e6980387049790986b2827642d437d80aee71cb5e51309146d`
+for q3 and
+`6e4e2e7d17de3e37de6d81699a132113b4c7bdd330173cad614cdc8a9247e4cb`
+for the full-corpus-dictionary stream. The earlier `322,978`-byte comparator
+and `symbol_raw_map.bin` row therefore apply only to the distinct full-corpus
+population and are quarantined from q3 adjudication.
+
+Before the active encoder removed its staging files, the exact q3 population
+was bound as follows:
 
 ```text
-expected raw bytes   322,978
-expected SHA-256     a5daeae040c2575ae1c2fd5f3284d73caafa0fcd48c3f546e199ab7c5f1ab7e9
+candidate.nncp.pp bytes       1,506,396
+candidate.nncp.pp SHA-256     bd1c6153bad848e739acb3dba139d411f527d6372e3707b5ca31de063a9ad0b5
+candidate.nncp.voc bytes      804
+candidate.nncp.voc SHA-256    814ebc4be8ebf998f77c0bc62fc29df834a34be086ceb6355123070a3be515dd
+modeled prefix bytes          131,072
+modeled symbols               65,536
+expected raw bytes            88,279
+expected raw SHA-256          02693fbe724e91de753a65fe7f036c552dc18ea183eba0605799e885badacf95
 ```
 
-Those two independent artifacts are byte-identical and consume the first
-65,536 big-endian symbols from the receipt-bound NNCP preprocessed stream.
-The independent full-corpus `symbol_raw_map.bin` also binds map row `65,535`
-to `raw_end=322,978`; its header declares `200,608,961` total symbol rows.
-The native gate declares the identical built-in `16384,512` symbol
-population. Its candidate decode must therefore match the expected artifact
-in length, SHA-256, and direct byte comparison; the serialized mode header,
-archive size, source package, and external memory guard remain separately
-mandatory. A mismatch quarantines the native result and forbids descendant
-authorization. This audit changes no active process and grants zero score or
-forecast credit.
+The expected raw reference was constructed by taking exactly the first
+`131,072` bytes of q3's staging stream and invoking the same receipt-bound
+NNCP `pd` inverse with q3's staging vocabulary. It is byte-identical to the
+first `88,279` bytes of the raw 1M input. The `.pp` and `.voc` files are
+encoder staging artifacts, not external decoder dependencies: NNCP embeds the
+compressed vocabulary in the main archive, recreates temporary inverse files
+during decode, and removes them afterward.
+
+After q3 terminalizes, promotion requires its restored output to have exactly
+`88,279` bytes and the expected SHA-256 above, in addition to direct raw-prefix
+identity, serialized mode header, archive gain, source package, and process-
+tree memory compliance. A mismatch quarantines the native result and forbids
+descendant authorization. This correction changes no active process and
+grants zero score or forecast credit.
 
 Conditional head-only graph implementation audit: the current full-midpoint
 patch completes 32 dummy future states because ordinary
