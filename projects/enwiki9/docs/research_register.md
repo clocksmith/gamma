@@ -571,3 +571,43 @@ information source. It may only re-enter through a separately authorized
 joint replay with another mature mechanism; gains may not be added. Evidence:
 `results/nncp_symbol_cache32_marginal_mature_qm1_v1/decision.json` and job
 `20260809T140936Z_f2c4c05018`.
+
+## 2026-08-09 - Cache-32 and full midpoint are jointly complementary at 262,144 symbols
+
+Candidate `nncp_midpoint_cache32_joint_qm1_v1` performed the authorized exact
+joint replay on the identical `262,144` symbols and `3,670,169` branches. It
+independently terminated faithful, midpoint-only, midpoint-plus-cache, and
+midpoint-plus-cross-stream-cache arithmetic streams. This prevents adding
+separately measured gains whose probability trajectories differ.
+
+The exact faithful payload is `341,558` bytes and the midpoint-only payload is
+`324,373` bytes, reproducing both registered hashes. Applying the frozen
+cache-32 symbol marginal to midpoint probabilities produces `318,144` bytes.
+The cache therefore retains `6,229` actual incremental bytes after midpoint
+has already saved `17,185` bytes, for `23,414` actual bytes from faithful to
+the joint stream. Independently terminated original-coordinate thirds retain
+`2,273`, `1,796`, and `2,159` incremental bytes.
+
+The capacity-matched cross-stream cache produces `326,271` bytes, losing
+`1,898` bytes relative to midpoint-only. The genuine joint arm consequently
+beats that control by `8,127` bytes. Its repeat payload is byte-identical, its
+arithmetic decoder reconstructs all symbols exactly, compressed incremental
+source is `9,952` bytes, and the guard passed at `56,608 KiB` sampled
+process-tree RSS.
+
+QM0 observed these same mechanism numbers but falsely retired because its
+expected faithful SHA-256 contained a transcription error. The QM1 child
+changed only that expected hash and candidate/output identities, reran the
+entire replay, and bound the correction to the QM0 decision hash. Measured QM0
+source remains immutable.
+
+Conclusion: recent exact symbol identity and midpoint adaptation contain
+nonredundant predictive information at this scope. The pass authorizes a
+same-object mature joint replay only after a mature full-midpoint probability
+trace exists. It does not authorize native cache integration from the failed
+faithful mature arm, additive extrapolation, a full-corpus forecast, or score
+credit. Both probability traces remain teacher artifacts and closed LibNC is
+outside the eligible submission boundary. Evidence:
+`results/nncp_midpoint_cache32_joint_qm1_v1/decision.json`, guard
+`results/nncp_midpoint_cache32_joint_qm1_guard_v1.json`, and job
+`20260809T142203Z_e06ae58dbd`.
