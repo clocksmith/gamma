@@ -148,6 +148,25 @@ updates, package ceiling, and dependency controls, but serializes public final
 weights and aggregate loss instead of the absent optional accumulator. QM0
 source and receipts remain immutable.
 
+QM1 passed. The reproducible MIT source closure is `1,169,956` compressed
+bytes with SHA-256
+`6a407e363e7f8ee0cc3b4b367fd5294a02736ec135725198df53afd23b41789e`,
+below the frozen `2,000,000`-byte ceiling. The static probe binary is
+`1,231,296` bytes. Two fresh empty-environment processes produced
+byte-identical updated weights and loss; the weights changed from their frozen
+initial values and all outputs were finite. `ldd` lists only the standard C,
+C++, math, GCC, and loader libraries: no GGML, CUDA, OpenCL, or other
+accelerator runtime remains external.
+
+Peak sampled single-process RSS was `424,956 KiB` and peak sampled process-tree
+RSS was `1,000,140 KiB`, with no decimal-limit violation. This establishes an
+open deterministic CPU forward/backward/update substrate, not LibNC or NNCP
+parity and not compression credit. It authorizes one NNCP-shaped miniature
+GGML forward/update comparison against the frozen LibNC teacher artifacts.
+Evidence: `results/nncp_ggml_open_cpu_kernel_closure_qm1_v1/decision.json`,
+guard `results/nncp_ggml_open_cpu_kernel_closure_qm1_guard_v1.json`, and job
+`20260809T233733Z_33faf8609f`.
+
 ## 2026-08-09 - Clean-source cmix-obias opening roundtrip is frozen
 
 Candidate `cmix_obias_source_1m_roundtrip_qm0_v1` closes a qualification gap
