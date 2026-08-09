@@ -1672,6 +1672,58 @@ pass the `30,000`-byte mature gate, and a pass authorizes a repeated decodable
 confirmation with marginal chronological evidence. No score, forecast, or
 compact-midpoint descendant credit is granted by this block observation.
 
+## 2026-08-09 - Agent A native cmix-obias 250M baseline completed
+
+The frozen baseline arm of
+`cmix_obias_helical_xmlsafe_prefix_qm4_v1` completed with return code zero.
+The exact 250,000,000-byte input has SHA-256 `ba261e95...9de8`. Native
+`cmix-obias` produced a 33,262,388-byte payload (`40bdd7f0...020e`) and the
+fixed package wrapper produced a 33,554,085-byte archive
+(`ed5a5b6c...8f09`). Peak sampled single-process and tree RSS were both
+9,216,780 KiB, below the 9,765,625 KiB decimal limit.
+
+The observed 20,348.5528-second wall time is diagnostic because independent
+dense jobs shared the host. No roundtrip or residual comparison is claimed by
+this arm alone. The executable, head asset, working-directory shape, model
+settings, wrapper, and resource policy remain frozen for the residual arm.
+Receipt:
+`results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/baseline_backend_receipt.json`.
+
+## 2026-08-09 - QM4 same-residual literal-ledger control proves source value
+
+Candidate
+`cmix_obias_helical_xmlsafe_literal_ledger_control_qm4_v1` retained the exact
+249,407,080-byte QM4 residual and replaced only the source-distance column
+with the 592,920 removed literal bytes. The finite copy ledger is 36,640
+compressed bytes; the matched literal ledger is 156,696 bytes. Exact
+far-history source reuse therefore contributes 120,056 bytes relative to
+literal reinsertion on this identical residual.
+
+The literal ledger decompressed, reconstructed a materialized 250,000,000-byte
+prefix, and reproduced SHA-256 `ba261e95...9de8`. All frozen residual and
+ledger hashes passed, as did the guarded adaptive job. This is exact
+attribution evidence, not a backend gain or target forecast. Receipt:
+`results/cmix_obias_helical_xmlsafe_literal_ledger_control_qm4_v1/decision.json`.
+
+## 2026-08-09 - QM5 full-corpus XML-safe census passes direct physical ceiling
+
+Candidate `cmix_obias_helical_xmlsafe_full_census_qm5_v1` applied the unchanged
+QM4 selector to the full canonical 1G corpus and frozen raw far-history
+ledger. It selected 253,428 matches covering 24,413,010 exact bytes. Coverage
+by chronological third is 1,016,167, 19,803,452, and 3,593,391 bytes, so the
+later corpus is materially denser than the opening 250M population. Every
+source is exact, fully prior, and closed; every target stays inside one text
+payload and excludes CR, LF, `<`, and `>`.
+
+The complete full-corpus copy ledger compresses to 1,425,836 bytes. A
+conservative LZMA charge for the existing complete transform/inverse source is
+3,664 bytes. The direct eight-bit ceiling is therefore 22,983,510 bytes. It
+exceeds the `cmix-obias` research-parent debt plus frozen 500,000-byte reserve
+by 18,990,685 bytes. This authorizes the already planned matched residual
+backend adjudication, but supplies no actual parent surprisal, retained-stream
+trajectory, archive delta, compliant full-1G package, or score credit. Receipt:
+`results/cmix_obias_helical_xmlsafe_full_census_qm5_v1/decision.json`.
+
 Live-position unit audit: NNCP's `--max_size=1,998,848` is a symbol count, but
 `/proc/<pid>/fdinfo` reports the underlying byte offset.  The receipt-bound
 preprocessed alphabet is serialized as big-endian U16, so complete input
@@ -1683,3 +1735,47 @@ by `symb_shift=1`, compares `max_size` in symbols, and `read_block()` consumes
 two bytes per symbol.  Any live report treating the current descriptor offset
 as full-population completion is invalid.  The terminal archive and its
 serialized symbol count remain the only promotion evidence.
+
+## 2026-08-09 - SYMBIONT-16 rotated control confirms negligible alignment value
+
+The first matched `P64R` arm of the still-running
+`nncp_symbiont16_p64_cmix21_qm0_v1` driver terminalized at `1,459,780`
+archive bytes on the frozen `1,048,576`-symbol population, or
+`11.137237548828125` bits/symbol. The correctly aligned `P64` arm is
+`1,458,972` bytes (`11.131072998046875` bits/symbol), so alignment improves
+this byte-plane realization by only `808` bytes, or `0.00616455078125`
+bits/symbol, relative to the one-segment-rotated low-plane control.
+
+This establishes a real but target-negligible alignment effect. Both arms are
+catastrophically above the frozen `563,609`-byte `4.30`-bits/symbol ceiling,
+and `P64` is already `458,127` bytes worse than interleaved `I16`. The driver
+has advanced unchanged to its second `P64` encode for determinism and later
+decode checks, but no remaining field can authorize `TID`, `TEXP`, or another
+CMIX16 descendant. The byte-plane crossing, block layout, and unchanged
+byte-native backend remain retired with zero score and forecast credit.
+
+## 2026-08-09 - Exact native 65,536-symbol midpoint antecedent passes strict audit
+
+Candidate `nncp_libnc_exact_midsegment32_65536_qm3_v1` completed its patched
+native decode and terminal guard. The matched parent archive is `44,786`
+bytes and the exact midpoint candidate is `41,564` bytes, an actual `3,222`-
+byte gain against the frozen `3,000`-byte gate. The archive hashes are
+`a5bf29c6...d7324dc` and `c879411c...99ce7`, respectively. The serialized
+header is valid and binds version 2, batch 32, segment 64, midpoint mode 1,
+vocabulary 336, seed 123, CPU bf16 execution, and no CUDA flag.
+
+An independent audit supersedes the driver's permissive nonempty-prefix
+Boolean. The restored output is exactly `88,279` bytes, has SHA-256
+`02693fbe...acf95`, and is byte-identical under direct `cmp` to the first
+`88,279` bytes of the canonical one-million-byte raw input. The complete
+counted source package is `1,184,561` bytes, below the frozen `1,300,000`-
+byte ceiling. The guard returned zero without exceeding its decimal limit;
+peak sampled single-process and process-tree RSS were `5,778,764` and
+`5,799,804` KiB against `9,765,625` KiB.
+
+This passes the exact-native 65,536-symbol antecedent only. It does not prove
+deterministic repeat encoding, isolated runtime, a compact realization, an
+eligible NNCP package, full-corpus transfer, or any Hutter score. The compact
+`P/K/O/OK/F/S` attribution child remains unauthorized until the separately
+running `1,998,848`-symbol mature cadence gate also passes. Strict receipt:
+`results/nncp_libnc_exact_midsegment32_65536_qm3_v1/strict_audit.json`.
