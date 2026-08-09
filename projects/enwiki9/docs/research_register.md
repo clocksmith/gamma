@@ -1826,3 +1826,28 @@ endian order, block size, plane width, dictionary size, or backend. `TID`,
 receipt receives zero score and does not change the `109,389,323` forecast or
 the `4,389,323`-byte debt to `105,000,000`. Receipt:
 `results/nncp_symbiont16_p64_cmix21_qm0_v1/decision.json`.
+
+## 2026-08-09 - Concurrent mature-midpoint and QM4 gates invalidated by ENOSPC
+
+Jobs `20260809T002749Z_e3dd8c43dc` and
+`20260809T055112Z_b3d4d1e586` both terminated with `OSError: [Errno 28] No
+space left on device`. Their guard writers could not emit terminal JSON, so
+the stale running receipts were reconciled to `cancelled` with reason
+`infrastructure_failure_enospc_no_terminal_receipt`. This is an infrastructure
+failure, not compression evidence for or against either mechanism.
+
+The mature train-length-32 attempt left a monotone but unterminated
+`1,490,944`-byte archive with SHA-256
+`bca5a07758e08ff52bc7ac94e6466f97ce5146074bb4b974a9479442c2185792`.
+It is below both frozen terminal ceilings, but arithmetic termination, final
+model updates, and framing are absent; it receives zero gain, score, forecast,
+or promotion credit. The exact-native `65,536`-symbol antecedent remains
+passed, while the `1,998,848`-symbol maturity antecedent remains unknown.
+
+Disk recovery removed only closed regenerable scratch: completed
+`cmix-richhead` temporary toolchain/QM0 directories, plus the failed July 27
+article-order transfer work directories `cmix_lex_article_order_transfer_v1`
+and `_retry1`. Canonical receipts and the successful `_retry2` artifact remain
+intact. Available filesystem capacity rose to `13,214,461,952` bytes. Agent B
+may retry the unchanged mature gate after removing its partial output
+directory; Agent A retains ownership of any QM4 residual retry.
