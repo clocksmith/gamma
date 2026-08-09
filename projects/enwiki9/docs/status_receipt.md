@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T09:34:35+00:00`
+- Generated at UTC: `2026-08-09T09:45:22+00:00`
 
 ## Target State
 
@@ -119,7 +119,7 @@ python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --offi
 - Audit return code: `0`
 - Program directories: `717`
 - Registered programs: `282`
-- Untracked nonignored entries: `1`
+- Untracked nonignored entries: `3`
 - Modified tracked entries: `4`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=31, measured_negative=100, retired=535`
 
@@ -127,34 +127,29 @@ python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --offi
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 2,013,691 | 2,193,714 | 21,716 | `python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate cmix_obias_helical_xmlsafe_residual_backend_qm4_v1 --max-workers 1` |
-| `rss_guard` | 2,013,778 | 2,013,691 | 16,836 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
-| `process` | 2,427,744 | 2,229,505 | 10,144 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
-| `rss_guard` | 2,427,829 | 2,427,744 | 10,224 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 2,013,786 | 2,013,778 | 19,120 | `python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py` |
-| `process` | 2,013,815 | 2,013,786 | 9,179,220 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
-| `process` | 2,427,832 | 2,427,829 | 12,588 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
-| `process` | 2,427,873 | 2,427,832 | 5,680,176 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
+| `process` | 510,791 | 2,229,505 | 21,656 | `python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
+| `rss_guard` | 510,888 | 510,791 | 16,848 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
+| `process` | 510,895 | 510,888 | 20,524 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
+| `process` | 510,946 | 510,895 | 4,670,484 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,490,944 | `2026-08-09T09:14:13+00:00` |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 49,152 | `2026-08-09T09:45:08+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `14,950,024`
+- Active process tree RSS KiB: `4,729,512`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-4,464,264`
-- Active process tree decimal margin KiB: `-5,184,399`
-- Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
+- Active process tree margin KiB (binary): `5,756,248`
+- Active process tree decimal margin KiB: `5,036,113`
 
 ## Contingencies
 
