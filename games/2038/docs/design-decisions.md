@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.2-test`
+**Rules reference:** `0.7.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -69,13 +69,24 @@ variation to test the central engine.
 
 - **Progress:** movement, Core Actions, Research, Facilities, Customers, and
   Scrutiny.
-- **Capacity:** Generators, Networks, Links, and early Escalations.
-- **Authority:** persistent agreements, Government votes, and competing
-  public realities.
+- **Capacity:** Generators and early Escalations. Advanced Play also introduces
+  Networks and Links.
+- **Authority:** persistent agreements and competing public realities.
+  Advanced Play also introduces Government votes and persistent Headline
+  procedures.
 - **Continuity:** Agent Swarm, Fusion, AGI, and the civilizational ending.
 
 Later systems remain visible from setup, but the Era card is the sole unlock
 authority.
+
+### Presentation cannot create a new phase
+
+The current player board may group end-of-Era resolution into three visual
+bands—**Power** for Generate, Trade, and Allocate; **Economy** for Produce and
+Partner; and **Consequences** for Audit and Mandate. This is a presentation
+hypothesis, not a rules change. Production remains the five numbered boxes,
+followed by the separate Audit and Mandate phases. Human testing must justify
+the visual grouping before it becomes a selected component layout.
 
 ### Mandate stays public
 
@@ -167,7 +178,7 @@ cubes immediately becomes a Runway-or-Trust penalty. Era IV Audit converts
 risk into Runway or Mandate loss so late exposure remains consequential.
 
 Declare AGI requires Capability nine, three Customers, three Facilities with
-Grid-Ready markers, Trust two, and three Compute. Markers record successful
+Grid-Ready faces, Trust two, and three Compute. Those faces record successful
 operation during a completed Production, replacing the declaration-time
 capacity proof. It scores but does not end play. The Blog Post Headline lowers
 only the Capability requirement.
@@ -200,7 +211,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.2-test` test:
+controlled `0.7.0-rc.3-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -212,7 +223,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.10.1` implements `0.7.0-rc.2-test` under engine
+Executable game `0.10.2` implements `0.7.0-rc.3-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready faces are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -221,6 +232,14 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.10.2` / `0.7.0-rc.3-test` alignment patch changes no mechanic or
+number. It makes the selected integrated physical state authoritative in the
+machine-readable player supply, distinguishes Default local Power from
+Advanced Networks in runtime copy, and synchronizes component inventories,
+profile language, and the explicitly unmeasured complexity forecast. The
+renamed supply and round fields are contract corrections, not new pieces or
+new procedures.
 
 The `0.10.1` / `0.7.0-rc.2-test` precision patch changes no mechanic or
 number. It prints final Generator prices on their only legal Energy districts,

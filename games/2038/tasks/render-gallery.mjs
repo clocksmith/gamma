@@ -170,7 +170,7 @@ function buildRounds(config, reference) {
         badgeList: [
           `${r.cycles} cycles`,
           `Audit base ${r.auditBaseDraws}`,
-          `${r.escalationTokens} escalation`
+          `${r.escalationAvailability} escalation availability`
         ],
         bodyHtml: `${textRows([{ text: era?.loreText, kind: "flavor" }])}
 ${listRows("New this era", era?.unlockText ? [era.unlockText] : [])}

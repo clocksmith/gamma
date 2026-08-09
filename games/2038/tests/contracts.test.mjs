@@ -10,10 +10,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.10.1");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.2-test");
+  assert.equal(current.gameVersion, "0.10.2");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.3-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.10.1");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.10.2");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -75,8 +75,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.2-test",
-    "synchronized with executable game 0.10.1",
+    "**Rules version:** 0.7.0-rc.3-test",
+    "synchronized with executable game 0.10.2",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
@@ -111,6 +111,24 @@ test("complexity-reduction review rules preserve precision and remove table acco
   assert.ok(!normalizedRules.includes("Power Purchase Agreement"));
 });
 
+test("complexity positioning stays broad, unmeasured, and profile-scoped", async () => {
+  const [comparisons, decisions, manufacturing] = await Promise.all([
+    readFile(new URL("docs/comparisons.md", root), "utf8"),
+    readFile(new URL("docs/design-decisions.md", root), "utf8"),
+    readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8")
+  ]);
+
+  assert.match(comparisons, /Default Game is designed as \*\*upper-medium\*\*/);
+  assert.match(comparisons, /`3\.0–3\.4`/);
+  assert.match(comparisons, /`3\.6–4\.0`/);
+  assert.match(comparisons, /broad positioning hypotheses, not\s+community ratings/);
+  assert.match(comparisons, /No current evidence supports a narrower Weight estimate/);
+  assert.doesNotMatch(comparisons, /`3\.0–3\.2`/);
+  assert.match(manufacturing, /ages 14\+, upper-medium strategy/);
+  assert.match(decisions, /Presentation cannot create a new phase/);
+  assert.match(decisions, /Production remains the five numbered boxes,\s+followed by the separate Audit and Mandate phases/);
+});
+
 test("the thematic inventory matches the two-source Power contract", async () => {
   const bible = await readFile(new URL("docs/thematic-content-bible.md", root), "utf8");
   assert.match(bible, /## Player-copy design inventory/);
@@ -119,6 +137,10 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(bible, /No replacement\n+or overage allowance has been selected yet/);
   assert.match(bible, /Ordinary Power Sources \| 2 location-defined reference types/);
   assert.doesNotMatch(bible, /Ordinary Power Sources \| 4 reference types/);
+  assert.match(bible, /Scrutiny cubes \/ Customer-track markers \| 60 \/ 6/);
+  assert.match(bible, /Escalation-track markers \/ separate AGI Declaration pieces \| 6 \/ 0/);
+  assert.match(bible, /Integrated Grid-Ready faces \/ starting-grid identities/);
+  assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
 });
 
 test("selected deck contracts have exact physical counts", async () => {
@@ -144,7 +166,7 @@ test("core action and escalation contracts stay singular", async () => {
     ["fund", "research", "build", "organize", "deploy", "influence"]
   );
   assert.deepEqual(config.rounds.map((round) => round.cycles), [3, 3, 3, 3]);
-  assert.deepEqual(config.rounds.map((round) => round.escalationTokens), [0, 1, 1, 2]);
+  assert.deepEqual(config.rounds.map((round) => round.escalationAvailability), [0, 1, 1, 2]);
   assert.ok(config.rounds[3].escalations.includes("fusion_demonstrator"));
 });
 
@@ -160,20 +182,37 @@ test("factions and player supplies match the selected limits", async () => {
       facilities: config.playerSupply.facilities,
       generators: config.playerSupply.generators,
       linkTokens: config.playerSupply.linkTokens,
-      networkMarkers: config.playerSupply.networkMarkers,
+      networkTrackMarkers: config.playerSupply.networkTrackMarkers,
       influenceCubes: config.playerSupply.influenceCubes,
-      scrutinyCubes: config.playerSupply.scrutinyCubes
+      scrutinyCubes: config.playerSupply.scrutinyCubes,
+      customerTrackMarkers: config.playerSupply.customerTrackMarkers,
+      escalationTrackMarkers: config.playerSupply.escalationTrackMarkers,
+      agiDeclarationCards: config.playerSupply.agiDeclarationCards,
+      startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
     {
       teams: 3,
       facilities: 4,
       generators: 1,
       linkTokens: 2,
-      networkMarkers: 1,
+      networkTrackMarkers: 1,
       influenceCubes: 0,
-      scrutinyCubes: 10
+      scrutinyCubes: 10,
+      customerTrackMarkers: 1,
+      escalationTrackMarkers: 1,
+      agiDeclarationCards: 1,
+      startingGridIdentifiers: 1
     }
   );
+  for (const staleField of [
+    "customerMarkers",
+    "escalationTokens",
+    "agiDeclarationMarkers",
+    "startingGridMarkers",
+    "jointVentureMarkers",
+    "megaClusterMarkers",
+    "networkMarkers"
+  ]) assert.ok(!(staleField in config.playerSupply), `playerSupply retires ${staleField}`);
 
   const allowedTiming = new Set(factions.abilityTimingContract.allowedTiming);
   for (const faction of factions.factions) {

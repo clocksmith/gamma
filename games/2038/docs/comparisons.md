@@ -8,6 +8,32 @@ useful player expectations; they do not describe direct mechanical equivalence.
 **Mandate 2038 is New Angeles × Gaia Project, with Oath-like stakes over what
 kind of world results.**
 
+## Complexity positioning — unmeasured
+
+Default Game is designed as **upper-medium**, with a working internal forecast
+of roughly `3.0–3.4` on a BoardGameGeek-like five-point scale. Advanced Play's
+working forecast is `3.6–4.0`. These are broad positioning hypotheses, not
+community ratings, measured outcomes, or publication claims. BoardGameGeek
+itself notes that Weight mixes rules burden, planning difficulty, randomness,
+technical skill, and required experience rather than defining one calibrated
+quantity. See [BGG's Weight definition](https://boardgamegeek.com/wiki/page/Weight).
+
+As checked on August 9, 2026, useful community reference points are
+[Race for the Galaxy](https://boardgamegeek.com/boardgame/28143/race-for-the-galaxy)
+at 2.99, [Terraforming Mars](https://boardgamegeek.com/boardgame/167791/terraforming-mars)
+at 3.27, [Scythe](https://boardgamegeek.com/boardgame/169786/scythe) and
+[Agricola Revised](https://boardgamegeek.com/boardgame/200680/agricola-revised-edition)
+at 3.45, [Brass: Birmingham](https://boardgamegeek.com/boardgame/224517/brass-birmingham)
+at 3.86, and [Terra Mystica](https://boardgamegeek.com/boardgame/120677/terra-mystica)
+at 3.97. The current design hypothesis places Default between Race for the
+Galaxy and Terraforming Mars in overall burden, while recognizing that Mandate
+moves more of that burden into negotiation, spatial timing, and shared-state
+administration.
+
+No current evidence supports a narrower Weight estimate, a reduced teaching
+time, or a reduced play duration. The 75–100 minute four-player duration remains
+the separately declared physical-test hypothesis.
+
 ## Closest references
 
 ### New Angeles — institutional theme and public/private tension

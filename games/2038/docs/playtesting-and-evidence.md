@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.2-test`
+**Rules under review:** `0.7.0-rc.3-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -103,20 +103,27 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.2-test`. Executable
-game `0.10.1` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.3-test`. Executable
+game `0.10.2` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
 
-Candidate `0.7.0-rc.2-test` and executable `0.10.1` establish the simplified
+Candidate `0.7.0-rc.3-test` and executable `0.10.2` establish the simplified
 baseline selected on 2026-08-08: one location-defined Generator, two programs
 per Faction, presence-only politics, removal of seven stored-token families,
 and the tightened Default/Advanced boundary. The earlier single-Generator
 matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
+
+This candidate changes no mechanic or number from `0.7.0-rc.2-test`. It
+corrects the machine-readable component and round vocabulary, separates
+Default local Power from Advanced Network language across executable copy, and
+records one broad profile-scoped complexity forecast as unmeasured. Evidence
+from the predecessor remains historically valid for its exact identity but
+does not silently transfer to the new release manifest.
 
 Candidate `0.6.0-rc.3-test` changes no physical rule from rc.2. Executable
 `0.9.2` adds the inactive, receipt-bound `single-generator-default` comparison
