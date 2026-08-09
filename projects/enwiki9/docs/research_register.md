@@ -1439,3 +1439,24 @@ full deep update and shifted-truth control. A head update can still explain
 later first-half gains because its weights and Adam second-moment state persist
 across segments, but it does not require a KV rebuild. This structural result
 does not authorize the gate before both active antecedents pass.
+
+Conditional native implementation audit: do not isolate the output head by
+calling `nc_sgd_opt_set(param, NULL)` and later reattaching it. Disassembly of
+the receipt-bound LibNC shows that detachment invokes the optimizer variable
+destructor and frees its state; reattachment invokes the constructor. That
+would reset Adam's persistent second moment and create a different mechanism.
+
+The attributable native `O` route is instead a midpoint-only stop-gradient at
+the final hidden tensor immediately before `embed_out`. Forward probabilities
+are unchanged, while midpoint backward reaches only `embed_out` and
+`out_bias`; all parameter objects and optimizer surfaces remain attached. The
+shared optimizer step intentionally advances, so its later effect is part of
+the causal head-update trajectory and must be controlled by shifted truth.
+For LibNC, the stopped deep first-half graph and key/value references must be
+preserved rather than released by the full-update cleanup path. If they remain
+valid, second-half coding can continue on identical cached values without a
+replay, and the ordinary second-half gradient can consume the complete deep
+graph. `K=P` and `O=OK` probability/state hashes are mandatory implementation
+checks. Any state reset, missing graph reference, or equality failure kills
+that realization rather than authorizing a workaround. This is a source-level
+plan only until both active antecedents pass.
