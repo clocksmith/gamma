@@ -537,3 +537,37 @@ port; it does not authorize WRT transfer, cache parameter sweeps, forecast
 credit, or a victory claim. Evidence:
 `results/nncp_symbol_cache32_marginal_qm0_v1/decision.json` and job
 `20260809T140233Z_2b0702ad8a`.
+
+## 2026-08-09 - Cache-32 marginal is positive but misses its mature gate
+
+The single unchanged maturity transfer
+`nncp_symbol_cache32_marginal_mature_qm1_v1` consumed all `1,998,848`
+receipt-bound symbols and `27,984,335` faithful branch frequencies. It retained
+the q0 window `32`, symbol-level prior mass `16:1`, stream-17 control, and
+native block resets without a parameter change. The same range coder produced
+`1,990,806` faithful bytes and `1,967,533` cache bytes, an actual gain of
+`23,273` bytes.
+
+The result is causal and specific. Its cross-stream control produced
+`2,008,215` bytes and lost `17,409` bytes, so the genuine cache margin is
+`40,682` bytes. The cache replay is byte-identical, the arithmetic decoder
+reconstructs all symbols, and original-coordinate thirds remain positive at
+`16,418`, `5,466`, and `1,389` bytes. The guard passed at `275,272 KiB`
+sampled process-tree RSS; compressed incremental source is `10,780` bytes.
+
+Promotion nevertheless fails. The frozen scientific gate was `30,000` actual
+bytes. Under the compact NNCP package normalization, the debt-plus-reserve
+equivalent is `23,776.620` bytes at this scope before the cache source and
+`23,884.031` after charging it. The measured result misses the latter by
+`611.031` bytes. A purely linear full-symbol normalization would be only
+`2,335,731.556` bytes versus `2,397,056` required after source; the strong
+chronological decay makes even that normalization non-forecast evidence.
+
+Verdict: retire this exact cache window, prior, block reset, source stream,
+and marginal without window, prior, lag, blend, or bucket sweeps. Native cache
+integration is not authorized from this parent. The result remains useful
+evidence that recent exact symbol identity is a genuine but diminishing
+information source. It may only re-enter through a separately authorized
+joint replay with another mature mechanism; gains may not be added. Evidence:
+`results/nncp_symbol_cache32_marginal_mature_qm1_v1/decision.json` and job
+`20260809T140936Z_f2c4c05018`.
