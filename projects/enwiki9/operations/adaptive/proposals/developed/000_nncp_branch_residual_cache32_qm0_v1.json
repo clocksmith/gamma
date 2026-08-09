@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_branch_residual_cache32_qm0_v1",
+  "claimed_at": "2026-08-09T14:27:39+00:00",
+  "created_at": "2026-08-09T14:27:34+00:00",
+  "developed_at": "2026-08-09T14:27:39+00:00",
+  "evidence": [
+    "results/nncp_midpoint_cache32_joint_qm1_v1/decision.json;results/nncp_symbol_cache32_marginal_qm0_v1/decision.json;docs/research_register.md"
+  ],
+  "expected_savings_bytes": 3000000,
+  "hypothesis": "The full-midpoint/cache joint pass shows nonredundant adaptation and recurrence information; weighting each preceding same-stream cache symbol by its decoder-visible prior branch error will recover at least 10000 actual faithful-trace bytes, beat the frozen uniform cache and a rotated-error association control by at least 1000 bytes each, and improve over uniform cache in every original-coordinate third.",
+  "interfaces_exposed": [
+    "Earlier decoded symbol plus its earlier realized branch error -> weighted cache posterior on the same current NNCP symbol branches"
+  ],
+  "kill_condition": "Any identity failure, sub-10000 total gain, sub-1000 margin, nonpositive incremental third, decode mismatch, nondeterminism, or source excess retires branch-residual weighting without weight transform, floor, window, prior, lag, or bucket sweeps.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "agent-b",
+  "parent": "nncp_midpoint_cache32_joint_qm1_v1",
+  "parent_proposal_id": null,
+  "priority": 1322,
+  "promotion_condition": "Exact independently terminated weighted-cache gain at least 10000 bytes, margin over uniform cache and rotated-error control at least 1000 bytes each, weighted-minus-uniform positive in every original-coordinate third, repeat byte identity, exact symbol decode, and compressed source at most 65536 bytes.",
+  "proposal_id": "nncp_branch_residual_cache32_qm0_v1",
+  "retired_neighborhoods": [
+    "No cache-window, prior, lag, weight-floor, error-transform, or bucket rescue around a miss."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1332,
+  "state": "developed",
+  "title": "NNCP branch-residual-weighted addressless cache"
+}
