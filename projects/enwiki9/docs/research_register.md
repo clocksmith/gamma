@@ -156,6 +156,34 @@ unchanged program-size, repeat-encode, bare-inverse, and resource gates. It
 does not change source revision, build flags, assets, modeled input, package,
 archive, memory policy, or score accounting.
 
+Job `20260809T223619Z_c4120f3ea0` completed that exact contract. The clean
+tracked-source build produced a `468,481`-byte packaged compressor and the
+receipt-bound `23,002`-byte head, for `491,483` counted program bytes under the
+frozen `500,000`-byte gate. Two independent opening-1M encodes produced
+byte-identical `172,605`-byte payloads (`a723ca62...70db7`) and
+`464,298`-byte self-extracting archives (`9065eaf5...8ccc4`). The bare empty-
+environment inverse returned zero and reconstructed the exact
+`369b6889...52cad` opening population. Peak sampled single-process RSS was
+`8,348,756 KiB`, peak process-tree RSS was `8,376,536 KiB`, and observed
+logical/allocated scratch peaks were `30,606,133`/`31,080,448` bytes.
+
+This authorizes the source-built reproduction ladder and proves neither the
+external full-1G archive claim nor a full-1G source-built score. It receives
+zero score credit. The source-built compressor is `8,492` bytes larger than
+the external `459,989`-byte artifact, so later accounting must use the exact
+binary that actually creates the measured full archive. Before a full encode,
+one independent clean build must reproduce or explicitly account for its
+program and opening-archive identity.
+
+Candidate `cmix_obias_source_1m_roundtrip_qm3_v1` is that independent-build
+gate. It repeats q2 from a fresh tracked-source export, result namespace, and
+scratch tree, including two opening encodes and one bare inverse. It then
+requires exact byte identity against q2 for the packaged compressor, head,
+payload, and self-extracting archive. A pass authorizes the source-built full-
+corpus encode ladder; a mismatch blocks that ladder until the build variance
+is explicitly accounted. It changes no codec mechanism and receives zero
+score credit.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL

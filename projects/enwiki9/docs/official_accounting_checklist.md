@@ -38,6 +38,54 @@ save at least `4,389,323 + added_program_bytes + added_framing_bytes` at full
 scope relative to the forecast parent, with additional transfer safety before
 full-1G authorization.
 
+## `cmix-obias` Immediate-Candidate Ledger
+
+The locally hash-bound external candidate uses the primary self-extracting
+submission form. Its currently claimed counted files are:
+
+| Role | Bytes | SHA-256 |
+| --- | ---: | --- |
+| self-extracting `archive9` | `108,009,834` | `664823c5d9f167bda342745d7b34a3ccb98fd7108723ba83643d9d09bf693900` |
+| packaged compressor `cmix` | `459,989` | `eee69c879f4bbd58015efd4d34f55c6dc986ec818fa68c2f32a9ee5ab5568f68` |
+| compressor head asset | `23,002` | `35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078` |
+
+The head asset is required by compression and is therefore counted alongside
+the compressor. A second physical copy is already embedded in `archive9` for
+bare decompression. Both `cmix` and `archive9` identify as statically linked
+x86-64 ELF files, and the archive starts successfully in an empty environment
+from a unique directory. The claimed arithmetic is:
+
+```text
+S1 = 459,989 + 23,002 =      482,991
+S2 =                         108,009,834
+S  = S1 + S2 =               108,492,825
+published prize ceiling =    109,685,196
+ceiling margin =               1,192,371
+Gamma target =               105,000,000
+Gamma target debt =            3,492,825
+```
+
+This is still zero-credit external accounting. The exact qualification ladder
+is deliberately split so one success cannot inherit an unproved antecedent:
+
+| Gate | Current evidence | Status |
+| --- | --- | --- |
+| first full-1G bare decode | job `20260809T220237Z_6e7fd20876`; live guard `results/cmix_obias_full1g_bare_decode_qm0_guard_v1.json` | running |
+| second isolated full-1G decode | fresh sealed filesystem view and independent receipt | not started |
+| clean source build | q2 produced a `491,483`-byte program package, deterministic `464,298`-byte opening archives, and an exact bare inverse | opening qualification passed |
+| clean build repeat identity | two independent source exports and builds | not established |
+| full encode reproduction | two full encodes plus inverse of both archives | not started |
+| final submission accounting | exact submitted files, instructions, option bytes, source publication, runtime, RAM, and disk | incomplete |
+
+The external source snapshot claims that `archive9` contains the matching
+decode stub, compressed dictionary, head asset, payload, and framing. The
+compressor still consumes the separately counted head through
+`KH_BITLSTM32`. Before any official-score promotion, determine whether the
+required invocation contributes option/instruction bytes under the detailed
+rules and include them if applicable. Do not infer full encode reproducibility
+from a successful external-archive decode or from an opening-prefix source
+roundtrip.
+
 ## External Rule Boundary
 
 The Large Text Compression Benchmark and Hutter Prize rule sets are related but
