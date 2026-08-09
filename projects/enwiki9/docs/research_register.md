@@ -294,3 +294,27 @@ indexes every midpoint paying call and proves trace-on versus trace-off archive
 identity. Offline chronology may then replay the exact recorded integer
 branches into three original-coordinate shadow arithmetic coders; no live
 model or archive trajectory needs to change.
+
+## 2026-08-09 - Midpoint indexed observer composition materialized
+
+The dedicated source-only materializer
+`materialize_nncp_midsegment32_indexed_trace_observer.py` now composes the
+exact midpoint schedule with the archive-neutral original-coordinate observer.
+It requires the midpoint patch up front, indexes both new first/second-half
+paying calls, both inherited scalar paths, and both encode-only vector paths,
+and fails unless all six setters are present.
+
+A clean temporary extraction of the receipt-bound NNCP source accepted the
+frozen q3 midpoint patch and produced a 14,687-byte combined observer patch
+with SHA-256
+`23d0428c9bdd687e270847f3914ec94e9ae676d18a75628475db2906a5b4a235`.
+The source audit found exactly six indexed writes and one `NNNTR4` trace
+header. No NNCP encode, decode, compression comparison, or score claim was
+executed; the temporary extraction and generated patch were deleted after the
+audit.
+
+This closes the previously identified source-composition gap but does not
+authorize the production-alphabet bridge. The running mature train-length gate
+remains its antecedent. A future bridge still must prove trace-on versus
+trace-off archive identity before using indexed branches for exact
+original-coordinate thirds.
