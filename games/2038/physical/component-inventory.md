@@ -4,34 +4,32 @@ This is the human-readable physical requirement for the supported game. It
 separates components required by Default Game from the additive Advanced Play
 profile. Numeric limits are governed by `content/data/game-config.json`.
 
-Where `component-spec.md` records an open embodiment choice, this inventory
-states the required game state rather than silently selecting loose tokens,
-reversible pieces, tracks, or dials.
+This inventory records the selected state encoding rather than adding separate
+markers for state already carried by a component or faction-board track.
 
 ## Default Game — one faction set per player
 
 - 1 faction board
 - 1 CEO
 - 3 Teams
-- 4 Facilities, each capable of visibly showing Grid-Ready or not Grid-Ready
-- 2 Generators, each capable of visibly showing its selected Power Source
-- 1 starting-grid state attached to the first Facility
+- 4 double-sided Facilities, each showing normal or Grid-Ready
+- 2 double-sided Generators, each showing clean or emergency Power Source
+- 1 integrated starting-grid identifier on the first Facility
 - 8 Influence cubes
 - 10 Scrutiny cubes, tactually identical to Systemic Risk while concealed
-- Customer state from zero through five, using five markers or one track marker
-- Four Escalation awards across the Era schedule, capable of showing zero to
-  two currently available, using four tokens or one track marker
+- 1 Customer-track marker per faction board, showing zero through five
+- 1 Escalation-track marker per faction board, showing zero to two currently
+  available
 - 6 Core Action cards
 - 7 Escalation cards
-- 1 visible AGI Declaration state, using a marker or the Declare AGI card
+- 1 Declare AGI card with an undeclared / declared reverse
 - Track or token state for Runway, Compute, Capability, Trust, and Safety
 - 1 Mandate marker for the shared Mandate track
 
-The separate-marker prototype therefore needs four Grid-Ready markers, two
-Power Source selectors, five Customer markers, four Escalation tokens, and one
-AGI Declaration marker per faction. A reversible-piece or track prototype
-replaces only the corresponding physical marker; it does not change game state
-or supply limits.
+The integrated prototype therefore needs no separate Grid-Ready markers,
+Power Source selectors, Customer markers, Escalation tokens, or AGI Declaration
+markers. Generic track cubes remain a separate supply because they serve other
+player-board tracks.
 
 ## Default Game — shared components
 
@@ -84,9 +82,10 @@ The supported box does not currently require:
 
 The rules specify caps but have not selected exact stock quantities for generic
 Runway, Compute, Safety, temporary Power-allocation, or generic track-marker
-supplies. Player-reference production copies are also unresolved. The open
-Facility, Generator, Customer, Escalation, AGI, and player-board embodiments
-are recorded in `component-spec.md`.
+supplies. Player-reference production copies are also unresolved. The selected
+Facility, Generator, Customer, Escalation, starting-grid, and AGI embodiments
+are recorded in `component-spec.md`. Generic track-marker stock remains
+unresolved.
 
 These are production blockers, not permission to improvise a retail bill of
 materials. Select exact quantities and embodiments here before placing an RFQ;

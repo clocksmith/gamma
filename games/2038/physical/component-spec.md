@@ -25,25 +25,25 @@ or metallic gold, silver, and bronze. Gold can denote a singular public
 distinction, silver ordinary shared infrastructure, and bronze a persistent
 shared project. Material or finish never creates an additional rules state.
 
-## Current prototype vocabulary
+## Selected prototype vocabulary
 
 | Gameplay object | Physical role | Current prototype form | State encoding |
 | --- | --- | --- | --- |
 | Faction board | One player’s dashboard | Board or thick player mat | Printed tracks, ability, and action slots |
 | CEO | Movable acting piece; two presence | Large faction-coloured pawn | Position on a district |
 | Team | Movable acting piece; one presence | Small faction-coloured pawn | Position on a district |
-| Facility | Stationary institutional site | Faction-coloured building/node piece | Position plus either a separate Grid-Ready marker or a Grid-Ready reverse |
-| Generator | Stationary Power source | Distinct faction-coloured power-node piece | Position plus either a source selector or a source-specific face |
+| Facility | Stationary institutional site | Faction-coloured double-sided building/node piece | Position plus normal or Grid-Ready face |
+| Generator | Stationary Power source | Distinct faction-coloured double-sided power-node piece | Position plus clean or emergency source face |
 | Influence | Political presence on a district | Small faction-coloured cube | District position |
 | Scrutiny | Exposure in the Audit bag | Small faction-coloured cube | In owner supply or Audit bag |
 | Systemic Risk | Shared Audit danger | Black Audit piece with the same concealed feel as Scrutiny | Audit bag or shared supply |
-| Customer | Acquired demand | Tokens or one player-board marker | Five tokens gained, or Customer track position |
+| Customer | Acquired demand | One marker on the faction-board Customer track | Customer track position from zero through five |
 | Runway, Compute, Capability, Trust, and Safety | Scalar player state | Tokens or markers on the faction board | Count or track position |
 | Mandate | Public score | One marker per faction on the shared Mandate track | Shared-track position |
-| Grid-Ready | A Facility received complete Production Power | Separate marker or the Facility’s reverse | Present / absent at that Facility |
-| Starting grid | Dedicated Power assigned to the first Facility | Marker attached to that Facility | Attached / moved with its Facility |
-| Escalation | Permission to select an Escalation | Four awarded tokens or one player-board marker | Zero to two currently available; unused permission expires each Era |
-| AGI Declaration | A faction has completed its declaration | Separate marker or the Declare AGI card’s reverse | Undeclared / declared |
+| Grid-Ready | A Facility received complete Production Power | The Facility’s reverse | Normal / Grid-Ready face |
+| Starting grid | Dedicated Power assigned to the first Facility | Integrated identifier on that first Facility | Attached / moved with its Facility |
+| Escalation | Permission to select an Escalation | One marker on the faction-board Escalation track | Zero to two currently available; unused permission expires each Era |
+| AGI Declaration | A faction has completed its declaration | The Declare AGI card’s reverse | Undeclared / declared |
 | Joint Venture / Mega-Cluster | A named shared project | Matched numbered token pair | Both host positions and pair number |
 | Expert | Neutral supporting presence | Neutral pawn | District position |
 | Economic Benchmark | A stored deployment waiver and Mandate opportunity | Token | Held / discarded |
@@ -60,28 +60,24 @@ shared project. Material or finish never creates an additional rules state.
 | Volatility — Advanced Play | Resolves a two-result Headline | One ordinary six-sided die | Printed result mapping |
 | Era, Headline, Mandate, Action, Escalation, Training, and Power Source | Information and choices | Cards | Face, orientation, and printed text |
 
-## Component-form decisions still required
+## Selected state-encoding decisions
 
-The following are intentional open physical decisions. Do not treat the
-manufacturing study’s recommendations as selected formats.
+Grid-Ready, Generator source, Customer count, Escalation availability, the
+starting-grid identity, and AGI Declaration are integrated into the listed
+components and faction-board tracks. They do not require separate state
+markers. The forms must remain legible when pieces occupy a crowded district;
+readability is a validation requirement, not an unresolved format choice.
 
-1. **Facility Power state:** choose either a separate Grid-Ready marker or a
-   double-sided Facility whose reverse is Grid-Ready. The latter reduces loose
-   pieces but must remain legible in a crowded district.
-2. **Generator source state:** choose either a Generator plus a source-selector
-   marker, or one double-sided Generator that carries its source choice.
-3. **Customers and Escalation:** choose separate tokens or faction-board
-   tracks. Tracks reduce pieces; separate tokens increase immediate table
-   visibility.
-4. **Track implementation:** choose recessed boards with cubes, printed boards
+The following minor physical decisions remain open. They do not change rules or
+state limits:
+
+1. **Track implementation:** choose recessed boards with cubes, printed boards
    with cubes, or integrated dials. Loose dials are excluded unless a player
    board contains them.
-5. **AGI Declaration:** choose a separate declaration marker or a clearly
-   printed reverse on each player’s Declare AGI card.
-6. **Minor status pieces:** choose stock cubes, beads, or punchboard for
+2. **Minor status pieces:** choose stock cubes, beads, or punchboard for
    Benchmark, Spotlight, Grant, Market Access, discounts, Shields, Initiative,
    and Systemic Risk without changing their supply limits.
-7. **Material:** choose wood or cardboard only after the selected state
+3. **Material:** choose wood or cardboard only after the selected state
    encoding, crowding, and blind-play readability have been tested.
 
 ## Physical constraints

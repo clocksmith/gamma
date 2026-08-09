@@ -1,6 +1,6 @@
 # ${content.worldCopy.title} — Component Reference
 
-Use this aid during setup and when a named marker appears. Printed Faction,
+Use this aid during setup and when a named component state appears. Printed Faction,
 Action, Escalation, Headline, Era, Mandate, Training, and Power cards own their
 exact text; resolve the printed card.
 
@@ -36,17 +36,16 @@ Each faction receives:
 - One CEO
 - Three Teams
 - Four Facilities
-- Four Grid-Ready markers
-- Two Generators
-- Two ${terms.infrastructure.power} Source selectors
-- One starting-grid marker
+- Four double-sided Facilities: normal / Grid-Ready
+- Two double-sided Generators: clean / emergency ${terms.infrastructure.power}
+- One integrated starting-grid identifier on the first Facility
 - Eight ${terms.actions.influence} cubes
 - Ten ${terms.playerTracks.scrutiny} cubes
-- Five ${terms.playerTracks.customer} markers
-- Four Escalation tokens
+- One ${terms.playerTracks.customer} track marker
+- One Escalation track marker
 - Six Core Action cards
 - Seven ${terms.systems.escalation} cards
-- One ${terms.systems.agi} Declaration marker
+- One ${terms.systems.agi} Declaration card with an undeclared / declared reverse
 
 Generators do not count against the Facility limit.
 
@@ -83,11 +82,11 @@ matched pair is available.
   rewards; store at most two.
 - **Neutral Expert:** one presence, placed with the acquiring CEO, moves one
   hex during ${terms.actions.organize}, and cannot act, ${terms.actions.build}, or ${terms.actions.influence}.
-- **Grid-Ready marker:** place after Production on a Facility that received
-  its complete Facility demand. Return it immediately when that Facility is
+- **Grid-Ready face:** flip a Facility after Production if it received its
+  complete Facility demand. Flip it back immediately when that Facility is
   relocated by an Action or effect, becomes ineligible for its owner’s Power
   after any change, or during a Production where it receives insufficient
-  ${terms.infrastructure.power}. Four per player.
+  ${terms.infrastructure.power}.
 - **${terms.infrastructure.power} offline recovery:** reassess every Production.
 - **${terms.systems.headline} offline recovery:** ends when the ${terms.systems.headline} states, normally next
   Production.

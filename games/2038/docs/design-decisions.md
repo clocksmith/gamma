@@ -146,6 +146,13 @@ module IDs. It does not authorize players to assemble ad hoc profiles: Default
 Game and Advanced Play remain the only supported profiles until a new profile
 is deliberately selected and validated.
 
+Proposed complexity reductions are governed by the
+[`complexity-reduction-protocol.md`](complexity-reduction-protocol.md). The
+current candidates—single Generator Default, Presence-Only Politics, and
+Two-Program Factions—are registered as proposed isolated tests and do not alter
+either supported profile. Package testing is permitted only after each candidate
+has an independent receipt.
+
 ## Selected risk and ending contract
 
 Audit draws scale by player count. Scrutiny beyond a player’s ten physical

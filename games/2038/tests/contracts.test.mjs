@@ -47,7 +47,7 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.match(inventory, /12 in a complete six-faction box/);
   assert.match(inventory, /18 in a complete box/);
   assert.match(inventory, /1 ordinary six-sided Volatility die/);
-  assert.match(inventory, /reversible pieces, tracks, or dials/);
+  assert.match(inventory, /selected state encoding/);
 
   for (const staleClaim of [
     "Approximately 190 baseline cards",
@@ -85,17 +85,17 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "Every cross-player contract or jointly funded project requires the explicit",
     "Facilities sharing one hex are **co-located**. Adjacent host Facilities occupy hexes that share an edge",
     "### Universal costs and caps",
-    "One starting-grid marker",
+    "integrated starting-grid identifier",
     "Every piece placed on the board during setup begins at Frontier",
     "Each public district touches exactly two operational districts and never another public district",
     "These ring pools are fixed; shuffle tiles only within their listed ring",
     "The inner and outer copies of Research Commons are mechanically identical",
     "Every player board presents the same five Production boxes",
-    "A ring rotation carries each Facility and its Grid-Ready marker together",
-    "return the marker from any Facility now outside",
+    "A ring rotation carries each Facility and its Grid-Ready face together",
+    "flip back any Facility now outside",
     "each player may make one Power purchase request",
     "In Advanced Play, each player may make up to two Production Power purchase",
-    "A **grid-ready Facility** has a Grid-Ready marker",
+    "A **grid-ready Facility** has its Grid-Ready face showing",
     "Do not run a second Production calculation",
     "Every Headline card is eligible",
     "same four-row reading order",
@@ -332,6 +332,21 @@ test("headline and board boundaries remain explicit", async () => {
     register.changes.find((change) => change.id === "deterministic-audit-replacement").status.id,
     "rejected"
   );
+  const proposedComplexityCandidates = register.changes
+    .filter((change) => change.status.id === "proposed_test")
+    .map((change) => change.id)
+    .sort();
+  assert.deepEqual(proposedComplexityCandidates, [
+    "presence-only-politics",
+    "single-generator-default",
+    "two-program-factions"
+  ]);
+  assert.ok(
+    proposedComplexityCandidates.every(
+      (id) => !Object.values(config.playProfiles).some((profile) => profile.moduleIds.includes(id))
+    ),
+    "proposed complexity candidates remain inactive"
+  );
   assert.deepEqual(
     config.board.realignment.motions.map((motion) => motion.id),
     ["consolidate_core", "expand_periphery", "counter_cycle"]
@@ -382,7 +397,7 @@ test("headline and board boundaries remain explicit", async () => {
   );
 
   const blogPost = headlines.headlines.find((headline) => headline.id === "agi_blog_post");
-  assert.match(blogPost.text, /consumes the action slot and Escalation token/);
+  assert.match(blogPost.text, /consumes the action slot and one Escalation availability/);
   assert.match(blogPost.text, /spends 3 Compute/);
   assert.match(blogPost.text, /flips the Escalation/);
   assert.match(blogPost.text, /adds 3 Scrutiny/);

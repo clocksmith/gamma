@@ -881,7 +881,7 @@ export function resolveSelectedAction(config, headlines, state, pieceId, tileId,
     summary = resolveCore(config, state, state.selectedAction.id, destination, options);
     state.player.actionsUsed.push(state.selectedAction.id);
   } else {
-    if (state.player.escalation < 1) throw new Error("No Escalation token is available.");
+    if (state.player.escalation < 1) throw new Error("No Escalation is currently available.");
     state.player.escalation -= 1;
     state.player.escalationsUsed.push(state.selectedAction.id);
     summary = `${state.selectedAction.id} committed at ${destination.name}; detailed Escalation resolution is recorded for manual study.`;
