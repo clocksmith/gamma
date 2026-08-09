@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-08",
+  "deps": [
+    "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1"
+  ],
+  "description": "NNCP output-bias-only midpoint adaptation attribution",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A single causal midpoint Adam step restricted to the existing 16392-entry output bias, followed by the faithful full-parameter segment-end update, retains at least 1600 of the exact 4791-byte 65536-symbol midpoint gain with positive chronological thirds.",
+  "id": "nncp_midpoint_bias_only_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Faithful NNCP predictions -> first 32 decoded states -> midpoint Adam state update for output_bias only -> rebuilt second-half prediction -> faithful full-parameter segment-end update"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_midpoint_bias_only_qm0_v1",
+    "retired_neighborhoods": [
+      "No learning-rate, optimizer, split-point, output-projection, layer, parameter-group, or scope ladder."
+    ]
+  },
+  "parent": "nncp_midsegment32_update_qm0_v1",
+  "status": "candidate"
+}
