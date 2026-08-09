@@ -1267,6 +1267,16 @@ branch-tree design, not a score forecast. A miss retires this byte-layout
 crossing without endian, block-size, plane-width, dictionary, or backend
 parameter sweeps. SABLE, copies, tries, and event-source models remain closed.
 
+Before the cmix arms terminated, a zero-credit empirical diagnostic on the
+identical `1,048,576` symbols measured `11.693727` zero-order bits/symbol and
+`6.291043` bits/symbol conditioned on the immediately prior symbol. Byte
+order-1 conditional entropy is `6.013934` bits for I16, `6.746009` for P64,
+and `6.745923` for P64R. Thus P64 has no first-order byte-entropy advantage and
+its alignment control is indistinguishable at that order. This does not price
+cmix's longer contexts and cannot decide the gate; it makes an eventual P64
+win specifically attributable to higher-order class/identity modeling rather
+than generic adjacent-byte entropy.
+
 ## 2026-08-08 - NNCP output-bias-only midpoint attribution frozen
 
 Candidate: `nncp_midpoint_bias_only_qm0_v1`. Epistemic tier before execution:
