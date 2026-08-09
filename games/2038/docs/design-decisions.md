@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.6.0-rc.2-test`
+**Rules reference:** `0.6.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -193,7 +193,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.6.0-rc.2-test` test:
+controlled `0.6.0-rc.3-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -205,7 +205,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.9.2` implements `0.6.0-rc.2-test` under engine
+Executable game `0.9.2` implements `0.6.0-rc.3-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -215,7 +215,7 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-The `0.9.2` / `0.6.0-rc.2-test` advancement changes no physical rule. It
+The `0.9.2` / `0.6.0-rc.3-test` advancement changes no physical rule. It
 adds a fail-closed, inactive execution path for the registered
 `single-generator-default` comparison. The candidate derives source and cost
 from Energy location, enforces one ordinary Generator, and preserves local

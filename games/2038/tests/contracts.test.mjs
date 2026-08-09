@@ -11,7 +11,7 @@ test("current release declaration separates executable game from physical rules 
   const current = await readJson("versions/current-release.json");
 
   assert.equal(current.gameVersion, "0.9.2");
-  assert.equal(current.rulesCandidate.version, "0.6.0-rc.2-test");
+  assert.equal(current.rulesCandidate.version, "0.6.0-rc.3-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, "0.9.2");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
@@ -74,7 +74,7 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.6.0-rc.2-test",
+    "**Rules version:** 0.6.0-rc.3-test",
     "synchronized with executable game 0.9.2",
     "Influence may place or relocate one additional cube on Civic Permission Authority",
     "cards without an **Advanced Play** badge",

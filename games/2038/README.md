@@ -61,7 +61,7 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.6.0-rc.2-test`.
+`0.6.0-rc.3-test`.
 Executable game `0.9.2` implements that candidate under
 `three-to-five-profiles-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
@@ -165,7 +165,7 @@ node tasks/check-project.mjs
 ```
 
 `npm run check` is the release gate. It verifies the executable `0.9.2`
-bundle, its synchronized `0.6.0-rc.2-test` physical-rules candidate, both
+bundle, its synchronized `0.6.0-rc.3-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:
