@@ -52,6 +52,7 @@ Harness source: \`${session.gameplayIdentity.provenance.sourceCommit}\`
 - Initial participant questions: ${session.stages.initialQuestions.length}.
 - Source-grounded facilitator answers: ${session.stages.initialFacilitation.synthesis.output.answers.length}.
 - Remaining follow-up questions: ${session.stages.remainingQuestions.length}.
+- Final ready/no-blocker confirmations: ${session.stages.finalReadiness.length}.
 - Complete Codex gameplay decisions: ${session.gameplayIdentity.usedLlmDecisions}.
 - Postgame winner, World Ending, and rules reconstruction: ${session.stages.postgame.length} records.
 

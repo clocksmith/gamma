@@ -4,11 +4,13 @@ import test from "node:test";
 import { CodexCliRunner } from "../lab/callers/codex-cli-runner.js";
 import {
   chunkRulesDocument,
+  finalReadinessResponseSchema,
   followupResponseSchema,
   postgameResponseSchema,
   rulesDocumentResponseSchema,
   rulesResponseSchema,
   unboxingResponseSchema,
+  validateFinalReadiness,
   validateCodexSessionRegistration
 } from "../lab/runner/codex-controlled-session-runner.js";
 
@@ -43,7 +45,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v6.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v7.json",
       root
     ),
     "utf8"
@@ -75,8 +77,23 @@ test("controlled-session schemas cover the complete recorded path", () => {
   assert.ok(rulesDocumentResponseSchema.properties.keyRules);
   assert.ok(rulesDocumentResponseSchema.properties.crossReferencesNeeded);
   assert.ok(followupResponseSchema.properties.readyToPlay);
+  assert.ok(finalReadinessResponseSchema.properties.blockingQuestions);
   assert.ok(postgameResponseSchema.properties.winnerExplanation);
   assert.ok(postgameResponseSchema.properties.worldEndingExplanation);
+});
+
+test("controlled sessions fail closed until every participant confirms readiness without blockers", () => {
+  const ready = Array.from({ length: 4 }, () => ({
+    output: { readyToPlay: true, blockingQuestions: [] }
+  }));
+  assert.equal(validateFinalReadiness(ready), ready);
+  assert.throws(
+    () => validateFinalReadiness([
+      ...ready.slice(0, 3),
+      { output: { readyToPlay: false, blockingQuestions: [{ text: "What now?", reason: "Blocked." }] } }
+    ]),
+    /engine seats 3/
+  );
 });
 
 test("rules documents split into bounded lossless source chunks", () => {

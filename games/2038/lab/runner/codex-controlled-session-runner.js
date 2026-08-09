@@ -59,6 +59,13 @@ export const followupResponseSchema = objectSchema({
   readyToPlay: { type: "boolean" }
 });
 
+export const finalReadinessResponseSchema = objectSchema({
+  summary: { type: "string", minLength: 1 },
+  resolvedSessionContext: stringArray(2, 8),
+  blockingQuestions: questionArray(0, 4),
+  readyToPlay: { type: "boolean" }
+});
+
 export const postgameResponseSchema = objectSchema({
   definingMoments: stringArray(1, 8),
   rulesReconstruction: stringArray(5, 16),
@@ -295,7 +302,27 @@ async function loadKit(kitManifestPath) {
 }
 
 function participantContext(participant) {
-  return `Seat ${participant.seat + 1}; faction ${participant.factionName} (${participant.factionId}); decision profile ${participant.profileId}.`;
+  return `Human seat ${participant.seat + 1} (engine seat ${participant.seat}); faction ${participant.factionName} (${participant.factionId}); decision profile ${participant.profileId}.`;
+}
+
+export function validateFinalReadiness(results) {
+  if (!Array.isArray(results) || results.length !== 4) {
+    throw new Error("Final readiness requires exactly four participant records.");
+  }
+  const blocked = results.flatMap((result, seat) => {
+    const output = result?.output;
+    const questions = output?.blockingQuestions;
+    if (!Array.isArray(questions)) {
+      throw new Error(`Final readiness seat ${seat + 1} omitted blockingQuestions.`);
+    }
+    return output.readyToPlay === true && questions.length === 0
+      ? []
+      : [{ seat, readyToPlay: output.readyToPlay === true, blockingQuestions: questions }];
+  });
+  if (blocked.length) {
+    throw new Error(`Final readiness failed for engine seats ${blocked.map((entry) => entry.seat).join(", ")}.`);
+  }
+  return results;
 }
 
 function questionsFrom(results, field, prefix) {
@@ -618,6 +645,47 @@ export async function runCodexControlledSession({
     )
     : null;
 
+  const finalReadiness = await stage("final-readiness", async () => validateFinalReadiness(
+    await mapWithConcurrency(
+      participants,
+      registration.provider.maxConcurrent,
+      (participant, index) => {
+        const ownQuestions = remainingQuestions.filter((question) => question.seat === participant.seat);
+        const ownQuestionIds = new Set(ownQuestions.map((question) => question.id));
+        const answers = followupFacilitation?.synthesis.output.answers.filter((answer) =>
+          ownQuestionIds.has(answer.questionId)
+        ) || [];
+        const unresolved = followupFacilitation?.synthesis.output.unresolved.filter((id) =>
+          ownQuestionIds.has(id)
+        ) || [];
+        return runStructured({
+          requestId: `${registration.id}:final-readiness:seat-${participant.seat + 1}`,
+          responseSchema: finalReadinessResponseSchema,
+          signal,
+          prompt: [
+            "Continue as the same first-time Mandate 2038 participant after the final facilitator response.",
+            participantContext(participant),
+            `Your follow-up record:\n${JSON.stringify(followup[index].output, null, 2)}`,
+            `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
+            `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
+            "Session facts, which are operational context rather than rulebook citations:",
+            `- This is a ${registration.playerCount}-player Default Game.`,
+            `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
+            "- The shuffled board, revealed Headline, current Mandate, legal targets, costs, and applicable card text are exposed by the game state and legal-choice packet when each decision occurs.",
+            "- You may rely on those visible legal choices during play, but not on hidden simulator state.",
+            "State whether every question that blocks legal play is resolved. List only genuinely blocking questions. You may be ready even when future shuffled cards are not yet revealed."
+          ].join("\n\n")
+        });
+      },
+      (participant, _index, result) => onParticipantComplete?.({
+        stageId: "final-readiness",
+        seat: participant.seat,
+        completedAt: new Date().toISOString(),
+        result
+      })
+    )
+  ));
+
   const gameReport = await stage("gameplay", () => simulationFactory({
     runs: 1,
     playerCount: 4,
@@ -661,7 +729,7 @@ export async function runCodexControlledSession({
       prompt: [
         "Continue as the same Mandate 2038 participant after the recorded game.",
         participantContext(participant),
-        `Your pre-play understanding:\n${JSON.stringify(followup[index].output, null, 2)}`,
+        `Your final pre-play readiness record:\n${JSON.stringify(finalReadiness[index].output, null, 2)}`,
         `Recorded game outcome:\n${JSON.stringify(gameSummary, null, 2)}`,
         "Without rereading the rules, explain the winner, World Ending, defining moments, remembered rules structure, confusing moments, and what you would teach differently."
       ].join("\n\n")
@@ -708,6 +776,7 @@ export async function runCodexControlledSession({
         followup,
         remainingQuestions,
         followupFacilitation,
+        finalReadiness,
         gameplay: gameSummary,
         postgame
       },
