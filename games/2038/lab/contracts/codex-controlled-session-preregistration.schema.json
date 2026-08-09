@@ -18,6 +18,7 @@
     "evidenceBoundary"
   ],
   "properties": {
+    "$schema": { "type": "string" },
     "schemaVersion": { "const": 1 },
     "artifactKind": { "const": "codex-controlled-session-preregistration" },
     "id": { "type": "string", "minLength": 1 },
@@ -65,6 +66,16 @@
         "maximumLlmDecisions": { "type": "null" }
       }
     },
-    "evidenceBoundary": { "type": "string", "minLength": 1 }
+    "evidenceBoundary": { "type": "string", "minLength": 1 },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "disposition", "reason"],
+      "properties": {
+        "id": { "type": "string" },
+        "disposition": { "const": "failed_diagnostic" },
+        "reason": { "type": "string" }
+      }
+    }
   }
 }

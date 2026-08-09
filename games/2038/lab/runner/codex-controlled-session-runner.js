@@ -135,7 +135,7 @@ function validateFacilitator(result, questions, documents) {
   return result;
 }
 
-async function mapWithConcurrency(values, concurrency, operation) {
+async function mapWithConcurrency(values, concurrency, operation, onItemComplete) {
   const results = new Array(values.length);
   let cursor = 0;
   const workers = Array.from(
@@ -145,6 +145,7 @@ async function mapWithConcurrency(values, concurrency, operation) {
         const index = cursor;
         cursor += 1;
         results[index] = await operation(values[index], index);
+        await onItemComplete?.(values[index], index, results[index]);
       }
     }
   );
@@ -282,6 +283,7 @@ export async function runCodexControlledSession({
   signal,
   onProgress,
   onStageComplete,
+  onParticipantComplete,
   runnerFactory,
   simulationFactory = createSimulation
 } = {}) {
@@ -337,6 +339,12 @@ export async function runCodexControlledSession({
         `Kit identity:\n${JSON.stringify(kit.manifest, null, 2)}`,
         fencedSources(kit.documents.filter((document) => document.id === "component-reference"))
       ].join("\n\n")
+    }),
+    (participant, _index, result) => onParticipantComplete?.({
+      stageId: "unboxing",
+      seat: participant.seat,
+      completedAt: new Date().toISOString(),
+      result
     })
   ));
 
@@ -355,6 +363,12 @@ export async function runCodexControlledSession({
         "Do not use outside knowledge or Advanced Play procedures.",
         fencedSources(kit.documents)
       ].join("\n\n")
+    }),
+    (participant, _index, result) => onParticipantComplete?.({
+      stageId: "rules-reading",
+      seat: participant.seat,
+      completedAt: new Date().toISOString(),
+      result
     })
   ));
   const initialQuestions = questionsFrom(rulesReading, "questions", "rules");
@@ -388,7 +402,13 @@ export async function runCodexControlledSession({
           "State what is now resolved, any remaining concrete questions, and whether you are ready to begin under the frozen rules."
         ].join("\n\n")
       });
-    }
+    },
+    (participant, _index, result) => onParticipantComplete?.({
+      stageId: "participant-followup",
+      seat: participant.seat,
+      completedAt: new Date().toISOString(),
+      result
+    })
   ));
   const remainingQuestions = questionsFrom(followup, "remainingQuestions", "followup");
   const followupFacilitation = remainingQuestions.length
@@ -450,6 +470,12 @@ export async function runCodexControlledSession({
         `Recorded game outcome:\n${JSON.stringify(gameSummary, null, 2)}`,
         "Without rereading the rules, explain the winner, World Ending, defining moments, remembered rules structure, confusing moments, and what you would teach differently."
       ].join("\n\n")
+    }),
+    (participant, _index, result) => onParticipantComplete?.({
+      stageId: "postgame-reconstruction",
+      seat: participant.seat,
+      completedAt: new Date().toISOString(),
+      result
     })
   ));
 

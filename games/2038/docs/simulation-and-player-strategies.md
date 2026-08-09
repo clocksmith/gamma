@@ -395,7 +395,7 @@ be frozen. Provider use is explicit:
 
 ```bash
 npm run simulate:codex-session -- \
-  --preregistration evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v1.json \
+  --preregistration evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v2.json \
   --kit-manifest dist/physical-kit/<kit-id>/physical-kit.json \
   --output-dir evidence/studies/simulation/codex-sessions/<session-id> \
   --allow-llm
