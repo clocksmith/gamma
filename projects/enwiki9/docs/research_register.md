@@ -1855,40 +1855,50 @@ intact. Available filesystem capacity rose to `13,214,461,952` bytes. Agent B
 may retry the unchanged mature gate after removing its partial output
 directory; Agent A retains ownership of any QM4 residual retry.
 
-## 2026-08-09 - Conditional MIDAS-1024-1 episodic factor replay frozen
+## 2026-08-09 - Factor replay superseded by conditional MIDAS-G1024
 
-Considered descendant: `MIDAS-1024-1`. Epistemic tier: unmaterialized causal
-midpoint descendant with zero score and forecast credit. It remains
-unauthorized until the exact native and mature cadence antecedents both pass.
+The unmaterialized `MIDAS-1024-1` factor-cache idea is superseded with zero
+evidence credit. Its `35,667,968`-byte factors can be multiplied once at the
+midpoint to form the ordinary output-head gradient, then accumulated directly
+into the existing output matrix. Retaining and replaying the factors would add
+an avoidable second projection on every later forward pass and introduce an
+arbitrary cache horizon.
 
-The corrected midpoint population contains `32 x 32 = 1,024` decoded examples.
-For hidden vectors `h_i`, realized symbols `y_i`, and parent distributions
-`p_i`, an unnormalized output-head SGD step changes a later logit vector by
+Conditional descendant: `MIDAS-G1024`. It remains unauthorized until the
+exact native and mature cadence antecedents both pass and exact `O` establishes
+that output-projection-plus-bias adaptation retains enough of full `F`.
+At each midpoint, form the exact causal gradient from all `32 x 32 = 1,024`
+decoded examples:
 
 ```text
-delta_z(h) = eta * sum_i (onehot(y_i) - p_i) * dot(h_i, h)
+G_W = mean_i((p_i - onehot(y_i)) outer h_i)
+G_b = mean_i(p_i - onehot(y_i))
 ```
 
-All factors are decoder-visible after the first half. Store one complete BF16
-factor cache: `1,024 x 1,024` hidden values plus `16,392 x 1,024` residual
-values, totaling `35,667,968` bytes before small framing. Apply the current
-first-half cache to its second half and retain it through the next segment's
-first half; replace it only after the next midpoint is decoded. This gives a
-causal one-segment persistent correction without changing model weights,
-transmitting data, or inheriting Adam's non-low-rank update claim.
+Update the existing output matrix and bias in place. Replace Adam's dense
+elementwise midpoint state with one persistent second-moment scalar per tensor:
 
-The exact finite operation count per coded position for a 32-stream batch is
-`33,554,432` multiply-accumulates for hidden similarities plus `537,133,056`
-for residual projection. Actual runtime, not this count, controls the frozen
-`15%` incremental-runtime gate. The factor cache is below the `128 MiB`
-incremental-memory ceiling; it must still be included in process-tree RSS.
+```text
+v_W <- beta2 * v_W + (1 - beta2) * mean(G_W ** 2)
+v_b <- beta2 * v_b + (1 - beta2) * mean(G_b ** 2)
+W   <- W - lr * G_W / (sqrt(v_W) + epsilon)
+b   <- b - lr * G_b / (sqrt(v_b) + epsilon)
+```
 
-If attribution authorizes materialization, compare the faithful parent, the
-aligned one-cache factor replay, the full midpoint teacher, and an identical
-capacity control formed by cyclically shifting first-half truths by one
-position within each stream before residual construction. Require exact
-arithmetic decode, deterministic repeat, every chronological third positive,
-the shifted control materially worse, at least `80%` of the teacher's actual
-gain, at most `128 MiB` added resident memory, and at most `15%` added parent
-runtime. Do not sweep cache depth, factor precision, learning rate, shift,
-kernel, or sparsity around a miss.
+Use the parent's fixed `beta2=0.9999`, epsilon `1e-8`, learning-rate
+coordinate, and per-tensor gradient clipping. The ordinary full parent Adam
+update still occurs after state 63; its persistent surfaces are unchanged.
+The midpoint update therefore adds two scalar states, no archive data, and no
+forward-time expert. A full float32 `G_W` temporary is `67,141,632` bytes;
+the first-half hidden population is `4,194,304` bytes, keeping the intended
+increment below `128 MiB` before allocator overhead. Actual process-tree RSS
+controls eligibility.
+
+If authorized, compare parent `P`, exact head-Adam `O`, full teacher `F`,
+scalar-RMS `MIDAS-G1024`, and an identical-capacity control whose first-half
+truths are cyclically shifted by one position within each stream. Require
+exact arithmetic decode, deterministic repeat, every chronological third
+positive, the shifted control materially worse, at least `80%` of `F`'s
+actual gain, at most `128 MiB` added resident memory, and at most `15%` added
+parent runtime. Do not sweep normalization, optimizer constants, split,
+parameter group, or shifted control around a miss.
