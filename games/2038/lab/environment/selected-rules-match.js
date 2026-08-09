@@ -9,6 +9,7 @@ import {
   simulateTrainingRun
 } from "../../web/src/engine.js";
 import { declarationReadiness } from "../rules/declaration-readiness.js";
+import { canAllocateLocalPower } from "../rules/local-power-allocation.js";
 import {
   applyAgiDeclarationScenario,
   finalizeAgiDeclarationScenario,
@@ -1901,6 +1902,34 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     } finally {
       player.runway = originalRunway;
     }
+    const singleGeneratorRule = this.rulesVariant.singleGeneratorRule;
+    if (actionId === "build" && singleGeneratorRule) {
+      const ordinaryGeneratorCount = player.generators.filter(
+        (generator) => generator.sourceId !== "fusion_demonstrator"
+      ).length;
+      decisions = decisions.flatMap((decision) => {
+        if (decision.parameters?.buildMode !== "generator") return [decision];
+        if (ordinaryGeneratorCount >= singleGeneratorRule.ordinaryGeneratorLimit) {
+          return [];
+        }
+        const destination = this.board.find(
+          (tile) => tile.instanceId === decision.parameters.destinationId
+        );
+        const location = singleGeneratorRule.locations[destination?.id];
+        if (!location || decision.parameters.sourceId !== location.sourceId) return [];
+        return [{
+          ...decision,
+          decisionId: decision.decisionId.replace(
+            `build_generator_${location.sourceId}_`,
+            `build_generator_${destination.id}_`
+          ),
+          parameters: {
+            ...decision.parameters,
+            generatorRuleId: singleGeneratorRule.id
+          }
+        }];
+      });
+    }
     if (actionId === "organize") {
       decisions = this.movementVariants(player, (piece, destination) => {
         const base = {
@@ -2351,20 +2380,25 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           (candidate) => candidate.id === result.parameters.sourceId
         )
         : null;
+      const destination = this.board.find(
+        (tile) => tile.instanceId === result.parameters.destinationId
+      );
+      const singleGeneratorLocation = mode === "generator"
+        ? this.rulesVariant.singleGeneratorRule?.locations[destination?.id]
+        : null;
       let cost = mode === "generator"
-        ? source?.runwayCost ?? 0
+        ? singleGeneratorLocation?.constructionCost ?? source?.runwayCost ?? 0
         : mode === "link"
           ? result.parameters.cost ?? 1
           : this.rulesVariant.facilityCost;
       if (category === "chip") cost -= 1;
       if (
+        !singleGeneratorLocation &&
         category === "energy" &&
         ["generator", "link"].includes(mode)
       ) cost -= 1;
-      const destination = this.board.find(
-        (tile) => tile.instanceId === result.parameters.destinationId
-      );
       if (
+        !singleGeneratorLocation &&
         destination?.id === "renewable_basin" &&
         source?.id === "clean_infrastructure"
       ) cost -= 1;
@@ -3797,7 +3831,27 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       for (let mask = 0; mask < 2 ** eligible.length; mask += 1) {
         const selected = eligible.filter((_, index) => mask & (1 << index));
         const demand = selected.length;
-        if (demand <= available) subsets.push({ selected, demand });
+        const installedGeneratorPower = state.connectedGenerators.reduce(
+          (sum, generator) => sum + generator.capacity,
+          0
+        );
+        const candidateAllocationValid = !this.rulesVariant.singleGeneratorRule ||
+          canAllocateLocalPower({
+            board: this.board,
+            player,
+            selectedFacilityIds: selected.map((facility) => facility.id),
+            connectedGenerators: state.connectedGenerators,
+            startingGridPower: generation[player.seat].starter,
+            importedPower: generation[player.seat].imported,
+            supplementalPower: Math.max(
+              0,
+              generation[player.seat].generated - installedGeneratorPower
+            ),
+            exportedPower: generation[player.seat].exported
+          });
+        if (demand <= available && candidateAllocationValid) {
+          subsets.push({ selected, demand });
+        }
       }
       const decisions = subsets.map(({ selected, demand }) => ({
         decisionId: `power_${selected.map((facility) => facility.id).join("_") || "none"}`,

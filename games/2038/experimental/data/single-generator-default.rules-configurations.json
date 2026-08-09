@@ -1,0 +1,30 @@
+[
+  {
+    "id": "canonical",
+    "overlay": {}
+  },
+  {
+    "id": "single-generator-default",
+    "overlay": {
+      "singleGeneratorRule": {
+        "id": "single-generator-default",
+        "ordinaryGeneratorLimit": 1,
+        "locations": {
+          "grid_reactor": {
+            "sourceId": "emergency_infrastructure",
+            "constructionCost": 1
+          },
+          "renewable_basin": {
+            "sourceId": "clean_infrastructure",
+            "constructionCost": 2
+          }
+        },
+        "localDelivery": "own-or-adjacent-facilities",
+        "powerSalesPerSupplier": 1,
+        "megaClusterDemand": 2,
+        "gridReadyLifecycle": "recompute-every-production-and-revoke-on-infrastructure-change",
+        "slotContention": "initiative-order-no-reservations"
+      }
+    }
+  }
+]

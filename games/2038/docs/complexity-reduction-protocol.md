@@ -20,7 +20,7 @@ after a candidate is accepted.
 
 | Candidate | Isolated change | Protected identity | Primary risk |
 | --- | --- | --- | --- |
-| `single-generator-default` | One Generator per player; remove source selectors and the second Generator | Energy geography, Power negotiation, Scrutiny, Grid-Ready AGI | Energy-site dominance or first-player advantage |
+| [`single-generator-default`](../experimental/single-generator-default.md) | One Generator per player; remove source selectors and the second Generator | Energy geography, Power negotiation, Scrutiny, Grid-Ready AGI | Energy-site dominance or first-player advantage |
 | `presence-only-politics` | Remove Influence cubes; use CEO, Team, and Facility presence for political access | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Presence becomes a universal movement bonus and politics loses persistence |
 | `two-program-factions` | One persistent identity and one signature program per faction | Six institutional identities and protected faction strengths | Factions become shallow or signature programs become compulsory |
 
