@@ -134,6 +134,20 @@ operators to undocumented LibNC gradients. Evidence:
 `results/nncp_libnc_open_source_eligibility_audit_qm3_v1/decision.json` and the
 current production-alphabet midpoint bridge.
 
+QM0 compiled and packaged the clean source closure, then failed during its
+first diagnostic process with `SIGSEGV`. A debug-symbol replay localized the
+fault after all three optimizer evaluations: the probe asked
+`ggml_opt_grad_acc` for an optional accumulator that was null and passed it to
+`ggml_nbytes`. Peak sampled process-tree RSS was `847,992 KiB`; no memory guard
+was crossed. This is an infrastructure failure and provides no kernel-closure
+or compression verdict.
+
+QM1 changes only the invalid diagnostic read. It retains the identical source
+commit, build flags, graph, inputs, labels, cross-entropy backward path, AdamW
+updates, package ceiling, and dependency controls, but serializes public final
+weights and aggregate loss instead of the absent optional accumulator. QM0
+source and receipts remain immutable.
+
 ## 2026-08-09 - Clean-source cmix-obias opening roundtrip is frozen
 
 Candidate `cmix_obias_source_1m_roundtrip_qm0_v1` closes a qualification gap
