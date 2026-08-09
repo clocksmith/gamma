@@ -1,0 +1,91 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py", "--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/nncp_ggml_output_head_update_parity_qm1_guard_v1.json", "--label", "nncp_ggml_output_head_update_parity_qm1_v1", "--", "python3", "tools/nncp_ggml_output_head_update_parity_qm1.py"], "job": {"candidate_id": "nncp_ggml_output_head_update_parity_qm1_v1", "gate_size": 4, "job_id": "20260809T235307Z_b80d31c199", "priority": 1416, "purpose": "oracle", "schema": "enwiki9_adaptive_job_v1", "started_at": "2026-08-09T23:53:17+00:00", "state": "running", "submitted_at": "2026-08-09T23:53:07+00:00", "tags": ["ggml", "nncp", "normalization-repair", "open-source", "output-head"], "tool": "tools/run_with_rss_guard.py", "tool_args": ["--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/nncp_ggml_output_head_update_parity_qm1_guard_v1.json", "--label", "nncp_ggml_output_head_update_parity_qm1_v1", "--", "python3", "tools/nncp_ggml_output_head_update_parity_qm1.py"]}}
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tools/nncp_ggml_output_head_update_parity_qm1.py", line 36, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/nncp_ggml_output_head_update_parity_qm1.py", line 23, in main
+    returncode = parent.main()
+  File "/home/x/deco/gamma/projects/enwiki9/tools/nncp_ggml_output_head_update_parity_qm0.py", line 208, in main
+    common.run([str(binary), str(fixture), str(run_a)], cwd=tmp, env=clean_env)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/nncp_ggml_open_cpu_kernel_closure_qm0.py", line 31, in run
+    return subprocess.run(
+           ~~~~~~~~~~~~~~^
+        command,
+        ^^^^^^^^
+    ...<5 lines>...
+        stderr=subprocess.PIPE,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/tmp/nncp-ggml-head-iqculmwe/build/nncp_ggml_head_probe', '/tmp/nncp-ggml-head-iqculmwe/fixture', '/tmp/nncp-ggml-head-iqculmwe/run_a']' returned non-zero exit status 12.
+{
+  "rss_guard": {
+    "label": "nncp_ggml_output_head_update_parity_qm1_v1",
+    "command": [
+      "python3",
+      "tools/nncp_ggml_output_head_update_parity_qm1.py"
+    ],
+    "limit_kib": 9765625,
+    "limit_mode": "max_single",
+    "official_decimal_limit_kib": 9765625,
+    "official_decimal_over_limit_kib": 0,
+    "max_sampled_single_rss_kib": 425644,
+    "max_sampled_tree_rss_kib": 979212,
+    "peak_sample": {
+      "processes": [
+        {
+          "pid": 1874305,
+          "rss_kib": 37740
+        },
+        {
+          "pid": 1875143,
+          "rss_kib": 18508
+        },
+        {
+          "pid": 1875144,
+          "rss_kib": 2684
+        },
+        {
+          "pid": 1875152,
+          "rss_kib": 2688
+        },
+        {
+          "pid": 1875155,
+          "rss_kib": 2700
+        },
+        {
+          "pid": 1876071,
+          "rss_kib": 2820
+        },
+        {
+          "pid": 1876484,
+          "rss_kib": 2008
+        },
+        {
+          "pid": 1876485,
+          "rss_kib": 3288
+        },
+        {
+          "pid": 1876487,
+          "rss_kib": 425644
+        }
+      ],
+      "max_single_rss_kib": 425644,
+      "tree_rss_kib": 498080
+    },
+    "latest_sample": {
+      "processes": [],
+      "max_single_rss_kib": 0,
+      "tree_rss_kib": 0
+    },
+    "sample_count": 5,
+    "rss_guard_exceeded": false,
+    "returncode": 1,
+    "status": "complete",
+    "elapsed_s": 20.0058
+  }
+}

@@ -154,6 +154,17 @@ normalization receipt. One immutable q1 child may change only `opt_period` from
 `results/nncp_ggml_output_head_update_parity_qm0_guard_v1.json`, and job
 `20260809T234726Z_df6daaf1af`.
 
+## 2026-08-09 - GGML head q1 exposes the direct-optimizer API boundary
+
+Candidate `nncp_ggml_output_head_update_parity_qm1_v1` changed only
+`opt_period` from `2` to `1`. GGML then built and executed its direct optimizer
+graph, for which `ggml_opt_grad_acc` returned null; the probe exited `12` before
+emitting a scientific decision. This is zero compression evidence and does not
+reject head parity. One q2 infrastructure child may restore period `2`, submit
+the identical logical batch twice, and read the completed accumulator. Evidence:
+guard `results/nncp_ggml_output_head_update_parity_qm1_guard_v1.json`, log
+`run_logs/adaptive/20260809T235307Z_b80d31c199.log`.
+
 ## 2026-08-09 - GGML open CPU kernel-closure feasibility gate proposed
 
 Candidate `nncp_ggml_open_cpu_kernel_closure_qm0_v1` tests a source-eligibility
