@@ -1779,3 +1779,23 @@ eligible NNCP package, full-corpus transfer, or any Hutter score. The compact
 `P/K/O/OK/F/S` attribution child remains unauthorized until the separately
 running `1,998,848`-symbol mature cadence gate also passes. Strict receipt:
 `results/nncp_libnc_exact_midsegment32_65536_qm3_v1/strict_audit.json`.
+
+## 2026-08-09 - Mature cadence crosses the first-half processing boundary
+
+The live `nncp_libnc_trainlen32_mature_1998848_qm2_v1` encoder loaded its
+third native block at `2026-08-09T04:04:45-04:00`. The read-only process
+descriptor moved from `1,998,848` to `2,998,272` physical input bytes, binding
+`1,499,136` of the frozen `1,998,848` big-endian U16 symbols as loaded. At
+that transition, the monotone on-disk candidate archive remained `1,097,728`
+bytes.
+
+This is the first observation after the encoder finished processing the first
+two `499,712`-symbol blocks. It is still not an exact first-half payload:
+stdio may retain an unwritten tail, and the arithmetic stream is not
+terminated. The receipt-bound parent shadow totals `1,123,119` coder bytes
+over its first two blocks, but subtracting the live descriptor would produce
+an invalid `25,391`-byte gain claim because the counted objects and buffering
+boundaries differ. Only the terminal candidate archive may be compared with
+the `2,042,820`-byte native parent and the frozen `30,000` scientific or
+`33,050` package-aware gain thresholds. This boundary receives zero score and
+does not yet authorize `P/K/O/OK/F/S`.
