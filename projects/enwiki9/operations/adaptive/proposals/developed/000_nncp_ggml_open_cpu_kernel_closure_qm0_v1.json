@@ -1,0 +1,33 @@
+{
+  "candidate_id": "nncp_ggml_open_cpu_kernel_closure_qm0_v1",
+  "claimed_at": "2026-08-09T23:29:03+00:00",
+  "created_at": "2026-08-09T23:29:03+00:00",
+  "developed_at": "2026-08-09T23:29:03+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "results/nncp_libnc_open_source_eligibility_audit_qm3_v1/decision.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "A clean MIT GGML source closure can build a CPU-only static runtime and execute the fixed NNCP-relevant forward, cross-entropy backward, and AdamW update probe twice with byte-identical state within a 2000000-byte compressed source package.",
+  "interfaces_exposed": [
+    "MIT GGML source closure -> deterministic CPU forward/backward/AdamW substrate for an NNCP-shaped parity probe"
+  ],
+  "kill_condition": "Any source, license, build, required-primitive, determinism, finite-state, dynamic-dependency, package-size, or memory failure rejects this exact GGML closure; no compiler, backend, or optimizer sweep.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "owner": "agent_b_merged",
+  "parent": "nncp_libnc_open_source_eligibility_audit_qm3_v1",
+  "parent_proposal_id": null,
+  "priority": 1413,
+  "promotion_condition": "Clean source export and CPU-only static build pass; repeated final tensor and optimizer state bytes are identical and finite; no uncounted GGML or accelerator dynamic dependency; compressed source closure <=2000000 bytes; strict decimal-memory guard passes.",
+  "proposal_id": "nncp_ggml_open_cpu_kernel_closure_qm0_v1",
+  "retired_neighborhoods": [
+    "Distinct from retired PyTorch emulation of undocumented LibNC gradients; no LibNC binary, GPU, or trace-only decoder."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1431,
+  "state": "developed",
+  "title": "NNCP GGML open CPU kernel closure"
+}
