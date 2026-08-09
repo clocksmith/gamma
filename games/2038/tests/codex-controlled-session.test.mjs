@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { CodexCliRunner } from "../lab/callers/codex-cli-runner.js";
 import {
+  chunkRulesDocument,
   followupResponseSchema,
   postgameResponseSchema,
   rulesDocumentResponseSchema,
@@ -42,7 +43,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v4.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v5.json",
       root
     ),
     "utf8"
@@ -74,4 +75,24 @@ test("controlled-session schemas cover the complete recorded path", () => {
   assert.ok(followupResponseSchema.properties.readyToPlay);
   assert.ok(postgameResponseSchema.properties.winnerExplanation);
   assert.ok(postgameResponseSchema.properties.worldEndingExplanation);
+});
+
+test("rules documents split into bounded lossless source chunks", () => {
+  const contents = [
+    "# Rules\n\n",
+    "A".repeat(6000),
+    "\n\n## Next\n\n",
+    "B".repeat(6000)
+  ].join("");
+  const chunks = chunkRulesDocument({
+    id: "rules",
+    fileName: "rules.md",
+    contents,
+    headings: ["Rules", "Next"]
+  });
+  assert.ok(chunks.length > 1);
+  assert.equal(chunks.map((chunk) => chunk.contents).join(""), contents);
+  assert.ok(chunks.every((chunk) => chunk.contents.length <= 8000));
+  assert.deepEqual(chunks.map((chunk) => chunk.part), [1, 2]);
+  assert.ok(chunks.every((chunk) => chunk.parts === chunks.length));
 });
