@@ -1,0 +1,31 @@
+{
+  "candidate_id": "cmix_obias_source_1m_roundtrip_qm0_v1",
+  "claimed_at": "2026-08-09T22:23:02+00:00",
+  "created_at": "2026-08-09T22:22:47+00:00",
+  "developed_at": "2026-08-09T22:23:02+00:00",
+  "evidence": [
+    "docs/research_register.md#2026-08-09---cmix-obias-source-and-archive-neutral-memory-successor-are-bounded",
+    "results/kairos108_final_head_dyadic_qm4_v1/decision.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "The hash-bound tracked cmix-obias source, PGO profile, dictionary, article order, neural-head asset, pinned Clang/LLD, and UPX toolchain can independently build one self-contained compressor whose two exact opening-1M encodes are byte-identical and whose bare archive reconstructs the canonical bytes below the strict decimal RSS limit.",
+  "interfaces_exposed": [
+    "Tracked source tree -> pinned PGO/LTO build -> counted packaged compressor plus head -> exact opening-1M archive twice -> bare self-extracting inverse"
+  ],
+  "kill_condition": "Any source/hash/build/package/inverse/determinism failure or decimal RSS violation rejects this exact source-build realization as infrastructure or eligibility evidence; it does not alter the external archive compression claim.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "owner": "agent-b-merged",
+  "parent": "cmix_obias_full1g_bare_decode_qm0_v1",
+  "parent_proposal_id": null,
+  "priority": 1402,
+  "promotion_condition": "Clean tracked-source extraction; successful pinned source build; complete compressor plus head <=500000 bytes; two byte-identical archives; bare empty-environment decode reproduces exact opening 1000000 canonical bytes; decimal RSS pass. Success authorizes the source-built full-corpus reproduction ladder but grants zero score.",
+  "proposal_id": "cmix_obias_source_1m_roundtrip_qm0_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1402,
+  "state": "developed",
+  "title": "cmix-obias clean tracked-source 1M roundtrip qualification"
+}
