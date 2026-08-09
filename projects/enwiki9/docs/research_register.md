@@ -2161,3 +2161,32 @@ whole-file byte-identical to itself. Archive scoring counts the full file,
 including the schedule byte; the cross-arm payload comparison is only a
 correctness and attribution invariant. This correction changes no frozen gain,
 source-package, chronology, memory, or shifted-control threshold.
+
+## 2026-08-09 - Mature train-length screen includes relative-position geometry
+
+Read-only command and source parity audit identifies one more strict boundary
+on the active mature surrogate. Its faithful baseline uses the unmodified
+`enwik9` profile with `train_len=64`, `mem_len=256`, and `d_pos=320`. The active
+candidate explicitly uses `train_len=32`, `mem_len=256`, and `d_pos=288`.
+Both therefore preserve full relative-position coverage
+`d_pos = mem_len + train_len`, but the comparison does not hold the learned
+parameter geometry fixed.
+
+With 20 layers, 8 heads, and `d_key=128`, reducing `d_pos` by 32 removes
+exactly `20 * 8 * 128 * 32 = 655,360` untied `w_r` weights, in addition to the
+smaller graph and key/value state schedule. The different `w_r` tensor sizes
+also consume different numbers of seeded initialization draws before later
+parameters are initialized, so equal seed `123` does not imply coefficient
+identity for the remaining model. The lower live RSS is consequently a joint
+effect of shorter graph geometry and a smaller relative-position parameter
+set, not pure update cadence.
+
+This does not change the already-running command or its frozen `30,000` and
+`33,050` terminal thresholds. A pass remains an authorization screen when
+combined with the separate exact same-geometry midpoint success; it transfers
+no archive bytes or parameter-level attribution to that candidate. A miss
+retires this frozen mature `train_len=32,d_pos=288` realization under the
+no-sweep contract, but must not be stated as a mathematical impossibility
+result for every fixed-geometry midpoint schedule. Only the conditional
+`P/K/O/OK/F/S` exact-native gate can attribute the measured midpoint mechanism
+while holding the 64-state model geometry fixed.
