@@ -1641,3 +1641,15 @@ The frozen decision remains unchanged: only the final candidate archive can
 pass the `30,000`-byte mature gate, and a pass authorizes a repeated decodable
 confirmation with marginal chronological evidence. No score, forecast, or
 compact-midpoint descendant credit is granted by this block observation.
+
+Live-position unit audit: NNCP's `--max_size=1,998,848` is a symbol count, but
+`/proc/<pid>/fdinfo` reports the underlying byte offset.  The receipt-bound
+preprocessed alphabet is serialized as big-endian U16, so complete input
+consumption requires descriptor position `3,997,696`, not `1,998,848`.
+The observed `1,998,848`-byte position is exactly `999,424` symbols: two
+`499,712`-symbol native blocks and one half of the frozen population.  Source
+inspection confirms that `encode_file()` right-shifts the physical file size
+by `symb_shift=1`, compares `max_size` in symbols, and `read_block()` consumes
+two bytes per symbol.  Any live report treating the current descriptor offset
+as full-population completion is invalid.  The terminal archive and its
+serialized symbol count remain the only promotion evidence.
