@@ -541,3 +541,30 @@ teacher experiments. A prize-facing descendant must either distill the
 measured mechanism into an independently open compact model or deliberately
 replace the required forward, backward, optimizer, and tensor semantics and
 charge that complete source. No archive, forecast, or score credit is granted.
+
+## 2026-08-09 - Production-bridge indexed observer passes clean build preflight
+
+The already-frozen combined midpoint/index observer was regenerated from a
+fresh extraction of the receipt-bound normalized CPU package. The exact
+midpoint patch applied cleanly, and
+`materialize_nncp_midsegment32_indexed_trace_observer.py` again produced the
+expected `14,687`-byte observer patch with SHA-256
+`23d0428c9bdd687e270847f3914ec94e9ae676d18a75628475db2906a5b4a235`.
+
+Source inspection confirms that its ordinal formula is identical to
+`get_symb()`'s stream layout:
+`block_base + block_stride * stream_idx + min(block_rem, stream_idx) +
+block_idx + cur_state`. All six encoder-write paths contain exactly one
+original-index setter: the two midpoint scalar paths, two inherited scalar
+paths, the normal encode-only vector path, and the remainder vector path.
+
+The composed source then built successfully through the package's actual
+Makefile with `CONFIG_VERSION=2024-06-05` and `LIBNC_CONFIG_FULL`. The resulting
+temporary binary was `515,336` bytes with SHA-256
+`7854646f0b1aec863402242806b3aba0eae4260ad778821097b8d39f7a0859af`.
+Temporary extraction and build products were removed.
+
+This closes source-composition and build-context risk for the conditional
+production-dictionary bridge. It does not execute an encode, establish trace
+neutrality, authorize the bridge before the mature antecedent terminalizes,
+or grant archive, forecast, eligibility, or score credit.
