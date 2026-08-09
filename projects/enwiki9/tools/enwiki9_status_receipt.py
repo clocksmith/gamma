@@ -836,7 +836,7 @@ def gate_liveness_state(
 ) -> dict[str, Any]:
     gate = gate if isinstance(gate, dict) else {}
     verdict = gate.get("verdict")
-    persisted_running = verdict == "running" or gate.get("rss_guard_status") == "running"
+    receipt_running = verdict == "running" or gate.get("rss_guard_status") == "running"
     observed_gate = observed_gate_command_state(candidate, scope, process_state)
     observed_controller = observed_controller_command_state(candidate, scope, process_state)
     controller_processes = observed_controller.get("controller_processes")
@@ -861,15 +861,16 @@ def gate_liveness_state(
     live_worker_job = any(
         row.get("worker_pid_live") is True for row in matching_jobs
     )
+    persisted_running = receipt_running or live_worker_job
     live = persisted_running and (
         driver_observed
         or bool(matching_controllers)
         or live_worker_job
     )
-    if not persisted_running:
-        classification = "not_persisted_running"
-    elif live:
+    if live:
         classification = "live_observed_owner"
+    elif not persisted_running:
+        classification = "not_persisted_running"
     elif matching_jobs:
         classification = "registered_running_job_without_live_owner"
     else:
@@ -877,6 +878,7 @@ def gate_liveness_state(
     return {
         "candidate": candidate,
         "scope_bytes": scope,
+        "receipt_running": receipt_running,
         "persisted_running": persisted_running,
         "classification": classification,
         "is_live": live,
@@ -885,8 +887,8 @@ def gate_liveness_state(
         "matching_adaptive_job_count": len(matching_jobs),
         "matching_adaptive_worker_live": live_worker_job,
         "claim_rule": (
-            "A persisted running receipt is live only with an exact driver, an "
-            "owning controller, or a matching adaptive worker PID and command."
+            "A running receipt or registered adaptive job is live only with an "
+            "exact driver, owning controller, or matching live worker PID and command."
         ),
     }
 
@@ -897,6 +899,18 @@ def reconcile_gate_liveness(
 ) -> dict[str, Any] | None:
     if not isinstance(gate, dict):
         return None
+    if (
+        liveness.get("is_live") is True
+        and gate.get("verdict") in {None, "incomplete", "receipt_incomplete"}
+    ):
+        reconciled = dict(gate)
+        reconciled["persisted_verdict"] = gate.get("verdict")
+        reconciled["persisted_next_action"] = gate.get("next_action")
+        reconciled["verdict"] = "running"
+        reconciled["next_action"] = "wait_for_gate_completion"
+        reconciled["live_gate"] = True
+        reconciled["liveness_classification"] = liveness.get("classification")
+        return reconciled
     if liveness.get("persisted_running") is not True or liveness.get("is_live") is True:
         return gate
     reconciled = dict(gate)
