@@ -427,3 +427,27 @@ transformer is insufficient. The exact CPU package result remains valuable for
 reproducible teacher work and package arithmetic, but receives zero score and
 runtime-eligibility credit. Official resource authority:
 `https://prize.hutter1.net/hrules.htm`.
+
+## 2026-08-09 - Output-bias-only midpoint adaptation is terminal negative
+
+The completed `nncp_midpoint_bias_only_qm0_v1` attribution had not yet been
+summarized in the shared register. On the exact `65,536`-symbol production
+alphabet population, the unchanged parent archive was `96,142` bytes and the
+output-bias-only midpoint archive was `97,746` bytes. The candidate therefore
+lost `1,604` actual archive bytes instead of meeting its `1,600`-byte gain
+gate. Its ideal-aligned loss was `1,604.905350` bytes, with chronological-third
+gains `-559.703219`, `-516.453129`, and `-528.749002` bytes.
+
+The run independently passed legal-probability, branch-population, arithmetic
+decode, symbol replay, official raw inverse, repeat-archive, and complete-state
+identity checks. The negative result is therefore algorithmic rather than an
+alignment or replay failure. Reserved GPU memory also exceeded the decimal
+limit, but that resource failure is not needed for rejection.
+
+Output-bias-only midpoint transfer is retired without optimizer, rate, split,
+or scope sweeps. It retains none of full midpoint `F`'s `4,791`-byte gain and
+instead reverses sign. This does not adjudicate the distinct output-projection
+plus bias arm `O`, whose full matrix can represent hidden-state-conditioned
+corrections that one global vocabulary bias cannot. Receipt:
+`results/nncp_midpoint_bias_only_qm0_v1/decision.json`. Score credit remains
+zero and the prize-facing forecast is unchanged.
