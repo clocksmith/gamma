@@ -75,6 +75,36 @@ function headings(markdown) {
     .map((line) => line.replace(/^#{1,6}\s+/, "").trim());
 }
 
+export function chunkRulesDocument(document, maximumCharacters = 8000) {
+  const chunks = [];
+  let start = 0;
+  let activeHeading = document.headings[0] || document.fileName;
+  while (start < document.contents.length) {
+    let end = Math.min(start + maximumCharacters, document.contents.length);
+    if (end < document.contents.length) {
+      const paragraphBreak = document.contents.lastIndexOf("\n\n", end);
+      if (paragraphBreak > start + Math.floor(maximumCharacters / 2)) {
+        end = paragraphBreak + 2;
+      }
+    }
+    const contents = document.contents.slice(start, end);
+    const localHeadings = headings(contents);
+    chunks.push({
+      id: `${document.id}-part-${chunks.length + 1}`,
+      sourceId: document.id,
+      fileName: document.fileName,
+      part: chunks.length + 1,
+      contents,
+      activeHeading,
+      headings: localHeadings
+    });
+    const lastHeading = localHeadings.at(-1);
+    if (lastHeading) activeHeading = lastHeading;
+    start = end;
+  }
+  return chunks.map((chunk) => ({ ...chunk, parts: chunks.length }));
+}
+
 function facilitatorResponseSchema(questions, documents) {
   return objectSchema({
     answers: {
@@ -260,7 +290,8 @@ async function loadKit(kitManifestPath) {
     const contents = await readFile(resolve(root, fileName), "utf8");
     return { id, fileName, contents, headings: headings(contents) };
   }));
-  return { root, manifestPath, manifest, documents };
+  const readingDocuments = documents.flatMap((document) => chunkRulesDocument(document));
+  return { root, manifestPath, manifest, documents, readingDocuments };
 }
 
 function participantContext(participant) {
@@ -283,7 +314,8 @@ function facilitatorEvidencePrompt(questions, document, label) {
   return [
     `You are collecting source evidence for a recorded Mandate 2038 ${label}.`,
     "Do not answer from memory and do not use tools. Read only the one embedded frozen document.",
-    "For each question this document materially helps answer, record concise evidence and the exact Markdown heading. Omit questions this document does not resolve.",
+    `This is part ${document.part} of ${document.parts} from ${document.fileName}. Its inherited section heading is ${document.activeHeading}.`,
+    "For each question this source chunk materially helps answer, record concise evidence and the exact Markdown heading. Omit questions this chunk does not resolve.",
     `Questions:\n${JSON.stringify(questions, null, 2)}`,
     fencedSources([document])
   ].join("\n\n");
@@ -436,14 +468,23 @@ export async function runCodexControlledSession({
   };
   const facilitate = async (stagePrefix, questions, label) => {
     const sourceEvidence = {};
-    for (const document of kit.documents) {
+    for (const document of kit.readingDocuments) {
+      const originalDocument = kit.documents.find((candidate) =>
+        candidate.id === document.sourceId
+      );
       const sourceStageId = `${stagePrefix}-${document.id}`;
-      sourceEvidence[document.id] = await stage(sourceStageId, () => runStructured({
-        requestId: `${registration.id}:${sourceStageId}`,
-        responseSchema: facilitatorEvidenceSchema(questions, document),
-        signal,
-        prompt: facilitatorEvidencePrompt(questions, document, label)
-      }));
+      sourceEvidence[document.id] = {
+        sourceId: document.sourceId,
+        part: document.part,
+        parts: document.parts,
+        activeHeading: document.activeHeading,
+        result: await stage(sourceStageId, () => runStructured({
+          requestId: `${registration.id}:${sourceStageId}`,
+          responseSchema: facilitatorEvidenceSchema(questions, originalDocument),
+          signal,
+          prompt: facilitatorEvidencePrompt(questions, document, label)
+        }))
+      };
     }
     const synthesis = await stage(`${stagePrefix}-synthesis`, async () => validateFacilitator(
       await runStructured({
@@ -484,7 +525,7 @@ export async function runCodexControlledSession({
   ));
 
   const documentReadings = {};
-  for (const document of kit.documents) {
+  for (const document of kit.readingDocuments) {
     const stageId = `rules-reading-${document.id}`;
     documentReadings[document.id] = await stage(stageId, () => mapWithConcurrency(
       participants,
@@ -494,11 +535,11 @@ export async function runCodexControlledSession({
         responseSchema: rulesDocumentResponseSchema,
         signal,
         prompt: [
-          `You are a first-time Mandate 2038 participant reading ${document.fileName} without facilitator help.`,
-          "Do not use tools or inspect the filesystem; the complete document is embedded below.",
+          `You are a first-time Mandate 2038 participant reading part ${document.part} of ${document.parts} from ${document.fileName} without facilitator help.`,
+          "Do not use tools or inspect the filesystem; the complete source chunk is embedded below.",
           participantContext(participant),
           `Your earlier unboxing notes:\n${JSON.stringify(unboxing[index].output, null, 2)}`,
-          "Record the rules this document contributes, explicit cross-references you still need, and concrete questions. Do not use outside knowledge or Advanced Play procedures.",
+          `This part inherits the section heading ${document.activeHeading}. Record the rules this source chunk contributes, explicit cross-references you still need, and concrete questions. Do not use outside knowledge or Advanced Play procedures.`,
           fencedSources([document])
         ].join("\n\n")
       }),
@@ -647,7 +688,14 @@ export async function runCodexControlledSession({
         manifestPath: relative(projectRoot, kit.manifestPath),
         kitId: kit.manifest.kitId,
         kitFingerprint: kit.manifest.kitFingerprint,
-        sourceCommit: kit.manifest.identity.sourceCommit
+        sourceCommit: kit.manifest.identity.sourceCommit,
+        readingCoverage: kit.documents.map((document) => ({
+          sourceId: document.id,
+          fileName: document.fileName,
+          parts: kit.readingDocuments.filter((chunk) =>
+            chunk.sourceId === document.id
+          ).length
+        }))
       },
       release: registration.release,
       participants,
