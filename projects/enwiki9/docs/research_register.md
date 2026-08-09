@@ -1946,3 +1946,34 @@ probabilities, persistent deep memory, update capacity, and execution order
 remain matched. Mandatory integrity assertions are unchanged: `K=P`,
 `O=OK`, parent Adam state survives bit-identically outside intended updates,
 and arithmetic encode/decode reproduce the same exact symbol stream.
+
+## 2026-08-09 - Archive-neutral NNCP block observer specified
+
+The mature qm2 driver decides only the terminal total; live file sizes cannot
+establish chronological marginal gains. The receipt-bound arithmetic coder
+already exposes every required state field in `PutBitState`: `range`, `low`,
+pending `current_byte`/`n_bytes`, buffered `idx`, flushed `byte_count`, and the
+arithmetic buffer itself. Its existing `put_bit_get_bit_count()` is explicitly
+approximate and should not be promoted as exact block evidence.
+
+For a positive maturity result, the repeated decodable confirmation may add an
+archive-neutral observer after each native `process_block()`:
+
+1. copy the `PutBitState` structure;
+2. allocate a separate same-sized arithmetic buffer and copy the live buffered
+   bytes through `idx`;
+3. replace the copied state's write callback with a count-only sink;
+4. invoke `put_bit_flush()` on only the copied state; and
+5. record original symbol boundary, exact hypothetical terminated arithmetic
+   bits, model step, and learning-rate coordinate.
+
+The live coder, live buffer, output file, model state, and probability
+trajectory remain untouched. Add the fixed header byte count separately.
+Run the same observer on the faithful and candidate schedules over the exact
+same continuous symbol population. Cumulative candidate-minus-parent gains at
+matched boundaries provide chronological evidence; differences of cumulative
+gains provide marginal block evidence. Each intermediate boundary includes
+its own finite termination cost and is therefore a terminated-prefix measure,
+not an additive independently reset block stream. The final boundary must
+equal the actual terminated archive arithmetic count, and an observer-enabled
+repeat must reproduce the observer-disabled archive byte-for-byte.
