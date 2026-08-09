@@ -1,0 +1,33 @@
+{
+  "candidate_id": "cmix_obias_full1g_bare_decode_qm0_v1",
+  "claimed_at": "2026-08-09T22:01:28+00:00",
+  "created_at": "2026-08-09T22:01:28+00:00",
+  "developed_at": "2026-08-09T22:01:28+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "docs/cmix_obias_external_candidate_audit.md"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "The exact locally hash-bound 108009834-byte external archive reconstructs canonical enwik9 with an empty environment from RAM-backed scratch while binary-10GiB and strict-decimal memory telemetry are recorded independently.",
+  "interfaces_exposed": [
+    "Exact external archive -> bare self-extraction -> canonical 1G reconstruction and resource certificate"
+  ],
+  "kill_condition": "Any decode failure, output-size mismatch, hash mismatch, external dependency, or binary-10GiB guard violation rejects this artifact; decimal-10GB excess blocks eligibility even if decode succeeds.",
+  "max_program_bytes": 8192,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "owner": "agent_b_merged",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1400,
+  "promotion_condition": "returncode == 0; output_bytes == 1000000000; output_sha256 == canonical_sha256; byte_identity == true; scratch cleanup confirmed",
+  "proposal_id": "cmix_obias_full1g_bare_decode_qm0_v1",
+  "retired_neighborhoods": [
+    "This is qualification of an existing full archive, not a new transform, predictor, copy mechanism, or probability correction."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1400,
+  "state": "developed",
+  "title": "cmix-obias full-1G bare-decode qualification"
+}
