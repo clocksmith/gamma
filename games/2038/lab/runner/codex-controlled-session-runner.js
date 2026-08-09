@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { promisify } from "node:util";
 import { CodexCliRunner } from "../callers/codex-cli-runner.js";
+import { CodexCliCaller } from "../callers/codex-cli-caller.js";
 import { createSimulation } from "../runtime/create-simulation.js";
 import { projectRoot } from "../versioning/game-identity.js";
 
@@ -191,6 +192,10 @@ export function validateCodexSessionRegistration(document) {
     !Number.isInteger(document.provider?.maxConcurrent) ||
     document.provider.maxConcurrent < 1 ||
     document.provider.maxConcurrent > 4 ||
+    (document.provider.maximumAttemptsPerRequest !== undefined &&
+      (!Number.isInteger(document.provider.maximumAttemptsPerRequest) ||
+        document.provider.maximumAttemptsPerRequest < 1 ||
+        document.provider.maximumAttemptsPerRequest > 3)) ||
     document.provider?.maximumLlmDecisions !== null
   ) {
     throw new TypeError("Invalid locked Codex controlled-session preregistration.");
@@ -315,6 +320,7 @@ export async function runCodexControlledSession({
   onProgress,
   onStageComplete,
   onParticipantComplete,
+  onProviderAttempt,
   runnerFactory,
   simulationFactory = createSimulation
 } = {}) {
@@ -345,6 +351,80 @@ export async function runCodexControlledSession({
     reasoningEffort: registration.provider.reasoningEffort,
     timeoutMs: registration.provider.timeoutMs
   });
+  const maximumAttempts = registration.provider.maximumAttemptsPerRequest || 1;
+  const runStructured = async (request) => {
+    const failedAttempts = [];
+    for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
+      try {
+        const result = await runner.run(request);
+        return {
+          ...result,
+          receipt: {
+            ...result.receipt,
+            attempt,
+            maximumAttempts,
+            failedAttempts
+          }
+        };
+      } catch (error) {
+        const failure = {
+          attempt,
+          maximumAttempts,
+          errorClass: error?.name || "Error",
+          errorMessage: error?.message || "Unknown provider failure.",
+          providerExitCode: Number.isInteger(error?.details?.code) ? error.details.code : null,
+          providerTimeoutMs: error?.details?.timeoutMs || null
+        };
+        failedAttempts.push(failure);
+        await onProviderAttempt?.({
+          requestId: request.requestId,
+          completedAt: new Date().toISOString(),
+          ...failure
+        });
+        if (attempt === maximumAttempts) {
+          error.providerAttempts = failedAttempts;
+          throw error;
+        }
+      }
+    }
+    throw new Error("Structured provider retry loop ended without a result.");
+  };
+  const gameplayCallerFactory = ({ model, reasoningEffort, timeoutMs }) => {
+    const caller = new CodexCliCaller({ model, reasoningEffort, timeoutMs });
+    return {
+      decisionProtocolVersion: caller.decisionProtocolVersion,
+      async decide(packet, options) {
+        const failedAttempts = [];
+        for (let attempt = 1; attempt <= maximumAttempts; attempt += 1) {
+          try {
+            const result = await caller.decide(packet, options);
+            return {
+              ...result,
+              receipt: {
+                ...result.receipt,
+                attempt,
+                maximumAttempts,
+                failedAttempts
+              }
+            };
+          } catch (error) {
+            failedAttempts.push({
+              attempt,
+              maximumAttempts,
+              errorClass: error?.name || "Error",
+              errorMessage: error?.message || "Unknown provider failure.",
+              providerReceipt: error?.providerReceipt || null
+            });
+            if (attempt === maximumAttempts) {
+              error.providerAttempts = failedAttempts;
+              throw error;
+            }
+          }
+        }
+        throw new Error("Gameplay provider retry loop ended without a result.");
+      }
+    };
+  };
   const participants = [...registration.participants].sort((left, right) => left.seat - right.seat);
   const startedAt = new Date().toISOString();
   const stage = async (id, operation) => {
@@ -358,7 +438,7 @@ export async function runCodexControlledSession({
     const sourceEvidence = {};
     for (const document of kit.documents) {
       const sourceStageId = `${stagePrefix}-${document.id}`;
-      sourceEvidence[document.id] = await stage(sourceStageId, () => runner.run({
+      sourceEvidence[document.id] = await stage(sourceStageId, () => runStructured({
         requestId: `${registration.id}:${sourceStageId}`,
         responseSchema: facilitatorEvidenceSchema(questions, document),
         signal,
@@ -366,7 +446,7 @@ export async function runCodexControlledSession({
       }));
     }
     const synthesis = await stage(`${stagePrefix}-synthesis`, async () => validateFacilitator(
-      await runner.run({
+      await runStructured({
         requestId: `${registration.id}:${stagePrefix}:synthesis`,
         responseSchema: facilitatorResponseSchema(questions, kit.documents),
         signal,
@@ -381,7 +461,7 @@ export async function runCodexControlledSession({
   const unboxing = await stage("unboxing", () => mapWithConcurrency(
     participants,
     registration.provider.maxConcurrent,
-    (participant) => runner.run({
+    (participant) => runStructured({
       requestId: `${registration.id}:unboxing:seat-${participant.seat + 1}`,
       responseSchema: unboxingResponseSchema,
       signal,
@@ -409,7 +489,7 @@ export async function runCodexControlledSession({
     documentReadings[document.id] = await stage(stageId, () => mapWithConcurrency(
       participants,
       registration.provider.maxConcurrent,
-      (participant, index) => runner.run({
+      (participant, index) => runStructured({
         requestId: `${registration.id}:${stageId}:seat-${participant.seat + 1}`,
         responseSchema: rulesDocumentResponseSchema,
         signal,
@@ -433,7 +513,7 @@ export async function runCodexControlledSession({
   const rulesReading = await stage("rules-synthesis", () => mapWithConcurrency(
     participants,
     registration.provider.maxConcurrent,
-    (participant, index) => runner.run({
+    (participant, index) => runStructured({
       requestId: `${registration.id}:rules-synthesis:seat-${participant.seat + 1}`,
       responseSchema: rulesResponseSchema,
       signal,
@@ -468,7 +548,7 @@ export async function runCodexControlledSession({
       const answers = initialFacilitation.synthesis.output.answers.filter((answer) =>
         initialQuestions.find((question) => question.id === answer.questionId)?.seat === participant.seat
       );
-      return runner.run({
+      return runStructured({
         requestId: `${registration.id}:followup:seat-${participant.seat + 1}`,
         responseSchema: followupResponseSchema,
         signal,
@@ -512,6 +592,7 @@ export async function runCodexControlledSession({
     model: registration.provider.model,
     reasoningEffort: registration.provider.reasoningEffort,
     timeoutMs: registration.provider.timeoutMs,
+    callerFactory: gameplayCallerFactory,
     simulateNegotiation: true,
     includeObservations: true,
     rotateProfiles: false,
@@ -532,7 +613,7 @@ export async function runCodexControlledSession({
   const postgame = await stage("postgame-reconstruction", () => mapWithConcurrency(
     participants,
     registration.provider.maxConcurrent,
-    (participant, index) => runner.run({
+    (participant, index) => runStructured({
       requestId: `${registration.id}:postgame:seat-${participant.seat + 1}`,
       responseSchema: postgameResponseSchema,
       signal,

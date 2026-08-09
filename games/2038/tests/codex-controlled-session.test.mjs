@@ -42,7 +42,7 @@ test("CodexCliRunner isolates structured session stages from workspace state", (
 test("controlled-session registration freezes four unique Codex seats and the release boundary", async () => {
   const registration = JSON.parse(await readFile(
     new URL(
-      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v3.json",
+      "evidence/studies/simulation/preregistrations/codex-controlled-session-2026-08-09-v4.json",
       root
     ),
     "utf8"
@@ -61,6 +61,8 @@ test("controlled-session registration freezes four unique Codex seats and the re
   assert.ok(registration.participants.every((participant) => participant.backend === "codex"));
   assert.equal(registration.provider.maximumLlmDecisions, null);
   assert.equal(registration.provider.timeoutMs, 300000);
+  assert.equal(registration.provider.reasoningEffort, "low");
+  assert.equal(registration.provider.maximumAttemptsPerRequest, 2);
   assert.equal(registration.predecessor.disposition, "failed_diagnostic");
 });
 
