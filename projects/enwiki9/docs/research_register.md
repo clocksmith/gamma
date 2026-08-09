@@ -105,6 +105,29 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-09 - cmix-obias full-1G bare-decode qualification moved to RAM-backed scratch
+
+The locally hash-bound external `cmix-obias` archive can be independently
+decoded without deleting shared workspace data. `/dev/shm` exposes `62 GB` of
+otherwise unused RAM-backed storage, exceeding the donor's reported roughly
+`21 GB` decode working set and leaving the root filesystem untouched. Candidate
+`cmix_obias_full1g_bare_decode_qm0_v1` therefore runs the exact
+`108,009,834`-byte archive with an empty environment in a uniquely created
+`/dev/shm` directory, streams the reconstructed billion-byte output against
+the canonical input, records both hashes and resource telemetry, and removes
+only that uniquely created scratch directory after the receipt is durable.
+
+This is an artifact-qualification oracle with zero compression or score
+credit. Promotion requires return code zero, exact `1,000,000,000`-byte output,
+canonical SHA-256 identity, and no dependence on external files or environment
+variables. The first run uses a binary-`10 GiB` kill limit while separately
+recording the strict decimal-`10 GB` boundary, because the donor self-report is
+below the former but above the latter. Any decimal-limit excess remains a
+submission blocker even if reconstruction succeeds. Failure to reconstruct
+retires the local external artifact as an immediate prize candidate; success
+authorizes source-rebuild, deterministic encode, and memory-removal work but
+does not adopt the reported score.
+
 ## 2026-08-09 - NNCP dictionary-boundary class marginal is terminal subscale
 
 Candidate `nncp_dictionary_boundary_class_marginal_qm0_v1` tested whether the
