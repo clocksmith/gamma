@@ -458,6 +458,7 @@ function scenarioOutcome(observation, seat) {
   );
   return {
     legalDeclaration: Boolean(funnel?.legalDeclarationWindow),
+    claimed: Boolean(observation.scenario?.claimed),
     declared: Boolean(funnel?.declared),
     scenario: observation.scenario || null
   };
@@ -738,8 +739,8 @@ export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
               `roster:${rotation}`
             ].join(":"),
             question:
-              "What is the paired outcome effect of a legal AGI declaration " +
-              "window versus an otherwise identical one-marker-short state?",
+              "What is the paired outcome effect of a legal AGI claim " +
+              "window versus an otherwise identical one-Compute-short state?",
             focalSeat,
             focalFactionId,
             backend,
@@ -749,13 +750,13 @@ export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
             leftFactionIds: roster,
             rightFactionIds: roster,
             leftScenario: {
-              id: "agi_declaration_window_v1",
+              id: "agi_claim_window_v1",
               arm: "eligible",
               focalSeat
             },
             rightScenario: {
-              id: "agi_declaration_window_v1",
-              arm: "blocked_grid_ready",
+              id: "agi_claim_window_v1",
+              arm: "blocked_compute",
               focalSeat
             }
           };
@@ -990,6 +991,8 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
       rightLegalDeclaration: rightScenario.legalDeclaration,
       leftDeclared: leftScenario.declared,
       rightDeclared: rightScenario.declared,
+      leftClaimed: leftScenario.claimed,
+      rightClaimed: rightScenario.claimed,
       leftDealFlowConversion: leftConversion,
       rightDealFlowConversion: rightConversion,
       causallyNecessaryCreditDelta:
@@ -1018,6 +1021,8 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
     )),
     leftDeclarationRate: mean(rows.map((row) => Number(row.leftDeclared))),
     rightDeclarationRate: mean(rows.map((row) => Number(row.rightDeclared))),
+    leftClaimRate: mean(rows.map((row) => Number(row.leftClaimed))),
+    rightClaimRate: mean(rows.map((row) => Number(row.rightClaimed))),
     meanCausallyNecessaryCreditDelta: mean(rows.map((row) =>
       row.causallyNecessaryCreditDelta
     )),

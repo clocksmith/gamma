@@ -10,10 +10,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.11.0");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.4-test");
+  assert.equal(current.gameVersion, "0.12.0");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.5-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.11.0");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.12.0");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -35,7 +35,7 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.match(spec, /same size, shape, material, and\s+weight/);
   assert.doesNotMatch(spec, /distinguishable by touch or sight/);
   assert.match(spec, /shared Mandate track/);
-  assert.match(spec, /AGI Declaration/);
+  assert.match(spec, /AGI claim/);
   assert.match(spec, /Fusion Demonstrator/);
   assert.doesNotMatch(spec, /Economic Benchmark/);
   assert.doesNotMatch(spec, /Market Access/);
@@ -75,8 +75,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.4-test",
-    "synchronized with executable game 0.11.0",
+    "**Rules version:** 0.7.0-rc.5-test",
+    "synchronized with executable game 0.12.0",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
@@ -138,7 +138,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(bible, /Ordinary Power Sources \| 2 location-defined reference types/);
   assert.doesNotMatch(bible, /Ordinary Power Sources \| 4 reference types/);
   assert.match(bible, /Scrutiny cubes \/ Customer-track markers \| 60 \/ 6/);
-  assert.match(bible, /Escalation-track markers \/ separate AGI Declaration pieces \| 6 \/ 0/);
+  assert.match(bible, /Escalation-track markers \/ separate AGI claim pieces \| 6 \/ 0/);
   assert.match(bible, /Integrated Grid-Ready faces \/ starting-grid identities/);
   assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
 });
@@ -547,7 +547,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
   assert.match(byId.benchmark_is_economy.text, /immediately scores 1 Mandate/);
   assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
   assert.match(byId.agi_personhood.text, /remainder of the game/);
-  assert.match(byId.agi_personhood.text, /Trust 4/);
+  assert.match(byId.agi_personhood.text, /gains 2 Trust/);
   assert.match(byId.room_temperature_superconductor.text, /1–3 Fraud; 4–6 Replicates/);
   assert.ok(
     headlines.every((headline) => !headline.regimeTags.includes("bonus_action")),

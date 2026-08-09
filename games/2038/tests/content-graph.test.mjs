@@ -403,7 +403,7 @@ test("Default Rules are compact while every moved authority has one table surfac
 
   const references = await readJson("dist/runtime/reference-cards.json");
   const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
-  assert.match(mandateReference.backText.join("\n"), /AGI emerges when a declaration finishes at Capability 9\+/);
+  assert.match(mandateReference.backText.join("\n"), /AGI emerges on one shared 5% roll/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
 
   for (const tactic of tacticDocument.tactics) {

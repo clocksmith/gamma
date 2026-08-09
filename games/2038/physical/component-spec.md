@@ -42,7 +42,7 @@ shared project. Material or finish never creates an additional rules state.
 | Grid-Ready | A Facility received complete Production Power | The Facility’s reverse | Normal / Grid-Ready face |
 | Starting grid | Dedicated Power assigned to the first Facility | Integrated identifier on that first Facility | Attached / moved with its Facility |
 | Escalation | Permission to select an Escalation | One marker on the faction-board Escalation track | Zero to two currently available; unused permission expires each Era |
-| AGI Declaration | A faction has completed its declaration | The Declare AGI card’s reverse | Undeclared / declared |
+| AGI claim | A faction registered its final-resolution claim | The Declare AGI card’s reverse | Unclaimed / claimed |
 | Joint Venture / Mega-Cluster | A named shared project | Matched numbered token pair | Both host positions and pair number |
 | Initiative | Current resolution and tie order | One shared marker | Current holder |
 | Fusion Demonstrator | The unique advanced-generation project | One shared project marker | Grid position / unbuilt |
@@ -55,7 +55,7 @@ shared project. Material or finish never creates an additional rules state.
 ## Selected state-encoding decisions
 
 Grid-Ready, Customer count, Escalation availability, the
-starting-grid identity, and AGI Declaration are integrated into the listed
+starting-grid identity, and AGI claim are integrated into the listed
 components and faction-board tracks. They do not require separate state
 markers. The forms must remain legible when pieces occupy a crowded district;
 readability is a validation requirement, not an unresolved format choice.

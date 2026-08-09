@@ -80,11 +80,11 @@ Resolve the World Ending mechanically in
 [Final scoring](./core-rules.md#13-final-scoring), then read the corresponding
 narrative aloud.
 
-The ending has two independent axes. ${terms.systems.agi} emerges when at least
-one declaration meets the printed ${terms.playerTracks.capability} test. The
-future is Open only when Collective ${terms.playerTracks.trust} rose by at least
-one per player from setup and unresolved Systemic Risk is below the player
-count. Otherwise it is Closed.
+The ending has two independent axes. ${terms.systems.agi} emerges only when the
+shared five-percent gate opens and the fourth-power Mandate resolution selects
+one institution. The future is Open only when Collective
+${terms.playerTracks.trust} rose by at least one per player from setup and
+unresolved Systemic Risk is below the player count. Otherwise it is Closed.
 
 ### ${content.worldCopy.byId.singularity.name} — Open ${terms.systems.agi}
 

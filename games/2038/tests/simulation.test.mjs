@@ -85,14 +85,13 @@ test("World Ending crosses AGI emergence with both Open-continuity gates", async
   const endingFor = async ({
     emerges,
     trustDeltaPerPlayer = 1,
-    systemicRisk = 0,
-    declarerCapability = 9
+    systemicRisk = 0
   }) => {
     const { match } = await createInteractiveGame(
       {
         playerCount: 3,
         factionId: "coalition_lab",
-        seed: `world-ending-${emerges}-${trustDeltaPerPlayer}-${systemicRisk}-${declarerCapability}`
+        seed: `world-ending-${emerges}-${trustDeltaPerPlayer}-${systemicRisk}`
       },
       () => {}
     );
@@ -103,7 +102,6 @@ test("World Ending crosses AGI emergence with both Open-continuity gates", async
     match.systemicRisk = systemicRisk;
     if (emerges) {
       match.players[0].agiDeclared = true;
-      match.players[0].capability = declarerCapability;
     }
     return match.result().worldEnding;
   };
@@ -131,10 +129,6 @@ test("World Ending crosses AGI emergence with both Open-continuity gates", async
     emerges: false,
     systemicRisk: 3
   })).id, "assured_continuity");
-  assert.equal((await endingFor({
-    emerges: true,
-    declarerCapability: 8
-  })).id, "plural_future");
 });
 
 test("interactive snapshots expose canonical Headline copy and the selected play profile", async () => {
@@ -1479,11 +1473,11 @@ test("recruiting reuses the actual missing Team identity without duplicates", as
   assert.equal(player.teamsInSupply, 0);
 });
 
-test("declaration readiness is pure, diagnostic, and UI-ready", async () => {
+test("AGI claim readiness is pure, diagnostic, and UI-ready", async () => {
   const player = {
     seat: 0,
     agiDeclared: false,
-    capability: 9,
+    capability: 6,
     customers: 3,
     trust: 3,
     compute: 4,
@@ -1506,10 +1500,10 @@ test("declaration readiness is pure, diagnostic, and UI-ready", async () => {
     megaClusters: [],
     startingGridPower: 1,
     requirements: {
-      capability: 9,
-      customers: 3,
-      facilities: 3,
-      trust: 2,
+      capability: 6,
+      customers: 0,
+      facilities: 0,
+      trust: 0,
       computeCost: 3
     }
   };
@@ -1517,21 +1511,61 @@ test("declaration readiness is pure, diagnostic, and UI-ready", async () => {
   const readiness = declarationReadiness(state, player);
   assert.equal(readiness.ready, true);
   assert.equal(readiness.failingRequirement, null);
-  assert.equal(readiness.gridReadyFacilities, 3);
+  assert.equal(readiness.gridReadyFacilities, 0);
   assert.equal(readiness.ppaIterations, 0);
-  assert.equal(readiness.capacityOps, 3);
+  assert.equal(readiness.capacityOps, 0);
   assert.deepEqual(state, before);
 
-  const unproven = structuredClone(player);
-  unproven.facilities[2].gridReady = false;
-  const capacityCannotSubstitute = declarationReadiness(state, unproven);
-  assert.equal(capacityCannotSubstitute.ready, false);
-  assert.equal(capacityCannotSubstitute.failingRequirement, "grid_ready_facilities");
-  assert.equal(capacityCannotSubstitute.gridReadyFacilities, 2);
+  const underfunded = { ...player, compute: 2 };
+  const insufficientCompute = declarationReadiness(state, underfunded);
+  assert.equal(insufficientCompute.ready, false);
+  assert.equal(insufficientCompute.failingRequirement, "compute");
 
-  const blocked = declarationReadiness(state, { ...player, capability: 8 });
+  const blocked = declarationReadiness(state, { ...player, capability: 5 });
   assert.equal(blocked.ready, false);
   assert.equal(blocked.failingRequirement, "capability");
+});
+
+test("final AGI resolution uses one gate, fourth-power Mandate, and one winner", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      seed: "agi-fourth-power-resolution",
+      rulesVariant: {
+        agiEmergenceProbabilityBasisPoints: 10000,
+        agiMandateExponent: 4,
+        agiClaimMandateBoost: 3
+      }
+    },
+    () => {}
+  );
+  const mandates = [18, 15, 12];
+  for (const [seat, mandate] of mandates.entries()) {
+    match.players[seat].mandate = mandate;
+  }
+  match.players[0].facilities.push({
+    id: "offline-agi-weight",
+    powered: false,
+    gridReady: false
+  });
+  match.players[1].agiClaimed = true;
+
+  match.resolveAgiOutcome();
+
+  const resolution = match.matchMetrics.agiResolution;
+  assert.equal(resolution.emerged, true);
+  assert.deepEqual(resolution.provisionalWinnerSeats, [0]);
+  assert.equal(resolution.weights.length, 3);
+  assert.deepEqual(
+    resolution.weights.map((entry) => entry.effectiveMandate),
+    [17, 18, 12]
+  );
+  assert.deepEqual(
+    resolution.weights.map((entry) => entry.weight),
+    [17 ** 4, 18 ** 4, 12 ** 4]
+  );
+  assert.equal(match.players.filter((player) => player.agiDeclared).length, 1);
+  assert.deepEqual(match.result().winnerSeats, [resolution.selectedSeat]);
 });
 
 test("Production earns Grid-Ready Facility states and infrastructure changes revoke them", async () => {
@@ -1602,10 +1636,9 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
 
   await match.produceAll(policies);
   assert.equal(player.facilities.filter((facility) => facility.gridReady).length, 3);
-  assert.equal(match.declarationReadiness(player).gridReadyFacilities, 3);
+  assert.equal(match.gridReadyFacilityCount(player), 3);
+  assert.equal(match.declarationReadiness(player).gridReadyFacilities, 0);
   assert.ok(match.matchMetrics.agiFunnel[0].coreRequirementsMet);
-  assert.ok(match.matchMetrics.agiFunnel[0].becameGridReady);
-  assert.equal(match.matchMetrics.agiFunnel[0].neededExternalPower, null);
 
   match.round = 4;
   player.escalation = 2;
@@ -1614,8 +1647,9 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
     (decision) => decision.actionId === "declare_agi"
   ));
   assert.ok(match.matchMetrics.agiFunnel[0].legalDeclarationWindow);
-  match.declareAgi(player);
-  assert.ok(match.matchMetrics.agiFunnel[0].declared);
+  match.registerAgiClaim(player);
+  assert.equal(player.agiClaimed, true);
+  assert.equal(player.agiDeclared, false);
 
   const currentTile = match.board.find(
     (tile) => tile.instanceId === player.facilities[0].tileId
@@ -1644,7 +1678,7 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
     consequences: { relocateFacility: true }
   });
   assert.equal(player.facilities[0].gridReady, false);
-  assert.equal(match.declarationReadiness(player).gridReadyFacilities, 2);
+  assert.equal(match.gridReadyFacilityCount(player), 2);
 });
 
 test("action selection excludes impossible commitments and labels trade-dependent choices", async () => {
@@ -2470,7 +2504,7 @@ test("paired faction diagnostics keep every non-focal input on common seeds", as
   assert.match(report.preRegistration.fingerprint, /^sha256:[a-f0-9]{64}$/);
 });
 
-test("AGI declaration scenarios create paired legal and one-marker-short states", async () => {
+test("AGI claim scenarios create paired legal and one-Compute-short states", async () => {
   const common = {
     runs: 1,
     playerCount: 3,
@@ -2491,7 +2525,7 @@ test("AGI declaration scenarios create paired legal and one-marker-short states"
   const eligible = await createSimulation({
     ...common,
     scenario: {
-      id: "agi_declaration_window_v1",
+      id: "agi_claim_window_v1",
       arm: "eligible",
       focalSeat: 0
     }
@@ -2499,8 +2533,8 @@ test("AGI declaration scenarios create paired legal and one-marker-short states"
   const blocked = await createSimulation({
     ...common,
     scenario: {
-      id: "agi_declaration_window_v1",
-      arm: "blocked_grid_ready",
+      id: "agi_claim_window_v1",
+      arm: "blocked_compute",
       focalSeat: 0
     }
   });
@@ -2509,22 +2543,22 @@ test("AGI declaration scenarios create paired legal and one-marker-short states"
     eligible.observations[0].scenario.afterInjection.legalDeclaration,
     true
   );
-  assert.equal(eligible.observations[0].scenario.declared, true);
+  assert.equal(eligible.observations[0].scenario.claimed, true);
   assert.equal(
     blocked.observations[0].scenario.afterInjection.legalDeclaration,
     false
   );
   assert.equal(
     blocked.observations[0].scenario.afterInjection.failingRequirement,
-    "grid_ready_facilities"
+    "compute"
   );
-  assert.equal(blocked.observations[0].scenario.declared, false);
+  assert.equal(blocked.observations[0].scenario.claimed, false);
   assert.notEqual(
     eligible.launchIdentity.fingerprint,
     blocked.launchIdentity.fingerprint
   );
   assert.deepEqual(eligible.configuration.scenario, {
-    id: "agi_declaration_window_v1",
+    id: "agi_claim_window_v1",
     arm: "eligible",
     focalSeat: 0
   });
@@ -2553,7 +2587,7 @@ test("AGI scenario matrices rotate faction, seat, backend, and opponent roster",
     comparison.rightFactionIds[comparison.focalSeat] ===
       comparison.focalFactionId &&
     comparison.leftScenario.arm === "eligible" &&
-    comparison.rightScenario.arm === "blocked_grid_ready"
+    comparison.rightScenario.arm === "blocked_compute"
   ));
   assert.deepEqual(
     new Set(comparisons.map((comparison) => comparison.backend)),
@@ -2579,13 +2613,13 @@ test("paired diagnostics report AGI scenario coverage and declaration effects", 
       leftFactionIds: roster,
       rightFactionIds: roster,
       leftScenario: {
-        id: "agi_declaration_window_v1",
+        id: "agi_claim_window_v1",
         arm: "eligible",
         focalSeat: 0
       },
       rightScenario: {
-        id: "agi_declaration_window_v1",
-        arm: "blocked_grid_ready",
+        id: "agi_claim_window_v1",
+        arm: "blocked_compute",
         focalSeat: 0
       }
     }]
@@ -2594,10 +2628,10 @@ test("paired diagnostics report AGI scenario coverage and declaration effects", 
   assert.equal(report.diagnosticKind, "paired_agi_declaration_scenario");
   assert.equal(comparison.paired.leftLegalDeclarationRate, 1);
   assert.equal(comparison.paired.rightLegalDeclarationRate, 0);
-  assert.equal(comparison.paired.leftDeclarationRate, 1);
-  assert.equal(comparison.paired.rightDeclarationRate, 0);
+  assert.equal(comparison.paired.leftClaimRate, 1);
+  assert.equal(comparison.paired.rightClaimRate, 0);
   assert.equal(comparison.left.scenario.arm, "eligible");
-  assert.equal(comparison.right.scenario.arm, "blocked_grid_ready");
+  assert.equal(comparison.right.scenario.arm, "blocked_compute");
   assert.match(
     report.balanceEvaluation.promotionGate.reasons[0],
     /qualify a route endpoint/
@@ -3070,7 +3104,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.11.0");
+  assert.equal(first.game.version, "0.12.0");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3648,7 +3682,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.11.0");
+  assert.equal(first.game.version, "0.12.0");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

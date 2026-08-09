@@ -21,13 +21,13 @@ markers for state already carried by a component or faction-board track.
   available
 - 6 Core Action cards
 - 7 Escalation cards
-- 1 Declare AGI card with an undeclared / declared reverse
+- 1 Declare AGI card with an unclaimed / claimed reverse
 - Track or token state for Runway, Compute, Capability, Trust, and Safety
 - 1 Mandate marker for the shared Mandate track
 
 The integrated prototype therefore needs no separate Grid-Ready pieces,
 Power Source selectors, Influence cubes, Customer counters, Escalation-
-availability counters, or AGI Declaration pieces. Generic track cubes remain
+availability counters, or separate AGI-claim pieces. Generic track cubes remain
 a separate supply because they serve other player-board tracks.
 
 ## Default Game — shared components

@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.4-test`
+**Rules reference:** `0.7.0-rc.5-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -90,11 +90,11 @@ the visual grouping before it becomes a selected component layout.
 
 ### Mandate stays public
 
-Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion,
-faction awards, and AGI score when they occur. Facilities and control create
+Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion, and
+faction awards score when they occur. Facilities and control create
 position and production rather than receiving automatic endgame points. Final
-calculation contains only the offline penalty before resolving the shared
-ending.
+calculation applies the offline penalty, names the provisional Mandate winner,
+and then resolves the rare shared AGI coda.
 
 This makes negotiation legible and lets every simulated score change retain a
 specific source.
@@ -177,15 +177,18 @@ Audit draws scale by player count. Scrutiny beyond a player’s ten physical
 cubes immediately becomes a Runway-or-Trust penalty. Era IV Audit converts
 risk into Runway or Mandate loss so late exposure remains consequential.
 
-Declare AGI requires Capability nine, three Customers, three Facilities with
-Grid-Ready faces, Trust two, and three Compute. Those faces record successful
-operation during a completed Production, replacing the declaration-time
-capacity proof. It scores but does not end play. The Blog Post Headline lowers
-only the Capability requirement.
+Declare AGI is an Era IV claim, not a deterministic declaration. Capability
+six and three Compute register the claim, add three Scrutiny, and add three
+effective Mandate only inside the final AGI weighting. The Blog Post Headline
+lowers only the Capability requirement.
 
-The winner is the institution with the most Mandate. AGI emergence and
-Open/Closed continuity are independent tests. A normal-threshold declarer
-establishes emergence. The ending is Open only when collective Trust improves
+The ordinary final-scoring winner, including the printed tie breakers, is the
+provisional winner. AGI then has one
+shared five-percent emergence gate. If it remains closed, the provisional
+winner wins. If it opens, every player's effective Mandate is raised to the
+fourth power and normalized into one weighted selection; the selected player
+becomes the sole winner. This produces zero or one declaration. The ending is
+Open only when collective Trust improves
 beyond setup by the player count and unresolved Systemic Risk remains below the
 player count; otherwise it is Closed. Winning and building the preferable
 future are deliberately different achievements.
@@ -211,7 +214,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.4-test` test:
+controlled `0.7.0-rc.5-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -223,7 +226,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.11.0` implements `0.7.0-rc.4-test` under engine
+Executable game `0.12.0` implements `0.7.0-rc.5-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready faces are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -233,7 +236,7 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-The `0.11.0` / `0.7.0-rc.4-test` correction makes eligibility explicit:
+The `0.11.0` / `0.7.0-rc.4-test` correction made eligibility explicit:
 select only an Action that resolves from current state or can become legal
 through one accepted immediate trade before Act. Simultaneous target loss and
 a rejected required trade still create real commitment risk. Purely impossible
@@ -242,6 +245,13 @@ immediate trade as one complete exchange, creates post-Act offers from the
 post-action resource state, and executes declared persona partner, placement,
 and resource preferences. The v10 Codex session motivated this correction but
 does not establish balance or human teachability.
+
+The `0.12.0` / `0.7.0-rc.5-test` candidate replaces deterministic AGI
+qualification with a rare shared coda. Declare AGI registers a costly Era IV
+claim. One five-percent gate follows final scoring; if it opens, normalized
+fourth-power effective Mandate selects one institution and overrides the
+provisional winner. The executable behavior is synchronized, but human
+reception and strategic value remain unmeasured.
 
 The `0.10.2` / `0.7.0-rc.3-test` alignment patch changes no mechanic or
 number. It makes the selected integrated physical state authoritative in the
