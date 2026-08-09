@@ -1977,3 +1977,31 @@ its own finite termination cost and is therefore a terminated-prefix measure,
 not an additive independently reset block stream. The final boundary must
 equal the actual terminated archive arithmetic count, and an observer-enabled
 repeat must reproduce the observer-disabled archive byte-for-byte.
+
+## 2026-08-09 - Native midpoint attribution byte gates frozen
+
+The strict exact-native population binds parent `P=44,786` bytes and full
+midpoint teacher `F=41,564` bytes, hence `G_F=3,222` actual bytes. If the
+mature cadence antecedent passes, the single `P/K/O/OK/F/S` attribution gate
+uses these fixed whole-archive thresholds:
+
+```text
+required O retention        ceil(0.80 * 3,222) = 2,578 bytes
+largest passing O archive   44,786 - 2,578      = 42,208 bytes
+minimum aligned-vs-S margin ceil(0.10 * 3,222) =   323 bytes
+incremental source package                           <= 65,536 bytes
+```
+
+`K` must be byte-identical to `P`; `OK` must be byte-identical to `O`.
+The archive-neutral block observer must show positive `O` gain at every
+chronological boundary and at least `80%` of `F`'s gain on every matched
+chronological split. The shifted-truth `S` control uses identical update
+capacity and must trail aligned `O` by at least `323` terminal bytes. All arms
+must independently decode the exact symbol population, reproduce the expected
+raw prefix through the official inverse, and repeat byte-identically.
+
+These are attribution thresholds, not Hutter score credit. `O` passing only
+authorizes the predeclared scalar-state `MIDAS-G1024` approximation. That
+compact descendant separately retains the existing `80%` gain, `128 MiB`
+incremental RSS, `15%` runtime, shifted-control, exact decode, and deterministic
+repeat conditions.
