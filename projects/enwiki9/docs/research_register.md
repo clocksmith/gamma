@@ -2276,3 +2276,30 @@ header, candidate repeat identity, exact `322,978`-byte raw identity, fully
 counted source package, and the decimal-memory guard. Cross-arm size comparison
 is valid because both archives embed the identical dictionary; no dictionary
 byte may be subtracted as common free information.
+
+## 2026-08-09 - Indexed native observer scalar-site bug fixed
+
+Temporary source-composition audit found a correctness defect in
+`materialize_nncp_native_indexed_trace_observer.py`. The clean NNCP source has
+two identical scalar `write_sym()` call strings. The materializer replaced the
+first occurrence with text that still contained the same call string, then
+performed the same one-occurrence replacement again. The second replacement
+therefore inserted a duplicate original-index setter at the first site and
+left the true second scalar/remainder site uninstrumented. Its final count of
+four setter calls passed despite incomplete coverage.
+
+This does not invalidate the prior complete-block encode-only receipts: their
+paying path uses the separately instrumented vector call, and their frozen
+populations have no remainder. It does invalidate any claim that the old
+materializer generically covered every scalar/remainder encoder path.
+
+The tracked tool now requires exactly two clean-source scalar sites and
+replaces both atomically. An altered call graph therefore fails rather than
+silently producing a partial trace. The midpoint patch has four matching
+scalar sites—two new paying midpoint calls plus the ordinary and remainder
+paths—so the corrected clean-source materializer deliberately rejects it. The
+future full-dictionary bridge needs a dedicated combined materializer that
+indexes every midpoint paying call and proves trace-on versus trace-off archive
+identity. Offline chronology may then replay the exact recorded integer
+branches into three original-coordinate shadow arithmetic coders; no live
+model or archive trajectory needs to change.

@@ -135,7 +135,13 @@ def instrument_nncp(source_root: Path) -> None:
         "write_sym(pb, output + stream_idx * stride, s->n_symbols, c);",
         "                        ",
     )
-    source = source.replace(scalar, scalar_replacement, 1)
+    scalar_count = source.count(scalar)
+    if scalar_count != 2:
+        raise ValueError(
+            "expected exactly two clean-source scalar encoder writes, "
+            f"found {scalar_count}"
+        )
+    source = source.replace(scalar, scalar_replacement)
     normal_vector = (
         "                    write_sym(pb, output + "
         "(cur_state * n_streams + stream_idx) * stride, s->n_symbols, c);"
@@ -154,7 +160,6 @@ def instrument_nncp(source_root: Path) -> None:
         normal_vector_replacement,
         "normal encode-only write",
     )
-    source = source.replace(scalar, scalar_replacement, 1)
     remainder_vector = """                        write_sym(pb, output +
                                   (cur_state * n_streams + stream_idx) *
                                   stride, s->n_symbols, c);"""
