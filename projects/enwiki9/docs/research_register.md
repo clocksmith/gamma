@@ -1503,6 +1503,13 @@ encoder staging artifacts, not external decoder dependencies: NNCP embeds the
 compressed vocabulary in the main archive, recreates temporary inverse files
 during decode, and removes them afterward.
 
+The method independently reproduces the completed q2 result: taking the first
+`20,000` staging bytes (`10,000` symbols) yields exactly `13,310` raw bytes,
+SHA-256
+`a6ea11e7cb1674925943c9f8f3ecfd81f88a44bf59568c2564664602d02feebe`,
+byte-identical to q2's native `restored.raw`. This validates the local-prefix
+inverse construction without trusting q3's weak Boolean.
+
 After q3 terminalizes, promotion requires its restored output to have exactly
 `88,279` bytes and the expected SHA-256 above, in addition to direct raw-prefix
 identity, serialized mode header, archive gain, source package, and process-
