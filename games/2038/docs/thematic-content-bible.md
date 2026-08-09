@@ -55,12 +55,12 @@ not make an unselected concept from the research backlog part of the game.
 | Eras | 4 | All 4 appear, one per Era | `content/copy/reference-cards.json` |
 | Player references | 4 | All 4 topics remain relevant; physical duplication is unresolved | `content/copy/reference-cards.json` |
 | Factions | 6 | 3–5 selected in supported play; 6 may appear in exploratory play | `content/copy/factions.json` |
-| Faction abilities | 24 | 4 per selected faction, normally one associated with each Era | `content/copy/factions.json` |
+| Faction abilities | 12 | 2 per selected faction: one persistent identity and one signature program | `content/copy/factions.json` |
 | Headlines | 24 | 12 appear: 3 of 6 from each Era | `content/copy/headlines.json` |
 | Escalations | 7 | Every player receives all 7 designs; Escalation limits uses | `content/copy/escalations.json` |
 | Era Mandates | 12 | 4 appear: 1 of 3 from each Era | `content/copy/mandates.json` |
 | Training faces | 12 | Distributed across the full 50-card Training deck | `content/copy/game-config.json` |
-| Ordinary Power Sources | 2 shared reference types | Both choices remain available; their Generator pieces are separate | `content/copy/game-config.json` |
+| Ordinary Power Sources | 2 location-defined reference types | Grid always provides emergency Power; Renewable always provides clean Power | `content/copy/game-config.json` |
 | Fusion Demonstrator | 1 | At most 1 shared project can be built | `content/copy/game-config.json` |
 | Map locations | 11 | Distributed across all 13 modular tiles | `content/copy/game-config.json` |
 | Realignment ballots | 3 | Advanced Play only; every player holds all 3 choices and 1 is selected | `content/copy/game-config.json` |
@@ -90,15 +90,15 @@ or overage allowance has been selected yet.
 | Headline cards | 24 | All 24 form the Era decks; 12 enter the Future Timeline | Not declared |
 | Era Mandate cards | 12 | All 12 form the Era decks; 4 are revealed | Not declared |
 | Training cards | 50 | All 50 form the draw deck; discard reshuffles if exhausted | Not declared |
-| Power Source reference cards | 2 ordinary designs; production copy count unresolved | Both choices remain available throughout play | Not declared |
+| Power Source reference cards | 2 ordinary designs; production copy count unresolved | Each explains one Energy location | Not declared |
 | Modular map tiles | 13 | All 13 | Not declared |
 | CEOs / Teams / Facilities | 6 / 18 / 24 | 5 / 15 / 20 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Grid-Ready / Generator / Link pieces | 24 / 12 / 12 | 20 / 10 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Influence / Scrutiny / Customer markers | 48 / 60 / 30 | 40 / 50 / 25 at the supported maximum; all at 6-player exploratory play | Not declared |
+| Grid-Ready / Generator / Link pieces | 24 / 6 / 12 | 20 / 5 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
+| Scrutiny / Customer markers | 60 / 30 | 50 / 25 at the supported maximum; all at 6-player exploratory play | Not declared |
 | Escalation / AGI Declaration markers | 24 / 6 | 20 / 5 at the supported maximum; all at 6-player exploratory play | Not declared |
 | Joint Venture / Mega-Cluster pairs | 6 / 6 shared pairs | All 6 pairs of either type may be committed | Not declared |
 | Fusion Demonstrator | 1 shared marker | 1 | Not declared |
-| Other shared markers and tokens | 6 Experts; 6 Economic Benchmarks; 1 Spotlight; 1 Public Research Grant; 12 Market Access; 12 Build discounts; 12 Policy Shields; 18 Systemic Risk | Bounded by the complete shared supply | Not declared |
+| Other shared markers and tokens | 18 Systemic Risk | All may enter the Audit bag | Not declared |
 | Audit bag / Volatility die / Initiative marker | 1 / 1 / 1 | 1 of each | Not declared |
 
 The genuine production gap is therefore not the number of authored systems.

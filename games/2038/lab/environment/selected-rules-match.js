@@ -78,14 +78,6 @@ export function immediateTradePacketCeiling(playerCount, {
   return ACTION_RESOLUTIONS_PER_PLAYER * playerCount * packetsPerResolution;
 }
 
-function permutations(values) {
-  if (values.length < 2) return [values];
-  return values.flatMap((value, index) =>
-    permutations(values.filter((_, candidate) => candidate !== index))
-      .map((rest) => [value, ...rest])
-  );
-}
-
 export function causallyNecessaryImportSuppliers({
   localAvailable,
   importedSupplierSeats,
@@ -224,8 +216,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     };
     this.activeHeadline = null;
     this.regime = {};
-    this.spotlightSeat = 0;
-    this.grantSeat = this.players.length - 1;
     this.roundMandate = null;
     this.headlineDecks = Object.fromEntries(
       this.config.rounds.map(({ number: round }) => [
@@ -266,10 +256,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.linkSupply = config.playerSupply.linkTokens;
       player.jointVentures = [];
       player.megaClusters = [];
-      player.experts = [];
-      player.marketAccess = 0;
-      player.policyShields = 0;
-      player.buildDiscounts = 0;
       player.agiDeclared = false;
       player.factionAbilityUsed = {};
       player.tacticModifiers = {};
@@ -320,8 +306,24 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   isFactionAbilityPaused(player, abilityId) {
-    return this.rulesVariant.pausedFactionAbilities.some((entry) =>
+    return !this.hasFactionAbility(player, abilityId) ||
+      this.rulesVariant.pausedFactionAbilities.some((entry) =>
       entry?.factionId === player.factionId && entry?.abilityId === abilityId
+    );
+  }
+
+  hasFactionAbility(player, abilityId) {
+    const factionList = Array.isArray(this.factions)
+      ? this.factions
+      : this.factions.factions;
+    const faction = factionList.find((candidate) =>
+      candidate.id === player.factionId
+    );
+    const ability = faction?.abilities.find((candidate) => candidate.id === abilityId);
+    return Boolean(
+      ability &&
+      this.round >= ability.round &&
+      (ability.persistsAfterUnlock || this.round === ability.round)
     );
   }
 
@@ -689,11 +691,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           .reduce((sum, piece) => sum + (piece.kind === "ceo" ? 2 : 1), 0);
         const facilities = candidate.facilities
           .filter((facility) => facility.tileId === tile.instanceId).length;
-        const influence = candidate.influence
-          .filter((cube) => cube.tileId === tile.instanceId).length;
-        const experts = candidate.experts
-          .filter((expert) => expert.tileId === tile.instanceId).length;
-        return pieces + facilities + influence + experts;
+        return pieces + facilities;
       });
       const maximum = Math.max(...scores);
       if (maximum > 0 && scores.filter((score) => score === maximum).length === 1) {
@@ -711,13 +709,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         .filter((piece) => piece.tileId === tile.instanceId)
         .reduce((sum, piece) => sum + (piece.kind === "ceo" ? 2 : 1), 0);
       return pieces +
-        player.facilities.filter((item) => item.tileId === tile.instanceId).length +
-        player.influence.filter((item) => item.tileId === tile.instanceId).length +
-        player.experts.filter((item) => item.tileId === tile.instanceId).length;
+        player.facilities.filter((item) => item.tileId === tile.instanceId).length;
     });
     const maximum = Math.max(...scores);
     if (maximum === 0 || scores.filter((score) => score === maximum).length !== 1) return null;
     return scores.indexOf(maximum);
+  }
+
+  hasPresenceAtCategory(player, category) {
+    const tileIds = new Set(
+      this.board.filter((tile) => tile.category === category).map((tile) => tile.instanceId)
+    );
+    return player.pieces.some((piece) => tileIds.has(piece.tileId)) ||
+      player.facilities.some((facility) => tileIds.has(facility.tileId));
   }
 
   nearestInitiative(seats) {
@@ -743,12 +747,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         tactics: [...player.tactics],
         objectiveId: player.objectiveId,
         teamsInSupply: player.teamsInSupply,
-        influence: player.influence.length,
         links: player.links.length,
         jointVentures: player.jointVentures.length,
-        marketAccess: player.marketAccess,
-        policyShields: player.policyShields,
-        buildDiscounts: player.buildDiscounts,
         agiDeclared: player.agiDeclared,
         dealFlowConversion: {
           unspentCredits: player.dealFlowRunwayCredits.reduce(
@@ -766,7 +766,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         return {
           ...opponent,
           currentScore: this.currentScore(source),
-          influence: source.influence.length,
           escalation: source.escalation,
           agiDeclared: source.agiDeclared,
           relationship: this.relationshipFor(seat, source.seat)
@@ -782,9 +781,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           links: [...candidate.links],
           jointVentures: this.copyPublic(candidate.jointVentures),
           megaClusters: this.copyPublic(candidate.megaClusters || []),
-          marketAccess: candidate.marketAccess,
-          policyShields: candidate.policyShields,
-          buildDiscounts: candidate.buildDiscounts,
           temporaryCompute: candidate.temporaryCompute || 0,
           agiDeclared: candidate.agiDeclared,
           currentScore: this.currentScore(candidate)
@@ -916,10 +912,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   async beginRound(policies) {
-    const scores = this.players.map((player) => this.currentScore(player));
-    const high = Math.max(...scores);
-    const low = Math.min(...scores);
-    const allEqual = high === low;
     if (this.round === 4 && this.matchMetrics.round4Start === null) {
       this.matchMetrics.round4Start = this.players.map((player) => ({
         seat: player.seat,
@@ -927,12 +919,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         profileId: player.profileId
       }));
     }
-    this.spotlightSeat = allEqual ? null : this.nearestInitiative(
-      this.players.filter((player) => scores[player.seat] === high).map((player) => player.seat)
-    );
-    this.grantSeat = allEqual ? null : this.nearestInitiative(
-      this.players.filter((player) => scores[player.seat] === low).map((player) => player.seat)
-    );
     this.roundMandate = this.mandateDeck[this.round];
     this.regime = { persistent: this.regime.persistent || {}, round: {} };
     for (const player of this.players) {
@@ -952,138 +938,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         riskyActions: 0
       };
     }
-    if (this.grantSeat !== null) {
-      const grantPlayer = this.players[this.grantSeat];
-      const grant = await this.choose(policies, this.grantSeat, "public_research_grant", [
-        {
-          decisionId: "grant_runway",
-          label: decisionLabel("grantRunway"),
-          actionId: "grant",
-          consequences: { runway: 1 }
-        },
-        {
-          decisionId: "grant_compute",
-          label: decisionLabel("grantCompute"),
-          actionId: "grant",
-          consequences: { compute: 1 }
-        }
-      ]);
-      this.addResource(grantPlayer, grant.decisionId === "grant_runway" ? "runway" : "compute", 1);
-    }
-    await this.resolveRoundFactionPowers(policies);
     this.roundInitialized = true;
     this.recordEvent(
       "round_started",
       null,
       renderSimulationCopy(simulationCopy.events.roundStarted, {
         round: this.round,
-        mandate: this.roundMandate.name,
-        seat: this.spotlightSeat === null ? "none" : this.spotlightSeat + 1
+        mandate: this.roundMandate.name
       })
     );
-  }
-
-  async resolveRoundFactionPowers(policies) {
-    for (const player of this.players) {
-      if (this.round === 2 && player.factionId === "imperial_research_lab") {
-        const choice = await this.choose(policies, player.seat, "call_mountain_view", [
-          { decisionId: "mountain_runway", label: decisionLabel("mountainRunway"), actionId: "fund" },
-          { decisionId: "mountain_compute", label: decisionLabel("mountainCompute"), actionId: "research" },
-          { decisionId: "mountain_training", label: decisionLabel("mountainTraining"), actionId: "research" }
-        ]);
-        if (choice.decisionId === "mountain_runway") {
-          this.addResource(player, "runway", 3);
-          this.recordFactionAbility(player, "call_mountain_view", {
-            runwayGained: 3
-          });
-        } else if (choice.decisionId === "mountain_compute") {
-          this.addResource(player, "compute", 3);
-          this.recordFactionAbility(player, "call_mountain_view", {
-            computeGained: 3
-          });
-        } else {
-          this.prepareTrainingDrawPile();
-          const visible = this.trainingDrawPile.slice(0, 4);
-          const arrangements = permutations(visible);
-          const reorder = await this.choose(
-            policies,
-            player.seat,
-            "call_mountain_view_reorder",
-            arrangements.map((cards, index) => ({
-              decisionId: `mountain_reorder_${index}`,
-              label: decisionLabel("reorderTraining", {
-                cards: cards.map((card) => card.type).join(" → ")
-              }),
-              actionId: "faction",
-              parameters: { cardIds: cards.map((card) => card.id) }
-            }))
-          );
-          const byId = new Map(visible.map((card) => [card.id, card]));
-          this.trainingDrawPile.splice(
-            0,
-            visible.length,
-            ...reorder.parameters.cardIds.map((id) => byId.get(id))
-          );
-          this.recordFactionAbility(player, "call_mountain_view", {
-            trainingCardsReordered: visible.length
-          });
-        }
-      }
-      if (this.round === 3 && player.factionId === "foundry") {
-        const demandCoupling =
-          this.rulesVariant.foundryNewArchitectureDemandCoupling;
-        const demandCoupled =
-          demandCoupling !== null &&
-          Number.isFinite(demandCoupling?.baseCompute);
-        let licensesSold = 0;
-        if (!demandCoupled) {
-          this.addResource(
-            player,
-            "compute",
-            this.rulesVariant.foundryNewArchitectureCompute
-          );
-          this.recordFactionAbility(player, "new_architecture", {
-            computeGained: this.rulesVariant.foundryNewArchitectureCompute
-          });
-        }
-        for (const rival of this.players.filter((candidate) =>
-          candidate.seat !== player.seat && candidate.runway > 0
-        )) {
-          const license = await this.choose(policies, rival.seat, "architecture_license", [
-            {
-              decisionId: `architecture_license_${rival.seat}`,
-              label: decisionLabel("architectureLicense"),
-              actionId: "faction"
-            },
-            { decisionId: `architecture_decline_${rival.seat}`, label: decisionLabel("architectureDecline"), actionId: "faction" }
-          ]);
-          if (license.decisionId.startsWith("architecture_license_")) {
-            licensesSold += 1;
-            this.spendRunway(rival, 1, { cause: "architecture_license" });
-            this.addResource(player, "runway", 1);
-            this.addResource(rival, "compute", 1);
-            this.recordFactionAbility(player, "new_architecture", {
-              uses: 0,
-              licensesSold: 1,
-              runwayGained: 1,
-              rivalComputeGranted: 1
-            });
-          }
-        }
-        if (demandCoupled) {
-          const computeGained = Math.min(
-            demandCoupling.maximumCompute,
-            demandCoupling.baseCompute +
-              licensesSold *
-                demandCoupling.computePerLicense
-          );
-          this.addResource(player, "compute", computeGained);
-          this.recordFactionAbility(player, "new_architecture", {
-            computeGained
-          });
-        }
-      }
-    }
   }
 
   async preSelectionFactionPowers(policies) {
@@ -1092,6 +955,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
     if (
       foundry &&
+      this.hasFactionAbility(foundry, "allocation_window") &&
       this.round === 2 &&
       !foundry.factionAbilityUsed.allocationWindow
     ) {
@@ -1232,47 +1096,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
 
-    if (
-      foundry &&
-      this.round === 4 &&
-      !foundry.factionAbilityUsed.everybodyGpu
-    ) {
-      const choice = await this.choose(policies, foundry.seat, "everybody_gpu_timing", [
-        {
-          decisionId: "everybody_gpu_wait",
-          label: decisionLabel("gpuProgramWait"),
-          actionId: "faction"
-        },
-        {
-          decisionId: "everybody_gpu_activate",
-          label: decisionLabel("selectGpuProgram"),
-          actionId: "faction"
-        }
-      ]);
-      if (choice.decisionId === "everybody_gpu_activate") {
-        for (const rival of this.players.filter(
-          (candidate) => candidate.seat !== foundry.seat
-        )) this.addResource(rival, "compute", 1);
-        const mandate = this.rulesVariant.foundryGpuMandateEnabled
-          ? Math.floor(
-            (this.playerCount - 1) /
-            this.rulesVariant.foundryGpuRivalsPerMandate
-          )
-          : 0;
-        this.awardMandate(
-          foundry,
-          mandate,
-          "everybody_gets_a_gpu"
-        );
-        this.removeScrutiny(foundry, 2);
-        foundry.factionAbilityUsed.everybodyGpu = true;
-        this.recordFactionAbility(foundry, "everybody_gets_a_gpu", {
-          rivalComputeGranted: this.playerCount - 1,
-          mandateGained: mandate,
-          scrutinyRemoved: 2
-        });
-      }
-    }
   }
 
   async secretAuction(policies, id, label) {
@@ -1349,46 +1172,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async prepareHeadline(policies) {
     this.activeHeadline = this.headlineDecks[this.round][this.cycle - 1];
-    const coalition = this.players.find((player) =>
-      player.factionId === "coalition_lab" &&
-      this.round >= 4 &&
-      !player.factionAbilityUsed.wildcardGovernance
-    );
-    if (coalition) {
-      const unused = shuffled(
-        this.headlineDocument.headlines.filter((card) =>
-          this.headlineAvailable(card, this.round) &&
-          card.id !== this.activeHeadline.id &&
-          !this.matchMetrics.headlines[card.id]
-        ),
-        `${this.seed}:replacement:${this.cycle}`
-      ).slice(0, 2);
-      if (unused.length === 2) {
-        const replacement = await this.choose(policies, coalition.seat, "wildcard_governance", [
-          {
-            decisionId: "wildcard_keep",
-            label: decisionLabel("keepHeadline", { headline: this.activeHeadline.name }),
-            actionId: "faction"
-          },
-          ...unused.map((card) => ({
-            decisionId: `wildcard_replace_${card.id}`,
-            label: decisionLabel("replaceHeadline", { headline: card.name }),
-            actionId: "faction",
-            parameters: { headlineId: card.id }
-          }))
-        ]);
-        if (replacement.parameters?.headlineId) {
-          this.activeHeadline = unused.find((card) => card.id === replacement.parameters.headlineId);
-          coalition.factionAbilityUsed.wildcardGovernance = true;
-          const scrutiny = this.rulesVariant.coalitionWildcardGovernanceScrutiny;
-          this.addScrutiny(coalition, scrutiny);
-          this.recordFactionAbility(coalition, "wildcard_governance", {
-            headlinesReplaced: 1,
-            scrutinyAdded: scrutiny
-          });
-        }
-      }
-    }
     this.regime.cycle = { id: this.activeHeadline.id };
     const id = this.activeHeadline.id;
     increment(this.matchMetrics.headlines, id);
@@ -1407,10 +1190,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
       this.addResource(this.players[target], "trust", 1);
     } else if (id === "talent_gold_rush") {
-      const winner = await this.secretAuction(policies, id, decisionLabel("hireExpert"));
+      const winner = await this.secretAuction(policies, id, "move your CEO up to 2 and gain 1 Trust");
       if (winner !== null) {
-        const ceo = this.players[winner].pieces.find((piece) => piece.kind === "ceo");
-        this.players[winner].experts.push({ id: `expert-${winner}`, tileId: ceo.tileId });
+        const player = this.players[winner];
+        const ceo = player.pieces.find((piece) => piece.kind === "ceo");
+        const current = this.board.find((tile) => tile.instanceId === ceo.tileId);
+        const destinations = this.board.filter((tile) => axialDistance(current, tile) <= 2);
+        const move = await this.choose(policies, winner, `${id}_destination`, destinations.map((tile) => ({
+          decisionId: `${id}_${tile.instanceId}`,
+          label: decisionLabel("moveCeo", { destination: tile.name }),
+          actionId: "headline",
+          parameters: { tileId: tile.instanceId }
+        })));
+        ceo.tileId = move.parameters.tileId;
+        this.addResource(player, "trust", 1);
       }
     } else if (id === "data_center_buys_county") {
       const winner = await this.secretAuction(policies, id, decisionLabel("acquireCounty"));
@@ -1424,19 +1217,23 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           parameters: { tileId: tile.instanceId }
         })));
         player.pieces.find((piece) => piece.kind === "ceo").tileId = move.parameters.tileId;
-        player.buildDiscounts = Math.min(2, player.buildDiscounts + 2);
+        this.addResource(player, "runway", 2);
         this.addScrutiny(player, 1);
       }
     } else if (id === "boardroom_coup") {
-      if (this.spotlightSeat === null) return;
-      const spotlight = this.players[this.spotlightSeat];
+      const scores = this.players.map((player) => this.currentScore(player));
+      const high = Math.max(...scores);
+      const leaderSeat = this.nearestInitiative(
+        this.players.filter((player) => scores[player.seat] === high).map((player) => player.seat)
+      );
+      const leader = this.players[leaderSeat];
       const decisions = [
-        ...(spotlight.runway >= 2 ? [{
+        ...(leader.runway >= 2 ? [{
           decisionId: "boardroom_pay",
           label: decisionLabel("retainAuthority"),
           actionId: "headline"
         }] : []),
-        ...this.players.filter((player) => player.seat !== spotlight.seat).map((player) => ({
+        ...this.players.filter((player) => player.seat !== leader.seat).map((player) => ({
           decisionId: `boardroom_request_${player.seat}`,
           label: decisionLabel("requestBacking", { seat: player.seat + 1 }),
           actionId: "headline",
@@ -1448,16 +1245,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           actionId: "headline"
         }
       ];
-      const choice = await this.choose(policies, spotlight.seat, id, decisions);
+      const choice = await this.choose(policies, leader.seat, id, decisions);
       if (choice.decisionId === "boardroom_pay") {
-        this.spendRunway(spotlight, 2, { cause: "boardroom_pay" });
+        this.spendRunway(leader, 2, { cause: "boardroom_pay" });
       }
       else if (choice.parameters?.targetSeat !== undefined) {
         const target = choice.parameters.targetSeat;
         const response = await this.choose(policies, target, `${id}_response`, [
           {
             decisionId: "boardroom_back",
-            label: decisionLabel("backSpotlight"),
+            label: "Back the current Mandate leader and gain 1 Trust",
             actionId: "headline"
           },
           {
@@ -1467,8 +1264,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           }
         ]);
         if (response.decisionId === "boardroom_back") this.addResource(this.players[target], "trust", 1);
-        else this.regime.cycle.ceoLockedSeat = spotlight.seat;
-      } else this.regime.cycle.ceoLockedSeat = spotlight.seat;
+        else this.regime.cycle.ceoLockedSeat = leader.seat;
+      } else this.regime.cycle.ceoLockedSeat = leader.seat;
     } else if (id === "export_controls") {
       for (const category of ["chip", "government"]) {
         const seat = this.controller(category);
@@ -1500,38 +1297,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           parameters: { join: false }
         }
       ]);
-      const vertical = this.players.find((player) =>
-        player.factionId === "vertical_empire" &&
-        !player.factionAbilityUsed.ownTheFeed
-      );
-      if (vertical) {
-        const override = await this.choose(policies, vertical.seat, "own_the_feed", [
-          {
-            decisionId: "own_feed_public",
-            label: decisionLabel("acceptPublicResult"),
-            actionId: "faction"
-          },
-          {
-            decisionId: "own_feed_adopt",
-            label: decisionLabel("ownFeedAdopt"),
-            actionId: "faction",
-            parameters: { join: true }
-          },
-          {
-            decisionId: "own_feed_defer",
-            label: decisionLabel("ownFeedDefer"),
-            actionId: "faction",
-            parameters: { join: false }
-          }
-        ]);
-        if (override.parameters?.join !== undefined) {
-          choices[vertical.seat] = override;
-          vertical.factionAbilityUsed.ownTheFeed = true;
-          this.recordFactionAbility(vertical, "own_the_feed", {
-            outcomesOverridden: 1
-          });
-        }
-      }
       const joiners = choices.map((choice, seat) => choice.parameters.join ? seat : null)
         .filter((seat) => seat !== null);
       for (const [seat, choice] of choices.entries()) {
@@ -1657,7 +1422,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           conversionEligible: true
         });
         const ceo = player.pieces.find((piece) => piece.kind === "ceo");
-        player.experts.push({ id: `expert-${seat}-${player.experts.length}`, tileId: ceo.tileId });
+        if (player.teamsInSupply > 0) {
+          const teamNumber = this.config.playerSupply.teams - player.teamsInSupply + 1;
+          player.pieces.push({
+            id: `p${seat + 1}-team-${teamNumber}`,
+            kind: "team",
+            tileId: ceo.tileId
+          });
+          player.teamsInSupply -= 1;
+        }
       } else if (id === "board_reshuffle") {
         const ready = player.actionsUsed.find((action) => ["organize", "influence"].includes(action));
         if (ready) player.actionsUsed = player.actionsUsed.filter((action) => action !== ready);
@@ -1666,7 +1439,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       } else if (id === "government_contract" && player.trust >= 4) {
         this.addResource(player, "runway", 2);
       } else if (id === "interconnection_waiver") {
-        player.buildDiscounts = Math.min(2, player.buildDiscounts + 1);
+        this.addResource(player, "runway", 1);
         this.addResource(player, "trust", 1);
       } else if (id === "weights_leak") {
         const rivals = this.players.filter((candidate) =>
@@ -1697,15 +1470,18 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (this.regime.cycle?.syntheticCandidate) {
       for (const seat of this.initiativeOrder()) {
         const player = this.players[seat];
-        if (player.influence.length < 2) continue;
+        if (
+          !this.hasPresenceAtCategory(player, "media") &&
+          !this.hasPresenceAtCategory(player, "government")
+        ) continue;
         const certify = this.regime.cycle.syntheticCandidate === "certify";
         const legal = certify && !this.canDeploy(player)
           ? []
           : [{
             decisionId: "synthetic_candidate_participate",
             label: certify
-              ? "Return 2 Influence to gain the next eligible Customer"
-              : "Return 2 Influence to gain 2 Trust",
+              ? "Use political presence to gain the next eligible Customer"
+              : "Use political presence to gain 2 Trust",
             actionId: "headline",
             parameters: { participate: true }
           }];
@@ -1713,13 +1489,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           ...legal,
           {
             decisionId: "synthetic_candidate_pass",
-            label: decisionLabel("keepInfluence"),
+            label: "Decline the political effect",
             actionId: "headline",
             parameters: { participate: false }
           }
         ]);
         if (!choice.parameters.participate) continue;
-        player.influence.splice(0, 2);
         if (certify) {
           player.customers += 1;
           this.addScrutiny(player, 2);
@@ -1746,9 +1521,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   legalDestinations(player, piece) {
     const current = this.board.find((tile) => tile.instanceId === piece.tileId);
-    const range = player.factionId === "vertical_empire" &&
-      this.round >= 2 && piece.kind === "ceo" ? 3 : 2;
-    return this.board.filter((tile) => axialDistance(current, tile) <= range);
+    return this.board.filter((tile) => axialDistance(current, tile) <= 2);
   }
 
   legalActionSelections(seat) {
@@ -1805,19 +1578,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async resolveFactionAction(policies, seat, id) {
     const player = this.players[seat];
-    if (id === "moonshot") {
-      const before = player.capability;
-      const research = await this.choose(
-        policies,
-        seat,
-        "moonshot_research",
-        this.legalResolutions(seat, "research")
-      );
-      this.applyResolution(seat, research);
-      this.addResource(player, "capability", Math.min(3, player.capability - before));
-      this.addScrutiny(player, 2);
-      player.factionAbilityUsed.moonshot = true;
-    } else if (id === "orbital_compute") {
+    if (id === "orbital_compute" && this.hasFactionAbility(player, id)) {
       const occupied = new Set(player.facilities.map((facility) => facility.tileId));
       const decisions = player.facilities.flatMap((facility) =>
         this.board.filter((tile) => !occupied.has(tile.instanceId)).map((tile) => ({
@@ -1862,22 +1623,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         trustGained: player.trust - trustBefore,
         escalationsBlocked: 1
       });
-    } else if (id === "everybody_gpu") {
-      for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
-        this.addResource(rival, "compute", 1);
-      }
-      this.awardMandate(
-        player,
-        this.rulesVariant.foundryGpuMandateEnabled
-          ? Math.floor(
-            (this.playerCount - 1) /
-            this.rulesVariant.foundryGpuRivalsPerMandate
-          )
-          : 0,
-        "everybody_gets_a_gpu"
-      );
-      this.removeScrutiny(player, 2);
-      player.factionAbilityUsed.everybodyGpu = true;
+    } else {
+      throw new RangeError(`Unavailable faction action: ${id}.`);
     }
     increment(player.metrics.actions, `faction_${id}`);
     this.recordEvent(
@@ -1892,16 +1639,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   legalResolutions(seat, actionId) {
     const player = this.players[seat];
-    const originalRunway = player.runway;
-    if (actionId === "build" && player.buildDiscounts > 0) {
-      player.runway += 1;
-    }
-    let decisions;
-    try {
-      decisions = super.legalResolutions(seat, actionId);
-    } finally {
-      player.runway = originalRunway;
-    }
+    let decisions = super.legalResolutions(seat, actionId);
     const singleGeneratorRule = this.rulesVariant.singleGeneratorRule;
     if (actionId === "build" && singleGeneratorRule) {
       const ordinaryGeneratorCount = player.generators.filter(
@@ -2034,50 +1772,36 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         if (
           this.regime.cycle?.id === "ten_dollar_intelligence" ||
           player.tacticModifiers.api_price_cut ||
-          player.tacticModifiers.economicBenchmark ||
           (
-            player.factionId === "platform_empire" &&
+            this.hasFactionAbility(player, "installed_base") &&
             ["consumer", "media"].includes(destination.category) &&
             !player.roundMetrics.installedBaseUsed
           )
         ) computeCost = 0;
         if (player.compute < computeCost) return [];
-        const accessChoices = player.marketAccess > 0 ? [false, true] : [false];
-        return accessChoices.flatMap((useMarketAccess) => {
-          const requirement = Math.max(
-            1,
-            baseRequirement - celebrityDiscount - Number(useMarketAccess)
-          );
-          if (player.capability < requirement) return [];
-          const accessSuffix = useMarketAccess ? "_market_access" : "";
-          const accessLabel = useMarketAccess
-            ? `; ${decisionLabel("useMarketAccess")}`
-            : "";
-          return [{
-            decisionId:
-              `deploy_${destination.category}_${piece.id}_` +
-              `${destination.instanceId}${accessSuffix}`,
-            label: renderSimulationCopy(simulationCopy.decisions.moveAndDeploy, {
-              piece: piece.id,
-              destination: destination.name,
-              customer: player.customers + 1
-            }) + accessLabel,
-            actionId,
-            parameters: {
-              pieceId: piece.id,
-              destinationId: destination.instanceId,
-              destinationCategory: destination.category,
-              computeCost,
-              useMarketAccess
-            },
-            consequences: {
-              compute: -computeCost,
-              customers: 1,
-              scrutiny: 1,
-              marketAccess: useMarketAccess ? -1 : 0
-            }
-          }];
-        });
+        const requirement = Math.max(1, baseRequirement - celebrityDiscount);
+        if (player.capability < requirement) return [];
+        return [{
+          decisionId:
+            `deploy_${destination.category}_${piece.id}_${destination.instanceId}`,
+          label: renderSimulationCopy(simulationCopy.decisions.moveAndDeploy, {
+            piece: piece.id,
+            destination: destination.name,
+            customer: player.customers + 1
+          }),
+          actionId,
+          parameters: {
+            pieceId: piece.id,
+            destinationId: destination.instanceId,
+            destinationCategory: destination.category,
+            computeCost
+          },
+          consequences: {
+            compute: -computeCost,
+            customers: 1,
+            scrutiny: 1
+          }
+        }];
       });
     }
     if (actionId === "research" && decisions.length === 0 && this.regime.cycle?.id === "ten_dollar_intelligence") {
@@ -2101,27 +1825,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
     }
     if (actionId === "organize") {
-      if (
-        player.factionId === "platform_empire" &&
-        this.round === 2 &&
-        !player.roundMetrics.yearEfficiencyUsed &&
-        player.pieces.some((piece) => piece.kind === "team")
-      ) {
-        const normalModes = decisions.filter((decision) =>
-          ["recruit", "redistribute", "relocate"].includes(decision.parameters?.mode)
-        );
-        decisions.push(...normalModes.map((decision) => ({
-          ...clone(decision),
-          decisionId: `${decision.decisionId}_year_of_efficiency`,
-          label: `${decisionLabel("returnTeamReorganize")}; ${decision.label}`,
-          parameters: { ...decision.parameters, yearOfEfficiency: true },
-          consequences: {
-            ...decision.consequences,
-            runway: (decision.consequences?.runway || 0) + 3,
-            teams: (decision.consequences?.teams || 0) - 1
-          }
-        })));
-      }
       if (
         this.regime.cycle?.id === "employee_free_unicorn" &&
         player.pieces.some((piece) => piece.kind === "team")
@@ -2149,7 +1852,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.linkSupply > 0
     ) {
       const cost = this.regime.cycle?.superconductor === "replicates" ? 0 : 1;
-      if (player.runway + Number(player.buildDiscounts > 0) >= cost) {
+      if (player.runway >= cost) {
         decisions.push(...this.movementVariants(player, (piece, destination) =>
           player.facilities
             .filter((facility) =>
@@ -2178,9 +1881,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (actionId === "influence" && this.round >= 3) {
       if (this.jointVentureSupplyAvailable()) decisions.push(...this.movementVariants(player, (piece, destination) => {
+        if (!player.facilities.some((facility) => facility.tileId === destination.instanceId)) {
+          return [];
+        }
         const contractChoices = [];
         for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
-          const range = player.factionId === "coalition_lab" ? 2 : 1;
+          const range = this.hasFactionAbility(player, "strategic_partnership") ? 2 : 1;
           for (const left of player.facilities) for (const right of rival.facilities) {
             const leftTile = this.board.find((tile) => tile.instanceId === left.tileId);
             const rightTile = this.board.find((tile) => tile.instanceId === right.tileId);
@@ -2212,7 +1918,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (contract.left.seat === seat || contract.right.seat === seat)
       );
       if (terminable.length) decisions.push(...this.movementVariants(player, (piece, destination) =>
-        terminable.map((contract) => ({
+        player.facilities.some((facility) => facility.tileId === destination.instanceId)
+          ? terminable.map((contract) => ({
           decisionId: `influence_terminate_joint_venture_${contract.id}_${piece.id}_` +
             destination.instanceId,
           label: decisionLabel("terminateJointVenture", { contract: contract.id }),
@@ -2225,13 +1932,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             contractId: contract.id
           },
           consequences: { terminateJointVenture: contract.id }
-        }))
+          }))
+          : []
       ));
     }
     if (
       actionId === "deploy" &&
-      player.factionId === "platform_empire" &&
-      this.round >= 4 &&
+      this.hasFactionAbility(player, "social_graph") &&
       !player.roundMetrics.socialGraphUsed
     ) {
       const existing = new Set(decisions.map((decision) => decision.parameters?.destinationId));
@@ -2243,41 +1950,30 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         const cost = tile.category === "consumer" ? 0 : this.rulesVariant.deployComputeCost;
         if (player.compute < cost) continue;
         const baseRequirement = this.customerRequirement(player.customers);
-        const accessChoices = player.marketAccess > 0 ? [false, true] : [false];
-        for (const useMarketAccess of accessChoices) {
-          if (
-            player.capability <
-            Math.max(1, baseRequirement - Number(useMarketAccess))
-          ) continue;
-          decisions.push({
-            decisionId:
-              `deploy_social_graph_${tile.instanceId}` +
-              (useMarketAccess ? "_market_access" : ""),
-            label: decisionLabel("socialGraphDeploy", {
-              destination: tile.name
-            }) + (useMarketAccess ? `; ${decisionLabel("useMarketAccess")}` : ""),
-            actionId,
-            parameters: {
-              destinationId: tile.instanceId,
-              destinationCategory: tile.category,
-              computeCost: cost,
-              socialGraph: true,
-              useMarketAccess
-            },
-            consequences: {
-              compute: -cost,
-              customers: 1,
-              scrutiny: 1,
-              marketAccess: useMarketAccess ? -1 : 0
-            }
-          });
-        }
+        if (player.capability < baseRequirement) continue;
+        decisions.push({
+          decisionId: `deploy_social_graph_${tile.instanceId}`,
+          label: decisionLabel("socialGraphDeploy", {
+            destination: tile.name
+          }),
+          actionId,
+          parameters: {
+            destinationId: tile.instanceId,
+            destinationCategory: tile.category,
+            computeCost: cost,
+            socialGraph: true
+          },
+          consequences: {
+            compute: -cost,
+            customers: 1,
+            scrutiny: 1
+          }
+        });
       }
     }
     if (
       actionId === "research" &&
-      player.factionId === "imperial_research_lab" &&
-      this.round >= 4 &&
+      this.hasFactionAbility(player, "scaling_law_breakthrough") &&
       !player.factionAbilityUsed.scalingLawBreakthrough
     ) {
       decisions.push(...decisions.map((decision) => ({
@@ -2297,30 +1993,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (this.regime.cycle?.ceoLockedSeat === seat) {
       decisions = decisions.filter((decision) => decision.parameters?.pieceId !== "ceo");
-    }
-    if (actionId === "build" && player.buildDiscounts > 0) {
-      decisions = decisions.flatMap((decision) => [
-        {
-          ...clone(decision),
-          parameters: {
-            ...decision.parameters,
-            useBuildDiscount: false
-          }
-        },
-        {
-          ...clone(decision),
-          decisionId: `${decision.decisionId}_build_discount`,
-          label: `${decision.label}; ${decisionLabel("useBuildDiscount")}`,
-          parameters: {
-            ...decision.parameters,
-            useBuildDiscount: true
-          },
-          consequences: {
-            ...decision.consequences,
-            buildDiscounts: -1
-          }
-        }
-      ]);
     }
     return decisions
       .map((decision) => this.adjustDecision(player, decision))
@@ -2346,9 +2018,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         ? this.rulesVariant.fundVenture
         : this.rulesVariant.fundConservative;
       if (category === "capital") result.parameters.actualRunway += 1;
-      if (player.seat === this.spotlightSeat && !player.roundMetrics.spotlightFundUsed) {
-        result.parameters.actualRunway += 1;
-      }
       const superconductor = this.regime.cycle?.superconductor;
       if (superconductor === "fraud") {
         result.parameters.actualRunway += 3;
@@ -2365,9 +2034,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       let cost = category === "consumer" ? 0 : this.rulesVariant.deployComputeCost;
       if (this.regime.cycle?.id === "ten_dollar_intelligence") cost = 0;
       if (player.tacticModifiers.api_price_cut) cost = 0;
-      if (player.tacticModifiers.economicBenchmark) cost = 0;
       if (
-        player.factionId === "platform_empire" &&
+        this.hasFactionAbility(player, "installed_base") &&
         ["consumer", "media"].includes(category) &&
         !player.roundMetrics.installedBaseUsed
       ) cost = 0;
@@ -2402,10 +2070,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         destination?.id === "renewable_basin" &&
         source?.id === "clean_infrastructure"
       ) cost -= 1;
-      if (result.parameters.useBuildDiscount) cost -= 1;
       const costBeforeIndustrialVelocity = Math.max(0, cost);
       if (
-        player.factionId === "vertical_empire" &&
+        this.hasFactionAbility(player, "industrial_velocity") &&
         this.rulesVariant.verticalIndustrialVelocityBuildModes.includes(mode) &&
         !player.roundMetrics.industrialVelocityUsed
       ) cost -= this.rulesVariant.verticalIndustrialVelocityDiscount;
@@ -2656,8 +2323,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       target.roundMetrics.jointVenturesCompleted += 1;
       player.history.jointVenturePartners.push(targetSeat);
       target.history.jointVenturePartners.push(seat);
-      if (player.factionId === "coalition_lab") this.addResource(player, "runway", 1);
-      if (player.factionId === "coalition_lab") {
+      if (this.hasFactionAbility(player, "strategic_partnership")) {
+        this.addResource(player, "runway", 1);
         const left = player.facilities.find(
           (facility) => facility.id === decision.parameters.leftFacilityId
         );
@@ -2742,26 +2409,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       safety: player.safety
     };
     let scientificMethodUsedThisResolution = false;
-    if (decision.actionId === "organize" && decision.parameters?.yearOfEfficiency) {
-      const team = player.pieces.find((piece) => piece.kind === "team");
-      if (team) {
-        player.pieces = player.pieces.filter((piece) => piece.id !== team.id);
-        player.teamsInSupply += 1;
-        this.addResource(player, "runway", 3);
-        for (const piece of player.pieces) {
-          const current = this.board.find((tile) => tile.instanceId === piece.tileId);
-          const options = this.board
-            .filter((tile) => axialDistance(current, tile) <= 1)
-            .sort((left, right) =>
-              Number(right.instanceId === decision.parameters.destinationId) -
-                Number(left.instanceId === decision.parameters.destinationId) ||
-              left.instanceId.localeCompare(right.instanceId)
-            );
-          if (options[0]) piece.tileId = options[0].instanceId;
-        }
-        player.roundMetrics.yearEfficiencyUsed = true;
-      }
-    }
     if (decision.actionId === "organize" && decision.parameters?.mode === "recruit") {
       this.spendRunway(player, decision.parameters.cost, {
         cause: "organize_recruit",
@@ -2835,7 +2482,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         cause: "build_link",
         conversionEligible: true
       });
-      if (decision.parameters.useBuildDiscount) player.buildDiscounts -= 1;
       player.links.push(decision.parameters.facilityId);
       player.linkSupply -= 1;
       this.movePiece(player, decision.parameters);
@@ -2848,19 +2494,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const tile = this.board.find(
         (candidate) => candidate.instanceId === decision.parameters.destinationId
       );
-      if (tile && POLITICAL_CATEGORIES.has(tile.category)) {
-        const count = 2 + Number(
-          !decision.parameters.suppressDestinationBonus &&
-          ["media", "government"].includes(tile.category)
-        );
-        for (let index = 0; index < count; index += 1) {
-          if (player.influence.length < this.config.playerSupply.influenceCubes) {
-            player.influence.push({ tileId: tile.instanceId });
-          } else if (player.influence.length) {
-            player.influence[index % player.influence.length].tileId = tile.instanceId;
-          }
-        }
-      }
+      if (!tile) throw new Error("Influence resolution requires a board destination.");
       if (decision.parameters.mode === "terminate_joint_venture") {
         this.terminateJointVenture(player.seat, decision.parameters.contractId);
       }
@@ -2878,7 +2512,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       : !player.roundMetrics.scientificMethodUsed;
     const scientificMethodProtection =
       decision.actionId === "research" &&
-      player.factionId === "imperial_research_lab" &&
+      this.hasFactionAbility(player, "scientific_method") &&
       player.runway >= scientificMethodRunwayCost &&
       player.safety === 0 &&
       decision.parameters?.destinationCategory !== "research" &&
@@ -2941,7 +2575,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const actual = decision.parameters.actualRunway ?? expected;
       this.addResource(player, "runway", actual - expected);
       player.roundMetrics.fundRunway += actual;
-      player.roundMetrics.spotlightFundUsed = true;
       if (decision.parameters.extraScrutiny) this.addScrutiny(player, decision.parameters.extraScrutiny);
     }
     if (decision.actionId === "research") {
@@ -2968,28 +2601,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.regime.cycle?.id === "professional_exam_sweep" &&
         gained >= 3
       ) {
-        player.marketAccess += 1;
-        if (gained >= 5) this.addResource(player, "trust", 1);
+        this.addResource(player, "trust", 1);
+        if (gained >= 5) this.removeScrutiny(player, 1);
       }
       if (this.regime.cycle?.id === "benchmark_is_economy" && gained >= 3) {
-        player.tacticModifiers.economicBenchmark = true;
+        this.awardMandate(player, 1, "benchmark_is_economy");
       }
       if (player.tacticModifiers.benchmark_optimization && gained > 0) {
         this.addResource(player, "capability", 1);
         this.addScrutiny(player, 1);
         delete player.tacticModifiers.benchmark_optimization;
-      }
-      if (player.factionId === "imperial_research_lab" && this.round >= 3 && gained >= 5) {
-        const trustBeforeNobel = player.trust;
-        this.addResource(
-          player,
-          "trust",
-          this.rulesVariant.imperialNobelTrust
-        );
-        this.recordFactionAbility(player, "nobel_effect", {
-          trustGained: player.trust - trustBeforeNobel,
-          qualifyingCapability: gained
-        });
       }
       player.roundMetrics.bestTrainingDomains = Math.max(
         player.roundMetrics.bestTrainingDomains,
@@ -3015,9 +2636,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
     if (decision.actionId === "build" && decision.parameters?.actualRunwayCost !== undefined) {
-      if (decision.parameters.useBuildDiscount) player.buildDiscounts -= 1;
       if (
-        player.factionId === "vertical_empire" &&
+        this.hasFactionAbility(player, "industrial_velocity") &&
         this.rulesVariant.verticalIndustrialVelocityBuildModes.includes(
           decision.parameters.buildMode
         ) &&
@@ -3046,19 +2666,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.runway += 1;
         this.awardMandate(player, 1, "reactor_restart_one_model");
         this.regime.cycle.reactorClaimed = true;
-        const government = this.board.find((tile) => tile.category === "government");
-        for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
-          if (rival.influence.length < this.config.playerSupply.influenceCubes) {
-            rival.influence.push({ tileId: government.instanceId });
-          }
-        }
       }
     }
     if (decision.actionId === "deploy") {
-      if (decision.parameters.useMarketAccess) player.marketAccess -= 1;
       player.roundMetrics.deployed = true;
       if (!player.history.deployRounds.includes(this.round)) player.history.deployRounds.push(this.round);
-      if (player.factionId === "safety_laboratory" && this.round >= 3 &&
+      if (this.hasFactionAbility(player, "audited_deployment") &&
         !player.roundMetrics.auditedDeployUsed) {
         const scrutinyBeforeAudit = player.scrutiny;
         this.removeScrutiny(player, 1);
@@ -3068,15 +2681,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           deploymentsCovered: 1
         });
       }
-      if (player.factionId === "platform_empire" &&
+      if (this.hasFactionAbility(player, "installed_base") &&
         ["consumer", "media"].includes(decision.parameters.destinationCategory)) {
         player.roundMetrics.installedBaseUsed = true;
       }
       if (decision.parameters.socialGraph) player.roundMetrics.socialGraphUsed = true;
-      if (player.seat === this.spotlightSeat && !player.roundMetrics.spotlightRiskUsed) {
-        this.addScrutiny(player, 1);
-        player.roundMetrics.spotlightRiskUsed = true;
-      }
       if (this.regime.cycle?.id === "ten_dollar_intelligence") this.addScrutiny(player, 1);
       if (
         this.regime.cycle?.id === "synthetic_celebrity" &&
@@ -3098,25 +2707,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.roundMetrics.discountedCustomerNoIncome =
           (player.roundMetrics.discountedCustomerNoIncome || 0) + 1;
         delete player.tacticModifiers.api_price_cut;
-      }
-      if (player.tacticModifiers.economicBenchmark) {
-        this.awardMandate(player, 1, "economic_benchmark");
-        delete player.tacticModifiers.economicBenchmark;
-      }
-    }
-    if (decision.actionId === "influence") {
-      const destination = decision.parameters.destinationId;
-      const tile = this.board.find((candidate) => candidate.instanceId === destination);
-      if (tile && POLITICAL_CATEGORIES.has(tile.category)) {
-        const extra = !decision.parameters.suppressDestinationBonus &&
-          ["media", "government"].includes(tile.category) ? 1 : 0;
-        for (let index = 0; index < 2 + extra; index += 1) {
-          if (player.influence.length < this.config.playerSupply.influenceCubes) {
-            player.influence.push({ tileId: destination });
-          } else if (player.influence.length) {
-            player.influence[index % player.influence.length].tileId = destination;
-          }
-        }
       }
     }
 
@@ -3159,7 +2749,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   rewardFoundryComputeSpend(spenderSeat, spentCompute) {
     if (spentCompute < 2) return;
     for (const foundry of this.players.filter((candidate) =>
-      candidate.factionId === "foundry" &&
+      this.hasFactionAbility(candidate, "the_shovels") &&
       candidate.seat !== spenderSeat &&
       (candidate.roundMetrics.shovelTriggers || 0) <
         this.rulesVariant.foundryShovelsPerRound
@@ -3281,7 +2871,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.markAgiFunnel(player, "declared", "escalation_resolved", {
       supportingSeats: readiness.supportingSeats
     });
-    this.addScrutiny(player, 3 + (player.seat === this.spotlightSeat ? 1 : 0));
+    this.addScrutiny(player, 3);
     this.recordEvent(
       "agi_declared",
       player.seat,
@@ -3365,7 +2955,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.megaClusters.push(cluster);
         player.megaClusters.push(cluster);
         if (partner) partner.megaClusters.push(cluster);
-        this.addScrutiny(player, 2 + (seat === this.spotlightSeat ? 1 : 0));
+        this.addScrutiny(player, 2);
       }
     } else if (id === "reorganization") {
       for (const piece of player.pieces.filter((piece) => piece.kind === "team")) {
@@ -3387,20 +2977,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     } else if (id === "open_weights") {
       player.history.openWeightsCapabilitySnapshot = this.players.map((candidate) => candidate.capability);
       for (const candidate of this.players) this.addResource(candidate, "capability", 1);
-      this.addResource(player, "trust", player.factionId === "platform_empire" ? 3 : 2);
-      if (player.factionId === "platform_empire") player.marketAccess += 1;
+      this.addResource(player, "trust", 2);
       this.removeScrutiny(player, 1);
-      const media = this.board.find((tile) => tile.category === "media");
-      if (media && player.influence.length < this.config.playerSupply.influenceCubes) {
-        player.influence.push({ tileId: media.instanceId });
-      }
     } else if (id === "narrative_capture") {
-      for (const category of ["media", "government", "capital"]) {
-        const tile = this.board.find((candidate) => candidate.category === category);
-        if (player.influence.length < this.config.playerSupply.influenceCubes) {
-          player.influence.push({ tileId: tile.instanceId });
-        }
-      }
       if (decision.parameters.mode === "scrutiny") this.removeScrutiny(player, 2);
       else if (decision.parameters.mode === "runway") this.addResource(player, "runway", 2);
       else this.addScrutiny(this.players[decision.parameters.targetSeat], 1);
@@ -3461,10 +3040,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       this.addScrutiny(
         player,
-        (this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 4 : 3) +
-          (seat === this.spotlightSeat && !player.roundMetrics.spotlightRiskUsed ? 1 : 0)
+        this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 4 : 3
       );
-      if (seat === this.spotlightSeat) player.roundMetrics.spotlightRiskUsed = true;
     } else if (id === "declare_agi") {
       this.declareAgi(player);
     } else if (id === "fusion_demonstrator") {
@@ -3537,8 +3114,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addResource(player, "runway", 1);
     } else if (facility.category === "chip") {
       this.addResource(player, "compute", 1);
+      this.addResource(player, "runway", 1);
       player.roundMetrics.computeProduced += 1;
-      player.buildDiscounts = Math.min(2, player.buildDiscounts + 1);
     } else if (facility.category === "capital") {
       this.addResource(player, "runway", 2);
     } else if (facility.category === "talent") {
@@ -3583,7 +3160,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     } else if (facility.category === "media") {
       this.removeScrutiny(player, 1);
     } else if (facility.category === "government") {
-      player.policyShields = Math.min(2, player.policyShields + 1);
+      this.addResource(player, "trust", 1);
     } else if (facility.category === "energy") {
       const tile = this.board.find((candidate) => candidate.instanceId === facility.tileId);
       if (tile?.id === "grid_reactor") {
@@ -3987,7 +3564,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (facility) => facility.id === contract.right.facilityId
       );
       const range = [leftPlayer, rightPlayer].some(
-        (candidate) => candidate.factionId === "coalition_lab"
+        (candidate) => this.hasFactionAbility(candidate, "strategic_partnership")
       ) ? 2 : 1;
       if (!left?.powered || !right?.powered) continue;
       const leftTile = this.board.find((tile) => tile.instanceId === left.tileId);
@@ -4114,7 +3691,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         } else if (player.runway > 0) {
           this.spendRunway(player, 1, { cause: "player_audit" });
         }
-        else if (player.policyShields > 0) player.policyShields -= 1;
         else this.addResource(player, "trust", -1);
       }
     }
@@ -4188,7 +3764,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (id === "alignment_as_service") return player.trust >= 4 && player.jointVentures.length > 0;
     if (id === "everyone_customer") return player.history.deployRounds.length >= 2;
-    if (id === "regulatory_moat") return player.policyShields >= 1 && this.controller("government") === player.seat;
+    if (id === "regulatory_moat") {
+      return player.trust >= 4 && this.controller("government") === player.seat;
+    }
     if (id === "recursive_revenue") {
       return player.customers > 0 && player.facilities.length > 0 &&
         this.facilityComponents(player).some((component) => component.length >= 2) &&
@@ -4562,13 +4140,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.selectedAction = null;
       return;
     }
-    const capabilityBefore = player.capability;
-    const scrutinyBefore = player.scrutiny;
-    const runwayBefore = player.runway;
-    const dealFlowCreditsBefore = clone(player.dealFlowRunwayCredits);
-    const dealFlowConversionBefore = clone(player.metrics.dealFlowConversion);
-    const trustBefore = player.trust;
-    const safetyBefore = player.safety;
     let legal = this.legalResolutions(seat, player.selectedAction);
     if (orbitalUsed) {
       legal = legal.filter((decision) => {
@@ -4600,155 +4171,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
     await this.resolveFrontierBridge(policies, seat, decision);
     if (trade?.timing === "after") await this.settleImmediateTrade(policies, seat, trade);
-    if (
-      decision.actionId === "organize" &&
-      player.factionId === "coalition_lab" &&
-      this.round === 2 &&
-      !player.roundMetrics.boardReshuffleUsed
-    ) {
-      const readyable = [...new Set(player.actionsUsed.filter((action) =>
-        action !== "organize" && this.config.actions.some((candidate) => candidate.id === action)
-      ))];
-      if (readyable.length) {
-        const choice = await this.choose(policies, seat, "board_reshuffle", [
-          {
-            decisionId: "board_reshuffle_pass",
-            label: decisionLabel("keepBoard"),
-            actionId: "faction"
-          },
-          ...readyable.map((action) => ({
-            decisionId: `board_reshuffle_ready_${action}`,
-            label: decisionLabel("readyAction", { action }),
-            actionId: "faction",
-            parameters: { action }
-          }))
-        ]);
-        if (choice.parameters?.action) {
-          const index = player.actionsUsed.indexOf(choice.parameters.action);
-          player.actionsUsed.splice(index, 1);
-          this.addScrutiny(player, 1);
-          player.roundMetrics.boardReshuffleUsed = true;
-          this.recordFactionAbility(player, "board_reshuffle", {
-            coreActionsReadied: 1,
-            scrutinyAdded: 1
-          });
-        }
-      }
-    }
-    if (
-      decision.actionId === "research" &&
-      player.capability === capabilityBefore &&
-      player.scrutiny > scrutinyBefore &&
-      player.lastTrainingResult?.crashProtectable
-    ) {
-      const safety = this.players.find((candidate) =>
-        candidate.factionId === "safety_laboratory" &&
-        candidate.seat !== seat &&
-        this.round === 2 &&
-        !candidate.roundMetrics.responsibleScalingUsed &&
-        candidate.safety > 0 &&
-        player.runway > 0
-      );
-      if (safety) {
-        const offer = await this.choose(policies, safety.seat, "responsible_scaling_offer", [
-          {
-            decisionId: "responsible_offer",
-            label: decisionLabel("responsibleOffer"),
-            actionId: "faction"
-          },
-          {
-            decisionId: "responsible_decline",
-            label: decisionLabel("responsibleDecline"),
-            actionId: "faction"
-          }
-        ]);
-        this.recordFactionAbility(safety, "responsible_scaling", {
-          uses: 0,
-          offersMade: 1
-        });
-        if (offer.decisionId === "responsible_offer") {
-          const response = await this.choose(policies, seat, "responsible_scaling_response", [
-            {
-              decisionId: "responsible_accept",
-              label: decisionLabel("responsibleAccept"),
-              actionId: "faction"
-            },
-            {
-              decisionId: "responsible_reject",
-              label: decisionLabel("responsibleReject"),
-              actionId: "faction"
-            }
-          ]);
-          if (response.decisionId === "responsible_accept") {
-            const trustBeforeSale = safety.trust;
-            const replayed = simulateTrainingRun(
-              this.config,
-              `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:training`,
-              {
-                deck: player.lastTrainingResult.deckSnapshot,
-                stopAt: decision.parameters.stopAt,
-                runway: runwayBefore,
-                safety: 1
-              }
-            );
-            player.capability = capabilityBefore;
-            player.trust = trustBefore;
-            player.safety = safetyBefore;
-            player.runway = runwayBefore;
-            player.dealFlowRunwayCredits = clone(dealFlowCreditsBefore);
-            player.metrics.dealFlowConversion = clone(dealFlowConversionBefore);
-            this.beginRunwayConversionContext(
-              player,
-              decision,
-              "responsible_scaling_replay"
-            );
-            this.spendRunway(player, replayed.runwaySpent, {
-              cause: "research_training",
-              conversionEligible: true
-            });
-            this.spendRunway(player, 1, { cause: "responsible_scaling_payment" });
-            player.scrutiny = scrutinyBefore;
-            this.addResource(player, "capability", replayed.capability);
-            this.addResource(player, "trust", replayed.trust);
-            this.addScrutiny(player, replayed.scrutiny);
-            player.lastTrainingResult = replayed;
-            player.metrics.researchCapability[
-              player.metrics.researchCapability.length - 1
-            ] = replayed.capability;
-            safety.safety -= 1;
-            this.addResource(safety, "runway", 1);
-            this.addResource(safety, "trust", 1);
-            safety.roundMetrics.responsibleScalingUsed = true;
-            this.recordFactionAbility(safety, "responsible_scaling", {
-              acceptedSales: 1,
-              safetySold: 1,
-              runwayGained: 1,
-              trustGained: safety.trust - trustBeforeSale
-            });
-            this.synchronizePublicMandate(player, "responsible_scaling");
-            this.endRunwayConversionContext(player);
-          } else {
-            this.recordFactionAbility(safety, "responsible_scaling", {
-              uses: 0,
-              offersRejected: 1
-            });
-          }
-        } else {
-          this.recordFactionAbility(safety, "responsible_scaling", {
-            uses: 0,
-            offersDeclined: 1
-          });
-        }
-      }
-    }
     player.selectedAction = null;
   }
 
   async maybeUseOrbitalCompute(policies, seat) {
     const player = this.players[seat];
     if (
-      player.factionId !== "vertical_empire" ||
-      this.round < 4 ||
+      !this.hasFactionAbility(player, "orbital_compute") ||
       player.factionAbilityUsed.orbitalCompute ||
       !player.facilities.length
     ) return false;

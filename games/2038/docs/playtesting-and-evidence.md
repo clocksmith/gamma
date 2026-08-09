@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.6.0-rc.3-test`
+**Rules under review:** `0.7.0-rc.1-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -103,12 +103,20 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.6.0-rc.3-test`. Executable
-game `0.9.2` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.1-test`. Executable
+game `0.10.0` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
+
+Candidate `0.7.0-rc.1-test` and executable `0.10.0` establish the simplified
+baseline selected on 2026-08-08: one location-defined Generator, two programs
+per Faction, presence-only politics, removal of seven stored-token families,
+and the tightened Default/Advanced boundary. The earlier single-Generator
+matrix qualifies only that isolated contract and its executable integrity. No
+historical report establishes the combined package’s balance, negotiation
+quality, or physical teachability; those gates restart from this identity.
 
 Candidate `0.6.0-rc.3-test` changes no physical rule from rc.2. Executable
 `0.9.2` adds the inactive, receipt-bound `single-generator-default` comparison
@@ -265,8 +273,8 @@ diagnostics rather than balance-authority evidence.
 - Trust and Mandate changes with causes;
 - Loopfold AI’s lead after every Production;
 - Corthaven’s Shovels income;
-- every New Architecture offer, acceptance, rival benefit, and Corthaven
-  self-Compute gain;
+- every Allocation Window offer, counteroffer, acceptance, and Corthaven
+  Runway gain from The Shovels;
 - every Industrial Velocity discount, whether it reduced the final paid cost
   of a completed Facility, and any Mandate awarded;
 - Era Mandate qualification and result;

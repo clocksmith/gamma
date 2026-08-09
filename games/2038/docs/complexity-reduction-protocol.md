@@ -1,31 +1,35 @@
 # Complexity-Reduction Candidate Protocol
 
-This protocol governs proposed reductions to Mandate 2038’s mechanical density.
-It protects the current Default Game while allowing narrative-rich alternatives
-to be tested as isolated rules candidates.
+This protocol governs future reductions to Mandate 2038’s mechanical density.
+It preserves a named current baseline while allowing alternatives to be tested
+as isolated rules candidates.
 
 ## Authority and status
 
 The canonical Default Game remains the `defaultGame` profile in
-`content/data/game-config.json`. The three candidates in the Rule-Change Register
-are proposed and inactive. They must not be added to `playRuleModules` or either
-supported profile until they pass this protocol.
+`content/data/game-config.json`. Accepted baseline simplifications are not
+optional rule modules. A future candidate must be registered as proposed and
+remain outside `playRuleModules` and both supported profiles until selected.
 
 The source of status is `content/data/rule-change-register.json`; the generated
 ledger is `dist/docs/rule-change-register.md`. Rationale belongs in this protocol
 and `docs/design-decisions.md`; player-facing rules belong in `content/copy/` only
 after a candidate is accepted.
 
-## Candidate queue
+## Current simplified baseline
 
-| Candidate | Isolated change | Protected identity | Primary risk |
+| Accepted decision | Canonical change | Protected identity | Remaining evidence question |
 | --- | --- | --- | --- |
-| [`single-generator-default`](../experimental/single-generator-default.md) | One Generator per player; remove source selectors and the second Generator | Energy geography, Power negotiation, Scrutiny, Grid-Ready AGI | Energy-site dominance or first-player advantage |
-| `presence-only-politics` | Remove Influence cubes; use CEO, Team, and Facility presence for political access | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Presence becomes a universal movement bonus and politics loses persistence |
-| `two-program-factions` | One persistent identity and one signature program per faction | Six institutional identities and protected faction strengths | Factions become shallow or signature programs become compulsory |
+| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, Grid-Ready AGI | Energy-site dominance or Initiative advantage |
+| `presence-only-politics` | CEO, Team, and Facility presence replaces Influence cubes | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
+| `two-program-factions` | One persistent identity and one signature program per Faction | Six institutional identities and protected strengths | Factions become shallow or scripted |
+| `stored-token-consolidation` | Seven stored-token families become immediate effects | Meaningful timing and resource decisions | Removed memory may reduce long-horizon planning |
+| `simplified-profile-boundary` | Default is the teachable core; Advanced adds six distinct experiences | One coherent baseline and one coherent expansion | Advanced setup cost exceeds its added strategic value |
 
-The stored-token economy is a later queue, not part of these three tests. Do not
-combine it with a candidate in the first evidence pass.
+Selection authorizes implementation, not a balance claim. The original
+single-Generator candidate and its receipts remain in `experimental/` and
+`evidence/` as historical provenance; the canonical contract now lives in
+`content/data/game-config.json` and player-facing rules.
 
 ## Test sequence
 

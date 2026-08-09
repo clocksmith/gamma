@@ -365,7 +365,6 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     facilities: [],
     generators: [],
     links: [],
-    influence: [],
     startingGridConnection: {
       ...structuredClone(config.board.startingGridConnection),
       assignedFacilityId: null
@@ -608,13 +607,16 @@ function resolveCore(config, state, actionId, destination, options) {
     }
     if (mode === "generator") {
       if (state.round < 2) return "Generator failed: industrial Power unlocks in Capacity.";
-      const source = config.powerSources.find((entry) => entry.id === options.powerSource);
       if (destination.category !== "energy") return "Generator failed: acting piece must end on an Energy location.";
-      if (!source || source.round > state.round) return "Generator failed: selected source is unavailable.";
-      if (player.runway < source.runwayCost || player.generators.length >= 2) {
+      const locationRule = config.singleGeneratorRule.locations[destination.id];
+      const source = locationRule && config.powerSources.find(
+        (entry) => entry.id === locationRule.sourceId
+      );
+      if (!source || source.round > state.round) return "Generator failed: this Energy location has no available source.";
+      if (player.runway < locationRule.constructionCost || player.generators.length >= 1) {
         return "Generator failed: insufficient Runway or no Generator supply.";
       }
-      player.runway -= source.runwayCost;
+      player.runway -= locationRule.constructionCost;
       addResource(config, player, "trust", source.trust || 0);
       addScrutiny(config, player, source.scrutinyOnBuild || 0);
       player.generators.push({
@@ -659,9 +661,18 @@ function resolveCore(config, state, actionId, destination, options) {
   }
 
   if (actionId === "influence") {
-    addResource(config, player, "trust", 1);
-    player.influence.push({ tileId: destination.instanceId });
-    return `Influence placed near ${destination.name}; +1 Trust.`;
+    if (!["media", "government", "capital"].includes(destination.category)) {
+      return "Influence failed: the acting piece must end at Media, Government, or Capital.";
+    }
+    if (options.influenceMode === "scrutiny") {
+      const removed = destination.category === "media" ? 2 : 1;
+      player.auditBag.splice(0, Math.min(removed, player.auditBag.length));
+      player.scrutiny = player.auditBag.length;
+      return `Political presence at ${destination.name} removes up to ${removed} Scrutiny.`;
+    }
+    const gained = destination.category === "government" ? 2 : 1;
+    addResource(config, player, "trust", gained);
+    return `Political presence at ${destination.name}: +${gained} Trust.`;
   }
 
   return `${actionId} is recorded but not automated in this study.`;

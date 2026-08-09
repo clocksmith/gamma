@@ -25,6 +25,7 @@ const FACILITY_CATEGORIES = new Set([
   "government",
   "energy"
 ]);
+const POLITICAL_CATEGORIES = new Set(["media", "government", "capital"]);
 
 function clamp(value, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, value));
@@ -87,7 +88,6 @@ function createPlayer(
     selectedAction: null,
     facilities: [],
     generators: [],
-    influence: [],
     pieces: [
       { id: `s${seat}-ceo`, kind: "ceo", tileId: frontierId },
       ...Array.from({ length: config.playerSupply.teams }, (_, index) => ({
@@ -238,9 +238,7 @@ export class CoreEconomyMatch {
       actionsUsed: [...player.actionsUsed],
       pieces: this.copyPublic(player.pieces),
       facilities: this.copyPublic(player.facilities),
-      generators: this.copyPublic(player.generators),
-      influence: this.copyPublic(player.influence || []),
-      experts: this.copyPublic(player.experts || [])
+      generators: this.copyPublic(player.generators)
     };
   }
 
@@ -267,13 +265,7 @@ export class CoreEconomyMatch {
           .map((facility) => ({ type: "facility", ownerSeat: player.seat, ...this.copyPublic(facility) })),
         ...player.generators
           .filter((generator) => generator.tileId === tile.instanceId)
-          .map((generator) => ({ type: "generator", ownerSeat: player.seat, ...this.copyPublic(generator) })),
-        ...(player.influence || [])
-          .filter((influence) => influence.tileId === tile.instanceId)
-          .map((influence) => ({ type: "influence", ownerSeat: player.seat, ...this.copyPublic(influence) })),
-        ...(player.experts || [])
-          .filter((expert) => expert.tileId === tile.instanceId)
-          .map((expert) => ({ type: "expert", ownerSeat: player.seat, ...this.copyPublic(expert) }))
+          .map((generator) => ({ type: "generator", ownerSeat: player.seat, ...this.copyPublic(generator) }))
       ])
     }));
   }
@@ -452,12 +444,11 @@ export class CoreEconomyMatch {
           player.generators.length < this.config.playerSupply.generators &&
           this.generatorOccupancy(destination.instanceId) < 3
         ) {
-          for (const source of this.config.powerSources.filter(
-            (candidate) =>
-              !candidate.isEscalation &&
-              candidate.round <= this.round &&
-              candidate.runwayCost <= player.runway
-          )) {
+          const locationRule = this.config.singleGeneratorRule.locations[destination.id];
+          const source = locationRule && this.config.powerSources.find(
+            (candidate) => candidate.id === locationRule.sourceId
+          );
+          if (source && locationRule.constructionCost <= player.runway) {
             decisions.push({
               decisionId: `build_generator_${source.id}_${suffix}`,
               label: renderSimulationCopy(simulationCopy.decisions.moveAndBuildPower, {
@@ -468,7 +459,7 @@ export class CoreEconomyMatch {
               actionId,
               parameters: { ...base, buildMode: "generator", sourceId: source.id },
               consequences: {
-                runway: -source.runwayCost,
+                runway: -locationRule.constructionCost,
                 generation: source.capacity,
                 scrutiny: source.scrutinyOnBuild || 0
               }
@@ -508,6 +499,7 @@ export class CoreEconomyMatch {
       }
 
       if (actionId === "influence") {
+        if (!POLITICAL_CATEGORIES.has(destination.category)) return [];
         const decisions = [];
         decisions.push({
           decisionId: `influence_gain_trust_${suffix}`,
@@ -517,7 +509,11 @@ export class CoreEconomyMatch {
           }),
           actionId,
           parameters: { ...base, mode: "trust" },
-          consequences: { trust: player.trust < this.config.resources.trust.cap ? 1 : 0 }
+          consequences: {
+            trust: player.trust < this.config.resources.trust.cap
+              ? destination.category === "government" ? 2 : 1
+              : 0
+          }
         });
         if (player.scrutiny > 0) {
           decisions.push({
@@ -528,7 +524,7 @@ export class CoreEconomyMatch {
             }),
             actionId,
             parameters: { ...base, mode: "scrutiny" },
-            consequences: { scrutiny: -1 }
+            consequences: { scrutiny: destination.category === "media" ? -2 : -1 }
           });
         }
         return decisions;
@@ -650,9 +646,11 @@ export class CoreEconomyMatch {
       player.customers += 1;
       this.addScrutiny(player, 1);
     } else if (decision.actionId === "influence") {
-      if (parameters.mode === "trust") this.addResource(player, "trust", 1);
-      else this.removeScrutiny(player, 1);
-      player.influence.push({ tileId: parameters.destinationId });
+      if (parameters.mode === "trust") {
+        this.addResource(player, "trust", parameters.destinationCategory === "government" ? 2 : 1);
+      } else {
+        this.removeScrutiny(player, parameters.destinationCategory === "media" ? 2 : 1);
+      }
     }
 
     player.actionsUsed.push(decision.actionId);

@@ -14,10 +14,9 @@ player-facing prose in `copy/`.
 `tactics-rules.md` is the generated-source rule document for the Tactics
 module; it remains excluded from Default Game.
 
-[`single-generator-default.md`](single-generator-default.md) freezes the first
-complexity-reduction candidate and its paired unified-matrix configuration. It
-is executable only through an explicit `rulesVariant` overlay and is not active
-in either supported play profile.
+[`single-generator-default.md`](single-generator-default.md) preserves the
+historical pre-promotion candidate and its paired comparison configuration.
+Current play takes the promoted rule directly from canonical game data.
 
 Do not include these modules in Default Game component counts, rules, balance
 studies, or physical playtests. A future variant must explicitly enable and

@@ -57,7 +57,6 @@ negotiated adjacency matter.
 - CEO: two presence
 - Team: one presence
 - Facility: one presence
-- ${terms.actions.influence} cube on ${terms.locations.media}, ${terms.locations.government}, or ${terms.locations.capital}: one presence
 
 The player with the most presence controls the hex. Ties mean nobody controls
 it.
@@ -69,11 +68,11 @@ it.
 | ${terms.locations.research} | Once this ${terms.systems.trainingRun}, protect one duplicate as if spending ${terms.resources.safety} | Gain one ${terms.resources.safety} token | ${terms.resources.compute} |
 | ${terms.locations.cloud} | First ${terms.resources.compute} cost is reduced by one | Gain two ${terms.resources.compute} | ${terms.resources.compute} |
 | ${terms.locations.consumer} | ${terms.actions.deploy} costs zero ${terms.resources.compute} | Gain one ${terms.resources.runway} | ${terms.resources.runway} |
-| ${terms.locations.chip} | ${terms.actions.build} costs one less ${terms.resources.runway} | Gain one ${terms.resources.compute} and one ${terms.actions.build} discount | ${terms.resources.compute} |
+| ${terms.locations.chip} | ${terms.actions.build} costs one less ${terms.resources.runway} | Gain one ${terms.resources.compute} and one ${terms.resources.runway} | ${terms.resources.compute} |
 | ${terms.locations.capital} | ${terms.actions.fund} gains one ${terms.resources.runway} | Gain two ${terms.resources.runway} | ${terms.resources.runway} |
 | ${terms.locations.talent} | Recruit costs one less ${terms.resources.runway} | Move one Team one hex during Production | ${terms.resources.runway} |
-| ${terms.locations.media} | ${terms.actions.influence} may place or relocate one additional cube | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
-| ${terms.locations.government} | ${terms.actions.influence} may place or relocate one additional cube on ${terms.locations.government} | Gain one Policy Shield | ${terms.resources.runway} |
+| ${terms.locations.media} | ${terms.actions.influence} may remove one additional ${terms.playerTracks.scrutiny} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
+| ${terms.locations.government} | ${terms.actions.influence} may gain one additional ${terms.playerTracks.trust} | Gain one ${terms.playerTracks.trust} | ${terms.resources.runway} |
 | ${terms.locations.grid} | Infrastructure ${terms.actions.build} costs one less | Gain one ${terms.resources.compute} | ${terms.resources.compute} |
 | ${terms.locations.renewable} | ${terms.technology.cleanInfrastructure} costs one less ${terms.resources.runway} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
 | ${terms.locations.frontier} | After Act, you may gain one ${terms.resources.runway} and add one ${terms.playerTracks.scrutiny} | No Facility spaces | None |

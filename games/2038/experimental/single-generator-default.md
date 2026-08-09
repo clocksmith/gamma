@@ -1,12 +1,12 @@
-# Single-Generator Default candidate
+# Single-Generator Default historical candidate
 
-**Status:** proposed isolated test; inactive in Default Game and Advanced Play.
+**Status:** promoted into the canonical baseline; retained only as evidence provenance.
 
-This candidate removes the ordinary Generator source-selection decision and one
-Generator piece from each player. It does not change the canonical profiles.
-Pass
+This file records the frozen contract that preceded promotion. The authoritative
+rule now lives in `content/data/game-config.json`; both supported profiles use
+it. The historical paired configuration remains at
 [`data/single-generator-default.rules-configurations.json`](data/single-generator-default.rules-configurations.json)
-to the unified matrix only when running this registered comparison.
+for replaying the registered comparison, not for configuring current play.
 
 ## Frozen candidate contract
 
@@ -22,7 +22,7 @@ to the unified matrix only when running this registered comparison.
   it supplies three Power, grants one Trust when built, and has no recurring
   Scrutiny.
 - A player never chooses or records an ordinary source separately from the
-  Generator's Energy location. Earned Build discounts still apply normally.
+  Generator's Energy location.
 - An ordinary Generator supplies only the owner's Facilities on its own or an
   adjacent hex. The starting grid remains dedicated to the first Facility.
 - Production retains one purchase request in Default Game. Each supplier may
@@ -38,8 +38,8 @@ to the unified matrix only when running this registered comparison.
 
 ## Evidence boundary
 
-This file is a test contract, not player-facing rules and not evidence that the
-candidate is balanced. The registered comparison must use common seeds and
+This file is historical evidence, not player-facing rules and not evidence that
+the promoted baseline is balanced. Any renewed comparison must use common seeds and
 paired canonical/candidate arms at three, four, and five players. Rotate
 Faction and Initiative seats, retain weighted and greedy backend regimes, and
 report legality, replay integrity, Power trades, Grid-Ready progression,
@@ -47,6 +47,5 @@ Generator-location choice, Audit exposure, AGI declarations, and faction/seat
 outcomes.
 
 Human sessions must separately record teachability, source-selection errors,
-Energy-location contention, negotiation quality, agency, and downtime. Promote
-the candidate only after the complexity-reduction protocol's automated and
-human gates pass and the user explicitly approves the rules change.
+Energy-location contention, negotiation quality, agency, and downtime. The user
+selected promotion; those open human questions remain release evidence gaps.

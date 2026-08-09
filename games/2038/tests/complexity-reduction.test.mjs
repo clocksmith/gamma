@@ -10,19 +10,6 @@ const root = new URL("../", import.meta.url);
 const readJson = async (path) =>
   JSON.parse(await readFile(new URL(path, root), "utf8"));
 
-async function candidateOverlay() {
-  const configurations = await readJson(
-    "experimental/data/single-generator-default.rules-configurations.json"
-  );
-  assert.deepEqual(configurations.map((entry) => entry.id), [
-    "canonical",
-    "single-generator-default"
-  ]);
-  assert.deepEqual(configurations[0].overlay, {});
-  assert.deepEqual(Object.keys(configurations[1].overlay), ["singleGeneratorRule"]);
-  return configurations[1].overlay;
-}
-
 function maximizingPowerPolicy() {
   return {
     async decide(packet) {
@@ -46,50 +33,39 @@ function maximizingPowerPolicy() {
   };
 }
 
-test("single-generator candidate remains one explicit inactive rules lever", async () => {
-  const [config, overlay] = await Promise.all([
-    readJson("dist/runtime/game-config.json"),
-    candidateOverlay()
-  ]);
+test("single-generator contract is canonical in both play profiles", async () => {
+  const config = await readJson("dist/runtime/game-config.json");
   const defaultRules = effectiveRulesVariant(config);
   const advancedRules = effectiveRulesVariant(config, {
     playProfileId: "advanced-play"
   });
 
-  assert.equal(Object.hasOwn(defaultRules, "singleGeneratorRule"), false);
-  assert.equal(Object.hasOwn(advancedRules, "singleGeneratorRule"), false);
+  assert.equal(defaultRules.singleGeneratorRule.id, "single-generator-default");
+  assert.equal(advancedRules.singleGeneratorRule.id, "single-generator-default");
+  assert.deepEqual(defaultRules.singleGeneratorRule, advancedRules.singleGeneratorRule);
   assert.ok(!config.playProfiles.defaultGame.moduleIds.includes(
     "single-generator-default"
   ));
   assert.ok(!config.playProfiles.advancedPlay.moduleIds.includes(
     "single-generator-default"
   ));
-  assert.equal(
-    effectiveRulesVariant(config, overlay).singleGeneratorRule.id,
-    "single-generator-default"
-  );
 });
 
-test("single-generator candidate fails explicitly on an incomplete contract", async () => {
-  const [config, overlay] = await Promise.all([
-    readJson("dist/runtime/game-config.json"),
-    candidateOverlay()
-  ]);
-  const invalid = structuredClone(overlay);
-  delete invalid.singleGeneratorRule.locations.renewable_basin;
+test("single-generator contract fails explicitly when incomplete", async () => {
+  const config = await readJson("dist/runtime/game-config.json");
+  const invalid = structuredClone(config.singleGeneratorRule);
+  delete invalid.locations.renewable_basin;
 
   assert.throws(
-    () => effectiveRulesVariant(config, invalid),
+    () => effectiveRulesVariant(config, { singleGeneratorRule: invalid }),
     /requires exact grid_reactor and renewable_basin location rules/
   );
 });
 
-test("single-generator candidate derives source and cost from Energy location", async () => {
-  const overlay = await candidateOverlay();
+test("canonical Generator derives source and cost from Energy location", async () => {
   const { match } = await createInteractiveGame({
     playerCount: 3,
     seed: "single-generator-location-contract",
-    rulesVariant: overlay
   }, () => {});
   match.round = 2;
   match.players[0].runway = 10;
@@ -121,13 +97,11 @@ test("single-generator candidate derives source and cost from Energy location", 
   ]);
 });
 
-test("single-generator candidate enforces one ordinary piece and source effects", async () => {
-  const overlay = await candidateOverlay();
+test("canonical Generator enforces one ordinary piece and source effects", async () => {
   const createMatch = async (suffix) => {
     const { match } = await createInteractiveGame({
       playerCount: 3,
-      seed: `single-generator-effects-${suffix}`,
-      rulesVariant: overlay
+      seed: `single-generator-effects-${suffix}`
     }, () => {});
     match.round = 2;
     match.players[0].runway = 10;
@@ -218,4 +192,29 @@ test("single-generator allocation cannot spend dedicated grid Power elsewhere", 
     ...common,
     selectedFacilityIds: ["local-a", "local-b", "local-c"]
   }), false);
+});
+
+test("canonical simplification removes stored-token state and keeps two programs per faction", async () => {
+  const [config, factions, componentReference] = await Promise.all([
+    readJson("dist/runtime/game-config.json"),
+    readJson("dist/runtime/factions.json"),
+    readFile(new URL("dist/docs/component-reference.md", root), "utf8")
+  ]);
+
+  assert.equal(config.playerSupply.generators, 1);
+  assert.equal(config.playerSupply.influenceCubes, 0);
+  assert.ok(factions.factions.every((faction) => faction.abilities.length === 2));
+  assert.ok(factions.factions.every((faction) =>
+    faction.abilities.every((ability) => typeof ability.id === "string")
+  ));
+  for (const removed of [
+    "Market Access",
+    "Build discount",
+    "Policy Shield",
+    "Economic Benchmark",
+    "Expert",
+    "Spotlight",
+    "Public Research Grant",
+    "Influence cube"
+  ]) assert.ok(!componentReference.includes(removed), `${removed} is absent`);
 });

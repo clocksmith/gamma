@@ -26,8 +26,8 @@ four Eras, simultaneous action selection, a modular thirteen-hex economy,
 six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.6.0-rc.3-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.9.2`. That synchronization is
+Rules `0.7.0-rc.1-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.10.0`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -50,7 +50,7 @@ Likely commercial format:
 - No conventional folding board
 - Thirteen thick modular hex tiles
 - Six faction/player boards
-- Approximately 163 Default Game cards, or 189 with the Advanced Play cards,
+- Approximately 151 Default Game cards, or 177 with the Advanced Play cards,
   plus final player-reference aids
 - Stock wooden pieces and cubes
 - Several punchboard sheets
@@ -83,18 +83,16 @@ locked component specification.
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
 | Era cards | 4 | selected |
 | Player references | 4 designs; production copy count unresolved | synchronized draft copy; final layout and per-player duplication unresolved |
-| Total cards | approximately 163 Default or 189 with Advanced, plus player references | quote placeholder |
+| Total cards | approximately 151 Default or 177 with Advanced, plus player references | quote placeholder |
 | CEO pieces | 6 | confirmed concept |
 | Team pieces | 18 | three per faction |
 | Facility pieces | 24 | four per faction |
-| Generator pieces | 12 | two per faction; source encoding remains open |
-| Power Source selectors | up to 12 | only if Generators are not source-specific or reversible |
+| Generator pieces | 6 | one per faction; Energy location determines source |
 | Link tokens | 12 | Advanced Play only; two per faction |
 | Network markers | 6 | Advanced Play only; one per faction with capacity tracked on the player board |
 | Starting-grid markers | 6 | one per faction; travels with its designated Facility |
 | Grid-Ready markers | up to 24 | only if Facilities do not encode Grid-Ready on their reverse |
 | Track markers | at least 30 | final track implementation unresolved |
-| Influence cubes | 48 | eight per faction |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
 | Customer markers | up to 30 | only if Customers do not use a player-board track |
 | Escalation tokens | up to 24 | only if Escalation does not use a player-board track |
@@ -397,7 +395,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.6.0-rc.3-test` physical test.
+1. Run the controlled four-player `0.7.0-rc.1-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.
