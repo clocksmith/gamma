@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T15:15:55+00:00`
+- Generated at UTC: `2026-08-09T15:20:22+00:00`
 
 ## Target State
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `3,969`
+- RSS samples: `4,022`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `5,691,344`
@@ -55,10 +55,10 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `991`
-- RSS guard JSON modified UTC: `2026-08-09T15:15:53+00:00`
-- RSS guard JSON SHA-256: `0bd125e4a6afb78d15590cab3bf6486eb127c6acbdfbf3c56c1f998f36be9df7`
-- RSS samples: `3,969`
+- RSS guard JSON bytes: `990`
+- RSS guard JSON modified UTC: `2026-08-09T15:20:18+00:00`
+- RSS guard JSON SHA-256: `8b2d1407ba6b536a4e878fa44dc0701a475e23e8a2c81a53234b10cb9bf64495`
+- RSS samples: `4,022`
 - Max sampled single RSS KiB: `5,691,344`
 - Max sampled tree RSS KiB: `5,711,868`
 - Single-process RSS margin KiB: `4,794,416`
@@ -132,7 +132,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Program directories: `728`
 - Registered programs: `291`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `4`
+- Modified tracked entries: `1`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=39, measured_negative=100, retired=538`
 
 ## Active Runner Process Table
