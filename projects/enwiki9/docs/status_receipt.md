@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T18:35:01+00:00`
+- Generated at UTC: `2026-08-09T21:10:22+00:00`
 
 ## Target State
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `6,356`
+- RSS samples: `8,218`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `5,691,852`
@@ -56,9 +56,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `991`
-- RSS guard JSON modified UTC: `2026-08-09T18:34:59+00:00`
-- RSS guard JSON SHA-256: `e7d645486705a9f4292473f99579d3dfa10d3e1b7716fa05e57d0788bd16077b`
-- RSS samples: `6,356`
+- RSS guard JSON modified UTC: `2026-08-09T21:10:18+00:00`
+- RSS guard JSON SHA-256: `6e86fe7cc25a1bec995d23ef1826163f333b383acb550123999919f21a159551`
+- RSS samples: `8,218`
 - Max sampled single RSS KiB: `5,691,852`
 - Max sampled tree RSS KiB: `5,712,376`
 - Single-process RSS margin KiB: `4,793,908`
@@ -131,8 +131,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `730`
 - Registered programs: `292`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `1`
+- Untracked nonignored entries: `3`
+- Modified tracked entries: `4`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=40, measured_negative=100, retired=539`
 
 ## Active Runner Process Table
@@ -148,7 +148,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,490,944 | `2026-08-09T17:02:50+00:00` |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,622,016 | `2026-08-09T21:06:32+00:00` |
 
 ## Active RSS
 

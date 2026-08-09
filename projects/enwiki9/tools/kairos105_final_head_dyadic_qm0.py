@@ -850,7 +850,7 @@ def screen(trace_path: Path, native_payload_path: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    if RESULT.exists() or EXTERNAL.exists():
+    if (RESULT.exists() and any(RESULT.iterdir())) or EXTERNAL.exists():
         raise FileExistsError(f"refusing overwrite: {RESULT} or {EXTERNAL}")
     if sha256(BASE_PACKAGED) != EXPECTED_BASE_BINARY_SHA256:
         raise ValueError("frozen packaged donor hash mismatch")
