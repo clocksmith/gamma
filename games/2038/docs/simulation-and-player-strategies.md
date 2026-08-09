@@ -1,6 +1,6 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.9.1` / `three-to-five-profiles-v1`
+**Executable game:** `0.9.2` / `three-to-five-profiles-v1`
 **Physical rules under review:** `0.6.0-rc.2-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 

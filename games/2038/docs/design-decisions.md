@@ -205,7 +205,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.9.1` implements `0.6.0-rc.2-test` under engine
+Executable game `0.9.2` implements `0.6.0-rc.2-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -215,7 +215,13 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-The `0.9.1` / `0.6.0-rc.2-test` advancement changes no physical rule. It
+The `0.9.2` / `0.6.0-rc.2-test` advancement changes no physical rule. It
+adds a fail-closed, inactive execution path for the registered
+`single-generator-default` comparison. The candidate derives source and cost
+from Energy location, enforces one ordinary Generator, and preserves local
+Power allocation without entering either supported play profile.
+
+The `0.9.1` / `0.6.0-rc.2-test` advancement also changes no physical rule. It
 corrects the executable selection contract so every unused Core Action and
 every unlocked, unspent Escalation remains legally selectable even when it has
 no current resolution. Resolution metadata lets deterministic policies avoid
