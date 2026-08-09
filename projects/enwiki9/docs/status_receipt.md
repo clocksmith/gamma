@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T13:12:32+00:00`
+- Generated at UTC: `2026-08-09T13:36:50+00:00`
 
 ## Target State
 
@@ -113,11 +113,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `719`
+- Program directories: `721`
 - Registered programs: `284`
-- Untracked nonignored entries: `14`
-- Modified tracked entries: `6`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=31, measured_negative=100, retired=535, track_source_before_evolution=2`
+- Untracked nonignored entries: `10`
+- Modified tracked entries: `3`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=33, measured_negative=100, retired=535, track_source_before_evolution=2`
 
 ## Active Runner Process Table
 
@@ -130,26 +130,26 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `process` | 510,895 | 510,888 | 20,524 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
 | `process` | 510,946 | 510,895 | 5,691,344 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 | `process` | 590,985 | 590,984 | 19,116 | `python3 tools/cmix_obias_helical_xmlsafe_residual_backend_qm4.py` |
-| `process` | 591,016 | 590,985 | 8,848,028 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
+| `process` | 591,016 | 590,985 | 9,032,848 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual.bin out.cmix` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 966,656 | `2026-08-09T13:05:41+00:00` |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,097,728 | `2026-08-09T13:27:31+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `14,656,072`
+- Active process tree RSS KiB: `14,840,892`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-4,170,312`
-- Active process tree decimal margin KiB: `-4,890,447`
+- Active process tree margin KiB (binary): `-4,355,132`
+- Active process tree decimal margin KiB: `-5,075,267`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
 
 ## Contingencies
