@@ -1,5 +1,27 @@
 # enwiki9 Research Register
 
+## 2026-08-09 - Agent A/B strategy and ownership merge under the 108M target
+
+Agent B has accepted Agent A's handoff and now owns both active scientific
+tracks. The canonical objective is an exact, self-contained full-1G score no
+larger than `108,000,000` bytes. The runnable `cmix-obias` research parent is
+reported at `108,492,825`, leaving `492,825` bytes of counted debt before its
+unresolved memory, source, and independent-verification obligations. KAIROS is
+the near-target lane: a paid, decoder-visible dyadic correction of the exact
+post-head probability surface, judged only by same-stream arithmetic replay.
+
+The independent NNCP lane tests whether the measured midpoint update-cadence
+effect persists over `1,998,848` symbols and can be localized to a compact
+causal mechanism. Its active mature gate remains frozen. A pass authorizes the
+predeclared state-refresh/output-head/full-update attribution and a compact
+MIDAS-style descendant; a miss retires only the tested cadence realization.
+
+These lanes do not inherit or add projected savings. Combination is authorized
+only after each mechanism independently passes its paid gate, and then only
+through a new exact joint coder replay with complete package and memory
+accounting. The XML-safe far-history/copy family remains terminally closed by
+the negative QM4 matched-parent result.
+
 This register tracks strategy and algorithm research separately from measured
 candidate proof. It is a map from idea to local implementation, not a scoreboard.
 
@@ -709,3 +731,83 @@ feature, dyadic-leaf, coefficient, schedule, or gate sweep is authorized by
 these infrastructure failures. Evidence: the two failed adaptive job records,
 their logs, `docs/kairos105_final_head_dyadic_qm0_plan.md`, and commit
 `bc746ecb`.
+
+## 2026-08-09 - Agent A/B KAIROS-108 QM1 reaches the pinned compiler boundary
+
+Candidate `kairos108_final_head_dyadic_qm1_v1` repaired only the conflict
+between the adaptive queue's empty result directory and the parent tool's
+no-overwrite `mkdir`. Job `20260809T213434Z_ea8ad27191` passed that boundary,
+copied the donor tree, applied the frozen post-head observer patch, and then
+failed before compilation because the Make command named `clang++-17`, which
+is absent from the host `PATH`. The guard completed without a violation at
+`2,448` KiB maximum sampled single-process RSS.
+
+This is zero compression evidence. The pinned Clang 17 compiler and matching
+libraries are already present under the project host-toolchain tree, so the
+only authorized successor is `kairos108_final_head_dyadic_qm2_v1`: supply the
+absolute compiler and library paths while preserving every KAIROS scientific
+choice and gate. Evidence: the failed adaptive job, its durable log,
+`docs/kairos108_final_head_dyadic_qm1_plan.md`, and
+`results/kairos108_final_head_dyadic_qm1_guard_v1.json`.
+
+## 2026-08-09 - KAIROS-108 QM2 compiles and reaches the donor linker boundary
+
+Candidate `kairos108_final_head_dyadic_qm2_v1` supplied the pinned Clang 17
+compiler and matching shared-library path without changing KAIROS science. Job
+`20260809T213710Z_0cfb0049b8` applied the frozen patch and successfully compiled
+all observer translation units. It then failed before producing a binary
+because the donor Makefile requested `-fuse-ld=lld`, while the pinned toolchain
+contains no `lld`. The guard completed without a violation at `145,596` KiB
+maximum sampled single-process RSS and `242,848` KiB process-tree RSS.
+
+This remains zero compression evidence. The repository's existing cmix build
+contract uses the available system `bfd` linker for this toolchain. The only
+authorized successor is `kairos108_final_head_dyadic_qm3_v1`, which overrides
+only the linker selection while preserving PGO/LTO and every observer and
+scientific gate. Evidence: the failed adaptive job and log,
+`docs/kairos108_final_head_dyadic_qm2_plan.md`, and
+`results/kairos108_final_head_dyadic_qm2_guard_v1.json`.
+
+## 2026-08-09 - KAIROS-108 QM3 proves the observer objects are LLVM bitcode
+
+Candidate `kairos108_final_head_dyadic_qm3_v1` replaced unavailable LLD with
+the repository's BFD linker contract. Job `20260809T213911Z_6b4bb6c6bd`
+successfully compiled the frozen observer, but link failed because the
+`prof_use` objects are LLVM IR bitcode and plain BFD had no active LLVM LTO
+plugin. The guard completed without a violation at `88,024` KiB maximum
+sampled single-process RSS and `188,564` KiB process-tree RSS.
+
+This remains zero compression evidence. The original cmix-obias donor contains
+a matching LLD 17 executable and `libxml2` compatibility directory, and the
+linker was directly verified to execute. The only authorized successor is
+`kairos108_final_head_dyadic_qm4_v1`, exposing those pinned paths while
+restoring the donor's original PGO/LTO link flags and preserving all scientific
+choices. Evidence: the failed adaptive job and log,
+`docs/kairos108_final_head_dyadic_qm3_plan.md`, and
+`results/kairos108_final_head_dyadic_qm3_guard_v1.json`.
+
+## 2026-08-09 - Exact KAIROS opening retires the final-head dyadic realization
+
+Candidate `kairos108_final_head_dyadic_qm4_v1` completed the frozen 1M
+same-stream experiment. The traced parent and independently replayed B0 suffix
+were byte-identical at `172,568` bytes and SHA-256
+`39934ddebd9fc482191cc15f46c9291b2aad85fb28f4a762207f564d408dbc03`.
+Both B0 and K0 arithmetic decoders reproduced all `4,415,992` truth bits;
+repeat fitting and payload generation were identical, probabilities remained
+legal, and the `100`-byte compressed K0 schedule was within budget.
+
+The scientific result is decisively subscale. K0 saved only `417` gross bytes
+against the required `4,500`. It selected one global leaf, exactly tied G0,
+R0, and S0, and exceeded only P0 by `405` bytes. Although its chronological
+thirds were positive at `217`, `132`, and `67` bytes, the paid lookup and
+schedule made the result `-8,339` bytes before the `4,020`-byte source package.
+Even the free atomic-leaf O0 ceiling was `517` bytes worse than B0.
+
+Verdict: retire this exact rank-eight feature set, Q8 correction law,
+`262,144`-bit dyadic partition, lookup realization, and all nearby feature,
+rank, leaf, coefficient, schedule, or quantization sweeps. KAIROS receives zero
+archive, forecast, eligibility, or score credit. The guard passed at
+`8,388,564` KiB maximum single-process RSS and `8,426,804` KiB process-tree
+RSS. Evidence: `results/kairos108_final_head_dyadic_qm4_v1/decision.json`,
+`results/kairos108_final_head_dyadic_qm4_guard_v1.json`, and adaptive job
+`20260809T214215Z_2ab1668c70`.

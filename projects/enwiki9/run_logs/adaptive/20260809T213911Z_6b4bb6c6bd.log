@@ -1,0 +1,87 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py", "--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/kairos108_final_head_dyadic_qm3_guard_v1.json", "--label", "kairos108_final_head_dyadic_qm3_v1", "--", "python3", "tools/kairos108_final_head_dyadic_qm3.py"], "job": {"candidate_id": "kairos108_final_head_dyadic_qm3_v1", "gate_size": 1000000, "job_id": "20260809T213911Z_6b4bb6c6bd", "priority": 1298, "purpose": "oracle", "schema": "enwiki9_adaptive_job_v1", "started_at": "2026-08-09T21:39:16+00:00", "state": "running", "submitted_at": "2026-08-09T21:39:11+00:00", "tags": ["bfd-link", "cmix-obias", "dyadic", "final-head", "kairos108"], "tool": "tools/run_with_rss_guard.py", "tool_args": ["--limit-kib", "9765625", "--limit-mode", "max_single", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/kairos108_final_head_dyadic_qm3_guard_v1.json", "--label", "kairos108_final_head_dyadic_qm3_v1", "--", "python3", "tools/kairos108_final_head_dyadic_qm3.py"]}}
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos108_final_head_dyadic_qm3.py", line 73, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos108_final_head_dyadic_qm3.py", line 69, in main
+    return core.main()
+           ~~~~~~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos105_final_head_dyadic_qm0.py", line 863, in main
+    observer_binary, build_receipts = build_observer(build)
+                                      ~~~~~~~~~~~~~~^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos108_final_head_dyadic_qm3.py", line 37, in build_observer
+    core.run_command(
+    ~~~~~~~~~~~~~~~~^
+        [
+        ^
+    ...<10 lines>...
+        env=build_env,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/kairos105_final_head_dyadic_qm0.py", line 134, in run_command
+    raise RuntimeError(json.dumps(receipt, indent=2))
+RuntimeError: {
+  "command": [
+    "make",
+    "prof_use",
+    "CC=/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/bin/clang++-17",
+    "LFLAGS=-m64 -fuse-ld=bfd -Wl,--gc-sections -std=c++17",
+    "CFLAGS_DEFINES=-DSEED=923 -DUPDATE_LIMIT=3000 -DLSTM_NUM_CELLS=256 -DKH_BITLSTM32 -DKH_OBIAS -DKH_OBIAS_CONST_GATE=0.15f",
+    "KH_BITLSTM32_ARCHIVE=1",
+    "KH_TRACE=1",
+    "-j4"
+  ],
+  "cwd": "/home/x/enwiki9-nonproof/results/kairos108_final_head_dyadic_qm3_v1/build",
+  "elapsed_seconds_diagnostic": 7.895174873061478,
+  "returncode": 2,
+  "output_sha256": "f248d19023c12f96b4784deb3fec8c9f609b7e86490de7c38f803dff605902d5",
+  "output_tail": "h mismatch) _ZN7Encoder6EncodeEi Hash = 757987888644222967 up to 176450395 count discarded [-Wbackend-plugin]\nwarning: src/coder/encoder.cpp: function control flow change detected (hash mismatch) _ZN7Encoder5FlushEv Hash = 650973721412386565 up to 3 count discarded [-Wbackend-plugin]\n2 warnings generated.\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z8loadFilePKc Hash = 421769327573387657 up to 20322044 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z7reorderv Hash = 535427391763038581 up to 12684304 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z4sortv Hash = 477729238250689696 up to 0 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z18selfextract_decompv Hash = 536873293986372656 up to 0 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z14RunCompressionbRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_S6_P8_IO_FILEPyS9_PKc Hash = 329227197659841507 up to 30 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) _Z16RunDecompressionRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_S6_P8_IO_FILEPyS9_PKc Hash = 649546730533022557 up to 14 count discarded [-Wbackend-plugin]\nwarning: src/runner.cpp: function control flow change detected (hash mismatch) main Hash = 458261030877880091 up to 66 count discarded [-Wbackend-plugin]\nwarning: src/context-manager.cpp: function control flow change detected (hash mismatch) _ZN14ContextManager14UpdateContextsEi Hash = 807055967677422528 up to 320399338 count discarded [-Wbackend-plugin]\n1 warning generated.\n7 warnings generated.\nwarning: src/contexts/bracket-context.cpp: function control flow change detected (hash mismatch) _ZN14BracketContext6UpdateEv Hash = 934725085569259046 up to 13593885 count discarded [-Wbackend-plugin]\n1 warning generated.\nwarning: src/models/bracket.cpp: function control flow change detected (hash mismatch) _ZN7Bracket10ByteUpdateEv Hash = 977427431290818313 up to 3333177752 count discarded [-Wbackend-plugin]\n1 warning generated.\nwarning: src/mixer/byte-mixer.cpp: function control flow change detected (hash mismatch) _ZN9ByteMixer8SetInputEif Hash = 431494654108067943 up to 3491069735 count discarded [-Wbackend-plugin]\nwarning: src/mixer/byte-mixer.cpp: function control flow change detected (hash mismatch) _ZN9ByteMixer10ByteUpdateEv Hash = 658987488178395784 up to 4743293785 count discarded [-Wbackend-plugin]\n2 warnings generated.\nwarning: src/predictor.cpp: function control flow change detected (hash mismatch) _ZN9Predictor10AddBracketEv Hash = 146835647075900052 up to 5 count discarded [-Wbackend-plugin]\nwarning: src/predictor.cpp: function control flow change detected (hash mismatch) _ZN9Predictor7AddPPMDEv Hash = 146835647075900052 up to 5 count discarded [-Wbackend-plugin]\nwarning: src/predictor.cpp: function control flow change detected (hash mismatch) _ZN9Predictor9AddMixersEv Hash = 301351147078810485 up to 1300 count discarded [-Wbackend-plugin]\n3 warnings generated.\n/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/bin/clang++-17 -m64 -fuse-ld=bfd -Wl,--gc-sections -std=c++17 bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o r1_reorder_transform.o run-map.o runner.o sigmoid.o sparse.o sse.o bitlstm32-head.o obias-prior.o  -s -o cmix\nbit-context.o: file not recognized: file format not recognized\nclang++-17: error: linker command failed with exit code 1 (use -v to see invocation)\nmake: *** [makefile:164: cmix] Error 1\n"
+}
+{
+  "rss_guard": {
+    "label": "kairos108_final_head_dyadic_qm3_v1",
+    "command": [
+      "python3",
+      "tools/kairos108_final_head_dyadic_qm3.py"
+    ],
+    "limit_kib": 9765625,
+    "limit_mode": "max_single",
+    "official_decimal_limit_kib": 9765625,
+    "official_decimal_over_limit_kib": 0,
+    "max_sampled_single_rss_kib": 88024,
+    "max_sampled_tree_rss_kib": 188564,
+    "peak_sample": {
+      "processes": [
+        {
+          "pid": 242718,
+          "rss_kib": 38248
+        },
+        {
+          "pid": 242798,
+          "rss_kib": 2836
+        },
+        {
+          "pid": 242802,
+          "rss_kib": 59456
+        },
+        {
+          "pid": 243844,
+          "rss_kib": 88024
+        }
+      ],
+      "max_single_rss_kib": 88024,
+      "tree_rss_kib": 188564
+    },
+    "latest_sample": {
+      "processes": [],
+      "max_single_rss_kib": 0,
+      "tree_rss_kib": 0
+    },
+    "sample_count": 3,
+    "rss_guard_exceeded": false,
+    "returncode": 1,
+    "status": "complete",
+    "elapsed_s": 10.0038
+  }
+}
