@@ -7,7 +7,7 @@ replace mechanical quantities or rules in `content/data/game-config.json`.
 ## Colour allocation
 
 The six saturated RGB colours are reserved for player ownership. Every CEO,
-Team, Facility, Generator, Influence cube, Scrutiny cube, and player track
+Team, Facility, Generator, Scrutiny cube, and player track
 marker uses its faction's colour. No shared or neutral component uses one of
 these six colours.
 
@@ -33,8 +33,7 @@ shared project. Material or finish never creates an additional rules state.
 | CEO | Movable acting piece; two presence | Large faction-coloured pawn | Position on a district |
 | Team | Movable acting piece; one presence | Small faction-coloured pawn | Position on a district |
 | Facility | Stationary institutional site | Faction-coloured double-sided building/node piece | Position plus normal or Grid-Ready face |
-| Generator | Stationary Power source | Distinct faction-coloured double-sided power-node piece | Position plus clean or emergency source face |
-| Influence | Political presence on a district | Small faction-coloured cube | District position |
+| Generator | Stationary Power source | Distinct faction-coloured power-node piece | Position; its Energy district determines clean or emergency source |
 | Scrutiny | Exposure in the Audit bag | Small faction-coloured cube | In owner supply or Audit bag |
 | Systemic Risk | Shared Audit danger | Black Audit piece with the same concealed feel as Scrutiny | Audit bag or shared supply |
 | Customer | Acquired demand | One marker on the faction-board Customer track | Customer track position from zero through five |
@@ -45,13 +44,6 @@ shared project. Material or finish never creates an additional rules state.
 | Escalation | Permission to select an Escalation | One marker on the faction-board Escalation track | Zero to two currently available; unused permission expires each Era |
 | AGI Declaration | A faction has completed its declaration | The Declare AGI card’s reverse | Undeclared / declared |
 | Joint Venture / Mega-Cluster | A named shared project | Matched numbered token pair | Both host positions and pair number |
-| Expert | Neutral supporting presence | Neutral pawn | District position |
-| Economic Benchmark | A stored deployment waiver and Mandate opportunity | Token | Held / discarded |
-| Spotlight | Public pressure on the current leader | One shared marker | Current holder |
-| Public Research Grant | Catch-up support for the lowest-scoring faction | One shared marker | Current holder / spent |
-| Market Access | A stored reduction to a Customer requirement | Token | Held / discarded |
-| Build discount | A stored reduction to one Build cost | Token | Zero to two held / discarded |
-| Policy Shield | Protection against one Trust loss or Regulatory effect | Token | Zero to two held / discarded |
 | Initiative | Current resolution and tie order | One shared marker | Current holder |
 | Fusion Demonstrator | The unique advanced-generation project | One shared project marker | Grid position / unbuilt |
 | Link — Advanced Play | A Facility’s connection to its owner’s Network | Faction-coloured connector token | Attached to one Facility |
@@ -62,7 +54,7 @@ shared project. Material or finish never creates an additional rules state.
 
 ## Selected state-encoding decisions
 
-Grid-Ready, Generator source, Customer count, Escalation availability, the
+Grid-Ready, Customer count, Escalation availability, the
 starting-grid identity, and AGI Declaration are integrated into the listed
 components and faction-board tracks. They do not require separate state
 markers. The forms must remain legible when pieces occupy a crowded district;
@@ -75,8 +67,7 @@ state limits:
    with cubes, or integrated dials. Loose dials are excluded unless a player
    board contains them.
 2. **Minor status pieces:** choose stock cubes, beads, or punchboard for
-   Benchmark, Spotlight, Grant, Market Access, discounts, Shields, Initiative,
-   and Systemic Risk without changing their supply limits.
+   Initiative and Systemic Risk without changing their supply limits.
 3. **Material:** choose wood or cardboard only after the selected state
    encoding, crowding, and blind-play readability have been tested.
 

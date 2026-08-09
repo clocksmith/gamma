@@ -273,7 +273,7 @@ test("Era cards are the single source for the world-companion escalation lore", 
   }
 });
 
-test("Era IV copy gives unchanged faction mechanics concrete continuity institutions", async () => {
+test("retained signature programs project concrete continuity institutions", async () => {
   const [factionsDocument, mandatesDocument, bible] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
@@ -294,23 +294,23 @@ test("Era IV copy gives unchanged faction mechanics concrete continuity institut
       eraIvAbility("foundry").displayName
     ],
     [
-      "Instance Quorum Protocol",
+      "Shared Capacity Compact",
       "Substrate Continuity Layer",
       "Substrate-Neutral Verification Standard",
       "Extraterritorial Succession Transfer",
       "Certified Right of Refusal",
-      "Substrate Access Guarantee"
+      "Priority Allocation Window"
     ]
   );
-  assert.match(eraIvAbility("coalition_lab").text, /reveal 2 replacements/);
+  assert.match(eraIvAbility("coalition_lab").text, /within 2 hexes/);
   assert.match(eraIvAbility("platform_empire").text, /without moving there/);
   assert.match(eraIvAbility("imperial_research_lab").text, /first 3 distinct domains/);
   assert.match(eraIvAbility("vertical_empire").text, /move 1 Facility/);
   assert.match(eraIvAbility("safety_laboratory").text, /cannot be selected this cycle/);
-  assert.match(eraIvAbility("foundry").text, /give every rival 1 Compute/);
+  assert.match(eraIvAbility("foundry").text, /create 2 temporary Compute/);
   assert.equal(
     eraIvAbility("coalition_lab").flavorText,
-    "Every recognized successor enters the quorum. The version with standing authorizes the event that occurred."
+    "Adjacency is a technical limit. Mutual necessity is an operating model."
   );
   assert.equal(
     eraIvAbility("imperial_research_lab").flavorText,

@@ -65,14 +65,6 @@ _${content.factions.byId.coalition_lab.abilities.0.flavorText}_
 
 _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
-**${content.factions.byId.coalition_lab.abilities.2.name} — ${content.factions.byId.coalition_lab.abilities.2.displayName}:** ${content.factions.byId.coalition_lab.abilities.2.text}
-
-_${content.factions.byId.coalition_lab.abilities.2.flavorText}_
-
-**${content.factions.byId.coalition_lab.abilities.3.name} — ${content.factions.byId.coalition_lab.abilities.3.displayName}:** ${content.factions.byId.coalition_lab.abilities.3.text}
-
-_${content.factions.byId.coalition_lab.abilities.3.flavorText}_
-
 ### ${content.factions.byId.platform_empire.name}
 
 **CEO:** ${content.factions.byId.platform_empire.chiefExecutive}
@@ -88,14 +80,6 @@ _${content.factions.byId.platform_empire.abilities.0.flavorText}_
 **${content.factions.byId.platform_empire.abilities.1.name} — ${content.factions.byId.platform_empire.abilities.1.displayName}:** ${content.factions.byId.platform_empire.abilities.1.text}
 
 _${content.factions.byId.platform_empire.abilities.1.flavorText}_
-
-**${content.factions.byId.platform_empire.abilities.2.name} — ${content.factions.byId.platform_empire.abilities.2.displayName}:** ${content.factions.byId.platform_empire.abilities.2.text}
-
-_${content.factions.byId.platform_empire.abilities.2.flavorText}_
-
-**${content.factions.byId.platform_empire.abilities.3.name} — ${content.factions.byId.platform_empire.abilities.3.displayName}:** ${content.factions.byId.platform_empire.abilities.3.text}
-
-_${content.factions.byId.platform_empire.abilities.3.flavorText}_
 
 ### ${content.factions.byId.imperial_research_lab.name}
 
@@ -113,14 +97,6 @@ _${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
 
 _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
-**${content.factions.byId.imperial_research_lab.abilities.2.name} — ${content.factions.byId.imperial_research_lab.abilities.2.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.2.text}
-
-_${content.factions.byId.imperial_research_lab.abilities.2.flavorText}_
-
-**${content.factions.byId.imperial_research_lab.abilities.3.name} — ${content.factions.byId.imperial_research_lab.abilities.3.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.3.text}
-
-_${content.factions.byId.imperial_research_lab.abilities.3.flavorText}_
-
 ### ${content.factions.byId.vertical_empire.name}
 
 **CEO:** ${content.factions.byId.vertical_empire.chiefExecutive}
@@ -134,14 +110,6 @@ _${content.factions.byId.vertical_empire.abilities.0.flavorText}_
 **${content.factions.byId.vertical_empire.abilities.1.name} — ${content.factions.byId.vertical_empire.abilities.1.displayName}:** ${content.factions.byId.vertical_empire.abilities.1.text}
 
 _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
-
-**${content.factions.byId.vertical_empire.abilities.2.name} — ${content.factions.byId.vertical_empire.abilities.2.displayName}:** ${content.factions.byId.vertical_empire.abilities.2.text}
-
-_${content.factions.byId.vertical_empire.abilities.2.flavorText}_
-
-**${content.factions.byId.vertical_empire.abilities.3.name} — ${content.factions.byId.vertical_empire.abilities.3.displayName}:** ${content.factions.byId.vertical_empire.abilities.3.text}
-
-_${content.factions.byId.vertical_empire.abilities.3.flavorText}_
 
 ### ${content.factions.byId.safety_laboratory.name}
 
@@ -157,14 +125,6 @@ _${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
 
 _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
-**${content.factions.byId.safety_laboratory.abilities.2.name} — ${content.factions.byId.safety_laboratory.abilities.2.displayName}:** ${content.factions.byId.safety_laboratory.abilities.2.text}
-
-_${content.factions.byId.safety_laboratory.abilities.2.flavorText}_
-
-**${content.factions.byId.safety_laboratory.abilities.3.name} — ${content.factions.byId.safety_laboratory.abilities.3.displayName}:** ${content.factions.byId.safety_laboratory.abilities.3.text}
-
-_${content.factions.byId.safety_laboratory.abilities.3.flavorText}_
-
 ### ${content.factions.byId.foundry.name}
 
 **CEO:** ${content.factions.byId.foundry.chiefExecutive}
@@ -178,14 +138,6 @@ _${content.factions.byId.foundry.abilities.0.flavorText}_
 **${content.factions.byId.foundry.abilities.1.name} — ${content.factions.byId.foundry.abilities.1.displayName}:** ${content.factions.byId.foundry.abilities.1.text}
 
 _${content.factions.byId.foundry.abilities.1.flavorText}_
-
-**${content.factions.byId.foundry.abilities.2.name} — ${content.factions.byId.foundry.abilities.2.displayName}:** ${content.factions.byId.foundry.abilities.2.text}
-
-_${content.factions.byId.foundry.abilities.2.flavorText}_
-
-**${content.factions.byId.foundry.abilities.3.name} — ${content.factions.byId.foundry.abilities.3.displayName}:** ${content.factions.byId.foundry.abilities.3.text}
-
-_${content.factions.byId.foundry.abilities.3.flavorText}_
 
 ## Core Action cards
 

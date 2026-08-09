@@ -109,7 +109,7 @@ none does, Initiative chooses. Government bonuses and other vote modifiers do
 not apply.
 
 ${terms.locations.frontier} never moves. Each moving tile carries every CEO, Team, Facility,
-Generator, ${terms.actions.influence} cube, Expert, and other site-bound component. Rotate the
+Generator and other site-bound component. Rotate the
 selected physical ring once, then recalculate every Network from its
 starting-grid Facility, Links, and visible adjacency. Do not lift or re-lay
 components.

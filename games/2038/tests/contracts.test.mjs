@@ -10,10 +10,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.9.2");
-  assert.equal(current.rulesCandidate.version, "0.6.0-rc.3-test");
+  assert.equal(current.gameVersion, "0.10.0");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.1-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.9.2");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.10.0");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -37,8 +37,9 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.match(spec, /shared Mandate track/);
   assert.match(spec, /AGI Declaration/);
   assert.match(spec, /Fusion Demonstrator/);
-  assert.match(spec, /Economic Benchmark/);
-  assert.match(spec, /Market Access/);
+  assert.doesNotMatch(spec, /Economic Benchmark/);
+  assert.doesNotMatch(spec, /Market Access/);
+  assert.doesNotMatch(spec, /Influence cube/);
   assert.match(spec, /Initiative/);
 
   assert.match(inventory, /## Default Game — one faction set per player/);
@@ -57,7 +58,7 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /163 Default or 189 with Advanced/);
+  assert.match(manufacturing, /151 Default or 177 with Advanced/);
   assert.match(manufacturing, /Advanced Play adds eighteen Realignment ballots/);
   assert.match(manufacturing, /Three shared Power Source references/);
 
@@ -74,9 +75,9 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.6.0-rc.3-test",
-    "synchronized with executable game 0.9.2",
-    "Influence may place or relocate one additional cube on Civic Permission Authority",
+    "**Rules version:** 0.7.0-rc.1-test",
+    "synchronized with executable game 0.10.0",
+    "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
     "A **joint Mega-Cluster**",
@@ -116,7 +117,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(bible, /## Physical quantity interpretation/);
   assert.match(bible, /Player-reference cards \| 4 designs; production copy count unresolved/);
   assert.match(bible, /No replacement\n+or overage allowance has been selected yet/);
-  assert.match(bible, /Ordinary Power Sources \| 2 shared reference types/);
+  assert.match(bible, /Ordinary Power Sources \| 2 location-defined reference types/);
   assert.doesNotMatch(bible, /Ordinary Power Sources \| 4 reference types/);
 });
 
@@ -166,18 +167,20 @@ test("factions and player supplies match the selected limits", async () => {
     {
       teams: 3,
       facilities: 4,
-      generators: 2,
+      generators: 1,
       linkTokens: 2,
       networkMarkers: 1,
-      influenceCubes: 8,
+      influenceCubes: 0,
       scrutinyCubes: 10
     }
   );
 
   const allowedTiming = new Set(factions.abilityTimingContract.allowedTiming);
   for (const faction of factions.factions) {
+    assert.equal(faction.abilities.length, 2);
     for (const ability of faction.abilities) {
-      assert.ok(allowedTiming.has(ability.timing), `${faction.id}/${ability.name} has a timing tag`);
+      assert.ok(ability.id, `${faction.id} ability has a stable id`);
+      assert.ok(allowedTiming.has(ability.timing), `${faction.id}/${ability.id} has a timing tag`);
       assert.equal(typeof ability.persistsAfterUnlock, "boolean");
     }
   }
@@ -332,20 +335,28 @@ test("headline and board boundaries remain explicit", async () => {
     register.changes.find((change) => change.id === "deterministic-audit-replacement").status.id,
     "rejected"
   );
-  const proposedComplexityCandidates = register.changes
-    .filter((change) => change.status.id === "proposed_test")
+  const acceptedSimplifications = register.changes
+    .filter((change) => [
+      "presence-only-politics",
+      "single-generator-default",
+      "two-program-factions",
+      "stored-token-consolidation",
+      "simplified-profile-boundary"
+    ].includes(change.id) && change.status.id === "accepted_current")
     .map((change) => change.id)
     .sort();
-  assert.deepEqual(proposedComplexityCandidates, [
+  assert.deepEqual(acceptedSimplifications, [
     "presence-only-politics",
+    "simplified-profile-boundary",
     "single-generator-default",
+    "stored-token-consolidation",
     "two-program-factions"
   ]);
   assert.ok(
-    proposedComplexityCandidates.every(
+    acceptedSimplifications.every(
       (id) => !Object.values(config.playProfiles).some((profile) => profile.moduleIds.includes(id))
     ),
-    "proposed complexity candidates remain inactive"
+    "canonical simplifications do not masquerade as optional modules"
   );
   assert.deepEqual(
     config.board.realignment.motions.map((motion) => motion.id),
@@ -494,7 +505,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
     "standard Headline instructions use the procedural DIRECTIVE badge"
   );
   assert.match(byId.emergency_power_authority.text, /Systemic Risk/);
-  assert.match(byId.benchmark_is_economy.text, /Economic Benchmark token/);
+  assert.match(byId.benchmark_is_economy.text, /immediately scores 1 Mandate/);
   assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
   assert.match(byId.agi_personhood.text, /remainder of the game/);
   assert.match(byId.agi_personhood.text, /Trust 4/);
@@ -614,7 +625,7 @@ test("new thematic decks and reference surfaces have complete draft inventories"
     world.endings.map((ending) => ending.id),
     ["singularity", "closed_loop", "plural_future", "assured_continuity"]
   );
-  assert.equal(world.tokenCopy.length, 14);
+  assert.equal(world.tokenCopy.length, 10);
 
   for (const card of [...tactics.tactics, ...reserve.specialists, ...objectives.objectives]) {
     assert.ok([1, 2, 3, 4].includes(card.era), `${card.id} has an Era classification`);

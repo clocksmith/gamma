@@ -9,10 +9,12 @@ gates; they are not shortened or extended afterthoughts.
 
 The standard game lasts four rounds with three simultaneous action selections
 per player per round. Players build networks across a thirteen-tile hex
-economy, push risky Training Runs, negotiate shared infrastructure, manage
-public scrutiny, and negotiate shared infrastructure without direct combat or
-elimination. Default Game keeps the jurisdiction static; bundled Advanced Play
-adds the former late-game spatial Realignment and full public-market procedure.
+economy, push risky Training Runs, negotiate shared infrastructure, and manage
+public scrutiny without direct combat or elimination. Each Faction has two
+programs, each player has one location-defined Generator, and political control
+uses visible CEO, Team, and Facility presence rather than Influence cubes.
+Default Game keeps the jurisdiction static; bundled Advanced Play adds the
+former late-game spatial Realignment and full public-market procedure.
 
 ## Status
 
@@ -61,8 +63,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.6.0-rc.3-test`.
-Executable game `0.9.2` implements that candidate under
+`0.7.0-rc.1-test`.
+Executable game `0.10.0` implements that candidate under
 `three-to-five-profiles-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
@@ -93,9 +95,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.9.2` game and export its
+- `http://localhost:8038/` — play the synchronized `0.10.0` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.9.2` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.10.0` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -164,8 +166,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.9.2`
-bundle, its synchronized `0.6.0-rc.3-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.10.0`
+bundle, its synchronized `0.7.0-rc.1-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

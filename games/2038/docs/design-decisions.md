@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.6.0-rc.3-test`
+**Rules reference:** `0.7.0-rc.1-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -129,10 +129,13 @@ Influence is required for persistent Joint Ventures and Trust manipulation.
 Power is bought immediately during Production from a consenting adjacent
 Network; no Power contract persists.
 
-Influence cubes can be relocated, so political control never becomes
-permanently solved when a supply empties. Joint Ventures use numbered neutral
-host pairs. Their identities survive Realignment; their operation still
-depends on the printed range and connectivity requirements.
+Influence is an action, not a component supply. The acting CEO or Team must end
+at Media, Government, or Capital to change Trust or Scrutiny. Political control
+counts CEOs as two presence and Teams and Facilities as one; ties remain
+uncontrolled. A Joint Venture must be proposed or terminated by an acting piece
+at one of the player’s Facilities. Joint Ventures use numbered neutral host
+pairs. Their identities survive Realignment; operation still depends on printed
+range, Power, and connectivity.
 
 Promises about later turns are not binding. The game supports negotiation
 without requiring a general contract-enforcement system.
@@ -146,12 +149,13 @@ module IDs. It does not authorize players to assemble ad hoc profiles: Default
 Game and Advanced Play remain the only supported profiles until a new profile
 is deliberately selected and validated.
 
-Proposed complexity reductions are governed by the
+Future complexity reductions are governed by the
 [`complexity-reduction-protocol.md`](complexity-reduction-protocol.md). The
-current candidates—single Generator Default, Presence-Only Politics, and
-Two-Program Factions—are registered as proposed isolated tests and do not alter
-either supported profile. Package testing is permitted only after each candidate
-has an independent receipt.
+August 2026 simplification package is current: one location-defined Generator,
+presence-only politics, two programs per Faction, removal of seven stored-token
+families, and a stricter Default/Advanced boundary. These are baseline rules,
+not optional modules, so they do not appear in either profile’s module list.
+The register records them as accepted current decisions.
 
 ## Selected risk and ending contract
 
@@ -193,7 +197,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.6.0-rc.3-test` test:
+controlled `0.7.0-rc.1-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -205,7 +209,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.9.2` implements `0.6.0-rc.3-test` under engine
+Executable game `0.10.0` implements `0.7.0-rc.1-test` under engine
 coverage `three-to-five-profiles-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -215,11 +219,15 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-The `0.9.2` / `0.6.0-rc.3-test` advancement changes no physical rule. It
-adds a fail-closed, inactive execution path for the registered
-`single-generator-default` comparison. The candidate derives source and cost
-from Energy location, enforces one ordinary Generator, and preserves local
-Power allocation without entering either supported play profile.
+This synchronized rules candidate promotes the accepted simplification
+package. It removes one Generator and all Influence cubes from every faction
+set, reduces printed Faction programs from twenty-four to twelve, and removes
+Market Access, Build discounts, Policy Shields, Economic Benchmarks, Experts,
+Spotlight, and Public Research Grants. Useful effects resolve immediately as
+Runway, Compute, Trust, Scrutiny removal, movement, Team recruitment, or
+Mandate. This synchronization proves implementation integrity only; new human
+and paired simulation evidence must establish balance, negotiation quality,
+and teachability.
 
 The `0.9.1` / `0.6.0-rc.2-test` advancement also changes no physical rule. It
 corrects the executable selection contract so every unused Core Action and

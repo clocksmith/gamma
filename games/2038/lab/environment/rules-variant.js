@@ -69,6 +69,7 @@ export function canonicalRulesVariant(config) {
     immediateTradeThirdPartyClaims: profile.immediateTradeThirdPartyClaims,
     powerPurchaseRequests: profile.powerPurchaseRequests,
     realignmentEnabled: profile.realignmentEnabled,
+    singleGeneratorRule: structuredClone(config.singleGeneratorRule),
     auditMultiplier: 1,
     fundConservative: 2,
     fundVenture: 4,
@@ -92,14 +93,12 @@ export function canonicalRulesVariant(config) {
     customerCapabilityOffset: 0,
     startingTeamsDeployed: 1,
     coalitionStartingRunway: null,
-    coalitionWildcardGovernanceScrutiny: 2,
     imperialStartingCompute: null,
     imperialScientificMethodCapabilityPenalty: 0,
     imperialScientificMethodThresholdMandatePenalty: 0,
     imperialScientificMethodScrutiny: 0,
     imperialScientificMethodRunwayCost: 1,
     imperialScientificMethodLifetimeLimit: null,
-    imperialNobelTrust: 2,
     imperialLateCapabilityThresholdMandate: structuredClone(
       config.factionRules.imperial.peerValidation
     ),
@@ -110,12 +109,6 @@ export function canonicalRulesVariant(config) {
     verticalIndustrialVelocityBuildModes: ["facility"],
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
-    foundryNewArchitectureCompute: config.factionRules.foundry.newArchitectureCompute,
-    foundryNewArchitectureDemandCoupling: structuredClone(
-      config.factionRules.foundry.newArchitectureDemandCoupling
-    ),
-    foundryGpuMandateEnabled: true,
-    foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate,
     safetyEmergencyPauseEnabled: true,
     safetyStartingTrust: null,
     // Simulation-only intervention surface. Each entry names the canonical
@@ -127,8 +120,7 @@ export function canonicalRulesVariant(config) {
 export const legacyPrePromotionRulesOverlay = Object.freeze({
   customerMandateSchedule: null,
   imperialLateCapabilityThresholdMandate: null,
-  verticalIndustrialVelocityMandate: 0,
-  foundryNewArchitectureDemandCoupling: null
+  verticalIndustrialVelocityMandate: 0
 });
 
 export function effectiveRulesVariant(config, overlay = {}) {

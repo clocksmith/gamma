@@ -36,6 +36,25 @@
     "headlinePublicProceduresEnabled": false,
     "headlineVolatilityEnabled": false
   },
+  "singleGeneratorRule": {
+    "id": "single-generator-default",
+    "ordinaryGeneratorLimit": 1,
+    "locations": {
+      "grid_reactor": {
+        "sourceId": "emergency_infrastructure",
+        "constructionCost": 1
+      },
+      "renewable_basin": {
+        "sourceId": "clean_infrastructure",
+        "constructionCost": 2
+      }
+    },
+    "localDelivery": "own-or-adjacent-facilities",
+    "powerSalesPerSupplier": 1,
+    "megaClusterDemand": 2,
+    "gridReadyLifecycle": "recompute-every-production-and-revoke-on-infrastructure-change",
+    "slotContention": "initiative-order-no-reservations"
+  },
   "playRuleModules": {
     "trade-counteroffers": {
       "id": "trade-counteroffers",
@@ -117,10 +136,7 @@
     "foundry": {
       "startingCompute": "${facts.shared.factions.foundry.startingCompute}",
       "shovelsPerRound": "${facts.shared.factions.foundry.shovelsPerRound}",
-      "allocationWindow": "${facts.shared.factions.foundry.allocationWindow}",
-      "newArchitectureCompute": "${facts.shared.factions.foundry.newArchitectureCompute}",
-      "newArchitectureDemandCoupling": "${facts.shared.factions.foundry.newArchitectureDemandCoupling}",
-      "everybodyGpuRivalsPerMandate": "${facts.shared.factions.foundry.everybodyGpuRivalsPerMandate}"
+      "allocationWindow": "${facts.shared.factions.foundry.allocationWindow}"
     }
   },
   "audit": {
@@ -208,10 +224,10 @@
     "ceos": 1,
     "teams": 3,
     "facilities": 4,
-    "generators": 2,
+    "generators": 1,
     "linkTokens": 2,
     "networkMarkers": 1,
-    "influenceCubes": 8,
+    "influenceCubes": 0,
     "scrutinyCubes": 10,
     "customerMarkers": 5,
     "escalationTokens": 4,
@@ -444,6 +460,7 @@
   "powerSources": [
     {
       "id": "clean_infrastructure",
+      "location": "renewable_basin",
       "round": 2,
       "runwayCost": 3,
       "capacity": 3,
@@ -452,6 +469,7 @@
     },
     {
       "id": "emergency_infrastructure",
+      "location": "grid_reactor",
       "round": 2,
       "runwayCost": 2,
       "capacity": 4,

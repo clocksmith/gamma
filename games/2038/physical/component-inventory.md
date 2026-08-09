@@ -13,9 +13,8 @@ markers for state already carried by a component or faction-board track.
 - 1 CEO
 - 3 Teams
 - 4 double-sided Facilities, each showing normal or Grid-Ready
-- 2 double-sided Generators, each showing clean or emergency Power Source
+- 1 Generator; its Energy district determines clean or emergency Power
 - 1 integrated starting-grid identifier on the first Facility
-- 8 Influence cubes
 - 10 Scrutiny cubes, tactually identical to Systemic Risk while concealed
 - 1 Customer-track marker per faction board, showing zero through five
 - 1 Escalation-track marker per faction board, showing zero to two currently
@@ -27,7 +26,7 @@ markers for state already carried by a component or faction-board track.
 - 1 Mandate marker for the shared Mandate track
 
 The integrated prototype therefore needs no separate Grid-Ready markers,
-Power Source selectors, Customer markers, Escalation tokens, or AGI Declaration
+Power Source selectors, Influence cubes, Customer markers, Escalation tokens, or AGI Declaration
 markers. Generic track cubes remain a separate supply because they serve other
 player-board tracks.
 
@@ -43,13 +42,6 @@ player-board tracks.
 - 6 matched Joint Venture pairs
 - 6 matched Mega-Cluster pairs
 - 1 Fusion Demonstrator marker
-- 6 neutral Expert pawns
-- 6 Economic Benchmark tokens
-- 1 Spotlight marker
-- 1 Public Research Grant token
-- 12 Market Access tokens
-- 12 Build-discount tokens
-- 12 Policy Shield tokens
 - 18 Systemic Risk pieces, tactually identical to Scrutiny while concealed
 - 1 opaque Audit bag
 - 1 Initiative marker

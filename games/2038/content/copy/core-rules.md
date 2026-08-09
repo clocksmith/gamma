@@ -34,14 +34,13 @@ Default Game lasts four Eras. The institution with the most ${terms.playerTracks
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside the
    matching Era card.
-4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.customer}, ${terms.resources.safety}, ${terms.actions.influence}, ${terms.playerTracks.scrutiny}, Systemic Risk,
-   Policy Shield, Market Access, ${terms.actions.build} discount, Economic Benchmark, Grid-Ready, ${terms.infrastructure.power}
-   Source, Joint Venture, ${terms.technology.megaCluster}, Expert, Spotlight,
-   Public ${terms.actions.research} Grant, Initiative, and Audit bag components
+4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.customer}, ${terms.resources.safety}, ${terms.playerTracks.scrutiny}, Systemic Risk,
+   Grid-Ready, ${terms.infrastructure.power} Source, Joint Venture,
+   ${terms.technology.megaCluster}, Initiative, and Audit bag components
    within reach.
 5. Each player chooses or receives one Faction. Take its board, six Core
-   Actions, seven ${terms.systems.escalations}, CEO, three Teams, four Facilities, two
-   Generators, markers, and starting resources.
+   Actions, seven ${terms.systems.escalations}, CEO, three Teams, four Facilities, one
+   Generator, markers, and starting resources.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
    supply. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
    and ${terms.resources.safety} to its printed starting values.
@@ -96,7 +95,7 @@ two presence and a Team one. Its destination determines where Facilities and
 power infrastructure may be built, where Research and Deploy occur, which
 location bonus applies, and which political spaces may be Influenced.
 
-Facilities, ${terms.actions.influence} cubes, Generators, and Experts cannot act. ${terms.actions.organize}
+Facilities and Generators cannot act. ${terms.actions.organize}
 receives normal acting-piece movement before its additional movement,
 recruitment, restructuring, or relocation.
 
@@ -374,16 +373,13 @@ Open Weights is global after movement.
 Every player gains one ${terms.playerTracks.capability}. You also gain:
 
 - Two ${terms.playerTracks.trust}
-- Place one ${terms.actions.influence} cube from supply, or relocate one of yours, on ${terms.locations.media},
-  ${terms.locations.government}, or ${terms.locations.capital}
 - Removal of one ${terms.playerTracks.scrutiny} cube
 
 #### Narrative Capture
 
 Narrative Capture is global after movement.
 
-Move or place three ${terms.actions.influence} cubes among ${terms.locations.media}, ${terms.locations.government}, and ${terms.locations.capital}.
-Then choose one:
+Choose one:
 
 - Remove two of your ${terms.playerTracks.scrutiny} cubes.
 - Gain two ${terms.resources.runway}.
@@ -439,7 +435,7 @@ ${facts.shared.advancedGeneration.runwayCostWord} ${terms.resources.runway} and 
 occupies one of that tile’s three Generator slots, provides ${facts.shared.advancedGeneration.powerWord} ${terms.infrastructure.power}, scores
 ${facts.shared.advancedGeneration.mandateWord} ${terms.playerTracks.mandate}, and adds ${facts.shared.advancedGeneration.scrutinyWord} ${terms.playerTracks.scrutiny}. ${terms.technology.advancedGenerationShort} counts as an owned Generator for
 local Power eligibility and ${terms.infrastructure.power} capacity. It does not count
-against the owner’s two ordinary Generator-piece limit. If all three Grid
+against the owner’s one ordinary Generator-piece limit. If all three Grid
 Generator slots are occupied, ${terms.technology.advancedGenerationShort} cannot be constructed. A full ${terms.locations.grid}
 blocks construction.
 
@@ -453,15 +449,6 @@ blocks construction.
   two cards in that deck to the box unseen.
 - Ready all six Core Actions.
 - Award Escalation availability.
-- The lowest-scoring player receives one Public ${terms.actions.research} Grant, spendable as
-  one ${terms.resources.runway} or one ${terms.resources.compute}.
-- The highest-scoring player receives the Spotlight:
-  - Their first ${terms.actions.fund} gains one additional ${terms.resources.runway}.
-  - Their first ${terms.actions.deploy}, ${terms.technology.megaCluster}, ${terms.technology.agentSwarm}, or ${terms.systems.agi} declaration adds one
-    additional ${terms.playerTracks.scrutiny}.
-
-Use the universal tie rule. If everyone has equal ${terms.playerTracks.mandate}, award neither
-marker; no player receives both from a universal tie.
 
 ### B. Three action cycles
 
@@ -657,8 +644,7 @@ Choose one mode.
 **Facility ${terms.actions.build}** means Construct a Facility. **Infrastructure ${terms.actions.build}** means
 Construct a Generator.
 ${terms.technology.megaCluster} and
-${terms.technology.advancedGeneration} are ${terms.systems.escalations}. A ${terms.actions.build} discount applies to them only when an
-effect names them explicitly.
+${terms.technology.advancedGeneration} are ${terms.systems.escalations}.
 
 #### Construct a Facility
 
@@ -669,8 +655,11 @@ be destroyed by rivals.
 
 #### Construct a Generator
 
-The acting piece must be on an Energy hex. Pay the selected ${terms.infrastructure.power} Source’s
-cost and place a Generator with its source card. This mode unlocks in Era II.
+The acting piece must be on an Energy hex. Each player may construct one
+ordinary Generator. On ${terms.locations.grid}, pay one ${terms.resources.runway} and place it as
+${terms.technology.emergencyInfrastructure}. On ${terms.locations.renewable}, pay two
+${terms.resources.runway} and place it as ${terms.technology.cleanInfrastructure}. The Energy
+location determines the source; there is no separate source choice. This mode unlocks in Era II.
 Each Energy hex has three Generator slots shared by all players. A Generator
 does not use a Facility space, but it cannot be built when all three Generator
 slots on that Energy hex are occupied.
@@ -680,8 +669,8 @@ slots on that Energy hex are occupied.
 Choose:
 
 - Recruit one Team at the acting piece’s destination for two ${terms.resources.runway}, then move
-  one CEO, Team, or Expert up to two additional adjacent hexes.
-- Move your CEOs, Teams, and Experts a combined total of five adjacent steps.
+  one CEO or Team up to two additional adjacent hexes.
+- Move your CEOs and Teams a combined total of five adjacent steps.
 - Move one Facility at the acting piece’s destination to an adjacent legal
   Facility space for one ${terms.resources.runway}.
 
@@ -706,38 +695,42 @@ Every ${terms.actions.deploy} adds one ${terms.playerTracks.scrutiny}.
 
 ### ${terms.actions.influence}
 
-Place or relocate up to two of your ${terms.actions.influence} cubes among the acting piece’s
-current or adjacent ${terms.locations.media}, ${terms.locations.government}, or ${terms.locations.capital} hexes. A relocated cube may
-come from any hex. Then choose one ${terms.actions.influence} effect. You may choose an effect
-even if you place or relocate no cubes:
+Move normally, then choose one legal effect:
 
-- Gain one ${terms.playerTracks.trust}.
-- Remove one ${terms.playerTracks.scrutiny}.
-- Create a Joint Venture with an eligible rival.
-- Terminate one named Joint Venture you share.
+- On ${terms.locations.media}, ${terms.locations.government}, or ${terms.locations.capital}, gain one
+  ${terms.playerTracks.trust} or remove one ${terms.playerTracks.scrutiny}. ${terms.locations.media}
+  removes one additional ${terms.playerTracks.scrutiny}; ${terms.locations.government} gains one
+  additional ${terms.playerTracks.trust}.
+- At one of your Facilities, create a Joint Venture using that Facility and an
+  eligible rival Facility, or terminate one named Joint Venture you share.
+
+Political control uses the CEO, Teams, and Facilities already on the board.
+The ${terms.actions.influence} Action creates no separate presence piece.
 
 ## Rules Reference
 
 ## 8. ${terms.infrastructure.power} Source cards
 
-Two shared ordinary Power Source reference cards are never claimed or consumed.
-Set one Source selector when each Generator is built.
-
-Any Energy-hex Generator may use either source, without limit. Generator pieces
-and each Energy hex’s three slots provide scarcity.
+Two shared ordinary Power Source reference cards explain the fixed Energy
+locations. They are never claimed or consumed. ${terms.locations.grid} always
+constructs ${terms.technology.emergencyInfrastructure}; ${terms.locations.renewable}
+always constructs ${terms.technology.cleanInfrastructure}. Each player has one
+ordinary Generator, and each Energy hex still has three shared slots.
 
 Every connected ordinary Generator operates automatically during Production.
 
 ### ${terms.technology.cleanInfrastructure}
 
-- Cost: three ${terms.resources.runway}
+- Location: ${terms.locations.renewable}
+- Cost: two ${terms.resources.runway}
 - Capacity: three ${terms.infrastructure.power}
 - Gain one ${terms.playerTracks.trust} when constructed
 - No recurring penalty
 
 ### ${terms.technology.emergencyInfrastructure}
 
-- Cost: two ${terms.resources.runway}
+- Location: ${terms.locations.grid}
+- Cost: one ${terms.resources.runway}
 - Capacity: four ${terms.infrastructure.power}
 - Add one ${terms.playerTracks.scrutiny} during every Production
 
