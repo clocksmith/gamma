@@ -648,3 +648,32 @@ credit. Evidence:
 `results/nncp_midpoint_tree_node_calibration_qm0_v1/decision.json`, guard
 `results/nncp_midpoint_tree_node_calibration_qm0_guard_v1.json`, adaptive job
 `20260809T155220Z_5a0202d849`.
+
+## 2026-08-09 - Agent A KAIROS-105 final-head dyadic gate is infrastructure-pending
+
+Agent A froze `kairos105_final_head_dyadic_qm0_v1` as an opening same-stream
+test over the first `1,000,000` raw bytes of the exact `cmix-obias` arithmetic
+bit stream. It observes the completed post-BitLSTM probability without changing
+raw arithmetic calls, override bits, predictor state, update order, modeled
+truths, or inverse. A paid rank-eight Q8 dyadic affine field is compared with
+the unchanged donor, one global field, intercept-only, rotated, shuffled, and
+free atomic-leaf controls. The opening references are `4,500` gross bytes and
+`500` bytes over every matched control; even a pass would authorize only a
+compact full-stream observer and fresh exact replay.
+
+Neither attempted adaptive job reached scientific execution. Job
+`20260809T175459Z_84279af953` failed while copying the donor because
+`tools/upx` resolved to a missing target. The no-overwrite infrastructure retry
+`20260809T181255Z_6abb21bd64` passed that point but failed because
+`post_head_complete_trace.patch` is malformed at its second hunk. Both guards
+completed without a memory violation, at only `2,344` and `3,900` KiB sampled
+single-process RSS respectively.
+
+Conclusion: KAIROS-105 remains a frozen, unmeasured Agent A proposal with zero
+archive, forecast, package, or score credit. The concrete next action is a new
+candidate/retry identity that repairs the patch syntax, proves clean donor
+copy and patch application, and then executes the already frozen controls. No
+feature, dyadic-leaf, coefficient, schedule, or gate sweep is authorized by
+these infrastructure failures. Evidence: the two failed adaptive job records,
+their logs, `docs/kairos105_final_head_dyadic_qm0_plan.md`, and commit
+`bc746ecb`.
