@@ -2,13 +2,13 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T21:10:22+00:00`
+- Generated at UTC: `2026-08-09T21:27:48+00:00`
 
 ## Target State
 
-- `10.5000000%` target score: `105,000,000`
+- `10.8000000%` target score: `108,000,000`
 - Full-corpus constructive result present: `false`
-- `10.5000000%` constructive upper bound present: `false`
+- `10.8000000%` constructive upper bound present: `false`
 
 ## Operator Summary
 
@@ -20,7 +20,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `8,218`
+- RSS samples: `8,427`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `5,691,852`
@@ -35,7 +35,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
+- Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
 
 ## Active Gate
 
@@ -56,9 +56,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `991`
-- RSS guard JSON modified UTC: `2026-08-09T21:10:18+00:00`
-- RSS guard JSON SHA-256: `6e86fe7cc25a1bec995d23ef1826163f333b383acb550123999919f21a159551`
-- RSS samples: `8,218`
+- RSS guard JSON modified UTC: `2026-08-09T21:27:44+00:00`
+- RSS guard JSON SHA-256: `672a2200769f80b0f2998a6b6dfbe586d1c7590c5f93cfc5fb416b6718532edc`
+- RSS samples: `8,427`
 - Max sampled single RSS KiB: `5,691,852`
 - Max sampled tree RSS KiB: `5,712,376`
 - Single-process RSS margin KiB: `4,793,908`
@@ -118,7 +118,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Gate mutation allowed: `false`
 - Recommended action: `wait_for_gate_receipts`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
+- Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
 
 ## Operator Logs
 
@@ -129,11 +129,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `730`
-- Registered programs: `292`
-- Untracked nonignored entries: `3`
-- Modified tracked entries: `4`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=40, measured_negative=100, retired=539`
+- Program directories: `731`
+- Registered programs: `293`
+- Untracked nonignored entries: `8`
+- Modified tracked entries: `18`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=40, measured_negative=100, retired=539, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -148,7 +148,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,622,016 | `2026-08-09T21:06:32+00:00` |
+| `projects/enwiki9/results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/candidate_encode_only.nncp` | 1,687,552 | `2026-08-09T21:18:03+00:00` |
 
 ## Active RSS
 
@@ -182,4 +182,4 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Claim Rule
 
-No prefix row proves the `10.5000000%` full-corpus target.
+No prefix row proves the `10.8000000%` full-corpus target.

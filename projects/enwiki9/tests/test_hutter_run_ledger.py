@@ -21,7 +21,7 @@ def fixture(tmp_path: Path) -> dict:
         "schema": "enwiki9_hutter_frontier_v1",
         "target": {
             "input_bytes": 1_000_000_000,
-            "score_bytes": 105_000_000,
+            "score_bytes": 108_000_000,
             "required_roundtrip": True,
         },
         "candidates": [

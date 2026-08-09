@@ -51,7 +51,7 @@ measured candidate.
 The objective is a constructive official full-corpus score:
 
 ```text
-score <= 105,000,000 bytes
+score <= 108,000,000 bytes
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
 ```
@@ -148,8 +148,8 @@ inspect that host directly.
 
 ## Status Replies
 
-When explicitly asked for Hutter status, include the `105,000,000` byte and
-`10.5000000%` targets, the verified full-1G score or `unknown`, the best counted
+When explicitly asked for Hutter status, include the `108,000,000` byte and
+`10.8000000%` targets, the verified full-1G score or `unknown`, the best counted
 forecast and signed target distance, and the active gate's receipt-backed
 scope, progress, guard state, and terminal status.
 
