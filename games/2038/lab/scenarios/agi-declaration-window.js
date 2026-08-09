@@ -1,7 +1,7 @@
 export const AGI_DECLARATION_WINDOW_SCENARIO_ID =
-  "agi_declaration_window_v1";
+  "agi_claim_window_v1";
 
-const ARMS = new Set(["eligible", "blocked_grid_ready"]);
+const ARMS = new Set(["eligible", "blocked_compute"]);
 
 export function validateAgiDeclarationScenario(value, playerCount) {
   if (value === null || value === undefined) return null;
@@ -13,7 +13,7 @@ export function validateAgiDeclarationScenario(value, playerCount) {
   }
   if (!ARMS.has(value.arm)) {
     throw new TypeError(
-      `${value.id} arm must be eligible or blocked_grid_ready.`
+      `${value.id} arm must be eligible or blocked_compute.`
     );
   }
   const focalSeat = Number(value.focalSeat);
@@ -30,22 +30,6 @@ export function validateAgiDeclarationScenario(value, playerCount) {
     focalSeat,
     applied: false
   };
-}
-
-function availableFacilityTile(match, player, index) {
-  const occupiedByPlayer = new Set(
-    player.facilities.map((facility) => facility.tileId)
-  );
-  const candidates = match.board.filter((tile) =>
-    tile.category !== "frontier" &&
-    !occupiedByPlayer.has(tile.instanceId) &&
-    match.tileOccupancy(tile.instanceId) <
-      (tile.facilitySpaces ?? match.config.board.facilitySpacesPerHex)
-  );
-  if (!candidates.length) {
-    throw new Error("AGI declaration scenario could not place a legal Facility.");
-  }
-  return candidates[index % candidates.length];
 }
 
 export function applyAgiDeclarationScenario(match) {
@@ -70,48 +54,12 @@ export function applyAgiDeclarationScenario(match) {
   };
 
   player.capability = Math.max(player.capability, requirements.capability);
-  player.customers = Math.max(player.customers, requirements.customers);
-  player.trust = Math.max(player.trust, requirements.trust);
-  player.compute = Math.max(player.compute, requirements.computeCost);
-
-  while (player.facilities.length < requirements.facilities) {
-    const tile = availableFacilityTile(
-      match,
-      player,
-      player.facilities.length
-    );
-    player.facilities.push({
-      id: `scenario-s${player.seat}-facility-${player.facilities.length + 1}`,
-      tileId: tile.instanceId,
-      category: tile.category,
-      powered: true,
-      gridReady: false,
-      gridReadySupportSeats: []
-    });
-  }
-
-  for (const candidate of match.players) {
-    for (const facility of candidate.facilities) {
-      facility.gridReady = false;
-      facility.gridReadySupportSeats = [];
-    }
-  }
-  const markedFacilities = scenario.arm === "eligible"
-    ? requirements.facilities
-    : Math.max(0, requirements.facilities - 1);
-  for (const facility of player.facilities.slice(0, markedFacilities)) {
-    facility.powered = true;
-    facility.gridReady = true;
-  }
+  player.compute = scenario.arm === "eligible"
+    ? Math.max(player.compute, requirements.computeCost)
+    : Math.max(0, requirements.computeCost - 1);
 
   match.synchronizePublicMandate(player, "agi_declaration_scenario");
   match.recordAgiCoreRequirements(player, "scenario_injected");
-  if (markedFacilities >= requirements.facilities) {
-    match.markAgiFunnel(player, "becameGridReady", "scenario_injected", {
-      gridReadyFacilities: markedFacilities,
-      supportingSeats: []
-    });
-  }
   match.recordEligibility(player, "scenario_injected");
   const readiness = match.declarationReadiness(player);
   const expectedReady = scenario.arm === "eligible";
@@ -138,10 +86,11 @@ export function applyAgiDeclarationScenario(match) {
       trust: player.trust,
       compute: player.compute,
       facilities: player.facilities.length,
-      gridReadyFacilities: readiness.gridReadyFacilities,
+      gridReadyFacilities: 0,
       legalDeclaration: readiness.ready,
       failingRequirement: readiness.failingRequirement
     },
+    claimed: false,
     declared: false,
     final: null
   };
@@ -153,6 +102,14 @@ export function markScenarioDeclaration(match, player) {
   scenario.declared = true;
   scenario.declarationRound = match.round;
   scenario.declarationCycle = match.cycle;
+}
+
+export function markScenarioClaim(match, player) {
+  const scenario = match.matchMetrics.scenario;
+  if (!scenario || scenario.focalSeat !== player.seat) return;
+  scenario.claimed = true;
+  scenario.claimRound = match.round;
+  scenario.claimCycle = match.cycle;
 }
 
 export function finalizeAgiDeclarationScenario(match) {

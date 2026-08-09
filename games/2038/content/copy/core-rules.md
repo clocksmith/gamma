@@ -197,8 +197,9 @@ Each ${terms.playerTracks.customer} produces one ${terms.resources.runway} durin
 
 ### ${terms.playerTracks.trust}
 
-A zero-to-six track affecting regulation, Joint Ventures, safety, and the
-final declaration. Zero ${terms.playerTracks.trust} does not eliminate a player.
+A zero-to-six track affecting regulation, Joint Ventures, safety, and whether
+the shared World Ending is Open. Zero ${terms.playerTracks.trust} does not
+eliminate a player.
 
 **${terms.playerTracks.mandate}** is the score used to determine the winner (victory points).
 It is the public authority you have gained to define outcomes.
@@ -212,8 +213,7 @@ ${terms.playerTracks.mandate} is normally scored immediately on one public track
 - Two the first time ${terms.playerTracks.capability} reaches three, six, nine, and twelve, except
   for a printed faction scoring rule.
 - Two the first time ${terms.playerTracks.trust} reaches two, four, and six.
-- Printed ${terms.playerTracks.mandate} from ${terms.systems.headlines}, Era Mandates, Fusion, faction abilities,
-  and ${terms.systems.agi}.
+- Printed ${terms.playerTracks.mandate} from ${terms.systems.headlines}, Era Mandates, Fusion, and faction abilities.
 
 Threshold awards are permanent; later losses do not reverse them.
 
@@ -397,7 +397,7 @@ Choose one:
 
 Each player receives two Escalation availability.
 
-Agent Swarms, ${terms.systems.agi} declarations, Fusion, and exceptional faction programs now
+Agent Swarms, ${terms.systems.agi} claims, Fusion, and exceptional faction programs now
 enter play.
 
 #### ${terms.technology.agentSwarm}
@@ -410,20 +410,16 @@ visit bonus to only one. Exhaust both, flip ${terms.technology.agentSwarm}, and 
 
 Requirements:
 
-- ${terms.playerTracks.capability} nine or higher
-- At least three ${terms.playerTracks.customers}
-- At least three grid-ready Facilities
-- ${terms.playerTracks.trust} two or higher
+- ${terms.playerTracks.capability} six or higher
 - Spend three ${terms.resources.compute}
 
-Declare ${terms.systems.agi} is global after movement. Check every requirement when it
-resolves.
-
-Selecting Declare ${terms.systems.agi} schedules an attempt; it is not itself a
-declaration. The selection is eligible only if every requirement is already
-met or one legal accepted pre-Act trade could supply the missing
-${terms.resources.compute}. Score and flip the declaration card only when the
-Escalation resolves successfully.
+Declare ${terms.systems.agi} is global after movement. It registers an
+institutional claim for the final ${terms.systems.agi} Resolution; it does not
+declare ${terms.systems.agi}, score ${terms.playerTracks.mandate}, or end play.
+Add three ${terms.playerTracks.scrutiny} and flip the declaration card to its
+Claimed face. The selection is eligible only if its ${terms.playerTracks.capability}
+and ${terms.resources.compute} requirements are already met or one legal
+accepted pre-Act trade could supply the missing ${terms.resources.compute}.
 
 A **grid-ready Facility** has its Grid-Ready face showing after earning it
 during a completed Production. After allocating Power, flip each Facility
@@ -431,16 +427,40 @@ receiving its complete Facility demand to Grid-Ready. Flip it back immediately
 if that Facility relocates or loses its legal Power connection, or during any
 Production when it lacks full Power.
 
-To declare ${terms.systems.agi}, check three existing Grid-Ready faces. Do not run a second Production
-calculation. A Facility built, moved, linked, or reconnected after the most
-recent Production must operate successfully in a later Production before
-receiving or regaining one. A Facility built in Era IV cannot support a
-declaration that Era.
+Grid-Ready remains operational evidence for Facilities and may matter to
+printed effects, but it is not an ${terms.systems.agi} claim requirement.
 
-The first valid declaration scores seven ${terms.playerTracks.mandate}. Later declarations score
-five. Every declaration adds three ${terms.playerTracks.scrutiny}.
+#### Final ${terms.systems.agi} Resolution
 
-Play continues after a declaration; victory does not require one.
+After the Era IV Mandate scores, apply the offline-Facility penalty and
+determine the ordinary winner using the final-scoring tie breakers. That player,
+or those tied players, are the **provisional winner**. Then resolve one final
+public uncertainty:
+
+1. ${terms.systems.agi} emerges with a five-percent probability. Resolve one
+   shared roll; do not roll once per player.
+2. If ${terms.systems.agi} does not emerge, the provisional winner or joint
+   provisional winners win.
+3. If it emerges, give every player an **effective Mandate** equal to final
+   ${terms.playerTracks.mandate}, plus three if that player registered an
+   ${terms.systems.agi} claim.
+4. Give player `i` selection weight `effective Mandateᵢ⁴`. Divide each weight by
+   the sum of all weights to obtain that player's selection probability.
+5. Make one weighted selection. The selected player declares
+   ${terms.systems.agi} and becomes the sole winner, replacing the provisional
+   winner. No second declaration occurs.
+
+If every effective Mandate is zero, use equal weights instead. This is the only
+fallback to the fourth-power calculation.
+
+Use the game resolver or any auditable uniform random-number generator. Record
+the emergence roll, each final and effective Mandate, each fourth-power weight,
+and the selection roll. This is a rare, deliberately volatile coda: final-Era
+choices still determine the likely winner, while a trailing institution can
+spend an Action and three ${terms.resources.compute} on a low-probability claim.
+
+Registering a claim does not end play. A declaration occurs only during final
+resolution; victory does not require one.
 
 #### ${terms.technology.advancedGeneration}
 
@@ -777,6 +797,10 @@ form the twelve-card **${terms.systems.futureTimeline}**. A Headline grants no A
 its text names this Era’s Production, its rules expire at the end of the
 current cycle.
 
+When an effect immediately resolves one Facility's printed production, resolve
+only that Facility. Do not run a second Production calculation, reopen Power
+trading, or update unrelated Facilities.
+
 ## 10. Map and component reference
 
 Use [**Map reference**](/map-reference.html) for setup, adjacency, location effects, presence, and
@@ -791,8 +815,11 @@ At game end:
 
 1. Read the twelve ${terms.systems.headlines} in the ${terms.systems.futureTimeline} aloud, Era by Era.
 2. Lose one ${terms.playerTracks.mandate} for each offline Facility.
-3. Resolve the shared World Ending.
-4. Announce the highest-${terms.playerTracks.mandate} institution only after reading the history it
+3. Name the ordinary winner under the tie breakers below as the provisional
+   winner; a complete tie remains a provisional joint victory.
+4. Resolve the final ${terms.systems.agi} Resolution described above.
+5. Resolve the shared World Ending.
+6. Announce the final institutional winner only after reading the history it
    claims to have won.
 
 Offline penalties cannot reduce a player below zero ${terms.playerTracks.mandate}.
@@ -801,16 +828,17 @@ There is no other endgame scoring.
 
 ### The shared World Ending
 
-Determine one institutional winner and one shared ending from visible state:
+Determine one institutional winner and one shared ending from visible state
+and the recorded ${terms.systems.agi} Resolution:
 
 - Count the ${terms.systems.agi} declarations.
 - Total every player’s final ${terms.playerTracks.trust}.
 - Count unresolved Systemic Risk cubes remaining in the Audit bag.
 
-First determine whether ${terms.systems.agi} emerges. It emerges if:
-
-- At least one declaring institution finishes the game at ${terms.playerTracks.capability} nine or
-  higher.
+${terms.systems.agi} emerges only when the shared five-percent gate opened and
+the weighted resolution selected one institution. Otherwise it does not
+emerge. Never infer emergence from ${terms.playerTracks.capability}, a claim
+card, or a projected probability.
 
 Then determine whether the ending is **Open**. It is Open only if both
 conditions are true:
@@ -822,8 +850,8 @@ conditions are true:
 Collective ${terms.playerTracks.trust} is every player’s total; individuals need not exceed their
 own starting value.
 
-If either Open condition fails, the ending is **Closed**. A qualified ${terms.systems.agi}
-declaration does not by itself make the ending Open.
+If either Open condition fails, the ending is **Closed**. An ${terms.systems.agi}
+selection does not by itself make the ending Open.
 
 Cross the two results to find the shared World Ending:
 

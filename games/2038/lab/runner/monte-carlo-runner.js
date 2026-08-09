@@ -286,14 +286,20 @@ function aggregateMatchMetrics(outcomes) {
     declarations: 0,
     declarationPpaIterations: 0,
     declarationCapacityOps: 0,
+    agiResolution: {
+      opportunities: 0,
+      emerged: 0,
+      claimantRegistrations: 0,
+      selectedClaimant: 0,
+      winnerOverrides: 0,
+      selectedMandateRanks: {}
+    },
     agiFunnel: {
       playerOpportunities: 0,
       coreRequirementsMet: 0,
-      neededExternalPower: 0,
-      receivedPowerOffer: 0,
-      acceptedPowerPrice: 0,
-      becameGridReady: 0,
       legalDeclarationWindow: 0,
+      claimRegistered: 0,
+      emergenceTriggered: 0,
       declared: 0
     },
     factionAbilityValues: {},
@@ -324,15 +330,32 @@ function aggregateMatchMetrics(outcomes) {
     }
     totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;
     totals.declarations += metrics.declarations || 0;
+    if (metrics.agiResolution) {
+      const resolution = metrics.agiResolution;
+      totals.agiResolution.opportunities += 1;
+      totals.agiResolution.claimantRegistrations +=
+        resolution.claimantSeats?.length || 0;
+      if (resolution.emerged) {
+        totals.agiResolution.emerged += 1;
+        totals.agiResolution.selectedClaimant += Number(
+          resolution.selectedWasClaimant
+        );
+        totals.agiResolution.winnerOverrides += Number(
+          resolution.winnerOverridden
+        );
+        increment(
+          totals.agiResolution.selectedMandateRanks,
+          String(resolution.selectedMandateRank)
+        );
+      }
+    }
     for (const entry of metrics.agiFunnel || []) {
       totals.agiFunnel.playerOpportunities += 1;
       for (const stage of [
         "coreRequirementsMet",
-        "neededExternalPower",
-        "receivedPowerOffer",
-        "acceptedPowerPrice",
-        "becameGridReady",
         "legalDeclarationWindow",
+        "claimRegistered",
+        "emergenceTriggered",
         "declared"
       ]) {
         totals.agiFunnel[stage] += Number(Boolean(entry[stage]));
@@ -600,9 +623,17 @@ class BatchAccumulator {
       headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {}, realignments: {},
       systemicRiskCreated: 0, declarations: 0, declarationPpaIterations: 0, declarationCapacityOps: 0,
       agiFunnel: {
-        playerOpportunities: 0, coreRequirementsMet: 0, neededExternalPower: 0,
-        receivedPowerOffer: 0, acceptedPowerPrice: 0, becameGridReady: 0,
-        legalDeclarationWindow: 0, declared: 0
+        playerOpportunities: 0, coreRequirementsMet: 0,
+        legalDeclarationWindow: 0, claimRegistered: 0,
+        emergenceTriggered: 0, declared: 0
+      },
+      agiResolution: {
+        opportunities: 0,
+        emerged: 0,
+        claimantRegistrations: 0,
+        selectedClaimant: 0,
+        winnerOverrides: 0,
+        selectedMandateRanks: {}
       },
       factionAbilityValues: {}, factionActionSelections: {}, powerTrades: 0,
       causallyNecessaryPowerTrades: 0, cooperativeDeclarationMatches: 0,
@@ -714,9 +745,28 @@ class BatchAccumulator {
     }
     totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;
     totals.declarations += metrics.declarations || 0;
+    if (metrics.agiResolution) {
+      const resolution = metrics.agiResolution;
+      totals.agiResolution.opportunities += 1;
+      totals.agiResolution.claimantRegistrations +=
+        resolution.claimantSeats?.length || 0;
+      if (resolution.emerged) {
+        totals.agiResolution.emerged += 1;
+        totals.agiResolution.selectedClaimant += Number(
+          resolution.selectedWasClaimant
+        );
+        totals.agiResolution.winnerOverrides += Number(
+          resolution.winnerOverridden
+        );
+        increment(
+          totals.agiResolution.selectedMandateRanks,
+          String(resolution.selectedMandateRank)
+        );
+      }
+    }
     for (const entry of metrics.agiFunnel || []) {
       totals.agiFunnel.playerOpportunities += 1;
-      for (const stage of ["coreRequirementsMet", "neededExternalPower", "receivedPowerOffer", "acceptedPowerPrice", "becameGridReady", "legalDeclarationWindow", "declared"]) {
+      for (const stage of ["coreRequirementsMet", "legalDeclarationWindow", "claimRegistered", "emergenceTriggered", "declared"]) {
         totals.agiFunnel[stage] += Number(Boolean(entry[stage]));
       }
     }
@@ -868,8 +918,8 @@ class BatchAccumulator {
       ...(diagnostics.seatWinShareRange > 0.15 ? [{ id: "seat_bias", severity: "high", value: diagnostics.seatWinShareRange }] : []),
       ...(diagnostics.factionWinShareRange > 0.15 ? [{ id: "faction_spread", severity: "high", value: diagnostics.factionWinShareRange }] : []),
       ...(diagnostics.actionDiversity < 0.72 ? [{ id: "action_collapse", severity: "high", value: diagnostics.actionDiversity }] : []),
-      ...(diagnostics.agiDeclarationRate < 0.1 ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiDeclarationRate }] : []),
-      ...(diagnostics.agiDeclarationRate > 0.7 ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiDeclarationRate }] : []),
+      ...(diagnostics.agiEmergenceRate < 0.03 ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiEmergenceRate }] : []),
+      ...(diagnostics.agiEmergenceRate > 0.08 ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiEmergenceRate }] : []),
       ...(diagnostics.openContinuityRate === 0 ? [{ id: "closed_continuity_only", severity: "medium", value: diagnostics.openContinuityRate }] : [])
     ];
     return {
@@ -1073,11 +1123,11 @@ export async function runMonteCarlo({
     ...(diagnostics.actionDiversity < 0.72
       ? [{ id: "action_collapse", severity: "high", value: diagnostics.actionDiversity }]
       : []),
-    ...(diagnostics.agiDeclarationRate < 0.1
-      ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiDeclarationRate }]
+    ...(diagnostics.agiEmergenceRate < 0.03
+      ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiEmergenceRate }]
       : []),
-    ...(diagnostics.agiDeclarationRate > 0.7
-      ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiDeclarationRate }]
+    ...(diagnostics.agiEmergenceRate > 0.08
+      ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiEmergenceRate }]
       : []),
     ...(diagnostics.openContinuityRate === 0
       ? [{ id: "closed_continuity_only", severity: "medium", value: diagnostics.openContinuityRate }]

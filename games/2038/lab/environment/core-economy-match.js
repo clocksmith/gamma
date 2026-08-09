@@ -693,9 +693,6 @@ export class CoreEconomyMatch {
     if (
       !player.metrics.earliestAgiEligibility &&
       player.capability >= requirement.capability &&
-      player.customers >= requirement.customers &&
-      player.facilities.length >= requirement.facilities &&
-      player.trust >= requirement.trust &&
       player.compute >= requirement.computeCost
     ) {
       player.metrics.earliestAgiEligibility = {

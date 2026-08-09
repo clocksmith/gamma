@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.11.0` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.4-test`
+**Executable game:** `0.12.0` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.7.0-rc.5-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -117,31 +117,20 @@ crash can therefore lose only an in-progress game. Provider failures and other
 quarantined matches retain their failure receipts in the aggregate but do not
 create a completed-game archive.
 
-## Paired deterministic AGI declaration scenario
+## Paired deterministic AGI claim scenario
 
-The registered `agi_declaration_window_v1` scenario deliberately creates an
-AGI decision instead of waiting for rare natural coverage. Immediately before
-the first Era IV action selection, both common-seed arms receive the same
-focal Capability, Customers, Trust, Compute, Facilities, faction, seat,
-opponents, and policy state. The eligible arm has three Grid-Ready Facility
-states; the blocked control has two. Scenario configuration is part of the strategy
-and launch identity, and each observation records the injected state, legal
-window, declaration, and final focal state.
+The registered `agi_claim_window_v1` scenario creates an Era IV claim decision
+instead of waiting for natural coverage. Common-seed arms differ only by the
+final Compute needed to pay for a claim. The scenario verifies claim
+reachability and policy choice; it cannot estimate the final coda because the
+coda contains a deliberately rare shared random gate.
 
-Run the three registered fields independently so four-player authority and
-the adjacent guards remain separate:
-
-```bash
-npm run simulate:faction-swap -- \
-  --comparisons evidence/studies/simulation/preregistrations/2026-08-01-agi-declaration-endpoint-v1.json \
-  --field p4 \
-  --workers 8 \
-  --output evidence/studies/simulation/2026-08-01-agi-declaration-endpoint-v1.p4.look-1.raw.json
-```
-
-Use `--field p3` and `--field p5` for the guards. The fields contain no LLM
-backend and make no provider calls. This is endpoint qualification, not an
-estimate of how often a natural game can afford the full AGI route.
+Natural reports record the gate probability and roll, every final Mandate,
+each claim bonus, fourth-power weight, selection roll, selected Mandate rank,
+and whether the selected institution displaced the provisional winner. The
+historical `agi_declaration_window_v1` preregistration remains evidence for the
+superseded Grid-Ready declaration contract and must not be mixed with current
+claims.
 
 ## Negotiation model
 

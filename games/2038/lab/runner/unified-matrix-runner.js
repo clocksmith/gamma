@@ -688,11 +688,9 @@ function outcomeSummary(observations) {
   const agiFunnel = {
     playerOpportunities: 0,
     coreRequirementsMet: 0,
-    neededExternalPower: 0,
-    receivedPowerOffer: 0,
-    acceptedPowerPrice: 0,
-    becameGridReady: 0,
     legalDeclarationWindow: 0,
+    claimRegistered: 0,
+    emergenceTriggered: 0,
     declared: 0
   };
   const factionAbilityValues = {};
@@ -724,11 +722,9 @@ function outcomeSummary(observations) {
       agiFunnel.playerOpportunities += 1;
       for (const stage of [
         "coreRequirementsMet",
-        "neededExternalPower",
-        "receivedPowerOffer",
-        "acceptedPowerPrice",
-        "becameGridReady",
         "legalDeclarationWindow",
+        "claimRegistered",
+        "emergenceTriggered",
         "declared"
       ]) {
         agiFunnel[stage] += Number(Boolean(entry[stage]));

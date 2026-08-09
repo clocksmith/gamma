@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.4-test`
+**Rules under review:** `0.7.0-rc.5-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.4-test`. Executable
-game `0.11.0` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.5-test`. Executable
+game `0.12.0` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.7.0-rc.4-test` and executable `0.11.0` correct action eligibility
+Candidate `0.7.0-rc.5-test` and executable `0.12.0` retain corrected action eligibility
 and immediate-trade timing after the controlled Codex session exposed a
 knowingly impossible AGI commitment. A selectable Action must resolve now or
 become resolvable through one legal accepted pre-Act trade. A rejected required
@@ -132,7 +132,15 @@ resource preferences operational and records trade-required selections and
 post-commitment blocks. These are implementation and simulation claims, not
 human teachability or balance evidence.
 
-This candidate changes no mechanic or number from `0.7.0-rc.2-test`. It
+They also replace deterministic AGI qualification with one final five-percent
+gate. An Era IV claim costs three Compute and adds three Scrutiny; if the gate
+opens, that claim adds three effective Mandate before normalized fourth-power
+selection chooses the sole winner. Simulation can verify this procedure and
+measure its frequency, but cannot establish whether people find the coda fair,
+funny, dramatic, or strategically worthwhile.
+
+Candidate `0.7.0-rc.3-test` changed no mechanic or number from
+`0.7.0-rc.2-test`. It
 corrects the machine-readable component and round vocabulary, separates
 Default local Power from Advanced Network language across executable copy, and
 records one broad profile-scoped complexity forecast as unmeasured. Evidence
@@ -267,7 +275,8 @@ diagnostics rather than balance-authority evidence.
 - Customers and Capability after every Era;
 - each Customer’s immediate Mandate award and continuing Production income;
 - Mirevanta Works’ Capability-nine and Capability-twelve Peer Validation awards;
-- earliest grid-ready AGI eligibility and every declaration.
+- every legal AGI claim, claim taken or declined, and its Action/Compute
+  opportunity cost.
 
 ### Infrastructure and negotiation
 
@@ -286,12 +295,10 @@ diagnostics rather than balance-authority evidence.
 - whether a supplier forgoes Power needed by its own Facilities, whether a
   refusal threat changes the deal, and whether participants describe the
   bargain as strategic, coerced, or kingmaking;
-- whether a Power supplier whose imported unit is counterfactually necessary
-  for an eventual declaration enters Era IV within a competitive score
-  range and finishes in the top half;
-- whether an institution that prepares unsuccessfully for AGI remains
-  competitive;
-- the earliest three-Grid-Ready state and first legal AGI window;
+- whether a trailing institution treats an AGI claim as a credible final-Era
+  pivot rather than an automatic or irrelevant choice;
+- whether the three-effective-Mandate claim bonus is understandable before
+  selection;
 - all three Grid-slot occupancy before Era IV;
 - whether Fusion was built, declined, blocked, or denied by occupied slots;
 - immediate trades and persistent agreements.
@@ -313,6 +320,10 @@ diagnostics rather than balance-authority evidence.
 - every Industrial Velocity discount, whether it reduced the final paid cost
   of a completed Facility, and any Mandate awarded;
 - Era Mandate qualification and result;
+- provisional Mandate winner;
+- AGI emergence roll, every final and effective Mandate, fourth-power weight,
+  selection roll, selected institution, and whether the coda changed the
+  winner;
 - final institutional winner and shared World Ending.
 
 ### Advanced Play Realignment and narrative

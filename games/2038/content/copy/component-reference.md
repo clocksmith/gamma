@@ -43,7 +43,7 @@ Each faction receives:
 - One Escalation track marker
 - Six Core Action cards
 - Seven ${terms.systems.escalation} cards
-- One ${terms.systems.agi} Declaration card with an undeclared / declared reverse
+- One Declare ${terms.systems.agi} card with an unclaimed / claimed reverse
 
 Generators do not count against the Facility limit.
 

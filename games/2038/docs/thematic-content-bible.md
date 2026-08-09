@@ -95,7 +95,7 @@ or overage allowance has been selected yet.
 | CEOs / Teams / Facilities | 6 / 18 / 24 | 5 / 15 / 20 at the supported maximum; all at 6-player exploratory play | Not declared |
 | Generator / Advanced Link pieces | 6 / 12 | 5 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
 | Scrutiny cubes / Customer-track markers | 60 / 6 | 50 / 5 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Escalation-track markers / separate AGI Declaration pieces | 6 / 0 | 5 / 0 at the supported maximum; all track markers at 6-player exploratory play | Not declared |
+| Escalation-track markers / separate AGI claim pieces | 6 / 0 | 5 / 0 at the supported maximum; all track markers at 6-player exploratory play | Not declared |
 | Integrated Grid-Ready faces / starting-grid identities | 24 / 6 Facilities carry these states | 20 / 5 at the supported maximum; all at 6-player exploratory play | Not applicable; these are not separate pieces |
 | Joint Venture / Mega-Cluster pairs | 6 / 6 shared pairs | All 6 pairs of either type may be committed | Not declared |
 | Fusion Demonstrator | 1 shared marker | 1 | Not declared |
@@ -443,8 +443,9 @@ copy:
 ## World Ending direction
 
 The current rules resolve four mechanical World Endings using two independent
-axes: AGI emergence and Open/Closed continuity. AGI emergence follows the
-qualified-declarer test. Open continuity requires collective Trust to improve
+axes: AGI emergence and Open/Closed continuity. AGI emergence requires the
+shared five-percent gate to open and the fourth-power Mandate resolution to
+select one institution. Open continuity requires collective Trust to improve
 by the player count from setup and unresolved Systemic Risk to remain below the
 player count.
 

@@ -13,12 +13,7 @@ const RULE_BOUNDS = {
   deployComputeCost: [0, 3, 1],
   startingGridPower: [1, 3, 1],
   customerMandate: [1, 4, 1],
-  agiFirstMandate: [4, 10, 1],
-  agiLaterMandate: [3, 8, 1],
   agiCapability: [6, 12, 1],
-  agiCustomers: [2, 5, 1],
-  agiFacilities: [2, 4, 1],
-  agiTrust: [1, 4, 1],
   agiComputeCost: [1, 5, 1],
   customerCapabilityOffset: [-2, 2, 1],
   startingTeamsDeployed: [0, 3, 1]
@@ -33,12 +28,7 @@ const DEFAULT_RULE_VARIANT = {
   deployComputeCost: 1,
   startingGridPower: 1,
   customerMandate: 2,
-  agiFirstMandate: 7,
-  agiLaterMandate: 5,
-  agiCapability: 9,
-  agiCustomers: 3,
-  agiFacilities: 3,
-  agiTrust: 2,
+  agiCapability: 6,
   agiComputeCost: 3,
   customerCapabilityOffset: 0,
   startingTeamsDeployed: 1
@@ -105,7 +95,6 @@ export function mutateRulesVariant(variant, seed, { mutations = 2 } = {}) {
     if (!changed.includes(key)) changed.push(key);
   }
   result.fundVenture = Math.max(result.fundConservative + 1, result.fundVenture);
-  result.agiLaterMandate = Math.min(result.agiFirstMandate, result.agiLaterMandate);
   return { variant: result, changed };
 }
 
@@ -246,7 +235,7 @@ export async function evolveStrategy({
 
 function ruleFitness(report, targetAgiRate) {
   const diagnostics = report.diagnostics;
-  const agiPenalty = Math.abs(diagnostics.agiDeclarationRate - targetAgiRate);
+  const agiPenalty = Math.abs(diagnostics.agiEmergenceRate - targetAgiRate);
   const contractPenalty = (report.balanceEvaluation?.checks || []).reduce((sum, entry) => {
     if (entry.passed || !Number.isFinite(entry.value) || !Number.isFinite(entry.threshold)) {
       return sum;
@@ -271,7 +260,7 @@ export async function searchRuleVariants({
   seed = "frontier-rule-search",
   profileIds,
   baseline = DEFAULT_RULE_VARIANT,
-  targetAgiRate = 0.35,
+  targetAgiRate = 0.05,
   signal,
   onProgress
 } = {}) {
