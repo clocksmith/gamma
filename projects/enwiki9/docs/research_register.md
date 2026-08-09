@@ -1902,3 +1902,39 @@ positive, the shifted control materially worse, at least `80%` of `F`'s
 actual gain, at most `128 MiB` added resident memory, and at most `15%` added
 parent runtime. Do not sweep normalization, optimizer constants, split,
 parameter group, or shifted control around a miss.
+
+## 2026-08-09 - MIDAS-G1024 LibNC ownership contract audited
+
+Read-only audit of the receipt-bound `libnc.so` and `libnc.h` establishes a
+safe native implementation path if the antecedent gates authorize it.
+`nc_dup_tensor()` is not a copy: disassembly shows it increments the reference
+count and returns the identical tensor pointer. Calling `nc_set_param()` on
+such a duplicate would mutate the parent parameter graph and is forbidden.
+
+The midpoint head-gradient helper must instead:
+
+1. retain the first-half final hidden tensors before `embed_out`;
+2. detach copied hidden values without releasing the deep key/value graph;
+3. allocate distinct tensors with `nc_new_tensor_from_tensor()`, populate them
+   with `nc_tensor_copy()`, and attach custom gradient tags only to those
+   temporary `embed_out` and `out_bias` copies;
+4. recompute the head softmax/loss on the exact `1,024` first-half examples;
+5. capture the two gradients through a custom `nc_backward()` callback;
+6. apply scalar-RMS updates to the original head using tensor operations and
+   `nc_tensor_convert()` while leaving its parent Adam objects attached; and
+7. free only the temporary head graph, preserving the original first-half
+   hidden/key/value graph for the exact second-half loss and segment-end full
+   update.
+
+`nc_new_tensor_from_tensor()` allocates a distinct same-shaped tensor with no
+graph node; `nc_set_param()` asserts that no node already exists.
+`nc_stop_grad()` consumes its input and may remove a graph in place when the
+reference count is one, so it may be used only on a deliberately retained
+copy, never directly on a parent parameter or sole deep-state reference.
+
+The shifted control changes only the temporary head-loss targets by a
+one-position cyclic shift within each stream. Coded truths, parent forward
+probabilities, persistent deep memory, update capacity, and execution order
+remain matched. Mandatory integrity assertions are unchanged: `K=P`,
+`O=OK`, parent Adam state survives bit-identically outside intended updates,
+and arithmetic encode/decode reproduce the same exact symbol stream.
