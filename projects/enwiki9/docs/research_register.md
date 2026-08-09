@@ -462,3 +462,16 @@ population better. Score, forecast, and LibNC eligibility credit remain zero.
 Evidence: `results/nncp_successor_cache32_qm0_v1/decision.json`, guard
 `results/nncp_successor_cache32_qm0_guard_v1.json`, and job
 `20260809T145728Z_9357a5aeaf`.
+
+## 2026-08-09 - Agent A - QM4 exact matched-parent replay retires XML-safe far-history deletion
+
+- Candidate: `cmix_obias_helical_xmlsafe_prefix_qm4_v1`; terminal adaptive job: `20260809T095159Z_d6c1dfe186`.
+- Frozen population: 250,000,000 original bytes, 5,967 exact XML/line-safe matches, 592,920 removed bytes, and a 36,640-byte compressed copy ledger.
+- Exact native `cmix-obias` baseline archive: 33,554,085 bytes. Exact residual archive: 33,542,467 bytes. Gross archive gain: 11,618 bytes.
+- Fully paid accounting: `11,618 - 36,640 - 5,728 = -30,750` bytes, where 5,728 bytes is the deterministic incremental source package.
+- Literal-ledger matched attribution remains positive for source reuse: the copy ledger is 120,056 bytes smaller than the same-residual literal ledger. That real relation does not overcome the mature backend and serialization costs.
+- Guard result: return code 0, 9,376,708 KiB maximum sampled single-process RSS, 9,395,824 KiB maximum sampled process-tree RSS, and no official decimal-limit violation. Runtime is diagnostic because other dense work was active.
+- Decision: retire this frozen XML-safe deletion realization, source horizon, match population, ledger realization, and unchanged `cmix-obias` parent. Do not sweep XML exclusions, thresholds, source policies, or anchor density, and do not launch a larger native encode.
+- Claim boundary: no decode/inverse replay, isolated timing, full-corpus transfer, or score credit is claimed because the fully paid encode is already negative.
+- Receipt defect: `results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/decision.json` contains the final backend fields but retains its pre-backend claim-boundary text and epistemic tier. The terminal authority is `results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/residual_backend_receipt.json`; the stale fields are preserved pending explicit approval to correct them.
+- Next action: Agent A stops representation invention and becomes independent packaging and eligibility adjudicator for Agent B's first mature compact exact candidate. SYMBIONT P64 is already retired; the exact 65,536-symbol midpoint candidate passed, while the 1,998,848-symbol maturity gate remains active.
