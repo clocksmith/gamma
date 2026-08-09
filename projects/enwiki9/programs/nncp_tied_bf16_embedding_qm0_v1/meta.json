@@ -1,0 +1,40 @@
+{
+  "candidate_id": "nncp_tied_bf16_embedding_qm0_v1",
+  "description": "One shared BF16 Parameter for NNCP input symbol lookup and output projection.",
+  "entrypoint": "tools/nncp_tied_bf16_embedding_qm0.py",
+  "epistemic_tier": "exact_65536_symbol_constructive_child_zero_credit",
+  "omega": {
+    "interfaces_exposed": [
+      "Decoded symbol ID -> shared BF16 input/output embedding Parameter -> unchanged Transformer and symbol arithmetic alphabet."
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_tied_bf16_embedding_qm0_v1",
+    "retired_neighborhoods": [
+      "Distinct from output-prior, PPM, teacher quotient, and hidden-memory candidates: it couples learned input and output symbol geometry and removes a full matrix."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "proposal_id": "nncp_tied_bf16_embedding_qm0_v1",
+  "status": "retired",
+  "measured_result": {
+    "faithful_archive_bytes": 96142,
+    "candidate_archive_bytes": 101076,
+    "actual_gain_bytes": -4934,
+    "aligned_ideal_gain_bytes": -4934.703158134734,
+    "chronological_third_gain_bytes": [
+      -1736.9965703953835,
+      -2004.5401560838368,
+      -1193.1664316553506
+    ],
+    "parameter_bytes_removed": 67141632,
+    "incremental_source_package_bytes": 5912,
+    "peak_allocated_bytes": 8431354880,
+    "peak_reserved_bytes": 9072279552,
+    "decision_path": "results/nncp_tied_bf16_embedding_qm0_v1/decision.json",
+    "decision_sha256": "2dc84d240a6bab5f4ab6c84e403a9f228ff601083af356142f58e6f380eb5968",
+    "guard_path": "results/nncp_tied_bf16_embedding_qm0_guard_v1.json",
+    "guard_sha256": "217044fdf982ac7025b4c9fee37911fd1769979786374b1525279200841036fb",
+    "verdict": "retire_tied_bf16_embedding"
+  }
+}

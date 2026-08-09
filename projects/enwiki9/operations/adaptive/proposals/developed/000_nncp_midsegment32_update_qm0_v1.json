@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_midsegment32_update_qm0_v1",
+  "claimed_at": "2026-08-08T23:49:29+00:00",
+  "created_at": "2026-08-08T23:49:22+00:00",
+  "developed_at": "2026-08-08T23:51:53+00:00",
+  "evidence": [
+    "docs/research_register.md;results/nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1/decision.json;docs/nncp_v33_rocm_incremental_kv_runtime_q0_plan.md"
+  ],
+  "expected_savings_bytes": 800,
+  "hypothesis": "One decoder-reproducible Adam update after the first 32 symbols of each 64-symbol segment adapts the faithful NNCP model early enough to save at least 800 actual bytes on the exact 65536-symbol population without adding model state.",
+  "interfaces_exposed": [
+    "Completed first 32 symbols -> masked causal loss -> Adam update -> decoder-rebuilt incremental KV -> remaining 32 symbols; no archive side information."
+  ],
+  "kill_condition": "Any exactness failure, actual gain <800 bytes, a nonpositive chronological third, source package >65536 bytes, or decimal memory failure retires causal mid-segment split updates and higher-frequency update schedules without a split-point sweep.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "coder",
+  "owner": "root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1210,
+  "promotion_condition": "Two encodes and one decode are byte/state/trace identical; official inverse and joint boundary pass; archive gain versus the 96142-byte faithful parent is >=800 actual bytes; aligned chronological thirds are each positive; compressed incremental source <=65536 bytes; decimal 10GB allocated and reserved gates pass.",
+  "proposal_id": "nncp_midsegment32_update_qm0_v1",
+  "retired_neighborhoods": [
+    "If terminal-negative, retire 32/32 split, alternative within-segment split points, and more-frequent online Adam updates at the frozen parent architecture."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1225,
+  "state": "developed",
+  "title": "NNCP causal 32/32 mid-segment Adam update"
+}

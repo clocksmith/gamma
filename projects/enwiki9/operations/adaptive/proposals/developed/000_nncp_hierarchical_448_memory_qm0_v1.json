@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_hierarchical_448_memory_qm0_v1",
+  "claimed_at": "2026-08-08T22:37:10+00:00",
+  "created_at": "2026-08-08T22:37:09+00:00",
+  "developed_at": "2026-08-08T22:38:17+00:00",
+  "evidence": [
+    "results/nncp_evicted_ema_memory_qm0_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2450000,
+  "hypothesis": "Replacing the flat 256-state memory with 64 four-state historical means plus 192 exact recent states saves at least 800 actual bytes on the exact 65536-symbol NNCP construction without new parameters or resident memory.",
+  "interfaces_exposed": [
+    "Evicted exact hidden states -> fixed four-state means in 64 old-memory slots -> 192 exact recent states -> unchanged attention and arithmetic alphabet."
+  ],
+  "kill_condition": "Retire the fixed 64x4-summary plus 192-exact layout without summary-count, pooling-width, or horizon sweeps if actual gain is below 800 bytes, any ideal third is nonpositive, exact identity fails, memory fails, or source exceeds 65536 bytes.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "owner": "/root",
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "parent_proposal_id": null,
+  "priority": 1140,
+  "promotion_condition": "Two encoders and one decoder reproduce exact symbols and identical candidate state; archive is at least 800 bytes smaller than faithful 96142 bytes; every chronological third has positive aligned ideal branch gain; allocated and reserved memory stay below decimal 10GB; compressed source is at most 65536 bytes.",
+  "proposal_id": "nncp_hierarchical_448_memory_qm0_v1",
+  "retired_neighborhoods": [
+    "Materially different from the retired one-slot EMA: this is a fixed two-resolution memory representation covering 448 positions with no recurrent EMA or parameter sweep."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1158,
+  "state": "developed",
+  "title": "NNCP fixed hierarchical 448-position memory"
+}

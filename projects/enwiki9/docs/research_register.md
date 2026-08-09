@@ -715,6 +715,105 @@ Candidate: fractal7_endpoint_sigma_latent_qm0_v1. Epistemic tier: zero-credit ex
 
 Evidence: results/fractal7_endpoint_sigma_latent_qm0_v1/decision.json and results/fractal7_endpoint_sigma_latent_qm0_v1/guard.json.
 
+## 2026-08-08 - HELICAL bounded far-history corridor QM0
+
+Candidate `helical_far_history_corridor_qm0_v1` preserved all 584,693 frozen
+far-history target intervals and reproduced the 4,058,323-byte `M0` command
+total exactly. A bounded exact-source scan found 1,749,149 alternatives across
+351,392 rows. All 2,333,842 candidates reproduce their complete target span,
+are strictly prior, and remain fully closed.
+
+The real geometry beats the matched shuffled control: constant-diagonal address
+cost is 2,360,410 versus 2,487,236 bytes. It is nevertheless too fragmented:
+`C0` needs 552,944 corridors and only 31,749 continuations. Sparse-shift `C1`
+uses 484,481 openings, 68,550 shifts, and 31,662 continuations. Its inline cost
+is 3,567,451 bytes, but the interleaved finite stream compresses to 3,482,836,
+worse than QM1's existing 3,296,268-byte collective ledger. Endpoint428 and
+`cmix-obias` average-rate proxy margins are -1,339,759 and -515,429 bytes after
+the 9,220-byte source and 500,000-byte reserve. Both scans and command streams
+are deterministic; peak RSS is 2,349,976 KiB and passes the decimal limit.
+
+Disposition: retire the interleaved bounded-corridor realization, not the
+measured address geometry. A diagnostic columnar split costs 3,175,732 bytes
+and proves that finite mode coding recovers 120,536 bytes over the old ledger,
+but still lacks target-bearing margin. The authorized successor replaces
+explicit target gaps and byte lengths with decoder-rebuilt complete CDC chunks
+while freezing matches and sources. Score credit is zero; forecast unchanged.
+Evidence: `results/helical_far_history_corridor_qm0_v1/decision.json`.
+
+## 2026-08-08 - HELICAL implicit CDC QM1 closure
+
+Candidate `helical_far_history_cdc_implicit_qm1_v1` rebuilt all 15,597,539
+frozen rolling anchors and allowed copies only between source and target
+boundaries whose complete 32-byte anchor windows lie inside a frozen exact
+match. Both derivations and all six command columns are byte-identical; every
+selected chunk is exact, strictly prior, fully closed, and decoder-visible.
+
+Only 274,480 of 584,693 matches contain a complete eligible chunk. Retained
+coverage is 12,452,656 bytes in 574,983 chunks, with positive thirds of
+1,282,640, 6,952,554, and 4,217,462 bytes. The best run-column representation
+costs 1,283,980 command bytes plus a 7,480-byte compressed source package.
+That is efficient but the reduced reservoir supplies only 1,358,935.910
+Endpoint428 proxy bytes or 1,345,009.307 `cmix-obias` proxy bytes. Target
+margins after debt and the frozen 500,000-byte reserve are -4,821,847.090 and
+-3,939,275.693 bytes. Peak RSS is 706,184 KiB.
+
+Disposition: retire complete mask-63 CDC extents without a mask sweep. The
+boundary rule removes about 80.7% of the verified copied reservoir, so metadata
+savings cannot compensate. Preserve full-span columnar C1 for an exact
+parent-event compatibility and selected-span cost measurement. Score credit is
+zero; forecast unchanged. Evidence:
+`results/helical_far_history_cdc_implicit_qm1_v1/decision.json`.
+
+## 2026-08-08 - HELICAL full-WRT compatibility QM2
+
+Candidate `helical_far_history_wrt_event_map_qm2_v1` materialized the ordinary
+full-1G WRT store using preprocessing-only FX2. The 647,798,597-byte store has
+SHA-256 `fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9`;
+the same binary exactly reproduces the preserved canonical 10M store hash.
+
+The repeated streaming mapper inverses all 544,219,035 events to canonical 1G
+raw bytes. Of QM0's 64,526,086 raw copied bytes, 61,674,353 align at all four
+event boundaries and 61,635,420 also have byte-identical encoded WRT source and
+target spans. The critical correction is modeled-stream distance: only 329,116
+matches, 37,416,112 raw bytes, and 24,327,757 WRT bytes remain beyond
+Endpoint428's 100M-WRT-byte ring. Their finite columns cost 1,824,048 bytes plus
+8,280 source bytes. Archive-average gross is 4,098,255.716 bytes, leaving a
+bare target margin of -2,123,395.284 and a reserve-bearing margin of
+-2,623,395.284. The 60M compatibility arm retains 39,791,327 WRT bytes but
+cannot inherit `cmix-obias` pricing because that parent uses another stream.
+
+Disposition: retire the raw-selected Endpoint far-history realization. Most of
+its reservoir is already inside Endpoint428's modeled-byte history. Preserve
+the full WRT store and rerun discovery directly in parent coordinates with
+event-boundary constraints. Score credit is zero; forecast unchanged. Evidence:
+`results/helical_far_history_wrt_event_map_qm2_v1/decision.json`.
+
+## 2026-08-08 - HELICAL direct-WRT far-history QM3 closure
+
+Candidate `helical_wrt_far_history_discovery_qm3_v1` scanned the exact
+647,798,592-byte WRT stream directly, rather than importing raw-distance
+matches. It froze the established mask-63 dual-hash scanner, required sources
+more than 100,000,000 WRT bytes earlier, clipped both endpoints to WRT event
+boundaries, and repeated the complete scan and ledger byte-identically.
+
+The parent-coordinate universe contains 279,644 nonoverlapping matches and
+25,088,821 copied WRT bytes with positive coverage in all coded-stream thirds.
+At Endpoint428's archive-average WRT rate the free gross is 4,226,460 bytes,
+162,863 below the bare 4,389,323-byte debt and 662,863 below the frozen reserve
+gate. The deterministic collective ledger is 1,548,640 bytes; after its source
+package, the paid bare margin is -1,717,899 bytes. Exact anchors, event
+boundaries, prior sources, closed sources, collision checks, and decimal-memory
+guards pass.
+
+Disposition: retire exact far-history self-reference as a standalone
+Endpoint428 successor, including corridor rescues of this universe. The free
+information reservoir itself is below target. A separately matched replacement
+transform against a closer parent remains a different experiment and must use
+that parent's actual archive, preprocessing, memory, and inverse. Score credit
+is zero; forecast unchanged. Evidence:
+`results/helical_wrt_far_history_discovery_qm3_v1/decision.json`.
+
 ## 2026-08-08 - NNCP/Endpoint common-raw-block routing closure
 
 Candidate `nncp_endpoint_commonblock_route_qm0_v1` compared the exact mature
@@ -733,3 +832,368 @@ common-boundary, and decimal-memory proofs pass. Score credit is zero. Decision
 SHA-256: `e83545f6fd91a15d0bc24e15b14c69bd252e915cb104a3068b52bbb2a34c5f7a`;
 guard SHA-256:
 `25aeb7bebc6b2ab85d5489c52d405e2fbc29aa847541a0e5e79cbb139de74025`.
+
+## 2026-08-08 - SABLE preceding-context deterministic ceiling
+
+Candidate `sable_precontext_consensus_qm0_v1` corrected the far-history
+activation boundary by using only the 32 transformed bytes preceding each
+target. Exact contexts are admitted only after they are strictly more than
+60,000,000 bytes old; all candidate continuations are intersected, compared
+with the actual target, and counted as a disjoint chronological union. Two
+full-stream scans and interval artifacts are byte-identical.
+
+The result contains `2,952,843` distinct correctly implied bytes, which is
+`1,103,982` below the `4,056,825` debt-plus-allowance-plus-reserve gate. This
+fails even under the impossible ceiling of eight saved bits per addressable
+byte, so no donor probability extraction is warranted. The shifted-37 control
+covers only `149,731` bytes; genuine coverage is positive by thirds at
+`140,561`, `361,577`, and `2,450,705` bytes. The compact state payload alone
+is at least `230,625,536` bytes. Because the public donor already exceeds the
+strict decimal limit, an additive realization would require at least `897,596`
+KiB of identified donor-memory removal.
+
+Disposition: retire deterministic preceding-context consensus on this frozen
+context width, anchor rule, distance, and donor stream. This does not prove an
+upper bound for probabilistic disagreeing-source experts, but such a successor
+needs an independently target-bearing causal ceiling. Score and forecast
+credit remain zero. Decision SHA-256:
+`5e7eb5a124dfff6ed35181c1f6b588cf80a0ec5f8d73933283b6859d6a6ad3c2`;
+guard SHA-256:
+`93600c13dfcbb4be106f6bcc02fe10386ecce4e8a1aa9a0d81690df2e55a9049`.
+
+## 2026-08-08 - NNCP mature symbol-domain hierarchical PPM closure
+
+Candidate `nncp_symbol_hierppm_mix_qm0_v1` replayed the exact 1,998,848-row
+NNCP trace, preserved its original-ordinal permutation and state-major
+32-stream schedule, and scored only the complete mature 499,712-symbol block.
+It mixed normalized decoder-built order-0, stream-order-1, stream-order-2, and
+execution-order-1 symbol models with NNCP through per-stream Bayesian switches
+reset at the existing 64-symbol update boundary.
+
+The best arm, stream-order-2, loses `854.541` ideal bytes with chronological
+thirds `-289.304`, `-303.849`, and `-261.388`. It recovers only `96.140` bytes
+over stream-order-1 and `121.459` over the execution-order-1 control, versus
+the frozen 1,000-byte margins. Its standalone loss is `4,754,514` bits against
+NNCP's `3,316,098`. Peak RSS is `304,684` KiB and the source package is `5,708`
+bytes.
+
+Disposition: retire this PPM hierarchy, concentrations, native-stream context,
+and 64-symbol switch without order or parameter sweeps. A successor must
+change NNCP's learned recurrent state or symbol representation and show its own
+mature headroom. Score and forecast credit remain zero. Decision SHA-256:
+`cc6d8fd9e5f148f500c236bbeba1390ff07dbd0317c0fb2bc10ba7a12c135a05`;
+guard SHA-256:
+`5f5a5071fedb35db25f931d6ddc714b41c34160bc13e249cdcdba7cc4e38aac4`.
+
+## 2026-08-08 - NNCP evicted-state EMA memory closure
+
+Candidate `nncp_evicted_ema_memory_qm0_v1` changed one coordinate of the exact
+65,536-symbol incremental-KV NNCP construction. For every layer and stream,
+the oldest slot became a decoder-built decay-0.5 summary of the oldest 64 exact
+states, while the newest 255 states, the 256-slot allocation, parameters,
+optimizer, attention, arithmetic alphabet, and update schedule remained fixed.
+
+The candidate archive is `96,129` bytes versus the faithful `96,142`, an actual
+gain of only `13` bytes against the frozen `800`-byte gate. Aligned ideal gain
+is `12.114` bytes and is positive but negligible in corpus-chronological thirds
+at `3.474`, `6.032`, and `2.608` bytes. Two encoders reproduce byte-identical
+archives and complete states; decoder symbols, branch frequencies, losses, and
+official NNCP raw inverse all agree. Peak allocated and reserved device memory
+are `8,884,454,400` and `9,525,264,384` bytes. The incremental source package
+is `4,768` bytes.
+
+Disposition: retire the one-slot decay-0.5 oldest-64 mean mechanism. Do not
+sweep decay, slot count, pooling, or context length around it. The result shows
+that this fixed compressed-memory coordinate is causal and exact but carries
+no target-scale headroom. Score and forecast credit remain zero. Decision
+SHA-256:
+`4b8801b250f6e2dc7d382b74064227f7f0e306983414a189232f9945c8b6efce`;
+guard SHA-256:
+`3f389587e2aff8dae887439d75c09ebc9403fc13e93a7af191bdef72ad0dd815`.
+
+## 2026-08-08 - NNCP hierarchical 448-position memory closure
+
+Candidate `nncp_hierarchical_448_memory_qm0_v1` replaced the flat 256-vector
+hidden memory with 64 four-state historical means followed by 192 exact recent
+states. This nominally covers 448 causal positions while preserving the exact
+tensor shape, parameters, optimizer, attention, arithmetic alphabet, update
+schedule, and incremental-KV path. It is a two-resolution representation, not
+a parameter variation of the one-slot EMA.
+
+The candidate archive is `96,145` bytes versus the faithful `96,142`, an actual
+loss of `3` bytes against the frozen `800`-byte gain gate. Aligned ideal gain is
+`-3.674` bytes, with true corpus-chronological thirds `-10.542`, `+18.897`, and
+`-12.030`. Two encoders reproduce byte-identical archives and complete states;
+decoder symbols, branch frequencies, losses, and official NNCP raw inverse all
+agree. Peak allocated and reserved device memory are `8,884,454,400` and
+`9,537,847,296` bytes. The incremental source package is `5,468` bytes.
+
+Disposition: retire the fixed 64-summary, four-state-mean, 192-exact geometry.
+Do not sweep summary count, pooling width, or horizon around it. Together with
+the one-slot EMA result, this closes simple parameter-free NNCP tail-memory
+compression at the exact 65,536-symbol gate; a successor must change the
+learned state or coded representation and establish new mature headroom. Score
+and forecast credit remain zero. Decision SHA-256:
+`39066d304371cff4aa9bae642083814168f042662a3dedb38d460806e8d06832`;
+guard SHA-256:
+`2da824abf04d51b4dae06f4c89204ef82b002153788567bcd4206fbd258a63b3`.
+
+## 2026-08-08 - NNCP zero-table Zipf output-prior candidate frozen
+
+Candidate: `nncp_zipf_output_bias_qm0_v1`. Epistemic tier before execution:
+full-symbol oracle plus planned exact constructive child; score credit zero.
+
+The exact receipt-bound NNCP preprocessed corpus contains `200,608,961`
+symbols over vocabulary size `16,392`. Although symbol ID and empirical
+frequency rank have only `0.02796` linear rank correlation, the fixed law
+
+```text
+q(i) proportional to (i + 1)^-0.435
+```
+
+costs `13.724519` bits/symbol under full-corpus counts versus `14.000704` for
+uniform, a zero-table oracle difference of `6,925,664` bytes. On the first
+`65,536` symbols the same frozen exponent saves `1,764` ideal bytes versus
+uniform. These values compare static priors only and do not claim improvement
+over the trained NNCP trajectory.
+
+The constructive candidate initializes NNCP's existing trainable output bias
+to `-0.435 * log(i + 1)` instead of zero. It adds no parameter, table, symbol,
+or archive metadata; encoder and decoder derive the vector from vocabulary ID.
+All other initialization, parameters, optimizer state, online updates,
+attention, arithmetic alphabet, and memory remain unchanged.
+
+Promotion requires at least `800` actual bytes against the faithful
+`96,142`-byte 65,536-symbol archive, positive aligned ideal gain in every true
+corpus-chronological third, exact repeated encode/decode/state identity,
+official NNCP inversion, decimal-memory compliance, and at most `65,536`
+compressed incremental source bytes. A miss retires this exponent and rank-law
+initialization without exponent, offset, piecewise, or frequency-table sweeps.
+
+The exact candidate produced `96,357` bytes, losing `215` actual bytes against
+the faithful `96,142`. Aligned ideal gain is `-215.279` bytes, with true
+chronological thirds `-227.915`, `+188.672`, and `-176.036`. Two encoders,
+decoder symbols, branch frequencies, losses, complete state, and official NNCP
+raw inversion all agree. Peak allocated and reserved device memory are
+`8,632,796,160` and `9,271,508,992` bytes; incremental source is `5,392` bytes.
+
+Disposition: retire alpha `0.435` and numeric-rank output-prior initialization.
+Do not sweep exponent, offset, piecewise laws, or transmitted frequency tables
+around it. The static prior's large advantage over uniform does not survive
+the random output embedding and joint online-training trajectory. Score and
+forecast credit remain zero. Decision SHA-256:
+`0f5c036a92ff3327ccdda538f6316e0f308fb4f324b9f26c555a3bd0492cf76b`;
+guard SHA-256:
+`4a6a236054dbb07bd5264b1c7d1d975b9aca71fd57316776ee9c265d66a948ff`.
+
+## 2026-08-08 - NNCP tied BF16 symbol embedding candidate frozen
+
+Candidate: `nncp_tied_bf16_embedding_qm0_v1`. Epistemic tier before
+execution: planned exact constructive learned-representation child; score
+credit zero.
+
+The faithful model uses independent input and output matrices over `16,392`
+symbols and width `1,024`: a float32 input embedding and a bfloat16 output
+embedding. The candidate initializes one bfloat16 matrix from the faithful
+input embedding and uses the same `Parameter` for symbol lookup and output
+projection. PyTorch parameter enumeration and Adam therefore see one shared
+parameter, not two aliased optimizer entries.
+
+This removes `67,141,632` parameter bytes relative to the two faithful matrices
+before gradient and optimizer-state effects. It adds no table, symbol,
+metadata, model blob, or archive field. Transformer blocks, output bias,
+optimizer hyperparameters, online update schedule, attention memory,
+arithmetic alphabet, and official inverse remain unchanged. BF16 input lookup
+is part of the frozen mechanism and is not separable from tying in this gate.
+
+Promotion requires at least `800` actual bytes against the faithful
+`96,142`-byte 65,536-symbol archive, positive aligned ideal gain in every true
+corpus-chronological third, exact repeated encode/decode/state identity,
+official NNCP inversion, decimal-memory compliance, and at most `65,536`
+compressed incremental source bytes. A miss retires this exact tied-BF16
+representation without dtype, partial-tying, scale, or projection sweeps.
+
+The exact candidate produced `101,076` bytes, losing `4,934` actual bytes.
+Aligned ideal gain is `-4,934.703` bytes, with every true chronological third
+negative at `-1,736.997`, `-2,004.540`, and `-1,193.166`. Two encoders, decoder
+symbols, branch frequencies, losses, complete state, and official NNCP raw
+inversion all agree. The shared matrix removes `67,141,632` parameter bytes;
+peak allocated and reserved device memory fall to `8,431,354,880` and
+`9,072,279,552` bytes. Incremental source is `5,912` bytes.
+
+Disposition: retire tied BF16 input/output embeddings. Do not sweep dtype,
+partial tying, scale, or projection around this construction. Independent
+symbol-reading and symbol-prediction geometry is essential to the present
+online model; the memory reduction does not compensate its predictive loss.
+Score and forecast credit remain zero. Decision SHA-256:
+`2dc84d240a6bab5f4ab6c84e403a9f228ff601083af356142f58e6f380eb5968`;
+guard SHA-256:
+`217044fdf982ac7025b4c9fee37911fd1769979786374b1525279200841036fb`.
+
+## 2026-08-08 - cmix rich-state H128 capacity gate rejected
+
+Candidate: `cmix_richstate_lstm128_ceiling_qm0_v1`. Epistemic tier: exact
+local same-object capacity diagnostic; score and forecast credit zero.
+
+The donor's complete golden trace was absent, so a local `KH_TRACE` build
+generated an exact opening `4,000,000`-byte trajectory on the receipt-bound
+`transformed_ready.bin`. Its `32,000,040` `res_v3` records include the donor's
+five-byte framing prefix. Bit reassembly is clean, the trace was not truncated,
+and trace entropy differs from the byte-tier accumulator by only
+`0.000047653` bits. The base finite archive is `492,615` bytes.
+
+The frozen H32 fp16 head was retained and an independent zero-output H96
+branch was trained once on one `1,048,576`-bit block. Summed logits form a
+block-diagonal H128 realization that begins exactly at H32. A second block was
+development-only; the next three blocks were disjoint confirmations. Scoring
+used the donor u16 discretization and exact 32-bit finite range update. Dense
+H128 bytes were conservatively charged twice.
+
+H128 beat H32 in all confirmation thirds, but only by `6`, `4`, and `4`
+finite bytes: `14` bytes over `393,216` modeled bytes, or `35.603841` B/MB.
+The frozen target-derived gate was `7,816` B/MB. Full projection is
+`20,904.397` gross bytes against a `4,588,897`-byte debt, model, source, and
+reserve requirement, leaving `-4,567,992.603` bytes. H32 itself was positive
+against the base in every confirmation block, so the rich feature path did
+detect its known mechanism. Guarded peak RSS was `2,686,764` KiB.
+
+Disposition: retire hidden-width, dense or block-diagonal widening, reset,
+feature, optimizer, learning-rate, epoch, and fp16 rescue sweeps for this
+rich-state residual-head neighborhood. A successor must expose a materially
+different representation or information source with a measured multi-megabyte
+ceiling. Exact evidence:
+`results/cmix_richstate_lstm128_ceiling_qm0_v1/decision.json` and
+`results/cmix_richstate_lstm128_ceiling_qm0_guard_v3.json`.
+
+## 2026-08-08 - NNCP CP8 symbol readout rejected, resource donor retained
+
+Candidate: `nncp_cp8_symbol_readout_qm0_v1`. Epistemic tier: exact constructive
+65,536-symbol representation child; score and forecast credit zero.
+
+The candidate kept NNCP's independent float32 input embedding and exact
+16,392-way output bias but replaced its `16,392 × 1,024` BF16 output matrix.
+For symbol `s = 256h + l`, its logit was an additive high-class projection,
+low-identity projection, and fixed rank-8 CP interaction. This removed
+`32,891,888` BF16 parameter bytes before optimizer-state savings and
+transmitted no symbol table.
+
+Two encodes produced the same `102,310`-byte archive and complete state. Branch
+frequencies, losses, decoded symbols, joint arithmetic boundary, and official
+NNCP raw inversion all agree. Peak allocated and reserved device memory were
+`8,498,503,168` and `9,313,452,032` bytes. Each encode/decode phase completed
+in approximately `105` measured seconds at this scope.
+
+Compression failed decisively: the faithful archive is `96,142`, so actual
+gain is `-6,168` bytes. Aligned ideal gain is `-6,168.721` bytes, with all
+true chronological thirds negative at `-2,152.294`, `-1,660.433`, and
+`-2,355.995`. Incremental source is `7,616` bytes.
+
+Disposition: retire CP rank, high/low partition, dtype, bias, initialization,
+and interaction-form sweeps for symbol-ID-factorized NNCP output readouts. The
+implementation remains a zero-credit runtime/memory donor only if an
+independently target-bearing information source can pay its compression loss.
+Decision: `results/nncp_cp8_symbol_readout_qm0_v1/decision.json`; guard:
+`results/nncp_cp8_symbol_readout_qm0_guard_v2.json`.
+
+## 2026-08-08 - NNCP causal 32/32 update schedule authorized
+
+Candidate: `nncp_midsegment32_update_qm0_v1`. Epistemic tier: exact
+constructive 65,536-symbol changed-schedule child; score and full-corpus
+forecast credit remain zero.
+
+The faithful parent predicts each 64-symbol segment and then performs one Adam
+update. This child predicts states 0–31, trains only on those completed
+targets, performs the frozen Adam update, rebuilds decoder-visible KV state
+under the updated weights, and predicts states 32–63. A second update uses
+only the completed second-half targets. No parameter or archive side
+information is added. Outgoing memory retains the parent's pre-update-forward
+convention.
+
+Two encodes produced the same `91,351`-byte archive and complete
+model/optimizer/memory state. The faithful parent is `96,142` bytes, so the
+exact finite payload gain is `4,791` bytes against an `800`-byte gate. Aligned
+ideal gain is `4,790.561` bytes, positive in all true corpus-order thirds at
+`1,614.137`, `1,814.825`, and `1,361.599` bytes. Branch frequencies, losses,
+decoded symbols, joint arithmetic boundary, and official NNCP raw inversion
+all agree.
+
+The compressed incremental source is `5,488` bytes. Peak device allocation
+and reservation are `9,052,226,560` and `9,563,013,120` bytes, both below the
+decimal 10 GB boundary; guarded process RSS peaked at `3,873,536` KiB.
+
+Disposition: authorize one source-native realization gate and a larger
+constructive maturity gate. Do not infer the published NNCP result, a local
+full-corpus score, or Endpoint428 composability from this prefix. The native
+gate must charge any changed package, reproduce a decodable archive, and
+distinguish the exact 32/32 rebuild schedule from the source's available
+`train_len=32` surrogate. Decision SHA-256:
+`7245450832f5e31240b861e62461b736ad25e5965f6af53b90b77427d5fd76a7`;
+guard SHA-256:
+`5ef4db12a8f64095188896b7164ff563c1f27970ac9fd63e00ace9bb55ef6cd1`.
+
+## 2026-08-08 - source-native NNCP train-length-32 surrogate authorized
+
+Candidate: `nncp_libnc_trainlen32_surrogate_qm1_v1`. Epistemic tier: exact
+source-native 10,000-symbol surrogate; score and full-corpus forecast credit
+remain zero.
+
+The held LibNC binary exposes a 32-state training segment, which supplies two
+updates per former 64-state interval but is not numerically identical to the
+ROCm child's post-midpoint KV rebuild. The first attempt correctly failed
+before compression: keeping `d_pos=320` made
+`mem_len + train_len - d_pos = -32`, and LibNC rejected the negative
+`nc_pad`. Those partial artifacts are preserved under the candidate's
+`_infra1` results directory. The mechanically valid coupled profile is
+`train_len=32`, `mem_len=256`, and `d_pos=288`.
+
+With that invariant, two source-native encodes produced the identical
+`8,417`-byte archive, SHA-256
+`495919f83d46aa19e0514169df18204f60c44d4cf224c03ce6ec14d4ca598078`.
+The exact batch-32 parent is `9,246` bytes, so actual gain is `829` bytes
+against a frozen `500`-byte gate. Native decode reconstructed the exact
+`13,310`-byte raw prefix, SHA-256
+`a6ea11e7cb1674925943c9f8f3ecfd81f88a44bf59568c2564664602d02feebe`.
+No executable or library bytes changed. Peak sampled single-process and tree
+RSS were `4,343,288` and `4,361,708` KiB, below decimal 10 GB.
+
+Disposition: authorize a mature source-native cadence measurement and preserve
+the exact KV-rebuild implementation as a distinct integration path. Do not
+inherit the published NNCP archive, project this opening gain, or sweep other
+training lengths. Decision SHA-256:
+`05a19d64ab9610c37e6772bf9b5f0304cb3dc9e264456750c92c14dd2cf40853`;
+guard SHA-256:
+`ba7920d63ed55bbbd539da3919d497e46b25a0b9b09d3bdfbc5716a9ae471f35`.
+
+## 2026-08-08 - NNCP causal 32/32 update maturity gate authorized
+
+Candidate: `nncp_midsegment32_update_262144_qm1_v1`. Epistemic tier: exact
+constructive 262,144-symbol changed-schedule child; score and full-corpus
+forecast credit remain zero.
+
+Qm1 executed a fresh faithful parent on the same first `262,144` receipt-bound
+symbols, whose endpoint maps exactly to raw byte `1,215,854` and a WRT
+emission-group boundary. The faithful archive is `341,558` bytes. The frozen
+32/32 update child produced `324,373` bytes twice, with identical complete
+model, Adam, and persistent-memory state. Actual finite gain is `17,185` bytes
+against the `8,000`-byte maturity gate.
+
+Aligned ideal gain is `17,185.334` bytes. Every true corpus-order third is
+positive at `5,629.646`, `5,374.912`, and `6,180.776` bytes. Branch
+frequencies, segment losses, decoded symbols, joint arithmetic boundary, and
+official NNCP raw inversion all agree. The candidate incremental source is
+`6,212` bytes.
+
+The faithful parent peaked at `8,634,352,640` allocated and `9,271,508,992`
+reserved device bytes. The child peaked at `9,053,783,040` allocated and
+`9,565,110,272` reserved bytes. Both pass decimal 10 GB. The outer guard's
+maximum sampled process RSS was `3,926,500` KiB.
+
+Disposition: authorize native integration and preserve the coupled built-in
+`train_len=32,d_pos=288` profile as an independently positive source-native
+path. Do not linearly project the gain, inherit the published NNCP score, or
+claim Endpoint428 composability. The already launched exact
+`1,998,848`-symbol LibNC maturity screen is the next scale discriminator.
+Decision SHA-256:
+`443facb7caf6e9c73de07d6d51403965c52d77e6fc5f91a6c6711196d344319e`;
+guard SHA-256:
+`11f631a2e130a47f8caf215f4eed3e920f7ff3a8c43818b7134660c3c3c31785`.

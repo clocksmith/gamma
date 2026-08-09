@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-08",
+  "deps": [
+    "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1"
+  ],
+  "description": "Exact NNCP causal 32/32 mid-segment Adam update gate.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A decoder-reproducible update after 32 completed symbols improves the remaining half enough to save at least 800 actual bytes.",
+  "id": "nncp_midsegment32_update_qm0_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Completed first 32 symbols -> masked causal loss -> Adam update -> decoder-rebuilt incremental KV -> remaining 32 symbols; no archive side information."
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_midsegment32_update_qm0_v1",
+    "retired_neighborhoods": [
+      "If terminal-negative, retire 32/32 split, alternative within-segment split points, and more-frequent online Adam updates at the frozen parent architecture."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "status": "active"
+}

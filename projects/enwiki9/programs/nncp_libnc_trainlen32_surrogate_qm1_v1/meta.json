@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-09",
+  "deps": [
+    "nncp_midsegment32_update_qm0_v1"
+  ],
+  "description": "Source-native NNCP train_len=32, d_pos=288 update-cadence surrogate gate.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The built-in native 32-state segment with its required d_pos=288 coupling retains at least 500 bytes of the exact 32/32 child's gain at 10,000 symbols.",
+  "id": "nncp_libnc_trainlen32_surrogate_qm1_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Native LibNC enwik9 profile -> built-in train_len=32 -> two updates per former 64-state interval -> unchanged native archive decoder."
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_libnc_trainlen32_surrogate_qm1_v1",
+    "retired_neighborhoods": [
+      "This freezes only the built-in train_len=32 surrogate; no train-length sweep. It is not numerically equivalent to the exact post-midpoint KV-rebuild child."
+    ]
+  },
+  "parent": "nncp_midsegment32_update_qm0_v1",
+  "status": "active"
+}

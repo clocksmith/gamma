@@ -1,0 +1,39 @@
+{
+  "candidate_id": "nncp_hierarchical_448_memory_qm0_v1",
+  "description": "Fixed two-resolution NNCP hidden memory with 64 four-state summaries and 192 exact recent states.",
+  "entrypoint": "tools/nncp_hierarchical_448_memory_qm0.py",
+  "epistemic_tier": "exact_65536_symbol_constructive_child_zero_credit",
+  "omega": {
+    "interfaces_exposed": [
+      "Evicted exact hidden states -> fixed four-state means in 64 old-memory slots -> 192 exact recent states -> unchanged attention and arithmetic alphabet."
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_hierarchical_448_memory_qm0_v1",
+    "retired_neighborhoods": [
+      "Materially different from the retired one-slot EMA: this is a fixed two-resolution memory representation covering 448 positions with no recurrent EMA or parameter sweep."
+    ]
+  },
+  "parent": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "proposal_id": "nncp_hierarchical_448_memory_qm0_v1",
+  "status": "retired",
+  "measured_result": {
+    "faithful_archive_bytes": 96142,
+    "candidate_archive_bytes": 96145,
+    "actual_gain_bytes": -3,
+    "aligned_ideal_gain_bytes": -3.6737975781904657,
+    "chronological_third_gain_bytes": [
+      -10.541599294126547,
+      18.897486238404113,
+      -12.029684522467594
+    ],
+    "incremental_source_package_bytes": 5468,
+    "peak_allocated_bytes": 8884454400,
+    "peak_reserved_bytes": 9537847296,
+    "decision_path": "results/nncp_hierarchical_448_memory_qm0_v1/decision.json",
+    "decision_sha256": "39066d304371cff4aa9bae642083814168f042662a3dedb38d460806e8d06832",
+    "guard_path": "results/nncp_hierarchical_448_memory_qm0_guard_v2.json",
+    "guard_sha256": "2da824abf04d51b4dae06f4c89204ef82b002153788567bcd4206fbd258a63b3",
+    "verdict": "retire_hierarchical_448_memory"
+  }
+}
