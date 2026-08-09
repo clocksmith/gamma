@@ -1596,6 +1596,17 @@ deep graph; `O` preserves it through the detached-head helper.  These frozen
 definitions prevent a favorable terminal result from selecting the control
 or update semantics post hoc.
 
+Active q3 payload checkpoint: the exact clean-source 65,536-symbol candidate
+encode terminalized at `41,564` bytes, SHA-256
+`c879411c5bfe4c8afb3998fd46fe367963da33fcd96130af559ddb7577991ce7`.
+Its adjacent faithful archive is `44,786` bytes, so the finite native gain is
+`3,222` bytes against the frozen `3,000`-byte threshold.  Independent header
+inspection shows file version `2`, batch `32`, segment `64`, and serialized
+`midsegment32=1`.  This passes the payload condition only.  The patched native
+decoder is still active, and q3 remains unauthorized until the exact
+`88,279`-byte raw reference hash, direct prefix comparison, complete source
+accounting, and terminal decimal-memory guard all pass.
+
 ## 2026-08-08 - SYMBIONT-16 P64 crosses its monotone rate ceiling
 
 The active `nncp_symbiont16_p64_cmix21_qm0_v1` job has produced a decisive
