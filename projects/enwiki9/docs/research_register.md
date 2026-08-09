@@ -451,3 +451,35 @@ plus bias arm `O`, whose full matrix can represent hidden-state-conditioned
 corrections that one global vocabulary bias cannot. Receipt:
 `results/nncp_midpoint_bias_only_qm0_v1/decision.json`. Score credit remains
 zero and the prize-facing forecast is unchanged.
+
+## 2026-08-09 - LibNC source debt makes native NNCP teacher-only
+
+The compact `253,913`-byte NNCP midpoint package does not yet prove official
+source eligibility. Durable q3 audit of its receipt-bound source tar found a
+`565,336`-byte `libnc.so` and `libnc.h`, but no LibNC implementation source.
+The included Makefile links `libnc$(DLLEXT)` into `nncp` and contains no target
+that builds that library from source. The donor README states that NNCP source
+is MIT-licensed and that the LibNC binary may be redistributed; binary
+redistribution is not evidence of buildable OSI-licensed LibNC source.
+
+The official rules accept a source ZIP only when its source and Makefile create
+the submitted executable, and separately require well-documented source under
+an OSI license for the compressor and relevant files. No receipt-bound written
+committee exception for this exact LibNC binary exists in the repository.
+Accordingly, q3 records `source_eligibility_proven=false` and verdict
+`retain_nncp_only_as_teacher_until_open_cpu_replacement`. This is an
+eligibility proof boundary, not a legal judgment or a claim about what contest
+judges might exceptionally accept.
+
+All exact midpoint compression and causal-attribution measurements remain
+valid teacher evidence. They receive no prize-facing archive, package,
+forecast, or score credit while the submitted codec depends on closed LibNC.
+The winning route must either replace LibNC with complete buildable
+OSI-licensed CPU code while retaining exact behavior, distill the measured
+mechanism into another open compact backend, or preserve an explicit written
+committee exception. Q2 is superseded only for provenance because it named a
+deleted temporary README path; q3 binds the README and Makefile as hashed tar
+members. Evidence:
+`results/nncp_libnc_open_source_eligibility_audit_qm3_v1/decision.json`.
+Authorities: `https://prize.hutter1.net/hrules.htm` and
+`https://bellard.org/libnc/`.
