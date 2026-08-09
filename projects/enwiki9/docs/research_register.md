@@ -106,6 +106,25 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-09 - Clean-source cmix-obias opening roundtrip is frozen
+
+Candidate `cmix_obias_source_1m_roundtrip_qm0_v1` closes a qualification gap
+independently of the live external-archive decode. It exports only the tracked
+`cmix-obias` Git tree, binds the donor commit and tree, uses the tracked PGO
+profile, dictionary, article order, and neural-head asset, and rebuilds with
+the pinned Clang/LLD and UPX toolchain. It then packages one compressor, runs
+two exact opening-1M encodes, compares both payloads and self-extracting
+archives byte-for-byte, and decodes one archive in a bare environment.
+
+Promotion requires exact canonical reconstruction, repeat identity, total
+packaged compressor plus head at most `500,000` bytes, and the strict decimal
+RSS guard. The gate uses unique `/dev/shm` scratch and records both logical and
+allocated temporary storage. Timing remains diagnostic under concurrent load.
+Success authorizes a source-built full-corpus reproduction ladder but receives
+zero score; failure rejects only this exact build realization and does not
+alter the separately hash-bound external archive claim. No compression model,
+memory budget, source coefficient, or transform is changed.
+
 ## 2026-08-09 - cmix-obias source and archive-neutral memory successor are bounded
 
 The local donor snapshot contains `127` tracked files, including the GPL
