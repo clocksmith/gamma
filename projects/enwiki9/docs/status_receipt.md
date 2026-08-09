@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-09T01:18:19+00:00`
+- Generated at UTC: `2026-08-09T01:55:44+00:00`
 
 ## Target State
 
@@ -115,9 +115,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `709`
 - Registered programs: `277`
-- Untracked nonignored entries: `106`
-- Modified tracked entries: `9`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=25, measured_negative=100, retired=525, track_source_before_evolution=8`
+- Untracked nonignored entries: `1`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=27, measured_negative=100, retired=531`
 
 ## Active Runner Process Table
 
@@ -127,7 +127,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `rss_guard` | 1,768,314 | 1,768,216 | 16,836 | `python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --label cmix_obias_helical_xmlsafe_qm4_baseline_encode --limit-kib 10485760...` |
 | `process` | 2,427,744 | 2,229,505 | 21,636 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_trainlen32_mature_1998848_qm2_v1 --max-workers 1 --min-free-mib 12000` |
 | `rss_guard` | 2,427,829 | 2,427,744 | 16,784 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 1,768,319 | 1,768,314 | 8,921,972 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
+| `process` | 1,768,319 | 1,768,314 | 9,016,996 | `./cmix -e /home/x/enwiki9-nonproof/results/cmix_obias_helical_xmlsafe_prefix_qm4_v1/original.bin out.cmix` |
 | `process` | 2,427,832 | 2,427,829 | 20,440 | `python3 tools/nncp_libnc_trainlen32_mature_1998848_qm2.py` |
 | `process` | 2,427,873 | 2,427,832 | 4,697,500 | `/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/result...` |
 
@@ -142,13 +142,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `13,699,096`
+- Active process tree RSS KiB: `13,794,120`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-3,213,336`
-- Active process tree decimal margin KiB: `-3,933,471`
+- Active process tree margin KiB (binary): `-3,308,360`
+- Active process tree decimal margin KiB: `-4,028,495`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
 
 ## Proof Boundary
