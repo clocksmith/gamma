@@ -318,3 +318,60 @@ authorize the production-alphabet bridge. The running mature train-length gate
 remains its antecedent. A future bridge still must prove trace-on versus
 trace-off archive identity before using indexed branches for exact
 original-coordinate thirds.
+
+## 2026-08-09 - Exact CPU-only midpoint package reduces the target-bearing gate
+
+Package candidate `nncp_libnc_midsegment32_cpu_xz_package_qm0_v1` exposed an
+invalid verifier condition rather than a codec failure. NNCP is compiled with
+`-g`; q3's raw ELF therefore embeds its random temporary build directory and
+a path-derived GNU build ID. The q0 certificate correctly failed when it
+required a different-directory rebuild to reproduce that path-specific ELF.
+Job `20260809T130601Z_c472791b18` is an infrastructure failure and provides no
+compression verdict.
+
+Its unique successor
+`nncp_libnc_midsegment32_cpu_xz_package_qm1_v1` fixes the proof object without
+weakening it. The donor and CPU-only source subset are built sequentially at
+one identical path, using the same initial build, exact midpoint patch, and
+relink sequence. All sixteen retained CPU source/library files match the
+receipt-bound donor byte-for-byte; the only omitted files are `Changelog`,
+`readme.txt`, and the unused `libnc_cuda.so`. The two raw normalized-path
+ELFs are byte-identical, SHA-256
+`6462dd93bbc2f6914d2059b3c1a94efe6f3d132226cbfb73baaa3b5bdca21903`,
+and the self-contained wrapper independently rebuilds that same ELF.
+
+The complete counted candidate directory is `253,913` bytes, below its
+`260,000` gate. It saves `930,648` bytes versus q3's `1,184,561`-byte
+package and is `375,042` bytes smaller than the published NNCP package. With
+the external published archive held only as a planning normalization,
+`106,632,363 + 253,913 = 106,886,276`; the debt to 105M is `1,886,276`.
+Adding the frozen `500,000` reserve requires `2,386,276` full-symbol archive
+bytes, or `23,777` bytes on the exact `1,998,848 / 200,608,961` mature
+population. This supersedes the earlier `33,050` package-aware screen for
+this exact package child; the running `30,000` scientific gate is therefore
+already target-bearing under the reduced package normalization.
+
+The guarded certificate passed with `64,676 KiB` maximum single-process RSS,
+`93,908 KiB` maximum tree RSS, exact parent patch/archive provenance, and no
+failed conditions. This is package-only evidence with zero score credit. It
+does not inherit the published NNCP archive as a local full-1G result and does
+not authorize a victory claim. Evidence:
+`results/nncp_libnc_midsegment32_cpu_xz_package_qm1_v1/decision.json`,
+`results/nncp_libnc_midsegment32_cpu_xz_package_qm1_guard_v1.json`, and job
+`20260809T130931Z_069decf804`.
+
+## 2026-08-09 - Adaptive-worker liveness prevents duplicate mature launch
+
+The generated status receipt incorrectly labeled the active mature NNCP retry
+as `not_persisted_running` even though it found the exact registered running
+job and verified its worker PID and command. Its gate parser expected the
+generic driver guard path rather than this candidate's custom root-level guard,
+then offered an unsafe duplicate-launch action.
+
+`enwiki9_status_receipt.py` now treats an exact live worker attached to a
+registered running adaptive job as persisted liveness. An incomplete generic
+gate view is reconciled to `running`, `live_observed_owner`, and
+`wait_for_gate_completion`; `safe_to_launch_gate` is false. The refreshed
+receipt identifies job `20260809T094504Z_5157a13386` as the active source.
+This is operational correctness only and receives zero compression credit. The
+temporary refresh log used to verify the change was deleted.
