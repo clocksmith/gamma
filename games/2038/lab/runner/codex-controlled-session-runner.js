@@ -119,7 +119,10 @@ export function facilitatorResponseSchema(questions, documents) {
       minItems: questions.length,
       maxItems: questions.length,
       items: objectSchema({
-        questionId: { enum: questions.map((question) => question.id) },
+        questionId: {
+          type: "string",
+          enum: questions.map((question) => question.id)
+        },
         answer: { type: "string", minLength: 1 },
         citations: {
           type: "array",
@@ -127,8 +130,8 @@ export function facilitatorResponseSchema(questions, documents) {
           maxItems: 4,
           items: {
             anyOf: documents.map((document) => objectSchema({
-              sourceId: { const: document.id },
-              heading: { enum: document.headings }
+              sourceId: { type: "string", const: document.id },
+              heading: { type: "string", enum: document.headings }
             }))
           }
         }
@@ -145,9 +148,12 @@ function facilitatorEvidenceSchema(questions, document) {
       minItems: 0,
       maxItems: questions.length,
       items: objectSchema({
-        questionId: { enum: questions.map((question) => question.id) },
+        questionId: {
+          type: "string",
+          enum: questions.map((question) => question.id)
+        },
         evidence: { type: "string", minLength: 1 },
-        heading: { enum: document.headings }
+        heading: { type: "string", enum: document.headings }
       })
     }
   });
