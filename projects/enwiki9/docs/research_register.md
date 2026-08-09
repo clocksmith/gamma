@@ -1545,6 +1545,36 @@ key/value reference, output mismatch, or optimizer-state reset kills the arm.
 This is still conditional source design with zero credit; no child is
 authorized before both active midpoint antecedents pass.
 
+Conditional optimizer-preserving attribution audit: an exact output-head-only
+midpoint update does not require detaching parameters from the shared LibNC
+optimizer.  Each `NCParam` retains its private `sgd_opt` variable pointer, and
+that pointer is the opaque value delivered to `sgd_opt_update_var()` during
+backward.  A midpoint-only callback can therefore forward gradients only when
+the opaque pointer equals the existing `embed_out` or `out_bias` optimizer
+variable and discard every other parameter callback.  LibNC applies each
+forwarded variable update inside that callback; the subsequent shared
+`nc_sgd_opt_update()` advances the optimizer clock.  Deep parameter values and
+their private Adam surfaces remain unchanged at the midpoint, while the shared
+clock advancement is intentionally retained and controlled by shifted truth.
+No parameter object or second-moment surface is destroyed or recreated.
+Receipt-bound disassembly confirms that `sgd_opt_update_var()` dispatches the
+per-variable Adam operation immediately, whereas the Adam target reached by
+`nc_sgd_opt_update()` increments the shared step and recomputes its bias
+correction scalars without walking the parameter list.
+
+This supplies the safest exact but deliberately expensive `OK` attribution
+arm: retain the full 64-state backward geometry, filter optimizer writes to
+the untied output head, update, and rebuild the unchanged deep first-half
+keys/values before coding the second half.  It is not the compact realization,
+because full deep backward and replay remain.  The efficient `O` arm still
+requires the dedicated detached-head gradient helper described above so it
+can preserve the original key/value graph without replay.  Since the output
+head is downstream of every key/value and hidden tensor, `O` and `OK` must
+produce identical probabilities, archives, parameters, optimizer state, and
+persistent memories.  A mismatch kills the implementation.  This refinement
+changes no active source, authorizes no job before both antecedents pass, and
+receives zero score and forecast credit.
+
 ## 2026-08-08 - SYMBIONT-16 P64 crosses its monotone rate ceiling
 
 The active `nncp_symbiont16_p64_cmix21_qm0_v1` job has produced a decisive
