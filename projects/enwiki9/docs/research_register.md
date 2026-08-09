@@ -1520,3 +1520,24 @@ references, but it must not alter the second-half probabilities. Any missing
 key/value reference, output mismatch, or optimizer-state reset kills the arm.
 This is still conditional source design with zero credit; no child is
 authorized before both active midpoint antecedents pass.
+
+## 2026-08-08 - SYMBIONT-16 P64 crosses its monotone rate ceiling
+
+The active `nncp_symbiont16_p64_cmix21_qm0_v1` job has produced a decisive
+rate impossibility result before terminalization. On the frozen
+`1,048,576`-symbol population, `4.30` bits/symbol permits at most `563,609`
+whole archive bytes. While the P64 encode was still incomplete, its actual
+monotone archive descriptor reached `565,248` bytes, or exactly `4.3125`
+bits/symbol. The final P64 archive cannot shrink, so the frozen rate condition
+is permanently false regardless of P64R, repeat-encode, or decode outcomes.
+
+The preceding I16 arm completed at `1,000,845` bytes, or
+`7.63584136962890625` bits/symbol. The driver remains untouched so it can
+produce its full exact controls, determinism, inverse, and external memory
+receipt, but those fields can no longer authorize a native CMIX16 child.
+Decision boundary: retire NNCP-symbol byte-plane crossing, 64-symbol
+transposition, and this unchanged byte-native CMIX backend. Do not sweep
+endian order, block length, plane width, dictionary size, or backend. The
+planned `TID/TEXP` CMIX16 descendant is unauthorized. This is a zero-credit
+prefix-screen rejection and does not change the `109,389,323` forecast or the
+`4,389,323`-byte debt to the active `105,000,000` target.
