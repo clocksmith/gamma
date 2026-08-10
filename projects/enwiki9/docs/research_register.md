@@ -116,6 +116,35 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-10 - Production-alphabet midpoint bridge passes exactly
+
+Candidate `nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1` terminated
+successfully on `65,536` symbols from the real `16,392`-symbol dictionary and
+the corresponding `322,978` raw bytes. The faithful parent archive is
+`148,140` bytes and the midpoint archive is `143,414` bytes, for an actual
+gain of `4,726` bytes against the frozen `3,000`-byte gate. Exact
+original-coordinate third gains are `1,593`, `1,775`, and `1,359` bytes; every
+third is positive.
+
+Clean and traced parent archives are byte-identical with SHA-256
+`e4f1b99393bee047d5ee809182d0f0ace2fb5391b37d960d26ab0df878c2842b`.
+Clean and traced midpoint archives are byte-identical with SHA-256
+`85208cda0ab962d7f8ce61367e0902c0bb864de05e57e733534f782b54736134`.
+Both decodes reproduce the same exact `322,978`-byte raw population with
+SHA-256 `a5daeae040c2575ae1c2fd5f3284d73caafa0fcd48c3f546e199ab7c5f1ab7e9`.
+The serialized schedule is valid: segment `64`, midpoint enabled, batch `32`,
+seed `123`, BF16 enabled, CUDA disabled, vocabulary `16,392`. There are no
+failed conditions.
+
+The terminal guard reports return code `0`, peak single-process RSS
+`6,380,124 KiB`, peak process-tree RSS `6,419,324 KiB`, and zero excess over
+the decimal `10 GB` limit. This authorizes production `P/K/O/OK/F/S`
+attribution scientifically but remains a four-thread closed-LibNC teacher
+result with zero score credit, no single-core eligibility, no full-corpus
+transfer, and no verified score. Under the frozen Gamma One order, proposal
+`nncp_ggml_profile_forward_parity_64_qm0_v1` was activated and developed next;
+attribution remains blocked until that parity candidate itself passes.
+
 ## 2026-08-10 - Gamma One compiles MIDAS into GRAM and ORBIT
 
 The post-bridge Gamma path is now frozen as `Gamma One`: the reversible NNCP
