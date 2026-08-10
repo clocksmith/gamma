@@ -314,3 +314,15 @@ tensors are aggregated in original position order; final K/V and invariant
 relative tensors use their exact matched terminal/initial states. Geometry,
 `1e-5` tolerance, one-count branch limit, source ceiling, and verdict are
 otherwise unchanged.
+
+Qm2 reached the intended block-256 boundary, wrote the complete
+`659,578,911`-byte parameter snapshot, `10,507,510`-byte decoder state, exact
+target symbols/tree stream, and exactly `15,616 = 244 x 64` selected-stream
+checkpoint tensors. It peaked at `6,380,220 KiB` single-process and
+`6,417,340 KiB` tree RSS with no violation. Validation then stopped before the
+open build because the declared per-layer manifest order placed persistent K/V
+before relative tensors, while LibNC constructs/dumps the relative tensors
+before entering the sequential append branch. Qm2 therefore proves that the
+sequential capture boundary and population are correct but provides no open
+parity verdict. Qm3 changes only this ordered manifest contract; no tensor,
+model, arithmetic path, tolerance, or promotion threshold changes.
