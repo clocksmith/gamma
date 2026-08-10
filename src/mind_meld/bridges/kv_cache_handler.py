@@ -231,7 +231,14 @@ class KVCache(ABC):
         # Keep config for attention-shape translation heuristics.
         self._cache_metadata: Dict[str, Any] = {"config": model_config}
         self.key, self.value = self._to_numpy(cache)
-        self.sequence_length = self.key.shape[2] if len(self.key.shape) > 2 else 0
+        # Hugging Face cache layers are [batch, kv_head, sequence, head_dim].
+        # Stacking layers produces [layer, batch, kv_head, sequence, head_dim],
+        # so the sequence axis is 3 rather than 2.  Keep rank-4 backends on
+        # their standard penultimate sequence axis.
+        self._sequence_axis = 3 if self.key.ndim == 5 else self.key.ndim - 2
+        self.sequence_length = (
+            self.key.shape[self._sequence_axis] if self.key.ndim >= 2 else 0
+        )
 
     def can_resume(self, target_config: Any, required_length: int) -> bool:
         """
@@ -256,7 +263,10 @@ class KVCache(ABC):
         if target_config.num_hidden_layers != self.num_layers:
             return False
 
-        if target_config.num_attention_heads != self.num_heads:
+        target_kv_heads = getattr(target_config, "num_key_value_heads", None)
+        if target_kv_heads is None:
+            target_kv_heads = getattr(target_config, "num_attention_heads", 0)
+        if target_kv_heads != self.num_heads:
             return False
 
         target_head_dim = getattr(target_config, "head_dim", None)
@@ -293,11 +303,16 @@ class KVCache(ABC):
         new_cache.num_heads = self.num_heads
         new_cache.head_dim = self.head_dim
         new_cache._cache_metadata = self._cache_metadata.copy()
+        new_cache._sequence_axis = self._sequence_axis
 
-        # Truncate key and value to prefix length
-        # Assumes shape: (num_layers, batch_size, seq_len, num_heads, head_dim) or similar
-        new_cache.key = self.key[:, :, :prefix_length, ...] if len(self.key.shape) > 2 else self.key
-        new_cache.value = self.value[:, :, :prefix_length, ...] if len(self.value.shape) > 2 else self.value
+        # Truncate the named sequence axis.  In particular, do not slice the
+        # KV-head axis of the canonical Hugging Face LBSHD representation.
+        key_slice = [slice(None)] * self.key.ndim
+        value_slice = [slice(None)] * self.value.ndim
+        key_slice[self._sequence_axis] = slice(0, prefix_length)
+        value_slice[self._sequence_axis] = slice(0, prefix_length)
+        new_cache.key = self.key[tuple(key_slice)]
+        new_cache.value = self.value[tuple(value_slice)]
         new_cache.sequence_length = prefix_length
 
         return new_cache
@@ -323,6 +338,7 @@ class KVCache(ABC):
         new_cache.num_heads = self.num_heads
         new_cache.head_dim = self.head_dim
         new_cache._cache_metadata = self._cache_metadata.copy()
+        new_cache._sequence_axis = self._sequence_axis
 
         # Select only specified layers
         new_cache.key = self.key[layer_indices, ...]

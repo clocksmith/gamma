@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.latent-handoff-experiment/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "mode", "thinking", "source", "target", "runtime", "mapper", "corpora", "phase1Receipts", "evaluation", "gates"],
+  "properties": {
+    "schema": {"const": "gamma.latent-handoff-experiment/v1"},
+    "mode": {"const": "completion"},
+    "thinking": {"const": false},
+    "source": {"$ref": "#/$defs/model"},
+    "target": {"$ref": "#/$defs/model"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device", "dtype", "attentionImplementation", "deterministicAlgorithms"],
+      "properties": {
+        "device": {"type": "string", "minLength": 1},
+        "dtype": {"enum": ["float32", "float16", "bfloat16"]},
+        "attentionImplementation": {"const": "eager"},
+        "deterministicAlgorithms": {"const": true}
+      }
+    },
+    "mapper": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topK", "ridgeLambda", "featurePolicy"],
+      "properties": {
+        "topK": {"type": "integer", "minimum": 1},
+        "ridgeLambda": {"type": "number", "minimum": 0},
+        "featurePolicy": {"enum": ["all-source-kv-heads", "same-source-head"]}
+      }
+    },
+    "corpora": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration", "validation", "evaluation", "benchmarks"],
+      "properties": {
+        "calibration": {"type": ["string", "null"]},
+        "validation": {"type": ["string", "null"]},
+        "evaluation": {"type": ["string", "null"]},
+        "benchmarks": {"type": ["string", "null"]}
+      }
+    },
+    "phase1Receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "target"],
+      "properties": {
+        "source": {"type": ["string", "null"]},
+        "target": {"type": ["string", "null"]}
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxNewTokens", "completionMode", "fixedVisibleQuery"],
+      "properties": {
+        "maxNewTokens": {"type": "integer", "minimum": 1},
+        "completionMode": {"const": true},
+        "fixedVisibleQuery": {"const": true}
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mappedNativeRecallRatio", "controlAdvantage", "bootstrapSamples", "bootstrapConfidence", "wrongCacheFollowsWrongRate", "floorNormalizedRetention"],
+      "properties": {
+        "mappedNativeRecallRatio": {"type": "number", "minimum": 0, "maximum": 1},
+        "controlAdvantage": {"type": "number", "minimum": 0, "maximum": 1},
+        "bootstrapSamples": {"type": "integer", "minimum": 1},
+        "bootstrapConfidence": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "wrongCacheFollowsWrongRate": {"type": "number", "minimum": 0, "maximum": 1},
+        "floorNormalizedRetention": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  },
+  "$defs": {
+    "digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "localPath", "expectedIdentity"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "localPath": {"type": ["string", "null"]},
+        "expectedIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["weightsDigest", "configDigest", "tokenizerBundleDigest", "chatTemplateDigest"],
+          "properties": {
+            "weightsDigest": {"$ref": "#/$defs/digest"},
+            "configDigest": {"$ref": "#/$defs/digest"},
+            "tokenizerBundleDigest": {"$ref": "#/$defs/digest"},
+            "chatTemplateDigest": {"$ref": "#/$defs/digest"}
+          }
+        }
+      }
+    }
+  }
+}
