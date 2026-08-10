@@ -107,6 +107,20 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-10 - Full-score accounting q0 isolates one fixture-size error
+
+Candidate `cmix_obias_full1g_submission_accounting_qm0_v1` matched every
+frozen SHA-256 and all substantive arithmetic. It reproduced conservative
+external and source-built conditional totals of `108,492,873` and
+`108,501,365` bytes, respectively. Both remain below `109,685,196` and above
+the active `105,000,000` target, with zero verified full-1G score credit.
+
+The gate failed only because q0 froze the source-build decision size as
+`6,790` rather than its actual `45,242` bytes; its frozen SHA-256 was correct.
+One immutable q1 child may correct only that expected size and rerun all
+identity, arithmetic, margin, and epistemic-boundary checks. Evidence: q0
+decision, guard, and job `20260810T000550Z_139c3a4644`.
+
 ## 2026-08-10 - Production output-head attribution is dependency-frozen
 
 Proposal `nncp_libnc_output_head_midpoint_attribution_65536_qm0_v1` converts
