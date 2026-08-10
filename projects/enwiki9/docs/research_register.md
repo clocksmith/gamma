@@ -107,6 +107,22 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-10 - Production output-head attribution is dependency-frozen
+
+Proposal `nncp_libnc_output_head_midpoint_attribution_65536_qm0_v1` converts
+the previously specified `P/K/O/OK/F/S` design into a machine-enforced dormant
+gate. It cannot be claimed until
+`nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1` terminates with verdict
+`authorize_production_P_K_O_OK_F_S_attribution`.
+
+The exact promotion floor remains `2,578` bytes retained by output-head-only
+arm `O` from the fixed `3,222`-byte full-midpoint gain, `O <= 42,208` bytes,
+`O=OK`, `P=K`, and at least `323` bytes over shifted-truth control `S`, with
+the existing split, raw inverse, repeat, `65,536`-byte source, and decimal-RSS
+gates. This proposal receives zero score credit and does not inherit mature
+train-length bytes. Evidence: the proposed JSON, archived part 013, mature
+receipt, and open GGML head-parity q2 receipt.
+
 ## 2026-08-09 - Open GGML output-head gradient and update parity passes
 
 Candidate `nncp_ggml_output_head_update_parity_qm2_v1` completed GGML's

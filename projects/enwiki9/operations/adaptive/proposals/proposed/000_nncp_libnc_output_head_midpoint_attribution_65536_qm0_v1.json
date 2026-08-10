@@ -1,0 +1,41 @@
+{
+  "activation_requirements": [
+    {
+      "allowed_verdicts": [
+        "authorize_production_P_K_O_OK_F_S_attribution"
+      ],
+      "candidate_id": "nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1",
+      "decision_path": "results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/decision.json",
+      "kind": "terminal_scientific_decision"
+    }
+  ],
+  "created_at": "2026-08-10T00:01:06+00:00",
+  "evidence": [
+    "docs/research_register/archive/part-013.md",
+    "results/nncp_libnc_trainlen32_mature_1998848_qm2_v1/decision.json",
+    "results/nncp_ggml_output_head_update_parity_qm2_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2578,
+  "hypothesis": "On the exact 65,536-symbol production-alphabet population, a decoder-causal output-head-only midpoint Adam update retains at least 2,578 of the full midpoint teacher gain, beats a shifted-truth control by at least 323 bytes, and is byte-identical with and without unchanged-deep state rebuild.",
+  "interfaces_exposed": [
+    "production 16392-symbol first-half hidden/truth state -> output-head-only midpoint update -> exact second-half probabilities"
+  ],
+  "kill_condition": "Any P/K or O/OK identity mismatch, O gain below 2578 bytes, O-vs-S margin below 323 bytes, nonpositive or sub-80% chronological split, decode/raw/repeat/source/memory failure retires exact head-only LibNC midpoint attribution without optimizer, split, graph, or tolerance sweeps.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "coder",
+  "operational_status": "blocked_dependency",
+  "parent": "nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1",
+  "parent_proposal_id": null,
+  "priority": 1420,
+  "promotion_condition": "Require P=K byte-identically; O=OK byte-identically; O archive <=42208 bytes and gain >=2578 bytes; O beats S by >=323 bytes; every terminated chronological split retains >=80% of F gain; all six arms decode exact symbols and official raw prefix; repeat archives identical; source delta <=65536 bytes; decimal RSS passes.",
+  "proposal_id": "nncp_libnc_output_head_midpoint_attribution_65536_qm0_v1",
+  "retired_neighborhoods": [
+    "Does not inherit train_len32 archive bytes, use bias-only adaptation, add a closed-model forecast, or combine separately measured trajectories."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1435,
+  "state": "proposed",
+  "title": "NNCP production-alphabet midpoint output-head attribution"
+}
