@@ -752,3 +752,10 @@ A pass proves technical source and static runtime closure only. It explicitly
 leaves official source-package interpretation, isolated timing, full-1G
 execution, final counting, and committee acceptance unresolved and receives
 zero score credit.
+
+Job `20260810T003034Z_64f4a01580` failed before the audit executed because its
+outer guard used unsupported mode token `max_tree`; the guard accepts `tree`.
+No result directory or scientific evidence was created. Unique successor
+`cmix_obias_source_runtime_closure_qm1_v1` changes only that invocation token
+and preserves every source, artifact, hash, license, dependency, and decision
+condition from q0.
