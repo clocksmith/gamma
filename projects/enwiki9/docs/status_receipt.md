@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-10T00:07:54+00:00`
+- Generated at UTC: `2026-08-10T00:30:36+00:00`
 
 ## Target State
 
@@ -20,15 +20,15 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `1,502`
+- RSS samples: `1,775`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `8,348,736`
-- Latest sampled single RSS KiB: `8,348,736`
-- Tightest binary single-process margin KiB: `2,137,024`
-- Tightest decimal single-process margin KiB: `1,416,889`
-- Latest binary single-process margin KiB: `2,137,024`
-- Latest decimal single-process margin KiB: `1,416,889`
+- Max sampled single RSS KiB: `8,348,740`
+- Latest sampled single RSS KiB: `8,348,740`
+- Tightest binary single-process margin KiB: `2,137,020`
+- Tightest decimal single-process margin KiB: `1,416,885`
+- Latest binary single-process margin KiB: `2,137,020`
+- Latest decimal single-process margin KiB: `1,416,885`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
@@ -56,21 +56,21 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `970`
-- RSS guard JSON modified UTC: `2026-08-10T00:07:50+00:00`
-- RSS guard JSON SHA-256: `959d26b205c8cc9108c71c2b43cd7f1c8f2f96ca93deef461ca5a44f75bd4317`
-- RSS samples: `1,502`
-- Max sampled single RSS KiB: `8,348,736`
+- RSS guard JSON modified UTC: `2026-08-10T00:30:35+00:00`
+- RSS guard JSON SHA-256: `a1e50032980568c759b7555ed871a1b802d3ecbe1c3839eb44475050581079be`
+- RSS samples: `1,775`
+- Max sampled single RSS KiB: `8,348,740`
 - Max sampled tree RSS KiB: `8,368,820`
-- Single-process RSS margin KiB: `2,137,024`
-- Single-process decimal `10GB` margin KiB: `1,416,889`
+- Single-process RSS margin KiB: `2,137,020`
+- Single-process decimal `10GB` margin KiB: `1,416,885`
 - Tree RSS margin KiB: `2,116,940`
 - Tree decimal `10GB` margin KiB: `1,396,805`
-- Latest sampled single RSS KiB: `8,348,736`
-- Latest sampled tree RSS KiB: `8,368,796`
-- Latest sampled single-process margin KiB: `2,137,024`
-- Latest sampled single-process decimal `10GB` margin KiB: `1,416,889`
-- Latest sampled tree margin KiB: `2,116,964`
-- Latest sampled tree decimal `10GB` margin KiB: `1,396,829`
+- Latest sampled single RSS KiB: `8,348,740`
+- Latest sampled tree RSS KiB: `8,368,800`
+- Latest sampled single-process margin KiB: `2,137,020`
+- Latest sampled single-process decimal `10GB` margin KiB: `1,416,885`
+- Latest sampled tree margin KiB: `2,116,960`
+- Latest sampled tree decimal `10GB` margin KiB: `1,396,825`
 
 ## Gate Evidence Status
 
@@ -129,11 +129,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `751`
-- Registered programs: `309`
+- Program directories: `754`
+- Registered programs: `312`
 - Untracked nonignored entries: `1`
-- Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=57, measured_negative=100, retired=543`
+- Modified tracked entries: `0`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=60, measured_negative=100, retired=543`
 
 ## Active Runner Process Table
 
@@ -148,19 +148,19 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `rss_guard` | 1,310,736 | 1,310,602 | 16,816 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `rss_guard` | 1,310,741 | 1,310,614 | 16,700 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
 | `process` | 523,198 | 523,195 | 20,060 | `python3 tools/cmix_obias_full1g_bare_decode_qm0.py` |
-| `process` | 523,323 | 523,198 | 8,348,736 | `./archive9` |
-| `process` | 642,123 | 642,117 | 39,200 | `python3 tools/nncp_libnc_full_dictionary_midsegment32_65536_qm0.py` |
+| `process` | 523,323 | 523,198 | 8,348,740 | `./archive9` |
+| `process` | 642,123 | 642,117 | 39,204 | `python3 tools/nncp_libnc_full_dictionary_midsegment32_65536_qm0.py` |
 | `process` | 1,310,745 | 1,310,736 | 20,664 | `python3 tools/cmix_obias_source_full1g_roundtrip_a_qm0.py` |
 | `process` | 1,310,746 | 1,310,741 | 20,444 | `python3 tools/cmix_obias_source_full1g_roundtrip_b_qm0.py` |
-| `process` | 1,310,866 | 1,310,745 | 9,059,004 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
-| `process` | 1,310,867 | 1,310,746 | 9,058,928 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
-| `process` | 1,600,978 | 642,123 | 6,380,124 | `/tmp/nncp-prod-midpoint-bridge-f2h71_nr/parent/nncp -q -T 4 d /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_6...` |
+| `process` | 1,310,866 | 1,310,745 | 9,304,648 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
+| `process` | 1,310,867 | 1,310,746 | 9,304,580 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
+| `process` | 2,118,426 | 642,123 | 6,203,916 | `/tmp/nncp-prod-midpoint-bridge-f2h71_nr/candidate/nncp -q -T 4 --profile enwik9 --n_symb 16392 --dict /home/x/enwiki9-nonproof/results/nncp_full_sy...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/decode.log` | 380,205 | `2026-08-10T00:07:54+00:00` |
+| `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/decode.log` | 383,792 | `2026-08-10T00:30:36+00:00` |
 | `projects/enwiki9/results/cmix_obias_full1g_bare_decode_qm0_v1/scratch_state.txt` | 62 | `2026-08-09T22:02:42+00:00` |
 
 ## Active RSS
@@ -168,13 +168,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `33,100,668`
+- Active process tree RSS KiB: `33,415,764`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `-22,614,908`
-- Active process tree decimal margin KiB: `-23,335,043`
+- Active process tree margin KiB (binary): `-22,930,004`
+- Active process tree decimal margin KiB: `-23,650,139`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
 
 ## Contingencies
