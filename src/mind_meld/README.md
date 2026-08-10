@@ -114,3 +114,4 @@ Useful diagnostics flags:
 - ABE: `src/mind_meld/core/abe_ensemble.py`
 - State bridging: `src/mind_meld/bridges/state_bridge.py`
 - Advanced routing/decoding: `src/mind_meld/advanced/`
+- Isolated cross-model KV proof harness: `src/mind_meld/latent_handoff/README.md`

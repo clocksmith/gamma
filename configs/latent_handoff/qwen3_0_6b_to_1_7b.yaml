@@ -1,0 +1,49 @@
+schema: gamma.latent-handoff-experiment/v1
+mode: completion
+thinking: false
+source:
+  repository: Qwen/Qwen3-0.6B
+  revision: 9d4bfd9a94aa5f2ab18d77fa457c306da0b8e439
+  localPath: null
+  expectedIdentity:
+    weightsDigest: null
+    configDigest: null
+    tokenizerBundleDigest: null
+    chatTemplateDigest: null
+target:
+  repository: Qwen/Qwen3-1.7B
+  revision: 8d4744f9e13072f4920c326350fa81eedb74eae9
+  localPath: null
+  expectedIdentity:
+    weightsDigest: null
+    configDigest: null
+    tokenizerBundleDigest: null
+    chatTemplateDigest: null
+runtime:
+  device: cuda
+  dtype: bfloat16
+  attentionImplementation: eager
+  deterministicAlgorithms: true
+mapper:
+  topK: 1
+  ridgeLambda: 0.01
+  featurePolicy: all-source-kv-heads
+corpora:
+  calibration: null
+  validation: null
+  evaluation: null
+  benchmarks: null
+phase1Receipts:
+  source: null
+  target: null
+evaluation:
+  maxNewTokens: 64
+  completionMode: true
+  fixedVisibleQuery: true
+gates:
+  mappedNativeRecallRatio: 0.70
+  controlAdvantage: 0.20
+  bootstrapSamples: 2000
+  bootstrapConfidence: 0.95
+  wrongCacheFollowsWrongRate: 0.50
+  floorNormalizedRetention: 0.70
