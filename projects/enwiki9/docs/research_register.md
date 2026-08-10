@@ -764,3 +764,25 @@ Score and forecast credit remain zero. Evidence:
 `results/fractal8_survival_hazard_sigma_qm0_v1/decision.json`,
 `results/fractal8_survival_hazard_sigma_qm0_v1/guard.json`, and
 `results/fractal8_survival_hazard_sigma_qm0_v1/historical_binding.json`.
+
+## 2026-08-09 - Full-1G sealed-filesystem second decode frozen
+
+Candidate `cmix_obias_full1g_sealedfs_decode_qm0_v1` materializes the already
+authorized second external decode behind a hard dependency on the live bare
+full-1G decision. It accepts only the exact `108,009,834`-byte archive with
+SHA-256 `664823c5...3900` and only runs if the first decode's terminal verdict
+is `bare_full_1g_decode_verified_resource_and_source_qualification_remain`.
+
+The unchanged self-extracting archive runs inside the 1M-certified bubblewrap
+contract: all namespaces and the network are unshared; only `/work`, private
+`/tmp`, devices, procfs, and read-only standard libraries are visible. The
+canonical corpus remains outside the sandbox and is used only afterward for
+size, SHA-256, and bytewise comparison. The gate records command, environment,
+archive and output identities, decode-log identity, observed scratch peak,
+cleanup, and the independent strict process-tree RSS guard.
+
+This candidate is deliberately not queued while the first decode is live. A
+pass would prove a second isolated `D(A)=enwik9`; it cannot prove
+`C(enwik9)=A`, source eligibility, final accounting, or score, and receives
+zero score credit. The two source-built full encodes remain the compression
+reproduction proof.
