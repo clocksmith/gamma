@@ -12,8 +12,8 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1`
-- Active scope bytes: `65,536`
+- Active candidate: `n/a`
+- Active scope bytes: `n/a`
 - cmix21 candidates with result or guard evidence: `9`
 
 ## Observed Knob Values
