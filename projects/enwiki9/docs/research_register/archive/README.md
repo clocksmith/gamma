@@ -18,3 +18,4 @@
 - [part-014.md: 2026-08-09 - Mature train-length retry crosses first block boundary through 2026-08-09 - Shared research-register partition is lint-enforced](part-014.md)
 - [part-015.md: 2026-08-09 - Exact decision-ID coverage reconciled across the shared register through 2026-08-09 - Exact KAIROS opening retires the final-head dyadic realization](part-015.md)
 - [part-016.md: 2026-08-09 - GGML output-head gradient and update parity proposed through 2026-08-09 - GGML head q1 exposes the direct-optimizer API boundary](part-016.md)
+- [part-017.md: 2026-08-10 - Full-score accounting q0 isolates one fixture-size error through 2026-08-10 - Conservative cmix-obias package boundaries are certified](part-017.md)
