@@ -10,10 +10,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.12.0");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.5-test");
+  assert.equal(current.gameVersion, "0.13.0");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.6-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.12.0");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.13.0");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -35,7 +35,7 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.match(spec, /same size, shape, material, and\s+weight/);
   assert.doesNotMatch(spec, /distinguishable by touch or sight/);
   assert.match(spec, /shared Mandate track/);
-  assert.match(spec, /AGI claim/);
+  assert.match(spec, /AGI Dossier/);
   assert.match(spec, /Fusion Demonstrator/);
   assert.doesNotMatch(spec, /Economic Benchmark/);
   assert.doesNotMatch(spec, /Market Access/);
@@ -58,7 +58,7 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /151 Default or 177 with Advanced/);
+  assert.match(manufacturing, /163 Default or 189 with Advanced/);
   assert.match(manufacturing, /Advanced Play adds eighteen Realignment ballots/);
   assert.match(manufacturing, /Three shared Power Source references/);
 
@@ -75,8 +75,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.5-test",
-    "synchronized with executable game 0.12.0",
+    "**Rules version:** 0.7.0-rc.6-test",
+    "synchronized with executable game 0.13.0",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
@@ -92,11 +92,11 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "These ring pools are fixed; shuffle tiles only within their listed ring",
     "The inner and outer copies of Research Commons are mechanically identical",
     "Every player board presents the same five Production boxes",
-    "A ring rotation carries each Facility and its Grid-Ready face together",
-    "flip back any Facility now outside",
+    "A ring rotation carries each Facility with its district",
     "each player may make one Power purchase request",
     "In Advanced Play, each player may make up to two Production Power purchase",
-    "A **grid-ready Facility** has its Grid-Ready face showing",
+    "The secret AGI Dossier",
+    "The Prediction Bag",
     "Do not run a second Production calculation",
     "Every Headline card is eligible",
     "Every Faction has one persistent institutional identity and one signature program",
@@ -138,8 +138,8 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(bible, /Ordinary Power Sources \| 2 location-defined reference types/);
   assert.doesNotMatch(bible, /Ordinary Power Sources \| 4 reference types/);
   assert.match(bible, /Scrutiny cubes \/ Customer-track markers \| 60 \/ 6/);
-  assert.match(bible, /Escalation-track markers \/ separate AGI claim pieces \| 6 \/ 0/);
-  assert.match(bible, /Integrated Grid-Ready faces \/ starting-grid identities/);
+  assert.match(bible, /Escalation-track markers \/ AGI Dossier cards \| 6 \/ 24/);
+  assert.match(bible, /Starting-grid identities \| 6 Facilities carry this identity/);
   assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
 });
 
@@ -151,8 +151,8 @@ test("selected deck contracts have exact physical counts", async () => {
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
   assert.equal(trainingCount, 50);
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
-  assert.equal(escalation.escalations.length, 7);
-  assert.equal(escalation.cardsPerPlayer, 7);
+  assert.equal(escalation.escalations.length, 6);
+  assert.equal(escalation.cardsPerPlayer, 6);
   assert.deepEqual(
     config.powerSources.filter((source) => !source.isEscalation).map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -187,7 +187,7 @@ test("factions and player supplies match the selected limits", async () => {
       scrutinyCubes: config.playerSupply.scrutinyCubes,
       customerTrackMarkers: config.playerSupply.customerTrackMarkers,
       escalationTrackMarkers: config.playerSupply.escalationTrackMarkers,
-      agiDeclarationCards: config.playerSupply.agiDeclarationCards,
+      agiDossierCards: config.playerSupply.agiDossierCards,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
     {
@@ -200,13 +200,14 @@ test("factions and player supplies match the selected limits", async () => {
       scrutinyCubes: 10,
       customerTrackMarkers: 1,
       escalationTrackMarkers: 1,
-      agiDeclarationCards: 1,
+      agiDossierCards: 4,
       startingGridIdentifiers: 1
     }
   );
   for (const staleField of [
     "customerMarkers",
     "escalationTokens",
+    "agiDeclarationCards",
     "agiDeclarationMarkers",
     "startingGridMarkers",
     "jointVentureMarkers",
@@ -447,10 +448,8 @@ test("headline and board boundaries remain explicit", async () => {
   );
 
   const blogPost = headlines.headlines.find((headline) => headline.id === "agi_blog_post");
-  assert.match(blogPost.text, /consumes the action slot and one Escalation availability/);
-  assert.match(blogPost.text, /spends 3 Compute/);
-  assert.match(blogPost.text, /flips the Escalation/);
-  assert.match(blogPost.text, /adds 3 Scrutiny/);
+  assert.match(blogPost.text, /receives 2 Publication tokens instead of 1/);
+  assert.match(blogPost.text, /does not change Dossier payment, Scrutiny/);
 });
 
 test("Headline deck preserves eight anchors and sixteen future regimes", async () => {

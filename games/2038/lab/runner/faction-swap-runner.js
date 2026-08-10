@@ -739,8 +739,8 @@ export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
               `roster:${rotation}`
             ].join(":"),
             question:
-              "What is the paired outcome effect of a legal AGI claim " +
-              "window versus an otherwise identical one-Compute-short state?",
+              "What is the paired outcome effect of a fully payable AGI Dossier " +
+              "versus an otherwise identical one-Compute-short state?",
             focalSeat,
             focalFactionId,
             backend,

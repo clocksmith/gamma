@@ -188,7 +188,7 @@ function markerState(tile, players) {
       if (facility.tileId !== tile.instanceId) continue;
       markers.push({
         key: markerKey(player, "facility", facility, index),
-        signature: `facility:${facility.powered}:${facility.gridReady}`
+        signature: `facility:${facility.powered}`
       });
     }
     for (const [index, generator] of player.generators.entries()) {
@@ -219,11 +219,9 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
     for (const [index, facility] of player.facilities.entries()) {
       if (facility.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
-      const status = facility.gridReady
-        ? copy.browser.gridReady
-        : facility.powered ? copy.browser.poweredThisProduction : copy.browser.offline;
+      const status = facility.powered ? copy.browser.poweredThisProduction : copy.browser.offline;
       marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
-        `${facility.gridReady ? "grid-ready" : ""}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
+        `" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
         `title="${escapeHtml(player.factionName)} Facility — ${status}"></i>`);
     }
     for (const [index, generator] of player.generators.entries()) {
@@ -308,7 +306,7 @@ function renderPlayers(state) {
         <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
         <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
         <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
-        <dt>${copy.browser.gridReady}</dt><dd>${player.agiReadiness.gridReadyFacilities}</dd>
+        <dt>${copy.browser.dossier}</dt><dd>${player.agiReadiness.committedCount}</dd>
       </dl>
     `;
     elements.players.append(card);

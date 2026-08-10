@@ -12,7 +12,7 @@ markers for state already carried by a component or faction-board track.
 - 1 faction board
 - 1 CEO
 - 3 Teams
-- 4 double-sided Facilities, each showing normal or Grid-Ready
+- 4 Facilities
 - 1 Generator; its Energy district determines clean or emergency Power
 - 1 integrated starting-grid identifier on the first Facility
 - 10 Scrutiny cubes, tactually identical to Systemic Risk while concealed
@@ -20,15 +20,16 @@ markers for state already carried by a component or faction-board track.
 - 1 Escalation-track marker per faction board, showing zero to two currently
   available
 - 6 Core Action cards
-- 7 Escalation cards
-- 1 Declare AGI card with an unclaimed / claimed reverse
+- 6 Escalation cards
+- 4 Era-labelled AGI Dossier cards with symmetrical backs and Commit / Hedge orientations
 - Track or token state for Runway, Compute, Capability, Trust, and Safety
 - 1 Mandate marker for the shared Mandate track
 
-The integrated prototype therefore needs no separate Grid-Ready pieces,
-Power Source selectors, Influence cubes, Customer counters, Escalation-
-availability counters, or separate AGI-claim pieces. Generic track cubes remain
-a separate supply because they serve other player-board tracks.
+The integrated prototype therefore needs no Grid-Ready state, Power Source
+selectors, Influence cubes, Customer counters, Escalation-availability
+counters, AGI probability chart, or AGI die. Generic track cubes remain a
+separate supply because they serve other player-board tracks and become
+Prediction Bag tokens only after the final Audit.
 
 ## Default Game — shared components
 
@@ -75,7 +76,7 @@ The supported box does not currently require:
 The rules specify caps but have not selected exact stock quantities for generic
 Runway, Compute, Safety, temporary Power-allocation, or generic track-marker
 supplies. Player-reference production copies are also unresolved. The selected
-Facility, Generator, Customer, Escalation, starting-grid, and AGI embodiments
+Facility, Generator, Customer, Escalation, starting-grid, and Dossier embodiments
 are recorded in `component-spec.md`. Generic track-marker stock remains
 unresolved.
 

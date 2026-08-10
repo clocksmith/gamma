@@ -292,7 +292,7 @@ test("the first Facility is powered by the basic starting grid connection", asyn
   assert.equal(state.metrics.poweredFacilityRounds[0].powered, 1);
   assert.equal(state.metrics.poweredFacilityRounds[0].supply, 1);
   assert.equal(state.player.facilities[0].powered, true);
-  assert.equal(state.player.facilities[0].gridReady, true);
+  assert.ok(!("gridReady" in state.player.facilities[0]));
 });
 
 test("Scrutiny beyond the ten-cube supply immediately creates penalties", async () => {

@@ -20,7 +20,7 @@ after a candidate is accepted.
 
 | Accepted decision | Canonical change | Protected identity | Remaining evidence question |
 | --- | --- | --- | --- |
-| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, and Grid-Ready lifecycle | Energy-site dominance or Initiative advantage |
+| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, and temporary Power allocation | Energy-site dominance or Initiative advantage |
 | `presence-only-politics` | CEO, Team, and Facility presence replaces Influence cubes | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
 | `two-program-factions` | One persistent identity and one signature program per Faction | Six institutional identities and protected strengths | Factions become shallow or scripted |
 | `stored-token-consolidation` | Seven stored-token families become immediate effects | Meaningful timing and resource decisions | Removed memory may reduce long-horizon planning |

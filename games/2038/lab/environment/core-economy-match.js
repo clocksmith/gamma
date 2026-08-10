@@ -290,7 +290,6 @@ export class CoreEconomyMatch {
         facilities: player.facilities.length,
         generators: player.generators.length,
         poweredFacilities: powered,
-        gridReadyFacilities: player.facilities.filter((facility) => facility.gridReady).length,
         unpoweredFacilities: player.facilities.length - powered,
         actionsUsed: [...player.actionsUsed],
         canDeploy: this.canDeploy(player)
@@ -300,10 +299,7 @@ export class CoreEconomyMatch {
         .map((opponent) => ({
           ...publicPlayers[opponent.seat],
           facilityTileIds: opponent.facilities.map((facility) => facility.tileId),
-          facilities: opponent.facilities.length,
-          gridReadyFacilities: opponent.facilities.filter(
-            (facility) => facility.gridReady
-          ).length
+          facilities: opponent.facilities.length
         })),
       board: this.publicBoardState()
     };
@@ -631,9 +627,7 @@ export class CoreEconomyMatch {
           id: `s${seat}-facility-${player.facilities.length + 1}`,
           tileId: parameters.destinationId,
           category: parameters.destinationCategory,
-          powered: false,
-          gridReady: false,
-          gridReadySupportSeats: []
+          powered: false
         });
       } else if (parameters.buildMode === "generator") {
         const source = this.config.powerSources.find(
@@ -689,11 +683,9 @@ export class CoreEconomyMatch {
   }
 
   recordEligibility(player, timing) {
-    const requirement = this.config.agiDeclaration;
     if (
       !player.metrics.earliestAgiEligibility &&
-      player.capability >= requirement.capability &&
-      player.compute >= requirement.computeCost
+      player.compute >= this.config.agiDossier.computePerCommit
     ) {
       player.metrics.earliestAgiEligibility = {
         round: this.round,

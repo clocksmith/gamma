@@ -50,10 +50,12 @@ export function applyAgiDeclarationScenario(match) {
     trust: player.trust,
     compute: player.compute,
     facilities: player.facilities.length,
-    gridReadyFacilities: match.gridReadyFacilityCount(player)
+    dossierChoices: { ...player.agiDossier.choices }
   };
 
-  player.capability = Math.max(player.capability, requirements.capability);
+  player.agiDossier.choices = Object.fromEntries(
+    match.config.agiDossier.modules.map((module) => [module.id, "commit"])
+  );
   player.compute = scenario.arm === "eligible"
     ? Math.max(player.compute, requirements.computeCost)
     : Math.max(0, requirements.computeCost - 1);
@@ -68,6 +70,9 @@ export function applyAgiDeclarationScenario(match) {
       `${scenario.id} ${scenario.arm} produced unexpected readiness ` +
       `${readiness.ready} (${readiness.failingRequirement || "none"}).`
     );
+  }
+  if (readiness.ready) {
+    match.markAgiFunnel(player, "legalDeclarationWindow", "scenario_injected");
   }
 
   scenario.applied = true;
@@ -86,7 +91,7 @@ export function applyAgiDeclarationScenario(match) {
       trust: player.trust,
       compute: player.compute,
       facilities: player.facilities.length,
-      gridReadyFacilities: 0,
+      dossierChoices: { ...player.agiDossier.choices },
       legalDeclaration: readiness.ready,
       failingRequirement: readiness.failingRequirement
     },
@@ -124,7 +129,7 @@ export function finalizeAgiDeclarationScenario(match) {
     trust: player.trust,
     compute: player.compute,
     facilities: player.facilities.length,
-    gridReadyFacilities: match.gridReadyFacilityCount(player),
+    dossier: structuredClone(player.agiDossier),
     declared: player.agiDeclared
   };
 }

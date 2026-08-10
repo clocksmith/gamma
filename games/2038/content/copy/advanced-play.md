@@ -114,7 +114,8 @@ selected physical ring once, then recalculate every Network from its
 starting-grid Facility, Links, and visible adjacency. Do not lift or re-lay
 components.
 
-A ring rotation carries each Facility and its Grid-Ready face together.
+A ring rotation carries each Facility with its district. Power eligibility is
+recalculated during the next Production.
 After recalculating each ${terms.systems.infrastructureNetwork}, flip back any
 Facility now outside its owner’s Network.
 

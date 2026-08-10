@@ -32,7 +32,6 @@ import {
   loadGameIdentity,
   mechanicsProjection
 } from "../lab/versioning/game-identity.js";
-import { declarationReadiness } from "../lab/rules/declaration-readiness.js";
 import { buildDecisionPrompt } from "../lab/contracts/decision-contract.js";
 import {
   causallyNecessaryImportSuppliers,
@@ -390,7 +389,7 @@ test("Safety Laboratory programs publish realized ability value", async () => {
   const trustBeforePause = safety.trust;
   const pausePolicies = emergency.match.players.map(() => fixturePolicy(
     (packet) => packet.legalDecisions.find(
-      (decision) => decision.parameters?.escalationId === "declare_agi"
+      (decision) => decision.parameters?.escalationId === "fusion_demonstrator"
     )
   ));
   await emergency.match.resolveFactionAction(
@@ -460,17 +459,13 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
     id: "lead-facility",
     tileId: frontier.instanceId,
     category: "cloud",
-    powered: true,
-    gridReady: true,
-    gridReadySupportSeats: []
+    powered: true
   }];
   partner.facilities = [{
     id: "partner-facility",
     tileId: adjacent.instanceId,
     category: "cloud",
-    powered: true,
-    gridReady: true,
-    gridReadySupportSeats: []
+    powered: true
   }];
   const policies = match.players.map(() => ({
     async decide(packet) {
@@ -518,9 +513,7 @@ test("shared contract supplies cap construction and Joint Venture termination re
     id: "political-host",
     tileId: player.pieces[0].tileId,
     category: "frontier",
-    powered: true,
-    gridReady: true,
-    gridReadySupportSeats: []
+    powered: true
   }];
 
   const legal = match.legalResolutions(0, "influence");
@@ -1064,17 +1057,13 @@ test("Foundry Shovels observes two-Compute Escalations and respects its round ca
       id: "spender-left",
       tileId: left.instanceId,
       category: left.category,
-      powered: true,
-      gridReady: true,
-      gridReadySupportSeats: []
+      powered: true
     },
     {
       id: "spender-right",
       tileId: right.instanceId,
       category: right.category,
-      powered: true,
-      gridReady: true,
-      gridReadySupportSeats: []
+      powered: true
     }
   ];
   const policies = match.players.map(() => ({
@@ -1186,9 +1175,7 @@ test("offline Facility penalties cannot reduce final Mandate below zero", async 
     id: "offline-facility",
     tileId: tile.instanceId,
     category: tile.category,
-    powered: false,
-    gridReady: false,
-    gridReadySupportSeats: []
+    powered: false
   }];
   const standing = match.result().standings.find((entry) => entry.seat === 0);
   assert.equal(standing.offlinePenalty, 1);
@@ -1321,17 +1308,13 @@ test("Ownership Headline lets the affected player choose the producing Facility"
       id: "cloud-fixture",
       tileId: cloud.instanceId,
       category: "cloud",
-      powered: true,
-      gridReady: true,
-      gridReadySupportSeats: []
+      powered: true
     },
     {
       id: "capital-fixture",
       tileId: capital.instanceId,
       category: "capital",
-      powered: true,
-      gridReady: true,
-      gridReadySupportSeats: []
+      powered: true
     }
   ];
   player.capability = 0;
@@ -1473,102 +1456,74 @@ test("recruiting reuses the actual missing Team identity without duplicates", as
   assert.equal(player.teamsInSupply, 0);
 });
 
-test("AGI claim readiness is pure, diagnostic, and UI-ready", async () => {
-  const player = {
-    seat: 0,
-    agiDeclared: false,
-    capability: 6,
-    customers: 3,
-    trust: 3,
-    compute: 4,
-    runway: 3,
-    links: [],
-    facilities: Array.from({ length: 3 }, (_, index) => ({
-      id: `facility-${index + 1}`,
-      tileId: `site-${index + 1}`,
-      gridReady: true
-    })),
-    generators: [{
-      id: "generator-1",
-      tileId: "site-1",
-      capacity: 99
-    }]
-  };
-  const state = {
-    players: [player],
-    contracts: [],
-    megaClusters: [],
-    startingGridPower: 1,
-    requirements: {
-      capability: 6,
-      customers: 0,
-      facilities: 0,
-      trust: 0,
-      computeCost: 3
-    }
-  };
-  const before = structuredClone(state);
-  const readiness = declarationReadiness(state, player);
-  assert.equal(readiness.ready, true);
-  assert.equal(readiness.failingRequirement, null);
-  assert.equal(readiness.gridReadyFacilities, 0);
-  assert.equal(readiness.ppaIterations, 0);
-  assert.equal(readiness.capacityOps, 0);
-  assert.deepEqual(state, before);
-
-  const underfunded = { ...player, compute: 2 };
-  const insufficientCompute = declarationReadiness(state, underfunded);
-  assert.equal(insufficientCompute.ready, false);
-  assert.equal(insufficientCompute.failingRequirement, "compute");
-
-  const blocked = declarationReadiness(state, { ...player, capability: 5 });
-  assert.equal(blocked.ready, false);
-  assert.equal(blocked.failingRequirement, "capability");
-});
-
-test("final AGI resolution uses one gate, fourth-power Mandate, and one winner", async () => {
+test("AGI Dossier readiness is pure, diagnostic, and UI-ready", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
-      seed: "agi-fourth-power-resolution",
-      rulesVariant: {
-        agiEmergenceProbabilityBasisPoints: 10000,
-        agiMandateExponent: 4,
-        agiClaimMandateBoost: 3
-      }
+      seed: "agi-dossier-readiness"
     },
     () => {}
   );
-  const mandates = [18, 15, 12];
-  for (const [seat, mandate] of mandates.entries()) {
-    match.players[seat].mandate = mandate;
-  }
-  match.players[0].facilities.push({
-    id: "offline-agi-weight",
-    powered: false,
-    gridReady: false
+  const player = match.players[0];
+  player.compute = 4;
+  player.agiDossier.choices = Object.fromEntries(
+    match.config.agiDossier.modules.map((module) => [module.id, "commit"])
+  );
+  const before = structuredClone(player);
+  assert.deepEqual(match.declarationReadiness(player), {
+    ready: true,
+    failingRequirement: null,
+    committedCount: 4,
+    publicationCommitted: true,
+    fullyPaid: false,
+    eligible: false
   });
-  match.players[1].agiClaimed = true;
+  assert.deepEqual(player, before);
+  player.compute = 3;
+  assert.equal(match.declarationReadiness(player).failingRequirement, "compute");
+  player.compute = 4;
+  player.agiDossier.choices.publication_claim = "hedge";
+  assert.equal(match.declarationReadiness(player).failingRequirement, "publication");
+});
+
+test("Prediction Bag requires two matching claimant tokens and names one winner", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "agi-prediction-bag-resolution" },
+    () => {}
+  );
+  match.config.agiDossier.predictionBag.noAgiTokens = 0;
+  const mandates = [18, 15, 12];
+  for (const [seat, mandate] of mandates.entries()) match.players[seat].mandate = mandate;
+  const claimant = match.players[1];
+  claimant.capability = 12;
+  claimant.trust = 4;
+  claimant.agiClaimed = true;
+  claimant.agiDossier = {
+    choices: Object.fromEntries(
+      match.config.agiDossier.modules.map((module) => [module.id, "commit"])
+    ),
+    revealed: true,
+    fullyPaid: true,
+    eligible: true,
+    committedCount: 4,
+    computePaid: 4,
+    finalPoweredFacilities: 2,
+    claimTokens: 0
+  };
 
   match.resolveAgiOutcome();
 
   const resolution = match.matchMetrics.agiResolution;
   assert.equal(resolution.emerged, true);
   assert.deepEqual(resolution.provisionalWinnerSeats, [0]);
-  assert.equal(resolution.weights.length, 3);
-  assert.deepEqual(
-    resolution.weights.map((entry) => entry.effectiveMandate),
-    [17, 18, 12]
-  );
-  assert.deepEqual(
-    resolution.weights.map((entry) => entry.weight),
-    [17 ** 4, 18 ** 4, 12 ** 4]
-  );
+  assert.deepEqual(resolution.draws, [1, 1]);
+  assert.equal(resolution.strengths[0].tokens, 9);
+  assert.equal(resolution.selectedSeat, 1);
   assert.equal(match.players.filter((player) => player.agiDeclared).length, 1);
   assert.deepEqual(match.result().winnerSeats, [resolution.selectedSeat]);
 });
 
-test("Production earns Grid-Ready Facility states and infrastructure changes revoke them", async () => {
+test("Production recalculates powered Facilities without persistent Grid-Ready state", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -1596,8 +1551,7 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
     id: `s0-facility-${index + 1}`,
     tileId: tile.instanceId,
     category: tile.category,
-    powered: false,
-    gridReady: false
+      powered: false
   }));
   player.links = player.facilities.slice(1).map((facility) => facility.id);
   player.generators = [{
@@ -1635,21 +1589,9 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
   }));
 
   await match.produceAll(policies);
-  assert.equal(player.facilities.filter((facility) => facility.gridReady).length, 3);
-  assert.equal(match.gridReadyFacilityCount(player), 3);
-  assert.equal(match.declarationReadiness(player).gridReadyFacilities, 0);
+  assert.equal(player.facilities.filter((facility) => facility.powered).length, 3);
+  assert.ok(player.facilities.every((facility) => !("gridReady" in facility)));
   assert.ok(match.matchMetrics.agiFunnel[0].coreRequirementsMet);
-
-  match.round = 4;
-  player.escalation = 2;
-  player.actionsUsed = [];
-  assert.ok(match.legalActionSelections(0).some(
-    (decision) => decision.actionId === "declare_agi"
-  ));
-  assert.ok(match.matchMetrics.agiFunnel[0].legalDeclarationWindow);
-  match.registerAgiClaim(player);
-  assert.equal(player.agiClaimed, true);
-  assert.equal(player.agiDeclared, false);
 
   const currentTile = match.board.find(
     (tile) => tile.instanceId === player.facilities[0].tileId
@@ -1664,7 +1606,7 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
       ) === 1
   );
   match.applyResolution(0, {
-    decisionId: "move-revokes-grid-ready",
+    decisionId: "move-preserves-no-power-state",
     label: "Move the first Facility",
     actionId: "organize",
     parameters: {
@@ -1677,8 +1619,8 @@ test("Production earns Grid-Ready Facility states and infrastructure changes rev
     },
     consequences: { relocateFacility: true }
   });
-  assert.equal(player.facilities[0].gridReady, false);
-  assert.equal(match.gridReadyFacilityCount(player), 2);
+  assert.equal(player.facilities[0].powered, true);
+  assert.ok(!("gridReady" in player.facilities[0]));
 });
 
 test("action selection excludes impossible commitments and labels trade-dependent choices", async () => {
@@ -3104,7 +3046,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.12.0");
+  assert.equal(first.game.version, "0.13.0");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3682,7 +3624,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.12.0");
+  assert.equal(first.game.version, "0.13.0");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

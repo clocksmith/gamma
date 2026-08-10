@@ -650,7 +650,7 @@ function renderSummary() {
     summaryCard(
       copy.labels.nonDeclaringWins,
       formatPercent(report.diagnostics.nonDeclaringWinRate),
-      "institutional winner did not Declare AGI"
+      "institutional winner did not form AGI"
     ),
     summaryCard(
       copy.labels.llmFallbacks,

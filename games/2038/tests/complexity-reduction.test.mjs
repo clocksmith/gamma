@@ -77,10 +77,11 @@ test("precision patch prints final Generator prices and consolidated state", asy
   assert.doesNotMatch(mapReference, /Infrastructure Build costs one less/);
   assert.doesNotMatch(mapReference, /Civic Heat Battery costs one less/);
 
-  assert.match(coreRules, /four double-sided\s+Facilities/);
+  assert.match(coreRules, /four\s+Facilities/);
   assert.match(coreRules, /one persistent institutional identity and one\s+signature program/);
   assert.doesNotMatch(coreRules, /Escalation token/);
-  assert.doesNotMatch(componentReference, /\n- Four Facilities\n/);
+  assert.match(componentReference, /\n- Four Facilities\n/);
+  assert.doesNotMatch(componentReference, /Grid-Ready/);
   assert.match(componentReference, /Gain, spend, and lose Escalation availability/);
 
   const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
@@ -177,9 +178,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
     id: "s0-facility-1",
     tileId: emergencyDecision.parameters.destinationId,
     category: "energy",
-    powered: false,
-    gridReady: false,
-    gridReadySupportSeats: []
+    powered: false
   }];
   for (const rival of emergency.players.slice(1)) {
     rival.facilities = [];
@@ -190,7 +189,8 @@ test("canonical Generator enforces one ordinary piece and source effects", async
     emergency.players.map(() => maximizingPowerPolicy())
   );
   assert.equal(emergencyPlayer.scrutiny, scrutinyBefore + 1);
-  assert.equal(emergencyPlayer.facilities[0].gridReady, true);
+  assert.equal(emergencyPlayer.facilities[0].powered, true);
+  assert.ok(!("gridReady" in emergencyPlayer.facilities[0]));
 });
 
 test("single-generator allocation cannot spend dedicated grid Power elsewhere", () => {

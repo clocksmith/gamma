@@ -52,7 +52,6 @@
     "localDelivery": "own-or-adjacent-facilities",
     "powerSalesPerSupplier": 1,
     "megaClusterDemand": 2,
-    "gridReadyLifecycle": "recompute-every-production-and-revoke-on-infrastructure-change",
     "slotContention": "initiative-order-no-reservations"
   },
   "playRuleModules": {
@@ -232,9 +231,9 @@
     "customerTrackMarkers": 1,
     "escalationTrackMarkers": 1,
     "coreActionCards": 6,
-    "escalationCards": 7,
+    "escalationCards": 6,
     "realignmentBallots": 3,
-    "agiDeclarationCards": 1,
+    "agiDossierCards": 4,
     "startingGridIdentifiers": 1
   },
   "sharedSupply": {
@@ -485,13 +484,43 @@
       "location": "grid_reactor"
     }
   ],
-  "agiDeclaration": {
-    "capability": "${facts.executable.agi.capability}",
-    "computeCost": "${facts.executable.agi.computeCost}",
-    "emergenceProbabilityBasisPoints": "${facts.executable.agi.emergenceProbabilityBasisPoints}",
-    "mandateExponent": "${facts.executable.agi.mandateExponent}",
-    "claimMandateBoost": "${facts.executable.agi.claimMandateBoost}",
-    "scrutiny": "${facts.executable.agi.scrutiny}"
+  "agiDossier": {
+    "computePerCommit": "${facts.executable.agi.computePerCommit}",
+    "scrutinyPerCommit": "${facts.executable.agi.scrutinyPerCommit}",
+    "modules": [
+      {
+        "id": "benchmark_claim",
+        "round": 1,
+        "metric": "capability",
+        "threshold": "${facts.executable.agi.benchmarkCapability}"
+      },
+      {
+        "id": "deployment_claim",
+        "round": 2,
+        "metric": "poweredFacilities",
+        "threshold": "${facts.executable.agi.deploymentPoweredFacilities}"
+      },
+      {
+        "id": "authority_claim",
+        "round": 3,
+        "metric": "trust",
+        "threshold": "${facts.executable.agi.authorityTrust}"
+      },
+      {
+        "id": "publication_claim",
+        "round": 4,
+        "metric": "publication",
+        "threshold": 1
+      }
+    ],
+    "predictionBag": {
+      "noAgiTokens": "${facts.executable.agi.noAgiTokens}",
+      "drawsWithoutReplacement": "${facts.executable.agi.predictionDraws}",
+      "matchingFactionTokensRequired": 2,
+      "maximumClaimTokens": "${facts.executable.agi.maximumClaimTokens}",
+      "capabilityThresholds": [3, 6, 9, 12],
+      "mandateComebackTokensByRank": [0, 1, 2, 3, 3, 3]
+    }
   },
   "scoring": {
     "mode": "public_event_track",
@@ -542,7 +571,7 @@
   },
   "worldEnding": {
     "agiEmergence": {
-      "minimumDeclarations": 1
+      "minimumFormations": 1
     },
     "openContinuity": {
       "collectiveTrustOffsetPerPlayer": 1,

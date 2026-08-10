@@ -1,5 +1,5 @@
 # ${content.worldCopy.title}
-## A strategy game about institutions turning reliable AI capability into contested public authority as they build, deploy, regulate, and race to declare ${terms.systems.agi}
+## A strategy game about institutions turning reliable AI capability into contested public authority as they build, deploy, regulate, and make rival claims on ${terms.systems.agi}
 
 **Suggested player count:** ${game.suggestedPlayerRange}
 
@@ -19,7 +19,11 @@ and ending narratives.
 
 ## How to Play
 
-Default Game lasts four Eras. The institution with the most ${terms.playerTracks.mandate} wins; resolve that winner and the shared World Ending separately. Follow the numbered sections in order.
+Default Game lasts four Eras. The institution with the most
+${terms.playerTracks.mandate} is the provisional winner. Only two matching
+claimant tokens from the final Prediction Bag can replace that result. Resolve
+the institutional winner and shared World Ending separately. Follow the
+numbered sections in order.
 
 ## 1. Setup
 
@@ -38,9 +42,9 @@ Default Game lasts four Eras. The institution with the most ${terms.playerTracks
    Joint Venture, ${terms.technology.megaCluster}, Initiative, and Audit bag
    components within reach. Place the ${terms.infrastructure.power} Source reference cards nearby.
 5. Each player chooses or receives one Faction. Take its board, six Core
-   Actions, seven ${terms.systems.escalations}, CEO, three Teams, four double-sided
+   Actions, six ${terms.systems.escalations}, CEO, three Teams, four
    Facilities, one Generator, one ${terms.playerTracks.customer}-track marker, one
-   Escalation-track marker, one reversible Declare ${terms.systems.agi} card,
+   Escalation-track marker, four Era-labelled ${terms.systems.agi} Dossier cards,
    remaining track markers, and starting resources.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
    supply. Keep all four Facilities and the Generator in supply; no Facility
@@ -129,7 +133,8 @@ Escalations, and Faction abilities are open information.
 
 Escalation is cumulative. Progress teaches ordinary institutional work;
 Capacity adds industrial infrastructure; Authority adds agreements, quantum
-record disputes, and public effects; Continuity adds compound Actions, declarations, and exceptional
+record disputes, and public effects; Continuity adds compound Actions, Dossier
+revelation, and exceptional
 generation. Later Eras retain previously unlocked systems
 unless a printed effect says otherwise.
 
@@ -163,7 +168,7 @@ Action resolves without a destination restriction.
 | I — ${terms.eras.demo} | 0 | None |
 | II — ${terms.eras.scale} | 1 | ${terms.technology.megaCluster}, Reorganization |
 | III — ${terms.eras.narrative} | 1 | Open Weights, Narrative Capture |
-| IV — ${terms.eras.claim} | 2 | ${terms.technology.agentSwarm}, Declare ${terms.systems.agi}, ${terms.technology.advancedGeneration} |
+| IV — ${terms.eras.claim} | 2 | ${terms.technology.agentSwarm}, ${terms.technology.advancedGeneration} |
 
 ${terms.technology.agentSwarm} is the selected Escalation; it resolves and exhausts two
 different unused Core Actions.
@@ -397,8 +402,8 @@ Choose one:
 
 Each player receives two Escalation availability.
 
-Agent Swarms, ${terms.systems.agi} claims, Fusion, and exceptional faction programs now
-enter play.
+Agent Swarms, Fusion, exceptional faction programs, and the final Dossier
+reveal now enter play.
 
 #### ${terms.technology.agentSwarm}
 
@@ -406,61 +411,93 @@ Select ${terms.technology.agentSwarm} only with two different unused Core Action
 resolve both from that destination in either order and pay all costs. Apply the
 visit bonus to only one. Exhaust both, flip ${terms.technology.agentSwarm}, and add three ${terms.playerTracks.scrutiny}.
 
-#### Declare ${terms.systems.agi}
+#### The secret ${terms.systems.agi} Dossier
 
-Requirements:
+Each player has four matching Dossier cards: **Benchmark**, **Deployment**,
+**Authority**, and **Publication**. Each card has a symmetrical back and two
+orientations on its face: **Commit** and **Hedge**. The arrow on the card points
+toward the center of the table when it is oriented to Commit.
 
-- ${terms.playerTracks.capability} six or higher
-- Spend three ${terms.resources.compute}
+After Production and before the Audit in each Era, everyone secretly orients
+that Era's Dossier card and places it face down. Do not reveal, rotate, exchange,
+or inspect a filed card. Table talk, resource plans, and visible board play may
+suggest a player's intentions, but never make a private orientation binding
+until the final reveal.
 
-Declare ${terms.systems.agi} is global after movement. It registers an
-institutional claim for the final ${terms.systems.agi} Resolution; it does not
-declare ${terms.systems.agi}, score ${terms.playerTracks.mandate}, or end play.
-Add three ${terms.playerTracks.scrutiny} and flip the declaration card to its
-Claimed face. The selection is eligible only if its ${terms.playerTracks.capability}
-and ${terms.resources.compute} requirements are already met or one legal
-accepted pre-Act trade could supply the missing ${terms.resources.compute}.
+In Era IV, file **Publication**, then reveal every Dossier simultaneously
+before conducting the final Audit.
 
-A **grid-ready Facility** has its Grid-Ready face showing after earning it
-during a completed Production. After allocating Power, flip each Facility
-receiving its complete Facility demand to Grid-Ready. Flip it back immediately
-if that Facility relocates or loses its legal Power connection, or during any
-Production when it lacks full Power.
+1. Count each player's committed cards. Every Commit costs one
+   ${terms.resources.compute} and adds one ${terms.playerTracks.scrutiny}.
+2. Pay the complete ${terms.resources.compute} cost. A player who cannot pay it
+   spends all remaining ${terms.resources.compute}, still adds the full
+   ${terms.playerTracks.scrutiny}, and has an **ineligible Dossier**.
+3. A fully paid Dossier becomes an **eligible claim** only when Publication is
+   committed. Earlier commitments without Publication are costly institutional
+   positioning or a bluff; they cannot produce ${terms.systems.agi}.
+4. Add the required ${terms.playerTracks.scrutiny} before the Era IV Audit. Use
+   the normal ten-cube supply and overflow rule.
 
-Grid-Ready remains operational evidence for Facilities and may matter to
-printed effects, but it is not an ${terms.systems.agi} claim requirement.
+Filing a Dossier uses no Action and scores no ${terms.playerTracks.mandate}.
+Its sacrifice is the ${terms.resources.compute} held for final payment, the
+${terms.playerTracks.scrutiny} exposed to the final Audit, and the ordinary
+actions spent building the public evidence that can strengthen it.
 
-#### Final ${terms.systems.agi} Resolution
+#### Claim strength
 
-After the Era IV Mandate scores, apply the offline-Facility penalty and
-determine the ordinary winner using the final-scoring tie breakers. That player,
-or those tied players, are the **provisional winner**. Then resolve one final
-public uncertainty:
+During final scoring, apply offline-Facility penalties and establish the final
+${terms.playerTracks.mandate} ranks. Then score each eligible claim in
+faction-coloured ${terms.playerTracks.scrutiny} cubes. These cubes are
+prediction tokens only; they do not add ${terms.playerTracks.scrutiny} or
+trigger another Audit.
 
-1. ${terms.systems.agi} emerges with a five-percent probability. Resolve one
-   shared roll; do not roll once per player.
-2. If ${terms.systems.agi} does not emerge, the provisional winner or joint
-   provisional winners win.
-3. If it emerges, give every player an **effective Mandate** equal to final
-   ${terms.playerTracks.mandate}, plus three if that player registered an
-   ${terms.systems.agi} claim.
-4. Give player `i` selection weight `effective Mandateᵢ⁴`. Divide each weight by
-   the sum of all weights to obtain that player's selection probability.
-5. Make one weighted selection. The selected player declares
+- **Publication:** one token for the eligible claim, unless an Era IV
+  ${terms.systems.headline} explicitly changes it.
+- **Benchmark:** one token if Benchmark was committed and final
+  ${terms.playerTracks.capability} is at least three.
+- **Deployment:** one token if Deployment was committed and at least two of
+  the claimant's Facilities were powered in the final Production.
+- **Authority:** one token if Authority was committed and final
+  ${terms.playerTracks.trust} is at least four.
+- **Capability:** one token for each reached threshold: three, six, nine, and
+  twelve ${terms.playerTracks.capability}.
+- **Mandate comeback:** zero tokens for first place, one for second, two for
+  third, and three for fourth place or lower.
+
+Use final-scoring ranks. Players tied on every final-scoring tie breaker share
+the better rank. A claim can add at most ten tokens.
+
+#### The Prediction Bag
+
+After final scoring identifies the provisional Mandate winner, resolve the
+Prediction Bag at the table:
+
+1. Record final Collective ${terms.playerTracks.trust} and the number of black
+   Systemic Risk cubes that remained unresolved after the final Audit. These
+   recorded values determine the World Ending.
+2. Empty the Audit bag. Return every player-coloured cube to its owner and put
+   all eighteen black Systemic Risk cubes into the empty bag. In this draw,
+   black cubes mean **no ${terms.systems.agi}**; they do not resolve Audit
+   penalties.
+3. For each eligible claim, add that player's calculated number of
+   faction-coloured cubes. Do not add cubes for an ineligible Dossier.
+4. If no claim is eligible, skip the draw: ${terms.systems.agi} does not emerge
+   and the provisional Mandate winner wins.
+5. Otherwise, mix the bag and draw two cubes without replacement. Reveal them
+   together.
+6. If both cubes are the same faction colour, that institution forms
    ${terms.systems.agi} and becomes the sole winner, replacing the provisional
-   winner. No second declaration occurs.
+   winner. Every other pair—including black-black, black-colour, or two
+   different faction colours—means ${terms.systems.agi} does not emerge and the
+   provisional winner or joint winners win.
+7. Apply any persistent ${terms.systems.headline} that triggers when
+   ${terms.systems.agi} emerges, then determine the World Ending from the
+   recorded final state plus that effect.
 
-If every effective Mandate is zero, use equal weights instead. This is the only
-fallback to the fourth-power calculation.
-
-Use the game resolver or any auditable uniform random-number generator. Record
-the emergence roll, each final and effective Mandate, each fourth-power weight,
-and the selection roll. This is a rare, deliberately volatile coda: final-Era
-choices still determine the likely winner, while a trailing institution can
-spend an Action and three ${terms.resources.compute} on a low-probability claim.
-
-Registering a claim does not end play. A declaration occurs only during final
-resolution; victory does not require one.
+The first cube is the model's proposed continuation; the second tests whether
+that institutional future completes coherently. There is no reroll, redraw,
+numeric probability calculation, or separate declaration. The visible bag
+construction and two revealed cubes are the complete tabletop resolution.
 
 #### ${terms.technology.advancedGeneration}
 
@@ -539,9 +576,9 @@ every player before advancing to the next box:
    at most one ${terms.infrastructure.power} this Production. Only installed Generator or Fusion
    capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
 3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
-   allocate it only to legal local Facilities and Mega-Clusters.
-   Flip every Facility receiving its complete demand to Grid-Ready; flip every
-   Facility that does not back to its normal face.
+   allocate it only to legal local Facilities and Mega-Clusters. Mark which
+   Facilities are powered for this Production; Power never creates a persistent
+   Facility state.
 4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number
@@ -557,7 +594,13 @@ future obligation. A supplier may leave its own Facility offline.
 
 Apply the universal resource caps after every Production gain.
 
-### D. ${terms.systems.publicAudit}
+### D. File the Era Dossier
+
+Every player secretly orients and files the matching Era Dossier card. In Era
+IV, reveal and pay every Dossier immediately, then add its ${terms.playerTracks.scrutiny}
+before continuing. See **The secret ${terms.systems.agi} Dossier**.
+
+### E. ${terms.systems.publicAudit}
 
 Risky actions add player-colored ${terms.playerTracks.scrutiny} to the opaque Audit bag. Each
 player has ten cubes. For each required cube when all ten are already in the
@@ -598,7 +641,7 @@ Risk cube gives every player with at least three ${terms.playerTracks.customers}
 penalty, then returns to supply. Apply the same availability rules. Black cubes
 remaining at game end are unresolved Systemic Risk.
 
-### E. Score the ${terms.playerTracks.mandate}
+### F. Score the ${terms.playerTracks.mandate}
 
 Each Era ${terms.playerTracks.mandate} has a minimum qualification. If nobody qualifies, nobody
 scores it. Otherwise the qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying
@@ -817,7 +860,7 @@ At game end:
 2. Lose one ${terms.playerTracks.mandate} for each offline Facility.
 3. Name the ordinary winner under the tie breakers below as the provisional
    winner; a complete tie remains a provisional joint victory.
-4. Resolve the final ${terms.systems.agi} Resolution described above.
+4. Resolve the Prediction Bag described above.
 5. Resolve the shared World Ending.
 6. Announce the final institutional winner only after reading the history it
    claims to have won.
@@ -829,16 +872,17 @@ There is no other endgame scoring.
 ### The shared World Ending
 
 Determine one institutional winner and one shared ending from visible state
-and the recorded ${terms.systems.agi} Resolution:
+and the recorded final Audit and Prediction Bag:
 
-- Count the ${terms.systems.agi} declarations.
+- Record whether matching faction-coloured prediction tokens formed ${terms.systems.agi}.
 - Total every player’s final ${terms.playerTracks.trust}.
-- Count unresolved Systemic Risk cubes remaining in the Audit bag.
+- Use the unresolved Systemic Risk count recorded immediately after the final
+  Audit and before the bag was rebuilt.
 
-${terms.systems.agi} emerges only when the shared five-percent gate opened and
-the weighted resolution selected one institution. Otherwise it does not
-emerge. Never infer emergence from ${terms.playerTracks.capability}, a claim
-card, or a projected probability.
+${terms.systems.agi} emerges only when the two Prediction Bag cubes match one
+eligible claimant's faction colour. Otherwise it does not emerge. Never infer
+emergence from ${terms.playerTracks.capability}, a committed Dossier, or a
+calculated chance.
 
 Then determine whether the ending is **Open**. It is Open only if both
 conditions are true:

@@ -26,8 +26,8 @@ four Eras, simultaneous action selection, a modular thirteen-hex economy,
 six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.7.0-rc.5-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.12.0`. That synchronization is
+Rules `0.7.0-rc.6-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.13.0`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -50,7 +50,7 @@ Likely commercial format:
 - No conventional folding board
 - Thirteen thick modular hex tiles
 - Six faction/player boards
-- Approximately 151 Default Game cards, or 177 with the Advanced Play cards,
+- Approximately 163 Default Game cards, or 189 with the Advanced Play cards,
   plus final player-reference aids
 - Stock wooden pieces and cubes
 - Several punchboard sheets
@@ -73,7 +73,7 @@ locked component specification.
 | Modular hex tiles | 13, double-sided, 80–90 mm, 2 mm greyboard | selected sixfold-symmetric footprint |
 | Faction/player boards | 6, ideally dual-layer or recessed | strong recommendation |
 | Core Action cards | 36, six per player | confirmed |
-| Escalation cards | 42, seven per player | confirmed |
+| Escalation cards | 36, six per player | confirmed |
 | Realignment ballot cards | 18, three per player | Advanced Play only |
 | Headline cards | 24: 16 Default plus 8 Advanced | confirmed profile split |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
@@ -83,7 +83,7 @@ locked component specification.
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
 | Era cards | 4 | selected |
 | Player references | 4 designs; production copy count unresolved | synchronized draft copy; final layout and per-player duplication unresolved |
-| Total cards | approximately 151 Default or 177 with Advanced, plus player references | quote placeholder |
+| Total cards | approximately 163 Default or 189 with Advanced, plus player references | quote placeholder |
 | CEO pieces | 6 | confirmed concept |
 | Team pieces | 18 | three per faction |
 | Facility pieces | 24 | four per faction |
@@ -91,12 +91,12 @@ locked component specification.
 | Link tokens | 12 | Advanced Play only; two per faction |
 | Network markers | 6 | Advanced Play only; one per faction with capacity tracked on the player board |
 | Starting-grid identifiers | 6 | integrated into each faction's first Facility |
-| Separate Grid-Ready pieces | 0 | each Facility's reverse encodes Grid-Ready |
+| Separate Grid-Ready pieces | 0 | no persistent Grid-Ready state exists |
 | Generic resource and track markers | exact stock unresolved | excludes the selected Customer and Escalation markers below |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
 | Customer-track markers | 6 | one per faction board; zero to five Customers |
 | Escalation-track markers | 6 | one per faction board; zero to two availability |
-| Separate AGI claim pieces | 0 | each Declare AGI card has an unclaimed / claimed reverse |
+| AGI Dossier cards | 24 | four Era-labelled Commit / Hedge cards per faction |
 | Shared punchboard tokens | use exact `core-rules.md` inventory | selected counts; layout unresolved |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Scrutiny bag | 1 opaque cloth bag | confirmed concept |
@@ -141,7 +141,7 @@ The selected rule is:
 > faction-board track. Unspent availability expires at the end of the Era.
 
 Each player gains four Escalation availability over the game and records it
-with one faction-board track marker. Each player has seven once-per-game
+with one faction-board track marker. Each player has six once-per-game
 Escalation cards.
 
 ### Resolved: player component maxima
@@ -396,7 +396,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.7.0-rc.5-test` physical test.
+1. Run the controlled four-player `0.7.0-rc.6-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.

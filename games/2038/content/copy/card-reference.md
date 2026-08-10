@@ -213,12 +213,6 @@ ${content.escalations.byId.agent_swarm.text}
 
 _${content.escalations.byId.agent_swarm.flavorText}_
 
-### ${content.escalations.byId.declare_agi.name} — ${content.escalations.byId.declare_agi.displayName}
-
-${content.escalations.byId.declare_agi.text}
-
-_${content.escalations.byId.declare_agi.flavorText}_
-
 ### ${content.escalations.byId.fusion_demonstrator.name} — ${content.escalations.byId.fusion_demonstrator.displayName}
 
 ${content.escalations.byId.fusion_demonstrator.text}
