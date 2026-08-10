@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "NNCP GGML production-profile forward parity on the decoder-compatible sequential path",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only sequential-production successor: capture the actual decoder-compatible non-encode-only 64-step path at block position 256, aggregate its ordered per-position layer states, and compare the unchanged fixed-profile open forward against that true causal trajectory. Preserve geometry, tolerances, branch gate, package ceiling, and zero-credit status.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm2_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm1_v1",
+  "status": "candidate"
+}

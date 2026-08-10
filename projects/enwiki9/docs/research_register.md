@@ -290,6 +290,27 @@ complete measured SHA-256 values before qm1 could launch. The donor tarball,
 source size, and all bound artifact bytes remain unchanged.
 Peak sampled RSS was only `1,332 KiB`; therefore qm0 supplies no forward,
 parity, compression, or memory evidence. Correction-only successor
-`nncp_ggml_profile_forward_parity_64_qm1_v1` changes that single expected hash
-and candidate/result names while preserving every scientific parameter and
-gate.
+`nncp_ggml_profile_forward_parity_64_qm1_v1` changes only those expected
+identity constants and candidate/result names while preserving every
+scientific parameter and gate.
+
+Qm1 passed every corrected artifact identity and initialized the full teacher,
+but terminalized before fixture export because its source patch instrumented
+the `--encode_only` batch branch while the passing bridge and decodable archive
+use the true sequential branch. It consumed `2,226.996` seconds, peaked at
+`6,380,244 KiB` single-process and `6,417,024 KiB` process-tree RSS, and stayed
+under the decimal limit. No fixture marker, open forward, tensor comparison, or
+parity verdict exists, so this is an infrastructure rejection with zero
+scientific or score credit.
+
+Correction-only qm2 moves capture to the decoder-compatible sequence of 64
+one-symbol evaluations at block position 256. It freezes parameters and memory
+before position zero, records stream-zero truth paths as each symbol is coded,
+captures the persistent key/value state after each append, and binds ordered
+per-position hidden, attention, relative, logit, and probability tensors. The
+open fixed-profile program reconstructs its 64 causal input symbols from the
+decoder-visible predecessor plus the preceding 63 truths. Sequential oracle
+tensors are aggregated in original position order; final K/V and invariant
+relative tensors use their exact matched terminal/initial states. Geometry,
+`1e-5` tolerance, one-count branch limit, source ceiling, and verdict are
+otherwise unchanged.
