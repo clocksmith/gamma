@@ -35,15 +35,15 @@ Each faction receives:
 
 - One CEO
 - Three Teams
-- Four double-sided Facilities: normal / Grid-Ready
+- Four Facilities
 - One Generator
 - One integrated starting-grid identifier on the first Facility
 - Ten ${terms.playerTracks.scrutiny} cubes
 - One ${terms.playerTracks.customer} track marker
 - One Escalation track marker
 - Six Core Action cards
-- Seven ${terms.systems.escalation} cards
-- One Declare ${terms.systems.agi} card with an unclaimed / claimed reverse
+- Six ${terms.systems.escalation} cards
+- Four Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs and Commit / Hedge orientations
 
 Generators do not count against the Facility limit.
 
@@ -65,11 +65,11 @@ matched pair is available.
 
 - **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your cubes from the Audit
   bag to your supply. If fewer are present, remove as many as possible.
-- **Grid-Ready face:** flip a Facility after Production if it received its
-  complete Facility demand. Flip it back immediately when that Facility is
-  relocated by an Action or effect, becomes ineligible for its owner’s Power
-  after any change, or during a Production where it receives insufficient
-  ${terms.infrastructure.power}.
+- **Powered Facility:** mark Power allocation only through the current
+  Production. Remove that temporary indication after Production finishes.
+- **Dossier orientation:** place the current Era card face down with its arrow
+  toward the table center for Commit or toward its owner for Hedge. Never
+  inspect a filed card before the Era IV reveal.
 - **${terms.infrastructure.power} offline recovery:** reassess every Production.
 - **${terms.systems.headline} offline recovery:** ends when the ${terms.systems.headline} states, normally next
   Production.

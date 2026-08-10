@@ -65,7 +65,6 @@ const required = [
   "lab/report-archive.js",
   "lab/versioning/game-identity.js",
   "lab/environment/selected-rules-match.js",
-  "lab/rules/declaration-readiness.js",
   "lab/scenarios/agi-declaration-window.js",
   "lab/environment/rules-variant.js",
   "lab/runner/monte-carlo-runner.js",

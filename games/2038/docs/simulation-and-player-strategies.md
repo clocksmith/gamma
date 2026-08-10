@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.12.0` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.5-test`
+**Executable game:** `0.13.0` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.7.0-rc.6-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -117,17 +117,18 @@ crash can therefore lose only an in-progress game. Provider failures and other
 quarantined matches retain their failure receipts in the aggregate but do not
 create a completed-game archive.
 
-## Paired deterministic AGI claim scenario
+## Paired deterministic AGI Dossier scenario
 
-The registered `agi_claim_window_v1` scenario creates an Era IV claim decision
-instead of waiting for natural coverage. Common-seed arms differ only by the
-final Compute needed to pay for a claim. The scenario verifies claim
-reachability and policy choice; it cannot estimate the final coda because the
-coda contains a deliberately rare shared random gate.
+The registered `agi_claim_window_v1` compatibility ID now creates a fully
+committed four-card Dossier instead of waiting for natural coverage.
+Common-seed arms differ only by the final Compute needed to pay every Commit.
+The scenario verifies payment eligibility and policy choice; it cannot
+estimate natural Dossier strategy or Prediction Bag frequency.
 
-Natural reports record the gate probability and roll, every final Mandate,
-each claim bonus, fourth-power weight, selection roll, selected Mandate rank,
-and whether the selected institution displaced the provisional winner. The
+Natural reports record every face-down choice, revealed commitments, Compute
+paid, Scrutiny added, module result, Capability and comeback contribution,
+claim-token count, the two drawn token identities, selected Mandate rank, and
+whether matching tokens displaced the provisional winner. The
 historical `agi_declaration_window_v1` preregistration remains evidence for the
 superseded Grid-Ready declaration contract and must not be mixed with current
 claims.
@@ -414,7 +415,7 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 `three-to-five-profiles-v1` covers the thirteen-tile board, four Eras, all baseline
 Headlines and Escalations, factions, Training, two-source Power, Default local
-Power, Advanced Links and Networks, Grid-Ready Facility states, immediate Power trades, Joint Ventures, Audit,
+Power, Advanced Links and Networks, temporary powered-Facility state, immediate Power trades, Joint Ventures, Audit,
 Realignment, visible scoring, declarations, and the shared ending. Tactics and
 secret objectives remain deferred.
 

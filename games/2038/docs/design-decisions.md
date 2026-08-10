@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.5-test`
+**Rules reference:** `0.7.0-rc.6-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -81,9 +81,10 @@ authority.
 
 ### Presentation cannot create a new phase
 
-The current player board may group end-of-Era resolution into three visual
+The current player board may group End-of-Era Resolution into four visual
 bands—**Power** for Generate, Trade, and Allocate; **Economy** for Produce and
-Partner; and **Consequences** for Audit and Mandate. This is a presentation
+Partner; **Dossier** for the simultaneous secret filing; and **Consequences**
+for Audit and Mandate. This is a presentation
 hypothesis, not a rules change. Production remains the five numbered boxes,
 followed by the separate Audit and Mandate phases. Human testing must justify
 the visual grouping before it becomes a selected component layout.
@@ -94,7 +95,7 @@ Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion, and
 faction awards score when they occur. Facilities and control create
 position and production rather than receiving automatic endgame points. Final
 calculation applies the offline penalty, names the provisional Mandate winner,
-and then resolves the rare shared AGI coda.
+and then resolves the physical Prediction Bag.
 
 This makes negotiation legible and lets every simulated score change retain a
 specific source.
@@ -177,17 +178,21 @@ Audit draws scale by player count. Scrutiny beyond a player’s ten physical
 cubes immediately becomes a Runway-or-Trust penalty. Era IV Audit converts
 risk into Runway or Mandate loss so late exposure remains consequential.
 
-Declare AGI is an Era IV claim, not a deterministic declaration. Capability
-six and three Compute register the claim, add three Scrutiny, and add three
-effective Mandate only inside the final AGI weighting. The Blog Post Headline
-lowers only the Capability requirement.
+AGI is a hidden four-Era Dossier rather than an Action or deterministic
+declaration. After each Production, every player secretly files Commit or
+Hedge for that Era. In Era IV all cards are revealed: every Commit costs one
+Compute and adds one Scrutiny before the final Audit; Publication must be
+committed and the full cost paid for a claim to be eligible.
 
 The ordinary final-scoring winner, including the printed tie breakers, is the
-provisional winner. AGI then has one
-shared five-percent emergence gate. If it remains closed, the provisional
-winner wins. If it opens, every player's effective Mandate is raised to the
-fourth power and normalized into one weighted selection; the selected player
-becomes the sole winner. This produces zero or one declaration. The ending is
+provisional winner. The Audit bag is then rebuilt with all eighteen black
+no-AGI cubes plus each eligible claim's faction-coloured prediction tokens.
+Two cubes are drawn without replacement. Matching faction colours form AGI
+and make that claimant the sole winner; every other pair preserves the
+Mandate result. Claim tokens come from committed Dossier modules, Capability
+thresholds, and a bounded Mandate-rank comeback bonus. This produces zero or
+one declaration without a die, app, published percentage, or player-authored
+arithmetic. The ending is
 Open only when collective Trust improves
 beyond setup by the player count and unresolved Systemic Risk remains below the
 player count; otherwise it is Closed. Winning and building the preferable
@@ -214,7 +219,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.5-test` test:
+controlled `0.7.0-rc.6-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -226,10 +231,11 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.12.0` implements `0.7.0-rc.5-test` under engine
-coverage `three-to-five-profiles-v1`. Grid-Ready faces are earned by demonstrated
-Production and invalidated by movement, disconnection, or later
-insufficient Power. Browser-native deterministic play, server-backed LLM play,
+Executable game `0.13.0` implements `0.7.0-rc.6-test` under engine
+coverage `three-to-five-profiles-v1`. Facility Power is temporary to each
+Production. Four secret Dossier choices, final payment and Scrutiny, claim
+strength, and the two-token Prediction Bag are explicit deterministic state
+transitions around one seeded draw. Browser-native deterministic play, server-backed LLM play,
 replay, policies, and Monte Carlo share that contract.
 
 Synchronization is implementation proof, not balance proof. Structured
@@ -246,12 +252,15 @@ post-action resource state, and executes declared persona partner, placement,
 and resource preferences. The v10 Codex session motivated this correction but
 does not establish balance or human teachability.
 
-The `0.12.0` / `0.7.0-rc.5-test` candidate replaces deterministic AGI
-qualification with a rare shared coda. Declare AGI registers a costly Era IV
-claim. One five-percent gate follows final scoring; if it opens, normalized
-fourth-power effective Mandate selects one institution and overrides the
-provisional winner. The executable behavior is synchronized, but human
-reception and strategic value remain unmeasured.
+The `0.13.0` / `0.7.0-rc.6-test` candidate replaces the rejected fixed gate
+with four secret Era Dossier choices and the physical Prediction Bag. It also
+removes Declare AGI from the Escalation deck and removes persistent Grid-Ready
+state. The executable behavior is synchronized, but Dossier bluffing, final
+Audit pressure, perceived fairness, and AGI frequency remain unmeasured.
+
+The `0.12.0` / `0.7.0-rc.5-test` fixed-gate candidate is retained only as
+historical evidence. It used a five-percent gate and fourth-power Mandate
+selection; those rules are not part of the current game.
 
 The `0.10.2` / `0.7.0-rc.3-test` alignment patch changes no mechanic or
 number. It makes the selected integrated physical state authoritative in the
@@ -303,8 +312,8 @@ deterministic Coalition policy treatment for a preregistered diagnostic. The
 physical-candidate suffix advances only to preserve immutable synchronized
 release identity; it is not a balance-rule revision.
 
-`0.5.0-rc.20-test` selected the clarification that ring rotation is district
-movement rather than Facility relocation for Grid-Ready purposes, the
+`0.5.0-rc.20-test` selected the historical clarification that ring rotation was district
+movement rather than Facility relocation for the then-current Grid-Ready rule, the
 two-source Power inventory, and the evidence-selected rule that Everybody Gets
 a GPU scores one Mandate per four rivals. It promotes four controlled
 conversion changes from the winning-path tolerance confirmation: Demis scores
@@ -314,8 +323,8 @@ actually reduces a completed Facility’s cost; Jensen’s New Architecture
 self-Compute follows accepted licenses with no automatic base; and Customers
 four and five score one Mandate each while retaining full income. Every other
 numerical rule is frozen pending human evidence.
-Grid-Ready cooperation remains deliberately frozen for the controlled physical
-test. Realignment is retained only in Advanced Play pending comparative human
+That Grid-Ready rule was removed in `0.7.0-rc.6-test`. Realignment is retained
+only in Advanced Play pending comparative human
 evidence.
 
 `0.5.0-rc.21-test` changes no playable rule from rc.20. Executable `0.8.20`

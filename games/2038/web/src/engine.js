@@ -527,12 +527,7 @@ export function addScrutiny(config, player, amount) {
 }
 
 export function isAgiEligible(config, player) {
-  const requirement = config.agiDeclaration;
-  return player.capability >= requirement.capability &&
-    player.customers >= requirement.customers &&
-    player.facilities.length >= requirement.facilities &&
-    player.trust >= requirement.trust &&
-    player.compute >= requirement.computeCost;
+  return player.compute >= config.agiDossier.computePerCommit;
 }
 
 function recordAgiEligibility(config, state, timing) {
@@ -596,8 +591,7 @@ function resolveCore(config, state, actionId, destination, options) {
       player.facilities.push({
         id: `facility-${player.facilities.length + 1}`,
         tileId: destination.instanceId,
-        powered: false,
-        gridReady: false
+        powered: false
       });
       if (!player.startingGridConnection.assignedFacilityId) {
         player.startingGridConnection.assignedFacilityId = player.facilities.at(-1).id;
@@ -696,7 +690,6 @@ function allocatePower(config, state) {
   for (const facility of player.facilities) {
     const demand = 1;
     facility.powered = networked.has(facility.id) && available >= demand;
-    facility.gridReady = facility.powered;
     if (facility.powered) {
       available -= demand;
       powered += 1;
@@ -837,12 +830,6 @@ export function castRealignmentVote(config, headlines, state, motionId) {
   );
   const winner = motions.find((motion) => motion.id === result.winningMotionId);
   const movement = applyBoardMotion(state.board, winner);
-  const networked = networkedFacilityIds(state.board, state.player, {
-    networkInfrastructureEnabled: playProfile(config, state).networkInfrastructureEnabled
-  });
-  for (const facility of state.player.facilities) {
-    if (!networked.has(facility.id)) facility.gridReady = false;
-  }
   const receipt = {
     round: state.round,
     activeBallot: motionId,

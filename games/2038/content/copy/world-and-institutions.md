@@ -81,8 +81,8 @@ Resolve the World Ending mechanically in
 narrative aloud.
 
 The ending has two independent axes. ${terms.systems.agi} emerges only when the
-shared five-percent gate opens and the fourth-power Mandate resolution selects
-one institution. The future is Open only when Collective
+two Prediction Bag cubes match one eligible claimant's faction colour. The
+future is Open only when Collective
 ${terms.playerTracks.trust} rose by at least one per player from setup and
 unresolved Systemic Risk is below the player count. Otherwise it is Closed.
 

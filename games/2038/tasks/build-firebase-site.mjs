@@ -374,7 +374,6 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     "environment/selected-rules-match.js",
     "personas/player-profile.js",
     "policies/weighted-policy.js",
-    "rules/declaration-readiness.js",
     "runtime/create-browser-interactive-game.js",
     "runtime/interactive-game-core.js",
     "scenarios/agi-declaration-window.js"

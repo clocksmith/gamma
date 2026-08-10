@@ -8,7 +8,6 @@ import {
   resolveBlindRealignmentVote,
   simulateTrainingRun
 } from "../../web/src/engine.js";
-import { declarationReadiness } from "../rules/declaration-readiness.js";
 import { canAllocateLocalPower } from "../rules/local-power-allocation.js";
 import {
   applyAgiDeclarationScenario,
@@ -260,6 +259,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.megaClusters = [];
       player.agiDeclared = false;
       player.agiClaimed = false;
+      player.agiDossier = {
+        choices: {},
+        revealed: false,
+        fullyPaid: false,
+        eligible: false,
+        committedCount: 0,
+        computePaid: 0,
+        finalPoweredFacilities: 0,
+        claimTokens: 0
+      };
       player.factionAbilityUsed = {};
       player.tacticModifiers = {};
       player.history = {
@@ -296,7 +305,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         mandateAttributed: 0,
         events: []
       };
-      player.metrics.gridReadyFacilityRounds = [];
       player.metrics.promisesMade = 0;
       player.metrics.promisesFulfilled = 0;
       player.metrics.promisesBroken = 0;
@@ -440,15 +448,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return spent;
   }
 
-  currentAgiRequirements() {
-    return {
-      capability: this.regime.cycle?.id === "agi_blog_post"
-        ? Math.max(1, this.rulesVariant.agiCapability - 1)
-        : this.rulesVariant.agiCapability,
-      computeCost: this.rulesVariant.agiComputeCost
-    };
-  }
-
   markAgiFunnel(player, stage, timing, details = {}) {
     const entry = this.matchMetrics.agiFunnel[player.seat];
     if (!entry || entry[stage]) return;
@@ -461,16 +460,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   recordAgiCoreRequirements(player, timing) {
-    const requirements = this.currentAgiRequirements();
-    if (
-      player.capability >= requirements.capability &&
-      player.compute >= requirements.computeCost
-    ) {
+    if (player.compute >= this.rulesVariant.agiComputePerCommit) {
       this.markAgiFunnel(player, "coreRequirementsMet", timing, {
         capability: player.capability,
         compute: player.compute
       });
     }
+  }
+
+  currentAgiRequirements() {
+    return {
+      computeCost: this.config.agiDossier.modules.length *
+        this.rulesVariant.agiComputePerCommit
+    };
   }
 
   recordFactionAbility(player, abilityId, values = {}) {
@@ -764,6 +766,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         links: player.links.length,
         jointVentures: player.jointVentures.length,
         agiDeclared: player.agiDeclared,
+        agiDossier: clone(player.agiDossier),
         dealFlowConversion: {
           unspentCredits: player.dealFlowRunwayCredits.reduce(
             (sum, credit) => sum + credit.remaining,
@@ -797,6 +800,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           megaClusters: this.copyPublic(candidate.megaClusters || []),
           temporaryCompute: candidate.temporaryCompute || 0,
           agiDeclared: candidate.agiDeclared,
+          dossierCardsFiled: Object.keys(candidate.agiDossier.choices).length,
+          agiDossier: candidate.agiDossier.revealed
+            ? clone(candidate.agiDossier)
+            : undefined,
           currentScore: this.currentScore(candidate)
         })),
         contracts: this.copyPublic(this.contracts),
@@ -1384,6 +1391,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         { id: "property", label: decisionLabel("agiProperty") }
       ]);
       increment(this.matchMetrics.headlineOutcomes, `${id}:${this.regime.persistent.agiPersonhood}`);
+    } else if (id === "agi_blog_post") {
+      this.regime.persistent.agiBlogPost = true;
     } else if (id === "room_temperature_superconductor") {
       const rng = createRng(`${this.seed}:volatility:${this.round}:${this.cycle}`);
       this.regime.cycle.superconductor = rng() < 0.5 ? "fraud" : "replicates";
@@ -1572,16 +1581,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         };
       })
       .filter(Boolean);
-    if (escalation.some((decision) =>
-      decision.actionId === "declare_agi" &&
-      decision.consequences.resolvableWithoutTrade
-    )) {
-      this.markAgiFunnel(
-        player,
-        "legalDeclarationWindow",
-        "action_selection"
-      );
-    }
     return [...core, ...escalation];
   }
 
@@ -1635,8 +1634,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const facility = player.facilities.find((item) => item.id === choice.parameters.facilityId);
       facility.tileId = choice.parameters.tileId;
       facility.category = this.board.find((tile) => tile.instanceId === choice.parameters.tileId).category;
-      facility.gridReady = false;
-      facility.gridReadySupportSeats = [];
       const resource = RESOURCE_BY_CATEGORY[facility.category];
       if (resource) this.addResource(player, resource, resource === "compute" ? 2 : 1);
       if (facility.category === "frontier") {
@@ -2266,16 +2263,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }])
         : [];
     }
-    if (id === "declare_agi") {
-      return this.isAgiEligible(player)
-        ? globalMoves((piece, destination) => [{
-          decisionId: `escalation_declare_agi_${piece.id}_${destination.instanceId}`,
-          label: simulationCopy.decisions.declareAgi,
-          actionId: id,
-          parameters: { pieceId: piece.id, destinationId: destination.instanceId }
-        }])
-        : [];
-    }
     if (id === "fusion_demonstrator") {
       const cost = this.regime.cycle?.superconductor === "replicates" ? 3 : 5;
       if (player.runway < cost) return [];
@@ -2498,8 +2485,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         facility.category = this.board.find(
           (tile) => tile.instanceId === facility.tileId
         )?.category;
-        facility.gridReady = false;
-        facility.gridReadySupportSeats = [];
       }
       this.markAction(player, "organize", decision.label);
       return;
@@ -2847,10 +2832,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       : null;
   }
 
-  gridReadyFacilityCount(player) {
-    return player.facilities.filter((facility) => facility.gridReady).length;
-  }
-
   provisionalWinnerSeats() {
     const standings = this.players.map((player) => ({
       seat: player.seat,
@@ -2875,15 +2856,23 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   declarationReadiness(player) {
-    const requirements = this.currentAgiRequirements();
-    return declarationReadiness({
-      board: this.board,
-      players: this.players,
-      contracts: this.contracts,
-      megaClusters: this.megaClusters,
-      startingGridPower: this.rulesVariant.startingGridPower,
-      requirements
-    }, player);
+    const dossier = player.agiDossier;
+    const committedCount = Object.values(dossier?.choices || {})
+      .filter((choice) => choice === "commit").length;
+    const publicationCommitted = dossier?.choices?.publication_claim === "commit";
+    return {
+      ready: publicationCommitted && player.compute >=
+        committedCount * this.rulesVariant.agiComputePerCommit,
+      failingRequirement: publicationCommitted
+        ? (player.compute >= committedCount * this.rulesVariant.agiComputePerCommit
+          ? null
+          : "compute")
+        : "publication",
+      committedCount,
+      publicationCommitted,
+      fullyPaid: Boolean(dossier?.fullyPaid),
+      eligible: Boolean(dossier?.eligible)
+    };
   }
 
   isAgiEligible(player) {
@@ -2901,91 +2890,214 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
   }
 
-  registerAgiClaim(player) {
-    const readiness = this.declarationReadiness(player);
-    this.matchMetrics.declarationReadiness.push({
-      seat: player.seat,
-      round: this.round,
-      cycle: this.cycle,
-      ready: readiness.ready,
-      failingRequirement: readiness.failingRequirement,
-      ppaIterations: readiness.ppaIterations,
-      capacityOps: readiness.capacityOps,
-      supportingSeats: readiness.supportingSeats
-    });
-    if (!readiness.ready) {
-      throw new Error(
-        `Cannot register AGI claim: ${readiness.failingRequirement || "not_ready"}.`
+  async fileAgiDossiers(policies) {
+    const module = this.config.agiDossier.modules.find(
+      (candidate) => candidate.round === this.round
+    );
+    if (!module) throw new Error(`Missing AGI Dossier module for Era ${this.round}.`);
+    const choices = await Promise.all(this.players.map((player) => this.choose(
+      policies,
+      player.seat,
+      `agi_dossier_${module.id}`,
+      [
+        {
+          decisionId: `agi_dossier_commit_${module.id}`,
+          label: `Commit the ${module.id.replaceAll("_", " ")} Dossier.`,
+          actionId: "agi_dossier",
+          parameters: { moduleId: module.id, orientation: "commit" },
+          consequences: { agiClaim: 1, compute: -1, scrutiny: 1 }
+        },
+        {
+          decisionId: `agi_dossier_hedge_${module.id}`,
+          label: `Hedge the ${module.id.replaceAll("_", " ")} Dossier.`,
+          actionId: "agi_dossier",
+          parameters: { moduleId: module.id, orientation: "hedge" },
+          consequences: { agiClaim: 0 }
+        }
+      ]
+    )));
+    for (const [seat, choice] of choices.entries()) {
+      this.players[seat].agiDossier.choices[module.id] = choice.parameters.orientation;
+    }
+    this.recordEvent(
+      "agi_dossiers_filed",
+      null,
+      `Every institution filed its Era ${this.round} AGI Dossier card.`
+    );
+    if (this.round === this.config.rounds.at(-1).number) this.revealAgiDossiers();
+  }
+
+  revealAgiDossiers() {
+    for (const player of this.players) {
+      const dossier = player.agiDossier;
+      dossier.revealed = true;
+      dossier.finalPoweredFacilities = player.facilities.filter(
+        (facility) => facility.powered
+      ).length;
+      dossier.committedCount = Object.values(dossier.choices)
+        .filter((choice) => choice === "commit").length;
+      const computeCost = dossier.committedCount * this.rulesVariant.agiComputePerCommit;
+      if (this.scenario?.applied && this.scenario.focalSeat === player.seat) {
+        player.compute = this.scenario.arm === "eligible"
+          ? Math.max(player.compute, computeCost)
+          : Math.min(player.compute, Math.max(0, computeCost - 1));
+      }
+      dossier.computePaid = Math.min(player.compute, computeCost);
+      player.compute -= dossier.computePaid;
+      dossier.fullyPaid = dossier.computePaid === computeCost;
+      dossier.eligible = dossier.fullyPaid &&
+        dossier.choices.publication_claim === "commit";
+      player.agiClaimed = dossier.eligible;
+      this.addScrutiny(
+        player,
+        dossier.committedCount * this.rulesVariant.agiScrutinyPerCommit
+      );
+      if (dossier.eligible) {
+        this.markAgiFunnel(player, "legalDeclarationWindow", "dossier_reveal", {
+          computeCost,
+          committedCount: dossier.committedCount
+        });
+        markScenarioClaim(this, player);
+        this.markAgiFunnel(player, "claimRegistered", "dossier_reveal", {
+          computeSpent: dossier.computePaid,
+          committedCount: dossier.committedCount
+        });
+      }
+      this.matchMetrics.declarationReadiness.push({
+        seat: player.seat,
+        round: this.round,
+        cycle: this.cycle,
+        ready: dossier.eligible,
+        failingRequirement: dossier.eligible
+          ? null
+          : (dossier.choices.publication_claim === "commit" ? "compute" : "publication"),
+        committedCount: dossier.committedCount,
+        computeCost,
+        computePaid: dossier.computePaid,
+        supportingSeats: []
+      });
+      this.recordEvent(
+        "agi_dossier_revealed",
+        player.seat,
+        `${player.factionName} revealed ${dossier.committedCount} commitments; ` +
+          `${dossier.eligible ? "the claim is eligible" : "the claim is ineligible"}.`
       );
     }
-    player.compute -= this.rulesVariant.agiComputeCost;
-    player.agiClaimed = true;
-    markScenarioClaim(this, player);
-    this.markAgiFunnel(player, "claimRegistered", "escalation_resolved", {
-      computeSpent: this.rulesVariant.agiComputeCost
-    });
-    this.addScrutiny(player, this.config.agiDeclaration.scrutiny);
-    this.recordEvent(
-      "agi_claimed",
-      player.seat,
-      `${player.factionName} registered an AGI claim for final resolution.`
+  }
+
+  agiClaimStrengths() {
+    const ranked = this.players.map((player) => ({
+      player,
+      score: this.finalMandate(player).score,
+      trust: player.trust,
+      customers: player.customers,
+      compute: player.compute
+    })).sort((left, right) =>
+      right.score - left.score ||
+      right.trust - left.trust ||
+      right.customers - left.customers ||
+      right.compute - left.compute ||
+      left.player.seat - right.player.seat
     );
+    const rankBySeat = new Map();
+    for (const entry of ranked) {
+      const rank = 1 + ranked.filter((candidate) =>
+        candidate.score > entry.score ||
+        (candidate.score === entry.score && candidate.trust > entry.trust) ||
+        (candidate.score === entry.score && candidate.trust === entry.trust &&
+          candidate.customers > entry.customers) ||
+        (candidate.score === entry.score && candidate.trust === entry.trust &&
+          candidate.customers === entry.customers && candidate.compute > entry.compute)
+      ).length;
+      rankBySeat.set(entry.player.seat, rank);
+    }
+    const publicationTokens = this.regime.persistent?.agiBlogPost ? 2 : 1;
+    return this.players.filter((player) => player.agiDossier.eligible).map((player) => {
+      const dossier = player.agiDossier;
+      const modules = {
+        publication: publicationTokens,
+        benchmark: Number(
+          dossier.choices.benchmark_claim === "commit" &&
+          player.capability >= this.config.agiDossier.modules
+            .find((module) => module.id === "benchmark_claim").threshold
+        ),
+        deployment: Number(
+          dossier.choices.deployment_claim === "commit" &&
+          dossier.finalPoweredFacilities >= this.config.agiDossier.modules
+            .find((module) => module.id === "deployment_claim").threshold
+        ),
+        authority: Number(
+          dossier.choices.authority_claim === "commit" &&
+          player.trust >= this.config.agiDossier.modules
+            .find((module) => module.id === "authority_claim").threshold
+        )
+      };
+      const capabilityTokens = this.config.agiDossier.predictionBag.capabilityThresholds
+        .filter((threshold) => player.capability >= threshold).length;
+      const rank = rankBySeat.get(player.seat);
+      const comebackTokens = this.config.agiDossier.predictionBag
+        .mandateComebackTokensByRank[Math.min(
+          rank - 1,
+          this.config.agiDossier.predictionBag.mandateComebackTokensByRank.length - 1
+        )];
+      const tokens = Math.min(
+        this.rulesVariant.agiMaximumClaimTokens,
+        Object.values(modules).reduce((sum, value) => sum + value, 0) +
+          capabilityTokens + comebackTokens
+      );
+      dossier.claimTokens = tokens;
+      return {
+        seat: player.seat,
+        mandate: this.finalMandate(player).score,
+        mandateRank: rank,
+        committedCount: dossier.committedCount,
+        modules,
+        capabilityTokens,
+        comebackTokens,
+        tokens
+      };
+    });
   }
 
   resolveAgiOutcome() {
-    const probability = this.rulesVariant.agiEmergenceProbabilityBasisPoints / 10000;
-    const rng = createRng(`${this.seed}:agi-final-resolution`);
-    const emergenceRoll = rng();
+    const strengths = this.agiClaimStrengths();
+    const noAgiTokens = this.config.agiDossier.predictionBag.noAgiTokens;
+    const predictionTokens = [
+      ...Array.from({ length: noAgiTokens }, () => "no_agi"),
+      ...strengths.flatMap((entry) =>
+        Array.from({ length: entry.tokens }, () => entry.seat)
+      )
+    ];
     const resolution = {
-      probability,
-      emergenceRoll,
-      mandateExponent: this.rulesVariant.agiMandateExponent,
-      claimMandateBoost: this.rulesVariant.agiClaimMandateBoost,
-      claimantSeats: this.players.filter((player) => player.agiClaimed)
-        .map((player) => player.seat),
+      method: "two-token-prediction-bag",
+      noAgiTokens,
+      claimantSeats: strengths.map((entry) => entry.seat),
       provisionalWinnerSeats: this.provisionalWinnerSeats(),
-      weights: [],
-      mandateLeaderSeats: [],
+      strengths,
+      draws: [],
       selectedSeat: null,
       selectedMandateRank: null,
-      selectedWasClaimant: false,
       winnerOverridden: false,
       emerged: false
     };
-    if (emergenceRoll >= probability) {
+    if (!strengths.length) {
       this.matchMetrics.agiResolution = resolution;
       return;
     }
-    const weights = this.players.map((player) => {
-      const finalMandate = this.finalMandate(player).score;
-      const effectiveMandate = finalMandate +
-        (player.agiClaimed ? this.rulesVariant.agiClaimMandateBoost : 0);
-      return {
-        seat: player.seat,
-        mandate: finalMandate,
-        claimed: player.agiClaimed,
-        effectiveMandate,
-        weight: Math.max(0, effectiveMandate) ** this.rulesVariant.agiMandateExponent
-      };
-    });
-    let totalWeight = weights.reduce((sum, entry) => sum + entry.weight, 0);
-    if (totalWeight === 0) {
-      for (const entry of weights) entry.weight = 1;
-      totalWeight = weights.length;
-      resolution.allZeroFallback = true;
-    } else {
-      resolution.allZeroFallback = false;
+    const rng = createRng(`${this.seed}:agi-prediction-bag`);
+    const bag = [...predictionTokens];
+    for (let draw = 0; draw < 2; draw += 1) {
+      const index = Math.floor(rng() * bag.length);
+      resolution.draws.push(bag.splice(index, 1)[0]);
     }
-    const highestMandate = Math.max(...weights.map((entry) => entry.mandate));
-    resolution.mandateLeaderSeats = weights.filter(
-      (entry) => entry.mandate === highestMandate
-    ).map((entry) => entry.seat);
-    const selectionRoll = rng() * totalWeight;
-    let cumulative = 0;
-    const selected = weights.find((entry) => {
-      cumulative += entry.weight;
-      return selectionRoll < cumulative;
-    }) || weights.at(-1);
+    if (
+      !Number.isInteger(resolution.draws[0]) ||
+      resolution.draws[0] !== resolution.draws[1]
+    ) {
+      this.matchMetrics.agiResolution = resolution;
+      return;
+    }
+    const selected = strengths.find((entry) => entry.seat === resolution.draws[0]);
     const player = this.players[selected.seat];
     player.agiDeclared = true;
     this.firstAgiSeat = player.seat;
@@ -2993,12 +3105,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     player.history.declarations += 1;
     this.matchMetrics.declarations = 1;
     this.markAgiFunnel(player, "emergenceTriggered", "final_agi_resolution", {
-      probability,
-      emergenceRoll
+      draws: [...resolution.draws]
     });
     this.markAgiFunnel(player, "declared", "final_agi_resolution", {
       mandate: selected.mandate,
-      weight: selected.weight
+      claimTokens: selected.tokens
     });
     markScenarioDeclaration(this, player);
     if (this.regime.persistent?.agiPersonhood === "person") {
@@ -3010,14 +3121,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.systemicRisk += 1;
       this.matchMetrics.systemicRiskCreated += 1;
     }
-    resolution.weights = weights;
-    resolution.totalWeight = totalWeight;
-    resolution.selectionRoll = selectionRoll;
     resolution.selectedSeat = player.seat;
-    resolution.selectedMandateRank = 1 + weights.filter(
-      (entry) => entry.mandate > selected.mandate
-    ).length;
-    resolution.selectedWasClaimant = player.agiClaimed;
+    resolution.selectedMandateRank = selected.mandateRank;
     resolution.winnerOverridden = !resolution.provisionalWinnerSeats.includes(
       player.seat
     );
@@ -3026,7 +3131,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.recordEvent(
       "agi_declared",
       player.seat,
-      `${player.factionName}'s claim produced AGI and overrode the Mandate result.`
+      `${player.factionName}'s matching prediction tokens produced AGI and overrode the Mandate result.`
     );
   }
 
@@ -3190,8 +3295,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player,
         this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 4 : 3
       );
-    } else if (id === "declare_agi") {
-      this.registerAgiClaim(player);
     } else if (id === "fusion_demonstrator") {
       this.movePiece(player, decision.parameters);
       this.spendRunway(player, decision.parameters.cost, {
@@ -3585,10 +3688,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       for (const facility of player.facilities) {
         facility.powered = poweredIds.has(facility.id);
-        facility.gridReady = facility.powered;
-        facility.gridReadySupportSeats = facility.gridReady
-          ? [...necessarySuppliers]
-          : [];
       }
       player.roundMetrics.powerDemandSatisfied = allocation.parameters.demand;
       player.roundMetrics.availablePower = available;
@@ -3707,10 +3806,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         demandSatisfied: player.roundMetrics.powerDemandSatisfied,
         networked: infrastructure[player.seat].networked.size
       });
-      player.metrics.gridReadyFacilityRounds.push({
-        round: this.round,
-        gridReady: player.facilities.filter((facility) => facility.gridReady).length
-      });
       this.recordEligibility(player, "after_production");
     }
     const platform = this.players.find((player) => player.factionId === "platform_empire");
@@ -3721,8 +3816,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         seat: player.seat,
         factionId: player.factionId,
         mandate: this.currentScore(player),
-        poweredFacilities: player.facilities.filter((facility) => facility.powered).length,
-        gridReadyFacilities: player.facilities.filter((facility) => facility.gridReady).length
+        poweredFacilities: player.facilities.filter((facility) => facility.powered).length
       })),
       platformLead: platform ? this.currentScore(platform) - leader : null,
       gridGeneratorSlotsFilled: this.generatorOccupancy(
@@ -4454,8 +4548,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       (candidate) => candidate.id === choice.parameters.facilityId
     );
     facility.tileId = choice.parameters.tileId;
-    facility.gridReady = false;
-    facility.gridReadySupportSeats = [];
     facility.category = this.board.find(
       (tile) => tile.instanceId === facility.tileId
     ).category;
@@ -4532,6 +4624,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async finishSelectedRound(policies) {
     await this.produceAll(policies);
+    await this.fileAgiDossiers(policies);
     this.audit();
     this.scoreMandate();
     if (this.round === 3 && this.rulesVariant.realignmentEnabled) {
@@ -4609,15 +4702,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       motion = motions.find((candidate) => candidate.id === tiebreak.parameters.motionId);
     }
     const movement = applyBoardMotion(this.board, motion);
-    for (const player of this.players) {
-      const networked = this.infrastructureState(player).networked;
-      for (const facility of player.facilities) {
-        if (!networked.has(facility.id)) {
-          facility.gridReady = false;
-          facility.gridReadySupportSeats = [];
-        }
-      }
-    }
     increment(this.matchMetrics.realignments, motion.id);
     this.recordEvent(
       "realignment_resolved",
@@ -4798,6 +4882,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           megaClusters: clone(player.megaClusters || []),
           agiDeclared: player.agiDeclared,
           agiClaimed: player.agiClaimed,
+          agiDossier: clone(player.agiDossier),
           agiReadiness: this.declarationReadiness(player),
           currentScore: this.currentScore(player)
         };
@@ -4834,6 +4919,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         offlinePenalty,
         agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,
+        agiDossier: clone(player.agiDossier),
         metrics: clone(player.metrics)
       };
     }).sort((left, right) =>
@@ -4863,7 +4949,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       (player) => player.agiDeclared
     ).length;
     const agiEmerges = qualifyingDeclarers >=
-        this.config.worldEnding.agiEmergence.minimumDeclarations;
+        this.config.worldEnding.agiEmergence.minimumFormations;
     const requiredCollectiveTrust = setupCollectiveTrust +
       this.playerCount * this.config.worldEnding.openContinuity.collectiveTrustOffsetPerPlayer;
     const systemicRiskBounded = !this.config.worldEnding.openContinuity

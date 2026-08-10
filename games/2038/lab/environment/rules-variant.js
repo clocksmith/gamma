@@ -2,7 +2,6 @@ import { resolvePlayProfile } from "../../web/src/engine.js";
 
 const SINGLE_GENERATOR_POLICIES = Object.freeze({
   delivery: "own-or-adjacent-facilities",
-  gridReady: "recompute-every-production-and-revoke-on-infrastructure-change",
   slotContention: "initiative-order-no-reservations"
 });
 
@@ -43,7 +42,6 @@ function validateSingleGeneratorRule(config, rule) {
   }
   for (const [field, expected] of [
     ["localDelivery", SINGLE_GENERATOR_POLICIES.delivery],
-    ["gridReadyLifecycle", SINGLE_GENERATOR_POLICIES.gridReady],
     ["slotContention", SINGLE_GENERATOR_POLICIES.slotContention]
   ]) {
     if (rule[field] !== expected) {
@@ -83,12 +81,9 @@ export function canonicalRulesVariant(config) {
     ),
     capabilityThresholdMandate: null,
     lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
-    agiCapability: config.agiDeclaration.capability,
-    agiComputeCost: config.agiDeclaration.computeCost,
-    agiEmergenceProbabilityBasisPoints:
-      config.agiDeclaration.emergenceProbabilityBasisPoints,
-    agiMandateExponent: config.agiDeclaration.mandateExponent,
-    agiClaimMandateBoost: config.agiDeclaration.claimMandateBoost,
+    agiComputePerCommit: config.agiDossier.computePerCommit,
+    agiScrutinyPerCommit: config.agiDossier.scrutinyPerCommit,
+    agiMaximumClaimTokens: config.agiDossier.predictionBag.maximumClaimTokens,
     customerCapabilityOffset: 0,
     startingTeamsDeployed: 1,
     coalitionStartingRunway: null,
