@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(nncp_ggml_head_probe LANGUAGES C CXX)
+project(nncp_ggml_profile_forward_parity LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,5 +15,5 @@ set(GGML_CPU_REPACK OFF CACHE BOOL "" FORCE)
 set(GGML_ALL_WARNINGS OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(ggml)
-add_executable(nncp_ggml_head_probe probe.cpp)
-target_link_libraries(nncp_ggml_head_probe PRIVATE ggml)
+add_executable(nncp_ggml_profile_forward_parity profile_forward_parity.cpp)
+target_link_libraries(nncp_ggml_profile_forward_parity PRIVATE ggml)

@@ -247,3 +247,35 @@ before the bridge verdict
 profile port without tolerance, layer, dtype, or kernel sweeps. Evidence: the
 proposal, archived part 019, GGML kernel q1, GGML head-parity q2, and the LibNC
 source-eligibility audit q3.
+
+## 2026-08-10 - Production bridge passes and fixed-shape parity is materialized
+
+The production bridge is terminal PASS: parent `148,140` bytes, full midpoint
+`143,414` bytes, and actual gain `4,726` bytes against the frozen `3,000`-byte
+gate. Independently terminated original-coordinate thirds save `1,593`,
+`1,775`, and `1,359` bytes; their one-byte nonadditivity against the whole
+archive is termination overhead, not an additive archive decomposition. Clean,
+traced, and repeated archives are identical, all `65,536` symbols decode, the
+`322,978`-byte raw inverse is exact, the schedule matches, and strict decimal
+memory passes. This is decisive zero-credit teacher evidence on the real
+`16,392`-symbol representation, not a submission score.
+
+The inherited `32 x 256` output-head scaffold has been removed from
+`nncp_ggml_profile_forward_parity_64_qm0_v1`. Its replacement freezes stream
+zero at original truth coordinates `[256,320)`, the earliest 64-symbol segment
+whose complete 256-symbol memory is decoder-visible. A patched LibNC oracle
+exports ordered, hashed parameters, selected-stream memory and input, causal
+mask, relative tensors, every layer checkpoint, final logits/probabilities,
+and the exact balanced-tree branch path. The fixture is explicitly zero-credit
+and forbidden as a runtime dependency.
+
+The open side is now a static CPU-only profile implementation: 20 layers,
+width 1,024, eight 128-wide heads, GEGLU inner width 3,072, memory 256,
+segment 64, relative span 320, and vocabulary 16,392. GGML performs fixed BF16
+matrix products; the candidate explicitly implements the frozen BF16
+conversion points, RMSNorm, relative shift, causal mask, attention softmax,
+residual order, tanh GELU, output softmax, numerical symbol tree, and integer
+probability quantization. Both the oracle extractor and open source closure
+compile; the compressed open source closure is about 1.174 MB, below the
+2.000 MB ceiling. No teacher or open forward has yet been executed under this
+candidate, so it still has zero parity or score credit.
