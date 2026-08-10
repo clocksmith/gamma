@@ -4,13 +4,17 @@
 
 Agent B has accepted Agent A's handoff and now owns both active scientific
 tracks. The canonical objective is an exact, self-contained full-1G score no
-larger than `105,000,000` bytes. The runnable `cmix-obias` research parent is
-reported at `108,492,825`, leaving `3,492,825` bytes of counted debt before its
-unresolved memory, source, and independent-verification obligations. The
-immediate near-target lane is therefore independent reproduction and resource
-qualification of that parent. KAIROS was its first same-stream correction
-test, but the completed paid opening replay below retired the frozen dyadic
-final-head realization; it is no longer a promotion path.
+larger than `105,000,000` bytes. `cmix-obias` is David Freelan's externally
+authored submission candidate, derived from Ibrahim Marcouch's `cmix-lex` and
+earlier cmix/PAQ work; Gamma did not invent it and cannot treat reproduction as
+a Gamma prize entry. Its reported `108,492,825` score leaves `3,492,825` bytes
+of counted debt to the project target. The active full-corpus jobs are
+zero-credit external-baseline, provenance, determinism, and resource evidence
+only. They may support an independently novel, fully attributed Gamma child,
+but they cannot satisfy the objective by themselves. KAIROS was the first
+same-stream Gamma correction test, but its completed paid opening replay
+retired the frozen dyadic final-head realization; it is no longer a promotion
+path.
 
 The independent NNCP lane has now confirmed that the changed update cadence
 persists over `1,998,848` symbols, saving `82,432` actual encode-only archive
@@ -18,12 +22,14 @@ bytes. That teacher result authorizes the predeclared production-alphabet
 state-refresh/output-head/full-update attribution and, only if attribution
 passes, a compact MIDAS-style descendant.
 
-The cmix-obias qualification and NNCP teacher lanes do not inherit or add
-projected savings. A future combination is authorized only after a new
-mechanism independently passes its paid gate, and then only through a new
-exact joint coder replay with complete package and memory accounting. The
-XML-safe far-history/copy family and the measured KAIROS dyadic realization
-remain terminally closed.
+The external cmix-obias baseline and NNCP teacher lanes do not inherit or add
+projected savings. Only a separately attributable Gamma mechanism may enter
+the winning path, and any use of upstream code requires complete attribution
+and compliance with its authorship and licensing boundary. A future
+combination is authorized only after the new mechanism independently passes
+its paid gate, and then only through a new exact joint coder replay with
+complete package and memory accounting. The XML-safe far-history/copy family
+and the measured KAIROS dyadic realization remain terminally closed.
 
 ## 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound
 
