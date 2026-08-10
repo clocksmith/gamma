@@ -115,3 +115,30 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 - [part-019.md: 2026-08-10 - Production output-head attribution is dependency-frozen through 2026-08-09 - cmix-obias technical source/runtime closure frozen](research_register/archive/part-019.md)
 
 ## Current entries
+
+## 2026-08-10 - Open GGML production-profile forward parity is dependency-frozen
+
+Proposal `nncp_ggml_profile_forward_parity_64_qm0_v1` closes the explicit
+decoder-eligibility step after the already passed GGML kernel and output-head
+update parity gates. Direct inspection of the production `enwik9` profile
+binds the specialized transformer to `20` layers, model width `1,024`, `8`
+heads, key width `128`, inner width `3,072`, memory `256`, and segment length
+`64`. This is a deliberate profile rewrite, not a generic shim for the roughly
+`71` reachable closed LibNC calls.
+
+The proposal is machine-blocked on a passing full-dictionary native midpoint
+bridge. Once activated, it compares one receipt-bound LibNC segment with an
+MIT GGML CPU implementation loaded from the same parameters and
+decoder-visible memory. It requires deterministic finite hidden, key/value,
+logit, tree, and branch outputs; at most `1e-5` matched tensor error; at most
+one integer probability count of branch error with no truth-path disagreement;
+a static source closure no larger than `2,000,000` bytes; and decimal-memory
+compliance. A pass authorizes one full open forward archive screen only.
+
+This is zero-credit source-eligibility infrastructure. It cannot inherit the
+teacher archive, midpoint gain, or package normalization, and it cannot run
+before the bridge verdict
+`authorize_production_P_K_O_OK_F_S_attribution`. A miss retires the exact
+profile port without tolerance, layer, dtype, or kernel sweeps. Evidence: the
+proposal, archived part 019, GGML kernel q1, GGML head-parity q2, and the LibNC
+source-eligibility audit q3.
