@@ -759,3 +759,18 @@ No result directory or scientific evidence was created. Unique successor
 `cmix_obias_source_runtime_closure_qm1_v1` changes only that invocation token
 and preserves every source, artifact, hash, license, dependency, and decision
 condition from q0.
+
+Job `20260810T003214Z_233838728d` completed q1 with every technical gate true.
+It binds the expected commit and source tree, exact `127`/`115` tracked-file
+counts, clean tracked state, exact GPL-3.0 license, PGO profile and head,
+required tracked assets, byte-identical q2/q3 clean builds, exact opening
+archive and inverse, and static runtime closure for both compressors and the
+self-extracting archive. `ldd` reports each artifact is not dynamic.
+
+The aggregate-tree guard returned zero at `2,756 KiB` peak. Verdict:
+`technical_source_and_static_runtime_closure_verified_official_eligibility_remains`.
+Official eligibility remains false in the receipt because committee package
+interpretation, isolated timing, and full-corpus proof are not supplied by
+this audit. Score credit remains zero. Evidence:
+`results/cmix_obias_source_runtime_closure_qm1_v1/decision.json` and
+`results/cmix_obias_source_runtime_closure_qm1_guard_v1.json`.
