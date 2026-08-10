@@ -26,9 +26,9 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `cmix_obias_full1g_bare_decode_qm0_v1` | 1,000,000,000 | n/a | active 1,000,000,000 byte replay is running; no constructive result is present for this candidate yet | running gate |
-| blocker | `n/a` | n/a | n/a | active 1,000,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `cmix_obias_full1g_bare_decode_qm0_v1` | 1,000,000,000 | n/a | unchanged 1,000,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active candidate | `nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1` | 65,536 | n/a | active 65,536 byte replay is running; no constructive result is present for this candidate yet | running gate |
+| blocker | `n/a` | n/a | n/a | active 65,536 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1` | 65,536 | n/a | unchanged 65,536 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 

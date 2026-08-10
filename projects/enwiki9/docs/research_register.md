@@ -116,6 +116,32 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-10 - External cmix full-corpus jobs intentionally cancelled
+
+The three live `cmix-obias` full-corpus jobs were intentionally terminated at
+the user's direction after the authorship boundary was corrected. The external
+bare decode had reached `16.38%`; source-built encodes A and B had each reached
+`9.03%` with identical emitted-byte progress. These jobs tested David
+Freelan's external candidate and supplied zero Gamma score or authorship
+credit; they are no longer on the Gamma prize path.
+
+Exact driver process groups were sent `SIGTERM`. The adaptive guards closed
+with process return code `-15` and the worker registry records `241`; neither
+value is a codec, roundtrip, compression, or memory verdict. Two independently
+sessioned `cmix` children survived their drivers and were then terminated by
+their exact process groups. No `cmix`, `archive9`, or external-candidate worker
+remains. The NNCP production midpoint bridge was not targeted and remains the
+sole active job.
+
+The killed drivers could not execute normal temporary-directory cleanup.
+Three exact incomplete regenerable `/dev/shm` scratch directories totaling
+about `12.9 GB` were deleted after process verification; durable logs, guard
+receipts, source/build certificates, and accounting receipts remain. This
+operator cancellation does not retire the external codec scientifically and
+does not create a full-1G result. It removes external qualification work from
+the active resource budget so the Gamma-authored MIDAS/open-predictor route
+can proceed without its CPU, memory, or memory-bandwidth contention.
+
 ## 2026-08-10 - Open GGML production-profile forward parity is dependency-frozen
 
 Proposal `nncp_ggml_profile_forward_parity_64_qm0_v1` closes the explicit
