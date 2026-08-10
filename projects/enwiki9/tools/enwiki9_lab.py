@@ -483,6 +483,8 @@ def activate_proposal(proposal_id: str, evidence: list[str]) -> dict[str, Any]:
             if isinstance(verdict_field, dict)
             else verdict_field
         )
+        if verdict is None:
+            verdict = decision.get("verdict")
         if verdict not in allowed:
             raise ValueError(
                 f"activation decision is not an allowed scientific terminal: "
