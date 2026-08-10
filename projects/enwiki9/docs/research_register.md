@@ -117,13 +117,22 @@ gate. It cannot be claimed until
 `nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1` terminates with verdict
 `authorize_production_P_K_O_OK_F_S_attribution`.
 
-The exact promotion floor remains `2,578` bytes retained by output-head-only
-arm `O` from the fixed `3,222`-byte full-midpoint gain, `O <= 42,208` bytes,
-`O=OK`, `P=K`, and at least `323` bytes over shifted-truth control `S`, with
-the existing split, raw inverse, repeat, `65,536`-byte source, and decimal-RSS
-gates. This proposal receives zero score credit and does not inherit mature
-train-length bytes. Evidence: the proposed JSON, archived part 013, mature
-receipt, and open GGML head-parity q2 receipt.
+The dormant proposal originally copied the `2,578`, `42,208`, and `323` byte
+gates from the older vocabulary-`336` source-transfer result. Archived part
+014 had already superseded those values for the production alphabet, so that
+machine-readable contract was impossible against the approximately `148 KB`
+production parent and is now corrected before activation.
+
+The gate reads `P`, `F`, and `G_F=P-F` from the required vocabulary-`16,392`
+bridge. It requires `O` gain at least `ceil(0.80*G_F)`, aligned-versus-shifted
+margin at least `ceil(0.10*G_F)`, and at least 80% retention on every matched
+original-coordinate shadow. Cross-schedule `P/K` and `O/OK` controls compare
+equal lengths, parsed arithmetic payloads, and model/optimizer/memory
+trajectories because their serialized schedule bytes intentionally differ.
+Raw inverse, within-arm repeat, `65,536`-byte source, and decimal-RSS gates are
+unchanged. This is an activation-contract correction with zero score credit;
+no attribution candidate exists or runs yet. Evidence: the corrected proposal,
+archived parts 013 and 014, mature receipt, and open GGML head-parity q2.
 
 ## 2026-08-09 - Open GGML output-head gradient and update parity passes
 
