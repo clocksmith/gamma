@@ -49,8 +49,9 @@ reaches any tile from the center; opposing outer tiles are four hexes apart.
 
 Every non-${terms.locations.frontier} hex has a visit bonus, two Facility spaces, Facility
 production, and a control value used by Headlines and Mandates. ${terms.locations.frontier} has
-no Facility spaces. Once pieces leave it, positioning, Teams, local Power, and
-negotiated adjacency matter.
+no Facility spaces and is never controlled. It is not a category for the hex-category
+Mandate. Once pieces leave it, positioning, Teams, local Power, and negotiated adjacency
+matter.
 
 ## Presence and control
 
@@ -58,8 +59,8 @@ negotiated adjacency matter.
 - Team: one presence
 - Facility: one presence
 
-The player with the most presence controls the hex. Ties mean nobody controls
-it.
+The player with the most presence controls each non-${terms.locations.frontier} hex. Ties mean
+nobody controls it. ${terms.locations.frontier} has no controller regardless of presence.
 
 ## District effects
 

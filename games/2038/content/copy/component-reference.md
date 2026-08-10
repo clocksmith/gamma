@@ -53,7 +53,8 @@ The shared supply contains:
 
 - ${facts.shared.components.jointVenturePairs} numbered matched Joint Venture token pairs
 - ${facts.shared.components.megaClusterPairs} numbered matched ${terms.technology.megaCluster} token pairs with a lead-side indicator
-- One dedicated ${terms.technology.advancedGeneration} marker
+- One dedicated ${terms.technology.advancedGeneration} marker; it is a single
+  shared project and is removed from the supply once any player constructs it
 - Eighteen Systemic Risk cubes
 - One opaque Audit bag
 - One Initiative marker
@@ -66,7 +67,11 @@ matched pair is available.
 - **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your cubes from the Audit
   bag to your supply. If fewer are present, remove as many as possible.
 - **Powered Facility:** mark Power allocation only through the current
-  Production. Remove that temporary indication after Production finishes.
+  Production. At the end of Production, record the powered and offline
+  Facility identities in the latest Production snapshot on the score sheet;
+  remove the temporary physical indication after that record is made. The
+  latest snapshot governs Mandates, the Dossier, powered-Facility Headlines,
+  and final offline penalties until the next Production.
 - **Dossier orientation:** place the current Era card face down with its arrow
   toward the table center for Commit or toward its owner for Hedge. Never
   inspect a filed card before the Era IV reveal.

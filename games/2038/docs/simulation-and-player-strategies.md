@@ -415,7 +415,7 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 `three-to-five-profiles-v1` covers the thirteen-tile board, four Eras, all baseline
 Headlines and Escalations, factions, Training, two-source Power, Default local
-Power, Advanced Links and Networks, temporary powered-Facility state, immediate Power trades, Joint Ventures, Audit,
+Power, Advanced Links and Networks, temporary physical Power marks with a retained latest-Production snapshot, immediate Power trades, Joint Ventures, Audit,
 Realignment, visible scoring, declarations, and the shared ending. Tactics and
 secret objectives remain deferred.
 

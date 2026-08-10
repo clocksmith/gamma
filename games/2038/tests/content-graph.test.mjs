@@ -402,9 +402,16 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(world, /Assured Continuity — Closed Non-AGI/);
 
   const references = await readJson("dist/runtime/reference-cards.json");
+  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
   const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
   assert.match(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
+  assert.match(cardReference, /Minimum qualification:\*\* 2/);
+  assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock:\*\* Era 3; passive/);
+  assert.match(cardReference, /Allocation Window[\s\S]*Unlock:\*\* Era 2; once_when_unlocked/);
+  assert.match(cardReference, /Advanced Play only: requires the public Headline-procedure module/);
+  assert.match(cardReference, /Each Faction program unlocks at the Era printed on its board/);
+  assert.match(cardReference, /latest Production snapshot/);
 
   for (const tactic of tacticDocument.tactics) {
     assert.ok(tactics.includes(tactic.name));

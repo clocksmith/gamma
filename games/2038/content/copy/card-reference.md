@@ -59,9 +59,13 @@ Each board's starts, starting public Mandate, and programs are printed below.
 
 **${content.factions.byId.coalition_lab.abilities.0.name} — ${content.factions.byId.coalition_lab.abilities.0.displayName}:** ${content.factions.byId.coalition_lab.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timing}.
+
 _${content.factions.byId.coalition_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.coalition_lab.abilities.1.name} — ${content.factions.byId.coalition_lab.abilities.1.displayName}:** ${content.factions.byId.coalition_lab.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timing}.
 
 _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
@@ -75,9 +79,13 @@ _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
 **${content.factions.byId.platform_empire.abilities.0.name} — ${content.factions.byId.platform_empire.abilities.0.displayName}:** ${content.factions.byId.platform_empire.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timing}.
+
 _${content.factions.byId.platform_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.platform_empire.abilities.1.name} — ${content.factions.byId.platform_empire.abilities.1.displayName}:** ${content.factions.byId.platform_empire.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timing}.
 
 _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
@@ -91,9 +99,13 @@ _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
 **${content.factions.byId.imperial_research_lab.abilities.0.name} — ${content.factions.byId.imperial_research_lab.abilities.0.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timing}.
+
 _${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.imperial_research_lab.abilities.1.name} — ${content.factions.byId.imperial_research_lab.abilities.1.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timing}.
 
 _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
@@ -105,9 +117,13 @@ _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
 **${content.factions.byId.vertical_empire.abilities.0.name} — ${content.factions.byId.vertical_empire.abilities.0.displayName}:** ${content.factions.byId.vertical_empire.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timing}.
+
 _${content.factions.byId.vertical_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.vertical_empire.abilities.1.name} — ${content.factions.byId.vertical_empire.abilities.1.displayName}:** ${content.factions.byId.vertical_empire.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timing}.
 
 _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
@@ -119,9 +135,13 @@ _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
 **${content.factions.byId.safety_laboratory.abilities.0.name} — ${content.factions.byId.safety_laboratory.abilities.0.displayName}:** ${content.factions.byId.safety_laboratory.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timing}.
+
 _${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
 
 **${content.factions.byId.safety_laboratory.abilities.1.name} — ${content.factions.byId.safety_laboratory.abilities.1.displayName}:** ${content.factions.byId.safety_laboratory.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timing}.
 
 _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
@@ -133,9 +153,13 @@ _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
 **${content.factions.byId.foundry.abilities.0.name} — ${content.factions.byId.foundry.abilities.0.displayName}:** ${content.factions.byId.foundry.abilities.0.text}
 
+**Unlock:** Era ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timing}.
+
 _${content.factions.byId.foundry.abilities.0.flavorText}_
 
 **${content.factions.byId.foundry.abilities.1.name} — ${content.factions.byId.foundry.abilities.1.displayName}:** ${content.factions.byId.foundry.abilities.1.text}
+
+**Unlock:** Era ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timing}.
 
 _${content.factions.byId.foundry.abilities.1.flavorText}_
 
@@ -267,6 +291,8 @@ ${content.headlines.byId.open_weights_drop.newswire}
 
 **${content.headlines.byId.talent_gold_rush.resolutionType} · ${content.headlines.byId.talent_gold_rush.strapline}**
 
+**Profile:** ${content.headlines.byId.talent_gold_rush.profileText}
+
 ${content.headlines.byId.talent_gold_rush.newswire}
 
 **Rules:** ${content.headlines.byId.talent_gold_rush.text}
@@ -287,6 +313,8 @@ ${content.headlines.byId.professional_exam_sweep.newswire}
 
 **${content.headlines.byId.boardroom_coup.resolutionType} · ${content.headlines.byId.boardroom_coup.strapline}**
 
+**Profile:** ${content.headlines.byId.boardroom_coup.profileText}
+
 ${content.headlines.byId.boardroom_coup.newswire}
 
 **Rules:** ${content.headlines.byId.boardroom_coup.text}
@@ -296,6 +324,8 @@ ${content.headlines.byId.boardroom_coup.newswire}
 ### ${content.headlines.byId.data_center_buys_county.name}
 
 **${content.headlines.byId.data_center_buys_county.resolutionType} · ${content.headlines.byId.data_center_buys_county.strapline}**
+
+**Profile:** ${content.headlines.byId.data_center_buys_county.profileText}
 
 ${content.headlines.byId.data_center_buys_county.newswire}
 
@@ -367,6 +397,8 @@ ${content.headlines.byId.benchmark_is_economy.newswire}
 
 **${content.headlines.byId.quantum_advantage_procurement.resolutionType} · ${content.headlines.byId.quantum_advantage_procurement.strapline}**
 
+**Profile:** ${content.headlines.byId.quantum_advantage_procurement.profileText}
+
 ${content.headlines.byId.quantum_advantage_procurement.newswire}
 
 **Rules:** ${content.headlines.byId.quantum_advantage_procurement.text}
@@ -376,6 +408,8 @@ ${content.headlines.byId.quantum_advantage_procurement.newswire}
 ### ${content.headlines.byId.synthetic_candidate.name}
 
 **${content.headlines.byId.synthetic_candidate.resolutionType} · ${content.headlines.byId.synthetic_candidate.strapline}**
+
+**Profile:** ${content.headlines.byId.synthetic_candidate.profileText}
 
 ${content.headlines.byId.synthetic_candidate.newswire}
 
@@ -387,6 +421,8 @@ ${content.headlines.byId.synthetic_candidate.newswire}
 
 **${content.headlines.byId.weights_on_internet.resolutionType} · ${content.headlines.byId.weights_on_internet.strapline}**
 
+**Profile:** ${content.headlines.byId.weights_on_internet.profileText}
+
 ${content.headlines.byId.weights_on_internet.newswire}
 
 **Rules:** ${content.headlines.byId.weights_on_internet.text}
@@ -396,6 +432,8 @@ ${content.headlines.byId.weights_on_internet.newswire}
 ### ${content.headlines.byId.election_deepfake_panic.name}
 
 **${content.headlines.byId.election_deepfake_panic.resolutionType} · ${content.headlines.byId.election_deepfake_panic.strapline}**
+
+**Profile:** ${content.headlines.byId.election_deepfake_panic.profileText}
 
 ${content.headlines.byId.election_deepfake_panic.newswire}
 
@@ -447,6 +485,8 @@ ${content.headlines.byId.agi_blog_post.newswire}
 
 **${content.headlines.byId.agi_personhood.resolutionType} · ${content.headlines.byId.agi_personhood.strapline}**
 
+**Profile:** ${content.headlines.byId.agi_personhood.profileText}
+
 ${content.headlines.byId.agi_personhood.newswire}
 
 **Rules:** ${content.headlines.byId.agi_personhood.text}
@@ -457,6 +497,8 @@ ${content.headlines.byId.agi_personhood.newswire}
 
 **${content.headlines.byId.room_temperature_superconductor.resolutionType} · ${content.headlines.byId.room_temperature_superconductor.strapline}**
 
+**Profile:** ${content.headlines.byId.room_temperature_superconductor.profileText}
+
 ${content.headlines.byId.room_temperature_superconductor.newswire}
 
 **Rules:** ${content.headlines.byId.room_temperature_superconductor.text}
@@ -465,9 +507,11 @@ ${content.headlines.byId.room_temperature_superconductor.newswire}
 
 ## Mandate cards
 
-Reveal one from the current Era’s deck. If nobody meets its minimum qualification, nobody scores; otherwise the leader scores 2 Mandate and tied leaders score 1 each.
+Reveal one from the current Era’s deck. If nobody meets its minimum qualification, nobody scores; otherwise the leader scores 2 Mandate and tied leaders score 1 each. Each card below prints its minimum qualification.
 
 ### ${content.mandates.byId.quarter_humanity_notices.name}
+
+**Minimum qualification:** ${content.mandates.byId.quarter_humanity_notices.minimumQualification}
 
 **Rules:** ${content.mandates.byId.quarter_humanity_notices.rulesText}
 
@@ -475,11 +519,15 @@ _${content.mandates.byId.quarter_humanity_notices.flavorText}_
 
 ### ${content.mandates.byId.model_ate_tuesday.name}
 
+**Minimum qualification:** ${content.mandates.byId.model_ate_tuesday.minimumQualification}
+
 **Rules:** ${content.mandates.byId.model_ate_tuesday.rulesText}
 
 _${content.mandates.byId.model_ate_tuesday.flavorText}_
 
 ### ${content.mandates.byId.markets_prefer_destiny.name}
+
+**Minimum qualification:** ${content.mandates.byId.markets_prefer_destiny.minimumQualification}
 
 **Rules:** ${content.mandates.byId.markets_prefer_destiny.rulesText}
 
@@ -487,11 +535,15 @@ _${content.mandates.byId.markets_prefer_destiny.flavorText}_
 
 ### ${content.mandates.byId.building_has_weather.name}
 
+**Minimum qualification:** ${content.mandates.byId.building_has_weather.minimumQualification}
+
 **Rules:** ${content.mandates.byId.building_has_weather.rulesText}
 
 _${content.mandates.byId.building_has_weather.flavorText}_
 
 ### ${content.mandates.byId.stack_reaches_horizon.name}
+
+**Minimum qualification:** ${content.mandates.byId.stack_reaches_horizon.minimumQualification}
 
 **Rules:** ${content.mandates.byId.stack_reaches_horizon.rulesText}
 
@@ -499,11 +551,15 @@ _${content.mandates.byId.stack_reaches_horizon.flavorText}_
 
 ### ${content.mandates.byId.compute_new_weather.name}
 
+**Minimum qualification:** ${content.mandates.byId.compute_new_weather.minimumQualification}
+
 **Rules:** ${content.mandates.byId.compute_new_weather.rulesText}
 
 _${content.mandates.byId.compute_new_weather.flavorText}_
 
 ### ${content.mandates.byId.voluntary_coordination_triumphs.name}
+
+**Minimum qualification:** ${content.mandates.byId.voluntary_coordination_triumphs.minimumQualification}
 
 **Rules:** ${content.mandates.byId.voluntary_coordination_triumphs.rulesText}
 
@@ -511,11 +567,15 @@ _${content.mandates.byId.voluntary_coordination_triumphs.flavorText}_
 
 ### ${content.mandates.byId.legibility_offensive.name}
 
+**Minimum qualification:** ${content.mandates.byId.legibility_offensive.minimumQualification}
+
 **Rules:** ${content.mandates.byId.legibility_offensive.rulesText}
 
 _${content.mandates.byId.legibility_offensive.flavorText}_
 
 ### ${content.mandates.byId.national_champion_without_nationalization.name}
+
+**Minimum qualification:** ${content.mandates.byId.national_champion_without_nationalization.minimumQualification}
 
 **Rules:** ${content.mandates.byId.national_champion_without_nationalization.rulesText}
 
@@ -523,17 +583,23 @@ _${content.mandates.byId.national_champion_without_nationalization.flavorText}_
 
 ### ${content.mandates.byId.continent_signs_loi.name}
 
+**Minimum qualification:** ${content.mandates.byId.continent_signs_loi.minimumQualification}
+
 **Rules:** ${content.mandates.byId.continent_signs_loi.rulesText}
 
 _${content.mandates.byId.continent_signs_loi.flavorText}_
 
 ### ${content.mandates.byId.zero_incident_quarter.name}
 
+**Minimum qualification:** ${content.mandates.byId.zero_incident_quarter.minimumQualification}
+
 **Rules:** ${content.mandates.byId.zero_incident_quarter.rulesText}
 
 _${content.mandates.byId.zero_incident_quarter.flavorText}_
 
 ### ${content.mandates.byId.responsible_acceleration.name}
+
+**Minimum qualification:** ${content.mandates.byId.responsible_acceleration.minimumQualification}
 
 **Rules:** ${content.mandates.byId.responsible_acceleration.rulesText}
 

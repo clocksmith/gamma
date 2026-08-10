@@ -232,8 +232,9 @@ Evidence from a run that includes an excluded module must name that variant.
 ## Implementation status
 
 Executable game `0.13.0` implements `0.7.0-rc.6-test` under engine
-coverage `three-to-five-profiles-v1`. Facility Power is temporary to each
-Production. Four secret Dossier choices, final payment and Scrutiny, claim
+coverage `three-to-five-profiles-v1`. Facility Power marks are temporary to each
+Production, while the latest powered/offline snapshot remains authoritative for
+later rules. Four secret Dossier choices, final payment and Scrutiny, claim
 strength, and the two-token Prediction Bag are explicit deterministic state
 transitions around one seeded draw. Browser-native deterministic play, server-backed LLM play,
 replay, policies, and Monte Carlo share that contract.
@@ -430,3 +431,28 @@ faction outliers. Its schema-v3 supplier attribution was not causal and is
 withdrawn; only clean schema-v4 runs may support supplier-viability claims.
 Simulation still cannot settle human negotiation, teachability, or duration;
 those remain physical-test questions.
+
+## Blind-play closure decisions
+
+The current rules candidate closes the following previously implicit contracts:
+
+- The Card Reference prints every Mandate minimum, every Faction program’s
+  printed unlock Era and timing, and every Headline’s Default/Advanced profile
+  requirement. The Era IV card introduces only programs printed as Era IV; the
+  Faction board remains authoritative for earlier programs.
+- Production Power marks are temporary physical aids, but the score sheet keeps
+  one latest Production snapshot containing powered and offline Facility IDs,
+  delivered demand, and supply. The snapshot is authoritative for the next
+  Mandate, powered-Facility Headlines, the Era IV Dossier, and final offline
+  penalties.
+- Fusion has one dedicated shared marker and therefore one project. Mega-Cluster
+  construction is resolved in Initiative order; hosts must be locally eligible
+  at proposal and partner acceptance, and later projects recheck capacity after
+  earlier accepted projects.
+- An immediate trade is one bilateral exchange with exactly one positive named
+  resource line per side. Gifts, bundles, and future promises are not legal;
+  same-type exchanges are legal but do not trigger Dovetalis Deal Flow.
+- Frontier is never controlled and never counts toward the hex-category Mandate.
+  Orisonix’s printed Safety cap is four. Dovetalis gains one Runway when its
+  Strategic Partnership forms. Influence Joint Venture proposals must use the
+  acting piece’s destination Facility.

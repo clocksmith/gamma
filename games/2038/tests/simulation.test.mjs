@@ -1066,6 +1066,12 @@ test("Foundry Shovels observes two-Compute Escalations and respects its round ca
       powered: true
     }
   ];
+  spender.generators = [{
+    id: "spender-generator",
+    tileId: left.instanceId,
+    sourceId: "clean_infrastructure",
+    capacity: 2
+  }];
   const policies = match.players.map(() => ({
     async decide(packet) {
       return {
@@ -1348,6 +1354,148 @@ test("Ownership Headline lets the affected player choose the producing Facility"
   assert.equal(player.runway, runwayBefore + 2);
 });
 
+test("latest Production snapshot governs later powered and offline rules", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "production-snapshot-contract" },
+    () => {}
+  );
+  const player = match.players[0];
+  const first = match.board.find((tile) => tile.category === "cloud");
+  const second = match.board.find((tile) => tile.category === "capital");
+  player.facilities = [
+    { id: "snapshot-powered", tileId: first.instanceId, category: "cloud", powered: false },
+    { id: "snapshot-offline", tileId: second.instanceId, category: "capital", powered: true }
+  ];
+  player.latestProductionSnapshot = {
+    round: 4,
+    poweredFacilityIds: ["snapshot-powered"],
+    offlineFacilityIds: ["snapshot-offline"],
+    powerSupply: 1,
+    powerDemandSatisfied: 1
+  };
+
+  assert.deepEqual(
+    match.latestPoweredFacilities(player).map((facility) => facility.id),
+    ["snapshot-powered"]
+  );
+  assert.deepEqual(
+    match.latestOfflineFacilities(player).map((facility) => facility.id),
+    ["snapshot-offline"]
+  );
+  assert.equal(match.finalMandate(player).offlinePenalty, 1);
+});
+
+test("Fusion consumes the single shared project marker", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "single-fusion-marker" },
+    () => {}
+  );
+  match.round = 4;
+  const first = match.players[0];
+  const second = match.players[1];
+  for (const player of [first, second]) {
+    player.escalation = 1;
+    player.runway = 10;
+    player.compute = 10;
+  }
+  const firstChoice = match.legalEscalationResolutions(0, "fusion_demonstrator")[0];
+  assert.ok(firstChoice);
+  await match.applyEscalation([], 0, "fusion_demonstrator", firstChoice);
+  assert.equal(match.fusionBuiltBy, 0);
+  assert.deepEqual(match.legalEscalationResolutions(1, "fusion_demonstrator"), []);
+});
+
+test("Frontier never contributes control to category Mandates", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "frontier-control-exception" },
+    () => {}
+  );
+  assert.equal(match.controlledCategories(match.players[0]).has("frontier"), false);
+});
+
+test("same-type immediate exchanges are legal and remain distinct from Deal Flow", async () => {
+  const runtime = await createInteractiveGame(
+    { playerCount: 3, factionId: "coalition_lab", seed: "same-type-exchange" },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  const player = match.players[0];
+  const partner = match.players[1];
+  player.runway = 2;
+  partner.runway = 1;
+  assert.ok(match.immediateTradeOffers(0, "before").some((offer) =>
+    offer.giveResource === "runway" && offer.receiveResource === "runway"
+  ));
+  assert.equal(match.completeImmediateTrade(player.seat, partner.seat, {
+    partnerSeat: partner.seat,
+    giveResource: "runway",
+    giveAmount: 1,
+    receiveResource: "runway",
+    receiveAmount: 1
+  }), true);
+  assert.equal(player.runway, 2);
+  assert.equal(partner.runway, 1);
+  assert.equal(player.roundMetrics.dealFlowUsed, undefined);
+  assert.equal(player.metrics.factionAbilityValues.deal_flow, undefined);
+});
+
+test("Boardroom Coup removes the leader's CEO from legal action movement", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "boardroom-ceo-lock" },
+    () => {}
+  );
+  match.round = 3;
+  match.cycle = 1;
+  const headline = match.headlineDocument.headlines.find(
+    (candidate) => candidate.id === "boardroom_coup"
+  );
+  match.headlineDecks[3][0] = headline;
+  match.choose = async (_policies, _seat, _stage, decisions) =>
+    decisions.find((decision) => decision.decisionId === "boardroom_accept_lock");
+
+  await match.prepareHeadline([]);
+
+  const leader = match.players[match.regime.cycle.ceoLockedSeat];
+  assert.ok(leader);
+  assert.ok(match.legalResolutions(leader.seat, "fund").length > 0);
+  assert.ok(match.legalResolutions(leader.seat, "fund")
+    .every((decision) => decision.parameters.pieceId !== leader.pieces.find(
+      (piece) => piece.kind === "ceo"
+    ).id));
+});
+
+test("Influence Joint Venture proposals use the acting destination Facility", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "influence-destination-host" },
+    () => {}
+  );
+  match.round = 3;
+  const player = match.players[0];
+  const rival = match.players[1];
+  const destination = match.board.find((tile) => tile.category === "frontier");
+  const adjacent = match.board.find((tile) =>
+    tile.instanceId !== destination.instanceId && match.areAdjacent(destination.instanceId, tile.instanceId)
+  );
+  const elsewhere = match.board.find((tile) =>
+    tile.category !== "frontier" && tile.instanceId !== adjacent.instanceId
+  );
+  player.facilities = [
+    { id: "destination-host", tileId: destination.instanceId, category: "frontier", powered: false },
+    { id: "elsewhere-host", tileId: elsewhere.instanceId, category: elsewhere.category, powered: false }
+  ];
+  rival.facilities = [
+    { id: "rival-host", tileId: adjacent.instanceId, category: adjacent.category, powered: false }
+  ];
+  const proposals = match.legalResolutions(0, "influence")
+    .filter((decision) => decision.parameters?.mode === "joint_venture");
+  assert.ok(proposals.length > 0);
+  assert.ok(proposals.every((decision) =>
+    player.facilities.find((facility) => facility.id === decision.parameters.leftFacilityId)
+      .tileId === decision.parameters.destinationId
+  ));
+});
+
 test("removed Build discounts cannot create otherwise unaffordable Builds", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "optional-build-discount" },
@@ -1589,7 +1737,8 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
   }));
 
   await match.produceAll(policies);
-  assert.equal(player.facilities.filter((facility) => facility.powered).length, 3);
+  assert.equal(player.latestProductionSnapshot.poweredFacilityIds.length, 3);
+  assert.equal(player.facilities.filter((facility) => facility.powered).length, 0);
   assert.ok(player.facilities.every((facility) => !("gridReady" in facility)));
   assert.ok(match.matchMetrics.agiFunnel[0].coreRequirementsMet);
 
@@ -1619,7 +1768,7 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
     },
     consequences: { relocateFacility: true }
   });
-  assert.equal(player.facilities[0].powered, true);
+  assert.equal(player.facilities[0].powered, false);
   assert.ok(!("gridReady" in player.facilities[0]));
 });
 
@@ -1690,14 +1839,18 @@ test("pre-Act offers preserve the selected action after the complete exchange", 
   );
   assert.ok(match.immediateTradeDecisions(0, "before")
     .filter((decision) => decision.parameters?.giveResource === "compute")
-    .every((decision) => decision.parameters.giveAmount === 1));
+    .every((decision) => match.provisionalTradeResolvesSelection(
+      0,
+      decision.parameters,
+      "research"
+    )));
   player.compute = 1;
   assert.deepEqual(
     match.immediateTradeGiveAmounts(0, partner, "compute"),
     [1]
   );
-  assert.equal(match.immediateTradeDecisions(0, "before")
-    .some((decision) => decision.parameters?.giveResource === "compute"), false);
+  assert.ok(match.immediateTradeDecisions(0, "before")
+    .some((decision) => decision.parameters?.giveResource === "compute"));
   partner.selectedAction = "research";
   partner.compute = 1;
   assert.deepEqual(

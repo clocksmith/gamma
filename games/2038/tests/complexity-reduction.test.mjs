@@ -189,7 +189,11 @@ test("canonical Generator enforces one ordinary piece and source effects", async
     emergency.players.map(() => maximizingPowerPolicy())
   );
   assert.equal(emergencyPlayer.scrutiny, scrutinyBefore + 1);
-  assert.equal(emergencyPlayer.facilities[0].powered, true);
+  assert.deepEqual(
+    emergencyPlayer.latestProductionSnapshot.poweredFacilityIds,
+    [emergencyPlayer.facilities[0].id]
+  );
+  assert.equal(emergencyPlayer.facilities[0].powered, false);
   assert.ok(!("gridReady" in emergencyPlayer.facilities[0]));
 });
 
