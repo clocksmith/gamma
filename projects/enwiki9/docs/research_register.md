@@ -116,6 +116,56 @@ Older entries are stored by complete H2 record in [research_register/archive/](r
 
 ## Current entries
 
+## 2026-08-10 - Gamma One compiles MIDAS into GRAM and ORBIT
+
+The post-bridge Gamma path is now frozen as `Gamma One`: the reversible NNCP
+symbol transform feeds a Gamma-authored, deterministic, single-thread CPU
+predictor, a branch-local `GRAM-MIDAS-32` fast-weight correction, one integer
+arithmetic stream, and the exact inverse. The 20-layer LibNC/GGML NNCP model is
+an oracle and parity reference, not the intended submission codec. No teacher
+archive, hidden trace, probability, or package normalization transfers to the
+student.
+
+The exact sequence is dependency-bound: terminal production bridge, open
+one-segment profile parity, production `P/K/O/OK/F/S` attribution,
+`nncp_gram_midas_full_hidden_65536_qm0_v1`, then
+`gamma_orbit192_gram_midas_65536_qm0_v1`. Attribution cannot activate from the
+bridge alone; it now also requires the parity receipt. GRAM cannot activate
+without an attribution verdict explicitly authorizing it, and ORBIT cannot
+activate without a GRAM verdict explicitly authorizing it. Both new proposals
+have `operational_status=blocked_dependency` and zero score credit.
+
+GRAM replaces a dense `16,392 x 1,024` midpoint mutation with sparse ephemeral
+branch state. For each first-half truth-path branch, it accumulates the decoded
+truth residual times a causal feature vector plus an intercept residual. It
+then corrects only queried second-half branch logits using frozen counted
+depth scales. The full-hidden gate requires an actual terminated arithmetic
+gain of at least `ceil(0.90*G_O)`, positive original-coordinate thirds, a
+shifted-truth margin of at least `ceil(0.10*G_O)`, exact symbol and raw inverse,
+byte-identical replay, no deep midpoint rebuild, source no larger than `32,768`
+bytes, and decimal-memory compliance. Any miss retires this formulation rather
+than opening a rank, optimizer, tree, scale, or coefficient sweep.
+
+ORBIT is one frozen `192`-dimensional causal feature engine: decoded dictionary
+symbol, decoder-rebuilt structural mode, short hashed symbol contexts, compact
+recurrent state, and bounded gated-delta memory. It optimizes the
+residual-weighted first-half/second-half Gram geometry that affects truth-path
+arithmetic bytes, not generic hidden-state error. Promotion requires its own
+exact archive to retain at least `max(ceil(0.60*G_F), paid scope requirement)`,
+positive thirds, failing shifted/permuted controls, exact deterministic inverse,
+one runnable CPU thread at at least `1,500` transformed symbols/second,
+incremental compressed source and parameters no larger than `131,072` bytes,
+and decimal-memory compliance. A miss retires the fixed ORBIT-192 profile.
+
+The counted targets remain distinct: prize lock below `109,685,197`, primary
+Gamma objective at most `105,000,000`, and stretch `101,101,101` only after a
+certified record exists. The official site currently identifies the eighth
+winners, record `110,793,128`, an ongoing contest, and the single-core,
+memory, disk, and self-containment boundary. Any eventual public claim must be
+about a transparently AI-led new record after official verification, never the
+first solution of a contest with prior winners. External theory motivating
+test-time learning remains zero-credit context: `https://arxiv.org/abs/2407.04620`.
+
 ## 2026-08-10 - External cmix full-corpus jobs intentionally cancelled
 
 The three live `cmix-obias` full-corpus jobs were intentionally terminated at
