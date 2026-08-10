@@ -279,3 +279,17 @@ probability quantization. Both the oracle extractor and open source closure
 compile; the compressed open source closure is about 1.174 MB, below the
 2.000 MB ceiling. No teacher or open forward has yet been executed under this
 candidate, so it still has zero parity or score credit.
+
+The first qm0 launch stopped after the frozen-input audit and before model
+initialization. Its handwritten expected identity table contained incorrectly
+transcribed digests; the actual pristine source is unchanged since July 26 and hashes to
+`9a44757c4837607b0be9abc0bb2780dbe006b381728549481eedc339599a138a`.
+An independent preflight then rebound the unchanged LibNC library,
+preprocessed symbol stream, dictionary, and terminal bridge decision to their
+complete measured SHA-256 values before qm1 could launch. The donor tarball,
+source size, and all bound artifact bytes remain unchanged.
+Peak sampled RSS was only `1,332 KiB`; therefore qm0 supplies no forward,
+parity, compression, or memory evidence. Correction-only successor
+`nncp_ggml_profile_forward_parity_64_qm1_v1` changes that single expected hash
+and candidate/result names while preserving every scientific parameter and
+gate.
