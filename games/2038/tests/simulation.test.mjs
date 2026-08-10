@@ -490,6 +490,73 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
   assert.equal(match.megaClusters.length, 0);
 });
 
+test("an earlier Mega-Cluster claims both hosts before a later partner acceptance", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "mega-cluster-host-contention" },
+    () => {}
+  );
+  match.round = 2;
+  const lead = match.players[0];
+  const partner = match.players[1];
+  lead.runway = 2;
+  lead.compute = 1;
+  lead.escalation = 1;
+  partner.runway = 1;
+  partner.compute = 1;
+  const frontier = match.board.find((tile) => tile.category === "frontier");
+  const adjacent = match.board.find((tile) =>
+    tile.instanceId !== frontier.instanceId &&
+    match.areAdjacent(frontier.instanceId, tile.instanceId)
+  );
+  lead.facilities = [{
+    id: "contention-lead-host",
+    tileId: frontier.instanceId,
+    category: frontier.category,
+    powered: false
+  }];
+  partner.facilities = [{
+    id: "contention-partner-host",
+    tileId: adjacent.instanceId,
+    category: adjacent.category,
+    powered: false
+  }];
+  const decision = {
+    actionId: "mega_cluster",
+    parameters: {
+      partnerSeat: partner.seat,
+      leftId: "contention-lead-host",
+      rightId: "contention-partner-host",
+      pieceId: lead.pieces[0].id,
+      destinationId: frontier.instanceId
+    }
+  };
+  assert.equal(
+    match.megaClusterDecisionLocallyEligible(lead.seat, decision.parameters),
+    true
+  );
+  match.choose = async () => {
+    match.megaClusters.push({
+      id: "mega-earlier",
+      leadSeat: 2,
+      partnerSeat: null,
+      leftId: "earlier-other-host",
+      rightId: "contention-partner-host",
+      powered: false
+    });
+    return { decisionId: "mega_cluster_accept", parameters: {} };
+  };
+
+  await match.applyEscalation([], lead.seat, "mega_cluster", decision);
+
+  assert.equal(match.megaClusters.length, 1);
+  assert.equal(match.megaClusterHostsAvailable(["contention-partner-host"]), false);
+  assert.equal(lead.runway, 2);
+  assert.equal(lead.compute, 1);
+  assert.equal(partner.runway, 1);
+  assert.equal(partner.compute, 1);
+  assert.ok(lead.escalationsUsed.includes("mega_cluster"));
+});
+
 test("shared contract supplies cap construction and Joint Venture termination requires Facility presence", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "shared-contract-supply" },
@@ -1463,6 +1530,72 @@ test("Boardroom Coup removes the leader's CEO from legal action movement", async
     .every((decision) => decision.parameters.pieceId !== leader.pieces.find(
       (piece) => piece.kind === "ceo"
     ).id));
+});
+
+test("Entanglement Custody Replicates does not discount Links or Fusion", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      seed: "entanglement-printed-fields-only",
+      rulesVariant: { networkInfrastructureEnabled: true }
+    },
+    () => {}
+  );
+  match.round = 4;
+  match.regime.cycle = { superconductor: "replicates" };
+  const player = match.players[0];
+  player.facilities = [{
+    id: "entanglement-facility",
+    tileId: player.pieces[0].tileId,
+    category: "frontier",
+    powered: false
+  }];
+
+  player.runway = 0;
+  assert.equal(
+    match.legalResolutions(player.seat, "build")
+      .some((decision) => decision.parameters?.buildMode === "link"),
+    false
+  );
+  player.runway = 1;
+  const links = match.legalResolutions(player.seat, "build")
+    .filter((decision) => decision.parameters?.buildMode === "link");
+  assert.ok(links.length > 0);
+  assert.ok(links.every((decision) => decision.parameters.actualRunwayCost === 1));
+
+  player.runway = 4;
+  assert.deepEqual(
+    match.legalEscalationResolutions(player.seat, "fusion_demonstrator"),
+    []
+  );
+  player.runway = 5;
+  const fusion = match.legalEscalationResolutions(player.seat, "fusion_demonstrator");
+  assert.ok(fusion.length > 0);
+  assert.ok(fusion.every((decision) => decision.parameters.cost === 5));
+});
+
+test("Loopfold stacks Social Graph with its destination-dependent Installed Base", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, factionId: "platform_empire", seed: "faction-modifier-stack" },
+    () => {}
+  );
+  match.round = 4;
+  const player = match.players[0];
+  player.compute = 1;
+  const decision = match.adjustDecision(player, {
+    decisionId: "deploy_social_graph_stack",
+    actionId: "deploy",
+    parameters: {
+      destinationCategory: "media",
+      socialGraph: true
+    },
+    consequences: {}
+  });
+
+  assert.equal(decision.parameters.computeCost, 0);
+  match.applyResolution(player.seat, decision);
+  assert.equal(player.roundMetrics.socialGraphUsed, true);
+  assert.equal(player.roundMetrics.installedBaseUsed, true);
 });
 
 test("Influence Joint Venture proposals use the acting destination Facility", async () => {
@@ -3199,7 +3332,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.13.0");
+  assert.equal(first.game.version, "0.13.1");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3777,7 +3910,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.13.0");
+  assert.equal(first.game.version, "0.13.1");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

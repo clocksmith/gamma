@@ -1,4 +1,4 @@
-import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import {
   canonicalJson,
@@ -9,6 +9,7 @@ import {
 } from "../lab/versioning/game-identity.js";
 import { canonicalRulesVariant } from "../lab/environment/rules-variant.js";
 import { contentSourceFiles as declaredContentSourceFiles } from "./content/source-files.mjs";
+import { writeImmutableArtifact } from "./release-artifacts.mjs";
 
 const arguments_ = process.argv.slice(2);
 if (arguments_.includes("--help")) {
@@ -120,7 +121,7 @@ const current = {
   canonicalVariantFingerprint: identity.variant.fingerprint
 };
 
-const artifacts = [
+const immutableArtifacts = [
   [resolve(releaseDirectory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`],
   [resolve(releaseDirectory, "game-bundle.json"), `${JSON.stringify(bundle, null, 2)}\n`]
 ];
@@ -162,7 +163,7 @@ if (rulesCandidate) {
     implementationStatus: rulesCandidate.implementationStatus,
     implementedByGameVersion: rulesCandidate.implementedByGameVersion
   };
-  artifacts.push(
+  immutableArtifacts.push(
     [resolve(candidateDirectory, "manifest.json"), `${JSON.stringify(candidateManifest, null, 2)}\n`],
     [
       resolve(candidateDirectory, "rules-candidate-bundle.json"),
@@ -171,10 +172,11 @@ if (rulesCandidate) {
   );
 }
 
-artifacts.push([
+const currentArtifact = [
   resolve(projectRoot, "versions/current.json"),
   `${JSON.stringify(current, null, 2)}\n`
-]);
+];
+const artifacts = [...immutableArtifacts, currentArtifact];
 
 if (verify) {
   for (const [path, expected] of artifacts) {
@@ -194,9 +196,10 @@ if (verify) {
     `${identity.game.rulesetFingerprint}\n`
   );
 } else {
-  await mkdir(releaseDirectory, { recursive: true });
-  if (candidateDirectory) await mkdir(candidateDirectory, { recursive: true });
-  for (const [path, contents] of artifacts) await writeFile(path, contents);
+  for (const [path, contents] of immutableArtifacts) {
+    await writeImmutableArtifact(path, contents);
+  }
+  await writeFile(...currentArtifact);
   process.stdout.write(
     `game-release: wrote executable ${versionDocument.gameVersion}` +
     `${rulesCandidate ? ` and rules candidate ${rulesCandidate.version}` : ""} ` +

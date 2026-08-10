@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.13.0` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.6-test`
+**Executable game:** `0.13.1` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.7.0-rc.7-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports

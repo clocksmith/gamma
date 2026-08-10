@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import test from "node:test";
+import { writeImmutableArtifact } from "../tasks/release-artifacts.mjs";
 
 const root = new URL("../", import.meta.url);
 const projectRoot = root.pathname;
@@ -10,10 +12,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.13.0");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.6-test");
+  assert.equal(current.gameVersion, "0.13.1");
+  assert.equal(current.rulesCandidate.version, "0.7.0-rc.7-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.13.0");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.13.1");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -24,9 +26,10 @@ test("current release declaration separates executable game from physical rules 
 });
 
 test("physical authority separates profiles and preserves blind Audit draws", async () => {
-  const [spec, inventory, manufacturing, manifest] = await Promise.all([
+  const [spec, inventory, scoreSheet, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
     readFile(new URL("physical/component-inventory.md", root), "utf8"),
+    readFile(new URL("physical/score-sheet.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8"),
     readJson("content/data/content-manifest.json")
   ]);
@@ -41,6 +44,8 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.doesNotMatch(spec, /Market Access/);
   assert.doesNotMatch(spec, /Influence cube/);
   assert.match(spec, /Initiative/);
+  assert.match(spec, /visibly numbered 1–4/);
+  assert.match(spec, /latest Production snapshot/);
 
   assert.match(inventory, /## Default Game — one faction set per player/);
   assert.match(inventory, /## Advanced Play addendum/);
@@ -49,6 +54,10 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.match(inventory, /18 in a complete box/);
   assert.match(inventory, /1 ordinary six-sided Volatility die/);
   assert.match(inventory, /selected state encoding/);
+  assert.match(inventory, /laminated Production and Era score sheet/);
+  assert.match(scoreSheet, /Total demand satisfied/);
+  assert.match(scoreSheet, /Facility 1/);
+  assert.match(scoreSheet, /Compute produced in Production/);
 
   for (const staleClaim of [
     "Approximately 190 baseline cards",
@@ -64,6 +73,24 @@ test("physical authority separates profiles and preserves blind Audit draws", as
 
   const mapSurface = manifest.surfaces.find((surface) => surface.id === "map_tile_types");
   assert.equal(mapSurface.physicalCopies, 13);
+  const scoreSheets = manifest.surfaces.find((surface) => surface.id === "score_sheets");
+  assert.equal(scoreSheets.physicalCopies, 6);
+});
+
+test("release artifacts are immutable once a version path exists", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "mandate-2038-release-artifact-"));
+  const path = join(directory, "0.13.1", "manifest.json");
+  try {
+    assert.equal(await writeImmutableArtifact(path, "first\n"), true);
+    assert.equal(await writeImmutableArtifact(path, "first\n"), false);
+    await assert.rejects(
+      writeImmutableArtifact(path, "different\n"),
+      /Refusing to overwrite immutable release artifact/
+    );
+    assert.equal(await readFile(path, "utf8"), "first\n");
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });
 
 test("complexity-reduction review rules preserve precision and remove table accounting", async () => {
@@ -75,12 +102,13 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.6-test",
-    "synchronized with executable game 0.13.0",
+    "**Rules version:** 0.7.0-rc.7-test",
+    "synchronized with executable game 0.13.1",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A **solo Mega-Cluster**",
     "A **joint Mega-Cluster**",
+    "Each Facility may host at most one Mega-Cluster",
     "The starting grid powers only its assigned first Facility",
     "Facility at the acting piece’s destination",
     "Every cross-player contract or jointly funded project requires the explicit",
@@ -100,6 +128,7 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "Do not run a second Production calculation",
     "Every Headline card is eligible",
     "Every Faction has one persistent institutional identity and one signature program",
+    "each applicable Faction modifier",
     "There is no hidden or deferred conversion",
     "There is no other endgame scoring"
   ]) {
@@ -547,7 +576,9 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
   assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
   assert.match(byId.agi_personhood.text, /remainder of the game/);
   assert.match(byId.agi_personhood.text, /gains 2 Trust/);
+  assert.match(byId.boardroom_coup.text, /cannot be chosen as that leader’s acting piece/);
   assert.match(byId.room_temperature_superconductor.text, /1–3 Fraud; 4–6 Replicates/);
+  assert.doesNotMatch(byId.room_temperature_superconductor.text, /Link|Fusion|discount/);
   assert.ok(
     headlines.every((headline) => !headline.regimeTags.includes("bonus_action")),
     "Agent Swarm remains the only compound Action surface"

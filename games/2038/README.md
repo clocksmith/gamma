@@ -63,8 +63,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.7.0-rc.6-test`.
-Executable game `0.13.0` implements that candidate under
+`0.7.0-rc.7-test`.
+Executable game `0.13.1` implements that candidate under
 `three-to-five-profiles-v1`, including temporary Production Power state, immediate
 Production power trades, the reduced two-source energy contract, four secret
 Era Dossier choices, and the physical two-token Prediction Bag. Synchronization means
@@ -96,9 +96,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.13.0` game and export its
+- `http://localhost:8038/` — play the synchronized `0.13.1` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.13.0` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.13.1` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -172,8 +172,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.13.0`
-bundle, its synchronized `0.7.0-rc.6-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.13.1`
+bundle, its synchronized `0.7.0-rc.7-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

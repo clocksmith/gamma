@@ -252,8 +252,13 @@ test("Card Reference projects every other required card surface", async () => {
   for (const faction of factionDocument.factions) {
     assert.ok(cardReference.includes(faction.name), `reference projects ${faction.id}`);
     if (faction.scoringRule) assert.ok(cardReference.includes(faction.scoringRule.text));
-    for (const ability of faction.abilities) assert.ok(cardReference.includes(ability.text));
+    for (const ability of faction.abilities) {
+      assert.ok(cardReference.includes(ability.text));
+      assert.ok(ability.timingLabel, `${faction.id}/${ability.id} owns player timing copy`);
+      assert.ok(cardReference.includes(ability.timingLabel));
+    }
   }
+  assert.doesNotMatch(cardReference, /once_per_(?:round|game)|once_when_unlocked/);
   for (const escalation of escalationDocument.escalations) {
     assert.ok(cardReference.includes(escalation.name));
     assert.ok(cardReference.includes(escalation.text));
@@ -408,7 +413,7 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
   assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock:\*\* Era 3; passive/);
-  assert.match(cardReference, /Allocation Window[\s\S]*Unlock:\*\* Era 2; once_when_unlocked/);
+  assert.match(cardReference, /Allocation Window[\s\S]*Unlock:\*\* Era 2; once when unlocked/);
   assert.match(cardReference, /Advanced Play only: requires the public Headline-procedure module/);
   assert.match(cardReference, /Each Faction program unlocks at the Era printed on its board/);
   assert.match(cardReference, /latest Production snapshot/);

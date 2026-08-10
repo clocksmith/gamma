@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.6-test`
+**Rules under review:** `0.7.0-rc.7-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.6-test`. Executable
-game `0.13.0` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.7-test`. Executable
+game `0.13.1` implements its Default Game profile under
 `three-to-five-profiles-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.7.0-rc.6-test` and executable `0.13.0` retain corrected action eligibility
+Candidate `0.7.0-rc.7-test` and executable `0.13.1` retain corrected action eligibility
 and immediate-trade timing after the controlled Codex session exposed a
 knowingly impossible AGI commitment. A selectable Action must resolve now or
 become resolvable through one legal accepted pre-Act trade. A rejected required

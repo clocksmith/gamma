@@ -35,7 +35,7 @@ Each faction receives:
 
 - One CEO
 - Three Teams
-- Four Facilities
+- Four Facilities, visibly numbered 1–4
 - One Generator
 - One integrated starting-grid identifier on the first Facility
 - Ten ${terms.playerTracks.scrutiny} cubes
@@ -44,6 +44,7 @@ Each faction receives:
 - Six Core Action cards
 - Six ${terms.systems.escalation} cards
 - Four Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs and Commit / Hedge orientations
+- One reusable Production and Era score sheet
 
 Generators do not count against the Facility limit.
 
@@ -67,11 +68,19 @@ matched pair is available.
 - **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your cubes from the Audit
   bag to your supply. If fewer are present, remove as many as possible.
 - **Powered Facility:** mark Power allocation only through the current
-  Production. At the end of Production, record the powered and offline
-  Facility identities in the latest Production snapshot on the score sheet;
-  remove the temporary physical indication after that record is made. The
-  latest snapshot governs Mandates, the Dossier, powered-Facility Headlines,
-  and final offline penalties until the next Production.
+  Production. At the end of Production, record the Era, final Power supply,
+  total Power demand satisfied, and the powered and offline numbered Facility
+  identities in the latest Production snapshot on the score sheet. Total demand
+  satisfied includes powered Facilities and the additional demand paid for
+  active Mega-Clusters. Remove the temporary physical indication after that
+  record is made. The latest snapshot governs Mandates, the Dossier,
+  powered-Facility Headlines, and final offline penalties until the next
+  Production.
+- **Era scoring record:** during each Era, record Capability gained, Customers
+  gained, Runway gained through Fund, new Joint Ventures active during
+  Production, whether Deploy was completed, the best successful Training Run’s
+  unique domains, Compute produced during Production, and Scrutiny added. These
+  public fields resolve the Era Mandates without memory or private notes.
 - **Dossier orientation:** place the current Era card face down with its arrow
   toward the table center for Commit or toward its owner for Hedge. Never
   inspect a filed card before the Era IV reveal.
