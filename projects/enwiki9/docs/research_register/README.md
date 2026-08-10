@@ -32,3 +32,4 @@ Archived files preserve complete H2 records.
 - [archive/part-016.md: 2026-08-09 - GGML output-head gradient and update parity proposed through 2026-08-09 - GGML head q1 exposes the direct-optimizer API boundary](archive/part-016.md)
 - [archive/part-017.md: 2026-08-10 - Full-score accounting q0 isolates one fixture-size error through 2026-08-10 - Conservative cmix-obias package boundaries are certified](archive/part-017.md)
 - [archive/part-018.md: 2026-08-09 - Branch-residual-weighted cache-32 proposed through 2026-08-09 - Historical FRACTAL-8 survival-hazard result recovered and retired](archive/part-018.md)
+- [archive/part-019.md: 2026-08-10 - Production output-head attribution is dependency-frozen through 2026-08-09 - cmix-obias technical source/runtime closure frozen](archive/part-019.md)
