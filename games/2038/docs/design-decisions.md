@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.6-test`
+**Rules reference:** `0.7.0-rc.7-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -219,7 +219,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.6-test` test:
+controlled `0.7.0-rc.7-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -231,13 +231,18 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.13.0` implements `0.7.0-rc.6-test` under engine
+Executable game `0.13.1` implements `0.7.0-rc.7-test` under engine
 coverage `three-to-five-profiles-v1`. Facility Power marks are temporary to each
 Production, while the latest powered/offline snapshot remains authoritative for
 later rules. Four secret Dossier choices, final payment and Scrutiny, claim
 strength, and the two-token Prediction Bag are explicit deterministic state
 transitions around one seeded draw. Browser-native deterministic play, server-backed LLM play,
 replay, policies, and Monte Carlo share that contract.
+
+The `0.13.1` / `0.7.0-rc.7-test` correction removes unprinted Entanglement
+Custody discounts, makes all applicable Faction modifiers stack explicitly,
+gives every Mega-Cluster host one project slot, and authors the public score
+sheet and stable Facility identities required by retained Production state.
 
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
@@ -440,14 +445,16 @@ The current rules candidate closes the following previously implicit contracts:
   printed unlock Era and timing, and every Headline’s Default/Advanced profile
   requirement. The Era IV card introduces only programs printed as Era IV; the
   Faction board remains authoritative for earlier programs.
-- Production Power marks are temporary physical aids, but the score sheet keeps
-  one latest Production snapshot containing powered and offline Facility IDs,
-  delivered demand, and supply. The snapshot is authoritative for the next
-  Mandate, powered-Facility Headlines, the Era IV Dossier, and final offline
-  penalties.
+- Production Power marks are temporary physical aids. Every faction has four
+  numbered Facilities and a public reusable score sheet whose Era rows retain
+  Mandate history and whose latest Production snapshot contains powered and
+  offline Facility IDs, delivered demand, and supply. The snapshot is
+  authoritative for the next Mandate, powered-Facility Headlines, the Era IV
+  Dossier, and final offline penalties.
 - Fusion has one dedicated shared marker and therefore one project. Mega-Cluster
-  construction is resolved in Initiative order; hosts must be locally eligible
-  at proposal and partner acceptance, and later projects recheck capacity after
+  construction is resolved in Initiative order; each Facility has one
+  Mega-Cluster host slot, hosts must be locally Power-eligible at proposal and
+  partner acceptance, and later projects recheck hosts and pair supply after
   earlier accepted projects.
 - An immediate trade is one bilateral exchange with exactly one positive named
   resource line per side. Gifts, bundles, and future promises are not legal;

@@ -33,4 +33,7 @@ The two artifacts are not equivalent until the candidate manifest names a
 non-null `implementedByGameVersion` and synchronized validation proves it.
 
 Never overwrite a shared artifact with different contents. Assign a new
-semantic version whenever its fingerprint changes.
+semantic version whenever its fingerprint changes. The release writer is
+idempotent for byte-identical artifacts and fails closed if an existing
+version path contains different bytes; only `versions/current.json` is updated
+in place.

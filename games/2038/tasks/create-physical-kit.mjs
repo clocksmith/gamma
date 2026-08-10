@@ -188,6 +188,10 @@ const worldGuide = labeledRulebook(
   await readFile(resolve(projectRoot, "dist/docs/world-and-institutions.md"), "utf8"),
   identity
 );
+const scoreSheet = labeledRulebook(
+  await readFile(resolve(projectRoot, "physical/score-sheet.md"), "utf8"),
+  identity
+);
 const gallery = labeledGallery(
   await readFile(resolve(projectRoot, "dist/site/gallery-baseline.html"), "utf8"),
   identity
@@ -197,6 +201,7 @@ await writeFile(resolve(outputRoot, "map-reference.md"), mapReference);
 await writeFile(resolve(outputRoot, "component-reference.md"), componentReference);
 await writeFile(resolve(outputRoot, "card-reference.md"), cardReference);
 await writeFile(resolve(outputRoot, "world-and-institutions.md"), worldGuide);
+await writeFile(resolve(outputRoot, "score-sheet.md"), scoreSheet);
 await writeFile(resolve(outputRoot, "component-masters.html"), gallery);
 await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity));
 await writeFile(
@@ -251,6 +256,7 @@ const relativeFiles = [
   "contracts/playtest-receipt.schema.json",
   "core-rules.md",
   "map-reference.md",
+  "score-sheet.md",
   "world-and-institutions.md",
   "playtest-protocol.md",
   "release/executable-manifest.json",

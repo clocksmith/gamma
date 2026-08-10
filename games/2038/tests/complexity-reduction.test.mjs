@@ -80,7 +80,7 @@ test("precision patch prints final Generator prices and consolidated state", asy
   assert.match(coreRules, /four\s+Facilities/);
   assert.match(coreRules, /one persistent institutional identity and one\s+signature program/);
   assert.doesNotMatch(coreRules, /Escalation token/);
-  assert.match(componentReference, /\n- Four Facilities\n/);
+  assert.match(componentReference, /\n- Four Facilities, visibly numbered 1–4\n/);
   assert.doesNotMatch(componentReference, /Grid-Ready/);
   assert.match(componentReference, /Gain, spend, and lose Escalation availability/);
 

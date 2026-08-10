@@ -59,13 +59,13 @@ Each board's starts, starting public Mandate, and programs are printed below.
 
 **${content.factions.byId.coalition_lab.abilities.0.name} — ${content.factions.byId.coalition_lab.abilities.0.displayName}:** ${content.factions.byId.coalition_lab.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timingLabel}.
 
 _${content.factions.byId.coalition_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.coalition_lab.abilities.1.name} — ${content.factions.byId.coalition_lab.abilities.1.displayName}:** ${content.factions.byId.coalition_lab.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timingLabel}.
 
 _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
@@ -79,13 +79,13 @@ _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
 **${content.factions.byId.platform_empire.abilities.0.name} — ${content.factions.byId.platform_empire.abilities.0.displayName}:** ${content.factions.byId.platform_empire.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timingLabel}.
 
 _${content.factions.byId.platform_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.platform_empire.abilities.1.name} — ${content.factions.byId.platform_empire.abilities.1.displayName}:** ${content.factions.byId.platform_empire.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timingLabel}.
 
 _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
@@ -99,13 +99,13 @@ _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
 **${content.factions.byId.imperial_research_lab.abilities.0.name} — ${content.factions.byId.imperial_research_lab.abilities.0.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timingLabel}.
 
 _${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.imperial_research_lab.abilities.1.name} — ${content.factions.byId.imperial_research_lab.abilities.1.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timingLabel}.
 
 _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
@@ -117,13 +117,13 @@ _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
 **${content.factions.byId.vertical_empire.abilities.0.name} — ${content.factions.byId.vertical_empire.abilities.0.displayName}:** ${content.factions.byId.vertical_empire.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timingLabel}.
 
 _${content.factions.byId.vertical_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.vertical_empire.abilities.1.name} — ${content.factions.byId.vertical_empire.abilities.1.displayName}:** ${content.factions.byId.vertical_empire.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timingLabel}.
 
 _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
@@ -135,13 +135,13 @@ _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
 **${content.factions.byId.safety_laboratory.abilities.0.name} — ${content.factions.byId.safety_laboratory.abilities.0.displayName}:** ${content.factions.byId.safety_laboratory.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timingLabel}.
 
 _${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
 
 **${content.factions.byId.safety_laboratory.abilities.1.name} — ${content.factions.byId.safety_laboratory.abilities.1.displayName}:** ${content.factions.byId.safety_laboratory.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timingLabel}.
 
 _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
@@ -153,13 +153,13 @@ _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
 **${content.factions.byId.foundry.abilities.0.name} — ${content.factions.byId.foundry.abilities.0.displayName}:** ${content.factions.byId.foundry.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timing}.
+**Unlock:** Era ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timingLabel}.
 
 _${content.factions.byId.foundry.abilities.0.flavorText}_
 
 **${content.factions.byId.foundry.abilities.1.name} — ${content.factions.byId.foundry.abilities.1.displayName}:** ${content.factions.byId.foundry.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timing}.
+**Unlock:** Era ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timingLabel}.
 
 _${content.factions.byId.foundry.abilities.1.flavorText}_
 

@@ -115,8 +115,10 @@ Apply these sources in order:
 - The Era card determines globally unlocked actions.
 - A Faction board modifies those actions.
 - The current ${terms.systems.headline} supplies its printed global effect.
-- An ordinary turn may apply the Action, one destination bonus, one Faction
-  modifier, and each applicable global effect.
+- An ordinary turn may apply the Action, one destination bonus, each applicable
+  Faction modifier, and each applicable global effect. If multiple programs on
+  the same Faction board apply to that Action, resolve all of them unless one
+  explicitly requires a choice.
 - Every exception is timed **before selection**, **during movement**, **during
   action**, or **after action**.
 - A ${terms.systems.headline} changes one named field or calls one public choice procedure. It
@@ -350,6 +352,8 @@ between two adjacent host Facilities. Construction does not require a prior
 Production Power mark; it does require the local eligibility check below at the
 moment of construction. It adds two ${terms.playerTracks.scrutiny} when constructed.
 Place one matched ${terms.technology.megaCluster} token half on each host Facility.
+Each Facility may host at most one ${terms.technology.megaCluster}; a Facility
+that already holds a ${terms.technology.megaCluster} half is not an eligible host.
 
 The acting piece must end on either host Facility’s hex.
 
@@ -358,21 +362,22 @@ your local Power. Check that eligibility when the project is constructed. During
 Production, power both hosts plus two additional demand to gain three
 ${terms.resources.compute}.
 
-A **joint ${terms.technology.megaCluster}** uses one adjacent, locally powered Facility from each
-consenting participant. Check both owners’ local eligibility when the project is
-proposed and again after the partner accepts. The lead names the partner and hosts. Rejection,
+A **joint ${terms.technology.megaCluster}** uses one adjacent Facility from each
+consenting participant that is eligible for its owner’s local Power. Check both
+owners’ local eligibility and both unclaimed hosts when the project is proposed
+and again after the partner accepts. The lead names the partner and hosts. Rejection,
 pass, or no response uses the Escalation; no replacement partner. The lead
 pays two ${terms.resources.runway} and one ${terms.resources.compute}; the partner pays one of each. During Production,
 each powers its host plus one additional demand. If all demand is met, the
 lead gains two ${terms.resources.compute} and the partner one.
 
 Hosts must remain adjacent for the project to operate. Construction resolves in
-Initiative order. It reserves no loose Power token: the first accepted project
-uses the available shared contract pair, and every later project rechecks its
-hosts against the remaining physical supply and local eligibility. If two
-projects would compete for the same capacity, the earlier resolved project has
-the choice; a later project is rejected or remains unbuilt if its hosts are no
-longer eligible.
+Initiative order. Construction reserves no Power; the additional demand is paid
+only during Production. An accepted project immediately claims its two hosts
+and the next available matched token pair. Every later project rechecks the
+shared pair supply, both unclaimed hosts, adjacency, and local Power eligibility.
+If an earlier accepted project claimed either host or the final pair, the later
+project is blocked and remains unbuilt.
 
 #### Reorganization
 
@@ -595,8 +600,11 @@ every player before advancing to the next box:
 3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
    allocate it only to legal local Facilities and Mega-Clusters. Mark which
    Facilities are powered for this Production. At the end of Production, record
-   the powered and offline Facility identities in the latest Production
-   snapshot; the physical Power marks may then be removed.
+   the Era, final Power supply, total Power demand satisfied, and the powered and
+   offline numbered Facility identities in the latest Production snapshot. Total
+   demand satisfied counts one for every powered Facility plus the additional
+   demand paid for active Mega-Clusters. The physical Power marks may then be
+   removed.
 4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number

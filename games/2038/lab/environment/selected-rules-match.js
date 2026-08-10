@@ -1909,7 +1909,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.round >= 2 &&
       player.linkSupply > 0
     ) {
-      const cost = this.regime.cycle?.superconductor === "replicates" ? 0 : 1;
+      const cost = 1;
       if (player.runway >= cost) {
         decisions.push(...this.movementVariants(player, (piece, destination) =>
           player.facilities
@@ -2158,6 +2158,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           if (
             left.id < right.id &&
             this.areAdjacent(left.tileId, right.tileId) &&
+            this.megaClusterHostsAvailable([left.id, right.id]) &&
             this.megaClusterLocallyEligible(player, [left.id, right.id])
           ) {
             for (const piece of player.pieces) {
@@ -2191,6 +2192,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           for (const left of player.facilities) for (const right of partner.facilities) {
             if (
               !this.areAdjacent(left.tileId, right.tileId) ||
+              !this.megaClusterHostsAvailable([left.id, right.id]) ||
               !this.megaClusterLocallyEligible(player, [left.id]) ||
               !this.megaClusterLocallyEligible(partner, [right.id])
             ) continue;
@@ -2297,7 +2299,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (id === "fusion_demonstrator") {
       if (this.fusionBuiltBy !== null) return [];
-      const cost = this.regime.cycle?.superconductor === "replicates" ? 3 : 5;
+      const cost = this.config.powerSources.find(
+        (source) => source.id === "fusion_demonstrator"
+      ).runwayCost;
       if (player.runway < cost) return [];
       const grid = this.board.find((tile) => tile.id === "grid_reactor");
       if (this.generatorOccupancy(grid.instanceId) >= 3) return [];
@@ -3210,7 +3214,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         accepted = response.decisionId === "mega_cluster_accept";
       }
       if (partner && accepted) {
-        accepted = this.megaClusterDecisionLocallyEligible(seat, decision.parameters);
+        accepted =
+          this.megaClusters.length < this.config.sharedSupply.megaClusterPairs &&
+          this.megaClusterDecisionLocallyEligible(seat, decision.parameters);
       }
       if (partner && accepted) {
         this.spendRunway(player, 2, {
@@ -3413,12 +3419,23 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     });
   }
 
+  megaClusterHostsAvailable(facilityIds) {
+    const requested = new Set(facilityIds);
+    if (requested.size !== facilityIds.length) return false;
+    return this.megaClusters.every((cluster) =>
+      !requested.has(cluster.leftId) && !requested.has(cluster.rightId)
+    );
+  }
+
   megaClusterDecisionLocallyEligible(seat, parameters = {}) {
     const player = this.players[seat];
     const partner = parameters.partnerSeat === undefined
       ? null
       : this.players[parameters.partnerSeat];
     if (!player || !parameters.leftId || !parameters.rightId) return false;
+    if (!this.megaClusterHostsAvailable([parameters.leftId, parameters.rightId])) {
+      return false;
+    }
     if (partner) {
       return this.megaClusterLocallyEligible(player, [parameters.leftId]) &&
         this.megaClusterLocallyEligible(partner, [parameters.rightId]);

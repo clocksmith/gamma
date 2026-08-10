@@ -92,6 +92,8 @@ const required = [
   "tasks/serve.mjs",
   "tasks/content/compile.mjs",
   "tasks/content/lint-provenance.mjs",
+  "tasks/release-artifacts.mjs",
+  "physical/score-sheet.md",
   "versions/current.json",
   "versions/0.1.0/manifest.json",
   "versions/0.1.0/game-bundle.json",
