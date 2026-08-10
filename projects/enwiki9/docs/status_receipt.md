@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-10T01:01:49+00:00`
+- Generated at UTC: `2026-08-10T01:31:27+00:00`
 
 ## Target State
 
@@ -20,15 +20,15 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `2,033`
+- RSS samples: `2,388`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `6,380,124`
-- Latest sampled single RSS KiB: `6,203,916`
+- Latest sampled single RSS KiB: `6,203,852`
 - Tightest binary single-process margin KiB: `4,105,636`
 - Tightest decimal single-process margin KiB: `3,385,501`
-- Latest binary single-process margin KiB: `4,281,844`
-- Latest decimal single-process margin KiB: `3,561,709`
+- Latest binary single-process margin KiB: `4,281,908`
+- Latest decimal single-process margin KiB: `3,561,773`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
@@ -56,21 +56,21 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,004`
-- RSS guard JSON modified UTC: `2026-08-10T01:01:47+00:00`
-- RSS guard JSON SHA-256: `b0ede8279c9f33bc102f17e2970c677ab060859bf3dae0473c95a72a86c005b2`
-- RSS samples: `2,033`
+- RSS guard JSON modified UTC: `2026-08-10T01:31:24+00:00`
+- RSS guard JSON SHA-256: `c5cdd67e368d45f3220bab2c03dd686cb2dcb4d7d9ff6d635afaa7848c9fd762`
+- RSS samples: `2,388`
 - Max sampled single RSS KiB: `6,380,124`
 - Max sampled tree RSS KiB: `6,419,324`
 - Single-process RSS margin KiB: `4,105,636`
 - Single-process decimal `10GB` margin KiB: `3,385,501`
 - Tree RSS margin KiB: `4,066,436`
 - Tree decimal `10GB` margin KiB: `3,346,301`
-- Latest sampled single RSS KiB: `6,203,916`
-- Latest sampled tree RSS KiB: `6,243,120`
-- Latest sampled single-process margin KiB: `4,281,844`
-- Latest sampled single-process decimal `10GB` margin KiB: `3,561,709`
-- Latest sampled tree margin KiB: `4,242,640`
-- Latest sampled tree decimal `10GB` margin KiB: `3,522,505`
+- Latest sampled single RSS KiB: `6,203,852`
+- Latest sampled tree RSS KiB: `6,243,160`
+- Latest sampled single-process margin KiB: `4,281,908`
+- Latest sampled single-process decimal `10GB` margin KiB: `3,561,773`
+- Latest sampled tree margin KiB: `4,242,600`
+- Latest sampled tree decimal `10GB` margin KiB: `3,522,465`
 
 ## Gate Evidence Status
 
@@ -131,8 +131,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `755`
 - Registered programs: `313`
-- Untracked nonignored entries: `3`
-- Modified tracked entries: `8`
+- Untracked nonignored entries: `2`
+- Modified tracked entries: `2`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=61, measured_negative=100, retired=543`
 
 ## Active Runner Process Table
@@ -141,14 +141,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 |---|---:|---:|---:|---|
 | `process` | 642,027 | 2,229,505 | 21,652 | `python3 tools/enwiki9_lab.py run --candidate nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1 --max-workers 1 --min-free-mib 50000` |
 | `rss_guard` | 642,117 | 642,027 | 16,668 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode max_single --official-decimal-lim...` |
-| `process` | 642,123 | 642,117 | 39,204 | `python3 tools/nncp_libnc_full_dictionary_midsegment32_65536_qm0.py` |
-| `process` | 2,118,426 | 642,123 | 6,203,916 | `/tmp/nncp-prod-midpoint-bridge-f2h71_nr/candidate/nncp -q -T 4 --profile enwik9 --n_symb 16392 --dict /home/x/enwiki9-nonproof/results/nncp_full_sy...` |
+| `process` | 642,123 | 642,117 | 39,308 | `python3 tools/nncp_libnc_full_dictionary_midsegment32_65536_qm0.py` |
+| `process` | 3,016,424 | 642,123 | 6,203,852 | `/tmp/nncp-prod-midpoint-bridge-f2h71_nr/candidate/nncp -q -T 4 --profile enwik9 --n_symb 16392 --dict /home/x/enwiki9-nonproof/results/nncp_full_sy...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/F_clean.nncp` | 49,152 | `2026-08-10T00:12:37+00:00` |
+| `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/F_trace.bin` | 229,376 | `2026-08-10T01:31:06+00:00` |
+| `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/F_trace.nncp` | 49,152 | `2026-08-10T01:29:37+00:00` |
+| `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/F_clean.nncp` | 143,414 | `2026-08-10T01:29:36+00:00` |
 | `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/P_restored.raw` | 322,978 | `2026-08-10T00:12:36+00:00` |
 | `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/P_trace.bin` | 7,405,677 | `2026-08-09T23:31:15+00:00` |
 | `projects/enwiki9/results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/P_trace.nncp` | 148,140 | `2026-08-09T23:31:15+00:00` |
@@ -161,13 +163,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `6,281,440`
+- Active process tree RSS KiB: `6,281,480`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `4,204,320`
-- Active process tree decimal margin KiB: `3,484,185`
+- Active process tree margin KiB (binary): `4,204,280`
+- Active process tree decimal margin KiB: `3,484,145`
 
 ## Contingencies
 
