@@ -1,7 +1,7 @@
-"""Descriptor for independent cmix-obias clean-build identity.
+"""Descriptor for cmix-obias source and runtime dependency closure.
 
-The executable proof is
-``tools/cmix_obias_source_1m_roundtrip_qm3.py``. It reruns q2 from a fresh
-tracked-source export and scratch tree, then requires byte-identical packaged
-compressor, head, opening payload, and self-extracting archive artifacts.
+The executable receipt is
+``tools/cmix_obias_source_runtime_closure_qm0.py``. It binds the tracked source
+and license, required build assets, independent-build receipts, and static
+runtime dependency surface. It makes no committee or compression claim.
 """

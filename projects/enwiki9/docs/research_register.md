@@ -731,3 +731,24 @@ A pass will establish deterministic local `C(enwik9)=A` and `D(A)=enwik9`
 with conservative byte accounting. Isolated official timing and final
 committee source/package eligibility remain explicit unresolved gates; the
 aggregator changes no codec and is not queued while either dense arm is live.
+
+## 2026-08-09 - cmix-obias technical source/runtime closure frozen
+
+Candidate `cmix_obias_source_runtime_closure_qm0_v1` closes the remaining
+locally decidable source boundary without claiming a committee ruling. It
+binds outer commit `51488a0c...1728`, source tree `23de249f...0f5`, all `127`
+outer and `115` codec-tree tracked files, exact GPL-3.0 license, materialized
+PGO profile, dictionary, article order, neural head, build documentation, and
+the q2/q3 independent-build receipts.
+
+The runtime audit requires both reproduced compressors and the reproduced
+self-extracting archive to be statically linked with `ldd` reporting no
+dynamic executable, exact q2/q3 binary identity, exact opening archive and raw
+roundtrip, and an empty-environment inverse. Untracked local compiler, linker,
+compatibility-library, and UPX provisioning is recorded but cannot be confused
+with the tracked source or runtime dependency set.
+
+A pass proves technical source and static runtime closure only. It explicitly
+leaves official source-package interpretation, isolated timing, full-1G
+execution, final counting, and committee acceptance unresolved and receives
+zero score credit.
