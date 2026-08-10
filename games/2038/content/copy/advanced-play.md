@@ -41,8 +41,9 @@ one Link and carries it when moved.
 
 A solo Mega-Cluster requires both hosts in its owner’s Network. A joint
 Mega-Cluster requires each host in its owner’s Network. When a Facility moves,
-recalculate its owner’s Network and every affected contract. Flip a Facility
-back to its normal face when it leaves its owner’s Network.
+recalculate its owner’s Network and every affected contract. A Facility never
+flips: if it leaves its owner’s Network, record it as disconnected/offline for
+the current Production and return it to service when Network eligibility returns.
 
 ## Immediate resource trades
 
@@ -115,9 +116,9 @@ starting-grid Facility, Links, and visible adjacency. Do not lift or re-lay
 components.
 
 A ring rotation carries each Facility with its district. Power eligibility is
-recalculated during the next Production.
-After recalculating each ${terms.systems.infrastructureNetwork}, flip back any
-Facility now outside its owner’s Network.
+recalculated during the next Production. A Facility never flips; if it is
+outside its owner’s Network, record it as disconnected/offline for that
+Production and return it to service when Network eligibility returns.
 
 Joint Ventures remain owned but operate only while their fixed hosts are
 adjacent and meet all requirements. Mega-Clusters whose hosts are no longer

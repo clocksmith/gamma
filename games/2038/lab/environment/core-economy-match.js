@@ -48,10 +48,14 @@ function immutableCopy(value) {
 }
 
 function finalMandate(config, player) {
+  const poweredIds = new Set(
+    player.latestProductionSnapshot?.poweredFacilityIds ||
+    player.facilities.filter((facility) => facility.powered).map((facility) => facility.id)
+  );
   return (
     player.mandate +
     publicMandateAwards(config, player).reduce((sum, award) => sum + award.points, 0) -
-    player.facilities.filter((facility) => !facility.powered).length
+    player.facilities.filter((facility) => !poweredIds.has(facility.id)).length
   );
 }
 
@@ -88,6 +92,7 @@ function createPlayer(
     selectedAction: null,
     facilities: [],
     generators: [],
+    latestProductionSnapshot: null,
     pieces: [
       { id: `s${seat}-ceo`, kind: "ceo", tileId: frontierId },
       ...Array.from({ length: config.playerSupply.teams }, (_, index) => ({
@@ -272,7 +277,9 @@ export class CoreEconomyMatch {
 
   publicObservation(seat) {
     const player = this.players[seat];
-    const powered = player.facilities.filter((facility) => facility.powered).length;
+    const powered = player.latestProductionSnapshot
+      ? player.latestProductionSnapshot.poweredFacilityIds.length
+      : player.facilities.filter((facility) => facility.powered).length;
     const publicPlayers = this.players.map((candidate) => this.publicPlayerState(candidate));
     return {
       round: this.round,
@@ -729,13 +736,25 @@ export class CoreEconomyMatch {
       }
     }
     this.addResource(player, "runway", player.customers);
-    const powered = player.facilities.filter((facility) => facility.powered).length;
+    const poweredIds = player.facilities
+      .filter((facility) => facility.powered)
+      .map((facility) => facility.id);
+    const powered = poweredIds.length;
+    player.latestProductionSnapshot = {
+      round: this.round,
+      poweredFacilityIds: poweredIds,
+      offlineFacilityIds: player.facilities
+        .filter((facility) => !poweredIds.includes(facility.id))
+        .map((facility) => facility.id),
+      powerSupply: starter + generated
+    };
     player.metrics.poweredFacilityRounds.push({
       round: this.round,
       powered,
       facilities: player.facilities.length,
       supply: starter + generated
     });
+    for (const facility of player.facilities) facility.powered = false;
     this.recordEligibility(player, "after_production");
   }
 

@@ -242,7 +242,7 @@ surcharges, then discounts. The final cost cannot fall below zero.
 ## 4. Modular hex board
 
 The board is one jurisdiction whose districts represent physical and
-institutional dependencies rather than ordinary distance. The [**Map reference**](/map-reference.html)
+institutional dependencies rather than ordinary distance. The [**Map reference**](/docs/map-reference.html)
 is authoritative for its thirteen-tile setup, adjacency, ring pools, tile
 effects, Facility spaces, presence, and control. The shuffled map remains
 fixed for all four Eras. **◆**
@@ -346,24 +346,33 @@ Each player receives one Escalation availability and unlocks:
 #### ${terms.technology.megaCluster}
 
 Spend three ${terms.resources.runway} and two ${terms.resources.compute} to place a ${terms.technology.megaCluster} across the edge
-between two adjacent host Facilities. Construction does not require either
-host to have received ${terms.infrastructure.power} previously. It adds two ${terms.playerTracks.scrutiny} when constructed.
+between two adjacent host Facilities. Construction does not require a prior
+Production Power mark; it does require the local eligibility check below at the
+moment of construction. It adds two ${terms.playerTracks.scrutiny} when constructed.
 Place one matched ${terms.technology.megaCluster} token half on each host Facility.
 
 The acting piece must end on either host Facility’s hex.
 
 A **solo ${terms.technology.megaCluster}** uses two adjacent Facilities that are each eligible for
-your local Power. During Production, power both hosts plus two additional demand
-to gain three ${terms.resources.compute}.
+your local Power. Check that eligibility when the project is constructed. During
+Production, power both hosts plus two additional demand to gain three
+${terms.resources.compute}.
 
 A **joint ${terms.technology.megaCluster}** uses one adjacent, locally powered Facility from each
-consenting participant. The lead names the partner and hosts. Rejection,
+consenting participant. Check both owners’ local eligibility when the project is
+proposed and again after the partner accepts. The lead names the partner and hosts. Rejection,
 pass, or no response uses the Escalation; no replacement partner. The lead
 pays two ${terms.resources.runway} and one ${terms.resources.compute}; the partner pays one of each. During Production,
 each powers its host plus one additional demand. If all demand is met, the
 lead gains two ${terms.resources.compute} and the partner one.
 
-Hosts must remain adjacent for the project to operate.
+Hosts must remain adjacent for the project to operate. Construction resolves in
+Initiative order. It reserves no loose Power token: the first accepted project
+uses the available shared contract pair, and every later project rechecks its
+hosts against the remaining physical supply and local eligibility. If two
+projects would compete for the same capacity, the earlier resolved project has
+the choice; a later project is rejected or remains unbuilt if its hosts are no
+longer eligible.
 
 #### Reorganization
 
@@ -402,8 +411,9 @@ Choose one:
 
 Each player receives two Escalation availability.
 
-Agent Swarms, Fusion, exceptional faction programs, and the final Dossier
-reveal now enter play.
+Agent Swarms, Fusion, the Era IV faction programs printed on the Faction boards,
+and the final Dossier reveal now enter play. Each Faction program unlocks at the
+Era printed on its board.
 
 #### ${terms.technology.agentSwarm}
 
@@ -510,6 +520,10 @@ against the owner’s one ordinary Generator-piece limit. If all three Grid
 Generator slots are occupied, ${terms.technology.advancedGenerationShort} cannot be constructed. A full ${terms.locations.grid}
 blocks construction.
 
+There is one shared ${terms.technology.advancedGenerationShort} marker and one
+Fusion project in the game. Once any player constructs it, no other player may
+select or construct Fusion.
+
 ## 6. Era sequence
 
 ### A. Begin the quarter
@@ -534,7 +548,10 @@ At the beginning of each cycle:
 #### Immediate resource trade ◆
 
 Immediately before or after Act, the active player may make one complete
-resource offer to one rival, naming each type and amount. That rival accepts
+resource offer to one rival, naming exactly one resource type and positive
+integer amount on each side. Both sides must give a resource; gifts, bundles,
+and promises are not legal. The two resource types may be the same, and the
+stated amounts still change hands immediately. That rival accepts
 or rejects, or publishes one complete counteroffer. The original offer-maker
 accepts or rejects that counteroffer. Rejection, pass, or no response ends the
 window; do not redirect or renegotiate. A counteroffer cannot receive another
@@ -577,8 +594,9 @@ every player before advancing to the next box:
    capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
 3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
    allocate it only to legal local Facilities and Mega-Clusters. Mark which
-   Facilities are powered for this Production; Power never creates a persistent
-   Facility state.
+   Facilities are powered for this Production. At the end of Production, record
+   the powered and offline Facility identities in the latest Production
+   snapshot; the physical Power marks may then be removed.
 4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number
@@ -590,7 +608,9 @@ keeps sales and contracts tied to one visible capacity state. Within a box,
 resolve in Initiative order unless that box specifies otherwise.
 
 Purchased ${terms.infrastructure.power} lasts only this Production and creates no contract or
-future obligation. A supplier may leave its own Facility offline.
+future obligation. A supplier may leave its own Facility offline. The latest
+Production snapshot remains the authority for the next Mandate, any
+powered-Facility Headline, the Era IV Dossier, and final offline penalties.
 
 Apply the universal resource caps after every Production gain.
 
@@ -819,7 +839,7 @@ The Era IV ${terms.systems.escalation} described above.
 
 Faction boards, Core Action cards, Escalation cards, Era cards, Mandate cards,
 Training cards, Power cards, and Headline cards are rules components. The
-[**Card reference**](/card-reference.html) projects every card face in one document; resolve that text
+[**Card reference**](/docs/card-reference.html) projects every card face in one document; resolve that text
 or the matching physical card. Card text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
 
@@ -846,9 +866,9 @@ trading, or update unrelated Facilities.
 
 ## 10. Map and component reference
 
-Use [**Map reference**](/map-reference.html) for setup, adjacency, location effects, presence, and
-control. Use [**Component reference**](/component-reference.html) for deck contracts, component limits, and
-defined markers. Use [**Card reference**](/card-reference.html) for every card face. Those references
+Use [**Map reference**](/docs/map-reference.html) for setup, adjacency, location effects, presence, and
+control. Use [**Component reference**](/docs/component-reference.html) for deck contracts, component limits, and
+defined markers. Use [**Card reference**](/docs/card-reference.html) for every card face. Those references
 are part of the Default Game, not optional background.
 ## 11. Final scoring
 
