@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "Sequential production parity with exact 16-lane LibNC RMS reduction",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only RMS reduction successor: reproduce the teacher CPU kernel fixed reduction with 16 independent F32 square-sum lanes followed by ordered lane reduction. This exactly reconstructs all 64 frozen layer-0 normalization outputs while preserving scalar precision, BF16 conversion points, and every parity gate.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm7_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm6_v1",
+  "status": "candidate"
+}

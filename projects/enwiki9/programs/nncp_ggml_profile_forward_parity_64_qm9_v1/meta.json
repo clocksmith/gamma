@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "Sequential production parity with LibNC-order open AVX2/FMA linear kernel",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only LibNC GEMM reduction successor: evaluate exported output-contiguous BF16 linear weights with an open AVX2/FMA output-vector kernel, preserving sequential input-axis accumulation and BF16 node conversion. This targets the remaining sparse GGML/LibNC tie cases without changing the model, fixture, or parity gates.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm9_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm8_v1",
+  "status": "candidate"
+}

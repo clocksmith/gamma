@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "Sequential production parity with complete LibNC BF16 node conversion points",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only exact LibNC BF8 matmul successor: reproduce the observed production BF16 path by 256-element block max scaling, BF16 scale rounding, signed-int8 quantization, integer dot products, and ordered FMA rescaling. Preserve the q8 fixture, model graph, node conversion points, tolerances, branch gates, package ceiling, and zero-credit status.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm12_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm8_v1",
+  "status": "candidate"
+}
