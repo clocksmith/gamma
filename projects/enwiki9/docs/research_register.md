@@ -326,3 +326,103 @@ before entering the sequential append branch. Qm2 therefore proves that the
 sequential capture boundary and population are correct but provides no open
 parity verdict. Qm3 changes only this ordered manifest contract; no tensor,
 model, arithmetic path, tolerance, or promotion threshold changes.
+
+Qm3 accepted the corrected manifest and bound all `15,616` checkpoint tensors,
+then produced a deterministic `2,543,298,652`-byte compressed oracle fixture.
+The open executable built within its `1,173,776`-byte compressed source ceiling,
+but stopped before its first calculation: its loader incorrectly required the
+64 sequential occurrences of each internal checkpoint label to be globally
+unique. A direct replay against the preserved fixture reported `duplicate
+tensor name: embedding_input`. Parameters and initial state remain unique;
+the repeated internal tensors are ordered comparison evidence. Qm3 therefore
+has no parity verdict and zero score credit.
+
+Correction-only qm4 retains strict parameter/state uniqueness while validating
+internal tensors by their already bound category index and payload. It also
+preserves a failed open subprocess's stdout/stderr in the adaptive log. The
+fixture selection, tensor values, profile implementation, `1e-5` tolerance,
+branch conditions, package ceiling, and authorization verdict are unchanged.
+
+## 2026-08-10 - Production forward numerical correction chain reaches local parity
+
+Qm4 through qm8 repaired only representation and operation-order defects found
+at the first mismatching checkpoint: sequential tensor addressing, matrix
+layout, RMSNorm scalar order, the observed reduction lanes, and explicit BF16
+node boundaries. Qm9 then tested a sequential AVX/FMA dot product and exposed
+that LibNC's default four-thread kernel does not use one 1,024-wide reduction.
+Qm10 and qm11 tested non-fused variants and were worse. Qm12 tested an inferred
+BF8 boundary and was also worse; all three are diagnostic rejections with zero
+score credit.
+
+An exact dispatch probe and kernel trace established the missing rule: LibNC's
+default kernel splits each 1,024-wide dot into eight 128-input AVX/FMA chunks,
+resets the partial accumulator at each chunk, then adds chunk results. Qm13
+implemented that rule. Its durable receipt has exact layer-zero attention
+input, key state, value state, relative weight, and relative bias. The first
+mismatch moved to attention probability (`3.0517578125e-05` maximum); the full
+forward still missed by `0.078125`, and the branch-count error fell to `106`.
+The repeated open outputs are byte-identical, source closure is `1,174,284`
+bytes, fixture package is `2,543,303,900` bytes, and the run stayed below the
+decimal memory guard. Qm13 therefore remains a zero-credit parity rejection.
+
+Qm14 applied the same proved reduction to transposed content and relative
+attention products. A manifest-bound replay showed that its pre-softmax scores
+are exact: passing all `163,840` layer-zero scores through LibNC reproduces the
+oracle attention probabilities bit-for-bit. Qm15 replaced `std::exp` with an
+open AVX2 implementation of LibNC's BF16 exponential polynomial, fixed 64-item
+sum tree, binary block accumulation, and BF16 normalization. Layer-zero
+attention probability then became exact. Qm16 applied the 128-input reduction
+to the 320-wide attention-value product; every checkpoint in layers zero and
+one became exact.
+
+Qm17 corrected the remaining softmax boundary from elementwise division to
+LibNC's single reciprocal followed by multiplication. Exactness then extended
+through layer three. A direct open-versus-LibNC replay isolated the next defect
+to the feed-forward RMS normalization after an exact layer-four attention
+residual. Qm18 replaced the approximate 16-lane squared-sum with LibNC's exact
+64-item AVX2 square-reduction and binary block tree.
+
+Qm18 is terminal PASS on both the preserved fixture and an independently
+regenerated guarded fixture. Maximum tensor error is exactly zero; repeated
+open outputs are byte-identical; all 896 branch rows preserve tree topology,
+symbol order, and truth path; maximum integer probability difference is one
+count, exactly at the frozen allowance. The compressed source closure is
+`1,175,720` bytes with no forbidden dynamic dependency. Peak sampled RSS was
+`6,380,224 KiB` single-process and `6,417,168 KiB` process-tree, below the
+decimal guard. Its zero-credit verdict is
+`authorize_production_P_K_O_OK_F_S_attribution`, so the dependency-frozen
+six-arm production attribution may now materialize without changing its gates.
+
+## 2026-08-10 - Production output-head attribution implementation reaches exact smoke parity
+
+Candidate `nncp_libnc_output_head_midpoint_attribution_65536_qm0_v1` now
+materializes one serialized `P/F/K/O/OK/S` decoder contract over the exact
+production NNCP source. `O`, `OK`, and `S` retain LibNC's proved 64-state
+backward geometry but filter midpoint optimizer writes to the existing
+`embed_out` and `out_bias` variables. `S` cyclically shifts first-half truths
+within each stream. `K` discards and rebuilds without a midpoint update; `OK`
+adds an extra discard/rebuild cycle after the identical head-only update.
+
+The one-segment, `2,048`-symbol smoke is infrastructure evidence only. Every
+arm decoded the same `9,965`-byte raw population. `P` and `K` were both
+`55,635` bytes and differed only at serialized schedule offset 18. `O` and
+`OK` were both `55,628` bytes and likewise differed only at offset 18; their
+head-gradient, updated-head, complete-parameter, persistent-memory, and
+optimizer-step witnesses were exact. Shifted `S` was `55,633` bytes, preserved
+the target-multiset bias update, and changed the aligned weight update as
+intended. No allocator leak remained.
+
+The indexed observer rebuilt successfully and reproduced O's clean archive
+byte-for-byte. The complete compressed incremental source package is `10,432`
+bytes against the frozen `65,536`-byte ceiling. This authorizes the already
+frozen guarded `65,536`-symbol run; it supplies no compression promotion or
+score credit. The scientific thresholds remain O gain at least `3,781` bytes,
+O over S at least `473` bytes, and original-coordinate third floors
+`[1,275, 1,420, 1,088]`.
+
+The first guarded qm0 launch failed before extraction because the driver
+created its temporary source directory and then called the bridge helper that
+also requires creating it. It ran no arm, returned `1`, sampled only `1,284`
+KiB RSS, and provides zero scientific evidence. Correction-only qm1 extracts
+into the already-created directory and retains every scientific input, arm,
+threshold, observer, and guard unchanged.

@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "Sequential production parity with non-fused AVX2 kernel enforced by build contract",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only compiler-contract successor: retain the qm10 explicit AVX multiply-plus-add kernel and disable floating-point contraction for the parity executable so the generated instruction stream cannot silently revert to FMA. Preserve all scientific inputs and gates.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm11_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm10_v1",
+  "status": "candidate"
+}

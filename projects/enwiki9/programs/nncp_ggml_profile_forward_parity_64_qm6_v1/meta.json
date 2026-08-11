@@ -1,0 +1,23 @@
+{
+  "added": "2026-08-10",
+  "deps": [
+    "nncp_libnc_open_source_eligibility_audit_qm2_v1"
+  ],
+  "description": "Sequential production parity with exact LibNC RMSNorm scalar precision",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Correction-only RMSNorm operation-order successor: LibNC computes the reciprocal RMS in F32, multiplies the BF16 input by that F32 scalar, rounds the normalized tensor to BF16, then applies BF16 gain/bias and rounds the result. Remove only the erroneous scalar BF16 conversion; preserve all other profile operations and gates.",
+  "id": "nncp_ggml_profile_forward_parity_64_qm6_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "receipt-bound LibNC production checkpoint -> profile-specialized MIT GGML forward/KV/logit/branch parity"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_ggml_profile_forward_parity_64_qm0_v1",
+    "retired_neighborhoods": [
+      "No generic 71-call LibNC compatibility shim, GPU backend, uncounted teacher trace, or tolerance sweep."
+    ]
+  },
+  "parent": "nncp_ggml_profile_forward_parity_64_qm5_v1",
+  "status": "candidate"
+}
