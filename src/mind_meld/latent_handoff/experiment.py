@@ -87,6 +87,9 @@ def load_config(path: Path, *, require_materialized: bool = True) -> dict[str, A
         raise ContractError("v0 requires deterministicAlgorithms=true")
     if value.get("runtime", {}).get("attentionImplementation") != "eager":
         raise ContractError("v0 requires the pinned eager attention implementation")
+    device = value.get("runtime", {}).get("device")
+    if device not in {"cpu", "cuda", "mps"}:
+        raise ContractError(f"unsupported runtime device: {device!r}")
     if value.get("mapper", {}).get("featurePolicy") not in (
         "all-source-kv-heads",
         "same-source-head",
@@ -202,6 +205,11 @@ def _validated_phase1_receipts(
 
 
 def load_side(section: dict[str, Any], *, device: str, dtype: str) -> LoadedSide:
+    if device == "cuda" and not torch.cuda.is_available():
+        raise ContractError("runtime device cuda is unavailable on this machine")
+    if device == "mps":
+        if not torch.backends.mps.is_built() or not torch.backends.mps.is_available():
+            raise ContractError("runtime device mps is unavailable on this machine")
     local_path = Path(section["localPath"]).expanduser().resolve()
     if not local_path.is_dir():
         raise ContractError(f"local model path does not exist: {local_path}")
