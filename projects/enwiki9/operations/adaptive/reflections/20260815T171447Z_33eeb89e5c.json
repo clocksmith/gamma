@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "medium",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The named-gradient instrumentation aborts inside the first model_eval_gradient path; the analyzer captured subprocess stderr but failed to persist it when check=True raised CalledProcessError, so the exact native assertion is not yet retained."
+  },
+  "candidateId": "delta_midas_named_midpoint_gradient_65536_q0_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_named_midpoint_gradient_65536_q0_v1",
+    "candidateTreeSha256": "sha256:c0e6e1ab2c7e7f7bfa5ff9bce93bdd5ddfa537b44fbfdbbf253e42b11f828bf8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_named_midpoint_gradient_65536_q0_v1/20260815T165921738764Z_c0e6e1ab2c7e.json",
+      "sha256": "sha256:142bca3f602e184c106892dbf31ffef386f5deb214e011844e2d25ce6f95858d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Preserve the failed process and guard receipts, reproduce the same instrumented encode with lossless stream capture, then change only the localized instrumentation defect under a newly frozen revision if required.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q0_v1/guard.json",
+      "sha256": "sha256:6e4835701c7ff98e63390f68be2ab61f670cb3edf9c43ba46f3309d8dd1be615"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T171447Z_33eeb89e5c.log",
+      "sha256": "sha256:d4fad40aa3cc0c5e239a1e6f8db0cbebf36e8a5df6b2238760d45a712feea2b9"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q0_v1.json",
+    "sha256": "sha256:f1bde30764c0b7ed55b2c55044ddded7ed957eaca06fab426f447e7e1e1f6560"
+  },
+  "generatedUtc": "2026-08-15T17:17:28+00:00",
+  "hypothesis": {
+    "rationale": "The process aborted before the two archive and row repeats required by the frozen experiment, so no localization evidence exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260815T171447Z_33eeb89e5c.json",
+    "sha256": "sha256:e5f47572fa4bdec9ec89512289583013dc2bb5815e7219064841b0e6983b9f2a"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Receipt-producing subprocess wrappers must persist stdout, stderr, return code, and signal on failure before raising; a Python traceback alone is insufficient native failure evidence."
+    ],
+    "uncertainties": [
+      "The abort may arise from gradient-energy tensor operations, device memory pressure, or a LibNC assertion; the lost native stderr prevents choosing among them."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t171447z_33eeb89e5c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The instrumented production NNCP process received SIGABRT during the first F encode before an archive or named-gradient table completed."
+    ],
+    "valid": false
+  }
+}
