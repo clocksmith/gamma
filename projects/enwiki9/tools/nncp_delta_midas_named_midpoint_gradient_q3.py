@@ -96,6 +96,18 @@ def require_q2_lineage() -> None:
         raise ValueError("q2 reflection does not classify the bound q2 result")
 
 
+def require_fresh_outputs() -> None:
+    experiment_reference = json.loads(os.environ["GAMMA_ENWIKI9_EXPERIMENT_JSON"])
+    experiment = json.loads((ROOT / experiment_reference["path"]).read_text())
+    result_root = (ROOT / "results" / CANDIDATE_ID).resolve()
+    for output in experiment["outputs"]:
+        path = (ROOT / output).resolve()
+        if path.parent != result_root:
+            raise ValueError(f"q3 output escapes its result boundary: {output}")
+        if path.exists():
+            raise FileExistsError(f"refusing to reuse q3 output: {path}")
+
+
 def q2_summary() -> dict[str, Any]:
     require_q2_lineage()
     research_contracts.validate_artifact(Q2_RESULT)
@@ -156,6 +168,8 @@ def source_package(path: Path) -> None:
         ):
             raise ValueError(f"packaged source drifted from q3 input: {relative}")
     tar_path = path.with_suffix("")
+    if tar_path.exists():
+        raise FileExistsError(f"refusing to reuse q3 package staging path: {tar_path}")
     with tarfile.open(tar_path, "w") as archive:
         for member in members:
             info = archive.gettarinfo(
@@ -177,6 +191,7 @@ def source_package(path: Path) -> None:
 
 def main() -> int:
     require_q2_lineage()
+    require_fresh_outputs()
     q0.CANDIDATE_ID = CANDIDATE_ID
     q0.MATERIALIZER = MATERIALIZER
     q0.materialize = materialize
