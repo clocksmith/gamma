@@ -18,6 +18,8 @@ import research_contracts
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE_INPUT_PREFIX = "runtime-source-"
+INHERITED_SOURCE_INPUT_PREFIXES = ("python-source-", SOURCE_INPUT_PREFIX)
 
 
 def load_object(path: Path) -> dict[str, Any]:
@@ -88,7 +90,7 @@ def parse_predicate(specification: str) -> dict[str, Any]:
 def source_identifier(path: Path) -> str:
     relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
     digest = hashlib.sha256(relative.encode()).hexdigest()[:12]
-    return f"python-source-{path.stem}-{digest}"
+    return f"{SOURCE_INPUT_PREFIX}{path.stem}-{digest}"
 
 
 def freeze(args: argparse.Namespace) -> dict[str, Any]:
@@ -121,7 +123,7 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
     inherited_source_ids = {
         item["id"]
         for item in experiment["inputs"]
-        if item["id"].startswith("python-source-")
+        if item["id"].startswith(INHERITED_SOURCE_INPUT_PREFIXES)
     }
     retained_inputs = [
         value
