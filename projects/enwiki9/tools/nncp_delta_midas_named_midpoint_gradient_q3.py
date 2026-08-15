@@ -29,6 +29,7 @@ MIDPOINT_PATCH = production_q1.PROGRAM / "nncp_midsegment32.patch"
 Q2_RESULT = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json"
 Q2_DETAIL = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/gradient-detail.json"
 Q2_REFLECTION = ROOT / "operations/adaptive/reflections/20260815T172824Z_465e6837f4.json"
+RETAINED_F = q0.RETAINED_F
 _BASE_SUMMARIZE = q0.summarize
 _BASE_EVALUATE = q0.evaluate
 _BASE_GRADIENT_ROWS = q0.gradient_rows
@@ -118,9 +119,19 @@ def require_q2_lineage() -> None:
         ("q2-decision", Q2_RESULT),
         ("q2-gradient-detail", Q2_DETAIL),
         ("q2-reflection", Q2_REFLECTION),
+        ("retained-f-archive", RETAINED_F),
     ):
         if inputs.get(identifier) != q0.reference(path, identifier):
             raise ValueError(f"q3 experiment does not bind its {identifier} input")
+
+    legacy_attribution = json.loads(q0.Q1_RESULT.read_text())
+    legacy_retained = legacy_attribution["archives"]["F_clean"]
+    if (
+        Path(legacy_retained["path"]).resolve() != RETAINED_F.resolve()
+        or legacy_retained["bytes"] != RETAINED_F.stat().st_size
+        or legacy_retained["sha256"] != q0.sha256(RETAINED_F)
+    ):
+        raise ValueError("retained F archive differs from its legacy attribution receipt")
 
     research_contracts.validate_artifact(Q2_REFLECTION)
     reflection = json.loads(Q2_REFLECTION.read_text())

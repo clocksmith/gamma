@@ -103,10 +103,13 @@ the named-gradient squared-energy observation. It records LibNC's fused F32
 squared-sum beside an explicit BF16-to-F32 multiply-and-sum reference; codec
 probabilities and updates are unchanged. Native stderr streams directly to the
 declared per-encode log, so live progress and failures remain inspectable.
-Before reading q2's low-precision summary, q3 requires its decision, detail, and
-terminal incomplete-evidence reflection to match the prospectively hash-bound
-inputs and requires that reflection to authorize `retry` before native work
-starts; the same check repeats before q2's diagnostic summary is consumed.
+Before native work, q3 requires its retained F comparator to be a direct
+prospectively hash-bound input and to match the path, byte count, and digest in
+the legacy attribution receipt. Before reading q2's low-precision summary, q3
+also requires its decision, detail, and terminal incomplete-evidence reflection
+to match the prospectively hash-bound inputs and requires that reflection to
+authorize `retry`; the same check repeats before q2's diagnostic summary is
+consumed.
 Every declared q3 output must remain directly inside its candidate result
 boundary and must be absent before execution, so a failed partial run cannot be
 silently resumed as an independent repeat.
