@@ -120,12 +120,16 @@ artifacts nor aliased evidence roles. Historical v1 contracts remain readable,
 but absence of this policy is not evidence of output-manifest completeness.
 The implementation-retry freezer now enables this policy by default.
 
-`pythonSourceClosureEntries` closes the corresponding prospective code-input
+`pythonSourceClosureEntries` closes the corresponding prospective runtime-source
 boundary. The contract validator recursively resolves each named entry's local
-imports and rejects an experiment whose hash-bound inputs omit any module. The
+imports and rejects an experiment whose hash-bound inputs omit any module. When
+that graph reaches `research_contracts.py`, the same closure binds the JSON
+schemas, objective contract, and search policy that determine validation at
+runtime; they cannot be silently supplied from an uncounted workspace. The
 implementation-retry freezer can populate that closure from the new runner and
 materializer, while the terminal runner can use the same resolver for its source
-package. Patches, models, and data still require explicit declarations.
+package. Experiment-specific patches, models, and data still require explicit
+declarations.
 
 Named-gradient detail is no longer an opaque hash-linked sidecar. Its schema and
 semantic validator bind the experiment and candidate revision, both execution

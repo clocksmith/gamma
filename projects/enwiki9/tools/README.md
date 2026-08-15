@@ -45,10 +45,13 @@ New implementation retries automatically use the strict output manifest and
 must declare each newly retained artifact with `--additional-output`. The
 frozen contract then requires its terminal result to bind every declared output
 except the result itself exactly once; `--strict-output-manifest` remains an
-explicit compatibility spelling. When both implementation entries are Python, the
-freezer automatically hashes every project-local imported module into the
-prospective input manifest and names the runner and materializer as closure
-roots; `--bind-python-source-closure` makes that requirement explicit. An
+explicit compatibility spelling. When both implementation entries are Python,
+the freezer automatically hashes their project-local runtime source closure into
+the prospective input manifest and names the runner and materializer as closure
+roots. That closure includes recursively imported modules under `tools/` and,
+when `research_contracts.py` is reachable, every JSON contract it loads from
+`contracts/research/v1/`; `--bind-python-source-closure` makes that requirement
+explicit. An
 implementation-only retry may retain extra diagnostic
 observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not
 change the inherited promotion or kill predicates. A correction that adds a
@@ -113,10 +116,13 @@ artifact hash. Immediately before packaging, every member must still equal its
 prospectively frozen input hash; a concurrent workspace edit fails the run.
 
 `enwiki9_python_source_closure.py` cannot launch a process. It recursively
-resolves imports that exist under `tools/`, emits their paths and SHA-256
-digests, and lets multi-module experiment runners use the same prospectively
-declared source set in their terminal source package. Non-Python data inputs
-remain explicit additions to the experiment and package.
+resolves imports that exist under `tools/`; if that graph reaches
+`research_contracts.py`, it also includes every runtime JSON file under
+`contracts/research/v1/`. It emits the resulting paths and SHA-256 digests and
+lets multi-module experiment runners use the same prospectively declared source
+set in their terminal source package. Patches, models, corpus fragments, and
+other experiment-specific data remain explicit additions to the experiment and
+package.
 
 `enwiki9_dependency_closure.py` cannot launch a compressor. It copies one exact
 candidate tree into a new bundle, rejects symlinks and special files, hashes and
