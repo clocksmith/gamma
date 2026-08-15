@@ -1344,6 +1344,11 @@ def _validate_dependency_closure(
         candidate_tree_digest(counted_files) == value["candidateTreeSha256"],
         f"{artifact_path}: candidate tree digest differs from counted files",
     )
+    _require(
+        sum(len(option.encode("utf-8")) for option in value["requiredOptions"])
+        == value["requiredOptionBytes"],
+        f"{artifact_path}: required option bytes differ from UTF-8 command text",
+    )
 
     dependency_keys = [
         (dependency["name"], dependency["provider"])

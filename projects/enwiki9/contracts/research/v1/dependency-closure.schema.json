@@ -15,6 +15,7 @@
     "platform",
     "commands",
     "countedFiles",
+    "requiredOptions",
     "requiredOptionBytes",
     "totalPackageBytes",
     "dependencies",
@@ -45,6 +46,11 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/file" }
+    },
+    "requiredOptions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
     },
     "requiredOptionBytes": { "type": "integer", "minimum": 0 },
     "totalPackageBytes": { "type": "integer", "minimum": 1 },
