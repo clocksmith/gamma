@@ -1,6 +1,6 @@
 # enwiki9 Research Register
 
-## 2026-08-15 - Direct-F32 named-gradient oracle is prospectively frozen
+## 2026-08-15 - Direct-F32 named-gradient oracle retires the localization lineage
 
 The q0 named-gradient implementation reached the first production F backward
 pass and reproducibly aborted at `libnc.c:7564`: `nc_free_tensor` observed an
@@ -46,7 +46,7 @@ retained as sensitivity evidence only. The terminal
 classifies the ranking as incomplete evidence, authorizes `retry`, and retires
 only post-reduction F32 conversion as an authoritative localization oracle.
 
-Candidate `delta_midas_named_midpoint_gradient_65536_q3_v1` is now frozen from
+Candidate `delta_midas_named_midpoint_gradient_65536_q3_v1` was frozen from
 that reflection. Its
 [`experiment contract`](../operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q3_v1.json)
 binds the direct reducer, explicit F32 reference, complete runtime source and
@@ -54,10 +54,27 @@ JSON-contract closure, q2 decision/detail/reflection, retained F comparator,
 exact midpoint patch, and strict output set before execution. Direct-reference
 finiteness and relative agreement are prerequisites for both promotion and
 retirement. Q2 comparisons are diagnostic only. Q3 remains closed-teacher,
-zero-credit attribution; it can select one later group ablation or retire this
-localization method, but it cannot claim codec savings or objective progress.
-Job `20260815T200718Z_9b504935f5` is queued under the process-tree memory and
-candidate-scratch guard with the exact q3 experiment and candidate revision.
+zero-credit attribution; it cannot claim codec savings or objective progress.
+
+Job `20260815T200718Z_9b504935f5` completed both encodes under the declared
+process-tree memory and scratch guard. The two archives are byte-identical to
+each other and to retained F, the two complete named-gradient tables repeat
+exactly, and every direct-F32 energy equals its independent explicit-F32
+reference. The valid result remains output-head dominated. Feed-forward is the
+largest non-head group overall but the dominant non-head group changes across
+chronological thirds, and the minimum-third share misses its prospectively
+frozen threshold. See the [`decision`](../results/delta_midas_named_midpoint_gradient_65536_q3_v1/decision.json),
+[`gradient detail`](../results/delta_midas_named_midpoint_gradient_65536_q3_v1/gradient-detail.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260815T200718Z_9b504935f5.json).
+
+The exact hypothesis is refuted: squared-gradient energy does not select one
+stable deep midpoint parameter group on the frozen production F population.
+No group ablation is authorized, and this entire localization lineage is
+retired with zero objective credit. The result does not refute a multi-group,
+signed-logit, Hessian, activation-residual, or decoder-visible causal
+mechanism. The next experiment must be materially different and prospectively
+bound; it may not inherit teacher energy, archive savings, or score credit.
 
 ## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
 
