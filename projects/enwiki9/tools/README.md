@@ -34,6 +34,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Record a driver result | `record_driver_result.py` |
 | Decide or continue a cmix21 gate | `cmix21_gate_decider.py`, `cmix21_continue_active_gate.py` |
 | Rebuild the run ledger | `backfill_run_ledger.py` |
+| Freeze a predicate-preserving implementation retry | `enwiki9_freeze_implementation_retry.py` |
 
 ## Filename Families
 

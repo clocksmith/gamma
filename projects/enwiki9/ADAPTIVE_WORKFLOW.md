@@ -299,6 +299,13 @@ directory with `enqueue-tool --scratch-directory results/<candidate_id>/...`.
 The executor validates that boundary and materializes the directory before the
 guard preflight; the inner tool still declares the same path to the guard.
 
+When a frozen experiment fails only in its implementation, create a new
+candidate and use `tools/enwiki9_freeze_implementation_retry.py` to inherit the
+scientific population, hypothesis, controls, metrics, and decision predicates.
+The command permits only explicit rebinding of the parent revision, runner,
+materializer, failure evidence, negative control, outputs, and implementation
+delta; it refuses to overwrite an existing frozen contract.
+
 ## Queue
 
 Queue an explicit gate:

@@ -20,6 +20,16 @@ boundary are unchanged. Q0 remains terminal implementation evidence; q1 must
 still prove both exact archives and complete deterministic rows before any
 gradient localization conclusion is allowed.
 
+Q1 then preserved the native stream and exposed the next exact defect:
+`nc_get_scalar_f32` rejected the non-F32 squared-energy reduction. Its
+[`reflection`](../operations/adaptive/reflections/20260815T172412Z_47ccd874f6.json)
+again leaves the scientific hypothesis untested. Candidate
+`delta_midas_named_midpoint_gradient_65536_q2_v1` is frozen from q1 with the
+new implementation-retry composer: every scientific field and predicate is
+inherited, while the runner, materializer, parent revision, negative control,
+failure evidence, outputs, and declared implementation delta are rebound. Q2
+converts only the reduction to `NC_TYPE_F32` before the scalar read.
+
 ## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
 
 Candidate `delta_midas_named_midpoint_gradient_65536_q0_v1` is the next
