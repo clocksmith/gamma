@@ -1,11 +1,14 @@
 ## Code Agent
 
-**Prime Directive:** Write Python code for the token-prediction game and LLM benchmarking tools.
+**Prime Directive:** Preserve Gamma as a trustworthy workbench for inspecting,
+comparing, measuring, and improving model or algorithm behavior under explicit
+evidence contracts.
 
 ## Component Intent
 
-Before modifying a file, read the `CATSCAN.md` chain from the repository root
-to the target directory.
+Before modifying a file, read [`GOALS.md`](GOALS.md), then read the `CATSCAN.md`
+chain from the repository root to the target directory, parent first. For a
+change spanning directories, read the union of all applicable chains.
 
 Treat Target, Authority, Invariants, Acceptance, and Non-goals as implementation
 constraints. A child CATSCAN may narrow its parent but may not contradict it.
