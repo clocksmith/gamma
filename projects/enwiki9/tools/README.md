@@ -29,6 +29,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Release evidence router | `enwiki9_release_receipts.py` |
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
+| Direct-F32 DELTA-MIDAS named-gradient retry | `nncp_delta_midas_named_midpoint_gradient_q3.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
 | Candidate triage | `candidate_triage.py` |
@@ -38,6 +39,11 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Decide or continue a cmix21 gate | `cmix21_gate_decider.py`, `cmix21_continue_active_gate.py` |
 | Rebuild the run ledger | `backfill_run_ledger.py` |
 | Freeze a predicate-preserving implementation retry | `enwiki9_freeze_implementation_retry.py` |
+
+New implementation retries should use `--strict-output-manifest` and declare
+each newly retained artifact with `--additional-output`. The frozen contract
+then requires its terminal result to bind every declared output except the
+result itself exactly once.
 
 ## Filename Families
 
@@ -72,6 +78,13 @@ and emits a zero-credit experiment receipt with a copy of the executed analyzer.
 `nncp_delta_midas_decoder_feature_probe.py` likewise cannot launch a compressor
 or teacher; it fits only its frozen train partition and emits sealed validation,
 test, shifted-control, quantized-payload, and causal-feature evidence.
+
+`nncp_delta_midas_named_midpoint_gradient_q3.py` launches the closed NNCP
+teacher twice and is zero-credit attribution work. Run it only through a
+revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
+`run_with_rss_guard.py`; the experiment must declare its candidate result tree
+as guarded scratch. Its q3 materializer cannot launch a process and changes only
+the named-gradient squared-energy reduction.
 
 `enwiki9_dependency_closure.py` cannot launch a compressor. It copies one exact
 candidate tree into a new bundle, rejects symlinks and special files, hashes and
