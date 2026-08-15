@@ -674,20 +674,34 @@ def replay(args: argparse.Namespace) -> Path:
         if work_root.exists():
             shutil.rmtree(work_root)
         if error is not None:
-            write_json(
-                replay_root / "attempt.json",
-                {
-                    "schema": "gamma.enwiki9.clean-room-attempt.diagnostic.v1",
-                    "candidateId": manifest["candidateId"],
-                    "candidateTreeSha256": manifest["candidateTreeSha256"],
-                    "error": error,
-                    "executions": executions,
-                    "scratchCleaned": not work_root.exists(),
-                    "generatedUtc": dt.datetime.now(dt.timezone.utc)
-                    .replace(microsecond=0)
-                    .isoformat(),
-                },
-            )
+            if receipt_path.exists():
+                os.replace(
+                    receipt_path,
+                    replay_root / "unvalidated-run-receipt.json",
+                )
+            attempt_path = replay_root / "attempt.json"
+            retained_artifacts = [
+                artifact(attempt_path, path)
+                for path in sorted(replay_root.rglob("*"))
+                if path.is_file() and path != attempt_path
+            ]
+            attempt = {
+                "schema": "gamma.enwiki9.clean-room-attempt.v1",
+                "objective": binding,
+                "candidateId": manifest["candidateId"],
+                "candidateTreeSha256": manifest["candidateTreeSha256"],
+                "manifest": reference(attempt_path, manifest_path),
+                "corpus": artifact(attempt_path, corpus),
+                "error": error,
+                "executions": executions,
+                "retainedArtifacts": retained_artifacts,
+                "scratchCleaned": not work_root.exists(),
+                "generatedUtc": dt.datetime.now(dt.timezone.utc)
+                .replace(microsecond=0)
+                .isoformat(),
+            }
+            write_json(attempt_path, attempt)
+            research_contracts.validate_artifact(attempt_path)
 
 
 def main() -> int:
