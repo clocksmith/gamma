@@ -1206,6 +1206,39 @@ def _validate_adaptive_experiment_result(
                 value["measurements"].get(measurement) == observed,
                 f"{artifact_path}: {measurement} differs from gradient detail",
             )
+        if "localizationFailed" in value["measurements"]:
+            localization_measurements = {
+                "stableDominantNonHeadGroup",
+                "minimumThirdDominantNonHeadShare",
+                "headGroupShare",
+            }
+            localization_predicates = [
+                predicate
+                for predicate in experiment["promotionPredicates"]
+                if predicate["measurement"] in localization_measurements
+            ]
+            _require(
+                len(localization_predicates) == len(localization_measurements)
+                and {
+                    predicate["measurement"]
+                    for predicate in localization_predicates
+                }
+                == localization_measurements,
+                f"{artifact_path}: localization predicates are incomplete",
+            )
+            localization_failed = not all(
+                _predicate_pass(
+                    summary[predicate["measurement"]],
+                    predicate["operator"],
+                    predicate["threshold"],
+                )
+                for predicate in localization_predicates
+            )
+            _require(
+                value["measurements"]["localizationFailed"]
+                == localization_failed,
+                f"{artifact_path}: localization failure differs from frozen predicates",
+            )
         retained_reference = inputs_by_id.get("retained-f-archive")
         if retained_reference is not None:
             retained_path = PROJECT_ROOT / retained_reference["path"]
