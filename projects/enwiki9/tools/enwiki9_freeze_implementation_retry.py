@@ -113,6 +113,10 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         "revision": reference(revision_path),
     }
     experiment["changedMechanism"] = args.changed_mechanism
+    for invariant in args.additional_invariant:
+        if invariant in experiment["invariants"]:
+            raise ValueError(f"duplicate implementation-retry invariant: {invariant}")
+        experiment["invariants"].append(invariant)
 
     inherited_source_ids = {
         item["id"]
@@ -232,6 +236,7 @@ def main() -> int:
     parser.add_argument("--changed-mechanism", required=True)
     parser.add_argument("--negative-control-id", required=True)
     parser.add_argument("--negative-control-definition", required=True)
+    parser.add_argument("--additional-invariant", action="append", default=[])
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--additional-output", action="append", default=[])
     parser.add_argument("--additional-measurement", action="append", default=[])

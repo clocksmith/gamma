@@ -54,7 +54,8 @@ observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not
 change the inherited promotion or kill predicates. A correction that adds a
 new validity oracle may bind stricter consequences with
 `--additional-promotion-predicate` and `--additional-kill-predicate`, each using
-`ID=MEASUREMENT=OPERATOR=JSON_THRESHOLD`.
+`ID=MEASUREMENT=OPERATOR=JSON_THRESHOLD`; `--additional-invariant` records the
+corresponding durable condition without rewriting inherited science.
 
 ## Filename Families
 
