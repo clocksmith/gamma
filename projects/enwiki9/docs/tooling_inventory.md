@@ -64,6 +64,7 @@ heavy lane.
 
 | Tool | Purpose |
 |---|---|
+| `nncp_delta_midas_deep_residual.py` | Compares hash-bound retained F/O indexed branch traces under a frozen experiment contract; it cannot launch NNCP or a compressor and emits a zero-credit result plus the executed analyzer source. |
 | `fx2_loss_probe.py` | Probes loss data from fx2-style runs. |
 | `fx2_loss_ledger.py` | Builds loss accounting views. |
 | `fx2_loss_windows.py` | Breaks loss into windows. |

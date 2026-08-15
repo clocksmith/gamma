@@ -24,6 +24,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
 | Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
 | Objective and receipt validation | `research_contracts.py` |
+| Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
 | Candidate triage | `candidate_triage.py` |
@@ -59,3 +60,7 @@ The detailed per-file catalog and lock-safety notes are in
 - Add every new tool to `docs/tooling_inventory.md`.
 - State whether a tool can launch a compressor and which memory, process, and
   output-path guards it uses.
+
+`nncp_delta_midas_deep_residual.py` cannot launch a compressor or teacher. It
+reads two hash-bound retained traces, refuses to overwrite its result boundary,
+and emits a zero-credit experiment receipt with a copy of the executed analyzer.

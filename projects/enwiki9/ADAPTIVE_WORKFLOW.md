@@ -14,6 +14,7 @@ analyze evidence
 -> propose and rank a mechanism
 -> claim and develop
 -> create or mutate
+-> freeze a structured experiment contract
 -> queue
 -> run the smallest missing exact gate
 -> record result and lifecycle state
@@ -107,6 +108,10 @@ python3 projects/enwiki9/tools/enwiki9_lab.py reflect <job_id> \
 ```
 
 Measurements are accepted only through hash-linked JSON-pointer assertions.
+Use the field matching the evidence unit: archive deltas use `netBytesSaved`,
+teacher probability shadows use `idealBitsSaved`, transformed populations use
+`scopeSymbols`, and transfer or segment measurements retain their explicit
+fraction fields. Do not relabel ideal bits as archive bytes.
 Invalid, infrastructure-failed, implementation-failed, or incomplete runs can
 only be retried or held; they cannot promote or retire the algorithm. Promotion
 requires valid controls, a supported hypothesis, an algorithmic-gain

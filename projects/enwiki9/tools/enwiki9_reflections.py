@@ -22,7 +22,11 @@ ADAPTIVE = ROOT / "operations" / "adaptive"
 REFLECTIONS = ADAPTIVE / "reflections"
 TERMINAL_STATES = ("completed", "failed", "cancelled")
 MEASUREMENT_FIELDS = {
+    "idealBitsSaved",
+    "minimumPartitionIdealBitsSaved",
+    "positiveSegmentFraction",
     "scopeBytes",
+    "scopeSymbols",
     "netBytesSaved",
     "sourceBytesDelta",
     "runtimeRatio",
