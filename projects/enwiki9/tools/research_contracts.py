@@ -732,7 +732,7 @@ def _validate_adaptive_experiment_contract(
         }
         _require(
             closure_paths.issubset(set(input_paths)),
-            f"{artifact_path}: declared inputs omit project-local Python dependencies",
+            f"{artifact_path}: declared inputs omit project-local runtime source dependencies",
         )
     control_ids = [item["id"] for item in value["controls"]]
     _require(
