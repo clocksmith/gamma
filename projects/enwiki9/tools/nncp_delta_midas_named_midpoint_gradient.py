@@ -211,9 +211,9 @@ def main() -> int:
         expected = bridge_decision["inputs"][identifier]
         if path.stat().st_size != expected["bytes"] or sha256(path) != expected["sha256"]:
             raise ValueError(f"external closed-teacher input differs: {identifier}")
-    if output.exists() or output.parent.exists():
-        raise FileExistsError(f"refusing to overwrite result: {output.parent}")
-    output.parent.mkdir(parents=True)
+    if output.exists():
+        raise FileExistsError(f"refusing to overwrite result: {output}")
+    output.parent.mkdir(parents=True, exist_ok=True)
     scratch = output.parent / "scratch"
     source = scratch / "source"
     source.mkdir(parents=True)

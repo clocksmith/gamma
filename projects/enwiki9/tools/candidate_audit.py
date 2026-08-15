@@ -16,6 +16,9 @@ from collections import Counter
 from datetime import datetime, timezone
 from typing import Any
 
+import enwiki9_candidate_revisions as candidate_revisions
+import research_contracts
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
@@ -24,6 +27,7 @@ RESULTS_DIR = ROOT / "results"
 INDEX_PATH = ROOT / "index.json"
 INVENTORY_JSON = ROOT / "candidate_inventory.json"
 INVENTORY_MD = ROOT / "CANDIDATE_INVENTORY.md"
+ADAPTIVE_DIR = ROOT / "operations" / "adaptive"
 
 LOCAL_ARTIFACT_PATTERNS = (
     "build/",
@@ -287,6 +291,110 @@ def collect_meta_evidence(
     }
 
 
+def proposal_index() -> dict[str, pathlib.Path]:
+    rows: dict[str, pathlib.Path] = {}
+    for state in ("proposed", "claimed", "developed", "rejected"):
+        for path in (ADAPTIVE_DIR / "proposals" / state).glob("*.json"):
+            try:
+                proposal = load_json(path)
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            proposal_id = proposal.get("proposal_id")
+            if isinstance(proposal_id, str):
+                rows[proposal_id] = path
+    return rows
+
+
+def terminal_reflection_index() -> tuple[dict[str, list[str]], set[str]]:
+    terminal: dict[str, list[str]] = {}
+    for state in ("completed", "failed", "cancelled"):
+        for path in (ADAPTIVE_DIR / state).glob("*.json"):
+            try:
+                job = load_json(path)
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            if job.get("schema") not in {
+                "enwiki9_adaptive_job_v2",
+                "gamma.enwiki9.adaptive-job.v3",
+            }:
+                continue
+            candidate_id = job.get("candidate_id")
+            job_id = job.get("job_id")
+            if isinstance(candidate_id, str) and isinstance(job_id, str):
+                terminal.setdefault(candidate_id, []).append(job_id)
+    valid_reflections: set[str] = set()
+    for path in (ADAPTIVE_DIR / "reflections").glob("*.json"):
+        try:
+            research_contracts.validate_artifact(path, verify_files=False)
+        except Exception:
+            continue
+        valid_reflections.add(path.stem)
+    return terminal, valid_reflections
+
+
+def scientific_control_state(
+    program_id: str,
+    meta: dict[str, Any] | None,
+    proposals: dict[str, pathlib.Path],
+    terminal_jobs: dict[str, list[str]],
+    valid_reflections: set[str],
+) -> dict[str, Any]:
+    latest = candidate_revisions.latest_revision(program_id)
+    revision_path: pathlib.Path | None
+    if latest is None:
+        revision_status = "missing"
+        revision_path = None
+    else:
+        revision_path, revision = latest
+        try:
+            current = candidate_revisions.candidate_tree_digest(
+                candidate_revisions.candidate_manifest(program_id)
+            )
+            research_contracts.validate_artifact(revision_path, verify_files=False)
+            revision_status = (
+                "current"
+                if current == revision["candidateTreeSha256"]
+                else "mutable-drift"
+            )
+        except Exception:
+            revision_status = "invalid"
+    omega = meta.get("omega") if isinstance(meta, dict) else None
+    proposal_id = omega.get("proposal_id") if isinstance(omega, dict) else None
+    proposal_path = proposals.get(proposal_id) if isinstance(proposal_id, str) else None
+    if proposal_id is None:
+        proposal_status = "unclassified"
+    elif proposal_path is None:
+        proposal_status = "orphaned"
+    else:
+        try:
+            proposal = load_json(proposal_path)
+            if proposal.get("schema") != "gamma.enwiki9.algorithm-proposal.v2":
+                proposal_status = "legacy-unstructured"
+            else:
+                research_contracts.validate_artifact(proposal_path)
+                proposal_status = "valid"
+        except Exception:
+            proposal_status = "invalid"
+    unreflected = sorted(
+        job_id
+        for job_id in terminal_jobs.get(program_id, [])
+        if job_id not in valid_reflections
+    )
+    return {
+        "revision_status": revision_status,
+        "revision_path": rel(revision_path) if revision_path is not None else None,
+        "proposal_id": proposal_id,
+        "proposal_status": proposal_status,
+        "proposal_path": rel(proposal_path) if proposal_path is not None else None,
+        "unreflected_terminal_jobs": unreflected,
+        "successor_eligible": (
+            revision_status == "current"
+            and proposal_status == "valid"
+            and not unreflected
+        ),
+    }
+
+
 def classify_candidate(
     *,
     has_program: bool,
@@ -350,6 +458,8 @@ def classify_candidate(
 def audit() -> dict[str, Any]:
     index = load_index()
     registered_ids = {entry["id"] for entry in index.get("programs", [])}
+    proposals = proposal_index()
+    terminal_jobs, valid_reflections = terminal_reflection_index()
 
     tracked = git_lines("ls-files", "--", rel(ROOT))
     untracked = git_lines("ls-files", "--others", "--exclude-standard", "--", rel(ROOT))
@@ -404,6 +514,13 @@ def audit() -> dict[str, Any]:
             reasons = [*reasons, "missing_payload_target"]
         results.update(meta_evidence)
         results["total_valid_evidence"] = total_valid_evidence
+        control = scientific_control_state(
+            program_id,
+            meta if isinstance(meta, dict) else None,
+            proposals,
+            terminal_jobs,
+            valid_reflections,
+        )
 
         candidates.append(
             {
@@ -424,10 +541,19 @@ def audit() -> dict[str, Any]:
                 "tracked_source_file_entries": len(tracked_source_files),
                 "untracked_source_files": untracked_source_files,
                 "results": results,
+                "scientific_control": control,
             }
         )
 
     status_counts = Counter(candidate["status"] for candidate in candidates)
+    revision_counts = Counter(
+        candidate["scientific_control"]["revision_status"]
+        for candidate in candidates
+    )
+    proposal_counts = Counter(
+        candidate["scientific_control"]["proposal_status"]
+        for candidate in candidates
+    )
     top_level_counts = Counter()
     for path in iter_file_entries(ROOT):
         parts = path.relative_to(ROOT).parts
@@ -457,6 +583,16 @@ def audit() -> dict[str, Any]:
             "registered_programs": len(registered_ids),
             "program_directories": len(candidates),
             "candidate_status_counts": dict(sorted(status_counts.items())),
+            "revision_status_counts": dict(sorted(revision_counts.items())),
+            "proposal_contract_status_counts": dict(sorted(proposal_counts.items())),
+            "unreflected_terminal_candidates": sum(
+                bool(candidate["scientific_control"]["unreflected_terminal_jobs"])
+                for candidate in candidates
+            ),
+            "successor_eligible_candidates": sum(
+                candidate["scientific_control"]["successor_eligible"]
+                for candidate in candidates
+            ),
             "top_level_file_entries": dict(sorted(top_level_counts.items())),
         },
         "modified_tracked_entries": sorted(modified),
@@ -490,6 +626,8 @@ def render_markdown(inventory: dict[str, Any]) -> str:
         f"- Ignored entries: `{summary['ignored_entries']}`",
         f"- Program directories: `{summary['program_directories']}`",
         f"- Registered programs: `{summary['registered_programs']}`",
+        f"- Successor-eligible candidates: `{summary['successor_eligible_candidates']}`",
+        f"- Candidates with unreflected terminal jobs: `{summary['unreflected_terminal_candidates']}`",
         "",
         "## Candidate Status Counts",
         "",
@@ -498,6 +636,20 @@ def render_markdown(inventory: dict[str, Any]) -> str:
     ]
     for status, count in sorted(by_status.items()):
         lines.append(f"| `{status}` | {count} |")
+
+    lines.extend(
+        [
+            "",
+            "## Scientific Control Counts",
+            "",
+            "| Boundary | State | Count |",
+            "|---|---|---:|",
+        ]
+    )
+    for state, count in summary["revision_status_counts"].items():
+        lines.append(f"| candidate revision | `{state}` | {count} |")
+    for state, count in summary["proposal_contract_status_counts"].items():
+        lines.append(f"| proposal contract | `{state}` | {count} |")
 
     lines.extend(
         [

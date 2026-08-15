@@ -15,7 +15,7 @@ lessons and bounded successor decisions. Experiments now freeze
 machine-evaluable controls and predicates. Mechanism graphs now make shared
 boundaries and joint-replay requirements explicit.
 
-The missing loop is:
+The enforced loop is now:
 
 ```text
 freeze objective
@@ -91,6 +91,14 @@ Implemented terminal control:
 - `search-policy`: successor proposals use validated parent reflections and
   asserted measurements before forecasts or manual priority.
 
+New scientific work uses `algorithm-proposal.v2`,
+`adaptive-experiment-contract.v1`, and `adaptive-job.v3`. A v3 job cannot be
+queued without one validated prospective contract, immutable candidate
+revision, proposal identity, and hashed runner. Its reflection must reuse the
+job's exact experiment reference. Any unreflected terminal v2/v3 job blocks a
+new gate and successor creation. Legacy proposals remain visible but are not
+actionable until migrated to the structured contract.
+
 Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
 unversioned, or unresolvable evidence must fail rather than be skipped or
 inferred.
@@ -115,10 +123,11 @@ valid equivalent controls, supported hypothesis, algorithmic-gain attribution,
 and explicit predicate outcomes.
 
 `next-experiment` reads the versioned search policy and ranks live proposals
-lexicographically by actionability, valid parent reflection, scientific decision,
-asserted net bytes, expected net bytes after source budget, and only then manual
-priority. Missing measurements remain missing. The policy orders experiments;
-it cannot modify evidence or authorize promotion.
+lexicographically by actionability, valid experiment, valid parent reflection,
+scientific decision, asserted net bytes, transfer retention, runtime, memory,
+expected net bytes after package cost, uncertainty, interaction risk, and only
+then manual priority. Missing measurements remain missing. The policy orders
+experiments; it cannot modify evidence or authorize promotion.
 
 The first structured causal-shadow application is
 `delta_midas_deep_residual_65536_q0_v1`. Its retained F/O traces align exactly;
@@ -132,6 +141,13 @@ held-out scientific gain predicate and was retired through its validated
 reflection. That negative transition demonstrates the intended loop: a positive
 teacher attribution did not bypass controls, and a completed process did not
 become a successor claim.
+
+The next DELTA-MIDAS action is now a prospectively frozen named midpoint-gradient
+localization on the production F arm. It binds two repeated encodes, archive
+identity, complete named-parameter coverage, chronological thirds, and frozen
+non-head concentration thresholds. Passing can select only one separately
+registered group ablation; failing with intact controls retires gradient-energy
+localization. It remains closed-teacher oracle evidence with zero score credit.
 
 ## Composition and independent audit
 
