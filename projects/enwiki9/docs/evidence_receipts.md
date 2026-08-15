@@ -225,7 +225,8 @@ python3 projects/enwiki9/tools/enwiki9_status_receipt.py
 `results/run_ledger.jsonl` is the central append-only registry for every completed
 driver run that writes a result JSON.
 
-Each row is one JSON object using schema `enwiki9_driver_run_ledger_v1` with at least:
+Each row is one JSON object using schema
+`gamma.enwiki9.driver-run-ledger-row.v2` with:
 
 - `run_id`, `program_id`, `algorithm_name`
 - `run_scope_label`, `run_purpose`, `run_context`, `run_source`, `run_tags`
@@ -234,7 +235,8 @@ Each row is one JSON object using schema `enwiki9_driver_run_ledger_v1` with at 
 - `compress_time_s`, `decompress_time_s`, `run_time_s`
 - `determinism_ok`, `roundtrip_ok`
 - `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
-- `result_path`, `timestamp`, `recorded_utc`, `host`
+- project-relative `result_path`, `result_bytes`, `result_sha256`, `timestamp`,
+  `recorded_utc`, `host`
 
 `run_scope_label` should usually be explicit (`full`, `1k`, `250k`, `1m`, `10m`) and
 is inferred from `--limit` when omitted. `run_purpose` is intended to distinguish
@@ -243,11 +245,16 @@ intent (`smoke`, `verification`, `candidate`, `rebaseline`, etc.). `run_context`
 work streams distinguishable when many similar runs are grouped by the same
 scope and algorithm.
 
-The row is authoritative for:
+The row is a validated index for:
 
 - run discovery and identity (`run_id` + `timestamp`)
 - memory/RSS trend tracking
-- result indexing and reproducibility pointers
+- result indexing and exact retained-result identity
+
+The retained result JSON remains measurement authority. Before append or
+backfill, the v2 validator checks the row schema, result path, byte count,
+SHA-256, program identity, and timestamp. Backfill scans only timestamp-named
+driver results; other JSON artifacts belong to their own receipt contracts.
 
 To rebuild from saved per-run result JSONs:
 

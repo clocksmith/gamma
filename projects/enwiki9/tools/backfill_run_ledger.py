@@ -6,45 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import sys
-import datetime as _dt
 from typing import Any
+
+import research_contracts
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 RESULTS_DIR = ROOT / "results"
 PROGRAMS_DIR = ROOT / "programs"
 LEDGER_PATH = RESULTS_DIR / "run_ledger.jsonl"
-LEDGER_SCHEMA = "enwiki9_driver_run_ledger_v1"
-KNOWN_SCOPE_LABELS = {
-    1024: "1k",
-    250_000: "250k",
-    1_000_000: "1m",
-    10_000_000: "10m",
-    1_000_000_000: "full",
-}
-
-
-def _infer_scope_label(data_size: Any) -> str:
-    if not isinstance(data_size, int):
-        return "unknown"
-    return KNOWN_SCOPE_LABELS.get(data_size, f"{data_size}B")
-
-
-def _infer_run_purpose(determinism: Any, data_size: Any) -> str:
-    if isinstance(determinism, dict) and "single_host_byte_equal" in determinism:
-        return "verification"
-    if isinstance(data_size, int) and data_size in KNOWN_SCOPE_LABELS:
-        return "smoke"
-    return "candidate"
-
-
-def rel(path: pathlib.Path) -> str:
-    root = ROOT.parent
-    try:
-        return path.resolve().relative_to(root).as_posix()
-    except ValueError:
-        return path.resolve().as_posix()
+DRIVER_RESULT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{6}(?:\.\d+)?\.json$")
 
 
 def parse_args() -> argparse.Namespace:
@@ -126,58 +99,11 @@ def build_ledger_row(
         )
         return None
 
-    memory = result.get("memory_kib") if isinstance(result.get("memory_kib"), dict) else {}
-    determinism = result.get("determinism")
-    compressed_md5 = result.get("compressed_md5")
-    if not isinstance(compressed_md5, str) or not compressed_md5:
-        compressed_md5 = ""
-
-    run_id = (
-        f"{program_id}__{timestamp.replace(':', '')}__{compressed_md5[:8]}"
+    return research_contracts.build_driver_run_ledger_row(
+        result,
+        result_path,
+        program_name=program_name,
     )
-
-    return {
-        "schema": LEDGER_SCHEMA,
-        "run_id": run_id,
-        "program_id": program_id,
-        "algorithm_name": program_name or program_id,
-        "data_path": result.get("data_path"),
-        "data_size": result.get("data_size"),
-        "data_md5": result.get("data_md5"),
-        "data_sha256": result.get("data_sha256"),
-        "compressed_size": result.get("compressed_size"),
-        "program_size": result.get("program_size"),
-        "hutter_score": result.get("hutter_score"),
-        "bits_per_byte": result.get("bits_per_byte"),
-        "compress_time_s": result.get("compress_time_s"),
-        "decompress_time_s": result.get("decompress_time_s"),
-        "run_time_s": result.get("run_time_s"),
-        "run_purpose": result.get("run_purpose")
-        if isinstance(result.get("run_purpose"), str)
-        else _infer_run_purpose(determinism, result.get("data_size")),
-        "run_scope_label": result.get("run_scope_label")
-        if isinstance(result.get("run_scope_label"), str)
-        else _infer_scope_label(result.get("data_size")),
-        "run_context": result.get("run_context"),
-        "run_source": result.get("run_source"),
-        "run_tags": result.get("run_tags") if isinstance(result.get("run_tags"), list) else [],
-        "determinism_ok": determinism.get("single_host_byte_equal")
-        if isinstance(determinism, dict)
-        else None,
-        "roundtrip_ok": result.get("roundtrip_ok"),
-        "result_path": rel(result_path),
-        "timestamp": timestamp,
-        "recorded_utc": _dt.datetime.fromtimestamp(
-            result_path.stat().st_mtime, tz=_dt.timezone.utc
-        )
-        .replace(microsecond=0)
-        .isoformat(),
-        "host": result.get("host"),
-        "memory_kib_before": memory.get("before"),
-        "memory_kib_after": memory.get("after"),
-        "memory_kib_peak": memory.get("peak"),
-        "rss_sample_count": memory.get("sample_count"),
-    }
 
 
 def collect_results(program_ids: list[str] | None) -> list[pathlib.Path]:
@@ -189,7 +115,11 @@ def collect_results(program_ids: list[str] | None) -> list[pathlib.Path]:
             continue
         if program_ids and entry.name not in program_ids:
             continue
-        rows.extend(sorted(entry.glob("*.json")))
+        rows.extend(
+            path
+            for path in sorted(entry.glob("*.json"))
+            if DRIVER_RESULT_RE.fullmatch(path.name)
+        )
     return rows
 
 
