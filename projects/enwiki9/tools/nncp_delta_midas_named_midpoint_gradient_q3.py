@@ -116,6 +116,9 @@ def require_q2_lineage() -> None:
     experiment = json.loads(experiment_path.read_text())
     inputs = {item["id"]: item for item in experiment["inputs"]}
     for identifier, path in (
+        ("production-attribution", q0.Q1_RESULT),
+        ("production-bridge", q0.BRIDGE_RESULT),
+        ("exact-midpoint-patch", MIDPOINT_PATCH),
         ("q2-decision", Q2_RESULT),
         ("q2-gradient-detail", Q2_DETAIL),
         ("q2-reflection", Q2_REFLECTION),
