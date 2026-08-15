@@ -135,6 +135,22 @@ does not show realizable archive savings, a compact student, transfer, package
 cost, or Hutter score credit. Hidden state, teacher probabilities, and the
 closed LibNC executable remain forbidden submission inputs.
 
+The running q2 named-gradient retry has a separate numeric-validity boundary.
+The production profile defaults parameters to BF16, and q1's retained native
+[`nc_get1_f32` assertion](../results/delta_midas_named_midpoint_gradient_65536_q1_v1/F_named_gradient_1.stderr)
+proves the squared-energy reduction did not produce an F32 tensor. The
+[`q2 materializer`](../tools/materialize_nncp_named_midpoint_gradient_q2.py)
+converts only after the BF16 elementwise square and reduction, so it repairs
+the scalar-reader crash but does not establish precision-stable group shares.
+The hash-bound LibNC binary exports `nc_reduce_sum_sqr`; its implementation
+creates an F32 scalar and dispatches BF16 inputs through the direct
+`vec_sum_sqr_bf16` F32 accumulation path. Therefore q2 may retain archive,
+gradient-hash, coverage, and implementation-liveness evidence, but its energy
+ranking cannot by itself authorize a group ablation. The smallest valid
+measurement retry replaces only the energy expression with
+`nc_reduce_sum_sqr(nc_dup_tensor(gradient))`, repeats both exact F encodes, and
+requires identical group and chronological-third decisions before any ablation.
+
 ## 2026-08-15 - Recursive self-improvement boundary audited
 
 The adaptive lane now binds the objective, immutable candidate revisions,

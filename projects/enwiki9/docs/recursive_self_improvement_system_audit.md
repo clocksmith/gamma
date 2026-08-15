@@ -162,6 +162,12 @@ check; q1 fixed ownership and exposed a non-F32 scalar-read defect. Both are
 terminal implementation-failure evidence. Q2 inherits the registered science
 through `tools/enwiki9_freeze_implementation_retry.py` and changes only the
 energy reduction's scalar type while retaining durable native-error capture.
+Static inspection then showed q2 converts after a BF16 square and reduction;
+the closed binary's direct `nc_reduce_sum_sqr` path instead returns an F32
+scalar and accumulates BF16 input squares in F32 lanes. Q2 can close execution
+but cannot alone close numeric localization validity. Its reflection must keep
+group-ablation authorization blocked until the direct F32 reduction repeats the
+same frozen decision.
 
 ## Composition and independent audit
 
