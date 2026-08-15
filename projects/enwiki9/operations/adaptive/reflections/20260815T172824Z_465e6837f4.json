@@ -1,0 +1,116 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Post-reduction NC_TYPE_F32 conversion repairs the scalar-reader type but leaves the square and reduction in BF16; execution, archive identity, row coverage, and repeatability are valid while energy ranking remains precision-confounded."
+  },
+  "candidateId": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "candidateTreeSha256": "sha256:0bc9ce771e8134eaab462ef85f8468ea4e644f4659cebf6cfefbe8ad05bd4360",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_named_midpoint_gradient_65536_q2_v1/20260815T172812821181Z_0bc9ce771e81.json",
+      "sha256": "sha256:b310638f09671c274ff5f77abdad3260948637fde042ab37e35f240932b38f52"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze one q3 implementation retry with the same population and science predicates, replace only the energy observation with direct F32 accumulation, require finite cross-path agreement for both promote and retire, and keep q2 comparison diagnostic.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_1.nncp",
+      "sha256": "sha256:85208cda0ab962d7f8ce61367e0902c0bb864de05e57e733534f782b54736134"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_1.stderr",
+      "sha256": "sha256:edd6f0ecc8481bf1787dc83646bae9a246ff0b4f1bd4ac36c886b166f15d7007"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_2.nncp",
+      "sha256": "sha256:85208cda0ab962d7f8ce61367e0902c0bb864de05e57e733534f782b54736134"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_2.stderr",
+      "sha256": "sha256:edd6f0ecc8481bf1787dc83646bae9a246ff0b4f1bd4ac36c886b166f15d7007"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+      "sha256": "sha256:99eaafeb0a3c9fea54e4a16be095bd0f6103abe78f6f9b4782d3b5f14bbefab2"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/gradient-detail.json",
+      "sha256": "sha256:9c20eadf990a87f56a2472994beb16781a66ade4817c6a1b4174851466bfa46a"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json",
+      "sha256": "sha256:b1c2858b4b9eeb81cab2f9c0c5c358b968e797a01414975431e1869c7979882c"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q2_v1/incremental_source.tar.xz",
+      "sha256": "sha256:a60319f7c946c921c7eebcfe050c4478d8dff3b69b7317425dbca1a64fb6b1a1"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T172824Z_465e6837f4.log",
+      "sha256": "sha256:16f47b9a29369e1d89de9e2c53383d5d99e9b2db4e3451adb3ae25e6b6d099a8"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q2_v1.json",
+    "sha256": "sha256:f5e2713285a0f78502d98088978723440c87e11688a0e5360230f34b153ebede"
+  },
+  "generatedUtc": "2026-08-15T20:04:31+00:00",
+  "hypothesis": {
+    "rationale": "The low-precision summary fails the frozen stable-group, minimum-share, and head-share predicates, but those numeric values cannot authorize retirement until the unchanged population is measured through a validated F32 accumulation path.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T172824Z_465e6837f4.json",
+    "sha256": "sha256:3bf719f38643a4fca11ab80377adab12db396ba45fcbb44a40ab78ac71f3514b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Post-reduction F32 conversion as authoritative BF16 gradient-energy localization"
+    ],
+    "transferableLessons": [
+      "A scalar reader type fix is not an accumulation-precision proof; gradient localization must bind a direct F32 reducer, an explicit cross-path reference, and validity predicates before either promotion or retirement."
+    ],
+    "uncertainties": [
+      "Direct F32 accumulation may preserve or change q2's dominant group, third-wise ranking, minimum share, and head share."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t172824z_465e6837f4",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "incomplete-evidence",
+    "reasons": [
+      "Q2 completed two deterministic exact F encodes and complete named-gradient rows, but it converts to F32 only after BF16 elementwise square and reduction, so its energy ranking is not an authoritative F32 localization oracle."
+    ],
+    "valid": false
+  }
+}
