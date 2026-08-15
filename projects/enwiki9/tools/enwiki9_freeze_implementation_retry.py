@@ -151,8 +151,7 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         if output in experiment["outputs"]:
             raise ValueError(f"duplicate implementation-retry output: {output}")
         experiment["outputs"].append(output)
-    if args.strict_output_manifest:
-        experiment["outputManifestPolicy"] = "complete-result-artifacts-v1"
+    experiment["outputManifestPolicy"] = "complete-result-artifacts-v1"
     experiment["generatedUtc"] = (
         dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
     )
