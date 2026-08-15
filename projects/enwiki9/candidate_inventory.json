@@ -7812,12 +7812,12 @@
     },
     {
       "deps": [],
-      "description": "Exact F-minus-O deep midpoint residual attribution",
-      "driver_program_size": 495,
+      "description": "Compact decoder-visible deep residual prediction",
+      "driver_program_size": 498,
       "has_meta_json": true,
       "has_program_py": true,
-      "id": "delta_midas_deep_residual_65536_q0_v1",
-      "meta_id": "delta_midas_deep_residual_65536_q0_v1",
+      "id": "delta_midas_decoder_feature_probe_65536_q0_v1",
+      "meta_id": "delta_midas_decoder_feature_probe_65536_q0_v1",
       "meta_id_matches_directory": true,
       "meta_status": "candidate",
       "missing_payload_targets": [],
@@ -7837,9 +7837,37 @@
       "status": "track_source_before_evolution",
       "tracked_source_file_entries": 0,
       "untracked_source_files": [
-        "projects/enwiki9/programs/delta_midas_deep_residual_65536_q0_v1/meta.json",
-        "projects/enwiki9/programs/delta_midas_deep_residual_65536_q0_v1/program.py"
+        "projects/enwiki9/programs/delta_midas_decoder_feature_probe_65536_q0_v1/meta.json",
+        "projects/enwiki9/programs/delta_midas_decoder_feature_probe_65536_q0_v1/program.py"
       ]
+    },
+    {
+      "deps": [],
+      "description": "Exact F-minus-O deep midpoint residual attribution",
+      "driver_program_size": 495,
+      "has_meta_json": true,
+      "has_program_py": true,
+      "id": "delta_midas_deep_residual_65536_q0_v1",
+      "meta_id": "delta_midas_deep_residual_65536_q0_v1",
+      "meta_id_matches_directory": true,
+      "meta_status": "active",
+      "missing_payload_targets": [],
+      "reasons": [
+        "active_without_valid_evidence"
+      ],
+      "registered": true,
+      "results": {
+        "best_valid_meta_evidence": null,
+        "best_valid_result": null,
+        "result_files": 1,
+        "total_valid_evidence": 0,
+        "valid_meta_evidence": 0,
+        "valid_result_files": 0
+      },
+      "source_file_entries": 2,
+      "status": "candidate",
+      "tracked_source_file_entries": 2,
+      "untracked_source_files": []
     },
     {
       "deps": [],
@@ -25479,7 +25507,7 @@
       "untracked_source_files": []
     }
   ],
-  "generated_at": "2026-08-15T16:17:02+00:00",
+  "generated_at": "2026-08-15T16:29:54+00:00",
   "ignored_entries": [
     "projects/enwiki9/data/enwik9",
     "projects/enwiki9/lib/__pycache__/driver.cpython-314.pyc",
@@ -26436,6 +26464,11 @@
     "projects/enwiki9/results/dedup_v1/2026-07-21T124127.json",
     "projects/enwiki9/results/dedup_v1/2026-07-21T124129.json",
     "projects/enwiki9/results/dedup_v1/2026-07-21T124205.json",
+    "projects/enwiki9/results/delta_midas_decoder_feature_probe_65536_q0_v1/analyzer.py",
+    "projects/enwiki9/results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+    "projects/enwiki9/results/delta_midas_decoder_feature_probe_65536_q0_v1/model.bin",
+    "projects/enwiki9/results/delta_midas_decoder_feature_probe_65536_q0_v1/research_contracts.py",
+    "projects/enwiki9/results/delta_midas_decoder_feature_probe_65536_q0_v1/trace_reader.py",
     "projects/enwiki9/results/delta_midas_deep_residual_65536_q0_v1/analyzer.py",
     "projects/enwiki9/results/delta_midas_deep_residual_65536_q0_v1/decision.json",
     "projects/enwiki9/results/dplr112_campaign_v1/decision.json",
@@ -28929,6 +28962,7 @@
     "projects/enwiki9/run_logs/adaptive/20260811T000532Z_5dadef2849.log",
     "projects/enwiki9/run_logs/adaptive/20260811T000748Z_c8f547fd68.log",
     "projects/enwiki9/run_logs/adaptive/20260815T161658Z_636aa4dd6c.log",
+    "projects/enwiki9/run_logs/adaptive/20260815T162913Z_047c55d5ea.log",
     "projects/enwiki9/run_logs/archive/progress_legacy.log",
     "projects/enwiki9/run_logs/archive/status_live_20260721.json",
     "projects/enwiki9/run_logs/archive/status_snapshot_accidental_dash_20260721.json",
@@ -29553,6 +29587,7 @@
     "projects/enwiki9/tools/__pycache__/nncp_branch_logit_state_screen.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_branch_residual_cache32_qm0.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_cp8_symbol_readout_qm0.cpython-314.pyc",
+    "projects/enwiki9/tools/__pycache__/nncp_delta_midas_decoder_feature_probe.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_delta_midas_deep_residual.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_distribution_to_branch_trace.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_endpoint_commonblock_route_qm0.cpython-314.pyc",
@@ -29808,46 +29843,48 @@
   ],
   "modified_tracked_entries": [
     "projects/enwiki9/index.json",
-    "projects/enwiki9/operations/adaptive/mutations.jsonl"
+    "projects/enwiki9/operations/adaptive/experiments/delta_midas_decoder_feature_probe_65536_q0_v1.json",
+    "projects/enwiki9/operations/adaptive/mutations.jsonl",
+    "projects/enwiki9/tools/research_contracts.py"
   ],
   "project_root": "projects/enwiki9",
   "summary": {
     "candidate_status_counts": {
       "active": 18,
       "blocked_dependency": 33,
-      "candidate": 82,
+      "candidate": 83,
       "measured_negative": 100,
       "retired": 543,
       "track_source_before_evolution": 1
     },
-    "directories": 1848,
-    "file_entries": 8737,
-    "ignored_entries": 4324,
-    "modified_tracked_entries": 2,
-    "program_directories": 777,
-    "registered_programs": 335,
+    "directories": 1855,
+    "file_entries": 8757,
+    "ignored_entries": 4331,
+    "modified_tracked_entries": 4,
+    "program_directories": 778,
+    "registered_programs": 336,
     "top_level_file_entries": {
       ".claude": 1,
       ".codex-reminders": 4,
       "<root>": 19,
       "agents": 5,
-      "contracts": 21,
+      "contracts": 22,
       "data": 7,
       "docs": 399,
       "enwiki9_segment_bundle": 6,
       "external": 174,
       "lib": 4,
-      "operations": 989,
+      "operations": 999,
       "patches": 36,
-      "programs": 2418,
-      "results": 3382,
-      "run_logs": 660,
+      "programs": 2420,
+      "results": 3387,
+      "run_logs": 661,
       "skills": 4,
       "tests": 59,
-      "tools": 549
+      "tools": 550
     },
-    "tracked_entries": 4996,
-    "untracked_nonignored_entries": 13
+    "tracked_entries": 5011,
+    "untracked_nonignored_entries": 12
   },
   "tracking_policy": {
     "ignored_local_artifacts": [
@@ -29874,18 +29911,17 @@
     ]
   },
   "untracked_nonignored_entries": [
-    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/1a/1ad811292e685b5040e51a037bf74aaf0ad93366b47bbcf8616d1789c7be4f4b",
-    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/21/21b26528ad98d914366a6b1f91c9149524c59075321eaebd4124f0ae14519c7f",
-    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/51/51444fcd17a8fd12ee82209e2fc9ed8f08b4b582d4c85ad9c57b451365bc5ba4",
-    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/52/52fd83918bbd00b314745ea1f2c33ad461b318480cd1e26b97485e0ab8db6146",
-    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/5a/5ad388257bcdcc404bb799b6417381673142aae62a8fe7ce1b6037c716003c67",
-    "projects/enwiki9/operations/adaptive/candidate-revisions.lock",
-    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_deep_residual_65536_q0_v1/20260815T161632644262Z_1935f3408580.json",
-    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_deep_residual_65536_q0_v1/20260815T161632733112Z_9c3ca22cf768.json",
-    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_deep_residual_65536_q0_v1/20260815T161651529758Z_b8bb93c35dc0.json",
-    "projects/enwiki9/operations/adaptive/completed/000_20260815T161658Z_636aa4dd6c.json",
-    "projects/enwiki9/operations/adaptive/proposals/developed/000_delta_midas_deep_residual_65536_q0_v1.json",
-    "projects/enwiki9/programs/delta_midas_deep_residual_65536_q0_v1/meta.json",
-    "projects/enwiki9/programs/delta_midas_deep_residual_65536_q0_v1/program.py"
+    "projects/enwiki9/contracts/research/v1/delta-midas-probe-result.schema.json",
+    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/77/77583899a5cd73c4575acbc01e8eb8b7fc5c22215339d3d3f8daa291123bf773",
+    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/83/830a23383ff1706983e07f08368c4dde9f6cbd154481522b5e85b00f992eff58",
+    "projects/enwiki9/operations/adaptive/candidate-blobs/sha256/d2/d24ea09bedc7ca3e671f2eb19e1fb11304e83add2819718b93b97b0959b4e366",
+    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_decoder_feature_probe_65536_q0_v1/20260815T162843195460Z_225edcc6e030.json",
+    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_decoder_feature_probe_65536_q0_v1/20260815T162843395324Z_13247725d617.json",
+    "projects/enwiki9/operations/adaptive/candidate-revisions/delta_midas_decoder_feature_probe_65536_q0_v1/20260815T162907713196Z_ef5d1c9f61be.json",
+    "projects/enwiki9/operations/adaptive/completed/000_20260815T162913Z_047c55d5ea.json",
+    "projects/enwiki9/operations/adaptive/proposals/developed/000_delta_midas_decoder_feature_probe_65536_q0_v1.json",
+    "projects/enwiki9/programs/delta_midas_decoder_feature_probe_65536_q0_v1/meta.json",
+    "projects/enwiki9/programs/delta_midas_decoder_feature_probe_65536_q0_v1/program.py",
+    "projects/enwiki9/tools/nncp_delta_midas_decoder_feature_probe.py"
   ]
 }

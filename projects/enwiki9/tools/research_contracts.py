@@ -27,6 +27,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.dependency-closure.v1": (
         CONTRACT_ROOT / "dependency-closure.schema.json"
     ),
+    "gamma.enwiki9.delta-midas-probe-result.v1": (
+        CONTRACT_ROOT / "delta-midas-probe-result.schema.json"
+    ),
     "gamma.enwiki9.experiment-contract.v1": (
         CONTRACT_ROOT / "experiment-contract.schema.json"
     ),
@@ -726,6 +729,203 @@ def _validate_experiment_result(
     }
 
 
+def _validate_delta_midas_probe_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = _project_receipt_reference(
+        value["experiment"],
+        "gamma.enwiki9.experiment-contract.v1",
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        value["experimentId"] == experiment["experimentId"]
+        and experiment["registrationTiming"] == "prospective"
+        and experiment.get("protocol") is not None,
+        f"{artifact_path}: probe requires its prospective protocol contract",
+    )
+    _project_file_reference(value["analyzer"], f"{artifact_path}: analyzer")
+    dependency_ids = [item["id"] for item in value["analyzerDependencies"]]
+    _require(
+        len(dependency_ids) == len(set(dependency_ids)),
+        f"{artifact_path}: duplicate analyzer dependency",
+    )
+    for dependency in value["analyzerDependencies"]:
+        _project_file_reference(
+            dependency,
+            f"{artifact_path}: analyzer dependency {dependency['id']}",
+        )
+
+    expected_inputs = {
+        arm["id"]: {"path": arm["trace"]["path"], "sha256": arm["trace"]["sha256"]}
+        for arm in experiment["arms"]
+    }
+    observed_inputs = {
+        item["id"]: {"path": item["path"], "sha256": item["sha256"]}
+        for item in value["inputs"]
+    }
+    _require(
+        observed_inputs == expected_inputs,
+        f"{artifact_path}: result inputs differ from frozen experiment arms",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+
+    contract_population = experiment["population"]
+    expected_population = {
+        "rows": contract_population["rowCount"],
+        "branches": contract_population["branchCount"],
+        "segments": contract_population["rowCount"]
+        // contract_population["segmentLength"],
+        "segmentLength": contract_population["segmentLength"],
+        "firstHalfLength": contract_population["firstHalfLength"],
+    }
+    _require(
+        value["population"] == expected_population,
+        f"{artifact_path}: measured population differs from frozen contract",
+    )
+    alignment = value["alignment"]
+    metrics = value["metrics"]
+    _require(
+        alignment["complete"]
+        == all(alignment[field] for field in (
+            "rowIdentity",
+            "symbolIdentity",
+            "treeIdentity",
+            "truthPathIdentity",
+        ))
+        == metrics["alignmentComplete"],
+        f"{artifact_path}: alignment claims differ",
+    )
+    audit = value["protocolAudit"]
+    for field in (
+        "decoderFeatureAuditPass",
+        "trainingLeakageAuditPass",
+        "quantizedEvaluationPass",
+    ):
+        _require(
+            audit[field] == metrics[field],
+            f"{artifact_path}: protocol audit and metric differ for {field}",
+        )
+
+    contract_partitions = experiment["protocol"]["partitions"]
+    expected_partition_segments = {
+        partition["id"]: (
+            partition["endSegmentExclusive"] - partition["firstSegment"]
+        )
+        for partition in contract_partitions
+    }
+    partition_rows = {row["id"]: row for row in value["partitions"]}
+    _require(
+        set(partition_rows) == set(expected_partition_segments),
+        f"{artifact_path}: result partitions differ from frozen protocol",
+    )
+    for partition_id, segment_count in expected_partition_segments.items():
+        row = partition_rows[partition_id]
+        _require(
+            row["segments"] == segment_count,
+            f"{artifact_path}: partition size differs for {partition_id}",
+        )
+        _require(
+            math.isclose(
+                row["gainIdealBits"],
+                row["baseIdealBits"] - row["correctedIdealBits"],
+                rel_tol=1e-12,
+                abs_tol=1e-9,
+            )
+            and math.isclose(
+                row["shiftedControlGainIdealBits"],
+                row["baseIdealBits"] - row["shiftedControlIdealBits"],
+                rel_tol=1e-12,
+                abs_tol=1e-9,
+            ),
+            f"{artifact_path}: partition gain arithmetic differs for {partition_id}",
+        )
+    _require(
+        metrics["validationIdealGainBits"] == partition_rows["validation"]["gainIdealBits"]
+        and metrics["testIdealGainBits"] == partition_rows["test"]["gainIdealBits"]
+        and metrics["testShiftedControlGainBits"]
+        == partition_rows["test"]["shiftedControlGainIdealBits"],
+        f"{artifact_path}: summary gains differ from partition evidence",
+    )
+    _require(
+        metrics["testThirdMinIdealGainBits"]
+        == min(metrics["testThirdIdealGainBits"]),
+        f"{artifact_path}: minimum test-third gain differs",
+    )
+    _require(
+        math.isclose(
+            metrics["testOverShiftedControlBits"],
+            metrics["testIdealGainBits"] - metrics["testShiftedControlGainBits"],
+            rel_tol=1e-12,
+            abs_tol=1e-9,
+        ),
+        f"{artifact_path}: shifted-control margin differs",
+    )
+    test_segments = expected_partition_segments["test"]
+    _require(
+        metrics["testPositiveSegments"] + metrics["testNegativeSegments"]
+        <= test_segments
+        and math.isclose(
+            metrics["testPositiveSegmentFraction"],
+            metrics["testPositiveSegments"] / test_segments,
+            rel_tol=1e-15,
+            abs_tol=0.0,
+        ),
+        f"{artifact_path}: test segment-sign evidence differs",
+    )
+
+    model = value["model"]
+    model_path = _project_file_reference(model["payload"], f"{artifact_path}: model")
+    _require(
+        model_path.stat().st_size == model["bytes"]
+        == metrics["modelPayloadBytes"]
+        and model["dimension"] == experiment["protocol"]["parameters"]["dimension"],
+        f"{artifact_path}: model payload accounting differs",
+    )
+
+    expected_gate_rows: list[dict[str, Any]] = []
+    for gate in experiment["gates"]:
+        predicates: list[dict[str, Any]] = []
+        for predicate in gate["all"]:
+            observed = metrics[predicate["metric"]]
+            passed = _predicate_pass(
+                observed,
+                predicate["operator"],
+                predicate["threshold"],
+            )
+            predicates.append({**predicate, "observed": observed, "pass": passed})
+        expected_gate_rows.append(
+            {
+                "id": gate["id"],
+                "pass": all(item["pass"] for item in predicates),
+                "predicates": predicates,
+            }
+        )
+    _require(
+        value["gateEvaluations"] == expected_gate_rows,
+        f"{artifact_path}: gate evaluations differ from frozen predicates",
+    )
+    all_gates_pass = all(row["pass"] for row in expected_gate_rows)
+    expected_status = "pass" if all_gates_pass else "fail"
+    expected_verdict = (
+        "authorize-open-base-integration"
+        if all_gates_pass
+        else "retire-hashed-linear-probe"
+    )
+    _require(
+        value["status"] == expected_status
+        and value["decision"]["verdict"] == expected_verdict,
+        f"{artifact_path}: status or decision differs from gate evidence",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "status": value["status"],
+        "verdict": value["decision"]["verdict"],
+    }
+
+
 def validate_search_policy() -> dict[str, Any]:
     path = CONTRACT_ROOT / "search-policy.json"
     value = load_json(path)
@@ -1170,6 +1370,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_candidate_revision(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.dependency-closure.v1":
         result = _validate_dependency_closure(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.delta-midas-probe-result.v1":
+        result = _validate_delta_midas_probe_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.experiment-contract.v1":
         result = _validate_experiment_contract(value, artifact_path)
     elif schema_id == "gamma.enwiki9.experiment-result.v1":

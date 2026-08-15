@@ -1,0 +1,32 @@
+{
+  "candidate_id": "delta_midas_decoder_feature_probe_65536_q0_v1",
+  "claimed_at": "2026-08-15T16:28:43+00:00",
+  "created_at": "2026-08-15T16:28:42+00:00",
+  "developed_at": "2026-08-15T16:28:43+00:00",
+  "evidence": [
+    "operations/adaptive/experiments/delta_midas_decoder_feature_probe_65536_q0_v1.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "One frozen 4,096-weight quantized hashed-linear correction predicts positive held-out F-minus-O ideal-bit residual from decoder-visible segment state and beats a shifted-label control.",
+  "interfaces_exposed": [
+    "prior decoded segment state -> 4096-weight quantized hashed-linear branch-logit correction"
+  ],
+  "kill_condition": "Any causal-feature, leakage, quantization, held-out, shifted-control, segment-consistency, or payload miss retires this exact fixed formulation without sweeps.",
+  "max_program_bytes": 16384,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "coder",
+  "owner": "codex",
+  "parent": "delta_midas_deep_residual_65536_q0_v1",
+  "parent_proposal_id": "delta_midas_deep_residual_65536_q0_v1",
+  "priority": 1445,
+  "promotion_condition": "Validation and test ideal-bit gains, every test-third gain, and treatment-over-shifted-control margin must be positive; at least 55 percent of test segments must improve; payload must not exceed 8200 bytes.",
+  "proposal_id": "delta_midas_decoder_feature_probe_65536_q0_v1",
+  "retired_neighborhoods": [
+    "Does not use the current symbol, teacher probability as a feature, hidden state, validation fitting, or the retired output-head GRAM formulation."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1463,
+  "state": "developed",
+  "title": "Compact decoder-visible deep residual prediction"
+}
