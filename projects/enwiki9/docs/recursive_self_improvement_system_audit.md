@@ -132,6 +132,12 @@ maxima, scratch-tree maximum, limit failures, and return code. Missing,
 unreadable, or escaping guard declarations remain explicit status states rather
 than disappearing behind worker liveness.
 
+The operator status receipt now derives adaptive population scope from the
+hash-bound experiment instead of relabeling `gate_size` as bytes. It reports
+byte and symbol scopes separately, derives the active candidate from current
+job/guard ownership rather than a stale certificate label, and parses named
+tool outputs without inventing a positional input path.
+
 Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
 unversioned, or unresolvable evidence must fail rather than be skipped or
 inferred.
