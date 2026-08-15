@@ -44,10 +44,11 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 New implementation retries should use `--strict-output-manifest` and declare
 each newly retained artifact with `--additional-output`. The frozen contract
 then requires its terminal result to bind every declared output except the
-result itself exactly once. Python runners should also use
-`--bind-python-source-closure`; the freezer hashes every project-local imported
-module into the prospective input manifest and names the runner and materializer
-as closure roots. An implementation-only retry may retain extra diagnostic
+result itself exactly once. When both implementation entries are Python, the
+freezer automatically hashes every project-local imported module into the
+prospective input manifest and names the runner and materializer as closure
+roots; `--bind-python-source-closure` makes that requirement explicit. An
+implementation-only retry may retain extra diagnostic
 observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not
 change the inherited promotion or kill predicates.
 
