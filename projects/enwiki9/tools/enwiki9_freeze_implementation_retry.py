@@ -49,6 +49,16 @@ def parse_evidence(specification: str) -> tuple[str, Path]:
     return identifier, Path(path)
 
 
+def parse_measurement(specification: str) -> dict[str, str]:
+    parts = specification.split("=", 2)
+    if len(parts) != 3 or not all(parts):
+        raise ValueError(
+            "--additional-measurement must use ID=UNIT=DEFINITION"
+        )
+    identifier, unit, definition = parts
+    return {"id": identifier, "unit": unit, "definition": definition}
+
+
 def source_identifier(path: Path) -> str:
     relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
     digest = hashlib.sha256(relative.encode()).hexdigest()[:12]
@@ -113,6 +123,15 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
                 experiment["inputs"].append(reference(path, source_identifier(path)))
                 existing_paths.add(relative)
         experiment["pythonSourceClosureEntries"] = ["runner", "materializer"]
+    measurement_ids = {value["id"] for value in experiment["measurements"]}
+    for specification in args.additional_measurement:
+        measurement = parse_measurement(specification)
+        if measurement["id"] in measurement_ids:
+            raise ValueError(
+                f"duplicate implementation-retry measurement: {measurement['id']}"
+            )
+        experiment["measurements"].append(measurement)
+        measurement_ids.add(measurement["id"])
     experiment["controls"] = [
         *experiment["controls"],
         {
@@ -165,6 +184,7 @@ def main() -> int:
     parser.add_argument("--negative-control-definition", required=True)
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--additional-output", action="append", default=[])
+    parser.add_argument("--additional-measurement", action="append", default=[])
     parser.add_argument("--strict-output-manifest", action="store_true")
     parser.add_argument("--bind-python-source-closure", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
