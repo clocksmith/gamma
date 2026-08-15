@@ -196,7 +196,13 @@ is often paired with `data_size`. `run_purpose` is the workflow intent
 To rebuild from existing historical result JSONs:
 
 ```bash
-python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
+python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite --strict
+```
+
+Audit every row and retained result identity without rebuilding:
+
+```bash
+python3 projects/enwiki9/tools/backfill_run_ledger.py --check
 ```
 
 For persistent or repeated candidate workflows, include these on invocation so
