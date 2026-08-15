@@ -2590,6 +2590,13 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_clean_room_replay(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.dependency-closure.v1":
         result = _validate_dependency_closure(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.driver-run-ledger-row.v2":
+        validate_driver_run_ledger_row(value)
+        result = {
+            "programId": value["program_id"],
+            "resultPath": value["result_path"],
+            "runId": value["run_id"],
+        }
     elif schema_id == "gamma.enwiki9.delta-midas-probe-result.v1":
         result = _validate_delta_midas_probe_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.experiment-contract.v1":
