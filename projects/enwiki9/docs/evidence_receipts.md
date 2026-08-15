@@ -262,6 +262,12 @@ To rebuild from saved per-run result JSONs:
 python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
 ```
 
+Validate the existing ledger and hash every referenced result:
+
+```bash
+python3 projects/enwiki9/tools/backfill_run_ledger.py --check
+```
+
 ## Gate Result Receipt
 
 Use this for `1K`, `250K`, `1M`, `10M`, `100M`, and `1G` gates.

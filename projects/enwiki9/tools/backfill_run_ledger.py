@@ -51,11 +51,37 @@ def parse_args() -> argparse.Namespace:
         help="do not write the ledger; print planned row count and checks",
     )
     parser.add_argument(
+        "--check",
+        action="store_true",
+        help="validate every existing ledger row and its retained result",
+    )
+    parser.add_argument(
         "--strict",
         action="store_true",
         help="fail if any result JSON is malformed",
     )
     return parser.parse_args()
+
+
+def check_ledger(path: pathlib.Path) -> dict[str, Any]:
+    if not path.is_file():
+        raise SystemExit(f"ledger is missing: {path}")
+    seen: set[str] = set()
+    rows = 0
+    for line_number, line in enumerate(path.read_text().splitlines(), 1):
+        try:
+            row = json.loads(line)
+            if not isinstance(row, dict):
+                raise ValueError("row is not an object")
+            research_contracts.validate_driver_run_ledger_row(row)
+        except Exception as exc:
+            raise SystemExit(f"invalid ledger row {line_number}: {exc}") from exc
+        run_id = row["run_id"]
+        if run_id in seen:
+            raise SystemExit(f"duplicate ledger run_id at row {line_number}: {run_id}")
+        seen.add(run_id)
+        rows += 1
+    return {"ledger": str(path.resolve()), "rows": rows, "valid": True}
 
 
 def load_json(path: pathlib.Path, *, strict: bool) -> dict[str, Any] | None:
@@ -125,6 +151,11 @@ def collect_results(program_ids: list[str] | None) -> list[pathlib.Path]:
 
 def main() -> int:
     args = parse_args()
+    if args.check:
+        if args.append or args.overwrite or args.dry_run or args.program_id:
+            raise SystemExit("--check cannot be combined with rebuild options")
+        print(json.dumps(check_ledger(args.ledger), indent=2))
+        return 0
     program_ids: list[str] | None = (
         [pid for group in args.program_id for pid in group]
         if args.program_id
