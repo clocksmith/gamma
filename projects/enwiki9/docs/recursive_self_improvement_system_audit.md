@@ -115,6 +115,12 @@ accepts only project-relative paths below `results/<candidate_id>/`, creates
 them before resource-guard preflight, and retains the declaration in the job
 receipt so a retry is replayable rather than repaired by manual setup.
 
+`enwiki9_lab.py status` resolves each active job's declared guard receipt and
+reports its live elapsed time, sample count, process-tree and single-process RSS
+maxima, scratch-tree maximum, limit failures, and return code. Missing,
+unreadable, or escaping guard declarations remain explicit status states rather
+than disappearing behind worker liveness.
+
 Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
 unversioned, or unresolvable evidence must fail rather than be skipped or
 inferred.
