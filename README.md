@@ -13,8 +13,8 @@ multiple active model engines.
 
 ## Mission, goal, and value
 
-Gamma’s mission is to make model behavior comparable under a fixed evaluation
-setup.
+Gamma’s mission is to make model and algorithm behavior inspectable, comparable,
+and reproducible under named evaluation contracts.
 
 The current goal is to give researchers and engineers one place to inspect
 token choices, compare models and runtimes, run benchmark workloads, and record
@@ -82,11 +82,11 @@ defines the comparison and performance workflow.
 
 ## Long-term vision
 
-Gamma is intended to become a shared workbench for model behavior research:
-interactive experiments for inspection, repeatable benchmarks for comparison,
-and controlled training or routing trials for capability changes. Results should
-remain tied to the exact model, prompt or dataset, runtime, metric, and replay
-needed to inspect them.
+Gamma is intended to become a shared workbench for model and algorithm behavior
+research: interactive experiments for inspection, repeatable benchmarks for
+comparison, and controlled training, routing, or algorithm trials for capability
+changes. Results should remain tied to the exact model or algorithm, prompt or
+dataset, runtime, metric, and replay needed to inspect them.
 
 ## Limits and current status
 
