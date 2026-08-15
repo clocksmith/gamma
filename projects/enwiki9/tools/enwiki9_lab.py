@@ -792,6 +792,7 @@ def enqueue_tool_job(
     force: bool,
     tags: list[str],
     experiment: pathlib.Path | None,
+    scratch_directories: list[str],
 ) -> dict[str, Any]:
     if purpose not in {"diagnostic", "infrastructure", "oracle"}:
         raise ValueError(
@@ -801,6 +802,12 @@ def enqueue_tool_job(
     tools_root = (ROOT / "tools").resolve()
     if tools_root not in tool_path.parents or not tool_path.is_file():
         raise ValueError("tool must be an existing file below projects/enwiki9/tools")
+    normalized_scratch_directories = sorted(
+        {
+            validate_candidate_scratch_directory(candidate_id, value)
+            for value in scratch_directories
+        }
+    )
     job = enqueue_job(
         candidate_id=candidate_id,
         gate_size=gate_size,
@@ -819,9 +826,35 @@ def enqueue_tool_job(
     )
     job["tool"] = tool_path.relative_to(ROOT).as_posix()
     job["tool_args"] = tool_args
+    job["scratch_directories"] = normalized_scratch_directories
     atomic_json(pending_path, job)
     research_contracts.validate_artifact(pending_path)
     return job
+
+
+def validate_candidate_scratch_directory(candidate_id: str, value: str) -> str:
+    if not value or pathlib.Path(value).is_absolute():
+        raise ValueError("scratch directory must be a non-empty project-relative path")
+    candidate_results = (ROOT / "results" / candidate_id).resolve()
+    resolved = (ROOT / value).resolve()
+    if resolved != candidate_results and candidate_results not in resolved.parents:
+        raise ValueError(
+            f"scratch directory must remain below results/{candidate_id}: {value}"
+        )
+    return resolved.relative_to(ROOT).as_posix()
+
+
+def materialize_job_scratch_directories(job: dict[str, Any]) -> None:
+    candidate_id = str(job["candidate_id"])
+    values = job.get("scratch_directories", [])
+    if not isinstance(values, list) or not all(isinstance(value, str) for value in values):
+        raise ValueError("queued scratch_directories must be a list of strings")
+    for value in values:
+        relative = validate_candidate_scratch_directory(candidate_id, value)
+        destination = ROOT / relative
+        destination.mkdir(parents=True, exist_ok=True)
+        if not destination.is_dir():
+            raise ValueError(f"scratch directory is not a directory: {relative}")
 
 
 def successful_scopes(meta: dict[str, Any]) -> set[int]:
@@ -1099,6 +1132,7 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
     with tempfile.TemporaryDirectory(prefix=f"gamma-enwiki9-{job_id}-") as temporary:
         snapshot_root = pathlib.Path(temporary) / candidate_id
         candidate_revisions.materialize_revision(revision_receipt, snapshot_root)
+        materialize_job_scratch_directories(job)
         process_environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID"] = candidate_id
         process_environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT"] = str(
             snapshot_root
@@ -1528,6 +1562,15 @@ def build_parser() -> argparse.ArgumentParser:
     enqueue_tool.add_argument("candidate_id")
     enqueue_tool.add_argument("--tool", required=True)
     enqueue_tool.add_argument("--tool-arg", action="append", default=[])
+    enqueue_tool.add_argument(
+        "--scratch-directory",
+        action="append",
+        default=[],
+        help=(
+            "project-relative candidate result directory to materialize before "
+            "the tool starts; must remain below results/<candidate_id>"
+        ),
+    )
     add_enqueue_options(enqueue_tool)
 
     discover = subparsers.add_parser(
@@ -1791,6 +1834,7 @@ def main() -> int:
                 force=args.force,
                 tags=args.tag,
                 experiment=args.experiment,
+                scratch_directories=args.scratch_directory,
             )
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0

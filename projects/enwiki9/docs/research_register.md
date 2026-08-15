@@ -26,6 +26,17 @@ attribution, the closed LibNC teacher remains unshippable, and this run cannot
 claim archive savings, an open correction, transfer, package economics, or
 objective bytes.
 
+The first queued execution, job `20260815T170528Z_778414d866`, stopped before
+the teacher began because the guard required its declared result scratch
+directory to pre-exist. The terminal
+[`reflection`](../operations/adaptive/reflections/20260815T170528Z_778414d866.json)
+classifies this as an infrastructure failure and leaves the hypothesis
+untested. The general executor boundary now records candidate-owned scratch
+directories in the job, constrains them below `results/<candidate_id>/`, and
+materializes them before guard preflight. Retry job
+`20260815T171447Z_33eeb89e5c` retains the same experiment, candidate revision,
+proposal, and runner bindings while adding that explicit lifecycle input.
+
 ## 2026-08-15 - Fixed decoder-visible DELTA-MIDAS probe is terminal negative
 
 The first prospective successor to the deep-residual receipt is terminal

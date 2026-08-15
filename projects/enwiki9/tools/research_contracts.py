@@ -8,7 +8,7 @@ import hashlib
 import json
 import math
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import jsonschema
@@ -677,6 +677,13 @@ def _validate_adaptive_job(
         proposal["state"] == "developed",
         f"{artifact_path}: job proposal is not developed",
     )
+    scratch_root = PurePosixPath("results") / value["candidate_id"]
+    for scratch_directory in value.get("scratch_directories", []):
+        scratch_path = PurePosixPath(scratch_directory)
+        _require(
+            scratch_path == scratch_root or scratch_root in scratch_path.parents,
+            f"{artifact_path}: scratch directory escapes candidate results",
+        )
     _project_file_reference(value["runner"], f"{artifact_path}: runner")
     return {
         "jobId": value["job_id"],

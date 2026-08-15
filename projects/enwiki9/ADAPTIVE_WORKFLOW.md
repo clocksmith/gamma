@@ -294,6 +294,11 @@ cannot execute; queue a revision-bound retry. A legacy candidate receives an exp
 `legacy-current-state` receipt, which captures its current source without
 claiming retroactive identity for old measurements.
 
+Guarded tool jobs that write candidate-owned artifacts declare each required
+directory with `enqueue-tool --scratch-directory results/<candidate_id>/...`.
+The executor validates that boundary and materializes the directory before the
+guard preflight; the inner tool still declares the same path to the guard.
+
 ## Queue
 
 Queue an explicit gate:

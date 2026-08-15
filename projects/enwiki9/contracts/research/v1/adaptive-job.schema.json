@@ -30,6 +30,11 @@
     "proposal": { "$ref": "#/$defs/reference" },
     "proposal_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
     "runner": { "$ref": "#/$defs/reference" },
+    "scratch_directories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
     "gate_size": { "type": "integer", "minimum": 1 },
     "priority": { "type": "integer" },
     "purpose": { "type": "string", "minLength": 1 },
