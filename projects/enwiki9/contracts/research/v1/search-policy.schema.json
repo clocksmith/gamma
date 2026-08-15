@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/search-policy.schema.json",
+  "title": "gamma.enwiki9.search_policy.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objective", "ordering", "decisionRank", "missingMeasurementDisposition"],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.search-policy.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "ordering": {
+      "const": [
+        "operationalStatus",
+        "parentReflectionValid",
+        "parentDecisionRank",
+        "assertedNetBytesSaved",
+        "expectedNetBytes",
+        "searchPriority",
+        "proposalId"
+      ]
+    },
+    "decisionRank": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["promote", "next-gate", "mutate", "retry", "hold", "retire", "missing"],
+      "properties": {
+        "promote": { "type": "integer" },
+        "next-gate": { "type": "integer" },
+        "mutate": { "type": "integer" },
+        "retry": { "type": "integer" },
+        "hold": { "type": "integer" },
+        "retire": { "type": "integer" },
+        "missing": { "type": "integer" }
+      }
+    },
+    "missingMeasurementDisposition": { "const": "rank-below-asserted-never-infer" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

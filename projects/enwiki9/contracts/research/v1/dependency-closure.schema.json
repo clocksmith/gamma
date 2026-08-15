@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/dependency-closure.schema.json",
+  "title": "gamma.enwiki9.dependency_closure.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "candidateId",
+    "candidateTreeSha256",
+    "candidateTreeDigestAlgorithm",
+    "candidateRoot",
+    "entryPoint",
+    "platform",
+    "commands",
+    "countedFiles",
+    "requiredOptionBytes",
+    "totalPackageBytes",
+    "dependencies",
+    "complete",
+    "missing",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.dependency-closure.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+$" },
+    "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+    "candidateTreeDigestAlgorithm": { "const": "sha256-canonical-counted-files-v1" },
+    "candidateRoot": { "$ref": "#/$defs/relativePath" },
+    "entryPoint": { "$ref": "#/$defs/relativePath" },
+    "platform": { "type": "string", "minLength": 1 },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build", "compress", "decompress"],
+      "properties": {
+        "build": { "$ref": "#/$defs/command" },
+        "compress": { "$ref": "#/$defs/command" },
+        "decompress": { "$ref": "#/$defs/command" }
+      }
+    },
+    "countedFiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/file" }
+    },
+    "requiredOptionBytes": { "type": "integer", "minimum": 0 },
+    "totalPackageBytes": { "type": "integer", "minimum": 1 },
+    "dependencies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/dependency" }
+    },
+    "complete": { "type": "boolean" },
+    "missing": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "role"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "role": { "enum": ["source", "executable", "model", "dictionary", "table", "configuration", "wrapper", "build", "runtime", "license", "other"] }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "provider", "counted", "license"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["bundled", "standard-library", "toolchain", "runtime", "system"] },
+        "provider": { "type": "string", "minLength": 1 },
+        "counted": { "type": "boolean" },
+        "license": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

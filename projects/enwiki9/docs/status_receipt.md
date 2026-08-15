@@ -2,10 +2,13 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-11T18:43:11+00:00`
+- Generated at UTC: `2026-08-15T15:32:37+00:00`
 
 ## Target State
 
+- Objective ID: `gamma-enwiki9-hutter-105m-v1`
+- Objective digest: `sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8`
+- Objective path: `contracts/research/v1/objective-contract.json`
 - `10.5000000%` target score: `105,000,000`
 - Full-corpus constructive result present: `false`
 - `10.5000000%` constructive upper bound present: `false`
@@ -114,8 +117,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `776`
 - Registered programs: `334`
-- Untracked nonignored entries: `1`
-- Modified tracked entries: `1`
+- Untracked nonignored entries: `5`
+- Modified tracked entries: `15`
 - Candidate statuses: `active=18, blocked_dependency=33, candidate=82, measured_negative=100, retired=543`
 
 ## Active Runner Process Table

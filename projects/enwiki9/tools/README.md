@@ -21,11 +21,14 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Task | Entry point |
 |---|---|
 | Adaptive experiment loop | `enwiki9_lab.py` |
+| Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
+| Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
+| Objective and receipt validation | `research_contracts.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
 | Candidate triage | `candidate_triage.py` |
 | Normalize receipts and generated views | `enwiki9_normalize_receipts.py` |
-| Run with memory guard | `run_with_rss_guard.py` |
+| Run with process-tree resource guard | `run_with_rss_guard.py` |
 | Record a driver result | `record_driver_result.py` |
 | Decide or continue a cmix21 gate | `cmix21_gate_decider.py`, `cmix21_continue_active_gate.py` |
 | Rebuild the run ledger | `backfill_run_ledger.py` |

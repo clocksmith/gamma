@@ -90,7 +90,9 @@ jobs:
           python -m pip install pytest
 
       - name: Docs/runtime parity test (blocking)
-        run: python -m pytest tests/test_docs_cli_parity.py -m docs
+        run: |
+          python tools/catscan.py --check
+          python -m pytest tests/test_docs_cli_parity.py -m docs
 
   smoke_cli:
     runs-on: ubuntu-latest

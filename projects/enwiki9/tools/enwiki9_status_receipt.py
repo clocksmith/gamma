@@ -21,6 +21,10 @@ import sys
 from typing import Any
 
 import cmix21_gate_decider
+try:
+    from projects.enwiki9.tools import research_contracts
+except ModuleNotFoundError:
+    import research_contracts
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -1484,10 +1488,17 @@ def operator_summary_state(
 
 
 def receipt() -> dict[str, Any]:
+    objective = research_contracts.objective_binding()
     cert = load_json(CERT_PATH)
     labels = top_status_by_label(cert)
     proof = cert.get("proof_status", {}) if isinstance(cert.get("proof_status"), dict) else {}
     target = cert.get("target", {}) if isinstance(cert.get("target"), dict) else {}
+    if target.get("target_score_10_95") != objective["targetScoreBytes"]:
+        raise ValueError("upper-bound certificate target differs from objective contract")
+    if target.get("input_size") != objective["corpusBytes"]:
+        raise ValueError("upper-bound certificate corpus scope differs from objective contract")
+    if cert.get("objective") != objective:
+        raise ValueError("upper-bound certificate objective binding is missing or stale")
     process_state = active_process_state()
     adaptive_state = adaptive_running_jobs_state()
     candidate, scope = active_candidate_from_cert(cert)
@@ -1575,8 +1586,9 @@ def receipt() -> dict[str, Any]:
         "receipt_type": "operator_status",
         "project": "enwiki9",
         "generated_at_utc": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "objective": objective,
         "operator_summary": operator_summary,
-        "target_score_10_95": target.get("target_score_10_95", 105_000_000),
+        "target_score_10_95": objective["targetScoreBytes"],
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
         "best_exact_10m": labels.get("best exact 10M"),
@@ -1685,6 +1697,9 @@ def render_md(data: dict[str, Any]) -> str:
         "",
         "## Target State",
         "",
+        f"- Objective ID: `{data.get('objective', {}).get('objectiveId', 'unknown')}`",
+        f"- Objective digest: `{data.get('objective', {}).get('objectiveDigest', 'unknown')}`",
+        f"- Objective path: `{data.get('objective', {}).get('objectivePath', 'unknown')}`",
         f"- `10.5000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
         f"- `10.5000000%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
@@ -2153,6 +2168,7 @@ def main() -> int:
     if args.check:
         required = (
             "project",
+            "objective",
             "target_score_10_95",
             "has_10_95_constructive_upper_bound",
             "active_processes",

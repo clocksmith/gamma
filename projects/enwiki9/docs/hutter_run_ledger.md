@@ -2,6 +2,7 @@
 
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
+- Objective: `gamma-enwiki9-hutter-105m-v1` (`sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8`).
 - Target: `105,000,000` bytes (`10.5000000%`).
 - Candidate runs indexed: `43`.
 - Candidate lineages indexed: `38`.

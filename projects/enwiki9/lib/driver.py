@@ -26,8 +26,10 @@ import datetime as _dt
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import platform
+import stat
 import sys
 import time
 
@@ -44,9 +46,15 @@ SCOPE_LABELS = {
     10_000_000: "10m",
 }
 
+try:
+    from projects.enwiki9.tools import research_contracts
+except ModuleNotFoundError:
+    sys.path.insert(0, str(ROOT / "tools"))
+    import research_contracts
+
 
 def _load(program_id: str):
-    path = ROOT / "programs" / program_id / "program.py"
+    path = _candidate_program_dir(program_id) / "program.py"
     if not path.exists():
         raise SystemExit(f"program not found: {path}")
     spec = importlib.util.spec_from_file_location(f"prog_{program_id}", path)
@@ -56,6 +64,17 @@ def _load(program_id: str):
         if not callable(getattr(mod, name, None)):
             raise SystemExit(f"{program_id}: missing callable {name}()")
     return mod, path
+
+
+def _candidate_program_dir(program_id: str) -> pathlib.Path:
+    snapshot_id = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID")
+    snapshot_root = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT")
+    if snapshot_id == program_id and snapshot_root:
+        path = pathlib.Path(snapshot_root)
+        if not path.is_dir():
+            raise ValueError(f"candidate snapshot is missing: {path}")
+        return path
+    return ROOT / "programs" / program_id
 
 
 def _sample_rss_kib() -> int | None:
@@ -80,14 +99,19 @@ def _sample_rss_kib() -> int | None:
         return None
 
 
-def _load_program_name(program_id: str) -> str | None:
-    meta = ROOT / "programs" / program_id / "meta.json"
+def _load_program_metadata(program_id: str) -> dict[str, Any]:
+    meta = _candidate_program_dir(program_id) / "meta.json"
     if not meta.exists():
-        return None
+        return {}
     try:
         data = json.loads(meta.read_text(encoding="utf-8"))
     except Exception:
-        return None
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _load_program_name(metadata: dict[str, Any]) -> str | None:
+    data = metadata
     name = data.get("name")
     if isinstance(name, str) and name.strip():
         return name.strip()
@@ -97,11 +121,119 @@ def _load_program_name(program_id: str) -> str | None:
     return None
 
 
+def _sha256_file(path: pathlib.Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _program_package_inventory(
+    program_dir: pathlib.Path,
+    metadata: dict[str, Any],
+) -> tuple[list[tuple[str, int]], dict[str, Any]]:
+    program_files: list[tuple[str, int]] = []
+    receipts: list[dict[str, Any]] = []
+    incomplete_reasons = [
+        "driver package score is a local tree proxy, not a materialized submission dependency closure"
+    ]
+    for child in sorted(program_dir.rglob("*")):
+        relative = child.relative_to(program_dir)
+        if relative == pathlib.Path("meta.json"):
+            continue
+        if any(part == "__pycache__" or part.startswith(".") for part in relative.parts):
+            continue
+        try:
+            mode = child.lstat().st_mode
+        except OSError as exc:
+            incomplete_reasons.append(f"cannot stat {relative.as_posix()}: {exc}")
+            continue
+        if stat.S_ISDIR(mode):
+            continue
+        if child.is_symlink():
+            try:
+                target = child.resolve(strict=True)
+                size = target.stat().st_size
+                digest = _sha256_file(target)
+            except OSError as exc:
+                incomplete_reasons.append(
+                    f"unresolvable symlink {relative.as_posix()}: {exc}"
+                )
+                continue
+            program_files.append((relative.as_posix(), size))
+            receipts.append(
+                {
+                    "path": relative.as_posix(),
+                    "bytes": size,
+                    "sha256": digest,
+                    "kind": "symlink-target-content",
+                    "link_target": child.readlink().as_posix(),
+                }
+            )
+            incomplete_reasons.append(
+                f"submission closure cannot contain unresolved packaging semantics for symlink {relative.as_posix()}"
+            )
+            continue
+        if not stat.S_ISREG(mode):
+            incomplete_reasons.append(
+                f"unsupported special package member {relative.as_posix()}"
+            )
+            continue
+        size = child.stat().st_size
+        program_files.append((relative.as_posix(), size))
+        receipts.append(
+            {
+                "path": relative.as_posix(),
+                "bytes": size,
+                "sha256": _sha256_file(child),
+                "kind": "regular-file",
+            }
+        )
+
+    dependencies = metadata.get("deps")
+    declared_dependencies = dependencies if isinstance(dependencies, list) else []
+    if not isinstance(dependencies, list):
+        incomplete_reasons.append("meta.json does not declare a deps array")
+    package = {
+        "accounting_class": "local-program-tree-proxy",
+        "recursive": True,
+        "counted_files": receipts,
+        "declared_dependencies": declared_dependencies,
+        "dependency_closure_complete": False,
+        "dependency_closure_failure_reasons": incomplete_reasons,
+    }
+    return program_files, package
+
+
 def _normalize_text(value: str | None) -> str | None:
     if not isinstance(value, str):
         return None
     stripped = value.strip()
     return stripped or None
+
+
+def _bound_candidate_revision(program_id: str) -> dict[str, Any] | None:
+    raw = os.environ.get("GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON")
+    if raw is None:
+        return None
+    try:
+        binding = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError("invalid candidate revision binding JSON") from exc
+    if not isinstance(binding, dict) or binding.get("candidateId") != program_id:
+        raise ValueError("candidate revision binding identifies another candidate")
+    tree_digest = binding.get("candidateTreeSha256")
+    receipt = binding.get("receipt")
+    if (
+        not isinstance(tree_digest, str)
+        or not tree_digest.startswith("sha256:")
+        or not isinstance(receipt, dict)
+        or not isinstance(receipt.get("path"), str)
+        or not isinstance(receipt.get("sha256"), str)
+    ):
+        raise ValueError("candidate revision binding is incomplete")
+    return binding
 
 
 def _infer_scope_label(limit: int | None) -> str:
@@ -159,6 +291,7 @@ def _build_run_ledger_row(
         "schema": LEDGER_SCHEMA,
         "run_id": f"{result['program_id']}__{result['timestamp'].replace(':', '')}__{result['compressed_md5'][:8]}",
         "program_id": result["program_id"],
+        "candidate_revision": result.get("candidate_revision"),
         "algorithm_name": program_name or result["program_id"],
         "data_size": result.get("data_size"),
         "data_md5": result.get("data_md5"),
@@ -203,6 +336,8 @@ def run(
     run_source: str | None = None,
     run_tags: list[str] | None = None,
 ) -> dict:
+    run_started = time.perf_counter()
+    objective = research_contracts.objective_binding()
     inferred_purpose = _infer_run_purpose(
         run_purpose=_normalize_text(run_purpose),
         limit=limit,
@@ -213,15 +348,18 @@ def run(
     normalized_source = _normalize_text(run_source)
     normalized_tags = run_tags or []
     mod, src_path = _load(program_id)
-    program_name = _load_program_name(program_id)
+    metadata = _load_program_metadata(program_id)
+    program_name = _load_program_name(metadata)
     raw = data_path.read_bytes()
     if limit is not None:
         raw = raw[:limit]
+    data_md5 = hashlib.md5(raw).hexdigest()
+    data_sha256 = hashlib.sha256(raw).hexdigest()
     rss_before = _sample_rss_kib()
 
-    t0 = time.perf_counter()
+    compress_started = time.perf_counter()
     compressed = mod.compress(raw)
-    t_compress = time.perf_counter() - t0
+    t_compress = time.perf_counter() - compress_started
     stats_fn = getattr(mod, "stats", None)
     program_stats = stats_fn() if callable(stats_fn) else None
     compressed_size = len(compressed)
@@ -231,17 +369,15 @@ def run(
         t_decompress = 0.0
         ok = None
     else:
-        t0 = time.perf_counter()
+        decompress_started = time.perf_counter()
         decompressed = mod.decompress(compressed)
-        t_decompress = time.perf_counter() - t0
+        t_decompress = time.perf_counter() - decompress_started
         ok = decompressed == raw
     program_dir = src_path.parent
-    program_files: list[tuple[str, int]] = []
-    for child in sorted(program_dir.iterdir()):
-        if child.name in ("meta.json", "__pycache__") or child.name.startswith("."):
-            continue
-        if child.is_file():
-            program_files.append((child.name, child.stat().st_size))
+    program_files, package_accounting = _program_package_inventory(
+        program_dir,
+        metadata,
+    )
     program_size = sum(sz for _, sz in program_files)
     archive_md5 = hashlib.md5(compressed).hexdigest()
     archive_sha256 = hashlib.sha256(compressed).hexdigest()
@@ -286,24 +422,30 @@ def run(
         }
 
     bits_per_byte = (compressed_size * 8 / len(raw)) if raw else 0.0
-    t_finished = time.perf_counter()
-    t_total = t_finished - t0
+    t_total = time.perf_counter() - run_started
     rss_after = _sample_rss_kib()
     rss_samples = [v for v in (rss_before, rss_after_compress, rss_after) if isinstance(v, int)]
     rss_peak = max(rss_samples) if rss_samples else None
 
     result = {
+        "schema": "gamma.enwiki9.driver-result.v2",
+        "objective": objective,
         "program_id": program_id,
+        "candidate_revision": _bound_candidate_revision(program_id),
         "data_path": str(data_path),
         "data_size": len(raw),
-        "data_md5": hashlib.md5(raw).hexdigest(),
-        "data_sha256": hashlib.sha256(raw).hexdigest(),
+        "data_md5": data_md5,
+        "data_sha256": data_sha256,
         "compressed_size": compressed_size,
         "compressed_md5": archive_md5,
         "compressed_sha256": archive_sha256,
         "program_size": program_size,
         "program_files": program_files,
+        "package_accounting": package_accounting,
         "hutter_score": compressed_size + program_size,
+        "hutter_score_kind": "local-tree-proxy-incomplete-dependency-closure",
+        "score_accounting_complete": False,
+        "prize_claimable": False,
         "bits_per_byte": round(bits_per_byte, 6),
         "compress_time_s": round(t_compress, 4),
         "decompress_time_s": round(t_decompress, 4),
@@ -328,15 +470,22 @@ def run(
         },
         "program_name": program_name,
         "memory_kib": {
+            "measurement_scope": "driver-process-boundary-samples",
+            "measurement_complete": False,
             "before": rss_before,
             "during_compress": rss_after_compress,
             "after": rss_after,
             "peak": rss_peak,
             "sample_count": len(rss_samples),
         },
+        "resource_evidence_complete": False,
         "timestamp": _dt.datetime.now().isoformat(timespec="seconds"),
     }
     result["run_time_s"] = round(t_total, 4)
+    result["run_time_scope"] = (
+        "driver invocation through input read, module load, compression, decompression, "
+        "optional deterministic re-encode, package hashing, and boundary resource sampling"
+    )
     if program_stats is not None:
         result["program_stats"] = program_stats
     return result

@@ -37,7 +37,7 @@ A submission that asserts any of the following is rejected on first contact, wit
 
 Run the following before any verdict:
 
-1. **Roundtrip on the canonical input.** `python3 lib/driver.py <id>`. Confirm `roundtrip_ok: true`, `data_size == 10⁹`, `data_md5 == 5b8f88a51bb1f6a3aedd0e9a3df8eb1d` (after extraction; verify against your local extraction). If any field is missing, NEEDS-INFO.
+1. **Roundtrip on the canonical input.** `python3 lib/driver.py <id>`. Confirm `roundtrip_ok: true`, `data_size == 10⁹`, `data_md5 == e206c3450ac99950df65bf70ef61a12d`, and `data_sha256 == 159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc`. If any field is missing, NEEDS-INFO.
 2. **Cold-start the decompressor.** Move `program.py` and the archive into a fresh tempdir with no environment, no internet, no caches. Decompress. Compare to the canonical input. If decompression requires a sibling file, count its bytes against `program_size` and re-score.
 3. **Determinism.** Run `compress(enwik9)` twice. Diff. Must be byte-identical. If not, the arithmetic coder is racing some non-deterministic state and the result is invalid.
 4. **Random-data check.** Run `compress(open('/dev/urandom','rb').read(10**8))` (100 MB; full 10⁹ if patient). The output must be `≥ 10⁸ − O(1)` bytes. If it isn't, the compressor is lossy and the roundtrip in (1) was a coincidence (likely the author tested only on enwik9).

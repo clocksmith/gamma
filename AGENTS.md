@@ -2,6 +2,22 @@
 
 **Prime Directive:** Write Python code for the token-prediction game and LLM benchmarking tools.
 
+## Component Intent
+
+Before modifying a file, read the `CATSCAN.md` chain from the repository root
+to the target directory.
+
+Treat Target, Authority, Invariants, Acceptance, and Non-goals as implementation
+constraints. A child CATSCAN may narrow its parent but may not contradict it.
+
+If requested work changes a component boundary, identify the conflict and
+update the affected CATSCAN with the implementation. Do not silently work
+around it.
+
+Novel implementations are welcome. CATSCAN constrains outcomes and authority,
+not internal algorithms. Agent handoffs state the component, whether intent was
+preserved or deliberately changed, acceptance evidence, and boundary effects.
+
 ### Before Starting
 - Read `README.md` for features and usage
 - Read `EMOJI.md` for approved Unicode symbols

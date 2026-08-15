@@ -525,6 +525,14 @@ code and guard verdict. A live guard without a driver result is not a
 compression result, but it is valid evidence that a serialized gate owns the
 lock and remains under observation.
 
+Current receipts bind the objective digest and record aggregate process-tree
+RSS, tree-wide affinity union, live and runnable threads, declared scratch-tree
+usage, monotonic elapsed time, phase, and the Geekbench-derived wall-time bound.
+Promotion-grade evidence requires separate `compression` and `decompression`
+phases, tree mode, a one-CPU affinity union, the exact decimal-memory and
+temporary-disk limits, and successful semantic validation through
+`tools/research_contracts.py`.
+
 `gate_evidence_status` makes that distinction explicit. A running RSS receipt
 with no driver result must be `live_guard_monitor_only`; it cannot be treated as
 a scored benchmark row or a promotion receipt.
@@ -545,10 +553,10 @@ phase. Expected values are `text_compress` for `-t`, `compress` for `-c`,
 and the active gate scope. These fields are operator evidence only; they do not
 become benchmark evidence until the driver and RSS receipts are terminal.
 
-The local kill guard is single-process. The receipt still records
-`active_tree_rss_kib`, `active_tree_margin_kib`, and
-`active_tree_rss_warning` so an operator can see process-tree pressure without
-mistaking it for the enforced guard contract.
+Historical local kill guards may use `max_single` mode. Those receipts are
+diagnostic even when they also expose tree pressure. Current prize-facing gates
+must use `tree` mode; the official decimal limit is enforced against aggregate
+process-tree RSS and equality fails the strict `< 10 GB` objective.
 
 `active_candidate_recent_artifacts` is a shallow read of the active candidate's
 result directory. It is a handoff aid for locating existing driver and RSS

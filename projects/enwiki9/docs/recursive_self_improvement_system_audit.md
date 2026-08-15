@@ -1,15 +1,18 @@
 # Recursive self-improvement system audit
 
-Status: design and correctness audit. This document is not compression proof and
-does not grant score, forecast, promotion, or authorship credit.
+Status: implementation audit; objective, measurement, resource, candidate
+identity, and terminal-reflection boundaries are implemented, while structured
+experiment contracts and composition audits remain open. This document is not
+compression proof and does not grant score, forecast, promotion, or authorship
+credit.
 
 ## Purpose
 
-Gamma's enwiki9 lane already preserves proposals, candidates, mutations, jobs,
-receipts, exclusions, and generated status views. That is a strong experimental
-archive. It is not yet a trustworthy recursive self-improvement loop because it
-cannot mechanically convert a terminal measurement into an attributed lesson,
-a safe source edit, and the smallest justified successor experiment.
+Gamma's enwiki9 lane preserves proposals, candidates, mutations, jobs, receipts,
+exclusions, and generated status views. The objective and source identity are
+now mechanically bound. Terminal measurements can become hash-linked attributed
+lessons and bounded successor decisions, but experiments still need structured
+machine-evaluable preregistration and composition constraints.
 
 The missing loop is:
 
@@ -37,70 +40,78 @@ freeze objective
   `docs/status_receipt.md` provide generated audit and operator views.
 - `docs/research_register.md` is the durable human research memory.
 
-## Blocking measurement defects
+## Closed measurement defects
 
-Recursive decisions must remain disabled until measurement is fail-closed.
+The implementation following this audit closed these original defects:
 
-1. `lib/driver.py` reuses the compression timer before decompression, so
-   `run_time_s` excludes compression time after a normal roundtrip.
-2. `lib/driver.py` counts only top-level candidate siblings. It does not compute
-   the recursive runtime dependency closure required for a Hutter score.
-3. Its RSS evidence samples the Python process at only three boundaries. It does
-   not continuously measure the complete process tree, temporary disk, or
-   decimal-memory peak.
-4. `tools/candidate_triage.py` normalizes a missing `roundtrip_ok` field as true.
-5. The same normalizer can infer determinism from labels containing `identity`
-   or `inherited` instead of requiring an exact receipt.
-6. `projects/enwiki9/README.md` still names a historical `108,000,000` target,
-   while `AGENTS.md`, the research register, and status receipts use the active
-   `105,000,000` target.
+1. `lib/driver.py` now retains distinct compression, decompression, and complete
+   invocation timers.
+2. Local program accounting is recursive and hash-linked, but explicitly remains
+   a non-claimable proxy until a dependency-closure receipt is complete.
+3. `tools/run_with_rss_guard.py` measures the process tree, affinity union,
+   threads, temporary disk, decimal-memory peak, phase, and wall-time formula.
+4. `tools/candidate_triage.py` preserves missing roundtrip and determinism as
+   unknown rather than inferring success from labels.
+5. The canonical objective contract and its digest now own the 105,000,000-byte
+   target across generated frontier, status, and certificate views.
 
-## Missing contracts
+## Contract state
 
-Add versioned, validated contracts for these objects:
+Implemented contracts:
 
 - `objective-contract`: corpus hashes, score target, score formula, runtime,
   decimal-memory, temporary-disk, licensing, and dependency-closure rules;
-- `candidate-snapshot`: immutable tree hash, parent hash, build inputs, and
-  dependency manifest;
-- `experiment-contract`: changed variable, invariants, controls, population,
-  metric, minimum effect, causal boundary, promotion, and kill predicates;
+- `candidate-revision`: immutable semantic tree, parent and previous revisions,
+  content-addressed blobs, hypothesis, evidence, and edit classification;
 - `run-receipt`: exact commands, environment, hashes, measured resources,
   archive, inverse, replay, and independent verification;
-- `reflection-receipt`: validity, hypothesis verdict, localized cause,
-  transferable lesson, retired dimensions, uncertainty, and next gate;
-- `edit-receipt`: complete semantic diff, mechanism changed, invariants retained,
-  source/package cost delta, and new candidate identity.
+- `dependency-closure`: exact counted package members, commands, dependencies,
+  options, and closure status;
+- `resource-guard-receipt`: measured process-tree and scratch-tree constraints.
+
+Still required:
+
+- `experiment-contract`: changed variable, invariants, controls, population,
+  metric, minimum effect, causal boundary, promotion, and kill predicates;
+- a run-receipt composer and clean-room executor; the schema and semantic
+  validator exist, but ordinary driver rows are deliberately not upgraded.
+
+Implemented terminal control:
+
+- `reflection-receipt`: process success is separated from scientific validity,
+  hypothesis verdict, localized cause, transferable lessons, retired dimensions,
+  uncertainty, and next gate;
+- `search-policy`: successor proposals use validated parent reflections and
+  asserted measurements before forecasts or manual priority.
 
 Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
 unversioned, or unresolvable evidence must fail rather than be skipped or
 inferred.
 
-## Missing algorithm-edit boundary
+## Implemented algorithm-edit boundary
 
-`tools/enwiki9_lab.py mutate` copies a parent and optionally performs text
-replacement in `program.py`. A safe editor must operate on the complete source
-tree, refuse mutation of a measured snapshot, record all additions and removals,
-recount the package, and create a new content-derived candidate identity. An
-edit may change one declared mechanism while automated checks enforce declared
-invariants. No reflection process may rewrite its own evidence or measured
-parent.
+`tools/enwiki9_lab.py` now snapshots the complete semantic candidate tree into
+deduplicated immutable blobs, binds parent and previous revision receipts, and
+requires an explicit `seal` after pre-measurement implementation. Queue v2 jobs
+bind that digest and execute a temporary read-only materialization. Source drift
+fails before execution; legacy unbound jobs require a bound retry; derived
+measurement/status metadata cannot change algorithm identity. Once any queue or
+result evidence exists, a changed tree must use a new candidate ID.
 
-## Missing reflection and search policy
+## Implemented reflection and search policy
 
-Terminal process status is not a scientific verdict. Each terminal job must be
-followed by receipt validation and a reflection receipt before candidate state,
-the exclusion ledger, or successor proposals can change. Reflection must
-distinguish implementation failure, infrastructure failure, invalid experiment,
-causal failure, transfer failure, accounting failure, and measured algorithmic
-loss.
+`tools/enwiki9_lab.py` no longer passes `--update-meta` from process execution.
+Its `reflect` command requires a schema-valid, hash-linked classification before
+changing derived candidate state. Numeric claims require JSON-pointer assertions
+into listed evidence. Invalid runs can only retry or hold; promotion requires
+valid equivalent controls, supported hypothesis, algorithmic-gain attribution,
+and explicit predicate outcomes.
 
-OMEGA's current manual priority plus fixed mechanism bonuses and descendant
-counts are useful ordering hints, not learning. A later policy should rank
-experiments by counted byte leverage, transfer retention, package cost,
-runtime, memory, uncertainty, interaction risk, and expected information gained
-per resource unit. It must never alter measured bytes or promote without the
-frozen predicates.
+`next-experiment` reads the versioned search policy and ranks live proposals
+lexicographically by actionability, valid parent reflection, scientific decision,
+asserted net bytes, expected net bytes after source budget, and only then manual
+priority. Missing measurements remain missing. The policy orders experiments;
+it cannot modify evidence or authorize promotion.
 
 ## Missing composition and independent audit
 

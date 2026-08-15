@@ -248,13 +248,19 @@ def normalize_cached_result(
     if isinstance(determinism, bool):
         determinism = {"single_host_byte_equal": determinism}
     elif not isinstance(determinism, dict):
-        deterministic = row.get("deterministic")
-        inherited_identity = (
-            isinstance(row.get("roundtrip_basis"), str)
-            or "inherited" in label
-            or "identity" in label
+        explicit_determinism = next(
+            (
+                value
+                for value in (row.get("determinism_ok"), row.get("deterministic"))
+                if isinstance(value, bool)
+            ),
+            None,
         )
-        determinism = {"single_host_byte_equal": deterministic is True or inherited_identity}
+        determinism = {"single_host_byte_equal": explicit_determinism}
+
+    roundtrip = row.get("roundtrip_ok")
+    if not isinstance(roundtrip, bool):
+        roundtrip = None
 
     return {
         "program_id": program_id,
@@ -264,7 +270,7 @@ def normalize_cached_result(
         "program_size": program_size,
         "hutter_score": hutter_score,
         "bits_per_byte": row.get("bits_per_byte"),
-        "roundtrip_ok": row.get("roundtrip_ok") is not False,
+        "roundtrip_ok": roundtrip,
         "determinism": determinism,
         "program_stats": row.get("program_stats"),
         "cached_source": source,
@@ -434,7 +440,13 @@ def classify_success(gate_rows: list[dict[str, Any]]) -> tuple[str, str]:
 
 
 def inspect_contract(candidate_id: str) -> dict[str, Any]:
-    program_path = PROGRAMS_DIR / candidate_id / "program.py"
+    snapshot_id = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID")
+    snapshot_root = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT")
+    program_path = (
+        pathlib.Path(snapshot_root) / "program.py"
+        if snapshot_id == candidate_id and snapshot_root
+        else PROGRAMS_DIR / candidate_id / "program.py"
+    )
     if not program_path.exists():
         return {
             "id": candidate_id,
@@ -446,9 +458,8 @@ def inspect_contract(candidate_id: str) -> dict[str, Any]:
 
     probe = """
 import importlib.util,json,pathlib,sys,traceback
-root=pathlib.Path(sys.argv[1])
+path=pathlib.Path(sys.argv[1])
 candidate_id=sys.argv[2]
-path=root/"programs"/candidate_id/"program.py"
 try:
  spec=importlib.util.spec_from_file_location("probe_"+candidate_id,path)
  mod=importlib.util.module_from_spec(spec)
@@ -459,7 +470,7 @@ except Exception as exc:
  print(json.dumps({"status":"import_error","error_type":type(exc).__name__,"error":str(exc)}))
 """
     proc = subprocess.run(
-        [sys.executable, "-c", probe, str(ROOT), candidate_id],
+        [sys.executable, "-c", probe, str(program_path), candidate_id],
         cwd=REPO_ROOT,
         text=True,
         stdout=subprocess.PIPE,
