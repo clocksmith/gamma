@@ -85,8 +85,11 @@ def materialize(args: argparse.Namespace) -> Path:
     bundle = args.bundle.resolve()
     if ROOT.resolve() not in source_root.parents or not source_root.is_dir():
         raise ValueError("source root must be an existing enwiki9 project directory")
-    if ROOT.resolve() not in bundle.parents or bundle.exists():
-        raise ValueError("bundle must be a new directory inside the enwiki9 project")
+    release_root = (ROOT / "results" / args.candidate_id / "release").resolve()
+    if bundle.parent != release_root or bundle.exists():
+        raise ValueError(
+            "bundle must be a new results/<candidate>/release/<receipt> directory"
+        )
 
     dependencies = load_json(args.dependencies)
     if not isinstance(dependencies, list):
