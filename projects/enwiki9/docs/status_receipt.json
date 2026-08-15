@@ -1,10 +1,89 @@
 {
-  "active_candidate": null,
-  "active_candidate_recent_artifacts": [],
-  "active_gate": null,
+  "active_candidate": {
+    "active_source": "no live adaptive worker",
+    "evidence": "no live adaptive worker or directly observed scorer is present",
+    "label": "active candidate",
+    "program_id": null,
+    "status": "idle"
+  },
+  "active_candidate_recent_artifacts": [
+    {
+      "bytes": 7091,
+      "mtime_utc": "2026-08-15T17:54:48+00:00",
+      "path": "projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json"
+    },
+    {
+      "bytes": 49152,
+      "mtime_utc": "2026-08-15T17:29:38+00:00",
+      "path": "projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_1.nncp"
+    }
+  ],
+  "active_gate": {
+    "driver_result_json": "projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+    "driver_result_json_present": false,
+    "evidence": "gate decision is running; wait for terminal receipts",
+    "label": "active gate",
+    "latest_sample_max_single_rss_kib": 6204000,
+    "latest_sample_single_rss_margin_kib": 4281760,
+    "latest_sample_tree_rss_kib": 6250576,
+    "latest_sample_tree_rss_margin_kib": 4235184,
+    "max_sampled_single_rss_kib": 6204000,
+    "max_sampled_tree_rss_kib": 6250576,
+    "next_action": "wait_for_gate_completion",
+    "program_id": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "returncode": null,
+    "rss_guard_json": "/home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json",
+    "rss_guard_json_bytes": 7091,
+    "rss_guard_json_mtime_utc": "2026-08-15T17:54:48+00:00",
+    "rss_guard_json_present": true,
+    "rss_guard_json_sha256": "2456ae4ef68cfb1399dd53d1f066977440d989cc912d88b3cc325c639a3208a4",
+    "rss_guard_status": "running",
+    "sample_count": 303,
+    "scope_bytes": 65536,
+    "single_rss_margin_kib": 4281760,
+    "source": "live_adaptive_tool_rss_guard",
+    "status": "running",
+    "tree_rss_margin_kib": 4235184
+  },
   "active_processes": {
-    "active_rows": [],
-    "active_scorer_observed": false,
+    "active_rows": [
+      {
+        "args": "python3 projects/enwiki9/tools/enwiki9_lab.py run --candidate delta_midas_named_midpoint_gradient_65536_q2_v1 --max-workers 1",
+        "pgid": 3437956,
+        "pid": 3437956,
+        "ppid": 130532,
+        "rss_kib": 35776,
+        "stat": "Ssl+"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode tree --official-decimal-limit-kib 9765625 --guard-json results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json --label delta_midas_named_midpoint_gradient_65536_q2_v1 --phase diagnostic --scratch-path results/delta_midas_named_midpoint_gradient_65536_q2_v1 --temporary-disk-limit-bytes 100000000000 -- python3 tools/nncp_delta_midas_named_midpoint_gradient_q2.py --experiment operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q2_v1.json --output results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+        "pgid": 3437956,
+        "pid": 3438091,
+        "ppid": 3437956,
+        "rss_kib": 31592,
+        "stat": "S+"
+      },
+      {
+        "args": "python3 tools/nncp_delta_midas_named_midpoint_gradient_q2.py --experiment operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q2_v1.json --output results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+        "pgid": 3438116,
+        "pid": 3438116,
+        "ppid": 3438091,
+        "rss_kib": 46576,
+        "stat": "Ssl"
+      },
+      {
+        "args": "/home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/scratch/source/nncp -q -T 4 --profile enwik9 --n_symb 16392 --dict /home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/dictionary.bin --midpoint_arm 1 --max_size 65536 c /home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin /home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/F_named_gradient_1.nncp",
+        "pgid": 3438116,
+        "pid": 3438424,
+        "ppid": 3438116,
+        "rss_kib": 6204000,
+        "stat": "Rl"
+      }
+    ],
+    "active_scorer_observed": true,
+    "active_tree_decimal_10gb_margin_kib": 3447681,
+    "active_tree_margin_kib": 4167816,
+    "active_tree_rss_kib": 6317944,
     "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
@@ -13,11 +92,22 @@
     "rss_guard_kib": 10485760
   },
   "adaptive_jobs": {
-    "claimable_pending_job_count": 1,
+    "claimable_pending_job_count": 0,
     "held_pending_job_count": 27,
-    "pending_job_count": 28,
-    "running_job_count": 0,
-    "running_jobs": []
+    "pending_job_count": 27,
+    "running_job_count": 1,
+    "running_jobs": [
+      {
+        "candidate_id": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+        "gate_size": 65536,
+        "job_id": "20260815T172824Z_465e6837f4",
+        "path": "projects/enwiki9/operations/adaptive/running/000_20260815T172824Z_465e6837f4.json",
+        "started_at": "2026-08-15T17:29:36+00:00",
+        "state": "running",
+        "worker_pid": 3438091,
+        "worker_pid_live": true
+      }
+    ]
   },
   "best_exact_100m": {
     "compressed_size": 14857781,
@@ -100,22 +190,23 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": null,
+  "blocker": {
+    "label": "blocker"
+  },
   "candidate_audit": {
     "returncode": 0,
     "summary": {
       "candidate_status_counts": {
         "active": 18,
         "blocked_dependency": 33,
-        "candidate": 85,
+        "candidate": 86,
         "measured_negative": 100,
-        "retired": 544,
-        "track_source_before_evolution": 1
+        "retired": 544
       },
-      "directories": 1877,
-      "file_entries": 8880,
-      "ignored_entries": 4398,
-      "modified_tracked_entries": 10,
+      "directories": 1880,
+      "file_entries": 8922,
+      "ignored_entries": 4433,
+      "modified_tracked_entries": 1,
       "program_directories": 781,
       "proposal_contract_status_counts": {
         "legacy-unstructured": 212,
@@ -134,24 +225,24 @@
         ".codex-reminders": 4,
         "<root>": 19,
         "agents": 5,
-        "contracts": 27,
+        "contracts": 30,
         "data": 7,
-        "docs": 399,
+        "docs": 400,
         "enwiki9_segment_bundle": 6,
         "external": 174,
         "lib": 4,
         "operations": 1030,
         "patches": 36,
         "programs": 2426,
-        "results": 3458,
-        "run_logs": 664,
+        "results": 3492,
+        "run_logs": 665,
         "skills": 4,
         "tests": 59,
-        "tools": 557
+        "tools": 560
       },
-      "tracked_entries": 5072,
+      "tracked_entries": 5096,
       "unreflected_terminal_candidates": 0,
-      "untracked_nonignored_entries": 15
+      "untracked_nonignored_entries": 0
     }
   },
   "certificate_active_candidate": {
@@ -163,44 +254,100 @@
   },
   "certificate_active_gate": null,
   "certificate_blocker": null,
-  "contingencies": null,
-  "gate_decision": null,
+  "contingencies": {
+    "if_passes": {
+      "action": "record pass and apply candidate target-gate promotion rule",
+      "next_scope_bytes": null,
+      "reason": "non-cmix candidates may need archive ceilings, target-gate metadata, or candidate-specific guard labels"
+    },
+    "if_roundtrip_or_determinism_fails": {
+      "action": "record failure and do not promote",
+      "reason": "compression evidence is not a deterministic constructive upper-bound row"
+    },
+    "if_rss_fails": {
+      "action": "record RSS failure and retire or repackage this integration shape",
+      "lower_memory_suggestion": null
+    }
+  },
+  "gate_decision": {
+    "adaptive_job_id": "20260815T172824Z_465e6837f4",
+    "adaptive_job_path": "projects/enwiki9/operations/adaptive/running/000_20260815T172824Z_465e6837f4.json",
+    "adaptive_worker_pid": 3438091,
+    "candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
+    "command": [
+      "python3",
+      "tools/nncp_delta_midas_named_midpoint_gradient_q2.py",
+      "--experiment",
+      "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q2_v1.json",
+      "--output",
+      "results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json"
+    ],
+    "driver_result_json": "projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+    "driver_result_json_present": false,
+    "guard_inferred_scope_bytes": null,
+    "guard_label_candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "guard_pid": 3438091,
+    "input_path": "/home/x/deco/gamma/projects/enwiki9/--output",
+    "latest_sample_max_single_rss_kib": 6204000,
+    "latest_sample_single_rss_margin_kib": 4281760,
+    "latest_sample_tree_rss_kib": 6250576,
+    "latest_sample_tree_rss_margin_kib": 4235184,
+    "max_sampled_single_rss_kib": 6204000,
+    "max_sampled_tree_rss_kib": 6250576,
+    "next_action": "wait_for_gate_completion",
+    "output_path": "/home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+    "promotion_authorized": false,
+    "returncode": null,
+    "rss_guard_json": "/home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json",
+    "rss_guard_json_bytes": 7091,
+    "rss_guard_json_mtime_utc": "2026-08-15T17:54:48+00:00",
+    "rss_guard_json_present": true,
+    "rss_guard_json_sha256": "2456ae4ef68cfb1399dd53d1f066977440d989cc912d88b3cc325c639a3208a4",
+    "rss_guard_status": "running",
+    "sample_count": 303,
+    "scope_bytes": 65536,
+    "single_rss_margin_kib": 4281760,
+    "source": "live_adaptive_tool_rss_guard",
+    "tree_rss_margin_kib": 4235184,
+    "verdict": "running"
+  },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
-    "claim_status": "awaiting_gate_receipts",
+    "claim_status": "live_guard_monitor_only",
     "driver_result_terminal": false,
-    "live_gate": false,
-    "live_guard_only": false,
-    "liveness_classification": "not_persisted_running",
+    "live_gate": true,
+    "live_guard_only": true,
+    "liveness_classification": "live_observed_owner",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": null,
+    "candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
     "claim_rule": "A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.",
-    "classification": "not_persisted_running",
-    "is_live": false,
-    "matching_adaptive_job_count": 0,
-    "matching_adaptive_worker_live": false,
+    "classification": "live_observed_owner",
+    "is_live": true,
+    "matching_adaptive_job_count": 1,
+    "matching_adaptive_worker_live": true,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
-    "persisted_running": false,
-    "receipt_running": false,
-    "scope_bytes": null
+    "persisted_running": true,
+    "receipt_running": true,
+    "scope_bytes": 65536
   },
-  "generated_at_utc": "2026-08-15T17:28:56+00:00",
+  "generated_at_utc": "2026-08-15T17:54:51+00:00",
   "handoff": {
-    "active_scorer_observed": false,
-    "candidate": null,
+    "active_scorer_observed": true,
+    "candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "inspect_queue_before_launch",
-    "scope_bytes": null,
+    "recommended_action": "wait_for_gate_receipts",
+    "scope_bytes": 65536,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
@@ -217,22 +364,22 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": null,
-    "expected_active_scope_bytes": null,
+    "expected_active_candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "expected_active_scope_bytes": 65536,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": null,
-    "expected_scope_bytes": null,
+    "expected_candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
+    "expected_scope_bytes": 65536,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "inspect_queue_before_launch",
-    "reason": "no terminal receipt blocks the next candidate queue decision",
-    "safe_to_launch_gate": true
+    "action": "wait_for_gate_receipts",
+    "reason": "the gate state is incomplete and cannot drive a mutation yet",
+    "safe_to_launch_gate": false
   },
   "operator_logs": {
     "latest_delayed_status_log": "projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log",
@@ -241,49 +388,65 @@
   },
   "operator_summary": {
     "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": null,
-    "active_process_tree_margin_kib": null,
-    "active_process_tree_rss_kib": null,
-    "active_scorer_observed": false,
+    "active_process_tree_decimal_10gb_margin_kib": 3447681,
+    "active_process_tree_margin_kib": 4167816,
+    "active_process_tree_rss_kib": 6317944,
+    "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": null,
+    "candidate": "delta_midas_named_midpoint_gradient_65536_q2_v1",
     "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
-    "claimable_pending_adaptive_jobs": 1,
+    "claimable_pending_adaptive_jobs": 0,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": null,
-    "driver_result_present": null,
+    "driver_result_json": "projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json",
+    "driver_result_present": false,
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 27,
-    "latest_sample_single_decimal_10gb_margin_kib": null,
-    "latest_sample_single_decimal_10gb_safe": null,
-    "latest_sample_single_rss_kib": null,
-    "latest_sample_single_rss_margin_kib": null,
-    "latest_sample_tree_decimal_10gb_margin_kib": null,
-    "latest_sample_tree_decimal_10gb_safe": null,
-    "max_sampled_single_decimal_10gb_margin_kib": null,
-    "max_sampled_single_decimal_10gb_safe": null,
-    "max_sampled_single_rss_kib": null,
-    "max_sampled_tree_decimal_10gb_margin_kib": null,
-    "max_sampled_tree_decimal_10gb_safe": null,
-    "operator_action": "inspect_queue_before_launch",
-    "pending_adaptive_jobs": 28,
-    "rss_guard_json": null,
-    "rss_guard_json_sha256": null,
-    "rss_guard_present": null,
-    "rss_guard_status": null,
-    "rss_samples": null,
-    "safe_to_launch_gate": true,
-    "scope_bytes": null,
-    "single_rss_margin_kib": null,
+    "latest_sample_single_decimal_10gb_margin_kib": 3561625,
+    "latest_sample_single_decimal_10gb_safe": true,
+    "latest_sample_single_rss_kib": 6204000,
+    "latest_sample_single_rss_margin_kib": 4281760,
+    "latest_sample_tree_decimal_10gb_margin_kib": 3515049,
+    "latest_sample_tree_decimal_10gb_safe": true,
+    "max_sampled_single_decimal_10gb_margin_kib": 3561625,
+    "max_sampled_single_decimal_10gb_safe": true,
+    "max_sampled_single_rss_kib": 6204000,
+    "max_sampled_tree_decimal_10gb_margin_kib": 3515049,
+    "max_sampled_tree_decimal_10gb_safe": true,
+    "objective_achieved_receipts": 0,
+    "operator_action": "wait_for_gate_receipts",
+    "pending_adaptive_jobs": 27,
+    "release_bundles": 0,
+    "release_failed_attempts": 0,
+    "release_run_receipts": 0,
+    "rss_guard_json": "/home/x/deco/gamma/projects/enwiki9/results/delta_midas_named_midpoint_gradient_65536_q2_v1/guard.json",
+    "rss_guard_json_sha256": "2456ae4ef68cfb1399dd53d1f066977440d989cc912d88b3cc325c639a3208a4",
+    "rss_guard_present": true,
+    "rss_guard_status": "running",
+    "rss_samples": 303,
+    "safe_to_launch_gate": false,
+    "scope_bytes": 65536,
+    "single_rss_margin_kib": 4281760,
     "terminal_verdict_present": false
   },
   "orphaned_gate": null,
   "project": "enwiki9",
   "receipt_type": "operator_status",
+  "release_receipts": {
+    "path": "projects/enwiki9/docs/release_receipt_index.json",
+    "sha256": "cd97c633cec6eaef07bc25fe1bd6c596fec6998923114d16cdee59ad893c627a",
+    "summary": {
+      "bundles": 0,
+      "completeClosures": 0,
+      "failedAttempts": 0,
+      "objectiveAchievedReceipts": 0,
+      "runReceipts": 0
+    },
+    "validation_mode": "structure-only-router"
+  },
   "target_score_10_95": 105000000
 }

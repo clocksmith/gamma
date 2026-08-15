@@ -32,6 +32,7 @@ REPO_ROOT = ROOT.parent.parent
 CERT_PATH = ROOT / "upper_bound_certificate.json"
 OUT_JSON = ROOT / "docs" / "status_receipt.json"
 OUT_MD = ROOT / "docs" / "status_receipt.md"
+RELEASE_RECEIPT_INDEX = ROOT / "docs" / "release_receipt_index.json"
 LATEST_DELAYED_STATUS_LOG = ROOT / "run_logs" / "enwiki9_delayed_status_latest.log"
 LOCAL_RSS_GUARD_KIB = 10_485_760
 DECIMAL_10GB_GUARD_KIB = 10_000_000_000 // 1024
@@ -60,6 +61,24 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
         return json.loads(path.read_text())
     except (OSError, json.JSONDecodeError):
         return {}
+
+
+def release_receipt_state(objective: dict[str, Any]) -> dict[str, Any]:
+    if not RELEASE_RECEIPT_INDEX.is_file():
+        raise ValueError("release receipt index is missing; regenerate normalization views")
+    result = research_contracts.validate_artifact(
+        RELEASE_RECEIPT_INDEX,
+        verify_files=False,
+    )
+    value = load_json(RELEASE_RECEIPT_INDEX)
+    if value.get("objective") != objective:
+        raise ValueError("release receipt index objective binding is stale")
+    return {
+        "path": logical_rel(RELEASE_RECEIPT_INDEX),
+        "sha256": sha256(RELEASE_RECEIPT_INDEX),
+        "validation_mode": value.get("validationMode"),
+        "summary": result["summary"],
+    }
 
 
 def mtime_utc(path: pathlib.Path) -> str | None:
@@ -1489,6 +1508,7 @@ def operator_summary_state(
 
 def receipt() -> dict[str, Any]:
     objective = research_contracts.objective_binding()
+    release_receipts = release_receipt_state(objective)
     cert = load_json(CERT_PATH)
     labels = top_status_by_label(cert)
     proof = cert.get("proof_status", {}) if isinstance(cert.get("proof_status"), dict) else {}
@@ -1580,6 +1600,13 @@ def receipt() -> dict[str, Any]:
     operator_summary["claimable_pending_adaptive_jobs"] = adaptive_state.get(
         "claimable_pending_job_count", 0
     )
+    release_summary = release_receipts["summary"]
+    operator_summary["release_bundles"] = release_summary["bundles"]
+    operator_summary["release_run_receipts"] = release_summary["runReceipts"]
+    operator_summary["release_failed_attempts"] = release_summary["failedAttempts"]
+    operator_summary["objective_achieved_receipts"] = release_summary[
+        "objectiveAchievedReceipts"
+    ]
     certificate_active_gate = labels.get("active gate")
     certificate_blocker = labels.get("blocker")
     return {
@@ -1588,6 +1615,7 @@ def receipt() -> dict[str, Any]:
         "generated_at_utc": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "objective": objective,
         "operator_summary": operator_summary,
+        "release_receipts": release_receipts,
         "target_score_10_95": objective["targetScoreBytes"],
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
@@ -1728,6 +1756,11 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Pending adaptive jobs: `{fmt_int(summary.get('pending_adaptive_jobs'))}`",
         f"- Held pending adaptive jobs: `{fmt_int(summary.get('held_pending_adaptive_jobs'))}`",
         f"- Claimable pending adaptive jobs: `{fmt_int(summary.get('claimable_pending_adaptive_jobs'))}`",
+        f"- Canonical release bundles: `{fmt_int(summary.get('release_bundles'))}`",
+        f"- Validated release run receipts: `{fmt_int(summary.get('release_run_receipts'))}`",
+        f"- Validated failed release attempts: `{fmt_int(summary.get('release_failed_attempts'))}`",
+        f"- Objective-achieved receipts: `{fmt_int(summary.get('objective_achieved_receipts'))}`",
+        f"- Release index mode: `{data.get('release_receipts', {}).get('validation_mode', 'unknown')}`",
         f"- Command source: `{summary.get('command_source', 'unknown')}`",
         f"- Claim rule: `{summary.get('claim_rule', 'unknown')}`",
         "",
@@ -2173,6 +2206,7 @@ def main() -> int:
             "has_10_95_constructive_upper_bound",
             "active_processes",
             "operator_logs",
+            "release_receipts",
             "candidate_audit",
             "active_candidate_recent_artifacts",
             "handoff",
