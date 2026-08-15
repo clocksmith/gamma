@@ -2,8 +2,8 @@
 
 Status: implementation audit; objective, measurement, resource, candidate
 identity, structured-experiment, and terminal-reflection boundaries are
-implemented, while composition audits and clean-room run composition remain
-open. This document is not compression proof and does not grant score,
+implemented. The mechanism-graph contract now covers composition, while
+clean-room run composition remains open. This document is not compression proof and does not grant score,
 forecast, promotion, or authorship credit.
 
 ## Purpose
@@ -12,8 +12,8 @@ Gamma's enwiki9 lane preserves proposals, candidates, mutations, jobs, receipts,
 exclusions, and generated status views. The objective and source identity are
 mechanically bound. Terminal measurements can become hash-linked attributed
 lessons and bounded successor decisions. Experiments now freeze
-machine-evaluable controls and predicates, but composition constraints remain
-incomplete.
+machine-evaluable controls and predicates. Mechanism graphs now make shared
+boundaries and joint-replay requirements explicit.
 
 The missing loop is:
 
@@ -74,6 +74,9 @@ Implemented contracts:
   bounded consequences;
 - `experiment-result`: input and analyzer hashes, alignment, measurements,
   frozen-predicate evaluation, decision, and zero-credit boundary.
+- `mechanism-graph`: component roles, shared probability boundaries,
+  overlapping costs, closed-teacher dependencies, causal compatibility, and
+  mandatory joint replay without additive forecast credit.
 
 Still required:
 
@@ -124,12 +127,20 @@ predicates pass. Its reflection authorizes a new prospective feature-capture
 contract only. The receipt grants no codec, archive, transfer, frontier, or
 objective credit.
 
-## Missing composition and independent audit
+The next prospectively frozen compact decoder-feature probe then failed every
+held-out scientific gain predicate and was retired through its validated
+reflection. That negative transition demonstrates the intended loop: a positive
+teacher attribution did not bypass controls, and a completed process did not
+become a successor claim.
 
-The system needs a mechanism graph identifying shared probability boundaries,
-overlapping costs, incompatible causal assumptions, closed-teacher dependencies,
-and required joint replays. Component forecasts must never be added. Candidate
-promotion requires a new exact joint archive.
+## Composition and independent audit
+
+The DELTA-MIDAS lineage now has a validated mechanism graph identifying shared
+probability boundaries, overlapping costs, closed-teacher dependencies, and
+required joint replays. It prohibits composition because the teacher and traces
+are zero-credit and the only compact child is retired. Every future multi-part
+candidate needs its own graph and new exact joint archive; component forecasts
+must never be added.
 
 Prize-facing evidence additionally requires a clean-room replay from the
 dependency manifest, an independent decoder, the official corpus hash, complete
