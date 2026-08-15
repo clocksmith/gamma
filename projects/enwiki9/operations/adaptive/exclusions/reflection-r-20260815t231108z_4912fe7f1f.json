@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json"
+  ],
+  "exclusion_id": "reflection-r-20260815t231108z_4912fe7f1f",
+  "failure": "The source-visible LibNC memory transition is exactly a 64-position shift plus append of the already exact layer inputs; no hidden state correction is required at this boundary.",
+  "mechanism": "Compile only LibNC mem_update into an explicit source-counted shift-and-append transform over the retained initial BF16 memory and exact 64-position layer inputs; no parameter update or second-segment forward is performed.",
+  "population": "production-profile next-segment layer memory tensor; All 20 layer memories after the retained stream-zero production segment at transformed coordinates [256, 320).; scopeBytes=None; scopeSymbols=64",
+  "recorded_at": "2026-08-15T23:13:21+00:00",
+  "retired_dimensions": [
+    "Unmodeled segment-memory movement as the remaining blocker between the exact first open segment and the next production state."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

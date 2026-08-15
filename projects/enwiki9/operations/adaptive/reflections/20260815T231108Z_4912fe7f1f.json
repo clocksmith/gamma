@@ -1,0 +1,101 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The source-visible LibNC memory transition is exactly a 64-position shift plus append of the already exact layer inputs; no hidden state correction is required at this boundary."
+  },
+  "candidateId": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_profile_memory_transition_64_q0_v1",
+    "candidateTreeSha256": "sha256:b061f15172ff906e860e8c012b39bab157066a62f8c4cfaffa3af0f932bdc29a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_profile_memory_transition_64_q0_v1/20260815T231045304412Z_b061f15172ff.json",
+      "sha256": "sha256:27a4d9980e5b02e0bc75ac954f22ad9a0ac4ebfbd121f6eb95d0db97e8c3e8ec"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Promote only to a separately prospectively frozen production full-update boundary that binds gradients, optimizer state, updated parameters, and memory; do not launch a second-segment claim until that boundary passes.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T230010Z_836682be9c.json",
+      "sha256": "sha256:e62ead0976c61c8651fc597495e3bdc7bfb29a674b84b0c48b73bf66f18a7888"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+      "sha256": "sha256:a930f6ed9f441f8db2bd404741b804cf5de4cac055dd3c220270f3a05a3eb23d"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/execution.json",
+      "sha256": "sha256:97dd36a9b4bb1fd1f1c4d0623a5d7669bd54db49cff526b49039e6b5d90e7837"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/guard.json",
+      "sha256": "sha256:549fdf1a2ea6ef11bc8c865c2db61dbe424827393f5a1a0ef863df60a7d2706d"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/state-digests.json",
+      "sha256": "sha256:70bec6e2ffd21ac2bb218d369a018932d75c6fc6d1c905113326f7935cbede28"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_memory_transition_64_q0_v1.json",
+    "sha256": "sha256:2487a5f7faaa9f2d8e888506fcb32fbd6fa95b92d0684875206d251711af31cf"
+  },
+  "generatedUtc": "2026-08-15T23:13:20+00:00",
+  "hypothesis": {
+    "rationale": "Teacher, first-open, and repeated-open next-memory states have the same aggregate SHA-256 74b16766c1a51a4449594dd5c5bdb3759ef7159e1d4a683fafca46a851a2d7ef; zero of twenty layers differ.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T231108Z_4912fe7f1f.json",
+    "sha256": "sha256:405259a0fedb3ffb4407edf291757180c5b9bfba436ecfce88e29825ee32ddfe"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Unmodeled segment-memory movement as the remaining blocker between the exact first open segment and the next production state."
+    ],
+    "transferableLessons": [
+      "A second equivalent production segment still requires the full deep parameter and optimizer update; fixed-parameter concatenation would compare different work.",
+      "The open production forward now preserves both arithmetic termination and the recurrent memory transition for the frozen segment."
+    ],
+    "uncertainties": [
+      "This result does not implement gradients, clipping, optimizer moments, parameter serialization, a second-segment forward, archive improvement, transfer, or objective credit."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t231108z_4912fe7f1f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound job completed under the declared process-tree and scratch guards; frozen Q1/Q18 inputs, source closure, two open executions, all twenty teacher/open memory reconstructions, and artifact hashes validate."
+    ],
+    "valid": true
+  }
+}

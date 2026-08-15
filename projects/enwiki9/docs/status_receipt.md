@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-15T23:05:56+00:00`
+- Generated at UTC: `2026-08-15T23:14:17+00:00`
 
 ## Target State
 
@@ -36,8 +36,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `true`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `28`
-- Held pending adaptive jobs: `28`
+- Pending adaptive jobs: `29`
+- Held pending adaptive jobs: `29`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `0`
 - Validated release run receipts: `0`
@@ -124,11 +124,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `784`
+- Program directories: `785`
 - Registered programs: `339`
-- Untracked nonignored entries: `29`
+- Untracked nonignored entries: `14`
 - Modified tracked entries: `3`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=86, measured_negative=100, retired=546, track_source_before_evolution=1`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=86, measured_negative=100, retired=547, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
