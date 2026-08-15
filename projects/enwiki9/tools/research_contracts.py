@@ -1180,6 +1180,7 @@ def _validate_adaptive_experiment_result(
             f"{artifact_path}: gradient detail identifies another candidate",
         )
         summary = detail["summary"]
+        inputs_by_id = {item["id"]: item for item in experiment["inputs"]}
         derived_measurements = {
             "namedGradientDeterministic": detail["runs"][0] == detail["runs"][1],
             "allBlocksSameParameterSet": summary["allBlocksSameParameterSet"],
@@ -1205,6 +1206,57 @@ def _validate_adaptive_experiment_result(
                 value["measurements"].get(measurement) == observed,
                 f"{artifact_path}: {measurement} differs from gradient detail",
             )
+        retained_reference = inputs_by_id.get("retained-f-archive")
+        if retained_reference is not None:
+            retained_path = PROJECT_ROOT / retained_reference["path"]
+            archive_references = [
+                artifacts_by_id.get(identifier)
+                for identifier in ("archive-1", "archive-2")
+            ]
+            _require(
+                all(reference is not None for reference in archive_references),
+                f"{artifact_path}: retained archive comparison is incomplete",
+            )
+            archive_identity = all(
+                reference["sha256"] == retained_reference["sha256"]
+                for reference in archive_references
+            )
+            _require(
+                value["measurements"].get("retainedArchiveIdentity")
+                == archive_identity,
+                f"{artifact_path}: retained archive identity differs from artifacts",
+            )
+            attribution_reference = inputs_by_id.get("production-attribution")
+            _require(
+                attribution_reference is not None,
+                f"{artifact_path}: retained archive has no attribution input",
+            )
+            attribution = load_json(PROJECT_ROOT / attribution_reference["path"])
+            legacy_retained = attribution["archives"]["F_clean"]
+            retained_relative = retained_path.relative_to(PROJECT_ROOT).as_posix()
+            legacy_path = Path(legacy_retained["path"]).as_posix()
+            legacy_identity = (
+                (
+                    legacy_path == retained_relative
+                    or legacy_path.endswith(f"/{retained_relative}")
+                )
+                and legacy_retained["bytes"] == retained_path.stat().st_size
+                and f"sha256:{legacy_retained['sha256']}"
+                == retained_reference["sha256"]
+            )
+            _require(
+                legacy_identity,
+                f"{artifact_path}: retained archive differs from attribution input",
+            )
+            expected_raw_inverse = bool(
+                archive_identity
+                and attribution["integrity"]["raw_inverse_exact"]["F"]
+            )
+            _require(
+                value["measurements"].get("rawInverseExact")
+                == expected_raw_inverse,
+                f"{artifact_path}: raw inverse transfer differs from bound evidence",
+            )
         comparison_measurements = {
             "lowPrecisionDominantGroupMatched",
             "lowPrecisionThirdDominantGroupsMatched",
@@ -1219,7 +1271,6 @@ def _validate_adaptive_experiment_result(
             f"{artifact_path}: low-precision comparison is only partially populated",
         )
         if present_comparisons:
-            inputs_by_id = {item["id"]: item for item in experiment["inputs"]}
             q2_reference = inputs_by_id.get("q2-gradient-detail")
             _require(
                 q2_reference is not None,
