@@ -47,7 +47,9 @@ then requires its terminal result to bind every declared output except the
 result itself exactly once. Python runners should also use
 `--bind-python-source-closure`; the freezer hashes every project-local imported
 module into the prospective input manifest and names the runner and materializer
-as closure roots.
+as closure roots. An implementation-only retry may retain extra diagnostic
+observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not
+change the inherited promotion or kill predicates.
 
 ## Filename Families
 
