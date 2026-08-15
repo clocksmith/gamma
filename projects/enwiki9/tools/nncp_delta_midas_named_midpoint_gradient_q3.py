@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import lzma
+import os
 from pathlib import Path
 import subprocess
 import tarfile
@@ -25,6 +26,7 @@ MATERIALIZER = ROOT / "tools/materialize_nncp_named_midpoint_gradient_q3.py"
 MIDPOINT_PATCH = production_q1.PROGRAM / "nncp_midsegment32.patch"
 Q2_RESULT = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/decision.json"
 Q2_DETAIL = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/gradient-detail.json"
+Q2_REFLECTION = ROOT / "operations/adaptive/reflections/20260815T172824Z_465e6837f4.json"
 _BASE_SUMMARIZE = q0.summarize
 _BASE_EVALUATE = q0.evaluate
 _DIRECT_F32_SUMMARY: dict[str, Any] | None = None
@@ -69,7 +71,33 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return _DIRECT_F32_SUMMARY
 
 
+def require_q2_lineage() -> None:
+    experiment_reference = json.loads(os.environ["GAMMA_ENWIKI9_EXPERIMENT_JSON"])
+    experiment_path = ROOT / experiment_reference["path"]
+    experiment = json.loads(experiment_path.read_text())
+    inputs = {item["id"]: item for item in experiment["inputs"]}
+    for identifier, path in (
+        ("q2-decision", Q2_RESULT),
+        ("q2-gradient-detail", Q2_DETAIL),
+        ("q2-reflection", Q2_REFLECTION),
+    ):
+        if inputs.get(identifier) != q0.reference(path, identifier):
+            raise ValueError(f"q3 experiment does not bind its {identifier} input")
+
+    research_contracts.validate_artifact(Q2_REFLECTION)
+    reflection = json.loads(Q2_REFLECTION.read_text())
+    if reflection["candidateId"] != "delta_midas_named_midpoint_gradient_65536_q2_v1":
+        raise ValueError("q2 reflection identifies another candidate")
+    if reflection["decision"]["verdict"] != "retry":
+        raise ValueError("q2 reflection does not authorize an implementation retry")
+    if reflection["validity"]["classification"] != "incomplete-evidence":
+        raise ValueError("q2 reflection does not preserve the numeric-validity boundary")
+    if q0.reference(Q2_RESULT) not in reflection["evidence"]:
+        raise ValueError("q2 reflection does not classify the bound q2 result")
+
+
 def q2_summary() -> dict[str, Any]:
+    require_q2_lineage()
     research_contracts.validate_artifact(Q2_RESULT)
     result = json.loads(Q2_RESULT.read_text())
     if result["candidateId"] != "delta_midas_named_midpoint_gradient_65536_q2_v1":

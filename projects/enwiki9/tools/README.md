@@ -92,6 +92,9 @@ revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
 as guarded scratch. Its q3 materializer cannot launch a process and changes only
 the named-gradient squared-energy reduction. Native stderr streams directly to
 the declared per-encode log, so live progress and failures remain inspectable.
+Before reading q2's low-precision summary, q3 requires its decision, detail, and
+terminal incomplete-evidence reflection to match the prospectively hash-bound
+inputs and requires that reflection to authorize `retry`.
 
 `enwiki9_python_source_closure.py` cannot launch a process. It recursively
 resolves imports that exist under `tools/`, emits their paths and SHA-256
