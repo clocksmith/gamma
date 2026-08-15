@@ -27,7 +27,8 @@ The accompanying schemas define the first fail-closed evidence boundary:
   reachable;
 - `named-gradient-detail.schema.json` validates the repeated named-gradient row
   population, experiment and revision bindings, execution logs, summary
-  coverage, and optional direct-versus-explicit-F32 reference fields; result
+  coverage, exact 64-state block coordinates, and optional
+  direct-versus-explicit-F32 reference fields; result
   validation also derives retained-archive identity and exact-inverse transfer
   from direct inputs, derives localization failure from the frozen predicates,
   and recomputes any complete q2 low-precision comparison from its prospectively

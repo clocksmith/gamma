@@ -28,6 +28,7 @@ REPOSITORY_ROOT = PROJECT_ROOT.parents[1]
 CONTRACT_ROOT = PROJECT_ROOT / "contracts" / "research" / "v1"
 OBJECTIVE_PATH = CONTRACT_ROOT / "objective-contract.json"
 SCHEMA_PATH = CONTRACT_ROOT / "objective-contract.schema.json"
+NAMED_GRADIENT_BLOCK_STRIDE = 64
 SCHEMA_PATHS = {
     "gamma.enwiki9.adaptive-experiment-contract.v1": (
         CONTRACT_ROOT / "adaptive-experiment-contract.schema.json"
@@ -828,8 +829,15 @@ def _validate_named_gradient_detail(
             f"{artifact_path}: run {run_index} block count differs from summary",
         )
         _require(
-            sorted(blocks) == list(range(summary["blockCount"])),
-            f"{artifact_path}: run {run_index} block coordinates are not contiguous",
+            sorted(blocks)
+            == list(
+                range(
+                    0,
+                    summary["blockCount"] * NAMED_GRADIENT_BLOCK_STRIDE,
+                    NAMED_GRADIENT_BLOCK_STRIDE,
+                )
+            ),
+            f"{artifact_path}: run {run_index} block coordinates differ from the 64-state population",
         )
         _require(
             all(len(names) == summary["parameterCount"] for names in blocks.values()),
