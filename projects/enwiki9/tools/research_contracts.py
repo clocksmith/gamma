@@ -35,6 +35,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.candidate-revision.v1": (
         CONTRACT_ROOT / "candidate-revision.schema.json"
     ),
+    "gamma.enwiki9.clean-room-attempt.v1": (
+        CONTRACT_ROOT / "clean-room-attempt.schema.json"
+    ),
     "gamma.enwiki9.clean-room-replay.v1": (
         CONTRACT_ROOT / "clean-room-replay.schema.json"
     ),
@@ -1772,6 +1775,65 @@ def _validate_clean_room_replay(
     }
 
 
+def _validate_clean_room_attempt(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, manifest, _ = _verify_reference(
+        artifact_path,
+        value["manifest"],
+        "gamma.enwiki9.dependency-closure.v1",
+        verify_files,
+    )
+    _require(
+        manifest["candidateId"] == value["candidateId"]
+        and manifest["candidateTreeSha256"] == value["candidateTreeSha256"],
+        f"{artifact_path}: attempt and manifest identify different candidates",
+    )
+    binding = objective_binding()
+    _require(
+        value["corpus"]["bytes"] == binding["corpusBytes"]
+        and value["corpus"]["sha256"] == binding["corpusSha256"],
+        f"{artifact_path}: attempt corpus is not canonical full enwik9",
+    )
+    expected_phases = [
+        "build-first",
+        "compression",
+        "build-replay",
+        "compression-replay",
+        "build-decode",
+        "decompression",
+    ]
+    actual_phases = [execution["phase"] for execution in value["executions"]]
+    _require(
+        actual_phases == expected_phases[: len(actual_phases)],
+        f"{artifact_path}: failed attempt phases are not a chronological prefix",
+    )
+    retained_paths = [record["path"] for record in value["retainedArtifacts"]]
+    _require(
+        len(retained_paths) == len(set(retained_paths)),
+        f"{artifact_path}: duplicate retained artifact path",
+    )
+    if verify_files:
+        _verify_run_artifact(artifact_path, value["corpus"], "attempt corpus")
+        for execution in value["executions"]:
+            _verify_run_artifact(
+                artifact_path,
+                execution["log"],
+                f"attempt {execution['phase']} log",
+            )
+        for record in value["retainedArtifacts"]:
+            _verify_run_artifact(artifact_path, record, "retained attempt artifact")
+    return {
+        "candidateId": value["candidateId"],
+        "executedPhases": actual_phases,
+        "filesVerified": verify_files,
+        "scratchCleaned": value["scratchCleaned"],
+    }
+
+
 def _resource_guard_checks(value: dict[str, Any]) -> dict[str, bool]:
     objective = validate_objective()
     resources = objective["resources"]
@@ -2270,6 +2332,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result: dict[str, Any] = {"objectiveId": value["objectiveId"]}
     elif schema_id == "gamma.enwiki9.candidate-revision.v1":
         result = _validate_candidate_revision(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.clean-room-attempt.v1":
+        result = _validate_clean_room_attempt(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.clean-room-replay.v1":
         result = _validate_clean_room_replay(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.dependency-closure.v1":

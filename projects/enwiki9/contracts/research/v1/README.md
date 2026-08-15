@@ -28,6 +28,8 @@ The accompanying schemas define the first fail-closed evidence boundary:
 - `clean-room-replay.schema.json` binds three fresh package copies, sealed
   build/compress/replay/decode commands, device and network probes, resource
   guards, scratch cleanup, and the manifest-derived license audit;
+- `clean-room-attempt.schema.json` preserves partial phase order, logs, guards,
+  artifacts, cleanup state, and the terminal error when replay cannot compose;
 - `run-receipt.schema.json` composes exact corpus, archive, package,
   second-archive determinism, correctness, resource, clean-room distribution,
   and independent-verification evidence.
