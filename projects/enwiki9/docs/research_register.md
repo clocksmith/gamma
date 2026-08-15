@@ -28,7 +28,12 @@ again leaves the scientific hypothesis untested. Candidate
 new implementation-retry composer: every scientific field and predicate is
 inherited, while the runner, materializer, parent revision, negative control,
 failure evidence, outputs, and declared implementation delta are rebound. Q2
-converts only the reduction to `NC_TYPE_F32` before the scalar read.
+converts only the completed BF16 squared-energy reduction to `NC_TYPE_F32`
+before the scalar read. That restores the scalar-reader type contract but does
+not make the accumulated energy authoritative: a direct F32 reducer must
+re-evaluate the unchanged localization predicates before any group ablation can
+be authorized. Agreement with q2 is a sensitivity diagnostic, not a promotion
+condition, because q2's low-precision ranking is not scientific ground truth.
 
 ## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
 
