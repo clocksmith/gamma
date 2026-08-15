@@ -56,6 +56,9 @@ The implementation following this audit closed these original defects:
    unknown rather than inferring success from labels.
 5. The canonical objective contract and its digest now own the 105,000,000-byte
    target across generated frontier, status, and certificate views.
+6. Driver-ledger v2 rows are built through one shared implementation, validated
+   against a schema, and bind one retained project-relative result JSON by byte
+   count and SHA-256 before append or deterministic historical backfill.
 
 ## Contract state
 

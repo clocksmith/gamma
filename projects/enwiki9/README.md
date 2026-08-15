@@ -170,7 +170,7 @@ It maps to information-theoretic statements (Shannon entropy of natural English 
 
 ## Central run ledger
 
-`results/run_ledger.jsonl` is the append-only, canonical run registry for driver executions that persist result JSONs.
+`results/run_ledger.jsonl` is the append-only, canonical run registry for driver executions that persist result JSONs. Historical rebuilds are deterministic projections from those retained JSONs.
 
 Each line is one row and includes:
 
@@ -180,7 +180,13 @@ Each line is one row and includes:
 - `compress_time_s`, `decompress_time_s`, `run_time_s`
 - `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
 - `roundtrip_ok`, `determinism_ok`, `timestamp`, `host`
-- `result_path` back-pointer to the per-run JSON
+- project-relative `result_path`, `result_bytes`, and `result_sha256` binding the
+  per-run JSON
+
+Every row uses `gamma.enwiki9.driver-run-ledger-row.v2` and is schema- and
+file-validated before append. A rebuild admits only timestamp-named driver
+results; unrelated decisions, guards, and receipts are not inferred into this
+ledger.
 
 `run_scope_label` is a human scope label (for example `full`, `1m`, `10m`) and
 is often paired with `data_size`. `run_purpose` is the workflow intent

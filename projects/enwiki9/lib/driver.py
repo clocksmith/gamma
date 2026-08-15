@@ -38,7 +38,6 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DEFAULT = ROOT / "data" / "enwik9"
 RESULT_LEDGER_PATH = ROOT / "results" / "run_ledger.jsonl"
-LEDGER_SCHEMA = "enwiki9_driver_run_ledger_v1"
 SCOPE_LABELS = {
     1024: "1k",
     250_000: "250k",
@@ -275,6 +274,7 @@ def _parse_run_tags(raw: list[str]) -> list[str]:
 
 
 def _append_run_ledger(row: dict[str, Any]) -> None:
+    research_contracts.validate_driver_run_ledger_row(row)
     RESULT_LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
     with RESULT_LEDGER_PATH.open("a", encoding="utf-8") as out:
         out.write(json.dumps(row, sort_keys=True) + "\n")
@@ -286,42 +286,14 @@ def _build_run_ledger_row(
     program_name: str | None,
     no_save: bool,
 ) -> dict[str, Any]:
-    memory = result.get("memory_kib") or {}
-    return {
-        "schema": LEDGER_SCHEMA,
-        "run_id": f"{result['program_id']}__{result['timestamp'].replace(':', '')}__{result['compressed_md5'][:8]}",
-        "program_id": result["program_id"],
-        "candidate_revision": result.get("candidate_revision"),
-        "algorithm_name": program_name or result["program_id"],
-        "data_size": result.get("data_size"),
-        "data_md5": result.get("data_md5"),
-        "data_sha256": result.get("data_sha256"),
-        "compressed_size": result.get("compressed_size"),
-        "program_size": result.get("program_size"),
-        "hutter_score": result.get("hutter_score"),
-        "bits_per_byte": result.get("bits_per_byte"),
-        "compress_time_s": result.get("compress_time_s"),
-        "decompress_time_s": result.get("decompress_time_s"),
-        "run_time_s": result.get("run_time_s"),
-        "run_purpose": result.get("run_purpose"),
-        "run_scope_label": result.get("run_scope_label"),
-        "run_context": result.get("run_context"),
-        "run_source": result.get("run_source"),
-        "run_tags": result.get("run_tags"),
-        "determinism_ok": result.get("determinism", {}).get("single_host_byte_equal")
-        if isinstance(result.get("determinism"), dict)
-        else None,
-        "roundtrip_ok": result.get("roundtrip_ok"),
-        "result_path": str(result_path) if result_path is not None else None,
-        "archival_scope": "full" if not no_save else "ephemeral",
-        "timestamp": result.get("timestamp"),
-        "recorded_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
-        "host": result.get("host"),
-        "memory_kib_before": memory.get("before"),
-        "memory_kib_after": memory.get("after"),
-        "memory_kib_peak": memory.get("peak"),
-        "rss_sample_count": memory.get("sample_count"),
-    }
+    if result_path is None or no_save:
+        raise ValueError("ledger rows require one persisted result JSON")
+    return research_contracts.build_driver_run_ledger_row(
+        result,
+        result_path,
+        program_name=program_name,
+        recorded_utc=_dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+    )
 
 def run(
     program_id: str,

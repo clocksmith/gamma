@@ -31,6 +31,8 @@ The accompanying schemas define the first fail-closed evidence boundary:
   closed dependencies, and an exact joint-replay requirement;
 - `dependency-closure.schema.json` binds every counted package member,
   dependency, command, license, and option byte;
+- `driver-run-ledger-row.schema.json` binds every canonical driver-ledger row
+  to one retained project-relative result JSON by byte count and SHA-256;
 - `clean-room-replay.schema.json` binds three fresh package copies, sealed
   build/compress/replay/decode commands, device and network probes, resource
   guards, scratch cleanup, and the manifest-derived license audit;
