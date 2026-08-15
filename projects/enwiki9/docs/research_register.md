@@ -1,6 +1,6 @@
 # enwiki9 Research Register
 
-## 2026-08-15 - Reference-safe named-gradient retry is prospectively frozen
+## 2026-08-15 - Direct-F32 named-gradient oracle is prospectively frozen
 
 The q0 named-gradient implementation reached the first production F backward
 pass and reproducibly aborted at `libnc.c:7564`: `nc_free_tensor` observed an
@@ -34,6 +34,30 @@ not make the accumulated energy authoritative: a direct F32 reducer must
 re-evaluate the unchanged localization predicates before any group ablation can
 be authorized. Agreement with q2 is a sensitivity diagnostic, not a promotion
 condition, because q2's low-precision ranking is not scientific ground truth.
+
+Q2 subsequently completed both encodes with byte-identical retained F archives
+and identical complete named-gradient rows. Its schema and semantic receipt
+validation pass, including the 64-state block coordinates, parameter coverage,
+artifact hashes, and predicate derivation. The low-precision summary selects
+feed-forward overall but not in every chronological third, falls below the
+frozen minimum-third share, and remains output-head dominated. Those values are
+retained as sensitivity evidence only. The terminal
+[`reflection`](../operations/adaptive/reflections/20260815T172824Z_465e6837f4.json)
+classifies the ranking as incomplete evidence, authorizes `retry`, and retires
+only post-reduction F32 conversion as an authoritative localization oracle.
+
+Candidate `delta_midas_named_midpoint_gradient_65536_q3_v1` is now frozen from
+that reflection. Its
+[`experiment contract`](../operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q3_v1.json)
+binds the direct reducer, explicit F32 reference, complete runtime source and
+JSON-contract closure, q2 decision/detail/reflection, retained F comparator,
+exact midpoint patch, and strict output set before execution. Direct-reference
+finiteness and relative agreement are prerequisites for both promotion and
+retirement. Q2 comparisons are diagnostic only. Q3 remains closed-teacher,
+zero-credit attribution; it can select one later group ablation or retire this
+localization method, but it cannot claim codec savings or objective progress.
+Job `20260815T200718Z_9b504935f5` is queued under the process-tree memory and
+candidate-scratch guard with the exact q3 experiment and candidate revision.
 
 ## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
 
