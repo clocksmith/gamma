@@ -103,6 +103,12 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         value.replace(parent_proposal_id, args.candidate_id)
         for value in experiment["outputs"]
     ]
+    for output in args.additional_output:
+        if output in experiment["outputs"]:
+            raise ValueError(f"duplicate implementation-retry output: {output}")
+        experiment["outputs"].append(output)
+    if args.strict_output_manifest:
+        experiment["outputManifestPolicy"] = "complete-result-artifacts-v1"
     experiment["generatedUtc"] = (
         dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
     )
@@ -136,6 +142,8 @@ def main() -> int:
     parser.add_argument("--negative-control-id", required=True)
     parser.add_argument("--negative-control-definition", required=True)
     parser.add_argument("--evidence", action="append", default=[])
+    parser.add_argument("--additional-output", action="append", default=[])
+    parser.add_argument("--strict-output-manifest", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     print(json.dumps(freeze(args), indent=2))
