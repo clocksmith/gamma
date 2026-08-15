@@ -11,9 +11,11 @@ from typing import Any
 
 try:
     from projects.enwiki9.tools import enwiki9_candidate_revisions
+    from projects.enwiki9.tools import enwiki9_omega
     from projects.enwiki9.tools import research_contracts
 except ModuleNotFoundError:
     import enwiki9_candidate_revisions
+    import enwiki9_omega
     import research_contracts
 
 
@@ -241,6 +243,7 @@ def create_reflection(
         reflection_path.unlink(missing_ok=True)
         raise
     _apply_reflection(candidate_id, job_id, reflection_path, receipt)
+    sync_reflection_exclusion(reflection_path, receipt)
     return reflection_path, receipt
 
 
@@ -277,6 +280,72 @@ def iter_reflections() -> list[dict[str, Any]]:
         research_contracts.validate_artifact(path, verify_files=False)
         rows.append({"_path": path.relative_to(ROOT).as_posix(), **value})
     return rows
+
+
+def sync_reflection_exclusion(
+    reflection_path: pathlib.Path,
+    reflection: dict[str, Any],
+) -> dict[str, Any] | None:
+    retired = reflection["knowledge"]["retiredDimensions"]
+    if not retired:
+        return None
+    experiment_reference = reflection["experiment"]
+    experiment_path = ROOT / experiment_reference["path"]
+    if reference(experiment_path) != experiment_reference:
+        raise ValueError("reflection experiment binding has drifted")
+    experiment = _load_json(experiment_path)
+    population = experiment["population"]
+    if experiment["schema"] == "gamma.enwiki9.adaptive-experiment-contract.v1":
+        mechanism = experiment["changedMechanism"]
+        scope_bytes = population["scopeBytes"]
+        scope_symbols = population["scopeSymbols"]
+    else:
+        mechanism = "; ".join(experiment["changedVariables"])
+        scope_bytes = None
+        scope_symbols = population["rowCount"]
+    exclusion_id = f"reflection-{reflection['reflectionId']}"
+    expected = {
+        "schema": "enwiki9_omega_exclusion_v1",
+        "exclusion_id": exclusion_id,
+        "mechanism": mechanism,
+        "population": (
+            f"{population['unit']}; {population['selection']}; "
+            f"scopeBytes={scope_bytes}; scopeSymbols={scope_symbols}"
+        ),
+        "failure": reflection["attribution"]["localizedCause"],
+        "retired_dimensions": retired,
+        "unsettled_successors": [],
+        "evidence": [reflection_path.relative_to(ROOT).as_posix()],
+    }
+    destination = enwiki9_omega.EXCLUSIONS / f"{exclusion_id}.json"
+    if destination.is_file():
+        existing = _load_json(destination)
+        observed = {key: existing.get(key) for key in expected}
+        if observed != expected:
+            raise ValueError(
+                f"reflection-derived exclusion differs from authority: {destination}"
+            )
+        return existing
+    return enwiki9_omega.record_exclusion(
+        exclusion_id=exclusion_id,
+        mechanism=expected["mechanism"],
+        population=expected["population"],
+        failure=expected["failure"],
+        retired_dimensions=expected["retired_dimensions"],
+        unsettled_successors=expected["unsettled_successors"],
+        evidence=expected["evidence"],
+    )
+
+
+def sync_reflection_exclusions() -> dict[str, int]:
+    reflected = 0
+    projected = 0
+    for reflection in iter_reflections():
+        reflected += 1
+        reflection_path = ROOT / reflection.pop("_path")
+        if sync_reflection_exclusion(reflection_path, reflection) is not None:
+            projected += 1
+    return {"reflections": reflected, "projectedExclusions": projected}
 
 
 def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:

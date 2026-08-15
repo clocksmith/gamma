@@ -144,6 +144,12 @@ into listed evidence. Invalid runs can only retry or hold; promotion requires
 valid equivalent controls, supported hypothesis, algorithmic-gain attribution,
 and explicit predicate outcomes.
 
+Reflection `retiredDimensions` now project deterministically into OMEGA
+exclusions. The projection verifies the reflection's exact experiment binding,
+derives mechanism and population from that contract, points evidence back to
+the reflection, and rejects drift on replay. It is searchable mechanism memory,
+not a second scientific authority or promotion receipt.
+
 `next-experiment` reads the versioned search policy and ranks live proposals
 lexicographically by actionability, valid experiment, valid parent reflection,
 scientific decision, asserted net bytes, transfer retention, runtime, memory,
