@@ -3,15 +3,17 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import lzma
 from pathlib import Path
+import subprocess
 import tarfile
+import time
 from typing import Any
 
 from enwiki9_python_source_closure import local_source_closure
 import nncp_delta_midas_named_midpoint_gradient as q0
-import nncp_delta_midas_named_midpoint_gradient_q1 as q1
 import nncp_libnc_output_head_midpoint_attribution_65536_qm1 as production_q1
 import research_contracts
 from materialize_nncp_named_midpoint_gradient_q3 import materialize
@@ -26,6 +28,39 @@ Q2_DETAIL = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/grad
 _BASE_SUMMARIZE = q0.summarize
 _BASE_EVALUATE = q0.evaluate
 _DIRECT_F32_SUMMARY: dict[str, Any] | None = None
+
+
+def execute(
+    command: list[str],
+    *,
+    cwd: Path,
+    environment: dict[str, str],
+    log: Path,
+) -> dict[str, Any]:
+    started = time.monotonic()
+    with log.open("wb") as error_stream:
+        completed = subprocess.run(
+            command,
+            cwd=cwd,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=error_stream,
+            check=False,
+        )
+    if completed.returncode != 0:
+        raise subprocess.CalledProcessError(
+            completed.returncode,
+            command,
+            output=completed.stdout,
+            stderr=log.read_bytes(),
+        )
+    return {
+        "command": command,
+        "elapsedSeconds": time.monotonic() - started,
+        "returncode": completed.returncode,
+        "stdoutSha256": hashlib.sha256(completed.stdout).hexdigest(),
+        "stderr": q0.reference(log),
+    }
 
 
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -95,7 +130,7 @@ def main() -> int:
     q0.CANDIDATE_ID = CANDIDATE_ID
     q0.MATERIALIZER = MATERIALIZER
     q0.materialize = materialize
-    q0.execute = q1.execute
+    q0.execute = execute
     q0.summarize = summarize
     q0.evaluate = evaluate
     q0.source_package = source_package
