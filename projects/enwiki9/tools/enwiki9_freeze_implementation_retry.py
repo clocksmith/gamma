@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+from enwiki9_python_source_closure import local_source_closure
 import research_contracts
 
 
@@ -48,6 +49,12 @@ def parse_evidence(specification: str) -> tuple[str, Path]:
     return identifier, Path(path)
 
 
+def source_identifier(path: Path) -> str:
+    relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
+    digest = hashlib.sha256(relative.encode()).hexdigest()[:12]
+    return f"python-source-{path.stem}-{digest}"
+
+
 def freeze(args: argparse.Namespace) -> dict[str, Any]:
     parent_experiment_path = args.parent_experiment.resolve()
     research_contracts.validate_artifact(parent_experiment_path)
@@ -71,10 +78,16 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
     }
     experiment["changedMechanism"] = args.changed_mechanism
 
+    inherited_source_ids = {
+        item["id"]
+        for item in experiment["inputs"]
+        if item["id"].startswith("python-source-")
+    }
     retained_inputs = [
         value
         for value in experiment["inputs"]
         if value["id"] not in {"runner", "materializer"}
+        and value["id"] not in inherited_source_ids
     ]
     evidence = [
         reference(path, identifier)
@@ -85,12 +98,21 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         if value["id"] in input_ids:
             raise ValueError(f"duplicate inherited evidence id: {value['id']}")
         input_ids.append(value["id"])
+    experiment.pop("pythonSourceClosureEntries", None)
     experiment["inputs"] = [
         reference(args.runner, "runner"),
         reference(args.materializer, "materializer"),
         *retained_inputs,
         *evidence,
     ]
+    if args.bind_python_source_closure:
+        existing_paths = {value["path"] for value in experiment["inputs"]}
+        for path in local_source_closure((args.runner, args.materializer)):
+            relative = path.relative_to(ROOT).as_posix()
+            if relative not in existing_paths:
+                experiment["inputs"].append(reference(path, source_identifier(path)))
+                existing_paths.add(relative)
+        experiment["pythonSourceClosureEntries"] = ["runner", "materializer"]
     experiment["controls"] = [
         *experiment["controls"],
         {
@@ -144,6 +166,7 @@ def main() -> int:
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--additional-output", action="append", default=[])
     parser.add_argument("--strict-output-manifest", action="store_true")
+    parser.add_argument("--bind-python-source-closure", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     print(json.dumps(freeze(args), indent=2))
