@@ -94,7 +94,7 @@ Implemented terminal control:
 New scientific work uses `algorithm-proposal.v2`,
 `adaptive-experiment-contract.v1`, and `adaptive-job.v3`. A v3 job cannot be
 queued without one validated prospective contract, immutable candidate
-revision, proposal identity, and hashed runner. Its reflection must reuse the
+revision, hash-bound developed proposal, and hashed runner. Its reflection must reuse the
 job's exact experiment reference. Any unreflected terminal v2/v3 job blocks a
 new gate and successor creation. Legacy proposals remain visible but are not
 actionable until migrated to the structured contract.

@@ -659,9 +659,23 @@ def _validate_adaptive_job(
         {"gamma.enwiki9.adaptive-experiment-contract.v1"},
         f"{artifact_path}: experiment",
     )
+    _, proposal = validate_project_reference(
+        value["proposal"],
+        {"gamma.enwiki9.algorithm-proposal.v2"},
+        f"{artifact_path}: proposal",
+    )
     _require(
-        experiment["proposalId"] == value["proposal_id"],
-        f"{artifact_path}: job and experiment proposal identities differ",
+        proposal["proposal_id"] == value["proposal_id"]
+        and experiment["proposalId"] == value["proposal_id"],
+        f"{artifact_path}: job, proposal, and experiment identities differ",
+    )
+    _require(
+        proposal["experiment"] == value["experiment"],
+        f"{artifact_path}: job experiment differs from proposal binding",
+    )
+    _require(
+        proposal["state"] == "developed",
+        f"{artifact_path}: job proposal is not developed",
     )
     _project_file_reference(value["runner"], f"{artifact_path}: runner")
     return {

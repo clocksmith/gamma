@@ -285,8 +285,8 @@ The clone removes inherited measurements and records the parent, hypothesis,
 creation event, and source replacements in
 `operations/adaptive/mutations.jsonl`.
 
-V3 queue receipts bind the proposal, prospectively frozen experiment, sealed
-tree, candidate-revision receipt, and runner digest. Workers validate every
+V3 queue receipts bind the proposal identity and digest, prospectively frozen
+experiment, sealed tree, candidate-revision receipt, and runner digest. Workers validate every
 binding and execute a read-only materialization from immutable blobs, not the
 mutable `programs/<id>/` working tree. A candidate with an unreflected terminal
 v2/v3 job cannot enter another gate or produce a successor. Legacy unbound jobs
