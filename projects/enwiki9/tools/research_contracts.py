@@ -14,6 +14,13 @@ from typing import Any
 
 import jsonschema
 
+try:
+    from projects.enwiki9.tools.enwiki9_python_source_closure import (
+        local_source_closure,
+    )
+except ModuleNotFoundError:
+    from enwiki9_python_source_closure import local_source_closure
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = PROJECT_ROOT.parents[1]
@@ -578,6 +585,30 @@ def _validate_adaptive_experiment_contract(
     )
     for item in value["inputs"]:
         _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+    input_paths = [item["path"] for item in value["inputs"]]
+    _require(
+        len(input_paths) == len(set(input_paths)),
+        f"{artifact_path}: distinct input identities alias one path",
+    )
+    closure_entries = value.get("pythonSourceClosureEntries")
+    if closure_entries is not None:
+        inputs_by_id = {item["id"]: item for item in value["inputs"]}
+        _require(
+            all(identifier in inputs_by_id for identifier in closure_entries),
+            f"{artifact_path}: Python closure entry is not a declared input",
+        )
+        entry_paths = [
+            PROJECT_ROOT / inputs_by_id[identifier]["path"]
+            for identifier in closure_entries
+        ]
+        closure_paths = {
+            path.relative_to(PROJECT_ROOT).as_posix()
+            for path in local_source_closure(entry_paths)
+        }
+        _require(
+            closure_paths.issubset(set(input_paths)),
+            f"{artifact_path}: declared inputs omit project-local Python dependencies",
+        )
     control_ids = [item["id"] for item in value["controls"]]
     _require(
         len(control_ids) == len(set(control_ids)),
