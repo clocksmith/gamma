@@ -21,6 +21,8 @@ The accompanying schemas define the first fail-closed evidence boundary:
   `complete-result-artifacts-v1`; under that policy the result path must be
   declared and every other declared output must be bound exactly once by the
   terminal result, with no undeclared or path-aliased artifacts;
+  `pythonSourceClosureEntries` additionally names entry inputs whose complete
+  project-local import closure must appear in the prospective input manifest;
 - `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
   causal-feature, quantized-model, shifted-control, and held-out evidence for
   the compact residual probe;
@@ -115,3 +117,8 @@ boundary for adaptive contract v1. Historical contracts without it retain their
 original validation semantics. New multi-artifact experiments should declare
 `complete-result-artifacts-v1`; omitting the policy grants no claim that the
 contract's output list and the result's artifact list are complete.
+
+The optional `pythonSourceClosureEntries` field is likewise backward compatible.
+When present, every named entry must be a declared tool input and every Python
+module it resolves under `tools/` must appear once in the same hash-bound input
+manifest. Non-Python patches, models, and data remain explicit inputs.

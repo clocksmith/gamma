@@ -110,6 +110,12 @@ output is represented by one unique artifact path, with neither undeclared
 artifacts nor aliased evidence roles. Historical v1 contracts remain readable,
 but absence of this policy is not evidence of output-manifest completeness.
 
+`pythonSourceClosureEntries` closes the corresponding prospective code-input
+boundary. The contract validator recursively resolves each named entry's local
+imports and rejects an experiment whose hash-bound inputs omit any module. The
+terminal runner can use the same resolver for its source package; patches,
+models, and data still require explicit declarations.
+
 Candidate-owned scratch directories are now explicit job inputs. The executor
 accepts only project-relative paths below `results/<candidate_id>/`, creates
 them before resource-guard preflight, and retains the declaration in the job
