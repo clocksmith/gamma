@@ -1,0 +1,116 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The exact midpoint gradient is output-head dominated and its non-head concentration changes by chronological third; squared-gradient energy does not localize one stable deep parameter group on this population."
+  },
+  "candidateId": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+    "candidateTreeSha256": "sha256:2a7678daf70cb8ad0f4f8bb03a29b3bb7af515dc3eb490af2c9e7a030b8f5b4e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_named_midpoint_gradient_65536_q3_v1/20260815T200615005458Z_2a7678daf70c.json",
+      "sha256": "sha256:340208a8eb826888a9463e33fbcaa0a970643c8341791c0312baf53874ed6140"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this gradient-energy localization lineage and do not launch a group ablation. Select the next eligible materially different causal mechanism from the evidence-aware queue without inheriting teacher energy, archive savings, or score credit.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/F_named_gradient_1.nncp",
+      "sha256": "sha256:85208cda0ab962d7f8ce61367e0902c0bb864de05e57e733534f782b54736134"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/F_named_gradient_1.stderr",
+      "sha256": "sha256:a03cf61926bbac4b5ad45806ab94ee72818073f0042bac7e7e4b4da581d2fd06"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/F_named_gradient_2.nncp",
+      "sha256": "sha256:85208cda0ab962d7f8ce61367e0902c0bb864de05e57e733534f782b54736134"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/F_named_gradient_2.stderr",
+      "sha256": "sha256:a03cf61926bbac4b5ad45806ab94ee72818073f0042bac7e7e4b4da581d2fd06"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/decision.json",
+      "sha256": "sha256:e1ed4d01cb956a11d30ccb5dd9221a02c612d033efbaed8789b16ed496546881"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/gradient-detail.json",
+      "sha256": "sha256:ed72b47d6eef155219f4edd455d8caa9fa9d419db6c48845118d0f54066b3516"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/guard.json",
+      "sha256": "sha256:34d78f097dfb9522d36a47ad476692d1402220414527dbb37d9be2971919b0c3"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q3_v1/incremental_source.tar.xz",
+      "sha256": "sha256:8b5a235531aff932809b55f958f362eed5e12e400907200194d444ddd1240d17"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T200718Z_9b504935f5.log",
+      "sha256": "sha256:bac637abe1de1bc7c944b9060b114765db13a20f2b74df4f6bb32769f9c0af8f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q3_v1.json",
+    "sha256": "sha256:4edb0cf93d19b7943aa02206a22cafcc38680dbd757c2450ec20aa7e3defbbbb"
+  },
+  "generatedUtc": "2026-08-15T22:36:00+00:00",
+  "hypothesis": {
+    "rationale": "Direct F32 energy selects feed-forward overall but attention in the middle chronological third, the frozen minimum-third share is below 0.35, and output-head share is above 0.5; all integrity and numeric-validity predicates pass, so the frozen single-stable-deep-group hypothesis fails.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T200718Z_9b504935f5.json",
+    "sha256": "sha256:510a85f845b8ccdb319b3d254de0a415e43ea5c3edb640354d86bef77673d8f8"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Squared-gradient energy concentration as selector for one stable deep midpoint parameter group on the exact production F population"
+    ],
+    "transferableLessons": [
+      "Direct F32 accumulation confirms that the q2 qualitative ranking was not a BF16 artifact: feed-forward dominates overall, attention dominates the middle third, and output-head energy remains dominant, so no single-group ablation is justified by gradient magnitude."
+    ],
+    "uncertainties": [
+      "The result does not refute multi-group, signed-logit, Hessian, activation-residual, or decoder-visible causal mechanisms; each would require a materially new prospective contract rather than a gradient-energy retry."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t200718z_9b504935f5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Q3 completed two byte-identical retained F archives and two identical complete 32-block named-gradient tables; every direct and explicit F32 value is finite, cross-path relative delta is zero, and all schema, lineage, source-closure, artifact, and guard checks pass."
+    ],
+    "valid": true
+  }
+}
