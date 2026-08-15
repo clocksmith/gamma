@@ -2,6 +2,14 @@
 
 These instructions apply to the entire Mandate 2038 project.
 
+## Component Intent
+
+Before modifying a file, read the `CATSCAN.md` chain from the repository root
+to the target directory. Treat Target, Authority, Invariants, Acceptance, and
+Non-goals as implementation constraints. A child may narrow its parent but may
+not contradict it. Boundary changes require the affected charter to change
+with the implementation; algorithms remain free inside those constraints.
+
 ## Product Intent
 
 Mandate 2038 is a 2–6 player medium-weight strategy board game about

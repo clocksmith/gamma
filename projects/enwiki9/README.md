@@ -151,9 +151,12 @@ S := S1 + S2
 
 `S` is the figure of merit. **Smaller wins.** The current world record is `fx2-cmix` at `S = 110,793,128`. The prize is paid for `S < 109,685,197` on the full 10⁹-byte `enwik9`.
 
-The repository's active research target is `S <= 108,000,000`. This is an
-internal target, not the official eligibility boundary; recheck the official
-record immediately before any prize claim.
+The repository's active research target is `S <= 105,000,000`. The canonical
+objective, corpus identity, resource rules, evidence floor, and promotion
+ladder are versioned in
+[`contracts/research/v1/objective-contract.json`](contracts/research/v1/objective-contract.json).
+This is an internal target, not the official eligibility boundary; recheck the
+live official rules immediately before any prize claim.
 
 In this repo's results JSONs, `hutter_score` ≡ `S`, `compressed_size` ≡ `S2`, `program_size` ≡ `S1`. The driver counts every file in `programs/<id>/` toward `program_size` *except* `meta.json` and `__pycache__`, so inlined data files (e.g., `cmix_wrapped` ships its binary base64-encoded inside `program.py`) are scored honestly.
 
@@ -272,7 +275,7 @@ A skeleton report:
 ```
 program: schema_lzma_v1
 scope: full 10⁹ bytes
-data_md5: 5b8f88a51bb1f6a3aedd0e9a3df8eb1d
+data_md5: e206c3450ac99950df65bf70ef61a12d
 S = 209,880,125  (b/B 1.679)
   compressed_size = 209,877,656
   program_size    = 2,469

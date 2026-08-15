@@ -2,6 +2,11 @@
 
 This is the primary operating workflow for enwiki9 research.
 
+All proposal, mutation, gate, and promotion decisions are subordinate to the
+versioned objective in `contracts/research/v1/objective-contract.json`.
+Receipts must eventually bind its canonical SHA-256; copied target values are
+not independent authority.
+
 The loop is:
 
 ```text
@@ -77,6 +82,48 @@ After a decisive run, update both layers:
 2. Append the algorithm-level conclusion and next gate to
    `docs/research_register.md`.
 3. Refresh generated inventories, frontier views, and operator status.
+
+Process completion does not update scientific candidate status. Every terminal
+revision-bound job must first receive one validated reflection:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py reflect <job_id> \
+  --validity valid \
+  --validity-reason "<why the causal comparison is valid>" \
+  --hypothesis-verdict supported \
+  --hypothesis-rationale "<receipt-backed verdict>" \
+  --failure-class algorithmic-gain \
+  --localized-cause "<specific mechanism boundary>" \
+  --causal-confidence high \
+  --controls-equivalent true \
+  --measurement 'netBytesSaved=results/<receipt>.json#/net_bytes_saved' \
+  --lesson "<transferable mechanism lesson>" \
+  --decision next-gate \
+  --promotion-pass true \
+  --kill-pass false \
+  --next-gate-bytes 1000000 \
+  --decision-rationale "<smallest justified successor gate>" \
+  --evidence results/<receipt>.json
+```
+
+Measurements are accepted only through hash-linked JSON-pointer assertions.
+Invalid, infrastructure-failed, implementation-failed, or incomplete runs can
+only be retried or held; they cannot promote or retire the algorithm. Promotion
+requires valid controls, a supported hypothesis, an algorithmic-gain
+attribution, and explicit promotion/kill predicate results. The receipt then
+updates derived candidate status without changing semantic source identity.
+
+Rank actionable proposals after reflection with:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py next-experiment
+```
+
+The ordering is versioned in `contracts/research/v1/search-policy.json`. It is
+lexicographic and fail-closed: validated parent evidence outranks unsupported
+activity, asserted net bytes are never inferred, expected savings are reduced
+by maximum source cost, and search priority breaks only later ties. Ranking does
+not change measured values or authorize a gate.
 
 ## Discover And Propose Algorithms
 
@@ -180,6 +227,24 @@ programs/<candidate_id>/meta.json
 
 Implement `compress(data)` and `decompress(archive)` in `program.py`.
 
+`new`, `mutate`, and `develop` create a content-addressed candidate-revision
+receipt. After implementing a new scaffold or making any pre-measurement edit,
+seal the exact tree explicitly:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py seal <candidate_id> \
+  --hypothesis "<falsifiable mechanism claim>" \
+  --change "<complete semantic change>" \
+  --evidence <proposal-or-design-receipt>
+```
+
+The receipt stores immutable, deduplicated source blobs under
+`operations/adaptive/candidate-blobs/`, binds the parent and previous revision,
+and records normalized semantic metadata. Derived `meta.json` status and
+measurement fields do not change algorithm identity. Once a candidate has any
+queued or measured evidence, source drift is rejected and the edit must use a
+new candidate ID.
+
 ## Mutate
 
 Every mutation gets a new candidate ID. Never mutate an active or previously
@@ -203,6 +268,13 @@ python3 projects/enwiki9/tools/enwiki9_lab.py mutate <parent_id> <new_id> \
 The clone removes inherited measurements and records the parent, hypothesis,
 creation event, and source replacements in
 `operations/adaptive/mutations.jsonl`.
+
+Queue receipts bind the sealed tree and revision receipt. Workers validate that
+binding and execute a read-only materialization from immutable blobs, not the
+mutable `programs/<id>/` working tree. Legacy unbound jobs cannot execute; queue
+a revision-bound retry. A legacy candidate receives an explicit
+`legacy-current-state` receipt, which captures its current source without
+claiming retroactive identity for old measurements.
 
 ## Queue
 

@@ -6,6 +6,7 @@ This directory is the canonical documentation index for GAMMA.
 
 | Topic | Canonical doc |
 |---|---|
+| Component authority and recursive intent | [COMPONENT_INDEX.md](COMPONENT_INDEX.md) |
 | System architecture | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Engine internals | [ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md) |
 | Model format compatibility | [MODEL_FORMATS.md](MODEL_FORMATS.md) |

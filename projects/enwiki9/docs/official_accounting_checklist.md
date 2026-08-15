@@ -4,6 +4,11 @@ This checklist is for promoted `enwik9` candidates only. Prefix results,
 forecasts, local proxy scores, and shadow-coder simulations do not satisfy this
 checklist.
 
+The canonical Gamma objective is
+`contracts/research/v1/objective-contract.json`. This checklist expands its
+prize-facing accounting procedure; conflicting prose does not override the
+versioned contract.
+
 ## Score Object
 
 The official-facing score must be audited as:

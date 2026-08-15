@@ -21,6 +21,11 @@ import subprocess
 from dataclasses import dataclass
 from typing import Any
 
+try:
+    from projects.enwiki9.tools import research_contracts
+except ModuleNotFoundError:
+    import research_contracts
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
@@ -30,8 +35,10 @@ FRONTIER_DEFAULT = ROOT / "docs" / "hutter_frontier.json"
 OUT_JSON_DEFAULT = ROOT / "upper_bound_certificate.json"
 OUT_MD_DEFAULT = ROOT / "UPPER_BOUND_CERTIFICATE.md"
 
-FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 105_000_000  # Legacy schema name retained for compatibility.
+OBJECTIVE = research_contracts.validate_objective()
+OBJECTIVE_BINDING = research_contracts.objective_binding()
+FULL_INPUT_BYTES = OBJECTIVE["corpus"]["bytes"]
+TARGET_10_95 = OBJECTIVE["score"]["targetBytes"]  # Legacy name retained in output schema.
 CALIBRATED_BASELINE_SCORE = 110_181_114
 
 METADATA_INHERITED_100M = {
@@ -125,6 +132,13 @@ class Result:
     roundtrip_ok: bool | None
     determinism_ok: bool | None
     timestamp: str
+    objective_digest: str | None = None
+    score_accounting_complete: bool = False
+    dependency_closure_complete: bool = False
+    resource_evidence_complete: bool = False
+    independent_decode_ok: bool = False
+    license_audit_ok: bool = False
+    prize_claimable: bool = False
 
     @property
     def percent(self) -> float:
@@ -144,7 +158,19 @@ class Result:
 
     @property
     def is_full_corpus_proof(self) -> bool:
-        return self.is_constructive and self.data_size == FULL_INPUT_BYTES
+        return (
+            self.is_constructive
+            and self.determinism_ok is True
+            and self.data_size == FULL_INPUT_BYTES
+            and self.data_sha256 == OBJECTIVE_BINDING["corpusSha256"]
+            and self.objective_digest == OBJECTIVE_BINDING["objectiveDigest"]
+            and self.score_accounting_complete
+            and self.dependency_closure_complete
+            and self.resource_evidence_complete
+            and self.independent_decode_ok
+            and self.license_audit_ok
+            and self.prize_claimable
+        )
 
 
 def as_int(data: dict[str, Any], key: str) -> int:
@@ -310,6 +336,8 @@ def load_result(path: pathlib.Path) -> Result | None:
     if not isinstance(roundtrip, bool):
         roundtrip = None
 
+    objective = data.get("objective")
+    package_accounting = data.get("package_accounting")
     return Result(
         path=path,
         program_id=program_id,
@@ -321,6 +349,18 @@ def load_result(path: pathlib.Path) -> Result | None:
         roundtrip_ok=roundtrip,
         determinism_ok=determinism_ok(data),
         timestamp=str(data.get("timestamp", "")),
+        objective_digest=(
+            objective.get("objectiveDigest") if isinstance(objective, dict) else None
+        ),
+        score_accounting_complete=data.get("score_accounting_complete") is True,
+        dependency_closure_complete=(
+            isinstance(package_accounting, dict)
+            and package_accounting.get("dependency_closure_complete") is True
+        ),
+        resource_evidence_complete=data.get("resource_evidence_complete") is True,
+        independent_decode_ok=data.get("independent_decode_ok") is True,
+        license_audit_ok=data.get("license_audit_ok") is True,
+        prize_claimable=data.get("prize_claimable") is True,
     )
 
 
@@ -509,6 +549,13 @@ def result_record(row: Result) -> dict[str, Any]:
         "archive_bpb": round(row.archive_bpb, 9),
         "roundtrip_ok": row.roundtrip_ok,
         "determinism_ok": row.determinism_ok,
+        "objective_digest": row.objective_digest,
+        "score_accounting_complete": row.score_accounting_complete,
+        "dependency_closure_complete": row.dependency_closure_complete,
+        "resource_evidence_complete": row.resource_evidence_complete,
+        "independent_decode_ok": row.independent_decode_ok,
+        "license_audit_ok": row.license_audit_ok,
+        "prize_claimable": row.prize_claimable,
         "timestamp": row.timestamp,
     }
 
@@ -952,6 +999,7 @@ def build_certificate(
             "If roundtrip_ok is true for archive A and decoder D on target corpus x, "
             "then |A| + |D| is a constructive upper bound for x in this testbed."
         ),
+        "objective": OBJECTIVE_BINDING,
         "target": {
             "input_size": FULL_INPUT_BYTES,
             "target_score_10_95": TARGET_10_95,

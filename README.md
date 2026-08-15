@@ -8,6 +8,8 @@ multiple active model engines.
 - [Browser demo](https://gamma-web-game.web.app/)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Documentation index](docs/README.md)
+- [Durable goals](GOALS.md)
+- [Component authority index](docs/COMPONENT_INDEX.md)
 
 ## Mission, goal, and value
 

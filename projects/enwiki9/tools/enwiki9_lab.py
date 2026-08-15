@@ -8,6 +8,7 @@ import concurrent.futures
 import copy
 import datetime as dt
 import fcntl
+import hashlib
 import json
 import os
 import pathlib
@@ -15,6 +16,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 from typing import Any
@@ -27,6 +29,8 @@ from enwiki9_omega import (
     proposal_search_fields,
     record_exclusion,
 )
+import enwiki9_candidate_revisions as candidate_revisions
+import enwiki9_reflections
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
@@ -231,7 +235,27 @@ def create_candidate(
             hypothesis=hypothesis,
             description=description,
         )
+        meta["candidate_revision_protocol"] = "gamma.enwiki9.candidate-revision.v1"
         atomic_json(destination / "meta.json", meta)
+        revision_replacements = [
+            {
+                "oldSha256": hashlib.sha256(row["old"].encode()).hexdigest(),
+                "newSha256": hashlib.sha256(row["new"].encode()).hexdigest(),
+            }
+            for row in applied
+        ]
+        candidate_revisions.record_revision(
+            candidate_id=candidate_id,
+            kind="mutate" if parent is not None else "create",
+            hypothesis=hypothesis,
+            summary=[
+                "Cloned and changed the declared parent candidate."
+                if parent is not None
+                else "Created the candidate scaffold."
+            ],
+            replacements=revision_replacements,
+            parent_id=parent,
+        )
         append_jsonl(
             MUTATION_LOG,
             {
@@ -419,6 +443,12 @@ def develop_proposal(
         )
     meta_path = destination / "meta.json"
     meta = load_json(meta_path)
+    candidate_revisions.ensure_current_revision(candidate_id)
+    if candidate_revisions.candidate_has_evidence(candidate_id):
+        raise ValueError(
+            "cannot attach proposal metadata to a queued or measured candidate; "
+            "develop a new candidate identity"
+        )
     meta["omega"] = {
         "proposal_id": proposal_id,
         "mechanism_change": proposal.get("mechanism_change", "unspecified"),
@@ -427,6 +457,14 @@ def develop_proposal(
         "parent_proposal_id": proposal.get("parent_proposal_id"),
     }
     atomic_json(meta_path, meta)
+    candidate_revisions.record_revision(
+        candidate_id=candidate_id,
+        kind="proposal-development",
+        hypothesis=str(proposal.get("hypothesis", proposal_id)),
+        summary=[f"Bound candidate to algorithm proposal {proposal_id}."],
+        evidence=[path.relative_to(ROOT).as_posix()],
+        parent_id=parent if isinstance(parent, str) else None,
+    )
     proposal = transition_proposal(
         proposal_id,
         target_state="developed",
@@ -550,6 +588,7 @@ def enqueue_job(
 ) -> dict[str, Any]:
     ensure_layout()
     candidate_meta(candidate_id)
+    revision_path, revision = candidate_revisions.ensure_current_revision(candidate_id)
     if gate_size <= 0:
         raise ValueError("gate size must be positive")
     if archive_ceiling is not None and archive_ceiling <= 0:
@@ -563,9 +602,11 @@ def enqueue_job(
     priority_value = default_priority(gate_size) if priority is None else priority
     job_id = f"{compact_utc()}_{uuid.uuid4().hex[:10]}"
     job = {
-        "schema": "enwiki9_adaptive_job_v1",
+        "schema": "enwiki9_adaptive_job_v2",
         "job_id": job_id,
         "candidate_id": candidate_id,
+        "candidate_tree_sha256": revision["candidateTreeSha256"],
+        "candidate_revision": candidate_revisions.receipt_reference(revision_path),
         "gate_size": gate_size,
         "priority": priority_value,
         "purpose": purpose,
@@ -803,6 +844,22 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
     gate_size = int(job["gate_size"])
     job_id = str(job["job_id"])
     log_path = RUN_LOGS / f"{job_id}.log"
+    try:
+        _, revision_receipt = candidate_revisions.verify_job_binding(job)
+    except (FileNotFoundError, ValueError) as exc:
+        job.update(
+            {
+                "state": "failed",
+                "finished_at": utc_now(),
+                "returncode": None,
+                "failure": "candidate_revision_validation_failed",
+                "failure_detail": str(exc),
+            }
+        )
+        destination = QUEUE_DIRS["failed"] / running_path.name
+        atomic_json(running_path, job)
+        os.replace(running_path, destination)
+        return job
     tool = job.get("tool")
     if isinstance(tool, str):
         tool_path = (ROOT / tool).resolve()
@@ -826,12 +883,6 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
             "--run",
             "--json",
         ]
-        if str(job.get("purpose", "")).strip().lower() not in {
-            "infrastructure",
-            "diagnostic",
-            "oracle",
-        }:
-            command.append("--update-meta")
         archive_ceiling = job.get("archive_ceiling")
         if isinstance(archive_ceiling, int) and archive_ceiling > 0:
             command.extend(
@@ -842,19 +893,38 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
             )
 
     started = time.monotonic()
-    with log_path.open("w") as log:
-        log.write(json.dumps({"job": job, "command": command}, sort_keys=True) + "\n")
-        log.flush()
-        process = subprocess.Popen(
-            command,
-            cwd=ROOT,
-            stdout=log,
-            stderr=subprocess.STDOUT,
+    process_environment = os.environ.copy()
+    process_environment["GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON"] = json.dumps(
+        {
+            "candidateId": candidate_id,
+            "candidateTreeSha256": job["candidate_tree_sha256"],
+            "receipt": job["candidate_revision"],
+        },
+        sort_keys=True,
+    )
+    with tempfile.TemporaryDirectory(prefix=f"gamma-enwiki9-{job_id}-") as temporary:
+        snapshot_root = pathlib.Path(temporary) / candidate_id
+        candidate_revisions.materialize_revision(revision_receipt, snapshot_root)
+        process_environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID"] = candidate_id
+        process_environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT"] = str(
+            snapshot_root
         )
-        job["worker_pid"] = process.pid
-        job["worker_started_at"] = utc_now()
-        atomic_json(running_path, job)
-        returncode = process.wait()
+        with log_path.open("w") as log:
+            log.write(
+                json.dumps({"job": job, "command": command}, sort_keys=True) + "\n"
+            )
+            log.flush()
+            process = subprocess.Popen(
+                command,
+                cwd=ROOT,
+                env=process_environment,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+            )
+            job["worker_pid"] = process.pid
+            job["worker_started_at"] = utc_now()
+            atomic_json(running_path, job)
+            returncode = process.wait()
     elapsed = round(time.monotonic() - started, 3)
     final_state = "completed" if returncode == 0 else "failed"
     job.update(
@@ -1155,6 +1225,98 @@ def build_parser() -> argparse.ArgumentParser:
     mutate.add_argument("--enqueue", action="store_true")
     add_enqueue_options(mutate)
 
+    seal = subparsers.add_parser(
+        "seal",
+        help="snapshot an implemented candidate before its first measurement",
+    )
+    seal.add_argument("candidate_id")
+    seal.add_argument("--hypothesis", required=True)
+    seal.add_argument("--change", action="append", required=True)
+    seal.add_argument("--evidence", action="append", default=[])
+
+    reflect = subparsers.add_parser(
+        "reflect",
+        help="classify a terminal revision-bound job before changing candidate state",
+    )
+    reflect.add_argument("job_id")
+    reflect.add_argument(
+        "--validity",
+        required=True,
+        choices=(
+            "valid",
+            "implementation-failure",
+            "infrastructure-failure",
+            "invalid-experiment",
+            "incomplete-evidence",
+        ),
+    )
+    reflect.add_argument("--validity-reason", action="append", required=True)
+    reflect.add_argument(
+        "--hypothesis-verdict",
+        required=True,
+        choices=("supported", "refuted", "inconclusive", "not-tested"),
+    )
+    reflect.add_argument("--hypothesis-rationale", required=True)
+    reflect.add_argument(
+        "--failure-class",
+        required=True,
+        choices=(
+            "algorithmic-gain",
+            "algorithmic-loss",
+            "causal-failure",
+            "transfer-failure",
+            "accounting-failure",
+            "implementation-failure",
+            "infrastructure-failure",
+            "invalid-experiment",
+            "inconclusive",
+        ),
+    )
+    reflect.add_argument("--localized-cause", required=True)
+    reflect.add_argument(
+        "--causal-confidence",
+        required=True,
+        choices=("high", "medium", "low", "none"),
+    )
+    reflect.add_argument(
+        "--controls-equivalent",
+        required=True,
+        choices=("true", "false", "unknown"),
+    )
+    reflect.add_argument(
+        "--measurement",
+        action="append",
+        default=[],
+        help="FIELD=project/path.json#/json/pointer",
+    )
+    reflect.add_argument("--lesson", action="append", required=True)
+    reflect.add_argument("--retired-dimension", action="append", default=[])
+    reflect.add_argument("--uncertainty", action="append", default=[])
+    reflect.add_argument(
+        "--decision",
+        required=True,
+        choices=("promote", "retire", "retry", "mutate", "next-gate", "hold"),
+    )
+    reflect.add_argument(
+        "--promotion-pass",
+        required=True,
+        choices=("true", "false", "unknown"),
+    )
+    reflect.add_argument(
+        "--kill-pass",
+        required=True,
+        choices=("true", "false", "unknown"),
+    )
+    reflect.add_argument("--next-gate-bytes", type=int)
+    reflect.add_argument("--decision-rationale", required=True)
+    reflect.add_argument("--evidence", action="append", type=pathlib.Path, default=[])
+    reflect.add_argument("--experiment", type=pathlib.Path)
+
+    subparsers.add_parser(
+        "next-experiment",
+        help="rank live proposals using validated parent reflections",
+    )
+
     enqueue = subparsers.add_parser("enqueue", help="queue a candidate gate")
     enqueue.add_argument("candidate_id")
     add_enqueue_options(enqueue)
@@ -1350,6 +1512,69 @@ def main() -> int:
                 tags=args.tag,
             )
             print(json.dumps(job, indent=2, sort_keys=True))
+            return 0
+        if args.command == "seal":
+            revision_path, revision = candidate_revisions.seal_candidate(
+                args.candidate_id,
+                hypothesis=args.hypothesis,
+                summary=args.change,
+                evidence=args.evidence,
+            )
+            print(
+                json.dumps(
+                    {
+                        "path": revision_path.relative_to(ROOT).as_posix(),
+                        "revision": revision,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "reflect":
+            reflection_path, reflection = enwiki9_reflections.create_reflection(
+                job_id=args.job_id,
+                valid=args.validity == "valid",
+                validity_classification=args.validity,
+                validity_reasons=args.validity_reason,
+                hypothesis_verdict=args.hypothesis_verdict,
+                hypothesis_rationale=args.hypothesis_rationale,
+                failure_class=args.failure_class,
+                localized_cause=args.localized_cause,
+                causal_confidence=args.causal_confidence,
+                controls_equivalent=args.controls_equivalent,
+                measurements=args.measurement,
+                lessons=args.lesson,
+                retired_dimensions=args.retired_dimension,
+                uncertainties=args.uncertainty,
+                decision=args.decision,
+                promotion_pass=args.promotion_pass,
+                kill_pass=args.kill_pass,
+                next_gate_bytes=args.next_gate_bytes,
+                decision_rationale=args.decision_rationale,
+                evidence=args.evidence,
+                experiment=args.experiment,
+            )
+            print(
+                json.dumps(
+                    {
+                        "path": reflection_path.relative_to(ROOT).as_posix(),
+                        "reflection": reflection,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "next-experiment":
+            proposals = iter_proposals({"proposed", "claimed"})
+            print(
+                json.dumps(
+                    enwiki9_reflections.select_next_experiment(proposals),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return 0
         if args.command == "enqueue-tool":
             job = enqueue_tool_job(

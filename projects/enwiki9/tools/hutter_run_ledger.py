@@ -9,6 +9,11 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+try:
+    from projects.enwiki9.tools import research_contracts
+except ModuleNotFoundError:
+    import research_contracts
+
 
 ROOT = Path(__file__).resolve().parents[1]
 FRONTIER = ROOT / "docs" / "hutter_frontier.json"
@@ -160,9 +165,15 @@ def normalize_row(row: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]
 
 def build_ledger(project_root: Path, frontier: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
+    objective = research_contracts.objective_binding()
     target = frontier.get("target", {})
-    if target.get("input_bytes") != 1_000_000_000 or target.get("score_bytes") != 105_000_000:
+    if (
+        target.get("input_bytes") != objective["corpusBytes"]
+        or target.get("score_bytes") != objective["targetScoreBytes"]
+    ):
         errors.append("frontier target is not the canonical enwiki9 target")
+    if frontier.get("objective") != objective:
+        errors.append("frontier objective binding is missing or stale")
 
     rows: list[dict[str, Any]] = []
     seen_run_ids: set[str] = set()
@@ -246,6 +257,7 @@ def build_ledger(project_root: Path, frontier: dict[str, Any]) -> tuple[dict[str
     ledger = {
         "schema": "enwiki9_hutter_run_ledger_v1",
         "source_frontier": "docs/hutter_frontier.json",
+        "objective": objective,
         "target": target,
         "summary": summary,
         "runs": rows,
@@ -264,6 +276,7 @@ def render_markdown(ledger: dict[str, Any]) -> str:
         "",
         "Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.",
         "",
+        f"- Objective: `{ledger['objective']['objectiveId']}` (`{ledger['objective']['objectiveDigest']}`).",
         f"- Target: `{target['score_bytes']:,}` bytes (`{target['score_bytes'] / target['input_bytes'] * 100:.7f}%`).",
         f"- Candidate runs indexed: `{ledger['summary']['run_count']}`.",
         f"- Candidate lineages indexed: `{ledger['summary']['candidate_count']}`.",

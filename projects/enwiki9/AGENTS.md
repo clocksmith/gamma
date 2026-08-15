@@ -3,6 +3,14 @@
 These instructions apply to `projects/enwiki9/`. Also obey
 `../../AGENTS.md`.
 
+## Component Intent
+
+Before modifying a file, read the `CATSCAN.md` chain from the repository root
+to the target directory. Treat Target, Authority, Invariants, Acceptance, and
+Non-goals as implementation constraints. A child may narrow its parent but may
+not contradict it. Boundary changes require the affected charter to change
+with the implementation; algorithms remain free inside those constraints.
+
 ## Main Focus
 
 Continuously create, mutate, try, measure, track, and promote compression
@@ -48,7 +56,9 @@ measured candidate.
 
 ## Proof Objective
 
-The objective is a constructive official full-corpus score:
+The canonical objective contract is
+`contracts/research/v1/objective-contract.json`. The objective is a
+constructive official full-corpus score:
 
 ```text
 score <= 105,000,000 bytes
