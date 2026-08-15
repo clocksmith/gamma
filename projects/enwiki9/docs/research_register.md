@@ -1,5 +1,25 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Reference-safe named-gradient retry is prospectively frozen
+
+The q0 named-gradient implementation reached the first production F backward
+pass and reproducibly aborted at `libnc.c:7564`: `nc_free_tensor` observed an
+already-consumed tensor reference. The defect is localized: LibNC's
+`nc_tensor_isfinite` consumes its input, while q0 passed the callback-owned
+gradient without first duplicating the reference. The
+[`reproduction guard`](../results/delta_midas_named_midpoint_gradient_65536_q0_v1/abort-reproduction.guard.json)
+records the same `SIGABRT` under the declared memory and scratch bounds.
+
+Candidate `delta_midas_named_midpoint_gradient_65536_q1_v1` is an immutable
+implementation retry. Its
+[`experiment contract`](../operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q1_v1.json)
+changes only reference ownership by calling `nc_tensor_isfinite` on a duplicate
+and makes subprocess failure streams durable. Population, F-arm behavior,
+grouping, thresholds, repeats, promotion, kill conditions, and zero-credit
+boundary are unchanged. Q0 remains terminal implementation evidence; q1 must
+still prove both exact archives and complete deterministic rows before any
+gradient localization conclusion is allowed.
+
 ## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
 
 Candidate `delta_midas_named_midpoint_gradient_65536_q0_v1` is the next

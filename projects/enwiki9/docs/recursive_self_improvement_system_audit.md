@@ -147,12 +147,15 @@ reflection. That negative transition demonstrates the intended loop: a positive
 teacher attribution did not bypass controls, and a completed process did not
 become a successor claim.
 
-The next DELTA-MIDAS action is now a prospectively frozen named midpoint-gradient
-localization on the production F arm. It binds two repeated encodes, archive
+The next DELTA-MIDAS action is now a prospectively frozen reference-safe named
+midpoint-gradient localization on the production F arm. It binds two repeated encodes, archive
 identity, complete named-parameter coverage, chronological thirds, and frozen
 non-head concentration thresholds. Passing can select only one separately
 registered group ablation; failing with intact controls retires gradient-energy
 localization. It remains closed-teacher oracle evidence with zero score credit.
+The q0 instrumentation consumed a callback-owned tensor during its finiteness
+check and is terminal implementation-failure evidence; q1 changes only that
+reference ownership and durable native-error capture.
 
 ## Composition and independent audit
 

@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-15T17:18:04+00:00`
+- Generated at UTC: `2026-08-15T17:24:23+00:00`
 
 ## Target State
 
@@ -34,9 +34,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `true`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
+- Pending adaptive jobs: `28`
 - Held pending adaptive jobs: `27`
-- Claimable pending adaptive jobs: `0`
+- Claimable pending adaptive jobs: `1`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
@@ -115,11 +115,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `779`
-- Registered programs: `337`
-- Untracked nonignored entries: `2`
-- Modified tracked entries: `5`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=84, measured_negative=100, retired=544`
+- Program directories: `780`
+- Registered programs: `338`
+- Untracked nonignored entries: `12`
+- Modified tracked entries: `4`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=84, measured_negative=100, retired=544, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
