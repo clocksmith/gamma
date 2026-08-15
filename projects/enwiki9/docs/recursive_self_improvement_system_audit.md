@@ -154,8 +154,10 @@ non-head concentration thresholds. Passing can select only one separately
 registered group ablation; failing with intact controls retires gradient-energy
 localization. It remains closed-teacher oracle evidence with zero score credit.
 The q0 instrumentation consumed a callback-owned tensor during its finiteness
-check and is terminal implementation-failure evidence; q1 changes only that
-reference ownership and durable native-error capture.
+check; q1 fixed ownership and exposed a non-F32 scalar-read defect. Both are
+terminal implementation-failure evidence. Q2 inherits the registered science
+through `tools/enwiki9_freeze_implementation_retry.py` and changes only the
+energy reduction's scalar type while retaining durable native-error capture.
 
 ## Composition and independent audit
 

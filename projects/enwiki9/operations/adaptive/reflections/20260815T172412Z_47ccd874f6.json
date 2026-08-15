@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Gradient tensors use a non-F32 item type on the production path; q1 reduced squared energy without converting the scalar tensor to NC_TYPE_F32 before nc_get_scalar_f32."
+  },
+  "candidateId": "delta_midas_named_midpoint_gradient_65536_q1_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_named_midpoint_gradient_65536_q1_v1",
+    "candidateTreeSha256": "sha256:06ad11fe7291479d035bb93c3c42b08be7c11765f3d026cf10d0171cb28bd6c2",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_named_midpoint_gradient_65536_q1_v1/20260815T172259240695Z_06ad11fe7291.json",
+      "sha256": "sha256:235665a244752fac61f91744999a67ace00858756f4a61bdfb08dd8d86b96a2c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create a new immutable implementation retry that converts only the energy reduction to NC_TYPE_F32; retain all experiment population and decision predicates unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q1_v1/F_named_gradient_1.stderr",
+      "sha256": "sha256:8f5d94b9099fbce28f31a8fec8c898e9e892352cd892525701fb1f4b6e65c4fb"
+    },
+    {
+      "path": "results/delta_midas_named_midpoint_gradient_65536_q1_v1/guard.json",
+      "sha256": "sha256:da11504c954fb20012c022a4019e6ebab1800b99f96c80b90439450aaf9d691f"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T172412Z_47ccd874f6.log",
+      "sha256": "sha256:abdef084028ab116b63de73adb88aa1d3d31b046b07303f44500004ba93e4a1c"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q1_v1.json",
+    "sha256": "sha256:fc5c6f2c6c7495494dec14fdf3c2de207fc75c9f1168cc8aaf8e01ca00ad83d4"
+  },
+  "generatedUtc": "2026-08-15T17:26:13+00:00",
+  "hypothesis": {
+    "rationale": "The first archive and named-gradient table did not complete, so no frozen localization predicate can be evaluated.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260815T172412Z_47ccd874f6.json",
+    "sha256": "sha256:3e86c3885ca2795aa15297fa620c5e0255c2f3f92705a1976e751dd0e95d49de"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "LibNC scalar readers are type-specific: instrumentation must duplicate callback-owned inputs before consuming operations and explicitly convert reductions to the reader type."
+    ],
+    "uncertainties": [
+      "No uncertainty remains about the q1 assertion, but archive identity and all scientific gradient-concentration questions remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t172412z_47ccd874f6",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Reference-safe q1 preserved native stderr but aborted during the first named-gradient energy read because nc_get_scalar_f32 received a non-F32 reduction tensor."
+    ],
+    "valid": false
+  }
+}
