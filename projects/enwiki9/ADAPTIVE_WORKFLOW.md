@@ -11,10 +11,10 @@ The loop is:
 
 ```text
 analyze evidence
--> propose and rank a mechanism
+-> freeze a structured experiment contract
+-> propose and rank a mechanism against that contract
 -> claim and develop
 -> create or mutate
--> freeze a structured experiment contract
 -> queue
 -> run the smallest missing exact gate
 -> record result and lifecycle state
@@ -74,8 +74,9 @@ or `causal_shadow` and receive zero score credit.
 
 A portfolio records evaluation and ranking; it does not create active work.
 Promote only the selected bounded probes into adaptive proposals. Every
-proposal must cite its register section, portfolio ID, predecessor receipt, or
-other durable evidence through `--evidence`.
+proposal must cite immutable predecessor receipts or other durable artifacts
+through `--evidence`; changing narrative documents are linked from the register
+but are not hash-bound proposal inputs.
 
 After a decisive run, update both layers:
 
@@ -125,10 +126,12 @@ python3 projects/enwiki9/tools/enwiki9_lab.py next-experiment
 ```
 
 The ordering is versioned in `contracts/research/v1/search-policy.json`. It is
-lexicographic and fail-closed: validated parent evidence outranks unsupported
-activity, asserted net bytes are never inferred, expected savings are reduced
-by maximum source cost, and search priority breaks only later ties. Ranking does
-not change measured values or authorize a gate.
+lexicographic and fail-closed: a valid frozen experiment and validated parent
+evidence outrank unsupported activity; asserted net bytes, transfer retention,
+runtime, and memory remain distinct; expected savings are reduced by maximum
+package cost; lower uncertainty and interaction risk break later ties; manual
+priority comes after evidence and cost. Ranking does not change measured values
+or authorize a gate.
 
 Before combining measured mechanisms, create a validated mechanism graph under
 `operations/adaptive/composition/`. Mark shared probability boundaries,
@@ -138,8 +141,9 @@ ideal bits to an archive result.
 
 ## Discover And Propose Algorithms
 
-Algorithm discovery is separate from gate discovery. Record a proposal before
-writing source:
+Algorithm discovery is separate from gate discovery. Freeze and validate
+`operations/adaptive/experiments/<id>.json` before recording a proposal or
+writing candidate source:
 
 ```bash
 python3 projects/enwiki9/tools/enwiki9_lab.py propose <proposal_id> \
@@ -150,10 +154,11 @@ python3 projects/enwiki9/tools/enwiki9_lab.py propose <proposal_id> \
   --max-program-bytes <bytes> \
   --promotion "<numeric promotion condition>" \
   --kill "<numeric kill condition>" \
+  --experiment projects/enwiki9/operations/adaptive/experiments/<id>.json \
   --mechanism-change change_coded_alphabet \
   --interface "<clean interface exposed to descendants>" \
   --retired-neighborhood "<negative neighborhood this does not repeat>" \
-  --evidence <receipt-or-document>
+  --evidence <immutable-receipt>
 ```
 
 Mechanism classes are `substrate`, `endpoint`, `representation`, and `coder`.
@@ -280,10 +285,12 @@ The clone removes inherited measurements and records the parent, hypothesis,
 creation event, and source replacements in
 `operations/adaptive/mutations.jsonl`.
 
-Queue receipts bind the sealed tree and revision receipt. Workers validate that
+V3 queue receipts bind the proposal, prospectively frozen experiment, sealed
+tree, candidate-revision receipt, and runner digest. Workers validate every
 binding and execute a read-only materialization from immutable blobs, not the
-mutable `programs/<id>/` working tree. Legacy unbound jobs cannot execute; queue
-a revision-bound retry. A legacy candidate receives an explicit
+mutable `programs/<id>/` working tree. A candidate with an unreflected terminal
+v2/v3 job cannot enter another gate or produce a successor. Legacy unbound jobs
+cannot execute; queue a revision-bound retry. A legacy candidate receives an explicit
 `legacy-current-state` receipt, which captures its current source without
 claiming retroactive identity for old measurements.
 
@@ -317,6 +324,9 @@ python3 projects/enwiki9/tools/enwiki9_lab.py enqueue-tool <candidate_id> \
 
 Tool paths are restricted to `projects/enwiki9/tools/`. Tool jobs cannot use a
 score-bearing purpose and never update candidate lifecycle or frontier credit.
+The tool digest is bound as the v3 runner, and the candidate's proposal-bound
+experiment is inferred unless `--experiment` is supplied to assert the same
+reference explicitly.
 
 Job purpose controls lifecycle mutation:
 

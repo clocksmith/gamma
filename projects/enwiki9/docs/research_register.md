@@ -1,5 +1,31 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Named production midpoint-gradient localization is prospectively frozen
+
+Candidate `delta_midas_named_midpoint_gradient_65536_q0_v1` is the next
+bounded teacher attribution after the positive deep F-versus-O residual and
+the negative compact hashed-linear probe. Its structured
+[`experiment contract`](../operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q0_v1.json)
+binds the exact `65,536`-symbol production population, retained F archive,
+closed-source inputs, immutable parent revision, analyzer, materializer, two
+repeat encodes, and zero-credit boundary.
+
+The only changed mechanism is observation: during each F-arm first-half
+midpoint backward pass, the instrumented teacher emits the stable `NCParam`
+name, gradient shape, hash, finiteness, and squared gradient energy. The
+instrumented archive must remain byte-identical to retained F, both encodes and
+complete named-gradient rows must repeat exactly, and every block must expose
+the same parameter set. A successor is authorized only if one non-head group
+is dominant in every chronological third, its minimum share of non-head energy
+is at least `0.35`, and the output-head share of total energy is at most `0.5`.
+
+Passing selects exactly one separately preregistered group-ablation arm.
+Failing the localization thresholds with all integrity predicates intact
+retires gradient-energy localization. Gradient magnitude is not probability
+attribution, the closed LibNC teacher remains unshippable, and this run cannot
+claim archive savings, an open correction, transfer, package economics, or
+objective bytes.
+
 ## 2026-08-15 - Fixed decoder-visible DELTA-MIDAS probe is terminal negative
 
 The first prospective successor to the deep-residual receipt is terminal
@@ -25,10 +51,10 @@ or inherit archive bytes, transfer, package economics, or score credit.
 A source-bound design audit confirms that LibNC exposes stable `NCParam` names
 at the midpoint backward callback (`embed`, output head, attention, feed-forward,
 normalization, and per-layer parameters). The next justified teacher action is
-therefore one prospectively frozen F-arm midpoint-only named gradient/update
-projection, summarized by group and chronological third. Its only possible
-consequence is selection of one later group-ablation arm; gradient magnitude is
-not itself probability attribution. No such teacher rerun is active or credited.
+the now-frozen F-arm midpoint-only named gradient projection above, summarized
+by group and chronological third. Its only possible consequence is selection
+of one later group-ablation arm; gradient magnitude is not itself probability
+attribution. It remains zero-credit teacher work.
 
 ## 2026-08-15 - DELTA-MIDAS deep residual survives exact retained-trace gate
 
