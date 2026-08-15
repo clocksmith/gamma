@@ -98,6 +98,9 @@ Before reading q2's low-precision summary, q3 requires its decision, detail, and
 terminal incomplete-evidence reflection to match the prospectively hash-bound
 inputs and requires that reflection to authorize `retry` before native work
 starts; the same check repeats before q2's diagnostic summary is consumed.
+Every declared q3 output must remain directly inside its candidate result
+boundary and must be absent before execution, so a failed partial run cannot be
+silently resumed as an independent repeat.
 Its incremental source archive uses the same resolved closure and canonical tar
 ownership, mode, and timestamp metadata so filesystem metadata cannot change the
 artifact hash. Immediately before packaging, every member must still equal its
