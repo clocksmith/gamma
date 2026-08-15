@@ -118,6 +118,7 @@ proves that the result itself is declared and that every remaining declared
 output is represented by one unique artifact path, with neither undeclared
 artifacts nor aliased evidence roles. Historical v1 contracts remain readable,
 but absence of this policy is not evidence of output-manifest completeness.
+The implementation-retry freezer now enables this policy by default.
 
 `pythonSourceClosureEntries` closes the corresponding prospective code-input
 boundary. The contract validator recursively resolves each named entry's local
