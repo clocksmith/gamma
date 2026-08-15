@@ -103,6 +103,13 @@ job's exact experiment reference. Any unreflected terminal v2/v3 job blocks a
 new gate and successor creation. Legacy proposals remain visible but are not
 actionable until migrated to the structured contract.
 
+New adaptive experiments can additionally require
+`outputManifestPolicy=complete-result-artifacts-v1`. The semantic validator then
+proves that the result itself is declared and that every remaining declared
+output is represented by one unique artifact path, with neither undeclared
+artifacts nor aliased evidence roles. Historical v1 contracts remain readable,
+but absence of this policy is not evidence of output-manifest completeness.
+
 Candidate-owned scratch directories are now explicit job inputs. The executor
 accepts only project-relative paths below `results/<candidate_id>/`, creates
 them before resource-guard preflight, and retains the declaration in the job

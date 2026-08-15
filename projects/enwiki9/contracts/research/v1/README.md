@@ -17,6 +17,10 @@ The accompanying schemas define the first fail-closed evidence boundary:
   result can change scientific state;
 - `experiment-result.schema.json` binds the exact analyzer and input hashes to
   alignment, measurements, predicate evaluations, and a zero-credit decision;
+- `adaptive-experiment-contract.schema.json` may opt new work into
+  `complete-result-artifacts-v1`; under that policy the result path must be
+  declared and every other declared output must be bound exactly once by the
+  terminal result, with no undeclared or path-aliased artifacts;
 - `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
   causal-feature, quantized-model, shifted-control, and held-out evidence for
   the compact residual probe;
@@ -105,3 +109,9 @@ hash-links each manifest, run, or failed attempt, but its
 The authority pages can change without notice. A content-hash change requires
 a new contract version and revalidation before any promotion; historical
 receipts retain the objective digest under which they were produced.
+
+The optional `outputManifestPolicy` field is the backward-compatible migration
+boundary for adaptive contract v1. Historical contracts without it retain their
+original validation semantics. New multi-artifact experiments should declare
+`complete-result-artifacts-v1`; omitting the policy grants no claim that the
+contract's output list and the result's artifact list are complete.
