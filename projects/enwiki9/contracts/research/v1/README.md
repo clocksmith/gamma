@@ -25,8 +25,12 @@ The accompanying schemas define the first fail-closed evidence boundary:
   closed dependencies, and an exact joint-replay requirement;
 - `dependency-closure.schema.json` binds every counted package member,
   dependency, command, license, and option byte;
+- `clean-room-replay.schema.json` binds three fresh package copies, sealed
+  build/compress/replay/decode commands, device and network probes, resource
+  guards, scratch cleanup, and the manifest-derived license audit;
 - `run-receipt.schema.json` composes exact corpus, archive, package,
-  correctness, resource, distribution, and independent-verification evidence.
+  second-archive determinism, correctness, resource, clean-room distribution,
+  and independent-verification evidence.
 - `reflection-receipt.schema.json` separates process completion from scientific
   validity, attribution, typed measurements, retained knowledge, and the next
   state transition;
@@ -74,6 +78,19 @@ retain the normal file-verifying result. Promotion-grade compression and
 decompression guards each require their matching `--phase`, a measured
 `--geekbench5-single-core-score`, aggregate process-tree RSS, a one-CPU affinity
 union, and declared candidate scratch paths.
+
+Create a new counted bundle with `tools/enwiki9_dependency_closure.py`. A
+complete bundle must declare every dependency; a counted dependency's provider
+must be a counted file, required options must occur in the declared commands,
+and one bundled dependency must bind a counted license file. Commands use the
+placeholders documented in `tools/README.md`.
+
+Run `tools/enwiki9_clean_room_replay.py` only against a new bundle. It performs
+two fresh-build full-corpus compressions and a third fresh-build decode. The
+decode namespace never receives the corpus. Each runtime is restricted to one
+logical CPU and measured for process-tree RSS, wall time, and candidate scratch
+usage. A second host's complete primary receipt is required before the verdict
+can become `objective-achieved`.
 
 The authority pages can change without notice. A content-hash change requires
 a new contract version and revalidation before any promotion; historical

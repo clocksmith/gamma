@@ -138,12 +138,15 @@ closed LibNC executable remain forbidden submission inputs.
 ## 2026-08-15 - Recursive self-improvement boundary audited
 
 The adaptive lane now binds the objective, immutable candidate revisions,
-structured experiments, terminal reflections, and evidence-aware selection.
-It is still not authorized for unattended mutation or prize-facing promotion:
-composition and independent clean-room replay gaps remain recorded in
-[`recursive_self_improvement_system_audit.md`](recursive_self_improvement_system_audit.md).
-Missing roundtrip, determinism, process-tree resource, or dependency-closure
-evidence still fails closed.
+structured experiments, terminal reflections, evidence-aware selection,
+dependency packaging, and clean-room receipt composition. The executor uses
+three fresh builds, two archive-identity runs, and a corpus-blind decode under
+sealed one-core resource guards. It is still not authorized for unattended
+mutation or prize-facing promotion because no eligible Gamma candidate has
+produced a complete full-1G package receipt or second-host identity receipt.
+See [`recursive_self_improvement_system_audit.md`](recursive_self_improvement_system_audit.md).
+Missing roundtrip, determinism, process-tree resource, dependency-closure, or
+peer evidence still fails closed.
 
 ## 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target
 

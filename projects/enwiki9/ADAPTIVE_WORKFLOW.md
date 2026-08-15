@@ -139,6 +139,28 @@ overlapping costs, causal compatibility, closed-teacher dependencies, and the
 exact joint replay required. Never add component forecasts or causal-shadow
 ideal bits to an archive result.
 
+## Compose prize-facing evidence
+
+An exact gate result is not a prize-facing package receipt. After a candidate
+reaches full-1G eligibility, stage a new dependency bundle with
+`tools/enwiki9_dependency_closure.py`. Declare the build, compression, and
+decompression command arrays, every dependency and license, all required option
+bytes, and the exact package entry point. Missing closure state remains explicit
+and cannot promote.
+
+Replay that immutable bundle with `tools/enwiki9_clean_room_replay.py`. The
+executor uses two independent fresh builds for deterministic compression and a
+third fresh build for decode. The decode sandbox receives only the counted
+package and archive, never the canonical corpus. All runtime phases are
+single-core and carry wall-time, process-tree memory, and temporary-disk guard
+receipts. The composed receipt remains below `objective-achieved` until a
+different host reproduces the same candidate tree and archive and its complete
+primary receipt is locally hash-bound.
+
+Do not retrofit ordinary driver rows into package receipts. A clean-room replay
+starts from the dependency manifest, and any package or command change requires
+a new bundle and new receipts.
+
 ## Discover And Propose Algorithms
 
 Algorithm discovery is separate from gate discovery. Freeze and validate

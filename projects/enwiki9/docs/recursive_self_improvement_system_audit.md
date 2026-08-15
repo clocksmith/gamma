@@ -3,7 +3,8 @@
 Status: implementation audit; objective, measurement, resource, candidate
 identity, structured-experiment, and terminal-reflection boundaries are
 implemented. The mechanism-graph contract now covers composition, while
-clean-room run composition remains open. This document is not compression proof and does not grant score,
+the dependency packer and clean-room composer now cover prize-facing replay.
+No complete full-1G Gamma package has passed that path. This document is not compression proof and does not grant score,
 forecast, promotion, or authorship credit.
 
 ## Purpose
@@ -65,7 +66,9 @@ Implemented contracts:
 - `candidate-revision`: immutable semantic tree, parent and previous revisions,
   content-addressed blobs, hypothesis, evidence, and edit classification;
 - `run-receipt`: exact commands, environment, hashes, measured resources,
-  archive, inverse, replay, and independent verification;
+  archive, inverse, second archive, sealed replay, and independent verification;
+- `clean-room-replay`: fresh package builds, corpus-blind decode, namespace and
+  device probes, three runtime guards, cleanup, and license-audit evidence;
 - `dependency-closure`: exact counted package members, commands, dependencies,
   options, and closure status;
 - `resource-guard-receipt`: measured process-tree and scratch-tree constraints.
@@ -80,8 +83,9 @@ Implemented contracts:
 
 Still required:
 
-- a run-receipt composer and clean-room executor; the schema and semantic
-  validator exist, but ordinary driver rows are deliberately not upgraded.
+- one complete eligible Gamma dependency bundle, its successful full-1G
+  clean-room receipt, and an independently reproduced second-host archive.
+  Ordinary driver rows are deliberately not upgraded into this evidence.
 
 Implemented terminal control:
 
@@ -174,6 +178,15 @@ package accounting, process-tree resource evidence, cross-host deterministic
 archive identity, and a full-1G result. `docs/hutter_frontier.json` may record
 source-bound forecasts, but only the independently verified package is the
 objective.
+
+`tools/enwiki9_dependency_closure.py` now creates the counted immutable bundle.
+`tools/enwiki9_clean_room_replay.py` builds two independent compression copies
+and a third decode copy under bubblewrap, keeps the corpus out of the decode
+namespace, records three one-core resource guards, compares both archives, and
+composes `gamma.enwiki9.run-receipt.v1`. Its automatic license audit is
+deliberately conservative: dependencies need recognized simple SPDX identifiers
+and a bundled dependency must bind a counted license file. Cross-host identity
+remains false until a complete primary peer receipt is present.
 
 ## Implementation order
 
