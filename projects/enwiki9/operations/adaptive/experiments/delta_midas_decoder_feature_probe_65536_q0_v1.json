@@ -1,0 +1,156 @@
+{
+  "schema": "gamma.enwiki9.experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "delta_midas_decoder_feature_probe_65536_q0_v1",
+  "title": "Prospective compact decoder-visible prediction of the deep midpoint residual",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "hypothesis": {
+    "claim": "One fixed 4,096-weight hashed linear correction built only from decoder-visible segment state predicts enough F-minus-O branch-logit residual to improve quantized held-out O truth-path ideal bits on validation, test, every test third, and against a shifted-label control.",
+    "minimumInterpretation": "A pass authorizes testing the same fixed correction interface against one open Gamma base predictor; it does not authorize a codec or inherit the O teacher endpoint.",
+    "excludedInterpretations": [
+      "The O teacher probability is an allowed submitted-codec input",
+      "held-out ideal-bit improvement equals arithmetic archive savings",
+      "the fixed learner may be tuned after validation or test inspection",
+      "a pass transfers beyond the frozen population or pays its source cost"
+    ]
+  },
+  "antecedents": [
+    {
+      "id": "deep-residual-result",
+      "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+      "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+    },
+    {
+      "id": "deep-residual-reflection",
+      "path": "operations/adaptive/reflections/20260815T161658Z_636aa4dd6c.json",
+      "sha256": "sha256:966372fd22ac1b76feb6641f61b6492f8efab19980c92a420b870f5387ca0c24"
+    }
+  ],
+  "population": {
+    "unit": "transformed-symbol",
+    "rowCount": 65536,
+    "branchCount": 917527,
+    "segmentLength": 64,
+    "firstHalfLength": 32,
+    "selection": "All aligned F/O rows define chronology; fitting and scoring use only second-half truth branches under frozen segment partitions.",
+    "coordinate": "Original transformed-symbol ordinal with contiguous 64-symbol segments."
+  },
+  "arms": [
+    {
+      "id": "F",
+      "role": "treatment",
+      "mechanism": "Full-update teacher probabilities provide residual targets only.",
+      "trace": {
+        "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/F_trace.bin",
+        "sha256": "sha256:73ae287ac4c55d3c24eb0d4805054e38e50e72bb9873c1f4b3a28d44cb76d569"
+      }
+    },
+    {
+      "id": "O",
+      "role": "comparator",
+      "mechanism": "Output-head-only probabilities are the frozen scoring offset, never a promoted input.",
+      "trace": {
+        "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/O_trace.bin",
+        "sha256": "sha256:f0a7c9185c93f58316209810c2f7515b86934af188ca1a1ffc933f552bd8a54c"
+      }
+    }
+  ],
+  "changedVariables": [
+    "The treatment adds one fixed quantized hashed-linear correction predicted from prior decoded symbols, segment position, branch index, and already-decoded branch prefix; the zero and shifted-label controls do not use aligned residual labels."
+  ],
+  "invariants": [
+    "No feature reads the current symbol, current truth bit before prediction, future symbol, F probability, O probability, teacher hidden state, or validation/test label.",
+    "O probability is used only after prediction as a scoring offset and cannot appear in the serialized correction model.",
+    "Only train segments update weights; validation and test are single sealed evaluations.",
+    "All hyperparameters, partitions, clipping, features, quantization, controls, and gates are frozen in this contract before execution.",
+    "The shifted control uses the same learner and features with train residual targets rotated by one complete segment.",
+    "Only quantized-model measurements enter promotion predicates and all evidence receives zero objective credit."
+  ],
+  "causalBoundary": {
+    "decoderVisibleAfterSymbols": 32,
+    "observableInputs": [
+      "64-symbol segment position",
+      "branch index and branch-prefix bits decoded before the current bit",
+      "previous one and two decoded transformed symbols",
+      "sixteen-bin signed-free count sketch of the segment first half"
+    ],
+    "forbiddenInputs": [
+      "current transformed symbol",
+      "current truth bit before probability emission",
+      "future transformed symbols",
+      "F or O probability as a correction-model feature",
+      "teacher logits hidden activations parameters or gradients",
+      "validation or test residual targets during fitting"
+    ]
+  },
+  "measurements": [
+    { "id": "alignmentComplete", "definition": "Exact F/O row, symbol, topology, and truth-path identity.", "unit": "boolean" },
+    { "id": "decoderFeatureAuditPass", "definition": "Static and runtime audit that every model feature is decoder-visible before the predicted branch.", "unit": "boolean" },
+    { "id": "trainingLeakageAuditPass", "definition": "Only train-segment labels update either treatment or shifted-control weights.", "unit": "boolean" },
+    { "id": "quantizedEvaluationPass", "definition": "All reported promoted measurements use the serialized int16 model reloaded from bytes.", "unit": "boolean" },
+    { "id": "validationIdealGainBits", "definition": "Validation O truth-path bits minus quantized-corrected truth-path bits.", "unit": "ideal bits" },
+    { "id": "testIdealGainBits", "definition": "Sealed test O truth-path bits minus quantized-corrected truth-path bits.", "unit": "ideal bits" },
+    { "id": "testThirdMinIdealGainBits", "definition": "Minimum test gain over three contiguous test-segment thirds.", "unit": "ideal bits" },
+    { "id": "testOverShiftedControlBits", "definition": "Quantized treatment test gain minus quantized shifted-label-control test gain.", "unit": "ideal bits" },
+    { "id": "testPositiveSegmentFraction", "definition": "Fraction of sealed test segments with positive quantized treatment gain.", "unit": "fraction" },
+    { "id": "modelPayloadBytes", "definition": "Serialized float64 scale plus 4,096 little-endian int16 weights.", "unit": "bytes" }
+  ],
+  "gates": [
+    {
+      "id": "authorize-open-base-integration",
+      "all": [
+        { "metric": "alignmentComplete", "operator": "eq", "threshold": true },
+        { "metric": "decoderFeatureAuditPass", "operator": "eq", "threshold": true },
+        { "metric": "trainingLeakageAuditPass", "operator": "eq", "threshold": true },
+        { "metric": "quantizedEvaluationPass", "operator": "eq", "threshold": true },
+        { "metric": "validationIdealGainBits", "operator": "gt", "threshold": 0 },
+        { "metric": "testIdealGainBits", "operator": "gt", "threshold": 0 },
+        { "metric": "testThirdMinIdealGainBits", "operator": "gt", "threshold": 0 },
+        { "metric": "testOverShiftedControlBits", "operator": "gt", "threshold": 0 },
+        { "metric": "testPositiveSegmentFraction", "operator": "gte", "threshold": 0.55 },
+        { "metric": "modelPayloadBytes", "operator": "lte", "threshold": 8200 }
+      ],
+      "passConsequence": "Authorize one exact experiment applying this unchanged correction interface to probabilities from one open Gamma predictor on a newly bound population.",
+      "failConsequence": "Retire this exact 4,096-weight hashed-linear formulation without dimension, feature, epoch, learning-rate, clipping, partition, or quantization sweeps."
+    }
+  ],
+  "protocol": {
+    "algorithm": "Four-epoch normalized online squared-error regression of clipped F-minus-O branch logits, followed by float64-scale plus int16 quantization and sealed ideal-bit replay.",
+    "randomness": "none",
+    "parameters": {
+      "dimension": 4096,
+      "epochs": 4,
+      "learningRate": 0.05,
+      "l2": 0.000001,
+      "targetClipLogit": 4.0,
+      "correctionClipLogit": 2.0,
+      "firstHalfSketchBins": 16,
+      "recentSymbolBuckets": 128,
+      "shiftedControlOffsetSegments": 1,
+      "quantization": "float64-scale-plus-int16-le-v1"
+    },
+    "partitions": [
+      { "id": "train", "firstSegment": 0, "endSegmentExclusive": 682, "labelsAvailableToFit": true },
+      { "id": "validation", "firstSegment": 682, "endSegmentExclusive": 853, "labelsAvailableToFit": false },
+      { "id": "test", "firstSegment": 853, "endSegmentExclusive": 1024, "labelsAvailableToFit": false }
+    ],
+    "controls": [
+      { "id": "zero-correction", "mechanism": "Use the unchanged O truth-path probabilities." },
+      { "id": "shifted-label", "mechanism": "Fit the identical model with training residual targets rotated forward by one complete segment." }
+    ]
+  },
+  "outputs": [
+    "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json"
+  ],
+  "generatedUtc": "2026-08-15T16:22:58Z"
+}

@@ -164,6 +164,50 @@
         }
       }
     },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "randomness", "parameters", "partitions", "controls"],
+      "properties": {
+        "algorithm": { "type": "string", "minLength": 1 },
+        "randomness": { "const": "none" },
+        "parameters": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": ["boolean", "integer", "number", "string"]
+          }
+        },
+        "partitions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "firstSegment", "endSegmentExclusive", "labelsAvailableToFit"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "firstSegment": { "type": "integer", "minimum": 0 },
+              "endSegmentExclusive": { "type": "integer", "minimum": 1 },
+              "labelsAvailableToFit": { "type": "boolean" }
+            }
+          }
+        },
+        "controls": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "mechanism"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "mechanism": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
     "outputs": {
       "type": "array",
       "minItems": 1,
