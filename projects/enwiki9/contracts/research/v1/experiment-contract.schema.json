@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/experiment-contract.schema.json",
+  "title": "gamma.enwiki9.experiment-contract.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "experimentId",
+    "title",
+    "status",
+    "registrationTiming",
+    "evidenceClass",
+    "objectiveCreditBytes",
+    "hypothesis",
+    "antecedents",
+    "population",
+    "arms",
+    "changedVariables",
+    "invariants",
+    "causalBoundary",
+    "measurements",
+    "gates",
+    "outputs",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.experiment-contract.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "experimentId": { "$ref": "#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "const": "frozen" },
+    "registrationTiming": {
+      "enum": ["prospective", "retrospective-frozen-before-tool-output"]
+    },
+    "evidenceClass": {
+      "enum": ["candidate-gate", "causal-shadow", "diagnostic", "oracle"]
+    },
+    "objectiveCreditBytes": { "const": 0 },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim", "minimumInterpretation", "excludedInterpretations"],
+      "properties": {
+        "claim": { "type": "string", "minLength": 1 },
+        "minimumInterpretation": { "type": "string", "minLength": 1 },
+        "excludedInterpretations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "antecedents": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/namedReference" }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "rowCount",
+        "branchCount",
+        "segmentLength",
+        "firstHalfLength",
+        "selection",
+        "coordinate"
+      ],
+      "properties": {
+        "unit": { "const": "transformed-symbol" },
+        "rowCount": { "type": "integer", "minimum": 1 },
+        "branchCount": { "type": "integer", "minimum": 1 },
+        "segmentLength": { "type": "integer", "minimum": 2 },
+        "firstHalfLength": { "type": "integer", "minimum": 1 },
+        "selection": { "type": "string", "minLength": 1 },
+        "coordinate": { "type": "string", "minLength": 1 }
+      }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "role", "mechanism", "trace"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "role": { "enum": ["treatment", "comparator", "control"] },
+          "mechanism": { "type": "string", "minLength": 1 },
+          "trace": { "$ref": "#/$defs/reference" }
+        }
+      }
+    },
+    "changedVariables": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "causalBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decoderVisibleAfterSymbols", "observableInputs", "forbiddenInputs"],
+      "properties": {
+        "decoderVisibleAfterSymbols": { "type": "integer", "minimum": 0 },
+        "observableInputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "forbiddenInputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "definition", "unit"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "definition": { "type": "string", "minLength": 1 },
+          "unit": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "all", "passConsequence", "failConsequence"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "all": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/predicate" }
+          },
+          "passConsequence": { "type": "string", "minLength": 1 },
+          "failConsequence": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "namedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric", "operator", "threshold"],
+      "properties": {
+        "metric": { "$ref": "#/$defs/id" },
+        "operator": { "enum": ["eq", "gt", "gte", "lt", "lte"] },
+        "threshold": { "type": ["boolean", "number"] }
+      }
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "delta_midas_deep_residual_65536_q0_v1",
+  "title": "Exact full-update versus output-head midpoint branch residual",
+  "status": "frozen",
+  "registrationTiming": "retrospective-frozen-before-tool-output",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "hypothesis": {
+    "claim": "The retained full-update F trace assigns more truth-path probability than output-head-only O on second-half branches after each decoder-visible 32-symbol first half, with positive ideal-bit savings in every chronological third and at least 95 percent of segments.",
+    "minimumInterpretation": "A pass authorizes one prospectively contracted deep-feature instrumentation experiment; it does not authorize a student correction, an archive-gain claim, or score credit.",
+    "excludedInterpretations": [
+      "F-minus-O ideal bits equal realizable arithmetic archive savings",
+      "hidden teacher state is decoder-visible or shippable",
+      "the residual transfers beyond this retained population",
+      "the output-head-only GRAM-MIDAS lineage is revived"
+    ]
+  },
+  "antecedents": [
+    {
+      "id": "terminal-output-head-attribution",
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/decision.json",
+      "sha256": "sha256:3e5c397443e5e972ba28c06405a5b9f106d440c36f3806c352aa62b2d2a07d55"
+    }
+  ],
+  "population": {
+    "unit": "transformed-symbol",
+    "rowCount": 65536,
+    "branchCount": 917527,
+    "segmentLength": 64,
+    "firstHalfLength": 32,
+    "selection": "All retained indexed branch rows; second-half rows have original ordinal modulo 64 in [32, 63].",
+    "coordinate": "Original transformed-symbol ordinal, not execution order."
+  },
+  "arms": [
+    {
+      "id": "F",
+      "role": "treatment",
+      "mechanism": "Full deep midpoint parameter update followed by state rebuild.",
+      "trace": {
+        "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/F_trace.bin",
+        "sha256": "sha256:73ae287ac4c55d3c24eb0d4805054e38e50e72bb9873c1f4b3a28d44cb76d569"
+      }
+    },
+    {
+      "id": "O",
+      "role": "comparator",
+      "mechanism": "Output-head-only midpoint parameter update under the same segment schedule.",
+      "trace": {
+        "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/O_trace.bin",
+        "sha256": "sha256:f0a7c9185c93f58316209810c2f7515b86934af188ca1a1ffc933f552bd8a54c"
+      }
+    }
+  ],
+  "changedVariables": [
+    "F updates the complete teacher parameter set at each midpoint; O updates only embed_out and out_bias."
+  ],
+  "invariants": [
+    "Both traces contain the same original and execution ordinals, symbols, vocabulary, branch topology, and truth bits.",
+    "No teacher is executed and no retained trace is modified.",
+    "Truth-path ideal-bit deltas are derived from the retained integer branch probabilities without claiming isolated arithmetic-coder bytes.",
+    "First-half and second-half effects remain separate because prior segment updates can affect later first halves.",
+    "The analysis receives zero objective and frontier credit."
+  ],
+  "causalBoundary": {
+    "decoderVisibleAfterSymbols": 32,
+    "observableInputs": [
+      "original ordinal and 64-symbol segment position",
+      "decoded truth-path bits through the current branch",
+      "retained quantized branch probabilities from F and O for attribution only"
+    ],
+    "forbiddenInputs": [
+      "future decoded symbols",
+      "unrecorded teacher logits or hidden activations",
+      "teacher parameters in a submitted codec",
+      "trace-derived probabilities in a promoted student"
+    ]
+  },
+  "measurements": [
+    {
+      "id": "alignmentComplete",
+      "definition": "Exact identity of row coordinates, symbols, topology, and truth bits across F and O.",
+      "unit": "boolean"
+    },
+    {
+      "id": "secondHalfIdealSavingsBits",
+      "definition": "Sum over second-half truth branches of log2(realized_F_probability / realized_O_probability).",
+      "unit": "ideal bits"
+    },
+    {
+      "id": "secondHalfThirdMinSavingsBits",
+      "definition": "Minimum second-half ideal-bit savings across three original-coordinate chronological thirds.",
+      "unit": "ideal bits"
+    },
+    {
+      "id": "secondHalfPositiveSegmentFraction",
+      "definition": "Fraction of 64-symbol segments whose second-half F-minus-O ideal-bit savings are positive.",
+      "unit": "fraction"
+    }
+  ],
+  "gates": [
+    {
+      "id": "authorize-deep-feature-instrumentation",
+      "all": [
+        { "metric": "alignmentComplete", "operator": "eq", "threshold": true },
+        { "metric": "secondHalfIdealSavingsBits", "operator": "gt", "threshold": 0 },
+        { "metric": "secondHalfThirdMinSavingsBits", "operator": "gt", "threshold": 0 },
+        { "metric": "secondHalfPositiveSegmentFraction", "operator": "gte", "threshold": 0.95 }
+      ],
+      "passConsequence": "Authorize one new prospective experiment that records compact decoder-visible first-half features and deep F-minus-O second-half residual targets.",
+      "failConsequence": "Retire DELTA-MIDAS deep residual attribution on this population without teacher instrumentation or parameter sweeps."
+    }
+  ],
+  "outputs": [
+    "results/delta_midas_deep_residual_65536_q0_v1/decision.json"
+  ],
+  "generatedUtc": "2026-08-15T16:10:38Z"
+}
