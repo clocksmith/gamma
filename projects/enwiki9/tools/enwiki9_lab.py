@@ -725,7 +725,7 @@ def enqueue_job(
     ensure_layout()
     candidate_meta(candidate_id)
     require_terminal_reflections(candidate_id, "enter another gate")
-    _proposal_path, proposal = candidate_proposal(candidate_id)
+    proposal_path_value, proposal = candidate_proposal(candidate_id)
     inferred_path, _experiment_value, experiment_reference = (
         load_proposal_experiment(proposal)
     )
@@ -758,6 +758,7 @@ def enqueue_job(
         "candidate_tree_sha256": revision["candidateTreeSha256"],
         "candidate_revision": candidate_revisions.receipt_reference(revision_path),
         "experiment": experiment_reference,
+        "proposal": artifact_reference(proposal_path_value),
         "proposal_id": proposal["proposal_id"],
         "runner": artifact_reference(TRIAGE if runner is None else runner),
         "gate_size": gate_size,
