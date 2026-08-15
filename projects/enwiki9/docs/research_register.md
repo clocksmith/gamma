@@ -1,5 +1,18 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Recursive self-improvement boundary audited
+
+The adaptive lane is a durable experimental archive, but it is not yet
+authorized as a recursive self-improvement controller. The measurement,
+schema, immutable-edit, reflection, learned-search, composition, and independent
+replay gaps are recorded in
+[`recursive_self_improvement_system_audit.md`](recursive_self_improvement_system_audit.md).
+The audit also records the operating goal and implementation order. Automatic
+promotion or mutation remains forbidden until measurement becomes fail-closed;
+in particular, missing roundtrip or determinism evidence may not be inferred,
+runtime and process-tree resources must be measured correctly, and the complete
+dependency closure must be counted.
+
 ## 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target
 
 Agent B has accepted Agent A's handoff and now owns both active scientific
