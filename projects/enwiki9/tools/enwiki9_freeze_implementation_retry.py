@@ -115,7 +115,10 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         *retained_inputs,
         *evidence,
     ]
-    if args.bind_python_source_closure:
+    bind_python_source_closure = args.bind_python_source_closure or all(
+        path.suffix == ".py" for path in (args.runner, args.materializer)
+    )
+    if bind_python_source_closure:
         existing_paths = {value["path"] for value in experiment["inputs"]}
         for path in local_source_closure((args.runner, args.materializer)):
             relative = path.relative_to(ROOT).as_posix()
