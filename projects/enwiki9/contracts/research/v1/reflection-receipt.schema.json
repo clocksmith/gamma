@@ -82,14 +82,18 @@
     "measurements": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["scopeBytes", "netBytesSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention"],
+      "required": ["scopeBytes", "scopeSymbols", "netBytesSaved", "idealBitsSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention", "positiveSegmentFraction", "minimumPartitionIdealBitsSaved"],
       "properties": {
         "scopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "scopeSymbols": { "type": ["integer", "null"], "minimum": 1 },
         "netBytesSaved": { "type": ["number", "null"] },
+        "idealBitsSaved": { "type": ["number", "null"] },
         "sourceBytesDelta": { "type": ["number", "null"] },
         "runtimeRatio": { "type": ["number", "null"], "exclusiveMinimum": 0 },
         "memoryRatio": { "type": ["number", "null"], "exclusiveMinimum": 0 },
-        "transferRetention": { "type": ["number", "null"], "minimum": 0 }
+        "transferRetention": { "type": ["number", "null"], "minimum": 0 },
+        "positiveSegmentFraction": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "minimumPartitionIdealBitsSaved": { "type": ["number", "null"] }
       }
     },
     "measurementAssertions": {
@@ -161,7 +165,7 @@
       "additionalProperties": false,
       "required": ["field", "source", "pointer"],
       "properties": {
-        "field": { "enum": ["scopeBytes", "netBytesSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention"] },
+        "field": { "enum": ["scopeBytes", "scopeSymbols", "netBytesSaved", "idealBitsSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention", "positiveSegmentFraction", "minimumPartitionIdealBitsSaved"] },
         "source": { "$ref": "#/$defs/reference" },
         "pointer": { "type": "string", "pattern": "^/" }
       }

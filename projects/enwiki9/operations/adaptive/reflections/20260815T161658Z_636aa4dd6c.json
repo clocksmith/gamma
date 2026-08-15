@@ -1,0 +1,119 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Useful midpoint information remains in the full deep parameter/state update after output-head-only adaptation is removed."
+  },
+  "candidateId": "delta_midas_deep_residual_65536_q0_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_deep_residual_65536_q0_v1",
+    "candidateTreeSha256": "sha256:b8bb93c35dc066e5f8cf47581c0f446e97d44f69548959b21fa94c25f93410eb",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_deep_residual_65536_q0_v1/20260815T161651529758Z_b8bb93c35dc0.json",
+      "sha256": "sha256:91fb4ffe864fc96c4afc018fb91e540ab81bd843e452d7c0173e4067b53bf4de"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Promote only to one new prospectively frozen decoder-visible deep-feature attribution experiment; no codec, frontier, archive, or score promotion is authorized.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+      "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_deep_residual_65536_q0_v1.json",
+    "sha256": "sha256:9770164ea684c532ac19683dae1bce6b2b8f44462c97b3aa13c9ec92955b5f0b"
+  },
+  "generatedUtc": "2026-08-15T16:18:07+00:00",
+  "hypothesis": {
+    "rationale": "F exceeded O by 22783.981772296793 ideal bits on second halves; all chronological thirds were positive and 1001 of 1024 segments were positive.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T161658Z_636aa4dd6c.json",
+    "sha256": "sha256:49f4b881440d4193552c857a4f8a188bc649511681db7659592828aebf5ddd22"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Output-head-only GRAM-MIDAS as the carrier of the measured midpoint gain."
+    ],
+    "transferableLessons": [
+      "First-half and second-half residuals must remain separate because prior midpoint updates persist into later segments.",
+      "Full deep midpoint adaptation contains a broad second-half truth-path advantage that output-head-only adaptation does not explain."
+    ],
+    "uncertainties": [
+      "Ideal-bit attribution does not establish realizable arithmetic archive bytes, transfer, package cost, or an open student.",
+      "The retained trace has quantized branch probabilities but no hidden activations, deep parameter deltas, or teacher logits."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/rows",
+      "source": {
+        "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+        "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+      }
+    },
+    {
+      "field": "idealBitsSaved",
+      "pointer": "/metrics/secondHalfIdealSavingsBits",
+      "source": {
+        "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+        "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+      }
+    },
+    {
+      "field": "positiveSegmentFraction",
+      "pointer": "/metrics/secondHalfPositiveSegmentFraction",
+      "source": {
+        "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+        "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+      }
+    },
+    {
+      "field": "minimumPartitionIdealBitsSaved",
+      "pointer": "/metrics/secondHalfThirdMinSavingsBits",
+      "source": {
+        "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+        "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": 22783.981772296793,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": 6016.202322290252,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": 0.9775390625,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t161658z_636aa4dd6c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound job completed with return code zero and the experiment result passed schema, hash, population, alignment, and frozen-predicate validation."
+    ],
+    "valid": true
+  }
+}

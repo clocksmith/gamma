@@ -1,18 +1,19 @@
 # Recursive self-improvement system audit
 
 Status: implementation audit; objective, measurement, resource, candidate
-identity, and terminal-reflection boundaries are implemented, while structured
-experiment contracts and composition audits remain open. This document is not
-compression proof and does not grant score, forecast, promotion, or authorship
-credit.
+identity, structured-experiment, and terminal-reflection boundaries are
+implemented, while composition audits and clean-room run composition remain
+open. This document is not compression proof and does not grant score,
+forecast, promotion, or authorship credit.
 
 ## Purpose
 
 Gamma's enwiki9 lane preserves proposals, candidates, mutations, jobs, receipts,
 exclusions, and generated status views. The objective and source identity are
-now mechanically bound. Terminal measurements can become hash-linked attributed
-lessons and bounded successor decisions, but experiments still need structured
-machine-evaluable preregistration and composition constraints.
+mechanically bound. Terminal measurements can become hash-linked attributed
+lessons and bounded successor decisions. Experiments now freeze
+machine-evaluable controls and predicates, but composition constraints remain
+incomplete.
 
 The missing loop is:
 
@@ -68,11 +69,14 @@ Implemented contracts:
 - `dependency-closure`: exact counted package members, commands, dependencies,
   options, and closure status;
 - `resource-guard-receipt`: measured process-tree and scratch-tree constraints.
+- `experiment-contract`: registration timing, changed variable, invariants,
+  arms, population, causal boundary, measurements, predicates, and explicitly
+  bounded consequences;
+- `experiment-result`: input and analyzer hashes, alignment, measurements,
+  frozen-predicate evaluation, decision, and zero-credit boundary.
 
 Still required:
 
-- `experiment-contract`: changed variable, invariants, controls, population,
-  metric, minimum effect, causal boundary, promotion, and kill predicates;
 - a run-receipt composer and clean-room executor; the schema and semantic
   validator exist, but ordinary driver rows are deliberately not upgraded.
 
@@ -112,6 +116,13 @@ lexicographically by actionability, valid parent reflection, scientific decision
 asserted net bytes, expected net bytes after source budget, and only then manual
 priority. Missing measurements remain missing. The policy orders experiments;
 it cannot modify evidence or authorize promotion.
+
+The first structured causal-shadow application is
+`delta_midas_deep_residual_65536_q0_v1`. Its retained F/O traces align exactly;
+the frozen second-half total, chronological-third, and positive-segment
+predicates pass. Its reflection authorizes a new prospective feature-capture
+contract only. The receipt grants no codec, archive, transfer, frontier, or
+objective credit.
 
 ## Missing composition and independent audit
 

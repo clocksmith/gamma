@@ -1,17 +1,44 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - DELTA-MIDAS deep residual survives exact retained-trace gate
+
+The terminal production attribution closes the output-head theory. On its
+same-run population, rebuild-only `K` is `148,141` bytes, full midpoint `F` is
+`143,414`, and output-head-only `O` is `148,709`. Thus F beats K by `4,727`
+bytes while O is `568` bytes worse than K. The earlier bridge reports `4,726`
+because its parent archive is one byte smaller; those values come from
+different exact runs and are not combined. The terminal decision remains a
+four-thread closed-LibNC teacher result with zero score credit.
+
+Proposals `nncp_gram_midas_full_hidden_65536_qm0_v1` and
+`gamma_orbit192_gram_midas_65536_qm0_v1` are retired because both depended on
+an output-head gain that does not exist. Their rejection receipts preserve the
+closed neighborhood; the ORBIT feature idea is not inherited into a new result.
+
+Experiment `delta_midas_deep_residual_65536_q0_v1` retrospectively froze an
+exact F-versus-O retained-trace analysis before its analyzer emitted a result.
+All `65,536` rows and `917,527` truth-path branches aligned. On second halves,
+F beats O by `22,783.981772296793` ideal bits. All original-coordinate thirds
+are positive, and `1,001` of `1,024` segments are positive. See
+[`decision.json`](../results/delta_midas_deep_residual_65536_q0_v1/decision.json)
+and the hash-linked
+[`reflection`](../operations/adaptive/reflections/20260815T161658Z_636aa4dd6c.json).
+
+The result localizes useful information beyond the output head and authorizes
+only one prospectively frozen decoder-visible feature-capture experiment. It
+does not show realizable archive savings, a compact student, transfer, package
+cost, or Hutter score credit. Hidden state, teacher probabilities, and the
+closed LibNC executable remain forbidden submission inputs.
+
 ## 2026-08-15 - Recursive self-improvement boundary audited
 
-The adaptive lane is a durable experimental archive, but it is not yet
-authorized as a recursive self-improvement controller. The measurement,
-schema, immutable-edit, reflection, learned-search, composition, and independent
-replay gaps are recorded in
+The adaptive lane now binds the objective, immutable candidate revisions,
+structured experiments, terminal reflections, and evidence-aware selection.
+It is still not authorized for unattended mutation or prize-facing promotion:
+composition and independent clean-room replay gaps remain recorded in
 [`recursive_self_improvement_system_audit.md`](recursive_self_improvement_system_audit.md).
-The audit also records the operating goal and implementation order. Automatic
-promotion or mutation remains forbidden until measurement becomes fail-closed;
-in particular, missing roundtrip or determinism evidence may not be inferred,
-runtime and process-tree resources must be measured correctly, and the complete
-dependency closure must be counted.
+Missing roundtrip, determinism, process-tree resource, or dependency-closure
+evidence still fails closed.
 
 ## 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target
 

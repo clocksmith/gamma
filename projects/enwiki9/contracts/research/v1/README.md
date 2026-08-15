@@ -12,12 +12,18 @@ The accompanying schemas define the first fail-closed evidence boundary:
   previous revisions, the declared edit, and immutable content-addressed blobs;
 - `resource-guard-receipt.schema.json` binds process-tree RSS, threads,
   affinity, elapsed wall time, and declared candidate scratch usage;
+- `experiment-contract.schema.json` freezes arms, changed variables, population,
+  causal inputs, measurements, and machine-evaluable consequences before a
+  result can change scientific state;
+- `experiment-result.schema.json` binds the exact analyzer and input hashes to
+  alignment, measurements, predicate evaluations, and a zero-credit decision;
 - `dependency-closure.schema.json` binds every counted package member,
   dependency, command, license, and option byte;
 - `run-receipt.schema.json` composes exact corpus, archive, package,
   correctness, resource, distribution, and independent-verification evidence.
 - `reflection-receipt.schema.json` separates process completion from scientific
-  validity, attribution, retained knowledge, and the next state transition;
+  validity, attribution, typed measurements, retained knowledge, and the next
+  state transition;
 - `search-policy.json` defines the evidence-aware lexicographic proposal order
   without changing any measured value or promotion predicate.
 
