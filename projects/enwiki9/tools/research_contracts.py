@@ -910,8 +910,25 @@ def _validate_adaptive_experiment_result(
         len(artifact_ids) == len(set(artifact_ids)),
         f"{artifact_path}: duplicate artifact identity",
     )
+    artifact_paths = [item["path"] for item in value["artifacts"]]
+    _require(
+        len(artifact_paths) == len(set(artifact_paths)),
+        f"{artifact_path}: distinct artifact identities alias one path",
+    )
     for item in value["artifacts"]:
         _project_file_reference(item, f"{artifact_path}: artifact {item['id']}")
+    if experiment.get("outputManifestPolicy") == "complete-result-artifacts-v1":
+        result_path = artifact_path.relative_to(PROJECT_ROOT).as_posix()
+        declared_outputs = set(experiment["outputs"])
+        _require(
+            result_path in declared_outputs,
+            f"{artifact_path}: strict output manifest omits its result path",
+        )
+        expected_artifacts = declared_outputs - {result_path}
+        _require(
+            set(artifact_paths) == expected_artifacts,
+            f"{artifact_path}: result artifacts differ from the strict output manifest",
+        )
     return {
         "candidateId": value["candidateId"],
         "experimentId": experiment["experimentId"],
