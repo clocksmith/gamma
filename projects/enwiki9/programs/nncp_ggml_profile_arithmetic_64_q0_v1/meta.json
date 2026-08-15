@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-15",
+  "deps": [
+    "nncp_ggml_profile_forward_parity_64_qm18_v1",
+    "delta_midas_named_midpoint_gradient_65536_q3_v1"
+  ],
+  "description": "Exact arithmetic termination and decode of the retained open GGML production-profile branch stream.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The Q18 open branch frequencies produce a deterministic exact-decodable payload identical to the oracle payload on the frozen production segment.",
+  "id": "nncp_ggml_profile_arithmetic_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260815T225004Z_10e9a0f5af": {
+        "decision": "retire",
+        "path": "operations/adaptive/reflections/20260815T225004Z_10e9a0f5af.json",
+        "sha256": "sha256:149b1f8a1228a06bf6405ec65e6cfd31d2490c4c4c82afc5b505a23593e1e681",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_ggml_profile_arithmetic_64_q0_v1.json",
+      "sha256": "sha256:62bc12549838e17aea9fc2e0e1a3b938079d6e5e8e88302906619461b802987d"
+    },
+    "interfaces_exposed": [
+      "receipt-bound open GGML branch stream -> Gamma range coder -> exact decoded production symbols"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+    "proposal_id": "nncp_ggml_profile_arithmetic_64_q0_v1",
+    "retired_neighborhoods": [
+      "No tolerance widening, coder substitution, closed-teacher runtime dependency, midpoint-gain inheritance, or score credit."
+    ]
+  },
+  "parent": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+  "status": "retired",
+  "verdict": "Retire arithmetic promotion under the one-count Q18 tolerance. Do not launch a multi-segment open runtime until the final integer branch frequencies are exact; the next admissible work is a correction-only localization of the fourteen final frequency differences."
+}

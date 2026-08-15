@@ -1,0 +1,254 @@
+{
+  "artifacts": [
+    {
+      "id": "oracle-payload",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/oracle.bin",
+      "sha256": "sha256:1230c100b8cd1d9d3cef740ada8267213d3d98e8446a9a28a9c47be8449d4876"
+    },
+    {
+      "id": "open-payload",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open.bin",
+      "sha256": "sha256:06513226d3b02b15c79a425c06f08d0fa3da1386817590aa5771566c7e67314c"
+    },
+    {
+      "id": "open-repeat-payload",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-repeat.bin",
+      "sha256": "sha256:06513226d3b02b15c79a425c06f08d0fa3da1386817590aa5771566c7e67314c"
+    },
+    {
+      "id": "open-tree-1",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-tree-1.u32le",
+      "sha256": "sha256:502f219dee40266cfb4f78be54fdc187bb757488f49ca3781ac2002914db701e"
+    },
+    {
+      "id": "open-tree-2",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-tree-2.u32le",
+      "sha256": "sha256:502f219dee40266cfb4f78be54fdc187bb757488f49ca3781ac2002914db701e"
+    },
+    {
+      "id": "execution",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/execution.json",
+      "sha256": "sha256:d71a111141dc3cc9475fa2bfeb1bc5590d2b200fbf15df77d021eda23919e603"
+    },
+    {
+      "id": "source-package",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/incremental_source.tar.xz",
+      "sha256": "sha256:034b425c422441603f3515f7e74247cfdfb33f366feb49efedc7c74d7274bd15"
+    }
+  ],
+  "candidateId": "nncp_ggml_profile_arithmetic_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_profile_arithmetic_64_q0_v1",
+    "candidateTreeSha256": "sha256:d32e710af18fb202bec111175d381e59d27a1320298eca1b8cc9b48b8cc93326",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_profile_arithmetic_64_q0_v1/20260815T224934084652Z_d32e710af18f.json",
+      "sha256": "sha256:14bf1d270fd969b9231d84951a912512e6ad8e9f4809dd444780ba804674b4f5"
+    }
+  },
+  "decision": "retire",
+  "evidenceClass": "infrastructure",
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_arithmetic_64_q0_v1.json",
+    "sha256": "sha256:62bc12549838e17aea9fc2e0e1a3b938079d6e5e8e88302906619461b802987d"
+  },
+  "generatedUtc": "2026-08-15T22:51:21+00:00",
+  "killPass": true,
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "q18ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-topology",
+      "measurement": "topologyTruthIdentity",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-frequency",
+      "measurement": "maximumProbabilityCountDifference",
+      "observed": 1,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 1
+    },
+    {
+      "id": "k-tree-repeat",
+      "measurement": "openTreeDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-oracle-decode",
+      "measurement": "oracleDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-open-decode",
+      "measurement": "openDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-repeat-decode",
+      "measurement": "openRepeatDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-payload-repeat",
+      "measurement": "openPayloadDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-payload",
+      "measurement": "payloadByteIdentical",
+      "observed": false,
+      "operator": "eq",
+      "passed": true,
+      "threshold": false
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 1175720,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "measurements": {
+    "maximumProbabilityCountDifference": 1,
+    "openDecodeExact": true,
+    "openPayloadBytes": 86,
+    "openPayloadDeterministic": true,
+    "openRepeatDecodeExact": true,
+    "openTreeDeterministic": true,
+    "oracleDecodeExact": true,
+    "oraclePayloadBytes": 86,
+    "payloadByteIdentical": false,
+    "payloadBytesEqual": true,
+    "q18ParentPass": true,
+    "sourceClosureBytes": 1175720,
+    "topologyTruthIdentity": true
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "promotionPass": false,
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "q18ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-topology",
+      "measurement": "topologyTruthIdentity",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-frequency",
+      "measurement": "maximumProbabilityCountDifference",
+      "observed": 1,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 1
+    },
+    {
+      "id": "p-tree-repeat",
+      "measurement": "openTreeDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-oracle-decode",
+      "measurement": "oracleDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-open-decode",
+      "measurement": "openDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-repeat-decode",
+      "measurement": "openRepeatDecodeExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-payload-repeat",
+      "measurement": "openPayloadDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-size",
+      "measurement": "payloadBytesEqual",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-payload",
+      "measurement": "payloadByteIdentical",
+      "observed": false,
+      "operator": "eq",
+      "passed": false,
+      "threshold": true
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 1175720,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "schema": "gamma.enwiki9.adaptive-experiment-result.v1"
+}

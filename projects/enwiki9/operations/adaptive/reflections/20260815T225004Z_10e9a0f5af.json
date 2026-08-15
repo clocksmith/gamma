@@ -1,0 +1,116 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "Q18 exact tensor parity still leaves fourteen one-count differences in the final integer branch frequencies; range-coder state amplifies those differences into a distinct final payload despite equal byte count and exact decode."
+  },
+  "candidateId": "nncp_ggml_profile_arithmetic_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_profile_arithmetic_64_q0_v1",
+    "candidateTreeSha256": "sha256:d32e710af18fb202bec111175d381e59d27a1320298eca1b8cc9b48b8cc93326",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_profile_arithmetic_64_q0_v1/20260815T224934084652Z_d32e710af18f.json",
+      "sha256": "sha256:14bf1d270fd969b9231d84951a912512e6ad8e9f4809dd444780ba804674b4f5"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire arithmetic promotion under the one-count Q18 tolerance. Do not launch a multi-segment open runtime until the final integer branch frequencies are exact; the next admissible work is a correction-only localization of the fourteen final frequency differences.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/decision.json",
+      "sha256": "sha256:2aa61cffc4f75105d300da6c9442fcfb5648153b7ac0772b62e84dc730f2d75b"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/execution.json",
+      "sha256": "sha256:d71a111141dc3cc9475fa2bfeb1bc5590d2b200fbf15df77d021eda23919e603"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/guard.json",
+      "sha256": "sha256:dbe663bcf13e06d0d98ce841cbc51ee84d7cc034e5b5b88bab98e40546a96486"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-repeat.bin",
+      "sha256": "sha256:06513226d3b02b15c79a425c06f08d0fa3da1386817590aa5771566c7e67314c"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-tree-1.u32le",
+      "sha256": "sha256:502f219dee40266cfb4f78be54fdc187bb757488f49ca3781ac2002914db701e"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open-tree-2.u32le",
+      "sha256": "sha256:502f219dee40266cfb4f78be54fdc187bb757488f49ca3781ac2002914db701e"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/open.bin",
+      "sha256": "sha256:06513226d3b02b15c79a425c06f08d0fa3da1386817590aa5771566c7e67314c"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q0_v1/oracle.bin",
+      "sha256": "sha256:1230c100b8cd1d9d3cef740ada8267213d3d98e8446a9a28a9c47be8449d4876"
+    },
+    {
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/decision.json",
+      "sha256": "sha256:f1898e98d8633b2c872db37bd4931ca838b7c13fc273ad88f44a8cda9e15c45d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_arithmetic_64_q0_v1.json",
+    "sha256": "sha256:62bc12549838e17aea9fc2e0e1a3b938079d6e5e8e88302906619461b802987d"
+  },
+  "generatedUtc": "2026-08-15T22:53:11+00:00",
+  "hypothesis": {
+    "rationale": "Oracle and open payloads both contain 86 bytes and independently decode the exact 64 symbols, but the open payload digest differs from the oracle digest. Fourteen of 896 hash-bound branch rows differ by one integer frequency count, so the prospectively required byte identity fails.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T225004Z_10e9a0f5af.json",
+    "sha256": "sha256:45985dd3a72847dcdcfbd73d4c39c48030fd0ddd6637141a085400689c36edfd"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "One-count integer branch-frequency tolerance as sufficient evidence for arithmetic byte identity on the production-profile open GGML forward."
+    ],
+    "transferableLessons": [
+      "Tensor and truth-path parity are insufficient at the codec boundary: integer branch frequencies and independently terminated payload bytes must be exact before an open forward can scale."
+    ],
+    "uncertainties": [
+      "This result does not refute the open GGML profile or Gamma range coder; an exact final softmax summation and probability-quantization match could still restore payload identity under a newly frozen correction-only contract."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t225004z_10e9a0f5af",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The retained Q18 inputs, prospective experiment, candidate revision, source closure, two open executions, topology, truth paths, exact decodes, repeat payload, and resource guard all validate; the observed payload mismatch is therefore scientific evidence rather than an implementation or infrastructure failure."
+    ],
+    "valid": true
+  }
+}
