@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260815T230010Z_836682be9c.json"
+  ],
+  "exclusion_id": "reflection-r-20260815t230010z_836682be9c",
+  "failure": "Q0's fourteen one-count discrepancies were caused by the scalar left-fold tree-mass sum; matching LibNC's 64-value reduction, masked-tail semantics, and binary partial accumulation removes every discrepancy without changing model outputs, quantization, or coding.",
+  "mechanism": "Replace only the final open tree-mass scalar summation with LibNC's 64-value AVX reduction, masked-tail-equivalent zero padding, and binary partial accumulation; the open model, softmax outputs, quantizer, coder, fixture, and population remain frozen.",
+  "population": "production-alphabet transformed symbol; The exact stream-zero production-profile segment at original transformed-symbol coordinates [256, 320) retained by Q18.; scopeBytes=None; scopeSymbols=64",
+  "recorded_at": "2026-08-15T23:02:32+00:00",
+  "retired_dimensions": [
+    "Scalar left-fold tree-mass summation as an equivalent replacement for LibNC vec_sum_f32 at the production arithmetic boundary."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

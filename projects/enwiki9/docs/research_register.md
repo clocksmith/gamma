@@ -1,5 +1,43 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Open production arithmetic identity is exact
+
+The retained Q18 GGML forward already matched every exported output tensor,
+but its scalar left-fold tree reduction differed from LibNC by one integer
+frequency count on a small subset of visited branches. Candidate
+`nncp_ggml_profile_arithmetic_64_q0_v1` terminated both paths through the same
+fixed Gamma range coder and independent decoder. Both payloads reconstructed
+the exact frozen transformed symbols and had equal length, but their bytes
+differed. The terminal
+[`reflection`](../operations/adaptive/reflections/20260815T225004Z_10e9a0f5af.json)
+therefore retires one-count branch tolerance as sufficient codec-boundary
+evidence. It does not reject the open GGML forward or the Gamma coder.
+
+Candidate `nncp_ggml_profile_arithmetic_64_q1_v1` changed only that final
+reduction. Its counted source reconstructs LibNC's 64-value AVX reduction,
+masked-tail semantics, and binary partial accumulation; model parameters,
+forward tensors, softmax, quantizer, coder, fixture, and population remained
+frozen. The prospective
+[`experiment`](../operations/adaptive/experiments/nncp_ggml_profile_arithmetic_64_q1_v1.json)
+required zero frequency drift rather than preserving Q18's tolerance.
+
+The guarded run passed. Every visited integer branch frequency is exact, both
+open tree paths repeat byte-for-byte, oracle/open/repeated-open payloads are
+identical, and all three payloads independently decode the exact symbols. See
+the [`decision`](../results/nncp_ggml_profile_arithmetic_64_q1_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260815T230010Z_836682be9c.json).
+This is a real open-runtime correctness gain with zero objective credit: it
+proves one production-profile segment, not online parameter updates,
+multi-segment continuity, package economics, transfer, or archive improvement.
+
+The next admissible integration must preserve this exact arithmetic boundary
+while exposing the segment transition explicitly. The incumbent updates both
+memory and model parameters after each production segment, so concatenating
+fixed-parameter forward calls would not be an equivalent multi-segment test.
+The smallest honest successor is a hash-bound state/update boundary followed
+by a later segment oracle; a generic prefix compressor gate is not authorized.
+
 ## 2026-08-15 - Direct-F32 named-gradient oracle retires the localization lineage
 
 The q0 named-gradient implementation reached the first production F backward

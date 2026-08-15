@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_ggml_profile_arithmetic_64_q0_v1",
+  "claimed_at": "2026-08-15T22:48:40+00:00",
+  "created_at": "2026-08-15T22:48:17+00:00",
+  "developed_at": "2026-08-15T22:49:36+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/decision.json",
+      "sha256": "sha256:f1898e98d8633b2c872db37bd4931ca838b7c13fc273ad88f44a8cda9e15c45d"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260815T200718Z_9b504935f5.json",
+      "sha256": "sha256:84fc82796febfd571608d92afa088d0065c3734406ec30bfa977e7bd05d8ec94"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_arithmetic_64_q0_v1.json",
+    "sha256": "sha256:62bc12549838e17aea9fc2e0e1a3b938079d6e5e8e88302906619461b802987d"
+  },
+  "hypothesis": "The Q18 open GGML production-profile branch frequencies terminate through the fixed Gamma integer range coder as a deterministic exact-decodable payload byte-identical to the oracle payload on the frozen 64-symbol segment.",
+  "interfaces_exposed": [
+    "receipt-bound open GGML branch stream -> Gamma range coder -> exact decoded production symbols"
+  ],
+  "kill_condition": "With Q18 identity, topology, repeat, decode, and source predicates passing, any oracle/open payload difference retires one-count branch parity as sufficient for arithmetic identity and requires exact frequencies before scaling.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "coder",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+  "parent_proposal_id": "delta_midas_named_midpoint_gradient_65536_q3_v1",
+  "priority": 1450,
+  "promotion_condition": "All frozen Q18 identity, topology, repeat, decode, source-closure, and arithmetic payload-identity predicates pass; authorize one prospectively frozen multi-segment open forward runtime integration.",
+  "proposal_id": "nncp_ggml_profile_arithmetic_64_q0_v1",
+  "retired_neighborhoods": [
+    "No tolerance widening, coder substitution, closed-teacher runtime dependency, midpoint-gain inheritance, or score credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1468,
+  "state": "developed",
+  "title": "Open GGML production-profile arithmetic termination"
+}
