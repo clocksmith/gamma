@@ -118,6 +118,11 @@ only be retried or held; they cannot promote or retire the algorithm. Promotion
 requires valid controls, a supported hypothesis, an algorithmic-gain
 attribution, and explicit promotion/kill predicate results. The receipt then
 updates derived candidate status without changing semantic source identity.
+Any explicit `--retired-dimension` is also projected into a deterministic OMEGA
+exclusion whose evidence points back to the reflection. The reflection remains
+authoritative; the exclusion is searchable mechanism memory and grants no
+measurement or promotion credit. Backfill and audit the projection with
+`enwiki9_lab.py sync-reflection-exclusions`.
 
 Rank actionable proposals after reflection with:
 

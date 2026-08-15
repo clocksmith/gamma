@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260815T162913Z_047c55d5ea.json"
+  ],
+  "exclusion_id": "reflection-r-20260815t162913z_047c55d5ea",
+  "failure": "The frozen 4,096-weight hashed-linear decoder-state map does not predict the deep F-minus-O residual; its aligned-label test loss is worse than the shifted-label control.",
+  "mechanism": "The treatment adds one fixed quantized hashed-linear correction predicted from prior decoded symbols, segment position, branch index, and already-decoded branch prefix; the zero and shifted-label controls do not use aligned residual labels.",
+  "population": "transformed-symbol; All aligned F/O rows define chronology; fitting and scoring use only second-half truth branches under frozen segment partitions.; scopeBytes=None; scopeSymbols=65536",
+  "recorded_at": "2026-08-15T18:11:42+00:00",
+  "retired_dimensions": [
+    "The exact 4,096-weight, four-epoch normalized hashed-linear feature map, clipping, chronology, int16 quantization, and O-offset replay contract."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

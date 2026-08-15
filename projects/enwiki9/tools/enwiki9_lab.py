@@ -1602,6 +1602,10 @@ def build_parser() -> argparse.ArgumentParser:
         "next-experiment",
         help="rank live proposals using validated parent reflections",
     )
+    subparsers.add_parser(
+        "sync-reflection-exclusions",
+        help="project retired reflection dimensions into OMEGA search memory",
+    )
 
     enqueue = subparsers.add_parser("enqueue", help="queue a candidate gate")
     enqueue.add_argument("candidate_id")
@@ -1870,6 +1874,15 @@ def main() -> int:
             print(
                 json.dumps(
                     enwiki9_reflections.select_next_experiment(proposals),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "sync-reflection-exclusions":
+            print(
+                json.dumps(
+                    enwiki9_reflections.sync_reflection_exclusions(),
                     indent=2,
                     sort_keys=True,
                 )
