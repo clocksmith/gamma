@@ -1205,6 +1205,51 @@ def _validate_adaptive_experiment_result(
                 value["measurements"].get(measurement) == observed,
                 f"{artifact_path}: {measurement} differs from gradient detail",
             )
+        comparison_measurements = {
+            "lowPrecisionDominantGroupMatched",
+            "lowPrecisionThirdDominantGroupsMatched",
+            "lowPrecisionMinimumThirdShareAbsoluteDelta",
+            "lowPrecisionHeadShareAbsoluteDelta",
+        }
+        present_comparisons = comparison_measurements.intersection(
+            value["measurements"]
+        )
+        _require(
+            not present_comparisons or present_comparisons == comparison_measurements,
+            f"{artifact_path}: low-precision comparison is only partially populated",
+        )
+        if present_comparisons:
+            inputs_by_id = {item["id"]: item for item in experiment["inputs"]}
+            q2_reference = inputs_by_id.get("q2-gradient-detail")
+            _require(
+                q2_reference is not None,
+                f"{artifact_path}: low-precision comparison has no q2 detail input",
+            )
+            q2_detail_path = PROJECT_ROOT / q2_reference["path"]
+            validate_artifact(q2_detail_path)
+            q2_summary = load_json(q2_detail_path)["summary"]
+            expected_comparisons = {
+                "lowPrecisionDominantGroupMatched": (
+                    q2_summary["dominantNonHeadGroup"]
+                    == summary["dominantNonHeadGroup"]
+                ),
+                "lowPrecisionThirdDominantGroupsMatched": (
+                    q2_summary["thirdDominantNonHeadGroups"]
+                    == summary["thirdDominantNonHeadGroups"]
+                ),
+                "lowPrecisionMinimumThirdShareAbsoluteDelta": abs(
+                    q2_summary["minimumThirdDominantNonHeadShare"]
+                    - summary["minimumThirdDominantNonHeadShare"]
+                ),
+                "lowPrecisionHeadShareAbsoluteDelta": abs(
+                    q2_summary["headGroupShare"] - summary["headGroupShare"]
+                ),
+            }
+            for measurement, observed in expected_comparisons.items():
+                _require(
+                    value["measurements"][measurement] == observed,
+                    f"{artifact_path}: {measurement} differs from q2 detail",
+                )
     if experiment.get("outputManifestPolicy") == "complete-result-artifacts-v1":
         result_path = artifact_path.relative_to(PROJECT_ROOT).as_posix()
         declared_outputs = set(experiment["outputs"])

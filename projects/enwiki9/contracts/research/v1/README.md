@@ -27,7 +27,9 @@ The accompanying schemas define the first fail-closed evidence boundary:
   reachable;
 - `named-gradient-detail.schema.json` validates the repeated named-gradient row
   population, experiment and revision bindings, execution logs, summary
-  coverage, and optional direct-versus-explicit-F32 reference fields;
+  coverage, and optional direct-versus-explicit-F32 reference fields; result
+  validation also recomputes any complete q2 low-precision comparison from its
+  prospectively bound detail input;
 - `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
   causal-feature, quantized-model, shifted-control, and held-out evidence for
   the compact residual probe;
