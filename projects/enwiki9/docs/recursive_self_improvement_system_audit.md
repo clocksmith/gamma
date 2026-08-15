@@ -58,7 +58,8 @@ The implementation following this audit closed these original defects:
    target across generated frontier, status, and certificate views.
 6. Driver-ledger v2 rows are built through one shared implementation, validated
    against a schema, and bind one retained project-relative result JSON by byte
-   count and SHA-256 before append or deterministic historical backfill.
+   count and SHA-256 before append or deterministic historical backfill. The
+   normal receipt-validation pass audits every row and referenced result.
 
 ## Contract state
 
