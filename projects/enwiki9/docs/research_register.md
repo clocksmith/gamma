@@ -41,9 +41,13 @@ Candidate `delta_midas_named_midpoint_gradient_65536_q0_v1` is the next
 bounded teacher attribution after the positive deep F-versus-O residual and
 the negative compact hashed-linear probe. Its structured
 [`experiment contract`](../operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q0_v1.json)
-binds the exact `65,536`-symbol production population, retained F archive,
-closed-source inputs, immutable parent revision, analyzer, materializer, two
-repeat encodes, and zero-credit boundary.
+binds the exact `65,536`-symbol production population, the legacy attribution
+receipt that names retained F, closed-source inputs, immutable parent revision,
+analyzer, materializer, two repeat encodes, and zero-credit boundary. That
+legacy receipt carries the retained archive digest, but q0 through q2 do not
+bind the archive itself as a separate prospective input; their archive-identity
+measurement is therefore useful execution evidence, not a tamper-evident
+comparator boundary.
 
 The only changed mechanism is observation: during each F-arm first-half
 midpoint backward pass, the instrumented teacher emits the stable `NCParam`
@@ -158,7 +162,9 @@ cross-checks every value against an explicit BF16-to-F32 multiply-and-sum path.
 Both paths must be finite and pass the frozen relative-error bound before the
 original group and chronological-third predicates can authorize or retire an
 ablation. Agreement with q2 remains diagnostic because q2's BF16 ranking is not
-an oracle.
+an oracle. Q3 also binds retained `F_clean.nncp` directly and checks its path,
+byte count, and digest against the legacy attribution receipt before starting
+the teacher, closing the comparator-identity gap instead of inheriting it.
 
 ## 2026-08-15 - Recursive self-improvement boundary audited
 

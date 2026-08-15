@@ -223,6 +223,10 @@ the same frozen predicates. Q2 agreement is retained as a numeric
 sensitivity measurement, not a promotion predicate. Q3 additionally compares
 every fused squared sum with an explicit BF16-to-F32 multiply-and-sum reference;
 finite cross-path agreement is a prerequisite for both promotion and retirement.
+It binds the retained F comparator as a direct prospective input and verifies
+that file against the path, byte count, and digest in the legacy attribution
+receipt before teacher execution. This closes a q0-through-q2 gap where the
+receipt was bound but its separately read comparator file was not.
 
 ## Composition and independent audit
 
