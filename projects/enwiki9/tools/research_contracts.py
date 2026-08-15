@@ -67,6 +67,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.mechanism-graph.v1": (
         CONTRACT_ROOT / "mechanism-graph.schema.json"
     ),
+    "gamma.enwiki9.named-gradient-detail.v1": (
+        CONTRACT_ROOT / "named-gradient-detail.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
@@ -779,6 +782,89 @@ def _validate_adaptive_experiment_contract(
     }
 
 
+def _validate_named_gradient_detail(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    revision_path, revision = _project_receipt_reference(
+        value["candidateRevision"]["receipt"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    candidate = value["candidateRevision"]
+    _require(
+        candidate["candidateId"] == experiment["proposalId"] == revision["candidateId"],
+        f"{artifact_path}: candidate identity differs across detail bindings",
+    )
+    _require(
+        candidate["candidateTreeSha256"] == revision["candidateTreeSha256"],
+        f"{artifact_path}: candidate tree differs from revision receipt",
+    )
+    for index, execution in enumerate(value["executions"]):
+        _project_file_reference(
+            execution["stderr"],
+            f"{artifact_path}: execution {index} stderr",
+        )
+
+    summary = value["summary"]
+    expected_rows = summary["blockCount"] * summary["parameterCount"]
+    reference_presence: set[bool] = set()
+    for run_index, rows in enumerate(value["runs"]):
+        _require(
+            len(rows) == expected_rows,
+            f"{artifact_path}: run {run_index} row count differs from summary",
+        )
+        blocks: dict[int, set[str]] = {}
+        for row in rows:
+            blocks.setdefault(row["block"], set()).add(row["name"])
+            reference_presence.add("referenceEnergy" in row)
+        _require(
+            len(blocks) == summary["blockCount"],
+            f"{artifact_path}: run {run_index} block count differs from summary",
+        )
+        _require(
+            all(len(names) == summary["parameterCount"] for names in blocks.values()),
+            f"{artifact_path}: run {run_index} parameter coverage differs",
+        )
+    _require(
+        len(reference_presence) == 1,
+        f"{artifact_path}: cross-path reference fields are only partially populated",
+    )
+    has_reference = True in reference_presence
+    _require(
+        has_reference == ("allDirectReferenceFinite" in summary),
+        f"{artifact_path}: cross-path row and summary fields differ",
+    )
+    _require(
+        summary["allGradientFinite"]
+        == all(row["finite"] for row in value["runs"][0]),
+        f"{artifact_path}: gradient finiteness summary differs",
+    )
+    if has_reference:
+        _require(
+            summary["allDirectReferenceFinite"]
+            == all(row["referenceFinite"] for row in value["runs"][0]),
+            f"{artifact_path}: reference finiteness summary differs",
+        )
+        _require(
+            summary["maxDirectReferenceRelativeDelta"]
+            == max(row["relativeDelta"] for row in value["runs"][0]),
+            f"{artifact_path}: maximum reference delta differs",
+        )
+    return {
+        "candidateId": candidate["candidateId"],
+        "candidateRevision": revision_path.relative_to(PROJECT_ROOT).as_posix(),
+        "runs": len(value["runs"]),
+        "rowsPerRun": expected_rows,
+        "crossPathReference": has_reference,
+    }
+
+
 def _validate_algorithm_proposal(
     value: dict[str, Any],
     artifact_path: Path,
@@ -1070,6 +1156,42 @@ def _validate_adaptive_experiment_result(
     )
     for item in value["artifacts"]:
         _project_file_reference(item, f"{artifact_path}: artifact {item['id']}")
+    artifacts_by_id = {item["id"]: item for item in value["artifacts"]}
+    detail_reference = artifacts_by_id.get("gradient-detail")
+    if detail_reference is not None:
+        detail_path = PROJECT_ROOT / detail_reference["path"]
+        detail_validation = validate_artifact(detail_path)
+        detail = load_json(detail_path)
+        _require(
+            detail_validation["candidateId"] == value["candidateId"],
+            f"{artifact_path}: gradient detail identifies another candidate",
+        )
+        summary = detail["summary"]
+        derived_measurements = {
+            "namedGradientDeterministic": detail["runs"][0] == detail["runs"][1],
+            "allBlocksSameParameterSet": summary["allBlocksSameParameterSet"],
+            "allGradientFinite": summary["allGradientFinite"],
+            "stableDominantNonHeadGroup": summary["stableDominantNonHeadGroup"],
+            "minimumThirdDominantNonHeadShare": summary[
+                "minimumThirdDominantNonHeadShare"
+            ],
+            "headGroupShare": summary["headGroupShare"],
+            "blockCount": summary["blockCount"],
+            "parameterCount": summary["parameterCount"],
+        }
+        for optional_measurement in (
+            "allDirectReferenceFinite",
+            "maxDirectReferenceRelativeDelta",
+        ):
+            if optional_measurement in summary:
+                derived_measurements[optional_measurement] = summary[
+                    optional_measurement
+                ]
+        for measurement, observed in derived_measurements.items():
+            _require(
+                value["measurements"].get(measurement) == observed,
+                f"{artifact_path}: {measurement} differs from gradient detail",
+            )
     if experiment.get("outputManifestPolicy") == "complete-result-artifacts-v1":
         result_path = artifact_path.relative_to(PROJECT_ROOT).as_posix()
         declared_outputs = set(experiment["outputs"])
@@ -2605,6 +2727,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_experiment_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.mechanism-graph.v1":
         result = _validate_mechanism_graph(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.named-gradient-detail.v1":
+        result = _validate_named_gradient_detail(value, artifact_path)
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
         result = _validate_resource_guard(value, artifact_path)
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":

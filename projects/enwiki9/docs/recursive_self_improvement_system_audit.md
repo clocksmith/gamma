@@ -127,6 +127,12 @@ implementation-retry freezer can populate that closure from the new runner and
 materializer, while the terminal runner can use the same resolver for its source
 package. Patches, models, and data still require explicit declarations.
 
+Named-gradient detail is no longer an opaque hash-linked sidecar. Its schema and
+semantic validator bind the experiment and candidate revision, both execution
+logs, complete block/parameter coverage, row-derived finiteness and reference
+summaries, deterministic-repeat measurement, and the result fields that consume
+those values.
+
 Candidate-owned scratch directories are now explicit job inputs. The executor
 accepts only project-relative paths below `results/<candidate_id>/`, creates
 them before resource-guard preflight, and retains the declaration in the job
