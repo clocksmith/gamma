@@ -99,6 +99,11 @@ Implemented terminal control:
 - `search-policy`: successor proposals use validated parent reflections and
   asserted measurements before forecasts or manual priority.
 
+Reflection commit projects any retired dimensions before updating candidate
+status. A failed projection removes the new reflection and any newly created
+exclusion, preventing a partially classified candidate from becoming eligible
+for successor selection.
+
 New scientific work uses `algorithm-proposal.v2`,
 `adaptive-experiment-contract.v1`, and `adaptive-job.v3`. A v3 job cannot be
 queued without one validated prospective contract, immutable candidate

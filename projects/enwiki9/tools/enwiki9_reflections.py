@@ -242,8 +242,20 @@ def create_reflection(
     except Exception:
         reflection_path.unlink(missing_ok=True)
         raise
-    _apply_reflection(candidate_id, job_id, reflection_path, receipt)
-    sync_reflection_exclusion(reflection_path, receipt)
+    exclusion_path = (
+        enwiki9_omega.EXCLUSIONS / f"reflection-{receipt['reflectionId']}.json"
+        if receipt["knowledge"]["retiredDimensions"]
+        else None
+    )
+    exclusion_existed = exclusion_path.is_file() if exclusion_path else False
+    try:
+        sync_reflection_exclusion(reflection_path, receipt)
+        _apply_reflection(candidate_id, job_id, reflection_path, receipt)
+    except Exception:
+        if exclusion_path is not None and not exclusion_existed:
+            exclusion_path.unlink(missing_ok=True)
+        reflection_path.unlink(missing_ok=True)
+        raise
     return reflection_path, receipt
 
 
