@@ -1,0 +1,145 @@
+# Recursive self-improvement system audit
+
+Status: design and correctness audit. This document is not compression proof and
+does not grant score, forecast, promotion, or authorship credit.
+
+## Purpose
+
+Gamma's enwiki9 lane already preserves proposals, candidates, mutations, jobs,
+receipts, exclusions, and generated status views. That is a strong experimental
+archive. It is not yet a trustworthy recursive self-improvement loop because it
+cannot mechanically convert a terminal measurement into an attributed lesson,
+a safe source edit, and the smallest justified successor experiment.
+
+The missing loop is:
+
+```text
+freeze objective
+-> snapshot candidate
+-> preregister experiment
+-> execute under resource guards
+-> validate the receipt
+-> reflect on the result
+-> update mechanism memory
+-> select one next edit
+-> create a new immutable candidate
+-> independently replay
+```
+
+## Existing foundation
+
+- `ADAPTIVE_WORKFLOW.md` and `tools/enwiki9_lab.py` define proposal, claim,
+  development, mutation, queue, execution, and refresh operations.
+- `operations/adaptive/mutations.jsonl` preserves candidate ancestry.
+- `results/run_ledger.jsonl` and `results/<candidate>/` preserve run evidence.
+- `tools/enwiki9_omega.py` records mechanism exclusions and lineage activity.
+- `candidate_inventory.json`, `docs/hutter_frontier.json`, and
+  `docs/status_receipt.md` provide generated audit and operator views.
+- `docs/research_register.md` is the durable human research memory.
+
+## Blocking measurement defects
+
+Recursive decisions must remain disabled until measurement is fail-closed.
+
+1. `lib/driver.py` reuses the compression timer before decompression, so
+   `run_time_s` excludes compression time after a normal roundtrip.
+2. `lib/driver.py` counts only top-level candidate siblings. It does not compute
+   the recursive runtime dependency closure required for a Hutter score.
+3. Its RSS evidence samples the Python process at only three boundaries. It does
+   not continuously measure the complete process tree, temporary disk, or
+   decimal-memory peak.
+4. `tools/candidate_triage.py` normalizes a missing `roundtrip_ok` field as true.
+5. The same normalizer can infer determinism from labels containing `identity`
+   or `inherited` instead of requiring an exact receipt.
+6. `projects/enwiki9/README.md` still names a historical `108,000,000` target,
+   while `AGENTS.md`, the research register, and status receipts use the active
+   `105,000,000` target.
+
+## Missing contracts
+
+Add versioned, validated contracts for these objects:
+
+- `objective-contract`: corpus hashes, score target, score formula, runtime,
+  decimal-memory, temporary-disk, licensing, and dependency-closure rules;
+- `candidate-snapshot`: immutable tree hash, parent hash, build inputs, and
+  dependency manifest;
+- `experiment-contract`: changed variable, invariants, controls, population,
+  metric, minimum effect, causal boundary, promotion, and kill predicates;
+- `run-receipt`: exact commands, environment, hashes, measured resources,
+  archive, inverse, replay, and independent verification;
+- `reflection-receipt`: validity, hypothesis verdict, localized cause,
+  transferable lesson, retired dimensions, uncertainty, and next gate;
+- `edit-receipt`: complete semantic diff, mechanism changed, invariants retained,
+  source/package cost delta, and new candidate identity.
+
+Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
+unversioned, or unresolvable evidence must fail rather than be skipped or
+inferred.
+
+## Missing algorithm-edit boundary
+
+`tools/enwiki9_lab.py mutate` copies a parent and optionally performs text
+replacement in `program.py`. A safe editor must operate on the complete source
+tree, refuse mutation of a measured snapshot, record all additions and removals,
+recount the package, and create a new content-derived candidate identity. An
+edit may change one declared mechanism while automated checks enforce declared
+invariants. No reflection process may rewrite its own evidence or measured
+parent.
+
+## Missing reflection and search policy
+
+Terminal process status is not a scientific verdict. Each terminal job must be
+followed by receipt validation and a reflection receipt before candidate state,
+the exclusion ledger, or successor proposals can change. Reflection must
+distinguish implementation failure, infrastructure failure, invalid experiment,
+causal failure, transfer failure, accounting failure, and measured algorithmic
+loss.
+
+OMEGA's current manual priority plus fixed mechanism bonuses and descendant
+counts are useful ordering hints, not learning. A later policy should rank
+experiments by counted byte leverage, transfer retention, package cost,
+runtime, memory, uncertainty, interaction risk, and expected information gained
+per resource unit. It must never alter measured bytes or promote without the
+frozen predicates.
+
+## Missing composition and independent audit
+
+The system needs a mechanism graph identifying shared probability boundaries,
+overlapping costs, incompatible causal assumptions, closed-teacher dependencies,
+and required joint replays. Component forecasts must never be added. Candidate
+promotion requires a new exact joint archive.
+
+Prize-facing evidence additionally requires a clean-room replay from the
+dependency manifest, an independent decoder, the official corpus hash, complete
+package accounting, process-tree resource evidence, cross-host deterministic
+archive identity, and a full-1G result. `docs/hutter_frontier.json` may record
+source-bound forecasts, but only the independently verified package is the
+objective.
+
+## Implementation order
+
+1. Establish one objective contract and remove target drift.
+2. Correct timing, roundtrip, determinism, recursive accounting, and resource
+   measurement.
+3. Add schemas, hash-linked references, validation, and migrations.
+4. Add immutable candidate snapshots and edit receipts.
+5. Add mandatory reflection receipts and fail-closed terminal decisions.
+6. Add mechanism-memory and composition audits.
+7. Add evidence-aware next-experiment selection.
+8. Permit bounded automatic mutation only after all earlier controls pass.
+
+## Operating goal (490 words)
+
+My goal is to build and use a trustworthy Gamma research loop that produces one self-contained compressor and decompressor for the official one-billion-byte enwik9 corpus, reconstructs it exactly, and achieves a fully counted Hutter score no greater than 105,000,000 bytes. The score must include every source file, executable, model, dictionary, table, option, framing byte, runtime dependency, and reconstruction aid. Decimal-10GB memory, runtime, temporary-disk, licensing, deterministic replay, and independent verification must pass. Forecasts, teachers, traces, partial scopes, and external compressors remain evidence only.
+
+First, I will make the objective mechanically unambiguous. A versioned objective contract will bind the official corpus hashes, score formula, target, resource ceilings, dependency rules, and promotion ladder. `AGENTS.md`, `README.md`, `ADAPTIVE_WORKFLOW.md`, and `docs/official_accounting_checklist.md` will reference that contract rather than carrying conflicting targets. `docs/status_receipt.md` and `docs/hutter_frontier.json` will report its hash and the signed target debt.
+
+Second, I will repair measurement truth before permitting automation. `lib/driver.py` will measure complete wall time, recursively count the runnable package, hash every counted member, and emit exact archive and inverse evidence. `tools/candidate_triage.py` will reject missing roundtrip or determinism fields instead of inferring success. Process-tree guards will measure peak RSS and temporary disk. `results/run_ledger.jsonl` will accept only schema-valid, hash-linked receipts.
+
+Third, I will turn `tools/enwiki9_lab.py` into a closed scientific loop. Each proposal will carry a structured experiment contract naming its parent, one changed mechanism, invariants, controls, population, causal boundary, expected byte effect, source budget, promotion predicate, and kill predicate. Every mutation will create an immutable candidate under `programs/<id>/`, record a complete edit receipt in `operations/adaptive/mutations.jsonl`, and bind parent and child tree hashes. Measured candidates will never be edited in place.
+
+After every terminal job, Gamma will require a reflection receipt before promotion, retirement, or further mutation. That receipt will audit validity, classify the failure or gain, compare controls, localize the responsible mechanism, record transferable knowledge in `docs/research_register.md`, update exclusions through `tools/enwiki9_omega.py`, and name the smallest justified next gate. Search priority will use measured net bytes, transfer retention, package cost, runtime, memory, uncertainty, and interaction risk, never descendant count alone.
+
+The recursive controller will never equate activity with progress. `candidate_inventory.json` will expose orphaned, mutable, or unclassified candidates; `docs/evidence_matrix.md` will distinguish exact results from inherited metadata; `docs/best_results.md` will rank identical scopes only; and `UPPER_BOUND_CERTIFICATE.md` will remain the constructive proof boundary. Each generated view must be reproducible from validated receipts and must fail on contradictions or missing references before any successor is selected.
+
+The immediate scientific lane remains DELTA-MIDAS. I will bind the exact F-versus-O midpoint traces, retire unsupported GRAM-MIDAS and ORBIT assumptions, measure decoder-causal deep residual structure, and authorize one compact open correction only if held-out arithmetic replay beats frozen controls after counted cost. Any survivor advances through exact 65K, mature, 10M, distant-transfer, 100M, and full-1G gates. Final success exists only when the dependency-closure package, independent decoder, official corpus, archive, replay hashes, resource receipts, and source are reproducible without LibNC, hidden teacher state, uncounted data, or optimistic arithmetic. Until then, the verified full-1G Gamma score remains unknown.

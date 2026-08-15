@@ -42,6 +42,10 @@ For cached residual/SSE shadow evidence, see
 For the strategy and novel-algorithm research register, see
 [docs/research_register.md](docs/research_register.md).
 
+For the measurement, reflection, immutable-edit, and recursive-improvement
+system audit, see
+[docs/recursive_self_improvement_system_audit.md](docs/recursive_self_improvement_system_audit.md).
+
 For the primary novel SRSTC / streaming self-referential retrieval strategy
 that turns cosine-style similarity into deterministic compressor state, see
 [docs/streaming_retrieval_mixer.md](docs/streaming_retrieval_mixer.md).
