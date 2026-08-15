@@ -36,6 +36,7 @@ GENERATORS = [
 ]
 
 CHECKS = [
+    ["python3", "projects/enwiki9/tools/backfill_run_ledger.py", "--check"],
     ["python3", "projects/enwiki9/tools/hutter_run_ledger.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_release_receipts.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_evidence_matrix.py", "--check"],
