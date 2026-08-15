@@ -41,10 +41,11 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Rebuild the run ledger | `backfill_run_ledger.py` |
 | Freeze a predicate-preserving implementation retry | `enwiki9_freeze_implementation_retry.py` |
 
-New implementation retries should use `--strict-output-manifest` and declare
-each newly retained artifact with `--additional-output`. The frozen contract
-then requires its terminal result to bind every declared output except the
-result itself exactly once. When both implementation entries are Python, the
+New implementation retries automatically use the strict output manifest and
+must declare each newly retained artifact with `--additional-output`. The
+frozen contract then requires its terminal result to bind every declared output
+except the result itself exactly once; `--strict-output-manifest` remains an
+explicit compatibility spelling. When both implementation entries are Python, the
 freezer automatically hashes every project-local imported module into the
 prospective input manifest and names the runner and materializer as closure
 roots; `--bind-python-source-closure` makes that requirement explicit. An
