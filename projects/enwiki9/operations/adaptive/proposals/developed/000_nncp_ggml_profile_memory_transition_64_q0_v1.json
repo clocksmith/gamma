@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "claimed_at": "2026-08-15T23:10:42+00:00",
+  "created_at": "2026-08-15T23:10:36+00:00",
+  "developed_at": "2026-08-15T23:10:46+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T230010Z_836682be9c.json",
+      "sha256": "sha256:e62ead0976c61c8651fc597495e3bdc7bfb29a674b84b0c48b73bf66f18a7888"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q1_v1/decision.json",
+      "sha256": "sha256:117e334d854688a747a8eff7e469f58621741e39692607005adf22efdb7abbea"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_memory_transition_64_q0_v1.json",
+    "sha256": "sha256:2487a5f7faaa9f2d8e888506fcb32fbd6fa95b92d0684875206d251711af31cf"
+  },
+  "hypothesis": "For every production layer, shifting the retained 256-position decoder memory by 64 positions and appending the exact open layer-input sequence reconstructs the teacher's next-segment memory byte-for-byte, deterministically across two open executions.",
+  "interfaces_exposed": [
+    "exact open layer inputs + prior decoder memory -> next-segment decoder memory"
+  ],
+  "kill_condition": "With frozen input, layer-population, replay, and source predicates passing, any next-memory difference retires this explicit transition before later-segment integration.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_profile_arithmetic_64_q1_v1",
+  "parent_proposal_id": "nncp_ggml_profile_arithmetic_64_q1_v1",
+  "priority": 1452,
+  "promotion_condition": "All twenty next-segment memories match the teacher reconstruction byte-for-byte across two open executions; authorize a separately frozen full parameter-and-optimizer update boundary.",
+  "proposal_id": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "retired_neighborhoods": [
+    "No parameter update, second-segment forward, tolerance, model, fixture, or score claim."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1470,
+  "state": "developed",
+  "title": "Exact production segment memory transition"
+}

@@ -31,12 +31,25 @@ This is a real open-runtime correctness gain with zero objective credit: it
 proves one production-profile segment, not online parameter updates,
 multi-segment continuity, package economics, transfer, or archive improvement.
 
-The next admissible integration must preserve this exact arithmetic boundary
-while exposing the segment transition explicitly. The incumbent updates both
-memory and model parameters after each production segment, so concatenating
-fixed-parameter forward calls would not be an equivalent multi-segment test.
-The smallest honest successor is a hash-bound state/update boundary followed
-by a later segment oracle; a generic prefix compressor gate is not authorized.
+The next admissible integration had to preserve this exact arithmetic boundary
+while exposing the segment transition explicitly. Candidate
+`nncp_ggml_profile_memory_transition_64_q0_v1` compiled LibNC's visible
+`mem_update` rule into a counted shift-and-append transform. For every layer it
+independently combined the retained initial teacher memory with either the
+ordered teacher layer inputs or one of two open executions. All layer states
+match byte-for-byte and all three aggregate state digests are identical. See
+the [`decision`](../results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json),
+[`state receipt`](../results/nncp_ggml_profile_memory_transition_64_q0_v1/state-digests.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json).
+
+This removes memory movement as the blocker, but it does not authorize a
+fixed-parameter second segment. The incumbent also computes full deep
+gradients, clipping, optimizer moments, and updated parameters after each
+production segment. The next honest boundary is therefore a prospectively
+frozen full-update receipt, followed only after a pass by a later-segment
+oracle. Generic prefix compressor jobs for these infrastructure descriptors
+remain held because they would compare different work.
 
 ## 2026-08-15 - Direct-F32 named-gradient oracle retires the localization lineage
 

@@ -1,0 +1,386 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp-ggml-profile-memory-transition-64-q0-v1",
+  "proposalId": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_ggml_profile_arithmetic_64_q1_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_profile_arithmetic_64_q1_v1/20260815T225926222894Z_b712a9f8ccc6.json",
+      "sha256": "sha256:24de94b279bfa7ad18d3f395444f4b07169db7a1541de48694850abcee5e2816"
+    }
+  },
+  "hypothesis": {
+    "claim": "For every production layer, shifting the retained 256-position decoder memory by 64 positions and appending the exact open layer-input sequence reconstructs the teacher's next-segment memory byte-for-byte, deterministically across two open executions.",
+    "falsification": "If the frozen exact-forward and replay inputs validate but any reconstructed layer memory differs, retire the explicit shift-and-append open memory transition before attempting a later segment or parameter update."
+  },
+  "changedMechanism": "Compile only LibNC mem_update into an explicit source-counted shift-and-append transform over the retained initial BF16 memory and exact 64-position layer inputs; no parameter update or second-segment forward is performed.",
+  "invariants": [
+    "The Q1 decision/reflection and Q18 decision, fixture, source closure, and guard must match their frozen digests.",
+    "The Q1 exact arithmetic patch is applied unchanged before both open executions.",
+    "Teacher next memory is reconstructed only from the receipt-bound initial teacher memory and ordered teacher layer-input tensors.",
+    "Open next memory is reconstructed independently from the same initial memory and each open execution\u2019s own layer-input tensors.",
+    "All twenty layers preserve the exact 256-position memory geometry; no tolerance or floating comparison is allowed.",
+    "Parameter gradients, optimizer state, later-segment probabilities, archive savings, and objective credit remain outside this gate."
+  ],
+  "controls": [
+    {
+      "id": "teacher-memory-transition",
+      "role": "comparator",
+      "definition": "For each layer, the retained teacher memory drops its oldest 64 positions and appends the ordered 64 teacher layer-input tensors."
+    },
+    {
+      "id": "open-memory-transition",
+      "role": "treatment",
+      "definition": "The first rebuilt exact open execution applies the same explicit transition to its independently produced layer-input tensor."
+    },
+    {
+      "id": "open-memory-transition-repeat",
+      "role": "replay",
+      "definition": "A second execution must reproduce every next-memory layer digest and aggregate digest exactly."
+    }
+  ],
+  "population": {
+    "unit": "production-profile next-segment layer memory tensor",
+    "scopeBytes": null,
+    "scopeSymbols": 64,
+    "selection": "All 20 layer memories after the retained stream-zero production segment at transformed coordinates [256, 320).",
+    "coordinate": "Each memory contains 256 positions by 1,024 BF16-representable values; the explicit transition retains positions [64,256) and appends the 64 current layer inputs."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Receipt-bound initial stream-zero memory for every layer.",
+      "Ordered teacher layer-input tensors for the comparator and independently emitted open layer-input tensors for each treatment run.",
+      "The source-visible LibNC mem_update shift-and-append rule and fixed segment/memory geometry."
+    ],
+    "forbiddenInformation": [
+      "Teacher next-memory payloads as open inputs.",
+      "Teacher probabilities, future symbols, gradients, parameter updates, optimizer state, or later-segment tensors.",
+      "Any tolerance, fitted correction, hidden runtime dependency, inherited archive saving, or score credit."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "q1-decision",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q1_v1/decision.json",
+      "sha256": "sha256:117e334d854688a747a8eff7e469f58621741e39692607005adf22efdb7abbea"
+    },
+    {
+      "id": "q1-reflection",
+      "path": "operations/adaptive/reflections/20260815T230010Z_836682be9c.json",
+      "sha256": "sha256:e62ead0976c61c8651fc597495e3bdc7bfb29a674b84b0c48b73bf66f18a7888"
+    },
+    {
+      "id": "q1-guard",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q1_v1/guard.json",
+      "sha256": "sha256:a82205c4b09e7715d94ebeb398ee004213c81e6d15e91d424374a9bea074d806"
+    },
+    {
+      "id": "q18-decision",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/decision.json",
+      "sha256": "sha256:f1898e98d8633b2c872db37bd4931ca838b7c13fc273ad88f44a8cda9e15c45d"
+    },
+    {
+      "id": "q18-fixture",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/production_forward_fixture.tar.xz",
+      "sha256": "sha256:fd70eec90d704be322f44b17198c14c2b862b30082d20176a709e223bf14c7b6"
+    },
+    {
+      "id": "q18-source",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:ec71e7e3478a741cdab9305ce1d481139d90bf7df41931fabe211121dd6b0da6"
+    },
+    {
+      "id": "q18-guard",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_guard_v1.json",
+      "sha256": "sha256:c53474a3e176f64722b90fb54a12cdd0d5c072231bb2b83c910fb51d371b6b27"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract-schema-json-bbe2e7b532b2",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result-schema-json-05fa224b9ac7",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job-schema-json-d01a141c6a45",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal-schema-json-2e6bc3df456f",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision-schema-json-26d20c11848a",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt-schema-json-9dd5a65f778d",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay-schema-json-556c8a20b5ba",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result-schema-json-1534b8c62fb6",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure-schema-json-56ede659d6ec",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row-schema-json-564eb9da8f1d",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract-schema-json-ddc50b7a26c9",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result-schema-json-f67a74ccefdf",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph-schema-json-4defbca57d45",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail-schema-json-dc5bafaae829",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-json-774aab7b321c",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract-schema-json-de1760e03688",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt-schema-json-74dcb037d60b",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index-schema-json-b98f33bbd2bb",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt-schema-json-ed672266f4ca",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt-schema-json-b1c279150e0c",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-json-b4863eb5bb14",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy-schema-json-7b83f8a5d789",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9-python-source-closure-py-b78ecd909e4b",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp-ggml-profile-arithmetic-64-q0-py-37935a72cbe0",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q0.py",
+      "sha256": "sha256:37935a72cbe0285982ed56c2b5cb80a3733ff1bf6982da7b595012a9f2ca0a86"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-arithmetic-64-q1-py-fc0bd37fa5f4",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q1.py",
+      "sha256": "sha256:fc0bd37fa5f44bdf9beab471fcfabbc3d2cee29b79ceabbaa27d77020c60d607"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-memory-transition-64-q0-py-f24de684d2e8",
+      "path": "tools/nncp_ggml_profile_memory_transition_64_q0.py",
+      "sha256": "sha256:f24de684d2e843ee0bed555c3e88612dd1a16eca14f7bd5474b324436d4a4853"
+    },
+    {
+      "id": "runtime-source-nncp-midpoint-phase-attribution-qm0-py-0c636c36e14b",
+      "path": "tools/nncp_midpoint_phase_attribution_qm0.py",
+      "sha256": "sha256:0c636c36e14b611b5f8ada01a06a974607610ea7793545af27c9cbd68ca214cc"
+    },
+    {
+      "id": "runtime-source-nncp-symbol-cache32-marginal-qm0-py-deec3ba812eb",
+      "path": "tools/nncp_symbol_cache32_marginal_qm0.py",
+      "sha256": "sha256:deec3ba812ebe1524d1b1e126ca9f55a18936008cd9857f549402edaa147af27"
+    },
+    {
+      "id": "runtime-source-research-contracts-py-9fb46117c2f5",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "pythonSourceClosureEntries": [
+    "runtime-source-tools-nncp-ggml-profile-memory-transition-64-q0-py-f24de684d2e8"
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 2000000,
+    "expectedNetSavingsBytes": -2000000
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.1,
+    "interactionRisk": 0.1
+  },
+  "measurements": [
+    {
+      "id": "q1ParentPass",
+      "definition": "The retained exact arithmetic parent remains a valid promotion pass.",
+      "unit": "boolean"
+    },
+    {
+      "id": "layerPopulation",
+      "definition": "Number of independently reconstructed production-layer next-memory tensors.",
+      "unit": "layers"
+    },
+    {
+      "id": "teacherOpenMemoryIdentity",
+      "definition": "Every first-open next-memory tensor is byte-identical to the independently reconstructed teacher transition.",
+      "unit": "boolean"
+    },
+    {
+      "id": "openMemoryDeterministic",
+      "definition": "Both open executions produce byte-identical next-memory tensors and aggregate digest.",
+      "unit": "boolean"
+    },
+    {
+      "id": "differingMemoryLayers",
+      "definition": "Count of teacher/open next-memory layers with any byte difference.",
+      "unit": "layers"
+    },
+    {
+      "id": "sourceClosureBytes",
+      "definition": "Compressed counted incremental source closure size.",
+      "unit": "bytes"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "q1ParentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-layers",
+      "measurement": "layerPopulation",
+      "operator": "eq",
+      "threshold": 20
+    },
+    {
+      "id": "p-identity",
+      "measurement": "teacherOpenMemoryIdentity",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "openMemoryDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-differences",
+      "measurement": "differingMemoryLayers",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "q1ParentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-layers",
+      "measurement": "layerPopulation",
+      "operator": "eq",
+      "threshold": 20
+    },
+    {
+      "id": "k-identity",
+      "measurement": "teacherOpenMemoryIdentity",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "openMemoryDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-differences",
+      "measurement": "differingMemoryLayers",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "outputs": [
+    "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+    "results/nncp_ggml_profile_memory_transition_64_q0_v1/state-digests.json",
+    "results/nncp_ggml_profile_memory_transition_64_q0_v1/execution.json",
+    "results/nncp_ggml_profile_memory_transition_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-15T23:10:15Z"
+}

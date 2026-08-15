@@ -1,0 +1,38 @@
+{
+  "added": "2026-08-15",
+  "deps": [
+    "nncp_ggml_profile_arithmetic_64_q1_v1"
+  ],
+  "description": "Exact open reconstruction of the production segment memory transition.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The retained exact open layer inputs reproduce all next-segment LibNC memory tensors byte-for-byte under the explicit shift-and-append transition.",
+  "id": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260815T231108Z_4912fe7f1f": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json",
+        "sha256": "sha256:936bd383ca40602224bf8e735b8b7f88d99631adb97447654696cdc3294d2811",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_ggml_profile_memory_transition_64_q0_v1.json",
+      "sha256": "sha256:2487a5f7faaa9f2d8e888506fcb32fbd6fa95b92d0684875206d251711af31cf"
+    },
+    "interfaces_exposed": [
+      "exact open layer inputs + prior decoder memory -> next-segment decoder memory"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_ggml_profile_arithmetic_64_q1_v1",
+    "proposal_id": "nncp_ggml_profile_memory_transition_64_q0_v1",
+    "retired_neighborhoods": [
+      "No parameter update, second-segment forward, tolerance, model, fixture, or score claim."
+    ]
+  },
+  "parent": "nncp_ggml_profile_arithmetic_64_q1_v1",
+  "status": "active",
+  "verdict": "Promote only to a separately prospectively frozen production full-update boundary that binds gradients, optimizer state, updated parameters, and memory; do not launch a second-segment claim until that boundary passes."
+}

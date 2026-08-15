@@ -1,0 +1,155 @@
+{
+  "artifacts": [
+    {
+      "id": "state-digests",
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/state-digests.json",
+      "sha256": "sha256:70bec6e2ffd21ac2bb218d369a018932d75c6fc6d1c905113326f7935cbede28"
+    },
+    {
+      "id": "execution",
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/execution.json",
+      "sha256": "sha256:97dd36a9b4bb1fd1f1c4d0623a5d7669bd54db49cff526b49039e6b5d90e7837"
+    },
+    {
+      "id": "source-package",
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/incremental_source.tar.xz",
+      "sha256": "sha256:3f07af82ba390dda6d305d8fc0d713979363319a050b224fe14e0dd624f8b584"
+    }
+  ],
+  "candidateId": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_profile_memory_transition_64_q0_v1",
+    "candidateTreeSha256": "sha256:b061f15172ff906e860e8c012b39bab157066a62f8c4cfaffa3af0f932bdc29a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_profile_memory_transition_64_q0_v1/20260815T231045304412Z_b061f15172ff.json",
+      "sha256": "sha256:27a4d9980e5b02e0bc75ac954f22ad9a0ac4ebfbd121f6eb95d0db97e8c3e8ec"
+    }
+  },
+  "decision": "authorize-successor",
+  "evidenceClass": "infrastructure",
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_profile_memory_transition_64_q0_v1.json",
+    "sha256": "sha256:2487a5f7faaa9f2d8e888506fcb32fbd6fa95b92d0684875206d251711af31cf"
+  },
+  "generatedUtc": "2026-08-15T23:12:24+00:00",
+  "killPass": false,
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "q1ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-layers",
+      "measurement": "layerPopulation",
+      "observed": 20,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 20
+    },
+    {
+      "id": "k-identity",
+      "measurement": "teacherOpenMemoryIdentity",
+      "observed": true,
+      "operator": "eq",
+      "passed": false,
+      "threshold": false
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "openMemoryDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-differences",
+      "measurement": "differingMemoryLayers",
+      "observed": 0,
+      "operator": "gt",
+      "passed": false,
+      "threshold": 0
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 42860,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "measurements": {
+    "differingMemoryLayers": 0,
+    "layerPopulation": 20,
+    "openMemoryDeterministic": true,
+    "q1ParentPass": true,
+    "sourceClosureBytes": 42860,
+    "teacherOpenMemoryIdentity": true
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "promotionPass": true,
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "q1ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-layers",
+      "measurement": "layerPopulation",
+      "observed": 20,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 20
+    },
+    {
+      "id": "p-identity",
+      "measurement": "teacherOpenMemoryIdentity",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "openMemoryDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-differences",
+      "measurement": "differingMemoryLayers",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 42860,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "schema": "gamma.enwiki9.adaptive-experiment-result.v1"
+}
