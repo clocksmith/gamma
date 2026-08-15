@@ -73,7 +73,7 @@
     "O probability is used only after prediction as a scoring offset and cannot appear in the serialized correction model.",
     "Only train segments update weights; validation and test are single sealed evaluations.",
     "All hyperparameters, partitions, clipping, features, quantization, controls, and gates are frozen in this contract before execution.",
-    "The shifted control uses the same learner and features with train residual targets rotated by one complete segment.",
+    "The shifted control uses the same learner and features; each train record receives the next train segment's residual at the same flattened branch ordinal modulo that target segment's branch count.",
     "Only quantized-model measurements enter promotion predicates and all evidence receives zero objective credit."
   ],
   "causalBoundary": {
@@ -146,7 +146,7 @@
     ],
     "controls": [
       { "id": "zero-correction", "mechanism": "Use the unchanged O truth-path probabilities." },
-      { "id": "shifted-label", "mechanism": "Fit the identical model with training residual targets rotated forward by one complete segment." }
+      { "id": "shifted-label", "mechanism": "Fit the identical model with each train target taken from the next train segment at the same flattened branch ordinal modulo target-segment branch count." }
     ]
   },
   "outputs": [
