@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Tool jobs can declare an output directory as guarded scratch, but the controller did not materialize that directory before run_with_rss_guard performed its preflight existence check."
+  },
+  "candidateId": "delta_midas_named_midpoint_gradient_65536_q0_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_named_midpoint_gradient_65536_q0_v1",
+    "candidateTreeSha256": "sha256:c0e6e1ab2c7e7f7bfa5ff9bce93bdd5ddfa537b44fbfdbbf253e42b11f828bf8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_named_midpoint_gradient_65536_q0_v1/20260815T165921738764Z_c0e6e1ab2c7e.json",
+      "sha256": "sha256:142bca3f602e184c106892dbf31ffef386f5deb214e011844e2d25ce6f95858d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retain the exact experiment and candidate revision, fix the general scratch-path lifecycle, then queue a new job bound to the corrected runner.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20260815T170528Z_778414d866.log",
+      "sha256": "sha256:26703a8c48dbaf4cbcbaf0556b4e9fae8c65654bb5f3c72264cae181259aa9de"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_named_midpoint_gradient_65536_q0_v1.json",
+    "sha256": "sha256:f1bde30764c0b7ed55b2c55044ddded7ed957eaca06fab426f447e7e1e1f6560"
+  },
+  "generatedUtc": "2026-08-15T17:12:02+00:00",
+  "hypothesis": {
+    "rationale": "No teacher encode or gradient observation ran, so the frozen localization hypothesis received no evidence.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260815T170528Z_778414d866.json",
+    "sha256": "sha256:b77b4cfe616f61f4bd2d89034cb5e87855953d6ca8a18ab9acfb44b1e8101663"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "The adaptive executor must materialize explicitly declared candidate-owned scratch directories before launching a guard; analyzers cannot create them after guard preflight."
+    ],
+    "uncertainties": [
+      "No scientific uncertainty was reduced because execution stopped before the first experiment operation."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t170528z_778414d866",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "The resource guard rejected the declared scratch directory before the analyzer started because the result directory did not yet exist."
+    ],
+    "valid": false
+  }
+}

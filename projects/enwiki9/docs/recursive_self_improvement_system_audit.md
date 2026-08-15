@@ -99,6 +99,11 @@ job's exact experiment reference. Any unreflected terminal v2/v3 job blocks a
 new gate and successor creation. Legacy proposals remain visible but are not
 actionable until migrated to the structured contract.
 
+Candidate-owned scratch directories are now explicit job inputs. The executor
+accepts only project-relative paths below `results/<candidate_id>/`, creates
+them before resource-guard preflight, and retains the declaration in the job
+receipt so a retry is replayable rather than repaired by manual setup.
+
 Every reference must bind the referenced artifact's SHA-256. Missing, malformed,
 unversioned, or unresolvable evidence must fail rather than be skipped or
 inferred.
