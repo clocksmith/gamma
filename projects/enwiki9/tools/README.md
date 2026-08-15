@@ -85,7 +85,8 @@ teacher twice and is zero-credit attribution work. Run it only through a
 revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
 `run_with_rss_guard.py`; the experiment must declare its candidate result tree
 as guarded scratch. Its q3 materializer cannot launch a process and changes only
-the named-gradient squared-energy reduction.
+the named-gradient squared-energy reduction. Native stderr streams directly to
+the declared per-encode log, so live progress and failures remain inspectable.
 
 `enwiki9_python_source_closure.py` cannot launch a process. It recursively
 resolves imports that exist under `tools/`, emits their paths and SHA-256
