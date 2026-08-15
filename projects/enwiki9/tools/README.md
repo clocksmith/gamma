@@ -99,7 +99,8 @@ terminal incomplete-evidence reflection to match the prospectively hash-bound
 inputs and requires that reflection to authorize `retry`.
 Its incremental source archive uses the same resolved closure and canonical tar
 ownership, mode, and timestamp metadata so filesystem metadata cannot change the
-artifact hash.
+artifact hash. Immediately before packaging, every member must still equal its
+prospectively frozen input hash; a concurrent workspace edit fails the run.
 
 `enwiki9_python_source_closure.py` cannot launch a process. It recursively
 resolves imports that exist under `tools/`, emits their paths and SHA-256
