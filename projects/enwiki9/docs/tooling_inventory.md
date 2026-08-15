@@ -28,7 +28,7 @@ runner-adjacent.
 | `backfill_run_ledger.py` | Rebuilds validated v2 rows in `results/run_ledger.jsonl` only from timestamp-named historical driver results, binding each retained JSON by project-relative path, bytes, and SHA-256; supports append/dry-run modes. |
 | `enwiki9_evidence_matrix.py` | Generates `docs/evidence_matrix.md` from result JSONs only. |
 | `enwiki9_best_results.py` | Generates `docs/best_results.md`, a compact top-results view by measured scope. |
-| `enwiki9_status_receipt.py` | Generates `docs/status_receipt.md/json` from certificate, lock, gate, and process state, including a flat `operator_summary` for handoff automation. |
+| `enwiki9_status_receipt.py` | Generates `docs/status_receipt.md/json` from certificate, lock, gate, experiment population, and process state, including explicit byte/symbol scope and a flat `operator_summary` for handoff automation. |
 | `enwiki9_normalize_receipts.py` | Regenerates certificate, evidence matrix, memory-valve report, residual matrix, and status receipt in one non-heavy pass. |
 | `enwiki9_artifact_fingerprint_audit.py` | Verifies recorded result/guard receipt hashes in candidate meta rows and reports legacy rows missing fingerprints. |
 | `enwiki9_doc_lint.py` | Validates live docs, claim flags, active-gate consistency, status-summary fields, stale paths, and tool inventory coverage. |
