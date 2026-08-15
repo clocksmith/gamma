@@ -20,6 +20,13 @@ CONTRACT_ROOT = PROJECT_ROOT / "contracts" / "research" / "v1"
 OBJECTIVE_PATH = CONTRACT_ROOT / "objective-contract.json"
 SCHEMA_PATH = CONTRACT_ROOT / "objective-contract.schema.json"
 SCHEMA_PATHS = {
+    "gamma.enwiki9.adaptive-experiment-contract.v1": (
+        CONTRACT_ROOT / "adaptive-experiment-contract.schema.json"
+    ),
+    "gamma.enwiki9.adaptive-job.v3": CONTRACT_ROOT / "adaptive-job.schema.json",
+    "gamma.enwiki9.algorithm-proposal.v2": (
+        CONTRACT_ROOT / "algorithm-proposal.schema.json"
+    ),
     "gamma.enwiki9.objective-contract.v1": SCHEMA_PATH,
     "gamma.enwiki9.candidate-revision.v1": (
         CONTRACT_ROOT / "candidate-revision.schema.json"
@@ -221,6 +228,21 @@ def _project_file_reference(
     return path
 
 
+def validate_project_reference(
+    reference: dict[str, Any],
+    expected_schemas: set[str],
+    context: str,
+) -> tuple[Path, dict[str, Any]]:
+    path = _project_file_reference(reference, context)
+    value = load_json(path)
+    _require(
+        value.get("schema") in expected_schemas,
+        f"{context}: referenced artifact has wrong schema: {path}",
+    )
+    validate_artifact(path)
+    return path, value
+
+
 def _validate_candidate_revision(
     value: dict[str, Any],
     artifact_path: Path,
@@ -354,8 +376,11 @@ def _validate_reflection_receipt(
     job_path = _project_file_reference(value["job"], f"{artifact_path}: job")
     job = load_json(job_path)
     _require(
-        job.get("schema") == "enwiki9_adaptive_job_v2",
-        f"{artifact_path}: reflection requires a revision-bound v2 job",
+        job.get("schema") in {
+            "enwiki9_adaptive_job_v2",
+            "gamma.enwiki9.adaptive-job.v3",
+        },
+        f"{artifact_path}: reflection requires a revision-bound v2 or v3 job",
     )
     _require(
         job.get("candidate_id") == value["candidateId"]
@@ -371,11 +396,23 @@ def _validate_reflection_receipt(
         job_path.parent.name == job.get("state"),
         f"{artifact_path}: job state differs from its queue directory",
     )
-    if value["experiment"] is not None:
-        _project_receipt_reference(
-            value["experiment"],
+    experiment_path = _project_file_reference(
+        value["experiment"],
+        f"{artifact_path}: experiment",
+    )
+    experiment = load_json(experiment_path)
+    _require(
+        experiment.get("schema") in {
             "gamma.enwiki9.experiment-contract.v1",
-            f"{artifact_path}: experiment",
+            "gamma.enwiki9.adaptive-experiment-contract.v1",
+        },
+        f"{artifact_path}: experiment has an unsupported schema",
+    )
+    validate_artifact(experiment_path)
+    if job.get("schema") == "gamma.enwiki9.adaptive-job.v3":
+        _require(
+            job.get("experiment") == value["experiment"],
+            f"{artifact_path}: reflection and job experiment bindings differ",
         )
     evidence_paths = {
         _project_file_reference(reference, f"{artifact_path}: evidence")
@@ -485,6 +522,148 @@ def _validate_reflection_receipt(
         "jobId": job.get("job_id"),
         "netBytesSaved": value["measurements"]["netBytesSaved"],
         "validExperiment": validity["valid"],
+    }
+
+
+def _validate_adaptive_experiment_contract(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    parent = value["parent"]
+    if parent is not None:
+        _, revision = _project_receipt_reference(
+            parent["revision"],
+            "gamma.enwiki9.candidate-revision.v1",
+            f"{artifact_path}: parent revision",
+        )
+        _require(
+            revision["candidateId"] == parent["candidateId"],
+            f"{artifact_path}: parent candidate differs from revision receipt",
+        )
+    input_ids = [item["id"] for item in value["inputs"]]
+    _require(
+        len(input_ids) == len(set(input_ids)),
+        f"{artifact_path}: duplicate input identity",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+    control_ids = [item["id"] for item in value["controls"]]
+    _require(
+        len(control_ids) == len(set(control_ids)),
+        f"{artifact_path}: duplicate control identity",
+    )
+    roles = {item["role"] for item in value["controls"]}
+    _require(
+        {"treatment", "comparator"}.issubset(roles),
+        f"{artifact_path}: treatment and comparator controls are required",
+    )
+    population = value["population"]
+    _require(
+        population["scopeBytes"] is not None
+        or population["scopeSymbols"] is not None,
+        f"{artifact_path}: population has no exact byte or symbol scope",
+    )
+    budget = value["budget"]
+    _require(
+        budget["expectedNetSavingsBytes"]
+        == budget["expectedGrossSavingsBytes"]
+        - budget["maximumAddedPackageBytes"],
+        f"{artifact_path}: expected net savings differs from gross less package cost",
+    )
+    measurement_ids = [item["id"] for item in value["measurements"]]
+    _require(
+        len(measurement_ids) == len(set(measurement_ids)),
+        f"{artifact_path}: duplicate measurement identity",
+    )
+    known_measurements = set(measurement_ids)
+    predicate_ids: list[str] = []
+    for predicate_class in ("promotionPredicates", "killPredicates"):
+        for predicate in value[predicate_class]:
+            predicate_ids.append(predicate["id"])
+            _require(
+                predicate["measurement"] in known_measurements,
+                f"{artifact_path}: predicate names an unknown measurement",
+            )
+    _require(
+        len(predicate_ids) == len(set(predicate_ids)),
+        f"{artifact_path}: duplicate predicate identity",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "proposalId": value["proposalId"],
+        "expectedNetSavingsBytes": budget["expectedNetSavingsBytes"],
+    }
+
+
+def _validate_algorithm_proposal(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        experiment["proposalId"] == value["proposal_id"],
+        f"{artifact_path}: proposal and experiment identities differ",
+    )
+    experiment_parent = experiment["parent"]
+    experiment_parent_id = (
+        experiment_parent["candidateId"] if experiment_parent is not None else None
+    )
+    _require(
+        experiment_parent_id == value["parent"],
+        f"{artifact_path}: proposal and experiment parents differ",
+    )
+    budget = experiment["budget"]
+    _require(
+        value["expected_savings_bytes"] == budget["expectedGrossSavingsBytes"]
+        and value["max_program_bytes"] == budget["maximumAddedPackageBytes"],
+        f"{artifact_path}: proposal and experiment budgets differ",
+    )
+    _require(
+        value["hypothesis"] == experiment["hypothesis"]["claim"],
+        f"{artifact_path}: proposal and experiment hypotheses differ",
+    )
+    for evidence in value["evidence"]:
+        _project_file_reference(evidence, f"{artifact_path}: evidence")
+    return {
+        "proposalId": value["proposal_id"],
+        "experimentId": experiment["experimentId"],
+        "state": value["state"],
+    }
+
+
+def _validate_adaptive_job(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _, revision = _project_receipt_reference(
+        value["candidate_revision"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    _require(
+        revision["candidateId"] == value["candidate_id"]
+        and revision["candidateTreeSha256"] == value["candidate_tree_sha256"],
+        f"{artifact_path}: candidate identity differs from revision receipt",
+    )
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        experiment["proposalId"] == value["proposal_id"],
+        f"{artifact_path}: job and experiment proposal identities differ",
+    )
+    return {
+        "jobId": value["job_id"],
+        "candidateId": value["candidate_id"],
+        "experimentId": experiment["experimentId"],
     }
 
 
@@ -1444,7 +1623,13 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         f"{artifact_path}: unknown schema {schema_id!r}",
     )
     _validate_schema(value, SCHEMA_PATHS[schema_id])
-    if schema_id == "gamma.enwiki9.objective-contract.v1":
+    if schema_id == "gamma.enwiki9.adaptive-experiment-contract.v1":
+        result = _validate_adaptive_experiment_contract(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.adaptive-job.v3":
+        result = _validate_adaptive_job(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.algorithm-proposal.v2":
+        result = _validate_algorithm_proposal(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.objective-contract.v1":
         _require(
             value == validate_objective(),
             f"{artifact_path}: objective differs from canonical contract",

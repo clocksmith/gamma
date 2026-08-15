@@ -31,6 +31,7 @@ from enwiki9_omega import (
 )
 import enwiki9_candidate_revisions as candidate_revisions
 import enwiki9_reflections
+import research_contracts
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
@@ -134,6 +135,106 @@ def candidate_meta(candidate_id: str) -> dict[str, Any]:
     return load_json(path)
 
 
+def resolve_project_file(path: pathlib.Path) -> pathlib.Path:
+    candidates = [path.resolve(), (ROOT / path).resolve()]
+    project_root = ROOT.resolve()
+    for candidate in candidates:
+        if candidate == project_root or project_root in candidate.parents:
+            if candidate.is_file():
+                return candidate
+    raise FileNotFoundError(f"project artifact not found: {path}")
+
+
+def artifact_reference(path: pathlib.Path) -> dict[str, str]:
+    return enwiki9_reflections.reference(resolve_project_file(path))
+
+
+def load_adaptive_experiment(
+    path: pathlib.Path,
+) -> tuple[pathlib.Path, dict[str, Any], dict[str, str]]:
+    resolved = resolve_project_file(path)
+    value = load_json(resolved)
+    if value.get("schema") != "gamma.enwiki9.adaptive-experiment-contract.v1":
+        raise ValueError(
+            "new adaptive work requires gamma.enwiki9.adaptive-experiment-contract.v1"
+        )
+    research_contracts.validate_artifact(resolved)
+    return resolved, value, artifact_reference(resolved)
+
+
+def load_proposal_experiment(
+    proposal: dict[str, Any],
+) -> tuple[pathlib.Path, dict[str, Any], dict[str, str]]:
+    if proposal.get("schema") != "gamma.enwiki9.algorithm-proposal.v2":
+        raise ValueError(
+            f"proposal {proposal.get('proposal_id')} lacks a structured v2 experiment"
+        )
+    reference = proposal.get("experiment")
+    if not isinstance(reference, dict) or not isinstance(reference.get("path"), str):
+        raise ValueError(f"proposal {proposal.get('proposal_id')} has no experiment")
+    resolved, value, current = load_adaptive_experiment(
+        ROOT / reference["path"]
+    )
+    if current != reference:
+        raise ValueError(
+            f"proposal {proposal.get('proposal_id')} experiment digest has drifted"
+        )
+    return resolved, value, current
+
+
+def candidate_proposal(candidate_id: str) -> tuple[pathlib.Path, dict[str, Any]]:
+    metadata = candidate_meta(candidate_id)
+    omega = metadata.get("omega")
+    proposal_id = omega.get("proposal_id") if isinstance(omega, dict) else None
+    if not isinstance(proposal_id, str):
+        raise ValueError(
+            f"candidate {candidate_id} is not bound to an algorithm proposal"
+        )
+    located = proposal_path(proposal_id)
+    if located is None:
+        raise FileNotFoundError(f"candidate proposal not found: {proposal_id}")
+    _state, path = located
+    proposal = load_json(path)
+    research_contracts.validate_artifact(path)
+    return path, proposal
+
+
+def missing_terminal_reflections(candidate_id: str) -> list[str]:
+    missing: list[str] = []
+    for state in ("completed", "failed", "cancelled"):
+        for path in QUEUE_DIRS[state].glob("*.json"):
+            try:
+                job = load_json(path)
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            if job.get("candidate_id") != candidate_id or job.get("schema") not in {
+                "enwiki9_adaptive_job_v2",
+                "gamma.enwiki9.adaptive-job.v3",
+            }:
+                continue
+            job_id = job.get("job_id")
+            if not isinstance(job_id, str):
+                continue
+            reflection_path = ADAPTIVE / "reflections" / f"{job_id}.json"
+            if not reflection_path.is_file():
+                missing.append(job_id)
+                continue
+            try:
+                research_contracts.validate_artifact(reflection_path)
+            except Exception:
+                missing.append(job_id)
+    return sorted(missing)
+
+
+def require_terminal_reflections(candidate_id: str, action: str) -> None:
+    missing = missing_terminal_reflections(candidate_id)
+    if missing:
+        raise ValueError(
+            f"candidate {candidate_id} cannot {action} before terminal reflections: "
+            + ", ".join(missing)
+        )
+
+
 def scaffold_program() -> str:
     return '''"""New enwiki9 candidate."""
 
@@ -203,6 +304,7 @@ def create_candidate(
         source = candidate_path(parent)
         if not source.is_dir():
             raise FileNotFoundError(f"parent candidate not found: {parent}")
+        require_terminal_reflections(parent, "produce a successor")
         shutil.copytree(
             source,
             destination,
@@ -294,6 +396,7 @@ def create_proposal(
     promotion_condition: str,
     kill_condition: str,
     evidence: list[str],
+    experiment: pathlib.Path,
     priority: int,
     mechanism_change: str | None = None,
     interfaces_exposed: list[str] | None = None,
@@ -306,6 +409,25 @@ def create_proposal(
         raise FileExistsError(f"proposal already exists: {proposal_id}")
     if parent is not None and not candidate_path(parent).is_dir():
         raise FileNotFoundError(f"proposal parent candidate not found: {parent}")
+    _experiment_path, experiment_value, experiment_reference = (
+        load_adaptive_experiment(experiment)
+    )
+    if experiment_value["proposalId"] != proposal_id:
+        raise ValueError("proposal and experiment identities differ")
+    experiment_parent = experiment_value["parent"]
+    experiment_parent_id = (
+        experiment_parent["candidateId"] if experiment_parent is not None else None
+    )
+    if experiment_parent_id != parent:
+        raise ValueError("proposal and experiment parents differ")
+    if experiment_value["hypothesis"]["claim"] != hypothesis:
+        raise ValueError("proposal and experiment hypotheses differ")
+    budget = experiment_value["budget"]
+    if (
+        budget["expectedGrossSavingsBytes"] != expected_savings_bytes
+        or budget["maximumAddedPackageBytes"] != max_program_bytes
+    ):
+        raise ValueError("proposal and experiment budgets differ")
     search_fields = proposal_search_fields(
         priority=priority,
         mechanism_change=mechanism_change,
@@ -314,7 +436,8 @@ def create_proposal(
         parent_proposal_id=parent_proposal_id,
     )
     proposal = {
-        "schema": "enwiki9_algorithm_proposal_v1",
+        "schema": "gamma.enwiki9.algorithm-proposal.v2",
+        "objective": research_contracts.objective_binding(),
         "proposal_id": proposal_id,
         "title": title,
         "hypothesis": hypothesis,
@@ -324,7 +447,8 @@ def create_proposal(
         "max_program_bytes": max_program_bytes,
         "promotion_condition": promotion_condition,
         "kill_condition": kill_condition,
-        "evidence": evidence,
+        "evidence": [artifact_reference(pathlib.Path(path)) for path in evidence],
+        "experiment": experiment_reference,
         "priority": priority,
         "state": "proposed",
         "created_at": utc_now(),
@@ -332,7 +456,13 @@ def create_proposal(
     }
     search_priority = int(proposal["search_priority"])
     filename = f"{999 - max(0, min(999, search_priority)):03d}_{proposal_id}.json"
-    atomic_json(PROPOSAL_DIRS["proposed"] / filename, proposal)
+    destination = PROPOSAL_DIRS["proposed"] / filename
+    atomic_json(destination, proposal)
+    try:
+        research_contracts.validate_artifact(destination)
+    except Exception:
+        destination.unlink(missing_ok=True)
+        raise
     return proposal
 
 
@@ -367,6 +497,7 @@ def require_actionable_proposal(proposal: dict[str, Any], action: str) -> None:
             f"proposal {proposal.get('proposal_id')} cannot {action} while "
             f"operational_status={operational_status!r}"
         )
+    load_proposal_experiment(proposal)
 
 
 def transition_proposal(
@@ -397,6 +528,8 @@ def transition_proposal(
     proposal[f"{target_state}_at"] = utc_now()
     destination = PROPOSAL_DIRS[target_state] / source_path.name
     atomic_json(source_path, proposal)
+    if proposal.get("schema") == "gamma.enwiki9.algorithm-proposal.v2":
+        research_contracts.validate_artifact(source_path)
     os.replace(source_path, destination)
     return proposal
 
@@ -451,6 +584,7 @@ def develop_proposal(
         )
     meta["omega"] = {
         "proposal_id": proposal_id,
+        "experiment": proposal["experiment"],
         "mechanism_change": proposal.get("mechanism_change", "unspecified"),
         "interfaces_exposed": proposal.get("interfaces_exposed", []),
         "retired_neighborhoods": proposal.get("retired_neighborhoods", []),
