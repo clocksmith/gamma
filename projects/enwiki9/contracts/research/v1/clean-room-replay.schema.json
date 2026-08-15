@@ -98,7 +98,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["phase", "command", "returncode", "guard"],
+        "required": ["phase", "command", "returncode", "guard", "log"],
         "properties": {
           "phase": {
             "enum": ["build-first", "compression", "build-replay", "compression-replay", "build-decode", "decompression"]
@@ -110,7 +110,8 @@
               { "$ref": "#/$defs/reference" },
               { "type": "null" }
             ]
-          }
+          },
+          "log": { "$ref": "#/$defs/artifact" }
         }
       }
     },
@@ -170,6 +171,16 @@
       "properties": {
         "path": { "type": "string", "minLength": 1 },
         "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     }
   }

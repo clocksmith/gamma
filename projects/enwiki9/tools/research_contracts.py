@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import sys
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -66,6 +67,7 @@ UNCOUNTED_PLATFORM_DEPENDENCY_KINDS = {
     "system",
     "toolchain",
 }
+REPLAY_PLACEHOLDER = re.compile(r"\{([a-z_]+)\}")
 APPROVED_SPDX_LICENSES = {
     "Apache-2.0",
     "BSD-2-Clause",
@@ -1375,6 +1377,29 @@ def _validate_dependency_closure(
         all(option in command_text for option in value["requiredOptions"]),
         f"{artifact_path}: a required option is absent from the declared commands",
     )
+    command_texts = {
+        name: "\0".join(command) for name, command in value["commands"].items()
+    }
+    _require(
+        "{corpus}" not in command_texts["build"]
+        and "{corpus}" not in command_texts["decompress"],
+        f"{artifact_path}: build or decompression command can access the corpus",
+    )
+    for placeholder, name in (
+        ("{corpus}", "compress"),
+        ("{archive}", "compress"),
+        ("{archive}", "decompress"),
+        ("{restored}", "decompress"),
+    ):
+        _require(
+            placeholder in command_texts[name],
+            f"{artifact_path}: {name} command lacks {placeholder}",
+        )
+    _require(
+        "{entry_point}" in command_text
+        or value["entryPoint"] in command_text,
+        f"{artifact_path}: declared commands never invoke the counted entry point",
+    )
     accepted_platforms = validate_objective()["distribution"][
         "acceptedExecutableSystems"
     ]
@@ -1486,6 +1511,122 @@ def dependency_license_audit(manifest: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _sandbox_binding_audit(
+    command: list[str],
+    artifact_path: Path,
+    phase: str,
+) -> dict[str, Any]:
+    context = f"{artifact_path}: {phase} sandbox"
+    try:
+        bwrap_index = command.index("/usr/bin/bwrap")
+        separator = command.index("--", bwrap_index)
+    except ValueError as exc:
+        raise ValueError(f"{context}: bubblewrap command boundary is missing") from exc
+    sandbox = command[bwrap_index:separator]
+    for option in (
+        "--unshare-all",
+        "--die-with-parent",
+        "--new-session",
+        "--clearenv",
+        "--proc",
+        "--dev",
+        "--tmpfs",
+    ):
+        _require(option in sandbox, f"{context}: required option {option} is missing")
+    _require("--share-net" not in sandbox, f"{context}: network was re-shared")
+
+    read_only = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--ro-bind"
+    ]
+    writable = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--bind"
+    ]
+    unsupported_bind_options = sorted(
+        {
+            token
+            for token in sandbox
+            if "bind" in token and token not in {"--bind", "--ro-bind"}
+        }
+    )
+    _require(
+        not unsupported_bind_options,
+        f"{context}: unsupported bind options: {unsupported_bind_options}",
+    )
+    _require(
+        len(writable) == 1 and writable[0][1] == "/work",
+        f"{context}: writable host bindings differ from /work",
+    )
+    corpus_bindings = [source for source, target in read_only if target == "/input/enwik9"]
+    non_corpus_read_only = [pair for pair in read_only if pair[1] != "/input/enwik9"]
+    _require(
+        non_corpus_read_only == [("/usr", "/usr")],
+        f"{context}: read-only system bindings differ from /usr",
+    )
+    compression_phase = phase in {"compression", "compression-replay"}
+    _require(
+        len(corpus_bindings) == (1 if compression_phase else 0),
+        f"{context}: corpus exposure differs from the phase contract",
+    )
+
+    environment_entries = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--setenv"
+    ]
+    environment = {
+        sandbox[index + 1]: sandbox[index + 2]
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--setenv"
+    }
+    _require(
+        len(environment_entries) == 4
+        and environment
+        == {
+            "LC_ALL": "C",
+            "PATH": "/usr/bin:/bin",
+            "SOURCE_DATE_EPOCH": "0",
+            "TZ": "UTC",
+        },
+        f"{context}: environment differs from the clean-room contract",
+    )
+    return {
+        "corpusSource": corpus_bindings[0] if corpus_bindings else None,
+        "innerCommand": command[separator + 1 :],
+        "workSource": writable[0][0],
+    }
+
+
+def _expanded_replay_command(
+    manifest: dict[str, Any],
+    command_name: str,
+    archive_name: str,
+) -> list[str]:
+    values = {
+        "archive": f"/work/{archive_name}",
+        "corpus": "/input/enwik9",
+        "entry_point": f"/work/package/{manifest['entryPoint']}",
+        "package": "/work/package",
+        "restored": "/work/restored.enwik9",
+        "scratch": "/work/tmp",
+    }
+    expanded: list[str] = []
+    for raw_token in manifest["commands"][command_name]:
+        unknown = sorted(set(REPLAY_PLACEHOLDER.findall(raw_token)) - set(values))
+        _require(
+            not unknown,
+            f"dependency closure contains unknown placeholders: {unknown}",
+        )
+        token = raw_token
+        for name, replacement in values.items():
+            token = token.replace(f"{{{name}}}", replacement)
+        expanded.append(token)
+    return expanded
+
+
 def _validate_clean_room_replay(
     value: dict[str, Any],
     artifact_path: Path,
@@ -1511,27 +1652,85 @@ def _validate_clean_room_replay(
         "decompression": "decompression",
     }
     guard_checks: dict[str, bool] = {}
+    binding_audits: dict[str, dict[str, Any]] = {}
     for execution in executions:
         phase = execution["phase"]
         reference = execution["guard"]
+        if verify_files:
+            _verify_file_record(
+                artifact_path.parent,
+                execution["log"],
+                f"{artifact_path}: {phase} log",
+            )
         if phase not in guard_phases:
             _require(
                 reference is None,
                 f"{artifact_path}: build phase unexpectedly carries a resource guard",
             )
-            continue
-        _require(reference is not None, f"{artifact_path}: runtime phase lacks a guard")
-        _, guard, result = _verify_reference(
+            sandbox_command = execution["command"]
+        else:
+            _require(reference is not None, f"{artifact_path}: runtime phase lacks a guard")
+            _, guard, result = _verify_reference(
+                artifact_path,
+                reference,
+                "gamma.enwiki9.resource-guard-receipt.v2",
+                verify_files,
+            )
+            _require(
+                guard["phase"] == guard_phases[phase],
+                f"{artifact_path}: runtime phase has the wrong guard phase",
+            )
+            try:
+                separator = execution["command"].index("--")
+            except ValueError as exc:
+                raise ValueError(
+                    f"{artifact_path}: {phase} guard command boundary is missing"
+                ) from exc
+            _require(
+                execution["command"][separator + 1 :] == guard["command"],
+                f"{artifact_path}: {phase} execution differs from its guard command",
+            )
+            _require(
+                execution["returncode"] == guard["returncode"],
+                f"{artifact_path}: {phase} return code differs from its guard",
+            )
+            guard_checks[phase] = result["promotionReady"]
+            sandbox_command = guard["command"]
+        binding_audits[phase] = _sandbox_binding_audit(
+            sandbox_command,
             artifact_path,
-            reference,
-            "gamma.enwiki9.resource-guard-receipt.v2",
-            verify_files,
+            phase,
         )
-        _require(
-            guard["phase"] == guard_phases[phase],
-            f"{artifact_path}: runtime phase has the wrong guard phase",
-        )
-        guard_checks[phase] = result["promotionReady"]
+
+    _require(
+        binding_audits["build-first"]["workSource"]
+        == binding_audits["compression"]["workSource"],
+        f"{artifact_path}: first build and compression use different package copies",
+    )
+    _require(
+        binding_audits["build-replay"]["workSource"]
+        == binding_audits["compression-replay"]["workSource"],
+        f"{artifact_path}: replay build and compression use different package copies",
+    )
+    _require(
+        binding_audits["build-decode"]["workSource"]
+        == binding_audits["decompression"]["workSource"],
+        f"{artifact_path}: decode build and execution use different package copies",
+    )
+    work_sources = {
+        binding_audits["build-first"]["workSource"],
+        binding_audits["build-replay"]["workSource"],
+        binding_audits["build-decode"]["workSource"],
+    }
+    _require(
+        len(work_sources) == value["packageCopiesVerified"],
+        f"{artifact_path}: package-copy count differs from command bindings",
+    )
+    _require(
+        binding_audits["compression"]["corpusSource"]
+        == binding_audits["compression-replay"]["corpusSource"],
+        f"{artifact_path}: compression runs use different corpus bindings",
+    )
 
     device_paths = value["probe"]["devicePaths"]
     gpu_visible = any(
@@ -1566,6 +1765,10 @@ def _validate_clean_room_replay(
         ),
         "licenseAudit": value["licenseAudit"],
         "networkUsed": network_used,
+        "corpusSource": binding_audits["compression"]["corpusSource"],
+        "innerCommands": {
+            phase: audit["innerCommand"] for phase, audit in binding_audits.items()
+        },
     }
 
 
@@ -1921,6 +2124,38 @@ def _validate_run_receipt(
         clean_room["candidateId"] == value["candidateId"]
         and clean_room["candidateTreeSha256"] == value["candidateTreeSha256"],
         f"{artifact_path}: clean-room receipt identifies a different candidate",
+    )
+    expected_inner_commands = {
+        "build-first": _expanded_replay_command(manifest, "build", "archive.first"),
+        "compression": _expanded_replay_command(
+            manifest, "compress", "archive.first"
+        ),
+        "build-replay": _expanded_replay_command(
+            manifest, "build", "archive.replay"
+        ),
+        "compression-replay": _expanded_replay_command(
+            manifest, "compress", "archive.replay"
+        ),
+        "build-decode": _expanded_replay_command(
+            manifest, "build", "archive.first"
+        ),
+        "decompression": _expanded_replay_command(
+            manifest, "decompress", "archive.first"
+        ),
+    }
+    _require(
+        clean_room_result["innerCommands"] == expected_inner_commands,
+        f"{artifact_path}: executed commands differ from the dependency closure",
+    )
+    corpus_path = _relative_path(
+        artifact_path.parent,
+        value["corpus"]["path"],
+        f"{artifact_path}: corpus",
+    )
+    _require(
+        clean_room_result["corpusSource"] is not None
+        and Path(clean_room_result["corpusSource"]).resolve() == corpus_path,
+        f"{artifact_path}: sandbox corpus binding differs from the recorded corpus",
     )
     expected_license_audit = dependency_license_audit(manifest)
     _require(

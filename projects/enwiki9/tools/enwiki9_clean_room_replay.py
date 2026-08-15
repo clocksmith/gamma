@@ -357,6 +357,7 @@ def replay(args: argparse.Namespace) -> Path:
             raise ValueError("peer receipt must be a non-recursive primary receipt")
 
     replay_root.mkdir(parents=True)
+    clean_path = replay_root / "clean-room-replay.json"
     work_root = replay_root / "work"
     work_root.mkdir()
     executions: list[dict[str, Any]] = []
@@ -379,15 +380,15 @@ def replay(args: argparse.Namespace) -> Path:
             build = sandbox_prefix(work, None) + expand_command(
                 manifest["commands"]["build"], manifest, archive_name
             )
-            build_returncode = run_command(
-                build, replay_root / f"{build_phase}.log"
-            )
+            build_log = replay_root / f"{build_phase}.log"
+            build_returncode = run_command(build, build_log)
             executions.append(
                 {
                     "phase": build_phase,
                     "command": build,
                     "returncode": build_returncode,
                     "guard": None,
+                    "log": artifact(clean_path, build_log),
                 }
             )
             if build_returncode != 0:
@@ -397,6 +398,7 @@ def replay(args: argparse.Namespace) -> Path:
                 manifest["commands"]["compress"], manifest, archive_name
             )
             guard_path = replay_root / f"{run_phase}.guard.json"
+            run_log = replay_root / f"{run_phase}.log"
             outer, returncode = guarded_command(
                 args,
                 f"{manifest['candidateId']}:{run_phase}",
@@ -404,7 +406,7 @@ def replay(args: argparse.Namespace) -> Path:
                 work,
                 compression,
                 guard_path,
-                replay_root / f"{run_phase}.log",
+                run_log,
             )
             executions.append(
                 {
@@ -412,6 +414,7 @@ def replay(args: argparse.Namespace) -> Path:
                     "command": outer,
                     "returncode": returncode,
                     "guard": None,
+                    "log": artifact(clean_path, run_log),
                 }
             )
             if returncode != 0:
@@ -430,15 +433,15 @@ def replay(args: argparse.Namespace) -> Path:
         build_decode = sandbox_prefix(decode_work, None) + expand_command(
             manifest["commands"]["build"], manifest, "archive.first"
         )
-        build_decode_returncode = run_command(
-            build_decode, replay_root / "build-decode.log"
-        )
+        build_decode_log = replay_root / "build-decode.log"
+        build_decode_returncode = run_command(build_decode, build_decode_log)
         executions.append(
             {
                 "phase": "build-decode",
                 "command": build_decode,
                 "returncode": build_decode_returncode,
                 "guard": None,
+                "log": artifact(clean_path, build_decode_log),
             }
         )
         if build_decode_returncode != 0:
@@ -448,6 +451,7 @@ def replay(args: argparse.Namespace) -> Path:
             manifest["commands"]["decompress"], manifest, "archive.first"
         )
         decompression_guard = replay_root / "decompression.guard.json"
+        decompression_log = replay_root / "decompression.log"
         outer, decompression_returncode = guarded_command(
             args,
             f"{manifest['candidateId']}:decompression",
@@ -455,7 +459,7 @@ def replay(args: argparse.Namespace) -> Path:
             decode_work,
             decompression,
             decompression_guard,
-            replay_root / "decompression.log",
+            decompression_log,
         )
         executions.append(
             {
@@ -463,6 +467,7 @@ def replay(args: argparse.Namespace) -> Path:
                 "command": outer,
                 "returncode": decompression_returncode,
                 "guard": None,
+                "log": artifact(clean_path, decompression_log),
             }
         )
         if decompression_returncode != 0:
@@ -476,7 +481,6 @@ def replay(args: argparse.Namespace) -> Path:
         guard_paths.append(decompression_guard)
 
         shutil.rmtree(work_root)
-        clean_path = replay_root / "clean-room-replay.json"
         guard_by_phase = {
             "compression": replay_root / "compression.guard.json",
             "compression-replay": replay_root / "compression-replay.guard.json",
