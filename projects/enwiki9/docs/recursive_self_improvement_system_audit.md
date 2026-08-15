@@ -210,7 +210,9 @@ scalar and accumulates BF16 input squares in F32 lanes. Q2 can close execution
 but cannot alone close numeric localization validity. Its reflection must keep
 group-ablation authorization blocked until the direct F32 reduction re-evaluates
 the same frozen predicates. Q2 agreement is retained as a numeric
-sensitivity measurement, not a promotion predicate.
+sensitivity measurement, not a promotion predicate. Q3 additionally compares
+every fused squared sum with an explicit BF16-to-F32 multiply-and-sum reference;
+finite cross-path agreement is a prerequisite for both promotion and retirement.
 
 ## Composition and independent audit
 

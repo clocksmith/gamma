@@ -51,7 +51,10 @@ prospective input manifest and names the runner and materializer as closure
 roots; `--bind-python-source-closure` makes that requirement explicit. An
 implementation-only retry may retain extra diagnostic
 observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not
-change the inherited promotion or kill predicates.
+change the inherited promotion or kill predicates. A correction that adds a
+new validity oracle may bind stricter consequences with
+`--additional-promotion-predicate` and `--additional-kill-predicate`, each using
+`ID=MEASUREMENT=OPERATOR=JSON_THRESHOLD`.
 
 ## Filename Families
 
@@ -92,8 +95,10 @@ teacher twice and is zero-credit attribution work. Run it only through a
 revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
 `run_with_rss_guard.py`; the experiment must declare its candidate result tree
 as guarded scratch. Its q3 materializer cannot launch a process and changes only
-the named-gradient squared-energy reduction. Native stderr streams directly to
-the declared per-encode log, so live progress and failures remain inspectable.
+the named-gradient squared-energy observation. It records LibNC's fused F32
+squared-sum beside an explicit BF16-to-F32 multiply-and-sum reference; codec
+probabilities and updates are unchanged. Native stderr streams directly to the
+declared per-encode log, so live progress and failures remain inspectable.
 Before reading q2's low-precision summary, q3 requires its decision, detail, and
 terminal incomplete-evidence reflection to match the prospectively hash-bound
 inputs and requires that reflection to authorize `retry` before native work

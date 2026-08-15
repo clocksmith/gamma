@@ -154,7 +154,11 @@ gradient-hash, coverage, and implementation-liveness evidence, but its energy
 ranking cannot by itself authorize a group ablation. The smallest valid
 measurement retry replaces only the energy expression with
 `nc_reduce_sum_sqr(nc_dup_tensor(gradient))`, repeats both exact F encodes, and
-requires identical group and chronological-third decisions before any ablation.
+cross-checks every value against an explicit BF16-to-F32 multiply-and-sum path.
+Both paths must be finite and pass the frozen relative-error bound before the
+original group and chronological-third predicates can authorize or retire an
+ablation. Agreement with q2 remains diagnostic because q2's BF16 ranking is not
+an oracle.
 
 ## 2026-08-15 - Recursive self-improvement boundary audited
 

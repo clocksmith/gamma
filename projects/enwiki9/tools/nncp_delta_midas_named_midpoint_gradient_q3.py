@@ -6,8 +6,10 @@ from __future__ import annotations
 import hashlib
 import json
 import lzma
+import math
 import os
 from pathlib import Path
+import re
 import subprocess
 import tarfile
 import time
@@ -29,7 +31,13 @@ Q2_DETAIL = ROOT / "results/delta_midas_named_midpoint_gradient_65536_q2_v1/grad
 Q2_REFLECTION = ROOT / "operations/adaptive/reflections/20260815T172824Z_465e6837f4.json"
 _BASE_SUMMARIZE = q0.summarize
 _BASE_EVALUATE = q0.evaluate
+_BASE_GRADIENT_ROWS = q0.gradient_rows
 _DIRECT_F32_SUMMARY: dict[str, Any] | None = None
+REFERENCE_RE = re.compile(
+    r"ATTR_NAMED_GRAD block=(\d+) name=([A-Za-z0-9_]+) grad=([0-9a-f]{8}) "
+    r"grad_elems=(\d+) param_elems=(\d+) energy=([^ ]+) finite=(\d+) "
+    r"reference_energy=([^ ]+) reference_finite=(\d+) relative_delta=(\S+)"
+)
 
 
 def execute(
@@ -65,9 +73,39 @@ def execute(
     }
 
 
+def gradient_rows(path: Path) -> list[dict[str, Any]]:
+    rows = _BASE_GRADIENT_ROWS(path)
+    references = list(REFERENCE_RE.finditer(path.read_text(errors="replace")))
+    if len(references) != len(rows):
+        raise ValueError(f"cross-path gradient reference is incomplete: {path}")
+    for row, match in zip(rows, references, strict=True):
+        if (
+            row["block"] != int(match.group(1))
+            or row["name"] != match.group(2)
+            or row["gradientHash"] != match.group(3)
+        ):
+            raise ValueError(f"cross-path gradient reference is misaligned: {path}")
+        reference_energy = float.fromhex(match.group(8))
+        relative_delta = float.fromhex(match.group(10))
+        row["referenceEnergy"] = reference_energy
+        row["referenceFinite"] = (
+            match.group(9) == "1"
+            and math.isfinite(reference_energy)
+            and math.isfinite(relative_delta)
+        )
+        row["relativeDelta"] = relative_delta
+    return rows
+
+
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     global _DIRECT_F32_SUMMARY
     _DIRECT_F32_SUMMARY = _BASE_SUMMARIZE(rows)
+    _DIRECT_F32_SUMMARY["allDirectReferenceFinite"] = all(
+        row["referenceFinite"] for row in rows
+    )
+    _DIRECT_F32_SUMMARY["maxDirectReferenceRelativeDelta"] = max(
+        row["relativeDelta"] for row in rows
+    )
     return _DIRECT_F32_SUMMARY
 
 
@@ -135,9 +173,17 @@ def evaluate(
     predicates: list[dict[str, Any]],
     measurements: dict[str, Any],
 ) -> list[dict[str, Any]]:
+    if _DIRECT_F32_SUMMARY is None:
+        raise ValueError("direct F32 summary was not captured")
+    measurements.setdefault(
+        "allDirectReferenceFinite",
+        _DIRECT_F32_SUMMARY["allDirectReferenceFinite"],
+    )
+    measurements.setdefault(
+        "maxDirectReferenceRelativeDelta",
+        _DIRECT_F32_SUMMARY["maxDirectReferenceRelativeDelta"],
+    )
     if "lowPrecisionDominantGroupMatched" not in measurements:
-        if _DIRECT_F32_SUMMARY is None:
-            raise ValueError("direct F32 summary was not captured")
         low_precision = q2_summary()
         measurements["lowPrecisionDominantGroupMatched"] = (
             low_precision["dominantNonHeadGroup"]
@@ -203,6 +249,7 @@ def main() -> int:
     q0.MATERIALIZER = MATERIALIZER
     q0.materialize = materialize
     q0.execute = execute
+    q0.gradient_rows = gradient_rows
     q0.summarize = summarize
     q0.evaluate = evaluate
     q0.source_package = source_package

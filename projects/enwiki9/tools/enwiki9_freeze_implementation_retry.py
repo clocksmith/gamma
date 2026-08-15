@@ -8,6 +8,7 @@ import copy
 import datetime as dt
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 from typing import Any
@@ -57,6 +58,31 @@ def parse_measurement(specification: str) -> dict[str, str]:
         )
     identifier, unit, definition = parts
     return {"id": identifier, "unit": unit, "definition": definition}
+
+
+def parse_predicate(specification: str) -> dict[str, Any]:
+    parts = specification.split("=", 3)
+    if len(parts) != 4 or not all(parts):
+        raise ValueError(
+            "additional predicates must use ID=MEASUREMENT=OPERATOR=JSON_THRESHOLD"
+        )
+    identifier, measurement, operator, threshold_text = parts
+    try:
+        threshold = json.loads(threshold_text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"invalid predicate threshold: {threshold_text}") from exc
+    if operator not in {"eq", "gt", "gte", "lt", "lte"}:
+        raise ValueError(f"invalid predicate operator: {operator}")
+    if not isinstance(threshold, (bool, int, float)):
+        raise ValueError("predicate threshold must be a JSON boolean or number")
+    if isinstance(threshold, float) and not math.isfinite(threshold):
+        raise ValueError("predicate threshold must be finite")
+    return {
+        "id": identifier,
+        "measurement": measurement,
+        "operator": operator,
+        "threshold": threshold,
+    }
 
 
 def source_identifier(path: Path) -> str:
@@ -135,6 +161,28 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
             )
         experiment["measurements"].append(measurement)
         measurement_ids.add(measurement["id"])
+    predicate_ids = {
+        predicate["id"]
+        for field in ("promotionPredicates", "killPredicates")
+        for predicate in experiment[field]
+    }
+    for field, specifications in (
+        ("promotionPredicates", args.additional_promotion_predicate),
+        ("killPredicates", args.additional_kill_predicate),
+    ):
+        for specification in specifications:
+            predicate = parse_predicate(specification)
+            if predicate["id"] in predicate_ids:
+                raise ValueError(
+                    f"duplicate implementation-retry predicate: {predicate['id']}"
+                )
+            if predicate["measurement"] not in measurement_ids:
+                raise ValueError(
+                    "implementation-retry predicate names an unknown measurement: "
+                    f"{predicate['measurement']}"
+                )
+            experiment[field].append(predicate)
+            predicate_ids.add(predicate["id"])
     experiment["controls"] = [
         *experiment["controls"],
         {
@@ -187,6 +235,8 @@ def main() -> int:
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--additional-output", action="append", default=[])
     parser.add_argument("--additional-measurement", action="append", default=[])
+    parser.add_argument("--additional-promotion-predicate", action="append", default=[])
+    parser.add_argument("--additional-kill-predicate", action="append", default=[])
     parser.add_argument("--strict-output-manifest", action="store_true")
     parser.add_argument("--bind-python-source-closure", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
