@@ -828,9 +828,22 @@ def _validate_named_gradient_detail(
             f"{artifact_path}: run {run_index} block count differs from summary",
         )
         _require(
+            sorted(blocks) == list(range(summary["blockCount"])),
+            f"{artifact_path}: run {run_index} block coordinates are not contiguous",
+        )
+        _require(
             all(len(names) == summary["parameterCount"] for names in blocks.values()),
             f"{artifact_path}: run {run_index} parameter coverage differs",
         )
+        if run_index == 0:
+            parameter_sets = list(blocks.values())
+            same_parameter_set = all(
+                names == parameter_sets[0] for names in parameter_sets
+            )
+            _require(
+                summary["allBlocksSameParameterSet"] == same_parameter_set,
+                f"{artifact_path}: parameter-set summary differs",
+            )
     _require(
         len(reference_presence) == 1,
         f"{artifact_path}: cross-path reference fields are only partially populated",
