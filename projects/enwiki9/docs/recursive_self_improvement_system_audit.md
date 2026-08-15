@@ -233,6 +233,9 @@ independently of their row populations even though they do not gate promotion.
 It also derives both repeated archive identities from artifact digests and
 allows exact-inverse transfer only when the direct retained input matches the
 legacy attribution's logical path, byte count, digest, and F inverse receipt.
+The localization-failure bit is derived from the detail summary through the
+frozen stable-group, minimum-share, and head-share predicates; it cannot be
+asserted independently to force a retirement decision.
 
 ## Composition and independent audit
 

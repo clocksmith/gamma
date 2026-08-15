@@ -29,8 +29,9 @@ The accompanying schemas define the first fail-closed evidence boundary:
   population, experiment and revision bindings, execution logs, summary
   coverage, and optional direct-versus-explicit-F32 reference fields; result
   validation also derives retained-archive identity and exact-inverse transfer
-  from direct inputs and recomputes any complete q2 low-precision comparison
-  from its prospectively bound detail input;
+  from direct inputs, derives localization failure from the frozen predicates,
+  and recomputes any complete q2 low-precision comparison from its prospectively
+  bound detail input;
 - `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
   causal-feature, quantized-model, shifted-control, and held-out evidence for
   the compact residual probe;
