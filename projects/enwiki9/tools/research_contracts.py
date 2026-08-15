@@ -27,6 +27,12 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.dependency-closure.v1": (
         CONTRACT_ROOT / "dependency-closure.schema.json"
     ),
+    "gamma.enwiki9.experiment-contract.v1": (
+        CONTRACT_ROOT / "experiment-contract.schema.json"
+    ),
+    "gamma.enwiki9.experiment-result.v1": (
+        CONTRACT_ROOT / "experiment-result.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
@@ -360,7 +366,11 @@ def _validate_reflection_receipt(
         f"{artifact_path}: job state differs from its queue directory",
     )
     if value["experiment"] is not None:
-        _project_file_reference(value["experiment"], f"{artifact_path}: experiment")
+        _project_receipt_reference(
+            value["experiment"],
+            "gamma.enwiki9.experiment-contract.v1",
+            f"{artifact_path}: experiment",
+        )
     evidence_paths = {
         _project_file_reference(reference, f"{artifact_path}: evidence")
         for reference in value["evidence"]
@@ -469,6 +479,221 @@ def _validate_reflection_receipt(
         "jobId": job.get("job_id"),
         "netBytesSaved": value["measurements"]["netBytesSaved"],
         "validExperiment": validity["valid"],
+    }
+
+
+def _validate_experiment_contract(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _require(
+        value["population"]["firstHalfLength"] * 2
+        == value["population"]["segmentLength"],
+        f"{artifact_path}: midpoint does not divide the segment into equal halves",
+    )
+    antecedent_ids = [item["id"] for item in value["antecedents"]]
+    _require(
+        len(antecedent_ids) == len(set(antecedent_ids)),
+        f"{artifact_path}: duplicate antecedent identity",
+    )
+    for antecedent in value["antecedents"]:
+        _project_file_reference(antecedent, f"{artifact_path}: antecedent")
+
+    arm_ids = [arm["id"] for arm in value["arms"]]
+    _require(
+        len(arm_ids) == len(set(arm_ids)),
+        f"{artifact_path}: duplicate arm identity",
+    )
+    roles = {arm["role"] for arm in value["arms"]}
+    _require(
+        {"treatment", "comparator"}.issubset(roles),
+        f"{artifact_path}: experiment requires treatment and comparator arms",
+    )
+    for arm in value["arms"]:
+        _project_file_reference(arm["trace"], f"{artifact_path}: arm {arm['id']}")
+
+    measurement_ids = [item["id"] for item in value["measurements"]]
+    _require(
+        len(measurement_ids) == len(set(measurement_ids)),
+        f"{artifact_path}: duplicate measurement identity",
+    )
+    gate_ids = [gate["id"] for gate in value["gates"]]
+    _require(
+        len(gate_ids) == len(set(gate_ids)),
+        f"{artifact_path}: duplicate gate identity",
+    )
+    known_measurements = set(measurement_ids)
+    for gate in value["gates"]:
+        for predicate in gate["all"]:
+            _require(
+                predicate["metric"] in known_measurements,
+                f"{artifact_path}: gate references undeclared measurement "
+                f"{predicate['metric']}",
+            )
+    return {
+        "experimentId": value["experimentId"],
+        "evidenceClass": value["evidenceClass"],
+        "registrationTiming": value["registrationTiming"],
+    }
+
+
+def _predicate_pass(observed: Any, operator: str, threshold: Any) -> bool:
+    operations = {
+        "eq": lambda: observed == threshold,
+        "gt": lambda: observed > threshold,
+        "gte": lambda: observed >= threshold,
+        "lt": lambda: observed < threshold,
+        "lte": lambda: observed <= threshold,
+    }
+    try:
+        return bool(operations[operator]())
+    except TypeError as exc:
+        raise ValueError(
+            f"cannot compare observed {observed!r} {operator} {threshold!r}"
+        ) from exc
+
+
+def _validate_experiment_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = _project_receipt_reference(
+        value["experiment"],
+        "gamma.enwiki9.experiment-contract.v1",
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        value["experimentId"] == experiment["experimentId"],
+        f"{artifact_path}: result identifies another experiment",
+    )
+    _project_file_reference(value["analyzer"], f"{artifact_path}: analyzer")
+
+    expected_inputs = {
+        arm["id"]: {"path": arm["trace"]["path"], "sha256": arm["trace"]["sha256"]}
+        for arm in experiment["arms"]
+    }
+    observed_inputs = {
+        item["id"]: {"path": item["path"], "sha256": item["sha256"]}
+        for item in value["inputs"]
+    }
+    _require(
+        observed_inputs == expected_inputs,
+        f"{artifact_path}: result inputs differ from frozen experiment arms",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+
+    population = value["population"]
+    contract_population = experiment["population"]
+    expected_population = {
+        "rows": contract_population["rowCount"],
+        "branches": contract_population["branchCount"],
+        "segments": contract_population["rowCount"]
+        // contract_population["segmentLength"],
+        "segmentLength": contract_population["segmentLength"],
+        "firstHalfLength": contract_population["firstHalfLength"],
+    }
+    _require(
+        population == expected_population,
+        f"{artifact_path}: measured population differs from frozen contract",
+    )
+    metrics = value["metrics"]
+    _require(
+        value["alignment"]["complete"]
+        == all(value["alignment"][field] for field in (
+            "rowIdentity",
+            "symbolIdentity",
+            "treeIdentity",
+            "truthPathIdentity",
+        ))
+        == metrics["alignmentComplete"],
+        f"{artifact_path}: alignment claims differ",
+    )
+    _require(
+        metrics["changedBranchCount"] + metrics["unchangedBranchCount"]
+        == population["branches"],
+        f"{artifact_path}: branch-change totals differ from population",
+    )
+    _require(
+        metrics["secondHalfPositiveSegments"]
+        + metrics["secondHalfNegativeSegments"]
+        <= population["segments"],
+        f"{artifact_path}: segment-sign totals exceed the population",
+    )
+    _require(
+        math.isclose(
+            metrics["secondHalfPositiveSegmentFraction"],
+            metrics["secondHalfPositiveSegments"] / population["segments"],
+            rel_tol=1e-15,
+            abs_tol=0.0,
+        ),
+        f"{artifact_path}: positive-segment fraction differs from counts",
+    )
+    _require(
+        metrics["secondHalfThirdMinSavingsBits"]
+        == min(metrics["secondHalfThirdSavingsBits"]),
+        f"{artifact_path}: minimum third savings differs from third values",
+    )
+    _require(
+        math.isclose(
+            metrics["allIdealSavingsBits"],
+            metrics["firstHalfIdealSavingsBits"]
+            + metrics["secondHalfIdealSavingsBits"],
+            rel_tol=1e-12,
+            abs_tol=1e-9,
+        ),
+        f"{artifact_path}: total ideal savings differs from half totals",
+    )
+
+    expected_gate_rows: list[dict[str, Any]] = []
+    for gate in experiment["gates"]:
+        predicates: list[dict[str, Any]] = []
+        for predicate in gate["all"]:
+            observed = metrics[predicate["metric"]]
+            passed = _predicate_pass(
+                observed,
+                predicate["operator"],
+                predicate["threshold"],
+            )
+            predicates.append({**predicate, "observed": observed, "pass": passed})
+        expected_gate_rows.append(
+            {
+                "id": gate["id"],
+                "pass": all(item["pass"] for item in predicates),
+                "predicates": predicates,
+            }
+        )
+    _require(
+        value["gateEvaluations"] == expected_gate_rows,
+        f"{artifact_path}: gate evaluations differ from frozen predicates",
+    )
+    all_gates_pass = all(row["pass"] for row in expected_gate_rows)
+    expected_status = (
+        "invalid"
+        if not value["alignment"]["complete"]
+        else "pass"
+        if all_gates_pass
+        else "fail"
+    )
+    _require(
+        value["status"] == expected_status,
+        f"{artifact_path}: status differs from alignment and gate evidence",
+    )
+    expected_verdict = {
+        "pass": "authorize-deep-feature-instrumentation",
+        "fail": "retire-deep-residual-lineage",
+        "invalid": "invalid-experiment",
+    }[expected_status]
+    _require(
+        value["decision"]["verdict"] == expected_verdict,
+        f"{artifact_path}: decision differs from experiment status",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "status": value["status"],
+        "verdict": value["decision"]["verdict"],
     }
 
 
@@ -916,6 +1141,10 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_candidate_revision(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.dependency-closure.v1":
         result = _validate_dependency_closure(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.experiment-contract.v1":
+        result = _validate_experiment_contract(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.experiment-result.v1":
+        result = _validate_experiment_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
         result = _validate_resource_guard(value, artifact_path)
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":
