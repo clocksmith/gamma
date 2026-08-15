@@ -36,6 +36,13 @@ directories in the job, constrains them below `results/<candidate_id>/`, and
 materializes them before guard preflight. Retry job
 `20260815T171447Z_33eeb89e5c` retains the same experiment, candidate revision,
 proposal, and runner bindings while adding that explicit lifecycle input.
+That retry confirmed the lifecycle fix and entered the first instrumented F
+encode, then NNCP terminated with `SIGABRT` before archive completion. Peak
+sampled process-tree RSS remained below the declared guard; the terminal
+[`implementation reflection`](../operations/adaptive/reflections/20260815T171447Z_33eeb89e5c.json)
+keeps the hypothesis untested. Because the analyzer discarded captured native
+stderr when `check=True` raised, the next action is an exact stream-preserving
+reproduction, not a localization conclusion or parameter sweep.
 
 ## 2026-08-15 - Fixed decoder-visible DELTA-MIDAS probe is terminal negative
 
