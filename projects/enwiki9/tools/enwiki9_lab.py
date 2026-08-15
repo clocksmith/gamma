@@ -1243,6 +1243,55 @@ def run_loop(args: argparse.Namespace) -> int:
         time.sleep(args.poll_seconds)
 
 
+def job_guard_snapshot(job: dict[str, Any]) -> dict[str, Any] | None:
+    arguments = job.get("tool_args")
+    if not isinstance(arguments, list) or "--guard-json" not in arguments:
+        return None
+    index = arguments.index("--guard-json")
+    if index + 1 >= len(arguments) or not isinstance(arguments[index + 1], str):
+        return {
+            "receipt_status": "invalid-declaration",
+            "error": "--guard-json has no path argument",
+        }
+    relative = pathlib.PurePosixPath(arguments[index + 1])
+    if relative.is_absolute() or ".." in relative.parts:
+        return {
+            "receipt_status": "invalid-declaration",
+            "path": relative.as_posix(),
+            "error": "guard path is not project-relative",
+        }
+    path = ROOT / relative
+    if not path.is_file():
+        return {
+            "receipt_status": "missing",
+            "path": relative.as_posix(),
+        }
+    try:
+        guard = load_json(path)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return {
+            "receipt_status": "unreadable",
+            "path": relative.as_posix(),
+            "error": str(exc),
+        }
+    return {
+        "receipt_status": guard.get("status", "unknown"),
+        "path": relative.as_posix(),
+        "schema": guard.get("schema"),
+        "phase": guard.get("phase"),
+        "elapsed_seconds": guard.get("elapsed_s"),
+        "sample_count": guard.get("sample_count"),
+        "max_tree_rss_kib": guard.get("max_sampled_tree_rss_kib"),
+        "max_single_rss_kib": guard.get("max_sampled_single_rss_kib"),
+        "max_temporary_disk_bytes": guard.get("max_sampled_temporary_disk_bytes"),
+        "rss_guard_exceeded": guard.get("rss_guard_exceeded"),
+        "temporary_disk_guard_exceeded": guard.get(
+            "temporary_disk_guard_exceeded"
+        ),
+        "returncode": guard.get("returncode"),
+    }
+
+
 def status_payload() -> dict[str, Any]:
     rows = iter_jobs()
     counts = {state: 0 for state in QUEUE_STATES}
@@ -1256,6 +1305,9 @@ def status_payload() -> dict[str, Any]:
         if state == "running":
             row = copy.deepcopy(job)
             row["worker_liveness"] = running_job_liveness(job)
+            guard = job_guard_snapshot(job)
+            if guard is not None:
+                row["resource_guard"] = guard
             if row["worker_liveness"] == "live":
                 active.append(row)
             else:
