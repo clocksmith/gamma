@@ -176,6 +176,7 @@ def source_package(path: Path) -> None:
 
 
 def main() -> int:
+    require_q2_lineage()
     q0.CANDIDATE_ID = CANDIDATE_ID
     q0.MATERIALIZER = MATERIALIZER
     q0.materialize = materialize
