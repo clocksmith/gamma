@@ -12,6 +12,8 @@ runner-adjacent.
 |---|---|
 | `enwiki9_lab.py` | Primary adaptive experiment loop: creates and clones candidates, records mutation lineage, selects the next exact gate, manages atomic durable jobs, fans out small gates, serializes heavy work, and refreshes inventories and reports after terminal batches. |
 | `run_with_rss_guard.py` | Wraps commands with RSS sampling and guard enforcement; writes live and final guard JSON. |
+| `enwiki9_dependency_closure.py` | Stages a new exact candidate bundle, rejects implicit filesystem inputs, hashes and counts every package member, and emits the validated dependency/command/license closure without launching a compressor. |
+| `enwiki9_clean_room_replay.py` | Runs a frozen full-1G package through two fresh-build compression sandboxes and one corpus-blind fresh-build decode sandbox; all runtime phases use one-core process-tree, wall-time, memory, and temporary-disk guards, and only a complete second-host receipt can close cross-host identity. |
 | `record_driver_result.py` | Records driver/guard evidence into candidate meta rows, including receipt paths, byte sizes, modified UTC stamps, and SHA-256 fingerprints. |
 | `cmix21_gate_decider.py` | Reads cmix21 driver and RSS guard receipts, prints the next safe action, and emits terminal apply commands for pass, RSS failure, and non-promotable terminal failures. |
 | `cmix21_continue_active_gate.py` | Finds the certificate active gate, calls `cmix21_gate_decider.py`, and optionally applies only terminal actions: pass promotion, RSS lower packaging, or non-promotable failure recording. |

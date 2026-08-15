@@ -24,6 +24,8 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
 | Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
 | Objective and receipt validation | `research_contracts.py` |
+| Count and stage a dependency closure | `enwiki9_dependency_closure.py` |
+| Sealed full-1G package replay | `enwiki9_clean_room_replay.py` |
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
@@ -69,3 +71,17 @@ and emits a zero-credit experiment receipt with a copy of the executed analyzer.
 `nncp_delta_midas_decoder_feature_probe.py` likewise cannot launch a compressor
 or teacher; it fits only its frozen train partition and emits sealed validation,
 test, shifted-control, quantized-payload, and causal-feature evidence.
+
+`enwiki9_dependency_closure.py` cannot launch a compressor. It copies one exact
+candidate tree into a new bundle, rejects symlinks and special files, hashes and
+counts every member, binds explicit dependencies and SPDX identifiers, and
+validates the resulting manifest.
+
+`enwiki9_clean_room_replay.py` launches only the manifest's frozen commands. It
+uses these placeholders: `{package}`, `{entry_point}`, `{corpus}`, `{archive}`,
+`{restored}`, and `{scratch}`. Build and decode commands cannot contain
+`{corpus}`. Compression must name `{corpus}` and `{archive}`; decompression must
+name `{archive}` and `{restored}`. The tool builds three fresh copies in sealed
+bubblewrap namespaces, exposes the corpus only to the two compression runs,
+uses `taskset` plus `run_with_rss_guard.py` for the three runtime phases, and
+retains a fail-closed diagnostic attempt if execution cannot compose a receipt.

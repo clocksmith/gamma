@@ -34,6 +34,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.candidate-revision.v1": (
         CONTRACT_ROOT / "candidate-revision.schema.json"
     ),
+    "gamma.enwiki9.clean-room-replay.v1": (
+        CONTRACT_ROOT / "clean-room-replay.schema.json"
+    ),
     "gamma.enwiki9.dependency-closure.v1": (
         CONTRACT_ROOT / "dependency-closure.schema.json"
     ),
@@ -62,6 +65,22 @@ UNCOUNTED_PLATFORM_DEPENDENCY_KINDS = {
     "standard-library",
     "system",
     "toolchain",
+}
+APPROVED_SPDX_LICENSES = {
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "GPL-3.0-or-later",
+    "ISC",
+    "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-only",
+    "LGPL-3.0-or-later",
+    "MIT",
+    "MPL-2.0",
 }
 
 
@@ -1349,6 +1368,20 @@ def _validate_dependency_closure(
         == value["requiredOptionBytes"],
         f"{artifact_path}: required option bytes differ from UTF-8 command text",
     )
+    command_text = "\0".join(
+        token for command in value["commands"].values() for token in command
+    )
+    _require(
+        all(option in command_text for option in value["requiredOptions"]),
+        f"{artifact_path}: a required option is absent from the declared commands",
+    )
+    accepted_platforms = validate_objective()["distribution"][
+        "acceptedExecutableSystems"
+    ]
+    _require(
+        value["platform"] in accepted_platforms,
+        f"{artifact_path}: platform is outside the objective contract",
+    )
 
     dependency_keys = [
         (dependency["name"], dependency["provider"])
@@ -1357,6 +1390,13 @@ def _validate_dependency_closure(
     _require(
         len(dependency_keys) == len(set(dependency_keys)),
         f"{artifact_path}: duplicate dependency identity",
+    )
+    _require(
+        all(
+            not dependency["counted"] or dependency["provider"] in set(paths)
+            for dependency in value["dependencies"]
+        ),
+        f"{artifact_path}: counted dependency provider is not a counted file",
     )
     uncounted = [
         dependency["name"]
@@ -1407,6 +1447,125 @@ def _validate_dependency_closure(
         "complete": value["complete"],
         "filesVerified": verify_files,
         "totalPackageBytes": value["totalPackageBytes"],
+    }
+
+
+def dependency_license_audit(manifest: dict[str, Any]) -> dict[str, Any]:
+    license_files = sorted(
+        record["path"]
+        for record in manifest["countedFiles"]
+        if record["role"] == "license"
+    )
+    dependency_licenses = sorted(
+        {dependency["license"] for dependency in manifest["dependencies"]}
+    )
+    bundled_license_providers = {
+        dependency["provider"]
+        for dependency in manifest["dependencies"]
+        if dependency["kind"] == "bundled" and dependency["counted"]
+    }
+    issues: list[str] = []
+    if not manifest["complete"]:
+        issues.append("dependency closure is incomplete")
+    if not license_files:
+        issues.append("no counted package license file")
+    if license_files and not bundled_license_providers.intersection(license_files):
+        issues.append("no bundled dependency binds a counted license file")
+    unapproved = sorted(
+        license
+        for license in dependency_licenses
+        if license not in APPROVED_SPDX_LICENSES
+    )
+    if unapproved:
+        issues.append("unapproved or compound SPDX identifiers: " + ", ".join(unapproved))
+    return {
+        "approved": not issues,
+        "licenseFiles": license_files,
+        "dependencyLicenses": dependency_licenses,
+        "issues": issues,
+    }
+
+
+def _validate_clean_room_replay(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    expected_phases = [
+        "build-first",
+        "compression",
+        "build-replay",
+        "compression-replay",
+        "build-decode",
+        "decompression",
+    ]
+    executions = value["executions"]
+    _require(
+        [execution["phase"] for execution in executions] == expected_phases,
+        f"{artifact_path}: clean-room phases are missing or out of order",
+    )
+    guard_phases = {
+        "compression": "compression",
+        "compression-replay": "compression",
+        "decompression": "decompression",
+    }
+    guard_checks: dict[str, bool] = {}
+    for execution in executions:
+        phase = execution["phase"]
+        reference = execution["guard"]
+        if phase not in guard_phases:
+            _require(
+                reference is None,
+                f"{artifact_path}: build phase unexpectedly carries a resource guard",
+            )
+            continue
+        _require(reference is not None, f"{artifact_path}: runtime phase lacks a guard")
+        _, guard, result = _verify_reference(
+            artifact_path,
+            reference,
+            "gamma.enwiki9.resource-guard-receipt.v2",
+            verify_files,
+        )
+        _require(
+            guard["phase"] == guard_phases[phase],
+            f"{artifact_path}: runtime phase has the wrong guard phase",
+        )
+        guard_checks[phase] = result["promotionReady"]
+
+    device_paths = value["probe"]["devicePaths"]
+    gpu_visible = any(
+        marker in path.lower()
+        for path in device_paths
+        for marker in ("/dri", "kfd", "nvidia", "render", "vga")
+    )
+    network_used = any(
+        interface != "lo" for interface in value["probe"]["networkInterfaces"]
+    )
+    commands_succeeded = all(execution["returncode"] == 0 for execution in executions)
+    _require(
+        value["allCommandsSucceeded"] == commands_succeeded,
+        f"{artifact_path}: command-success summary differs from executions",
+    )
+    clean_room_ok = bool(
+        commands_succeeded
+        and value["scratchCleaned"]
+        and not value["decodeCorpusExposed"]
+        and not gpu_visible
+        and not network_used
+    )
+    return {
+        "candidateId": value["candidateId"],
+        "candidateTreeSha256": value["candidateTreeSha256"],
+        "cleanRoomReplayOk": clean_room_ok,
+        "gpuUsed": gpu_visible,
+        "hiddenInputs": value["sandbox"]["hostDataPathsVisible"],
+        "independentDecodeOk": bool(
+            executions[-1]["returncode"] == 0
+            and guard_checks.get("decompression") is True
+        ),
+        "licenseAudit": value["licenseAudit"],
+        "networkUsed": network_used,
     }
 
 
@@ -1660,6 +1819,11 @@ def _validate_run_receipt(
         accounting["complete"] == manifest["complete"],
         f"{artifact_path}: complete accounting requires complete dependency closure",
     )
+    for command_name in ("build", "compress", "decompress"):
+        _require(
+            value["commands"][command_name] == manifest["commands"][command_name],
+            f"{artifact_path}: {command_name} command differs from the dependency closure",
+        )
 
     _, compression_guard, compression_result = _verify_reference(
         artifact_path,
@@ -1681,7 +1845,50 @@ def _validate_run_receipt(
         decompression_guard["phase"] == "decompression",
         f"{artifact_path}: decompression guard has wrong phase",
     )
-    guard_results = (compression_result["checks"], decompression_result["checks"])
+    if verify_files:
+        _verify_run_artifact(artifact_path, value["corpus"], "corpus")
+        _verify_run_artifact(artifact_path, value["archive"], "archive")
+        _verify_run_artifact(
+            artifact_path,
+            value["correctness"]["deterministicReplayArchive"],
+            "deterministic replay archive",
+        )
+        _verify_run_artifact(
+            artifact_path,
+            value["correctness"]["restored"],
+            "restored corpus",
+        )
+
+    correctness = value["correctness"]
+    replay_archive = correctness["deterministicReplayArchive"]
+    archive_identity = (
+        replay_archive["bytes"] == value["archive"]["bytes"]
+        and replay_archive["sha256"] == value["archive"]["sha256"]
+    )
+    _require(
+        correctness["determinismOk"] == archive_identity,
+        f"{artifact_path}: determinism verdict differs from replay archive identity",
+    )
+    _require(
+        correctness["roundtripOk"],
+        f"{artifact_path}: exact restored artifact is mislabeled as a failed roundtrip",
+    )
+
+    _, replay_compression_guard, replay_compression_result = _verify_reference(
+        artifact_path,
+        value["resources"]["replayCompressionGuard"],
+        "gamma.enwiki9.resource-guard-receipt.v2",
+        verify_files,
+    )
+    _require(
+        replay_compression_guard["phase"] == "compression",
+        f"{artifact_path}: replay compression guard has wrong phase",
+    )
+    guard_results = (
+        compression_result["checks"],
+        replay_compression_result["checks"],
+        decompression_result["checks"],
+    )
     expected_resources = {
         "wallTimePass": all(result["wallTime"] for result in guard_results),
         "memoryPass": all(result["memory"] for result in guard_results),
@@ -1693,27 +1900,85 @@ def _validate_run_receipt(
     for field, expected in expected_resources.items():
         _require(
             value["resources"][field] == expected,
-            f"{artifact_path}: {field} differs from guard evidence",
+            f"{artifact_path}: {field} differs from all three guard receipts",
         )
     expected_resource_complete = all(expected_resources.values()) and all(
         result["command"] for result in guard_results
     )
     _require(
         value["resources"]["complete"] == expected_resource_complete,
-        f"{artifact_path}: resource completeness differs from guard evidence",
+        f"{artifact_path}: resource completeness differs from all three guards",
     )
 
-    if verify_files:
-        _verify_run_artifact(artifact_path, value["corpus"], "corpus")
-        _verify_run_artifact(artifact_path, value["archive"], "archive")
-        _verify_run_artifact(
-            artifact_path,
-            value["correctness"]["restored"],
-            "restored corpus",
-        )
-
-    correctness = value["correctness"]
     distribution = value["distribution"]
+    _, clean_room, clean_room_result = _verify_reference(
+        artifact_path,
+        distribution["cleanRoomReceipt"],
+        "gamma.enwiki9.clean-room-replay.v1",
+        verify_files,
+    )
+    _require(
+        clean_room["candidateId"] == value["candidateId"]
+        and clean_room["candidateTreeSha256"] == value["candidateTreeSha256"],
+        f"{artifact_path}: clean-room receipt identifies a different candidate",
+    )
+    expected_license_audit = dependency_license_audit(manifest)
+    _require(
+        clean_room_result["licenseAudit"] == expected_license_audit,
+        f"{artifact_path}: clean-room license audit differs from the dependency closure",
+    )
+    expected_distribution = {
+        "cleanRoomReplayOk": clean_room_result["cleanRoomReplayOk"],
+        "networkUsed": clean_room_result["networkUsed"],
+        "gpuUsed": clean_room_result["gpuUsed"],
+        "hiddenInputs": clean_room_result["hiddenInputs"],
+        "licenseAuditOk": expected_license_audit["approved"],
+    }
+    expected_distribution["selfContained"] = bool(
+        manifest["complete"]
+        and expected_distribution["cleanRoomReplayOk"]
+        and not expected_distribution["networkUsed"]
+        and not expected_distribution["gpuUsed"]
+        and not expected_distribution["hiddenInputs"]
+    )
+    for field, expected in expected_distribution.items():
+        _require(
+            distribution[field] == expected,
+            f"{artifact_path}: {field} differs from bound clean-room evidence",
+        )
+    _require(
+        correctness["independentDecodeOk"]
+        == clean_room_result["independentDecodeOk"],
+        f"{artifact_path}: independent decode verdict differs from clean-room execution",
+    )
+
+    peer_reference = value["verification"]["peerReceipt"]
+    cross_host_ok = False
+    if peer_reference is not None:
+        _, peer, _ = _verify_reference(
+            artifact_path,
+            peer_reference,
+            "gamma.enwiki9.run-receipt.v1",
+            verify_files,
+        )
+        _require(
+            peer["verification"]["peerReceipt"] is None,
+            f"{artifact_path}: peer receipt must be a non-recursive primary receipt",
+        )
+        cross_host_ok = bool(
+            peer["candidateId"] == value["candidateId"]
+            and peer["candidateTreeSha256"] == value["candidateTreeSha256"]
+            and peer["archive"]["bytes"] == value["archive"]["bytes"]
+            and peer["archive"]["sha256"] == value["archive"]["sha256"]
+            and peer["correctness"]["roundtripOk"]
+            and peer["correctness"]["determinismOk"]
+            and peer["verification"]["host"] != value["verification"]["host"]
+        )
+    _require(
+        value["verification"]["crossHostArchiveIdentityOk"] == cross_host_ok,
+        f"{artifact_path}: cross-host verdict differs from the peer receipt",
+    )
+
     objective_criteria = [
         accounting["complete"],
         accounting["officialScoreBytes"] <= binding["targetScoreBytes"],
@@ -1770,6 +2035,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result: dict[str, Any] = {"objectiveId": value["objectiveId"]}
     elif schema_id == "gamma.enwiki9.candidate-revision.v1":
         result = _validate_candidate_revision(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.clean-room-replay.v1":
+        result = _validate_clean_room_replay(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.dependency-closure.v1":
         result = _validate_dependency_closure(value, artifact_path, verify_files)
     elif schema_id == "gamma.enwiki9.delta-midas-probe-result.v1":

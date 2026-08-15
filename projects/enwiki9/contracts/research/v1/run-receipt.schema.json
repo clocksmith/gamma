@@ -57,10 +57,11 @@
     "correctness": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["roundtripOk", "determinismOk", "restored", "independentDecodeOk"],
+      "required": ["roundtripOk", "determinismOk", "deterministicReplayArchive", "restored", "independentDecodeOk"],
       "properties": {
         "roundtripOk": { "type": "boolean" },
         "determinismOk": { "type": "boolean" },
+        "deterministicReplayArchive": { "$ref": "#/$defs/artifact" },
         "restored": { "$ref": "#/$defs/artifact" },
         "independentDecodeOk": { "type": "boolean" }
       }
@@ -68,9 +69,10 @@
     "resources": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["compressionGuard", "decompressionGuard", "wallTimePass", "memoryPass", "temporaryDiskPass", "singleCorePass", "complete"],
+      "required": ["compressionGuard", "replayCompressionGuard", "decompressionGuard", "wallTimePass", "memoryPass", "temporaryDiskPass", "singleCorePass", "complete"],
       "properties": {
         "compressionGuard": { "$ref": "#/$defs/reference" },
+        "replayCompressionGuard": { "$ref": "#/$defs/reference" },
         "decompressionGuard": { "$ref": "#/$defs/reference" },
         "wallTimePass": { "type": "boolean" },
         "memoryPass": { "type": "boolean" },
@@ -82,8 +84,9 @@
     "distribution": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["selfContained", "cleanRoomReplayOk", "networkUsed", "gpuUsed", "hiddenInputs", "licenseAuditOk"],
+      "required": ["cleanRoomReceipt", "selfContained", "cleanRoomReplayOk", "networkUsed", "gpuUsed", "hiddenInputs", "licenseAuditOk"],
       "properties": {
+        "cleanRoomReceipt": { "$ref": "#/$defs/reference" },
         "selfContained": { "type": "boolean" },
         "cleanRoomReplayOk": { "type": "boolean" },
         "networkUsed": { "type": "boolean" },
@@ -106,10 +109,16 @@
     "verification": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["host", "verifier", "crossHostArchiveIdentityOk"],
+      "required": ["host", "verifier", "peerReceipt", "crossHostArchiveIdentityOk"],
       "properties": {
         "host": { "type": "string", "minLength": 1 },
         "verifier": { "type": "string", "minLength": 1 },
+        "peerReceipt": {
+          "oneOf": [
+            { "$ref": "#/$defs/reference" },
+            { "type": "null" }
+          ]
+        },
         "crossHostArchiveIdentityOk": { "type": "boolean" }
       }
     },
