@@ -117,8 +117,9 @@ but absence of this policy is not evidence of output-manifest completeness.
 `pythonSourceClosureEntries` closes the corresponding prospective code-input
 boundary. The contract validator recursively resolves each named entry's local
 imports and rejects an experiment whose hash-bound inputs omit any module. The
-terminal runner can use the same resolver for its source package; patches,
-models, and data still require explicit declarations.
+implementation-retry freezer can populate that closure from the new runner and
+materializer, while the terminal runner can use the same resolver for its source
+package. Patches, models, and data still require explicit declarations.
 
 Candidate-owned scratch directories are now explicit job inputs. The executor
 accepts only project-relative paths below `results/<candidate_id>/`, creates
