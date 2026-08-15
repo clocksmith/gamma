@@ -23,6 +23,9 @@ The accompanying schemas define the first fail-closed evidence boundary:
   terminal result, with no undeclared or path-aliased artifacts;
   `pythonSourceClosureEntries` additionally names entry inputs whose complete
   project-local import closure must appear in the prospective input manifest;
+- `named-gradient-detail.schema.json` validates the repeated named-gradient row
+  population, experiment and revision bindings, execution logs, summary
+  coverage, and optional direct-versus-explicit-F32 reference fields;
 - `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
   causal-feature, quantized-model, shifted-control, and held-out evidence for
   the compact residual probe;

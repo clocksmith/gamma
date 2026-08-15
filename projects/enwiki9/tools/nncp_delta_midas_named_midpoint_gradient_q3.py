@@ -156,6 +156,7 @@ def require_fresh_outputs() -> None:
 def q2_summary() -> dict[str, Any]:
     require_q2_lineage()
     research_contracts.validate_artifact(Q2_RESULT)
+    research_contracts.validate_artifact(Q2_DETAIL)
     result = json.loads(Q2_RESULT.read_text())
     if result["candidateId"] != "delta_midas_named_midpoint_gradient_65536_q2_v1":
         raise ValueError("q2 result identifies another candidate")
