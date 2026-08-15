@@ -22,7 +22,9 @@ The accompanying schemas define the first fail-closed evidence boundary:
   declared and every other declared output must be bound exactly once by the
   terminal result, with no undeclared or path-aliased artifacts;
   `pythonSourceClosureEntries` additionally names entry inputs whose complete
-  project-local import closure must appear in the prospective input manifest;
+  project-local runtime source closure must appear in the prospective input
+  manifest, including the research-contract JSON files when the validator is
+  reachable;
 - `named-gradient-detail.schema.json` validates the repeated named-gradient row
   population, experiment and revision bindings, execution logs, summary
   coverage, and optional direct-versus-explicit-F32 reference fields;
@@ -126,4 +128,6 @@ contract's output list and the result's artifact list are complete.
 The optional `pythonSourceClosureEntries` field is likewise backward compatible.
 When present, every named entry must be a declared tool input and every Python
 module it resolves under `tools/` must appear once in the same hash-bound input
-manifest. Non-Python patches, models, and data remain explicit inputs.
+manifest. If that closure reaches `research_contracts.py`, all JSON files under
+this contract directory are runtime support inputs and must also appear once.
+Experiment-specific non-Python patches, models, and data remain explicit inputs.

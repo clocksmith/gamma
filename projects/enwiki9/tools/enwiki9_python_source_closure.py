@@ -13,6 +13,8 @@ from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
+CONTRACT_ROOT = ROOT / "contracts" / "research" / "v1"
+RESEARCH_CONTRACTS = TOOLS / "research_contracts.py"
 
 
 def imported_modules(path: Path) -> set[str]:
@@ -58,6 +60,8 @@ def local_source_closure(entries: Iterable[Path]) -> list[Path]:
             dependency = resolve_local_module(module)
             if dependency is not None and dependency not in closure:
                 pending.append(dependency)
+    if RESEARCH_CONTRACTS.resolve() in closure:
+        closure.update(path.resolve() for path in CONTRACT_ROOT.glob("*.json"))
     return sorted(closure, key=lambda path: path.relative_to(ROOT).as_posix())
 
 
