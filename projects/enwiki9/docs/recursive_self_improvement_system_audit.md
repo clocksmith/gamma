@@ -230,6 +230,9 @@ receipt was bound but its separately read comparator file was not.
 The result validator derives all four q2 sensitivity measurements again from
 the bound q2 and q3 detail receipts, so those diagnostics cannot be edited
 independently of their row populations even though they do not gate promotion.
+It also derives both repeated archive identities from artifact digests and
+allows exact-inverse transfer only when the direct retained input matches the
+legacy attribution's logical path, byte count, digest, and F inverse receipt.
 
 ## Composition and independent audit
 

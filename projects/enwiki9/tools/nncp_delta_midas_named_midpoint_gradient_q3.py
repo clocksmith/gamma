@@ -129,9 +129,13 @@ def require_q2_lineage() -> None:
 
     legacy_attribution = json.loads(q0.Q1_RESULT.read_text())
     legacy_retained = legacy_attribution["archives"]["F_clean"]
+    retained_relative = RETAINED_F.relative_to(ROOT).as_posix()
+    legacy_path = Path(legacy_retained["path"]).as_posix()
     if (
-        Path(legacy_retained["path"]).resolve() != RETAINED_F.resolve()
-        or legacy_retained["bytes"] != RETAINED_F.stat().st_size
+        legacy_path != retained_relative
+        and not legacy_path.endswith(f"/{retained_relative}")
+    ) or (
+        legacy_retained["bytes"] != RETAINED_F.stat().st_size
         or legacy_retained["sha256"] != q0.sha256(RETAINED_F)
     ):
         raise ValueError("retained F archive differs from its legacy attribution receipt")
