@@ -26,6 +26,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Objective and receipt validation | `research_contracts.py` |
 | Count and stage a dependency closure | `enwiki9_dependency_closure.py` |
 | Sealed full-1G package replay | `enwiki9_clean_room_replay.py` |
+| Release evidence router | `enwiki9_release_receipts.py` |
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
@@ -85,3 +86,6 @@ name `{archive}` and `{restored}`. The tool builds three fresh copies in sealed
 bubblewrap namespaces, exposes the corpus only to the two compression runs,
 uses `taskset` plus `run_with_rss_guard.py` for the three runtime phases, and
 retains a fail-closed diagnostic attempt if execution cannot compose a receipt.
+`enwiki9_release_receipts.py` cannot launch a compressor. It discovers only the
+canonical `results/<candidate>/release/<receipt>/` layout and regenerates a
+structure-only index; a release claim must still validate every referenced file.

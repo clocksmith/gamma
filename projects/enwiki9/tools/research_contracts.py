@@ -62,6 +62,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.reflection-receipt.v1": (
         CONTRACT_ROOT / "reflection-receipt.schema.json"
     ),
+    "gamma.enwiki9.release-receipt-index.v1": (
+        CONTRACT_ROOT / "release-receipt-index.schema.json"
+    ),
     "gamma.enwiki9.run-receipt.v1": CONTRACT_ROOT / "run-receipt.schema.json",
     "gamma.enwiki9.search-policy.v1": CONTRACT_ROOT / "search-policy.schema.json",
 }
@@ -1834,6 +1837,85 @@ def _validate_clean_room_attempt(
     }
 
 
+def _validate_release_receipt_index(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    bundle_paths = [row["bundlePath"] for row in value["bundles"]]
+    _require(
+        bundle_paths == sorted(bundle_paths) and len(bundle_paths) == len(set(bundle_paths)),
+        f"{artifact_path}: release bundles are unsorted or duplicated",
+    )
+    for row in value["bundles"]:
+        _, manifest = _project_receipt_reference(
+            row["manifest"],
+            "gamma.enwiki9.dependency-closure.v1",
+            f"{artifact_path}: release manifest",
+        )
+        _require(
+            manifest["candidateId"] == row["candidateId"]
+            and manifest["complete"] == row["dependencyClosureComplete"],
+            f"{artifact_path}: release row differs from its manifest",
+        )
+        run = row["runReceipt"]
+        attempt = row["failedAttempt"]
+        _require(
+            run is None or attempt is None,
+            f"{artifact_path}: release bundle has both success and failure receipts",
+        )
+        if run is not None:
+            run_path, receipt = _project_receipt_reference(
+                run["reference"],
+                "gamma.enwiki9.run-receipt.v1",
+                f"{artifact_path}: release run receipt",
+            )
+            result = validate_artifact(run_path, verify_files=False)
+            _require(
+                receipt["candidateId"] == row["candidateId"]
+                and run["verdict"] == receipt["verdict"]
+                and run["officialScoreBytes"]
+                == receipt["accounting"]["officialScoreBytes"]
+                and run["targetDebtBytes"]
+                == receipt["accounting"]["targetDebtBytes"]
+                and run["objectiveCriteriaPass"] == result["objectiveCriteriaPass"],
+                f"{artifact_path}: release summary differs from its run receipt",
+            )
+        if attempt is not None:
+            attempt_path, attempt_receipt = _project_receipt_reference(
+                attempt["reference"],
+                "gamma.enwiki9.clean-room-attempt.v1",
+                f"{artifact_path}: release failure receipt",
+            )
+            validate_artifact(attempt_path, verify_files=False)
+            _require(
+                attempt_receipt["candidateId"] == row["candidateId"]
+                and attempt["error"] == attempt_receipt["error"]
+                and attempt["scratchCleaned"] == attempt_receipt["scratchCleaned"],
+                f"{artifact_path}: release summary differs from its failure receipt",
+            )
+    expected_summary = {
+        "bundles": len(value["bundles"]),
+        "completeClosures": sum(
+            row["dependencyClosureComplete"] for row in value["bundles"]
+        ),
+        "runReceipts": sum(row["runReceipt"] is not None for row in value["bundles"]),
+        "failedAttempts": sum(
+            row["failedAttempt"] is not None for row in value["bundles"]
+        ),
+        "objectiveAchievedReceipts": sum(
+            row["runReceipt"] is not None
+            and row["runReceipt"]["verdict"] == "objective-achieved"
+            for row in value["bundles"]
+        ),
+    }
+    _require(
+        value["summary"] == expected_summary,
+        f"{artifact_path}: release summary differs from indexed bundles",
+    )
+    return {"summary": expected_summary}
+
+
 def _resource_guard_checks(value: dict[str, Any]) -> dict[str, bool]:
     objective = validate_objective()
     resources = objective["resources"]
@@ -2350,6 +2432,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_resource_guard(value, artifact_path)
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":
         result = _validate_reflection_receipt(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.release-receipt-index.v1":
+        result = _validate_release_receipt_index(value, artifact_path)
     elif schema_id == "gamma.enwiki9.search-policy.v1":
         _require(
             value == validate_search_policy(),

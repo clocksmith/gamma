@@ -22,6 +22,7 @@ REPO_ROOT = ROOT.parent.parent
 GENERATORS = [
     ["python3", "projects/enwiki9/tools/hutter_upper_bound_certificate.py"],
     ["python3", "projects/enwiki9/tools/hutter_run_ledger.py"],
+    ["python3", "projects/enwiki9/tools/enwiki9_release_receipts.py"],
     ["python3", "projects/enwiki9/tools/enwiki9_evidence_matrix.py"],
     ["python3", "projects/enwiki9/tools/enwiki9_best_results.py"],
     ["python3", "projects/enwiki9/tools/cmix21_memory_valve_report.py"],
@@ -36,6 +37,7 @@ GENERATORS = [
 
 CHECKS = [
     ["python3", "projects/enwiki9/tools/hutter_run_ledger.py", "--check"],
+    ["python3", "projects/enwiki9/tools/enwiki9_release_receipts.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_evidence_matrix.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_best_results.py", "--check"],
     ["python3", "projects/enwiki9/tools/cmix21_memory_valve_report.py", "--check"],

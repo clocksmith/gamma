@@ -159,7 +159,9 @@ primary receipt is locally hash-bound.
 
 Do not retrofit ordinary driver rows into package receipts. A clean-room replay
 starts from the dependency manifest, and any package or command change requires
-a new bundle and new receipts.
+a new bundle and new receipts. Regenerate `docs/release_receipt_index.json` with
+`tools/enwiki9_release_receipts.py` so the bundle is discoverable; the index is
+a structural router, not proof that its large artifacts were rehashed.
 
 ## Discover And Propose Algorithms
 
