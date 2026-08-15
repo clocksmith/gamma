@@ -106,6 +106,13 @@ def require_fresh_outputs() -> None:
             raise ValueError(f"q3 output escapes its result boundary: {output}")
         if path.exists():
             raise FileExistsError(f"refusing to reuse q3 output: {path}")
+        if (
+            path.name == "incremental_source.tar.xz"
+            and path.with_suffix("").exists()
+        ):
+            raise FileExistsError(
+                f"refusing to reuse q3 package staging path: {path.with_suffix('')}"
+            )
 
 
 def q2_summary() -> dict[str, Any]:
