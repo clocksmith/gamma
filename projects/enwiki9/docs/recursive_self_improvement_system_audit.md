@@ -196,8 +196,9 @@ Static inspection then showed q2 converts after a BF16 square and reduction;
 the closed binary's direct `nc_reduce_sum_sqr` path instead returns an F32
 scalar and accumulates BF16 input squares in F32 lanes. Q2 can close execution
 but cannot alone close numeric localization validity. Its reflection must keep
-group-ablation authorization blocked until the direct F32 reduction repeats the
-same frozen decision.
+group-ablation authorization blocked until the direct F32 reduction re-evaluates
+the same frozen predicates. Q2 agreement is retained as a numeric
+sensitivity measurement, not a promotion predicate.
 
 ## Composition and independent audit
 
