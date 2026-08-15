@@ -227,6 +227,9 @@ It binds the retained F comparator as a direct prospective input and verifies
 that file against the path, byte count, and digest in the legacy attribution
 receipt before teacher execution. This closes a q0-through-q2 gap where the
 receipt was bound but its separately read comparator file was not.
+The result validator derives all four q2 sensitivity measurements again from
+the bound q2 and q3 detail receipts, so those diagnostics cannot be edited
+independently of their row populations even though they do not gate promotion.
 
 ## Composition and independent audit
 
