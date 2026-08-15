@@ -531,6 +531,35 @@ def _validate_experiment_contract(
                 f"{artifact_path}: gate references undeclared measurement "
                 f"{predicate['metric']}",
             )
+    protocol = value.get("protocol")
+    if protocol is not None:
+        partitions = protocol["partitions"]
+        partition_ids = [partition["id"] for partition in partitions]
+        _require(
+            len(partition_ids) == len(set(partition_ids)),
+            f"{artifact_path}: duplicate partition identity",
+        )
+        expected_first = 0
+        for partition in partitions:
+            _require(
+                partition["firstSegment"] == expected_first
+                and partition["endSegmentExclusive"] > expected_first,
+                f"{artifact_path}: partitions must be ordered and contiguous",
+            )
+            expected_first = partition["endSegmentExclusive"]
+        expected_segments = (
+            value["population"]["rowCount"]
+            // value["population"]["segmentLength"]
+        )
+        _require(
+            expected_first == expected_segments,
+            f"{artifact_path}: partitions do not cover the frozen population",
+        )
+        control_ids = [control["id"] for control in protocol["controls"]]
+        _require(
+            len(control_ids) == len(set(control_ids)),
+            f"{artifact_path}: duplicate control identity",
+        )
     return {
         "experimentId": value["experimentId"],
         "evidenceClass": value["evidenceClass"],
