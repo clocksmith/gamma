@@ -619,13 +619,22 @@ def live_speedlab_gate_from_process(
                 candidate = command[driver_index + 1]
         input_path: pathlib.Path | None = None
         output_path: pathlib.Path | None = None
-        if len(command) >= 3:
+        if "--input" in command:
+            input_index = command.index("--input")
+            if input_index + 1 < len(command):
+                input_path = pathlib.Path(command[input_index + 1])
+        if "--output" in command:
+            output_index = command.index("--output")
+            if output_index + 1 < len(command):
+                output_path = pathlib.Path(command[output_index + 1])
+        if output_path is None and len(command) >= 3:
             input_path = pathlib.Path(command[-2])
             output_path = pathlib.Path(command[-1])
+        if input_path is not None or output_path is not None:
             if process_cwd is not None:
-                if not input_path.is_absolute():
+                if input_path is not None and not input_path.is_absolute():
                     input_path = process_cwd / input_path
-                if not output_path.is_absolute():
+                if output_path is not None and not output_path.is_absolute():
                     output_path = process_cwd / output_path
         scope: int | None = None
         if "--limit" in command:
@@ -776,7 +785,31 @@ def bind_guard_to_adaptive_job(
     bound["guard_inferred_scope_bytes"] = gate.get("scope_bytes")
     candidate = job.get("candidate_id")
     bound["candidate"] = candidate
-    bound["scope_bytes"] = job.get("gate_size")
+    bound["gate_size"] = job.get("gate_size")
+    bound.pop("scope_bytes", None)
+    experiment_reference = job.get("experiment")
+    if isinstance(experiment_reference, dict):
+        experiment_path = experiment_reference.get("path")
+        if isinstance(experiment_path, str):
+            resolved_experiment = (ROOT / experiment_path).resolve()
+            expected_digest = experiment_reference.get("sha256")
+            observed_digest = sha256(resolved_experiment)
+            if ROOT.resolve() not in resolved_experiment.parents:
+                bound["scope_status"] = "experiment-reference-escapes-project"
+            elif expected_digest == f"sha256:{observed_digest}":
+                research_contracts.validate_artifact(resolved_experiment)
+                experiment = load_json(resolved_experiment)
+                population = experiment.get("population")
+                if isinstance(population, dict):
+                    bound["scope_unit"] = population.get("unit")
+                    if isinstance(population.get("scopeBytes"), int):
+                        bound["scope_bytes"] = population["scopeBytes"]
+                    if isinstance(population.get("scopeSymbols"), int):
+                        bound["scope_symbols"] = population["scopeSymbols"]
+            else:
+                bound["scope_status"] = "experiment-reference-mismatch"
+    if "scope_bytes" not in bound and "scope_symbols" not in bound:
+        bound.setdefault("scope_status", "missing-experiment-population")
     bound["adaptive_job_id"] = job.get("job_id")
     bound["adaptive_job_path"] = job.get("path")
     bound["adaptive_worker_pid"] = job.get("worker_pid")
@@ -849,6 +882,7 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
                 "started_at": job.get("started_at"),
                 "worker_pid": worker_pid,
                 "worker_pid_live": worker_pid_live,
+                "experiment": job.get("experiment"),
                 "path": logical_rel(path),
             }
         )
@@ -884,8 +918,11 @@ def gate_liveness_state(
     gate = gate if isinstance(gate, dict) else {}
     verdict = gate.get("verdict")
     receipt_running = verdict == "running" or gate.get("rss_guard_status") == "running"
-    observed_gate = observed_gate_command_state(candidate, scope, process_state)
-    observed_controller = observed_controller_command_state(candidate, scope, process_state)
+    byte_scope = gate.get("scope_bytes")
+    observed_gate = observed_gate_command_state(candidate, byte_scope, process_state)
+    observed_controller = observed_controller_command_state(
+        candidate, byte_scope, process_state
+    )
     controller_processes = observed_controller.get("controller_processes")
     if not isinstance(controller_processes, list):
         controller_processes = []
@@ -924,7 +961,10 @@ def gate_liveness_state(
         classification = "orphaned_running_receipt"
     return {
         "candidate": candidate,
-        "scope_bytes": scope,
+        "gate_size": scope,
+        "scope_bytes": gate.get("scope_bytes"),
+        "scope_symbols": gate.get("scope_symbols"),
+        "scope_unit": gate.get("scope_unit"),
         "receipt_running": receipt_running,
         "persisted_running": persisted_running,
         "classification": classification,
@@ -1039,6 +1079,10 @@ def active_gate_status_state(
         row["program_id"] = candidate
     if isinstance(scope, int):
         row["scope_bytes"] = scope
+    elif isinstance(gate.get("scope_symbols"), int):
+        row.pop("scope_bytes", None)
+        row["scope_symbols"] = gate["scope_symbols"]
+        row["scope_unit"] = gate.get("scope_unit")
     if isinstance(verdict, str):
         row["status"] = verdict
     for key in (
@@ -1061,6 +1105,8 @@ def active_gate_status_state(
         "rss_guard_json_bytes",
         "rss_guard_json_mtime_utc",
         "rss_guard_json_sha256",
+        "gate_size",
+        "scope_status",
     ):
         if key in gate:
             row[key] = gate.get(key)
@@ -1084,6 +1130,41 @@ def active_gate_status_state(
         )
     elif isinstance(verdict, str):
         row["evidence"] = f"gate decision is {verdict}; wait for terminal receipts"
+    return row
+
+
+def active_candidate_status_state(
+    cert_row: dict[str, Any] | None,
+    candidate: str | None,
+    gate: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if candidate is None:
+        return None
+    row = dict(cert_row) if isinstance(cert_row, dict) else {}
+    row.update(
+        {
+            "label": "active candidate",
+            "program_id": candidate,
+            "status": gate.get("verdict") if isinstance(gate, dict) else "active",
+            "active_source": (
+                gate.get("source", "current status receipt")
+                if isinstance(gate, dict)
+                else "current status receipt"
+            ),
+            "evidence": (
+                "current process, guard, and adaptive-job evidence identify this candidate"
+            ),
+        }
+    )
+    if isinstance(gate, dict):
+        if isinstance(gate.get("scope_bytes"), int):
+            row["scope_bytes"] = gate["scope_bytes"]
+            row.pop("scope_symbols", None)
+            row.pop("scope_unit", None)
+        elif isinstance(gate.get("scope_symbols"), int):
+            row.pop("scope_bytes", None)
+            row["scope_symbols"] = gate["scope_symbols"]
+            row["scope_unit"] = gate.get("scope_unit")
     return row
 
 
@@ -1389,6 +1470,9 @@ def handoff_state(
     out: dict[str, Any] = {
         "candidate": candidate,
         "scope_bytes": scope,
+        "scope_symbols": gate.get("scope_symbols"),
+        "scope_unit": gate.get("scope_unit"),
+        "gate_size": gate.get("gate_size"),
         "gate_verdict": verdict,
         "gate_next_action": gate.get("next_action"),
         "terminal_verdict_present": terminal,
@@ -1445,6 +1529,9 @@ def operator_summary_state(
     summary: dict[str, Any] = {
         "candidate": candidate,
         "scope_bytes": scope,
+        "scope_symbols": gate.get("scope_symbols"),
+        "scope_unit": gate.get("scope_unit"),
+        "gate_size": gate.get("gate_size"),
         "gate_verdict": gate.get("verdict"),
         "gate_next_action": gate.get("next_action"),
         "active_scorer_observed": process_state.get("active_scorer_observed"),
@@ -1535,9 +1622,12 @@ def receipt() -> dict[str, Any]:
                 owning_job,
             )
         candidate = live_speedlab_gate.get("candidate")
-        scope = live_speedlab_gate.get("scope_bytes")
+        scope = live_speedlab_gate.get("gate_size")
+        if not isinstance(scope, int):
+            scope = live_speedlab_gate.get("scope_bytes")
         gate = live_speedlab_gate
     else:
+        gate = None
         process_candidate, process_scope = active_candidate_from_process(process_state)
         if process_candidate is not None:
             candidate = process_candidate
@@ -1555,12 +1645,24 @@ def receipt() -> dict[str, Any]:
                 else []
             )
             if live_jobs:
-                candidate = live_jobs[0].get("candidate_id")
-                scope = live_jobs[0].get("gate_size")
+                live_job = live_jobs[0]
+                candidate = live_job.get("candidate_id")
+                scope = live_job.get("gate_size")
+                gate = bind_guard_to_adaptive_job(
+                    {
+                        "candidate": candidate,
+                        "verdict": "running",
+                        "next_action": "wait_for_gate_completion",
+                        "source": "live_adaptive_job",
+                        "driver_result_json_present": False,
+                    },
+                    live_job,
+                )
             else:
                 candidate = None
                 scope = None
-        gate = gate_state(candidate, scope)
+        if gate is None:
+            gate = gate_state(candidate, scope)
     liveness = gate_liveness_state(
         candidate,
         scope,
@@ -1571,7 +1673,11 @@ def receipt() -> dict[str, Any]:
     gate = reconcile_gate_liveness(gate, liveness)
     orphaned = gate is not None and gate.get("verdict") == "orphaned_running_receipt"
     live_candidate = None if orphaned else candidate
-    live_scope = None if orphaned else scope
+    live_scope = (
+        gate.get("scope_bytes")
+        if not orphaned and isinstance(gate, dict)
+        else None
+    )
     add_active_decode_progress(process_state, gate)
     action = operator_action(process_state, gate)
     handoff = handoff_state(
@@ -1624,10 +1730,8 @@ def receipt() -> dict[str, Any]:
         "best_exact_100m": labels.get("best exact 100M"),
         "best_full_1g": labels.get("best full 1G"),
         "best_forecast": labels.get("best forecast"),
-        "active_candidate": (
-            labels.get("active candidate")
-            if not orphaned and live_candidate is not None
-            else None
+        "active_candidate": active_candidate_status_state(
+            labels.get("active candidate"), live_candidate, gate
         ),
         "certificate_active_candidate": labels.get("active candidate"),
         "active_gate": (
@@ -1651,8 +1755,16 @@ def receipt() -> dict[str, Any]:
         "active_candidate_recent_artifacts": active_candidate_recent_artifacts(live_candidate),
         "adaptive_jobs": adaptive_state,
         "active_processes": process_state,
-        "observed_gate_command": observed_gate_command_state(candidate, scope, process_state),
-        "observed_controller_command": observed_controller_command_state(candidate, scope, process_state),
+        "observed_gate_command": observed_gate_command_state(
+            candidate,
+            gate.get("scope_bytes") if isinstance(gate, dict) else scope,
+            process_state,
+        ),
+        "observed_controller_command": observed_controller_command_state(
+            candidate,
+            gate.get("scope_bytes") if isinstance(gate, dict) else scope,
+            process_state,
+        ),
         "gate_decision": gate,
         "gate_liveness": liveness,
         "gate_evidence_status": gate_evidence_status(gate, liveness),
@@ -1736,6 +1848,8 @@ def render_md(data: dict[str, Any]) -> str:
         "",
         f"- Candidate: `{summary.get('candidate', 'unknown')}`",
         f"- Scope bytes: `{fmt_int(summary.get('scope_bytes'))}`",
+        f"- Scope symbols: `{fmt_int(summary.get('scope_symbols'))}`",
+        f"- Scope unit: `{summary.get('scope_unit') or 'n/a'}`",
         f"- Gate verdict: `{summary.get('gate_verdict', 'unknown')}`",
         f"- Gate next action: `{summary.get('gate_next_action', 'unknown')}`",
         f"- Active scorer observed: `{fmt_bool(summary.get('active_scorer_observed'))}`",
@@ -1774,6 +1888,8 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Next action: `{gate.get('next_action', 'unknown')}`",
         f"- Candidate: `{gate.get('candidate', 'unknown')}`",
         f"- Scope bytes: `{fmt_int(gate.get('scope_bytes'))}`",
+        f"- Scope symbols: `{fmt_int(gate.get('scope_symbols'))}`",
+        f"- Scope unit: `{gate.get('scope_unit') or 'n/a'}`",
         f"- Driver result JSON: `{gate.get('driver_result_json') or 'not present'}`",
         f"- Driver result present: `{fmt_bool(gate.get('driver_result_json_present'))}`",
         f"- RSS guard JSON: `{gate.get('rss_guard_json') or 'not present'}`",
