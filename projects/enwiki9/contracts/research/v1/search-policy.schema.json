@@ -4,17 +4,24 @@
   "title": "gamma.enwiki9.search_policy.v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "objective", "ordering", "decisionRank", "missingMeasurementDisposition"],
+  "required": ["schema", "objective", "ordering", "decisionRank", "missingMeasurementDisposition", "riskDirection"],
   "properties": {
     "schema": { "const": "gamma.enwiki9.search-policy.v1" },
     "objective": { "$ref": "#/$defs/objectiveBinding" },
     "ordering": {
       "const": [
         "operationalStatus",
+        "experimentValid",
         "parentReflectionValid",
         "parentDecisionRank",
         "assertedNetBytesSaved",
+        "assertedTransferRetention",
+        "assertedRuntimeRatio",
+        "assertedMemoryRatio",
         "expectedNetBytes",
+        "maximumAddedPackageBytes",
+        "uncertaintyRisk",
+        "interactionRisk",
         "searchPriority",
         "proposalId"
       ]
@@ -33,7 +40,8 @@
         "missing": { "type": "integer" }
       }
     },
-    "missingMeasurementDisposition": { "const": "rank-below-asserted-never-infer" }
+    "missingMeasurementDisposition": { "const": "rank-below-asserted-never-infer" },
+    "riskDirection": { "const": "lower-is-better" }
   },
   "$defs": {
     "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },

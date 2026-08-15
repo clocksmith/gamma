@@ -1,0 +1,155 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "delta-midas-named-midpoint-gradient-65536-q0-v1",
+  "proposalId": "delta_midas_named_midpoint_gradient_65536_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "delta_midas_deep_residual_65536_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_deep_residual_65536_q0_v1/20260815T161651529758Z_b8bb93c35dc0.json",
+      "sha256": "sha256:91fb4ffe864fc96c4afc018fb91e540ab81bd843e452d7c0173e4067b53bf4de"
+    }
+  },
+  "hypothesis": {
+    "claim": "The production F arm's exact first-half midpoint gradient has one stable non-head parameter-group concentration across every chronological third, localizing one deep group for a separately frozen causal ablation.",
+    "falsification": "Retire gradient-energy localization if exact repeated F archives and named gradients are valid but no single non-head group dominates every third with the frozen share and output-head bounds."
+  },
+  "changedMechanism": "Instrument only the production F arm's already-authorized first-half midpoint backward pass to emit parameter-name, shape, hash, finiteness, and squared-gradient-energy witnesses; do not alter its update or probabilities.",
+  "invariants": [
+    "The emitted archive must remain byte-identical to the retained production F archive.",
+    "Two independent instrumented encodes must emit byte-identical archives and named gradient rows.",
+    "Every midpoint block must expose the same complete named parameter set and finite gradient energies.",
+    "Gradient magnitude is localization evidence only and is not probability contribution, codec gain, or objective credit.",
+    "No group ablation, open correction, or additive forecast is authorized by this experiment itself."
+  ],
+  "controls": [
+    {
+      "id": "instrumented-f-repeat",
+      "role": "treatment",
+      "definition": "Two clean builds of the same instrumented production F encode path with named gradient capture enabled only during each first-half midpoint backward pass."
+    },
+    {
+      "id": "retained-f-archive",
+      "role": "comparator",
+      "definition": "The hash-bound uninstrumented production F archive already independently decoded to the exact raw population."
+    },
+    {
+      "id": "output-head-share",
+      "role": "negative",
+      "definition": "The previously failed output-head-only mechanism remains excluded; a head-dominated gradient cannot authorize a deep-group successor."
+    }
+  ],
+  "population": {
+    "unit": "production-alphabet transformed symbol",
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "selection": "The exact frozen opening 65,536-symbol population used by the retained P/K/O/OK/F/S attribution gate.",
+    "coordinate": "Thirty-two chronological 64-state blocks over the production 16,392-symbol alphabet."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Named gradients produced by the first 32 decoded symbols of each production F block.",
+      "Parameter names, tensor shapes, deterministic gradient hashes, and squared gradient energy.",
+      "The retained exact F archive and terminal attribution receipts."
+    ],
+    "forbiddenInformation": [
+      "Second-half truth symbols before they are decoded.",
+      "Any fitted correction, group ablation result, future gate result, or full-corpus score.",
+      "Treating the closed LibNC teacher, gradients, or traces as shippable Gamma state."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/nncp_delta_midas_named_midpoint_gradient.py",
+      "sha256": "sha256:b43a4d1ac0aeb5371edcfee057cd4b95a596ba7117b07f7206b773274ad26da7"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/materialize_nncp_named_midpoint_gradient.py",
+      "sha256": "sha256:8fed583b4a47e77eef39a3b5f3089c18b27756a8bcc23a24034b8859c7757711"
+    },
+    {
+      "id": "production-attribution",
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/decision.json",
+      "sha256": "sha256:3e5c397443e5e972ba28c06405a5b9f106d440c36f3806c352aa62b2d2a07d55"
+    },
+    {
+      "id": "production-bridge",
+      "path": "results/nncp_libnc_full_dictionary_midsegment32_65536_qm0_v1/decision.json",
+      "sha256": "sha256:74f7c9ab1933d017608a20727127536de82823cadac312e285c3b066a8dbd4d8"
+    },
+    {
+      "id": "deep-residual",
+      "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+      "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 0,
+    "expectedNetSavingsBytes": 0
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 2.0,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.7,
+    "interactionRisk": 0.8
+  },
+  "measurements": [
+    { "id": "retainedArchiveIdentity", "definition": "Both instrumented F archives equal the retained F archive byte for byte.", "unit": "boolean" },
+    { "id": "rawInverseExact", "definition": "Archive identity transfers the retained exact raw inverse receipt.", "unit": "boolean" },
+    { "id": "namedGradientDeterministic", "definition": "The two complete ordered named-gradient row sets are identical.", "unit": "boolean" },
+    { "id": "allBlocksSameParameterSet", "definition": "Every midpoint block reports the same unique parameter names.", "unit": "boolean" },
+    { "id": "allGradientFinite", "definition": "Every named gradient and squared energy is finite.", "unit": "boolean" },
+    { "id": "stableDominantNonHeadGroup", "definition": "The overall dominant non-head group is also dominant in every chronological third.", "unit": "boolean" },
+    { "id": "minimumThirdDominantNonHeadShare", "definition": "Minimum across thirds of the selected group's share of non-head squared gradient energy.", "unit": "ratio" },
+    { "id": "headGroupShare", "definition": "Output-head squared gradient energy divided by total squared gradient energy.", "unit": "ratio" },
+    { "id": "localizationFailed", "definition": "Stable dominance, minimum third share, or maximum output-head share failed.", "unit": "boolean" },
+    { "id": "blockCount", "definition": "Number of captured midpoint blocks.", "unit": "blocks" },
+    { "id": "parameterCount", "definition": "Number of unique named parameters per complete block.", "unit": "parameters" }
+  ],
+  "promotionPredicates": [
+    { "id": "p-archive", "measurement": "retainedArchiveIdentity", "operator": "eq", "threshold": true },
+    { "id": "p-inverse", "measurement": "rawInverseExact", "operator": "eq", "threshold": true },
+    { "id": "p-repeat", "measurement": "namedGradientDeterministic", "operator": "eq", "threshold": true },
+    { "id": "p-parameter-set", "measurement": "allBlocksSameParameterSet", "operator": "eq", "threshold": true },
+    { "id": "p-finite", "measurement": "allGradientFinite", "operator": "eq", "threshold": true },
+    { "id": "p-stable-group", "measurement": "stableDominantNonHeadGroup", "operator": "eq", "threshold": true },
+    { "id": "p-third-share", "measurement": "minimumThirdDominantNonHeadShare", "operator": "gte", "threshold": 0.35 },
+    { "id": "p-head-share", "measurement": "headGroupShare", "operator": "lte", "threshold": 0.5 },
+    { "id": "p-blocks", "measurement": "blockCount", "operator": "eq", "threshold": 32 },
+    { "id": "p-parameters", "measurement": "parameterCount", "operator": "gte", "threshold": 1 }
+  ],
+  "killPredicates": [
+    { "id": "k-archive", "measurement": "retainedArchiveIdentity", "operator": "eq", "threshold": true },
+    { "id": "k-inverse", "measurement": "rawInverseExact", "operator": "eq", "threshold": true },
+    { "id": "k-repeat", "measurement": "namedGradientDeterministic", "operator": "eq", "threshold": true },
+    { "id": "k-parameter-set", "measurement": "allBlocksSameParameterSet", "operator": "eq", "threshold": true },
+    { "id": "k-finite", "measurement": "allGradientFinite", "operator": "eq", "threshold": true },
+    { "id": "k-localization", "measurement": "localizationFailed", "operator": "eq", "threshold": true },
+    { "id": "k-blocks", "measurement": "blockCount", "operator": "eq", "threshold": 32 },
+    { "id": "k-parameters", "measurement": "parameterCount", "operator": "gte", "threshold": 1 }
+  ],
+  "outputs": [
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/decision.json",
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/gradient-detail.json",
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/F_named_gradient_1.nncp",
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/F_named_gradient_2.nncp",
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/F_named_gradient_1.stderr",
+    "results/delta_midas_named_midpoint_gradient_65536_q0_v1/F_named_gradient_2.stderr"
+  ],
+  "generatedUtc": "2026-08-15T17:30:00Z"
+}
