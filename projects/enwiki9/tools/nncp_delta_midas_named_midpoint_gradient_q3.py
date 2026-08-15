@@ -144,6 +144,17 @@ def source_package(path: Path) -> None:
         *local_source_closure((Path(__file__), MATERIALIZER)),
         MIDPOINT_PATCH,
     ]
+    experiment_reference = json.loads(os.environ["GAMMA_ENWIKI9_EXPERIMENT_JSON"])
+    experiment = json.loads((ROOT / experiment_reference["path"]).read_text())
+    inputs = {item["path"]: item for item in experiment["inputs"]}
+    for member in members:
+        relative = member.relative_to(ROOT).as_posix()
+        expected = inputs.get(relative)
+        observed = q0.reference(member)
+        if expected is None or any(
+            expected.get(key) != observed[key] for key in ("path", "sha256")
+        ):
+            raise ValueError(f"packaged source drifted from q3 input: {relative}")
     tar_path = path.with_suffix("")
     with tarfile.open(tar_path, "w") as archive:
         for member in members:
