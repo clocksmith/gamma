@@ -1,0 +1,135 @@
+{
+  "schema": "gamma.enwiki9.mechanism-graph.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "graphId": "delta_midas_lineage_v1",
+  "scope": "The production NNCP midpoint teacher, exact deep residual attribution, and first compact decoder-visible prediction probe.",
+  "components": [
+    {
+      "id": "nncp-full-midpoint-teacher",
+      "role": "closed-teacher",
+      "state": "evidence-only",
+      "probabilityBoundary": "Quantized truth-path branch probabilities on the reversible NNCP symbol stream.",
+      "causalInputs": [
+        "decoded first-half NNCP symbols",
+        "closed LibNC transformer parameters and memory",
+        "midpoint full-parameter gradient update"
+      ],
+      "outputs": [
+        "F and O indexed branch traces",
+        "exact F K O and control archives"
+      ],
+      "closedTeacherDependency": true,
+      "scoreCreditBytes": 0,
+      "evidence": [
+        {
+          "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/decision.json",
+          "sha256": "sha256:3e5c397443e5e972ba28c06405a5b9f106d440c36f3806c352aa62b2d2a07d55"
+        }
+      ]
+    },
+    {
+      "id": "delta-midas-deep-residual",
+      "role": "causal-shadow",
+      "state": "active",
+      "probabilityBoundary": "F-minus-O truth-path ideal-bit residual separated by segment half and chronology.",
+      "causalInputs": [
+        "hash-bound F and O integer branch traces",
+        "original transformed-symbol ordinal",
+        "truth-path branch bits"
+      ],
+      "outputs": [
+        "second-half residual totals thirds and segment signs",
+        "authorization for one prospective compact probe"
+      ],
+      "closedTeacherDependency": true,
+      "scoreCreditBytes": 0,
+      "evidence": [
+        {
+          "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+          "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+        },
+        {
+          "path": "operations/adaptive/reflections/20260815T161658Z_636aa4dd6c.json",
+          "sha256": "sha256:966372fd22ac1b76feb6641f61b6492f8efab19980c92a420b870f5387ca0c24"
+        }
+      ]
+    },
+    {
+      "id": "delta-midas-hashed-linear-probe",
+      "role": "causal-shadow",
+      "state": "retired",
+      "probabilityBoundary": "Quantized hashed-linear correction added to the closed O branch logit for zero-credit replay.",
+      "causalInputs": [
+        "prior decoded transformed symbols",
+        "segment position branch index and decoded branch prefix",
+        "first-half symbol count sketch"
+      ],
+      "outputs": [
+        "negative validation and sealed-test ideal-bit deltas",
+        "terminal retirement of the exact fixed formulation"
+      ],
+      "closedTeacherDependency": true,
+      "scoreCreditBytes": 0,
+      "evidence": [
+        {
+          "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+          "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+        },
+        {
+          "path": "operations/adaptive/reflections/20260815T162913Z_047c55d5ea.json",
+          "sha256": "sha256:8d6af920531600b41ec78ae344d83f01acf6850ce5752b9f28060107b30ebef9"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "id": "teacher-to-residual-attribution",
+      "components": ["nncp-full-midpoint-teacher", "delta-midas-deep-residual"],
+      "sharedProbabilityBoundary": true,
+      "overlappingCost": true,
+      "causalCompatibility": "compatible",
+      "jointReplayRequired": true,
+      "disposition": "The residual is an attribution view of the teacher traces, not an independently addable gain."
+    },
+    {
+      "id": "residual-to-hashed-linear-probe",
+      "components": ["delta-midas-deep-residual", "delta-midas-hashed-linear-probe"],
+      "sharedProbabilityBoundary": true,
+      "overlappingCost": true,
+      "causalCompatibility": "compatible",
+      "jointReplayRequired": true,
+      "disposition": "The compact probe consumed the residual target and failed; neither measurement can be added to another archive forecast."
+    }
+  ],
+  "composition": {
+    "candidateId": null,
+    "componentIds": [
+      "nncp-full-midpoint-teacher",
+      "delta-midas-deep-residual",
+      "delta-midas-hashed-linear-probe"
+    ],
+    "status": "prohibited",
+    "componentForecastsAdded": false,
+    "jointReplay": null,
+    "requiredEvidence": [
+      "exact-joint-archive",
+      "exact-roundtrip",
+      "deterministic-replay",
+      "dependency-closure",
+      "counted-package",
+      "process-tree-resources",
+      "independent-decode",
+      "full-corpus-objective-replay"
+    ]
+  },
+  "conclusion": "No DELTA-MIDAS component is composable into a prize-facing candidate. The teacher and traces remain zero-credit; the only compact probe is retired. A materially new open successor requires its own prospective contract and exact joint replay.",
+  "generatedUtc": "2026-08-15T16:33:01Z"
+}

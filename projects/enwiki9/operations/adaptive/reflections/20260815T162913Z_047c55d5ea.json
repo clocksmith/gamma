@@ -1,0 +1,119 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "The frozen 4,096-weight hashed-linear decoder-state map does not predict the deep F-minus-O residual; its aligned-label test loss is worse than the shifted-label control."
+  },
+  "candidateId": "delta_midas_decoder_feature_probe_65536_q0_v1",
+  "candidateRevision": {
+    "candidateId": "delta_midas_decoder_feature_probe_65536_q0_v1",
+    "candidateTreeSha256": "sha256:ef5d1c9f61bebdf1544187455d9990348494d2bce570056f7327d19679ab21a0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/delta_midas_decoder_feature_probe_65536_q0_v1/20260815T162907713196Z_ef5d1c9f61be.json",
+      "sha256": "sha256:0ef6dffd2eb5fd277c28872716a522c3b9856042681dab53c85b3eedac69c9e4"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this exact compact hashed-linear formulation; it cannot advance to an open-base integration and receives no archive, frontier, or score credit.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+      "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/delta_midas_decoder_feature_probe_65536_q0_v1.json",
+    "sha256": "sha256:c393494ad603abbf69c0c17573ca7ffbacf3ac0449101e09299125d4b1b784ae"
+  },
+  "generatedUtc": "2026-08-15T16:30:25+00:00",
+  "hypothesis": {
+    "rationale": "The quantized correction lost 887.0184641356755 ideal bits on validation and 1080.7027626223207 on test; all test thirds were negative and only 13 of 171 test segments improved.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260815T162913Z_047c55d5ea.json",
+    "sha256": "sha256:f5fc3c80d5d6eb20f4fe8e78667dc83c15cf9bad962954782392b340432836a3"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "The exact 4,096-weight, four-epoch normalized hashed-linear feature map, clipping, chronology, int16 quantization, and O-offset replay contract."
+    ],
+    "transferableLessons": [
+      "A broad F-minus-O teacher residual is not sufficient evidence that shallow hashed decoder-state features can recover it.",
+      "The aligned learner losing more than the shifted-label control is evidence against this fixed feature and optimizer interface, not evidence against the existence of the deep residual."
+    ],
+    "uncertainties": [
+      "A materially different recurrent or low-rank mechanism would require a new hypothesis and prospective contract rather than a parameter retry.",
+      "The receipt does not distinguish representational insufficiency from the frozen normalized online optimizer; the no-sweep rule retires both together."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/rows",
+      "source": {
+        "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+        "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+      }
+    },
+    {
+      "field": "idealBitsSaved",
+      "pointer": "/metrics/testIdealGainBits",
+      "source": {
+        "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+        "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+      }
+    },
+    {
+      "field": "positiveSegmentFraction",
+      "pointer": "/metrics/testPositiveSegmentFraction",
+      "source": {
+        "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+        "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+      }
+    },
+    {
+      "field": "minimumPartitionIdealBitsSaved",
+      "pointer": "/metrics/testThirdMinIdealGainBits",
+      "source": {
+        "path": "results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json",
+        "sha256": "sha256:4959db22e2e092df107218e38ad76025dd12ec49e14e502207bae2088f9f87ec"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": -1080.7027626223207,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": -463.5401418625876,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": 0.07602339181286549,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t162913z_047c55d5ea",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospective contract, immutable candidate, F/O alignment, train-only fitting, quantized replay, shifted control, and sealed partitions all validated; the process completed with return code zero."
+    ],
+    "valid": true
+  }
+}

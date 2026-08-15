@@ -130,6 +130,12 @@ activity, asserted net bytes are never inferred, expected savings are reduced
 by maximum source cost, and search priority breaks only later ties. Ranking does
 not change measured values or authorize a gate.
 
+Before combining measured mechanisms, create a validated mechanism graph under
+`operations/adaptive/composition/`. Mark shared probability boundaries,
+overlapping costs, causal compatibility, closed-teacher dependencies, and the
+exact joint replay required. Never add component forecasts or causal-shadow
+ideal bits to an archive result.
+
 ## Discover And Propose Algorithms
 
 Algorithm discovery is separate from gate discovery. Record a proposal before

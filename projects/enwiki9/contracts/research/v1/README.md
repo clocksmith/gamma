@@ -17,6 +17,12 @@ The accompanying schemas define the first fail-closed evidence boundary:
   result can change scientific state;
 - `experiment-result.schema.json` binds the exact analyzer and input hashes to
   alignment, measurements, predicate evaluations, and a zero-credit decision;
+- `delta-midas-probe-result.schema.json` binds prospective partition, leakage,
+  causal-feature, quantized-model, shifted-control, and held-out evidence for
+  the compact residual probe;
+- `mechanism-graph.schema.json` prevents additive component forecasts by
+  binding shared probability boundaries, cost overlap, causal compatibility,
+  closed dependencies, and an exact joint-replay requirement;
 - `dependency-closure.schema.json` binds every counted package member,
   dependency, command, license, and option byte;
 - `run-receipt.schema.json` composes exact corpus, archive, package,

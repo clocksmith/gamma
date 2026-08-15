@@ -25,6 +25,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
 | Objective and receipt validation | `research_contracts.py` |
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
+| Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
 | Candidate triage | `candidate_triage.py` |
@@ -64,3 +65,6 @@ The detailed per-file catalog and lock-safety notes are in
 `nncp_delta_midas_deep_residual.py` cannot launch a compressor or teacher. It
 reads two hash-bound retained traces, refuses to overwrite its result boundary,
 and emits a zero-credit experiment receipt with a copy of the executed analyzer.
+`nncp_delta_midas_decoder_feature_probe.py` likewise cannot launch a compressor
+or teacher; it fits only its frozen train partition and emits sealed validation,
+test, shifted-control, quantized-payload, and causal-feature evidence.

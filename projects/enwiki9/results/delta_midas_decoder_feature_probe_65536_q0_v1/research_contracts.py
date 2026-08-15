@@ -36,9 +36,6 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.experiment-result.v1": (
         CONTRACT_ROOT / "experiment-result.schema.json"
     ),
-    "gamma.enwiki9.mechanism-graph.v1": (
-        CONTRACT_ROOT / "mechanism-graph.schema.json"
-    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
@@ -929,87 +926,6 @@ def _validate_delta_midas_probe_result(
     }
 
 
-def _validate_mechanism_graph(
-    value: dict[str, Any],
-    artifact_path: Path,
-) -> dict[str, Any]:
-    _validate_objective_binding(value["objective"], str(artifact_path))
-    components = {component["id"]: component for component in value["components"]}
-    _require(
-        len(components) == len(value["components"]),
-        f"{artifact_path}: duplicate component identity",
-    )
-    for component in components.values():
-        if component["role"] != "open-codec":
-            _require(
-                component["scoreCreditBytes"] == 0,
-                f"{artifact_path}: non-codec component received score credit",
-            )
-        for evidence in component["evidence"]:
-            _project_file_reference(
-                evidence,
-                f"{artifact_path}: component {component['id']}",
-            )
-
-    interaction_ids: set[str] = set()
-    for interaction in value["interactions"]:
-        _require(
-            interaction["id"] not in interaction_ids,
-            f"{artifact_path}: duplicate interaction identity",
-        )
-        interaction_ids.add(interaction["id"])
-        _require(
-            set(interaction["components"]).issubset(components),
-            f"{artifact_path}: interaction references an unknown component",
-        )
-        if interaction["sharedProbabilityBoundary"] or interaction["overlappingCost"]:
-            _require(
-                interaction["jointReplayRequired"],
-                f"{artifact_path}: shared boundary or cost requires joint replay",
-            )
-
-    composition = value["composition"]
-    selected = [components[component_id] for component_id in composition["componentIds"]]
-    _require(
-        len(selected) == len(composition["componentIds"]),
-        f"{artifact_path}: composition references an unknown component",
-    )
-    exact_replay = composition["status"] == "exact-replay-present"
-    _require(
-        exact_replay == (composition["jointReplay"] is not None),
-        f"{artifact_path}: exact composition status differs from joint replay",
-    )
-    if exact_replay:
-        _require(
-            composition["candidateId"] is not None and selected,
-            f"{artifact_path}: exact composition lacks candidate or components",
-        )
-        _require(
-            not any(component["closedTeacherDependency"] for component in selected),
-            f"{artifact_path}: exact prize composition retains a closed teacher",
-        )
-        _project_receipt_reference(
-            composition["jointReplay"],
-            "gamma.enwiki9.run-receipt.v1",
-            f"{artifact_path}: joint replay",
-        )
-    if any(component["state"] == "retired" for component in selected):
-        _require(
-            composition["status"] == "prohibited",
-            f"{artifact_path}: composition includes a retired component",
-        )
-    if composition["status"] == "prohibited":
-        _require(
-            composition["candidateId"] is None,
-            f"{artifact_path}: prohibited composition names a candidate",
-        )
-    return {
-        "graphId": value["graphId"],
-        "components": len(components),
-        "compositionStatus": composition["status"],
-    }
-
-
 def validate_search_policy() -> dict[str, Any]:
     path = CONTRACT_ROOT / "search-policy.json"
     value = load_json(path)
@@ -1460,8 +1376,6 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_experiment_contract(value, artifact_path)
     elif schema_id == "gamma.enwiki9.experiment-result.v1":
         result = _validate_experiment_result(value, artifact_path)
-    elif schema_id == "gamma.enwiki9.mechanism-graph.v1":
-        result = _validate_mechanism_graph(value, artifact_path)
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
         result = _validate_resource_guard(value, artifact_path)
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":

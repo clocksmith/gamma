@@ -1,9 +1,40 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Fixed decoder-visible DELTA-MIDAS probe is terminal negative
+
+The first prospective successor to the deep-residual receipt is terminal
+`REJECT`. Candidate `delta_midas_decoder_feature_probe_65536_q0_v1` froze one
+`4,096`-weight hashed-linear model, four normalized online passes, chronological
+train/validation/test partitions, int16 replay, an `8,200`-byte payload ceiling,
+and a one-segment shifted-label control before execution.
+
+The experiment was causally valid but lost `887.0184641356755` ideal bits on
+validation and `1,080.7027626223207` on sealed test. Every test third was
+negative, only `13` of `171` test segments improved, and the aligned treatment
+was `696.9629361023035` bits worse than the shifted-label control. See the
+[`decision`](../results/delta_midas_decoder_feature_probe_65536_q0_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260815T162913Z_047c55d5ea.json).
+
+This retires the exact feature map, optimizer, clipping, partition,
+quantization, and O-offset replay contract without sweeps. It does not refute
+the measured deep teacher residual. Any recurrent or low-rank successor must be
+a materially new, prospectively bound mechanism; it cannot be a parameter retry
+or inherit archive bytes, transfer, package economics, or score credit.
+
+A source-bound design audit confirms that LibNC exposes stable `NCParam` names
+at the midpoint backward callback (`embed`, output head, attention, feed-forward,
+normalization, and per-layer parameters). The next justified teacher action is
+therefore one prospectively frozen F-arm midpoint-only named gradient/update
+projection, summarized by group and chronological third. Its only possible
+consequence is selection of one later group-ablation arm; gradient magnitude is
+not itself probability attribution. No such teacher rerun is active or credited.
+
 ## 2026-08-15 - DELTA-MIDAS deep residual survives exact retained-trace gate
 
-The terminal production attribution closes the output-head theory. On its
-same-run population, rebuild-only `K` is `148,141` bytes, full midpoint `F` is
+Terminal candidate
+`nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1` closes the
+output-head theory. On its same-run population, rebuild-only `K` is `148,141` bytes, full midpoint `F` is
 `143,414`, and output-head-only `O` is `148,709`. Thus F beats K by `4,727`
 bytes while O is `568` bytes worse than K. The earlier bridge reports `4,726`
 because its parent archive is one byte smaller; those values come from
