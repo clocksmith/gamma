@@ -95,6 +95,9 @@ the declared per-encode log, so live progress and failures remain inspectable.
 Before reading q2's low-precision summary, q3 requires its decision, detail, and
 terminal incomplete-evidence reflection to match the prospectively hash-bound
 inputs and requires that reflection to authorize `retry`.
+Its incremental source archive uses the same resolved closure and canonical tar
+ownership, mode, and timestamp metadata so filesystem metadata cannot change the
+artifact hash.
 
 `enwiki9_python_source_closure.py` cannot launch a process. It recursively
 resolves imports that exist under `tools/`, emits their paths and SHA-256

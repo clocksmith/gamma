@@ -147,7 +147,17 @@ def source_package(path: Path) -> None:
     tar_path = path.with_suffix("")
     with tarfile.open(tar_path, "w") as archive:
         for member in members:
-            archive.add(member, arcname=member.relative_to(ROOT))
+            info = archive.gettarinfo(
+                str(member), arcname=member.relative_to(ROOT).as_posix()
+            )
+            info.uid = 0
+            info.gid = 0
+            info.uname = ""
+            info.gname = ""
+            info.mtime = 0
+            info.mode = 0o644
+            with member.open("rb") as stream:
+                archive.addfile(info, stream)
     path.write_bytes(
         lzma.compress(tar_path.read_bytes(), preset=9 | lzma.PRESET_EXTREME)
     )
