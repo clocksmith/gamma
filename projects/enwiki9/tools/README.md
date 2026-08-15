@@ -22,6 +22,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 |---|---|
 | Adaptive experiment loop | `enwiki9_lab.py` |
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
+| Project-local Python source closure | `enwiki9_python_source_closure.py` |
 | Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
 | Objective and receipt validation | `research_contracts.py` |
 | Count and stage a dependency closure | `enwiki9_dependency_closure.py` |
@@ -85,6 +86,12 @@ revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
 `run_with_rss_guard.py`; the experiment must declare its candidate result tree
 as guarded scratch. Its q3 materializer cannot launch a process and changes only
 the named-gradient squared-energy reduction.
+
+`enwiki9_python_source_closure.py` cannot launch a process. It recursively
+resolves imports that exist under `tools/`, emits their paths and SHA-256
+digests, and lets multi-module experiment runners use the same prospectively
+declared source set in their terminal source package. Non-Python data inputs
+remain explicit additions to the experiment and package.
 
 `enwiki9_dependency_closure.py` cannot launch a compressor. It copies one exact
 candidate tree into a new bundle, rejects symlinks and special files, hashes and
