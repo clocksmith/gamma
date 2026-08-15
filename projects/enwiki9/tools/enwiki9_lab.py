@@ -719,9 +719,25 @@ def enqueue_job(
     purpose: str,
     force: bool,
     tags: list[str],
+    experiment: pathlib.Path | None,
+    runner: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     ensure_layout()
     candidate_meta(candidate_id)
+    require_terminal_reflections(candidate_id, "enter another gate")
+    _proposal_path, proposal = candidate_proposal(candidate_id)
+    inferred_path, _experiment_value, experiment_reference = (
+        load_proposal_experiment(proposal)
+    )
+    if experiment is not None:
+        explicit_path, _explicit_value, explicit_reference = (
+            load_adaptive_experiment(experiment)
+        )
+        if explicit_reference != experiment_reference:
+            raise ValueError(
+                f"explicit experiment {explicit_path} differs from proposal binding "
+                f"{inferred_path}"
+            )
     revision_path, revision = candidate_revisions.ensure_current_revision(candidate_id)
     if gate_size <= 0:
         raise ValueError("gate size must be positive")
@@ -736,11 +752,14 @@ def enqueue_job(
     priority_value = default_priority(gate_size) if priority is None else priority
     job_id = f"{compact_utc()}_{uuid.uuid4().hex[:10]}"
     job = {
-        "schema": "enwiki9_adaptive_job_v2",
+        "schema": "gamma.enwiki9.adaptive-job.v3",
         "job_id": job_id,
         "candidate_id": candidate_id,
         "candidate_tree_sha256": revision["candidateTreeSha256"],
         "candidate_revision": candidate_revisions.receipt_reference(revision_path),
+        "experiment": experiment_reference,
+        "proposal_id": proposal["proposal_id"],
+        "runner": artifact_reference(TRIAGE if runner is None else runner),
         "gate_size": gate_size,
         "priority": priority_value,
         "purpose": purpose,
@@ -751,7 +770,13 @@ def enqueue_job(
     if archive_ceiling is not None:
         job["archive_ceiling"] = archive_ceiling
     filename = f"{999 - max(0, min(999, priority_value)):03d}_{job_id}.json"
-    atomic_json(QUEUE_DIRS["pending"] / filename, job)
+    destination = QUEUE_DIRS["pending"] / filename
+    atomic_json(destination, job)
+    try:
+        research_contracts.validate_artifact(destination)
+    except Exception:
+        destination.unlink(missing_ok=True)
+        raise
     return job
 
 
@@ -765,6 +790,7 @@ def enqueue_tool_job(
     purpose: str,
     force: bool,
     tags: list[str],
+    experiment: pathlib.Path | None,
 ) -> dict[str, Any]:
     if purpose not in {"diagnostic", "infrastructure", "oracle"}:
         raise ValueError(
@@ -782,6 +808,8 @@ def enqueue_tool_job(
         purpose=purpose,
         force=force,
         tags=tags,
+        experiment=experiment,
+        runner=tool_path,
     )
     pending_path = next(
         path
@@ -791,6 +819,7 @@ def enqueue_tool_job(
     job["tool"] = tool_path.relative_to(ROOT).as_posix()
     job["tool_args"] = tool_args
     atomic_json(pending_path, job)
+    research_contracts.validate_artifact(pending_path)
     return job
 
 
@@ -863,6 +892,7 @@ def discover_candidates(
                 purpose="adaptive_discovery",
                 force=False,
                 tags=["adaptive"],
+                experiment=None,
             )
             existing.add(job_key(candidate_id, gate))
     return discovered
@@ -994,12 +1024,33 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
         atomic_json(running_path, job)
         os.replace(running_path, destination)
         return job
+    if job.get("schema") == "gamma.enwiki9.adaptive-job.v3":
+        try:
+            research_contracts.validate_artifact(running_path)
+        except Exception as exc:
+            job.update(
+                {
+                    "state": "failed",
+                    "finished_at": utc_now(),
+                    "returncode": None,
+                    "failure": "experiment_contract_validation_failed",
+                    "failure_detail": str(exc),
+                }
+            )
+            destination = QUEUE_DIRS["failed"] / running_path.name
+            atomic_json(running_path, job)
+            os.replace(running_path, destination)
+            return job
     tool = job.get("tool")
     if isinstance(tool, str):
         tool_path = (ROOT / tool).resolve()
         tools_root = (ROOT / "tools").resolve()
         if tools_root not in tool_path.parents or not tool_path.is_file():
             raise ValueError(f"invalid queued tool: {tool}")
+        if job.get("schema") == "gamma.enwiki9.adaptive-job.v3" and artifact_reference(
+            tool_path
+        ) != job.get("runner"):
+            raise ValueError(f"queued tool digest differs: {tool}")
         tool_args = job.get("tool_args", [])
         if not isinstance(tool_args, list) or not all(
             isinstance(value, str) for value in tool_args
@@ -1007,6 +1058,10 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
             raise ValueError("queued tool_args must be a list of strings")
         command = [sys.executable, str(tool_path), *tool_args]
     else:
+        if job.get("schema") == "gamma.enwiki9.adaptive-job.v3" and artifact_reference(
+            TRIAGE
+        ) != job.get("runner"):
+            raise ValueError("candidate triage runner digest differs")
         command = [
             sys.executable,
             str(TRIAGE),
@@ -1034,6 +1089,10 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
             "candidateTreeSha256": job["candidate_tree_sha256"],
             "receipt": job["candidate_revision"],
         },
+        sort_keys=True,
+    )
+    process_environment["GAMMA_ENWIKI9_EXPERIMENT_JSON"] = json.dumps(
+        job.get("experiment"),
         sort_keys=True,
     )
     with tempfile.TemporaryDirectory(prefix=f"gamma-enwiki9-{job_id}-") as temporary:
@@ -1257,6 +1316,11 @@ def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--purpose", default="manual")
     parser.add_argument("--tag", action="append", default=[])
     parser.add_argument("--force", action="store_true")
+    parser.add_argument(
+        "--experiment",
+        type=pathlib.Path,
+        help="prospectively frozen adaptive experiment; must match the proposal binding",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1280,6 +1344,7 @@ def build_parser() -> argparse.ArgumentParser:
     propose.add_argument("--promotion", required=True)
     propose.add_argument("--kill", required=True)
     propose.add_argument("--evidence", action="append", default=[])
+    propose.add_argument("--experiment", type=pathlib.Path, required=True)
     propose.add_argument("--priority", type=int, default=50)
     propose.add_argument(
         "--mechanism-change",
@@ -1529,6 +1594,7 @@ def main() -> int:
                 promotion_condition=args.promotion,
                 kill_condition=args.kill,
                 evidence=args.evidence,
+                experiment=args.experiment,
                 priority=args.priority,
                 mechanism_change=args.mechanism_change,
                 interfaces_exposed=args.interface,
@@ -1605,6 +1671,7 @@ def main() -> int:
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
+                    experiment=args.experiment,
                 )
             print(json.dumps(result, indent=2, sort_keys=True))
             return 0
@@ -1632,6 +1699,7 @@ def main() -> int:
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
+                    experiment=args.experiment,
                 )
             print(json.dumps(result, indent=2, sort_keys=True))
             return 0
@@ -1644,6 +1712,7 @@ def main() -> int:
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,
+                experiment=args.experiment,
             )
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0
@@ -1720,6 +1789,7 @@ def main() -> int:
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,
+                experiment=args.experiment,
             )
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0

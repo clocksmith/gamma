@@ -163,12 +163,26 @@ def create_reflection(
     if reflection_path.exists():
         raise FileExistsError(f"job already has a reflection: {job_id}")
     job_path, job = terminal_job(job_id)
-    if job.get("schema") != "enwiki9_adaptive_job_v2":
+    if job.get("schema") not in {
+        "enwiki9_adaptive_job_v2",
+        "gamma.enwiki9.adaptive-job.v3",
+    }:
         raise ValueError("legacy unbound jobs cannot receive scientific reflection")
     candidate_id = job.get("candidate_id")
     if not isinstance(candidate_id, str):
         raise ValueError("job has no candidate identity")
     revision_path, revision = enwiki9_candidate_revisions.verify_job_binding(job)
+    if job.get("schema") == "gamma.enwiki9.adaptive-job.v3":
+        job_experiment = job.get("experiment")
+        if not isinstance(job_experiment, dict):
+            raise ValueError("v3 job has no experiment binding")
+        if experiment is not None and reference(experiment) != job_experiment:
+            raise ValueError("reflection experiment differs from the job binding")
+        experiment_reference = job_experiment
+    else:
+        if experiment is None:
+            raise ValueError("v2 job reflection requires an explicit experiment")
+        experiment_reference = reference(experiment)
     measurement_values, assertions, assertion_sources = (
         _parse_measurement_assertions(measurements)
     )
@@ -187,7 +201,7 @@ def create_reflection(
             "receipt": reference(revision_path),
         },
         "job": reference(job_path),
-        "experiment": reference(experiment) if experiment is not None else None,
+        "experiment": experiment_reference,
         "evidence": [reference(path) for path in evidence_paths],
         "validity": {
             "valid": valid,
@@ -272,6 +286,24 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
         latest[reflection["candidateId"]] = reflection
     rows: list[dict[str, Any]] = []
     for proposal in proposals:
+        experiment: dict[str, Any] | None = None
+        experiment_error: str | None = None
+        experiment_reference = proposal.get("experiment")
+        try:
+            if proposal.get("schema") != "gamma.enwiki9.algorithm-proposal.v2":
+                raise ValueError("proposal has no structured v2 experiment")
+            if not isinstance(experiment_reference, dict):
+                raise ValueError("proposal has no experiment reference")
+            _experiment_path, experiment = research_contracts.validate_project_reference(
+                experiment_reference,
+                {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+                f"proposal {proposal.get('proposal_id')}",
+            )
+            if experiment["proposalId"] != proposal.get("proposal_id"):
+                raise ValueError("proposal and experiment identities differ")
+        except Exception as exc:
+            experiment = None
+            experiment_error = str(exc)
         parent = proposal.get("parent")
         reflection = latest.get(parent) if isinstance(parent, str) else None
         decision = (
@@ -282,22 +314,59 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if reflection is not None
             else None
         )
-        expected_net = int(proposal.get("expected_savings_bytes", 0)) - int(
-            proposal.get("max_program_bytes", 0)
+        transfer_retention = (
+            reflection["measurements"]["transferRetention"]
+            if reflection is not None
+            else None
         )
+        runtime_ratio = (
+            reflection["measurements"]["runtimeRatio"]
+            if reflection is not None
+            else None
+        )
+        memory_ratio = (
+            reflection["measurements"]["memoryRatio"]
+            if reflection is not None
+            else None
+        )
+        budget = experiment["budget"] if experiment is not None else {}
+        search = experiment["search"] if experiment is not None else {}
+        expected_net = int(
+            budget.get(
+                "expectedNetSavingsBytes",
+                int(proposal.get("expected_savings_bytes", 0))
+                - int(proposal.get("max_program_bytes", 0)),
+            )
+        )
+        maximum_package = int(
+            budget.get("maximumAddedPackageBytes", proposal.get("max_program_bytes", 0))
+        )
+        uncertainty_risk = float(search.get("uncertaintyRisk", 1.0))
+        interaction_risk = float(search.get("interactionRisk", 1.0))
         operational = proposal.get("operational_status", "actionable") == "actionable"
         parent_evidence_valid = (
             parent is None
             or (reflection is not None and reflection["validity"]["valid"])
         )
-        eligible = operational and parent_evidence_valid
+        experiment_valid = experiment is not None
+        eligible = operational and experiment_valid and parent_evidence_valid
         rank_key = (
             int(eligible),
+            int(experiment_valid),
             int(reflection is not None and reflection["validity"]["valid"]),
             policy["decisionRank"][decision],
             int(net_saved is not None),
             float(net_saved or 0),
+            int(transfer_retention is not None),
+            float(transfer_retention or 0),
+            int(runtime_ratio is not None),
+            -float(runtime_ratio or search.get("expectedRuntimeRatio", 1.0)),
+            int(memory_ratio is not None),
+            -float(memory_ratio or search.get("expectedMemoryRatio", 1.0)),
             expected_net,
+            -maximum_package,
+            -uncertainty_risk,
+            -interaction_risk,
             int(proposal.get("search_priority", proposal.get("priority", 0))),
             str(proposal.get("proposal_id", "")),
         )
@@ -308,7 +377,15 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "parentReflection": reflection.get("_path") if reflection else None,
                 "parentDecision": decision,
                 "assertedNetBytesSaved": net_saved,
+                "assertedTransferRetention": transfer_retention,
+                "assertedRuntimeRatio": runtime_ratio,
+                "assertedMemoryRatio": memory_ratio,
                 "expectedNetBytes": expected_net,
+                "maximumAddedPackageBytes": maximum_package,
+                "uncertaintyRisk": uncertainty_risk,
+                "interactionRisk": interaction_risk,
+                "experimentValid": experiment_valid,
+                "experimentError": experiment_error,
                 "eligible": eligible,
                 "operationalStatus": proposal.get(
                     "operational_status", "actionable"

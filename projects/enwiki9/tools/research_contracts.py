@@ -23,6 +23,9 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.adaptive-experiment-contract.v1": (
         CONTRACT_ROOT / "adaptive-experiment-contract.schema.json"
     ),
+    "gamma.enwiki9.adaptive-experiment-result.v1": (
+        CONTRACT_ROOT / "adaptive-experiment-result.schema.json"
+    ),
     "gamma.enwiki9.adaptive-job.v3": CONTRACT_ROOT / "adaptive-job.schema.json",
     "gamma.enwiki9.algorithm-proposal.v2": (
         CONTRACT_ROOT / "algorithm-proposal.schema.json"
@@ -660,6 +663,7 @@ def _validate_adaptive_job(
         experiment["proposalId"] == value["proposal_id"],
         f"{artifact_path}: job and experiment proposal identities differ",
     )
+    _project_file_reference(value["runner"], f"{artifact_path}: runner")
     return {
         "jobId": value["job_id"],
         "candidateId": value["candidate_id"],
@@ -766,6 +770,107 @@ def _predicate_pass(observed: Any, operator: str, threshold: Any) -> bool:
         raise ValueError(
             f"cannot compare observed {observed!r} {operator} {threshold!r}"
         ) from exc
+
+
+def _validate_adaptive_experiment_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    candidate = value["candidateRevision"]
+    _require(
+        candidate["candidateId"] == value["candidateId"],
+        f"{artifact_path}: candidate revision identifies another candidate",
+    )
+    _, revision = _project_receipt_reference(
+        candidate["receipt"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    _require(
+        revision["candidateId"] == candidate["candidateId"]
+        and revision["candidateTreeSha256"] == candidate["candidateTreeSha256"],
+        f"{artifact_path}: candidate revision identity differs from receipt",
+    )
+    _require(
+        value["evidenceClass"] == experiment["evidenceClass"],
+        f"{artifact_path}: evidence class differs from the experiment",
+    )
+    measurement_ids = [item["id"] for item in experiment["measurements"]]
+    _require(
+        set(value["measurements"]) == set(measurement_ids),
+        f"{artifact_path}: result measurements differ from the contract",
+    )
+
+    def validate_evaluations(contract_field: str, result_field: str) -> bool:
+        predicates = experiment[contract_field]
+        evaluations = value[result_field]
+        _require(
+            len(predicates) == len(evaluations),
+            f"{artifact_path}: predicate evaluation count differs",
+        )
+        expected_rows: list[dict[str, Any]] = []
+        for predicate in predicates:
+            observed = value["measurements"][predicate["measurement"]]
+            expected_rows.append(
+                {
+                    **predicate,
+                    "observed": observed,
+                    "passed": _predicate_pass(
+                        observed,
+                        predicate["operator"],
+                        predicate["threshold"],
+                    ),
+                }
+            )
+        _require(
+            evaluations == expected_rows,
+            f"{artifact_path}: predicate evaluations differ from frozen contract",
+        )
+        return all(row["passed"] for row in expected_rows)
+
+    promotion_pass = validate_evaluations(
+        "promotionPredicates", "promotionPredicates"
+    )
+    kill_pass = validate_evaluations("killPredicates", "killPredicates")
+    _require(
+        value["promotionPass"] == promotion_pass and value["killPass"] == kill_pass,
+        f"{artifact_path}: aggregate predicate outcomes differ",
+    )
+    _require(
+        not (promotion_pass and kill_pass),
+        f"{artifact_path}: promotion and kill predicates both pass",
+    )
+    expected_decision = (
+        "authorize-successor"
+        if promotion_pass
+        else "retire"
+        if kill_pass
+        else "retry"
+    )
+    _require(
+        value["decision"] == expected_decision,
+        f"{artifact_path}: decision differs from predicate outcomes",
+    )
+    artifact_ids = [item["id"] for item in value["artifacts"]]
+    _require(
+        len(artifact_ids) == len(set(artifact_ids)),
+        f"{artifact_path}: duplicate artifact identity",
+    )
+    for item in value["artifacts"]:
+        _project_file_reference(item, f"{artifact_path}: artifact {item['id']}")
+    return {
+        "candidateId": value["candidateId"],
+        "experimentId": experiment["experimentId"],
+        "decision": value["decision"],
+        "promotionPass": promotion_pass,
+        "killPass": kill_pass,
+    }
 
 
 def _validate_experiment_result(
@@ -1625,6 +1730,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
     _validate_schema(value, SCHEMA_PATHS[schema_id])
     if schema_id == "gamma.enwiki9.adaptive-experiment-contract.v1":
         result = _validate_adaptive_experiment_contract(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.adaptive-experiment-result.v1":
+        result = _validate_adaptive_experiment_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.adaptive-job.v3":
         result = _validate_adaptive_job(value, artifact_path)
     elif schema_id == "gamma.enwiki9.algorithm-proposal.v2":
