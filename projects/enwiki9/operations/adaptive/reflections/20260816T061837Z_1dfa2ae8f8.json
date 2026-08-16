@@ -1,0 +1,102 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The proposed BF16 affine-product boundary cannot explain the sparse FF2 mismatch because the complete gain vector is exactly unity at this update; the parent and retry residual and FF2 artifacts are byte-identical."
+  },
+  "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:b914054b9184437491fa727ad50609c5ac1d832465adcac50621da187fc64adf",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/20260816T061820040240Z_b914054b9184.json",
+      "sha256": "sha256:d00ef7d9ef61ef8132ee445d4e582579cdd79920285df91f210a1eaecffbc9e2"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a direct production top-layer adjoint attribution gate. It must determine whether the open 2,097,152-word residual matches the source adjoint before any further arithmetic retry is authorized.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5a1e60ab3d85fc069fae03e19280190d670afbb59ba768a8055f0d46689ddd5d"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:2d80dfe1a3dece2e8cf5d0fb32f510dbc5b6939d3cc285db930a75e3ebe2d258"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:ab2e8a4b294307b7a06494c71e6673b073d5a53b0c8383f64276b852ac8281be"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:95005e164394df01e192f305a1ad47499c723ee655c79dc9e5ab7e24b1c92ef5"
+  },
+  "generatedUtc": "2026-08-16T06:33:56+00:00",
+  "hypothesis": {
+    "rationale": "The retry reproduced the parent normalization-input residual and ff2_19 artifact hashes byte-for-byte and retained the same 184 mismatches. The digest-bound initial ln_g_40 tensor contains BF16 1.0 in all 1,024 coordinates, so rounding incoming-gradient times gain was a numerical identity.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T061837Z_1dfa2ae8f8.json",
+    "sha256": "sha256:84d61a9e4eb672fa936c834f54e7d501886c3e76763baad6fe8bb404ace3c522"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not retry BF16 rounding of final RMSNorm incoming-gradient times gain at this update: ln_g_40 is exactly one everywhere and the boundary is a proven no-op."
+    ],
+    "transferableLessons": [
+      "Retain the exact forward, output-head, final-normalization parameter gradients, bias projection, and deterministic FF2 reconstruction while retiring the unity-gain BF16 boundary as causally inert.",
+      "The next smallest decisive evidence is a zero-credit production capture of the actual post-FF2 residual-join adjoint, compared word-for-word with the open final-normalization input residual before changing more arithmetic."
+    ],
+    "uncertainties": [
+      "The 184 mismatches remain localized to three output coordinates but are not yet separated between the open per-sample normalization adjoint and FF2 matmul reduction. No deeper backward, recursive training, compression, package, or Hutter credit follows."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json",
+        "sha256": "sha256:5a1e60ab3d85fc069fae03e19280190d670afbb59ba768a8055f0d46689ddd5d"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t061837z_1dfa2ae8f8",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen BF16 affine-upstream retry completed both all-stream populations under its bound revision and guards, retained delayed comparator use, emitted every declared artifact, and preserved deterministic replay and live controls."
+    ],
+    "valid": true
+  }
+}

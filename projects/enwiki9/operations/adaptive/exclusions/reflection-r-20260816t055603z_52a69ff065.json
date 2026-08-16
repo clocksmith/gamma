@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T055603Z_52a69ff065.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t055603z_52a69ff065",
+  "failure": "The 128-sample output-head matrix-gradient reduction contract does not transfer byte-exactly to the top-layer FF2 matmul backward. With exact fresh operands and deterministic replay, the remaining error is localized to FF2 operation-specific product or reduction semantics.",
+  "mechanism": "Retain the exact output-head and centered final-normalization backward, expose each freshly generated BF16 layer-19 GEGLU output, and reduce its outer product with the centered residual into the complete ff2_19 parameter gradient using the already proved 128-sample matmul reduction.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T06:10:18+00:00",
+  "retired_dimensions": [
+    "Directly transferring the output-head 128-sample matmul reduction to ff2_19 without an FF2-specific arithmetic boundary is insufficient."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

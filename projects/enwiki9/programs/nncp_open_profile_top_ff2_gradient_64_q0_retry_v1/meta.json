@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "BF16-upstream production top-layer FF2 parameter-gradient retry",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Rounding the final RMSNorm incoming-gradient times gain product to BF16 before the frozen centered backward eliminates the sparse coordinate-localized ff2_19 mismatches while preserving every inherited exact tail.",
+  "id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "measured": {
+    "reflections": {
+      "20260816T061837Z_1dfa2ae8f8": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json",
+        "sha256": "sha256:b026cff744099c08468a382220a8a02772527a14cfeb32f978f482afb460c7e1",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.json",
+      "sha256": "sha256:95005e164394df01e192f305a1ad47499c723ee655c79dc9e5ab7e24b1c92ef5"
+    },
+    "interfaces_exposed": [
+      "BF16 affine upstream plus centered final RMSNorm backward plus open GEGLU output -> complete ff2_19 parameter gradient"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+    "proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+    "retired_neighborhoods": [
+      "No tolerance, comparator-derived correction, FF2 activation residual, GEGLU backward, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Freeze a direct production top-layer adjoint attribution gate. It must determine whether the open 2,097,152-word residual matches the source adjoint before any further arithmetic retry is authorized."
+}

@@ -1,5 +1,42 @@
 # enwiki9 Research Register
 
+## 2026-08-16 - The first top-layer FF2 reduction is narrowly refuted
+
+Candidate `nncp_open_profile_top_ff2_gradient_64_q0_v1` retained the complete
+exact output-head and final-normalization tails, exposed fresh BF16 layer-19
+GEGLU outputs, and applied the promoted 128-sample output-head matrix-gradient
+reduction directly to the complete `ff2_19` outer product. Both 32-stream
+executions were byte-identical, every inherited comparator remained exact,
+both negative controls changed, and dependency, source, memory, scratch, and
+finalization guards passed.
+
+The FF2 claim itself failed exactly: 184 of 3,145,728 retained BF16 words
+differed, with maximum absolute error `9.5367431640625e-07`. This valid result
+localizes the remaining discrepancy to operation-specific FF2 product or
+reduction semantics. It retires direct reuse of the output-head reduction
+without an FF2-specific arithmetic boundary; it does not weaken exact parity
+or authorize tolerance. See the
+[`decision`](../results/nncp_open_profile_top_ff2_gradient_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_top_ff2_gradient_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_profile_top_ff2_gradient_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T055603Z_52a69ff065.json).
+
+The first immutable retry tested a uniform BF16 boundary after the final
+RMSNorm incoming-gradient times gain product. It was a valid numerical no-op:
+the digest-bound initial `ln_g_40` tensor is BF16 `1.0` in every coordinate,
+and the retry reproduced both the normalization-input residual and `ff2_19`
+gradient artifact hashes byte-for-byte, including the same mismatch set. This
+retires that boundary at the selected update. See its
+[`decision`](../results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json).
+
+This experiment has zero Hutter objective credit. The next justified gate is
+a zero-credit source capture of the actual production post-FF2 residual-join
+adjoint. It must compare that complete per-sample tensor with the open
+normalization-input residual before another arithmetic retry is authorized.
+
 ## 2026-08-16 - The complete final RMSNorm backward tail is open and exact
 
 The first `nncp_open_profile_final_norm_backward_64_q0_v1` execution generated

@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t061837z_1dfa2ae8f8",
+  "failure": "The proposed BF16 affine-product boundary cannot explain the sparse FF2 mismatch because the complete gain vector is exactly unity at this update; the parent and retry residual and FF2 artifacts are byte-identical.",
+  "mechanism": "Preserve every forward, output-head, gain-gradient, centered normalization, and FF2 reduction operation, but round the per-element final RMSNorm incoming-gradient times gain product to BF16 before calculating the centered input residual.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T06:33:57+00:00",
+  "retired_dimensions": [
+    "Do not retry BF16 rounding of final RMSNorm incoming-gradient times gain at this update: ln_g_40 is exactly one everywhere and the boundary is a proven no-op."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}
