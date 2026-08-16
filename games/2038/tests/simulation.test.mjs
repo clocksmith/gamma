@@ -1458,6 +1458,38 @@ test("latest Production snapshot governs later powered and offline rules", async
   assert.equal(match.finalMandate(player).offlinePenalty, 1);
 });
 
+test("powered Facility Mandate probe scores only the latest Production snapshot", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      seed: "powered-facility-mandate-probe",
+      rulesVariant: { finalPoweredFacilityMandate: 1 }
+    },
+    () => {}
+  );
+  const player = match.players[0];
+  const first = match.board.find((tile) => tile.category === "cloud");
+  const second = match.board.find((tile) => tile.category === "capital");
+  player.mandate = 5;
+  player.facilities = [
+    { id: "probe-powered", tileId: first.instanceId, category: "cloud", powered: false },
+    { id: "probe-offline", tileId: second.instanceId, category: "capital", powered: true }
+  ];
+  player.latestProductionSnapshot = {
+    round: 4,
+    poweredFacilityIds: ["probe-powered"],
+    offlineFacilityIds: ["probe-offline"],
+    powerSupply: 1,
+    powerDemandSatisfied: 1
+  };
+
+  assert.deepEqual(match.finalMandate(player), {
+    score: 5,
+    poweredFacilityMandate: 1,
+    offlinePenalty: 1
+  });
+});
+
 test("Fusion consumes the single shared project marker", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "single-fusion-marker" },
