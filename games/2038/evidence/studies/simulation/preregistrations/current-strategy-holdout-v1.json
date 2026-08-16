@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "current-strategy-holdout-v1",
+  "registeredBeforeResults": true,
+  "question": "Do fresh-seed Trust Governor and Power Broker champions restore current-rule strategy validity without creating a new profile, faction, seat, backend, or winning-path failure?",
+  "sourceEvidence": "2026-08-15-current-strategy-evolution-training",
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/2026-08-15-current-power-evolution-v1.raw.json",
+      "sha256": "be77914d441b9b7b46e18c5b1be9ce82c5f012cddc8b64595e5e038c4ba9212a",
+      "profileId": "power_broker"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 6000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-current-strategy-holdout-v1",
+  "selectionRule": {
+    "profilePromotion": "A champion may replace its authored profile only if fresh seeds improve its competitiveness, the four-player profile range passes, and no faction, seat, backend, interaction, pairwise, diversity, fallback, forced-no-op, or three/five-player guard regresses beyond its registered bound.",
+    "profileRejection": "Reject a champion that wins by abandoning its declared identity, becomes dominant, transfers the failure to another strategy, or does not generalize across weighted and greedy regimes.",
+    "rulesBoundary": "This study can repair the deterministic evidence ecology but cannot select a physical rule change.",
+    "nextRuleTest": "If competitive champions still need to avoid Influence or Power behavior, isolate the relevant Core Action or Default-profile contract in a separately preregistered one-lever rules study."
+  },
+  "surfaceAudit": {
+    "physicalRules": "unchanged",
+    "canonicalProfiles": "unchanged before selection",
+    "simulator": "existing fingerprinted profile override path",
+    "browser": "unchanged",
+    "tests": "no behavior change before selection"
+  }
+}
