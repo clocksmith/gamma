@@ -22,6 +22,7 @@ const report = await runExperiment({
   mode: input.mode || "strategy-evolution",
   seed: input.seed,
   playerCount: input.players,
+  playerCounts: input["player-counts"],
   runs: input.runs,
   runsPerSeat: input["runs-per-seat"],
   targetProfileId: input.profile,
@@ -30,6 +31,7 @@ const report = await runExperiment({
   magnitude: input.magnitude,
   backendId: input.backend,
   targetWinShare: input["target-win-share"],
+  opponentCoverage: input["opponent-coverage"],
   iterations: input.iterations,
   targetAgiRate: input["target-agi-rate"],
   profileIds: input.profiles?.split(",").filter(Boolean)

@@ -275,6 +275,8 @@ export async function createReportIdentity({
     generations: report.generations ?? null,
     population: report.population ?? null,
     runsPerSeat: report.runsPerSeat ?? null,
+    opponentCoverage: report.opponentCoverage ?? null,
+    targetWinShare: report.targetWinShare ?? null,
     iterations: report.iterations ?? null,
     runsPerVariant: report.runsPerVariant ?? null,
     runsPerMatchup: report.runsPerMatchup ?? null,

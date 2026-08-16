@@ -27,6 +27,18 @@ function unitInterval(value, label) {
   return parsed;
 }
 
+function strategyTarget(value) {
+  if (value === undefined) return undefined;
+  if (String(value).toLowerCase() === "neutral") return "neutral";
+  return unitInterval(value, "targetWinShare");
+}
+
+function strategyPlayerCounts(value) {
+  if (value === undefined) return undefined;
+  const values = Array.isArray(value) ? value : String(value).split(",");
+  return values.map((entry) => integer(entry, undefined, 3, 5, "playerCounts"));
+}
+
 export async function runExperiment(options = {}, onProgress) {
   const mode = options.mode || "tournament";
   if (mode === "tournament") return createSimulation(options, onProgress);
@@ -37,10 +49,12 @@ export async function runExperiment(options = {}, onProgress) {
       population: integer(options.population, 6, 2, 50, "population"),
       runsPerSeat: integer(options.runsPerSeat ?? options.runs, 12, 1, 1000, "runsPerSeat"),
       playerCount: integer(options.playerCount, 4, 3, 5, "playerCount"),
+      playerCounts: strategyPlayerCounts(options.playerCounts),
       seed: options.seed,
       magnitude: options.magnitude === undefined ? undefined : Number(options.magnitude),
       backendId: options.backendId,
-      targetWinShare: unitInterval(options.targetWinShare, "targetWinShare"),
+      targetWinShare: strategyTarget(options.targetWinShare),
+      opponentCoverage: options.opponentCoverage,
       rulesVariant: options.rulesVariant,
       signal: options.signal,
       onProgress
