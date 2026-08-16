@@ -21,7 +21,11 @@
           "betrayWeight": 0.7,
           "reciprocityWeight": 0.5
         },
-        "resourceValues": { "runway": 1, "compute": 1.2, "researchProtection": 1 },
+        "resourceValues": {
+          "runway": 1,
+          "compute": 1.2,
+          "researchProtection": 1
+        },
         "objectives": [
           "Avoid compulsory action loops.",
           "Maintain enough ${terms.resources.compute} for ${terms.actions.research} and ${terms.actions.deploy}.",
@@ -52,18 +56,42 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.runway", "operator": "lte", "value": 2 }],
-            "target": { "actionId": "fund" },
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
             "multiplier": 3
           },
           {
-            "when": [{ "path": "self.unpoweredFacilities", "operator": "gt", "value": 0 }],
-            "target": { "decisionIdPrefix": "build_generator_clean_infrastructure" },
+            "when": [
+              {
+                "path": "self.unpoweredFacilities",
+                "operator": "gt",
+                "value": 0
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator_clean_infrastructure"
+            },
             "multiplier": 4
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 3
           }
         ]
@@ -89,7 +117,11 @@
           "betrayWeight": 1.1,
           "reciprocityWeight": 0.25
         },
-        "resourceValues": { "runway": 0.8, "compute": 1.8, "researchProtection": 0.6 },
+        "resourceValues": {
+          "runway": 0.8,
+          "compute": 1.8,
+          "researchProtection": 0.6
+        },
         "objectives": [
           "Maximize ${terms.playerTracks.capability} gained per ${terms.actions.research} action.",
           "${terms.actions.fund} ${terms.resources.compute} recovery when ${terms.actions.research} becomes impossible.",
@@ -120,13 +152,29 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.compute", "operator": "lte", "value": 1 }],
-            "target": { "actionId": "fund" },
+            "when": [
+              {
+                "path": "self.compute",
+                "operator": "lte",
+                "value": 1
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
             "multiplier": 2
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 2.5
           }
         ]
@@ -152,31 +200,35 @@
           "betrayWeight": 0.55,
           "reciprocityWeight": 0.6
         },
-        "resourceValues": { "runway": 1.5, "compute": 1, "researchProtection": 0.8 },
+        "resourceValues": {
+          "runway": 1.5,
+          "compute": 1,
+          "researchProtection": 0.8
+        },
         "objectives": [
           "Establish two connected, powered Facilities without overbuilding.",
           "Use the engine to cross ${terms.playerTracks.capability} and ${terms.playerTracks.customer} ${terms.playerTracks.mandate} thresholds.",
           "Keep enough late tempo and ${terms.resources.compute} for Fusion, ${terms.technology.agentSwarm}, or a paid ${terms.systems.agi} Dossier."
         ],
         "actionWeights": {
-          "fund": 2.4,
-          "research": 3.2,
-          "build": 3.8,
-          "organize": 0.8,
-          "deploy": 3,
-          "influence": 0.9,
-          "mega_cluster": 4,
-          "reorganization": 1.3,
-          "open_weights": 3.5,
-          "narrative_capture": 1.5,
-          "agent_swarm": 4,
-          "agi_dossier": 24,
-          "fusion_demonstrator": 6
+          "fund": 2.993,
+          "research": 4.209,
+          "build": 6.53,
+          "organize": 1.222,
+          "deploy": 2.512,
+          "influence": 0.851,
+          "mega_cluster": 4.974,
+          "reorganization": 1.013,
+          "open_weights": 2.987,
+          "narrative_capture": 1.633,
+          "agent_swarm": 3.472,
+          "agi_dossier": 22.006,
+          "fusion_demonstrator": 4.227
         },
         "decisionWeights": {
-          "build_facility_cloud": 2.5,
-          "build_facility_capital": 2,
-          "build_generator_clean_infrastructure": 2
+          "build_facility_cloud": 1.811,
+          "build_facility_capital": 1.821,
+          "build_generator_clean_infrastructure": 2.61
         },
         "consequenceWeights": {
           "poweredFacilities": 8,
@@ -184,23 +236,55 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.unpoweredFacilities", "operator": "gt", "value": 0 }],
-            "target": { "decisionIdPrefix": "build_generator_clean_infrastructure" },
+            "when": [
+              {
+                "path": "self.unpoweredFacilities",
+                "operator": "gt",
+                "value": 0
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator_clean_infrastructure"
+            },
             "multiplier": 6
           },
           {
-            "when": [{ "path": "self.facilities", "operator": "gte", "value": 2 }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 3
           },
           {
-            "when": [{ "path": "self.facilities", "operator": "gte", "value": 2 }],
-            "target": { "actionId": "build" },
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "build"
+            },
             "multiplier": 0.45
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": false }],
-            "target": { "actionId": "research" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": false
+              }
+            ],
+            "target": {
+              "actionId": "research"
+            },
             "multiplier": 1.8
           }
         ]
@@ -226,7 +310,11 @@
           "betrayWeight": 1.7,
           "reciprocityWeight": 0.35
         },
-        "resourceValues": { "runway": 1.4, "compute": 1.2, "researchProtection": 0.7 },
+        "resourceValues": {
+          "runway": 1.4,
+          "compute": 1.2,
+          "researchProtection": 0.7
+        },
         "objectives": [
           "${terms.actions.deploy} immediately at each ${terms.playerTracks.capability} threshold.",
           "${terms.actions.build} ${terms.playerTracks.customer} income.",
@@ -257,13 +345,29 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 8
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": false }],
-            "target": { "actionId": "research" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": false
+              }
+            ],
+            "target": {
+              "actionId": "research"
+            },
             "multiplier": 2
           }
         ]
@@ -289,26 +393,30 @@
           "betrayWeight": 1.009,
           "reciprocityWeight": 0.4
         },
-        "resourceValues": { "runway": 1, "compute": 0.9, "researchProtection": 1.8 },
+        "resourceValues": {
+          "runway": 1,
+          "compute": 0.9,
+          "researchProtection": 1.8
+        },
         "objectives": [
           "Keep ${terms.playerTracks.trust} at four or higher.",
           "Remove ${terms.playerTracks.scrutiny} before it compounds.",
           "Use conservative ${terms.actions.research} and ${terms.actions.deploy} windows."
         ],
         "actionWeights": {
-          "fund": 1.439,
-          "research": 4.28,
-          "build": 0.863,
-          "organize": 0.444,
-          "deploy": 2.594,
-          "influence": 4.065,
-          "mega_cluster": 4.205,
-          "reorganization": 0.891,
-          "open_weights": 2.026,
-          "narrative_capture": 6.12,
-          "agent_swarm": 6.198,
-          "agi_dossier": 11.702,
-          "fusion_demonstrator": 4.137
+          "fund": 1.246,
+          "research": 10.07,
+          "build": 0.591,
+          "organize": 0.372,
+          "deploy": 4.847,
+          "influence": 1.406,
+          "mega_cluster": 12.124,
+          "reorganization": 1.661,
+          "open_weights": 1.981,
+          "narrative_capture": 7.677,
+          "agent_swarm": 2.845,
+          "agi_dossier": 6.861,
+          "fusion_demonstrator": 2.16
         },
         "decisionWeights": {
           "fund_venture": 0.623,
@@ -321,13 +429,29 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.trust", "operator": "lte", "value": 3 }],
-            "target": { "decisionIdPrefix": "influence_gain_trust" },
+            "when": [
+              {
+                "path": "self.trust",
+                "operator": "lte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "influence_gain_trust"
+            },
             "multiplier": 5
           },
           {
-            "when": [{ "path": "self.scrutiny", "operator": "gte", "value": 3 }],
-            "target": { "decisionIdPrefix": "influence_remove_scrutiny" },
+            "when": [
+              {
+                "path": "self.scrutiny",
+                "operator": "gte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "influence_remove_scrutiny"
+            },
             "multiplier": 6
           }
         ]
@@ -353,33 +477,37 @@
           "betrayWeight": 1,
           "reciprocityWeight": 0.7
         },
-        "resourceValues": { "runway": 1.2, "compute": 1.6, "researchProtection": 1.2 },
+        "resourceValues": {
+          "runway": 1.2,
+          "compute": 1.6,
+          "researchProtection": 1.2
+        },
         "objectives": [
           "Reach multiple Capability thresholds while preserving enough Compute to pay every committed Dossier card.",
           "Build public evidence in Capability, powered Facilities, and Trust without revealing every Dossier choice.",
           "Commit Publication when at least two evidence claims are supportable and the final Scrutiny exposure is justified."
         ],
         "actionWeights": {
-          "fund": 7,
-          "research": 9,
-          "build": 10,
-          "organize": 1,
-          "deploy": 8,
-          "influence": 2,
-          "mega_cluster": 1,
-          "reorganization": 1,
-          "open_weights": 6,
-          "narrative_capture": 2,
-          "agent_swarm": 7,
-          "agi_dossier": 60,
-          "fusion_demonstrator": 1
+          "fund": 7.414,
+          "research": 11.081,
+          "build": 10.594,
+          "organize": 1.534,
+          "deploy": 9.787,
+          "influence": 1.526,
+          "mega_cluster": 1.196,
+          "reorganization": 1.76,
+          "open_weights": 4.427,
+          "narrative_capture": 1.868,
+          "agent_swarm": 4.749,
+          "agi_dossier": 40.31,
+          "fusion_demonstrator": 1.117
         },
         "decisionWeights": {
-          "build_facility": 8,
-          "research_stop_4": 3,
-          "deploy_": 5,
+          "build_facility": 7.985,
+          "research_stop_4": 2.972,
+          "deploy_": 4.99,
           "power_purchase_from_": 20,
-          "power_purchase_none_": 0.05,
+          "power_purchase_none_": 0.067,
           "agi_dossier_commit": 20
         },
         "partnerWeights": {
@@ -397,18 +525,42 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.facilities", "operator": "gte", "value": 3 }],
-            "target": { "actionId": "build" },
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "actionId": "build"
+            },
             "multiplier": 0.05
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 5
           },
           {
-            "when": [{ "path": "self.runway", "operator": "lte", "value": 2 }],
-            "target": { "actionId": "fund" },
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
             "multiplier": 4
           }
         ]
@@ -434,32 +586,36 @@
           "betrayWeight": 1.371,
           "reciprocityWeight": 0.431
         },
-        "resourceValues": { "runway": 1.5, "compute": 1.2, "researchProtection": 0.8 },
+        "resourceValues": {
+          "runway": 1.5,
+          "compute": 1.2,
+          "researchProtection": 0.8
+        },
         "objectives": [
           "Construct a Facility in Era I and connected generation in Era II.",
           "Sell Power to the AGI Candidate when legal.",
           "Remain in the top half rather than donating the game."
         ],
         "actionWeights": {
-          "fund": 1.455,
-          "research": 11.115,
-          "build": 10.201,
-          "organize": 1.749,
-          "deploy": 3.247,
-          "influence": 5.257,
-          "mega_cluster": 2.114,
-          "reorganization": 2.224,
-          "open_weights": 1.391,
-          "narrative_capture": 9.732,
-          "agent_swarm": 6.71,
-          "agi_dossier": 8.125,
-          "fusion_demonstrator": 3.904
+          "fund": 1.249,
+          "research": 17.697,
+          "build": 3.268,
+          "organize": 1.963,
+          "deploy": 13.076,
+          "influence": 3.129,
+          "mega_cluster": 1.098,
+          "reorganization": 1.415,
+          "open_weights": 0.559,
+          "narrative_capture": 6.197,
+          "agent_swarm": 20,
+          "agi_dossier": 10.083,
+          "fusion_demonstrator": 3.325
         },
         "decisionWeights": {
-          "build_facility": 7.445,
-          "build_generator_clean_infrastructure": 13.923,
+          "build_facility": 6.313,
+          "build_generator_clean_infrastructure": 7.115,
           "build_generator_emergency_infrastructure": 20,
-          "power_sale_accept_": 4.373,
+          "power_sale_accept_": 12.59,
           "power_sale_reject_": 0.05
         },
         "partnerWeights": {
@@ -477,26 +633,60 @@
         },
         "rules": [
           {
-            "when": [{ "path": "self.generators", "operator": "gte", "value": 1 }],
-            "target": { "decisionIdPrefix": "build_generator" },
+            "when": [
+              {
+                "path": "self.generators",
+                "operator": "gte",
+                "value": 1
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator"
+            },
             "multiplier": 0.1
           },
           {
             "when": [
-              { "path": "self.facilities", "operator": "gte", "value": 1 },
-              { "path": "self.generators", "operator": "gte", "value": 1 }
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 1
+              },
+              {
+                "path": "self.generators",
+                "operator": "gte",
+                "value": 1
+              }
             ],
-            "target": { "actionId": "build" },
+            "target": {
+              "actionId": "build"
+            },
             "multiplier": 0.08
           },
           {
-            "when": [{ "path": "self.runway", "operator": "lte", "value": 2 }],
-            "target": { "actionId": "fund" },
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
             "multiplier": 4
           },
           {
-            "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
-            "target": { "actionId": "deploy" },
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
             "multiplier": 6
           }
         ]
