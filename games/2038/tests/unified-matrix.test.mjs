@@ -163,6 +163,18 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
     typeof report.playerCountResults[4].outcomes.factionAbilityValues,
     "object"
   );
+  assert.equal(
+    typeof report.playerCountResults[4].outcomes.profileActionSelections,
+    "object"
+  );
+  assert.equal(
+    typeof report.playerCountResults[4].outcomes.profileMandateSources,
+    "object"
+  );
+  assert.ok(Object.hasOwn(
+    report.playerCountResults[4].outcomes.profileActionSelections,
+    "trust_governor"
+  ));
   const allocationWindow = report.playerCountResults[4].outcomes
     .factionAbilityValues.foundry?.allocation_window;
   if (allocationWindow) {
@@ -320,6 +332,10 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
   );
   assert.equal(
     typeof report.configurationResults.canonical.outcomes.factionMandateSources,
+    "object"
+  );
+  assert.equal(
+    typeof report.configurationResults.canonical.outcomes.profileMandateSources,
     "object"
   );
   assert.ok(

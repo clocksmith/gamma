@@ -316,6 +316,8 @@ function aggregateMatchMetrics(outcomes) {
     },
     factionAbilityValues: {},
     factionActionSelections: {},
+    profileActionSelections: {},
+    profileMandateSources: {},
     powerTrades: 0,
     causallyNecessaryPowerTrades: 0,
     cooperativeDeclarationMatches: 0,
@@ -377,6 +379,16 @@ function aggregateMatchMetrics(outcomes) {
       const actions = totals.factionActionSelections[standing.factionId] || {};
       mergeCounts(actions, standing.metrics.actions || {});
       totals.factionActionSelections[standing.factionId] = actions;
+      const profileActions =
+        totals.profileActionSelections[standing.profileId] || {};
+      mergeCounts(profileActions, standing.metrics.actions || {});
+      totals.profileActionSelections[standing.profileId] = profileActions;
+      const profileSources =
+        totals.profileMandateSources[standing.profileId] || {};
+      for (const event of standing.metrics.mandateEvents || []) {
+        increment(profileSources, event.source || "unknown", event.points || 0);
+      }
+      totals.profileMandateSources[standing.profileId] = profileSources;
       const faction = totals.factionAbilityValues[standing.factionId] || {};
       for (const [abilityId, values] of Object.entries(
         standing.metrics.factionAbilityValues || {}
@@ -645,7 +657,8 @@ class BatchAccumulator {
         winnerOverrides: 0,
         selectedMandateRanks: {}
       },
-      factionAbilityValues: {}, factionActionSelections: {}, powerTrades: 0,
+      factionAbilityValues: {}, factionActionSelections: {},
+      profileActionSelections: {}, profileMandateSources: {}, powerTrades: 0,
       causallyNecessaryPowerTrades: 0, cooperativeDeclarationMatches: 0,
       supplierSupportMatches: 0, supplierWins: 0, supplierTopHalfFinishes: 0,
       supplierFinalScoreGap: 0, supplierRound4ScoreGap: 0, worldEndings: {},
@@ -784,6 +797,16 @@ class BatchAccumulator {
       const actions = totals.factionActionSelections[standing.factionId] || {};
       mergeCounts(actions, standing.metrics.actions || {});
       totals.factionActionSelections[standing.factionId] = actions;
+      const profileActions =
+        totals.profileActionSelections[standing.profileId] || {};
+      mergeCounts(profileActions, standing.metrics.actions || {});
+      totals.profileActionSelections[standing.profileId] = profileActions;
+      const profileSources =
+        totals.profileMandateSources[standing.profileId] || {};
+      for (const event of standing.metrics.mandateEvents || []) {
+        increment(profileSources, event.source || "unknown", event.points || 0);
+      }
+      totals.profileMandateSources[standing.profileId] = profileSources;
       const faction = totals.factionAbilityValues[standing.factionId] || {};
       for (const [abilityId, values] of Object.entries(standing.metrics.factionAbilityValues || {})) {
         const ability = faction[abilityId] || {};

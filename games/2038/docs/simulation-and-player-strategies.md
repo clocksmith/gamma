@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.2` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.3-test`
+**Executable game:** `0.14.3` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.4-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -225,6 +225,9 @@ intervals, credible cycle detection, declaration blockers, Mandate sources,
 Audit pressure, promises, trades, causal suppliers, supplier placement, the
 seven-stage AGI funnel, and realized faction-ability value. Per-player-count
 summaries keep scaling effects such as Foundry revenue visible.
+Action selections and Mandate sources are also aggregated by profile, not only
+by faction. A strategy can therefore be rejected when it becomes competitive
+by abandoning the behavior it claims to test.
 One-lever reports also retain common-seed faction deltas by backend, player
 count, and Mandate mode; use
 `rulesComparisons[].families.factionBackendPlayerCountMandateMode` when a
