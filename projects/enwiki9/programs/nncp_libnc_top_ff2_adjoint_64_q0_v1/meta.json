@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1"
+  ],
+  "description": "Production LibNC top-layer FF2 adjoint attribution capture",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The source-captured post-FF2 adjoint differs from the open final-normalization residual, while source input plus source adjoint reconstruct every retained ff2_19 word under the frozen reducer.",
+  "id": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T064522Z_bd9f01360c": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T064522Z_bd9f01360c.json",
+        "sha256": "sha256:7b245184c4a9aed140553b05fdbdcaeed63215ea10d0b457886f22586e1eb777",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_v1.json",
+      "sha256": "sha256:c7bb37335850685bd6b15b73e72681faef5d629a7a978e67171d4f61a7beaf96"
+    },
+    "interfaces_exposed": [
+      "source top-layer FF2 input and post-bias adjoint -> exact retained ff2_19 attribution"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+    "proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+    "retired_neighborhoods": [
+      "The source teacher is a zero-credit attribution oracle; no captured tensor, teacher executable, or LibNC dependency may enter a submitted codec."
+    ]
+  },
+  "parent": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "status": "candidate",
+  "verdict": "Create an immutable retry that changes only the missing forward declarations, preserves the prospective attribution predicates, and reruns both complete guarded captures."
+}

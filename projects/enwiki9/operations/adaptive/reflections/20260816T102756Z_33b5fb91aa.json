@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The remaining GEGLU divergence is confined to the gate branch, specifically the upstream-times-value then GELU-derivative arithmetic or its BF16 materialization; the value branch and FF2 transpose are exact."
+  },
+  "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:6975199679ba319323a18744e3fb261de588e54b59982b85bbe319bb50c6e8c8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/20260816T102743270516Z_6975199679ba.json",
+      "sha256": "sha256:284968f881d2ecb4ebbe20543c8f20e57f9f9de746a7e397baa1c9c1f9d889f9"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Freeze one gate-only exact arithmetic attribution over all 6,291,456 elements, varying operation ordering or FMA/materialization from source evidence rather than the final bias vector.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:353c838945bac260dfc86932363150c4922ba7501d6453b80a9d6761f4cf2594"
+    },
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:67e3dbfd419019d01ef61e595532f63f4dec803868924cce882804be9978d762"
+    },
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:18139dfa8fc9d9ad240ca014484fa57b5090de40c008b4806c6928468e64ebfe"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2.json",
+    "sha256": "sha256:0c819f7fb4552638e131b28ca15700409803a9d08e5e7b6004666d08fb26a89d"
+  },
+  "generatedUtc": "2026-08-16T10:28:53+00:00",
+  "hypothesis": {
+    "rationale": "After exact fixture accounting, the value branch matches all 6,291,456 open BF16 words while the gate branch differs in exactly 114 words with maximum absolute error 7.450580596923828e-09.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T102756Z_33b5fb91aa.json",
+    "sha256": "sha256:d955e09f96b8a645a99c3f1bd253b615674537425c854f328e31ab94f0790191"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Non-probe fixture drift in the sealed GEGLU branch capture.",
+      "Value-branch GEGLU arithmetic as the cause of the retained ff_bias1_19 mismatch."
+    ],
+    "transferableLessons": [
+      "Use the source gate-branch adjoint as an independent comparator for frozen arithmetic variants. Preserve the exact value-branch formula and 128-panel FF2 transpose unchanged."
+    ],
+    "uncertainties": [
+      "The exact operation order inside nc_gelu_bw that explains the 114 gate words remains unresolved."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t102756z_33b5fb91aa",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The immutable correction enumerated exactly 512 declared top_geglu_ probe paths per sealed manifest, proved every stale mismatch was a declared probe path, found zero non-probe fixture mismatches, preserved all four branch artifact digests, retained deterministic source capture, and passed strict outputs, source, scratch, memory, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

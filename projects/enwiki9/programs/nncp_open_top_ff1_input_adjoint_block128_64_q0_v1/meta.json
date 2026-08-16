@@ -1,0 +1,40 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1"
+  ],
+  "description": "Open ordered-panel transpose through the initial top-FF1 matrix",
+  "family": "nncp_transpose_schedule",
+  "hypothesis": "The source-attributed ordered 128-feature matmul panels transfer from FF2 to the 6,144-feature FF1 reduction and reproduce all 2,097,152 production FF1 input-adjoint words exactly, while one unbroken reduction remains distinguishable.",
+  "id": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T123635Z_f1f6615808": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T123635Z_f1f6615808.json",
+        "sha256": "sha256:b864e1b5d06cd2f1148ac601e1c844453e921deba2bf98e24f68d436bb6c0d40",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1.json",
+      "sha256": "sha256:bd5a8a27cfc6803cee1db168430a6def142e6142edd3405f8ff24f5570e1cc3e"
+    },
+    "interfaces_exposed": [
+      "exact FF1 output adjoint plus initial matrix -> source-exact open FF1 input adjoint"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unblocked FF1 transpose reduction",
+      "LibNC dependency for top-FF1 input-adjoint projection"
+    ]
+  },
+  "parent": "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1",
+  "status": "measured_negative",
+  "verdict": "Use the exact open FF1 input adjoint as the incoming residual for the layer-19 pre-FF layer-normalization backward boundary, preserving the direct FF residual branch and independently verifying normalization parameter and input adjoints."
+}

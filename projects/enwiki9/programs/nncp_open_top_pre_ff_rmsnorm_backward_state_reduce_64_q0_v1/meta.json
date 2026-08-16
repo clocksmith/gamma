@@ -1,0 +1,47 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+    "nncp_open_ff1_bias_state_reduce_64_q0_v1"
+  ],
+  "description": "State-reduced layer-19 pre-FF normalization backward",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The correct final-normalization input adjoint, width-scaled centered normalization arithmetic, and chronological 32-stream BF16 state reductions reproduce the complete layer-19 pre-FF total adjoint and both affine gradients exactly.",
+  "id": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T132931Z_9e97fad02f": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T132931Z_9e97fad02f.json",
+        "sha256": "sha256:1af36910849c62105c4bfc1e0dd010ab70e096fb1eee491bbeb6557a798e4492",
+        "valid": false
+      },
+      "20260816T133105Z_4b045b57ce": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T133105Z_4b045b57ce.json",
+        "sha256": "sha256:905bfd21195b4eed8f02e5227d05d28314c6648bbf4693c2f198ec58f947223e",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1.json",
+      "sha256": "sha256:27a5433ecf292447d014bfea8ebee87b348781ee4eb7988e3de1a277a7d81d33"
+    },
+    "interfaces_exposed": [
+      "exact pre-FF hidden plus normalized/direct adjoints -> exact affine gradients and total layer-19 hidden adjoint"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+    "proposal_id": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+    "retired_neighborhoods": [
+      "pre-final-normalization-direct-adjoint",
+      "flat-affine-gradient-reduction"
+    ]
+  },
+  "parent": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Retain the exact direct branch and affine reductions; isolate only pre-merge versus post-merge BF16 conversion using the retained complete population before authorizing another full replay."
+}

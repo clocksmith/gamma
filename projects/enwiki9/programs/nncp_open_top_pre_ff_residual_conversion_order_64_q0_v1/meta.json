@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1"
+  ],
+  "description": "Layer-19 pre-FF residual conversion-order attribution",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Keeping the normalization input residual in F32 through the residual add and converting the merged result once reproduces every source total-adjoint word while the preconverted control does not.",
+  "id": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T135007Z_c0fde22dd2": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T135007Z_c0fde22dd2.json",
+        "sha256": "sha256:78a315070ec613d33d7deffb34de86fc5775f1058df9ac9e204c76da91302d2f",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1.json",
+      "sha256": "sha256:0b145f20a5e5c04feecd27262b6a26617f8f39599213e9af2980cf8f8041a45f"
+    },
+    "interfaces_exposed": [
+      "raw normalization input residual plus direct residual -> once-converted total hidden adjoint"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+    "proposal_id": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+    "retired_neighborhoods": [
+      "pre-merge-bf16-conversion"
+    ]
+  },
+  "parent": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Retain pre-merge conversion and exact state-wise affine reductions; capture the source normalization-only input adjoint at layer 19 before changing arithmetic again."
+}

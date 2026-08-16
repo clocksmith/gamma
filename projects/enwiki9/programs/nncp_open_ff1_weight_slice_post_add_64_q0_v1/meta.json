@@ -1,0 +1,40 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1"
+  ],
+  "description": "Immutable post-dot prior-add open kernel for the exact ff1_19 gradient slice",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The post-dot prior-add AVX2 cell reproduces the complete LibNC treatment, reverse-state, and sign-negated FF1 weight slices exactly while retaining the frozen prior-initialized and nonfused mismatch populations.",
+  "id": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T120602Z_ec1474d292": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json",
+        "sha256": "sha256:06b1cfac355d97a5bf88790c36ab32cab4c5da8eb390c91f02624af16a3c1cbf",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_post_add_64_q0_v1.json",
+      "sha256": "sha256:0466252f258cc995f209c9807c4162314c17722be3661c5fe649156d43c873af"
+    },
+    "interfaces_exposed": [
+      "open BF16 FF1 operands -> exact post-dot-add ff1_19 gradient slice"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+    "retired_neighborhoods": [
+      "Prior-initialized FF1 matrix-gradient accumulation",
+      "Nonfused FF1 matrix-gradient accumulation"
+    ]
+  },
+  "parent": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Expand the uniform post-dot-add kernel prospectively across all 6,144 ff1_19 output rows and require exact parity against the retained full gradient before using it as an open backpropagation boundary."
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_id": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "claimed_at": "2026-08-16T12:36:21+00:00",
+  "created_at": "2026-08-16T12:36:16+00:00",
+  "developed_at": "2026-08-16T12:36:21+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T123446Z_5cbfc56c6d.json",
+      "sha256": "sha256:9deca4126b99e657d744f41aa23c5707f4f758d147549cbd83ed1314ae6227d3"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1.json",
+    "sha256": "sha256:bd5a8a27cfc6803cee1db168430a6def142e6142edd3405f8ff24f5570e1cc3e"
+  },
+  "hypothesis": "The source-attributed ordered 128-feature matmul panels transfer from FF2 to the 6,144-feature FF1 reduction and reproduce all 2,097,152 production FF1 input-adjoint words exactly, while one unbroken reduction remains distinguishable.",
+  "interfaces_exposed": [
+    "exact FF1 output adjoint plus initial matrix -> source-exact open FF1 input adjoint"
+  ],
+  "kill_condition": "Any ordered-panel/source mismatch or failed antecedent, control, replay, dependency, source, or resource predicate.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1",
+  "parent_proposal_id": null,
+  "priority": 1456,
+  "promotion_condition": "Exact parity over all 2,097,152 words with 48 ordered panels; live unblocked control; deterministic two-cell replay; no forbidden dependency; green source and resource guards.",
+  "proposal_id": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unblocked FF1 transpose reduction",
+    "LibNC dependency for top-FF1 input-adjoint projection"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1471,
+  "state": "developed",
+  "title": "Open ordered-panel top-FF1 input adjoint"
+}

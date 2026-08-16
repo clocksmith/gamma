@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+  "claimed_at": "2026-08-16T16:35:20+00:00",
+  "created_at": "2026-08-16T16:35:20+00:00",
+  "developed_at": "2026-08-16T16:35:21+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T163008Z_9e18c10ab5.json",
+      "sha256": "sha256:690a8dbb6afd7321007079b9a11efb076712973bfaf21e5d92ab713940101de4"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_gradient_full_post_add_64_q0_v1.json",
+    "sha256": "sha256:2d86fda7e0c8030f708b168123c55ad3067977d3f6d52658ce57d5cdc8404fad"
+  },
+  "hypothesis": "The slice-validated LibNC-free chronological post-dot prior-add BF16/FMA kernel exactly reconstructs all 1,048,576 retained w_o_19 gradient words with deterministic replay, while a sign-negated control differs.",
+  "interfaces_exposed": [
+    "sealed pre-w_o input plus open post-w_o adjoint -> exact complete w_o_19 gradient"
+  ],
+  "kill_condition": "Any full treatment mismatch or failed replay, dependency, source, control, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1535,
+  "promotion_condition": "Zero mismatches across all 1,048,576 treatment words; live sign-negated control; byte-identical replay; no forbidden dependencies; green source and resource guards.",
+  "proposal_id": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+  "retired_neighborhoods": [
+    "Assuming 128-row w_o_19 slice parity extends to the complete matrix"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1550,
+  "state": "developed",
+  "title": "Complete open layer-19 w_o gradient"
+}

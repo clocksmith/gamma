@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T15:54:53+00:00",
+  "created_at": "2026-08-16T15:54:52+00:00",
+  "developed_at": "2026-08-16T15:54:53+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T155008Z_4831e25438.json",
+      "sha256": "sha256:d44ac52ec048d825b92f34488290129fac5de52c69ac97b3a6cb08bf77bdad07"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:e006fd3eea81dd6c8ad857b4ab6b2c37395d01111fd99be88a0f708fb317044f"
+  },
+  "hypothesis": "BF16 addition of the exact output-order RMSNorm branch and promoted streaming-dot direct residual reproduces every source pre-FF total-adjoint word.",
+  "interfaces_exposed": [
+    "exact open RMSNorm branch plus exact open direct -> exact pre-FF total adjoint"
+  ],
+  "kill_condition": "Kill if the corrected complete composition differs from the sealed source total in any BF16 word.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+  "parent_proposal_id": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+  "priority": 1513,
+  "promotion_condition": "Require exact attribution antecedents, zero complete source-total mismatches, live negated control, byte-identical replay, clean dependencies, source closure, and cleanup.",
+  "proposal_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "stale final_norm_backward residual as an exact downstream input"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1531,
+  "state": "developed",
+  "title": "Correct open pre-FF total-adjoint input lineage"
+}

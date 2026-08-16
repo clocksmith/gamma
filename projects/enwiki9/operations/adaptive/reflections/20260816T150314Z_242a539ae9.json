@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "BF16 elementwise nc_mul is not an available adjoint-injection primitive in the attributed LibNC CPU implementation."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v3",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v3",
+    "candidateTreeSha256": "sha256:9d67dd14ebf8130dda24047d183901cda52778028bcb6c6afd76b83c5022ef75",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_retry_v3/20260816T150303471926Z_9d67dd14ebf8.json",
+      "sha256": "sha256:23c33da8c3ae31b4f1cfad098629912e1272b0bbbf44bacf7b9369256a0f63d5"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Replace only the unsupported coefficient injection with production-supported BF16 matrix multiplication; retain production-shaped shared parameter, values, graph orders, controls, comparators, ABI, and library digest.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v3/guard.json",
+      "sha256": "sha256:a609ebe211c513c9e36c03c5554c5b2842a60030f7d8c75410b11bf52eb951b2"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T150314Z_242a539ae9.log",
+      "sha256": "sha256:66ae4201ea88a9f6164401c38ee6b0f21cfdc2fef5e6fcdb4238f01e7e526140"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v3.json",
+    "sha256": "sha256:1227b4e53951a0840c7967bbbb7f65e11f58b748046cdeafea6c99c73fde1252"
+  },
+  "generatedUtc": "2026-08-16T15:06:10+00:00",
+  "hypothesis": {
+    "rationale": "No single-path gradient or merge population was produced, so the shared-gradient hypothesis remains untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T150314Z_242a539ae9.json",
+    "sha256": "sha256:cc99ee2b6b4ae1b09405fbdcbad1e5eebc57545e8324c88258ae1b8cd9a2c888"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Choose an oracle injection primitive supported by the exact production backend and require single-path identity before interpreting shared-gradient accumulation."
+    ],
+    "uncertainties": [
+      "Whether a BF16 nc_matmul dot-product path preserves each coefficient adjoint exactly and reaches the shared-gradient merge."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t150314z_242a539ae9",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The production-rank, full-config evaluator compiled and resolved the attributed library, but its first BF16 nc_mul aborted before any gradient; the operation is unsupported on this LibNC CPU path even with matching ABI."
+    ],
+    "valid": false
+  }
+}

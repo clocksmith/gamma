@@ -1,0 +1,37 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4"
+  ],
+  "description": "F32 coefficient injection around a shared BF16 LibNC parameter",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A digest-bound LibNC shared-parameter graph fed the exact BF16 branch and direct adjoints reproduces the sealed source pre-FF total and identifies the graph-order merge contract.",
+  "id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+  "measured": {
+    "reflections": {
+      "20260816T151453Z_cbf1bff98d": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T151453Z_cbf1bff98d.json",
+        "sha256": "sha256:82282e35a7b7ff6770d9637194422d412bb6f8cf7c8a6328fca480c3b62f4e45",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5.json",
+      "sha256": "sha256:761191fe5aa88dd6e24d88f2164a11c4f8d65c3c77043688fe35f880581bdab2"
+    },
+    "interfaces_exposed": [
+      "two exact BF16 adjoints through F32 path coefficients -> shared BF16 LibNC gradient"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+    "proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+  "status": "measured_negative",
+  "verdict": "Retire the synthetic merge family and inspect or replay the actual same-run residual-plus-RMSNorm boundary; do not sweep coefficient injection primitives."
+}

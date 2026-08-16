@@ -1,0 +1,100 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner used reference(experiment_path, experiment) in the result body, producing path, sha256, and id; adaptive-experiment-result.v1 permits only path and sha256 for experiment."
+  },
+  "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:ca8ca655f14b11749e20379b57431f6c75fdecec9e307296f6fb1cc8b254c657",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2/20260816T154346855563Z_ca8ca655f14b.json",
+      "sha256": "sha256:ab7ac7f2c17c00fd729066ca41ca9539c14370b1901aaadfad232bb7762ffa91"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze a receipt-only immutable successor that binds the failed job, staged decision, execution, guard, source package, and five retained tensors; remove the extra experiment id, re-evaluate predicates, and publish a schema-valid result without recomputing science.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260816T154402Z_74511ffe59.json",
+      "sha256": "sha256:abf1684eb1e244b1b43d39d8156b3b07f320f45629b4ca139a553408e2a89cba"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2/decision.staged.json",
+      "sha256": "sha256:6db958be30997405f071b88775dd74de28f0fbaf007eb9c18ee6c47ba93af506"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:091d691d57e32545c904f81f4cbd35e77aa4f0c1b809d8f060d1ea026d74dcdd"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:aea8603583d8128d0d383f4f411cb4948bdcc0f6e2aeb4fb647a6e8b34f2f72c"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T154402Z_74511ffe59.log",
+      "sha256": "sha256:3f60011b87e6b08ef19893f830db210893dd234f1669bd861ba64734d55482c3"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v2.json",
+    "sha256": "sha256:be4b1e6c5a59f7cddbc8a4df2c46280d9e59af294f894e7a9e9b498b685df6b3"
+  },
+  "generatedUtc": "2026-08-16T15:47:12+00:00",
+  "hypothesis": {
+    "rationale": "The staged measurements satisfy the hypothesis, but no schema-valid terminal decision was published, so formal hypothesis status remains not-tested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T154402Z_74511ffe59.json",
+    "sha256": "sha256:abf1684eb1e244b1b43d39d8156b3b07f320f45629b4ca139a553408e2a89cba"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Rerunning source capture or repeating tensor arithmetic to repair a terminal result-reference shape."
+    ],
+    "transferableLessons": [
+      "Validate the complete staged result schema before destructive cleanup and keep result-reference helpers distinct from input-reference helpers that add semantic ids."
+    ],
+    "uncertainties": [
+      "The next receipt-only retry must rebind the staged measurements and every durable artifact to its own candidate revision and experiment before promotion."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t154402z_74511ffe59",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "All declared comparisons, controls, replay, fixture, resource, source, and cleanup measurements completed and were durably staged, but the result validator rejected the staged decision before publication because its experiment reference contained an additional id property."
+    ],
+    "valid": false
+  }
+}

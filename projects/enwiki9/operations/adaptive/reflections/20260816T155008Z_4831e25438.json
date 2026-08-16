@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The prior three-word pre-FF total failure came from selecting the stale final_norm_backward direct artifact, not from residual-add arithmetic or generic shared-BF16 gradient accumulation; five of the eight corrected direct words did not cross the final sum rounding boundary and three did."
+  },
+  "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+    "candidateTreeSha256": "sha256:f8659d942db178895470f9e0f5924b6cbc8882e0d542895cd54e5f47ac4c4ed1",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/20260816T154953683160Z_f8659d942db1.json",
+      "sha256": "sha256:ff48d5a3aeea4901be51a0f40d8cc025a4a0109da39e07344832584d51771f91"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Freeze an open receipt-backed successor that composes the exact output-order RMSNorm branch with the promoted streaming-dot direct residual, requires zero source-total mismatch over the complete population, and carries no teacher tensor into the codec.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/decision.json",
+      "sha256": "sha256:636bb939b6a0a8b71adab95f987042787b07ec03a5bce35243c5625dee1e0473"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/execution.json",
+      "sha256": "sha256:4939426d169d1b469a23c5ca017ac62fc04b0f4a4d2f2604dd41f0ff93f62704"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/guard.json",
+      "sha256": "sha256:8df2ff0f2409705908c376c5305f158ebeb7d0a98a2e469d620da093ca149ec4"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3.json",
+    "sha256": "sha256:8804dec3e83257f1f397c8b736ea37e3dc05fcb718a4ea35ac891fb7f04970b8"
+  },
+  "generatedUtc": "2026-08-16T15:52:51+00:00",
+  "hypothesis": {
+    "rationale": "The same-run direct differs from the stale open artifact in exactly eight BF16 words, equals the promoted streaming-dot residual in all 2,097,152 words, and its RNE sum with the exact branch equals every sealed source total word.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T155008Z_4831e25438.json",
+    "sha256": "sha256:a812c39756c4f72bd574498589b31aecde4ea4ade1d57ef4272807fa1f48b597"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Raw F32 branch conversion or coordinate repair for the pre-FF residual join.",
+      "The generic shared-BF16 merge chain as a causal explanation for the three pre-FF total mismatches when driven by the stale eight-word-inexact direct residual."
+    ],
+    "transferableLessons": [
+      "Exactness labels must be backed by the promoting result and artifact lineage, not inferred from a filename or an older successful projection; downstream composition must bind the newest source-exact residual."
+    ],
+    "uncertainties": [
+      "The exact total is established on the retained 64-state production population only; attention backward and full recursive update remain unproven."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t155008z_4831e25438",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The schema-valid result binds both full source captures, exact fixture identity, complete replay, durable artifact rechecks, resource receipts, source closure, and cleanup; every promotion predicate passed and no kill predicate passed."
+    ],
+    "valid": true
+  }
+}

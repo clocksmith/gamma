@@ -1,0 +1,41 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "nncp_open_top_w_o_input_forward_64_q0_retry_v2",
+    "nncp_open_w_o_input_adjoint_block128_64_q0_v1"
+  ],
+  "description": "Exact LibNC-free serialized concat-head forward and backward identity.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "In the retained state-stream-head-feature serialization, concat_head and its backward are byte-order identities: the complete source attended input equals the exact open pre-w_o value and the complete source attended adjoint equals the exact open pre-w_o adjoint, while a head-major reinterpretation differs in both directions.",
+  "id": "nncp_open_concat_head_identity_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T175422Z_91aae07812": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T175422Z_91aae07812.json",
+        "sha256": "sha256:a05c513aebdef149e64e3aab32bf6fbc969449632de744a9057ed17357692859",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_concat_head_identity_64_q0_v1.json",
+      "sha256": "sha256:8e1a7e1779bd890244b92804190d7e0eac943e4d7a750554d9cabfe37011b12d"
+    },
+    "interfaces_exposed": [
+      "exact pre-w-o forward/adjoint -> exact attended forward/adjoint serialized identity"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "proposal_id": "nncp_open_concat_head_identity_64_q0_v1",
+    "retired_neighborhoods": [
+      "Adding a runtime concat transpose after the serialized state-stream-head-feature contract is established"
+    ]
+  },
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "status": "measured_negative",
+  "verdict": "Expose the exact open layer-19 value state and attention probabilities across all streams, then implement the value-attention transpose against the source probability adjoint with full-population arithmetic controls."
+}

@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The source residual accumulation consumes the rounded RMSNorm branch for almost all coordinates; wholesale post-join branch conversion is wrong, and the remaining three-coordinate parent discrepancy belongs to the source backward accumulator or tensor-gradient merge rule."
+  },
+  "candidateId": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+    "candidateTreeSha256": "sha256:8ea2f888cba57592e76da378ad1614f2cace9bebc244a72164ba18d6066c35f7",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1/20260816T144117028221Z_8ea2f888cba5.json",
+      "sha256": "sha256:4e8e7109fddae640fed20c1ac94a3a48ead9f72ff85417d349c673c6faca8571"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Keep the exact rounded RMSNorm branch and direct residual; attribute the three-word discrepancy to the primitive source gradient-merge schedule using a focused all-word arithmetic oracle before advancing upstream.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1/decision.json",
+      "sha256": "sha256:b1e36418e6eddb05c751fbca60dbcebdc9c748359ff6bfeed1b28308e397c479"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1/execution.json",
+      "sha256": "sha256:2dcff330d8efaefc025540ad5365aa6a7f310895600b8401e387b851b56c5919"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1/guard.json",
+      "sha256": "sha256:eaf70ae533d09655223b19c5823b54faec9240adbf5e573311bdd73d15b9a47b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1.json",
+    "sha256": "sha256:9652323efe0d69224a26e32c263035dbf4c657b61e20710c150bfc18fb623067"
+  },
+  "generatedUtc": "2026-08-16T14:45:28+00:00",
+  "hypothesis": {
+    "rationale": "Retaining the entire RMSNorm branch in F32 through the residual join preserved exact separate branch output but increased source-total mismatches from three to 167,635, with a maximum one-BF16-ulp error.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T144129Z_cbf5902ca5.json",
+    "sha256": "sha256:3886bccc2a0eabc5c7e690b48676a71245a957cce6bf12af7f348d8affd6921f"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "raw-f32-rmsnorm-branch-through-entire-pre-ff-residual-join"
+    ],
+    "transferableLessons": [
+      "A live graph may round a branch before accumulation while still using a gradient-merge primitive whose arithmetic is not equivalent to standalone BF16 addition.",
+      "Do not repair sparse exactness failures by moving a conversion boundary globally; compare the complete population and retain the narrower proven formula."
+    ],
+    "uncertainties": [
+      "The exact open arithmetic of LibNC gradient accumulation when two BF16 adjoints meet at the pre-FF hidden tensor."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t144129z_cbf5902ca5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The complete 2,097,152-word treatment ran twice from sealed inputs, reproduced the branch and both affine gradients exactly, retained a live negated-total control, replayed byte-identically, used no forbidden dependency, passed resource guards, and validated its strict result."
+    ],
+    "valid": true
+  }
+}

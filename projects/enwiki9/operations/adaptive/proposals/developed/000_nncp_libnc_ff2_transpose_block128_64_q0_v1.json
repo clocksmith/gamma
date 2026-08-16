@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_ff2_transpose_block128_64_q0_v1",
+  "claimed_at": "2026-08-16T09:38:46+00:00",
+  "created_at": "2026-08-16T09:38:42+00:00",
+  "developed_at": "2026-08-16T09:38:51+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T093214Z_c6950a77d0.json",
+      "sha256": "sha256:5b4fa56cb64eed82b69d62ff6a251104d0210dbd418056d6af16533da37bd920"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/decision.json",
+      "sha256": "sha256:91ca5951aef20c575994312faca522d0719700083af4b07b2fe243685e770bf6"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:0c4e2996c82f315f1013d3f8ece235e980dcad565ad20753793c44ec6b4fda34"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff2_transpose_block128_64_q0_v1.json",
+    "sha256": "sha256:d2b7f124b84f2a6190ad06888599e3d8fb9122ef94357277b913096253c2e9e9"
+  },
+  "hypothesis": "Resetting lane-sequential FF2 transpose accumulation at each ordered 128-feature reduction panel and adding each panel to the prior output reproduces every source FF2-input-adjoint word.",
+  "interfaces_exposed": [
+    "captured incoming residual plus initial ff2_19 -> source-exact panel-blocked FF2-input adjoint"
+  ],
+  "kill_condition": "Any nonzero treatment/source mismatch retires the 128-feature panel schedule as a sufficient exact FF2 transpose contract.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "priority": 1471,
+  "promotion_condition": "Two complete byte-identical panel evaluations, preserved 775-word horizontal and 929-word unblocked controls, zero treatment/source mismatches, bound digests, and green guards.",
+  "proposal_id": "nncp_libnc_ff2_transpose_block128_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not use one unblocked FMA stream per FF2 transpose output feature."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1489,
+  "state": "developed",
+  "title": "Exact production BF16 FF2 transpose 128-panel order"
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T14:32:19+00:00",
+  "created_at": "2026-08-16T14:32:18+00:00",
+  "developed_at": "2026-08-16T14:32:19+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1/decision.json",
+      "sha256": "sha256:f6c7d65634755b965b4a93d85a4c3c01a8ef171016e1db843430032d7896f05a"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T142835Z_50298bd574.json",
+      "sha256": "sha256:180f9bc4a4b9235a1a326e7e8b751ea67846d631a2b7d10665a4119297ca8c48"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_v1.json",
+    "sha256": "sha256:8ea99017f16526400dd0f1874a21b0204fc42999f36ebb6b4c5d98b9a4546984"
+  },
+  "hypothesis": "BF16 addition of the exact open RMSNorm branch adjoint and exact direct residual reproduces every source pre-FF total-adjoint word.",
+  "interfaces_exposed": [
+    "exact RMSNorm branch adjoint plus direct residual -> exact pre-FF total adjoint"
+  ],
+  "kill_condition": "Any total-adjoint mismatch or control, replay, dependency, source, resource, or receipt failure rejects the composition.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "priority": 1447,
+  "promotion_condition": "Exact complete source-total parity, a live negated-branch control, byte-identical replay, open dependencies, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "post-merge-only branch conversion"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1465,
+  "state": "developed",
+  "title": "Compose the exact pre-FF total adjoint"
+}

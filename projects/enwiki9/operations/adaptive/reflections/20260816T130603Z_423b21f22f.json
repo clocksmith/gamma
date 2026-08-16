@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The source oracle now isolates the complete layer-19 pre-FF hidden boundary upstream of both the direct residual and normalized feed-forward branches."
+  },
+  "candidateId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:528fd4b6380dc9f43ae3e948b2129cd4f3d1b1baf8accb3f73efb1f5f2745b8b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/20260816T130549268640Z_528fd4b6380d.json",
+      "sha256": "sha256:ec74fc9caaa35a6068a1d76a361d2463b14533116d63381a5d177ac6dce5f823"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Use the exact hidden and total-adjoint oracle to evaluate the already frozen dependency-free RMSNorm backward and residual merge.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:eed765e336d712f7ffe54ae084aafe330ab53feb7d1ea2bf5d1a84ed470ec2f5"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2.json",
+    "sha256": "sha256:16bbc8aad1cd7b1e21e192ed8eb9a2cb346d3f49fbb86944684f80ce6a004a45"
+  },
+  "generatedUtc": "2026-08-16T13:06:54+00:00",
+  "hypothesis": {
+    "rationale": "Both source replays have one aggregate digest; all 512 declared probe files are exact, non-probe drift is zero, and both pre/post-normalization boundary controls are live across the complete population.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T130603Z_423b21f22f.json",
+    "sha256": "sha256:f60c8681c87bf26d13c0d9a0c24f6040ff2ae7c911c16d1db90d4c9eab093615"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "For sealed BF16 comparisons, preserve the named comparison record through receipts; never unpack mapping keys positionally. Complete capture manifests can safely rescue post-capture bookkeeping failures without rerunning a zero-credit teacher."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t130603z_423b21f22f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The sealed artifacts, twin complete capture-manifest digests, exact declared probe populations, non-probe fixture identity, typed comparisons, strict result validation, and resource guard all pass."
+    ],
+    "valid": true
+  }
+}

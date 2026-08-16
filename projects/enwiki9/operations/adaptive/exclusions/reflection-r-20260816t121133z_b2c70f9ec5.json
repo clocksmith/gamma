@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T121133Z_b2c70f9ec5.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t121133z_b2c70f9ec5",
+  "failure": "The complete ff1_19 parameter gradient uses one uniform eight-lane contract: chronological states, 32-stream dot from zero by sequential AVX2 FMA, decoded prior BF16 addition after the dot, then one BF16 round-to-nearest-even materialization.",
+  "mechanism": "Expand the exact post-dot-add eight-lane kernel without arithmetic changes from 128 prospectively frozen FF1 output rows to all 6,144 rows.",
+  "population": "BF16 ff1_19 gradient words; Every coordinate in the complete 1,024-input by 6,144-output ff1_19 gradient, partitioned prospectively into 48 adjacent 128-row blocks.; scopeBytes=12582912; scopeSymbols=6291456",
+  "recorded_at": "2026-08-16T12:12:49+00:00",
+  "retired_dimensions": [
+    "LibNC dependency for the complete ff1_19 parameter gradient",
+    "Slice-only evidence for the FF1 matrix-gradient update schedule"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

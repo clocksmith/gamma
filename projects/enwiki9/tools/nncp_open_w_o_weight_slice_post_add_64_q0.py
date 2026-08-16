@@ -1,0 +1,343 @@
+#!/usr/bin/env python3
+"""Validate the open post-dot-add layer-19 w_o gradient slice."""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import lzma
+import os
+from pathlib import Path
+import shutil
+import tarfile
+from typing import Any
+
+from enwiki9_python_source_closure import local_source_closure
+import nncp_libnc_ff1_bias_state_reduce_64_q0 as oracle
+import research_contracts
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CANDIDATE_ID = "nncp_open_w_o_weight_slice_post_add_64_q0_v1"
+PROGRAM = ROOT / "programs" / CANDIDATE_ID
+RESULT = ROOT / "results" / CANDIDATE_ID
+WORK = RESULT / "work"
+PARENT_ID = "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1"
+PARENT_RESULT = ROOT / "results" / PARENT_ID
+PARENT_DECISION = PARENT_RESULT / "decision.json"
+PARENT_EXECUTION = PARENT_RESULT / "execution.json"
+PARENT_GUARD = PARENT_RESULT / "guard.json"
+PARENT_REFLECTION = ROOT / (
+    "operations/adaptive/reflections/20260816T162351Z_97a6519638.json"
+)
+SOURCE_INPUT = PARENT_RESULT / "source-w-o-input.bf16"
+UPSTREAM_ID = "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1"
+UPSTREAM_RESULT = ROOT / "results" / UPSTREAM_ID
+UPSTREAM_DECISION = UPSTREAM_RESULT / "decision.json"
+UPSTREAM_EXECUTION = UPSTREAM_RESULT / "execution.json"
+UPSTREAM_GUARD = UPSTREAM_RESULT / "guard.json"
+UPSTREAM_REFLECTION = ROOT / (
+    "operations/adaptive/reflections/20260816T155508Z_53d5388d2c.json"
+)
+UPSTREAM_ADJOINT = UPSTREAM_RESULT / "source-exact-pre-ff-total-adjoint.bf16"
+SCHEDULE_ID = "nncp_open_ff1_weight_slice_post_add_64_q0_v1"
+SCHEDULE_RESULT = ROOT / "results" / SCHEDULE_ID
+SCHEDULE_DECISION = SCHEDULE_RESULT / "decision.json"
+SCHEDULE_EXECUTION = SCHEDULE_RESULT / "execution.json"
+SCHEDULE_REFLECTION = ROOT / (
+    "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json"
+)
+FIXTURE = ROOT / "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture"
+RETAINED_GRADIENT = FIXTURE / "gradients/0007_w_o_19.bin"
+RETAINED_GRADIENT_META = FIXTURE / "gradients/0007_w_o_19.meta"
+EVALUATOR_SOURCE = PROGRAM / "w_o_weight_slice_post_add.cpp"
+PROGRAM_DESCRIPTOR = PROGRAM / "program.py"
+RUNNER = Path(__file__).resolve()
+MATERIALIZER = ROOT / (
+    "tools/nncp_open_w_o_weight_slice_post_add_64_q0_materializer.py"
+)
+FULL_OUTPUTS = 1024
+INPUTS = 1024
+SLICE_OUTPUTS = 128
+SLICE_ELEMENTS = SLICE_OUTPUTS * INPUTS
+SOURCE_CEILING = 500_000
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def reference(path: Path, identifier: str | None = None) -> dict[str, str]:
+    return oracle.reference(path, identifier)
+
+
+def retained_slice(path: Path) -> bytes:
+    payload = path.read_bytes()
+    if len(payload) != FULL_OUTPUTS * INPUTS * 2:
+        raise ValueError("retained w_o_19 gradient geometry differs")
+    result = bytearray(SLICE_ELEMENTS * 2)
+    cursor = 0
+    for input_feature in range(INPUTS):
+        start = input_feature * FULL_OUTPUTS * 2
+        block = payload[start : start + SLICE_OUTPUTS * 2]
+        result[cursor : cursor + len(block)] = block
+        cursor += len(block)
+    return bytes(result)
+
+
+def require_inputs(experiment: dict[str, Any]) -> None:
+    inputs = {item["id"]: item for item in experiment["inputs"]}
+    bound = (
+        ("parent-decision", PARENT_DECISION),
+        ("parent-execution", PARENT_EXECUTION),
+        ("parent-guard", PARENT_GUARD),
+        ("parent-reflection", PARENT_REFLECTION),
+        ("source-w-o-input", SOURCE_INPUT),
+        ("upstream-decision", UPSTREAM_DECISION),
+        ("upstream-execution", UPSTREAM_EXECUTION),
+        ("upstream-guard", UPSTREAM_GUARD),
+        ("upstream-reflection", UPSTREAM_REFLECTION),
+        ("open-post-w-o-adjoint", UPSTREAM_ADJOINT),
+        ("schedule-decision", SCHEDULE_DECISION),
+        ("schedule-execution", SCHEDULE_EXECUTION),
+        ("schedule-reflection", SCHEDULE_REFLECTION),
+        ("retained-w-o-gradient", RETAINED_GRADIENT),
+        ("retained-w-o-gradient-meta", RETAINED_GRADIENT_META),
+        ("evaluator-source", EVALUATOR_SOURCE),
+    )
+    for identifier, path in bound:
+        if inputs.get(identifier) != reference(path, identifier):
+            raise ValueError(f"experiment input drifted: {identifier}")
+    parent = json.loads(PARENT_DECISION.read_text())
+    parent_guard = json.loads(PARENT_GUARD.read_text())
+    parent_reflection = json.loads(PARENT_REFLECTION.read_text())
+    upstream = json.loads(UPSTREAM_DECISION.read_text())
+    upstream_reflection = json.loads(UPSTREAM_REFLECTION.read_text())
+    schedule = json.loads(SCHEDULE_DECISION.read_text())
+    schedule_reflection = json.loads(SCHEDULE_REFLECTION.read_text())
+    if not (
+        parent["promotionPass"] is True
+        and parent["measurements"]["rawProbeTensorMismatchCount"] == 0
+        and parent["measurements"]["sourceCaptureDeterministic"] is True
+        and parent["measurements"]["fixturePayloadMismatchCount"] == 0
+        and parent_guard["returncode"] == 0
+        and parent_guard["rss_guard_exceeded"] is False
+        and parent_guard["temporary_disk_guard_exceeded"] is False
+        and parent_reflection["validity"]["valid"] is True
+        and parent_reflection["hypothesis"]["verdict"] == "supported"
+        and parent_reflection["decision"]["verdict"] == "mutate"
+        and upstream["promotionPass"] is True
+        and upstream["measurements"]["totalAdjointMismatchCount"] == 0
+        and upstream_reflection["validity"]["valid"] is True
+        and upstream_reflection["hypothesis"]["verdict"] == "supported"
+        and schedule["promotionPass"] is True
+        and schedule["measurements"]["treatmentMismatchCount"] == 0
+        and schedule["measurements"]["evaluationReplayIdentical"] is True
+        and schedule_reflection["validity"]["valid"] is True
+        and schedule_reflection["hypothesis"]["verdict"] == "supported"
+    ):
+        raise ValueError("open w_o weight-slice antecedents are not satisfied")
+
+
+def source_package(path: Path) -> None:
+    members = [
+        *local_source_closure((RUNNER, MATERIALIZER)),
+        EVALUATOR_SOURCE.resolve(),
+        PROGRAM_DESCRIPTOR.resolve(),
+    ]
+    members = sorted(
+        set(members), key=lambda item: item.relative_to(ROOT).as_posix()
+    )
+    tar_path = path.with_suffix("")
+    with tarfile.open(tar_path, "w") as archive:
+        for member in members:
+            info = archive.gettarinfo(
+                str(member), arcname=member.relative_to(ROOT).as_posix()
+            )
+            info.uid = info.gid = info.mtime = 0
+            info.uname = info.gname = ""
+            info.mode = 0o644
+            with member.open("rb") as stream:
+                archive.addfile(info, stream)
+    path.write_bytes(
+        lzma.compress(tar_path.read_bytes(), preset=9 | lzma.PRESET_EXTREME)
+    )
+    tar_path.unlink()
+    if path.stat().st_size > SOURCE_CEILING:
+        raise ValueError("open w_o weight-slice source closure exceeds ceiling")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--experiment", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    experiment_path = args.experiment.resolve()
+    output = args.output.resolve()
+    research_contracts.validate_artifact(experiment_path)
+    experiment = json.loads(experiment_path.read_text())
+    if experiment["proposalId"] != CANDIDATE_ID:
+        raise ValueError("experiment identifies another candidate")
+    if reference(experiment_path) != json.loads(
+        os.environ["GAMMA_ENWIKI9_EXPERIMENT_JSON"]
+    ):
+        raise ValueError("job and open w_o weight-slice bindings differ")
+    revision = json.loads(os.environ["GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON"])
+    if revision["candidateId"] != CANDIDATE_ID:
+        raise ValueError("job candidate revision identifies another candidate")
+    require_inputs(experiment)
+    if output != RESULT / "decision.json" or output.exists():
+        raise ValueError("open w_o weight-slice result boundary is not fresh")
+    if not WORK.is_dir() or any(WORK.iterdir()):
+        raise ValueError("open w_o weight-slice work root is not fresh")
+
+    evaluator = WORK / "w_o_weight_slice_post_add"
+    build = oracle.execute(
+        [
+            os.environ.get("CXX", "g++"),
+            "-std=c++17",
+            "-O3",
+            "-mavx2",
+            "-mfma",
+            "-ffp-contract=off",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            str(EVALUATOR_SOURCE),
+            "-o",
+            str(evaluator),
+        ],
+        ROOT,
+    )
+    ldd = oracle.execute(["ldd", str(evaluator)], ROOT)
+    forbidden = [
+        line
+        for line in ldd["stdout"].splitlines()
+        if any(
+            token in line.lower()
+            for token in ("libnc", "ggml", "cuda", "openmp", "gomp", "blas")
+        )
+    ]
+    output_names = ("treatment", "prior", "nonfused", "reverse", "negated")
+    evaluations: list[dict[str, Any]] = []
+    replay_paths: list[dict[str, Path]] = []
+    for replay in ("a", "b"):
+        directory = WORK / replay
+        directory.mkdir()
+        paths = {name: directory / f"{name}.bf16" for name in output_names}
+        receipt = oracle.execute(
+            [
+                str(evaluator),
+                str(SOURCE_INPUT),
+                str(UPSTREAM_ADJOINT),
+                *(str(paths[name]) for name in output_names),
+            ],
+            WORK,
+        )
+        if any(path.stat().st_size != SLICE_ELEMENTS * 2 for path in paths.values()):
+            raise ValueError("open w_o weight-slice output geometry differs")
+        evaluations.append(
+            {
+                "receipt": receipt,
+                "sha256": {name: sha256(path) for name, path in paths.items()},
+            }
+        )
+        replay_paths.append(paths)
+    replay_identical = all(
+        replay_paths[0][name].read_bytes() == replay_paths[1][name].read_bytes()
+        for name in output_names
+    )
+    comparator = WORK / "retained-w-o-slice.bf16"
+    comparator.write_bytes(retained_slice(RETAINED_GRADIENT))
+    comparisons = {
+        name: oracle.compare_bf16(replay_paths[0][name], comparator)
+        for name in output_names
+    }
+    treatment_artifact = RESULT / "source-exact-w-o-gradient-slice.bf16"
+    shutil.copyfile(replay_paths[0]["treatment"], treatment_artifact)
+    incremental_source = RESULT / "incremental_source.tar.xz"
+    source_package(incremental_source)
+    execution_path = RESULT / "execution.json"
+    execution_path.write_text(
+        json.dumps(
+            {
+                "arithmeticContract": {
+                    "dot": "32 sequential AVX2 FMAs from zero",
+                    "prior": "add decoded prior BF16 gradient after the dot",
+                    "stateOrder": "0..63 chronological",
+                    "materialization": "round-to-nearest-even BF16 after each state",
+                    "laneMapping": "eight adjacent w_o output features",
+                },
+                "build": build,
+                "comparisons": comparisons,
+                "evaluations": evaluations,
+                "forbiddenDynamicDependencies": forbidden,
+                "ldd": ldd,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
+    shutil.rmtree(WORK)
+    measurements: dict[str, bool | int | float] = {
+        "antecedentsPass": True,
+        "sliceElementCount": SLICE_ELEMENTS,
+        "treatmentMismatchCount": comparisons["treatment"]["mismatchCount"],
+        "maximumTreatmentAbsoluteError": comparisons["treatment"][
+            "maximumAbsoluteError"
+        ],
+        "priorControlMismatchCount": comparisons["prior"]["mismatchCount"],
+        "nonfusedControlMismatchCount": comparisons["nonfused"]["mismatchCount"],
+        "reverseControlMismatchCount": comparisons["reverse"]["mismatchCount"],
+        "negatedControlMismatchCount": comparisons["negated"]["mismatchCount"],
+        "evaluationReplayIdentical": replay_identical,
+        "forbiddenDynamicDependencyCount": len(forbidden),
+        "incrementalSourceBytes": incremental_source.stat().st_size,
+        "guardedWorkRootPass": not WORK.exists(),
+    }
+    promotion = oracle.evaluate(experiment["promotionPredicates"], measurements)
+    kill = oracle.evaluate(experiment["killPredicates"], measurements)
+    promotion_pass = all(row["passed"] for row in promotion)
+    kill_pass = all(row["passed"] for row in kill)
+    result = {
+        "schema": "gamma.enwiki9.adaptive-experiment-result.v1",
+        "objective": research_contracts.objective_binding(),
+        "experiment": reference(experiment_path),
+        "candidateId": CANDIDATE_ID,
+        "candidateRevision": revision,
+        "evidenceClass": experiment["evidenceClass"],
+        "objectiveCreditBytes": 0,
+        "measurements": measurements,
+        "promotionPredicates": promotion,
+        "killPredicates": kill,
+        "promotionPass": promotion_pass,
+        "killPass": kill_pass,
+        "decision": (
+            "authorize-successor"
+            if promotion_pass
+            else "retire" if kill_pass else "retry"
+        ),
+        "artifacts": [
+            reference(execution_path, "execution"),
+            reference(treatment_artifact, "source-exact-w-o-gradient-slice"),
+            reference(incremental_source, "incremental-source-package"),
+        ],
+        "generatedUtc": dt.datetime.now(dt.timezone.utc)
+        .replace(microsecond=0)
+        .isoformat(),
+    }
+    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+    research_contracts.validate_artifact(output)
+    print(json.dumps(result, sort_keys=True), flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

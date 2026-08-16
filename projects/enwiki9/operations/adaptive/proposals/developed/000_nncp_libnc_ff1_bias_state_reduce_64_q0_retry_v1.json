@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T11:18:13+00:00",
+  "created_at": "2026-08-16T11:18:12+00:00",
+  "developed_at": "2026-08-16T11:18:18+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T111413Z_c720568e7a.json",
+      "sha256": "sha256:5800ee2fea96b75b44d847f10281af10e9002081932875ecd6de18d1d886efa7"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1.json",
+    "sha256": "sha256:982561a873d086aeeb0b8eac7e8750bb9396576313a189e433d94f7a2dfc96cf"
+  },
+  "hypothesis": "Applying LibNC's production add_dup1 backward schedule\u2014one nc_reduce_sum(existing_gradient, 6144x32 BF16 state panel, 1) call for each of 64 chronological states\u2014to the source-exact FF1-output adjoint reproduces every retained ff_bias1_19 gradient word.",
+  "interfaces_exposed": [
+    "source-exact FF1-output BF16 adjoint -> exact production bias gradient"
+  ],
+  "kill_condition": "Any nonzero treatment mismatch after complete replay, or any failed antecedent, digest, control, source, or guard predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_ff1_bias_state_reduce_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1463,
+  "promotion_condition": "Exact parity over all 6,144 retained bias-gradient words, deterministic replay, live controls, bound production library, and green guards.",
+  "proposal_id": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Compile failure from external-header unused-parameter warnings under strict -Werror"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1478,
+  "state": "developed",
+  "title": "LibNC FF1 bias state-panel reduction compile retry"
+}

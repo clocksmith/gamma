@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "Generic shared BF16 parameter-gradient accumulation is not the source of the three exceptional words; they arise before or within the actual combined residual-plus-RMSNorm backward topology, or from isolation-dependent branch/direct captures."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+    "candidateTreeSha256": "sha256:61c1c6471930f324b5100917a13a7e0d91c5a6bbade8b976a13ded92cfdaf7ba",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5/20260816T151440809696Z_61c1c6471930.json",
+      "sha256": "sha256:ecfdeb028038b5c0e63e5e5c03a81706bd96f9da6e9a8282cf5aa9242492b7ce"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire the synthetic merge family and inspect or replay the actual same-run residual-plus-RMSNorm boundary; do not sweep coefficient injection primitives.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5/decision.json",
+      "sha256": "sha256:92df1371032c5703b6c3b57596adcfe5829d8977424d9a5be08afefd4ef5a067"
+    },
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5/execution.json",
+      "sha256": "sha256:721e920975eb2a86dc1e542c257ed56a8a5d4f6e7eabc9e31913e5d9fb26d12c"
+    },
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5/guard.json",
+      "sha256": "sha256:05b34600d09ee0f66aa7a21ff01c836f1996a55303e3f3c95b1fadddbdd9f7e5"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5.json",
+    "sha256": "sha256:761191fe5aa88dd6e24d88f2164a11c4f8d65c3c77043688fe35f880581bdab2"
+  },
+  "generatedUtc": "2026-08-16T15:16:31+00:00",
+  "hypothesis": {
+    "rationale": "Neither LibNC graph order reproduced the sealed source total: both retained the same three one-word mismatches as the open rounded sum, despite exact single-path controls.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T151453Z_cbf1bff98d.json",
+    "sha256": "sha256:05b078bc3f78c59444b42ebe48e764274cc443599c731f73aaeea773c88d911d"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "standalone rounded branch/direct adjoints through generic shared-BF16 parameter accumulation as an exact source pre-FF join"
+    ],
+    "transferableLessons": [
+      "Exact isolated BF16 adjoints plus ordinary LibNC gradient accumulation are insufficient to reconstruct a combined graph at midpoint-sensitive coordinates.",
+      "The next oracle must preserve the source residual-plus-RMSNorm topology and capture same-run contributions without changing graph traversal."
+    ],
+    "uncertainties": [
+      "Whether the three exceptional words come from isolation-sensitive direct values, isolation-sensitive RMSNorm branch evaluation, or contribution scheduling inside the actual combined graph."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t151453z_cbf1bff98d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Both complete single-path populations reproduced their sealed BF16 adjoints exactly; both shared-parameter graph orders completed, replayed byte-identically, resolved the attributed LibNC digest, and stayed within resource and source bounds."
+    ],
+    "valid": true
+  }
+}

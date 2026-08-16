@@ -1,0 +1,435 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -1000000,
+    "maximumAddedPackageBytes": 1000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The exact incoming FF1 output adjoint and initial BF16 ff1_19 matrix.",
+      "The prior independently attributed ordered-panel LibNC matmul-driver contract.",
+      "The source adjoint only after complete open populations exist."
+    ],
+    "forbiddenInformation": [
+      "Coordinate-specific arithmetic, fitted corrections, tolerance, or any source-oracle dependency in the executable."
+    ]
+  },
+  "changedMechanism": "Apply the previously source-attributed matmul driver schedule to FF1: eight adjacent destination lanes, 48 ordered 128-feature reduction panels, sequential fused accumulation within panels, and explicit panel combination before one BF16 output conversion.",
+  "controls": [
+    {
+      "definition": "Reduce 6,144 features as 48 ordered 128-feature panels and combine completed panels sequentially.",
+      "id": "ordered-128-panels",
+      "role": "treatment"
+    },
+    {
+      "definition": "Compare only after both complete open cells exist against the deterministic source oracle.",
+      "id": "source-input-adjoint",
+      "role": "comparator"
+    },
+    {
+      "definition": "Use the same lanes, weights, input, FMA, and BF16 conversion but remove all intermediate panel boundaries.",
+      "id": "one-unbroken-reduction",
+      "role": "negative"
+    },
+    {
+      "definition": "Bind the independent exact FF2 transpose receipt that first attributed the ordered-panel driver.",
+      "id": "ff2-driver-transfer",
+      "role": "shifted"
+    },
+    {
+      "definition": "Execute both complete arithmetic cells twice.",
+      "id": "independent-replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "generatedUtc": "2026-08-16T12:36:06+00:00",
+  "hypothesis": {
+    "claim": "The source-attributed ordered 128-feature matmul panels transfer from FF2 to the 6,144-feature FF1 reduction and reproduce all 2,097,152 production FF1 input-adjoint words exactly, while one unbroken reduction remains distinguishable.",
+    "falsification": "Any ordered-panel/source mismatch, indistinguishable unblocked control, replay failure, forbidden dependency, source failure, or resource failure rejects the transferred driver contract."
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:e52df55685dee87ea74af9b8bd87739129f0dab148a83f8d65ad2e6d2af7a340"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:19477b53a94b05ba2383f312caf17d6cd1155bcdee9f2d759a86c3b004e61037"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:eee9f2a97c8e64b30472b8c21247b388fd518e68b9f5cd3b94f59d7b0d968e69"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T123446Z_5cbfc56c6d.json",
+      "sha256": "sha256:9deca4126b99e657d744f41aa23c5707f4f758d147549cbd83ed1314ae6227d3"
+    },
+    {
+      "id": "source-ff1-input-adjoint",
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/source-ff1-input-adjoint.bf16",
+      "sha256": "sha256:9be6125a639c3c7dc0d819cd13e815eae367baee756465a158a240c57defbaf4"
+    },
+    {
+      "id": "source-initial-ff1-19",
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/source-initial-ff1-19.bf16",
+      "sha256": "sha256:00d9f8dcd43bf8dfd9e314e7ee3eefb8c1dd889d6f15bfbece97f96c3b9fbc2e"
+    },
+    {
+      "id": "open-ff1-output-adjoint",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff1-output-residual.bf16",
+      "sha256": "sha256:5271b61af446063837f14a0d8c0374bafac71d97ce774a634adf5ed4a278007c"
+    },
+    {
+      "id": "ff2-panel-decision",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:18883f7654a60ece9cc2b67095f2ec44c8f123c10cc77ea295f3623970110acd"
+    },
+    {
+      "id": "ff2-panel-execution",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2bace14a8458018ed979c17eb9bdd1771e89a90ba0b3429fab58a5e43bd97fd8"
+    },
+    {
+      "id": "ff2-panel-reflection",
+      "path": "operations/adaptive/reflections/20260816T093907Z_7f51e2d346.json",
+      "sha256": "sha256:41aa8505ee92820f71d7e7d0b9188152b77ecf13b511d84d82f1a5124008c9ee"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_top_ff1_input_adjoint_block128_64_q0.py",
+      "sha256": "sha256:f1815f05f7c8c9cad8bdbcf8822201289f6fd177c7aaa708694d9c776b904ab9"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_top_ff1_input_adjoint_block128_64_q0_materializer.py",
+      "sha256": "sha256:3ae13232494a11f055eb474167260239adc7741a985609e0c4bdf860a8850d51"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/ff1_transpose_block128.cpp",
+      "sha256": "sha256:9f8cbf5549c79d21794edd135d5e03704e610d711b5cd898b62931df815f8dce"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/program.py",
+      "sha256": "sha256:7b1dee788f576e35f784e4d93839eac8ed3950c374ea5c5b10481e4c242c6714"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The captured source adjoint, initial ff1_19 matrix, exact incoming FF1 output adjoint, sample order, coordinate layout, and BF16 conversion remain unchanged.",
+    "One uniform kernel covers all 2,097,152 coordinates; tolerance, coordinate repair, and comparator-derived values are forbidden.",
+    "Both complete arithmetic cells are generated before consulting the source comparator.",
+    "The executable has no LibNC, GGML, BLAS, OpenMP, or CUDA dependency."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-treatment",
+      "measurement": "block128SourceMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The deterministic source oracle, exact operands, initial matrix, and prior FF2 panel attribution remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Words in each complete FF1 input-adjoint cell.",
+      "id": "adjointElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Ordered panels covering the 6,144-feature reduction.",
+      "id": "reductionPanelCount",
+      "unit": "128-feature panels"
+    },
+    {
+      "definition": "Ordered-panel words differing from the source adjoint.",
+      "id": "block128SourceMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum ordered-panel/source error.",
+      "id": "maximumBlock128AbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "One-unbroken-reduction words differing from the source adjoint.",
+      "id": "unblockedSourceMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Ordered-panel and unblocked complete populations differ byte-for-byte.",
+      "id": "arithmeticCellsDiffer",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Two complete two-cell evaluations reproduce byte-for-byte.",
+      "id": "evaluationReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "LibNC, GGML, BLAS, OpenMP, or CUDA dependencies in the open executable.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed candidate source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All transient build and evaluation payloads were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/decision.json",
+    "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/execution.json",
+    "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/source-exact-ff1-input-adjoint.bf16",
+    "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/20260816T123432539258Z_3dc9797c6f85.json",
+      "sha256": "sha256:2c3fea496db406eafdc0123b193f578be793780673374674b88d2fa4acab1b27"
+    }
+  },
+  "population": {
+    "coordinate": "state-major, stream-major, destination-feature-major",
+    "scopeBytes": 4194304,
+    "scopeSymbols": 2097152,
+    "selection": "Every one of 1,024 destination features for all 64 chronological states and 32 streams.",
+    "unit": "BF16 top-FF1 input-adjoint words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-elements",
+      "measurement": "adjointElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-panels",
+      "measurement": "reductionPanelCount",
+      "operator": "eq",
+      "threshold": 48
+    },
+    {
+      "id": "p-treatment",
+      "measurement": "block128SourceMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximum",
+      "measurement": "maximumBlock128AbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-unblocked-live",
+      "measurement": "unblockedSourceMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-cells-differ",
+      "measurement": "arithmeticCellsDiffer",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-replay",
+      "measurement": "evaluationReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 1000000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.05,
+    "uncertaintyRisk": 0.15
+  },
+  "status": "frozen"
+}

@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Fixture identity used a stale probe-prefix exclusion; the captured arithmetic and source/open comparisons completed independently."
+  },
+  "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:9eb48e7bd66c165dcb82508d966c98d21849887bffb4c7579f98cd0fd6f26117",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1/20260816T101116986368Z_9eb48e7bd66c.json",
+      "sha256": "sha256:3c86e7193f8aae0d920bd6e391ada380a12ac78f97b86194b127b8461c0985e6"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Create a zero-credit immutable manifest-correction candidate bound to the sealed decision, manifests, guards, and four branch artifacts; promote the branch attribution only if all remaining fixture paths match exactly.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:f85052b5c88593890fdea52afe0a9e2e9ce939282538d7aeeb161bb3d02c49df"
+    },
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:10401822293ddac9c60384f60c0b40fd2d0dc766af6cba0eb68f3f63d9456d90"
+    },
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:12b0836c567b0e4c8532bbbe5488ba651ccfdfc4b9406f943994015f4b95c8c1"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1.json",
+    "sha256": "sha256:3ce10d8ef82d924c5b5952a3c2c860ae3366a55c2ed7c2c6ee0b5ea14cba6bcb"
+  },
+  "generatedUtc": "2026-08-16T10:25:01+00:00",
+  "hypothesis": {
+    "rationale": "The sealed data show 114 gate-branch mismatches and zero value-branch mismatches, but promotion is withheld until an immutable receipt proves every reported fixture mismatch belongs to the declared probe namespace and every non-probe payload matches.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T101128Z_dc16c55f42.json",
+    "sha256": "sha256:64a7b1aee46087117e336b892c6ae1998705a1382aa945cb66bf13d16687cb5a"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Probe namespaces are part of the fixture accounting contract. Correct only the declared top_geglu_ exclusion against the sealed manifests; do not rerun or alter the branch tensors."
+    ],
+    "uncertainties": [
+      "Whether any non-probe fixture mismatch remains after excluding exactly top_geglu_ must be established by the correction receipt."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t101128z_dc16c55f42",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete source captures, branch artifacts, replay, comparisons, source closure, strict outputs, and resource guards completed, but the inherited fixture-identity filter recognized only the old top_ff2_ probe namespace and counted all 1,024 declared top_geglu_ probe files across both captures as fixture drift."
+    ],
+    "valid": false
+  }
+}

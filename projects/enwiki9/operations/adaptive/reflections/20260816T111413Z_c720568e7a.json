@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The evaluator compile command omitted -Wno-unused-parameter while including warning-bearing external LibNC headers under -Werror."
+  },
+  "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:6388499ba45c2b33bb99a6f75032f32009ce4cb67e46c158a66fec8e30830d14",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_v1/20260816T111347680001Z_6388499ba45c.json",
+      "sha256": "sha256:6a0e66b712004e46a61563e8da02069791fffb41d8c325136353843c936b96c7"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create a contract-preserving implementation retry with only -Wno-unused-parameter added to the compile invocation.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_ff1_bias_state_reduce_64_q0_v1/guard.json",
+      "sha256": "sha256:5a3c04322aa71d8b32a8c27faa7bbb443798b9bd8addbc2f4dd71bc7497a384a"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T111413Z_c720568e7a.log",
+      "sha256": "sha256:6f98751d2d0a6bd70fb54e7f54b9b15a6d9ef5e73d8abfcf353f3ec3c6386df8"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff1_bias_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:cfaee98d2eb14baf22c2b9164fdd4eef95e8c3003372adcb9ec5777764abdf24"
+  },
+  "generatedUtc": "2026-08-16T11:16:35+00:00",
+  "hypothesis": {
+    "rationale": "No treatment or control executable was produced and the retained comparator was never opened.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T111413Z_c720568e7a.json",
+    "sha256": "sha256:53a9dd887fcbf29075727222d04ea2aa24842fe98308b3c285f37dc177de7312"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "External warning policy is an implementation boundary; suppress only the known header warning class in an immutable retry without changing reduction arithmetic or the frozen scientific contract."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t111413z_c720568e7a",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The revision-bound job reached guarded execution but compilation stopped before any scientific payload because -Werror promoted unused-parameter warnings in external LibNC headers."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_pre_ff_same_run_contributions_64_q0_v1",
+  "claimed_at": "2026-08-16T15:22:30+00:00",
+  "created_at": "2026-08-16T15:22:24+00:00",
+  "developed_at": "2026-08-16T15:22:30+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T151453Z_cbf1bff98d.json",
+      "sha256": "sha256:82282e35a7b7ff6770d9637194422d412bb6f8cf7c8a6328fca480c3b62f4e45"
+    },
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v5/decision.json",
+      "sha256": "sha256:92df1371032c5703b6c3b57596adcfe5829d8977424d9a5be08afefd4ef5a067"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_pre_ff_same_run_contributions_64_q0_v1.json",
+    "sha256": "sha256:9debfd1f53659411fe0a27467821e7ad0863ad0415abeb208af357c852aaa866"
+  },
+  "hypothesis": "The direct pre-FF residual adjoint captured in the same source graph differs from the open direct calculation at the exceptional coordinates and, with the same-run exact RMSNorm branch, reconstructs every sealed source total word.",
+  "interfaces_exposed": [
+    "one production source graph -> same-run total, branch, and direct BF16 adjoints"
+  ],
+  "kill_condition": "Any non-exact same-run composition or capture, fixture, source, resource, or receipt failure rejects the direct-adjoint attribution.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+  "parent_proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v5",
+  "priority": 1455,
+  "promotion_condition": "Exact retained total and branch, nonzero direct localization, exact same-run composition, a live negated control, deterministic replay, exact fixture identity, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_libnc_pre_ff_same_run_contributions_64_q0_v1",
+  "retired_neighborhoods": [
+    "standalone rounded adjoint injection as an exact source merge oracle"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1473,
+  "state": "developed",
+  "title": "Capture pre-FF contributions in one source graph"
+}

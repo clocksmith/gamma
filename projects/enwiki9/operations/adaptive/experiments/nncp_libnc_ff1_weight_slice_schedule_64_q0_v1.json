@@ -1,0 +1,628 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The complete source-exact BF16 FF1-output adjoint.",
+      "A digest-derived exact open forward exposing BF16 layer-19 FF1 inputs.",
+      "The statically attributed nc_backward matrix-gradient call and production LibNC digest."
+    ],
+    "forbiddenInformation": [
+      "The retained ff1_19 slice before both replay populations complete.",
+      "Coordinate-specific patches, tolerance, fitted row selection, or teacher payloads in a submitted codec."
+    ]
+  },
+  "changedMechanism": "Expose the exact layer-19 FF1 matrix input, then replace an unspecified whole-population projection with the statically attributed backward call: nc_matmul_add2(state_residual, state_input, existing_gradient, false, true, 1, 0) for 64 chronological states.",
+  "controls": [
+    {
+      "definition": "Accumulate one 128-by-32 residual panel times one transposed 1,024-by-32 input panel into the existing BF16 gradient for each chronological state.",
+      "id": "chronological-state-matmul",
+      "role": "treatment"
+    },
+    {
+      "definition": "Perform one 128-by-2,048 times transposed 1,024-by-2,048 LibNC matrix update.",
+      "id": "flat-whole-population",
+      "role": "comparator"
+    },
+    {
+      "definition": "Apply the same state updates from state 63 down to state 0.",
+      "id": "reverse-state-order",
+      "role": "negative"
+    },
+    {
+      "definition": "Invert only the sign bit of every source-exact FF1-output adjoint word.",
+      "id": "negated-residual",
+      "role": "negative"
+    },
+    {
+      "definition": "Regenerate the complete open forward input and all four projections twice.",
+      "id": "independent-replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+  "generatedUtc": "2026-08-16T11:39:36+00:00",
+  "hypothesis": {
+    "claim": "Sixty-four chronological LibNC BF16 matrix-gradient updates reproduce every retained word in the first 128 output rows of ff1_19, while a flat whole-population update and reverse state order differ.",
+    "falsification": "Any treatment mismatch, exact-forward mismatch, dead control, replay failure, digest drift, or resource failure rejects this schedule as the source-exact FF1 weight-gradient boundary."
+  },
+  "inputs": [
+    {
+      "id": "top-parent-decision",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/decision.json",
+      "sha256": "sha256:5dda477b87a845497b5fb312a17609ada3f7857989b1bd9d62e433ba4b011745"
+    },
+    {
+      "id": "top-parent-execution",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/execution.json",
+      "sha256": "sha256:d120c8af71f7b1ff3714158143202b97b94927ebaac26a76326edfaaf7c78056"
+    },
+    {
+      "id": "top-parent-guard",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/guard.json",
+      "sha256": "sha256:0fb3799b2c8cd9a0a1b0b621d140192584d859e95d1f34bcae9173c86f22103f"
+    },
+    {
+      "id": "top-parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T104952Z_2204470800.json",
+      "sha256": "sha256:717923ae9726710672c3fc94984d0b31066799298d99f668c042427196974782"
+    },
+    {
+      "id": "source-exact-ff1-output-residual",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff1-output-residual.bf16",
+      "sha256": "sha256:5271b61af446063837f14a0d8c0374bafac71d97ce774a634adf5ed4a278007c"
+    },
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/decision.json",
+      "sha256": "sha256:ea998fc37737a5a69f0f830346415c16b260b6f52666a539365a9ce2bb42d370"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/execution.json",
+      "sha256": "sha256:2b4624ea8155efe8b35716855ab5fcb6215dc1ff77968054141f6eeba2aca377"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/guard.json",
+      "sha256": "sha256:34ce918a90f5f83b28335ab8409e6891f688cfae817bfd82b5c2a02df854c257"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T112548Z_7841e2cc5b.json",
+      "sha256": "sha256:247818ccd5a497e869eea82af9a138c3eb89cf8418e29d587574ffbc8206dc76"
+    },
+    {
+      "id": "fixture-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "fixture-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "retained-ff1-19-gradient",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0002_ff1_19.bin",
+      "sha256": "sha256:dafaebb39bcfba3aac62f4cdba9c67ddba043704948a091f049050b9bae6287c"
+    },
+    {
+      "id": "retained-ff1-19-gradient-meta",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0002_ff1_19.meta",
+      "sha256": "sha256:32ae37c1512a7cd9d6c02c86d1a54a0262bf85603f301063e36e1fe7a3f78c22"
+    },
+    {
+      "id": "parent-forward-materializer",
+      "path": "programs/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/materialize_forward.py",
+      "sha256": "sha256:6afb5369e3c6c90f41c5e2b15ae547fc1e664446b9fb53788058ae09d8563a2e"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_libnc_ff1_weight_slice_schedule_64_q0.py",
+      "sha256": "sha256:702a27a5b4dfd602a98102f6b2cd7ac49b62353203e45027a76b8e97f26240f0"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_libnc_ff1_weight_slice_schedule_64_q0_materializer.py",
+      "sha256": "sha256:5c92fc1bc7a056281acc2c284e1e0ed970e280e45c8b3d5bdb1f87be3c78e8b6"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/ff1_weight_slice_schedule.c",
+      "sha256": "sha256:65171eaef1b83539ba96831749d2edf9b77bf2fdd376ef7be109559147e5b864"
+    },
+    {
+      "id": "ff1-input-materializer",
+      "path": "programs/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/materialize_ff1_input.py",
+      "sha256": "sha256:cf28f97db68a12c6e72682d311b77b448308a1ea4544809953acecb6357b1da7"
+    },
+    {
+      "id": "cmake-contract",
+      "path": "programs/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/CMakeLists.txt",
+      "sha256": "sha256:0e958bcb8cb33d3abfc2f6ed624741a1b5b72c77dc57af6acf38b55e2a2e36d2"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/program.py",
+      "sha256": "sha256:4cfdb6e542a35c3d5b5d0c759ee8e7a710789e2a1d3852dc36e163529ddcd480"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_final_hidden_residual_64_q0-0f3e6dd226ef",
+      "path": "tools/nncp_open_profile_final_hidden_residual_64_q0.py",
+      "sha256": "sha256:f00196e474d415d70793e29cb00c3a9ece0668d7e84e3f2872759498cb543d77"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff1_bias_gradient_64_q0_v1-fb6b32dc96f9",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.py",
+      "sha256": "sha256:b8085f7dfeff8b79599ccb4e562e0433fd93097fe8b5c4f480f753b148587a39"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_64_q0_retry_v1-c3b7f3df680f",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.py",
+      "sha256": "sha256:e42d745b9884260af00a3515cda818572893cf1ac1f3e03b1da0048f147f0a47"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The exact FF2 and GEGLU output adjoint is consumed unchanged and the open forward changes only artifact visibility.",
+    "The 128 adjacent output rows are selected before execution and no retained coordinate influences the treatment.",
+    "The retained gradient is read only after both complete treatment/control populations exist; tolerance and coordinate repair are forbidden.",
+    "LibNC remains a zero-credit attribution teacher and cannot ship in a submitted codec."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The exact top-FF1 adjoint, open bias reducer, source fixture, comparator, and guards remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Streams in every decoder-state matrix input.",
+      "id": "streamCount",
+      "unit": "streams"
+    },
+    {
+      "definition": "Chronological decoder states accumulated.",
+      "id": "stateCount",
+      "unit": "states"
+    },
+    {
+      "definition": "Complete state-by-stream sample population.",
+      "id": "sampleCount",
+      "unit": "samples"
+    },
+    {
+      "definition": "FF1 matrix input features.",
+      "id": "inputFeatureCount",
+      "unit": "features"
+    },
+    {
+      "definition": "Prospectively selected adjacent FF1 output rows.",
+      "id": "sliceOutputFeatureCount",
+      "unit": "features"
+    },
+    {
+      "definition": "Complete open layer-19 FF1 input population.",
+      "id": "inputElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Complete source-exact FF1-output adjoint population.",
+      "id": "residualElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Retained ff1_19 gradient words in the frozen slice.",
+      "id": "sliceElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Chronological nc_matmul_add2 state updates.",
+      "id": "stateMatmulCallCount",
+      "unit": "calls"
+    },
+    {
+      "definition": "Inherited exact forward checkpoints in one replay.",
+      "id": "layerInputCheckpointCount",
+      "unit": "checkpoints"
+    },
+    {
+      "definition": "Inherited forward checkpoint mismatches over both replays.",
+      "id": "layerInputMismatchCount",
+      "unit": "float32 elements"
+    },
+    {
+      "definition": "Maximum inherited forward checkpoint error.",
+      "id": "maximumLayerInputAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Chronological treatment words differing from the retained slice.",
+      "id": "treatmentMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum treatment/comparator error.",
+      "id": "maximumTreatmentAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "One-call flat-control words differing from the retained slice.",
+      "id": "flatMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Reverse-state control words differing from the retained slice.",
+      "id": "reverseMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Sign-negating the exact residual changes the projected slice.",
+      "id": "negatedControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Two complete open forward populations produce the same FF1 input.",
+      "id": "ff1InputReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Both treatment/control populations reproduce byte-for-byte.",
+      "id": "evaluationReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Execution uses the attributed production LibNC digest.",
+      "id": "sourceLibraryDigestBound",
+      "unit": "boolean"
+    },
+    {
+      "definition": "LibNC, GGML, BLAS, OpenMP, or CUDA dependencies in the open forward executable.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed candidate source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All transient forward, build, and oracle payloads were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/decision.json",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/execution.json",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/open-ff1-input.bf16",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/libnc-treatment-slice.bf16",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/libnc-flat-control-slice.bf16",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/libnc-reverse-control-slice.bf16",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/libnc-negated-control-slice.bf16",
+    "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_bias_state_reduce_64_q0_v1/20260816T112424357780Z_733fecc39a59.json",
+      "sha256": "sha256:f46393cb88f1facb7b38dd17f5b4bdee1b5166dd1050006a934e102fc16706ad"
+    }
+  },
+  "population": {
+    "coordinate": "state-major, stream-major, feature-major operands; input-major then output-feature-major gradient storage",
+    "scopeBytes": 29360128,
+    "scopeSymbols": 14680064,
+    "selection": "All 64 states, all 32 streams, all 1,024 FF1 inputs, the complete 6,144-feature adjoint, and a prospectively frozen adjacent 128-output gradient slice.",
+    "unit": "BF16 FF1 matrix-gradient operands"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-streams",
+      "measurement": "streamCount",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-states",
+      "measurement": "stateCount",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "p-samples",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-input-features",
+      "measurement": "inputFeatureCount",
+      "operator": "eq",
+      "threshold": 1024
+    },
+    {
+      "id": "p-output-features",
+      "measurement": "sliceOutputFeatureCount",
+      "operator": "eq",
+      "threshold": 128
+    },
+    {
+      "id": "p-input",
+      "measurement": "inputElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-residual",
+      "measurement": "residualElementCount",
+      "operator": "eq",
+      "threshold": 12582912
+    },
+    {
+      "id": "p-slice",
+      "measurement": "sliceElementCount",
+      "operator": "eq",
+      "threshold": 131072
+    },
+    {
+      "id": "p-calls",
+      "measurement": "stateMatmulCallCount",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "p-checkpoints",
+      "measurement": "layerInputCheckpointCount",
+      "operator": "eq",
+      "threshold": 640
+    },
+    {
+      "id": "p-forward-mismatch",
+      "measurement": "layerInputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-forward-maximum",
+      "measurement": "maximumLayerInputAbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-treatment-maximum",
+      "measurement": "maximumTreatmentAbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-flat-live",
+      "measurement": "flatMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-reverse-live",
+      "measurement": "reverseMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-negated",
+      "measurement": "negatedControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-input-replay",
+      "measurement": "ff1InputReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-evaluation-replay",
+      "measurement": "evaluationReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-library",
+      "measurement": "sourceLibraryDigestBound",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 0.0,
+    "interactionRisk": 0.2,
+    "uncertaintyRisk": 0.2
+  },
+  "status": "frozen"
+}

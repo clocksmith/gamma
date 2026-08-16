@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The patch inserted static probe definitions near the fixture helper but no declarations before trf_eval."
+  },
+  "candidateId": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+    "candidateTreeSha256": "sha256:f4d935c9e7221b96a0631f99935a6da593018349b6c8a969661c4a7d5fb2e1ac",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_order_64_q0_v1/20260816T071949631003Z_f4d935c9e722.json",
+      "sha256": "sha256:11393ba07b84e06b2f6ac8dd0f279cf57cf3da43eeb227763b18f5c44aff0e0d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create an immutable declaration-only retry, preserve all six prospective arithmetic orders and predicates, and rerun both complete guarded captures.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_v1/guard.json",
+      "sha256": "sha256:ea4b73b8cc4955bcdda3a446323643301783050032118ac6f35085b100caf44b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_order_64_q0_v1.json",
+    "sha256": "sha256:0fb10cd3e18cc5844a06cb125885bc9a43e4c1d6a43ee4b30fab1c2e8bcf1f34"
+  },
+  "generatedUtc": "2026-08-16T07:21:31+00:00",
+  "hypothesis": {
+    "rationale": "No production execution, final-RMSNorm tensor, arithmetic-order evaluation, comparator result, or scientific control was produced.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T072040Z_e4976727fd.json",
+    "sha256": "sha256:a557653e5e5c7b1323db050c21da53c49232df51bd8aba8d3ffffddf225a393c"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Read-only production probes inserted below trf_eval still require digest-bound declarations at the unique pre-trf_eval boundary."
+    ],
+    "uncertainties": [
+      "The exact production BF16 final-RMSNorm arithmetic order remains wholly unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t072040z_e4976727fd",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The instrumented translation unit failed to compile before either production capture because the read-only probe definitions were inserted after their first use without forward declarations."
+    ],
+    "valid": false
+  }
+}

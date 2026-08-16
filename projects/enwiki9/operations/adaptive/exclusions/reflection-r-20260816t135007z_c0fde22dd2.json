@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T135007Z_c0fde22dd2.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t135007z_c0fde22dd2",
+  "failure": "The total-adjoint mismatch is not explained by pre- versus post-residual BF16 conversion; the remaining uncertainty lies inside the normalization branch input-adjoint arithmetic or its source graph boundary.",
+  "mechanism": "Change only the normalization-input residual conversion point: retain the exact F32 centered result until it is added to the BF16 direct branch, then convert the merged value once.",
+  "population": "BF16 layer-19 pre-FF hidden-adjoint words; Every one of 1,024 features for all 64 chronological states and 32 streams.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T13:51:26+00:00",
+  "retired_dimensions": [
+    "post-merge-only-bf16-conversion"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

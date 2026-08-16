@@ -1,0 +1,37 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "Open top-layer FF2-transpose and GEGLU bias projection",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The source-attributed streaming BF16 dot for ff2_19 transpose, followed by the measured unfused tanh-GELU derivative and explicit BF16 operation boundaries, reconstructs the complete top-layer FF1-output adjoint whose broadcast projection exactly equals the retained ff_bias1_19 gradient.",
+  "id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T084751Z_2949ede196": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T084751Z_2949ede196.json",
+        "sha256": "sha256:87b65ea886efa0c3a54ead47471edfbf1942f3931362879d6fd6194ba55e2d71",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.json",
+      "sha256": "sha256:68bd6212ac9717ea15354618f9e23daeaf7b264ac41e9ab635259d1676029a7d"
+    },
+    "interfaces_exposed": [
+      "top-layer-geglu-backward"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+    "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "status": "measured_negative",
+  "verdict": "Freeze a source-attributed FF2-input-adjoint capture or an equivalent independent primitive comparator before changing any activation formula; do not tune against the retained ff_bias1_19 vector."
+}

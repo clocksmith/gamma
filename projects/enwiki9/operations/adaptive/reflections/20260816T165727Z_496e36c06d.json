@@ -1,0 +1,94 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The result serializer used a descriptive decision label instead of the schema-permitted authorize-successor enum."
+  },
+  "candidateId": "nncp_open_top_w_o_input_forward_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_w_o_input_forward_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:09b3d0dd0f4654c947070409048f894d8afa9821935895856934c7d7f9fadc2a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_w_o_input_forward_64_q0_retry_v1/20260816T165709376994Z_09b3d0dd0f46.json",
+      "sha256": "sha256:0a41a6c744413012e469dd0e3e11df223b659129ed34f58f5c6af4d2a80e11aa"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Run a receipt-only salvage over the preserved exact tensor, execution receipt, invalid prevalidation result, guard, job, and source oracle; do not repeat the expensive open-forward population.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:2ec0d999162024670ad3396688ddf318164383c3dd0d48de361f0241159203a6"
+    },
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:37ddb195d411a93bf300baad4034ddf0f0e6e33c73cf4ee6fb5d310faef57ebb"
+    },
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v1/incremental_source.tar.xz",
+      "sha256": "sha256:e708abdf9d237ff5fd1965ab86ef92ce00287f164cb72854a6863d45355e7ff3"
+    },
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v1/open-exact-w-o-input.bf16",
+      "sha256": "sha256:15fcaea4146ec1f6c361c527ef74ac740b8a0ab1458ea5909c5df8ce2109265e"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_w_o_input_forward_64_q0_retry_v1.json",
+    "sha256": "sha256:07572e667302d96bc27678be35f86b3e1cc8f86f9bdb88c48908328801289b43"
+  },
+  "generatedUtc": "2026-08-16T17:09:37+00:00",
+  "hypothesis": {
+    "rationale": "The raw measurements support the hypothesis, but the terminal result is schema-invalid and therefore cannot serve as validated evidence until a receipt-only salvage independently revalidates the preserved artifacts.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T165727Z_496e36c06d.json",
+    "sha256": "sha256:2210761fe7e179fc557574aec3af9f024689e2bc35338db81a19e03de0f28349"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Decision labels are contract values, not prose; emit only schema-enumerated values and put boundary-specific meaning in rationale or reflection."
+    ],
+    "uncertainties": [
+      "The preserved artifacts appear exact but remain unpromoted until a fresh contract-valid salvage receipt verifies their hashes, source comparison, replay evidence, controls, and guards."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t165727z_496e36c06d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete 32-stream populations and all scientific comparisons finished, but the runner emitted decision label authorize-attention-descent, which is outside the adaptive-result schema enum. Schema validation raised after writing the otherwise complete result, so the job returned one."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_ff1_weight_slice_post_add_64_q0_v1"
+  ],
+  "description": "Full 6,144-by-1,024 open top-FF1 weight-gradient projection",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The exact post-dot prior-add schedule transfers uniformly from the frozen 128-row slice to all 6,144 ff1_19 output rows and reproduces the retained 6,291,456-word gradient byte-for-byte.",
+  "id": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T121133Z_b2c70f9ec5": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T121133Z_b2c70f9ec5.json",
+        "sha256": "sha256:b97976505d70e01e6b1997f03baf861e96ee87e56ccbb3c793fb555405d12c53",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1.json",
+      "sha256": "sha256:908975fcc3c4f58aac149cd9449a4ab632a1ce587e9e46fc0339b44668521c7d"
+    },
+    "interfaces_exposed": [
+      "exact open BF16 FF1 operands -> full source-exact ff1_19 gradient"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+    "retired_neighborhoods": [
+      "Slice-only FF1 matrix-gradient evidence"
+    ]
+  },
+  "parent": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Use the now-open exact full FF1 parameter boundary to attribute the remaining FF1 input-adjoint transpose and continue the teacher-removal chain toward the previous layer."
+}

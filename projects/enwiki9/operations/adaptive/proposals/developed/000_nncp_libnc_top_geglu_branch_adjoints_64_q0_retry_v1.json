@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T10:11:16+00:00",
+  "created_at": "2026-08-16T10:11:16+00:00",
+  "developed_at": "2026-08-16T10:11:17+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T100841Z_829771fc57.json",
+      "sha256": "sha256:6d5a2ab4b04c744fadd89c05f1f77638252c271170140748f8ac5d9b38435cd7"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T095147Z_8ddedba49c.json",
+      "sha256": "sha256:b3265262588916368ab0d076bcf716e7813ab9ae86215e38280b7dbf71987de9"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1.json",
+    "sha256": "sha256:3ce10d8ef82d924c5b5952a3c2c860ae3366a55c2ed7c2c6ee0b5ea14cba6bcb"
+  },
+  "hypothesis": "With the source patch bound to the unique FF_ACT_GEGLU case and no probe or predicate change, at least one production split-branch adjoint differs from the open branch residual after the incoming FF2 residual is source-exact.",
+  "interfaces_exposed": [
+    "source-exact FF2 residual -> production GEGLU gate/value branch adjoints"
+  ],
+  "kill_condition": "Both complete source branch adjoints equal their open counterparts, exonerating GEGLU and localizing the retained mismatch to bias projection.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "priority": 1467,
+  "promotion_condition": "The unchanged branch-capture gate executes twice and passes capture, fixture, live-comparator, branch-mismatch, source, strict-output, and resource predicates.",
+  "proposal_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Do not use a bare nc_split statement as a source instrumentation anchor."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1467,
+  "state": "developed",
+  "title": "Unique-anchor production GEGLU branch capture"
+}

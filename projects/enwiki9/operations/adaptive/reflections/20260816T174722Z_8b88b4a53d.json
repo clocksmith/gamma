@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "LibNC dims identify feature, singleton, head, and stream axes, while write_axis serializes highest-to-lowest axes; concatenating states therefore already yields state-major, stream-major, head-major, feature-major bytes, exactly the open pre-w_o order."
+  },
+  "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:1d7f4c34813b3550df6115ba62859016d2c31618a6ee88f444f0a6da7d13f9ab",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/20260816T174704034195Z_1d7f4c34813b.json",
+      "sha256": "sha256:824d2c40ee6b15774509cae8339a04b5671dc6bec426cecbe024b3cc34589a63"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Use the exact probability input and exact attended/probability adjoints to implement the smallest LibNC-free layer-19 value-attention backward boundary, beginning with the now-proven concat identity and preserving forward, replay, and wrong-order controls.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:e9011ea1891c14d82db1d3c1d733f183efaf63c1c04091fa91d9e4debd14a37d"
+    },
+    {
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:4fd30f759b0665a48a5359d6382e0d8520bd211a2b719a39d564add94ae31b4c"
+    },
+    {
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:4978f9d430bf78eaf69d992e995deeb4b9af18ea951c8f41f1df4a9543e9fa31"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2.json",
+    "sha256": "sha256:2ba1ff3d24bb49e9640b61d998fe5f723393684e357fc347879df396529f5682"
+  },
+  "generatedUtc": "2026-08-16T17:50:18+00:00",
+  "hypothesis": {
+    "rationale": "Every prospectively frozen salvage predicate passed. Direct serialized attended bytes exactly matched the independently exact open pre-w_o tensor, both complete source captures reproduced byte-for-byte, all forward and adjoint tensors were live, and the rejected head-major interpretation differed broadly.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T174722Z_8b88b4a53d.json",
+    "sha256": "sha256:06b0a50aa0aced19725b50ab01befdef13aac0b04aa3f96a383cce5edaf49ec8"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Interpreting LibNC dimension values as serialized outer-axis order without following write_axis traversal",
+      "Rerunning a zero-credit teacher after two complete raw capture trees can be manifest-frozen and independently salvaged"
+    ],
+    "transferableLessons": [
+      "Bind tensor coordinates through both metadata and serialization traversal, then require an independently exact downstream identity plus a live alternative-order control before promoting a source oracle."
+    ],
+    "uncertainties": [
+      "The result earns zero Hutter credit and does not yet implement the value-attention matmul or softmax backward arithmetic in a self-contained Gamma predictor."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t174722z_8b88b4a53d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound receipt-only salvage re-hashed both 1,013-file capture trees against their frozen manifests, verified equal aggregate digests, exact 1,024-file probe population, unchanged non-probe fixture, four complete live tensor populations, zero direct concat mismatches and zero maximum error, a live 2,078,456-word wrong-order control, zero teacher executions, green resource guards, schema-valid pre-cleanup and final results, and removal of both transient work roots."
+    ],
+    "valid": true
+  }
+}

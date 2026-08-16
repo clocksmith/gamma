@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_open_concat_head_identity_64_q0_v1",
+  "claimed_at": "2026-08-16T17:54:10+00:00",
+  "created_at": "2026-08-16T17:54:10+00:00",
+  "developed_at": "2026-08-16T17:54:11+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T174722Z_8b88b4a53d.json",
+      "sha256": "sha256:a2191bedd789d7f7ca55076d87c36cf367ba6789ec0cbc380cbfaa7077b2083a"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T171305Z_fdae41e74c.json",
+      "sha256": "sha256:6974b9d4c5319b03f4f290ae12dbf48b65786f46ad59020a2dee57457d5deb18"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+      "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_concat_head_identity_64_q0_v1.json",
+    "sha256": "sha256:8e1a7e1779bd890244b92804190d7e0eac943e4d7a750554d9cabfe37011b12d"
+  },
+  "hypothesis": "In the retained state-stream-head-feature serialization, concat_head and its backward are byte-order identities: the complete source attended input equals the exact open pre-w_o value and the complete source attended adjoint equals the exact open pre-w_o adjoint, while a head-major reinterpretation differs in both directions.",
+  "interfaces_exposed": [
+    "exact pre-w-o forward/adjoint -> exact attended forward/adjoint serialized identity"
+  ],
+  "kill_condition": "Any direct adjoint mismatch, dead order control, replay drift, artifact drift, teacher execution, source failure, or cleanup failure.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "priority": 1543,
+  "promotion_condition": "Zero forward and adjoint mismatches across 2,097,152 words; live forward and adjoint wrong-order controls; exact replay and artifact digest; no teacher execution; green source and cleanup gates.",
+  "proposal_id": "nncp_open_concat_head_identity_64_q0_v1",
+  "retired_neighborhoods": [
+    "Adding a runtime concat transpose after the serialized state-stream-head-feature contract is established"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1543,
+  "state": "developed",
+  "title": "Exact open concat-head serialized identity"
+}

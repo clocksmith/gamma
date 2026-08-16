@@ -1,0 +1,680 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound initial parameters and state, fresh exact forward FF1 outputs, the promoted open final-RMS input residual, and the prospectively frozen 128-panel transpose arithmetic.",
+      "The captured FF2-input adjoint and retained ff_bias1_19 gradient only as comparators after each complete open payload exists."
+    ],
+    "forbiddenInformation": [
+      "Teacher probabilities or activations as calculation inputs, captured adjoints or retained gradients during calculation, future symbols, fitted corrections, LibNC execution, coordinate repair, or tolerance.",
+      "Claiming complete transformer backward, a recursive update, compression, transfer, package, or Hutter credit from this oracle gate."
+    ]
+  },
+  "changedMechanism": "Replace only scalar libm-tanh GELU backward with the digest-attributed eight-lane bounded-exp polynomial and FMA order proven exact by the complete branch-adjoint oracle. Preserve the exact FF2 transpose, branch multiplication, BF16 boundaries, and bias reduction.",
+  "controls": [
+    {
+      "definition": "The complete FF2 input residual must remain byte-identical to the independent source capture.",
+      "id": "exact-ff2-residual",
+      "role": "comparator"
+    },
+    {
+      "definition": "The complete gate branch must match its deterministic source capture exactly.",
+      "id": "source-gate-adjoint",
+      "role": "comparator"
+    },
+    {
+      "definition": "The unchanged value branch must remain exact over the complete population.",
+      "id": "source-value-adjoint",
+      "role": "comparator"
+    },
+    {
+      "definition": "Only the GEGLU gate derivative uses the digest-attributed bounded-exp AVX2 instruction contract.",
+      "id": "exact-avx2-gate",
+      "role": "treatment"
+    },
+    {
+      "definition": "Negating the incoming residual must change the final ff_bias1_19 projection through the same arithmetic.",
+      "id": "sign-negated-control",
+      "role": "negative"
+    },
+    {
+      "definition": "Two complete forward/backward populations must be byte-identical before classification.",
+      "id": "independent-replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "generatedUtc": "2026-08-16T10:49:21+00:00",
+  "hypothesis": {
+    "claim": "Installing only the source-exact AVX2 GEGLU gate-backward contract into the exact-FF2 open replay reproduces both complete source branch adjoints and the retained ff_bias1_19 gradient exactly.",
+    "falsification": "Any antecedent, forward checkpoint, FF2 residual, gate adjoint, value adjoint, retained bias, replay, control, dependency, source, strict-output, memory, disk, or cleanup failure prevents promotion."
+  },
+  "inputs": [
+    {
+      "id": "tail-decision",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:040273f09a8e0eedea0bae7901c70bab4aaa9a0afb6cfcdb9bde325b75cc12ed"
+    },
+    {
+      "id": "tail-execution",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:5dbeb1b404f8145b11d5181a1b9891ba06843e58fccda6ad8e8b8d50471c8d81"
+    },
+    {
+      "id": "tail-guard",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:d522219f1f1c2903a4775517df28f795556d4dcc007c1d628a7a8b391f95e72d"
+    },
+    {
+      "id": "tail-reflection",
+      "path": "operations/adaptive/reflections/20260816T082228Z_f0bff9b6df.json",
+      "sha256": "sha256:58af1dc7a7f34980cba2915246d3f62a422238174662dffe780d59b8af66de39"
+    },
+    {
+      "id": "promoted-final-rms-input-residual",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-final-norm-input-residual.bf16",
+      "sha256": "sha256:8e301350a133e76b6926b410743856764aff939a8be04860df3bf8e714eee8a3"
+    },
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:26440050deda40eba87aa567c6230a3ef8988ca03b1d4d57047e0547658d783d"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:467b80c245e9769b54cced512e04b93a9e5b8ff7b3cd7bea60d0255429d7c805"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:36dd2d130eb56ea0b4f592e91264fe23f99315ed111ee06295574b035ef91916"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T095147Z_8ddedba49c.json",
+      "sha256": "sha256:b3265262588916368ab0d076bcf716e7813ab9ae86215e38280b7dbf71987de9"
+    },
+    {
+      "id": "parent-reducer-source",
+      "path": "programs/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/top_ff1_bias_gradient.cpp",
+      "sha256": "sha256:392b6b983a554797f6f061402ad5f2f3f895746626b7fe6973af6bb56ea03dc2"
+    },
+    {
+      "id": "block128-decision",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:18883f7654a60ece9cc2b67095f2ec44c8f123c10cc77ea295f3623970110acd"
+    },
+    {
+      "id": "block128-execution",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2bace14a8458018ed979c17eb9bdd1771e89a90ba0b3429fab58a5e43bd97fd8"
+    },
+    {
+      "id": "block128-guard",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:b845d3ac1132486165418e472b932370cff6bdde59ace31eec91fae4d834ab19"
+    },
+    {
+      "id": "block128-reflection",
+      "path": "operations/adaptive/reflections/20260816T093907Z_7f51e2d346.json",
+      "sha256": "sha256:41aa8505ee92820f71d7e7d0b9188152b77ecf13b511d84d82f1a5124008c9ee"
+    },
+    {
+      "id": "block128-ff2-input-adjoint",
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/block128-ff2-input-adjoint.bf16",
+      "sha256": "sha256:c5168afc7246ea0262f8d707102a64b863a37d0bfe081afb8691defecdd30637"
+    },
+    {
+      "id": "source-ff2-input-adjoint-decision",
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:0c4e2996c82f315f1013d3f8ece235e980dcad565ad20753793c44ec6b4fda34"
+    },
+    {
+      "id": "source-ff2-input-adjoint",
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/source-ff2-input-adjoint.bf16",
+      "sha256": "sha256:c5168afc7246ea0262f8d707102a64b863a37d0bfe081afb8691defecdd30637"
+    },
+    {
+      "id": "avx2-decision",
+      "path": "results/nncp_libnc_geglu_gate_avx2_64_q0_v1/decision.json",
+      "sha256": "sha256:ad99295b29d0bf809b863f1aaec5581fe23fe2a694856feda5c1a23985039e0a"
+    },
+    {
+      "id": "avx2-execution",
+      "path": "results/nncp_libnc_geglu_gate_avx2_64_q0_v1/execution.json",
+      "sha256": "sha256:9898beca48abf03931040b04374741e951bb3f4089ebdf47cd0fd95019a1a8e9"
+    },
+    {
+      "id": "avx2-guard",
+      "path": "results/nncp_libnc_geglu_gate_avx2_64_q0_v1/guard.json",
+      "sha256": "sha256:fe95cf3469c858cbe2ee0c2fad540e33f4dab4dc613755a0235f923de3074490"
+    },
+    {
+      "id": "avx2-reflection",
+      "path": "operations/adaptive/reflections/20260816T104055Z_2c469fd001.json",
+      "sha256": "sha256:26baff773f39943e6abeb607f8c14cc8d5d4350fee8ad5c7c562aa3b79bfd7fe"
+    },
+    {
+      "id": "avx2-gate-adjoint",
+      "path": "results/nncp_libnc_geglu_gate_avx2_64_q0_v1/avx2-geglu-gate-adjoint.bf16",
+      "sha256": "sha256:bdc4610239aa0d621f6a6dd8ef828a0dfd1b8a298cec547c5fda255bab75c5fa"
+    },
+    {
+      "id": "avx2-value-control",
+      "path": "results/nncp_libnc_geglu_gate_avx2_64_q0_v1/value-branch-control.bf16",
+      "sha256": "sha256:4aa7868957568e9f44a3dd1906ae05335514596dd050d83a25539a8a1824c4fd"
+    },
+    {
+      "id": "source-geglu-gate-adjoint",
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/source-geglu-gate-adjoint.bf16",
+      "sha256": "sha256:bdc4610239aa0d621f6a6dd8ef828a0dfd1b8a298cec547c5fda255bab75c5fa"
+    },
+    {
+      "id": "source-geglu-value-adjoint",
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_retry_v2/source-geglu-value-adjoint.bf16",
+      "sha256": "sha256:4aa7868957568e9f44a3dd1906ae05335514596dd050d83a25539a8a1824c4fd"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0.py",
+      "sha256": "sha256:ca3e4c28e6f13d5daeeb30e0c67efc4713a333d28d64e5fdc0a64485b5eb3070"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_materializer.py",
+      "sha256": "sha256:61caa5d9115df0488730922f3072be2b0f236eedbee61b8e9493a7c1be13c9eb"
+    },
+    {
+      "id": "forward-materializer",
+      "path": "programs/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/materialize_forward.py",
+      "sha256": "sha256:6afb5369e3c6c90f41c5e2b15ae547fc1e664446b9fb53788058ae09d8563a2e"
+    },
+    {
+      "id": "cmake-contract",
+      "path": "programs/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/CMakeLists.txt",
+      "sha256": "sha256:97c62beca7090c6c8fdfd832a89deaf980c635919e049381dc21243704e9c494"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/program.py",
+      "sha256": "sha256:38f15252e15eea026613c3f676647faf11b54fe7f6fae7e785abea608952782b"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_final_hidden_residual_64_q0-0f3e6dd226ef",
+      "path": "tools/nncp_open_profile_final_hidden_residual_64_q0.py",
+      "sha256": "sha256:f00196e474d415d70793e29cb00c3a9ece0668d7e84e3f2872759498cb543d77"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff1_bias_gradient_64_q0_v1-fb6b32dc96f9",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.py",
+      "sha256": "sha256:b8085f7dfeff8b79599ccb4e562e0433fd93097fe8b5c4f480f753b148587a39"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff1_bias_gradient_64_q0_v1_materializer-22ba902660fe",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1_materializer.py",
+      "sha256": "sha256:50f39ed79bc2161061e1daa94f448d3374f5ce6de9c8876a6b1758586646aa94"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_64_q0_retry_v1-c3b7f3df680f",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.py",
+      "sha256": "sha256:e42d745b9884260af00a3515cda818572893cf1ac1f3e03b1da0048f147f0a47"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1_materializer-291d7f8fd948",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1_materializer.py",
+      "sha256": "sha256:3480ce5942296b22192bd63898abadff2054645315878396a18aad316fac6448"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The exact 128-feature FF2 transpose, incoming residual, forward fixtures, sample order, branch multiplication, BF16 boundaries, bias reduction, and sign control remain unchanged.",
+    "Only the uniform GEGLU gate derivative arithmetic changes; the value branch remains an exact independent alignment control.",
+    "The derived reducer is generated by two unique source replacements before configure and its parent and derived digests are recorded in the build receipt.",
+    "Source branch adjoints and the retained ff_bias1_19 comparator are consulted only after complete outputs exist; tolerance and coordinate repair are forbidden.",
+    "All teacher artifacts and captured adjoints remain zero-credit and cannot ship in the submitted codec."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-bias-mismatch",
+      "measurement": "topFf1BiasMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-source-gate",
+      "measurement": "sourceGateAdjointMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-source-value",
+      "measurement": "sourceValueAdjointMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "All bound parent contracts authorize this gate.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Fresh streams in each population.",
+      "id": "streamCount",
+      "unit": "streams"
+    },
+    {
+      "definition": "Interleaved decoder-visible states.",
+      "id": "sampleCount",
+      "unit": "samples"
+    },
+    {
+      "definition": "Exact forward layer-input checkpoints in one population.",
+      "id": "layerInputCheckpointCount",
+      "unit": "tensors"
+    },
+    {
+      "definition": "Forward checkpoint mismatches across both populations.",
+      "id": "layerInputMismatchCount",
+      "unit": "F32 elements"
+    },
+    {
+      "definition": "Maximum forward checkpoint absolute error.",
+      "id": "maximumLayerInputAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete open FF2-input residual population.",
+      "id": "ff2InputResidualElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Complete open FF1-output residual population.",
+      "id": "ff1OutputResidualElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Open ff_bias1_19 gradient elements.",
+      "id": "topFf1BiasElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Open versus retained ff_bias1_19 mismatches.",
+      "id": "topFf1BiasMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum ff_bias1_19 absolute error.",
+      "id": "maximumTopFf1BiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Both complete open populations and reducers are byte-identical.",
+      "id": "openBackwardDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Sign control changes the ff_bias1_19 projection.",
+      "id": "negatedTopFf1ControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Forbidden runtime libraries in open executables.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "libraries"
+    },
+    {
+      "definition": "Compressed dependency-closed source package size.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Candidate work root is removed before finalization.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Open 128-panel FF2 residual mismatches against the captured source adjoint.",
+      "id": "sourceFf2InputResidualMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum open versus captured FF2-input residual absolute error.",
+      "id": "maximumSourceFf2InputResidualAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete open gate-branch words differing from source.",
+      "id": "sourceGateAdjointMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum absolute open/source gate-branch difference.",
+      "id": "maximumSourceGateAdjointAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete unchanged value-branch words differing from source.",
+      "id": "sourceValueAdjointMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum absolute open/source value-branch difference.",
+      "id": "maximumSourceValueAdjointAbsoluteError",
+      "unit": "float32 value"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/decision.json",
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/execution.json",
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff2-input-residual.bf16",
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff1-output-residual.bf16",
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff-bias1-19-gradient.bf16",
+    "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/20260816T095132877494Z_926794f9e1d3.json",
+      "sha256": "sha256:340cf37b59db29854bb22cb19b545a2e054cfeab4c0b53bb8ce8c4d89d228203"
+    }
+  },
+  "population": {
+    "coordinate": "Production update over original transformed-symbol coordinates [256,320) independently within each of 32 contiguous streams.",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.",
+    "unit": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-streams",
+      "measurement": "streamCount",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-samples",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-checkpoints",
+      "measurement": "layerInputCheckpointCount",
+      "operator": "eq",
+      "threshold": 640
+    },
+    {
+      "id": "p-layer-mismatch",
+      "measurement": "layerInputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-layer-maximum",
+      "measurement": "maximumLayerInputAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-ff2-residual-count",
+      "measurement": "ff2InputResidualElementCount",
+      "operator": "eq",
+      "threshold": 6291456
+    },
+    {
+      "id": "p-ff1-residual-count",
+      "measurement": "ff1OutputResidualElementCount",
+      "operator": "eq",
+      "threshold": 12582912
+    },
+    {
+      "id": "p-bias-count",
+      "measurement": "topFf1BiasElementCount",
+      "operator": "eq",
+      "threshold": 6144
+    },
+    {
+      "id": "p-bias-mismatch",
+      "measurement": "topFf1BiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-bias-maximum",
+      "measurement": "maximumTopFf1BiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-replay",
+      "measurement": "openBackwardDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-control",
+      "measurement": "negatedTopFf1ControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-source-ff2-mismatch",
+      "measurement": "sourceFf2InputResidualMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-ff2-maximum",
+      "measurement": "maximumSourceFf2InputResidualAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-gate",
+      "measurement": "sourceGateAdjointMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-gate-maximum",
+      "measurement": "maximumSourceGateAdjointAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-value",
+      "measurement": "sourceValueAdjointMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-value-maximum",
+      "measurement": "maximumSourceValueAdjointAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    }
+  ],
+  "proposalId": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.35,
+    "uncertaintyRisk": 0.45
+  },
+  "status": "frozen"
+}

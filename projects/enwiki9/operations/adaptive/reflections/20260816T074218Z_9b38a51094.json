@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The remaining source/open disagreement is not in FF2, final RMSNorm forward normalization, affine gain/bias handling, or the tested per-element backward expression orders; it is upstream in the two scalar backward reductions, mean(g) and/or mean(g*y)."
+  },
+  "candidateId": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+    "candidateTreeSha256": "sha256:9d29603e7a8ca81c43e9097cf4081bc78f1238857616116ac956c8c8e3c4cf64",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/20260816T074151586602Z_9d29603e7a8c.json",
+      "sha256": "sha256:202da4cbbcc95065bd27857d9e86da667d3d12f6854edaed2bee1ca7c0e0b414"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a reduction-only successor that preserves exact affine inversion and the current pre-centered FMA expression while varying only prospectively declared scalar reduction kernels.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/decision.json",
+      "sha256": "sha256:39040df3109f8c23bb3980a0c97f30730ae8aa4bafd764559f564353c1c28983"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/execution.json",
+      "sha256": "sha256:831a76ed7a63a14832b07bc6a3a337eb2c4e5888a55d18599a7841b42b307ce6"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/guard.json",
+      "sha256": "sha256:ab1e204d595389c5bff76438603777fb73ed2e5368829ee864e6274b5aafe2cd"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1.json",
+    "sha256": "sha256:4eee63a5d6d2576113c5df0b48e1b4516603c79d33731dd337643aa3ae30c4e9"
+  },
+  "generatedUtc": "2026-08-16T07:45:42+00:00",
+  "hypothesis": {
+    "rationale": "None of the six prospectively frozen per-element subtraction/FMA orders exactly reproduced the source input adjoint; the current pre-centered FMA order remained best with exactly eight BF16 mismatches.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T074218Z_9b38a51094.json",
+    "sha256": "sha256:280cb1a87b8b19783e64ddafd279cd269e18d6b20e421cf1337bdee1ed89a20e"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Per-element centered/standard subtraction and FMA/split order at fixed current scalar reductions."
+    ],
+    "transferableLessons": [
+      "Exact affine inversion proves the production tensor was post-bias and recovers the normalized operand word for word.",
+      "The current pre-centered FMA evaluator is byte-identical to the retained open residual and is the closest tested source replay, so future attribution must hold that expression fixed."
+    ],
+    "uncertainties": [
+      "Which source scalar reduction tree computes mean(g) and mean(g*y), and whether one or both differ from the open evaluator."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t074218z_9b38a51094",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The digest-bound retained inputs replayed deterministically; affine reconstruction matched every production output word, the current evaluator matched every retained open-adjoint word, the negative control differed everywhere, and all guards passed."
+    ],
+    "valid": true
+  }
+}

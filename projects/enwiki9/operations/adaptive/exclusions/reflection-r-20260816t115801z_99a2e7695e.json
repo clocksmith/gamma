@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T115801Z_99a2e7695e.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t115801z_99a2e7695e",
+  "failure": "LibNC computes each 32-stream BF16 matrix-gradient dot from zero with sequential fused FMAs, adds the decoded prior BF16 gradient only after the dot, and then materializes BF16 once at the state boundary; initializing the FMA accumulator from the prior changes 43 words.",
+  "mechanism": "Replace the digest-bound LibNC matrix update with an explicit open eight-lane kernel and cross prior-initialized fused accumulation against post-dot prior addition and nonfused multiply/add arithmetic while preserving all 64 state boundaries.",
+  "population": "BF16 ff1_19 gradient words; Every coordinate in the prospectively frozen 128-adjacent-output by 1,024-input slice across all 64 states and 32 streams.; scopeBytes=262144; scopeSymbols=131072",
+  "recorded_at": "2026-08-16T12:00:30+00:00",
+  "retired_dimensions": [
+    "Prior-initialized FMA and nonfused multiply/add as source-exact within-state FF1 matrix-gradient kernels"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

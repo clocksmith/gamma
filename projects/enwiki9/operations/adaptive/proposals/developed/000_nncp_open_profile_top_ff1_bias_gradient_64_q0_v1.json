@@ -1,0 +1,45 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "claimed_at": "2026-08-16T08:44:06+00:00",
+  "created_at": "2026-08-16T08:44:05+00:00",
+  "developed_at": "2026-08-16T08:44:06+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T082228Z_f0bff9b6df.json",
+      "sha256": "sha256:58af1dc7a7f34980cba2915246d3f62a422238174662dffe780d59b8af66de39"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.json",
+    "sha256": "sha256:68bd6212ac9717ea15354618f9e23daeaf7b264ac41e9ab635259d1676029a7d"
+  },
+  "hypothesis": "The source-attributed streaming BF16 dot for ff2_19 transpose, followed by the measured unfused tanh-GELU derivative and explicit BF16 operation boundaries, reconstructs the complete top-layer FF1-output adjoint whose broadcast projection exactly equals the retained ff_bias1_19 gradient.",
+  "interfaces_exposed": [
+    "top-layer-geglu-backward"
+  ],
+  "kill_condition": "Any nonzero ff_bias1_19 mismatch after equivalent replay refutes this arithmetic contract and requires source attribution before deeper propagation.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "priority": 1474,
+  "promotion_condition": "Every frozen forward, exact ff_bias1_19, replay, control, dependency, source, strict-output, and resource predicate passes.",
+  "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1474,
+  "state": "developed",
+  "title": "Open top-layer FF2-transpose and GEGLU bias projection"
+}

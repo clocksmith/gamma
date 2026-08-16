@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T07:23:24+00:00",
+  "created_at": "2026-08-16T07:23:24+00:00",
+  "developed_at": "2026-08-16T07:23:34+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T072040Z_e4976727fd.json",
+      "sha256": "sha256:628ee47b797d7d9989261a2484b382028615905b42d21881623b25f128e2b988"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_v1/guard.json",
+      "sha256": "sha256:ea4b73b8cc4955bcdda3a446323643301783050032118ac6f35085b100caf44b"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1.json",
+    "sha256": "sha256:831b55dffebece6bc2ee02c146203c2c137a1acc4920eef9415b885b149d46fe"
+  },
+  "hypothesis": "Exactly one member of the frozen six-order BF16 family reproduces all 2,097,152 production final-RMSNorm input-adjoint words, while the current pre-centered FMA order retains a nonzero mismatch.",
+  "interfaces_exposed": [
+    "declared read-only production final-RMSNorm probe -> exact six-order attribution"
+  ],
+  "kill_condition": "Retain the parent finite-family kill predicates unchanged; a compile-only failed attempt supplies no scientific retirement evidence.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "priority": 1474,
+  "promotion_condition": "The declaration-only retry satisfies every unchanged capture, replay, forward, exact-order, identity, control, source, and guard predicate.",
+  "proposal_id": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Do not change scientific predicates in response to the compile-only failed attempt; it produced no production tensor or order measurement."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1492,
+  "state": "developed",
+  "title": "Declared exact production BF16 final-RMSNorm operation order"
+}

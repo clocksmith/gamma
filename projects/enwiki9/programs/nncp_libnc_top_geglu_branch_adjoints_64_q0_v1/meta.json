@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "Production layer-19 GEGLU split-branch adjoint capture",
+  "family": "nncp_update_schedule",
+  "hypothesis": "At least one production layer-19 GEGLU split-branch adjoint differs from the open branch residual even after the incoming FF2 residual is source-exact, localizing the retained ff_bias1_19 mismatch before bias projection.",
+  "id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T100841Z_829771fc57": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T100841Z_829771fc57.json",
+        "sha256": "sha256:6d5a2ab4b04c744fadd89c05f1f77638252c271170140748f8ac5d9b38435cd7",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_v1.json",
+      "sha256": "sha256:41e7063cc375808bc6d2babdec676b8cafe18c7de55bb1351fa2e74482b4ed04"
+    },
+    "interfaces_exposed": [
+      "source-exact FF2 residual -> production GEGLU gate/value branch adjoints"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+    "proposal_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+    "retired_neighborhoods": [
+      "Do not revisit FF2 transpose arithmetic or tune GEGLU formulas against the retained bias vector."
+    ]
+  },
+  "parent": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Create an immutable retry changing only the patch anchor to the unique FF_ACT_GEGLU block while preserving probes, predicates, and resource limits."
+}

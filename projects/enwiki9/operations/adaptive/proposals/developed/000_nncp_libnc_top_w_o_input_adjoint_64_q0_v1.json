@@ -1,0 +1,52 @@
+{
+  "candidate_id": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T16:06:03+00:00",
+  "created_at": "2026-08-16T16:05:57+00:00",
+  "developed_at": "2026-08-16T16:06:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T155508Z_53d5388d2c.json",
+      "sha256": "sha256:14b8cd6e29d2e19f31b43de9b5d679c8f4a468f0a49326d595ce834558d1dec8"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:eb24b73027541b2120941a2c60dacccd02b62c5e64d1edeaea19710cac26409b"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_w_o_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:22165254fb3552016b9c11deed72dcd085774f39a1680ee1909a2ea6cb24485f"
+  },
+  "hypothesis": "A marked zero node immediately before the production layer-19 w_o matmul captures deterministic complete pre-w_o values and input adjoints without changing any non-probe fixture payload, while the initial w_o_19 BF16 matrix is extracted verbatim from the bound parameter container.",
+  "interfaces_exposed": [
+    "production layer-19 w_o graph -> zero-credit exact pre-w_o input-adjoint oracle",
+    "bound initial parameter container -> exact BF16 w_o_19 matrix"
+  ],
+  "kill_condition": "Any failed completeness, determinism, liveness, fixture, matrix, source, or resource predicate.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "parent_proposal_id": null,
+  "priority": 1532,
+  "promotion_condition": "Two deterministic complete 2,097,152-word captures; exact 256-file probe namespace per capture; unchanged non-probe fixture; live input and adjoint; verbatim 1,048,576-word initial matrix; green source and resource guards.",
+  "proposal_id": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unmeasured layer-19 w_o input-adjoint arithmetic"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1532,
+  "state": "developed",
+  "title": "Production layer-19 w_o input-adjoint oracle"
+}

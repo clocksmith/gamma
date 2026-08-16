@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T12:45:39+00:00",
+  "created_at": "2026-08-16T12:45:28+00:00",
+  "developed_at": "2026-08-16T12:45:40+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:8c017066803b012195f68dd19d2997c93c74618c94354f8d3e82481b545651b1"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_v1.json",
+    "sha256": "sha256:40c303fa233ed709b66ca6977ba709586dab9c1ac083fa12334d643675d69315"
+  },
+  "hypothesis": "A marked zero node immediately before the layer-19 feed-forward split captures deterministic complete pre-normalization hidden input and total adjoint populations from both the direct residual and normalized FF branches without changing any non-probe fixture payload.",
+  "interfaces_exposed": [
+    "production layer-19 pre-FF split -> zero-credit exact hidden input and total adjoint oracle"
+  ],
+  "kill_condition": "A zero total adjoint or invalid boundary placement rejects the oracle.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "priority": 1455,
+  "promotion_condition": "Two exact complete captures, exact declared probe population, zero non-probe fixture drift, live boundary controls, and guarded source closure.",
+  "proposal_id": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unmeasured layer-19 pre-FF residual-merge arithmetic"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1455,
+  "state": "developed",
+  "title": "Capture the complete layer-19 pre-FF hidden adjoint"
+}

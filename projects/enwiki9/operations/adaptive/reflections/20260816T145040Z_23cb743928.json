@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The compile policy promoted unused-parameter warnings originating in digest-bound external libnc.h and cutils.h inline functions to errors."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+    "candidateTreeSha256": "sha256:49936af613a1dad7774b1cc14272c8ce85c4fb2d25228c7a144e83a328146c95",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_v1/20260816T145028710502Z_49936af613a1.json",
+      "sha256": "sha256:fdd0a294f952bfaf5e37dd9479443049802cd75409cd2ce48d90176f62afc510"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Keep the evaluator and frozen scientific boundary unchanged; retry with only unused-parameter diagnostics from the attributed external headers suppressed.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_v1/guard.json",
+      "sha256": "sha256:0c015403aa1639fb2badf20030bdae0ea8492e5dce75ddaa145dcea6939faf6a"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T145040Z_23cb743928.log",
+      "sha256": "sha256:61e79cd5c98e133cd2e4f4da409a9a1930436c90bef82e050126c16a47c68a3f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_v1.json",
+    "sha256": "sha256:c2c1543dec78d1dee23fe483a5844b911274dd35135ddfcb3460e58ca10cf9d5"
+  },
+  "generatedUtc": "2026-08-16T14:53:28+00:00",
+  "hypothesis": {
+    "rationale": "No evaluator binary or gradient population existed, so the BF16 shared-gradient merge hypothesis received no scientific test.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T145040Z_23cb743928.json",
+    "sha256": "sha256:ed62c29885e2936da34a1eb044754c05acc55ed8418ff4153d232842a8d94327"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Compile owned evaluator code strictly while suppressing only known warning classes emitted by immutable third-party headers."
+    ],
+    "uncertainties": [
+      "Whether either LibNC graph order reproduces the sealed source total after compilation succeeds."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t145040z_23cb743928",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The prospectively frozen job, candidate revision, LibNC digest, resource guard, and compile receipt are intact, but compilation stopped before any graph or comparator executed because third-party LibNC headers trigger unused-parameter warnings under -Werror."
+    ],
+    "valid": false
+  }
+}

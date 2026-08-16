@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The attributed LibNC CPU backend does not support this one-row BF16-by-BF16 nc_matmul shape; the attempted injection primitive is not equivalent to the production mixed-shape NNCP graph."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+    "candidateTreeSha256": "sha256:31c09b4cb13f02b49975a89b9d7b717bc091d81fee60a759c2fa1b88bf5dd5bf",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_retry_v4/20260816T150909815044Z_31c09b4cb13f.json",
+      "sha256": "sha256:1623f6b3754e4971589abb269d99b0803e6f991957de4193b5933c3932b1eff6"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retire synthetic BF16 coefficient injection and reconstruct the actual pre-FF residual-plus-RMSNorm graph boundary or its open arithmetic merge from sealed tensors.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v4/guard.json",
+      "sha256": "sha256:7d929a2d423b707089cf7b1e8f067840336ecb6dd1ebade64a0b45370266692a"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T150925Z_9e580bcc8b.log",
+      "sha256": "sha256:24538766a63e77acb96d0c43d9f195efbad94828bb74cc9aa5791be283d21519"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v4.json",
+    "sha256": "sha256:6609b5f2ac9533c183f1299118bf47adb6225a1d1149ada4997658fbab9fa131"
+  },
+  "generatedUtc": "2026-08-16T15:11:09+00:00",
+  "hypothesis": {
+    "rationale": "No identity control or shared-gradient merge population was produced, so the source merge hypothesis remains untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T150925Z_9e580bcc8b.json",
+    "sha256": "sha256:5289b8f970acfaefe2b00704b4faa14f6ac333318975df9207ae2fd503443cac"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Do not infer primitive support from an operation name alone; preserve the exact production operand roles, shapes, and graph topology when building a LibNC oracle."
+    ],
+    "uncertainties": [
+      "The three source words may be determined directly from the actual residual-plus-RMSNorm graph or from LibNC gradient accumulation, not a synthetic coefficient-injection graph."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t150925z_9e580bcc8b",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The full-config evaluator compiled and resolved the attributed LibNC library, but the first BF16 nc_matmul path aborted in nc_matmul_add2 before any single-path gradient was produced."
+    ],
+    "valid": false
+  }
+}

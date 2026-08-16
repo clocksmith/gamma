@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The enqueue route omitted the run_with_rss_guard tool and candidate-specific runner arguments."
+  },
+  "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:6c625d083864bdae6cd83641d506a0307c2bd34bc838c951acae363e0e173620",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/20260816T132903146864Z_6c625d083864.json",
+      "sha256": "sha256:28cec6de129f143ff27d06a1f53539bf8ba6227c9533663f1c7c01d5d7ddd929"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Re-enqueue the unchanged candidate revision through the guarded oracle runner with the prospectively frozen experiment binding.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20260816T132931Z_9e97fad02f.log",
+      "sha256": "sha256:4b2138d2cb862bff5d2493347c645cbd96ba4c6da3f50c8b65c04421e0661dca"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:27a5433ecf292447d014bfea8ebee87b348781ee4eb7988e3de1a277a7d81d33"
+  },
+  "generatedUtc": "2026-08-16T13:30:45+00:00",
+  "hypothesis": {
+    "rationale": "Candidate triage rejected the oracle-only program identity before the frozen normalization backward was materialized.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T132931Z_9e97fad02f.json",
+    "sha256": "sha256:50ee8b02eb0b11d47b6e0d6dde37510da2fa5d0c553777df98879a26f43b2386"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Oracle candidates exposing RUNNER descriptors must enter the adaptive queue with enqueue-tool; generic candidate triage only knows compressor inventory identities."
+    ],
+    "uncertainties": [
+      "None about the routing failure; the arithmetic hypothesis remains unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t132931z_9e97fad02f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The candidate was enqueued through the generic compressor triage runner instead of its declared guarded oracle tool, so no arithmetic executable or population ran."
+    ],
+    "valid": false
+  }
+}

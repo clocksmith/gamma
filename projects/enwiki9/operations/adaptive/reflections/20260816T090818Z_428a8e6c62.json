@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The first measured divergence after the exact final-RMSNorm adjoint and exact ff2_19 parameter gradient lies inside the ff2_19 input-adjoint transpose arithmetic. GEGLU backward is downstream of this already-nonexact residual and is not required to explain the retained ff_bias1_19 mismatch."
+  },
+  "candidateId": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:6c0a99aa4fc6df820dd813d934dde4a8be0af1541e0b4521db323f9a59778eee",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/20260816T090806227557Z_6c0a99aa4fc6.json",
+      "sha256": "sha256:6e28d64965a47ef89d2ede7705d0f73f6c4a1d15c5b04fa2917bac23ed7ebac6"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a small arithmetic attribution over the captured production input, output adjoint, and ff2_19 weights; compare explicit transpose variants against the source adjoint before reopening GEGLU.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:0c4e2996c82f315f1013d3f8ece235e980dcad565ad20753793c44ec6b4fda34"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/execution.json",
+      "sha256": "sha256:6ec0aab9b9462d504372507b7c197eb8c4990059f0b9939be429bedf93812440"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:40c1ef7b3c28506b7e5d9ba51b074bbe9e26cb9c9941ba232e495aec3704d977"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:0ac15f0e191e32383ddbf305bf58c577be33fc734cea4c563ba1acd3e6253278"
+  },
+  "generatedUtc": "2026-08-16T09:23:39+00:00",
+  "hypothesis": {
+    "rationale": "The production FF2-input adjoint differs from the open streaming-transpose residual in 775 of 6,291,456 BF16 words, with maximum absolute error 2.9802322387695312e-08.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T090818Z_428a8e6c62.json",
+    "sha256": "sha256:85527727597a9c0572bab74e85ad75330becefe087a5a5b19bee31f3be4c828a"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "The hypothesis that the current open ff2_19 streaming transpose residual is byte-identical to the production BF16 FF2-input adjoint."
+    ],
+    "transferableLessons": [
+      "Exact forward checkpoints and an exact streamed matrix-parameter gradient do not establish transpose input-adjoint parity; production and open reduction/order semantics must be measured independently for each adjoint projection."
+    ],
+    "uncertainties": [
+      "The specific production transpose accumulation, vectorization, conversion, or rounding order responsible for the 775 mismatches remains unresolved."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t090818z_428a8e6c62",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen two-capture source gate completed with 2,048 samples, complete 6,291,456-word input and adjoint populations, byte-identical capture replay, unchanged non-probe fixture payloads, a live comparator, strict output validation, and passing memory, scratch, source, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_ff2_input_adjoint_64_q0_v1"
+  ],
+  "description": "Exact production BF16 FF2 transpose lane order",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Replacing the horizontal eight-lane reduction with the production BF16 kernel's ordered reduction-dimension FMA stream per output-feature lane reproduces every source FF2-input-adjoint word.",
+  "id": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T093214Z_c6950a77d0": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T093214Z_c6950a77d0.json",
+        "sha256": "sha256:5b4fa56cb64eed82b69d62ff6a251104d0210dbd418056d6af16533da37bd920",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_ff2_transpose_lane_order_64_q0_v1.json",
+      "sha256": "sha256:96afda19090eec23005ff142ff02e02018135fdb3fa96e1cfdff95cbeb37e83d"
+    },
+    "interfaces_exposed": [
+      "captured incoming residual plus initial ff2_19 -> source-exact open FF2-input adjoint"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+    "proposal_id": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+    "retired_neighborhoods": [
+      "Do not reuse horizontal SIMD lanes for partitions of the FF2 transpose reduction dimension."
+    ]
+  },
+  "parent": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Trace the exact FF2 backward matmul dimensions through the shape-dependent dispatch and freeze only the selected packed-kernel/block-combination order before another full evaluation."
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "Open top-layer FF1 bias projection with exact 128-panel FF2 transpose",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Replacing only the FF2 transpose with the source-exact ordered 128-feature panel schedule preserves the exact upstream residual and reconstructs the retained ff_bias1_19 gradient through the frozen GEGLU backward contract.",
+  "id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+  "measured": {
+    "reflections": {
+      "20260816T094657Z_e9fe7b3dcc": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T094657Z_e9fe7b3dcc.json",
+        "sha256": "sha256:02bd6d8ae82e18b4d7fbb29c798a72e2b8f6134a15997f121e6332ae548fbc17",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1.json",
+      "sha256": "sha256:0edc832f1db21d5bc16e6e401fd030ed4f4be4d18f0f835fef8545e08e1af087"
+    },
+    "interfaces_exposed": [
+      "source-exact FF2 input adjoint -> open GEGLU backward -> retained ff_bias1_19"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+    "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+    "retired_neighborhoods": [
+      "Do not restore horizontal or unblocked FF2 transpose accumulation."
+    ]
+  },
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Create an immutable retry candidate with unchanged arithmetic and a fully specified guarded tool invocation."
+}

@@ -1,0 +1,101 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The exact slice arithmetic is uniform across every w_o_19 feature, so coverage expansion alone preserves the chronological post-dot prior-add BF16 gradient contract."
+  },
+  "candidateId": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+    "candidateTreeSha256": "sha256:89c78a5984a1b1f3776d1ac529e1af33603d31bd42ac953f51d1414c50c5f0bf",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_w_o_gradient_full_post_add_64_q0_v1/20260816T163521293893Z_89c78a5984a1.json",
+      "sha256": "sha256:a8db1dc9d8e65d5529a3e4e588e43148df908214e1528e57ecd543951fc80b49"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Validate the w_o_19 transpose residual next: apply the independently attributed ordered 128-feature panel reduction to the sealed initial matrix and exact open post-w_o adjoint, compare every output word to the source input-adjoint oracle, replay, and retain unblocked and sign-negated controls.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:432f9254a9fbea0c0ffcb08749b3e71247923985c097f8d97d40d5389b82511b"
+    },
+    {
+      "path": "results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:8a8f03cee95b09fc5c1a653d95c82746ae7fd6acfaffc54243521bac027e2074"
+    },
+    {
+      "path": "results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/guard.json",
+      "sha256": "sha256:8b0dada03a07eb12f1ff038dec7ba5fd08adc962799ee854c81d70739faa38fd"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_gradient_full_post_add_64_q0_v1.json",
+    "sha256": "sha256:2d86fda7e0c8030f708b168123c55ad3067977d3f6d52658ce57d5cdc8404fad"
+  },
+  "generatedUtc": "2026-08-16T16:37:26+00:00",
+  "hypothesis": {
+    "rationale": "The full treatment had zero mismatches and zero maximum error across the complete 1,024-by-1,024 matrix, while the sign-negated control differed at all 1,048,576 coordinates.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T163533Z_7a29124cd9.json",
+    "sha256": "sha256:e40af6981197cb2cf38332f85c470b35bc7540e8046fb3826c73b5882e6719ad"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Treating the exact w_o_19 slice as sufficient evidence for unmeasured rows"
+    ],
+    "transferableLessons": [
+      "Prospective slice-to-full expansion can close a matrix-gradient boundary when the kernel is uniform, the full independent comparator is bound before execution, and exact replay plus a full negative control remain live."
+    ],
+    "uncertainties": [
+      "The full gradient uses the sealed source pre-w_o value as an operand and earns zero objective credit; an open forward value and exact transpose residual remain unproven."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/gradientElementCount",
+      "source": {
+        "path": "results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/decision.json",
+        "sha256": "sha256:432f9254a9fbea0c0ffcb08749b3e71247923985c097f8d97d40d5389b82511b"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 1048576,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t163533z_7a29124cd9",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound LibNC-free full-matrix evaluator completed two byte-identical treatment/control populations; all 1,048,576 treatment words matched the independently retained w_o_19 gradient exactly; every sign-negated word differed; and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

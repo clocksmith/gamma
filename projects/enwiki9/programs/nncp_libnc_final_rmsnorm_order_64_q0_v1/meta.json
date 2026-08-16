@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1"
+  ],
+  "description": "Exact production BF16 final-RMSNorm backward operation-order attribution",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Exactly one member of the frozen six-order BF16 family reproduces every production final-RMSNorm input-adjoint word while the current pre-centered FMA order remains non-exact.",
+  "id": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T072040Z_e4976727fd": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T072040Z_e4976727fd.json",
+        "sha256": "sha256:628ee47b797d7d9989261a2484b382028615905b42d21881623b25f128e2b988",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_order_64_q0_v1.json",
+      "sha256": "sha256:0fb10cd3e18cc5844a06cb125885bc9a43e4c1d6a43ee4b30fab1c2e8bcf1f34"
+    },
+    "interfaces_exposed": [
+      "production BF16 final-RMSNorm input/output plus exact source adjoint -> frozen arithmetic-order attribution"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+    "proposal_id": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+    "retired_neighborhoods": [
+      "Do not reuse the width-8 F32 non-concat RMSNorm probe as production BF16 operation-order evidence."
+    ]
+  },
+  "parent": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "status": "candidate",
+  "verdict": "Create an immutable declaration-only retry, preserve all six prospective arithmetic orders and predicates, and rerun both complete guarded captures."
+}

@@ -1,0 +1,45 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "claimed_at": "2026-08-16T08:21:57+00:00",
+  "created_at": "2026-08-16T08:21:56+00:00",
+  "developed_at": "2026-08-16T08:21:57+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T080451Z_d5838c6e4e.json",
+      "sha256": "sha256:21c6af32c655a1e73f7d47959cc3a6fbcb09918232332bba0b4cd432d2ad2ea0"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2.json",
+    "sha256": "sha256:f45b6984a4003c5cd1efcfde79c2f819bc4a0ad43a66e32838a249feff7f13e4"
+  },
+  "hypothesis": "Installing only the source-attributed streaming eight-lane BF16 g*y dot in the otherwise unchanged open final-RMSNorm backward makes the complete normalization-input residual and ff2_19 parameter gradient source-exact while preserving every inherited forward, output-head, normalization-parameter, projection, replay, control, dependency, source, and resource predicate.",
+  "interfaces_exposed": [
+    "final-rmsnorm-backward"
+  ],
+  "kill_condition": "Any frozen predicate failure, nonzero exact mismatch, replay drift, dead control, dependency violation, source overflow, resource failure, or strict output validation failure prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1",
+  "priority": 1475,
+  "promotion_condition": "Every frozen promotion predicate passes and the strict result manifest validates all nine candidate-owned outputs.",
+  "proposal_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1475,
+  "state": "developed",
+  "title": "Manifest-corrected streaming-dot open top-FF2 gate"
+}

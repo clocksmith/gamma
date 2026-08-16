@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1"
+  ],
+  "description": "LibNC-free within-state arithmetic attribution for the exact ff1_19 gradient slice",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Initializing eight adjacent output-feature lanes from the prior BF16 gradient and applying 32 sequential AVX2 FMAs before one BF16 state-boundary conversion reproduces the exact LibNC ff1_19 slice and its reverse/sign controls.",
+  "id": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T115801Z_99a2e7695e": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T115801Z_99a2e7695e.json",
+        "sha256": "sha256:19a3a1d50a9f6b9d12edd95c2126ce271ee815756673209e22dc8166c6503272",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1.json",
+      "sha256": "sha256:b8c2d959c6bbf689ec3656d88ab2573d4ee4ddf6a4b339f51e192b3040869d3a"
+    },
+    "interfaces_exposed": [
+      "open BF16 FF1 operands -> LibNC-free exact ff1_19 gradient slice"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unattributed within-state FF1 matrix-gradient arithmetic"
+    ]
+  },
+  "parent": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Freeze an immutable post-dot-add successor, require exact treatment plus reverse and sign controls under that cell, and only then expand the uniform open kernel beyond the 128-row slice."
+}

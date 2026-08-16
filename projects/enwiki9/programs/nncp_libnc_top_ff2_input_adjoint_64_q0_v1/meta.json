@@ -1,0 +1,37 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "Capture production top-layer FF2-input adjoint",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The complete production BF16 adjoint at the layer-19 GEGLU output is byte-identical to the open streaming-dot ff2_19 transpose residual, localizing the remaining ff_bias1_19 discrepancy strictly to GEGLU backward or its later projection.",
+  "id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T090818Z_428a8e6c62": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T090818Z_428a8e6c62.json",
+        "sha256": "sha256:04f6317593e5ade43b215cc75afb1407b527e4bc22fdec60ad15898205b67523",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_input_adjoint_64_q0_v1.json",
+      "sha256": "sha256:0ac15f0e191e32383ddbf305bf58c577be33fc734cea4c563ba1acd3e6253278"
+    },
+    "interfaces_exposed": [
+      "source-ff2-input-adjoint"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+    "proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Freeze a small arithmetic attribution over the captured production input, output adjoint, and ff2_19 weights; compare explicit transpose variants against the source adjoint before reopening GEGLU."
+}

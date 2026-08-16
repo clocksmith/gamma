@@ -1,0 +1,73 @@
+{
+  "candidateId": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "candidateTreeSha256": "sha256:e0e13fcfacda7f1fea16cab7137ecc211d8555876373e272ca7d6f5599a4e799",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1.json",
+      "operations/adaptive/reflections/20260816T072401Z_436d248c4d.json"
+    ],
+    "hypothesis": "The digest-bound ln_b_40 affine replay validates the reconstructed raw normalized output, the current pre-centered FMA order exactly reproduces the retained open residual but differs from source, and exactly one unchanged alternative order reproduces every source-adjoint word.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Extract the actual production gain and bias and validate raw normalization through exact affine replay.",
+      "Preserve all six backward arithmetic orders and exact source/open comparators.",
+      "Reuse the retained repeated production input without rerunning the teacher."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/8b/8bed4a8758de93cecdd7663681b89c90ad1a2fa10e9405fc302deb34a2d9ef89",
+      "bytes": 11646,
+      "normalization": "verbatim",
+      "path": "final_rmsnorm_order.cpp",
+      "sha256": "8bed4a8758de93cecdd7663681b89c90ad1a2fa10e9405fc302deb34a2d9ef89"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d1/d1cd5fea0127b8c26a8faf2692bd3a6a77e27734c38137a02f8f66d9e9312141",
+      "bytes": 2856,
+      "normalization": "verbatim",
+      "path": "final_rmsnorm_probe.inc.c",
+      "sha256": "d1cd5fea0127b8c26a8faf2692bd3a6a77e27734c38137a02f8f66d9e9312141"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/8b/8bcc8e9fe4fee18e30b1979722e0af3adc6db4b06b690b6c8699980a44d3a9fe",
+      "bytes": 1299,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "8bcc8e9fe4fee18e30b1979722e0af3adc6db4b06b690b6c8699980a44d3a9fe"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/8a/8ab6a2c886152a23babc28a0aaabb909392a86ad33764ca388acc2a13a8ba564",
+      "bytes": 240,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "8ab6a2c886152a23babc28a0aaabb909392a86ad33764ca388acc2a13a8ba564"
+    }
+  ],
+  "generatedUtc": "2026-08-16T07:41:50+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:8c6e24f42831442418774a558e6071a1f48bffe8642a7a5899a49439e364f1fa",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/20260816T072334216369Z_8c6e24f42831.json",
+      "sha256": "sha256:33bb9a1f328ebeb78ff8771b7195b68526e19fb443c7788765703d0d87192fad"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/20260816T073757038845Z_c4d8ca3aa1ed.json",
+    "sha256": "sha256:0db0ecf9d82e44f7d39a082f48d3dc4666484cbf470a33246266b90cf1b76a39"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

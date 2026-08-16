@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "Mapping adjacent FF2 output features to independent SIMD lanes and accumulating each through one chronological 1,024-step FMA stream is insufficient. The remaining production behavior lies in a shape-dependent packed matmul kernel, blocking/reduction schedule, or conversion boundary not represented by either frozen reduction."
+  },
+  "candidateId": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+    "candidateTreeSha256": "sha256:3942ac06fd66d64ddc74dc5e013b36c801c034b2b139d2a2a9112e351f733e85",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/20260816T093154904697Z_3942ac06fd66.json",
+      "sha256": "sha256:b94e5f6800b0596011abd5a2472272ed1cd7e660acfe462e1271b9d08b005b14"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Trace the exact FF2 backward matmul dimensions through the shape-dependent dispatch and freeze only the selected packed-kernel/block-combination order before another full evaluation.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/decision.json",
+      "sha256": "sha256:91ca5951aef20c575994312faca522d0719700083af4b07b2fe243685e770bf6"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/execution.json",
+      "sha256": "sha256:6326b3b1f337b08e28b6f5f3752cd00cf0bd96a903be873c549c89ad26c3a2b1"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/guard.json",
+      "sha256": "sha256:898a813eec2e4b60f5d47dde7e3f1eaf55f29369c498b0ccfbafd058cc7d2f3f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff2_transpose_lane_order_64_q0_v1.json",
+    "sha256": "sha256:96afda19090eec23005ff142ff02e02018135fdb3fa96e1cfdff95cbeb37e83d"
+  },
+  "generatedUtc": "2026-08-16T09:34:00+00:00",
+  "hypothesis": {
+    "rationale": "The lane-sequential treatment differs from the source adjoint in 929 of 6,291,456 BF16 words with maximum absolute error 2.9802322387695312e-08, so it is not a source-exact replacement for the 775-word horizontal baseline.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T093214Z_c6950a77d0.json",
+    "sha256": "sha256:7914df15d3cac7cfc6cbf8717af83eb57500792bf391b7f615ae2064435ceaa1"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "A single unblocked 1,024-step FMA accumulation per adjacent FF2 output-feature lane as the exact production transpose contract."
+    ],
+    "transferableLessons": [
+      "Static identification of a generic BF16 matmul kernel is insufficient until the exact production matrix shape and dispatch branch are proven; shape-specialized packing and blocking can change BF16-boundary results."
+    ],
+    "uncertainties": [
+      "Whether production selects the generic BF16 dispatch entry or the specialized 32-output path, and how its packed blocks are combined, remains unresolved."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t093214z_c6950a77d0",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen evaluator completed two full 6,291,456-word treatment populations byte-identically, reproduced the 775-word baseline/source mismatch, changed the baseline, bound the LibNC and parameter digests, validated strict outputs, and passed source, memory, scratch, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

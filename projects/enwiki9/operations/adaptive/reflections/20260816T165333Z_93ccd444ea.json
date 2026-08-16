@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner called the inherited single-stream fixture materializer with work/fixtures/stream_00 before creating work/fixtures."
+  },
+  "candidateId": "nncp_open_top_w_o_input_forward_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_w_o_input_forward_64_q0_v1",
+    "candidateTreeSha256": "sha256:b1ef88a9d33fc047c946119e08d3b81fb5a3fa087a5dc1f513df2f921089693c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_w_o_input_forward_64_q0_v1/20260816T165309057078Z_b1ef88a9d33f.json",
+      "sha256": "sha256:56607f34ec5a8c64f8cfa7afdbfd0af223740f2e63c3151589468a73ba3bfe3e"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create a fresh retry candidate that adds the missing fixtures parent creation and rerun the unchanged scientific contract.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_v1/guard.json",
+      "sha256": "sha256:5481c92ad625228929bb1ef9eb9e77b4255492f2b8ef2960b8ac3e474734a8b7"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_w_o_input_forward_64_q0_v1.json",
+    "sha256": "sha256:10791780a10e39691304a1e5664c2e9e78615287c54d6e2a2b3650030f7549f3"
+  },
+  "generatedUtc": "2026-08-16T16:55:16+00:00",
+  "hypothesis": {
+    "rationale": "Failure occurred at filesystem setup before any open forward population or source comparison, so the frozen scientific hypothesis was not tested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T165333Z_93ccd444ea.json",
+    "sha256": "sha256:ab060728c7c29d6682c3e555abf193e7522f960d07e12b079e0f3669c6247c2d"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Create every runner-owned parent directory explicitly before invoking helpers that intentionally create only their leaf directory."
+    ],
+    "uncertainties": [
+      "The exact pre-w_o forward identity remains unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t165333z_93ccd444ea",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The revision-bound job failed while materializing stream zero because the runner did not create the fixtures parent directory. No stream forward, treatment, comparator, replay, or scientific predicate executed; memory and disk guards remained green."
+    ],
+    "valid": false
+  }
+}

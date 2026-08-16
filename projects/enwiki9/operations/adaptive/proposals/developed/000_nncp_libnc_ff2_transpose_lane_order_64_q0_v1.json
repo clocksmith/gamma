@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "claimed_at": "2026-08-16T09:31:14+00:00",
+  "created_at": "2026-08-16T09:31:08+00:00",
+  "developed_at": "2026-08-16T09:31:55+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T090818Z_428a8e6c62.json",
+      "sha256": "sha256:04f6317593e5ade43b215cc75afb1407b527e4bc22fdec60ad15898205b67523"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:0c4e2996c82f315f1013d3f8ece235e980dcad565ad20753793c44ec6b4fda34"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/execution.json",
+      "sha256": "sha256:6ec0aab9b9462d504372507b7c197eb8c4990059f0b9939be429bedf93812440"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff2_transpose_lane_order_64_q0_v1.json",
+    "sha256": "sha256:96afda19090eec23005ff142ff02e02018135fdb3fa96e1cfdff95cbeb37e83d"
+  },
+  "hypothesis": "Replacing the horizontal eight-lane reduction with the production BF16 kernel's ordered reduction-dimension FMA stream per output-feature lane reproduces every source FF2-input-adjoint word.",
+  "interfaces_exposed": [
+    "captured incoming residual plus initial ff2_19 -> source-exact open FF2-input adjoint"
+  ],
+  "kill_condition": "Any nonzero treatment/source mismatch retires lane-sequential accumulation as a sufficient exact FF2 transpose contract.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "priority": 1472,
+  "promotion_condition": "Two complete byte-identical treatment executions, the frozen 775-word baseline mismatch, zero treatment/source mismatches, live arithmetic change, bound digests, and green guards.",
+  "proposal_id": "nncp_libnc_ff2_transpose_lane_order_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not reuse horizontal SIMD lanes for partitions of the FF2 transpose reduction dimension."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1490,
+  "state": "developed",
+  "title": "Exact production BF16 FF2 transpose lane order"
+}

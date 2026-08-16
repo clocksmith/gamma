@@ -1,0 +1,84 @@
+{
+  "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "candidateTreeSha256": "sha256:9a64be4f660181f668eba5015b0c1190e3ef9db1e2585012142ec79a06537a9b",
+  "change": {
+    "evidence": [
+      "operations/adaptive/proposals/claimed/000_nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.json"
+    ],
+    "hypothesis": "The source-attributed streaming BF16 dot for ff2_19 transpose, followed by the measured unfused tanh-GELU derivative and explicit BF16 operation boundaries, reconstructs the complete top-layer FF1-output adjoint whose broadcast projection exactly equals the retained ff_bias1_19 gradient.",
+    "kind": "proposal-development",
+    "replacements": [],
+    "summary": [
+      "Bound candidate to algorithm proposal nncp_open_profile_top_ff1_bias_gradient_64_q0_v1."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/8d/8d6fe671fb1570651bf002d7b40ec6c29d9210acb221d956c21b78dbf3bd06a9",
+      "bytes": 1261,
+      "normalization": "verbatim",
+      "path": "CMakeLists.txt",
+      "sha256": "8d6fe671fb1570651bf002d7b40ec6c29d9210acb221d956c21b78dbf3bd06a9"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/e4/e4dea5eb25530581447a32463bac5bb2f063d376501b62733ddbf45e081a3fb5",
+      "bytes": 15951,
+      "normalization": "verbatim",
+      "path": "final_norm_backward.cpp",
+      "sha256": "e4dea5eb25530581447a32463bac5bb2f063d376501b62733ddbf45e081a3fb5"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/35/35e58baed7d56153e5cb8d458c8b40fcb5691184016ae8d3dbf49dea32414f80",
+      "bytes": 2861,
+      "normalization": "verbatim",
+      "path": "materialize_forward.py",
+      "sha256": "35e58baed7d56153e5cb8d458c8b40fcb5691184016ae8d3dbf49dea32414f80"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/49/49619fdf647c7d4098940f4d7814d5bc1b30a382c2dad8b87b0957dfd259eaf6",
+      "bytes": 1115,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "49619fdf647c7d4098940f4d7814d5bc1b30a382c2dad8b87b0957dfd259eaf6"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/47/47981e043234df0b254acfc25514ea23ee644803bf72442a737c087a1df38ec9",
+      "bytes": 263,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "47981e043234df0b254acfc25514ea23ee644803bf72442a737c087a1df38ec9"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/ca/ca996964960c9385a0f1754fadb116152491f4619b61b817b6ad0f3fff75b53d",
+      "bytes": 6467,
+      "normalization": "verbatim",
+      "path": "top_ff2_gradient.cpp",
+      "sha256": "ca996964960c9385a0f1754fadb116152491f4619b61b817b6ad0f3fff75b53d"
+    }
+  ],
+  "generatedUtc": "2026-08-16T08:44:06+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:fc66142d71c1e752ff437798017e3bc92e70227cbe5fb823915a1a6d7522d776",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/20260816T082216196136Z_fc66142d71c1.json",
+      "sha256": "sha256:8249fa66a10ae97c5b4484682020a06ea0eb34b1974d89a6d6e17fd0f31bfff9"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/20260816T084406698903Z_c702318a225c.json",
+    "sha256": "sha256:5fa659425df012afc4abc2ad502ffee5d43c64215a10e3662b399848c4f8e21c"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

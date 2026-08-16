@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "LibNC applies the same matmul-driver contract to the 6,144-feature FF1 transpose as to FF2: eight adjacent destination lanes, sequential FMA within each 128-feature panel, ordered addition of completed panels, then one BF16 materialization."
+  },
+  "candidateId": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1",
+    "candidateTreeSha256": "sha256:14625f15e2e6c1f9350f3d6b1f725cada762571063f2c5572cac6e104b7ed234",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/20260816T123621862284Z_14625f15e2e6.json",
+      "sha256": "sha256:9b7fac61b3431a7e657f3a9b01ba55bf8c4d024df153eac8dd47d0f648e409ee"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Use the exact open FF1 input adjoint as the incoming residual for the layer-19 pre-FF layer-normalization backward boundary, preserving the direct FF residual branch and independently verifying normalization parameter and input adjoints.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:8c017066803b012195f68dd19d2997c93c74618c94354f8d3e82481b545651b1"
+    },
+    {
+      "path": "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:7297ff69ae4d59cb8b825b81d301f5e598af07d7c0d1944ed3ca087e2c604c95"
+    },
+    {
+      "path": "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:5e95c908030e0edb904bc35a629e7dcc1716503e1f3b2a23987c9dfbb58cda1e"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1.json",
+    "sha256": "sha256:bd5a8a27cfc6803cee1db168430a6def142e6142edd3405f8ff24f5570e1cc3e"
+  },
+  "generatedUtc": "2026-08-16T12:37:30+00:00",
+  "hypothesis": {
+    "rationale": "Forty-eight ordered 128-feature panels reproduced the complete production FF1 input adjoint with zero error, while removing those panel boundaries changed the population and missed 1,256 source words.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T123635Z_f1f6615808.json",
+    "sha256": "sha256:85bb6cdd06e4a7b356c7e39ae91a19083dc854dabe199023657c2569efc74de1"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "LibNC dependency for the complete top-FF1 input-adjoint projection",
+      "One unbroken 6,144-feature FF1 transpose reduction as source-exact arithmetic"
+    ],
+    "transferableLessons": [
+      "The source-attributed 128-feature reduction-panel schedule is a transferable matmul-driver invariant across FF2 and FF1; the full top-FF1 input adjoint is now open and exact."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t123635z_f1f6615808",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound open transpose completed two byte-identical ordered-panel and unblocked populations; all 2,097,152 ordered-panel words matched the deterministic source oracle exactly, the unblocked control retained 1,256 mismatches, and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

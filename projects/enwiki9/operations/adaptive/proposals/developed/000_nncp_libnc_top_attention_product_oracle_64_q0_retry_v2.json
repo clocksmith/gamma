@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "claimed_at": "2026-08-16T17:47:03+00:00",
+  "created_at": "2026-08-16T17:47:03+00:00",
+  "developed_at": "2026-08-16T17:47:04+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T172814Z_45054e4c3f.json",
+      "sha256": "sha256:97a488fb1c32cac767682440d612b0519556c39cb4d985650a6f3eb5b57fcce4"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2.json",
+    "sha256": "sha256:2ba1ff3d24bb49e9640b61d998fe5f723393684e357fc347879df396529f5682"
+  },
+  "hypothesis": "The two completed manifest-frozen attention-product captures can be re-hashed and assembled in observed stream-head byte order without teacher replay, yielding deterministic, live forward and adjoint tensors whose attended input exactly equals the promoted open pre-w_o value.",
+  "interfaces_exposed": [
+    "manifest-frozen production attention captures -> exact attended/probability oracle tensors"
+  ],
+  "kill_condition": "Any manifest drift, incomplete or nondeterministic population, fixture drift, direct concat mismatch, dead control, source failure, resource failure, teacher replay, or cleanup failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+  "priority": 1542,
+  "promotion_condition": "Both frozen manifests exact; four tensor populations deterministic and live; declared probes complete; fixture unchanged; direct concat identity exact; wrong-order control live; no teacher replay; green source, resource, and cleanup gates.",
+  "proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+  "retired_neighborhoods": [
+    "Interpreting LibNC dims[2] and dims[3] values as serialized outer-axis order instead of following write_axis traversal"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1542,
+  "state": "developed",
+  "title": "Top attention-product source oracle manifest salvage"
+}

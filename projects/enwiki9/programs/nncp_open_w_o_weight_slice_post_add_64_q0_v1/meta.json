@@ -1,0 +1,40 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+    "nncp_open_ff1_weight_slice_post_add_64_q0_v1"
+  ],
+  "description": "LibNC-free chronological post-dot-add validation of a layer-19 w_o_19 gradient slice",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The previously attributed LibNC-free chronological post-dot prior-add BF16/FMA kernel exactly reconstructs the first 128 output rows of the retained w_o_19 gradient from the sealed pre-w_o input and independently opened post-w_o adjoint, while reversed and sign-negated controls differ.",
+  "id": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T163008Z_9e18c10ab5": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T163008Z_9e18c10ab5.json",
+        "sha256": "sha256:690a8dbb6afd7321007079b9a11efb076712973bfaf21e5d92ab713940101de4",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_w_o_weight_slice_post_add_64_q0_v1.json",
+      "sha256": "sha256:ca9c7fefe4abd79a88164ad8700982180a55d0f059d0ff1e025896abe559d766"
+    },
+    "interfaces_exposed": [
+      "sealed pre-w_o input plus open post-w_o adjoint -> independently checked w_o_19 gradient slice"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unvalidated transfer of FF1 weight-gradient arithmetic to w_o_19"
+    ]
+  },
+  "parent": "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+  "status": "measured_negative",
+  "verdict": "Expand the exact treatment prospectively over all 1,024 w_o_19 output rows with byte-identical replay and a sign-negated control, compare all 1,048,576 words to the retained gradient, then use the sealed initial matrix and open upstream adjoint to validate the transpose residual."
+}

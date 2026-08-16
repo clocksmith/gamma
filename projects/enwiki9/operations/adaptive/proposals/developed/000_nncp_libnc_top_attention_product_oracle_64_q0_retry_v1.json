@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T17:28:01+00:00",
+  "created_at": "2026-08-16T17:28:00+00:00",
+  "developed_at": "2026-08-16T17:28:01+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T172243Z_21e3211378.json",
+      "sha256": "sha256:14c572d057114aff0a295615cb3a0945385a6c0eca5ec475bd61180a3b3a8848"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_product_oracle_64_q0_retry_v1.json",
+    "sha256": "sha256:8eaf88419de45fd38e28326ee1a3376771892782b8546776412187d5b68aad89"
+  },
+  "hypothesis": "Two same-run production probes at the layer-19 value-attention product and its probability operand yield deterministic, complete BF16 forward and adjoint populations, preserve every non-probe fixture payload, and the attended-head input maps exactly through concat_head to the promoted open pre-w_o value.",
+  "interfaces_exposed": [
+    "production attention value product -> complete attended/probability forward and adjoint oracle"
+  ],
+  "kill_condition": "Any incomplete, nondeterministic, dead, fixture-changing, concat-mismatching, source-failing, or resource-failing capture.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "priority": 1541,
+  "promotion_condition": "Two exact complete four-tensor captures; live inputs and adjoints; exact probe population; unchanged fixture; exact concat/open-forward identity; green source and resource guards.",
+  "proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Top-attention enum and enumerators defined below patched trf_eval call sites"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1541,
+  "state": "developed",
+  "title": "Top attention-product source oracle declaration-order retry"
+}

@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T104055Z_2c469fd001.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t104055z_2c469fd001",
+  "failure": "The remaining gate divergence was caused by using scalar libm tanh instead of LibNC production kernel bytes [0x29850,0x2999f): bounded Cephes exp/tanh arithmetic with fixed FMA order.",
+  "mechanism": "Evaluate the production eight-lane GELU-backward instruction contract: fused argument and derivative construction, bounded Cephes exp polynomial for tanh, analytic derivative, incoming-adjoint multiply, and final BF16 materialization.",
+  "population": "one BF16 GEGLU branch-adjoint word; All retained 64 states across 32 streams and all 3,072 layer-19 gate features.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T10:43:56+00:00",
+  "retired_dimensions": [
+    "Do not use scalar libm tanh as the exact production GELU-backward contract."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

@@ -1,5 +1,457 @@
 # enwiki9 Research Register
 
+## 2026-08-16 - The layer-19 output projection is open in both directions
+
+A same-run production probe sealed the tensor immediately after
+`concat_head` and before `w_o_19`, its input adjoint, and the initial
+`w_o_19` matrix over all 64 states and 32 streams. Both complete source
+populations were byte-identical, every non-probe fixture file was unchanged,
+and the retained matrix-gradient identity held. The source job completed the
+science but named an undeclared pre-cleanup decision artifact; its receipt-only
+successor rehashed both 256-file probe populations, published the three durable
+BF16 artifacts, and removed the transient capture trees. See the valid
+[`decision`](../results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T162351Z_97a6519638.json).
+
+The open matrix-gradient attribution first reproduced a prospectively fixed
+128-row slice, then expanded the same chronological kernel across all
+1,048,576 `w_o_19` weights. Each state accumulates its 32-stream dot from
+zero with sequential AVX2 FMAs, adds the decoded prior BF16 gradient after the
+dot, and rounds once to BF16. The full treatment is exact; its sign-negated
+control differs everywhere. See the full
+[`decision`](../results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_w_o_gradient_full_post_add_64_q0_v1/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T163533Z_7a29124cd9.json).
+
+The complete transpose then transferred the independently attributed
+128-feature panel schedule to `w_o_19`. Eight ordered panels reproduce every
+one of the 2,097,152 source input-adjoint words exactly across two replays. A
+single unblocked 1,024-feature chain differs in 285 words and the sign-negated
+control differs everywhere. The evaluator has no LibNC, GGML, CUDA, OpenMP,
+BLAS, or other forbidden dynamic dependency. See the
+[`decision`](../results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T164348Z_ff5718724e.json).
+
+Finally, the already exact 32-stream open forward exposed its existing
+layer-19 merged-attention value without changing arithmetic. Two full
+populations retained zero mismatch across all 640 layer-input checkpoints and
+equal aggregate hashes. State-major assembly reproduces all 2,097,152 source
+pre-`w_o` words exactly; the prospectively frozen stream-major control differs
+in 2,088,943 words. The expensive run first failed before science because its
+fixture parent was absent. Its retry completed every predicate but used a
+decision label outside the result schema. A receipt-only successor freshly
+rechecked the source tensor, replay receipts, control, artifact copy, and
+original resource envelope, then emitted a contract-valid result. See its
+[`decision`](../results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/decision.json),
+[`execution receipt`](../results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/execution.json),
+[`guard`](../results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T171305Z_fdae41e74c.json).
+
+This closes the layer-19 output projection's forward value, parameter
+gradient, and input adjoint. It remains zero-credit teacher-removal evidence:
+the forward binds a pinned static GGML source archive and sealed fixture, and
+none of these results proves a compact predictor, recursive adaptation,
+compression gain, transfer, package closure, or a Hutter score. The next live
+boundary is the eight-head value-attention product and `concat_head` backward.
+
+## 2026-08-16 - The layer-19 pre-FF total adjoint is open and exact
+
+The residual-join investigation found an evidence-lineage error rather than a
+new arithmetic rule. A production same-run probe captured the pre-FF input,
+total adjoint, RMSNorm branch adjoint, and direct residual adjoint in one graph
+over the complete retained population. Both source captures were complete,
+byte-identical, fixture-preserving, and within the decimal-memory and scratch
+limits. The total and branch reproduced their independently sealed source
+artifacts exactly. The direct differed from the older
+`final_norm_backward` artifact in eight BF16 words, but reproduced the already
+promoted streaming-dot final-RMSNorm residual in every word. Adding the
+same-run branch and direct in F32 and rounding once to BF16 reproduced every
+source total word; the negated control remained live. See the terminal
+[`decision`](../results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/decision.json),
+[`execution receipt`](../results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/execution.json),
+[`guard`](../results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T155008Z_4831e25438.json).
+
+This supersedes the earlier interpretation of the three-word total mismatch.
+Five of the eight corrected direct words did not cross the final BF16 sum
+boundary; three did. The generic shared-BF16 merge experiments were therefore
+driven by a stale direct input and do not establish special merge behavior.
+Raw F32 branch joins, coordinate repair, and special residual accumulation are
+not needed. Historical receipts remain unchanged.
+
+The first source job completed both large captures but failed at finalization
+because it imported the comparator from the wrong module. Its manifest-only
+retry completed every scientific comparison, staged durable artifacts, and
+removed the transient capture trees before schema validation rejected an
+extra `id` in the result's experiment reference. A receipt-only immutable
+successor rebound those staged artifacts and published the valid result. The
+two implementation failures and their reflections remain part of the audit
+trail; no teacher rerun was used to repair either finalization error.
+
+Finally,
+`nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1` replaced only the stale
+direct input with the promotion-backed streaming-dot artifact. Two
+teacher-free full-population compositions replay byte-for-byte and reproduce
+the complete sealed source total with zero error. The small executable has no
+LibNC, GGML, BLAS, OpenMP, or CUDA dependency. See its
+[`decision`](../results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T155508Z_53d5388d2c.json).
+
+This closes the open backward boundary through the layer-19 FF block and its
+pre-FF normalization/residual join. It remains zero-credit teacher-removal
+evidence and proves no attention backward, recursive update, compression
+gain, transfer, package, or Hutter result. The next frozen boundary is the
+layer-19 attention output projection: the pre-`w_o_19` value tensor, its input
+adjoint, the retained `w_o_19` gradient, and the transpose residual.
+
+## 2026-08-16 - The complete top FF1 backward is open through its input adjoint
+
+Three prospectively frozen experiments resolved the remaining `ff1_19`
+matrix-gradient boundary. The source attribution first replayed 64
+chronological graph states over a fixed 128-output by 1,024-input slice. Its
+LibNC treatment matched the retained gradient exactly, while a flat
+whole-population product missed 101,753 words and reverse state order missed
+110,634. This established that matrix gradients, like bias gradients, retain
+BF16 materialization at every graph-state boundary. See the
+[`decision`](../results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/execution.json),
+[`guard`](../results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T114029Z_4b8fd50e01.json).
+
+The first open arithmetic grid then refuted its frozen prior-initialized FMA
+hypothesis: that cell and the nonfused cell each missed 43 of 131,072 words.
+The prospectively declared post-dot cell was exact. Its immutable successor
+confirmed the localized contract over the entire slice and two replays:
+accumulate each 32-stream dot from zero with sequential AVX2 FMAs, add the
+decoded prior BF16 gradient after the dot, then round-to-nearest-even BF16
+once per state. It also reproduced the independent reverse-state and
+sign-negated oracles exactly while retaining both 43-word failures. See the
+grid
+[`decision`](../results/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/decision.json)
+and
+[`reflection`](../operations/adaptive/reflections/20260816T115801Z_99a2e7695e.json),
+then the immutable successor
+[`decision`](../results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T120602Z_ec1474d292.json).
+
+Finally,
+`nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1` expanded that uniform
+kernel to the complete 1,024-input by 6,144-output matrix without changing
+arithmetic. Both full 6,291,456-word projections replayed byte-for-byte. Every
+one of 48 prospectively fixed 128-row partitions, the inherited parent slice,
+and the retained production gradient matched exactly. The generated gradient
+also reproduces the retained artifact SHA-256. The executable has no LibNC,
+GGML, BLAS, OpenMP, or CUDA dependency and passed the decimal-memory,
+temporary-disk, source-closure, and cleanup guards. See the
+[`decision`](../results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T121133Z_b2c70f9ec5.json).
+
+The next source probe attached a marked zero tensor immediately before the
+production `ff1_19` matmul and sealed two complete input and input-adjoint
+populations. Its raw science was sound but its first gate retried: the reused
+fixture helper excluded only the historical `top_ff2_` namespace and counted
+all 256 declared `top_ff1_` probe files in each capture as fixture mutations.
+An immutable manifest-only correction did not rerun the teacher. It proved
+that all 512 stale mismatches were exactly the enumerated probe paths and that
+every non-probe fixture payload remained identical. The corrected oracle
+retains two byte-identical 2,097,152-word adjoints, exact source/open FF1 input
+identity, and a verbatim 6,291,456-word initial BF16 matrix. See the original
+[`decision`](../results/nncp_libnc_top_ff1_input_adjoint_64_q0_v1/decision.json)
+and
+[`reflection`](../operations/adaptive/reflections/20260816T121911Z_d066eaf1cf.json),
+then the corrected
+[`decision`](../results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/guard.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260816T123446Z_5cbfc56c6d.json).
+
+Finally, `nncp_open_top_ff1_input_adjoint_block128_64_q0_v1` transferred the
+already attributed LibNC matmul-driver schedule from FF2 to the wider FF1
+transpose. Forty-eight ordered 128-feature panels reproduced every source
+input-adjoint word exactly across two full replays. A one-panel unbroken
+6,144-feature reduction differed in 1,256 words, proving that the panel
+boundary remains operationally live. The generated open artifact reproduces
+the source-oracle digest and the executable has no LibNC, GGML, BLAS, OpenMP,
+or CUDA dependency. See the
+[`decision`](../results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T123635Z_f1f6615808.json).
+
+This retires LibNC for both top-FF1 parameter gradients and the complete FF1
+input-adjoint projection. It remains zero-credit teacher-removal evidence: no
+compression, transfer, package, or Hutter improvement follows. The next live
+top-layer boundary is the layer-19 pre-FF normalization backward, including
+`ln_g_39`, `ln_b_39`, its input adjoint, and the direct FF residual branch.
+
+## 2026-08-16 - The top FF1 bias gradient is fully open and exact
+
+The complete top-layer backward chain now has an open exact projection through
+`ff_bias1_19`. Candidate
+`nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1` combined the promoted
+128-feature-panel FF2 transpose with the attributed AVX2 bounded-exp GELU
+backward. Both complete populations replayed byte-for-byte. All 6,291,456
+FF2-input residual words, all 6,291,456 gate-branch words, and all 6,291,456
+value-branch words matched their independent source captures exactly. The
+remaining flat bias projection still differed in 4,708 of 6,144 words, with
+maximum absolute error `1.52587890625e-05`, localizing the discrepancy after
+the elementwise FF1-output adjoint. See the
+[`decision`](../results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/execution.json),
+and
+[`guard`](../results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/guard.json).
+
+Static `nc_backward` attribution showed that each broadcast-bias parameter
+node invokes `nc_reduce_sum(existing_gradient, state_gradient, 1)`. Candidate
+`nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1` therefore replayed the 64
+chronological `[6144, 32]` state panels instead of flattening all 2,048
+samples. The source operation reproduced every retained word exactly; the
+flat control retained 4,708 mismatches and the reverse-state control retained
+5,099. See its
+[`decision`](../results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T111831Z_64dcc1173e.json).
+
+The immutable LibNC-free successor
+`nncp_open_ff1_bias_state_reduce_64_q0_v1` then implemented the attributed
+contract directly: decode the prior BF16 gradient, add streams 0 through 31
+sequentially in float32, and round-to-nearest-even BF16 once after each state.
+Two complete executions were byte-identical and matched all 6,144 independent
+LibNC oracle words with zero error. The flat, reverse-order, and sign-negated
+controls remained live; the executable had no LibNC, GGML, BLAS, or OpenMP
+dependency. See the
+[`decision`](../results/nncp_open_ff1_bias_state_reduce_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_ff1_bias_state_reduce_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_ff1_bias_state_reduce_64_q0_v1/guard.json), and
+terminal
+[`reflection`](../operations/adaptive/reflections/20260816T112548Z_7841e2cc5b.json).
+
+This retires both flattened bias accumulation and LibNC as an FF1-bias
+dependency. It remains zero-credit teacher-removal evidence: no compression,
+transfer, package, or Hutter result follows. The next unproven top-layer
+parameter boundary is the `ff1_19` matrix gradient. Its gate must preserve the
+same chronological graph-state accumulation rather than borrowing a flat
+whole-population reducer.
+
+## 2026-08-16 - The exact FF2 transpose uses ordered 128-feature panels
+
+Two prospectively frozen arithmetic attributions resolved the 775-word
+source/open FF2-input-adjoint boundary. The first mapped SIMD lanes to
+adjacent output features and accumulated each lane through one unbroken
+1,024-feature FMA stream. It was valid but worse: 929 of 6,291,456 source
+BF16 words differed, with maximum absolute error
+`2.9802322387695312e-08`. This retires the unblocked lane stream and shows
+that identifying the inner kernel alone is insufficient. See its
+[`decision`](../results/nncp_libnc_ff2_transpose_lane_order_64_q0_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T093214Z_c6950a77d0.json).
+
+Static dispatch attribution then exposed the missing driver boundary: the
+1,024-feature reduction is executed as eight ordered 128-feature panels. The
+second candidate preserved adjacent-feature lanes, reset each lane
+accumulator at every panel, and added each completed panel to the prior
+output. Two complete executions replay byte-for-byte and reproduce every one
+of the 6,291,456 independent source-adjoint words with zero error. The
+horizontal and unblocked controls retain their distinct 775-word and
+929-word mismatch populations, so the panel boundary is live. Parameter and
+LibNC digests, strict outputs, source closure, memory, scratch, and cleanup
+guards pass. See the
+[`decision`](../results/nncp_libnc_ff2_transpose_block128_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_ff2_transpose_block128_64_q0_v1/execution.json),
+[`guard`](../results/nncp_libnc_ff2_transpose_block128_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T093907Z_7f51e2d346.json).
+
+This authorizes one uniform open FF2-transpose implementation: adjacent
+output-feature SIMD lanes, ordered 128-feature reduction panels, one panel
+combination before the next panel, and one final BF16 conversion. It remains
+zero-credit teacher-removal evidence and proves no GEGLU, FF1, recursive
+update, compression improvement, transfer, package, or Hutter result.
+
+## 2026-08-16 - The first remaining divergence is the FF2 transpose
+
+Candidate `nncp_libnc_top_ff2_input_adjoint_64_q0_v1` placed a marked zero
+probe on the production layer-19 GEGLU output immediately before `ff2_19` and
+captured its complete backward adjoint twice. The frozen comparison withheld
+the open residual until both source populations were complete and preserved
+all non-probe fixture payloads.
+
+The experiment is valid and its byte-identity hypothesis is refuted. Both
+source captures replay exactly, expose all 6,291,456 expected BF16 input and
+adjoint words, leave the production fixture unchanged, retain a live
+comparator, and pass strict output, source, memory, scratch, and cleanup
+guards. The source adjoint nevertheless differs from the open streaming
+transpose residual in 775 words, with maximum absolute error
+`2.9802322387695312e-08`. See the
+[`decision`](../results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/execution.json),
+[`guard`](../results/nncp_libnc_top_ff2_input_adjoint_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T090818Z_428a8e6c62.json).
+
+This is the first measured divergence after the exact final-RMSNorm adjoint
+and exact `ff2_19` parameter gradient. GEGLU backward is downstream of an
+already-nonexact residual and is therefore not needed to explain the retained
+`ff_bias1_19` mismatch. The current eight-lane streaming transpose is retired
+as source-exact, but FF2 transpose itself is not. The next gate must compare
+frozen arithmetic variants against the captured source adjoint before GEGLU
+is reopened. This source oracle has zero objective credit and proves no
+recursive update, compression improvement, transfer, package, or Hutter
+result.
+
+## 2026-08-16 - The first open GEGLU backward contract is refuted
+
+Candidate `nncp_open_profile_top_ff1_bias_gradient_64_q0_v1` started from the
+promoted exact final-RMSNorm input residual, regenerated both complete forward
+populations with fresh layer-19 FF1 outputs, and applied one frozen backward
+contract: streaming BF16 FF2-transpose dots, a BF16 transpose-output boundary,
+the measured unfused tanh-GELU derivative, and explicit BF16 product
+boundaries. The retained `ff_bias1_19` gradient remained unavailable until both
+open projections were complete.
+
+The experiment is valid and the hypothesis is refuted. Both populations and
+their complete FF2-input and FF1-output residuals replay byte-for-byte, all
+forward checkpoints remain exact, the sign-negated control changes, strict
+outputs validate, and dependency, source, memory, scratch, and cleanup guards
+pass. Nevertheless, 4,708 of 6,144 retained `ff_bias1_19` BF16 words differ,
+with maximum absolute error `1.52587890625e-05`. Both the gate and value halves
+contain mismatches, so the bias projection alone cannot distinguish the shared
+FF2-transpose adjoint from branch-specific GEGLU arithmetic. See the
+[`decision`](../results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T084751Z_2949ede196.json).
+
+This retires the combined contract, not FF2 transpose or GELU individually.
+The next justified experiment must capture or independently validate the
+production FF2-input adjoint before changing activation arithmetic. Tuning
+against the retained bias vector is forbidden. This result has zero objective
+credit and proves no FF1 matrix gradient, earlier-layer backward, recursive
+update, compression improvement, transfer, package, or Hutter result.
+
+## 2026-08-16 - The open tail is exact through the top FF2 gradient
+
+Candidate `nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1` installed
+only the source-attributed streaming eight-lane FMA reduction at the final
+RMSNorm `g*y` dot. Its first job stopped during digest-bound preflight because
+the wrapper retargeted an inherited antecedent checker; no scientific payload
+was produced. The first immutable retry completed both populations and every
+scientific comparison, but strict validation rejected its result because the
+cloned output manifest still named the ancestor candidate. Both failures are
+retained as implementation evidence in their terminal
+[`preflight reflection`](../operations/adaptive/reflections/20260816T080014Z_9da1ba0532.json)
+and
+[`manifest reflection`](../operations/adaptive/reflections/20260816T080451Z_d5838c6e4e.json).
+
+The manifest-only second retry preserved the C++ algorithm byte-for-byte and
+reran the complete guarded population. The prospectively frozen gate passed
+every predicate. Two independent 32-stream executions preserve all inherited
+forward, output-head, final-normalization parameter, and projection results;
+the complete final-RMSNorm input residual matches the independent source
+adjoint in all 2,097,152 BF16 words; and all 3,145,728 retained `ff2_19`
+gradient words are exact. Replay is deterministic, the residual-negation and
+FF2-negation controls remain live, the strict nine-output manifest validates,
+and dependency, source, memory, and scratch guards pass. See the
+[`decision`](../results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/decision.json),
+[`execution receipt`](../results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/execution.json),
+[`guard`](../results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T082228Z_f0bff9b6df.json).
+
+This opens the production backward tail from the output head through final
+RMSNorm and the top-layer FF2 parameter gradient. It remains a zero-credit
+teacher-removal result. It proves no FF2 input residual, GEGLU derivative,
+`ff1_19` or bias gradient, earlier transformer backward, recursive update,
+compression improvement, transfer, package, or Hutter result. The next frozen
+boundary is the FF2 transpose residual through GEGLU into the top-layer FF1
+and bias gradients.
+
+## 2026-08-16 - The final RMSNorm discrepancy is the product reduction
+
+The four-cell
+`nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1` attribution crossed two
+product-reduction orders with two algebraically equivalent scalar placements.
+Both generic block-combined dot cells reproduced the retained open residual
+and differed from the source adjoint in the same 8 BF16 words. Both ordered
+eight-lane streaming FMA cells reproduced the independent source adjoint
+exactly. Mean-scaled versus width-scaled placement was BF16-identical across
+the complete population, so the frozen uniqueness hypothesis was refuted even
+though the causal boundary became sharper.
+
+This retires generic 64-element block combination as a source-equivalent
+implementation of the final-RMSNorm `g*y` dot and retires scalar placement as
+the cause on this population. It authorizes one uniform streaming reduction,
+not coordinate patches or tolerance. See the
+[`decision`](../results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/execution.json),
+[`guard`](../results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T075342Z_b33521b4a0.json).
+
+The attribution uses retained source tensors only as post-completion
+comparators and has zero objective credit. No source executable, captured
+adjoint, gradient, trace, or probability may enter a submitted codec.
+
+## 2026-08-16 - The production top-layer FF2 adjoint is localized
+
+The first `nncp_libnc_top_ff2_adjoint_64_q0_v1` job stopped before measurement:
+its probe definitions were below their first call sites and lacked forward
+declarations. The terminal
+[`reflection`](../operations/adaptive/reflections/20260816T064522Z_bd9f01360c.json)
+classifies that compiler failure as implementation evidence and preserves the
+unchanged scientific predicates.
+
+The declaration-only retry attached a zero-valued marked parameter after the
+production layer-19 FF2 bias at the first retained update. Two complete source
+executions each emitted the same 757-file population and aggregate hash. Every
+non-probe file remained byte-identical to the retained production fixture, and
+the combined source FF2 inputs, post-FF2 adjoints, reconstructed gradients, and
+sign-negated controls replayed byte-for-byte.
+
+The attribution is exact. Source input plus source adjoint under the frozen
+128-sample reducer reproduces all 3,145,728 retained `ff2_19` BF16 words with
+zero error. The open final-normalization input residual differs from the source
+post-FF2 adjoint in 8 of 2,097,152 words across 8 output features, with maximum
+absolute error `2.9802322387695312e-08`. This retires FF2 outer-product
+reduction order as the cause of the prior 184-word mismatch and moves the next
+boundary to an operation-level decomposition of the open final RMSNorm
+per-sample adjoint. See the retry
+[`decision`](../results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/guard.json), and
+terminal
+[`reflection`](../operations/adaptive/reflections/20260816T065037Z_1d8853ab41.json).
+
+This source capture is a zero-credit attribution oracle. No teacher
+executable, LibNC dependency, captured tensor, gradient, trace, or probability
+may ship in a submitted codec, and no compression, transfer, package, or
+Hutter result follows.
+
 ## 2026-08-16 - The first top-layer FF2 reduction is narrowly refuted
 
 Candidate `nncp_open_profile_top_ff2_gradient_64_q0_v1` retained the complete

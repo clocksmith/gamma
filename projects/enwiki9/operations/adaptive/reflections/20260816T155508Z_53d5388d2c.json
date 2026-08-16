@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The exact pre-FF total is the ordinary BF16 residual sum once both inputs have correct promotion-backed lineage; no special merge, raw branch, or coordinate correction is required."
+  },
+  "candidateId": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:a82573b1026b900765cb9eb22b0cc6d40d6581136f18548ea4da1eebac684ab2",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/20260816T155453696714Z_a82573b1026b.json",
+      "sha256": "sha256:0c0fa99b219167f80cdccb5ccac7f575e70c2457c3c9c1efb30d927143d49a6c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Advance to the layer-19 attention output projection: capture and independently validate the production pre-w_o value tensor and its input adjoint, then reconstruct w_o_19 and its transpose residual under already attributed matmul schedules.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:eb24b73027541b2120941a2c60dacccd02b62c5e64d1edeaea19710cac26409b"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:96357b7028b80a33ea55d4bacdc31a273a46d18c4b2fa73efaba98813e842870"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:aa543079d0782be754c2726621e5f861916db00f3da907ba3f5ccc6b78b44187"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:e006fd3eea81dd6c8ad857b4ab6b2c37395d01111fd99be88a0f708fb317044f"
+  },
+  "generatedUtc": "2026-08-16T15:58:10+00:00",
+  "hypothesis": {
+    "rationale": "One F32 addition followed by RNE BF16 of the exact output-order RMSNorm branch and promoted streaming-dot direct residual reproduces all 2,097,152 source pre-FF total-adjoint words.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T155508Z_53d5388d2c.json",
+    "sha256": "sha256:3a1336b02cbd3e51bd36d3173591546740f55c6205dd6e9e3fc6b3d9a47f0927"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Special pre-FF residual-merge semantics beyond one F32 addition and RNE BF16 on exact inputs."
+    ],
+    "transferableLessons": [
+      "Promoted artifact lineage is part of the arithmetic contract: the same operation can appear inexact when a superseded upstream artifact is silently reused."
+    ],
+    "uncertainties": [
+      "This is zero-credit teacher-removal evidence on one retained 64-state population; attention backward, recursive update, compression transfer, and Hutter score remain unproven."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t155508z_53d5388d2c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The complete teacher-free composition ran twice from promotion-backed branch and direct artifacts, matched every sealed source-total word, preserved a live negative control, validated dependencies and source closure, stayed inside resource limits, and removed scratch."
+    ],
+    "valid": true
+  }
+}

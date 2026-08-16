@@ -1,0 +1,106 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The frozen FF2 outer-product reducer is exact when supplied the production source operands, while the open final-normalization input residual is not the production post-FF2 adjoint at 8 BF16 coordinates; the next attribution boundary is the open final RMSNorm per-sample arithmetic, not FF2 reduction."
+  },
+  "candidateId": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:f614bd733469be3909026a0a94eb4f6c4773c5c637e7b75c129ca97e9d6ea30f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/20260816T065021151451Z_f614bd733469.json",
+      "sha256": "sha256:78e033dfe4c54fe97497ac71403ba6188dde0309c33eddde580638bb203e8d14"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Promote this zero-credit attribution oracle and freeze one operation-level final RMSNorm residual decomposition; do not claim deeper backward, recursive adaptation, compression savings, package readiness, or Hutter credit.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1.json",
+      "sha256": "sha256:4e73b2ae969e0536d7c420b4e74f0588970c198af12c6afe23c0ab512a5ce3c1"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:dd2b633ab786acaa462522745a5d58a83ad6affff99b8d3e60a7a9a8f4c5eca8"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:545ccab13b2b1e646a94efe293161de10f7d81bc11ce7a1e6b456e030ee7729e"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:6d30d0c038c03de865fd3eb0bcaf0aef22e411c6fadfe10b7ff0d359e4266a3c"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:4e73b2ae969e0536d7c420b4e74f0588970c198af12c6afe23c0ab512a5ce3c1"
+  },
+  "generatedUtc": "2026-08-16T07:04:41+00:00",
+  "hypothesis": {
+    "rationale": "The source adjoint differs from the open residual in 8 of 2,097,152 BF16 words across 8 output features with maximum absolute error 2.9802322387695312e-08, while source input plus source adjoint reconstruct all 3,145,728 retained ff2_19 words with zero error.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T065037Z_1d8853ab41.json",
+    "sha256": "sha256:c0d74abe2c2c156dff7c788ab0a1fc757e1cd5c6ce442455bdcaa0519e0110e6"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not retry FF2 outer-product reduction geometry: source operands reproduce every retained ff2_19 BF16 word exactly."
+    ],
+    "transferableLessons": [
+      "A zero-valued marked LibNC parameter exposes an exact residual-join adjoint without perturbing any retained production fixture byte.",
+      "The source FF2 input and source adjoint under the frozen 128-sample reducer reproduce retained ff2_19 exactly, retiring reduction order as the cause of the 184-word open mismatch."
+    ],
+    "uncertainties": [
+      "The eight source-versus-open adjoint differences are localized but their exact final RMSNorm operation-order cause is not yet identified; open versus source FF2 input identity also remains to be decomposed directly."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/scopeSymbols",
+      "source": {
+        "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1.json",
+        "sha256": "sha256:4e73b2ae969e0536d7c420b4e74f0588970c198af12c6afe23c0ab512a5ce3c1"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t065037z_1d8853ab41",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The declaration-only retry completed two full production captures under revision, memory, disk, and experiment guards; both 757-file captures and all combined payloads replayed byte-identically, every inherited fixture file remained unchanged, the negative control was live, and the complete source reconstruction was exact."
+    ],
+    "valid": true
+  }
+}

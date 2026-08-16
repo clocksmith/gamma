@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "claimed_at": "2026-08-16T10:08:28+00:00",
+  "created_at": "2026-08-16T10:08:28+00:00",
+  "developed_at": "2026-08-16T10:08:29+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T095147Z_8ddedba49c.json",
+      "sha256": "sha256:b3265262588916368ab0d076bcf716e7813ab9ae86215e38280b7dbf71987de9"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T090818Z_428a8e6c62.json",
+      "sha256": "sha256:04f6317593e5ade43b215cc75afb1407b527e4bc22fdec60ad15898205b67523"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:26440050deda40eba87aa567c6230a3ef8988ca03b1d4d57047e0547658d783d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_v1.json",
+    "sha256": "sha256:41e7063cc375808bc6d2babdec676b8cafe18c7de55bb1351fa2e74482b4ed04"
+  },
+  "hypothesis": "At least one production layer-19 GEGLU split-branch adjoint differs from the open branch residual even after the incoming FF2 residual is source-exact, localizing the retained ff_bias1_19 mismatch before bias projection.",
+  "interfaces_exposed": [
+    "source-exact FF2 residual -> production GEGLU gate/value branch adjoints"
+  ],
+  "kill_condition": "Both complete source branch adjoints equal their open counterparts, exonerating GEGLU and localizing the retained mismatch to bias projection.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "priority": 1468,
+  "promotion_condition": "Two complete deterministic source captures, fixture identity, live branch adjoints, valid source closure and guards, and at least one independently measured source/open branch mismatch.",
+  "proposal_id": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not revisit FF2 transpose arithmetic or tune GEGLU formulas against the retained bias vector."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1486,
+  "state": "developed",
+  "title": "Production layer-19 GEGLU branch-adjoint capture"
+}

@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T123635Z_f1f6615808.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t123635z_f1f6615808",
+  "failure": "LibNC applies the same matmul-driver contract to the 6,144-feature FF1 transpose as to FF2: eight adjacent destination lanes, sequential FMA within each 128-feature panel, ordered addition of completed panels, then one BF16 materialization.",
+  "mechanism": "Apply the previously source-attributed matmul driver schedule to FF1: eight adjacent destination lanes, 48 ordered 128-feature reduction panels, sequential fused accumulation within panels, and explicit panel combination before one BF16 output conversion.",
+  "population": "BF16 top-FF1 input-adjoint words; Every one of 1,024 destination features for all 64 chronological states and 32 streams.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T12:37:30+00:00",
+  "retired_dimensions": [
+    "LibNC dependency for the complete top-FF1 input-adjoint projection",
+    "One unbroken 6,144-feature FF1 transpose reduction as source-exact arithmetic"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

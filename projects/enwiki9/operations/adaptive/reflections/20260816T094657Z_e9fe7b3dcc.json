@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The enqueue-tool recipe omitted the required runner arguments; candidate arithmetic was not reached."
+  },
+  "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:8baab96944e4ad0aef7c00d5b84268b30421bdd8bb58add7cd2a1639f3008a18",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1/20260816T094656418539Z_8baab96944e4.json",
+      "sha256": "sha256:7d285ea743589f429c4f679499578104a28540917a00946ef239eee1f6145ccd"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create an immutable retry candidate with unchanged arithmetic and a fully specified guarded tool invocation.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260816T094657Z_e9fe7b3dcc.json",
+      "sha256": "sha256:03e257acfc8eec6c5d95320647703790425c100039745e6f99dac8affd94063e"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T094657Z_e9fe7b3dcc.log",
+      "sha256": "sha256:c02246788bf294871cf75c2e6dcea0f9cd4124f175e759a1da7ef5538dad39e0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:0edc832f1db21d5bc16e6e401fd030ed4f4be4d18f0f835fef8545e08e1af087"
+  },
+  "generatedUtc": "2026-08-16T09:49:24+00:00",
+  "hypothesis": {
+    "rationale": "No open forward checkpoint, FF2 residual, GEGLU residual, retained bias comparison, replay, or scientific control was produced.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T094657Z_e9fe7b3dcc.json",
+    "sha256": "sha256:03e257acfc8eec6c5d95320647703790425c100039745e6f99dac8affd94063e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A directly queued adaptive tool does not infer experiment/output arguments; the retry must freeze the complete guarded invocation explicitly."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t094657z_e9fe7b3dcc",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The frozen job invoked the candidate runner without its required experiment and output arguments, so argparse exited before input validation, compilation, or either forward population."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The source patch anchor named only nc_split(tab2, t0, 2, NULL, 0), which is not unique in nncp.c."
+  },
+  "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_geglu_branch_adjoints_64_q0_v1",
+    "candidateTreeSha256": "sha256:eb8181e965224eb207ed3fdefc8a0bb69fb871bdbf0147e7e372fbec4df2339c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_geglu_branch_adjoints_64_q0_v1/20260816T100829363736Z_eb8181e96522.json",
+      "sha256": "sha256:775a3f90505c0219b27762a058567663bfa51591d33253c9602430d06fd7ecb1"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create an immutable retry changing only the patch anchor to the unique FF_ACT_GEGLU block while preserving probes, predicates, and resource limits.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260816T100841Z_829771fc57.json",
+      "sha256": "sha256:30814386f92320624dda79c9ea6099ad1a57bba1611a7a798dffe78bcd4d350d"
+    },
+    {
+      "path": "results/nncp_libnc_top_geglu_branch_adjoints_64_q0_v1/guard.json",
+      "sha256": "sha256:59f36c639f4bbaf1ac8c4f3228936b04f391fe1dd948480ad0c0d3c1ba46a7f6"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T100841Z_829771fc57.log",
+      "sha256": "sha256:e6a60870cbb27ca0c7be5750ab65d8485571b0434ab49c2e06ec51c153774245"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_geglu_branch_adjoints_64_q0_v1.json",
+    "sha256": "sha256:41e7063cc375808bc6d2babdec676b8cafe18c7de55bb1351fa2e74482b4ed04"
+  },
+  "generatedUtc": "2026-08-16T10:09:43+00:00",
+  "hypothesis": {
+    "rationale": "No source branch input, adjoint, fixture comparison, open comparison, or scientific control was produced.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T100841Z_829771fc57.json",
+    "sha256": "sha256:30814386f92320624dda79c9ea6099ad1a57bba1611a7a798dffe78bcd4d350d"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Source instrumentation must bind the complete FF_ACT_GEGLU case context, not a generic split statement."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t100841z_829771fc57",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The frozen source patch rejected a non-unique bare nc_split anchor before compilation or teacher execution; the source contains multiple split operations and the GEGLU-specific context was not included."
+    ],
+    "valid": false
+  }
+}

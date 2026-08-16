@@ -1,0 +1,103 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The first remaining divergence is after exact branch adjoints, at the broadcast-bias gradient reduction across the 2,048 sample dimension; scalar chronological accumulation is not the production reduction contract."
+  },
+  "candidateId": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+    "candidateTreeSha256": "sha256:3e14d48cd786967cd2caaf848667e6af4b204da80e63880046cad2e712847ec6",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/20260816T104937251353Z_3e14d48cd786.json",
+      "sha256": "sha256:893a00485421ab4d064a49f4fba4ad43561e88a425d90c52589c889a45499d45"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze one source-motivated bias-reduction order attribution over the exact 12,582,912-word residual, compare complete 6,144-word outputs, and do not rerun the teacher.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1.json",
+      "sha256": "sha256:dd84f60f6341331edd9e8ef183a81ed0c1c8a56f9bcde62993d75de114f55642"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/decision.json",
+      "sha256": "sha256:5dda477b87a845497b5fb312a17609ada3f7857989b1bd9d62e433ba4b011745"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/execution.json",
+      "sha256": "sha256:d120c8af71f7b1ff3714158143202b97b94927ebaac26a76326edfaaf7c78056"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/guard.json",
+      "sha256": "sha256:0fb3799b2c8cd9a0a1b0b621d140192584d859e95d1f34bcae9173c86f22103f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1.json",
+    "sha256": "sha256:dd84f60f6341331edd9e8ef183a81ed0c1c8a56f9bcde62993d75de114f55642"
+  },
+  "generatedUtc": "2026-08-16T11:05:07+00:00",
+  "hypothesis": {
+    "rationale": "Installing the exact AVX2 gate kernel made both 6,291,456-word branch adjoints exact, but ff_bias1_19 still differed in 4,708 of 6,144 words with maximum absolute error 1.52587890625e-05.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T104952Z_2204470800.json",
+    "sha256": "sha256:b920fd86b75f1b972881af960ed0a1d71b0c27eb5894bfd777f5e05623d595f7"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not attribute the remaining top-FF1 bias mismatch to FF2 transpose or either GEGLU branch."
+    ],
+    "transferableLessons": [
+      "Exact FF2 and exact GEGLU branch adjoints do not imply an exact bias gradient: the broadcast reduction schedule and materialization are a separate arithmetic contract."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/scopeSymbols",
+      "source": {
+        "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1.json",
+        "sha256": "sha256:dd84f60f6341331edd9e8ef183a81ed0c1c8a56f9bcde62993d75de114f55642"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t104952z_2204470800",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Both complete replays were deterministic, all 640 forward checkpoints matched, FF2 plus gate and value adjoints matched their independent source captures exactly, the sign control remained live, dependencies and source closure passed, and memory, disk, strict-output, and cleanup guards were green."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T065037Z_1d8853ab41.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t065037z_1d8853ab41",
+  "failure": "The frozen FF2 outer-product reducer is exact when supplied the production source operands, while the open final-normalization input residual is not the production post-FF2 adjoint at 8 BF16 coordinates; the next attribution boundary is the open final RMSNorm per-sample arithmetic, not FF2 reduction.",
+  "mechanism": "Preserve the complete zero-add production probe, capture, identity controls, reduction, and prospective predicates, but declare the three static probe functions at the unique pre-trf_eval boundary before their first use.",
+  "population": "one production state, BF16 activation word, adjoint word, or parameter-gradient word; All 64 sequential states across all 32 streams at update block 256, all 6,291,456 FF2 input words, all 2,097,152 post-FF2 adjoint words, and all 3,145,728 ff2_19 words.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T07:04:41+00:00",
+  "retired_dimensions": [
+    "Do not retry FF2 outer-product reduction geometry: source operands reproduce every retained ff2_19 BF16 word exactly."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

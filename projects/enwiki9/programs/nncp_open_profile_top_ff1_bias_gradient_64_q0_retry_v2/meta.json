@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff2_gradient_64_q0_v1"
+  ],
+  "description": "Invocation-corrected open top-layer FF1 exact-transpose replay",
+  "family": "nncp_update_schedule",
+  "hypothesis": "With the complete guarded invocation restored and no arithmetic change, the exact 128-panel FF2 transpose preserves the source adjoint and the frozen GEGLU backward either exactly reconstructs or causally fails the retained ff_bias1_19 gradient.",
+  "id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+  "measured": {
+    "reflections": {
+      "20260816T095147Z_8ddedba49c": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T095147Z_8ddedba49c.json",
+        "sha256": "sha256:b3265262588916368ab0d076bcf716e7813ab9ae86215e38280b7dbf71987de9",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2.json",
+      "sha256": "sha256:771cdaf5680bc07cbd97576752715c3ee355bee2a404af631567b36ac1850c9e"
+    },
+    "interfaces_exposed": [
+      "source-exact FF2 input adjoint -> open GEGLU backward -> retained ff_bias1_19"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+    "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+    "retired_neighborhoods": [
+      "Do not change arithmetic to repair a missing invocation argument."
+    ]
+  },
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+  "status": "measured_negative",
+  "verdict": "Freeze a production source capture of both layer-19 GEGLU split-branch adjoints, compare only after complete branch payloads exist, and attribute each branch independently before another open formula retry."
+}

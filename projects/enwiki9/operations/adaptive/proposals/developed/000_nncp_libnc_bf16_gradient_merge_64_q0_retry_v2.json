@@ -1,0 +1,49 @@
+{
+  "candidate_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v2",
+  "claimed_at": "2026-08-16T14:59:14+00:00",
+  "created_at": "2026-08-16T14:59:14+00:00",
+  "developed_at": "2026-08-16T14:59:15+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T145446Z_b081961542.json",
+      "sha256": "sha256:714c5c059018960dc999f16687a4453264377f581b2b8076d32bf5e05810e735"
+    },
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:f9c94bf98f87610964de1d45696fab556c94811a59da86598925640139a8128c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v2.json",
+    "sha256": "sha256:8952bf503c9dd8a4ef65204175505892d60f38adda91a9a87034c84e0ba8dea4"
+  },
+  "hypothesis": "A digest-bound LibNC shared-parameter graph fed the exact BF16 branch and direct adjoints reproduces the sealed source pre-FF total and identifies the graph-order merge contract.",
+  "interfaces_exposed": [
+    "two production-shaped BF16 adjoint tensors plus graph order -> shared-tensor LibNC gradient"
+  ],
+  "kill_condition": "No exact graph-order merge or any control, replay, library, source, resource, or receipt failure rejects the production-shaped oracle.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v1",
+  "priority": 1451,
+  "promotion_condition": "Exact single-path controls and at least one exact complete graph-order merge, a live negated control, deterministic replay, production rank, the attributed LibNC digest, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v2",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1469,
+  "state": "developed",
+  "title": "Restore production rank in the BF16 merge oracle"
+}

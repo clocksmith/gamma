@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T084751Z_2949ede196.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t084751z_2949ede196",
+  "failure": "The combined streaming FF2-transpose plus current BF16 GEGLU-backward arithmetic is not source-exact. Mismatches affect both gate and value halves, so the retained bias projection alone cannot yet distinguish the shared transpose adjoint from activation-product and derivative boundaries.",
+  "mechanism": "Add one open FF2-transpose residual and GEGLU backward reducer. Use the promoted exact final-RMS input residual, initial ff2_19 values, fresh layer-19 FF1 outputs, the source-attributed streaming dot, and the previously measured unfused tanh-GELU derivative; compare only after both complete open payloads exist.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T09:03:14+00:00",
+  "retired_dimensions": [
+    "The unqualified combination of one streaming FF2-transpose dot, BF16-rounded transpose output, BF16 gate-product boundary, and the current explicit unfused tanh-GELU derivative as a source-exact top-layer backward contract."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

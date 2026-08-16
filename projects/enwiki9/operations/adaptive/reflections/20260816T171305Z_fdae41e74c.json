@@ -1,0 +1,102 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The promoted open forward already computed the exact source layer-19 merged-attention value; exposing that intermediate and assembling per-stream values in state-major, stream-major, feature-major order recovers the complete source tensor exactly."
+  },
+  "candidateId": "nncp_open_top_w_o_input_forward_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_w_o_input_forward_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:daa96353e958090cbc282baff055ed751e9a096d8063e074acb31e057a55cce8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_w_o_input_forward_64_q0_retry_v2/20260816T171252541917Z_daa96353e958.json",
+      "sha256": "sha256:b3aff2e38a660c4188bd3c7adf765ffe6baa32311f81b5d9c36723722219ef48"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Use the exact open pre-w_o value and exact open pre-w_o adjoint to descend through concat-head and the eight value-attention products, freezing the smallest full-population causal gate with independent source evidence and live arithmetic controls.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:3cf7e01926f9b19de3897927a9156c2a06523ddaf2b8b74f759ddc3c0ef48f53"
+    },
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:f73dd5b1c88bdbf156e42f398d00227822434d2f81c4ebfd27636758b209cad8"
+    },
+    {
+      "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:1ea2cff70c0b5508171ba2a7f58e6350a79d148f827598c4a9388794d44c290c"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_w_o_input_forward_64_q0_retry_v2.json",
+    "sha256": "sha256:ae3b000e7f7a271014232b27c5290568ab113e81d6a89d50e9723255f3e77417"
+  },
+  "generatedUtc": "2026-08-16T17:13:55+00:00",
+  "hypothesis": {
+    "rationale": "Every prospectively frozen salvage predicate passed: preserved science and replay receipts were internally consistent, the fresh source comparison was exact, the order control remained live, and the copied artifact and resource envelope were exact.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T171305Z_fdae41e74c.json",
+    "sha256": "sha256:50442e7d841ae5c64db3c1a73d736a7fc95c23483fe048bbc8d1e4d79c9c874b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Assuming downstream output parity alone proves an unexposed pre-w_o intermediate",
+      "Using descriptive terminal decision labels outside the result schema"
+    ],
+    "transferableLessons": [
+      "A downstream-exact open forward can close an unexposed internal boundary only after the intermediate itself is emitted prospectively, its full coordinate population is independently compared, and replay/control receipts survive schema-valid promotion."
+    ],
+    "uncertainties": [
+      "The forward path still binds a large pinned static GGML source archive and sealed production fixture, earns zero objective credit, and does not yet open the layer-19 attention backward internals or a compact submitted predictor."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/preWOElementCount",
+      "source": {
+        "path": "results/nncp_open_top_w_o_input_forward_64_q0_retry_v2/decision.json",
+        "sha256": "sha256:3cf7e01926f9b19de3897927a9156c2a06523ddaf2b8b74f759ddc3c0ef48f53"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2097152,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t171305z_fdae41e74c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound receipt-only salvage freshly compared all 2,097,152 preserved treatment words to the independently captured source oracle with zero mismatch and zero maximum error; verified two equal complete population aggregates, both exact 640-checkpoint receipts, 64 stream receipts, a live 2,088,943-word coordinate control, hash-exact artifact copy, dependency evidence, and both original and salvage resource guards; and emitted a schema-valid authorize-successor result."
+    ],
+    "valid": true
+  }
+}

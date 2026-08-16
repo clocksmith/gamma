@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "LibNC reduces each 6,144-by-32 BF16 state panel into the existing BF16 parameter gradient with nc_reduce_sum before the next state, making state-boundary rounding and chronological graph order part of the arithmetic contract."
+  },
+  "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:da07d1f56e34ca980323e62e711001460ef1761760cb7af7aa0ed3ec33d69391",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/20260816T111818014131Z_da07d1f56e34.json",
+      "sha256": "sha256:40aa33f96942c38ff9aa33b6c260f58dcdc69dd9d4b1f133597985072675aaef"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Authorize a LibNC-free immutable successor that implements the attributed per-state BF16 accumulation and compares first against this independent exact oracle before reintegration.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:693062343f0a9199ac39eeec97fb1aade1be2774fc93fe5a523753a003e3a514"
+    },
+    {
+      "path": "results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:c074ec4ec5f389023a4b745166e190d1acda5322a3f4cbd2ae110a35f60bec4b"
+    },
+    {
+      "path": "results/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:5fd32f4042d3a29979b8fc4a9eca9f0936fd4c547dcbe405e3fcc5fee46b2581"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1.json",
+    "sha256": "sha256:982561a873d086aeeb0b8eac7e8750bb9396576313a189e433d94f7a2dfc96cf"
+  },
+  "generatedUtc": "2026-08-16T11:21:17+00:00",
+  "hypothesis": {
+    "rationale": "The chronological 64-state add_dup1 schedule reproduced all 6,144 retained ff_bias1_19 BF16 words with zero absolute error; flattened and reversed controls retained distinct mismatch populations.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T111831Z_64dcc1173e.json",
+    "sha256": "sha256:1adb8c98b862f85271d5f7da2a4799669a9587ebf7000e12d724245d31586afa"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Flattened 2,048-sample FF1 bias accumulation as a source-exact projection"
+    ],
+    "transferableLessons": [
+      "Broadcast-parameter gradients must preserve graph-state reduction boundaries and chronological accumulation; an exact elementwise adjoint followed by one flat reduction is not source-equivalent."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t111831z_64dcc1173e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound oracle completed both treatment/control populations, all frozen predicates validated, and the memory, scratch, digest, source, replay, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

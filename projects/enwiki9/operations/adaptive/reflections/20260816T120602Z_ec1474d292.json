@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "LibNC forms every FF1 matrix-gradient element by accumulating the 32-stream dot from zero with sequential fused FMAs, adds the decoded prior BF16 gradient after the dot, and rounds to BF16 once per chronological state."
+  },
+  "candidateId": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+    "candidateTreeSha256": "sha256:d9354e9ada67a5d7224f623bb72e867cd5939ae8d529365fad39c3009cb63d2b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_weight_slice_post_add_64_q0_v1/20260816T120550629545Z_d9354e9ada67.json",
+      "sha256": "sha256:4fa48da95251e08c9c6e229b3dbb6b75786fac65dd6d5279c3793f1af4cf4b20"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Expand the uniform post-dot-add kernel prospectively across all 6,144 ff1_19 output rows and require exact parity against the retained full gradient before using it as an open backpropagation boundary.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:c796fa9fef6cb0485f55a91ff8fff6cf58468827ecda6549735b7908b0e42f62"
+    },
+    {
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:da552c5a75ac79b42de1dabc8065ca939871c111d91d425740f6c18a3d41965c"
+    },
+    {
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/guard.json",
+      "sha256": "sha256:629c3e0301dee8aa910d3a392a6af80f9a8e23e5e3b764f22be285ee8a2edab4"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_post_add_64_q0_v1.json",
+    "sha256": "sha256:0466252f258cc995f209c9807c4162314c17722be3661c5fe649156d43c873af"
+  },
+  "generatedUtc": "2026-08-16T12:07:02+00:00",
+  "hypothesis": {
+    "rationale": "The post-dot prior-add treatment matched all 131,072 LibNC words exactly, including the independent reverse-state and sign-negated controls, while both alternative arithmetic controls retained their prospectively frozen 43 mismatches.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T120602Z_ec1474d292.json",
+    "sha256": "sha256:c73b2470595212f2e536a52344ba871d07fb06b471133546af2996cfa15fb7bb"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "LibNC dependency for the attributed 128-row ff1_19 gradient slice",
+      "Prior-initialized FMA and nonfused arithmetic as source-exact FF1 matrix-gradient kernels"
+    ],
+    "transferableLessons": [
+      "The source-exact open FF1 matrix-gradient kernel is dot-from-zero, post-dot prior addition, and one BF16 state-boundary materialization; it transfers exactly to reverse-state and sign-negated populations."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t120602z_ec1474d292",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound post-dot kernel completed two byte-identical five-population evaluations; exact treatment, reverse, and negated comparisons passed; the two frozen 43-word controls reproduced; and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

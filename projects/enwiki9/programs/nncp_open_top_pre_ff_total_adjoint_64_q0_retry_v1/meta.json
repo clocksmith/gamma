@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3"
+  ],
+  "description": "Corrected open pre-FF total-adjoint composition",
+  "family": "nncp_update_schedule",
+  "hypothesis": "BF16 addition of the exact output-order RMSNorm branch and promoted streaming-dot direct residual reproduces every source pre-FF total-adjoint word.",
+  "id": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "measured": {
+    "reflections": {
+      "20260816T155508Z_53d5388d2c": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T155508Z_53d5388d2c.json",
+        "sha256": "sha256:14b8cd6e29d2e19f31b43de9b5d679c8f4a468f0a49326d595ce834558d1dec8",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1.json",
+      "sha256": "sha256:e006fd3eea81dd6c8ad857b4ab6b2c37395d01111fd99be88a0f708fb317044f"
+    },
+    "interfaces_exposed": [
+      "exact open RMSNorm branch plus exact open direct -> exact pre-FF total adjoint"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+    "proposal_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+    "retired_neighborhoods": [
+      "stale final_norm_backward residual as an exact downstream input"
+    ]
+  },
+  "parent": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3",
+  "status": "measured_negative",
+  "verdict": "Advance to the layer-19 attention output projection: capture and independently validate the production pre-w_o value tensor and its input adjoint, then reconstruct w_o_19 and its transpose residual under already attributed matmul schedules."
+}

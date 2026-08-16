@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "LibNC computes each 32-stream BF16 matrix-gradient dot from zero with sequential fused FMAs, adds the decoded prior BF16 gradient only after the dot, and then materializes BF16 once at the state boundary; initializing the FMA accumulator from the prior changes 43 words."
+  },
+  "candidateId": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+    "candidateTreeSha256": "sha256:22b63c166c1311a664b85f92ff72049033d9ff740a041e27aef22db0f653685e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/20260816T115749813131Z_22b63c166c13.json",
+      "sha256": "sha256:da15af3d8e871750a2ce4b8113fe1b806cee7945530218d3683fbfdc40c60415"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze an immutable post-dot-add successor, require exact treatment plus reverse and sign controls under that cell, and only then expand the uniform open kernel beyond the 128-row slice.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/decision.json",
+      "sha256": "sha256:b7fdcee0b6d095d350d995e0f1fbeca35a569e0ad8e91be5f6a34d47bfa48c94"
+    },
+    {
+      "path": "results/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/execution.json",
+      "sha256": "sha256:0fb30229038c1b75625d173dd5a0d0737e74452bb28da15d3452588f7d165ec6"
+    },
+    {
+      "path": "results/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/guard.json",
+      "sha256": "sha256:23e6c150d01392c204638488c16d1d2fb02d70758503cec85abc89fbb8788e85"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1.json",
+    "sha256": "sha256:b8c2d959c6bbf689ec3656d88ab2573d4ee4ddf6a4b339f51e192b3040869d3a"
+  },
+  "generatedUtc": "2026-08-16T12:00:30+00:00",
+  "hypothesis": {
+    "rationale": "The frozen prior-initialized FMA treatment missed 43 of 131,072 words, whereas the prospectively declared post-dot prior-add cell matched the complete LibNC treatment slice with zero error.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T115801Z_99a2e7695e.json",
+    "sha256": "sha256:e11df23fc74864dfcdebe6a3c4800a7092d710c5bf0d7e0e872c75dddbe04b0a"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Prior-initialized FMA and nonfused multiply/add as source-exact within-state FF1 matrix-gradient kernels"
+    ],
+    "transferableLessons": [
+      "For FF1 matrix gradients, graph-state materialization is shared with bias gradients but the within-state update differs: dot first, prior gradient second, BF16 conversion last."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t115801z_99a2e7695e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound open grid completed two byte-identical five-cell populations, every strict output and source/dependency/resource guard passed, and all comparisons used the frozen independent LibNC slices."
+    ],
+    "valid": true
+  }
+}

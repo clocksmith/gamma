@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The injected declaration block referenced enum GammaTopAttnKind before its definition, and trf_eval used GAMMA_TOP_ATTN_PROBABILITY and GAMMA_TOP_ATTN_ATTENDED before those enumerators were declared."
+  },
+  "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+    "candidateTreeSha256": "sha256:dd9c84820617beb48fbf1c9adb32a5891791727736b2cff0fc345375817f6c02",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_attention_product_oracle_64_q0_v1/20260816T172029101299Z_dd9c84820617.json",
+      "sha256": "sha256:5adbb28c67ed87447e63d454551cc2ecacbf8c4e077bdf49f8b5991499dd8690"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze a new retry candidate that moves the probe enum definition to the early declaration boundary, removes its late duplicate, and reruns the unchanged scientific claim.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_v1/guard.json",
+      "sha256": "sha256:5d8868b50b526647f9982f8098fb5cb8702d1e04903e9e2f2945170b060b6d15"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_product_oracle_64_q0_v1.json",
+    "sha256": "sha256:d4801df2402b8a93ebba93c0dde830bcdbf46f6c25dd5f7e0220d7a8e8d027f2"
+  },
+  "generatedUtc": "2026-08-16T17:25:37+00:00",
+  "hypothesis": {
+    "rationale": "Compilation failed before either source capture began, so the frozen source-oracle hypothesis was not tested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T172243Z_21e3211378.json",
+    "sha256": "sha256:2f8e89bc1a877b8e822b4a3362f2970949a59271138b7b25f6b0f55e881b4355"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Types and constants used by patched production call sites must be defined in the early declaration injection; the later helper-body injection may contain only implementations."
+    ],
+    "uncertainties": [
+      "The attention-product tensor populations and concat identity remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t172243z_21e3211378",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The revision-bound job failed while compiling the instrumented teacher because GammaTopAttnKind and its constants were defined below trf_eval, where the probe calls use them. No production capture, tensor comparison, or scientific predicate executed; resource guards remained green."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The previously attributed chronological 32-stream FMA-from-zero, post-dot prior-add, per-state BF16 materialization contract transfers exactly from ff1_19 to the prospectively frozen w_o_19 slice."
+  },
+  "candidateId": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+    "candidateTreeSha256": "sha256:e8d5548ff86279284b8ad1a92c438c16a33616aea24bf33c3b8c3891a8b57d04",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_w_o_weight_slice_post_add_64_q0_v1/20260816T162957006212Z_e8d5548ff862.json",
+      "sha256": "sha256:94c3880507404d86ee39af1ac1e7833e0f03cd1ce516535f2b7a2e8b244b2943"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Expand the exact treatment prospectively over all 1,024 w_o_19 output rows with byte-identical replay and a sign-negated control, compare all 1,048,576 words to the retained gradient, then use the sealed initial matrix and open upstream adjoint to validate the transpose residual.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:0786c20973cf91186a775c2316a5ce740efbe79711c5336e798f57cc21d792ba"
+    },
+    {
+      "path": "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:e6840f0cd70012a969a98155fc7b2c3f4ffe02b677dd563c25fc01e89607de11"
+    },
+    {
+      "path": "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/guard.json",
+      "sha256": "sha256:6be2eedb3f4bc49eba810cc2e58e1025190f4d518593533b1ce7c45da33f7420"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_weight_slice_post_add_64_q0_v1.json",
+    "sha256": "sha256:ca9c7fefe4abd79a88164ad8700982180a55d0f059d0ff1e025896abe559d766"
+  },
+  "generatedUtc": "2026-08-16T16:31:55+00:00",
+  "hypothesis": {
+    "rationale": "The treatment had zero mismatches and zero maximum error. Prior-initialized and nonfused controls each missed 23 words, reverse state order missed 107,945, and sign negation missed all 131,072 words.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T163008Z_9e18c10ab5.json",
+    "sha256": "sha256:262e251ee20a89138df5475a43ea6a81f714af9460f451ae6b8a01e79525f14b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Treating prior-initialized FMA or nonfused multiply/add as equivalent w_o_19 accumulation"
+    ],
+    "transferableLessons": [
+      "The post-dot-add matrix-gradient contract is reusable across distinct layer-19 linear projections when operand order, state chronology, stream reduction, lane mapping, and BF16 materialization are preserved."
+    ],
+    "uncertainties": [
+      "The result validates a 128-row gradient slice using a sealed source forward input; it does not yet prove all w_o_19 rows, an open pre-w_o forward path, the transpose residual, or compression value."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sliceElementCount",
+      "source": {
+        "path": "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/decision.json",
+        "sha256": "sha256:0786c20973cf91186a775c2316a5ce740efbe79711c5336e798f57cc21d792ba"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 131072,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t163008z_9e18c10ab5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound LibNC-free evaluator completed two byte-identical five-cell populations; the 131,072-word post-dot-add treatment matched the independently retained w_o_19 slice exactly; prior-initialized, nonfused, reverse-state, and sign-negated controls remained live; and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

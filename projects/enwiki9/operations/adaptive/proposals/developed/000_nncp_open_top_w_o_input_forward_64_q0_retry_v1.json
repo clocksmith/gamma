@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_top_w_o_input_forward_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T16:57:08+00:00",
+  "created_at": "2026-08-16T16:57:07+00:00",
+  "developed_at": "2026-08-16T16:57:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T165333Z_93ccd444ea.json",
+      "sha256": "sha256:7033b89bfd01240f655333123b4f17c089ba97c26d19a41938d11029667b9c56"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_w_o_input_forward_64_q0_retry_v1.json",
+    "sha256": "sha256:07572e667302d96bc27678be35f86b3e1cc8f86f9bdb88c48908328801289b43"
+  },
+  "hypothesis": "The independently exact open 32-stream forward, with only its layer-19 merged-attention value exposed, reproduces every one of the 2,097,152 source pre-w_o BF16 words in state-major, stream-major, feature-major order, while a stream-major assembly control differs.",
+  "interfaces_exposed": [
+    "sealed initial fixture plus pinned open forward -> exact layer-19 pre-w_o value"
+  ],
+  "kill_condition": "Any treatment mismatch, stale layer checkpoint, dead coordinate control, nondeterministic replay, undeclared dependency, or resource failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_w_o_input_forward_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_w_o_input_forward_64_q0_v1",
+  "priority": 1538,
+  "promotion_condition": "Zero treatment mismatches across all 2,097,152 words; all 640 layer-input checkpoints exact; live order control; exact complete replay; explicit static source; green dependency and resource guards.",
+  "proposal_id": "nncp_open_top_w_o_input_forward_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Runner-owned fixture parent left implicit before leaf materialization"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1538,
+  "state": "developed",
+  "title": "Open layer-19 pre-w_o forward fixture-root retry"
+}

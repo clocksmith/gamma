@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T06:44:52+00:00",
+  "created_at": "2026-08-16T06:44:52+00:00",
+  "developed_at": "2026-08-16T06:44:53+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json",
+      "sha256": "sha256:b026cff744099c08468a382220a8a02772527a14cfeb32f978f482afb460c7e1"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_v1.json",
+    "sha256": "sha256:c7bb37335850685bd6b15b73e72681faef5d629a7a978e67171d4f61a7beaf96"
+  },
+  "hypothesis": "The source-captured post-FF2 adjoint differs from the open final-normalization residual, while source input plus source adjoint reconstruct every retained ff2_19 word under the frozen reducer.",
+  "interfaces_exposed": [
+    "source top-layer FF2 input and post-bias adjoint -> exact retained ff2_19 attribution"
+  ],
+  "kill_condition": "Retire this attribution if source operands do not exactly reconstruct retained ff2_19 or if the source adjoint equals the open residual; retry only an explicit infrastructure failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "priority": 1477,
+  "promotion_condition": "Both independent zero-add production captures preserve the retained fixture, replay identically, the source input and adjoint reconstruct every ff2_19 BF16 word exactly, and the source adjoint differs from the open residual.",
+  "proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "The source teacher is a zero-credit attribution oracle; no captured tensor, teacher executable, or LibNC dependency may enter a submitted codec."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1495,
+  "state": "developed",
+  "title": "Production top-layer FF2 adjoint attribution"
+}

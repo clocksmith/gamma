@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T093214Z_c6950a77d0.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t093214z_c6950a77d0",
+  "failure": "Mapping adjacent FF2 output features to independent SIMD lanes and accumulating each through one chronological 1,024-step FMA stream is insufficient. The remaining production behavior lies in a shape-dependent packed matmul kernel, blocking/reduction schedule, or conversion boundary not represented by either frozen reduction.",
+  "mechanism": "Transpose the immutable ff2_19 weights into output-major lane packs, then accumulate each eight-feature output lane through all 1,024 incoming features in chronological FMA order before one BF16 output conversion; do not horizontally reduce the reduction dimension.",
+  "population": "one BF16 FF2-input-adjoint word; All retained 64 states across 32 streams and all 3,072 layer-19 GEGLU output features.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T09:34:00+00:00",
+  "retired_dimensions": [
+    "A single unblocked 1,024-step FMA accumulation per adjacent FF2 output-feature lane as the exact production transpose contract."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}
