@@ -4028,12 +4028,15 @@ test("strategy evolution and rule search return inspectable recommendations", as
     runsPerSeat: 1,
     playerCount: 3,
     backendId: "greedy",
+    targetWinShare: 1 / 3,
     seed: "evolution-contract"
   });
   assert.equal(evolution.reportType, "strategy_evolution");
   assert.equal(evolution.history.length, 1);
   assert.equal(evolution.championProfile.id, "balanced_operator");
   assert.equal(evolution.backendId, "greedy");
+  assert.equal(evolution.targetWinShare, 1 / 3);
+  assert.equal(typeof evolution.history[0].champion.targetDistance, "number");
   assert.equal(
     evolution.history[0].evaluationSeed,
     "evolution-contract:g:0:common"

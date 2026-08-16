@@ -114,6 +114,7 @@ async function evaluateStrategyCandidate({
   seed,
   rulesVariant,
   backendId,
+  targetWinShare,
   signal
 }) {
   const opponents = profiles.filter((candidate) => candidate.id !== profile.id);
@@ -140,11 +141,15 @@ async function evaluateStrategyCandidate({
   const meanWinShare = average(target.map((entry) => entry.winShare));
   const meanScore = average(target.map((entry) => entry.meanScore));
   const actionDiversity = average(target.map((entry) => entry.actionDiversity));
+  const targetDistance = Number.isFinite(targetWinShare)
+    ? Math.abs(meanWinShare - targetWinShare)
+    : null;
   return {
     fitness: round(meanWinShare * 100 + meanScore * 0.1 + actionDiversity),
     meanWinShare,
     meanScore,
     actionDiversity,
+    targetDistance,
     seatWinShares: target.map((entry) => entry.winShare)
   };
 }
@@ -158,12 +163,19 @@ export async function evolveStrategy({
   seed = "frontier-strategy-evolution",
   magnitude = 0.45,
   backendId = "weighted",
+  targetWinShare,
   rulesVariant,
   signal,
   onProgress
 } = {}) {
   if (!["weighted", "greedy"].includes(backendId)) {
     throw new TypeError("Strategy evolution backendId must be weighted or greedy.");
+  }
+  if (
+    targetWinShare !== undefined &&
+    (!Number.isFinite(targetWinShare) || targetWinShare < 0 || targetWinShare > 1)
+  ) {
+    throw new RangeError("Strategy evolution targetWinShare must be from zero to one.");
   }
   const profiles = await loadPlayerProfiles();
   const source = profiles.find((profile) => profile.id === targetProfileId);
@@ -188,16 +200,21 @@ export async function evolveStrategy({
         seed: evaluationSeed,
         rulesVariant,
         backendId,
+        targetWinShare,
         signal
       });
       evaluated.push({ profile, evaluation });
       completed += 1;
       onProgress?.({ phase: "strategy_evolution", completed, total });
     }
-    evaluated.sort((left, right) =>
-      right.evaluation.fitness - left.evaluation.fitness ||
-      JSON.stringify(left.profile.strategy).localeCompare(JSON.stringify(right.profile.strategy))
-    );
+    evaluated.sort((left, right) => {
+      if (Number.isFinite(targetWinShare)) {
+        const targetOrder = left.evaluation.targetDistance - right.evaluation.targetDistance;
+        if (targetOrder !== 0) return targetOrder;
+      }
+      return right.evaluation.fitness - left.evaluation.fitness ||
+        JSON.stringify(left.profile.strategy).localeCompare(JSON.stringify(right.profile.strategy));
+    });
     incumbent = structuredClone(evaluated[0].profile);
     history.push({
       generation: generation + 1,
@@ -213,7 +230,8 @@ export async function evolveStrategy({
       })),
       champion: {
         fitness: evaluated[0].evaluation.fitness,
-        meanWinShare: evaluated[0].evaluation.meanWinShare
+        meanWinShare: evaluated[0].evaluation.meanWinShare,
+        targetDistance: evaluated[0].evaluation.targetDistance
       }
     });
   }
@@ -230,6 +248,7 @@ export async function evolveStrategy({
     population,
     runsPerSeat,
     backendId,
+    targetWinShare: targetWinShare ?? null,
     scope: structuredClone(simulationCopy.coverage.strategyEvolution),
     baselineProfile: source,
     championProfile: incumbent,
