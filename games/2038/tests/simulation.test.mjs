@@ -14,8 +14,10 @@ import {
   WeightedPlayerPolicy
 } from "../lab/policies/policy-factory.js";
 import {
+  compareStrategyEvaluations,
   mutateRulesVariant,
-  mutateStrategy
+  mutateStrategy,
+  opponentProfileWindows
 } from "../lab/runner/optimization-runner.js";
 import { runExperiment } from "../lab/runtime/run-experiment.js";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
@@ -3502,7 +3504,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.14.4");
+  assert.equal(first.game.version, "0.14.5");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -4025,7 +4027,7 @@ test("strategy evolution and rule search return inspectable recommendations", as
     targetProfileId: "balanced_operator",
     generations: 1,
     population: 2,
-    runsPerSeat: 1,
+    runsPerSeat: 6,
     playerCount: 3,
     backendId: "greedy",
     targetWinShare: 1 / 3,
@@ -4036,6 +4038,13 @@ test("strategy evolution and rule search return inspectable recommendations", as
   assert.equal(evolution.championProfile.id, "balanced_operator");
   assert.equal(evolution.backendId, "greedy");
   assert.equal(evolution.targetWinShare, 1 / 3);
+  assert.equal(evolution.opponentCoverage, "all_windows");
+  assert.equal(evolution.evaluatedMatchesPerCandidate, 18);
+  assert.equal(
+    evolution.history[0].candidates[0].evaluation
+      .playerCountEvaluations[3].opponentWindows.length,
+    6
+  );
   assert.equal(typeof evolution.history[0].champion.targetDistance, "number");
   assert.equal(
     evolution.history[0].evaluationSeed,
@@ -4053,6 +4062,93 @@ test("strategy evolution and rule search return inspectable recommendations", as
   assert.equal(search.evaluations.length, 2);
   assert.ok(search.recommendation.variant);
   assert.match(search.scope.verdictBoundary, /never changed automatically/i);
+});
+
+test("strategy evolution covers every opponent and fails closed on incomplete coverage", async () => {
+  const profiles = await loadPlayerProfiles();
+  for (const playerCount of [3, 4, 5]) {
+    const windows = opponentProfileWindows({
+      profiles,
+      targetProfileId: "agi_candidate",
+      playerCount
+    });
+    assert.equal(windows.length, 6);
+    const appearances = new Map();
+    for (const profileId of windows.flat()) {
+      appearances.set(profileId, (appearances.get(profileId) || 0) + 1);
+    }
+    assert.equal(appearances.size, 6);
+    assert.deepEqual(
+      [...appearances.values()],
+      Array.from({ length: 6 }, () => playerCount - 1)
+    );
+  }
+
+  await assert.rejects(
+    runExperiment({
+      mode: "strategy-evolution",
+      targetProfileId: "agi_candidate",
+      generations: 1,
+      population: 2,
+      runsPerSeat: 5,
+      playerCounts: [3, 4, 5],
+      targetWinShare: "neutral"
+    }),
+    /runsPerSeat must be at least 6/
+  );
+});
+
+test("neutral strategy calibration ranks worst count, then mean miss, then fitness", () => {
+  const candidate = (targetDistance, meanTargetDistance, fitness) => ({
+    profile: { strategy: { actionWeights: { fund: fitness } } },
+    evaluation: { targetDistance, meanTargetDistance, fitness }
+  });
+  assert.ok(compareStrategyEvaluations(
+    candidate(0.1, 0.08, 100),
+    candidate(0.11, 0.01, 200),
+    "neutral"
+  ) < 0);
+  assert.ok(compareStrategyEvaluations(
+    candidate(0.1, 0.03, 100),
+    candidate(0.1, 0.04, 200),
+    "neutral"
+  ) < 0);
+  assert.ok(compareStrategyEvaluations(
+    candidate(0.1, 0.03, 200),
+    candidate(0.1, 0.03, 100),
+    "neutral"
+  ) < 0);
+});
+
+test("multi-count neutral strategy calibration records count-specific targets", async () => {
+  const evolution = await runExperiment({
+    mode: "strategy-evolution",
+    targetProfileId: "balanced_operator",
+    generations: 1,
+    population: 2,
+    runsPerSeat: 1,
+    playerCounts: "3,4,5",
+    backendId: "greedy",
+    targetWinShare: "neutral",
+    opponentCoverage: "fixed_window",
+    seed: "neutral-ecology-contract"
+  });
+  assert.deepEqual(evolution.playerCounts, [3, 4, 5]);
+  assert.deepEqual(evolution.targetWinShares, {
+    3: 1 / 3,
+    4: 1 / 4,
+    5: 1 / 5
+  });
+  assert.equal(evolution.evaluatedMatchesPerCandidate, 12);
+  for (const candidate of evolution.history[0].candidates) {
+    const evaluations = Object.values(candidate.evaluation.playerCountEvaluations);
+    const distances = evaluations.map((entry) => entry.targetDistance);
+    assert.equal(candidate.evaluation.targetDistance, Math.max(...distances));
+    assert.equal(
+      candidate.evaluation.meanTargetDistance,
+      distances.reduce((sum, value) => sum + value, 0) / distances.length
+    );
+  }
 });
 
 test("completed simulation reports archive under the central studies directory", async () => {
@@ -4100,7 +4196,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.14.4");
+  assert.equal(first.game.version, "0.14.5");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

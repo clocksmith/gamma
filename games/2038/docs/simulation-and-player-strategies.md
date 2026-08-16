@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.4` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.5-test`
+**Executable game:** `0.14.5` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.6-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -421,11 +421,18 @@ provider latency cannot estimate human setup, teaching, or play duration.
 
 ```bash
 npm run simulate:monte-carlo -- --runs 100 --players 4
-npm run simulate:evolve -- --profile balanced_operator --generations 4 --population 6 --runs-per-seat 12
+npm run simulate:evolve -- --profile balanced_operator --generations 4 --population 6 --runs-per-seat 12 --opponent-coverage all_windows
+npm run simulate:evolve -- --profile agi_candidate --player-counts 3,4,5 --target-win-share neutral --generations 4 --population 6 --runs-per-seat 96 --opponent-coverage all_windows
 npm run simulate:balance -- --iterations 12 --runs 80 --players 4
 ```
 
 Monte Carlo describes the selected field. Evolution proposes strategy weights.
+Promotable calibration uses every circular opponent window; `runs-per-seat` is
+distributed across those windows rather than multiplied by them. Multi-count
+calibration minimizes the largest miss from the declared target before its mean
+miss and ordinary fitness. `neutral` means `1 / player count` separately at
+three, four, and five players. `fixed_window` exists only to reconstruct older
+diagnostic studies and must not support a promotion claim.
 Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits

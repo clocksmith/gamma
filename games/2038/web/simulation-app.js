@@ -754,7 +754,7 @@ function renderExperimentReport() {
         copy.notes.generationIncumbent
       ),
       summaryCard(copy.labels.evaluatedMatches,
-        report.generations * report.population * report.runsPerSeat * report.playerCount,
+        report.generations * report.population * report.evaluatedMatchesPerCandidate,
         copy.notes.commonSeededMatches)
     ].join("");
     elements["experiment-results-title"].textContent = copy.results.evolvedStrategy;
