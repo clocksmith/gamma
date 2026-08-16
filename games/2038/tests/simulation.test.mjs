@@ -2458,6 +2458,47 @@ test("deterministic policies preserve legal commitment while avoiding known dead
   );
 });
 
+test("greedy policy resolves equal utility without leaking lexicographic decision order", async () => {
+  const profiles = await loadPlayerProfiles();
+  const profile = profiles.find((candidate) => candidate.id === "infrastructure_compounder");
+  const policy = new WeightedPlayerPolicy(profile, { selection: "greedy" });
+  const decisions = [
+    {
+      decisionId: "agi_dossier_commit_benchmark_claim",
+      label: "Commit",
+      actionId: "agi_dossier",
+      consequences: { agiClaim: 1, compute: -1, scrutiny: 1 }
+    },
+    {
+      decisionId: "agi_dossier_hedge_benchmark_claim",
+      label: "Hedge",
+      actionId: "agi_dossier",
+      consequences: { agiClaim: 0 }
+    }
+  ];
+  const selected = new Set();
+  for (let index = 0; index < 64; index += 1) {
+    const packet = {
+      schemaVersion: 1,
+      requestId: `dossier-tie-${index}`,
+      matchId: "dossier-tie",
+      seed: "dossier-tie",
+      seat: 0,
+      factionId: "coalition_lab",
+      round: 1,
+      cycle: 1,
+      observation: { self: {} },
+      legalDecisions: decisions
+    };
+    const first = await policy.decide(packet);
+    const repeated = await policy.decide(packet);
+    assert.equal(repeated.decision.decisionId, first.decision.decisionId);
+    assert.equal(first.receipt.tiedTopCount, 2);
+    selected.add(first.decision.decisionId);
+  }
+  assert.deepEqual(selected, new Set(decisions.map((decision) => decision.decisionId)));
+});
+
 test("deterministic personas execute partner, placement, and resource preferences", async () => {
   const profiles = await loadPlayerProfiles();
   const profile = profiles.find((candidate) => candidate.id === "power_broker");

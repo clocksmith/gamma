@@ -96,6 +96,12 @@ backends. They are assigned per seat, included in the launch and strategy
 fingerprints, and rejected for LLM backends. Baseline weighted and greedy
 policies remain unchanged when their treatment is `null`.
 
+Greedy means highest declared policy score, not first decision ID. When two or
+more legal decisions have exactly the same top score, the policy uses a seeded
+deterministic tie draw and records the number of tied choices in its receipt.
+This keeps replay exact while preventing labels such as `commit` and `hedge`
+from acquiring accidental priority through lexicographic ordering.
+
 `coalition_conversion_v1` is a bounded diagnostic treatment. It activates only
 for Coalition Lab while an earned Deal Flow Runway credit remains unspent. It
 prefers Build and selected Runway-spending resolutions that consume a credit

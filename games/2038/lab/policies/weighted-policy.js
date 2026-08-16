@@ -266,6 +266,15 @@ export class WeightedPlayerPolicy {
           break;
         }
       }
+    } else {
+      const tied = ranked.filter((entry) => entry.weight === ranked[0].weight);
+      if (tied.length > 1) {
+        const rng = createRng(
+          `${packet.policySeed || packet.seed || packet.matchId}:` +
+          `${packet.requestId}:${packet.seat}:${this.profile.id}:greedy-tie`
+        );
+        selected = tied[Math.floor(rng() * tied.length)];
+      }
     }
 
     return {
@@ -278,7 +287,10 @@ export class WeightedPlayerPolicy {
         profileId: this.profile.id,
         policyTreatment: this.treatment,
         requestId: packet.requestId,
-        selectedWeight: selected.weight
+        selectedWeight: selected.weight,
+        tiedTopCount: ranked.filter(
+          (entry) => entry.weight === ranked[0].weight
+        ).length
       }
     };
   }
