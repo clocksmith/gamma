@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_profile_update_fixture_64_q3_v1",
+  "claimed_at": "2026-08-15T23:51:05+00:00",
+  "created_at": "2026-08-15T23:51:03+00:00",
+  "developed_at": "2026-08-15T23:51:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T234138Z_f38eb2f9dc.json",
+      "sha256": "sha256:26baf85f518d21fdbf63325b1667d624b9b6c5f7117fc5540ead9d970dced6aa"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q2_v1/guard.json",
+      "sha256": "sha256:7e5f211795e0da80908db9768776227de6d277dccebed635b605e6bc706e1166"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q3_v1.json",
+    "sha256": "sha256:9e3381fdaa0b5491e8975fd3dc85d01d969656b8a159919eb17ec89cef714e52"
+  },
+  "hypothesis": "Keying each save-time name by the NCParam pointer used as the bound sgd_opt_update_var callback key allows the unchanged observation-only two-run LibNC experiment to materialize a byte-identical, complete 32-stream production update fixture at block position 256, including every dense gradient and all pre/post parameter, optimizer, memory, batch, learning-rate, and train-step state required by an open parity successor.",
+  "interfaces_exposed": [
+    "callback opaque NCParam identity -> save-time name lookup -> unchanged dense gradient population"
+  ],
+  "kill_condition": "After the callback-key correction, missing, unnamed, sparse, reordered, or non-repeating gradients; incomplete pre/post state; schedule drift; geometry drift; or source-identity drift prevents promotion and forbids a second-segment claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_libnc_profile_update_fixture_64_q2_v1",
+  "parent_proposal_id": "nncp_libnc_profile_update_fixture_64_q2_v1",
+  "priority": 1463,
+  "promotion_condition": "The unchanged full fixture predicates pass after only the callback-key correction.",
+  "proposal_id": "nncp_libnc_profile_update_fixture_64_q3_v1",
+  "retired_neighborhoods": [
+    "No changes beyond the observer pointer key; no scientific predicate, teacher operation, model, update, or score rescue."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1463,
+  "state": "developed",
+  "title": "Callback-key-corrected production update oracle fixture"
+}

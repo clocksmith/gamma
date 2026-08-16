@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_profile_update_fixture_64_q0_v1",
+  "claimed_at": "2026-08-15T23:27:01+00:00",
+  "created_at": "2026-08-15T23:26:50+00:00",
+  "developed_at": "2026-08-15T23:27:05+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json",
+      "sha256": "sha256:936bd383ca40602224bf8e735b8b7f88d99631adb97447654696cdc3294d2811"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+      "sha256": "sha256:a930f6ed9f441f8db2bd404741b804cf5de4cac055dd3c220270f3a05a3eb23d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q0_v1.json",
+    "sha256": "sha256:47327ccb68d008e4f48441ccdd31241f59a082d820656420a5b1ed8a7b473fd2"
+  },
+  "hypothesis": "An observation-only two-run LibNC execution can materialize a byte-identical, complete 32-stream production update fixture at block position 256, including every dense gradient and all pre/post parameter, optimizer, memory, batch, learning-rate, and train-step state required by an open parity successor.",
+  "interfaces_exposed": [
+    "complete 32-stream pre-update state + exact targets -> named gradients + post-update state"
+  ],
+  "kill_condition": "Missing, unnamed, sparse, reordered, or non-repeating gradients; incomplete pre/post state; schedule drift; geometry drift; or source-identity drift prevents promotion and forbids a second-segment claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "parent_proposal_id": "nncp_ggml_profile_memory_transition_64_q0_v1",
+  "priority": 1460,
+  "promotion_condition": "The full fixture is byte-identical across fresh runs, contains 246 named dense gradients, binds all 32 streams and 20 layers, and advances the frozen boundary exactly from block 256/train step 4 to block 320/train step 5.",
+  "proposal_id": "nncp_libnc_profile_update_fixture_64_q0_v1",
+  "retired_neighborhoods": [
+    "No open backward, optimizer parity, second-segment, compression, or score claim follows from the teacher fixture alone."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1478,
+  "state": "developed",
+  "title": "Complete production update oracle fixture"
+}

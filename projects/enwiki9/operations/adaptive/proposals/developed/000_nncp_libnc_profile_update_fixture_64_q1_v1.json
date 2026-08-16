@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "claimed_at": "2026-08-15T23:30:50+00:00",
+  "created_at": "2026-08-15T23:30:47+00:00",
+  "developed_at": "2026-08-15T23:30:54+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T232741Z_117111326a.json",
+      "sha256": "sha256:1e876a5c3914e3cd308b3b0d4d27a22724259f63cacce6ec2f420bad9d09223f"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q0_v1/guard.json",
+      "sha256": "sha256:8d862eeb900bd2f5428dfde69c08967619b91c0971e8cd9b1d7df4445bf9b620"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q1_v1.json",
+    "sha256": "sha256:81f822fd24e2adfbbce754a73ab47792ee3c22b802a3b56703456be52dbfeed8"
+  },
+  "hypothesis": "Correcting only the four stale external digest literals allows the unchanged observation-only two-run LibNC experiment to materialize a byte-identical, complete 32-stream production update fixture at block position 256, including every dense gradient and all pre/post parameter, optimizer, memory, batch, learning-rate, and train-step state required by an open parity successor.",
+  "interfaces_exposed": [
+    "correct external identity binding -> unchanged complete production update fixture"
+  ],
+  "kill_condition": "After the identity-only correction, missing, unnamed, sparse, reordered, or non-repeating gradients; incomplete pre/post state; schedule drift; geometry drift; or source-identity drift prevents promotion and forbids a second-segment claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_libnc_profile_update_fixture_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_profile_update_fixture_64_q0_v1",
+  "priority": 1461,
+  "promotion_condition": "The unchanged full fixture predicates pass after only the external identity correction.",
+  "proposal_id": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "retired_neighborhoods": [
+    "No changes beyond the four stale external identity literals; no scientific predicate, capture, model, update, or score rescue."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1461,
+  "state": "developed",
+  "title": "Corrected production update oracle fixture"
+}

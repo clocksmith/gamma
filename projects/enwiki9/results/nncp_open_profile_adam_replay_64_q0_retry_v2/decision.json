@@ -1,0 +1,207 @@
+{
+  "artifacts": [
+    {
+      "id": "open-replay-1",
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/replay-1.json",
+      "sha256": "sha256:f1d707fd76b7098803fb34ff122d916648048ca01318e40d7da4a8d1de9d6d66"
+    },
+    {
+      "id": "open-replay-2",
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/replay-2.json",
+      "sha256": "sha256:f1d707fd76b7098803fb34ff122d916648048ca01318e40d7da4a8d1de9d6d66"
+    },
+    {
+      "id": "execution",
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:7f3ccf2145ef9e4d7b75cb55f3b134e638f288146ba24f256ec8bd3636b1374f"
+    },
+    {
+      "id": "source-package",
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/incremental_source.tar.xz",
+      "sha256": "sha256:6a8417d9747b2421292a2430e62540948354a45d431abbd3035d8f26552ece31"
+    }
+  ],
+  "candidateId": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:0c948f92d77e310bad2e08dee88b4988c8337d9b86458ade5224a860e668115a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_adam_replay_64_q0_retry_v2/20260816T003840593278Z_0c948f92d77e.json",
+      "sha256": "sha256:44cdb2adab76c10bd096c9d66b3d4198e5685d8ebab610649e667c2767e56f62"
+    }
+  },
+  "decision": "authorize-successor",
+  "evidenceClass": "oracle",
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_retry_v2.json",
+    "sha256": "sha256:7131ab624a1b1764680f74646de55f580837ee9dedc5441923915127c192229c"
+  },
+  "generatedUtc": "2026-08-16T00:39:04+00:00",
+  "killPass": false,
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "q3ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-fixture",
+      "measurement": "fixtureIdentityPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "openReplayDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "k-exact",
+      "measurement": "openReplayExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": false,
+      "threshold": false
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 40172,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "measurements": {
+    "bf16ParameterPopulation": 245,
+    "f32ParameterPopulation": 1,
+    "fixtureFilePopulation": 501,
+    "fixtureIdentityPass": true,
+    "openReplayDeterministic": true,
+    "openReplayExact": true,
+    "parameterHighMismatchCount": 0,
+    "parameterLowMismatchCount": 0,
+    "parameterPopulation": 246,
+    "parameterWordPopulation": 313000456,
+    "q3ParentPass": true,
+    "sourceClosureBytes": 40172,
+    "varianceMismatchCount": 0
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "promotionPass": true,
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "q3ParentPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-fixture",
+      "measurement": "fixtureIdentityPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-files",
+      "measurement": "fixtureFilePopulation",
+      "observed": 501,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 501
+    },
+    {
+      "id": "p-exact",
+      "measurement": "openReplayExact",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "openReplayDeterministic",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-params",
+      "measurement": "parameterPopulation",
+      "observed": 246,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 246
+    },
+    {
+      "id": "p-bf16",
+      "measurement": "bf16ParameterPopulation",
+      "observed": 245,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 245
+    },
+    {
+      "id": "p-f32",
+      "measurement": "f32ParameterPopulation",
+      "observed": 1,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 1
+    },
+    {
+      "id": "p-high",
+      "measurement": "parameterHighMismatchCount",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-low",
+      "measurement": "parameterLowMismatchCount",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-variance",
+      "measurement": "varianceMismatchCount",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "observed": 40172,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 2000000
+    }
+  ],
+  "schema": "gamma.enwiki9.adaptive-experiment-result.v1"
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_profile_update_fixture_64_q2_v1",
+  "claimed_at": "2026-08-15T23:40:57+00:00",
+  "created_at": "2026-08-15T23:40:55+00:00",
+  "developed_at": "2026-08-15T23:41:01+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260815T233112Z_ee79010d5f.json",
+      "sha256": "sha256:3736b2f9a15e9deafcf33f1fdc056b88ad5b2c7a0298203cab649f32576d5053"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q1_v1/guard.json",
+      "sha256": "sha256:d25a6611d3fa8773db2d6e2fef73c63cb83fc14db2ad9be01c78d9ea6dbc8b1d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q2_v1.json",
+    "sha256": "sha256:1ee70d3adc50bd0fea0375284ae67fab7370aa9fbae973b96a450dc192474173"
+  },
+  "hypothesis": "Binding each parameter name while the already-required pre-update optimizer state is saved allows the unchanged observation-only two-run LibNC experiment to materialize a byte-identical, complete 32-stream production update fixture at block position 256, including every dense gradient and all pre/post parameter, optimizer, memory, batch, learning-rate, and train-step state required by an open parity successor.",
+  "interfaces_exposed": [
+    "save-time parameter identity -> named dense gradient population -> unchanged complete production update fixture"
+  ],
+  "kill_condition": "After the observation-time name-binding correction, missing, unnamed, sparse, reordered, or non-repeating gradients; incomplete pre/post state; schedule drift; geometry drift; or source-identity drift prevents promotion and forbids a second-segment claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "parent_proposal_id": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "priority": 1462,
+  "promotion_condition": "The unchanged full fixture predicates pass after only observation-time parameter-name binding.",
+  "proposal_id": "nncp_libnc_profile_update_fixture_64_q2_v1",
+  "retired_neighborhoods": [
+    "No changes beyond observation-time name binding; no scientific predicate, teacher operation, model, update, or score rescue."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1462,
+  "state": "developed",
+  "title": "Save-time named production update oracle fixture"
+}

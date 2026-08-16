@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json"
+  ],
+  "exclusion_id": "reflection-r-20260815t235124z_86c7e4f805",
+  "failure": "Using the callback opaque NCParam pointer as the observer name-map key matches the bound sgd_opt_update_var ABI and exposes the complete production gradient/update boundary without modifying teacher computation.",
+  "mechanism": "Change only the observation name-map key from NCParam.sgd_opt to the NCParam pointer passed as the sgd_opt_update_var opaque callback argument; preserve the teacher operations, population, predicates, and output contract.",
+  "population": "one complete 32-stream production gradient and Adam update; All 32 streams and all 64 positions at production block position 256, after the proven forward and before/after its single deep update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T00:04:51+00:00",
+  "retired_dimensions": [
+    "LibNC production update state as an unavailable or unnamed oracle boundary."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

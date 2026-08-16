@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_profile_adam_replay_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T00:35:39+00:00",
+  "created_at": "2026-08-16T00:35:35+00:00",
+  "developed_at": "2026-08-16T00:35:40+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T002809Z_201b5c18e4.json",
+      "sha256": "sha256:681357efdd042f3909c03b19cd32fd2e0b892d2fc55edf5dee4938dcb97afdd5"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_retry_v1.json",
+    "sha256": "sha256:a3f22e0fb8647dcaceda32227d73e615e72050cb37d3fd9790500cf0af9a3396"
+  },
+  "hypothesis": "After decoding the versioned structured reflection verdict, the standalone Gamma-authored AVX2/FMA implementation reproduces every final parameter high word, biased low residual, and variance word across the complete 246-parameter, 32-stream update using only the retained initial state and dense gradients.",
+  "interfaces_exposed": [
+    "structured reflection + initial parameter/optimizer state + dense gradients -> open Adam replay -> exact serialized state"
+  ],
+  "kill_condition": "Any fixture drift, arithmetic mismatch, nondeterminism, source-closure overflow, or repeat preflight failure prevents promotion and forbids a second-segment claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_adam_replay_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_adam_replay_64_q0_v1",
+  "priority": 1464,
+  "promotion_condition": "Require the reflected preflight repair, digest-exact Q3 fixture identity, two byte-identical open reports, complete 246-parameter coverage, and zero high-word, low-residual, F32, or variance mismatches.",
+  "proposal_id": "nncp_open_profile_adam_replay_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "No in-place rewrite of measured source, tolerance, fitted correction, altered optimizer constant, reduced population, closed update call, score credit, or second-segment claim."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1482,
+  "state": "developed",
+  "title": "Receipt-preserving open Adam replay retry"
+}

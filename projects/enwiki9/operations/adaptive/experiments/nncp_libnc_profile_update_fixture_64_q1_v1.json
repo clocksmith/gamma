@@ -1,0 +1,467 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "proposalId": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_libnc_profile_update_fixture_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_update_fixture_64_q0_v1/20260815T232704582421Z_a9e9965d5d09.json",
+      "sha256": "sha256:b5eaef0faa93be443b17d8de378885a12685da29f0c8f371f47edd971ced5650"
+    }
+  },
+  "hypothesis": {
+    "claim": "Correcting only the four stale external digest literals allows the unchanged observation-only two-run LibNC experiment to materialize a byte-identical, complete 32-stream production update fixture at block position 256, including every dense gradient and all pre/post parameter, optimizer, memory, batch, learning-rate, and train-step state required by an open parity successor.",
+    "falsification": "After the identity-only correction, missing, unnamed, sparse, reordered, or non-repeating gradients; incomplete pre/post state; schedule drift; geometry drift; or source-identity drift prevents promotion and forbids a second-segment claim."
+  },
+  "changedMechanism": "Change only the four stale external identity literals in the q0 runner through a source-bound q1 wrapper; preserve the capture observer, teacher operations, population, predicates, and output contract.",
+  "invariants": [
+    "The Q18 forward and exact arithmetic evidence and the exact open memory-transition parent remain digest-bound.",
+    "The production profile remains 20 layers, width 1024, 32 streams, segment 64, memory 256, BF16 parameters, and vocabulary 16392.",
+    "The selected boundary remains block position 256 with train step advancing exactly from 4 to 5.",
+    "All gradients must be named dense tensors; sparse or unnamed gradients fail closed.",
+    "The raw teacher fixture is oracle evidence and contributes zero objective credit."
+  ],
+  "controls": [
+    {
+      "id": "teacher-fixture-first",
+      "role": "treatment",
+      "definition": "The first observation-only LibNC execution captures the complete selected update boundary."
+    },
+    {
+      "id": "teacher-fixture-repeat",
+      "role": "replay",
+      "definition": "A fresh second LibNC execution must produce the same ordered file population, byte sizes, and per-file digests."
+    },
+    {
+      "id": "q18-parent",
+      "role": "comparator",
+      "definition": "The retained Q18 fixture fixes the same production source, corpus, dictionary, profile, and selected forward boundary."
+    }
+  ],
+  "population": {
+    "unit": "one complete 32-stream production gradient and Adam update",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All 32 streams and all 64 positions at production block position 256, after the proven forward and before/after its single deep update.",
+    "coordinate": "preprocessed production-symbol coordinates: 32 stream-local ranges at block [256,320), train step 4 -> 5"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The bound production source, preprocessed corpus, dictionary, profile, batch inputs, targets, pre-update parameters, optimizer state, and recurrent memory.",
+      "The gradients and post-update state emitted by the zero-credit teacher only as a future parity oracle."
+    ],
+    "forbiddenInformation": [
+      "Future segments, future probabilities, unbound teacher state, altered gradients, changed optimizer settings, or captured data used as objective credit.",
+      "Any second-segment, open-backward, compression-gain, or full-corpus claim from this fixture alone."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+      "sha256": "sha256:a930f6ed9f441f8db2bd404741b804cf5de4cac055dd3c220270f3a05a3eb23d"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json",
+      "sha256": "sha256:936bd383ca40602224bf8e735b8b7f88d99631adb97447654696cdc3294d2811"
+    },
+    {
+      "id": "q18-decision",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/decision.json",
+      "sha256": "sha256:f1898e98d8633b2c872db37bd4931ca838b7c13fc273ad88f44a8cda9e15c45d"
+    },
+    {
+      "id": "q18-fixture",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/production_forward_fixture.tar.xz",
+      "sha256": "sha256:fd70eec90d704be322f44b17198c14c2b862b30082d20176a709e223bf14c7b6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract-schema-json-bbe2e7b532b2",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result-schema-json-05fa224b9ac7",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job-schema-json-d01a141c6a45",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal-schema-json-2e6bc3df456f",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision-schema-json-26d20c11848a",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt-schema-json-9dd5a65f778d",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay-schema-json-556c8a20b5ba",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result-schema-json-1534b8c62fb6",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure-schema-json-56ede659d6ec",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row-schema-json-564eb9da8f1d",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract-schema-json-ddc50b7a26c9",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result-schema-json-f67a74ccefdf",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph-schema-json-4defbca57d45",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail-schema-json-dc5bafaae829",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-json-774aab7b321c",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract-schema-json-de1760e03688",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt-schema-json-74dcb037d60b",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index-schema-json-b98f33bbd2bb",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt-schema-json-ed672266f4ca",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt-schema-json-b1c279150e0c",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-json-b4863eb5bb14",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy-schema-json-7b83f8a5d789",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9-python-source-closure-py-b78ecd909e4b",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp-ggml-profile-arithmetic-64-q0-py-37935a72cbe0",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q0.py",
+      "sha256": "sha256:37935a72cbe0285982ed56c2b5cb80a3733ff1bf6982da7b595012a9f2ca0a86"
+    },
+    {
+      "id": "runtime-source-nncp-libnc-profile-update-fixture-64-q0-py-b4d85d218f81",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q0.py",
+      "sha256": "sha256:b4d85d218f810c780b52f09cd6d9d7728d3c487076b903981045c2a9edee50ec"
+    },
+    {
+      "id": "runtime-source-nncp-profile-update-fixture-hook-c-d69099151ae9",
+      "path": "tools/nncp_profile_update_fixture_hook.c",
+      "sha256": "sha256:d69099151ae931f3ad35adcfa57e85ff01df3873b9b2bb545bc3234291d504d2"
+    },
+    {
+      "id": "runtime-source-nncp-midpoint-phase-attribution-qm0-py-0c636c36e14b",
+      "path": "tools/nncp_midpoint_phase_attribution_qm0.py",
+      "sha256": "sha256:0c636c36e14b611b5f8ada01a06a974607610ea7793545af27c9cbd68ca214cc"
+    },
+    {
+      "id": "runtime-source-nncp-symbol-cache32-marginal-qm0-py-deec3ba812eb",
+      "path": "tools/nncp_symbol_cache32_marginal_qm0.py",
+      "sha256": "sha256:deec3ba812ebe1524d1b1e126ca9f55a18936008cd9857f549402edaa147af27"
+    },
+    {
+      "id": "runtime-source-research-contracts-py-9fb46117c2f5",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    },
+    {
+      "id": "q0-reflection",
+      "path": "operations/adaptive/reflections/20260815T232741Z_117111326a.json",
+      "sha256": "sha256:1e876a5c3914e3cd308b3b0d4d27a22724259f63cacce6ec2f420bad9d09223f"
+    },
+    {
+      "id": "q0-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q0_v1/guard.json",
+      "sha256": "sha256:8d862eeb900bd2f5428dfde69c08967619b91c0971e8cd9b1d7df4445bf9b620"
+    },
+    {
+      "id": "runtime-source-nncp-libnc-profile-update-fixture-64-q1-py-150a6abad24a",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q1.py",
+      "sha256": "sha256:150a6abad24acb239ae268b2588f2fc1d9402abe9f3c993f71717afd8f784771"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 2000000,
+    "expectedNetSavingsBytes": -2000000
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 0.8,
+    "uncertaintyRisk": 0.25,
+    "interactionRisk": 0.15
+  },
+  "measurements": [
+    {
+      "id": "parentPass",
+      "definition": "The exact memory-transition parent remains promotable.",
+      "unit": "boolean"
+    },
+    {
+      "id": "fixtureComplete",
+      "definition": "All declared pre/post parameter, optimizer, state, boundary, and marker files exist.",
+      "unit": "boolean"
+    },
+    {
+      "id": "fixtureRepeatByteIdentical",
+      "definition": "Fresh teacher executions have identical ordered fixture file hashes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "parameterPopulation",
+      "definition": "Named dense gradient payload count.",
+      "unit": "tensors"
+    },
+    {
+      "id": "gradientMetadataPopulation",
+      "definition": "Named dense gradient metadata count.",
+      "unit": "tensors"
+    },
+    {
+      "id": "streamPopulation",
+      "definition": "Production streams bound by the fixture.",
+      "unit": "streams"
+    },
+    {
+      "id": "segmentPopulation",
+      "definition": "Positions per stream bound by the fixture.",
+      "unit": "symbols"
+    },
+    {
+      "id": "layerPopulation",
+      "definition": "Transformer layers bound in recurrent state.",
+      "unit": "layers"
+    },
+    {
+      "id": "trainStepBefore",
+      "definition": "Optimizer step before the captured update.",
+      "unit": "steps"
+    },
+    {
+      "id": "trainStepAfter",
+      "definition": "Optimizer step after the captured update.",
+      "unit": "steps"
+    },
+    {
+      "id": "targetBlockBefore",
+      "definition": "Stream-local block coordinate before update.",
+      "unit": "symbols"
+    },
+    {
+      "id": "targetBlockAfter",
+      "definition": "Stream-local block coordinate after update.",
+      "unit": "symbols"
+    },
+    {
+      "id": "fixtureBytes",
+      "definition": "Retained local raw oracle fixture bytes.",
+      "unit": "bytes"
+    },
+    {
+      "id": "sourceClosureBytes",
+      "definition": "Compressed incremental Gamma source closure.",
+      "unit": "bytes"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "parentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-complete",
+      "measurement": "fixtureComplete",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "fixtureRepeatByteIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-gradients",
+      "measurement": "parameterPopulation",
+      "operator": "eq",
+      "threshold": 246
+    },
+    {
+      "id": "p-gradient-meta",
+      "measurement": "gradientMetadataPopulation",
+      "operator": "eq",
+      "threshold": 246
+    },
+    {
+      "id": "p-streams",
+      "measurement": "streamPopulation",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-segment",
+      "measurement": "segmentPopulation",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "p-layers",
+      "measurement": "layerPopulation",
+      "operator": "eq",
+      "threshold": 20
+    },
+    {
+      "id": "p-step-before",
+      "measurement": "trainStepBefore",
+      "operator": "eq",
+      "threshold": 4
+    },
+    {
+      "id": "p-step-after",
+      "measurement": "trainStepAfter",
+      "operator": "eq",
+      "threshold": 5
+    },
+    {
+      "id": "p-block-before",
+      "measurement": "targetBlockBefore",
+      "operator": "eq",
+      "threshold": 256
+    },
+    {
+      "id": "p-block-after",
+      "measurement": "targetBlockAfter",
+      "operator": "eq",
+      "threshold": 320
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "parentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-complete",
+      "measurement": "fixtureComplete",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "fixtureRepeatByteIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-streams",
+      "measurement": "streamPopulation",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "k-segment",
+      "measurement": "segmentPopulation",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "k-layers",
+      "measurement": "layerPopulation",
+      "operator": "eq",
+      "threshold": 20
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "outputs": [
+    "results/nncp_libnc_profile_update_fixture_64_q1_v1/decision.json",
+    "results/nncp_libnc_profile_update_fixture_64_q1_v1/fixture-manifest.json",
+    "results/nncp_libnc_profile_update_fixture_64_q1_v1/execution.json",
+    "results/nncp_libnc_profile_update_fixture_64_q1_v1/incremental_source.tar.xz"
+  ],
+  "generatedUtc": "2026-08-15T23:30:02Z"
+}

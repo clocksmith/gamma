@@ -1,5 +1,52 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - Complete open production optimizer replay is exact
+
+The segment-transition program now has a complete, retained production update
+oracle. The Q0 through Q2 fixture attempts were terminal implementation
+evidence: stale external digests, callback identity, and incomplete gradient
+naming prevented a scientific conclusion. Candidate
+`nncp_libnc_profile_update_fixture_64_q3_v1` corrected the shared callback
+boundary by using the callback's opaque `NCParam` pointer as the parameter-name
+key. Two fresh teacher executions then emitted byte-identical complete
+fixtures. The retained local fixture contains all `246` dense gradients,
+initial and final parameter/optimizer containers, initial and final recurrent
+state, and the train-step `4` to `5` boundary. See its
+[`decision`](../results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json).
+
+The first two official open-replay jobs stopped before arithmetic. Their
+separate reflections preserve two general orchestration defects: a consumer
+decoded the structured reflection decision as a scalar, then rejected the
+empty scratch root that `enqueue-tool` had correctly pre-created. Measured
+source and experiment bindings were not edited in place. Each repair received
+a new candidate and prospective experiment, leaving both failed jobs
+auditable.
+
+Candidate `nncp_open_profile_adam_replay_64_q0_retry_v2` passed the resulting
+gate. Its standalone Gamma-authored C++ implementation parses the retained
+containers and reproduces the complete production update without calling
+LibNC. It implements the exact 64-value reduction, per-tensor norm clipping,
+step-five Adam correction, deterministic fast reciprocal square root, fused
+update order, BF16 round-to-nearest-even, and biased low-word serialization.
+Across `313,000,456` parameter words, `245` BF16 tensors, one F32 tensor, and
+all variance tensors, both fresh reports are byte-identical and every mismatch
+counter is zero. The dependency-closed source package is retained with the
+[`decision`](../results/nncp_open_profile_adam_replay_64_q0_retry_v2/decision.json),
+[`guard`](../results/nncp_open_profile_adam_replay_64_q0_retry_v2/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T003855Z_aab09244b0.json).
+
+This closes the optimizer and serialization oracle, not recursive training.
+The dense gradients are still captured teacher outputs, the result has zero
+objective credit, and no open backward pass, second-segment forward, archive
+gain, transfer result, or full-corpus package exists. The next admissible gate
+is a separately frozen post-update forward fixture and open
+update-to-next-forward replay. Only after that passes may work claim one
+causally continuous segment transition; open gradient generation remains the
+larger teacher-removal blocker.
+
 ## 2026-08-15 - Open production arithmetic identity is exact
 
 The retained Q18 GGML forward already matched every exported output tensor,

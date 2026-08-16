@@ -1,0 +1,431 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "experimentId": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+  "proposalId": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_open_profile_adam_replay_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_adam_replay_64_q0_retry_v1/20260816T003540040554Z_b7799b357e43.json",
+      "sha256": "sha256:a6b4274ca174f4067db6b32385b797bb5a44a31f9c860641d16306872c29299d"
+    }
+  },
+  "hypothesis": {
+    "claim": "After accepting the enqueue-tool pre-created scratch root while rejecting any pre-existing declared output, the standalone Gamma-authored AVX2/FMA implementation reproduces every final parameter high word, biased low residual, and variance word across the complete 246-parameter, 32-stream update using only the retained initial state and dense gradients.",
+    "falsification": "Any fixture-identity drift, missing or mismatched tensor, non-deterministic replay, nonzero parameter or variance mismatch, altered optimizer geometry, or source-closure overflow prevents promotion and forbids a second-segment claim."
+  },
+  "changedMechanism": "Preserve the independent open update implementation and structured reflection decoder while accepting the declared pre-created scratch root; retain rejection of pre-existing outputs and all reduction, clipping, Adam, reciprocal-square-root, fused-arithmetic, BF16, and low-word behavior unchanged.",
+  "invariants": [
+    "The Q3 fixture remains a digest-bound zero-credit oracle and the open replay may use final tensors only as expected comparator outputs.",
+    "The production population remains 246 parameters, 32 streams, segment length 64, block position 256 to 320, and train step 4 to 5.",
+    "Beta1 remains zero, beta2 remains 0.9999, epsilon remains 1e-8, per-parameter clipping remains 0.05, and the captured learning rate remains unchanged.",
+    "No LibNC function or executable may perform the open update.",
+    "This parity gate contributes zero objective credit and authorizes no second-segment or compression claim by itself."
+  ],
+  "controls": [
+    {
+      "id": "open-replay-first",
+      "role": "treatment",
+      "definition": "The standalone open executable parses the retained initial containers and gradients, computes all updated tensors, and compares every serialized word with Q3 final state."
+    },
+    {
+      "id": "open-replay-repeat",
+      "role": "replay",
+      "definition": "A fresh execution of the same open binary over the same fixture must emit a byte-identical report."
+    },
+    {
+      "id": "q3-closed-oracle",
+      "role": "comparator",
+      "definition": "The digest-bound Q3 final parameter and optimizer containers provide expected outputs only; Q3's closed update is not invoked."
+    }
+  ],
+  "population": {
+    "unit": "one serialized parameter or variance word in the complete production Adam update",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "Every word of every one of the 246 dense parameters and optimizer variance tensors captured at the selected 32-stream production update.",
+    "coordinate": "preprocessed production-symbol coordinates: all 32 stream-local ranges at block [256,320), train step 4 -> 5"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The digest-bound Q3 initial parameter and optimizer containers, all 246 named dense gradients, fixed optimizer constants, geometry, and learning rate.",
+      "The Q3 final parameter and optimizer containers only as comparator outputs after each open word is computed."
+    ],
+    "forbiddenInformation": [
+      "Calling LibNC or the NNCP teacher to compute any replayed update value.",
+      "Using final parameter or optimizer words as an update input, fitting a correction to the expected output, weakening exact word identity, or claiming score credit.",
+      "Future segments, future probabilities, open backward parity, compression gain, or full-corpus transfer."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "q3-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "q3-fixture-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "q3-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "q3-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "failed-preflight-reflection",
+      "path": "operations/adaptive/reflections/20260816T002809Z_201b5c18e4.json",
+      "sha256": "sha256:681357efdd042f3909c03b19cd32fd2e0b892d2fc55edf5dee4938dcb97afdd5"
+    },
+    {
+      "id": "failed-scratch-root-reflection",
+      "path": "operations/adaptive/reflections/20260816T003602Z_1308cc7ddd.json",
+      "sha256": "sha256:cf2f5df0ffa6611e775d000167ad1cc9ae7f407af64cb66dcdc3c55079ff2d94"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-contract-schema-json-bbe2e7b532b2",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-result-schema-json-05fa224b9ac7",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-job-schema-json-d01a141c6a45",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-algorithm-proposal-schema-json-2e6bc3df456f",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-candidate-revision-schema-json-26d20c11848a",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-attempt-schema-json-9dd5a65f778d",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-replay-schema-json-556c8a20b5ba",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-delta-midas-probe-result-schema-json-1534b8c62fb6",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-dependency-closure-schema-json-56ede659d6ec",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-driver-run-ledger-row-schema-json-564eb9da8f1d",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-contract-schema-json-ddc50b7a26c9",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-result-schema-json-f67a74ccefdf",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-mechanism-graph-schema-json-4defbca57d45",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-named-gradient-detail-schema-json-dc5bafaae829",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-json-774aab7b321c",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-schema-json-de1760e03688",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-reflection-receipt-schema-json-74dcb037d60b",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-release-receipt-index-schema-json-b98f33bbd2bb",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-resource-guard-receipt-schema-json-ed672266f4ca",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-run-receipt-schema-json-b1c279150e0c",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-json-b4863eb5bb14",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-schema-json-7b83f8a5d789",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-programs-nncp-open-profile-adam-replay-64-q0-retry-v2-adam-replay-cpp-e4f1f168b0fe",
+      "path": "programs/nncp_open_profile_adam_replay_64_q0_retry_v2/adam_replay.cpp",
+      "sha256": "sha256:e4f1f168b0fe14ba9b92aaaedf9fd24f2c1fc0558b9429e565c050689d0d24ae"
+    },
+    {
+      "id": "runtime-source-programs-nncp-open-profile-adam-replay-64-q0-retry-v2-program-py-8800b3026d17",
+      "path": "programs/nncp_open_profile_adam_replay_64_q0_retry_v2/program.py",
+      "sha256": "sha256:8800b3026d17f20f250a104abbecef6ce66a681b36a7710aac291a1657d8a3dc"
+    },
+    {
+      "id": "runtime-source-tools-enwiki9-python-source-closure-py-b78ecd909e4b",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-tools-nncp-open-profile-adam-replay-64-q0-retry-v2-py-b31d073e5492",
+      "path": "tools/nncp_open_profile_adam_replay_64_q0_retry_v2.py",
+      "sha256": "sha256:b31d073e5492e54e49d8e973b2a8c93be70f30873df3f403397221b7d5c6c3d5"
+    },
+    {
+      "id": "runtime-source-tools-research-contracts-py-9fb46117c2f5",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "outputs": [
+    "results/nncp_open_profile_adam_replay_64_q0_retry_v2/decision.json",
+    "results/nncp_open_profile_adam_replay_64_q0_retry_v2/replay-1.json",
+    "results/nncp_open_profile_adam_replay_64_q0_retry_v2/replay-2.json",
+    "results/nncp_open_profile_adam_replay_64_q0_retry_v2/execution.json",
+    "results/nncp_open_profile_adam_replay_64_q0_retry_v2/incremental_source.tar.xz"
+  ],
+  "measurements": [
+    {
+      "id": "q3ParentPass",
+      "unit": "boolean",
+      "definition": "Q3 fixture parent authorizes the open replay."
+    },
+    {
+      "id": "fixtureIdentityPass",
+      "unit": "boolean",
+      "definition": "Every retained fixture file matches the Q3 manifest and aggregate."
+    },
+    {
+      "id": "fixtureFilePopulation",
+      "unit": "files",
+      "definition": "Digest-verified fixture file population."
+    },
+    {
+      "id": "openReplayExact",
+      "unit": "boolean",
+      "definition": "All open parameter and variance output words match the closed oracle."
+    },
+    {
+      "id": "openReplayDeterministic",
+      "unit": "boolean",
+      "definition": "Two open replay reports are byte-identical."
+    },
+    {
+      "id": "parameterPopulation",
+      "unit": "tensors",
+      "definition": "Complete parameter tensor population."
+    },
+    {
+      "id": "bf16ParameterPopulation",
+      "unit": "tensors",
+      "definition": "BF16 parameter population with biased low residual state."
+    },
+    {
+      "id": "f32ParameterPopulation",
+      "unit": "tensors",
+      "definition": "F32 parameter population."
+    },
+    {
+      "id": "parameterWordPopulation",
+      "unit": "words",
+      "definition": "Total parameter element population replayed."
+    },
+    {
+      "id": "parameterHighMismatchCount",
+      "unit": "words",
+      "definition": "Mismatching BF16 high or F32 parameter words."
+    },
+    {
+      "id": "parameterLowMismatchCount",
+      "unit": "words",
+      "definition": "Mismatching BF16 biased low residual words."
+    },
+    {
+      "id": "varianceMismatchCount",
+      "unit": "words",
+      "definition": "Mismatching Adam variance words."
+    },
+    {
+      "id": "sourceClosureBytes",
+      "unit": "bytes",
+      "definition": "Compressed dependency-closed open replay source."
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "p-parent",
+      "measurement": "q3ParentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-fixture",
+      "measurement": "fixtureIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-files",
+      "measurement": "fixtureFilePopulation",
+      "operator": "eq",
+      "threshold": 501
+    },
+    {
+      "id": "p-exact",
+      "measurement": "openReplayExact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "openReplayDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-params",
+      "measurement": "parameterPopulation",
+      "operator": "eq",
+      "threshold": 246
+    },
+    {
+      "id": "p-bf16",
+      "measurement": "bf16ParameterPopulation",
+      "operator": "eq",
+      "threshold": 245
+    },
+    {
+      "id": "p-f32",
+      "measurement": "f32ParameterPopulation",
+      "operator": "eq",
+      "threshold": 1
+    },
+    {
+      "id": "p-high",
+      "measurement": "parameterHighMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-low",
+      "measurement": "parameterLowMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-variance",
+      "measurement": "varianceMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "k-parent",
+      "measurement": "q3ParentPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-fixture",
+      "measurement": "fixtureIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "openReplayDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-exact",
+      "measurement": "openReplayExact",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-source",
+      "measurement": "sourceClosureBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 2000000,
+    "expectedNetSavingsBytes": -2000000
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 0.4,
+    "uncertaintyRisk": 0.1,
+    "interactionRisk": 0.2
+  },
+  "generatedUtc": "2026-08-16T00:38:00Z"
+}
