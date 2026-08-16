@@ -470,7 +470,7 @@ def main():
     p_doppler = subparsers.add_parser("doppler", parents=[common], help="Benchmark Doppler WebGPU engine")
     p_doppler.add_argument("model", help="Model name (e.g., gemma-3-1b, gemma-2-2b, llama-3.2-1b)")
     p_doppler.add_argument("--doppler-path", type=str, default=None,
-                           help="Path to doppler repo (default: ../ouroboros/doppler)")
+                           help="Path to doppler repo (default: ../doppler)")
     p_doppler.add_argument("--kernel-profile", "-k", choices=["fast", "safe", "debug", "fused", "apple"],
                            default="fast", help="Kernel profile (default: fast)")
     p_doppler.add_argument("--head", action="store_true", help="Show browser window (default: headless)")

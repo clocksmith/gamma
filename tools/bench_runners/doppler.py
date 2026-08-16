@@ -15,8 +15,8 @@ class DopplerRunner(BaseRunner):
 
     engine_name = "Doppler"
 
-    # Default doppler path (relative to gamma)
-    DEFAULT_DOPPLER_PATH = Path(__file__).parent.parent.parent.parent / "ouroboros" / "doppler"
+    # Default doppler path (relative to gamma: ../doppler)
+    DEFAULT_DOPPLER_PATH = Path(__file__).parent.parent.parent.parent / "doppler"
 
     # Model aliases to doppler model names
     # Only include models that actually exist in doppler/models/
@@ -70,7 +70,7 @@ class DopplerRunner(BaseRunner):
         if not self._check_doppler():
             raise RuntimeError(
                 f"Doppler not found at {self.doppler_path}. "
-                "Set doppler_path or ensure ouroboros/doppler exists."
+                "Set doppler_path or ensure doppler exists."
             )
 
         # Check if npm dependencies are installed
