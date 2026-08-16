@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "reportType": "strategy_profile_proposal",
+  "evidenceLabel": "simulation_candidate",
+  "sourceReport": {
+    "path": "2026-08-15-full-ecology-agi-training-v1.raw.json",
+    "sha256": "3090d31535178e92177536640ddf911134cbe110b1bc25eaf5a377983e43940c"
+  },
+  "trainingContract": {
+    "preregistration": "full-ecology-strategy-training-v1",
+    "playerCounts": [3, 4, 5],
+    "opponentCoverage": "all_windows",
+    "targetWinShare": "neutral",
+    "backend": "greedy",
+    "evaluatedMatchesPerCandidate": 144
+  },
+  "championProfile": {
+    "id": "agi_candidate",
+    "name": "The AGI Candidate",
+    "description": "Builds technical credibility across four hidden Dossier choices, then competes on supported evidence and claim strength.",
+    "defaultBackend": "greedy",
+    "persona": {
+      "identity": "A focused claimant converting technical credibility into a final institutional gamble.",
+      "worldview": "Public Mandate usually decides history, but a sufficiently prepared claim might overwrite it.",
+      "riskPosture": "Accepts reserved Compute and final-Audit Scrutiny when ordinary victory begins to recede.",
+      "negotiationStyle": "Offers clear one-quarter terms and pays immediately for delivered Power.",
+      "voice": "Direct, technical, and coalition-aware."
+    },
+    "strategy": {
+      "selection": "greedy",
+      "negotiation": {
+        "promiseWeight": 2.457,
+        "fulfillWeight": 1.139,
+        "betrayWeight": 0.509,
+        "reciprocityWeight": 1.099
+      },
+      "resourceValues": {
+        "runway": 1.2,
+        "compute": 1.6,
+        "researchProtection": 1.2
+      },
+      "objectives": [
+        "Reach multiple Capability thresholds while preserving enough Compute to pay every committed Dossier card.",
+        "Build public evidence in Capability, powered Facilities, and Trust without revealing every Dossier choice.",
+        "Commit Publication when at least two evidence claims are supportable and the final Scrutiny exposure is justified."
+      ],
+      "actionWeights": {
+        "fund": 7.414,
+        "research": 11.081,
+        "build": 10.594,
+        "organize": 1.534,
+        "deploy": 9.787,
+        "influence": 1.526,
+        "mega_cluster": 1.196,
+        "reorganization": 1.76,
+        "open_weights": 4.427,
+        "narrative_capture": 1.868,
+        "agent_swarm": 4.749,
+        "agi_dossier": 40.31,
+        "fusion_demonstrator": 1.117
+      },
+      "decisionWeights": {
+        "build_facility": 7.985,
+        "research_stop_4": 2.972,
+        "deploy_": 4.99,
+        "power_purchase_from_": 20,
+        "power_purchase_none_": 0.067,
+        "agi_dossier_commit": 20
+      },
+      "partnerWeights": {
+        "power_broker": 12
+      },
+      "spatialPreference": {
+        "targetProfileId": "power_broker",
+        "preferredDistance": 1,
+        "multiplier": 12,
+        "applyUntilFacilities": 3
+      },
+      "consequenceWeights": {
+        "poweredFacilities": 12,
+        "powerDemand": 2
+      },
+      "rules": [
+        {
+          "when": [{ "path": "self.facilities", "operator": "gte", "value": 3 }],
+          "target": { "actionId": "build" },
+          "multiplier": 0.05
+        },
+        {
+          "when": [{ "path": "self.canDeploy", "operator": "eq", "value": true }],
+          "target": { "actionId": "deploy" },
+          "multiplier": 5
+        },
+        {
+          "when": [{ "path": "self.runway", "operator": "lte", "value": 2 }],
+          "target": { "actionId": "fund" },
+          "multiplier": 4
+        }
+      ]
+    },
+    "provenance": {
+      "kind": "curated_strategy_candidate",
+      "parentId": "agi_candidate",
+      "sourceEvolutionSha256": "3090d31535178e92177536640ddf911134cbe110b1bc25eaf5a377983e43940c",
+      "preregistration": "full-ecology-strategy-training-v1",
+      "intendedPlayProfile": "default-game"
+    }
+  }
+}
