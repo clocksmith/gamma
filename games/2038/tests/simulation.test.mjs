@@ -53,6 +53,10 @@ import {
   runFactionSwapDiagnostic
 } from "../lab/runner/faction-swap-runner.js";
 
+const currentRelease = await (async () => {
+  return JSON.parse(await readFile(new URL("../versions/current-release.json", import.meta.url), "utf8"));
+})();
+
 function fixturePolicy(select = () => null) {
   return {
     async decide(packet) {
@@ -3505,7 +3509,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.14.7");
+  assert.equal(first.game.version, currentRelease.gameVersion);
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -4253,7 +4257,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.14.7");
+  assert.equal(first.game.version, currentRelease.gameVersion);
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
