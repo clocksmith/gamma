@@ -1,0 +1,88 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Disassembly of the bound LibNC sgd_opt_update_var proves its opaque argument is NCParam*: the function first loads offset 0x28 (NCParam.sgd_opt). Q2 instead keyed its name table by parameter->sgd_opt, so lookup by the callback opaque pointer could never match."
+  },
+  "candidateId": "nncp_libnc_profile_update_fixture_64_q2_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_profile_update_fixture_64_q2_v1",
+    "candidateTreeSha256": "sha256:11f186e7173a61bb2268060672d747db3c50707c6d3bbe0434001f8e90860df5",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_update_fixture_64_q2_v1/20260815T234100135946Z_11f186e7173a.json",
+      "sha256": "sha256:3c24a1538e6e5e9b13b20f61cfcf7c2c58fd5832c6a7422de8c2e4d59d06d46e"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correct only the observer pointer key in a new source-bound q3 hook and rerun the unchanged scientific boundary.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q2_v1/guard.json",
+      "sha256": "sha256:7e5f211795e0da80908db9768776227de6d277dccebed635b605e6bc706e1166"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T234138Z_f38eb2f9dc.log",
+      "sha256": "sha256:d425712ff69e54c164aba9069316143ac7a3119fa381b732ab7c818661713bc0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q2_v1.json",
+    "sha256": "sha256:1ee70d3adc50bd0fea0375284ae67fab7370aa9fbae973b96a450dc192474173"
+  },
+  "generatedUtc": "2026-08-15T23:49:30+00:00",
+  "hypothesis": {
+    "rationale": "The fixture repeat and post-update predicates were not reached; the abort was an observer pointer-contract defect before any optimizer operation.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260815T234138Z_f38eb2f9dc.json",
+    "sha256": "sha256:d25480813b78b2ff37df7a10097df2225f3b16311b6485c91f55c339d6efc2d6"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Gradient naming keyed by NCParam.sgd_opt rather than the callback opaque NCParam pointer."
+    ],
+    "transferableLessons": [
+      "Key the observer name table by NCParam* while nc_save_param_opt exports each parameter, then resolve the unchanged callback opaque NCParam* against that table."
+    ],
+    "uncertainties": [
+      "Gradient population, dense-only status, post-update capture, repeat identity, and final scratch size remain untested."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t234138z_f38eb2f9dc",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The run reached the frozen boundary and wrote complete pre-update parameter, optimizer, batch, and recurrent state, then the observer aborted before the first gradient payload because its lookup key used parameter->sgd_opt while the callback opaque argument is the NCParam pointer itself."
+    ],
+    "valid": false
+  }
+}

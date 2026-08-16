@@ -566,6 +566,7 @@ def develop_proposal(
                 "adopted candidate parent does not match proposal parent: "
                 f"{existing_meta.get('parent')!r} != {parent!r}"
             )
+        register_candidate(candidate_id)
     else:
         destination = create_candidate(
             candidate_id=candidate_id,

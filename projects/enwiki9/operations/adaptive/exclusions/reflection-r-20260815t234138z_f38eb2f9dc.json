@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260815T234138Z_f38eb2f9dc.json"
+  ],
+  "exclusion_id": "reflection-r-20260815t234138z_f38eb2f9dc",
+  "failure": "Disassembly of the bound LibNC sgd_opt_update_var proves its opaque argument is NCParam*: the function first loads offset 0x28 (NCParam.sgd_opt). Q2 instead keyed its name table by parameter->sgd_opt, so lookup by the callback opaque pointer could never match.",
+  "mechanism": "Bind each parameter name to its gradient and optimizer tensors only while the already-required pre-update optimizer state is saved through nc_save_param_opt; preserve the teacher operations, population, predicates, and output contract.",
+  "population": "one complete 32-stream production gradient and Adam update; All 32 streams and all 64 positions at production block position 256, after the proven forward and before/after its single deep update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-15T23:49:32+00:00",
+  "retired_dimensions": [
+    "Gradient naming keyed by NCParam.sgd_opt rather than the callback opaque NCParam pointer."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

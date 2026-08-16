@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The wrapper called output.parent.mkdir(parents=True) without exist_ok=True even though enqueue-tool materializes the declared scratch directory before invocation."
+  },
+  "candidateId": "nncp_open_profile_adam_replay_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_adam_replay_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:b7799b357e439df62643ea671ddce96da09fe3d014cec4bc63c9786b383cd09d",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_adam_replay_64_q0_retry_v1/20260816T003540040554Z_b7799b357e43.json",
+      "sha256": "sha256:a6b4274ca174f4067db6b32385b797bb5a44a31f9c860641d16306872c29299d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Preserve this failed wrapper and experiment, fork a corrected retry accepting only the pre-created result root, and rerun unchanged arithmetic.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:49b24271d92596017542a88a4c62eb876046371a0a5ac49695d5645c681c5529"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_retry_v1.json",
+    "sha256": "sha256:a3f22e0fb8647dcaceda32227d73e615e72050cb37d3fd9790500cf0af9a3396"
+  },
+  "generatedUtc": "2026-08-16T00:37:12+00:00",
+  "hypothesis": {
+    "rationale": "The official job reached result-boundary setup but executed no fixture verification or Adam arithmetic.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T003602Z_1308cc7ddd.json",
+    "sha256": "sha256:fca9b406ddf459c178b45eb5877e605d3bd5d3589a7c26a2fa5adc8e3012282c"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Oracle wrappers must accept an existing empty declared scratch root while continuing to reject any pre-existing declared output artifact."
+    ],
+    "uncertainties": [
+      "The exact full-population replay remains officially unmeasured until a separately digest-bound retry executes beyond result setup."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t003602z_1308cc7ddd",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The corrected authorization check passed, but the wrapper rejected the empty result directory that enqueue-tool is contractually required to pre-create before fixture hashing, compilation, or open arithmetic."
+    ],
+    "valid": false
+  }
+}

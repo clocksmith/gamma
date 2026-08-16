@@ -1,0 +1,113 @@
+{
+  "build": {
+    "commands": [
+      [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.o"
+      ],
+      [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-shared",
+        "-fPIC",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_profile_update_fixture_hook_q3.c",
+        "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-lnc",
+        "-ldl",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture_hook.so"
+      ]
+    ],
+    "executableSha256": "1a76aaba05b0e1df7c8b2bb692ecda197360a539ba24c0e9f48a06210392ff45",
+    "hookSha256": "8e9b2180666738be66fc1d91aed7cf4b8393c173f3d89c413b13572c507fd3f2",
+    "patchedSourceSha256": "8bd07022375272b544479122998eac04d2031bc834e3b9346f4db3fceae0076f",
+    "stderrs": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018log_init.constprop\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:2375:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2375 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:2375:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018encode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3604:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3604 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3604:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018encode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3613:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3613 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3613:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018encode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3624:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3624 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3623:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018encode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3631:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3631 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3630:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018decode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3790:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3790 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3790:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018decode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3821:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3821 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3820:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c: In function \u2018decode_file\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3823:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3823 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture.c:3822:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n",
+      "",
+      ""
+    ]
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture",
+        "-q",
+        "-T",
+        "4",
+        "--profile",
+        "enwik9",
+        "--n_symb",
+        "16392",
+        "--dict",
+        "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/dictionary.bin",
+        "--max_size",
+        "65536",
+        "c",
+        "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture.partial.nncp"
+      ],
+      "partialArchiveBytes": 52014,
+      "partialArchiveSha256": "2eb230b415442c4cbb13e88fe33ca896c13f5c5b4eacab4d2900b6da54dfdaf1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/scratch/nncp_profile_update_fixture",
+        "-q",
+        "-T",
+        "4",
+        "--profile",
+        "enwik9",
+        "--n_symb",
+        "16392",
+        "--dict",
+        "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/dictionary.bin",
+        "--max_size",
+        "65536",
+        "c",
+        "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-repeat.partial.nncp"
+      ],
+      "partialArchiveBytes": 52014,
+      "partialArchiveSha256": "2eb230b415442c4cbb13e88fe33ca896c13f5c5b4eacab4d2900b6da54dfdaf1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

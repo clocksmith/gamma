@@ -1,0 +1,38 @@
+{
+  "added": "2026-08-16",
+  "deps": [
+    "nncp_libnc_profile_update_fixture_64_q3_v1"
+  ],
+  "description": "Standalone full-population replay of the production Adam update and serialized BF16/F32 optimizer state.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A Gamma-authored AVX2/FMA update implementation exactly reproduces all parameter and variance words in the retained complete production update without invoking LibNC.",
+  "id": "nncp_open_profile_adam_replay_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T002809Z_201b5c18e4": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T002809Z_201b5c18e4.json",
+        "sha256": "sha256:681357efdd042f3909c03b19cd32fd2e0b892d2fc55edf5dee4938dcb97afdd5",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_v1.json",
+      "sha256": "sha256:ec64f41835b1cbe8bc9f03b5c15b17b8ca84e6a2770f029be8486b43d052c320"
+    },
+    "interfaces_exposed": [
+      "initial parameter/optimizer state + dense gradients -> open Adam replay -> exact serialized state"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": "nncp_libnc_profile_update_fixture_64_q3_v1",
+    "proposal_id": "nncp_open_profile_adam_replay_64_q0_v1",
+    "retired_neighborhoods": [
+      "No tolerance, fitted correction, altered optimizer constant, reduced population, closed update call, score credit, or second-segment claim."
+    ]
+  },
+  "parent": "nncp_libnc_profile_update_fixture_64_q3_v1",
+  "status": "candidate",
+  "verdict": "Correct the general structured-reflection decoder, freeze a new immutable experiment binding, and rerun the unchanged open Adam implementation."
+}

@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "require_inputs decoded reflection.decision as a scalar; reflection-receipt.v1 stores the verdict at reflection.decision.verdict."
+  },
+  "candidateId": "nncp_open_profile_adam_replay_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_adam_replay_64_q0_v1",
+    "candidateTreeSha256": "sha256:573301b5b1daf185fdda7bf9be8127ba61baff30c8b7ca9ab7be046fd5de1e42",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_adam_replay_64_q0_v1/20260816T002733405923Z_573301b5b1da.json",
+      "sha256": "sha256:4619af952577036dad0dcddd44e5febfd9af8227a9c016d6a469323922ef8861"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Correct the general structured-reflection decoder, freeze a new immutable experiment binding, and rerun the unchanged open Adam implementation.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_adam_replay_64_q0_v1/guard.json",
+      "sha256": "sha256:c76d8cf55fc17b86c24c7d6ed0f172cae42f60355aadacd1996689ae3916995d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_v1.json",
+    "sha256": "sha256:ec64f41835b1cbe8bc9f03b5c15b17b8ca84e6a2770f029be8486b43d052c320"
+  },
+  "generatedUtc": "2026-08-16T00:31:14+00:00",
+  "hypothesis": {
+    "rationale": "No open Adam arithmetic executed in the official job, so this receipt measures only a preflight contract-decoding defect.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T002809Z_201b5c18e4.json",
+    "sha256": "sha256:c21b20dfd94981b6085b2bf591e25fffc795907c45bd0f2233d32ee3b6c4a952"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Replay consumers must read the versioned structured reflection verdict and must classify preflight rejection separately from an algorithm result."
+    ],
+    "uncertainties": [
+      "The official full-population replay remains unmeasured until a newly digest-bound prospective experiment reruns the corrected preflight."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t002809z_201b5c18e4",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The runner rejected the Q3 authorization before fixture hashing, compilation, or open replay because it compared the structured reflection decision object with a legacy scalar string."
+    ],
+    "valid": false
+  }
+}

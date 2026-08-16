@@ -1,0 +1,88 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The preload observer assumed nc_sgd_opt_set_all interposition would see LibNC internal registration, but those internal calls bypassed symbol preemption. The later executable-to-libnc nc_save_param_opt calls do cross the preload boundary and carry each NCParam name plus optimizer pointer."
+  },
+  "candidateId": "nncp_libnc_profile_update_fixture_64_q1_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_profile_update_fixture_64_q1_v1",
+    "candidateTreeSha256": "sha256:cc0f00ac50f673e873c062ceb372ca3eb635bb5122dec0d7fdd07a4aefb3a64a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_update_fixture_64_q1_v1/20260815T233053048924Z_cc0f00ac50f6.json",
+      "sha256": "sha256:c5794ae7926d854a9af288a76fe60392a083b7030472958b85aa46061da3beda"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Add only observation-time name binding at nc_save_param_opt in a new source-bound q2 hook and rerun.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q1_v1/guard.json",
+      "sha256": "sha256:d25a6611d3fa8773db2d6e2fef73c63cb83fc14db2ad9be01c78d9ea6dbc8b1d"
+    },
+    {
+      "path": "run_logs/adaptive/20260815T233112Z_ee79010d5f.log",
+      "sha256": "sha256:746308c160e34fe6740151509940737ee4d8c6f62859c0c369a1fb9253b8aed8"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_update_fixture_64_q1_v1.json",
+    "sha256": "sha256:81f822fd24e2adfbbce754a73ab47792ee3c22b802a3b56703456be52dbfeed8"
+  },
+  "generatedUtc": "2026-08-15T23:37:35+00:00",
+  "hypothesis": {
+    "rationale": "The fixture repeat and post-update predicates were not reached; the abort was an observer naming defect before any optimizer operation.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260815T233112Z_ee79010d5f.json",
+    "sha256": "sha256:edb2dd891df16ea7668382c8414359ba746d79c05e7f087ca0b34a96bf420d78"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Gradient naming via nc_sgd_opt_set_all preload interposition alone."
+    ],
+    "transferableLessons": [
+      "In q2, populate the observer name map by interposing nc_save_param_opt during the pre-update optimizer export, then delegate unchanged; preserve every scientific predicate and teacher operation."
+    ],
+    "uncertainties": [
+      "Gradient population, post-update capture, repeat identity, and final scratch size remain untested."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260815t233112z_ee79010d5f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The run reached the frozen boundary and wrote complete pre-update parameter, optimizer, batch, and recurrent state, then the observer aborted before the first gradient payload because internal LibNC parameter registration did not populate the preload hook name map."
+    ],
+    "valid": false
+  }
+}
