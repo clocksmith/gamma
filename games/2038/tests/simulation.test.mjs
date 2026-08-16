@@ -3502,7 +3502,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.14.2");
+  assert.equal(first.game.version, "0.14.3");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3539,6 +3539,8 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(typeof first.matchMetrics.agiFunnelRates.declared, "number");
   assert.equal(typeof first.matchMetrics.factionAbilityValues, "object");
   assert.equal(typeof first.matchMetrics.factionActionSelections, "object");
+  assert.equal(typeof first.matchMetrics.profileActionSelections, "object");
+  assert.equal(typeof first.matchMetrics.profileMandateSources, "object");
   assert.equal(first.samples[0].replay.at(-1).type, "round_settled");
   assert.equal(first.samples[0].replay.at(-1).round, 4);
 
@@ -4084,7 +4086,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.14.2");
+  assert.equal(first.game.version, "0.14.3");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

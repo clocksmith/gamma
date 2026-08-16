@@ -5,8 +5,8 @@ comparing the authored rules and card data, the physical specification, and the
 selected-rules executable. Generated `dist/` artifacts are projections and are
 not independent authorities. Each checkbox is one finding; a checked finding
 has an authored ruling, aligned executable behavior where applicable, and a
-focused regression or blind-play contract in executable `0.14.2` and rules
-candidate `0.8.0-rc.3-test`.
+focused regression or blind-play contract in executable `0.14.3` and rules
+candidate `0.8.0-rc.4-test`.
 
 Closure evidence is concentrated in `tests/gameplay-audit.test.mjs` for the
 decision-level mechanics, `tests/engine.test.mjs` for Training and map helpers,

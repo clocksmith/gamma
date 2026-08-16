@@ -763,7 +763,9 @@ function outcomeSummary(observations) {
   };
   const factionAbilityValues = {};
   const factionActionSelections = {};
+  const profileActionSelections = {};
   const factionMandateSources = {};
+  const profileMandateSources = {};
   const factionStandingTotals = {};
   const profileStandingTotals = {};
   const seatStandingTotals = {};
@@ -842,11 +844,14 @@ function outcomeSummary(observations) {
         standingWinCredit
       );
       const actions = factionActionSelections[standing.factionId] || {};
+      const profileActions = profileActionSelections[standing.profileId] || {};
       for (const [actionId, count] of Object.entries(standing.actions || {})) {
         actions[actionId] = (actions[actionId] || 0) + count;
+        profileActions[actionId] = (profileActions[actionId] || 0) + count;
         increment(actionCounts, actionId, count);
       }
       factionActionSelections[standing.factionId] = actions;
+      profileActionSelections[standing.profileId] = profileActions;
       increment(
         openingCounts,
         (standing.openingActions || []).join("→") || "none"
@@ -950,6 +955,11 @@ function outcomeSummary(observations) {
         factionSources[source] =
           (factionSources[source] || 0) + (event.points || 0);
         factionMandateSources[standing.factionId] = factionSources;
+        const profileSources =
+          profileMandateSources[standing.profileId] || {};
+        profileSources[source] =
+          (profileSources[source] || 0) + (event.points || 0);
+        profileMandateSources[standing.profileId] = profileSources;
       }
     }
   }
@@ -1054,11 +1064,13 @@ function outcomeSummary(observations) {
     bindingRequirements,
     mandateSources,
     factionMandateSources,
+    profileMandateSources,
     factionStandings,
     profileStandings,
     seatStandings,
     factionAbilityValues,
     factionActionSelections,
+    profileActionSelections,
     agiFunnel,
     agiFunnelRates: Object.fromEntries(
       Object.entries(agiFunnel)
