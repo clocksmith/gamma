@@ -447,6 +447,11 @@ test("unified matrix fingerprints and executes evolved profile overrides", async
     mandateModes: ["fixed"],
     includeAdversarial: false,
     profileOverrides: [override],
+    profileOverrideSources: [{
+      path: "evidence/test-trust-profile.json",
+      profileId: override.id,
+      sha256: "b".repeat(64)
+    }],
     seed: "profile-override-matrix-fixture"
   });
   const registered = report.preRegistration.profiles.find(
@@ -454,7 +459,44 @@ test("unified matrix fingerprints and executes evolved profile overrides", async
   );
   assert.equal(registered.provenance.kind, "test_strategy_override");
   assert.match(registered.fingerprint, /^sha256:/);
+  assert.deepEqual(report.profileOverrideSources, [{
+    path: "evidence/test-trust-profile.json",
+    profileId: override.id,
+    sha256: "b".repeat(64)
+  }]);
+  assert.deepEqual(
+    report.preRegistration.profileOverrideSources,
+    report.profileOverrideSources
+  );
+  assert.deepEqual(
+    report.ecologyProfiles.find((profile) => profile.id === override.id),
+    override
+  );
   assert.equal(report.integrity.violations, 0);
+});
+
+test("unified matrix rejects profile source metadata for a different profile", async () => {
+  const profiles = await loadPlayerProfiles();
+  const override = structuredClone(
+    profiles.find((profile) => profile.id === "trust_governor")
+  );
+  await assert.rejects(
+    runUnifiedMatrix({
+      maximumMatches: 142,
+      initialRunsPerCell: 1,
+      batchSize: 1,
+      playerCounts: [4],
+      mandateModes: ["fixed"],
+      includeAdversarial: false,
+      profileOverrides: [override],
+      profileOverrideSources: [{
+        path: "evidence/wrong-profile.json",
+        profileId: "power_broker",
+        sha256: "c".repeat(64)
+      }]
+    }),
+    /source identities must match/
+  );
 });
 
 test("deterministic negotiators can rationally fulfill or break a promise", async () => {

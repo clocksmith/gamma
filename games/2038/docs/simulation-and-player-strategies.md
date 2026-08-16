@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.6` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.7-test`
+**Executable game:** `0.14.7` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.8-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -436,8 +436,9 @@ three, four, and five players. `fixed_window` exists only to reconstruct older
 diagnostic studies and must not support a promotion claim.
 `profile-override-reports` loads exact frozen `championProfile` artifacts for
 non-target opponents. Their paths, byte hashes, complete profiles, and strategy
-fingerprints are retained in the evolution report. A promotable training claim
-must use the exact opponent artifacts named by its intended holdout ecology.
+fingerprints are retained in evolution and unified-matrix reports. A promotable
+training or holdout claim must use the exact artifacts named by its intended
+ecology.
 Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits

@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.8.0-rc.7-test`
+**Rules under review:** `0.8.0-rc.8-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.7-test`. Executable
-game `0.14.6` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.8-test`. Executable
+game `0.14.7` implements its Default Game profile under
 `nineteen-hex-simplified-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.8.0-rc.7-test` and executable `0.14.6` retain the synchronized
+Candidate `0.8.0-rc.8-test` and executable `0.14.7` retain the synchronized
 identity for the complete nineteen-hex simplification. They replace private
 Escalation hands with six shared Programs, remove Safety currency, reduce
 Training to forty cards, make Mega-Clusters solo projects, restrict immediate
@@ -134,10 +134,15 @@ already have a legal resolution before the optional trade window. These are
 implementation claims, not human teachability, negotiation-quality, or balance
 evidence; all three supported player counts require fresh evidence.
 
-The rc.7 candidate changes no playable rule from rc.6. Executable `0.14.6`
-adds exact, hashed opponent-profile injection to strategy evolution. Training
-reports now preserve and execute the same profile artifacts named for their
-intended holdout rather than resolving only matching canonical IDs.
+The rc.8 candidate changes no playable rule from rc.7. Executable `0.14.7`
+extends exact profile-artifact identity into the unified holdout matrix.
+Holdout reports preserve each source path and byte hash alongside the complete
+executed ecology, and mismatched source identities fail before simulation.
+
+Historical rc.7 / executable `0.14.6` added exact, hashed opponent-profile
+injection to strategy evolution. Training reports preserve and execute the same
+profile artifacts named for their intended holdout rather than resolving only
+matching canonical IDs.
 
 Historical rc.6 / executable `0.14.5` corrected strategy calibration so every
 opponent profile appears through a declared circular roster window. It
