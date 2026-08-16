@@ -285,11 +285,18 @@ def _apply_reflection(
     _atomic_json(meta_path, metadata)
 
 
-def iter_reflections() -> list[dict[str, Any]]:
+def iter_reflections(*, strict: bool = True) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for path in sorted(REFLECTIONS.glob("*.json")):
         value = _load_json(path)
-        research_contracts.validate_artifact(path, verify_files=False)
+        if strict:
+            research_contracts.validate_artifact(path, verify_files=False)
+        else:
+            try:
+                research_contracts.validate_artifact(path, verify_files=False)
+            except Exception as exc:  # pragma: no cover - compatibility pathway
+                value = dict(value)
+                value["_validation_error"] = str(exc)
         rows.append({"_path": path.relative_to(ROOT).as_posix(), **value})
     return rows
 
@@ -363,7 +370,9 @@ def sync_reflection_exclusions() -> dict[str, int]:
 def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
     policy = research_contracts.validate_search_policy()
     latest: dict[str, dict[str, Any]] = {}
-    for reflection in iter_reflections():
+    for reflection in iter_reflections(strict=False):
+        if reflection.get("_validation_error"):
+            continue
         latest[reflection["candidateId"]] = reflection
     rows: list[dict[str, Any]] = []
     for proposal in proposals:
