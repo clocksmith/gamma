@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "full-ecology-strategy-training-v1",
+  "registeredBeforeResults": true,
+  "question": "Can the AGI Candidate and Trust Governor be calibrated toward neutral win share across the complete three-, four-, and five-player opponent ecology without changing physical rules, faction starts, Core Actions, or declared strategy identity?",
+  "sourceCommit": "e709c2da",
+  "sourceEvidence": [
+    "2026-08-15-calibrated-strategy-ecology-holdout-v2",
+    "e709c2da-full-ecology-optimizer-correction"
+  ],
+  "sharedContract": {
+    "gameVersion": "0.14.5",
+    "rulesVersion": "0.8.0-rc.6-test",
+    "engineVersion": "0.16.4",
+    "playerCounts": [3, 4, 5],
+    "opponentCoverage": "all_windows",
+    "targetWinShare": "neutral",
+    "generations": 5,
+    "population": 6,
+    "runsPerSeat": 12,
+    "mutationMagnitude": 0.25,
+    "candidateSelection": "Minimize the largest absolute miss from 1/player-count, then the mean miss, then ordinary simulation fitness. Every candidate receives identical seeds within a generation and the match budget is distributed over all six circular opponent windows.",
+    "rulesVariant": {},
+    "automaticPromotion": false
+  },
+  "jobs": [
+    {
+      "id": "full-ecology-agi-training-v1",
+      "profileId": "agi_candidate",
+      "backend": "greedy",
+      "seed": "mandate-2038-full-ecology-agi-training-v1",
+      "identityGate": "The selected candidate must retain AGI Dossier as its largest Program weight, mean score of at least 14 at every supported player count, and an AGI-focused action policy. Final identity remains subject to the fresh holdout AGI winner-credit gate."
+    },
+    {
+      "id": "full-ecology-trust-training-v1",
+      "profileId": "trust_governor",
+      "backend": "weighted",
+      "seed": "mandate-2038-full-ecology-trust-training-v1",
+      "identityGate": "The selected candidate must retain explicit Influence and scrutiny-removal preferences and mean score of at least 16 at every supported player count. Final identity remains subject to fresh holdout Influence, Trust, and Mandate gates."
+    }
+  ],
+  "selectionRule": {
+    "nomination": "A training champion may be frozen for holdout only if it improves the maximum neutral-share miss over its generation-zero baseline and passes its profile identity gate.",
+    "rejection": "Reject a champion that abandons the named strategy, misses its score floor, or merely transfers strength between supported player counts.",
+    "holdout": "No training result changes canonical profiles. Nominated candidates must be committed with exact report hashes before one fresh-seed unified ecology holdout.",
+    "physicalBoundary": "Training cannot select starting resources, Core Actions, Dossier costs, scoring changes, or other physical rules. Any remaining mechanical defect requires a separately preregistered one-lever study."
+  },
+  "knownLimits": [
+    "Deterministic weighted and greedy policies are modelled strategy probes, not human players.",
+    "Training candidates share generations and may overfit despite opponent-window coverage.",
+    "Simulation cannot establish fun, negotiation quality, teachability, or physical handling."
+  ]
+}
