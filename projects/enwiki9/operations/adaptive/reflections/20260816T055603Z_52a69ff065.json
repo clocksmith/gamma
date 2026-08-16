@@ -1,0 +1,102 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The 128-sample output-head matrix-gradient reduction contract does not transfer byte-exactly to the top-layer FF2 matmul backward. With exact fresh operands and deterministic replay, the remaining error is localized to FF2 operation-specific product or reduction semantics."
+  },
+  "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+    "candidateTreeSha256": "sha256:2328e90b16fcd67f93cea5a3be05db174fd85b1a03d2a714865ead1f59289164",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_64_q0_v1/20260816T055538160747Z_2328e90b16fc.json",
+      "sha256": "sha256:9dbab9c36d7bd36e3e4dbeed68fc48823b01e0ca902f82e423b47f4ed7ad1320"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Authorize one immutable FF2-arithmetic retry that changes only the outer-product boundary, retains every inherited predicate, and must eliminate all 184 mismatches without tolerance.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:25636c40ebce64cdf795f4bf137fa04bf97b3a80c5f7c02f94b5de9c9d2c86f6"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/execution.json",
+      "sha256": "sha256:d99a6fc25f581a58a0a3b2e63dfa7cb710935642f71bf02a28f797a79f0e920f"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/guard.json",
+      "sha256": "sha256:b0471de05c1651dcd8a4891aad2744eacd0db484a5ee211c08c7039aff23fe4b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_v1.json",
+    "sha256": "sha256:823c32efb4fadb3c26860cea76e4774d9bd26adffe6ae08d22bdf874ad71efa9"
+  },
+  "generatedUtc": "2026-08-16T06:10:18+00:00",
+  "hypothesis": {
+    "rationale": "The inherited output-head and final RMSNorm tails remained exact and both complete FF2 payloads replayed byte-identically, but the direct 128-sample outer-product reduction differed from 184 of 3,145,728 retained ff2_19 BF16 words with maximum absolute error 9.5367431640625e-07.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T055603Z_52a69ff065.json",
+    "sha256": "sha256:1bb4fce71afe2ae921aba108f99f413950241ebb64adcb58deb7afd72101edd1"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Directly transferring the output-head 128-sample matmul reduction to ff2_19 without an FF2-specific arithmetic boundary is insufficient."
+    ],
+    "transferableLessons": [
+      "Retain every exact inherited tail and the fresh GEGLU exposure; only the FF2 outer-product arithmetic may change in a retry.",
+      "Use the 184 sparse one-BF16-step mismatches as an attribution target for an operation-specific reduction boundary rather than weakening exact parity."
+    ],
+    "uncertainties": [
+      "The first gate localizes but does not yet distinguish product rounding, partial-reduction geometry, or final partial accumulation order. No FF2 activation residual, recursive training, compression gain, package result, or Hutter objective credit follows."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/decision.json",
+        "sha256": "sha256:25636c40ebce64cdf795f4bf137fa04bf97b3a80c5f7c02f94b5de9c9d2c86f6"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t055603z_52a69ff065",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen top-layer FF2 gate completed both all-stream populations under its bound revision and guard, emitted every declared artifact, delayed the retained ff2_19 comparator until both payloads existed, and preserved deterministic replay and live controls."
+    ],
+    "valid": true
+  }
+}

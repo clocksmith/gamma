@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "claimed_at": "2026-08-16T05:55:32+00:00",
+  "created_at": "2026-08-16T05:55:28+00:00",
+  "developed_at": "2026-08-16T05:55:38+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T053159Z_b79233ecb1.json",
+      "sha256": "sha256:7e6b3e549eae6183c3a7c735d4930843d533a20fdc68d18c6e79b57389139e35"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:b52a25e8ce1d5c2a33858ef092288ccfe0ac9ededf4045066cb3c4db63701a14"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_v1.json",
+    "sha256": "sha256:823c32efb4fadb3c26860cea76e4774d9bd26adffe6ae08d22bdf874ad71efa9"
+  },
+  "hypothesis": "The promoted centered final-normalization input residual and freshly generated BF16 layer-19 GEGLU output reproduce every retained ff2_19 parameter-gradient word under the already proved 128-sample matmul reduction.",
+  "interfaces_exposed": [
+    "exact centered top-layer residual plus open GEGLU output -> complete ff2_19 parameter gradient"
+  ],
+  "kill_condition": "Any inherited tail failure, replay mismatch, dead control, dependency or guard violation, source overflow, population drift, or one differing ff2_19 word prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "priority": 1479,
+  "promotion_condition": "Require every inherited forward, output-head, final RMSNorm, and ff_bias2_19 predicate plus exact parity for all 3,145,728 BF16 ff2_19 words, deterministic replay, a live sign-negated residual control, dependency closure, and resource compliance.",
+  "proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "retired_neighborhoods": [
+    "No FF2 activation-residual, GEGLU backward, teacher calculation, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1497,
+  "state": "developed",
+  "title": "Exact open top-layer FF2 parameter gradient"
+}

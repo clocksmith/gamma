@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T06:18:19+00:00",
+  "created_at": "2026-08-16T06:18:12+00:00",
+  "developed_at": "2026-08-16T06:18:20+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T055603Z_52a69ff065.json",
+      "sha256": "sha256:17ea2d341daefac41f349b69ebe1af22746d5f884479d1c4cdb0676b02465346"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:25636c40ebce64cdf795f4bf137fa04bf97b3a80c5f7c02f94b5de9c9d2c86f6"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:95005e164394df01e192f305a1ad47499c723ee655c79dc9e5ab7e24b1c92ef5"
+  },
+  "hypothesis": "Rounding the final RMSNorm incoming-gradient times gain product to BF16 before the frozen centered backward eliminates the sparse coordinate-localized ff2_19 mismatches while preserving every inherited exact tail.",
+  "interfaces_exposed": [
+    "BF16 affine upstream plus centered final RMSNorm backward plus open GEGLU output -> complete ff2_19 parameter gradient"
+  ],
+  "kill_condition": "Any inherited regression, dead control, replay difference, dependency or guard violation, source overflow, ff_bias2_19 mismatch, or remaining ff2_19 mismatch refutes the BF16 affine-upstream hypothesis.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "priority": 1478,
+  "promotion_condition": "Require every inherited exact predicate plus zero mismatches across all 3,145,728 ff2_19 words after the single uniform BF16 affine-product boundary, deterministic replay, live controls, dependency closure, and resource compliance.",
+  "proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "No tolerance, comparator-derived correction, FF2 activation residual, GEGLU backward, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1496,
+  "state": "developed",
+  "title": "BF16 affine-upstream top-layer FF2 retry"
+}

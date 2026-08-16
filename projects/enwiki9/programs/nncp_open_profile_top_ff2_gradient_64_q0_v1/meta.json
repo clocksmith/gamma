@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_final_norm_backward_64_q0_retry_v2"
+  ],
+  "description": "Production open top-layer FF2 parameter gradient",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The promoted centered final-normalization input residual and freshly generated BF16 layer-19 GEGLU output reproduce every retained ff2_19 parameter-gradient word under the already proved 128-sample matmul reduction.",
+  "id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T055603Z_52a69ff065": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T055603Z_52a69ff065.json",
+        "sha256": "sha256:17ea2d341daefac41f349b69ebe1af22746d5f884479d1c4cdb0676b02465346",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_64_q0_v1.json",
+      "sha256": "sha256:823c32efb4fadb3c26860cea76e4774d9bd26adffe6ae08d22bdf874ad71efa9"
+    },
+    "interfaces_exposed": [
+      "exact centered top-layer residual plus open GEGLU output -> complete ff2_19 parameter gradient"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+    "proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_v1",
+    "retired_neighborhoods": [
+      "No FF2 activation-residual, GEGLU backward, teacher calculation, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "status": "candidate",
+  "verdict": "Authorize one immutable FF2-arithmetic retry that changes only the outer-product boundary, retains every inherited predicate, and must eliminate all 184 mismatches without tolerance."
+}
