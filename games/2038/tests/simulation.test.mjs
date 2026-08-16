@@ -183,17 +183,18 @@ test("Scientific Method charges only when its protection is actually consumed", 
   };
 
   const used = await createImperialMatch("used");
+  used.players[0].researchProtection = 0;
   used.resolveTrainingRun = () => ({
     capability: 0,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 1,
+    researchProtectionSpent: 1,
     scrutiny: 0
   });
   used.applyResolution(0, researchDecision);
   assert.equal(used.players[0].runway, 2);
   assert.equal(used.players[0].roundMetrics.scientificMethodUsed, true);
-  assert.equal(used.players[0].safety, 0);
+  assert.equal(used.players[0].researchProtection, 0);
   assert.deepEqual(
     used.players[0].metrics.factionAbilityValues.scientific_method,
     {
@@ -212,26 +213,26 @@ test("Scientific Method charges only when its protection is actually consumed", 
     capability: 1,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 0,
+    researchProtectionSpent: 0,
     scrutiny: 0
   });
   unused.applyResolution(0, researchDecision);
   assert.equal(unused.players[0].runway, 3);
   assert.ok(!unused.players[0].roundMetrics.scientificMethodUsed);
 
-  const ordinarySafety = await createImperialMatch("ordinary-safety");
-  ordinarySafety.players[0].safety = 1;
-  ordinarySafety.resolveTrainingRun = () => ({
+  const ordinaryProtection = await createImperialMatch("ordinary-protection");
+  ordinaryProtection.players[0].researchProtection = 1;
+  ordinaryProtection.resolveTrainingRun = () => ({
     capability: 0,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 1,
+    researchProtectionSpent: 1,
     scrutiny: 0
   });
-  ordinarySafety.applyResolution(0, researchDecision);
-  assert.equal(ordinarySafety.players[0].runway, 3);
-  assert.ok(!ordinarySafety.players[0].roundMetrics.scientificMethodUsed);
-  assert.equal(ordinarySafety.players[0].safety, 0);
+  ordinaryProtection.applyResolution(0, researchDecision);
+  assert.equal(ordinaryProtection.players[0].runway, 3);
+  assert.ok(!ordinaryProtection.players[0].roundMetrics.scientificMethodUsed);
+  assert.equal(ordinaryProtection.players[0].researchProtection, 0);
 });
 
 test("legal-decision adjustments do not mutate their generated decision", async () => {
@@ -273,11 +274,12 @@ test("Scientific Method scrutiny taxes validation without reducing Capability", 
     () => {}
   );
   const researcher = match.players[0];
+  researcher.researchProtection = 0;
   match.resolveTrainingRun = () => ({
     capability: 3,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 1,
+    researchProtectionSpent: 1,
     scrutiny: 0
   });
   match.applyResolution(0, {
@@ -434,7 +436,7 @@ test("Safety Laboratory programs publish realized ability value", async () => {
 
 });
 
-test("joint Mega-Cluster acceptance is unavailable after a partner spends its contribution", async () => {
+test("Mega-Cluster construction rejects another player's Facility", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -447,7 +449,7 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
   const partner = match.players[1];
   lead.runway = 2;
   lead.compute = 1;
-  lead.escalation = 1;
+  lead.programUses = 1;
   partner.runway = 1;
   partner.compute = 0;
   const frontier = match.board.find((tile) => tile.category === "frontier");
@@ -490,42 +492,46 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
   assert.equal(match.megaClusters.length, 0);
 });
 
-test("an earlier Mega-Cluster claims both hosts before a later partner acceptance", async () => {
+test("a stale Mega-Cluster selection cannot reuse a claimed solo host", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "mega-cluster-host-contention" },
     () => {}
   );
   match.round = 2;
   const lead = match.players[0];
-  const partner = match.players[1];
-  lead.runway = 2;
-  lead.compute = 1;
-  lead.escalation = 1;
-  partner.runway = 1;
-  partner.compute = 1;
+  lead.runway = 3;
+  lead.compute = 2;
+  lead.programUses = 1;
   const frontier = match.board.find((tile) => tile.category === "frontier");
   const adjacent = match.board.find((tile) =>
     tile.instanceId !== frontier.instanceId &&
     match.areAdjacent(frontier.instanceId, tile.instanceId)
   );
-  lead.facilities = [{
-    id: "contention-lead-host",
+  lead.facilities = [
+    {
+      id: "contention-lead-host",
+      tileId: frontier.instanceId,
+      category: frontier.category,
+      powered: false
+    },
+    {
+      id: "contention-second-host",
+      tileId: adjacent.instanceId,
+      category: adjacent.category,
+      powered: false
+    }
+  ];
+  lead.generators = [{
+    id: "contention-generator",
     tileId: frontier.instanceId,
-    category: frontier.category,
-    powered: false
-  }];
-  partner.facilities = [{
-    id: "contention-partner-host",
-    tileId: adjacent.instanceId,
-    category: adjacent.category,
-    powered: false
+    sourceId: "clean_infrastructure",
+    capacity: 3
   }];
   const decision = {
     actionId: "mega_cluster",
     parameters: {
-      partnerSeat: partner.seat,
       leftId: "contention-lead-host",
-      rightId: "contention-partner-host",
+      rightId: "contention-second-host",
       pieceId: lead.pieces[0].id,
       destinationId: frontier.instanceId
     }
@@ -534,27 +540,22 @@ test("an earlier Mega-Cluster claims both hosts before a later partner acceptanc
     match.megaClusterDecisionLocallyEligible(lead.seat, decision.parameters),
     true
   );
-  match.choose = async () => {
-    match.megaClusters.push({
-      id: "mega-earlier",
-      leadSeat: 2,
-      partnerSeat: null,
-      leftId: "earlier-other-host",
-      rightId: "contention-partner-host",
-      powered: false
-    });
-    return { decisionId: "mega_cluster_accept", parameters: {} };
-  };
+  match.megaClusters.push({
+    id: "mega-earlier",
+    leadSeat: 2,
+    leftId: "earlier-other-host",
+    rightId: "contention-second-host",
+    powered: false
+  });
 
   await match.applyEscalation([], lead.seat, "mega_cluster", decision);
 
   assert.equal(match.megaClusters.length, 1);
-  assert.equal(match.megaClusterHostsAvailable(["contention-partner-host"]), false);
-  assert.equal(lead.runway, 2);
-  assert.equal(lead.compute, 1);
-  assert.equal(partner.runway, 1);
-  assert.equal(partner.compute, 1);
-  assert.ok(lead.escalationsUsed.includes("mega_cluster"));
+  assert.equal(match.megaClusterHostsAvailable(["contention-second-host"]), false);
+  assert.equal(lead.runway, 3);
+  assert.equal(lead.compute, 2);
+  assert.equal(lead.programUses, 1);
+  assert.ok(!lead.escalationsUsed.includes("mega_cluster"));
 });
 
 test("shared contract supplies cap construction and Joint Venture termination requires Facility presence", async () => {
@@ -596,14 +597,14 @@ test("shared contract supplies cap construction and Joint Venture termination re
   assert.equal(player.jointVentures.some((venture) => venture.contractId === 1), false);
   assert.equal(partner.jointVentures.some((venture) => venture.contractId === 1), false);
 
-  player.escalation = 1;
+  player.programUses = 1;
   match.megaClusters = Array.from(
     { length: match.config.sharedSupply.megaClusterPairs },
     (_, index) => ({ id: `mega-${index + 1}` })
   );
   assert.deepEqual(match.legalEscalationResolutions(0, "mega_cluster"), []);
   await match.applyEscalation([], 0, "mega_cluster", { parameters: {} });
-  assert.equal(player.escalation, 1);
+  assert.equal(player.programUses, 1);
   assert.deepEqual(player.escalationsUsed, []);
 });
 
@@ -865,7 +866,7 @@ test("Scientific Method can be capped across the full game by a rules probe", as
     capability: 0,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 0,
+    researchProtectionSpent: 0,
     scrutiny: 1
   });
   const runwayBefore = player.runway;
@@ -930,11 +931,12 @@ test("faction progress probes alter only realized protected Research and discoun
     () => {}
   );
   const researcher = imperial.match.players[0];
+  researcher.researchProtection = 0;
   imperial.match.resolveTrainingRun = () => ({
     capability: 3,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 1,
+    researchProtectionSpent: 1,
     scrutiny: 0
   });
   imperial.match.applyResolution(0, {
@@ -964,12 +966,13 @@ test("faction progress probes alter only realized protected Research and discoun
   );
   const validatedResearcher = publicValidation.match.players[0];
   validatedResearcher.capability = 2;
+  validatedResearcher.researchProtection = 0;
   const mandateBeforeValidation = validatedResearcher.mandate;
   publicValidation.match.resolveTrainingRun = () => ({
     capability: 1,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 1,
+    researchProtectionSpent: 1,
     scrutiny: 0
   });
   publicValidation.match.applyResolution(0, {
@@ -1010,7 +1013,7 @@ test("faction progress probes alter only realized protected Research and discoun
     capability: 1,
     trust: 0,
     runwaySpent: 0,
-    safetySpent: 0,
+    researchProtectionSpent: 0,
     scrutiny: 0
   });
   unprotectedValidation.match.applyResolution(0, {
@@ -1090,7 +1093,7 @@ test("the legacy pre-promotion overlay reproduces retained historical defaults",
   assert.equal(match.rulesVariant.verticalIndustrialVelocityMandate, 0);
 });
 
-test("Foundry Shovels observes two-Compute Escalations and respects its round cap", async () => {
+test("Foundry Shovels observes two-Compute Programs and respects its round cap", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -1107,7 +1110,7 @@ test("Foundry Shovels observes two-Compute Escalations and respects its round ca
   match.cycle = 1;
   spender.runway = 3;
   spender.compute = 2;
-  spender.escalation = 1;
+  spender.programUses = 1;
   spender.selectedAction = "escalation_mega_cluster";
   const frontier = match.board.find((tile) => tile.category === "frontier");
   const left = match.board.find((tile) =>
@@ -1352,7 +1355,10 @@ test("LLM decision packets expose the public table without simulation-only state
   assert.equal(opponent.profileId, undefined);
   assert.equal(packet.observation.publicTable.players[opponent.seat].objectiveId, undefined);
   assert.equal(packet.observation.publicTable.players[opponent.seat].tactics, undefined);
-  assert.equal(opponent.safety, match.players[opponent.seat].safety);
+  assert.equal(
+    opponent.researchProtection,
+    match.players[opponent.seat].researchProtection
+  );
   assert.deepEqual(opponent.pieces, match.players[opponent.seat].pieces);
   assert.ok(packet.observation.board.some((tile) =>
     tile.components.some((component) => component.id === opponentCeo.id)
@@ -1461,7 +1467,7 @@ test("Fusion consumes the single shared project marker", async () => {
   const first = match.players[0];
   const second = match.players[1];
   for (const player of [first, second]) {
-    player.escalation = 1;
+    player.programUses = 1;
     player.runway = 10;
     player.compute = 10;
   }
@@ -1480,7 +1486,7 @@ test("Frontier never contributes control to category Mandates", async () => {
   assert.equal(match.controlledCategories(match.players[0]).has("frontier"), false);
 });
 
-test("same-type immediate exchanges are legal and remain distinct from Deal Flow", async () => {
+test("immediate exchanges are exactly one-for-one across Runway and Compute", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 3, factionId: "coalition_lab", seed: "same-type-exchange" },
     () => {}
@@ -1491,16 +1497,20 @@ test("same-type immediate exchanges are legal and remain distinct from Deal Flow
   const partner = match.players[1];
   player.runway = 2;
   partner.runway = 1;
-  assert.ok(match.immediateTradeOffers(0, "before").some((offer) =>
-    offer.giveResource === "runway" && offer.receiveResource === "runway"
+  partner.compute = 1;
+  assert.ok(match.immediateTradeOffers(0, "before").every((offer) =>
+    offer.giveResource !== offer.receiveResource &&
+    offer.giveAmount === 1 &&
+    offer.receiveAmount === 1
   ));
   assert.equal(match.completeImmediateTrade(player.seat, partner.seat, {
+    timing: "before",
     partnerSeat: partner.seat,
     giveResource: "runway",
     giveAmount: 1,
     receiveResource: "runway",
     receiveAmount: 1
-  }), true);
+  }), false);
   assert.equal(player.runway, 2);
   assert.equal(partner.runway, 1);
   assert.equal(player.roundMetrics.dealFlowUsed, undefined);
@@ -1673,7 +1683,7 @@ test("removed Market Access cannot lower a Deploy requirement", async () => {
   assert.equal(player.customers, 1);
 });
 
-test("trade generation uses the receiver's Safety cap", async () => {
+test("Research Protection is never a tradable resource", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -1684,17 +1694,17 @@ test("trade generation uses the receiver's Safety cap", async () => {
   );
   const safetyLab = match.players[0];
   const ordinaryInstitution = match.players[1];
-  safetyLab.safety = 1;
-  ordinaryInstitution.safety = match.config.resources.safety.cap;
-
-  assert.ok(!match.tradableResources(
-    safetyLab,
-    ordinaryInstitution
-  ).includes("safety"));
-  assert.ok(match.tradableResources(
-    ordinaryInstitution,
-    safetyLab
-  ).includes("safety"));
+  safetyLab.runway = 1;
+  safetyLab.compute = 1;
+  ordinaryInstitution.runway = 1;
+  ordinaryInstitution.compute = 1;
+  assert.ok(match.config.resources.researchProtection);
+  for (const [giver, receiver] of [
+    [safetyLab, ordinaryInstitution],
+    [ordinaryInstitution, safetyLab]
+  ]) {
+    assert.deepEqual(match.tradableResources(giver, receiver).sort(), ["compute", "runway"]);
+  }
 });
 
 test("recruiting reuses the actual missing Team identity without duplicates", async () => {
@@ -1767,39 +1777,70 @@ test("AGI Dossier readiness is pure, diagnostic, and UI-ready", async () => {
   assert.equal(match.declarationReadiness(player).failingRequirement, "publication");
 });
 
-test("Prediction Bag requires two matching claimant tokens and names one winner", async () => {
+test("revealed Dossier payment eligibility reaches aggregate bookkeeping", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "dossier-eligibility-bookkeeping" },
+    () => {}
+  );
+  const player = match.players[0];
+  match.round = 4;
+  player.compute = 4;
+  player.agiDossier.choices = Object.fromEntries(
+    match.config.agiDossier.modules.map((module) => [module.id, "commit"])
+  );
+  for (const rival of match.players.slice(1)) {
+    rival.agiDossier.choices = Object.fromEntries(
+      match.config.agiDossier.modules.map((module) => [module.id, "hedge"])
+    );
+  }
+
+  match.revealAgiDossiers();
+
+  assert.deepEqual(player.metrics.earliestAgiEligibility, {
+    round: 4,
+    cycle: 1,
+    timing: "dossier_reveal"
+  });
+  assert.equal(player.agiDossier.eligible, true);
+  assert.equal(player.compute, 0);
+});
+
+test("the strongest supported Dossier claim deterministically overrides Mandate", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "agi-prediction-bag-resolution" },
     () => {}
   );
-  match.config.agiDossier.predictionBag.noAgiTokens = 0;
   const mandates = [18, 15, 12];
   for (const [seat, mandate] of mandates.entries()) match.players[seat].mandate = mandate;
-  const claimant = match.players[1];
-  claimant.capability = 12;
-  claimant.trust = 4;
-  claimant.agiClaimed = true;
-  claimant.agiDossier = {
-    choices: Object.fromEntries(
-      match.config.agiDossier.modules.map((module) => [module.id, "commit"])
-    ),
-    revealed: true,
-    fullyPaid: true,
-    eligible: true,
-    committedCount: 4,
-    computePaid: 4,
-    finalPoweredFacilities: 2,
-    claimTokens: 0
-  };
+  for (const player of match.players) {
+    player.agiDossier = {
+      choices: Object.fromEntries(
+        match.config.agiDossier.modules.map((module) => [module.id, "commit"])
+      ),
+      revealed: true,
+      fullyPaid: true,
+      eligible: true,
+      committedCount: 4,
+      computePaid: 4,
+      finalPoweredFacilities: player.seat < 2 ? 2 : 0
+    };
+  }
+  match.players[0].capability = 3;
+  match.players[0].trust = 4;
+  match.players[1].capability = 12;
+  match.players[1].trust = 4;
+  match.players[2].capability = 2;
+  match.players[2].trust = 1;
 
   match.resolveAgiOutcome();
 
   const resolution = match.matchMetrics.agiResolution;
+  assert.equal(resolution.method, "highest-supported-claim");
   assert.equal(resolution.emerged, true);
   assert.deepEqual(resolution.provisionalWinnerSeats, [0]);
-  assert.deepEqual(resolution.draws, [1, 1]);
-  assert.equal(resolution.strengths[0].tokens, 9);
   assert.equal(resolution.selectedSeat, 1);
+  assert.equal(resolution.strengths[0].strength, 8);
+  assert.ok(!Object.hasOwn(resolution, "draws"));
   assert.equal(match.players.filter((player) => player.agiDeclared).length, 1);
   assert.deepEqual(match.result().winnerSeats, [resolution.selectedSeat]);
 });
@@ -1905,7 +1946,7 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
   assert.ok(!("gridReady" in player.facilities[0]));
 });
 
-test("action selection excludes impossible commitments and labels trade-dependent choices", async () => {
+test("action selection excludes impossible commitments without trade-assisted legality", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "six-core-actions" },
     () => {}
@@ -1923,13 +1964,13 @@ test("action selection excludes impossible commitments and labels trade-dependen
 
   runtime.match.players[0].compute = 0;
   runtime.match.players[1].compute = 1;
+  for (const tile of runtime.match.board) {
+    if (tile.category === "cloud") tile.category = "media";
+  }
   selections = runtime.match.legalActionSelections(0)
     .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   const research = selections.find((decision) => decision.actionId === "research");
-  assert.equal(research.consequences.currentResolutionCount, 0);
-  assert.equal(research.consequences.resolvableWithoutTrade, false);
-  assert.equal(research.consequences.resolvableWithImmediateTrade, true);
-  assert.equal(research.consequences.status, "trade_required");
+  assert.equal(research, undefined);
 
   for (const opponent of runtime.match.players.slice(1)) opponent.compute = 0;
   selections = runtime.match.legalActionSelections(0)
@@ -1937,7 +1978,7 @@ test("action selection excludes impossible commitments and labels trade-dependen
   assert.equal(selections.some((decision) => decision.actionId === "research"), false);
 
   runtime.match.round = 2;
-  runtime.match.players[0].escalation = 1;
+  runtime.match.players[0].programUses = 1;
   const megaCluster = runtime.match.legalActionSelections(0).find(
     (decision) => decision.actionId === "mega_cluster"
   );
@@ -1948,12 +1989,12 @@ test("action selection excludes impossible commitments and labels trade-dependen
   runtime.match.commitEscalationSelection(player, "mega_cluster");
   player.selectedAction = "escalation_mega_cluster";
   await runtime.match.resolveSelectedSeat(runtime.policies, 0);
-  assert.equal(player.escalation, 0);
+  assert.equal(player.programUses, 0);
   assert.ok(player.escalationsUsed.includes("mega_cluster"));
   assert.equal(player.metrics.forcedNoOps, forcedNoOpsBefore + 1);
 });
 
-test("pre-Act offers preserve the selected action after the complete exchange", async () => {
+test("pre-Act offers cannot make the selected action illegal", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "preserve-selected-action" },
     () => {}
@@ -1968,7 +2009,7 @@ test("pre-Act offers preserve the selected action after the complete exchange", 
   partner.compute = 0;
   assert.deepEqual(
     match.immediateTradeGiveAmounts(0, partner, "compute"),
-    [1, 2]
+    [1]
   );
   assert.ok(match.immediateTradeDecisions(0, "before")
     .filter((decision) => decision.parameters?.giveResource === "compute")
@@ -1983,7 +2024,12 @@ test("pre-Act offers preserve the selected action after the complete exchange", 
     [1]
   );
   assert.ok(match.immediateTradeDecisions(0, "before")
-    .some((decision) => decision.parameters?.giveResource === "compute"));
+    .filter((decision) => decision.parameters)
+    .every((decision) => match.provisionalTradeResolvesSelection(
+      0,
+      decision.parameters,
+      "research"
+    )));
   partner.selectedAction = "research";
   partner.compute = 1;
   assert.deepEqual(
@@ -2026,7 +2072,6 @@ test("immediate trades skip impossible turns and package each offer", async () =
   for (const player of match.players) {
     player.runway = 0;
     player.compute = 0;
-    player.safety = 0;
   }
   const unavailablePolicies = match.players.map(() => ({
     async decide() {
@@ -2061,12 +2106,11 @@ test("immediate trades skip impossible turns and package each offer", async () =
   assert.equal(offer.partnerSeat, partner.seat);
   const resourcesBeforeTrade = match.players.map((candidate) => ({
     runway: candidate.runway,
-    compute: candidate.compute,
-    safety: candidate.safety
+    compute: candidate.compute
   }));
   assert.equal(await match.settleImmediateTrade(policies, player.seat, offer), true);
   assert.deepEqual(stages, ["immediate_trade_before", "immediate_trade_response"]);
-  for (const resource of ["runway", "compute", "safety"]) {
+  for (const resource of ["runway", "compute"]) {
     const dealFlowBonus = resource === "runway" && player.factionId === "coalition_lab" ? 1 : 0;
     assert.equal(
       player[resource],
@@ -2112,6 +2156,7 @@ test("Deal Flow can be paused without suppressing the underlying trade", async (
   partner.compute = 1;
 
   assert.equal(match.completeImmediateTrade(coalition.seat, partner.seat, {
+    timing: "before",
     partnerSeat: partner.seat,
     giveResource: "runway",
     giveAmount: 1,
@@ -2129,20 +2174,18 @@ test("Deal Flow can be paused without suppressing the underlying trade", async (
 test("immediate-trade packet ceiling is rule-derived and formal windows cannot repeat", async () => {
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount)),
-    [72, 108, 144, 180, 216]
+    [48, 72, 96, 120, 144]
   );
-  assert.deepEqual(
-    [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
-      counteroffers: true
-    })),
-    [96, 144, 192, 240, 288]
+  assert.throws(
+    () => immediateTradePacketCeiling(4, { counteroffers: true }),
+    /forbids counteroffers and claims/
   );
-  assert.deepEqual(
-    [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
+  assert.throws(
+    () => immediateTradePacketCeiling(4, {
       counteroffers: true,
       thirdPartyClaims: true
-    })),
-    [120, 216, 336, 480, 648]
+    }),
+    /forbids counteroffers and claims/
   );
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "immediate-trade-window-ledger" },
@@ -2155,10 +2198,10 @@ test("immediate-trade packet ceiling is rule-derived and formal windows cannot r
     /formal window repeated/
   );
   assert.equal(match.immediateTradePackets, 1);
-  assert.equal(match.immediateTradePacketCeiling, 144);
+  assert.equal(match.immediateTradePacketCeiling, 72);
 });
 
-test("counteroffer makers choose among simultaneous immediate-trade claimants", async () => {
+test("rejected immediate trades end without counteroffers or claims", async () => {
   const runtime = await createInteractiveGame(
     {
       playerCount: 4,
@@ -2172,30 +2215,21 @@ test("counteroffer makers choose among simultaneous immediate-trade claimants", 
   for (const player of match.players) {
     player.runway = 0;
     player.compute = 0;
-    player.safety = 0;
   }
   const active = match.players[0];
   const counterMaker = match.players[1];
-  const chosenClaimant = match.players[2];
   active.runway = 2;
   counterMaker.compute = 1;
-  chosenClaimant.runway = 1;
   const stages = [];
   const policies = match.players.map(() => ({
     async decide(packet) {
       const stage = packet.requestId.split(":").at(-2);
       stages.push(stage);
       const selected = stage === "immediate_trade_response"
-        ? packet.legalDecisions.find((decision) => decision.decisionId.startsWith("trade_counter_"))
-        : stage === "immediate_trade_claim"
-          ? packet.legalDecisions.find((decision) => decision.decisionId === "trade_claim_accept")
-          : stage === "immediate_trade_counterparty"
-            ? packet.legalDecisions.find((decision) =>
-              decision.decisionId === `trade_counterparty_${chosenClaimant.seat}`
-            )
-            : packet.legalDecisions.find((decision) =>
-              decision.decisionId.startsWith("trade_offer_")
-            );
+        ? packet.legalDecisions.find((decision) => decision.decisionId === "trade_reject")
+        : packet.legalDecisions.find((decision) =>
+          decision.decisionId.startsWith("trade_offer_")
+        );
       return {
         decision: { decisionId: selected.decisionId },
         receipt: { provider: "fixture" }
@@ -2204,75 +2238,34 @@ test("counteroffer makers choose among simultaneous immediate-trade claimants", 
   }));
   const offer = await match.chooseImmediateTrade(policies, active.seat, "before");
   assert.ok(offer);
-  assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), true);
+  assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), false);
   assert.deepEqual(stages, [
     "immediate_trade_before",
-    "immediate_trade_response",
-    "immediate_trade_claim",
-    "immediate_trade_claim",
-    "immediate_trade_counterparty"
+    "immediate_trade_response"
   ]);
   assert.equal(active.runway, 2);
-  assert.equal(chosenClaimant.runway, 0);
-  assert.equal(chosenClaimant.compute, 1);
-  assert.equal(counterMaker.compute, 0);
+  assert.equal(active.compute, 0);
+  assert.equal(counterMaker.runway, 0);
+  assert.equal(counterMaker.compute, 1);
 });
 
-test("a counteroffer can settle directly when third-party claims are disabled", async () => {
-  const runtime = await createInteractiveGame(
-    {
+test("counteroffer and third-party-claim overlays fail closed", async () => {
+  await assert.rejects(
+    createInteractiveGame({
       playerCount: 2,
-      seed: "direct-counteroffer",
-      rulesVariant: {
-        immediateTradeCounteroffers: true,
-        immediateTradeThirdPartyClaims: false
-      }
-    },
-    () => {}
+      seed: "forbidden-counteroffer",
+      rulesVariant: { immediateTradeCounteroffers: true }
+    }, () => {}),
+    /forbids counteroffers and claims/
   );
-  await runtime.match.setup(runtime.policies);
-  const match = runtime.match;
-  const active = match.players[0];
-  const counterMaker = match.players[1];
-  for (const player of match.players) {
-    player.runway = 0;
-    player.compute = 0;
-    player.safety = 0;
-  }
-  active.runway = 1;
-  counterMaker.compute = 1;
-  const stages = [];
-  const policies = match.players.map(() => ({
-    async decide(packet) {
-      const stage = packet.requestId.split(":").at(-2);
-      stages.push(stage);
-      const selected = stage === "immediate_trade_counter_response"
-        ? packet.legalDecisions.find(
-          (decision) => decision.decisionId === "trade_counter_accept"
-        )
-        : packet.legalDecisions.find(
-          (decision) => decision.parameters?.counterMakerSeat !== undefined
-        ) || packet.legalDecisions[0];
-      return {
-        decision: { decisionId: selected.decisionId },
-        receipt: { provider: "fixture" }
-      };
-    }
-  }));
-  const offer = {
-    timing: "before",
-    partnerSeat: counterMaker.seat,
-    giveResource: "runway",
-    giveAmount: 1,
-    receiveResource: "compute",
-    receiveAmount: 1
-  };
-  assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), true);
-  assert.deepEqual(stages, ["immediate_trade_response", "immediate_trade_counter_response"]);
-  assert.equal(active.runway, 1, "Coalition Deal Flow refunds its first completed trade");
-  assert.equal(active.compute, 1);
-  assert.equal(counterMaker.runway, 1);
-  assert.equal(counterMaker.compute, 0);
+  await assert.rejects(
+    createInteractiveGame({
+      playerCount: 2,
+      seed: "forbidden-claims",
+      rulesVariant: { immediateTradeThirdPartyClaims: true }
+    }, () => {}),
+    /forbids counteroffers and claims/
+  );
 });
 
 test("interactive games accept mixed per-opponent personas and decision backends", async () => {
@@ -3326,13 +3319,13 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   const second = await createSimulation(options);
   assert.deepEqual(first.seats, second.seats);
   assert.deepEqual(first.samples, second.samples);
-  assert.equal(first.scope.id, "three-to-five-profiles-v1");
+  assert.equal(first.scope.id, "nineteen-hex-simplified-v1");
   assert.ok(first.scope.excluded.includes("the deferred Tactic module"));
   assert.equal(first.schemaVersion, 6);
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.13.1");
+  assert.equal(first.game.version, "0.14.1");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3354,7 +3347,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.samples[0].replay.filter((event) =>
     event.type === "headline_revealed"
   ).length, 12);
-  assert.equal(first.samples[0].replay[0].state.board.length, 13);
+  assert.equal(first.samples[0].replay[0].state.board.length, 19);
   assert.equal(first.samples[0].replay.filter((event) =>
     event.type === "realignment_resolved"
   ).length, 0);
@@ -3805,7 +3798,7 @@ test("aggregate-only Monte Carlo runs do not require replay samples", async () =
     backends: ["greedy"]
   });
   assert.equal(report.samples.length, 0);
-  assert.equal(report.scope.id, "three-to-five-profiles-v1");
+  assert.equal(report.scope.id, "nineteen-hex-simplified-v1");
   assert.equal(report.seats.length, 3);
 });
 
@@ -3851,6 +3844,10 @@ test("strategy evolution and rule search return inspectable recommendations", as
   assert.equal(evolution.reportType, "strategy_evolution");
   assert.equal(evolution.history.length, 1);
   assert.equal(evolution.championProfile.id, "balanced_operator");
+  assert.equal(
+    evolution.history[0].evaluationSeed,
+    "evolution-contract:g:0:common"
+  );
 
   const search = await runExperiment({
     mode: "rule-search",
@@ -3910,7 +3907,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.13.1");
+  assert.equal(first.game.version, "0.14.1");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

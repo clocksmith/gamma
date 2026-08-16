@@ -1,19 +1,18 @@
 # ${content.worldCopy.title} — Component Reference
 
-Use this aid during setup and when a named component state appears. Printed Faction,
-Action, Escalation, Headline, Era, Mandate, Training, and Power cards own their
-exact text; resolve the printed card.
+Use this aid during setup and when a named component state appears. Printed
+Faction boards, Governance Board Era panels, map tiles, Core Actions, shared
+Programs, Headlines, Mandates, Training cards, Dossiers, and player aids own
+their exact text; resolve the matching printed surface.
 
 ## Deck contracts
 
-### Training deck: 50 cards
+### Training deck: 40 cards
 
-- Five copies of each of seven domains: 35
-- Three Curated Corpus
-- Three Licensed Dataset
-- Three Benchmark Leak
-- Three Synthetic Loop
-- Three Human Evaluation
+- Four copies of each of seven domains: 28
+- Four Curated Corpus
+- Four Benchmark Leak
+- Four Human Evaluation
 
 Discard every revealed card after a run. If the deck empties, resolve the
 current card, shuffle the discard, and continue.
@@ -23,6 +22,12 @@ current card, shuffle the discard, and continue.
 In Default Game, each Era deck contains every card for that Era without an
 **Advanced Play** badge. Reveal three each Era. Leave every resolved card face
 up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
+
+### Shared Program display
+
+Place all six Program cards face up. They are public rules surfaces, not player
+hands. Each player tracks use with two faction-coloured Program markers. A
+marker on a Program means that player has used that named Program this game.
 
 ### Deferred Tactic deck: 36 cards
 
@@ -37,53 +42,64 @@ Each faction receives:
 - Three Teams
 - Four Facilities, visibly numbered 1–4
 - One Generator
-- One integrated starting-grid identifier on the first Facility
+- One integrated starting-grid identifier on Facility 1; Facilities are
+  constructed in number order
 - Ten ${terms.playerTracks.scrutiny} cubes
-- One ${terms.playerTracks.customer} track marker
-- One Escalation track marker
+- One ${terms.playerTracks.mandate} marker
+- Six captive faction-board sliders: ${terms.resources.runway},
+  ${terms.resources.compute}, ${terms.playerTracks.capability},
+  ${terms.playerTracks.customers}, ${terms.playerTracks.trust}, and Research
+  Protection
+- Two Program markers
+- Two Links, used only in Advanced Play
 - Six Core Action cards
-- Six ${terms.systems.escalation} cards
-- Four Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs and Commit / Hedge orientations
-- One reusable Production and Era score sheet
+- Four Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs
+  and Commit / Hedge orientations
+- One four-panel foldout player aid
 
 Generators do not count against the Facility limit.
 
-Gain, spend, and lose Escalation availability on the faction-board track.
-
 The shared supply contains:
 
+- One Governance Board and nineteen district tiles
+- Six shared Program cards
 - ${facts.shared.components.jointVenturePairs} numbered matched Joint Venture token pairs
-- ${facts.shared.components.megaClusterPairs} numbered matched ${terms.technology.megaCluster} token pairs with a lead-side indicator
+- ${facts.shared.components.megaClusterPairs} numbered matched
+  ${terms.technology.megaCluster} token pairs
 - One dedicated ${terms.technology.advancedGeneration} marker; it is a single
-  shared project and is removed from the supply once any player constructs it
+  shared project and leaves the supply once constructed
 - Eighteen Systemic Risk cubes
+- Thirty-six silver Power cubes
+- Two distinct Temporary Compute tokens
 - One opaque Audit bag
 - One Initiative marker
+- One Current Era marker
+- One writable Current Mandate ledger on the Governance Board and one shared
+  fine-tip dry-erase marker
+- Six Advanced Play Realignment ballots and one Volatility die
 
-Unused contract tokens cannot be reserved; create agreements only while a
-matched pair is available.
+Unused contract tokens cannot be reserved; create a Joint Venture or
+Mega-Cluster only while a matched pair is available.
 
 ## Defined markers and effects
 
-- **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your cubes from the Audit
-  bag to your supply. If fewer are present, remove as many as possible.
-- **Powered Facility:** mark Power allocation only through the current
-  Production. At the end of Production, record the Era, final Power supply,
-  total Power demand satisfied, and the powered and offline numbered Facility
-  identities in the latest Production snapshot on the score sheet. Total demand
-  satisfied includes powered Facilities and the additional demand paid for
-  active Mega-Clusters. Remove the temporary physical indication after that
-  record is made. The latest snapshot governs Mandates, the Dossier,
-  powered-Facility Headlines, and final offline penalties until the next
-  Production.
-- **Era scoring record:** during each Era, record Capability gained, Customers
-  gained, Runway gained through Fund, new Joint Ventures active during
-  Production, whether Deploy was completed, the best successful Training Run’s
-  unique domains, Compute produced during Production, and Scrutiny added. These
-  public fields resolve the Era Mandates without memory or private notes.
-- **Dossier orientation:** place the current Era card face down with its arrow
-  toward the table center for Commit or toward its owner for Hedge. Never
+- **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your
+  cubes from the Audit bag to your supply. If fewer are present, remove as many
+  as possible.
+- **Research Protection:** refresh to one at Era start; Orisonix refreshes to
+  two. Spend one when a duplicate appears to discard it and bank the run. It is
+  not a tradeable resource.
+- **Latest Production snapshot:** during Allocate, remove the prior snapshot,
+  then place one Power cube on each powered Facility and one per satisfied unit
+  of Mega-Cluster demand. Leave every cube in place until the next Allocate.
+  Built Facilities without cubes are offline. This visible snapshot governs
+  Mandates, the Dossier, powered-Facility Headlines, and final penalties.
+- **Current Mandate ledger:** after revealing the Era Mandate, write its
+  criterion and minimum. Use one public row per faction to retain only the
+  value that card asks the table to count. Reset this-Era values; evaluate
+  current-state criteria when scored.
+- **Dossier orientation:** place the current Era's Dossier face down with its
+  arrow toward the table center for Commit or toward its owner for Hedge. Never
   inspect a filed card before the Era IV reveal.
-- **${terms.infrastructure.power} offline recovery:** reassess every Production.
-- **${terms.systems.headline} offline recovery:** ends when the ${terms.systems.headline} states, normally next
-  Production.
+- **Offline recovery:** reassess Power and, in Advanced Play, Network
+  connectivity every Production. Facilities never flip.

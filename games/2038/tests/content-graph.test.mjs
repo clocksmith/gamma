@@ -152,7 +152,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.deepEqual(variables.terms.resources, {
     runway: "Runway",
     compute: "Compute",
-    safety: "Safety"
+    researchProtection: "Research Protection"
   });
   assert.deepEqual(variables.terms.playerTracks, {
     capability: "Capability",
@@ -240,7 +240,7 @@ test("Mandate cards own their exact text while the Default book owns scoring tim
   assert.match(rules, /Score the Mandate/);
 });
 
-test("Card Reference projects every other required card surface", async () => {
+test("Card and Board Reference projects every other required card surface", async () => {
   const [factionDocument, escalationDocument, referenceDocument, config, cardReference] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/escalations.json"),
@@ -262,17 +262,49 @@ test("Card Reference projects every other required card surface", async () => {
   for (const escalation of escalationDocument.escalations) {
     assert.ok(cardReference.includes(escalation.name));
     assert.ok(cardReference.includes(escalation.text));
+    assert.ok(cardReference.includes(`**Unlock:** Era ${escalation.unlockedRound}`));
   }
   for (const era of referenceDocument.eraCards) {
+    assert.equal(era.physicalSurface, "governance_board");
     assert.ok(cardReference.includes(era.rulesText));
     assert.ok(cardReference.includes(era.unlockText));
   }
+  assert.match(cardReference, /## Governance Board Era panels/);
+  assert.match(cardReference, /## Four-panel player aid/);
+  assert.match(cardReference, /## Printed Power contracts/);
+  assert.match(cardReference, /there are no separate Power Source cards/);
+  for (const reference of referenceDocument.playerReferences) {
+    for (const line of [...reference.frontText, ...reference.backText]) {
+      assert.ok(cardReference.includes(line), `foldout projects ${reference.id}: ${line}`);
+    }
+  }
+  assert.deepEqual(
+    referenceDocument.playerReferences.map((reference) => [
+      reference.physicalSurface,
+      reference.panel
+    ]),
+    [
+      ["foldout_player_aid", 1],
+      ["foldout_player_aid", 2],
+      ["foldout_player_aid", 3],
+      ["foldout_player_aid", 4]
+    ]
+  );
+  const eraThree = referenceDocument.eraCards.find((era) => era.id === "era_narrative");
+  assert.match(eraThree.unlockText, /Joint Ventures/);
+  assert.match(eraThree.unlockText, /Advanced Play adds one Production Power request/);
   for (const action of config.actions) assert.ok(cardReference.includes(action.summary));
-  for (const training of config.trainingDeck.cards) assert.ok(cardReference.includes(training.flavorText));
-  for (const source of config.powerSources) assert.ok(cardReference.includes(source.publicClaim));
+  for (const training of config.trainingDeck.cards) {
+    assert.ok(cardReference.includes(training.rulesText));
+    assert.ok(cardReference.includes(training.flavorText));
+  }
+  for (const source of config.powerSources) {
+    assert.ok(cardReference.includes(source.rulesText));
+    assert.ok(cardReference.includes(source.publicClaim));
+  }
 });
 
-test("Era cards are the single source for the world-companion escalation lore", async () => {
+test("Era panel data is the single source for the world-companion escalation lore", async () => {
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const worldSource = await readFile(
@@ -290,7 +322,7 @@ test("Era cards are the single source for the world-companion escalation lore", 
   }
 });
 
-test("retained signature programs project concrete continuity institutions", async () => {
+test("retained signature abilities project concrete continuity institutions", async () => {
   const [factionsDocument, mandatesDocument, bible] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
@@ -385,17 +417,18 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.doesNotMatch(rules, /adds 1 additional Runway/);
 
   assert.match(mapReference, /## Build the jurisdiction/);
-  assert.match(mapReference, /Each public\s+district touches exactly two operational districts/);
+  assert.match(mapReference, /Every outer district touches its two outer neighbors/);
+  assert.match(mapReference, /either one or two\s+inner districts/);
   assert.match(mapReference, /## District effects/);
-  assert.match(componentReference, /### Training deck: 50 cards/);
+  assert.match(componentReference, /### Training deck: 40 cards/);
   assert.match(componentReference, /integrated starting-grid identifier/);
   assert.match(componentReference, /## Defined markers and effects/);
   assert.match(advanced, /## Connected infrastructure/);
   assert.match(advanced, /## Immediate resource trades/);
-  assert.match(advanced, /## Production Power requests/);
+  assert.match(advanced, /## Production Power request/);
   assert.match(advanced, /## Headline procedures/);
   assert.match(advanced, /## Era III Jurisdictional Realignment/);
-  assert.match(advanced, /every card for its Era, including cards with an\s+\*\*Advanced Play\*\* badge/);
+  assert.match(advanced, /and every\s+Advanced-badged Headline to its matching Era packet/);
 
   assert.match(world, /## The jurisdiction/);
   assert.doesNotMatch(world, /\*\*Interpretation\.\*\*/);
@@ -409,13 +442,14 @@ test("Default Rules are compact while every moved authority has one table surfac
   const references = await readJson("dist/runtime/reference-cards.json");
   const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
   const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
-  assert.match(mandateReference.backText.join("\n"), /Draw two without replacement/);
+  assert.match(mandateReference.backText.join("\n"), /Highest strength wins/);
+  assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
   assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock:\*\* Era 3; passive/);
   assert.match(cardReference, /Allocation Window[\s\S]*Unlock:\*\* Era 2; once when unlocked/);
   assert.match(cardReference, /Advanced Play only: requires the public Headline-procedure module/);
-  assert.match(cardReference, /Each Faction program unlocks at the Era printed on its board/);
+  assert.match(cardReference, /Each Faction ability unlocks at the Era printed on its board/);
   assert.match(cardReference, /latest Production snapshot/);
 
   for (const tactic of tacticDocument.tactics) {
@@ -441,7 +475,7 @@ test("numeric typography preserves exact card digits while prose may spell numbe
     headlines.find((headline) => headline.id === "ten_dollar_intelligence").text,
     /adds 1 additional/
   );
-  assert.match(mapReference, /CEO: two presence/);
+  assert.match(mapReference, /CEO, Team, or Facility: one presence/);
 });
 
 test("fictional institution identities are canonical across generated game surfaces", async () => {
@@ -473,7 +507,10 @@ test("fictional institution identities are canonical across generated game surfa
   );
   assert.ok(factions.factions.every((faction) => !("historicalReference" in faction)));
   assert.match(rules, /All Factions and CEOs are fictional/);
-  for (const name of expectedNames) assert.ok(!rules.includes(name));
+  assert.ok(rules.includes("Orisonix"), "the rules state the exceptional Research Protection refresh");
+  for (const name of expectedNames.filter((name) => name !== "Orisonix")) {
+    assert.ok(!rules.includes(name));
+  }
   for (const identity of formerIdentities) {
     assert.ok(!rules.includes(identity), `generated rules omit former identity ${identity}`);
   }

@@ -85,7 +85,7 @@ function createPlayer(
     capability: starts.capability,
     customers: starts.customers,
     trust: starts.trust,
-    safety: starts.safety,
+    researchProtection: starts.researchProtection,
     mandate: 0,
     scrutiny: starts.scrutiny,
     actionsUsed: [],
@@ -237,7 +237,7 @@ export class CoreEconomyMatch {
       capability: player.capability,
       customers: player.customers,
       trust: player.trust,
-      safety: player.safety,
+      researchProtection: player.researchProtection,
       mandate: player.mandate,
       scrutiny: player.scrutiny,
       actionsUsed: [...player.actionsUsed],
@@ -292,7 +292,7 @@ export class CoreEconomyMatch {
         capability: player.capability,
         customers: player.customers,
         trust: player.trust,
-        safety: player.safety,
+        researchProtection: player.researchProtection,
         scrutiny: player.scrutiny,
         facilities: player.facilities.length,
         generators: player.generators.length,
@@ -384,7 +384,7 @@ export class CoreEconomyMatch {
     );
   }
 
-  legalResolutions(seat, actionId) {
+  legalResolutions(seat, actionId, { skipAffordability = false } = {}) {
     const player = this.players[seat];
     const variants = this.movementVariants(player, (piece, destination) => {
       const base = {
@@ -419,24 +419,22 @@ export class CoreEconomyMatch {
         ];
       }
 
-      if (actionId === "research" && player.compute >= 1) {
-        return [2, 3, 4, 5, 6, 7].map((stopAt) => ({
-          decisionId: `research_stop_${stopAt}_${suffix}`,
+      if (actionId === "research") {
+        return [{
+          decisionId: `research_${suffix}`,
           label: renderSimulationCopy(simulationCopy.decisions.moveAndResearch, {
             piece: piece.id,
-            destination: destination.name,
-            stopAt
+            destination: destination.name
           }),
           actionId,
-          parameters: { ...base, stopAt },
-          consequences: { compute: -1, stopAt }
-        }));
+          parameters: { ...base },
+          consequences: { compute: -1 }
+        }];
       }
 
       if (actionId === "build") {
         const decisions = [];
         if (
-          player.runway >= 2 &&
           player.facilities.length < this.config.playerSupply.facilities &&
           FACILITY_CATEGORIES.has(destination.category) &&
           this.tileOccupancy(destination.instanceId) <
@@ -462,7 +460,7 @@ export class CoreEconomyMatch {
           const source = locationRule && this.config.powerSources.find(
             (candidate) => candidate.id === locationRule.sourceId
           );
-          if (source && locationRule.constructionCost <= player.runway) {
+          if (source) {
             decisions.push({
               decisionId: `build_generator_${source.id}_${suffix}`,
               label: renderSimulationCopy(simulationCopy.decisions.moveAndBuildPower, {
@@ -498,7 +496,6 @@ export class CoreEconomyMatch {
 
       if (actionId === "deploy" && this.canDeploy(player)) {
         const computeCost = destination.category === "consumer" ? 0 : 1;
-        if (player.compute < computeCost) return [];
         return [{
           decisionId: `deploy_${destination.category}_${suffix}`,
           label: renderSimulationCopy(simulationCopy.decisions.moveAndDeploy, {
@@ -546,7 +543,12 @@ export class CoreEconomyMatch {
 
       return [];
     });
-    return variants;
+    if (skipAffordability) return variants;
+    return variants.filter((decision) => {
+      const runwayCost = Math.max(0, -(decision.consequences?.runway || 0));
+      const computeCost = Math.max(0, -(decision.consequences?.compute || 0));
+      return player.runway >= runwayCost && player.compute >= computeCost;
+    });
   }
 
   recordPolicyReceipt(player, receipt) {
@@ -613,7 +615,8 @@ export class CoreEconomyMatch {
       if (parameters.mode === "venture") this.addScrutiny(player, 2);
     } else if (decision.actionId === "research") {
       player.compute -= 1;
-      const result = this.resolveTrainingRun(seat, player, parameters);
+      const result = parameters.trainingResult ||
+        this.resolveTrainingRun(seat, player, parameters);
       player.lastTrainingResult = result;
       this.addResource(player, "capability", result.capability);
       this.addResource(player, "trust", result.trust);
@@ -621,7 +624,10 @@ export class CoreEconomyMatch {
         cause: "research_training",
         conversionEligible: true
       });
-      player.safety -= result.safetySpent;
+      player.researchProtection -= Math.min(
+        player.researchProtection,
+        result.researchProtectionSpent
+      );
       this.addScrutiny(player, result.scrutiny);
       player.metrics.researchCapability.push(result.capability);
     } else if (decision.actionId === "build") {
@@ -683,8 +689,8 @@ export class CoreEconomyMatch {
       `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:training`,
       {
         stopAt: parameters.stopAt,
-        runway: player.runway,
-        safety: player.safety
+        researchProtection: player.researchProtection +
+          Number(parameters.destinationCategory === "research")
       }
     );
   }
@@ -725,7 +731,7 @@ export class CoreEconomyMatch {
     for (const facility of player.facilities.filter((candidate) => candidate.powered)) {
       const multiplier = 1;
       if (facility.category === "cloud") this.addResource(player, "compute", 2 * multiplier);
-      if (facility.category === "research") this.addResource(player, "safety", 1 * multiplier);
+      if (facility.category === "research") this.addResource(player, "compute", 1 * multiplier);
       if (facility.category === "consumer") this.addResource(player, "runway", 1 * multiplier);
       if (facility.category === "chip") this.addResource(player, "compute", 1 * multiplier);
       if (facility.category === "capital") this.addResource(player, "runway", 2 * multiplier);

@@ -147,6 +147,18 @@ function increment(target, key, amount = 1) {
   target[key] = (target[key] || 0) + amount;
 }
 
+function mergeAbilityTelemetry(target, source = {}) {
+  for (const [key, value] of Object.entries(source)) {
+    if (typeof value === "number") {
+      target[key] = (Number(target[key]) || 0) + value;
+    } else if (!(key in target)) {
+      target[key] = structuredClone(value);
+    } else if (target[key] !== value) {
+      target[key] = [...new Set([].concat(target[key], value))];
+    }
+  }
+}
+
 function normalizedEntropy(counts) {
   const values = Object.values(counts).filter((value) => value > 0);
   const total = values.reduce((sum, value) => sum + value, 0);
@@ -206,6 +218,12 @@ export function configurationOutcomeBalanceChecks({
 }) {
   const definitions = [
     {
+      id: "seat_win_share_range",
+      read: (outcomes) => outcomes.seatWinShareRange,
+      operator: "max",
+      threshold: thresholds.seatWinShareRangeMax
+    },
+    {
       id: "faction_win_share_range",
       read: (outcomes) => range(
         Object.values(outcomes.factionStandings || {})
@@ -214,6 +232,12 @@ export function configurationOutcomeBalanceChecks({
       ),
       operator: "max",
       threshold: thresholds.factionWinShareRangeMax
+    },
+    {
+      id: "profile_win_share_range",
+      read: (outcomes) => outcomes.profileWinShareRange,
+      operator: "max",
+      threshold: thresholds.profileWinShareRangeMax
     },
     {
       id: "action_entropy",
@@ -667,6 +691,50 @@ function cooperationSummary(observations) {
   };
 }
 
+function recordStandingTotal(target, id, standing, rank, winCredit) {
+  const totals = target[id] || {
+    appearances: 0,
+    winCredit: 0,
+    mandate: 0,
+    rank: 0,
+    auditHits: 0,
+    forcedNoOps: 0
+  };
+  totals.appearances += 1;
+  totals.winCredit += winCredit;
+  totals.mandate += standing.score || 0;
+  totals.rank += rank;
+  totals.auditHits += standing.auditHits || 0;
+  totals.forcedNoOps += standing.forcedNoOps || 0;
+  target[id] = totals;
+}
+
+function summarizeStandingTotals(totalsById) {
+  return Object.fromEntries(
+    Object.entries(totalsById).map(([id, totals]) => [
+      id,
+      {
+        appearances: totals.appearances,
+        winShare: totals.appearances
+          ? totals.winCredit / totals.appearances
+          : 0,
+        meanMandate: totals.appearances
+          ? totals.mandate / totals.appearances
+          : 0,
+        meanRank: totals.appearances
+          ? totals.rank / totals.appearances
+          : 0,
+        meanAuditHits: totals.appearances
+          ? totals.auditHits / totals.appearances
+          : 0,
+        meanForcedNoOps: totals.appearances
+          ? totals.forcedNoOps / totals.appearances
+          : 0
+      }
+    ])
+  );
+}
+
 function outcomeSummary(observations) {
   const mandateSources = {};
   const actionCounts = {};
@@ -697,6 +765,8 @@ function outcomeSummary(observations) {
   const factionActionSelections = {};
   const factionMandateSources = {};
   const factionStandingTotals = {};
+  const profileStandingTotals = {};
+  const seatStandingTotals = {};
   let declarations = 0;
   let agiEmergence = 0;
   let openContinuity = 0;
@@ -749,21 +819,28 @@ function outcomeSummary(observations) {
       requiredTradeFailures += standing.requiredTradeFailures || 0;
       blockedAfterCommitment += standing.blockedAfterCommitment || 0;
       fallbacks += standing.policyFallbacks || 0;
-      const standingTotals = factionStandingTotals[standing.factionId] || {
-        appearances: 0,
-        winCredit: 0,
-        mandate: 0,
-        rank: 0,
-        auditHits: 0,
-        forcedNoOps: 0
-      };
-      standingTotals.appearances += 1;
-      standingTotals.winCredit += winnerCredit.get(standing.seat) || 0;
-      standingTotals.mandate += standing.score || 0;
-      standingTotals.rank += index + 1;
-      standingTotals.auditHits += standing.auditHits || 0;
-      standingTotals.forcedNoOps += standing.forcedNoOps || 0;
-      factionStandingTotals[standing.factionId] = standingTotals;
+      const standingWinCredit = winnerCredit.get(standing.seat) || 0;
+      recordStandingTotal(
+        factionStandingTotals,
+        standing.factionId,
+        standing,
+        index + 1,
+        standingWinCredit
+      );
+      recordStandingTotal(
+        profileStandingTotals,
+        standing.profileId,
+        standing,
+        index + 1,
+        standingWinCredit
+      );
+      recordStandingTotal(
+        seatStandingTotals,
+        String(standing.seat),
+        standing,
+        index + 1,
+        standingWinCredit
+      );
       const actions = factionActionSelections[standing.factionId] || {};
       for (const [actionId, count] of Object.entries(standing.actions || {})) {
         actions[actionId] = (actions[actionId] || 0) + count;
@@ -860,9 +937,7 @@ function outcomeSummary(observations) {
         standing.factionAbilityValues || {}
       )) {
         const ability = faction[abilityId] || {};
-        for (const [key, value] of Object.entries(values)) {
-          ability[key] = (ability[key] || 0) + value;
-        }
+        mergeAbilityTelemetry(ability, values);
         faction[abilityId] = ability;
       }
       factionAbilityValues[standing.factionId] = faction;
@@ -878,29 +953,9 @@ function outcomeSummary(observations) {
       }
     }
   }
-  const factionStandings = Object.fromEntries(
-    Object.entries(factionStandingTotals).map(([factionId, totals]) => [
-      factionId,
-      {
-        appearances: totals.appearances,
-        winShare: totals.appearances
-          ? totals.winCredit / totals.appearances
-          : 0,
-        meanMandate: totals.appearances
-          ? totals.mandate / totals.appearances
-          : 0,
-        meanRank: totals.appearances
-          ? totals.rank / totals.appearances
-          : 0,
-        meanAuditHits: totals.appearances
-          ? totals.auditHits / totals.appearances
-          : 0,
-        meanForcedNoOps: totals.appearances
-          ? totals.forcedNoOps / totals.appearances
-          : 0
-      }
-    ])
-  );
+  const factionStandings = summarizeStandingTotals(factionStandingTotals);
+  const profileStandings = summarizeStandingTotals(profileStandingTotals);
+  const seatStandings = summarizeStandingTotals(seatStandingTotals);
   const totalWinCredit = Object.values(winningPathAttributionTotals)
     .reduce((sum, path) => sum + path.winCredit, 0);
   const winningPathAttribution = Object.fromEntries(
@@ -990,10 +1045,18 @@ function outcomeSummary(observations) {
     factionWinShareRange: range(
       Object.values(factionStandings).map((standing) => standing.winShare)
     ),
+    profileWinShareRange: range(
+      Object.values(profileStandings).map((standing) => standing.winShare)
+    ),
+    seatWinShareRange: range(
+      Object.values(seatStandings).map((standing) => standing.winShare)
+    ),
     bindingRequirements,
     mandateSources,
     factionMandateSources,
     factionStandings,
+    profileStandings,
+    seatStandings,
     factionAbilityValues,
     factionActionSelections,
     agiFunnel,

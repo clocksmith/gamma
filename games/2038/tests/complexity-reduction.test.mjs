@@ -66,23 +66,25 @@ test("precision patch prints final Generator prices and consolidated state", asy
 
   assert.equal(
     locations.get("grid_reactor").visit,
-    "Build Emergency Power Complex here for 1 Runway."
+    "Build Emergency Power Complex here for 1 Runway. Capacity: 4 local Power. Add 1 Scrutiny each Production it operates. One ordinary Generator per player."
   );
   assert.equal(
     locations.get("renewable_basin").visit,
-    "Build Civic Heat Battery here for 2 Runway."
+    "Build Civic Heat Battery here for 2 Runway. Capacity: 3 local Power. Gain 1 Trust when constructed. No recurring penalty. One ordinary Generator per player."
   );
-  assert.match(mapReference, /Power Corridor \| Build Emergency Power Complex here for one Runway/);
-  assert.match(mapReference, /Thermal and Water Basin \| Build Civic Heat Battery here for two Runway/);
+  assert.match(mapReference, /Power Corridor \| Build Emergency Power Complex here for one Runway: capacity four local Power/);
+  assert.match(mapReference, /Thermal and Water Basin \| Build Civic Heat Battery here for two Runway: capacity three local Power/);
   assert.doesNotMatch(mapReference, /Infrastructure Build costs one less/);
   assert.doesNotMatch(mapReference, /Civic Heat Battery costs one less/);
 
   assert.match(coreRules, /four\s+Facilities/);
-  assert.match(coreRules, /one persistent institutional identity and one\s+signature program/);
+  assert.match(coreRules, /one persistent institutional identity and one\s+signature ability/);
   assert.doesNotMatch(coreRules, /Escalation token/);
   assert.match(componentReference, /\n- Four Facilities, visibly numbered 1–4\n/);
   assert.doesNotMatch(componentReference, /Grid-Ready/);
-  assert.match(componentReference, /Gain, spend, and lose Escalation availability/);
+  assert.match(componentReference, /Six shared Program cards/);
+  assert.match(componentReference, /Two Program markers/);
+  assert.doesNotMatch(componentReference, /private Program hand|Escalation slider/);
 
   const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
   const vertical = factions.factions.find((faction) => faction.id === "vertical_empire");
@@ -234,6 +236,39 @@ test("single-generator allocation cannot spend dedicated grid Power elsewhere", 
   assert.equal(canAllocateLocalPower({
     ...common,
     selectedFacilityIds: ["local-a", "local-b", "local-c"]
+  }), false);
+});
+
+test("Default purchased Power remains bound to its named buyer Facility endpoint", () => {
+  const board = [
+    { instanceId: "first-tile", q: 0, r: 0 },
+    { instanceId: "buyer-tile", q: 1, r: 0 },
+    { instanceId: "other-tile", q: 0, r: 1 }
+  ];
+  const player = {
+    facilities: [
+      { id: "first", tileId: "first-tile" },
+      { id: "buyer", tileId: "buyer-tile" },
+      { id: "other", tileId: "other-tile" }
+    ]
+  };
+  const common = {
+    board,
+    player,
+    connectedGenerators: [],
+    startingGridPower: 1,
+    importedPower: 0,
+    importedFacilityIds: ["buyer"],
+    supplementalPower: 0,
+    exportedPower: 0
+  };
+  assert.equal(canAllocateLocalPower({
+    ...common,
+    selectedFacilityIds: ["first", "buyer"]
+  }), true);
+  assert.equal(canAllocateLocalPower({
+    ...common,
+    selectedFacilityIds: ["first", "other"]
   }), false);
 });
 

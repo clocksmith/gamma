@@ -74,7 +74,7 @@ export function validatePlayerProfile(profile) {
       profile.strategy.resourceValues,
       `Player profile ${profile.id} resourceValues`
     );
-    for (const resource of ["runway", "compute", "safety"]) {
+    for (const resource of ["runway", "compute", "researchProtection"]) {
       if (!(profile.strategy.resourceValues[resource] > 0)) {
         throw new TypeError(
           `Player profile ${profile.id} resource value for ${resource} must be positive.`

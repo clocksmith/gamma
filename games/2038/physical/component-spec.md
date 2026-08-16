@@ -1,15 +1,14 @@
 # Component specification
 
-This is the canonical physical-form record for Mandate 2038. It specifies
-what players manipulate and how a component expresses state. It does not
-replace mechanical quantities or rules in `content/data/game-config.json`.
+This is the canonical physical-form record for Mandate 2038. It specifies what
+players manipulate and how components express state. Mechanical quantities and
+limits remain authoritative in `content/data/game-config.json`.
 
 ## Colour allocation
 
 The six saturated RGB colours are reserved for player ownership. Every CEO,
-Team, Facility, Generator, Scrutiny cube, and player track
-marker uses its faction's colour. No shared or neutral component uses one of
-these six colours.
+Team, Facility, Generator, Scrutiny cube, Mandate marker, and ballot accent uses
+its faction's colour.
 
 | Faction | Ownership colour | Hex value |
 | --- | --- | --- |
@@ -20,150 +19,220 @@ these six colours.
 | Orisonix | Cyan | `#00e5ff` |
 | Corthaven | Yellow | `#ffea00` |
 
-Shared and neutral components use black, white, clear/translucent material,
-or metallic gold, silver, and bronze. Gold can denote a singular public
-distinction, silver ordinary shared infrastructure, and bronze a persistent
-shared project. Material or finish never creates an additional rules state.
+Shared components use black, white, clear or translucent material, or metallic
+gold, silver, and bronze. Finish never creates an additional rules state.
 
 ## Selected prototype vocabulary
 
-| Gameplay object | Physical role | Current prototype form | State encoding |
+| Gameplay object | Physical role | Selected form | State encoding |
 | --- | --- | --- | --- |
-| Shared Governance Board | Shared public dashboard and modular map frame | Rigid foldable board with recessed tile wells, card rails, and marked public-state bays | Tile positions, Era order, Headline history, Mandate, Initiative, contracts, Power references, and supply staging |
-| Faction board | One player’s dashboard | Dedicated board or thick player mat | Printed tracks, ability, action slots, and faction supply areas |
-| CEO | Movable acting piece; two presence | Large faction-coloured pawn | Position on a district |
-| Team | Movable acting piece; one presence | Small faction-coloured pawn | Position on a district |
-| Facility | Stationary institutional site | Faction-coloured building/node piece visibly numbered 1–4 | Stable printed Facility ID and board position |
-| Generator | Stationary Power source | Distinct faction-coloured power-node piece | Position; its Energy district determines clean or emergency source |
-| Scrutiny | Exposure in the Audit bag | Small faction-coloured cube | In owner supply or Audit bag |
-| Systemic Risk | Shared Audit danger | Black Audit piece with the same concealed feel as Scrutiny | Audit bag or shared supply |
-| Customer | Acquired demand | One marker on the faction-board Customer track | Customer track position from zero through five |
-| Runway, Compute, Capability, Trust, and Safety | Scalar player state | Tokens or markers on the faction board | Count or track position |
-| Mandate | Public score | One marker per faction on the shared Mandate track | Shared-track position |
-| Starting grid | Dedicated Power assigned to the first Facility | Integrated identifier on that first Facility | Attached / moved with its Facility |
-| Escalation | Permission to select an Escalation | One marker on the faction-board Escalation track | Zero to two currently available; unused permission expires each Era |
-| AGI Dossier | A hidden Era-by-Era institutional commitment | Four Era-labelled cards per faction with symmetrical backs | Face-down Commit / Hedge orientation; revealed together before the final Audit |
-| Prediction token | A claimant's contribution to final AGI resolution | Existing faction-coloured Scrutiny cube | Added only after Audit state is recorded; never counts as Scrutiny |
-| Joint Venture / Mega-Cluster | A named shared project | Matched numbered token pair | Both host positions and pair number |
-| Initiative | Current resolution and tie order | One shared marker | Current holder |
-| Fusion Demonstrator | The unique advanced-generation project | One shared project marker | Grid position / unbuilt |
-| Link — Advanced Play | A Facility’s connection to its owner’s Network | Faction-coloured connector token | Attached to one Facility |
-| Network capacity — Advanced Play | Pooled connected Power | Player-board track marker | Current connected capacity |
-| Realignment — Advanced Play | One secret jurisdiction motion | Three ballot cards per player | Selected face down, then revealed |
-| Volatility — Advanced Play | Resolves a two-result Headline | One ordinary six-sided die | Printed result mapping |
-| Era, Headline, Mandate, Action, Escalation, Training, and Power Source | Information and choices | Cards | Face, orientation, and printed text |
-| Production and Era score sheet | Public retained state for scoring and later effects | One laminated sheet and fine-tip dry-erase marker per faction | Four Era rows plus one clearly boxed latest Production snapshot |
+| Governance Board | Shared map frame and public dashboard | One rigid folding board with tile wells, card rails, tracks, and a writable panel | Map geometry, Era, Timeline, Mandate, Initiative, contracts, current criterion, and final resolution |
+| Era | Progressive rules unlock | Four panels printed on the Governance Board plus one Current Era marker | Marker position; panel text is open information |
+| Faction board | One institution's dashboard | Thick dual-layer board with six captive sliders | Runway, Compute, Capability, Customers, Trust, and Research Protection |
+| Player aid | Turn and scoring reminder | One four-panel foldout per faction tray | Four authored aid topics in one object |
+| CEO | Movable acting piece; one presence | Large faction-coloured pawn | District position |
+| Team | Movable acting piece; one presence | Small faction-coloured pawn | District position |
+| Facility | Stationary institutional site | Faction-coloured node, visibly numbered 1–4 | Stable Facility ID and district position |
+| Generator | Stationary Power source | Distinct faction-coloured power node | Its Energy-tile position selects the printed contract |
+| Starting grid | Dedicated Power for Facility 1 | Identifier integrated into Facility 1 | Travels with that Facility |
+| Scrutiny | Exposure in the Audit bag | Small faction-coloured cube | Owner supply or Audit bag |
+| Systemic Risk | Shared Audit danger | Black piece matching Scrutiny's concealed feel | Audit bag or shared supply |
+| Mandate | Public institutional score | One faction-coloured marker per faction | Shared Mandate-track position |
+| Program marker | Per-Era exceptional action allowance and once-per-game use | Two faction-coloured markers per player | Available beside faction board or committed on one shared Program card |
+| Power allocation | Latest completed Production state | Thirty-six shared silver cubes | One on each powered Facility and one per satisfied Mega-Cluster demand until next Allocate |
+| Current Mandate ledger | Shared short-term counting aid and ending record | Writable panel integrated into Governance Board; one shared marker | Revealed criterion, six faction values, Setup Collective Trust, and final resolution |
+| AGI Dossier | Hidden Era-by-Era commitment | Four Era-labelled cards per faction, symmetrical backs | Face-down Commit or Hedge orientation |
+| Temporary Compute | Allocation Window capacity | Two distinct shared tokens | Current holder; returned at cycle end |
+| Joint Venture / Mega-Cluster | Named shared project | Matched numbered token pair | Host positions and pair number; Mega-Clusters have one owner |
+| Initiative | Resolution and tie order | One shared marker | Current holder |
+| Fusion Demonstrator | Unique advanced-generation project | One shared marker | Grid position or unbuilt supply |
+| Link — Advanced | Facility connection to its owner's Network | Faction-coloured connector token | Attached to one Facility |
+| Realignment — Advanced | Secret jurisdiction motion | One square four-way ballot per faction | Edge aimed toward board center while face down |
+| Volatility — Advanced | Two-result Headline resolver | One ordinary six-sided die | Printed result mapping |
+| Headline, Mandate, Action, Program, Training | Information and choices | Cards | Face, orientation, markers, and printed text |
+| Ordinary Power contract | Generator rules at point of construction | Printed in the Grid and Renewable tile visit boxes | Tile identity; no separate reference card |
 
-## Shared Governance Board
+## Governance Board
 
-The shared Governance Board is the table’s public control surface. It gives the
-modular map a stable frame and gives Era progression, public scoring, contracts,
-and retained Headline history dedicated positions. It does not replace the 13
-district tiles, faction boards, card decks, or Production and Era score sheets.
+The Governance Board is the table's public control surface. It organizes the
+modular map and shared state without replacing district tiles, faction boards,
+decks, or physical pieces.
 
-### Board zones
+### Map field
 
-| Zone | Physical provision | What remains visible there |
-| --- | --- | --- |
-| Modular map frame | One Frontier well, six inner-ring wells, and six outer-ring wells | The 13 district tiles and all pieces currently occupying them |
-| Era rail | Four upright Era-card positions | The current Era, prior Era cards, and each Era’s Headline deck position |
-| Headline row | One deck/discard position beneath each Era | The current Headline and resolved Headlines for that Era |
-| Public-state rail | Mandate track and Initiative position | Every faction’s public Mandate and the current resolution order |
-| Future Timeline | Twelve numbered or sequential card positions | Every resolved Headline, kept face up after resolution |
-| Contract bays | Six matched Joint Venture bays and six matched Mega-Cluster bays | Active numbered pairs, host relationships, and lead-side indicators |
-| Advanced-generation bay | One Fusion Demonstrator position and three Power Source reference positions | Whether Fusion is unbuilt or constructed and the available Power contracts |
-| Audit and supply staging | Clearly labelled open areas beside the Audit bag | Scrutiny, Systemic Risk, unused contract pairs, and shared markers before use |
+- One fixed Frontier well at center.
+- Six inner operational-ring wells.
+- Twelve outer public-ring wells forming the complete radius-two hexagon.
+- Clear edge adjacency and clockwise direction.
+- Enough clearance for acting pieces, two Facilities, Generators, contract
+  tokens, Links, and retained Power cubes without obscuring district text.
 
-The operational and public ring wells must remain visually distinct, but no
-district name is permanently assigned to a well. The six operational tiles are
-shuffled among the inner wells and the six public tiles among the outer wells.
-The board’s geometry supplies the map; the tiles supply the district identity,
-visit bonus, Facility spaces, production, and control value.
+No district identity is printed in a ring well. Tile identity, visit text,
+production, Facility spaces, category, and ordinary Generator contract remain
+on the shuffled tile.
+
+### Era and card field
+
+Four printed Era panels run in order from I to IV. Each panel contains:
+
+- Era name and strapline;
+- ready / Program-marker / cycle / Audit summary;
+- complete **New this Era** unlock text;
+- one Headline-deck well;
+- one Mandate-deck well; and
+- three numbered Future Timeline positions.
+
+One pre-Era Start bay holds the Current Era marker during setup. The marker then
+moves along the four panels. The panels replace four Era
+cards; full Era fiction remains in the Card and Board Reference and World and
+Institutions companion.
+
+### Public-state field
+
+The board includes:
+
+- the shared Mandate track;
+- one Initiative position;
+- a Current Mandate ledger with spaces for the revealed name, criterion,
+  minimum, and one value per faction;
+- Setup Collective Trust;
+- final Collective Trust and unresolved Systemic Risk;
+- eligible Dossier claims and their strengths;
+- provisional and final institutional winner;
+- AGI Emerges / Does Not Emerge;
+- Open / Closed continuity; and
+- World Ending.
+
+The writable panel retains only state needed later. A resolved Mandate card
+stays face up in its Era panel as public history; prior per-player criterion
+values are not mechanically reused.
+
+### Contract and supply field
+
+Provide six shared Program-card positions, six numbered Joint Venture pair
+bays, six numbered Mega-Cluster pair bays, one Fusion bay, and open labelled staging for Power cubes, Temporary
+Compute, the Audit bag, Scrutiny, and Systemic Risk. The board has no Power
+Source reference slots. Emergency and Clean Infrastructure are printed on
+their Energy tiles; Fusion is printed on its shared Program card.
 
 ### Retention and materials
 
-Use recessed wells for district tiles and card rails or shallow wells for Era
-cards and Headlines. Low-profile magnetic retention may be used for the
-Initiative marker, Mandate markers, contract markers, and Era cards if a
-physical test confirms that pieces remain easy to move and their states remain
-unambiguous. Magnetic backing is not required for every card, tile, or resource.
+Use recessed tile wells and low card rails. Low-profile magnets may retain the
+Current Era, Initiative, Mandate, and contract markers only if physical testing
+shows that pieces remain easy to move and states remain unambiguous. Do not add
+magnets merely as decoration or use them to encode an unprinted state.
 
-The board must fold for storage, accept the complete 13-tile map without tile
-overlap, and leave enough clearance for CEO, Team, Facility, and Generator
-pieces to occupy a district. The final dimensions, fold pattern, material, and
-magnet specification remain manufacturing decisions; they do not change the
-rules or component limits.
+The ledger must erase cleanly after repeated use without allowing casual table
+contact to erase it. Its single fine-tip marker is shared and returns to a
+labelled board or insert channel.
 
-### Table organization
+## Faction board and tray
 
-The Governance Board holds public state and map-facing pieces. Use separate
-labelled trays around it for:
+Each faction board provides:
 
-- Training cards and their discard;
-- Era Mandate decks;
-- Runway, Compute, and Safety supplies;
-- unused CEOs, Teams, Facilities, and Generators;
-- unused Joint Venture and Mega-Cluster pairs; and
-- Scrutiny and Systemic Risk supplies.
+- faction identity, starts, scoring exception where applicable, and two
+  programs with exact unlock Era and timing;
+- six captive sliders for Runway, Compute, Capability, Customers, Trust, and
+  Research Protection;
+- two Program-marker wells and a compact once-per-game Program-use reminder;
+- six Core Action positions;
+- supply wells for the CEO, Teams, Facilities, Generator, Scrutiny, and
+  Mandate marker; and
+- a nearby Dossier filing edge with an unambiguous direction toward the board
+  center.
 
-The trays remain open and countable. The Audit bag is the only opaque supply.
-The board and trays must not introduce a second hidden state or require a
-private note to reconstruct a turn.
+Captive sliders must expose exact integer positions and resist accidental
+movement. They replace loose track markers; they do not alter caps. Advanced
+Network connectivity is read from the shared map and has no slider.
 
-## Faction board arrangement
+Each board and its faction-specific pieces, cards, and foldout aid are packed
+as one labelled tray. Advanced Link tokens and the Realignment ballot stay in
+the separate Advanced module so Default setup never asks a new player to sort
+unused systems.
 
-Each faction board remains a separate player station. Its visible areas should
-provide:
+## State encoding
 
-- a faction identity and ability panel;
-- Runway, Compute, Capability, Customer, Trust, Safety, and Escalation tracks;
-- six Core Action card slots and six Escalation card slots;
-- supply positions for the CEO, Teams, Facilities, and Generator; and
-- a clearly marked temporary Power area for the current Production.
+### Latest Production snapshot
 
-AGI Dossier cards remain face down beside or beneath the faction board. They do
-not go into a shared board slot, because their orientation is private until
-the final reveal.
+Power cubes do two jobs without changing meaning: they resolve the current
+Allocate step and remain as the latest completed Production snapshot.
 
-## Selected state-encoding decisions
+1. At the next Allocate step, collect every cube from the previous snapshot.
+2. Place one cube on each powered Facility.
+3. Place one cube on a Mega-Cluster for each additional unit of demand it
+   receives.
+4. Leave all those cubes in place through Produce, Partner, Dossier, Audit,
+   Mandate, later turns, and any intervening Headline.
 
-Customer count, Escalation availability, the starting-grid identity, and AGI
-Dossier choices are integrated into the listed components and faction-board
-tracks. They do not require separate state markers. The forms must remain
-legible when pieces occupy a crowded district;
-readability is a validation requirement, not an unresolved format choice.
+A built Facility without a cube is offline. The retained cubes govern
+powered-Facility Mandates and Headlines, the Deployment Dossier, and final
+offline penalties. They are not a permanent Power contract and are not carried
+through Realignment as a fresh eligibility calculation. They travel with their
+marked hosts as the previous snapshot; the next Production recalculates and
+replaces them.
 
-Facility 1 carries the integrated starting-grid identifier. Facility numbers
-remain attached to their pieces when those Facilities move. The score sheet’s
-latest Production snapshot records its Era, final Power supply, total demand
-satisfied, and the powered/offline status of Facilities 1–4. Its four Era rows
-also record every historical value named by an Era Mandate: Capability gained,
-Customers gained, Fund Runway gained, new Joint Ventures active in Production,
-Deploy completion, best successful Training Run unique domains, Compute
-produced during Production, and Scrutiny added. All entries are public.
+### Current Mandate ledger
 
-The following minor physical decisions remain open. They do not change rules or
-state limits:
+When a Mandate is revealed, erase the previous faction rows and write the new
+criterion and minimum. For a criterion that counts activity **this Era**, start
+each faction at zero or No and update only that value. For a current-state
+criterion, record the visible value at scoring. The printed Mandate remains the
+qualification and scoring authority.
 
-1. **Track implementation:** choose recessed boards with cubes, printed boards
-   with cubes, or integrated dials. Loose dials are excluded unless a player
-   board contains them.
-2. **Minor status pieces:** choose stock cubes, beads, or punchboard for
-   Initiative and Systemic Risk without changing their supply limits.
-3. **Material:** choose wood or cardboard only after the selected state
-   encoding, crowding, and blind-play readability have been tested.
+This one ledger replaces six four-Era score sheets. It retains the exact
+short-lived value players would otherwise have to remember without preserving
+unused historical arithmetic.
+
+### Dossier cards and folio gate
+
+The supported form remains four face-down Dossier cards per faction. Their
+symmetrical backs conceal Commit / Hedge orientation, and players may not
+inspect filed cards before the Era IV reveal.
+
+A reusable Dossier folio is a gated prototype, not a selected replacement. It
+may replace the cards only after a blind physical test proves all of the
+following:
+
+- the owner and opponents cannot read filed choices;
+- each Era's orientation survives movement, bumps, and storage;
+- prior choices cannot be reinspected while filing a later Era;
+- simultaneous final reveal is complete and unambiguous; and
+- setup and handling are measurably simpler than four cards.
+
+Until every condition passes, manufacture and rules counts remain twenty-four
+Dossier cards.
+
+### Realignment ballot
+
+The Advanced ballot is rotationally symmetric on its back. Its face prints one
+choice on each edge: Consolidate Core, Expand Periphery, Counter-Cycle, and
+Pass. All players orient and place their ballots face down before anyone
+reveals. Pass is equivalent to naming no motion. The physical redesign replaces
+three cards per player with one and changes no plurality or tie rule.
+
+## Packaging and setup order
+
+The insert has six faction trays, four Default Era packets, one Training deck
+well, one shared-component well, and one clearly separated Advanced module.
+The Era I–IV packets hold `5 / 4 / 3 / 4` Default Headlines respectively and
+three Mandates each. The Advanced module holds its eight badged Headlines
+sorted `1 / 2 / 3 / 2` by Era alongside Links, ballots, and the Volatility die.
+
+Labels must match the board's Era numerals and canonical component names. Trays
+and packets organize setup but create no hidden game state and need not remain
+on the table.
 
 ## Physical constraints
 
 - No component may conceal a district name, Facility slot, host relationship,
-  or piece count.
-- Every state required during a turn must be visible without consulting a
-  private note.
-- Shared contracts need durable matching identifiers.
+  Power cube, or piece count.
+- Every state required during a turn must be visible without a private note.
+- Shared contracts require durable matching identifiers.
 - Scrutiny and Systemic Risk must be indistinguishable by touch while concealed
-  in the opaque Audit bag. They must be immediately distinguishable by colour
-  or printed identity after drawing. Use the same size, shape, material, and
-  weight; never use a differently shaped Systemic Risk token.
-- Do not add miniatures, custom plastic, or loose rotating wheels merely for
-  theme. The neural-network language should come from node, connection, and
-  illumination graphics, not extra game state.
+  in the opaque Audit bag and immediately distinguishable by colour or print
+  after drawing. Use the same size, shape, material, and weight.
+- Facility numbers and the starting-grid identity remain attached when a
+  Facility moves.
+- Do not add miniatures, wheels, selectors, or duplicate reference components
+  merely for theme. Neural-network language should come from node, connection,
+  and illumination graphics, not extra game state.

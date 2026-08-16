@@ -11,6 +11,18 @@ function mergeCounts(target, source = {}) {
   for (const [key, value] of Object.entries(source)) increment(target, key, value);
 }
 
+function mergeAbilityTelemetry(target, source = {}) {
+  for (const [key, value] of Object.entries(source)) {
+    if (typeof value === "number") {
+      target[key] = (Number(target[key]) || 0) + value;
+    } else if (!(key in target)) {
+      target[key] = structuredClone(value);
+    } else if (target[key] !== value) {
+      target[key] = [...new Set([].concat(target[key], value))];
+    }
+  }
+}
+
 function histogram(values) {
   const result = {};
   for (const value of values) increment(result, String(value));
@@ -370,9 +382,7 @@ function aggregateMatchMetrics(outcomes) {
         standing.metrics.factionAbilityValues || {}
       )) {
         const ability = faction[abilityId] || {};
-        for (const [key, value] of Object.entries(values)) {
-          ability[key] = (ability[key] || 0) + value;
-        }
+        mergeAbilityTelemetry(ability, values);
         faction[abilityId] = ability;
       }
       totals.factionAbilityValues[standing.factionId] = faction;
@@ -777,7 +787,7 @@ class BatchAccumulator {
       const faction = totals.factionAbilityValues[standing.factionId] || {};
       for (const [abilityId, values] of Object.entries(standing.metrics.factionAbilityValues || {})) {
         const ability = faction[abilityId] || {};
-        for (const [key, value] of Object.entries(values)) ability[key] = (ability[key] || 0) + value;
+        mergeAbilityTelemetry(ability, values);
         faction[abilityId] = ability;
       }
       totals.factionAbilityValues[standing.factionId] = faction;

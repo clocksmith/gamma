@@ -165,6 +165,7 @@ export async function evolveStrategy({
   let completed = 0;
 
   for (let generation = 0; generation < generations; generation += 1) {
+    const evaluationSeed = `${seed}:g:${generation}:common`;
     const candidates = [incumbent, ...Array.from({ length: population - 1 }, (_, index) =>
       mutateStrategy(incumbent, `${seed}:g:${generation}:candidate:${index}`, { magnitude })
     )];
@@ -175,7 +176,7 @@ export async function evolveStrategy({
         profiles,
         playerCount,
         runsPerSeat,
-        seed: `${seed}:g:${generation}:candidate:${index}`,
+        seed: evaluationSeed,
         rulesVariant,
         signal
       });
@@ -190,6 +191,7 @@ export async function evolveStrategy({
     incumbent = structuredClone(evaluated[0].profile);
     history.push({
       generation: generation + 1,
+      evaluationSeed,
       candidates: evaluated.map(({ profile, evaluation }, rank) => ({
         rank: rank + 1,
         profile: {

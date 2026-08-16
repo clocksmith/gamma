@@ -246,17 +246,23 @@ function buildPowerSources(config) {
         subtitle: p.tagline,
         badgeList: [
           p.round ? roundBadge(p.round) : "",
+          p.id === "clean_infrastructure"
+            ? "Renewable tile"
+            : p.id === "emergency_infrastructure"
+              ? "Grid tile"
+              : "Fusion Escalation",
           `${p.runwayCost} Runway`,
           `${p.capacity} Power`
         ],
         bodyHtml: textRows([
+          { text: p.rulesText, kind: "rules" },
           { label: "Public claim", text: p.publicClaim },
           { text: [p.scrutinyPerUse ? `Scrutiny/Production: ${p.scrutinyPerUse}` : "", p.trust ? `Trust: ${p.trust}` : ""].filter(Boolean).join(" · ") }
         ])
       })
     )
     .join("");
-  return section("power", "Power Sources", config.powerSources.length, cards, "Generator options trading capacity against Scrutiny and Trust.");
+  return section("power", "Embedded Power Contracts", config.powerSources.length, cards, "Printed on the two Energy tiles and the Fusion Escalation; no separate reference cards.");
 }
 
 function buildTactics(data) {
@@ -314,7 +320,7 @@ function buildReferenceCards(data) {
     card({
       title: c.name,
       subtitle: c.strapline,
-      badgeList: [roundBadge(c.round), "Era card"],
+      badgeList: [roundBadge(c.round), "Governance Board panel"],
       bodyHtml: textRows([
         { text: c.rulesText, kind: "rules" },
         { label: "Unlocks", text: c.unlockText }
@@ -329,7 +335,7 @@ function buildReferenceCards(data) {
     })
   );
   const all = [...eras, ...refs].join("");
-  return section("reference", "Reference Cards", eras.length + refs.length, all, "Era cards and player quick-reference aids.");
+  return section("reference", "Board Panels and Player Aids", eras.length + refs.length, all, "Four printed Era panels and the four topics repeated on each foldout player aid.");
 }
 
 // --- page assembly -----------------------------------------------------------
@@ -420,8 +426,8 @@ async function build() {
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
     { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
     { id: "escalations", label: "Escalations", html: buildEscalations(escalation), n: escalation.escalations.length },
-    { id: "power", label: "Power Sources", html: buildPowerSources(config), n: config.powerSources.length },
-    { id: "reference", label: "Reference Cards", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
+    { id: "power", label: "Embedded Power Contracts", html: buildPowerSources(config), n: config.powerSources.length },
+    { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },
     { id: "objectives", label: "Secret Objectives", html: buildObjectives(objectives), n: objectives.objectives.length },
     { id: "specialists", label: "Reserve Specialists", html: buildSpecialists(specialists), n: specialists.specialists.length }

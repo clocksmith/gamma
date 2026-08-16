@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.13.1` / `three-to-five-profiles-v1`
-**Physical rules under review:** `0.7.0-rc.7-test`
+**Executable game:** `0.14.1` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.2-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -79,14 +79,13 @@ unknown alias. The environment alone mutates state. Player-owned movement, Headl
 Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
-Selection packets contain every unused Core Action and unlocked, unspent
-Escalation that has a legal resolution now or can gain one through one legal
-accepted pre-Act trade. Each choice reports `resolvable_now` or
-`trade_required`, its current resolution count, and whether an immediate trade
-is required. A later target conflict or rejected required trade may still block
-the committed choice; it then exhausts normally, and a blocked Escalation has
-already spent its availability. A choice that cannot possibly resolve is not a
-legal decision and is never sent to deterministic or CLI-backed players.
+Selection packets contain every unused Core Action and unlocked Program that
+has a legal resolution now. A legal selection cannot depend on a future trade.
+Each choice reports `resolvable_now` and its current resolution count. A later
+target conflict may still block the committed choice; it then exhausts
+normally, and a selected Program has already spent one Era allowance and its
+once-per-game use. A choice that cannot resolve is not a legal decision and is
+never sent to deterministic or CLI-backed players.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 
@@ -123,12 +122,12 @@ The registered `agi_claim_window_v1` compatibility ID now creates a fully
 committed four-card Dossier instead of waiting for natural coverage.
 Common-seed arms differ only by the final Compute needed to pay every Commit.
 The scenario verifies payment eligibility and policy choice; it cannot
-estimate natural Dossier strategy or Prediction Bag frequency.
+estimate natural Dossier strategy or natural claim frequency.
 
 Natural reports record every face-down choice, revealed commitments, Compute
-paid, Scrutiny added, module result, Capability and comeback contribution,
-claim-token count, the two drawn token identities, selected Mandate rank, and
-whether matching tokens displaced the provisional winner. The
+paid, Scrutiny added, module result, supported evidence count, Capability
+threshold, final claim strength, selected Mandate rank, and the deterministic
+winner. The
 historical `agi_declaration_window_v1` preregistration remains evidence for the
 superseded Grid-Ready declaration contract and must not be mixed with current
 claims.
@@ -413,10 +412,12 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits
 
-`three-to-five-profiles-v1` covers the thirteen-tile board, four Eras, all baseline
-Headlines and Escalations, factions, Training, two-source Power, Default local
-Power, Advanced Links and Networks, temporary physical Power marks with a retained latest-Production snapshot, immediate Power trades, Joint Ventures, Audit,
-Realignment, visible scoring, declarations, and the shared ending. Tactics and
+`nineteen-hex-simplified-v1` covers the complete nineteen-tile board, four Eras,
+all baseline Headlines and shared Programs, factions, Training, two-source
+Power, Default local Power, Advanced Links and Networks, retained Power cubes
+replaced at each Allocate step, the bounded pre-resolution resource trade,
+Joint Ventures, Audit, Realignment, visible scoring, deterministic Dossiers,
+and the shared ending. Tactics and
 secret objectives remain deferred.
 
 Simulation can measure action pressure, faction/seat/backend interaction,

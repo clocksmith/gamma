@@ -6,7 +6,8 @@ import {
   networkedFacilityIds,
   publicMandateAwards,
   resolveBlindRealignmentVote,
-  simulateTrainingRun
+  simulateTrainingRun,
+  TRAINING_DOMAINS
 } from "../../web/src/engine.js";
 import { canAllocateLocalPower } from "../rules/local-power-allocation.js";
 import {
@@ -36,7 +37,7 @@ const RESOURCE_BY_CATEGORY = {
   chip: "compute",
   capital: "runway",
   consumer: "runway",
-  research: "safety"
+  research: "compute"
 };
 
 function clone(value) {
@@ -68,14 +69,10 @@ export function immediateTradePacketCeiling(playerCount, {
   if (!Number.isInteger(playerCount) || playerCount < 2) {
     throw new RangeError("Immediate-trade packet ceiling requires at least two players.");
   }
-  // A counteroffer adds the original offer-maker's direct accept/reject.
-  // Third-party claims add up to n - 1 claim packets and claimant selection.
-  // Declining the pre-Act window may add one later post-Act offer packet.
-  const packetsPerResolution = counteroffers && thirdPartyClaims
-    ? playerCount + 3
-    : counteroffers
-      ? 4
-      : 3;
+  if (counteroffers || thirdPartyClaims) {
+    throw new RangeError("The simplified trade contract forbids counteroffers and claims.");
+  }
+  const packetsPerResolution = 2;
   return ACTION_RESOLUTIONS_PER_PLAYER * playerCount * packetsPerResolution;
 }
 
@@ -188,6 +185,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.trainingDrawPile = buildTrainingDeck(config, `${seed}:training-deck`);
     this.trainingDiscard = [];
     this.trainingShuffle = 0;
+    this.tacticDrawPile = this.rulesVariant.tacticsEnabled
+      ? shuffled(
+        this.tacticDocument.tactics.flatMap((card) =>
+          Array.from(
+            { length: this.tacticDocument.copiesPerCard || 1 },
+            () => card.id
+          )
+        ),
+        `${seed}:tactics`
+      )
+      : [];
+    this.tacticDiscard = [];
+    this.scrutinyChoicesEnabled = false;
+    this.pendingScrutinyOverflow = [];
     this.roundInitialized = false;
     this.firstAgiSeat = null;
     this.agiWinnerSeat = null;
@@ -250,9 +261,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           Number(piece.id.split("-").at(-1)) <= deployedTeams
       );
       player.teamsInSupply = config.playerSupply.teams - deployedTeams;
-      player.escalation = 0;
+      player.programUses = 0;
       player.escalationsUsed = [];
       player.tactics = [];
+      player.tacticPlayedCycleKey = null;
       player.objectiveId = null;
       player.links = [];
       player.linkSupply = config.playerSupply.linkTokens;
@@ -268,7 +280,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         committedCount: 0,
         computePaid: 0,
         finalPoweredFacilities: 0,
-        claimTokens: 0
+        supportedEvidenceClaims: 0,
+        claimStrength: 0
       };
       player.latestProductionSnapshot = null;
       player.factionAbilityUsed = {};
@@ -354,10 +367,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   addResource(player, key, amount) {
-    if (key === "safety" && this.factionResourceCap(player, key) !== this.config.resources.safety.cap) {
-      player.safety = Math.max(0, Math.min(this.factionResourceCap(player, key), player.safety + amount));
-      return;
-    }
     super.addResource(player, key, amount);
     if (
       (key === "capability" || key === "trust") &&
@@ -499,9 +508,40 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   addScrutiny(player, amount) {
+    if (!this.scrutinyChoicesEnabled) {
+      const before = player.metrics.scrutinyAdded;
+      super.addScrutiny(player, amount);
+      player.history.cumulativeScrutiny += player.metrics.scrutinyAdded - before;
+      return;
+    }
     const before = player.metrics.scrutinyAdded;
-    super.addScrutiny(player, amount);
+    const added = Math.min(
+      Math.max(0, amount),
+      this.config.playerSupply.scrutinyCubes - player.scrutiny
+    );
+    player.scrutiny += added;
+    player.metrics.scrutinyAdded += added;
+    const overflow = Math.max(0, amount - added);
+    if (overflow) {
+      this.pendingScrutinyOverflow.push({
+        seat: player.seat,
+        count: overflow,
+        round: this.round,
+        cycle: this.cycle
+      });
+    }
     player.history.cumulativeScrutiny += player.metrics.scrutinyAdded - before;
+  }
+
+  async settlePendingScrutinyOverflow(policies, stage = "scrutiny_overflow") {
+    void policies;
+    while (this.pendingScrutinyOverflow.length) {
+      const pending = this.pendingScrutinyOverflow.shift();
+      const player = this.players[pending.seat];
+      for (let index = 0; index < pending.count; index += 1) {
+        this.applyAutomaticPenalty(player, stage);
+      }
+    }
   }
 
   prepareTrainingDrawPile() {
@@ -526,8 +566,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       {
         deck,
         stopAt: parameters.stopAt,
-        runway: player.runway,
-        safety: player.safety
+        researchProtection: player.researchProtection +
+          Number(parameters.destinationCategory === "research")
       }
     );
     if (result.deckExhausted && this.trainingDiscard.length) {
@@ -543,8 +583,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         {
           deck,
           stopAt: parameters.stopAt,
-          runway: player.runway,
-          safety: player.safety
+          researchProtection: player.researchProtection +
+            Number(parameters.destinationCategory === "research")
         }
       );
       this.trainingDrawPile.push(...remainder);
@@ -555,6 +595,188 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       ...this.trainingDrawPile.splice(0, result.cardsDrawn)
     );
     return { ...result, deckSnapshot };
+  }
+
+  drawTrainingCard() {
+    this.prepareTrainingDrawPile();
+    if (!this.trainingDrawPile.length) return null;
+    return this.trainingDrawPile.shift();
+  }
+
+  scientificMethodAvailable(player) {
+    if (!this.hasFactionAbility(player, "scientific_method")) return false;
+    const limit = this.rulesVariant.imperialScientificMethodLifetimeLimit;
+    const uses = player.factionAbilityUsed.scientificMethodUses || 0;
+    const withinLimit = Number.isFinite(limit)
+      ? uses < limit
+      : !player.roundMetrics.scientificMethodUsed;
+    return withinLimit &&
+      player.runway >= this.rulesVariant.imperialScientificMethodRunwayCost;
+  }
+
+  async resolveTrainingRunWithPolicies(policies, seat, parameters) {
+    const player = this.players[seat];
+    const ordinaryDomains = new Set();
+    const revealedCards = [];
+    const revealed = [];
+    let provisionalCapability = 0;
+    let trust = 0;
+    let scrutiny = 0;
+    let researchProtectionSpent = 0;
+    let outcome = "banked";
+    let protection = null;
+    let crashProtectable = false;
+
+    while (true) {
+      const card = this.drawTrainingCard();
+      if (!card) {
+        outcome = "deck-exhausted-banked";
+        break;
+      }
+      revealedCards.push(card);
+      revealed.push(card.type);
+      let duplicate = false;
+
+      if (card.kind === "domain") {
+        duplicate = ordinaryDomains.has(card.type);
+        if (!duplicate) {
+          ordinaryDomains.add(card.type);
+          provisionalCapability += 1;
+        }
+      } else if (card.type === "curated_corpus") {
+        const missing = TRAINING_DOMAINS.filter((domain) => !ordinaryDomains.has(domain));
+        if (!missing.length) duplicate = true;
+        else {
+          const choice = await this.choose(
+            policies,
+            seat,
+            "training_curated_domain",
+            missing.map((domain) => ({
+              decisionId: `training_curated_${domain}`,
+              label: decisionLabel("trainingCuratedDomain", { domain }),
+              actionId: "research",
+              parameters: { domain }
+            }))
+          );
+          ordinaryDomains.add(choice.parameters.domain);
+          provisionalCapability += 1;
+        }
+      } else if (card.type === "benchmark_leak") {
+        provisionalCapability += 2;
+        scrutiny += 1;
+      } else if (card.type === "human_evaluation") {
+        trust += 1;
+        outcome = "human-evaluation-banked";
+        break;
+      }
+
+      if (duplicate) {
+        crashProtectable = true;
+        const choices = [];
+        if (player.researchProtection - researchProtectionSpent > 0) {
+          choices.push({
+            decisionId: "training_protect_research_protection",
+            label: decisionLabel("trainingProtectResearchProtection"),
+            actionId: "research",
+            parameters: { protection: "research_protection" }
+          });
+        }
+        if (crashProtectable && parameters.destinationCategory === "research") {
+          choices.push({
+            decisionId: "training_protect_research_visit",
+            label: decisionLabel("trainingProtectResearchVisit"),
+            actionId: "research",
+            parameters: { protection: "research_visit" }
+          });
+        }
+        if (crashProtectable && this.scientificMethodAvailable(player)) {
+          choices.push({
+            decisionId: "training_protect_scientific_method",
+            label: decisionLabel("trainingProtectScientificMethod", {
+              cost: this.rulesVariant.imperialScientificMethodRunwayCost
+            }),
+            actionId: "research",
+            parameters: { protection: "scientific_method" }
+          });
+        }
+        if (
+          this.rulesVariant.tacticsEnabled &&
+          player.tactics.includes("emergency_pause") &&
+          player.tacticPlayedCycleKey !== `${this.round}:${this.cycle}`
+        ) {
+          choices.push({
+            decisionId: "training_emergency_pause",
+            label: decisionLabel("trainingEmergencyPause"),
+            actionId: "research",
+            parameters: { protection: "emergency_pause" }
+          });
+        }
+        choices.push({
+          decisionId: "training_accept_crash",
+          label: decisionLabel("trainingAcceptCrash"),
+          actionId: "research",
+          parameters: { protection: null }
+        });
+        const choice = choices.length === 1
+          ? choices[0]
+          : await this.choose(policies, seat, "training_duplicate", choices);
+        protection = choice.parameters.protection;
+        if (protection === "emergency_pause") {
+          provisionalCapability = 0;
+          outcome = "emergency-pause";
+          this.consumeTactic(player, "emergency_pause");
+          player.tacticPlayedCycleKey = `${this.round}:${this.cycle}`;
+        } else if (protection) {
+          if (protection === "research_protection") researchProtectionSpent += 1;
+          outcome = `${protection}-banked`;
+        } else {
+          provisionalCapability = 0;
+          scrutiny += 1;
+          outcome = "crashed";
+        }
+        break;
+      }
+
+      const choice = await this.choose(policies, seat, "training_continue", [
+        {
+          decisionId: "training_bank",
+          label: decisionLabel("trainingBank", { capability: provisionalCapability }),
+          actionId: "research",
+          parameters: { continue: false }
+        },
+        {
+          decisionId: "training_continue",
+          label: decisionLabel("trainingContinue", { capability: provisionalCapability }),
+          actionId: "research",
+          parameters: { continue: true }
+        }
+      ]);
+      if (!choice.parameters.continue) {
+        outcome = "banked";
+        break;
+      }
+    }
+
+    this.trainingDiscard.push(...revealedCards);
+    return {
+      seed: `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:training`,
+      outcome,
+      capability: provisionalCapability,
+      trust,
+      scrutiny,
+      runwaySpent: 0,
+      researchProtectionSpent,
+      protectedDuplicate: Boolean(protection),
+      protection,
+      crashProtectable,
+      ordinaryDomains: [...ordinaryDomains],
+      ordinaryDomainCount: ordinaryDomains.size,
+      distinctDomains: ordinaryDomains.size,
+      revealed,
+      cardsDrawn: revealed.length,
+      deckExhausted: this.trainingDrawPile.length === 0,
+      deckSnapshot: revealedCards.map((card) => ({ ...card }))
+    };
   }
 
   currentScore(player) {
@@ -727,7 +949,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const scores = this.players.map((candidate) => {
         const pieces = candidate.pieces
           .filter((piece) => piece.tileId === tile.instanceId)
-          .reduce((sum, piece) => sum + (piece.kind === "ceo" ? 2 : 1), 0);
+          .length;
         const facilities = candidate.facilities
           .filter((facility) => facility.tileId === tile.instanceId).length;
         return pieces + facilities;
@@ -746,7 +968,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const scores = this.players.map((player) => {
       const pieces = player.pieces
         .filter((piece) => piece.tileId === tile.instanceId)
-        .reduce((sum, piece) => sum + (piece.kind === "ceo" ? 2 : 1), 0);
+        .length;
       return pieces +
         player.facilities.filter((item) => item.tileId === tile.instanceId).length;
     });
@@ -781,7 +1003,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       persistentRegimes: this.copyPublic(this.regime.persistent || {}),
       self: {
         ...base.self,
-        escalation: player.escalation,
+        programUses: player.programUses,
         escalationsUsed: [...player.escalationsUsed],
         tactics: [...player.tactics],
         objectiveId: player.objectiveId,
@@ -806,7 +1028,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         return {
           ...opponent,
           currentScore: this.currentScore(source),
-          escalation: source.escalation,
+          programUses: source.programUses,
           agiDeclared: source.agiDeclared,
           relationship: this.relationshipFor(seat, source.seat)
         };
@@ -814,7 +1036,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       publicTable: {
         players: this.players.map((candidate) => ({
           ...this.publicPlayerState(candidate),
-          escalation: candidate.escalation,
+          programUses: candidate.programUses,
           escalationsUsed: [...candidate.escalationsUsed],
           factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
           teamsInSupply: candidate.teamsInSupply,
@@ -948,11 +1170,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   dealTactic(player) {
-    return player;
+    if (!this.rulesVariant.tacticsEnabled || !this.tacticDrawPile.length) return null;
+    const tacticId = this.tacticDrawPile.shift();
+    player.tactics.push(tacticId);
+    return tacticId;
   }
 
   async setup(policies) {
-    void policies;
+    this.scrutinyChoicesEnabled = true;
+    if (!this.rulesVariant.tacticsEnabled) return;
+    for (const player of this.players) this.dealTactic(player);
   }
 
   async beginRound(policies) {
@@ -968,7 +1195,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const player of this.players) {
       player.actionsUsed = [];
       player.selectedAction = null;
-      player.escalation = this.config.rounds[this.round - 1].escalationAvailability;
+      player.programUses = this.config.rounds[this.round - 1].programUses;
+      player.researchProtection = player.factionId === "safety_laboratory" ? 2 : 1;
       player.tacticModifiers = {};
       player.roundMetrics = {
         capabilityStart: player.capability,
@@ -981,6 +1209,30 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         jointVenturesCompleted: 0,
         riskyActions: 0
       };
+      if (this.rulesVariant.tacticsEnabled) {
+        this.dealTactic(player);
+        while (player.tactics.length > 3) {
+          const uniqueChoices = player.tactics.map((tacticId, index) => {
+            const card = this.tacticDocument.tactics.find(
+              (candidate) => candidate.id === tacticId
+            );
+            return {
+              decisionId: `tactic_discard_${index}_${tacticId}`,
+              label: decisionLabel("discardTactic", { card: card?.name || tacticId }),
+              actionId: "tactic",
+              parameters: { index, tacticId }
+            };
+          });
+          const choice = await this.choose(
+            policies,
+            player.seat,
+            "tactic_hand_limit",
+            uniqueChoices
+          );
+          const [discarded] = player.tactics.splice(choice.parameters.index, 1);
+          this.tacticDiscard.push(discarded);
+        }
+      }
     }
     this.roundInitialized = true;
     this.recordEvent(
@@ -1011,25 +1263,25 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           label: decisionLabel("allocationWait"),
           actionId: "faction"
         },
-        {
+        ...(!this.regime.cycle?.computeTradeBlocked ? [{
           decisionId: "allocation_open",
           label: decisionLabel("allocationOpen"),
           actionId: "faction"
-        }
+        }] : [])
       ]);
       if (activate.decisionId === "allocation_open") {
         foundry.factionAbilityUsed.allocationWindow = true;
         this.recordFactionAbility(foundry, "allocation_window");
+        if (!foundry.temporaryCompute) foundry.temporaryComputeBaseline = foundry.compute;
+        const computeBefore = foundry.compute;
+        this.addResource(foundry, "compute", temporaryCompute);
+        foundry.temporaryCompute = foundry.compute - computeBefore;
         for (let unit = 0; unit < temporaryCompute; unit += 1) {
           const buyers = this.players.filter((candidate) =>
             candidate.seat !== foundry.seat && candidate[paymentResource] >= minimumPrice
           );
+          if (!buyers.length || foundry.temporaryCompute <= 0) continue;
           const offer = await this.choose(policies, foundry.seat, `allocation_window_${unit}`, [
-            {
-              decisionId: `allocation_hold_${unit}`,
-              label: decisionLabel("allocationExpire"),
-              actionId: "faction"
-            },
             ...buyers.flatMap((buyer) => {
               const maximumPrice = buyer[paymentResource];
               return Array.from(
@@ -1165,33 +1417,69 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   async governmentVote(policies, id, outcomes) {
+    this.regime.cycle ||= {};
     const controller = this.controller("government");
-    const votes = await this.chooseAll(policies, `${id}_vote`, (seat) =>
-      outcomes.flatMap((outcome) => {
-        const base = [{
-          decisionId: `${id}_${outcome.id}`,
-          label: decisionLabel("vote", { outcome: outcome.label }),
-          actionId: "headline",
-          parameters: { outcomeId: outcome.id, extraVote: false }
-        }];
-        if (this.players[seat].tactics.includes("open_letter")) {
-          base.push({
-            decisionId: `${id}_${outcome.id}_open_letter`,
-            label: decisionLabel("openLetterVote", { outcome: outcome.label }),
-            actionId: "headline",
-            parameters: { outcomeId: outcome.id, extraVote: true }
+    const publicVotes = Object.fromEntries(outcomes.map((outcome) => [outcome.id, 0]));
+    if (this.rulesVariant.tacticsEnabled) {
+      for (const seat of this.initiativeOrder()) {
+        const player = this.players[seat];
+        if (
+          !player.tactics.includes("open_letter") ||
+          player.tacticPlayedCycleKey === `${this.round}:${this.cycle}`
+        ) continue;
+        const choice = await this.choose(policies, seat, `${id}_open_letter_precommit`, [
+          {
+            decisionId: `${id}_open_letter_pass`,
+            label: decisionLabel("openLetterPass"),
+            actionId: "tactic",
+            parameters: { outcomeId: null }
+          },
+          ...outcomes.map((outcome) => ({
+            decisionId: `${id}_open_letter_${outcome.id}`,
+            label: decisionLabel("openLetterVote", {
+              outcome: outcome.label,
+              publicVotes: publicVotes[outcome.id]
+            }),
+            actionId: "tactic",
+            parameters: { outcomeId: outcome.id }
+          }))
+        ]);
+        if (choice.parameters.outcomeId) {
+          publicVotes[choice.parameters.outcomeId] += 1;
+          this.regime.cycle.publicVoteInterventions ||= [];
+          this.regime.cycle.publicVoteInterventions.push({
+            tactic: "open_letter",
+            seat,
+            outcomeId: choice.parameters.outcomeId
           });
+          this.recordEvent(
+            "open_letter_committed",
+            seat,
+            `${player.factionName} publicly added one vote to ` +
+              `${choice.parameters.outcomeId} before secret voting.`
+          );
+          this.consumeTactic(player, "open_letter");
+          player.tacticPlayedCycleKey = `${this.round}:${this.cycle}`;
         }
-        return base;
-      })
+      }
+    }
+    const votes = await this.chooseAll(policies, `${id}_vote`, (seat) =>
+      outcomes.map((outcome) => ({
+          decisionId: `${id}_${outcome.id}`,
+          label: Object.values(publicVotes).some(Boolean)
+            ? decisionLabel("voteAfterPublicIntervention", {
+                outcome: outcome.label,
+                publicVotes: publicVotes[outcome.id]
+              })
+            : decisionLabel("vote", { outcome: outcome.label }),
+          actionId: "headline",
+          parameters: { outcomeId: outcome.id },
+          consequences: { publicVotes: publicVotes[outcome.id] }
+        }))
     );
-    const totals = Object.fromEntries(outcomes.map((outcome) => [outcome.id, 0]));
+    const totals = { ...publicVotes };
     for (const [seat, vote] of votes.entries()) {
       totals[vote.parameters.outcomeId] += controller === seat ? 2 : 1;
-      if (vote.parameters.extraVote) {
-        totals[vote.parameters.outcomeId] += 1;
-        this.consumeTactic(this.players[seat], "open_letter");
-      }
     }
     const maximum = Math.max(...Object.values(totals));
     const tied = outcomes.filter((outcome) => totals[outcome.id] === maximum);
@@ -1218,6 +1506,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.activeHeadline = this.headlineDecks[this.round][this.cycle - 1];
     this.regime.cycle = { id: this.activeHeadline.id };
     const id = this.activeHeadline.id;
+    if (id === "emergency_power_authority") {
+      this.regime.round.emergencyPowerAuthority = true;
+    }
     increment(this.matchMetrics.headlines, id);
     this.matchMetrics.futureTimeline.push({
       round: this.round,
@@ -1398,14 +1689,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       this.addResource(this.players[owner], "trust", 1);
     } else if (id === "election_deepfake_panic") {
-      this.regime.cycle.deepfake = await this.governmentVote(policies, id, [
+      this.regime.round.deepfake = await this.governmentVote(policies, id, [
         { id: "regulate", label: decisionLabel("regulateMedia") },
         { id: "do_nothing", label: decisionLabel("doNothing") }
       ]);
-      if (this.regime.cycle.deepfake === "do_nothing") {
+      if (this.regime.round.deepfake === "do_nothing") {
         this.regime.round.deepfakeIncome = true;
+        this.regime.round.deepfakeCustomersAtVote = this.players.map(
+          (player) => player.customers
+        );
       }
-      increment(this.matchMetrics.headlineOutcomes, `${id}:${this.regime.cycle.deepfake}`);
+      increment(this.matchMetrics.headlineOutcomes, `${id}:${this.regime.round.deepfake}`);
     } else if (id === "agi_personhood") {
       this.regime.persistent.agiPersonhood = await this.governmentVote(policies, id, [
         { id: "person", label: decisionLabel("agiPerson") },
@@ -1426,91 +1720,178 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   consumeTactic(player, id) {
     const index = player.tactics.indexOf(id);
-    if (index >= 0) player.tactics.splice(index, 1);
+    if (index >= 0) {
+      player.tactics.splice(index, 1);
+      this.tacticDiscard.push(id);
+    }
     increment(player.metrics.tactics, id);
     increment(this.matchMetrics.tactics, id);
   }
 
-  async tacticStage(policies) {
-    for (const seat of this.initiativeOrder()) {
-      const player = this.players[seat];
-      const playable = [...new Set(player.tactics.filter((id) => id !== "open_letter"))];
-      const decisions = [
-        { decisionId: "tactic_pass", label: decisionLabel("skipTactic"), actionId: "tactic" },
-        ...playable.map((id) => {
-          const card = this.tacticDocument.tactics.find((candidate) => candidate.id === id);
-          return {
-            decisionId: `tactic_${id}`,
-            label: decisionLabel("playTactic", { card: card.name, text: card.text }),
-            actionId: "tactic",
-            parameters: { tacticId: id }
-          };
-        })
-      ];
-      const choice = await this.choose(policies, seat, "tactic", decisions);
-      const id = choice.parameters?.tacticId;
-      if (!id) continue;
-      this.consumeTactic(player, id);
-      if (id === "cloud_partnership") {
-        if (player.runway >= 1) {
-          this.spendRunway(player, 1, {
-            cause: "tactic_cloud_partnership",
-            conversionEligible: true
-          });
-          this.addResource(player, "compute", 2);
-          this.addResource(this.players[(seat + 1) % this.playerCount], "runway", 1);
-        }
-      } else if (id === "talent_raid" && player.runway >= 1) {
-        this.spendRunway(player, 1, {
-          cause: "tactic_talent_raid",
-          conversionEligible: true
-        });
-        const ceo = player.pieces.find((piece) => piece.kind === "ceo");
-        if (player.teamsInSupply > 0) {
-          const teamNumber = this.config.playerSupply.teams - player.teamsInSupply + 1;
-          player.pieces.push({
-            id: `p${seat + 1}-team-${teamNumber}`,
-            kind: "team",
-            tileId: ceo.tileId
-          });
-          player.teamsInSupply -= 1;
-        }
-      } else if (id === "board_reshuffle") {
-        const ready = player.actionsUsed.find((action) => ["organize", "influence"].includes(action));
-        if (ready) player.actionsUsed = player.actionsUsed.filter((action) => action !== ready);
-      } else if (id === "custom_silicon" && player.facilities.length) {
-        player.facilities[0].customSilicon = true;
-      } else if (id === "government_contract" && player.trust >= 4) {
-        this.addResource(player, "runway", 2);
-      } else if (id === "interconnection_waiver") {
-        this.addResource(player, "runway", 1);
-        this.addResource(player, "trust", 1);
-      } else if (id === "weights_leak") {
-        const rivals = this.players.filter((candidate) =>
-          candidate.seat !== player.seat &&
-          this.latestPoweredFacilities(candidate).length > 0
-        );
-        const source = rivals[0] ? this.latestPoweredFacilities(rivals[0])[0] : null;
-        if (source) await this.produceFacility(policies, player, source, "weights_leak");
-      } else {
-        player.tacticModifiers[id] = true;
+  async maybePlayTacticForResolution(policies, seat, selectedDecision) {
+    const decision = clone(selectedDecision);
+    const player = this.players[seat];
+    const cycleKey = `${this.round}:${this.cycle}`;
+    if (
+      !this.rulesVariant.tacticsEnabled ||
+      player.tacticPlayedCycleKey === cycleKey
+    ) return decision;
+
+    const tacticRequired = decision.actionId === "deploy" &&
+      (decision.parameters?.computeCost || 0) > player.compute;
+    const usable = [...new Set(player.tactics)].filter((id) => {
+      if (tacticRequired) return id === "api_price_cut";
+      if (["open_letter", "emergency_pause"].includes(id)) return false;
+      if (id === "cloud_partnership") return player.runway >= 1;
+      if (id === "api_price_cut" || id === "model_card") {
+        return decision.actionId === "deploy";
       }
+      if (id === "talent_raid") {
+        return player.runway >= 1 && player.teamsInSupply > 0 &&
+          Boolean(decision.parameters?.destinationId);
+      }
+      if (id === "board_reshuffle") {
+        return player.actionsUsed.some((action) =>
+          ["organize", "influence"].includes(action)
+        );
+      }
+      if (id === "weights_leak") {
+        return this.players.some((candidate) =>
+          candidate.seat !== seat && this.latestPoweredFacilities(candidate).length
+        );
+      }
+      if (id === "custom_silicon") return player.facilities.length > 0;
+      if (id === "government_contract") return player.trust >= 4;
+      if (id === "benchmark_optimization") return decision.actionId === "research";
+      return id === "interconnection_waiver";
+    });
+    if (!usable.length) return decision;
+
+    const choice = await this.choose(policies, seat, "tactic_resolution", [
+      ...(!tacticRequired ? [{
+        decisionId: "tactic_pass",
+        label: decisionLabel("skipTactic"),
+        actionId: "tactic",
+        parameters: { tacticId: null }
+      }] : []),
+      ...usable.map((id) => {
+        const card = this.tacticDocument.tactics.find((candidate) => candidate.id === id);
+        return {
+          decisionId: `tactic_${id}`,
+          label: decisionLabel("playTactic", { card: card.name, text: card.text }),
+          actionId: "tactic",
+          parameters: { tacticId: id }
+        };
+      })
+    ]);
+    const id = choice.parameters.tacticId;
+    if (!id) return decision;
+
+    if (id === "cloud_partnership") {
+      const target = await this.choose(
+        policies,
+        seat,
+        "tactic_cloud_partnership_target",
+        this.players.filter((candidate) => candidate.seat !== seat).map((candidate) => ({
+          decisionId: `tactic_cloud_partnership_${candidate.seat}`,
+          label: decisionLabel("tacticChooseBeneficiary", { seat: candidate.seat + 1 }),
+          actionId: "tactic",
+          parameters: { targetSeat: candidate.seat }
+        }))
+      );
+      this.spendRunway(player, 1, {
+        cause: "tactic_cloud_partnership",
+        conversionEligible: true
+      });
+      this.addResource(player, "compute", 2);
+      this.addResource(this.players[target.parameters.targetSeat], "runway", 1);
+    } else if (id === "api_price_cut") {
+      decision.parameters.computeCost = 0;
+      player.tacticModifiers.api_price_cut = true;
+    } else if (id === "model_card") {
+      player.tacticModifiers.model_card = true;
+    } else if (id === "talent_raid") {
+      this.spendRunway(player, 1, {
+        cause: "tactic_talent_raid",
+        conversionEligible: true
+      });
+      const usedNumbers = new Set(
+        player.pieces.filter((piece) => piece.kind === "team")
+          .map((piece) => Number(piece.id.split("-").at(-1)))
+      );
+      const number = Array.from(
+        { length: this.config.playerSupply.teams },
+        (_, candidate) => candidate + 1
+      ).find((candidate) => !usedNumbers.has(candidate));
+      player.pieces.push({
+        id: `s${seat}-team-${number}`,
+        kind: "team",
+        tileId: decision.parameters.destinationId
+      });
+      player.teamsInSupply -= 1;
+    } else if (id === "board_reshuffle") {
+      const readyable = [...new Set(player.actionsUsed.filter((action) =>
+        ["organize", "influence"].includes(action)
+      ))];
+      const target = await this.choose(
+        policies,
+        seat,
+        "tactic_board_reshuffle_target",
+        readyable.map((action) => ({
+          decisionId: `tactic_board_reshuffle_${action}`,
+          label: decisionLabel("tacticReadyAction", { action }),
+          actionId: "tactic",
+          parameters: { action }
+        }))
+      );
+      const index = player.actionsUsed.indexOf(target.parameters.action);
+      if (index >= 0) player.actionsUsed.splice(index, 1);
+    } else if (id === "weights_leak") {
+      const targets = this.players.flatMap((candidate) =>
+        candidate.seat === seat ? [] : this.latestPoweredFacilities(candidate).map((facility) => ({
+          decisionId: `tactic_weights_leak_${candidate.seat}_${facility.id}`,
+          label: decisionLabel("tacticChooseRivalFacility", {
+            seat: candidate.seat + 1,
+            facility: facility.id
+          }),
+          actionId: "tactic",
+          parameters: { targetSeat: candidate.seat, facilityId: facility.id }
+        }))
+      );
+      const target = await this.choose(policies, seat, "tactic_weights_leak_target", targets);
+      const source = this.latestPoweredFacilities(
+        this.players[target.parameters.targetSeat]
+      ).find((facility) => facility.id === target.parameters.facilityId);
+      await this.produceFacility(policies, player, source, "weights_leak");
+    } else if (id === "custom_silicon") {
+      const target = await this.choose(
+        policies,
+        seat,
+        "tactic_custom_silicon_target",
+        player.facilities.map((facility) => ({
+          decisionId: `tactic_custom_silicon_${facility.id}`,
+          label: decisionLabel("tacticChooseOwnFacility", { facility: facility.id }),
+          actionId: "tactic",
+          parameters: { facilityId: facility.id }
+        }))
+      );
+      player.facilities.find(
+        (facility) => facility.id === target.parameters.facilityId
+      ).customSilicon = true;
+    } else if (id === "government_contract") {
+      this.addResource(player, "runway", 2);
+    } else if (id === "benchmark_optimization") {
+      player.tacticModifiers.benchmark_optimization = true;
+    } else if (id === "interconnection_waiver") {
+      this.addResource(player, "runway", 1);
+      this.addResource(player, "trust", 1);
     }
+    this.consumeTactic(player, id);
+    player.tacticPlayedCycleKey = cycleKey;
+    return decision;
   }
 
   async headlineChoiceStage(policies) {
-    if (this.regime.cycle?.id === "emergency_power_authority") {
-      for (const seat of this.initiativeOrder()) {
-        const choice = await this.choose(policies, seat, "emergency_power", [0, 1, 2].map((power) => ({
-          decisionId: `emergency_power_${power}`,
-          label: decisionLabel("authorizeEmergencyPower", { power }),
-          actionId: "headline",
-          parameters: { power }
-        })));
-        this.players[seat].roundMetrics.emergencyPower =
-          Math.max(this.players[seat].roundMetrics.emergencyPower || 0, choice.parameters.power);
-      }
-    }
     if (this.regime.cycle?.syntheticCandidate) {
       for (const seat of this.initiativeOrder()) {
         const player = this.players[seat];
@@ -1577,7 +1958,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       .filter((action) => !player.escalationsUsed.includes(action.id))
       .filter((action) => action.id !== this.regime.cycle?.disabledEscalation)
       .filter((action) =>
-        player.escalation > 0 ||
+        player.programUses > 0 ||
         (action.id === "agent_swarm" && this.regime.cycle?.id === "agent_swarm_escapes_scope")
       )
       .map((action) => {
@@ -1617,17 +1998,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       actionId,
       { isEscalation }
     );
-    const resolvableWithImmediateTrade = currentResolutionCount === 0 &&
-      this.canResolveSelectionAfterImmediateTrade(seat, actionId, { isEscalation });
     return {
       currentResolutionCount,
       resolvableWithoutTrade: currentResolutionCount > 0,
-      resolvableWithImmediateTrade,
-      status: currentResolutionCount > 0
-        ? "resolvable_now"
-        : resolvableWithImmediateTrade
-          ? "trade_required"
-          : "blocked"
+      resolvableWithImmediateTrade: false,
+      status: currentResolutionCount > 0 ? "resolvable_now" : "blocked"
     };
   }
 
@@ -1697,7 +2072,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   legalResolutions(seat, actionId) {
     const player = this.players[seat];
-    let decisions = super.legalResolutions(seat, actionId);
+    let decisions = super.legalResolutions(seat, actionId, {
+      skipAffordability: true
+    });
     const singleGeneratorRule = this.rulesVariant.singleGeneratorRule;
     if (actionId === "build" && singleGeneratorRule) {
       const ordinaryGeneratorCount = player.generators.filter(
@@ -1754,30 +2131,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             }
           }
         }
-        for (const extraPiece of player.pieces) {
-          const current = this.board.find((tile) => tile.instanceId === extraPiece.tileId);
-          for (const extraDestination of this.board.filter(
-            (tile) => axialDistance(current, tile) <= 5
-          )) {
-            result.push({
-              decisionId:
-                `organize_redistribute_${piece.id}_${destination.instanceId}_` +
-                `${extraPiece.id}_${extraDestination.instanceId}`,
-              label: `${decisionLabel("reposition", {
-                piece: piece.id,
-                destination: destination.name
-              })}; redistribute ${extraPiece.id} to ${extraDestination.name}`,
-              actionId,
-              parameters: {
-                ...base,
-                mode: "redistribute",
-                extraPieceId: extraPiece.id,
-                extraDestinationId: extraDestination.instanceId
-              },
-              consequences: { mobilityOnly: true }
-            });
-          }
-        }
+        result.push({
+          decisionId: `organize_redistribute_${piece.id}_${destination.instanceId}`,
+          label: `${decisionLabel("reposition", {
+            piece: piece.id,
+            destination: destination.name
+          })}; then distribute up to five adjacent movement steps`,
+          actionId,
+          parameters: { ...base, mode: "redistribute" },
+          consequences: { mobilityOnly: true, additionalMovementSteps: 5 }
+        });
         for (const facility of player.facilities.filter(
           (candidate) => candidate.tileId === destination.instanceId
         )) {
@@ -1836,7 +2199,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             !player.roundMetrics.installedBaseUsed
           )
         ) computeCost = 0;
-        if (player.compute < computeCost) return [];
         const requirement = Math.max(1, baseRequirement - celebrityDiscount);
         if (player.capability < requirement) return [];
         return [{
@@ -1862,47 +2224,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }];
       });
     }
-    if (actionId === "research" && decisions.length === 0 && this.regime.cycle?.id === "ten_dollar_intelligence") {
-      decisions = this.movementVariants(player, (piece, destination) =>
-        [2, 3, 4, 5, 6, 7].map((stopAt) => ({
-          decisionId: `research_stop_${stopAt}_${piece.id}_${destination.instanceId}`,
-          label: renderSimulationCopy(simulationCopy.decisions.moveAndResearch, {
-            piece: piece.id,
-            destination: destination.name,
-            stopAt
-          }),
-          actionId,
-          parameters: {
-            pieceId: piece.id,
-            destinationId: destination.instanceId,
-            destinationCategory: destination.category,
-            stopAt
-          },
-          consequences: { compute: 0, stopAt }
-        }))
-      );
-    }
-    if (actionId === "organize") {
-      if (
-        this.regime.cycle?.id === "employee_free_unicorn" &&
-        player.pieces.some((piece) => piece.kind === "team")
-      ) {
-        const teams = player.pieces.filter((piece) => piece.kind === "team");
-        for (let count = 1; count <= teams.length; count += 1) {
-          decisions.push({
-            decisionId: `organize_employee_free_${count}`,
-            label: decisionLabel("returnTeams", {
-              count,
-              plural: count === 1 ? "" : "s",
-              runway: count * 2
-            }),
-            actionId,
-            parameters: { mode: "employee_free", count },
-            consequences: { runway: count * 2, scrutiny: 2 }
-          });
-        }
-      }
-    }
     if (
       actionId === "build" &&
       this.rulesVariant.networkInfrastructureEnabled &&
@@ -1910,32 +2231,30 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.linkSupply > 0
     ) {
       const cost = 1;
-      if (player.runway >= cost) {
-        decisions.push(...this.movementVariants(player, (piece, destination) =>
-          player.facilities
-            .filter((facility) =>
-              facility.tileId === destination.instanceId &&
-              !player.links.includes(facility.id)
-            )
-            .map((facility) => ({
-              decisionId: `build_link_${facility.id}_${piece.id}`,
-              label: decisionLabel("installLink", {
-                piece: piece.id,
-                destination: destination.name
-              }),
-              actionId,
-              parameters: {
-                pieceId: piece.id,
-                destinationId: destination.instanceId,
-                destinationCategory: destination.category,
-                buildMode: "link",
-                facilityId: facility.id,
-                cost
-              },
-              consequences: { runway: -cost, links: 1 }
-            }))
-        ));
-      }
+      decisions.push(...this.movementVariants(player, (piece, destination) =>
+        player.facilities
+          .filter((facility) =>
+            facility.tileId === destination.instanceId &&
+            !player.links.includes(facility.id)
+          )
+          .map((facility) => ({
+            decisionId: `build_link_${facility.id}_${piece.id}`,
+            label: decisionLabel("installLink", {
+              piece: piece.id,
+              destination: destination.name
+            }),
+            actionId,
+            parameters: {
+              pieceId: piece.id,
+              destinationId: destination.instanceId,
+              destinationCategory: destination.category,
+              buildMode: "link",
+              facilityId: facility.id,
+              cost
+            },
+            consequences: { runway: -cost, links: 1 }
+          }))
+      ));
     }
     if (actionId === "influence" && this.round >= 3) {
       if (this.jointVentureSupplyAvailable()) decisions.push(...this.movementVariants(player, (piece, destination) => {
@@ -2001,14 +2320,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.hasFactionAbility(player, "social_graph") &&
       !player.roundMetrics.socialGraphUsed
     ) {
-      const existing = new Set(decisions.map((decision) => decision.parameters?.destinationId));
       for (const tile of this.board.filter((candidate) =>
         ["consumer", "media"].includes(candidate.category) &&
-        this.controller(candidate.category) === seat &&
-        !existing.has(candidate.instanceId)
+        this.controller(candidate.category) === seat
       )) {
         const cost = tile.category === "consumer" ? 0 : this.rulesVariant.deployComputeCost;
-        if (player.compute < cost) continue;
         const baseRequirement = this.customerRequirement(player.customers);
         if (player.capability < baseRequirement) continue;
         decisions.push({
@@ -2060,7 +2376,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       .filter((decision) =>
         decision.parameters?.actualRunwayCost === undefined ||
         decision.parameters.actualRunwayCost <= player.runway
-      );
+      )
+      .filter((decision) => {
+        const computeCost = decision.actionId === "research"
+          ? decision.parameters?.actualComputeCost ?? 1
+          : decision.actionId === "deploy"
+            ? decision.parameters?.computeCost ?? 0
+            : 0;
+        const apiPriceCutAvailable =
+          this.rulesVariant.tacticsEnabled &&
+          decision.actionId === "deploy" &&
+          player.tactics.includes("api_price_cut") &&
+          player.tacticPlayedCycleKey !== `${this.round}:${this.cycle}`;
+        return computeCost <= player.compute || apiPriceCutAvailable;
+      });
   }
 
   adjustDecision(player, decision) {
@@ -2100,6 +2429,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         ["consumer", "media"].includes(category) &&
         !player.roundMetrics.installedBaseUsed
       ) cost = 0;
+      if (this.regime.round?.deepfake === "regulate") cost += 1;
       result.parameters.computeCost = cost;
     }
     if (result.actionId === "build") {
@@ -2185,63 +2515,18 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           }
         }
       }
-      if (player.runway >= 2 && player.compute >= 1) {
-        for (const partner of this.players.filter((candidate) =>
-          candidate.seat !== seat && candidate.runway >= 1 && candidate.compute >= 1
-        )) {
-          for (const left of player.facilities) for (const right of partner.facilities) {
-            if (
-              !this.areAdjacent(left.tileId, right.tileId) ||
-              !this.megaClusterHostsAvailable([left.id, right.id]) ||
-              !this.megaClusterLocallyEligible(player, [left.id]) ||
-              !this.megaClusterLocallyEligible(partner, [right.id])
-            ) continue;
-            for (const piece of player.pieces.filter((candidate) =>
-              this.legalDestinations(player, candidate)
-                .some((tile) => tile.instanceId === left.tileId)
-            )) {
-              pairs.push({
-                decisionId:
-                  `escalation_mega_cluster_joint_${left.id}_${partner.seat}_${right.id}_${piece.id}`,
-                label: decisionLabel("jointMegaCluster", { seat: partner.seat + 1 }),
-                actionId: id,
-                parameters: {
-                  leftId: left.id,
-                  rightId: right.id,
-                  partnerSeat: partner.seat,
-                  pieceId: piece.id,
-                  destinationId: left.tileId
-                }
-              });
-            }
-          }
-        }
-      }
       return pairs;
     }
     if (id === "reorganization") {
-      return globalMoves((piece, destination) => [
-        {
-          decisionId: `escalation_reorganization_move_${piece.id}_${destination.instanceId}`,
-          label: decisionLabel("reorganizeMove"),
-          actionId: id,
-          parameters: {
-            returnTeam: false,
-            pieceId: piece.id,
-            destinationId: destination.instanceId
-          }
-        },
-        ...(player.pieces.some((candidate) => candidate.kind === "team") ? [{
-          decisionId: `escalation_reorganization_return_${piece.id}_${destination.instanceId}`,
-          label: decisionLabel("reorganizeReturn"),
-          actionId: id,
-          parameters: {
-            returnTeam: true,
-            pieceId: piece.id,
-            destinationId: destination.instanceId
-          }
-        }] : [])
-      ]);
+      return globalMoves((piece, destination) => [{
+        decisionId: `escalation_reorganization_${piece.id}_${destination.instanceId}`,
+        label: decisionLabel("reorganizeMove"),
+        actionId: id,
+        parameters: {
+          pieceId: piece.id,
+          destinationId: destination.instanceId
+        }
+      }]);
     }
     if (id === "open_weights") {
       return globalMoves((piece, destination) => [{
@@ -2415,13 +2700,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (
       !Number.isInteger(price) ||
       price < minimumPrice ||
-      buyer[paymentResource] < price
+      buyer[paymentResource] < price ||
+      (foundry.temporaryCompute || 0) < 1 ||
+      foundry.compute < 1
     ) return false;
     if (paymentResource === "runway") {
       this.spendRunway(buyer, price, { cause: "allocation_window_purchase" });
     } else {
       buyer[paymentResource] -= price;
     }
+    foundry.compute -= 1;
+    foundry.temporaryCompute -= 1;
     if (!buyer.temporaryCompute) buyer.temporaryComputeBaseline = buyer.compute;
     this.addResource(buyer, "compute", 1);
     buyer.temporaryCompute = (buyer.temporaryCompute || 0) + 1;
@@ -2470,7 +2759,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       capability: player.capability,
       customers: player.customers,
       scrutiny: player.scrutiny,
-      safety: player.safety
+      researchProtection: player.researchProtection
     };
     let scientificMethodUsedThisResolution = false;
     if (decision.actionId === "organize" && decision.parameters?.mode === "recruit") {
@@ -2505,10 +2794,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (decision.actionId === "organize" && decision.parameters?.mode === "redistribute") {
       this.movePiece(player, decision.parameters);
-      const extra = player.pieces.find(
-        (piece) => piece.id === decision.parameters.extraPieceId
-      );
-      if (extra) extra.tileId = decision.parameters.extraDestinationId;
       this.markAction(player, "organize", decision.label);
       return;
     }
@@ -2523,16 +2808,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           (tile) => tile.instanceId === facility.tileId
         )?.category;
       }
-      this.markAction(player, "organize", decision.label);
-      return;
-    }
-    if (decision.actionId === "organize" && decision.parameters?.mode === "employee_free") {
-      const teams = player.pieces.filter((piece) => piece.kind === "team")
-        .slice(0, decision.parameters.count);
-      player.pieces = player.pieces.filter((piece) => !teams.includes(piece));
-      player.teamsInSupply += teams.length;
-      this.addResource(player, "runway", teams.length * 2);
-      this.addScrutiny(player, 2);
       this.markAction(player, "organize", decision.label);
       return;
     }
@@ -2574,16 +2849,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       : !player.roundMetrics.scientificMethodUsed;
     const scientificMethodProtection =
       decision.actionId === "research" &&
+      !decision.parameters?.trainingResult &&
       this.hasFactionAbility(player, "scientific_method") &&
       player.runway >= scientificMethodRunwayCost &&
-      player.safety === 0 &&
+      player.researchProtection === 0 &&
       decision.parameters?.destinationCategory !== "research" &&
       scientificMethodAvailable;
     const scientificProtection =
       decision.actionId === "research" &&
       (scientificMethodProtection || decision.parameters?.destinationCategory === "research");
+    const resolvedScientificMethod =
+      decision.parameters?.trainingResult?.protection === "scientific_method";
     const deferPublicMandate =
-      scientificMethodProtection &&
+      (scientificMethodProtection || resolvedScientificMethod) &&
       this.rulesVariant.imperialScientificMethodThresholdMandatePenalty > 0;
     if (deferPublicMandate) {
       this.deferredPublicMandateSeats ||= new Set();
@@ -2594,13 +2872,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       scientificMethodRunwayCost,
       { cause: "scientific_method", conversionEligible: true }
     );
-    if (scientificProtection) player.safety += 1;
+    if (scientificProtection) player.researchProtection += 1;
     super.applyResolution(seat, decision);
     if (scientificProtection) {
       const scientificMethodUsed =
         scientificMethodProtection &&
-        player.lastTrainingResult?.safetySpent > 0;
-      player.safety = Math.min(before.safety, player.safety);
+        player.lastTrainingResult?.researchProtectionSpent > 0;
+      player.researchProtection = Math.min(
+        before.researchProtection,
+        player.researchProtection
+      );
       if (scientificMethodUsed) {
         scientificMethodUsedThisResolution = true;
         const capabilityPenalty = Math.min(
@@ -2631,20 +2912,52 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.runway += scientificMethodRunwayCost;
       }
     }
+    if (resolvedScientificMethod) {
+      scientificMethodUsedThisResolution = true;
+      this.spendRunway(player, scientificMethodRunwayCost, {
+        cause: "scientific_method",
+        conversionEligible: true
+      });
+      const capabilityPenalty = Math.min(
+        this.rulesVariant.imperialScientificMethodCapabilityPenalty,
+        player.lastTrainingResult?.capability || 0
+      );
+      if (capabilityPenalty > 0) {
+        player.capability -= capabilityPenalty;
+        player.lastTrainingResult.capability -= capabilityPenalty;
+        const researchResults = player.metrics.researchCapability;
+        researchResults[researchResults.length - 1] -= capabilityPenalty;
+      }
+      player.roundMetrics.scientificMethodUsed = true;
+      player.factionAbilityUsed.scientificMethodUses = scientificMethodLifetimeUses + 1;
+      const scrutinyAdded = this.rulesVariant.imperialScientificMethodScrutiny;
+      if (scrutinyAdded > 0) this.addScrutiny(player, scrutinyAdded);
+      this.recordFactionAbility(player, "scientific_method", {
+        runwaySpent: scientificMethodRunwayCost,
+        duplicatesProtected: 1,
+        capabilityPreserved: player.lastTrainingResult?.capability || 0,
+        capabilityPenalty,
+        thresholdMandateWithheld: 0,
+        scrutinyAdded
+      });
+    }
 
     if (decision.actionId === "fund") {
       const expected = decision.parameters.mode === "venture" ? 4 : 2;
       const actual = decision.parameters.actualRunway ?? expected;
       this.addResource(player, "runway", actual - expected);
-      player.roundMetrics.fundRunway += actual;
+      player.roundMetrics.fundRunway += Math.max(0, player.runway - before.runway);
       if (decision.parameters.extraScrutiny) this.addScrutiny(player, decision.parameters.extraScrutiny);
     }
     if (decision.actionId === "research") {
       const actualCost = decision.parameters.actualComputeCost ?? 1;
       player.compute += 1 - actualCost;
       const gained = player.capability - before.capability;
+      const bankedOrdinaryDomains = gained > 0
+        ? player.lastTrainingResult?.ordinaryDomainCount || 0
+        : 0;
       if (decision.parameters.scalingLawBreakthrough) {
-        const bonus = Math.min(3, gained);
+        const bonus = Math.min(3, bankedOrdinaryDomains);
         this.addResource(player, "capability", bonus);
         this.addScrutiny(player, 2);
         player.factionAbilityUsed.scalingLawBreakthrough = true;
@@ -2654,10 +2967,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         });
       }
       if (this.regime.cycle?.id === "recursive_self_improvement") {
-        this.addResource(player, "capability", gained);
-      }
-      if (decision.parameters.destinationCategory === "frontier" && gained > 0) {
-        this.addResource(player, "capability", 1);
+        this.addResource(player, "capability", bankedOrdinaryDomains);
       }
       if (
         this.regime.cycle?.id === "professional_exam_sweep" &&
@@ -2676,7 +2986,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       player.roundMetrics.bestTrainingDomains = Math.max(
         player.roundMetrics.bestTrainingDomains,
-        gained
+        player.lastTrainingResult?.outcome === "crashed"
+          ? 0
+          : player.lastTrainingResult?.ordinaryDomainCount || 0
       );
       if (
         this.regime.cycle?.id === "recursive_self_improvement" &&
@@ -2756,11 +3068,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.addScrutiny(player, 2);
         player.tacticModifiers.syntheticCelebrityUsed = true;
       }
-      if (this.regime.cycle?.deepfake === "regulate") {
-        player.compute = Math.max(0, player.compute - 1);
+      if (this.regime.round?.deepfake === "regulate") {
         this.addResource(player, "trust", 1);
       }
-      if (this.regime.cycle?.deepfake === "do_nothing") this.addScrutiny(player, 1);
+      if (this.regime.round?.deepfake === "do_nothing") this.addScrutiny(player, 1);
       if (player.tacticModifiers.model_card) {
         this.removeScrutiny(player, 1);
         delete player.tacticModifiers.model_card;
@@ -2806,6 +3117,159 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         mandateSynchronization.capabilityMandateWithheld;
     }
     this.endRunwayConversionContext(player);
+  }
+
+  async resolveAdditionalMovement(policies, seat, {
+    stage,
+    steps,
+    eligibleKinds = new Set(["ceo", "team"])
+  }) {
+    const player = this.players[seat];
+    for (let step = 0; step < steps; step += 1) {
+      const moves = player.pieces
+        .filter((piece) => eligibleKinds.has(piece.kind))
+        .flatMap((piece) => {
+          const current = this.board.find((tile) => tile.instanceId === piece.tileId);
+          return this.board
+            .filter((tile) => axialDistance(current, tile) === 1)
+            .map((tile) => ({
+              decisionId: `${stage}_${step + 1}_${piece.id}_${tile.instanceId}`,
+              label: decisionLabel("moveAdditionalStep", {
+                piece: piece.id,
+                destination: tile.name,
+                remaining: steps - step - 1
+              }),
+              actionId: "organize",
+              parameters: { pieceId: piece.id, destinationId: tile.instanceId }
+            }));
+        });
+      const choice = await this.choose(policies, seat, `${stage}_${step + 1}`, [
+        {
+          decisionId: `${stage}_finish_${step + 1}`,
+          label: decisionLabel("finishAdditionalMovement", {
+            remaining: steps - step
+          }),
+          actionId: "organize",
+          parameters: { finish: true }
+        },
+        ...moves
+      ]);
+      if (choice.parameters.finish) break;
+      this.movePiece(player, choice.parameters);
+    }
+  }
+
+  async resolveRecruitFollowUp(policies, seat) {
+    const player = this.players[seat];
+    const pieceChoice = await this.choose(policies, seat, "organize_recruit_follow_up", [
+      {
+        decisionId: "organize_recruit_move_none",
+        label: decisionLabel("declineRecruitFollowUp"),
+        actionId: "organize",
+        parameters: { decline: true }
+      },
+      ...player.pieces.map((piece) => ({
+        decisionId: `organize_recruit_move_${piece.id}`,
+        label: decisionLabel("chooseRecruitFollowUpPiece", { piece: piece.id }),
+        actionId: "organize",
+        parameters: { pieceId: piece.id }
+      }))
+    ]);
+    if (pieceChoice.parameters.decline) return;
+    const pieceId = pieceChoice.parameters.pieceId;
+    for (let step = 0; step < 2; step += 1) {
+      const piece = player.pieces.find((candidate) => candidate.id === pieceId);
+      const current = this.board.find((tile) => tile.instanceId === piece.tileId);
+      const choice = await this.choose(
+        policies,
+        seat,
+        `organize_recruit_follow_up_step_${step + 1}`,
+        [
+          {
+            decisionId: `organize_recruit_finish_${step + 1}`,
+            label: decisionLabel("finishRecruitFollowUp"),
+            actionId: "organize",
+            parameters: { finish: true }
+          },
+          ...this.board.filter((tile) => axialDistance(current, tile) === 1).map((tile) => ({
+            decisionId: `organize_recruit_step_${step + 1}_${pieceId}_${tile.instanceId}`,
+            label: decisionLabel("moveRecruitFollowUp", {
+              piece: pieceId,
+              destination: tile.name
+            }),
+            actionId: "organize",
+            parameters: { pieceId, destinationId: tile.instanceId }
+          }))
+        ]
+      );
+      if (choice.parameters.finish) break;
+      this.movePiece(player, choice.parameters);
+    }
+  }
+
+  teamSubsets(player) {
+    const teams = player.pieces.filter((piece) => piece.kind === "team");
+    const subsets = [];
+    for (let mask = 1; mask < (1 << teams.length); mask += 1) {
+      subsets.push(teams.filter((_, index) => mask & (1 << index)).map((team) => team.id));
+    }
+    return subsets;
+  }
+
+  async resolveEmployeeFreeFollowUp(policies, seat) {
+    if (this.regime.cycle?.id !== "employee_free_unicorn") return;
+    const player = this.players[seat];
+    const subsets = this.teamSubsets(player);
+    if (!subsets.length) return;
+    const choice = await this.choose(policies, seat, "employee_free_return", [
+      {
+        decisionId: "employee_free_return_none",
+        label: decisionLabel("returnNoTeams"),
+        actionId: "organize",
+        parameters: { teamIds: [] }
+      },
+      ...subsets.map((teamIds) => ({
+        decisionId: `employee_free_return_${teamIds.join("_")}`,
+        label: decisionLabel("returnNamedTeams", {
+          teams: teamIds.join(", "),
+          runway: teamIds.length * 2
+        }),
+        actionId: "organize",
+        parameters: { teamIds }
+      }))
+    ]);
+    const returned = new Set(choice.parameters.teamIds);
+    if (!returned.size) return;
+    player.pieces = player.pieces.filter((piece) => !returned.has(piece.id));
+    player.teamsInSupply += returned.size;
+    this.addResource(player, "runway", returned.size * 2);
+    this.addScrutiny(player, 2);
+  }
+
+  async applyResolutionWithPolicies(policies, seat, selectedDecision) {
+    const decision = clone(selectedDecision);
+    if (decision.actionId === "research" && !decision.consequences?.noOp) {
+      decision.parameters ||= {};
+      decision.parameters.trainingResult = await this.resolveTrainingRunWithPolicies(
+        policies,
+        seat,
+        decision.parameters
+      );
+    }
+    this.applyResolution(seat, decision);
+    if (decision.actionId === "organize" && !decision.consequences?.noOp) {
+      if (decision.parameters?.mode === "recruit") {
+        await this.resolveRecruitFollowUp(policies, seat);
+      } else if (decision.parameters?.mode === "redistribute") {
+        await this.resolveAdditionalMovement(policies, seat, {
+          stage: "organize_redistribute",
+          steps: 5
+        });
+      }
+      await this.resolveEmployeeFreeFollowUp(policies, seat);
+    }
+    await this.settlePendingScrutinyOverflow(policies, "action_scrutiny_overflow");
+    return decision;
   }
 
   rewardFoundryComputeSpend(spenderSeat, spentCompute) {
@@ -2913,6 +3377,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   isAgiEligible(player) {
+    if (player.agiDossier?.revealed) return Boolean(player.agiDossier.eligible);
     return this.declarationReadiness(player).ready;
   }
 
@@ -2983,6 +3448,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       dossier.eligible = dossier.fullyPaid &&
         dossier.choices.publication_claim === "commit";
       player.agiClaimed = dossier.eligible;
+      this.recordEligibility(player, "dossier_reveal");
       this.addScrutiny(
         player,
         dossier.committedCount * this.rulesVariant.agiScrutinyPerCommit
@@ -3021,36 +3487,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   agiClaimStrengths() {
-    const ranked = this.players.map((player) => ({
-      player,
-      score: this.finalMandate(player).score,
-      trust: player.trust,
-      customers: player.customers,
-      compute: player.compute
-    })).sort((left, right) =>
-      right.score - left.score ||
-      right.trust - left.trust ||
-      right.customers - left.customers ||
-      right.compute - left.compute ||
-      left.player.seat - right.player.seat
-    );
-    const rankBySeat = new Map();
-    for (const entry of ranked) {
-      const rank = 1 + ranked.filter((candidate) =>
-        candidate.score > entry.score ||
-        (candidate.score === entry.score && candidate.trust > entry.trust) ||
-        (candidate.score === entry.score && candidate.trust === entry.trust &&
-          candidate.customers > entry.customers) ||
-        (candidate.score === entry.score && candidate.trust === entry.trust &&
-          candidate.customers === entry.customers && candidate.compute > entry.compute)
-      ).length;
-      rankBySeat.set(entry.player.seat, rank);
-    }
-    const publicationTokens = this.regime.persistent?.agiBlogPost ? 2 : 1;
-    return this.players.filter((player) => player.agiDossier.eligible).map((player) => {
+    const publicationStrength = this.regime.persistent?.agiBlogPost ? 2 : 1;
+    const thresholds = this.config.agiDossier.claimResolution.capabilityThresholds;
+    const minimumEvidence = this.rulesVariant.agiMinimumSupportedEvidenceClaims;
+    return this.players.filter((player) => player.agiDossier.eligible).flatMap((player) => {
       const dossier = player.agiDossier;
-      const modules = {
-        publication: publicationTokens,
+      const supportedEvidence = {
         benchmark: Number(
           dossier.choices.benchmark_claim === "commit" &&
           player.capability >= this.config.agiDossier.modules
@@ -3067,51 +3509,46 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             .find((module) => module.id === "authority_claim").threshold
         )
       };
-      const capabilityTokens = this.config.agiDossier.predictionBag.capabilityThresholds
+      const supportedEvidenceClaims = Object.values(supportedEvidence)
+        .reduce((sum, value) => sum + value, 0);
+      const capabilityStrength = thresholds
         .filter((threshold) => player.capability >= threshold).length;
-      const rank = rankBySeat.get(player.seat);
-      const comebackTokens = this.config.agiDossier.predictionBag
-        .mandateComebackTokensByRank[Math.min(
-          rank - 1,
-          this.config.agiDossier.predictionBag.mandateComebackTokensByRank.length - 1
-        )];
-      const tokens = Math.min(
-        this.rulesVariant.agiMaximumClaimTokens,
-        Object.values(modules).reduce((sum, value) => sum + value, 0) +
-          capabilityTokens + comebackTokens
-      );
-      dossier.claimTokens = tokens;
-      return {
+      const strength = publicationStrength + supportedEvidenceClaims + capabilityStrength;
+      dossier.supportedEvidenceClaims = supportedEvidenceClaims;
+      dossier.claimStrength = strength;
+      player.agiClaimed = supportedEvidenceClaims >= minimumEvidence;
+      if (!player.agiClaimed) return [];
+      return [{
         seat: player.seat,
         mandate: this.finalMandate(player).score,
-        mandateRank: rank,
         committedCount: dossier.committedCount,
-        modules,
-        capabilityTokens,
-        comebackTokens,
-        tokens
-      };
+        publicationStrength,
+        supportedEvidence,
+        supportedEvidenceClaims,
+        capabilityStrength,
+        strength
+      }];
     });
   }
 
   resolveAgiOutcome() {
-    const strengths = this.agiClaimStrengths();
-    const noAgiTokens = this.config.agiDossier.predictionBag.noAgiTokens;
-    const predictionTokens = [
-      ...Array.from({ length: noAgiTokens }, () => "no_agi"),
-      ...strengths.flatMap((entry) =>
-        Array.from({ length: entry.tokens }, () => entry.seat)
-      )
-    ];
+    const initiativeRank = new Map(
+      this.initiativeOrder().map((seat, index) => [seat, index])
+    );
+    const strengths = this.agiClaimStrengths().sort((left, right) =>
+      right.strength - left.strength ||
+      right.mandate - left.mandate ||
+      this.players[right.seat].trust - this.players[left.seat].trust ||
+      this.players[right.seat].customers - this.players[left.seat].customers ||
+      this.players[right.seat].compute - this.players[left.seat].compute ||
+      initiativeRank.get(left.seat) - initiativeRank.get(right.seat)
+    );
     const resolution = {
-      method: "two-token-prediction-bag",
-      noAgiTokens,
+      method: "highest-supported-claim",
       claimantSeats: strengths.map((entry) => entry.seat),
       provisionalWinnerSeats: this.provisionalWinnerSeats(),
       strengths,
-      draws: [],
       selectedSeat: null,
-      selectedMandateRank: null,
       winnerOverridden: false,
       emerged: false
     };
@@ -3119,20 +3556,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.matchMetrics.agiResolution = resolution;
       return;
     }
-    const rng = createRng(`${this.seed}:agi-prediction-bag`);
-    const bag = [...predictionTokens];
-    for (let draw = 0; draw < 2; draw += 1) {
-      const index = Math.floor(rng() * bag.length);
-      resolution.draws.push(bag.splice(index, 1)[0]);
-    }
-    if (
-      !Number.isInteger(resolution.draws[0]) ||
-      resolution.draws[0] !== resolution.draws[1]
-    ) {
-      this.matchMetrics.agiResolution = resolution;
-      return;
-    }
-    const selected = strengths.find((entry) => entry.seat === resolution.draws[0]);
+    const selected = strengths[0];
     const player = this.players[selected.seat];
     player.agiDeclared = true;
     this.firstAgiSeat = player.seat;
@@ -3140,11 +3564,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     player.history.declarations += 1;
     this.matchMetrics.declarations = 1;
     this.markAgiFunnel(player, "emergenceTriggered", "final_agi_resolution", {
-      draws: [...resolution.draws]
+      claimStrength: selected.strength
     });
     this.markAgiFunnel(player, "declared", "final_agi_resolution", {
       mandate: selected.mandate,
-      claimTokens: selected.tokens
+      claimStrength: selected.strength,
+      supportedEvidenceClaims: selected.supportedEvidenceClaims
     });
     markScenarioDeclaration(this, player);
     if (this.regime.persistent?.agiPersonhood === "person") {
@@ -3157,7 +3582,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.matchMetrics.systemicRiskCreated += 1;
     }
     resolution.selectedSeat = player.seat;
-    resolution.selectedMandateRank = selected.mandateRank;
     resolution.winnerOverridden = !resolution.provisionalWinnerSeats.includes(
       player.seat
     );
@@ -3166,7 +3590,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.recordEvent(
       "agi_declared",
       player.seat,
-      `${player.factionName}'s matching prediction tokens produced AGI and overrode the Mandate result.`
+      `${player.factionName} formed the strongest supported AGI claim.`
     );
   }
 
@@ -3186,91 +3610,66 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.movePiece(player, decision.parameters || {});
 
     if (id === "mega_cluster") {
-      const partner = decision.parameters.partnerSeat === undefined
-        ? null
-        : this.players[decision.parameters.partnerSeat];
-      const leadCanPay = player.runway >= (partner ? 2 : 3) &&
-        player.compute >= (partner ? 1 : 2);
-      let accepted = leadCanPay;
-      if (partner) {
-        const partnerCanPay = partner.runway >= 1 && partner.compute >= 1;
-        const response = await this.choose(
-          policies,
-          partner.seat,
-          "mega_cluster_partner",
-          [
-            ...(leadCanPay && partnerCanPay ? [{
-              decisionId: "mega_cluster_accept",
-              label: decisionLabel("megaClusterAccept"),
-              actionId: "mega_cluster"
-            }] : []),
-            {
-              decisionId: "mega_cluster_reject",
-              label: decisionLabel("megaClusterReject"),
-              actionId: "mega_cluster"
-            }
-          ]
-        );
-        accepted = response.decisionId === "mega_cluster_accept";
-      }
-      if (partner && accepted) {
-        accepted =
-          this.megaClusters.length < this.config.sharedSupply.megaClusterPairs &&
-          this.megaClusterDecisionLocallyEligible(seat, decision.parameters);
-      }
-      if (partner && accepted) {
-        this.spendRunway(player, 2, {
-          cause: "mega_cluster",
-          conversionEligible: true
-        });
-        player.compute -= 1;
-        this.beginRunwayConversionContext(partner, {
-          actionId: "mega_cluster",
-          decisionId: "mega_cluster_accept"
-        }, "escalation_partner");
-        this.spendRunway(partner, 1, {
-          cause: "mega_cluster_partner",
-          conversionEligible: true
-        });
-        this.endRunwayConversionContext(partner);
-        partner.compute -= 1;
-      } else if (!partner) {
+      if (player.runway >= 3 && player.compute >= 2) {
         this.spendRunway(player, 3, {
           cause: "mega_cluster",
           conversionEligible: true
         });
         player.compute -= 2;
-      }
-      if (accepted) {
         const cluster = {
           id: `mega-${this.megaClusters.length + 1}`,
           leadSeat: seat,
-          partnerSeat: partner?.seat ?? null,
           leftId: decision.parameters.leftId,
           rightId: decision.parameters.rightId,
           powered: false
         };
         this.megaClusters.push(cluster);
         player.megaClusters.push(cluster);
-        if (partner) partner.megaClusters.push(cluster);
         this.addScrutiny(player, 2);
       }
     } else if (id === "reorganization") {
-      for (const piece of player.pieces.filter((piece) => piece.kind === "team")) {
-        const options = this.board.filter((tile) =>
-          axialDistance(
-            this.board.find((current) => current.instanceId === piece.tileId),
-            tile
-          ) <= 1
+      for (const team of player.pieces.filter((piece) => piece.kind === "team")) {
+        const current = this.board.find((tile) => tile.instanceId === team.tileId);
+        const choice = await this.choose(
+          policies,
+          seat,
+          `reorganization_move_${team.id}`,
+          this.board.filter((tile) => axialDistance(current, tile) <= 1).map((tile) => ({
+            decisionId: `reorganization_${team.id}_${tile.instanceId}`,
+            label: decisionLabel("reorganizationTeamDestination", {
+              team: team.id,
+              destination: tile.name
+            }),
+            actionId: id,
+            parameters: { teamId: team.id, destinationId: tile.instanceId }
+          }))
         );
-        piece.tileId = options[0].instanceId;
+        team.tileId = choice.parameters.destinationId;
       }
-      if (decision.parameters.returnTeam) {
-        const team = player.pieces.find((piece) => piece.kind === "team");
-        player.pieces = player.pieces.filter((piece) => piece.id !== team.id);
-        player.teamsInSupply += 1;
-        this.addResource(player, "runway", 3);
-        this.addScrutiny(player, 1);
+      const teams = player.pieces.filter((piece) => piece.kind === "team");
+      if (teams.length) {
+        const choice = await this.choose(policies, seat, "reorganization_return", [
+          {
+            decisionId: "reorganization_return_none",
+            label: decisionLabel("reorganizationReturnNone"),
+            actionId: id,
+            parameters: { teamId: null }
+          },
+          ...teams.map((team) => ({
+            decisionId: `reorganization_return_${team.id}`,
+            label: decisionLabel("reorganizationReturnNamed", { team: team.id }),
+            actionId: id,
+            parameters: { teamId: team.id }
+          }))
+        ]);
+        if (choice.parameters.teamId) {
+          player.pieces = player.pieces.filter(
+            (piece) => piece.id !== choice.parameters.teamId
+          );
+          player.teamsInSupply += 1;
+          this.addResource(player, "runway", 3);
+          this.addScrutiny(player, 1);
+        }
       }
     } else if (id === "open_weights") {
       player.history.openWeightsCapabilitySnapshot = this.players.map((candidate) => candidate.capability);
@@ -3315,26 +3714,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
                 resolvableWithoutTrade: currentResolutionCount > 0
               }
             };
-          });
+          })
+          .filter((selection) => selection.consequences.currentResolutionCount > 0);
         if (!selections.length) break;
         const selection = await this.choose(policies, seat, `agent_swarm_${index + 1}`, selections);
-        let legal = swarmResolutions(selection.parameters.actionId);
-        if (!legal.length) {
-          player.metrics.forcedNoOps += 1;
-          legal = [{
-            decisionId: `forced_noop_${selection.parameters.actionId}`,
-            label: decisionLabel("noLegalResolution", {
-              action: selection.parameters.actionId
-            }),
-            actionId: selection.parameters.actionId,
-            parameters: {},
-            consequences: { noOp: true }
-          }];
-        }
+        const legal = swarmResolutions(selection.parameters.actionId);
         const resolution = clone(
           await this.choose(policies, seat, `agent_resolve_${index + 1}`, legal)
         );
-        this.applyResolution(seat, resolution);
+        const computeBeforeSubaction = player.compute;
+        await this.applyResolutionWithPolicies(policies, seat, resolution);
+        this.rewardFoundryComputeSpend(
+          seat,
+          computeBeforeSubaction - player.compute
+        );
       }
       this.addScrutiny(
         player,
@@ -3429,16 +3822,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   megaClusterDecisionLocallyEligible(seat, parameters = {}) {
     const player = this.players[seat];
-    const partner = parameters.partnerSeat === undefined
-      ? null
-      : this.players[parameters.partnerSeat];
     if (!player || !parameters.leftId || !parameters.rightId) return false;
     if (!this.megaClusterHostsAvailable([parameters.leftId, parameters.rightId])) {
       return false;
-    }
-    if (partner) {
-      return this.megaClusterLocallyEligible(player, [parameters.leftId]) &&
-        this.megaClusterLocallyEligible(partner, [parameters.rightId]);
     }
     return this.megaClusterLocallyEligible(player, [parameters.leftId, parameters.rightId]);
   }
@@ -3456,17 +3842,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   async produceFacility(policies, player, facility, stage = "facility_production") {
+    const countsForProduction = stage === "facility_production";
     if (facility.category === "cloud") {
       this.addResource(player, "compute", 2);
-      player.roundMetrics.computeProduced += 2;
+      if (countsForProduction) player.roundMetrics.computeProduced += 2;
     } else if (facility.category === "research") {
-      this.addResource(player, "safety", 1);
+      this.addResource(player, "compute", 1);
+      if (countsForProduction) player.roundMetrics.computeProduced += 1;
     } else if (facility.category === "consumer") {
       this.addResource(player, "runway", 1);
     } else if (facility.category === "chip") {
       this.addResource(player, "compute", 1);
       this.addResource(player, "runway", 1);
-      player.roundMetrics.computeProduced += 1;
+      if (countsForProduction) player.roundMetrics.computeProduced += 1;
     } else if (facility.category === "capital") {
       this.addResource(player, "runway", 2);
     } else if (facility.category === "talent") {
@@ -3516,14 +3904,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const tile = this.board.find((candidate) => candidate.instanceId === facility.tileId);
       if (tile?.id === "grid_reactor") {
         this.addResource(player, "compute", 1);
-        player.roundMetrics.computeProduced += 1;
+        if (countsForProduction) player.roundMetrics.computeProduced += 1;
       } else {
         this.removeScrutiny(player, 1);
       }
     }
     if (facility.customSilicon) {
       this.addResource(player, "compute", 1);
-      player.roundMetrics.computeProduced += 1;
+      if (countsForProduction) player.roundMetrics.computeProduced += 1;
     }
   }
 
@@ -3531,7 +3919,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (player.escalationsUsed.includes(id)) return;
     const tokenFree = id === "agent_swarm" &&
       this.regime.cycle?.id === "agent_swarm_escapes_scope";
-    if (!tokenFree) player.escalation -= 1;
+    if (!tokenFree) player.programUses -= 1;
     player.escalationsUsed.push(id);
     if (!player.history.escalationRounds.includes(this.round)) {
       player.history.escalationRounds.push(this.round);
@@ -3548,6 +3936,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       exportable: 0,
       exported: 0,
       imported: 0,
+      importFacilityIds: [],
       importSuppliers: []
     }));
 
@@ -3574,17 +3963,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         generation[player.seat].generated +=
           infrastructure[player.seat].connectedGenerators.length * 2;
       }
-      const emergency = player.roundMetrics.emergencyPower || 0;
-      generation[player.seat].generated += emergency;
-      this.addScrutiny(player, emergency);
-      if (emergency === 2) {
-        this.systemicRisk += 1;
-        this.matchMetrics.systemicRiskCreated += 1;
-      }
       this.recordAgiCoreRequirements(player, "production_started");
     }
+    await this.settlePendingScrutinyOverflow(
+      policies,
+      "production_generation_scrutiny_overflow"
+    );
 
     const suppliersUsed = new Set();
+    const requestedSuppliersByBuyer = this.players.map(() => new Set());
     for (const buyerSeat of this.initiativeOrder()) {
       if (this.round < 3) break;
       const buyer = this.players[buyerSeat];
@@ -3593,41 +3980,65 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         purchase < this.rulesVariant.powerPurchaseRequests && buyer.runway > 0;
         purchase += 1
       ) {
-        const suppliers = this.players.filter((supplier) =>
-          supplier.seat !== buyerSeat &&
-          !suppliersUsed.has(supplier.seat) &&
-          generation[supplier.seat].exportable - generation[supplier.seat].exported >= 1 &&
-          [...infrastructure[buyerSeat].networked].some((buyerFacilityId) => {
+        const endpoints = this.players.flatMap((supplier) => {
+          if (
+            supplier.seat === buyerSeat ||
+            suppliersUsed.has(supplier.seat) ||
+            requestedSuppliersByBuyer[buyerSeat].has(supplier.seat) ||
+            generation[supplier.seat].exportable - generation[supplier.seat].exported < 1
+          ) return [];
+          const supplierFacilities = [...infrastructure[supplier.seat].networked]
+            .map((facilityId) => supplier.facilities.find(
+              (facility) => facility.id === facilityId
+            ))
+            .filter((facility) => facility && (
+              this.rulesVariant.networkInfrastructureEnabled ||
+              infrastructure[supplier.seat].connectedGenerators.some((generator) =>
+                this.areAdjacent(generator.tileId, facility.tileId) ||
+                generator.tileId === facility.tileId
+              )
+            ));
+          return [...infrastructure[buyerSeat].networked].flatMap((buyerFacilityId) => {
             const buyerFacility = buyer.facilities.find(
               (facility) => facility.id === buyerFacilityId
             );
-            return [...infrastructure[supplier.seat].networked].some((supplierFacilityId) => {
-              const supplierFacility = supplier.facilities.find(
-                (facility) => facility.id === supplierFacilityId
-              );
-              return buyerFacility && supplierFacility &&
-                this.areAdjacent(buyerFacility.tileId, supplierFacility.tileId);
-            });
-          })
-        );
-        if (!suppliers.length) break;
+            return supplierFacilities
+              .filter((supplierFacility) => buyerFacility &&
+                this.areAdjacent(buyerFacility.tileId, supplierFacility.tileId))
+              .map((supplierFacility) => ({
+                supplier,
+                buyerFacility,
+                supplierFacility
+              }));
+          });
+        });
+        if (!endpoints.length) break;
         const request = await this.choose(policies, buyerSeat, `power_purchase_${purchase}`, [
           {
             decisionId: `power_purchase_none_${purchase}`,
             label: decisionLabel("declinePower"),
             actionId: "production"
           },
-          ...suppliers.map((supplier) => ({
-            decisionId: `power_purchase_from_${supplier.seat}_${purchase}`,
-            label: decisionLabel("buyPower", { seat: supplier.seat + 1 }),
+          ...endpoints.map(({ supplier, buyerFacility, supplierFacility }) => ({
+            decisionId:
+              `power_purchase_from_${supplier.seat}_${buyerFacility.id}_` +
+              `${supplierFacility.id}_${purchase}`,
+            label: decisionLabel("buyPowerAtConnection", {
+              seat: supplier.seat + 1,
+              buyerFacility: buyerFacility.id,
+              supplierFacility: supplierFacility.id
+            }),
             actionId: "production",
             parameters: {
               supplierSeat: supplier.seat,
               targetSeat: supplier.seat,
+              buyerFacilityId: buyerFacility.id,
+              supplierFacilityId: supplierFacility.id
             }
           }))
         ]);
         if (request.parameters?.supplierSeat === undefined) break;
+        requestedSuppliersByBuyer[buyerSeat].add(request.parameters.supplierSeat);
         const supplier = this.players[request.parameters.supplierSeat];
         const promise = this.activePowerPromise(supplier.seat, buyerSeat);
         const response = await this.choose(
@@ -3683,6 +4094,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.addResource(supplier, "runway", 1);
         generation[supplier.seat].exported += 1;
         generation[buyer.seat].imported += 1;
+        generation[buyer.seat].importFacilityIds.push(
+          request.parameters.buyerFacilityId
+        );
         generation[buyer.seat].importSuppliers.push(supplier.seat);
         suppliersUsed.add(supplier.seat);
         buyer.metrics.powerBought += 1;
@@ -3718,6 +4132,37 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       });
     }
 
+    // Headline-granted supplemental Power is chosen in the Allocate box, after
+    // installed generation and every purchase request are public.
+    if (this.regime.round?.emergencyPowerAuthority) {
+      for (const seat of this.initiativeOrder()) {
+        const choice = await this.choose(
+          policies,
+          seat,
+          "production_emergency_power",
+          [0, 1, 2].map((power) => ({
+            decisionId: `production_emergency_power_${power}`,
+            label: decisionLabel("authorizeEmergencyPower", { power }),
+            actionId: "production",
+            parameters: { power }
+          }))
+        );
+        const player = this.players[seat];
+        const power = choice.parameters.power;
+        player.roundMetrics.emergencyPower = power;
+        generation[seat].generated += power;
+        this.addScrutiny(player, power);
+        if (power === 2) {
+          this.systemicRisk += 1;
+          this.matchMetrics.systemicRiskCreated += 1;
+        }
+      }
+      await this.settlePendingScrutinyOverflow(
+        policies,
+        "production_supplemental_power_scrutiny_overflow"
+      );
+    }
+
     for (const player of this.players) {
       const state = infrastructure[player.seat];
       const available =
@@ -3726,41 +4171,94 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         generation[player.seat].exported +
         generation[player.seat].imported;
       const eligible = player.facilities.filter((facility) => state.networked.has(facility.id));
+      const projectContributions = this.megaClusters.flatMap((cluster) => {
+        if (cluster.leadSeat === player.seat) {
+          return [{
+            clusterId: cluster.id,
+            demand: 2,
+            hostIds: [cluster.leftId, cluster.rightId],
+            additionalDemandHostIds: [cluster.leftId, cluster.rightId]
+          }];
+        }
+        return [];
+      });
       const subsets = [];
-      for (let mask = 0; mask < 2 ** eligible.length; mask += 1) {
-        const selected = eligible.filter((_, index) => mask & (1 << index));
-        const demand = selected.length;
-        const installedGeneratorPower = state.connectedGenerators.reduce(
-          (sum, generator) => sum + generator.capacity,
-          0
-        );
-        const candidateAllocationValid = !this.rulesVariant.singleGeneratorRule ||
-          canAllocateLocalPower({
-            board: this.board,
-            player,
-            selectedFacilityIds: selected.map((facility) => facility.id),
-            connectedGenerators: state.connectedGenerators,
-            startingGridPower: generation[player.seat].starter,
-            importedPower: generation[player.seat].imported,
-            supplementalPower: Math.max(
-              0,
-              generation[player.seat].generated - installedGeneratorPower
-            ),
-            exportedPower: generation[player.seat].exported
-          });
-        if (demand <= available && candidateAllocationValid) {
-          subsets.push({ selected, demand });
+      for (let facilityMask = 0; facilityMask < 2 ** eligible.length; facilityMask += 1) {
+        const selected = eligible.filter((_, index) => facilityMask & (1 << index));
+        const selectedIds = selected.map((facility) => facility.id);
+        const selectedSet = new Set(selectedIds);
+        for (
+          let projectMask = 0;
+          projectMask < 2 ** projectContributions.length;
+          projectMask += 1
+        ) {
+          const projects = projectContributions.filter(
+            (_, index) => projectMask & (1 << index)
+          );
+          if (projects.some((project) =>
+            project.hostIds.some((hostId) => !selectedSet.has(hostId))
+          )) continue;
+          const additionalFacilityDemandIds = projects.flatMap(
+            (project) => project.additionalDemandHostIds
+          );
+          const demand = selected.length + projects.reduce(
+            (sum, project) => sum + project.demand,
+            0
+          );
+          const installedGeneratorPower = state.connectedGenerators.reduce(
+            (sum, generator) => sum + generator.capacity,
+            0
+          );
+          const candidateAllocationValid = !this.rulesVariant.singleGeneratorRule ||
+            canAllocateLocalPower({
+              board: this.board,
+              player,
+              selectedFacilityIds: selectedIds,
+              connectedGenerators: state.connectedGenerators,
+              startingGridPower: generation[player.seat].starter,
+              importedPower: this.rulesVariant.networkInfrastructureEnabled
+                ? generation[player.seat].imported
+                : 0,
+              importedFacilityIds: this.rulesVariant.networkInfrastructureEnabled
+                ? []
+                : generation[player.seat].importFacilityIds,
+              supplementalPower: Math.max(
+                0,
+                generation[player.seat].generated - installedGeneratorPower
+              ),
+              exportedPower: generation[player.seat].exported,
+              additionalFacilityDemandIds
+            });
+          if (demand <= available && candidateAllocationValid) {
+            subsets.push({ selected, projects, demand });
+          }
         }
       }
-      const decisions = subsets.map(({ selected, demand }) => ({
-        decisionId: `power_${selected.map((facility) => facility.id).join("_") || "none"}`,
-        label: selected.length
-          ? `Power ${selected.map((facility) => facility.id).join(", ")} (${demand}/${available})`
-          : `Power no Facilities (0/${available})`,
-        actionId: "production",
-        parameters: { facilityIds: selected.map((facility) => facility.id), demand },
-        consequences: { poweredFacilities: selected.length, powerDemand: demand }
-      }));
+      const decisions = subsets.map(({ selected, projects, demand }) => {
+        const projectIds = projects.map((project) => project.clusterId);
+        return {
+          decisionId:
+            `power_${selected.map((facility) => facility.id).join("_") || "none"}_` +
+            `projects_${projectIds.join("_") || "none"}`,
+          label: decisionLabel("allocatePower", {
+            facilities: selected.map((facility) => facility.id).join(", ") || "none",
+            projects: projectIds.join(", ") || "none",
+            demand,
+            available
+          }),
+          actionId: "production",
+          parameters: {
+            facilityIds: selected.map((facility) => facility.id),
+            projectIds,
+            demand
+          },
+          consequences: {
+            poweredFacilities: selected.length,
+            poweredProjects: projectIds.length,
+            powerDemand: demand
+          }
+        };
+      });
       const allocation = await this.choose(
         policies,
         player.seat,
@@ -3782,83 +4280,63 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           candidate.round === this.round &&
           candidate.buyerSeat === player.seat
       )) {
-        trade.causallyNecessary = necessarySuppliers.includes(
-          trade.supplierSeat
-        );
+        trade.causallyNecessary = necessarySuppliers.includes(trade.supplierSeat);
       }
-      for (const facility of player.facilities) {
-        facility.powered = poweredIds.has(facility.id);
-      }
+      for (const facility of player.facilities) facility.powered = poweredIds.has(facility.id);
+      player.roundMetrics.poweredProjectIds = allocation.parameters.projectIds;
       player.roundMetrics.powerDemandSatisfied = allocation.parameters.demand;
       player.roundMetrics.availablePower = available;
     }
 
     for (const cluster of this.megaClusters) {
       const lead = this.players[cluster.leadSeat];
-      const partner = cluster.partnerSeat === null ? lead : this.players[cluster.partnerSeat];
       const left = lead.facilities.find((facility) => facility.id === cluster.leftId);
-      const right = partner.facilities.find((facility) => facility.id === cluster.rightId) ||
-        lead.facilities.find((facility) => facility.id === cluster.rightId);
-      if (!left || !right || !left.powered || !right.powered ||
-          !this.areAdjacent(left.tileId, right.tileId)) {
-        cluster.powered = false;
-        continue;
-      }
-      if (cluster.partnerSeat === null) {
-        const remaining =
-          lead.roundMetrics.availablePower - lead.roundMetrics.powerDemandSatisfied;
-        cluster.powered = remaining >= 2;
-        if (cluster.powered) {
-          lead.roundMetrics.powerDemandSatisfied += 2;
-          this.addResource(lead, "compute", 3);
-          lead.roundMetrics.computeProduced += 3;
-        }
-      } else {
-        const leadRemaining =
-          lead.roundMetrics.availablePower - lead.roundMetrics.powerDemandSatisfied;
-        const partnerRemaining =
-          partner.roundMetrics.availablePower - partner.roundMetrics.powerDemandSatisfied;
-        cluster.powered = leadRemaining >= 1 && partnerRemaining >= 1;
-        if (cluster.powered) {
-          lead.roundMetrics.powerDemandSatisfied += 1;
-          partner.roundMetrics.powerDemandSatisfied += 1;
-          this.addResource(lead, "compute", 2);
-          this.addResource(partner, "compute", 1);
-          lead.roundMetrics.computeProduced += 2;
-          partner.roundMetrics.computeProduced += 1;
-        }
-      }
+      const right = lead.facilities.find((facility) => facility.id === cluster.rightId);
+      const leadCommitted = lead.roundMetrics.poweredProjectIds?.includes(cluster.id);
+      cluster.powered = Boolean(
+        left && right && left.powered && right.powered &&
+        this.areAdjacent(left.tileId, right.tileId) &&
+        leadCommitted
+      );
     }
 
-    for (const player of this.players) {
+    // Produce box: Facilities for every player, then Customer income, then
+    // active Mega-Clusters. Initiative orders each sub-step.
+    for (const seat of this.initiativeOrder()) {
+      const player = this.players[seat];
       for (const facility of player.facilities.filter((candidate) => candidate.powered)) {
         await this.produceFacility(policies, player, facility);
       }
-      if (
-        this.rulesVariant.networkInfrastructureEnabled &&
-        this.round >= 2 &&
-        player.facilities.filter((facility) => facility.powered).length >= 2
-      ) {
-        const choice = await this.choose(policies, player.seat, "network_bonus", [
-          {
-            decisionId: "network_runway",
-            label: decisionLabel("networkBonusRunway"),
-            actionId: "production",
-            consequences: { runway: 1 }
-          },
-          {
-            decisionId: "network_compute",
-            label: decisionLabel("networkBonusCompute"),
-            actionId: "production",
-            consequences: { compute: 1 }
-          }
-        ]);
-        const resource = choice.decisionId === "network_compute" ? "compute" : "runway";
-        this.addResource(player, resource, 1);
-        if (resource === "compute") player.roundMetrics.computeProduced += 1;
-      }
     }
 
+    for (const seat of this.initiativeOrder()) {
+      const player = this.players[seat];
+      let customerIncome = Math.max(
+        0,
+        player.customers - (player.roundMetrics.discountedCustomerNoIncome || 0)
+      );
+      if (this.regime.round?.deepfakeIncome) customerIncome += Math.max(
+        0,
+        player.customers -
+          (this.regime.round.deepfakeCustomersAtVote?.[player.seat] ?? player.customers)
+      );
+      this.addResource(player, "runway", customerIncome);
+    }
+
+    const initiativeRank = new Map(
+      this.initiativeOrder().map((seat, index) => [seat, index])
+    );
+    for (const cluster of [...this.megaClusters].sort((left, right) =>
+      initiativeRank.get(left.leadSeat) - initiativeRank.get(right.leadSeat) ||
+      left.id.localeCompare(right.id)
+    )) {
+      if (!cluster.powered) continue;
+      const lead = this.players[cluster.leadSeat];
+      this.addResource(lead, "compute", 3);
+      lead.roundMetrics.computeProduced += 3;
+    }
+
+    // Partner box: Joint Ventures always resolve after all Produce sub-steps.
     for (const contract of this.contracts
       .filter((candidate) => candidate.kind === "joint_venture")
       .sort((left, right) => left.id - right.id)) {
@@ -3879,8 +4357,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (axialDistance(leftTile, rightTile) > range) continue;
       const leftResource = this.facilityContractResource(right);
       const rightResource = this.facilityContractResource(left);
-      if (leftResource) this.addResource(leftPlayer, leftResource, 1);
-      if (rightResource) this.addResource(rightPlayer, rightResource, 1);
+      if (leftResource) {
+        this.addResource(leftPlayer, leftResource, 1);
+        if (leftResource === "compute") leftPlayer.roundMetrics.computeProduced += 1;
+      }
+      if (rightResource) {
+        this.addResource(rightPlayer, rightResource, 1);
+        if (rightResource === "compute") rightPlayer.roundMetrics.computeProduced += 1;
+      }
       if (contract.createdRound === this.round) {
         leftPlayer.roundMetrics.activeNewJointVentures =
           (leftPlayer.roundMetrics.activeNewJointVentures || 0) + 1;
@@ -3889,14 +4373,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
 
+    await this.settlePendingScrutinyOverflow(
+      policies,
+      "production_scrutiny_overflow"
+    );
+
     for (const player of this.players) {
-      let customerIncome = Math.max(
-        0,
-        player.customers - (player.roundMetrics.discountedCustomerNoIncome || 0)
-      );
-      if (this.regime.round?.deepfakeIncome) customerIncome +=
-        player.customers - player.roundMetrics.customersStart;
-      this.addResource(player, "runway", customerIncome);
       const poweredFacilityIds = player.facilities
         .filter((facility) => facility.powered)
         .map((facility) => facility.id);
@@ -3964,7 +4446,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return result;
   }
 
-  audit() {
+  applyAutomaticPenalty(player, cause) {
+    if (player.runway > 0) this.spendRunway(player, 1, { cause });
+    else if (player.trust > 0) this.addResource(player, "trust", -1);
+  }
+
+  async audit(policies) {
     const base = this.config.rounds[this.round - 1].auditBaseDraws;
     const draws = Math.max(
       1,
@@ -3982,33 +4469,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const selected = bag[Math.floor(rng() * bag.length)];
       if (selected.type === "systemic") {
         this.systemicRisk -= 1;
-        for (const player of this.players.filter((candidate) => candidate.customers >= 3)) {
-          if (this.round === 4) {
-            if (player.runway >= 2) {
-              this.spendRunway(player, 2, { cause: "systemic_audit" });
-            }
-            else if (player.mandate > 0) player.mandate -= 1;
-            else this.spendRunway(player, player.runway, { cause: "systemic_audit" });
-          } else if (player.runway > 0) {
-            this.spendRunway(player, 1, { cause: "systemic_audit" });
-          }
-          else this.addResource(player, "trust", -1);
+        for (const seat of this.initiativeOrder()) {
+          const player = this.players[seat];
+          if (player.customers < 3) continue;
+          this.applyAutomaticPenalty(player, "systemic_audit");
           player.metrics.systemicRiskHits += 1;
         }
       } else {
         const player = this.players[selected.seat];
         player.scrutiny -= 1;
         player.metrics.auditHits += 1;
-        if (this.round === 4) {
-          if (player.runway >= 2) {
-            this.spendRunway(player, 2, { cause: "player_audit" });
-          }
-          else if (player.mandate > 0) player.mandate -= 1;
-          else this.spendRunway(player, player.runway, { cause: "player_audit" });
-        } else if (player.runway > 0) {
-          this.spendRunway(player, 1, { cause: "player_audit" });
-        }
-        else this.addResource(player, "trust", -1);
+        this.applyAutomaticPenalty(player, "player_audit");
       }
     }
   }
@@ -4027,14 +4498,21 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (id === "compute_new_weather") return player.roundMetrics.computeProduced;
       if (id === "zero_incident_quarter") {
         const added = player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart;
-        return added > 0 ? -added : -Infinity;
+        return -added;
       }
       if (id === "responsible_acceleration") return player.trust >= 4 ? player.capability : -1;
       if (id === "markets_prefer_destiny") return player.roundMetrics.fundRunway;
       return 0;
     });
     const minimum = this.roundMandate.minimumQualification ?? 1;
-    const qualifiedValues = values.map((value) => value >= minimum ? value : -Infinity);
+    const qualificationValues = id === "zero_incident_quarter"
+      ? this.players.map((player) =>
+        player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart
+      )
+      : values;
+    const qualifiedValues = values.map((value, index) =>
+      qualificationValues[index] >= minimum ? value : -Infinity
+    );
     const maximum = Math.max(...qualifiedValues);
     increment(this.matchMetrics.mandates, id);
     if (!Number.isFinite(maximum)) return;
@@ -4101,7 +4579,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   tradableResources(player, receiver, excluded = null) {
     const exportControl = this.regime.cycle?.id === "export_controls";
-    return ["runway", "compute", "safety"].filter((resource) =>
+    return ["runway", "compute"].filter((resource) =>
       resource !== excluded &&
       !(exportControl && resource === "compute") &&
       player[resource] > 0 &&
@@ -4125,14 +4603,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const player = this.players[seat];
     const partnerCap = this.factionResourceCap(partner, resource);
     const maximumGive = Math.min(player[resource], partnerCap - partner[resource]);
-    return Array.from({ length: maximumGive }, (_, index) => index + 1);
+    return maximumGive >= 1 ? [1] : [];
   }
 
   immediateTradeReceiveAmounts(seat, partner, resource) {
     const player = this.players[seat];
     const playerCap = this.factionResourceCap(player, resource);
     const maximumReceive = Math.min(partner[resource], playerCap - player[resource]);
-    return Array.from({ length: maximumReceive }, (_, index) => index + 1);
+    return maximumReceive >= 1 ? [1] : [];
   }
 
   dealFlowEligibleTrade(offer) {
@@ -4147,8 +4625,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const snapshots = [player, partner].map((participant) => ({
       participant,
       runway: participant.runway,
-      compute: participant.compute,
-      safety: participant.safety
+      compute: participant.compute
     }));
     player[offer.giveResource] -= offer.giveAmount;
     partner[offer.giveResource] += offer.giveAmount;
@@ -4173,7 +4650,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const snapshot of snapshots) {
       snapshot.participant.runway = snapshot.runway;
       snapshot.participant.compute = snapshot.compute;
-      snapshot.participant.safety = snapshot.safety;
     }
     return resolves;
   }
@@ -4191,6 +4667,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             (resource) => this.immediateTradeReceiveAmounts(seat, partner, resource).length > 0
           );
           for (const receiveResource of receiveResources) {
+            if (receiveResource === giveResource) continue;
             for (const receiveAmount of this.immediateTradeReceiveAmounts(
               seat,
               partner,
@@ -4220,6 +4697,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   immediateTradeDecisions(seat, timing = "before") {
+    if (timing !== "before") {
+      throw new RangeError("Immediate trades occur only before action resolution.");
+    }
     const player = this.players[seat];
     const selectedAction = player.selectedAction;
     const selectedEscalation = selectedAction?.startsWith("escalation_");
@@ -4230,7 +4710,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       ? this.selectedActionResolutions(seat).length > 0
       : true;
     const offers = this.immediateTradeOffers(seat, timing).filter((offer) =>
-      timing === "after" ||
       !selectedActionId ||
       this.provisionalTradeResolvesSelection(seat, offer, selectedActionId, {
         isEscalation: selectedEscalation
@@ -4257,9 +4736,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           offer.receiveAmount
         ].join("_"),
         label: decisionLabel("tradeOffer", {
-          timing: timing === "before"
-            ? decisionLabel("tradeTimingBefore")
-            : decisionLabel("tradeTimingAfter"),
+          timing: decisionLabel("tradeTimingBefore"),
           giveAmount: offer.giveAmount,
           giveResource: offer.giveResource,
           partner: this.players[offer.partnerSeat].factionName,
@@ -4270,7 +4747,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         parameters: offer,
         consequences: {
           timing,
-          enablesSelectedAction: timing === "before" && !selectedCurrentlyResolvable
+          enablesSelectedAction: !selectedCurrentlyResolvable
         }
       });
     }
@@ -4291,6 +4768,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   canCompleteImmediateTrade(seat, partnerSeat, offer) {
     const partner = this.players[partnerSeat];
+    const allowedResources = new Set(["runway", "compute"]);
+    if (
+      !partner ||
+      offer?.timing !== "before" ||
+      !allowedResources.has(offer.giveResource) ||
+      !allowedResources.has(offer.receiveResource) ||
+      offer.giveResource === offer.receiveResource ||
+      offer.giveAmount !== 1 ||
+      offer.receiveAmount !== 1
+    ) return false;
     const resourcesAvailable = this.immediateTradeGiveAmounts(
       seat,
       partner,
@@ -4300,7 +4787,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     ) && this.immediateTradeReceiveAmounts(seat, partner, offer.receiveResource).includes(
       offer.receiveAmount
     );
-    if (!resourcesAvailable || offer.timing !== "before") return resourcesAvailable;
+    if (!resourcesAvailable) return false;
     const selectedAction = this.players[seat].selectedAction;
     if (!selectedAction) return resourcesAvailable;
     const isEscalation = selectedAction.startsWith("escalation_");
@@ -4310,24 +4797,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return this.provisionalTradeResolvesSelection(seat, offer, actionId, {
       isEscalation
     });
-  }
-
-  immediateTradeCounterDecisions(seat, offer) {
-    const counterMaker = this.players[offer.partnerSeat];
-    return this.immediateTradeDecisions(counterMaker.seat, offer.timing)
-      .filter((decision) =>
-        decision.parameters?.partnerSeat === seat &&
-        decision.parameters.timing === offer.timing
-      )
-      .map((decision) => ({
-        ...decision,
-        decisionId: decision.decisionId.replace("trade_offer_", "trade_counter_"),
-        label: decisionLabel("tradeCounter", { offer: decision.label }),
-        parameters: {
-          ...decision.parameters,
-          counterMakerSeat: counterMaker.seat
-        }
-      }));
   }
 
   completeImmediateTrade(seat, partnerSeat, offer) {
@@ -4380,9 +4849,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (!offer) return false;
     this.activeImmediateTradeSeat = seat;
     const partner = this.players[offer.partnerSeat];
-    const counters = this.rulesVariant.immediateTradeCounteroffers
-      ? this.immediateTradeCounterDecisions(seat, offer)
-      : [];
     const response = await this.choose(policies, partner.seat, "immediate_trade_response", [
       {
         decisionId: "trade_reject",
@@ -4405,98 +4871,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           targetSeat: seat,
           tradePerspective: "responder"
         }
-      },
-      ...counters
+      }
     ]);
     if (response.decisionId === "trade_accept") {
       return this.completeImmediateTrade(seat, partner.seat, offer);
     }
-    if (!response.parameters?.counterMakerSeat) return false;
-
-    const counterOffer = response.parameters;
-    if (!this.rulesVariant.immediateTradeThirdPartyClaims) {
-      const directResponse = await this.choose(
-        policies,
-        seat,
-        "immediate_trade_counter_response",
-        [
-          {
-            decisionId: "trade_counter_reject",
-            label: decisionLabel("tradeCounterReject"),
-            actionId: "trade",
-            parameters: {
-              ...counterOffer,
-              partnerSeat: partner.seat,
-              targetSeat: partner.seat,
-              tradePerspective: "responder"
-            }
-          },
-          {
-            decisionId: "trade_counter_accept",
-            label: decisionLabel("tradeCounterAccept", counterOffer),
-            actionId: "trade",
-            parameters: {
-              ...counterOffer,
-              partnerSeat: partner.seat,
-              targetSeat: partner.seat,
-              tradePerspective: "responder"
-            }
-          }
-        ]
-      );
-      return directResponse.decisionId === "trade_counter_accept"
-        ? this.completeImmediateTrade(partner.seat, seat, counterOffer)
-        : false;
-    }
-
-    const claimants = this.players.filter((candidate) =>
-      candidate.seat !== partner.seat &&
-      this.canCompleteImmediateTrade(partner.seat, candidate.seat, counterOffer)
-    );
-    const claims = await Promise.all(claimants.map(async (claimant) => ({
-      claimant,
-      choice: await this.choose(policies, claimant.seat, "immediate_trade_claim", [
-        {
-          decisionId: "trade_claim_pass",
-          label: decisionLabel("tradeClaimPass"),
-          actionId: "trade"
-        },
-        {
-          decisionId: "trade_claim_accept",
-          label: decisionLabel("tradeClaimAccept"),
-          actionId: "trade",
-          parameters: { claimantSeat: claimant.seat }
-        }
-      ])
-    })));
-    const claimed = claims.filter(({ choice }) => choice.parameters?.claimantSeat !== undefined);
-    if (!claimed.length) return false;
-    const counterparty = await this.choose(
-      policies,
-      partner.seat,
-      "immediate_trade_counterparty",
-      [
-        {
-          decisionId: "trade_counterparty_decline",
-          label: decisionLabel("tradeCounterpartyDecline"),
-          actionId: "trade"
-        },
-        ...claimed.map(({ claimant }) => ({
-          decisionId: `trade_counterparty_${claimant.seat}`,
-          label: decisionLabel("tradeCounterpartyAccept", {
-            faction: claimant.factionName
-          }),
-          actionId: "trade",
-          parameters: { claimantSeat: claimant.seat }
-        }))
-      ]
-    );
-    if (counterparty.parameters?.claimantSeat === undefined) return false;
-    return this.completeImmediateTrade(
-      partner.seat,
-      counterparty.parameters.claimantSeat,
-      counterOffer
-    );
+    return false;
   }
 
   async resolveSelectedSeat(policies, seat) {
@@ -4505,10 +4885,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const beforeTradeAccepted = beforeTrade
       ? await this.settleImmediateTrade(policies, seat, beforeTrade)
       : false;
-    if (player.selectionRequiredTrade) {
-      player.metrics.requiredTradeOffers += Number(Boolean(beforeTrade));
-      player.metrics.requiredTradeAcceptances += Number(beforeTradeAccepted);
-    }
+    void beforeTradeAccepted;
     const orbitalUsed = await this.maybeUseOrbitalCompute(policies, seat);
     if (player.selectedAction.startsWith("faction_")) {
       const computeBeforeAction = player.compute;
@@ -4539,9 +4916,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (!legal.length) {
         player.metrics.forcedNoOps += 1;
         player.metrics.blockedAfterCommitment += 1;
-        player.metrics.requiredTradeFailures += Number(
-          player.selectionRequiredTrade && !beforeTradeAccepted
-        );
         this.recordEvent(
           "escalation_blocked",
           seat,
@@ -4551,23 +4925,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           })
         );
         player.selectedAction = null;
-        player.selectionRequiredTrade = false;
         return;
       }
-      const decision = await this.choose(policies, seat, `resolve_escalation_${id}`, legal);
+      let decision = await this.choose(policies, seat, `resolve_escalation_${id}`, legal);
+      decision = await this.maybePlayTacticForResolution(policies, seat, decision);
       const computeBeforeAction = player.compute;
       await this.applyEscalation(policies, seat, id, decision);
-      this.rewardFoundryComputeSpend(
-        seat,
-        computeBeforeAction - player.compute
-      );
-      await this.resolveFrontierBridge(policies, seat, decision);
-      if (!beforeTrade) {
-        const afterTrade = await this.chooseImmediateTrade(policies, seat, "after");
-        if (afterTrade) await this.settleImmediateTrade(policies, seat, afterTrade);
+      if (id !== "agent_swarm") {
+        this.rewardFoundryComputeSpend(
+          seat,
+          computeBeforeAction - player.compute
+        );
       }
+      await this.resolveFrontierBridge(policies, seat, decision);
       player.selectedAction = null;
-      player.selectionRequiredTrade = false;
       return;
     }
     let legal = this.legalResolutions(seat, player.selectedAction);
@@ -4582,9 +4953,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (!legal.length) {
       player.metrics.forcedNoOps += 1;
       player.metrics.blockedAfterCommitment += 1;
-      player.metrics.requiredTradeFailures += Number(
-        player.selectionRequiredTrade && !beforeTradeAccepted
-      );
       legal = [{
         decisionId: `forced_noop_${player.selectedAction}`,
         label: decisionLabel("noLegalResolution", { action: player.selectedAction }),
@@ -4593,23 +4961,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         consequences: { noOp: true }
       }];
     }
-    const decision = await this.choose(policies, seat, "resolve", legal);
+    let decision = await this.choose(policies, seat, "resolve", legal);
+    decision = await this.maybePlayTacticForResolution(policies, seat, decision);
     if (decision.parameters?.mode === "joint_venture") {
       await this.negotiate(policies, seat, decision);
     }
     const computeBeforeAction = player.compute;
-    this.applyResolution(seat, decision);
+    await this.applyResolutionWithPolicies(policies, seat, decision);
     this.rewardFoundryComputeSpend(
       seat,
       computeBeforeAction - player.compute
     );
     await this.resolveFrontierBridge(policies, seat, decision);
-    if (!beforeTrade) {
-      const afterTrade = await this.chooseImmediateTrade(policies, seat, "after");
-      if (afterTrade) await this.settleImmediateTrade(policies, seat, afterTrade);
-    }
     player.selectedAction = null;
-    player.selectionRequiredTrade = false;
   }
 
   async maybeUseOrbitalCompute(policies, seat) {
@@ -4717,7 +5081,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.seat !== controller.seat &&
         selections[player.seat] === this.regime.cycle.incentivizedAction
       );
-      if (rivals.length >= 2) this.addResource(controller, "trust", 1);
+      if (rivals.length >= Math.ceil((this.playerCount - 1) / 2)) {
+        this.addResource(controller, "trust", 1);
+      }
     }
     for (const player of this.players) {
       const temporary = player.temporaryCompute || 0;
@@ -4735,7 +5101,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   async finishSelectedRound(policies) {
     await this.produceAll(policies);
     await this.fileAgiDossiers(policies);
-    this.audit();
+    await this.settlePendingScrutinyOverflow(policies, "dossier_scrutiny_overflow");
+    await this.audit(policies);
     this.scoreMandate();
     if (this.round === 3 && this.rulesVariant.realignmentEnabled) {
       await this.resolveRealignment(policies);
@@ -4829,8 +5196,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   async playCycle(policies) {
     if (!this.roundInitialized) await this.beginRound(policies);
     await this.prepareHeadline(policies);
+    await this.settlePendingScrutinyOverflow(policies, "headline_scrutiny_overflow");
     await this.headlineChoiceStage(policies);
+    await this.settlePendingScrutinyOverflow(policies, "headline_choice_scrutiny_overflow");
     await this.preSelectionFactionPowers(policies);
+    await this.settlePendingScrutinyOverflow(policies, "faction_scrutiny_overflow");
     applyAgiDeclarationScenario(this);
     await this.collectNegotiationIntents(policies);
 
@@ -4848,11 +5218,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         (decision) => decision.decisionId === result.decision.decisionId
       );
       player.selectedAction = legal.decisionId.replace(/^select_/, "");
-      player.selectionRequiredTrade = legal.consequences?.status === "trade_required";
-      const availabilityKey = player.selectionRequiredTrade
-        ? "tradeRequired"
-        : "resolvableNow";
-      player.metrics.selectionAvailability[availabilityKey] += 1;
+      player.metrics.selectionAvailability.resolvableNow += 1;
       if (player.selectedAction.startsWith("escalation_")) {
         this.commitEscalationSelection(
           player,
@@ -4898,6 +5264,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
     for (const [turnInCycle, seat] of this.initiativeOrder().entries()) {
       await this.resolveSelectedSeat(policies, seat);
+      await this.settlePendingScrutinyOverflow(policies, "turn_scrutiny_overflow");
       this.reportProgress("turn", {
         completedSeat: seat,
         turnNumber: (this.config.rounds
@@ -4984,7 +5351,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         const player = this.players[seat];
         return {
           ...snapshot,
-          escalation: player.escalation,
+          programUses: player.programUses,
           escalationsUsed: [...(player.escalationsUsed || [])],
           tactics: [...(player.tactics || [])],
           objectiveId: player.objectiveId,

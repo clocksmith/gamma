@@ -29,7 +29,7 @@
   "playRuleDefaults": {
     "immediateTradeCounteroffers": false,
     "immediateTradeThirdPartyClaims": false,
-    "powerPurchaseRequests": 1,
+    "powerPurchaseRequests": 0,
     "realignmentEnabled": false,
     "networkInfrastructureEnabled": false,
     "headlinePersistentEffectsEnabled": false,
@@ -55,22 +55,10 @@
     "slotContention": "initiative-order-no-reservations"
   },
   "playRuleModules": {
-    "trade-counteroffers": {
-      "id": "trade-counteroffers",
+    "advanced-power-market": {
+      "id": "advanced-power-market",
       "settings": {
-        "immediateTradeCounteroffers": true
-      }
-    },
-    "third-party-trade-claims": {
-      "id": "third-party-trade-claims",
-      "settings": {
-        "immediateTradeThirdPartyClaims": true
-      }
-    },
-    "second-power-request": {
-      "id": "second-power-request",
-      "settings": {
-        "powerPurchaseRequests": 2
+        "powerPurchaseRequests": 1
       }
     },
     "jurisdictional-realignment": {
@@ -107,16 +95,12 @@
   "playProfiles": {
     "defaultGame": {
       "id": "default-game",
-      "moduleIds": [
-        "trade-counteroffers"
-      ]
+      "moduleIds": []
     },
     "advancedPlay": {
       "id": "advanced-play",
       "moduleIds": [
-        "trade-counteroffers",
-        "third-party-trade-claims",
-        "second-power-request",
+        "advanced-power-market",
         "jurisdictional-realignment",
         "network-infrastructure",
         "headline-persistence",
@@ -141,7 +125,12 @@
   "audit": {
     "scaling": "round(baseDraws * playerCount / 4)",
     "minimumDraws": 1,
-    "scrutinySupplyPerPlayer": 10
+    "scrutinySupplyPerPlayer": 10,
+    "penalty": {
+      "primary": "runway",
+      "fallback": "trust",
+      "amount": 1
+    }
   },
   "rounds": [
     {
@@ -149,28 +138,28 @@
       "id": "demo",
       "cycles": 3,
       "auditBaseDraws": 2,
-      "escalationAvailability": 0
+      "programUses": 0
     },
     {
       "number": 2,
       "id": "scale",
       "cycles": 3,
       "auditBaseDraws": 3,
-      "escalationAvailability": 1
+      "programUses": 1
     },
     {
       "number": 3,
       "id": "narrative",
       "cycles": 3,
       "auditBaseDraws": 4,
-      "escalationAvailability": 1
+      "programUses": 1
     },
     {
       "number": 4,
       "id": "claim",
       "cycles": 3,
       "auditBaseDraws": 5,
-      "escalationAvailability": 2
+      "programUses": 2
     }
   ],
   "actions": [
@@ -214,9 +203,9 @@
       "min": 0,
       "cap": 6
     },
-    "safety": {
+    "researchProtection": {
       "min": 0,
-      "cap": 3
+      "cap": 2
     }
   },
   "playerSupply": {
@@ -225,33 +214,53 @@
     "facilities": 4,
     "generators": 1,
     "linkTokens": 2,
-    "networkTrackMarkers": 1,
     "influenceCubes": 0,
     "scrutinyCubes": 10,
-    "customerTrackMarkers": 1,
-    "escalationTrackMarkers": 1,
+    "factionBoardCaptiveSliders": 6,
     "coreActionCards": 6,
-    "escalationCards": 6,
-    "realignmentBallots": 3,
+    "escalationCards": 0,
+    "programMarkers": 2,
+    "realignmentBallotCards": 1,
     "agiDossierCards": 4,
-    "startingGridIdentifiers": 1
+    "startingGridIdentifiers": 1,
+    "facilityConstructionOrder": [1, 2, 3, 4]
   },
   "sharedSupply": {
     "jointVenturePairs": "${facts.shared.components.jointVenturePairs}",
-    "megaClusterPairs": "${facts.shared.components.megaClusterPairs}"
+    "megaClusterPairs": "${facts.shared.components.megaClusterPairs}",
+    "governanceBoards": 1,
+    "governanceBoardEraPanels": 4,
+    "currentEraMarkers": 1,
+    "playerAidFoldouts": 6,
+    "governanceLedgers": 1,
+    "sharedDryEraseMarkers": 1,
+    "powerAllocationMarkers": 36,
+    "temporaryComputeTokens": 2,
+    "mandateMarkers": 6,
+    "sharedProgramCards": 6
   },
   "board": {
-    "selectedTileCount": 13,
-    "prototypeTileCount": 13,
+    "selectedTileCount": 19,
+    "prototypeTileCount": 19,
     "geometry": {
       "radius": 2,
       "centerSlots": 1,
       "innerSlots": 6,
-      "outerSlots": 6,
+      "outerSlots": 12,
       "movementRange": 2,
       "maximumDistance": 4
     },
     "realignment": {
+      "ballot": {
+        "cardsPerPlayer": 1,
+        "orientationChoices": [
+          "consolidate_core",
+          "expand_periphery",
+          "counter_cycle",
+          "pass"
+        ],
+        "passChoice": "pass"
+      },
       "motions": [
         {
           "id": "consolidate_core",
@@ -290,31 +299,31 @@
       {
         "id": "research",
         "category": "research",
-        "count": 2,
+        "count": 3,
         "placement": {
           "center": 0,
           "inner": 1,
-          "outer": 1
+          "outer": 2
         }
       },
       {
         "id": "cloud",
         "category": "cloud",
-        "count": 2,
+        "count": 3,
         "placement": {
           "center": 0,
           "inner": 1,
-          "outer": 1
+          "outer": 2
         }
       },
       {
         "id": "consumer",
         "category": "consumer",
-        "count": 1,
+        "count": 2,
         "placement": {
           "center": 0,
           "inner": 0,
-          "outer": 1
+          "outer": 2
         }
       },
       {
@@ -350,21 +359,21 @@
       {
         "id": "media",
         "category": "media",
-        "count": 1,
+        "count": 2,
         "placement": {
           "center": 0,
           "inner": 0,
-          "outer": 1
+          "outer": 2
         }
       },
       {
         "id": "government",
         "category": "government",
-        "count": 1,
+        "count": 2,
         "placement": {
           "center": 0,
           "inner": 0,
-          "outer": 1
+          "outer": 2
         }
       },
       {
@@ -380,11 +389,11 @@
       {
         "id": "renewable_basin",
         "category": "energy",
-        "count": 1,
+        "count": 2,
         "placement": {
           "center": 0,
           "inner": 0,
-          "outer": 1
+          "outer": 2
         }
       }
     ]
@@ -395,62 +404,52 @@
       {
         "id": "code",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "science",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "web",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "books",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "images",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "video",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "synthetic",
         "kind": "domain",
-        "count": 5
+        "count": 4
       },
       {
         "id": "curated_corpus",
         "kind": "special",
-        "count": 3
+        "count": 4
       },
       {
         "id": "benchmark_leak",
         "kind": "special",
-        "count": 3
-      },
-      {
-        "id": "licensed_dataset",
-        "kind": "special",
-        "count": 3
-      },
-      {
-        "id": "synthetic_loop",
-        "kind": "special",
-        "count": 3
+        "count": 4
       },
       {
         "id": "human_evaluation",
         "kind": "special",
-        "count": 3
+        "count": 4
       }
     ]
   },
@@ -459,19 +458,21 @@
       "id": "clean_infrastructure",
       "location": "renewable_basin",
       "round": 2,
-      "runwayCost": 3,
+      "runwayCost": 2,
       "capacity": 3,
       "trust": 1,
-      "scrutinyPerUse": 0
+      "scrutinyPerUse": 0,
+      "physicalSurface": "renewable_basin_tile"
     },
     {
       "id": "emergency_infrastructure",
       "location": "grid_reactor",
       "round": 2,
-      "runwayCost": 2,
+      "runwayCost": 1,
       "capacity": 4,
       "trust": 0,
-      "scrutinyPerUse": 1
+      "scrutinyPerUse": 1,
+      "physicalSurface": "grid_reactor_tile"
     },
     {
       "id": "fusion_demonstrator",
@@ -480,8 +481,9 @@
       "capacity": "${facts.shared.advancedGeneration.power}",
       "mandate": "${facts.shared.advancedGeneration.mandate}",
       "scrutinyOnBuild": "${facts.shared.advancedGeneration.scrutiny}",
-      "isEscalation": true,
-      "location": "grid_reactor"
+      "isProgram": true,
+      "location": "grid_reactor",
+      "physicalSurface": "fusion_demonstrator_program"
     }
   ],
   "agiDossier": {
@@ -513,13 +515,11 @@
         "threshold": 1
       }
     ],
-    "predictionBag": {
-      "noAgiTokens": "${facts.executable.agi.noAgiTokens}",
-      "drawsWithoutReplacement": "${facts.executable.agi.predictionDraws}",
-      "matchingFactionTokensRequired": 2,
-      "maximumClaimTokens": "${facts.executable.agi.maximumClaimTokens}",
+    "claimResolution": {
+      "method": "highest-supported-claim",
+      "minimumSupportedEvidenceClaims": 2,
       "capabilityThresholds": [3, 6, 9, 12],
-      "mandateComebackTokensByRank": [0, 1, 2, 3, 3, 3]
+      "tieBreakers": ["mandate", "trust", "customers", "compute", "initiative"]
     }
   },
   "scoring": {

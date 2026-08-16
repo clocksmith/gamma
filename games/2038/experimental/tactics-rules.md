@@ -4,6 +4,10 @@
 
 **Baseline status:** Deferred; do not use for baseline play or balance evidence
 
+**Executable opt-in:** set the selected-rules variant field
+`tacticsEnabled: true`. It is `false` by default and is never enabled by either
+supported play profile.
+
 **Rules companion:** [How to Play and Rules Reference](./core-rules.md)
 
 This document preserves the complete optional Tactic module without
@@ -15,14 +19,20 @@ not used in the baseline game.
 Use ${content.tactics.copiesPerCard} copies of each of the twelve Tactics, for a
 thirty-six-card deck. Deal one Tactic to each player during setup. Draw one at
 the beginning of every Era, including Era I. Keep at most three and discard
-excess cards after drawing. Maximum normal five-player demand is twenty-five
-cards.
+excess cards after drawing. Maximum six-player demand is thirty cards before
+discards, so the discard pile is never reshuffled.
 
 ## Timing
 
 Players may play at most one Tactic per cycle. Unless its card states another
 window, play a Tactic during your own resolution. A Tactic occupies the
 optional modifier slot and never grants an additional Action.
+
+When a card says “another player,” “one Facility,” or names more than one
+eligible Action, the player of the Tactic chooses the exact target. A card is
+discarded only after that target is chosen and the effect resolves. API Price
+Cut may be committed with an otherwise unaffordable Deploy because it changes
+that Deploy's final cost to zero.
 
 Open Letter is the module’s only off-turn timing window. Play it after a
 Government vote’s options are announced but before any votes are committed.

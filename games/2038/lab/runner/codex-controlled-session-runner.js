@@ -325,7 +325,7 @@ export function finalReadinessPrompt({
     `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
     `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
     "The following operational session facts are authoritative and resolve any conflicting inference in your follow-up record:",
-    `- This is a ${playerCount}-player Default Game. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card Reference do not apply to you.`,
+    `- This is a ${playerCount}-player Default Game. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card and Board Reference do not apply to you.`,
     `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
     "- No Facility is placed during setup. All four begin in supply; the first Facility has the integrated starting-grid identifier and receives that Power after it is legally constructed.",
     "- Core Rules are the baseline authority. A Headline changes only its named rule while that specific Headline is currently revealed and active; unrelated Headline variants are not simultaneous alternatives.",

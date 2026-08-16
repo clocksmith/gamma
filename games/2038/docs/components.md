@@ -19,12 +19,12 @@ keyed merge and rejects unknown identities or incompatible shapes.
 | Copy source | Player-facing surface | Mechanical source |
 | --- | --- | --- |
 | `content/copy/world-copy.json` | Box, world primer, tokens, declarations, endings | `content/data/world-copy.json` |
-| `content/copy/reference-cards.json` | Era cards and player aids | `content/data/reference-cards.json` |
+| `content/copy/reference-cards.json` | Governance Board Era panels and foldout player-aid panels | `content/data/reference-cards.json` |
 | `content/copy/factions.json` | Faction boards and abilities | `content/data/factions.json` |
 | `content/copy/game-config.json` | Actions, Eras, map, resources, Training, and Power | `content/data/game-config.json` |
 | `content/copy/mandates.json` | Era Mandates | `content/data/mandates.json` |
 | `content/copy/headlines.json` | Headline cards | `content/data/headlines.json` |
-| `content/copy/escalations.json` | Escalation cards | `content/data/escalations.json` |
+| `content/copy/escalations.json` | Shared Program cards | `content/data/escalations.json` |
 | `experimental/copy/*.json` | Deferred modules | matching `experimental/data/*.json` |
 
 The player-readable document templates are `content/copy/core-rules.md` and

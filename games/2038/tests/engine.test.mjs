@@ -18,7 +18,8 @@ import {
   resolvePlayProfile,
   resolveTieByInitiative,
   resolveSelectedAction,
-  simulateTrainingRun
+  simulateTrainingRun,
+  TRAINING_DOMAINS
 } from "../web/src/engine.js";
 
 const root = new URL("../", import.meta.url);
@@ -37,21 +38,19 @@ test("board generation is deterministic by seed", async () => {
   assert.deepEqual(first, second);
   assert.notDeepEqual(first, different);
   assert.equal(first[0], "frontier-1");
-  assert.equal(first.length, 13);
+  assert.equal(first.length, 19);
 });
 
 test("play profiles compose declared rule modules without exposing ad hoc player profiles", async () => {
   const [config] = await load();
   assert.deepEqual(resolvePlayProfile(config, "default-game"), {
     ...config.playProfiles.defaultGame,
-    ...config.playRuleDefaults,
-    immediateTradeCounteroffers: true
+    ...config.playRuleDefaults
   });
   assert.deepEqual(resolvePlayProfile(config, "advanced-play"), {
     ...config.playProfiles.advancedPlay,
-    immediateTradeCounteroffers: true,
-    immediateTradeThirdPartyClaims: true,
-    powerPurchaseRequests: 2,
+    ...config.playRuleDefaults,
+    powerPurchaseRequests: 1,
     realignmentEnabled: true,
     networkInfrastructureEnabled: true,
     headlinePersistentEffectsEnabled: true,
@@ -59,8 +58,8 @@ test("play profiles compose declared rule modules without exposing ad hoc player
     headlineVolatilityEnabled: true
   });
   const invalid = structuredClone(config);
-  invalid.playProfiles.advancedPlay.moduleIds = ["third-party-trade-claims"];
-  assert.throws(() => resolvePlayProfile(invalid, "advanced-play"), /require trade counteroffers/);
+  invalid.playProfiles.advancedPlay.moduleIds = ["unknown-module"];
+  assert.throws(() => resolvePlayProfile(invalid, "advanced-play"), /unknown rule module/);
 });
 
 test("Default Game excludes Advanced-only Headline procedures while Advanced Play restores them", async () => {
@@ -76,7 +75,7 @@ test("Default Game excludes Advanced-only Headline procedures while Advanced Pla
   }
 });
 
-test("board is a sixfold-symmetric thirteen-hex layout with balanced ring pools", async () => {
+test("board is a complete sixfold-symmetric nineteen-hex layout with balanced ring pools", async () => {
   const [config] = await load();
   const board = generateBoard(config, "ring-contract");
   const byDistance = [0, 1, 2].map((distance) =>
@@ -86,15 +85,24 @@ test("board is a sixfold-symmetric thirteen-hex layout with balanced ring pools"
       Math.abs(-tile.q - tile.r)
     ) === distance)
   );
-  assert.deepEqual(byDistance.map((ring) => ring.length), [1, 6, 6]);
+  assert.deepEqual(byDistance.map((ring) => ring.length), [1, 6, 12]);
   assert.deepEqual(
     byDistance[1].map((tile) => tile.category).sort(),
     ["capital", "chip", "cloud", "energy", "research", "talent"]
   );
-  assert.equal(byDistance[2].filter((tile) => tile.category === "consumer").length, 1);
+  assert.deepEqual(
+    Object.fromEntries(
+      ["research", "cloud", "consumer", "media", "government", "energy"]
+        .map((category) => [
+          category,
+          byDistance[2].filter((tile) => tile.category === category).length
+        ])
+    ),
+    { research: 2, cloud: 2, consumer: 2, media: 2, government: 2, energy: 2 }
+  );
 });
 
-test("sparse board topology and duplicated ring resources remain exact", async () => {
+test("complete radius-two topology and duplicated ring resources remain exact", async () => {
   const [config] = await load();
   const board = generateBoard(config, "sparse-topology-contract");
   const edges = board.flatMap((left, leftIndex) =>
@@ -104,18 +112,21 @@ test("sparse board topology and duplicated ring resources remain exact", async (
   );
   const degree = (tile) => edges.filter((edge) => edge.includes(tile)).length;
 
-  assert.equal(edges.length, 24);
+  assert.equal(edges.length, 42);
   assert.deepEqual(
     board.map((tile) => degree(tile)).sort((left, right) => left - right),
-    [2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 6]
+    [3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 6]
   );
-  assert.ok(!edges.some(([left, right]) =>
+  assert.equal(edges.filter(([left, right]) =>
     left.placementRing === "outer" && right.placementRing === "outer"
-  ));
+  ).length, 12);
 
   for (const id of ["research", "cloud"]) {
     const copies = board.filter((tile) => tile.id === id);
-    assert.deepEqual(copies.map((tile) => tile.placementRing).sort(), ["inner", "outer"]);
+    assert.deepEqual(
+      copies.map((tile) => tile.placementRing).sort(),
+      ["inner", "outer", "outer"]
+    );
     for (const field of ["category", "visit", "production", "facilitySpaces"]) {
       assert.equal(copies[0][field], copies[1][field], `${id} copies share ${field}`);
     }
@@ -269,7 +280,7 @@ test("three different Core Actions advance exactly one era without early Realign
   assert.equal(state.round, 2);
   assert.equal(state.cycle, 1);
   assert.deepEqual(state.player.actionsUsed, []);
-  assert.equal(state.player.escalation, 1);
+  assert.equal(state.player.programUses, 1);
   assert.deepEqual(
     state.metrics.actionSelections.map((selection) => selection.actionId),
     ["fund", "influence", "organize"]
@@ -344,6 +355,27 @@ test("Advanced Networks use the first Facility, visible adjacency, and bounded L
     Math.abs((-first.q - first.r) - (-adjacent.q - adjacent.r))
   ) <= 1) assert.ok(connected.has("adjacent"));
   assert.equal(config.playerSupply.linkTokens, 2);
+});
+
+test("an isolated Advanced Generator cannot seed a disconnected Network", async () => {
+  const [config, factions, headlines] = await load();
+  const state = createGame(config, factions, headlines, "isolated-generator", "coalition_lab");
+  state.board = [
+    { instanceId: "first-tile", q: 0, r: 0 },
+    { instanceId: "remote-tile", q: 3, r: 0 }
+  ];
+  state.player.facilities = [
+    { id: "first", tileId: "first-tile" },
+    { id: "remote", tileId: "remote-tile" }
+  ];
+  state.player.startingGridConnection.assignedFacilityId = "first";
+  state.player.generators = [{ id: "isolated", tileId: "remote-tile", capacity: 3 }];
+  state.player.links = [];
+
+  const connected = networkedFacilityIds(state.board, state.player, {
+    networkInfrastructureEnabled: true
+  });
+  assert.deepEqual([...connected], ["first"]);
 });
 
 test("Default Game local Power ignores Links and does not propagate through Facilities", async () => {
@@ -426,8 +458,56 @@ test("public Mandate schedules are canonical at three, four, and five players", 
 
 test("Training studies replay exactly under the same seed", async () => {
   const [config] = await load();
-  const first = simulateTrainingRun(config, "training-42", { stopAt: 4, runway: 5, safety: 1 });
-  const second = simulateTrainingRun(config, "training-42", { stopAt: 4, runway: 5, safety: 1 });
+  const first = simulateTrainingRun(config, "training-42", {
+    stopAt: 4,
+    researchProtection: 1
+  });
+  const second = simulateTrainingRun(config, "training-42", {
+    stopAt: 4,
+    researchProtection: 1
+  });
   assert.deepEqual(first, second);
-  assert.ok(["banked", "crashed", "protected", "human-evaluation", "licensed-stop", "stopped"].includes(first.outcome));
+  assert.ok(["banked", "crashed", "protected", "human-evaluation", "stopped"].includes(first.outcome));
+});
+
+test("the forty-card Training deck preserves its exact special-card contracts", async () => {
+  const [config] = await load();
+  const domain = (type) => ({ id: type, type, kind: "domain" });
+  const special = (type) => ({ id: type, type, kind: "special" });
+
+  const curatedAfterEveryOrdinaryDomain = simulateTrainingRun(
+    config,
+    "curated-all-domains",
+    {
+      stopAt: 8,
+      researchProtection: 0,
+      deck: [
+        ...TRAINING_DOMAINS.map(domain),
+        special("curated_corpus")
+      ]
+    }
+  );
+  assert.equal(curatedAfterEveryOrdinaryDomain.outcome, "crashed");
+  assert.equal(curatedAfterEveryOrdinaryDomain.cardsDrawn, 8);
+  assert.equal(curatedAfterEveryOrdinaryDomain.ordinaryDomainCount, 7);
+
+  const protectedDuplicate = simulateTrainingRun(config, "protected-duplicate", {
+    stopAt: 8,
+    researchProtection: 1,
+    deck: [domain("code"), domain("code")]
+  });
+  assert.equal(protectedDuplicate.outcome, "protected");
+  assert.equal(protectedDuplicate.crashProtectable, true);
+  assert.equal(protectedDuplicate.researchProtectionSpent, 1);
+  assert.deepEqual(protectedDuplicate.revealed, ["code", "code"]);
+
+  const benchmarkThenHuman = simulateTrainingRun(config, "benchmark-human", {
+    stopAt: 8,
+    deck: [special("benchmark_leak"), special("human_evaluation")]
+  });
+  assert.equal(benchmarkThenHuman.outcome, "human-evaluation");
+  assert.equal(benchmarkThenHuman.capability, 2);
+  assert.equal(benchmarkThenHuman.scrutiny, 1);
+  assert.equal(benchmarkThenHuman.trust, 1);
+  assert.deepEqual(benchmarkThenHuman.revealed, ["benchmark_leak", "human_evaluation"]);
 });

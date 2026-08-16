@@ -9,62 +9,53 @@ ${content.ruleChangeRegister.profileComparison}
 
 ## Setup
 
-Each player takes two Link tokens, one Network marker and capacity track, and
-three ${terms.systems.realignment} ballots in addition to their Default Game components. Add the
-six-sided Volatility die to the shared supply. Build each Headline deck from
-every card for its Era, including cards with an **Advanced Play** badge.
+Each player takes two Link tokens and one four-way
+${terms.systems.realignment} ballot. Add the six-sided Volatility die and every
+Advanced-badged Headline to its matching Era packet. There is no Network
+capacity slider; connectivity is visible on the board.
 
 ## Connected infrastructure
 
-Advanced Play replaces local Power with a connected ${terms.systems.infrastructureNetwork}.
-The same graph governs ${terms.infrastructure.power} delivery and the Network production bonus:
+Advanced Play replaces local Power with one binary connected
+${terms.systems.infrastructureNetwork} per player:
 
-- The first Facility joins through the basic grid connection.
+- The first Facility joins through its starting-grid identifier.
 - Owned Facilities and Generators on the same or adjacent hexes connect to one
   another.
-- A Link on one otherwise disconnected Facility joins that Facility to the
-  Network. Owned sites adjacent to it may then connect normally.
-- ${terms.infrastructure.power} from connected Generators and purchased ${terms.infrastructure.power} is pooled across the
+- A Link on one otherwise disconnected Facility joins that Facility. Owned
+  sites adjacent to it may then connect normally.
+- Power from connected Generators and purchased Power is pooled across the
   Network.
-- Beginning in Era II, two or more connected, powered Facilities produce one
-  additional ${terms.resources.runway} or ${terms.resources.compute}.
 
-Award at most one Network bonus per player. Use this graph for Power delivery
-and production; do not calculate edge-by-edge flow. Recalculate the whole
-Network when a Facility or Link moves or changes.
+There is no Network production bonus and no capacity value to adjust. A site is
+connected or disconnected. Recalculate the graph whenever a Facility, tile, or
+Link moves.
 
 Beginning in Era II, **Infrastructure Build** may Install a Link: pay one
-${terms.resources.runway} and place one of your Link tokens on the Facility at the acting piece’s
-destination. That Facility joins your Network even if otherwise disconnected;
-owned sites adjacent to it may then connect normally. A Facility holds at most
-one Link and carries it when moved.
+${terms.resources.runway} and place one of your Link tokens on the Facility at
+the acting piece’s destination. A Facility holds at most one Link and carries
+it when moved.
 
-A solo Mega-Cluster requires both hosts in its owner’s Network. A joint
-Mega-Cluster requires each host in its owner’s Network. When a Facility moves,
-recalculate its owner’s Network and every affected contract. A Facility never
-flips: if it leaves its owner’s Network, record it as disconnected/offline for
-the current Production and return it to service when Network eligibility returns.
+A Mega-Cluster requires both Facilities in its owner’s Network. A Facility
+never flips: a disconnected Facility remains visibly built but is offline
+during Production until connectivity returns.
 
 ## Immediate resource trades
 
-After the named rival publishes a counteroffer, every eligible player other
-than the counteroffer maker—including the original offer maker—may
-simultaneously pass or claim it instead of giving the original maker the sole
-accept-or-reject decision. The counteroffer maker chooses one claimant or
-declines them all. A chosen claim completes immediately, even if neither party
-is the active player.
+Advanced Play uses the same single pre-resolution exchange as Default Game:
+one ${terms.resources.runway} for one ${terms.resources.compute}, or the reverse.
+It adds no counteroffers, claims, gifts, bundles, or post-action window.
 
-There are no further offers or counteroffers in that resolution. A
-counteroffer with no claimant, or with all claimants declined, expires. The
-active player then continues the selected Action under the normal blocked-Action
-rule if necessary.
+## Production Power request
 
-## Production ${terms.infrastructure.power} requests
-
-In Advanced Play, each player may make up to two Production Power purchase
-requests, each to a different adjacent rival Network. A rejection does not
-consume the second request. Supplier limits, price, eligible capacity, and all
-other Production rules remain unchanged.
+Default Game makes no Power purchase request. In Advanced Play, each player may
+make one request during the Trade box through a named pair of adjacent
+Facilities belonging to different Networks. The buyer names its endpoint and a
+rival supplier endpoint with unsold installed Generator or Fusion capacity.
+The supplier accepts or rejects. On acceptance, the buyer pays one
+${terms.resources.runway}; one Power enters the buyer's Network for this
+Production. Each supplier may sell at most one Power. Starting-grid and
+Headline-granted Power cannot be sold.
 
 ## Headline procedures
 
@@ -74,59 +65,47 @@ per card:
 - **DIRECTIVE:** resolve an instruction or modify one field for its duration.
 - **SECRET CHOICE:** everyone chooses simultaneously, then reveals.
 - **CIVIC PERMISSION AUTHORITY VOTE:** everyone secretly votes and reveals
-  together. The ${terms.locations.government} controller’s vote counts twice and breaks a tie;
-  Initiative breaks it if ${terms.locations.government} is uncontrolled.
-- **AUCTION:** everyone secretly bids from zero to their current
-  ${terms.resources.runway}, then reveals. The highest positive bidder pays and wins. Ties use
-  Initiative-clockwise order; all-zero bidding has no winner.
+  together. The ${terms.locations.government} controller’s vote counts twice
+  and breaks a tie; Initiative breaks it if Government is uncontrolled.
+- **AUCTION:** everyone secretly bids from zero to current
+  ${terms.resources.runway}, then reveals. Highest positive bid pays and wins.
+  Ties use Initiative-clockwise order; all-zero bidding has no winner.
 - **VOLATILITY:** roll only when instructed. A two-result roll uses 1–3 for the
   first result and 4–6 for the second unless the card states otherwise.
 
-An immediate instruction resolves before action selection. Unless stated
-otherwise, an effect lasts for the current cycle; an effect naming this Era’s
-Production remains until Production, and a remainder-of-game result becomes
-shared public state. Place a persistent Headline beside the affected Action as
-a reminder. The current Headline overrides an older persistent Headline on the
-same field; effects on other fields remain active. There is no separate Law
-system or Law deck.
+An immediate instruction resolves before action selection. Use each card's
+printed duration: immediate, current cycle, current Era, or remainder of game.
+Place persistent Headlines beside the affected surface. A newer Headline
+overrides an older effect on the same field; unrelated effects remain. There
+is no separate Law deck.
 
 ## Era III ${terms.systems.realignment}
 
-Resolve ${terms.systems.realignment} exactly once, after Era III Mandate scoring. Skip it in
-every other Era. Each player secretly chooses and simultaneously reveals one
-ballot:
+Resolve ${terms.systems.realignment} once, after Era III Mandate scoring. Each
+player secretly rotates their square ballot so one choice edge points toward
+the board center, places it face down, and reveals simultaneously:
 
 - **Consolidate the Core:** rotate the six inner-ring locations one position
   clockwise.
-- **Expand the Periphery:** rotate the six outer-ring locations one position
-  clockwise.
+- **Expand the Periphery:** rotate the twelve outer-ring locations one
+  position clockwise.
 - **Authorize Counter-Cycle:** rotate the inner ring one position clockwise
   and the outer ring one position counterclockwise.
+- **Pass:** name no motion.
 
-A player who places no ballot names no motion and cannot break a tie. The motion
-with the most ballots wins. If leading motions tie, scan clockwise from
-Initiative; the first player whose ballot names a tied motion chooses it. If
-none does, Initiative chooses. Government bonuses and other vote modifiers do
-not apply.
+Plurality wins. A Pass names no motion. If leading motions tie, scan clockwise
+from Initiative; the first player whose ballot names a tied motion chooses it.
+If none does, Initiative chooses. Government and other vote modifiers do not
+apply.
 
-${terms.locations.frontier} never moves. Each moving tile carries every CEO, Team, Facility,
-Generator and other site-bound component. Rotate the
-selected physical ring once, then recalculate every Network from its
-starting-grid Facility, Links, and visible adjacency. Do not lift or re-lay
-components.
+${terms.locations.frontier} never moves. Each moving tile carries every CEO,
+Team, Facility, Generator, Link, contract half, and other site-bound component.
+Rotate the selected physical ring in its board channel; do not lift and re-lay
+individual contents.
 
-A ring rotation carries each Facility with its district. Power eligibility is
-recalculated during the next Production. A Facility never flips; if it is
-outside its owner’s Network, record it as disconnected/offline for that
-Production and return it to service when Network eligibility returns.
-
-Joint Ventures remain owned but operate only while their fixed hosts are
-adjacent and meet all requirements. Mega-Clusters whose hosts are no longer
-adjacent are offline until adjacency returns. Matched tokens travel with their
-host Facilities. Immediate ${terms.infrastructure.power} purchases do not persist through Realignment.
-Realignment destroys no component, changes no host, and terminates no contract.
-
-Ballot options are public; choices remain secret until simultaneous reveal.
-Players may discuss and signal, but those statements are non-binding. The
-procedure above alone chooses the motion. Every player then has Era IV’s three
-Actions to respond to the changed geography.
+After movement, recalculate each Network. Retained Power cubes travel with
+their marked Facilities and Mega-Clusters and still represent the previous
+Production snapshot until the next Allocate. Joint Ventures remain owned but
+operate only while their hosts are adjacent and satisfy their rules.
+Mega-Clusters remain owned but are offline while their two hosts are not
+adjacent. Realignment destroys no component and terminates no contract.

@@ -12,8 +12,10 @@ machine-enforced game data.
 - `component-inventory.md` is the human-readable supported-box inventory. It
   separates Default Game requirements, the Advanced Play addendum, and
   excluded deferred content without selecting an unresolved physical format.
-- `score-sheet.md` is the printable public record for Era Mandate history and
-  the retained latest Production snapshot.
+- `governance-ledger.md` specifies the single writable board panel for the
+  current Mandate, Setup Collective Trust, and final public resolution. The
+  retained Power cubes, not a written duplicate, are the latest Production
+  snapshot.
 - `production/` is reserved for printer-ready specifications, dielines, and
   vendor-facing files once those are deliberately approved.
 
