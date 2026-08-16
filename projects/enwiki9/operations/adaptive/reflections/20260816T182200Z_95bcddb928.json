@@ -1,0 +1,97 @@
+{
+  "attribution": {
+    "causalConfidence": "none",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Scientific status: superseded (non-selectable); compression verdict: none; score credit: 0. The stale direct-input branch-run fixture is superseded by later same-run and top-forward-total evidence."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+    "candidateTreeSha256": "sha256:49936af613a1dad7774b1cc14272c8ce85c4fb2d25228c7a144e83a328146c95",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_v1/20260816T145028710502Z_49936af613a1.json",
+      "sha256": "sha256:fdd0a294f952bfaf5e37dd9479443049802cd75409cd2ce48d90176f62afc510"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Supersede this candidate as a non-selectable legacy branch; evidence now comes from exact same-run contributions and top-forward total-adjoint control chains.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_v1/guard.json",
+      "sha256": "sha256:0c015403aa1639fb2badf20030bdae0ea8492e5dce75ddaa145dcea6939faf6a"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T145040Z_23cb743928.log",
+      "sha256": "sha256:61e79cd5c98e133cd2e4f4da409a9a1930436c90bef82e050126c16a47c68a3f"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v3/decision.json",
+      "sha256": "sha256:636bb939b6a0a8b71adab95f987042787b07ec03a5bce35243c5625dee1e0473"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:eb24b73027541b2120941a2c60dacccd02b62c5e64d1edeaea19710cac26409b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_v1_supersession_v1.json",
+    "sha256": "sha256:46631bf61f4bec2fa03c544e2bb602751dcd3a78f539453b5685fb481cdcf6b6"
+  },
+  "generatedUtc": "2026-08-16T18:22:00+00:00",
+  "hypothesis": {
+    "rationale": "The exact BF16 merge hypothesis is now superseded by direct and total-adjoint evidence in retry successors; it remains non-selectable and confers no compression hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T145040Z_23cb743928.json",
+    "sha256": "sha256:ed62c29885e2936da34a1eb044754c05acc55ed8418ff4153d232842a8d94327"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "generic BF16 merge from stale direct input"
+    ],
+    "transferableLessons": [
+      "Treat direct-input stale direct branches as superseded evidence when exact same-run and top-forward-total successors are available.",
+      "Compression verdict remains 0; oracle and zero-credit scaffolding are retained for governance only."
+    ],
+    "uncertainties": [
+      "Whether additional successor candidates should treat direct BF16 merge controls as obsolete under this evidence chain."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t182200z_95bcddb928",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Scientific status is superseded by exact same-run and top-forward-total control evidence; this run is retained only as governance history."
+    ],
+    "valid": false
+  }
+}

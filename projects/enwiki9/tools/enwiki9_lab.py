@@ -1871,7 +1871,7 @@ def main() -> int:
             )
             return 0
         if args.command == "next-experiment":
-            proposals = iter_proposals({"proposed", "claimed"})
+            proposals = iter_proposals({"proposed", "claimed", "developed"})
             print(
                 json.dumps(
                     enwiki9_reflections.select_next_experiment(proposals),
