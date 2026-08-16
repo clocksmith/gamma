@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "default-strategy-ecology-v1",
+  "registeredBeforeResults": true,
+  "question": "Do the held-out Trust policy and Default-compatible Capacity Operator produce a valid strategy ecology while retaining the behavior their names claim?",
+  "sourceEvidence": [
+    "2026-08-15-current-strategy-evolution-training",
+    "2026-08-15-current-strategy-holdout-v1"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 6000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-default-strategy-ecology-v1",
+  "selectionRule": {
+    "balance": "Select only if every three-, four-, and five-player faction, seat, profile, diversity, fallback, and forced-no-op bound passes with no credible homogeneous or pairwise dominance.",
+    "trustIdentity": "Trust Governor must select Influence on average, use it selectively rather than as its largest Core Action, and retain a competitive final Trust and Mandate result.",
+    "capacityIdentity": "Capacity Operator must average at least two Build selections per appearance, then select Research plus Deploy more often than Build; otherwise the new name does not describe its behavior.",
+    "powerBoundary": "Default Game may test local capacity operation but cannot claim Power-market brokerage. Advanced sales remain a separate future holdout.",
+    "rulesBoundary": "Profile selection changes the evidence policy ecology and browser opponent labels, not physical rules."
+  },
+  "requiredDiagnostics": [
+    "profile Action selections and Mandate sources",
+    "profile and faction win shares by supported player count",
+    "backend-specific strategy cells",
+    "opening and winning-path diversity",
+    "AGI emergence and winner override rates",
+    "integrity, fallback, and forced-no-op rates"
+  ]
+}
