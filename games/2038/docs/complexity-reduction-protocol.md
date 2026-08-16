@@ -20,10 +20,12 @@ after a candidate is accepted.
 
 | Accepted decision | Canonical change | Protected identity | Remaining evidence question |
 | --- | --- | --- | --- |
-| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, and temporary Power allocation | Energy-site dominance or Initiative advantage |
-| `presence-only-politics` | CEO, Team, and Facility presence replaces Influence cubes | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
-| `two-program-factions` | One persistent identity and one signature program per Faction | Six institutional identities and protected strengths | Factions become shallow or scripted |
-| `stored-token-consolidation` | Seven stored-token families become immediate effects | Meaningful timing and resource decisions | Removed memory may reduce long-horizon planning |
+| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, and a visible retained allocation snapshot | Energy-site dominance or Initiative advantage |
+| `equal-presence-control` | CEO, Team, and Facility each contribute one presence; ties control nothing | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
+| `shared-program-display` | Six public Program cards and two markers per player replace private copies and a track | Public escalation, timing pressure, and once-per-game choices | Programs become scripted or insufficiently contested |
+| `research-protection-refresh` | Research Protection refreshes each Era and Research visits protect only that run | Push-your-luck identity without a second spendable currency | Research becomes too safe or protection feels forgettable |
+| `deterministic-dossier` | Supported evidence and printed claim strength replace bag draws and comeback arithmetic | Secret commitments, uncertainty, evidence, and a dramatic endgame claim | Resolution becomes predictable too early |
+| `nineteen-hex-board` | One center, six inner, and twelve outer tiles form a complete radius-two board | Geographic specialization, movement, control, and Realignment | Added space weakens interaction or increases setup burden |
 | `simplified-profile-boundary` | Default is the teachable core; Advanced adds six distinct experiences | One coherent baseline and one coherent expansion | Advanced setup cost exceeds its added strategic value |
 
 Selection authorizes implementation, not a balance claim. The original

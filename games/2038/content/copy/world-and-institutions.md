@@ -77,12 +77,12 @@ or inherits an execution loop whose metrics outlive their purpose.
 ## The four World Endings
 
 Resolve the World Ending mechanically in
-[Final scoring](./core-rules.md#13-final-scoring), then read the corresponding
+[Final scoring](./core-rules.md#11-final-scoring), then read the corresponding
 narrative aloud.
 
-The ending has two independent axes. ${terms.systems.agi} emerges only when the
-two Prediction Bag cubes match one eligible claimant's faction colour. The
-future is Open only when Collective
+The ending has two independent axes. ${terms.systems.agi} emerges only when one
+fully paid Publication Dossier has at least two supported evidence modules and
+wins the deterministic claim-strength comparison. The future is Open only when Collective
 ${terms.playerTracks.trust} rose by at least one per player from setup and
 unresolved Systemic Risk is below the player count. Otherwise it is Closed.
 

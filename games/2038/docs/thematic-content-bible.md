@@ -52,18 +52,18 @@ not make an unselected concept from the research backlog part of the game.
 | --- | ---: | --- | --- |
 | World primer and box copy | 1 set | Always used | `content/copy/world-copy.json` |
 | Core Actions | 6 | Every player receives all 6 designs | `content/copy/game-config.json` |
-| Eras | 4 | All 4 appear, one per Era | `content/copy/reference-cards.json` |
-| Player references | 4 | All 4 topics remain relevant; physical duplication is unresolved | `content/copy/reference-cards.json` |
+| Governance Board Era panels | 4 | All 4 appear on the shared board | `content/copy/reference-cards.json` |
+| Player-aid panels | 4 | All 4 topics appear on each of six foldout aids | `content/copy/reference-cards.json` |
 | Factions | 6 | 3–5 selected in supported play; 6 may appear in exploratory play | `content/copy/factions.json` |
-| Faction abilities | 12 | 2 per selected faction: one persistent identity and one signature program | `content/copy/factions.json` |
+| Faction abilities | 12 | 2 per selected faction: one persistent identity and one signature ability | `content/copy/factions.json` |
 | Headlines | 24 | 12 appear: 3 of 6 from each Era | `content/copy/headlines.json` |
-| Escalations | 7 | Every player receives all 7 designs; Escalation limits uses | `content/copy/escalations.json` |
+| Shared Programs | 6 | All 6 remain face up; each player may use each named Program once per game within the Era allowance | `content/copy/escalations.json` |
 | Era Mandates | 12 | 4 appear: 1 of 3 from each Era | `content/copy/mandates.json` |
-| Training faces | 12 | Distributed across the full 50-card Training deck | `content/copy/game-config.json` |
-| Ordinary Power Sources | 2 location-defined reference types | Grid always provides emergency Power; Renewable always provides clean Power | `content/copy/game-config.json` |
+| Training faces | 10 | Four copies of each face form the 40-card Training deck | `content/copy/game-config.json` |
+| Ordinary Power contracts | 2 location-defined contracts printed on their Energy tiles | Grid always provides emergency Power; Renewable always provides clean Power | `content/copy/game-config.json` |
 | Fusion Demonstrator | 1 | At most 1 shared project can be built | `content/copy/game-config.json` |
-| Map locations | 11 | Distributed across all 13 modular tiles | `content/copy/game-config.json` |
-| Realignment ballots | 3 | Advanced Play only; every player holds all 3 choices and 1 is selected | `content/copy/game-config.json` |
+| Map locations | 11 | Distributed across all 19 modular tiles | `content/copy/game-config.json` |
+| Realignment ballot | 1 four-way design | Advanced Play only; every player secretly selects Consolidate, Periphery, Counter-Cycle, or Pass by orientation | `content/copy/game-config.json` |
 | Future Timeline | 0 additional designs | It consists of the 12 Headlines revealed during play | Emergent during play |
 
 Deferred Tactics, reserve Specialists, and Secret Objectives are not baseline
@@ -83,29 +83,30 @@ or overage allowance has been selected yet.
 | --- | ---: | --- | --- |
 | Complete faction kits | 6 | 5 kits in supported play; all 6 in exploratory play | Not declared |
 | Core Action cards | 36 | 6 per active player; 30 at the supported maximum | Not declared |
-| Escalation cards | 42 | 7 per active player; 35 at the supported maximum | Not declared |
-| Realignment ballot cards | 18 | 3 per active player; 15 at the supported maximum | Not declared |
-| Era cards | 4 | All 4 | Not declared |
-| Player-reference cards | 4 designs; production copy count unresolved | All 4 topics must remain readable during play | Not declared |
+| Shared Program cards / player Program markers | 6 / 12 | All 6 cards remain public; each faction has 2 markers | Not declared |
+| Realignment ballot cards | 6 | 1 per active player; 5 at the supported maximum | Not declared |
+| Governance Board Era panels / Current Era marker | 4 printed panels / 1 marker | All | Not declared |
+| Foldout player aids | 6 copies containing all 4 panels | 5 at the supported maximum; all 6 at 6-player exploratory play | Not declared |
 | Headline cards | 24 | All 24 form the Era decks; 12 enter the Future Timeline | Not declared |
 | Era Mandate cards | 12 | All 12 form the Era decks; 4 are revealed | Not declared |
-| Training cards | 50 | All 50 form the draw deck; discard reshuffles if exhausted | Not declared |
-| Power Source reference cards | 2 ordinary designs; production copy count unresolved | Each explains one Energy location | Not declared |
-| Modular map tiles | 13 | All 13 | Not declared |
+| Training cards | 40 | All 40 form the draw deck; discard reshuffles if exhausted | Not declared |
+| Printed Power contracts | 3 embedded surfaces: 2 Energy tiles and 1 Fusion Program | All 3 | No separate cards |
+| Modular map tiles | 19 | All 19 | Not declared |
 | CEOs / Teams / Facilities | 6 / 18 / 24 | 5 / 15 / 20 at the supported maximum; all at 6-player exploratory play | Not declared |
 | Generator / Advanced Link pieces | 6 / 12 | 5 / 10 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Scrutiny cubes / Customer-track markers | 60 / 6 | 50 / 5 at the supported maximum; all at 6-player exploratory play | Not declared |
-| Escalation-track markers / AGI Dossier cards | 6 / 24 | 5 / 20 at the supported maximum; all at 6-player exploratory play | Dossiers use symmetrical backs and two face orientations |
+| Scrutiny cubes / captive faction-board sliders | 60 / 36 | 50 cubes / 30 sliders at the supported maximum; all at 6-player exploratory play | Sliders are integrated, not loose components |
+| Mandate markers / AGI Dossier cards | 6 / 24 | 5 / 20 at the supported maximum; all at 6-player exploratory play | Dossiers use symmetrical backs and two face orientations |
 | Starting-grid identities | 6 Facilities carry this identity | 5 at the supported maximum; all at 6-player exploratory play | Not applicable; these are not separate pieces |
 | Joint Venture / Mega-Cluster pairs | 6 / 6 shared pairs | All 6 pairs of either type may be committed | Not declared |
 | Fusion Demonstrator | 1 shared marker | 1 | Not declared |
-| Other shared markers and tokens | 18 Systemic Risk | All may enter the Audit bag | Not declared |
-| Audit bag / Volatility die / Initiative marker | 1 / 1 / 1 | 1 of each | Not declared |
+| Other shared markers and tokens | 18 Systemic Risk / 36 retained Power / 2 Temporary Compute / 1 Current Era / 1 Initiative | All quantities cover the 6-player component maximum | Not declared |
+| Audit bag / Volatility die / shared dry-erase marker | 1 / 1 / 1 | 1 of each | Not declared |
 
-The genuine production gap is therefore not the number of authored systems.
-It is that player-reference duplication, track-marker implementation, and
-replacement-piece policy remain unresolved. Headline and Mandate breadth are
-separate replay-variety questions and require play evidence before expansion.
+The genuine production gap is therefore not the number of authored systems or
+the selected stock quantities. It is final dimensions, materials, sheet
+layouts, manufactured spare allowance, and replacement-piece policy. Headline
+and Mandate breadth are separate replay-variety questions and require play
+evidence before expansion.
 
 ## The four Eras
 
@@ -435,18 +436,19 @@ copy:
 2. What existing institution makes the event operational?
 3. What public benefit does that institution sincerely claim?
 4. What allocation, authority, or continuity consequence follows?
-5. Which existing game surface expresses it: Headline, Escalation, faction,
-   tile, action, Era card, or ending?
+5. Which existing game surface expresses it: Headline, Program, faction,
+   tile, action, Era panel, or ending?
 6. Does the event preserve the printed mechanic, or does it propose a rule
    change requiring separate evidence and approval?
 
 ## World Ending direction
 
 The current rules resolve four mechanical World Endings using two independent
-axes: AGI emergence and Open/Closed continuity. AGI emerges only when two
-Prediction Bag cubes match one eligible claimant's faction colour. Open continuity requires collective Trust to improve
-by the player count from setup and unresolved Systemic Risk to remain below the
-player count.
+axes: AGI emergence and Open/Closed continuity. AGI emerges when at least one
+fully paid Publication Dossier has two supported evidence claims and the
+strongest eligible claim is resolved. Open continuity requires collective
+Trust to improve by the player count from setup and unresolved Systemic Risk
+to remain below the player count.
 
 | | Open Continuity | Closed Continuity |
 | --- | --- | --- |

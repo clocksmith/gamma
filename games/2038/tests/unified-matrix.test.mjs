@@ -54,12 +54,14 @@ test("matrix contract declares all seven factors independently", async () => {
   assert.deepEqual(contract.playerCountPolicy.regressionGuards, [3, 5]);
 });
 
-test("unified balance checks enforce faction and diversity bounds per candidate count", () => {
+test("unified balance checks enforce identity and diversity bounds per candidate count", () => {
   const outcomes = {
+    seatWinShareRange: 0.2,
     factionStandings: {
       a: { appearances: 10, winShare: 0.4 },
       b: { appearances: 10, winShare: 0.2 }
     },
+    profileWinShareRange: 0.3,
     actionDiversity: 0.9,
     openingDiversity: { entropy: 0.7, topShare: 0.2 },
     winningPathDiversity: { entropy: 0.5, topShare: 0.51 },
@@ -77,7 +79,9 @@ test("unified balance checks enforce faction and diversity bounds per candidate 
     configurationIds: ["candidate"],
     playerCounts: [4],
     thresholds: {
+      seatWinShareRangeMax: 0.1,
       factionWinShareRangeMax: 0.15,
+      profileWinShareRangeMax: 0.18,
       actionEntropyMin: 0.72,
       openingEntropyMin: 0.65,
       openingTopShareMax: 0.3,
@@ -87,11 +91,13 @@ test("unified balance checks enforce faction and diversity bounds per candidate 
       forcedNoOpRateMax: 0.03
     }
   });
-  assert.equal(checks.length, 8);
+  assert.equal(checks.length, 10);
   assert.deepEqual(
     checks.filter((entry) => !entry.passed).map((entry) => entry.id),
     [
+      "candidate:p4:seat_win_share_range",
       "candidate:p4:faction_win_share_range",
+      "candidate:p4:profile_win_share_range",
       "candidate:p4:winning_path_entropy"
     ]
   );
@@ -157,6 +163,11 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
     typeof report.playerCountResults[4].outcomes.factionAbilityValues,
     "object"
   );
+  const allocationWindow = report.playerCountResults[4].outcomes
+    .factionAbilityValues.foundry?.allocation_window;
+  if (allocationWindow) {
+    assert.equal(allocationWindow.paymentResource, "runway");
+  }
   assert.ok(report.playerCountResults[4].outcomes.actionDiversity > 0);
   assert.ok(report.playerCountResults[4].outcomes.openingDiversity.observed > 1);
   assert.ok(report.playerCountResults[4].outcomes.winningPathDiversity.observed > 1);

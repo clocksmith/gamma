@@ -23,8 +23,10 @@ export function canAllocateLocalPower({
   connectedGenerators,
   startingGridPower,
   importedPower,
+  importedFacilityIds = [],
   supplementalPower,
-  exportedPower
+  exportedPower,
+  additionalFacilityDemandIds = []
 }) {
   const selected = selectedFacilityIds.map((facilityId) => {
     const facility = player.facilities.find((candidate) => candidate.id === facilityId);
@@ -39,10 +41,22 @@ export function canAllocateLocalPower({
       return repeatedUnits("generator", generator.capacity, { tile });
     }),
     ...repeatedUnits("imported", importedPower),
+    ...importedFacilityIds.map((facilityId, index) => ({
+      kind: "imported_endpoint",
+      index,
+      facilityId
+    })),
     ...repeatedUnits("supplemental", supplementalPower)
   ];
   const demands = [
     ...selected.map((facility) => ({ kind: "facility", facility })),
+    ...additionalFacilityDemandIds.map((facilityId) => {
+      const facility = player.facilities.find((candidate) => candidate.id === facilityId);
+      if (!facility) {
+        throw new RangeError(`Unknown additional-demand Facility: ${facilityId}.`);
+      }
+      return { kind: "facility", facility };
+    }),
     ...repeatedUnits("export", exportedPower)
   ];
   const eligibleUnitIndexes = demands.map((demand) =>
@@ -54,6 +68,9 @@ export function canAllocateLocalPower({
         return demand.facility.id === firstFacilityId ? [index] : [];
       }
       if (["imported", "supplemental"].includes(unit.kind)) return [index];
+      if (unit.kind === "imported_endpoint") {
+        return demand.facility.id === unit.facilityId ? [index] : [];
+      }
       const facilityTile = board.find(
         (candidate) => candidate.instanceId === demand.facility.tileId
       );

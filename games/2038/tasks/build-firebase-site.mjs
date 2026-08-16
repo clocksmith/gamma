@@ -104,7 +104,7 @@ const defaultGamePlayKitOrder = new Map([
   ["Core Rules", 0],
   ["Map Reference", 1],
   ["Component Reference", 2],
-  ["Card Reference", 3]
+  ["Card and Board Reference", 3]
 ]);
 
 function renderPageGroups(pages) {
@@ -277,7 +277,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
       description: name === "core-rules.html"
         ? "Complete setup, Eras, Actions, and scoring reference."
         : name === "map-reference.html"
-          ? "The 13-district jurisdiction, adjacency, movement, and location effects."
+          ? "The 19-district jurisdiction, adjacency, movement, and location effects."
           : name === "component-reference.html"
             ? "Every Default Game component, its purpose, and its setup location."
             : name === "card-reference.html"

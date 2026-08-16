@@ -93,7 +93,7 @@ const required = [
   "tasks/content/compile.mjs",
   "tasks/content/lint-provenance.mjs",
   "tasks/release-artifacts.mjs",
-  "physical/score-sheet.md",
+  "physical/governance-ledger.md",
   "versions/current.json",
   "versions/0.1.0/manifest.json",
   "versions/0.1.0/game-bundle.json",
@@ -278,7 +278,7 @@ for (const file of files) {
 
 const config = JSON.parse(await readFile(resolve(root, "dist/runtime/game-config.json"), "utf8"));
 const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
-if (trainingCount !== 50) throw new Error(`Training deck must contain 50 cards, found ${trainingCount}.`);
+if (trainingCount !== 40) throw new Error(`Training deck must contain 40 cards, found ${trainingCount}.`);
 
 const contentManifest = JSON.parse(await readFile(resolve(root, "dist/runtime/content-manifest.json"), "utf8"));
 const missingWriting = contentManifest.surfaces.filter((surface) => (
@@ -398,5 +398,5 @@ for (const path of requiredCandidateDocuments) {
 }
 
 process.stdout.write(
-  `check-project: ${required.length} required files, ${jsonCount} JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 6, unified strategic-unsolvability contract, 50-card Training contract, structurally complete thematic manifest\n`
+  `check-project: ${required.length} required files, ${jsonCount} JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 6, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest\n`
 );

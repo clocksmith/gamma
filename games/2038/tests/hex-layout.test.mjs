@@ -28,11 +28,15 @@ test("point-top browser layout makes every rules-adjacent board pair share a hon
   }
 });
 
-test("point-top browser layout preserves the sparse public wedges", () => {
+test("point-top browser layout closes the complete twelve-hex public ring", () => {
   const publicTiles = BOARD_RINGS.outer.map(([q, r]) => ({ q, r }));
-  for (const [index, tile] of publicTiles.entries()) {
-    for (const other of publicTiles.slice(index + 1)) {
-      assert.notEqual(axialDistance(tile, other), 1);
-    }
-  }
+  const publicEdges = publicTiles.flatMap((tile, index) =>
+    publicTiles.slice(index + 1)
+      .filter((other) => axialDistance(tile, other) === 1)
+      .map((other) => [tile, other])
+  );
+  assert.equal(publicEdges.length, 12);
+  assert.ok(publicTiles.every((tile) =>
+    publicEdges.filter((edge) => edge.includes(tile)).length === 2
+  ));
 });

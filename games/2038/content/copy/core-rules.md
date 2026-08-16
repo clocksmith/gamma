@@ -20,42 +20,41 @@ and ending narratives.
 ## How to Play
 
 Default Game lasts four Eras. The institution with the most
-${terms.playerTracks.mandate} is the provisional winner. Only two matching
-claimant tokens from the final Prediction Bag can replace that result. Resolve
+${terms.playerTracks.mandate} is the provisional winner. The strongest eligible
+${terms.systems.agi} claim can replace that result. Resolve
 the institutional winner and shared World Ending separately. Follow the
 numbered sections in order.
 
 ## 1. Setup
 
-1. ${terms.actions.build} the thirteen-tile board as described in **Modular hex board**:
+1. Unfold the Governance Board. Build the nineteen-tile map in its wells as described in **Modular hex board**:
    ${terms.locations.frontier} in the center, the shuffled six-tile operational ring around it,
-   and the shuffled six-tile public ring in the evenly spaced outer positions.
+   and the shuffled twelve-tile public ring around the complete outer edge.
 2. Separate the ${terms.systems.headline} cards by Era. **◆** Use only the
    Default-eligible cards: cards without an **Advanced Play** badge. Shuffle
-   each eligible Era deck and place it beside its Era card. Each Era uses three
-   ${terms.systems.headlines}.
-   Leave room below the four Era cards for the twelve-card ${terms.systems.futureTimeline}.
+   each deck into its printed Era panel's Headline well. Each Era uses three
+   ${terms.systems.headlines}. Place the Current Era marker in its Start bay.
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
-   four three-card Era decks. Shuffle each deck and place it beside the
-   matching Era card.
-4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.resources.safety}, ${terms.playerTracks.scrutiny}, Systemic Risk,
-   Joint Venture, ${terms.technology.megaCluster}, Initiative, and Audit bag
-   components within reach. Place the ${terms.infrastructure.power} Source reference cards nearby.
-5. Each player chooses or receives one Faction. Take its board, six Core
-   Actions, six ${terms.systems.escalations}, CEO, three Teams, four
-   Facilities, one Generator, one ${terms.playerTracks.customer}-track marker, one
-   Escalation-track marker, four Era-labelled ${terms.systems.agi} Dossier cards,
-   remaining track markers, and starting resources.
+   four three-card Era decks. Shuffle each deck and place it beside its Era
+   panel.
+4. Place the six shared Program cards face up beside the Governance Board and
+   stage the remaining shared supplies. Ordinary
+   ${terms.infrastructure.power} contracts are printed on the Energy tiles;
+   Fusion's is on its shared Program card.
+5. Each player takes one prepacked Faction tray and foldout aid. Set its captive
+   sliders to their printed starts.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
    supply. Keep all four Facilities and the Generator in supply; no Facility
-   begins on the board. The first Facility a player constructs carries that
-   Faction's integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
-   and ${terms.resources.safety} to its printed starting values.
+   begins on the board. Facilities must be constructed in printed number order:
+   Facility 1 first, then 2, 3, and 4. Facility 1 carries that Faction's
+   integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
+   and Research Protection to its printed starting values. Each player takes
+   two Program markers.
 7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
    printed on its Faction board. Put every player’s ten ${terms.playerTracks.scrutiny}
    cubes outside the bag; the bag begins empty.
 8. Add every Faction’s printed starting ${terms.playerTracks.trust} and record the result as
-   **Setup Collective ${terms.playerTracks.trust}** on the Era reference. This fixed value is used
+   **Setup Collective ${terms.playerTracks.trust}** in the Governance Board ledger. This fixed value is used
    during the World Ending.
 9. Choose Initiative randomly and give that player the Initiative marker.
    Begin Era I.
@@ -80,10 +79,10 @@ unused unless an ability readies one.
 ### The complete ordinary turn: Select → Move → Act
 
 1. Reveal one ${terms.systems.headline}.
-2. Every player secretly selects one eligible unused Core Action, or spends one
-   Escalation availability to select one eligible unlocked Escalation. A choice
-   is eligible only when it has a legal resolution now or could gain one through
-   one legal accepted immediate resource trade before Act.
+2. Every player secretly selects one eligible unused Core Action, or commits one
+   Program marker to select one eligible unlocked Program. A choice is eligible
+   only when it has a legal resolution now. A possible trade cannot make an
+   illegal selection legal.
 3. Reveal every selected action simultaneously.
 4. Resolve clockwise from Initiative.
 5. **Select:** the revealed Action is the only Action this turn.
@@ -91,7 +90,8 @@ unused unless an ability readies one.
    hexes.
 7. **Act:** read the chosen Action card from top to bottom and resolve it from
    the destination.
-8. Exhaust the Core Action, or spend one Escalation availability and flip the Escalation.
+8. Exhaust the Core Action, or place the committed Program marker on the shared
+   Program card.
 9. Pass Initiative clockwise before the next cycle.
 
 Selection commits the Action card; choose the piece, path, target, and payment
@@ -99,8 +99,8 @@ during resolution.
 
 ### Acting piece
 
-The acting piece is a CEO or Team. Both can take any Action; a CEO contributes
-two presence and a Team one. Its destination determines where Facilities and
+The acting piece is a CEO or Team. Both can take any Action and each contributes
+one presence. Its destination determines where Facilities and
 power infrastructure may be built, where Research and Deploy occur, which
 location bonus applies, and which political spaces may be Influenced.
 
@@ -112,7 +112,7 @@ recruitment, restructuring, or relocation.
 
 Apply these sources in order:
 
-- The Era card determines globally unlocked actions.
+- The Current Era panel determines globally unlocked actions.
 - A Faction board modifies those actions.
 - The current ${terms.systems.headline} supplies its printed global effect.
 - An ordinary turn may apply the Action, one destination bonus, each applicable
@@ -129,11 +129,11 @@ Apply these sources in order:
 
 ### What an Era teaches
 
-Systems are inactive before their Era card lists them under **New this Era**.
-Read that strip aloud before revealing the Mandate. All Era cards,
-Escalations, and Faction abilities are open information.
+Systems are inactive before their printed Era panel lists them under **New this Era**.
+Read that strip aloud before revealing the Mandate. All Era panels, Programs,
+and Faction abilities are open information.
 
-Escalation is cumulative. Progress teaches ordinary institutional work;
+Program access is cumulative. Progress teaches ordinary institutional work;
 Capacity adds industrial infrastructure; Authority adds agreements, quantum
 record disputes, and public effects; Continuity adds compound Actions, Dossier
 revelation, and exceptional
@@ -150,37 +150,36 @@ all tied players, overrides this rule.
 Initiative is an order, not a resource. Passing it after each cycle changes who
 resolves first and who wins unresolved ties; it cannot be traded or retained.
 
-### Escalation availability and ${terms.systems.escalations}
+### Program markers and ${terms.systems.escalations}
 
-Gain, spend, and lose **Escalation availability** on your faction-board track.
-Spend one availability to select an Era-unlocked Escalation:
+The six shared Program cards are public. At the start of each Era, each player
+sets aside the printed number of their two Program markers: zero, one, one,
+then two. Commit one available marker to select an Era-unlocked Program:
 
-- Select an ${terms.systems.escalation} instead of a Core Action.
-- Commit and reduce the Escalation availability track by one.
-- Flip the ${terms.systems.escalation} after resolution.
-- Each named ${terms.systems.escalation} is usable once per player per game.
-- Unspent Escalation availability expires at Era end.
-- Previously unlocked unused ${terms.systems.escalations} remain available later.
+- Select a Program instead of a Core Action.
+- Place your marker on that shared Program card when selected.
+- Each named Program is usable once per player per game.
+- At Era end, return committed markers; unused markers do not carry forward.
+- Previously unlocked unused Programs remain available later.
 
 **Global after movement** means the acting piece moves normally, then the
 Action resolves without a destination restriction.
 
-| Era | Availability gained | Newly available ${terms.systems.escalations} |
+| Era | Program markers | Newly available Programs |
 | --- | ---: | --- |
 | I — ${terms.eras.demo} | 0 | None |
 | II — ${terms.eras.scale} | 1 | ${terms.technology.megaCluster}, Reorganization |
 | III — ${terms.eras.narrative} | 1 | Open Weights, Narrative Capture |
 | IV — ${terms.eras.claim} | 2 | ${terms.technology.agentSwarm}, ${terms.technology.advancedGeneration} |
 
-${terms.technology.agentSwarm} is the selected Escalation; it resolves and exhausts two
+${terms.technology.agentSwarm} is the selected Program; it resolves and exhausts two
 different unused Core Actions.
 
 ### A committed Action that becomes blocked
 
-At selection, the Action must have a legal resolution or one legal pre-Act
-trade that would create one. After reveal, choose any legal piece, movement,
-mode, target, payment, and immediate trade, but never replace the selected
-Action. If the required trade is rejected, the Action becomes blocked.
+At selection, the Action must have a legal resolution before any trade. After
+reveal, choose any legal piece, movement, mode, target, payment, and optional
+pre-resolution trade, but never replace the selected Action.
 
 If an earlier player consumes every legal Facility space, Generator slot,
 contract token, or other required target, movement still resolves and the
@@ -234,7 +233,10 @@ Apply resource caps immediately after any gain or trade:
 
 - ${terms.resources.runway}: twelve
 - ${terms.resources.compute}: ten
-- ${terms.resources.safety}: three, except a printed Faction limit
+
+Research Protection is not traded or accumulated as currency. Refresh it to
+one at the start of each Era; Orisonix refreshes to two. A Research visit adds
+one temporary protection for that Training Run only.
 
 Return excess. A trade cannot move resources through a player above a cap.
 
@@ -245,7 +247,7 @@ surcharges, then discounts. The final cost cannot fall below zero.
 
 The board is one jurisdiction whose districts represent physical and
 institutional dependencies rather than ordinary distance. The [**Map reference**](/docs/map-reference.html)
-is authoritative for its thirteen-tile setup, adjacency, ring pools, tile
+is authoritative for its nineteen-tile setup, adjacency, ring pools, tile
 effects, Facility spaces, presence, and control. The shuffled map remains
 fixed for all four Eras. **◆**
 
@@ -266,7 +268,8 @@ preserve a connection the visible board no longer supports.
 
 ### Contract hosts
 
-Joint Ventures and Mega-Clusters use shared, matched token pairs. Create one
+Joint Ventures and Mega-Clusters use shared, matched token pairs. A Mega-Cluster
+is always owned by one player. Create one
 only while its pair is available; place one numbered half on each host.
 
 A contract remains owned but is active only while its fixed hosts meet its
@@ -325,21 +328,21 @@ An offline Facility still occupies space, contributes presence, and may be
 visited, but produces nothing. Sufficient Power in a later Production returns
 it online.
 
-## 5. Four-Era escalation
+## 5. Four-Era progression
 
 ### Era I — ${terms.eras.demo}
 
 - Three turns per player
 - Only Core Actions
 - Beneficial or mildly disruptive ${terms.systems.headlines}
-- No Escalation availability
+- No Program markers
 
 Era I activates movement, Core Actions, Training, the starting grid,
 Facilities, Customers, and Scrutiny.
 
 ### Era II — ${terms.eras.scale} ◆
 
-Each player receives one Escalation availability and unlocks:
+Each player receives one Program marker and unlocks:
 
 - Generators
 - Mega-Clusters
@@ -350,30 +353,23 @@ Each player receives one Escalation availability and unlocks:
 Spend three ${terms.resources.runway} and two ${terms.resources.compute} to place a ${terms.technology.megaCluster} across the edge
 between two adjacent host Facilities. Construction does not require a prior
 Production Power mark; it does require the local eligibility check below at the
-moment of construction. It adds two ${terms.playerTracks.scrutiny} when constructed.
+moment of construction. Add two ${terms.playerTracks.scrutiny} to its owner.
 Place one matched ${terms.technology.megaCluster} token half on each host Facility.
 Each Facility may host at most one ${terms.technology.megaCluster}; a Facility
 that already holds a ${terms.technology.megaCluster} half is not an eligible host.
 
 The acting piece must end on either host Facility’s hex.
 
-A **solo ${terms.technology.megaCluster}** uses two adjacent Facilities that are each eligible for
+A ${terms.technology.megaCluster} uses two adjacent Facilities you own that are each eligible for
 your local Power. Check that eligibility when the project is constructed. During
 Production, power both hosts plus two additional demand to gain three
 ${terms.resources.compute}.
 
-A **joint ${terms.technology.megaCluster}** uses one adjacent Facility from each
-consenting participant that is eligible for its owner’s local Power. Check both
-owners’ local eligibility and both unclaimed hosts when the project is proposed
-and again after the partner accepts. The lead names the partner and hosts. Rejection,
-pass, or no response uses the Escalation; no replacement partner. The lead
-pays two ${terms.resources.runway} and one ${terms.resources.compute}; the partner pays one of each. During Production,
-each powers its host plus one additional demand. If all demand is met, the
-lead gains two ${terms.resources.compute} and the partner one.
-
 Hosts must remain adjacent for the project to operate. Construction resolves in
 Initiative order. Construction reserves no Power; the additional demand is paid
-only during Production. An accepted project immediately claims its two hosts
+only during Production. During Allocate, its owner chooses the complete
+Facility and project allocation together. A project operates only if both host
+Facilities are powered and its additional demand is satisfied. A constructed project immediately claims its two hosts
 and the next available matched token pair. Every later project rechecks the
 shared pair supply, both unclaimed hosts, adjacency, and local Power eligibility.
 If an earlier accepted project claimed either host or the final pair, the later
@@ -390,8 +386,9 @@ Reorganization never resolves or readies another Action.
 
 ### Era III — ${terms.eras.narrative}
 
-Each player receives one Escalation availability. Previous ${terms.systems.escalations} remain
-unlocked. Joint Ventures and immediate ${terms.infrastructure.power} purchases now enter play.
+Each player receives one Program marker. Previous Programs remain
+unlocked. Joint Ventures now enter play. Production Power purchases are an
+Advanced Play rule.
 
 #### Open Weights
 
@@ -414,17 +411,17 @@ Choose one:
 
 ### Era IV — ${terms.eras.claim}
 
-Each player receives two Escalation availability.
+Each player receives two Program markers.
 
-Agent Swarms, Fusion, the Era IV faction programs printed on the Faction boards,
-and the final Dossier reveal now enter play. Each Faction program unlocks at the
+Agent Swarms, Fusion, the Era IV faction abilities printed on the Faction boards,
+and the final Dossier reveal now enter play. Each Faction ability unlocks at the
 Era printed on its board.
 
 #### ${terms.technology.agentSwarm}
 
 Select ${terms.technology.agentSwarm} only with two different unused Core Actions. Move once;
 resolve both from that destination in either order and pay all costs. Apply the
-visit bonus to only one. Exhaust both, flip ${terms.technology.agentSwarm}, and add three ${terms.playerTracks.scrutiny}.
+visit bonus to only one. Exhaust both, place your marker on ${terms.technology.agentSwarm}, and add three ${terms.playerTracks.scrutiny}.
 
 #### The secret ${terms.systems.agi} Dossier
 
@@ -460,59 +457,30 @@ actions spent building the public evidence that can strengthen it.
 
 #### Claim strength
 
-During final scoring, apply offline-Facility penalties and establish the final
-${terms.playerTracks.mandate} ranks. Then score each eligible claim in
-faction-coloured ${terms.playerTracks.scrutiny} cubes. These cubes are
-prediction tokens only; they do not add ${terms.playerTracks.scrutiny} or
-trigger another Audit.
+During final scoring, evaluate each fully paid claim with Publication committed.
+A claim needs at least two supported evidence modules among Benchmark,
+Deployment, and Authority:
 
-- **Publication:** one token for the eligible claim, unless an Era IV
-  ${terms.systems.headline} explicitly changes it.
-- **Benchmark:** one token if Benchmark was committed and final
+- **Benchmark:** supported if Benchmark was committed and final
   ${terms.playerTracks.capability} is at least three.
-- **Deployment:** one token if Deployment was committed and at least two of
+- **Deployment:** supported if Deployment was committed and at least two of
   the claimant's Facilities were powered in the final Production.
-- **Authority:** one token if Authority was committed and final
+- **Authority:** supported if Authority was committed and final
   ${terms.playerTracks.trust} is at least four.
-- **Capability:** one token for each reached threshold: three, six, nine, and
-  twelve ${terms.playerTracks.capability}.
-- **Mandate comeback:** zero tokens for first place, one for second, two for
-  third, and three for fourth place or lower.
 
-Use final-scoring ranks. Players tied on every final-scoring tie breaker share
-the better rank. A claim can add at most ten tokens.
+An eligible claim's strength equals:
 
-#### The Prediction Bag
+- one for Publication, or two while the AGI Blog Post Headline applies;
+- one for each supported evidence module;
+- one for each reached Capability threshold: three, six, nine, and twelve.
 
-After final scoring identifies the provisional Mandate winner, resolve the
-Prediction Bag at the table:
-
-1. Record final Collective ${terms.playerTracks.trust} and the number of black
-   Systemic Risk cubes that remained unresolved after the final Audit. These
-   recorded values determine the World Ending.
-2. Empty the Audit bag. Return every player-coloured cube to its owner and put
-   all eighteen black Systemic Risk cubes into the empty bag. In this draw,
-   black cubes mean **no ${terms.systems.agi}**; they do not resolve Audit
-   penalties.
-3. For each eligible claim, add that player's calculated number of
-   faction-coloured cubes. Do not add cubes for an ineligible Dossier.
-4. If no claim is eligible, skip the draw: ${terms.systems.agi} does not emerge
-   and the provisional Mandate winner wins.
-5. Otherwise, mix the bag and draw two cubes without replacement. Reveal them
-   together.
-6. If both cubes are the same faction colour, that institution forms
-   ${terms.systems.agi} and becomes the sole winner, replacing the provisional
-   winner. Every other pair—including black-black, black-colour, or two
-   different faction colours—means ${terms.systems.agi} does not emerge and the
-   provisional winner or joint winners win.
-7. Apply any persistent ${terms.systems.headline} that triggers when
-   ${terms.systems.agi} emerges, then determine the World Ending from the
-   recorded final state plus that effect.
-
-The first cube is the model's proposed continuation; the second tests whether
-that institutional future completes coherently. There is no reroll, redraw,
-numeric probability calculation, or separate declaration. The visible bag
-construction and two revealed cubes are the complete tabletop resolution.
+The highest-strength eligible claim forms ${terms.systems.agi}. Break a strength
+tie by final ${terms.playerTracks.mandate}, then ${terms.playerTracks.trust},
+${terms.playerTracks.customers}, ${terms.resources.compute}, and finally
+Initiative-clockwise order. If no claim has two supported evidence modules,
+${terms.systems.agi} does not emerge and the provisional Mandate winner remains
+the institutional winner. There is no Prediction Bag, comeback bonus, random
+draw, or separate declaration.
 
 #### ${terms.technology.advancedGeneration}
 
@@ -533,12 +501,15 @@ select or construct Fusion.
 
 ### A. Begin the quarter
 
-- Advance to the next fixed Era card.
+- Move the Current Era marker to Era I; in later Eras, advance one panel.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.
 - Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
+- Clear the Current Mandate ledger and write the revealed criterion and
+  minimum. Start this-Era values at zero; evaluate current-state values when
+  scored.
 - Ready all six Core Actions.
-- Award Escalation availability.
+- Make the Era's zero, one, one, or two Program markers available.
 
 ### B. Three action cycles
 
@@ -552,21 +523,17 @@ At the beginning of each cycle:
 
 #### Immediate resource trade ◆
 
-Immediately before or after Act, the active player may make one complete
-resource offer to one rival, naming exactly one resource type and positive
-integer amount on each side. Both sides must give a resource; gifts, bundles,
-and promises are not legal. The two resource types may be the same, and the
-stated amounts still change hands immediately. That rival accepts
-or rejects, or publishes one complete counteroffer. The original offer-maker
-accepts or rejects that counteroffer. Rejection, pass, or no response ends the
-window; do not redirect or renegotiate. A counteroffer cannot receive another
-counteroffer.
-${terms.resources.runway}, ${terms.resources.compute}, and ${terms.resources.safety} tokens may be exchanged. Every accepted component changes hands
-immediately; promises about later turns are not binding. The active
+Immediately before resolving the selected Action, the active player may make
+one offer to one rival: give exactly one ${terms.resources.runway} for one
+${terms.resources.compute}, or one ${terms.resources.compute} for one
+${terms.resources.runway}. The named rival accepts or rejects. Gifts, bundles,
+same-resource exchanges, unequal amounts, counteroffers, redirects, and
+third-party claims are not legal. Adjust both players' captive sliders
+immediately after acceptance. The active
 ${terms.systems.headline} may prohibit a named resource from being traded.
 
-Without acceptance, continue the selected Action; resolve it as blocked if no
-legal resolution remains.
+The selected Action was legal before this window and continues whether the
+offer is accepted or rejected. There is no post-action trade window.
 
 Immediate resource trades require no ${terms.actions.influence} Action. Only ${terms.actions.influence} creates
 persistent Joint Ventures, lobbying effects, or ${terms.playerTracks.trust} manipulation.
@@ -590,21 +557,29 @@ every player before advancing to the next box:
 1. **Generate:** determine every Generator’s local eligible Facilities. Every
    Generator with at least one eligible Facility operates automatically. Add one ${terms.playerTracks.scrutiny} for every
    ${terms.technology.emergencyInfrastructure}. Add any ${terms.systems.headline} generation.
-2. **Trade ◆:** in Initiative order, each player may make one ${terms.infrastructure.power}
-   purchase request to one adjacent rival Power connection. The named supplier accepts
+2. **Trade ◆:** Default Game skips this box. In Advanced Play, in Initiative
+   order, each player may make one ${terms.infrastructure.power}
+   purchase request through one named pair of adjacent Facilities. Name one of
+   your locally eligible Facilities as the buyer endpoint and one rival Facility
+   as the supplier endpoint. The supplier endpoint need not itself be powered,
+   but it must be on or adjacent to one of that rival's installed Generators or
+   Fusion with unsold capacity. The named supplier accepts
    or rejects. A rejected, passed, or unanswered request fails; the buyer then
    allocates with the ${terms.infrastructure.power} they have. An accepted buyer pays one
    ${terms.resources.runway} per ${terms.infrastructure.power} directly to the consenting supplier. Each supplier may sell
    at most one ${terms.infrastructure.power} this Production. Only installed Generator or Fusion
-   capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
-3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
-   allocate it only to legal local Facilities and Mega-Clusters. Mark which
-   Facilities are powered for this Production. At the end of Production, record
-   the Era, final Power supply, total Power demand satisfied, and the powered and
-   offline numbered Facility identities in the latest Production snapshot. Total
-   demand satisfied counts one for every powered Facility plus the additional
-   demand paid for active Mega-Clusters. The physical Power marks may then be
-   removed.
+   capacity may be sold; starting-grid and Headline-granted supplemental
+   ${terms.infrastructure.power} may not. Emergency Infrastructure is an installed Generator, so
+   its capacity is exportable. The purchased unit enters the buyer's connected
+   Network.
+3. **Allocate:** after all purchase requests, resolve any Headline that lets a
+   player choose supplemental ${terms.infrastructure.power}. Then each player chooses one complete
+   allocation of starting-grid, Generator, purchased, and supplemental
+   ${terms.infrastructure.power} among legal local Facilities and Mega-Cluster demand. Remove the
+   previous snapshot, then place one Power cube on each powered Facility and
+   per satisfied Mega-Cluster demand. Leave these cubes until the next Allocate
+   step. A built Facility without a cube is offline. The cubes are total demand
+   satisfied.
 4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number
@@ -616,11 +591,17 @@ keeps sales and contracts tied to one visible capacity state. Within a box,
 resolve in Initiative order unless that box specifies otherwise.
 
 Purchased ${terms.infrastructure.power} lasts only this Production and creates no contract or
-future obligation. A supplier may leave its own Facility offline. The latest
-Production snapshot remains the authority for the next Mandate, any
+future obligation. A supplier may leave its own Facility offline. The retained
+Power cubes remain the authority for the next Mandate, any
 powered-Facility Headline, the Era IV Dossier, and final offline penalties.
 
 Apply the universal resource caps after every Production gain.
+
+When an Era Mandate counts **Compute produced during Production**, count printed
+Compute output before the universal cap. Include powered Facilities, active
+Mega-Clusters, and either side of an active
+Joint Venture that receives Compute. Do not count an immediate Facility effect
+outside the five Production boxes.
 
 ### D. File the Era Dossier
 
@@ -632,8 +613,8 @@ before continuing. See **The secret ${terms.systems.agi} Dossier**.
 
 Risky actions add player-colored ${terms.playerTracks.scrutiny} to the opaque Audit bag. Each
 player has ten cubes. For each required cube when all ten are already in the
-bag, immediately pay one ${terms.resources.runway} or lose one ${terms.playerTracks.trust}; take the available option if
-only one exists. If neither exists, suffer no further loss. A depleted supply
+bag, immediately lose one ${terms.resources.runway}; if none remains, lose one
+${terms.playerTracks.trust}. If neither remains, suffer no further loss. A depleted supply
 never makes a risky action free.
 
 The four-player base draws are two, three, four, and five. For other player
@@ -652,21 +633,16 @@ Era halves upward. The resulting Audit profiles are:
 
 Draw the listed number of cubes or stop when the bag is empty.
 
-In Eras I–III, each colored cube makes its owner pay one ${terms.resources.runway} or lose one
-${terms.playerTracks.trust}. Take the available option if only one exists; if neither exists, suffer
-no further loss.
-
-In Era IV, each colored cube makes its owner pay two ${terms.resources.runway} or lose one
-${terms.playerTracks.mandate}. The payment is indivisible. With fewer than two ${terms.resources.runway}, lose one
-${terms.playerTracks.mandate} if possible; at zero ${terms.playerTracks.mandate}, reduce ${terms.resources.runway} to zero. ${terms.playerTracks.mandate} cannot fall
-below zero.
+In every Era, each colored cube makes its owner lose one
+${terms.resources.runway}; if none remains, lose one ${terms.playerTracks.trust}.
+If neither remains, suffer no further loss. This is automatic, not a choice.
 
 Drawn player-colored cubes return to the owner’s supply; undrawn cubes remain
 in the bag.
 
 ${terms.locations.media} Facilities may remove cubes before the draw. A drawn black Systemic
 Risk cube gives every player with at least three ${terms.playerTracks.customers} the current Era’s
-penalty, then returns to supply. Apply the same availability rules. Black cubes
+penalty, then returns to supply. Black cubes
 remaining at game end are unresolved Systemic Risk.
 
 ### F. Score the ${terms.playerTracks.mandate}
@@ -677,7 +653,8 @@ leaders score one ${terms.playerTracks.mandate} each.
 
 Compare only the revealed Mandate’s printed criterion. Resources, control, and
 public score do not break its tie. Leave the scored card beside its Era as part
-of the table’s public history.
+of the table’s public history. The ledger is a counting aid; clear
+it when the next Mandate is revealed.
 
 The revealed Mandate card is the exact qualification and scoring authority.
 ## 7. Core Actions
@@ -719,11 +696,12 @@ ${terms.playerTracks.capability} earned during ${terms.actions.research} is **pr
 ${terms.playerTracks.scrutiny}, ${terms.playerTracks.trust}, and ${terms.resources.runway} changes resolved before a crash are not reversed.
 All revealed cards enter the discard pile after the run.
 
-When a duplicate appears, the player may spend one ${terms.resources.safety} token to discard
-that duplicate and immediately bank the current provisional ${terms.playerTracks.capability}. A
-${terms.locations.research} visit may do this once during that run without spending
-${terms.resources.safety}. ${terms.locations.research} protection and ${terms.resources.safety} have the same timing and result; neither
-allows the run to continue after the duplicate.
+When a duplicate appears, the player may spend one Research Protection to
+discard that duplicate and immediately bank the current provisional
+${terms.playerTracks.capability}. Each player refreshes to one Research
+Protection at Era start; Orisonix refreshes to two. A ${terms.locations.research}
+visit grants one additional protection for that run. Protection never lets the
+run continue after the duplicate.
 
 Special cards:
 
@@ -732,15 +710,13 @@ Special cards:
   domain is already present, it is a duplicate.
 - **Benchmark Leak:** add two provisional ${terms.playerTracks.capability} and one ${terms.playerTracks.scrutiny}. It is
   not a domain. Its ${terms.playerTracks.capability} is lost if the run later crashes.
-- **Licensed Dataset:** pay one ${terms.resources.runway} and continue, or decline, bank the
-  current provisional ${terms.playerTracks.capability}, and end the run.
-- **Synthetic Loop:** the first copy revealed in a run counts as the unique
-  special domain **Loop** and adds one provisional ${terms.playerTracks.capability}. A later
-  Synthetic Loop is a duplicate. After the first Loop resolves, the next
-duplicate of any kind cannot be protected by ${terms.resources.safety}, a ${terms.locations.research} visit, or
-  a Faction ability.
 - **Human Evaluation:** gain one ${terms.playerTracks.trust}, immediately bank all provisional
   ${terms.playerTracks.capability}, and end the run.
+
+When a Mandate, Faction ability, or Headline counts **unique domains**, count
+only the seven ordinary domains listed above that were banked successfully.
+Benchmark Leak and Human Evaluation never count unless an effect names them
+explicitly.
 
 ### ${terms.actions.build} ◆
 
@@ -753,7 +729,9 @@ ${terms.technology.advancedGeneration} are ${terms.systems.escalations}.
 
 #### Construct a Facility
 
-Pay two ${terms.resources.runway} and place a Facility on the acting piece’s hex. It requires one
+Pay two ${terms.resources.runway} and place your lowest-numbered unbuilt Facility on the acting
+piece’s hex. Facility 1 must be built first, followed by Facilities 2, 3, and 4.
+It requires one
 ${terms.infrastructure.power} during Production. Each non-${terms.locations.frontier} hex has only two Facility spaces;
 ${terms.locations.frontier} has none and is never a legal Facility destination. Facilities cannot
 be destroyed by rivals.
@@ -814,13 +792,15 @@ The ${terms.actions.influence} Action creates no separate presence piece.
 
 ## Rules Reference
 
-## 8. ${terms.infrastructure.power} Source cards
+## 8. Printed ${terms.infrastructure.power} contracts
 
-Two shared ordinary Power Source reference cards explain the fixed Energy
-locations. They are never claimed or consumed. ${terms.locations.grid} always
-constructs ${terms.technology.emergencyInfrastructure}; ${terms.locations.renewable}
-always constructs ${terms.technology.cleanInfrastructure}. Each player has one
-ordinary Generator, and each Energy hex still has three shared slots.
+The two ordinary contracts are printed at their point of use. The
+${terms.locations.grid} tile always constructs
+${terms.technology.emergencyInfrastructure}; the ${terms.locations.renewable}
+tile always constructs ${terms.technology.cleanInfrastructure}. Fusion's full
+contract is printed on its Era IV Program card. No separate Power Source
+cards are used. Each player has one ordinary Generator, and each Energy hex
+still has three shared slots.
 
 Every connected ordinary Generator operates automatically during Production.
 
@@ -845,15 +825,16 @@ The Era IV ${terms.systems.escalation} described above.
 
 ## 9. Printed card authorities
 
-Faction boards, Core Action cards, Escalation cards, Era cards, Mandate cards,
-Training cards, Power cards, and Headline cards are rules components. The
-[**Card reference**](/docs/card-reference.html) projects every card face in one document; resolve that text
-or the matching physical card. Card text changes only the field or timing it
+Faction boards, Governance Board Era panels, map-tile Power contracts, Core
+Action cards, shared Program cards, Mandate cards, Training cards, player aids, and
+Headline cards are rules components. The [**Card and Board Reference**](/docs/card-reference.html)
+projects every authored face in one document; resolve that text or the matching
+physical surface. Printed text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
 
 All Factions and CEOs are fictional and imply no real-world claim or
 endorsement. Every Faction has one persistent institutional identity and one
-signature program. Timing is **passive**, **once per Era**, **once when
+signature ability. Timing is **passive**, **once per Era**, **once when
 unlocked**, or **once per game**. “Persists” remains available; “named Era
 only” expires at Era end. Faction abilities modify named timing windows; they
 add no phase.
@@ -876,7 +857,7 @@ trading, or update unrelated Facilities.
 
 Use [**Map reference**](/docs/map-reference.html) for setup, adjacency, location effects, presence, and
 control. Use [**Component reference**](/docs/component-reference.html) for deck contracts, component limits, and
-defined markers. Use [**Card reference**](/docs/card-reference.html) for every card face. Those references
+defined markers. Use [**Card and Board Reference**](/docs/card-reference.html) for every authored face. Those references
 are part of the Default Game, not optional background.
 ## 11. Final scoring
 
@@ -888,7 +869,7 @@ At game end:
 2. Lose one ${terms.playerTracks.mandate} for each offline Facility.
 3. Name the ordinary winner under the tie breakers below as the provisional
    winner; a complete tie remains a provisional joint victory.
-4. Resolve the Prediction Bag described above.
+4. Resolve the highest supported Dossier claim described above.
 5. Resolve the shared World Ending.
 6. Announce the final institutional winner only after reading the history it
    claims to have won.
@@ -900,17 +881,17 @@ There is no other endgame scoring.
 ### The shared World Ending
 
 Determine one institutional winner and one shared ending from visible state
-and the recorded final Audit and Prediction Bag:
+and the recorded final Audit and Dossier resolution:
 
-- Record whether matching faction-coloured prediction tokens formed ${terms.systems.agi}.
+- Record whether an eligible highest-strength claim formed ${terms.systems.agi}.
 - Total every player’s final ${terms.playerTracks.trust}.
 - Use the unresolved Systemic Risk count recorded immediately after the final
   Audit and before the bag was rebuilt.
 
-${terms.systems.agi} emerges only when the two Prediction Bag cubes match one
-eligible claimant's faction colour. Otherwise it does not emerge. Never infer
-emergence from ${terms.playerTracks.capability}, a committed Dossier, or a
-calculated chance.
+${terms.systems.agi} emerges only when one fully paid Publication claim has at
+least two supported evidence modules and wins the deterministic strength
+comparison. Otherwise it does not emerge. Never infer emergence from
+${terms.playerTracks.capability} alone or an unsupported commitment.
 
 Then determine whether the ending is **Open**. It is Open only if both
 conditions are true:
@@ -938,7 +919,9 @@ score no separate endgame ${terms.playerTracks.mandate}.
 Keep the draft secret objectives out of the baseline game, balance evidence,
 and duration evidence.
 
-Highest ${terms.playerTracks.mandate} wins.
+The highest-${terms.playerTracks.mandate} institution under the following tie breakers is the
+provisional winner before Dossier resolution. The strongest eligible claim then
+either replaces that result or leaves it intact as described above.
 
 Ties break by:
 

@@ -83,7 +83,8 @@ export function canonicalRulesVariant(config) {
     lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
     agiComputePerCommit: config.agiDossier.computePerCommit,
     agiScrutinyPerCommit: config.agiDossier.scrutinyPerCommit,
-    agiMaximumClaimTokens: config.agiDossier.predictionBag.maximumClaimTokens,
+    agiMinimumSupportedEvidenceClaims:
+      config.agiDossier.claimResolution?.minimumSupportedEvidenceClaims ?? 2,
     customerCapabilityOffset: 0,
     startingTeamsDeployed: 1,
     coalitionStartingRunway: null,
@@ -105,6 +106,7 @@ export function canonicalRulesVariant(config) {
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
     safetyEmergencyPauseEnabled: true,
     safetyStartingTrust: null,
+    tacticsEnabled: false,
     // Simulation-only intervention surface. Each entry names the canonical
     // faction and ability suppressed for the entire match.
     pausedFactionAbilities: []

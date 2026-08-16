@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.7.0-rc.7-test`
+**Rules reference:** `0.8.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -69,14 +69,14 @@ variation to test the central engine.
 
 - **Progress:** movement, Core Actions, Research, Facilities, Customers, and
   Scrutiny.
-- **Capacity:** Generators and early Escalations. Advanced Play also introduces
+- **Capacity:** Generators and early Programs. Advanced Play also introduces
   Networks and Links.
 - **Authority:** persistent agreements and competing public realities.
   Advanced Play also introduces Government votes and persistent Headline
   procedures.
 - **Continuity:** Agent Swarm, Fusion, AGI, and the civilizational ending.
 
-Later systems remain visible from setup, but the Era card is the sole unlock
+Later systems remain visible from setup, but the Current Era panel is the sole unlock
 authority.
 
 ### Presentation cannot create a new phase
@@ -95,30 +95,33 @@ Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion, and
 faction awards score when they occur. Facilities and control create
 position and production rather than receiving automatic endgame points. Final
 calculation applies the offline penalty, names the provisional Mandate winner,
-and then resolves the physical Prediction Bag.
+and then resolves supported Dossier claims deterministically.
 
 This makes negotiation legible and lets every simulated score change retain a
 specific source.
 
 ## Selected spatial contract
 
-The game uses thirteen tiles:
+The game uses nineteen tiles in a complete radius-two hexagon:
 
 - Frontier at the center with no Facility spaces;
-- six shuffled operational-ring tiles; and
-- six shuffled public-ring tiles in a sixfold-symmetric footprint.
+- six shuffled inner-ring tiles; and
+- twelve shuffled outer-ring tiles.
 
-Every non-Frontier tile has two Facility spaces. The smaller board restores
-scarcity while keeping all action categories reachable.
+The inner ring contains Research, Cloud, Foundry, Capital, Talent, and Grid.
+The outer ring contains two each of Research, Cloud, Consumer, Media,
+Government, and Renewable. Every non-Frontier tile has two Facility spaces.
+The complete ring preserves exact sixfold geometry, removes empty perimeter
+positions, and keeps every action category reachable.
 
 Power delivery is profile-specific. Default Game uses local Power: a Generator
 can power its owner's Facilities on its own hex or an adjacent hex. Advanced
 Play gives each player one Infrastructure Network; adjacency and two Link
-tokens govern pooled Power delivery and the Network bonus. There is no separate
-Transmission graph.
+tokens govern pooled Power delivery. There is no Network production bonus or
+separate Transmission graph.
 
 The integrated starting-grid identity exists from setup. Generators and
-Mega-Clusters unlock in Era II. Links and the Network production bonus are
+Mega-Clusters unlock in Era II. Links and binary Network connectivity are
 Advanced Play additions that also unlock in Era II.
 
 Default Game keeps the randomized jurisdiction fixed for all four Eras.
@@ -219,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.7.0-rc.7-test` test:
+controlled `0.8.0-rc.2-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -231,18 +234,19 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.13.1` implements `0.7.0-rc.7-test` under engine
-coverage `three-to-five-profiles-v1`. Facility Power marks are temporary to each
-Production, while the latest powered/offline snapshot remains authoritative for
-later rules. Four secret Dossier choices, final payment and Scrutiny, claim
-strength, and the two-token Prediction Bag are explicit deterministic state
-transitions around one seeded draw. Browser-native deterministic play, server-backed LLM play,
-replay, policies, and Monte Carlo share that contract.
+Executable game `0.14.1` implements `0.8.0-rc.2-test` under engine coverage
+`nineteen-hex-simplified-v1`. Each Production replaces the prior Power
+allocation; its cubes remain on the map as the authoritative powered/offline
+snapshot for later rules. The executable uses the complete radius-two board,
+six shared Programs, Research Protection, a forty-card Training deck, solo
+Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, binary
+Advanced Networks, and deterministic evidence-backed Dossier resolution.
+Browser-native deterministic play, server-backed LLM play, replay, policies,
+and Monte Carlo share that contract.
 
-The `0.13.1` / `0.7.0-rc.7-test` correction removes unprinted Entanglement
-Custody discounts, makes all applicable Faction modifiers stack explicitly,
-gives every Mega-Cluster host one project slot, and authors the public score
-sheet and stable Facility identities required by retained Production state.
+Historical `0.13.7` / `0.7.0-rc.13-test` evidence retains its exact old
+identity. It does not qualify this redesigned map, component set, action
+eligibility, Audit, or endgame.
 
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
@@ -284,7 +288,7 @@ Escalation availability on one faction-board track everywhere. It also removes
 duplicate loose-component descriptions created by the selected double-sided
 and track-based physical forms.
 
-This synchronized rules candidate promotes the accepted simplification
+That historical synchronized rules candidate promoted the accepted simplification
 package. It removes one Generator and all Influence cubes from every faction
 set, reduces printed Faction programs from twenty-four to twelve, and removes
 Market Access, Build discounts, Policy Shields, Economic Benchmarks, Experts,
@@ -409,7 +413,8 @@ replay uses read-only mode and fails on any missing decision.
 Measure before changing numbers:
 
 - Can unfamiliar four-player groups complete the game from the rulebook?
-- Does the thirteen-tile map create useful scarcity without compulsory routes?
+- Does the nineteen-tile map create useful spatial choice without eliminating
+  scarcity or creating compulsory routes?
 - Does Default Game preserve enough adaptation without Realignment, and does
   bundled Advanced Play justify its additional interruption?
 - Are non-declaration strategies competitive?
@@ -441,16 +446,18 @@ those remain physical-test questions.
 
 The current rules candidate closes the following previously implicit contracts:
 
-- The Card Reference prints every Mandate minimum, every Faction program’s
+- The Card and Board Reference prints every Mandate minimum, every Faction ability’s
   printed unlock Era and timing, and every Headline’s Default/Advanced profile
-  requirement. The Era IV card introduces only programs printed as Era IV; the
-  Faction board remains authoritative for earlier programs.
-- Production Power marks are temporary physical aids. Every faction has four
-  numbered Facilities and a public reusable score sheet whose Era rows retain
-  Mandate history and whose latest Production snapshot contains powered and
-  offline Facility IDs, delivered demand, and supply. The snapshot is
-  authoritative for the next Mandate, powered-Facility Headlines, the Era IV
-  Dossier, and final offline penalties.
+  requirement. The Era IV card introduces only abilities printed as Era IV; the
+  Faction board remains authoritative for earlier abilities.
+- Production Power cubes remain on powered Facilities and satisfied
+  Mega-Cluster demand as the latest Production snapshot until the next
+  Allocate step. Built Facilities without cubes are offline. One shared
+  Governance Board ledger retains only the currently revealed Mandate's
+  criterion, Setup Collective Trust, and final resolution; scored Mandate
+  cards remain face up as history. The visible snapshot is authoritative for
+  the next Mandate, powered-Facility Headlines, the Era IV Dossier, and final
+  offline penalties.
 - Fusion has one dedicated shared marker and therefore one project. Mega-Cluster
   construction is resolved in Initiative order; each Facility has one
   Mega-Cluster host slot, hosts must be locally Power-eligible at proposal and

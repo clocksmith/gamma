@@ -22,12 +22,12 @@ rechecked before use.
 
 Mandate 2038 materially changes the manufacturing estimate from a lightweight
 card game. It is currently a medium-box hobby strategy design: 3–5 players,
-four Eras, simultaneous action selection, a modular thirteen-hex economy,
-six asymmetric institutions, negotiation, push-your-luck Research, and an
+four Eras, simultaneous action selection, a complete radius-two nineteen-hex
+economy, six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.7.0-rc.7-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.13.1`. That synchronization is
+Rules `0.8.0-rc.2-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.14.1`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -47,14 +47,15 @@ tests support it.
 Likely commercial format:
 
 - Approximately 10–11.5-inch square rigid box
-- No conventional folding board
-- Thirteen thick modular hex tiles
-- Six faction/player boards
-- Approximately 163 Default Game cards, or 189 with the Advanced Play cards,
-  plus final player-reference aids
+- One rigid folding Governance Board with a modular-map frame and writable
+  public ledger
+- Nineteen thick modular hex tiles
+- Six dual-layer faction boards with six captive sliders each
+- 134 Default standard cards plus 6 foldout aids; 148 standard cards plus 6
+  foldouts with Advanced Play
 - Stock wooden pieces and cubes
 - Several punchboard sheets
-- One opaque Scrutiny bag
+- One opaque Audit bag
 - One ordinary six-sided Volatility die
 - 24–32-page rulebook
 - Planning MSRP: $69–$79
@@ -70,36 +71,37 @@ locked component specification.
 
 | Component | Quote assumption | Status |
 | --- | ---: | --- |
-| Modular hex tiles | 13, double-sided, 80–90 mm, 2 mm greyboard | selected sixfold-symmetric footprint |
-| Faction/player boards | 6, ideally dual-layer or recessed | strong recommendation |
+| Governance Board | 1 folding board with 19 tile wells, 4 printed Era panels, public tracks, contract bays, and writable ledger | selected physical authority; dimensions unresolved |
+| Modular hex tiles | 19, double-sided, 80–90 mm, 2 mm greyboard | selected complete radius-two footprint |
+| Faction/player boards | 6 dual-layer boards with 6 captive sliders each | selected physical authority; slider construction unresolved |
 | Core Action cards | 36, six per player | confirmed |
-| Escalation cards | 36, six per player | confirmed |
-| Realignment ballot cards | 18, three per player | Advanced Play only |
+| Shared Program cards | 6, one shared copy of each named Program | confirmed |
+| Realignment ballot cards | 6 square four-way cards, one per player | Advanced Play only |
 | Headline cards | 24: 16 Default plus 8 Advanced | confirmed profile split |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
-| Training cards | 50 | confirmed test contract |
-| Power Source references | 3 shared cards: two ordinary sources plus Fusion | selected; availability unlimited |
+| Training cards | 40 | confirmed test contract |
 | Mandate cards | 12 | selected wording; balance provisional |
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
-| Era cards | 4 | selected |
-| Player references | 4 designs; production copy count unresolved | synchronized draft copy; final layout and per-player duplication unresolved |
-| Total cards | approximately 163 Default or 189 with Advanced, plus player references | quote placeholder |
+| Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
+| Player aids | 6 four-panel foldouts | replaces twenty-four separate reference cards |
+| Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its shared Program card | replaces three separate reference cards |
+| Total printed card-and-aid pieces | 140 Default or 154 with Advanced | 134 / 148 standard cards plus 6 foldouts; manufacturing overage excluded |
 | CEO pieces | 6 | confirmed concept |
 | Team pieces | 18 | three per faction |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |
 | Link tokens | 12 | Advanced Play only; two per faction |
-| Network markers | 6 | Advanced Play only; one per faction with capacity tracked on the player board |
 | Starting-grid identifiers | 6 | integrated into each faction's first Facility |
 | Separate Grid-Ready pieces | 0 | no persistent Grid-Ready state exists |
-| Generic resource and track markers | exact stock unresolved | excludes the selected Customer and Escalation markers below |
+| Faction-board sliders | 36 captive sliders: Runway, Compute, Capability, Customers, Trust, and Research Protection on each board | integrated into boards; no loose track markers |
+| Program markers | 12, two per faction | record each player's Era Program allowance on the shared display |
+| Mandate markers | 6 | one loose faction-coloured marker per faction for the shared track |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
-| Customer-track markers | 6 | one per faction board; zero to five Customers |
-| Escalation-track markers | 6 | one per faction board; zero to two availability |
 | AGI Dossier cards | 24 | four Era-labelled Commit / Hedge cards per faction |
-| Shared punchboard tokens | use exact `core-rules.md` inventory | selected counts; layout unresolved |
+| Shared punchboard tokens | 36 retained Power cubes, 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `physical/component-inventory.md` | selected counts; layout unresolved |
+| Shared dry-erase marker | 1 fine-tip marker | serves the Governance Board ledger |
 | Punchboard sheets | 4–6 | quote placeholder |
-| Scrutiny bag | 1 opaque cloth bag | confirmed concept |
+| Audit bag | 1 opaque cloth bag | confirmed concept |
 | Volatility die | 1 stock d6 | Advanced Play only |
 | Rulebook | 24–32 pages | expected |
 | Box | rigid two-piece box with cardboard insert | recommendation |
@@ -116,14 +118,12 @@ prototype loss, wear, and blind-play evidence establishes what must be packed.
 
 ### Resolved: Training distribution
 
-The selected 50-card test distribution is:
+The selected 40-card test distribution is:
 
-- Seven domains × five cards = 35
-- Three Curated Corpus
-- Three Benchmark Leak
-- Three Licensed Dataset
-- Three Synthetic Loop
-- Three Human Evaluation
+- Seven domains × four cards = 28
+- Four Curated Corpus
+- Four Benchmark Leak
+- Four Human Evaluation
 
 It remains a balance subject, but its current physical count is exact.
 
@@ -133,16 +133,13 @@ Tactics and secret objectives are excluded from the controlled baseline.
 Their 36-card and 18-card drafts remain optional future modules and should not
 be included in the first prototype quote.
 
-### Resolved: Escalation spending
+### Resolved: shared Program use
 
-The selected rule is:
-
-> To perform an unlocked Escalation, spend one Escalation availability on your
-> faction-board track. Unspent availability expires at the end of the Era.
-
-Each player gains four Escalation availability over the game and records it
-with one faction-board track marker. Each player has six once-per-game
-Escalation cards.
+Six named Program cards remain face up on the Governance Board. Each player
+has two Program markers. The Era panels allow `0 / 1 / 1 / 2` Program uses;
+unused allowance expires at Era end. A player may use each named Program at
+most once per game. This removes thirty-six private cards and the captive
+Escalation track while preserving public timing and once-per-game identity.
 
 ### Resolved: player component maxima
 
@@ -151,25 +148,38 @@ canonical rules. Physical dimensions and material choices remain unresolved.
 
 ### Resolved: exact board inventory
 
-The selected thirteen-tile map contains one fixed Frontier, six shuffled
-operational-ring locations, and six shuffled public-ring locations in a
-sixfold-symmetric footprint. It uses two Research, two Cloud, and one each of
-Consumer, Chip, Capital, Talent, Media, Government, Grid, and Renewable.
-Advanced Play adds eighteen Realignment ballots for six factions; Default Game
-uses none. Its vote occurs only after Era III.
+The selected nineteen-tile map is a complete radius-two hexagon: one fixed
+Frontier, six shuffled inner-ring locations, and twelve shuffled outer-ring
+locations. The inner ring contains one each of Research, Cloud, Foundry,
+Capital, Talent, and Grid. The outer ring contains two each of Research,
+Cloud, Consumer, Media, Government, and Renewable. Every outer tile has the
+same geometric role, and all twelve outer positions are occupied.
+Advanced Play adds six four-way Realignment ballots for six factions; Default
+Game uses none. Its vote occurs only after Era III.
 
-### Drafted: Mandates and references
+### Resolved: Mandates and references
 
-The baseline contains twelve Era-specific Mandates and four Era cards. Mandate
-balance remains provisional. Player-reference copy is synchronized with the
-current profile split; its production duplication and layout remain unresolved.
+The baseline contains twelve Era-specific Mandates and four Era panels printed
+on the Governance Board. Mandate balance remains provisional. The box contains
+six identical four-panel foldout player aids; only final fold and layout remain
+unresolved.
 
 ### Resolved rules, unresolved production format
 
-Three shared Power Source references—two ordinary sources plus Fusion—have
-unlimited availability. Generator pieces and Energy slots create scarcity.
+Three Power contracts remain in the rules without separate cards: Emergency
+Infrastructure is printed on Grid, Clean Infrastructure on Renewable, and
+Fusion on its shared Program. Generator pieces and Energy slots create scarcity.
 Fusion uses one dedicated shared marker. Shared token quantities are exact in
 the rulebook.
+
+One Governance Board ledger replaces six personal score sheets. The thirty-six
+Power cubes remain on the map as the latest Production snapshot until the next
+Allocate step. One shared marker records only the current Mandate criterion,
+Setup Collective Trust, and final public resolution.
+
+Six labelled faction trays, four Default Era packets, and one separately packed
+Advanced module are selected setup organization. Their exact insert material
+and construction remain quote variables.
 
 The remaining manufacturing decisions are material, dimensions, player-board
 tracking, card sizing, Link and Generator format, punchboard organization, and
@@ -396,7 +406,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.7.0-rc.7-test` physical test.
+1. Run the controlled four-player `0.8.0-rc.2-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.

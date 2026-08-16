@@ -124,7 +124,7 @@ test("facilitator citations pair each source only with its own headings", () => 
     [{ id: "q1" }],
     [
       { id: "rules", headings: ["Setup", "Actions"] },
-      { id: "cards", headings: ["Era cards"] }
+      { id: "cards", headings: ["Era panels"] }
     ]
   );
   const branches = schema.properties.answers.items.properties.citations.items.anyOf;
@@ -135,7 +135,7 @@ test("facilitator citations pair each source only with its own headings", () => 
     },
     {
       sourceId: { type: "string", const: "cards" },
-      heading: { type: "string", enum: ["Era cards"] }
+      heading: { type: "string", enum: ["Era panels"] }
     }
   ]);
 });

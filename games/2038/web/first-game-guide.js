@@ -41,7 +41,7 @@ function componentFor(index) {
       body: Object.values(config.worldEnding.outcomes).join(" · ")
     })}</div>`;
   }
-  if (index === 1) return card({ eyebrow: "Era card", title: eraOne.name, body: eraOne.rulesText, extra: `<p>${escapeHtml(eraOne.unlockText)}</p>`, highlight: true });
+  if (index === 1) return card({ eyebrow: "Era panel", title: eraOne.name, body: eraOne.rulesText, extra: `<p>${escapeHtml(eraOne.unlockText)}</p>`, highlight: true });
   if (index === 2) return card({ eyebrow: headline.strapline, title: headline.name, body: headline.text, extra: `<p>${escapeHtml(headline.newswire)}</p>`, highlight: true });
   if (index === 3) return card({ eyebrow: research.initiativeName, title: research.name, body: research.summary, extra: `<p>${escapeHtml(research.flavorText)}</p>`, highlight: true });
   if (index === 4) return `<div class="guide-card-grid">${trainingCards.map((training) => card({ eyebrow: "Training face", title: training.name, body: training.flavorText, compact: true })).join("")}</div>`;

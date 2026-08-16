@@ -12,10 +12,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.13.1");
-  assert.equal(current.rulesCandidate.version, "0.7.0-rc.7-test");
+  assert.equal(current.gameVersion, "0.14.1");
+  assert.equal(current.rulesCandidate.version, "0.8.0-rc.2-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.13.1");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.14.1");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -25,11 +25,11 @@ test("current release declaration separates executable game from physical rules 
   ]);
 });
 
-test("physical authority separates profiles and preserves blind Audit draws", async () => {
-  const [spec, inventory, scoreSheet, manufacturing, manifest] = await Promise.all([
+test("physical authority separates profiles and preserves automatic blind Audit draws", async () => {
+  const [spec, inventory, governanceLedger, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
     readFile(new URL("physical/component-inventory.md", root), "utf8"),
-    readFile(new URL("physical/score-sheet.md", root), "utf8"),
+    readFile(new URL("physical/governance-ledger.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8"),
     readJson("content/data/content-manifest.json")
   ]);
@@ -45,41 +45,61 @@ test("physical authority separates profiles and preserves blind Audit draws", as
   assert.doesNotMatch(spec, /Influence cube/);
   assert.match(spec, /Initiative/);
   assert.match(spec, /visibly numbered 1–4/);
-  assert.match(spec, /latest Production snapshot/);
+  assert.match(spec, /Latest Production snapshot/);
+  assert.match(spec, /Thirty-six shared silver cubes/);
+  assert.match(spec, /Two distinct shared tokens/);
 
-  assert.match(inventory, /## Default Game — one faction set per player/);
-  assert.match(inventory, /## Advanced Play addendum/);
-  assert.match(inventory, /8 additional Headline cards/);
-  assert.match(inventory, /12 in a complete six-faction box/);
-  assert.match(inventory, /18 in a complete box/);
+  assert.match(inventory, /## One prepacked faction tray per player/);
+  assert.match(inventory, /## Advanced module/);
+  assert.match(inventory, /8 Advanced-badged Headline cards/);
+  assert.match(inventory, /12 Link tokens/);
+  assert.match(inventory, /6 four-way Realignment ballot cards/);
   assert.match(inventory, /1 ordinary six-sided Volatility die/);
-  assert.match(inventory, /selected state encoding/);
-  assert.match(inventory, /laminated Production and Era score sheet/);
-  assert.match(scoreSheet, /Total demand satisfied/);
-  assert.match(scoreSheet, /Facility 1/);
-  assert.match(scoreSheet, /Compute produced in Production/);
+  assert.match(inventory, /No component tracks Network capacity/);
+  assert.match(inventory, /six captive sliders/);
+  assert.match(inventory, /6 shared Program cards/);
+  assert.match(inventory, /twelve Program markers/);
+  assert.match(inventory, /6 foldout player aids/);
+  assert.match(inventory, /36 silver Power cubes/);
+  assert.match(inventory, /2 distinct Temporary Compute tokens/);
+  assert.doesNotMatch(inventory, /final production copy count remains open/);
+  assert.doesNotMatch(inventory, /Unresolved packing quantities/);
+  assert.match(governanceLedger, /Current Mandate/);
+  assert.match(governanceLedger, /Criterion value or status/);
+  assert.match(governanceLedger, /Setup Collective Trust/);
+  assert.match(governanceLedger, /Unresolved Systemic Risk/);
+  assert.match(governanceLedger, /Final institutional winner/);
+  assert.match(governanceLedger, /World Ending/);
+  assert.match(governanceLedger, /Do not transcribe Power/);
 
   for (const staleClaim of [
     "Approximately 190 baseline cards",
     "approximately 188 plus player references",
+    "180 Default or 194 with Advanced",
     "older rules release",
     "Four shared ordinary Power Source references"
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /163 Default or 189 with Advanced/);
-  assert.match(manufacturing, /Advanced Play adds eighteen Realignment ballots/);
-  assert.match(manufacturing, /Three shared Power Source references/);
+  assert.match(manufacturing, /140 Default or 154 with Advanced/);
+  assert.match(manufacturing, /Advanced Play adds six four-way Realignment ballots/);
+  assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
   const mapSurface = manifest.surfaces.find((surface) => surface.id === "map_tile_types");
-  assert.equal(mapSurface.physicalCopies, 13);
-  const scoreSheets = manifest.surfaces.find((surface) => surface.id === "score_sheets");
-  assert.equal(scoreSheets.physicalCopies, 6);
+  assert.equal(mapSurface.physicalCopies, 19);
+  const governanceLedgerSurface = manifest.surfaces.find(
+    (surface) => surface.id === "governance_ledger"
+  );
+  assert.equal(governanceLedgerSurface.physicalCopies, 1);
+  assert.equal(
+    manifest.surfaces.find((surface) => surface.id === "player_aid_panels").physicalCopies,
+    6
+  );
 });
 
 test("release artifacts are immutable once a version path exists", async () => {
   const directory = await mkdtemp(join(tmpdir(), "mandate-2038-release-artifact-"));
-  const path = join(directory, "0.13.1", "manifest.json");
+  const path = join(directory, "test-version", "manifest.json");
   try {
     assert.equal(await writeImmutableArtifact(path, "first\n"), true);
     assert.equal(await writeImmutableArtifact(path, "first\n"), false);
@@ -102,12 +122,11 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.7.0-rc.7-test",
-    "synchronized with executable game 0.13.1",
+    "**Rules version:** 0.8.0-rc.2-test",
+    "synchronized with executable game 0.14.1",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
-    "A **solo Mega-Cluster**",
-    "A **joint Mega-Cluster**",
+    "A Mega-Cluster uses two adjacent Facilities you own",
     "Each Facility may host at most one Mega-Cluster",
     "The starting grid powers only its assigned first Facility",
     "Facility at the acting piece’s destination",
@@ -116,18 +135,22 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "### Universal costs and caps",
     "integrated starting-grid identifier",
     "Every piece placed on the board during setup begins at Frontier",
-    "Each public district touches exactly two operational districts and never another public district",
+    "Use nineteen tiles in a complete radius-two hexagon",
+    "Every outer district touches its two outer neighbors",
     "These ring pools are fixed; shuffle tiles only within their listed ring",
-    "The inner and outer copies of Research Commons are mechanically identical",
+    "All copies of one named district are mechanically identical",
     "Every player board presents the same five Production boxes",
-    "A ring rotation carries each Facility with its district",
-    "each player may make one Power purchase request",
-    "In Advanced Play, each player may make up to two Production Power purchase",
+    "Leave these cubes until the next Allocate step",
+    "No separate Power Source cards are used",
+    "Each moving tile carries every CEO, Team, Facility, Generator, Link",
+    "A Pass names no motion",
+    "Default Game makes no Power purchase request",
+    "In Advanced Play, each player may make one request",
     "The secret AGI Dossier",
-    "The Prediction Bag",
+    "There is no Prediction Bag",
     "Do not run a second Production calculation",
     "Every Headline card is eligible",
-    "Every Faction has one persistent institutional identity and one signature program",
+    "Every Faction has one persistent institutional identity and one signature ability",
     "each applicable Faction modifier",
     "There is no hidden or deferred conversion",
     "There is no other endgame scoring"
@@ -162,40 +185,119 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   const bible = await readFile(new URL("docs/thematic-content-bible.md", root), "utf8");
   assert.match(bible, /## Player-copy design inventory/);
   assert.match(bible, /## Physical quantity interpretation/);
-  assert.match(bible, /Player-reference cards \| 4 designs; production copy count unresolved/);
+  assert.match(bible, /Foldout player aids \| 6 copies containing all 4 panels/);
+  assert.match(bible, /Shared Program cards \/ player Program markers \| 6 \/ 12/);
+  assert.match(bible, /Printed Power contracts \| 3 embedded surfaces/);
   assert.match(bible, /No replacement\n+or overage allowance has been selected yet/);
-  assert.match(bible, /Ordinary Power Sources \| 2 location-defined reference types/);
-  assert.doesNotMatch(bible, /Ordinary Power Sources \| 4 reference types/);
-  assert.match(bible, /Scrutiny cubes \/ Customer-track markers \| 60 \/ 6/);
-  assert.match(bible, /Escalation-track markers \/ AGI Dossier cards \| 6 \/ 24/);
+  assert.match(bible, /Ordinary Power contracts \| 2 location-defined contracts/);
+  assert.doesNotMatch(bible, /Ordinary Power contracts \| 4/);
+  assert.match(bible, /Scrutiny cubes \/ captive faction-board sliders \| 60 \/ 36/);
+  assert.match(bible, /Mandate markers \/ AGI Dossier cards \| 6 \/ 24/);
   assert.match(bible, /Starting-grid identities \| 6 Facilities carry this identity/);
   assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
 });
 
 test("selected deck contracts have exact physical counts", async () => {
-  const config = await readJson("dist/runtime/game-config.json");
-  const tactics = await readJson("dist/runtime/tactics.json");
-  const escalation = await readJson("dist/runtime/escalations.json");
+  const [config, tactics, escalation, headlines, mandates] = await Promise.all([
+    readJson("dist/runtime/game-config.json"),
+    readJson("dist/runtime/tactics.json"),
+    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/headlines.json"),
+    readJson("dist/runtime/mandates.json")
+  ]);
 
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
-  assert.equal(trainingCount, 50);
+  assert.equal(trainingCount, 40);
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
   assert.equal(escalation.escalations.length, 6);
-  assert.equal(escalation.cardsPerPlayer, 6);
+  assert.equal(escalation.cardsPerPlayer, 0);
+  assert.equal(escalation.sharedCardCount, 6);
+  const defaultHeadlineCount = headlines.headlines.filter(
+    (headline) => !headline.requiredRuleModules?.length
+  ).length;
   assert.deepEqual(
-    config.powerSources.filter((source) => !source.isEscalation).map((source) => source.id),
+    [1, 2, 3, 4].map((era) =>
+      headlines.headlines.filter(
+        (headline) => headline.round === era && !headline.requiredRuleModules?.length
+      ).length
+    ),
+    [5, 4, 3, 4]
+  );
+  assert.deepEqual(
+    [1, 2, 3, 4].map((era) =>
+      headlines.headlines.filter(
+        (headline) => headline.round === era && headline.requiredRuleModules?.length
+      ).length
+    ),
+    [1, 2, 3, 2]
+  );
+  const defaultStandardCards =
+    config.playerSupply.coreActionCards * config.players.max +
+    config.sharedSupply.sharedProgramCards +
+    defaultHeadlineCount +
+    mandates.mandates.length +
+    trainingCount +
+    config.playerSupply.agiDossierCards * config.players.max;
+  const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
+  const advancedPrintedPieces =
+    defaultPrintedPieces +
+    (headlines.headlines.length - defaultHeadlineCount) +
+    config.playerSupply.realignmentBallotCards * config.players.max;
+  assert.equal(defaultStandardCards, 134);
+  assert.equal(defaultPrintedPieces, 140);
+  assert.equal(advancedPrintedPieces, 154);
+  assert.deepEqual(
+    config.powerSources.filter((source) => !source.isProgram).map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
+  );
+  for (const source of config.powerSources.filter((candidate) => !candidate.isProgram)) {
+    assert.equal(
+      source.runwayCost,
+      config.singleGeneratorRule.locations[source.location].constructionCost,
+      `${source.id} projects its authoritative location cost`
+    );
+  }
+  assert.deepEqual(
+    Object.fromEntries(config.powerSources.map((source) => [source.id, source.physicalSurface])),
+    {
+      clean_infrastructure: "renewable_basin_tile",
+      emergency_infrastructure: "grid_reactor_tile",
+      fusion_demonstrator: "fusion_demonstrator_program"
+    }
+  );
+  assert.deepEqual(config.playerSupply.facilityConstructionOrder, [1, 2, 3, 4]);
+  assert.deepEqual(
+    {
+      governanceBoardEraPanels: config.sharedSupply.governanceBoardEraPanels,
+      currentEraMarkers: config.sharedSupply.currentEraMarkers,
+      playerAidFoldouts: config.sharedSupply.playerAidFoldouts,
+      governanceLedgers: config.sharedSupply.governanceLedgers,
+      sharedDryEraseMarkers: config.sharedSupply.sharedDryEraseMarkers,
+      powerAllocationMarkers: config.sharedSupply.powerAllocationMarkers,
+      temporaryComputeTokens: config.sharedSupply.temporaryComputeTokens,
+      mandateMarkers: config.sharedSupply.mandateMarkers
+    },
+    {
+      governanceBoardEraPanels: 4,
+      currentEraMarkers: 1,
+      playerAidFoldouts: 6,
+      governanceLedgers: 1,
+      sharedDryEraseMarkers: 1,
+      powerAllocationMarkers: 36,
+      temporaryComputeTokens: 2,
+      mandateMarkers: 6
+    }
   );
 });
 
-test("core action and escalation contracts stay singular", async () => {
+test("core action and shared Program contracts stay singular", async () => {
   const config = await readJson("dist/runtime/game-config.json");
   assert.deepEqual(
     config.actions.map((action) => action.id),
     ["fund", "research", "build", "organize", "deploy", "influence"]
   );
   assert.deepEqual(config.rounds.map((round) => round.cycles), [3, 3, 3, 3]);
-  assert.deepEqual(config.rounds.map((round) => round.escalationAvailability), [0, 1, 1, 2]);
+  assert.deepEqual(config.rounds.map((round) => round.programUses), [0, 1, 1, 2]);
   assert.ok(config.rounds[3].escalations.includes("fusion_demonstrator"));
 });
 
@@ -211,11 +313,11 @@ test("factions and player supplies match the selected limits", async () => {
       facilities: config.playerSupply.facilities,
       generators: config.playerSupply.generators,
       linkTokens: config.playerSupply.linkTokens,
-      networkTrackMarkers: config.playerSupply.networkTrackMarkers,
       influenceCubes: config.playerSupply.influenceCubes,
       scrutinyCubes: config.playerSupply.scrutinyCubes,
-      customerTrackMarkers: config.playerSupply.customerTrackMarkers,
-      escalationTrackMarkers: config.playerSupply.escalationTrackMarkers,
+      factionBoardCaptiveSliders: config.playerSupply.factionBoardCaptiveSliders,
+      programMarkers: config.playerSupply.programMarkers,
+      realignmentBallotCards: config.playerSupply.realignmentBallotCards,
       agiDossierCards: config.playerSupply.agiDossierCards,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
@@ -224,11 +326,11 @@ test("factions and player supplies match the selected limits", async () => {
       facilities: 4,
       generators: 1,
       linkTokens: 2,
-      networkTrackMarkers: 1,
       influenceCubes: 0,
       scrutinyCubes: 10,
-      customerTrackMarkers: 1,
-      escalationTrackMarkers: 1,
+      factionBoardCaptiveSliders: 6,
+      programMarkers: 2,
+      realignmentBallotCards: 1,
       agiDossierCards: 4,
       startingGridIdentifiers: 1
     }
@@ -241,7 +343,12 @@ test("factions and player supplies match the selected limits", async () => {
     "startingGridMarkers",
     "jointVentureMarkers",
     "megaClusterMarkers",
-    "networkMarkers"
+    "networkMarkers",
+    "networkTrackMarkers",
+    "customerTrackMarkers",
+    "escalationTrackMarkers",
+    "advancedNetworkCaptiveSliders",
+    "realignmentBallots"
   ]) assert.ok(!(staleField in config.playerSupply), `playerSupply retires ${staleField}`);
 
   const allowedTiming = new Set(factions.abilityTimingContract.allowedTiming);
@@ -296,7 +403,7 @@ test("faction truth constrains balance without becoming a point-buy budget", asy
   }
 });
 
-test("Faction boards project into Card Reference without duplicating their card text in Default Rules", async () => {
+test("Faction boards project into Card and Board Reference without duplicating their card text in Default Rules", async () => {
   const factions = await readJson("dist/runtime/factions.json");
   const [rules, cardReference] = await Promise.all([
     readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
@@ -316,7 +423,7 @@ test("Faction boards project into Card Reference without duplicating their card 
     }
   }
 
-  assert.match(rules, /one persistent institutional identity and one\s+signature program/);
+  assert.match(rules, /one persistent institutional identity and one\s+signature ability/);
   assert.match(rules, /use each Faction board’s printed starts/);
   assert.doesNotMatch(rules, /Scientific Method:/);
   assert.doesNotMatch(rules, /Industrial Velocity:/);
@@ -331,20 +438,20 @@ test("headline and board boundaries remain explicit", async () => {
     assert.equal(headlines.headlines.filter((headline) => headline.round === round).length, 6);
   }
   const expandedTiles = config.board.tiles.reduce((sum, tile) => sum + tile.count, 0);
-  assert.equal(config.board.selectedTileCount, 13);
+  assert.equal(config.board.selectedTileCount, 19);
   assert.equal(expandedTiles, config.board.prototypeTileCount);
-  assert.equal(expandedTiles, 13);
-  assert.equal(config.board.tiles.find((tile) => tile.id === "consumer").count, 1);
+  assert.equal(expandedTiles, 19);
+  assert.equal(config.board.tiles.find((tile) => tile.id === "consumer").count, 2);
   assert.equal(
     config.board.tiles.filter((tile) => tile.category === "energy")
       .reduce((sum, tile) => sum + tile.count, 0),
-    2
+    3
   );
   assert.equal(config.board.startingGridConnection.capacity, 1);
   assert.deepEqual(config.playRuleDefaults, {
     immediateTradeCounteroffers: false,
     immediateTradeThirdPartyClaims: false,
-    powerPurchaseRequests: 1,
+    powerPurchaseRequests: 0,
     realignmentEnabled: false,
     networkInfrastructureEnabled: false,
     headlinePersistentEffectsEnabled: false,
@@ -356,9 +463,7 @@ test("headline and board boundaries remain explicit", async () => {
       Object.entries(config.playRuleModules).map(([id, module]) => [id, module.settings])
     ),
     {
-      "trade-counteroffers": { immediateTradeCounteroffers: true },
-      "third-party-trade-claims": { immediateTradeThirdPartyClaims: true },
-      "second-power-request": { powerPurchaseRequests: 2 },
+      "advanced-power-market": { powerPurchaseRequests: 1 },
       "jurisdictional-realignment": { realignmentEnabled: true },
       "network-infrastructure": { networkInfrastructureEnabled: true },
       "headline-persistence": { headlinePersistentEffectsEnabled: true },
@@ -369,16 +474,14 @@ test("headline and board boundaries remain explicit", async () => {
   assert.deepEqual(config.playProfiles, {
     defaultGame: {
       id: "default-game",
-      moduleIds: ["trade-counteroffers"],
+      moduleIds: [],
       name: "Default Game",
-      summary: "The primary four-Era game: one complete trade offer or counteroffer, one Production Power request, local Power, immediate Headlines, and a static jurisdiction."
+      summary: "The primary four-Era game: one optional 1-for-1 resource trade before resolution, local Power, immediate Headlines, and a static nineteen-district jurisdiction."
     },
     advancedPlay: {
       id: "advanced-play",
       moduleIds: [
-        "trade-counteroffers",
-        "third-party-trade-claims",
-        "second-power-request",
+        "advanced-power-market",
         "jurisdictional-realignment",
         "network-infrastructure",
         "headline-persistence",
@@ -386,7 +489,7 @@ test("headline and board boundaries remain explicit", async () => {
         "headline-volatility"
       ],
       name: "Advanced Play",
-      summary: "The bundled Advanced profile adds third-party claims, connected Networks, a second Production Power request, procedural and persistent Headlines, Volatility, and Era III Jurisdictional Realignment."
+      summary: "The bundled Advanced profile adds connected Networks, one Production Power request, procedural and persistent Headlines, Volatility, and Era III Jurisdictional Realignment."
     }
   });
   const register = await readJson("dist/runtime/rule-change-register.json");
@@ -400,26 +503,26 @@ test("headline and board boundaries remain explicit", async () => {
       assert.ok(implementedModuleIds.includes(moduleId));
     }
   }
-  assert.equal(
-    register.changes.find((change) => change.id === "deterministic-audit-replacement").status.id,
-    "rejected"
-  );
   const acceptedSimplifications = register.changes
     .filter((change) => [
-      "presence-only-politics",
+      "equal-presence-control",
       "single-generator-default",
-      "two-program-factions",
-      "stored-token-consolidation",
+      "shared-program-display",
+      "research-protection-refresh",
+      "deterministic-dossier",
+      "nineteen-hex-board",
       "simplified-profile-boundary"
     ].includes(change.id) && change.status.id === "accepted_current")
     .map((change) => change.id)
     .sort();
   assert.deepEqual(acceptedSimplifications, [
-    "presence-only-politics",
+    "deterministic-dossier",
+    "equal-presence-control",
+    "nineteen-hex-board",
+    "research-protection-refresh",
+    "shared-program-display",
     "simplified-profile-boundary",
-    "single-generator-default",
-    "stored-token-consolidation",
-    "two-program-factions"
+    "single-generator-default"
   ]);
   assert.ok(
     acceptedSimplifications.every(
@@ -431,7 +534,19 @@ test("headline and board boundaries remain explicit", async () => {
     config.board.realignment.motions.map((motion) => motion.id),
     ["consolidate_core", "expand_periphery", "counter_cycle"]
   );
-  assert.equal(config.playerSupply.realignmentBallots, 3);
+  assert.deepEqual(config.board.realignment.ballot, {
+    cardsPerPlayer: 1,
+    orientationChoices: [
+      "consolidate_core",
+      "expand_periphery",
+      "counter_cycle",
+      "pass"
+    ],
+    passChoice: "pass"
+  });
+  assert.equal(config.playerSupply.realignmentBallotCards, 1);
+  assert.equal(config.playerSupply.factionBoardCaptiveSliders, 6);
+  assert.equal(config.playerSupply.programMarkers, 2);
   assert.deepEqual(
     Object.fromEntries(config.board.tiles.map((tile) => [tile.id, tile.name])),
     {
@@ -473,11 +588,11 @@ test("headline and board boundaries remain explicit", async () => {
       (sum, tile) => sum + Object.values(tile.placement).reduce((total, count) => total + count, 0),
       0
     ),
-    13
+    19
   );
 
   const blogPost = headlines.headlines.find((headline) => headline.id === "agi_blog_post");
-  assert.match(blogPost.text, /receives 2 Publication tokens instead of 1/);
+  assert.match(blogPost.text, /receives 2 Publication strength instead of 1/);
   assert.match(blogPost.text, /does not change Dossier payment, Scrutiny/);
 });
 
@@ -633,12 +748,12 @@ test("every player-facing content surface has complete copy", async () => {
     }
   }
   for (const card of config.trainingDeck.cards) {
-    for (const field of ["name", "flavorText"]) {
+    for (const field of ["name", "rulesText", "flavorText"]) {
       assert.ok(card[field], `${card.id} has ${field}`);
     }
   }
   for (const source of config.powerSources) {
-    for (const field of ["tagline", "publicClaim"]) {
+    for (const field of ["tagline", "rulesText", "publicClaim"]) {
       assert.ok(source[field], `${source.id} has ${field}`);
     }
   }

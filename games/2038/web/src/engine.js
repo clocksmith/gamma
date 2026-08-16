@@ -38,14 +38,36 @@ export const BOARD_RINGS = Object.freeze({
     [1, -1]
   ]),
   outer: Object.freeze([
+    [2, 0],
     [1, 1],
+    [0, 2],
     [-1, 2],
+    [-2, 2],
     [-2, 1],
+    [-2, 0],
     [-1, -1],
+    [0, -2],
     [1, -2],
+    [2, -2],
     [2, -1]
   ])
 });
+
+const LEGACY_OUTER_RING = Object.freeze([
+  [1, 1],
+  [-1, 2],
+  [-2, 1],
+  [-1, -1],
+  [1, -2],
+  [2, -1]
+]);
+
+function ringCoordinates(ring, count) {
+  if (ring === "outer" && count === LEGACY_OUTER_RING.length) {
+    return LEGACY_OUTER_RING;
+  }
+  return BOARD_RINGS[ring];
+}
 
 const coordinateKey = (q, r) => `${q},${r}`;
 
@@ -81,7 +103,7 @@ export function generateBoard(config, seed) {
       definitions.filter((tile) => tile.placementRing === ring),
       createRng(`${seed}:${ring}`)
     );
-    const coordinates = BOARD_RINGS[ring];
+    const coordinates = ringCoordinates(ring, pool.length);
     if (pool.length !== coordinates.length) {
       throw new Error(
         `${ring} ring requires ${coordinates.length} tiles; received ${pool.length}.`
@@ -141,7 +163,14 @@ export function applyBoardMotion(board, motion) {
     motionId: motion.id,
     movements: [
       ...rotateBoardRing(board, BOARD_RINGS.inner, motion.innerSteps || 0),
-      ...rotateBoardRing(board, BOARD_RINGS.outer, motion.outerSteps || 0)
+      ...rotateBoardRing(
+        board,
+        ringCoordinates(
+          "outer",
+          board.filter((tile) => tile.placementRing === "outer").length
+        ),
+        motion.outerSteps || 0
+      )
     ]
   };
 }
@@ -247,23 +276,30 @@ export function buildTrainingDeck(config, seed) {
   return shuffle(cards, createRng(seed));
 }
 
+export const TRAINING_DOMAINS = Object.freeze([
+  "code",
+  "science",
+  "web",
+  "books",
+  "images",
+  "video",
+  "synthetic"
+]);
+
 function firstMissingDomain(seen) {
-  return ["code", "science", "web", "books", "images", "video", "synthetic"]
-    .find((domain) => !seen.has(domain));
+  return TRAINING_DOMAINS.find((domain) => !seen.has(domain));
 }
 
 export function simulateTrainingRun(config, seed, options = {}) {
-  const stopAt = Math.max(1, Math.min(7, Number(options.stopAt || 3)));
-  const startingRunway = Number(options.runway ?? 12);
-  let runway = startingRunway;
-  let safety = Number(options.safety || 0);
+  const stopAt = Math.max(1, Number(options.stopAt || 3));
+  const startingProtection = Number(options.researchProtection || 0);
+  let researchProtection = startingProtection;
   let capability = 0;
   let trust = 0;
   let scrutiny = 0;
   let protectedDuplicate = false;
   let crashProtectable = false;
-  let nextDuplicateUnprotected = false;
-  const seen = new Set();
+  const ordinaryDomains = new Set();
   const revealed = [];
   const deck = options.deck || buildTrainingDeck(config, seed);
   let outcome = "stopped";
@@ -271,51 +307,43 @@ export function simulateTrainingRun(config, seed, options = {}) {
   for (const card of deck) {
     revealed.push(card.type);
 
+    let duplicate = false;
     if (card.kind === "domain") {
-      if (seen.has(card.type)) {
-        crashProtectable = !nextDuplicateUnprotected;
-        if (safety > 0 && !nextDuplicateUnprotected) {
-          safety -= 1;
-          protectedDuplicate = true;
-          outcome = "protected";
-        } else {
-          capability = 0;
-          scrutiny += 1;
-          outcome = "crashed";
-        }
-        break;
-      }
-      seen.add(card.type);
-      capability += 1;
-    } else if (card.type === "curated_corpus") {
-      const domain = firstMissingDomain(seen);
-      if (domain) {
-        seen.add(domain);
+      duplicate = ordinaryDomains.has(card.type);
+      if (!duplicate) {
+        ordinaryDomains.add(card.type);
         capability += 1;
       }
+    } else if (card.type === "curated_corpus") {
+      const domain = firstMissingDomain(ordinaryDomains);
+      if (domain) {
+        ordinaryDomains.add(domain);
+        capability += 1;
+      } else duplicate = true;
     } else if (card.type === "benchmark_leak") {
       capability += 2;
       scrutiny += 1;
-    } else if (card.type === "licensed_dataset") {
-      if (runway > 0) {
-        runway -= 1;
-      } else {
-        outcome = "licensed-stop";
-        break;
-      }
-    } else if (card.type === "synthetic_loop") {
-      if (!seen.has("synthetic_loop")) {
-        seen.add("synthetic_loop");
-        capability += 1;
-      }
-      nextDuplicateUnprotected = true;
     } else if (card.type === "human_evaluation") {
       trust += 1;
       outcome = "human-evaluation";
       break;
     }
 
-    if (seen.size >= stopAt) {
+    if (duplicate) {
+      crashProtectable = true;
+      if (researchProtection > 0) {
+        researchProtection -= 1;
+        protectedDuplicate = true;
+        outcome = "protected";
+      } else {
+        capability = 0;
+        scrutiny += 1;
+        outcome = "crashed";
+      }
+      break;
+    }
+
+    if (ordinaryDomains.size >= stopAt) {
       outcome = "banked";
       break;
     }
@@ -328,11 +356,13 @@ export function simulateTrainingRun(config, seed, options = {}) {
     capability,
     trust,
     scrutiny,
-    runwaySpent: startingRunway - runway,
-    safetySpent: Number(options.safety || 0) - safety,
+    runwaySpent: 0,
+    researchProtectionSpent: startingProtection - researchProtection,
     protectedDuplicate,
     crashProtectable,
-    distinctDomains: seen.size,
+    ordinaryDomains: [...ordinaryDomains],
+    ordinaryDomainCount: ordinaryDomains.size,
+    distinctDomains: ordinaryDomains.size,
     revealed,
     cardsDrawn: revealed.length,
     deckExhausted: revealed.length === deck.length && outcome === "stopped"
@@ -350,7 +380,7 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     ...structuredClone(faction.starts),
     mandate: 0,
     mandateAwards: [],
-    escalation: 0,
+    programUses: 0,
     actionsUsed: [],
     escalationsUsed: [],
     pieces: [
@@ -475,7 +505,7 @@ export function availableEscalations(escalations, state) {
   return escalations.escalations.filter((action) =>
     action.unlockedRound <= state.round &&
     !state.player.escalationsUsed.includes(action.id) &&
-    state.player.escalation > 0
+    state.player.programUses > 0
   );
 }
 
@@ -556,13 +586,15 @@ function resolveCore(config, state, actionId, destination, options) {
     player.compute -= 1;
     const result = simulateTrainingRun(config, `${state.seed}:r${state.round}:c${state.cycle}`, {
       stopAt: options.stopAt,
-      runway: player.runway,
-      safety: player.safety
+      researchProtection: player.researchProtection +
+        Number(destination.category === "research")
     });
     addResource(config, player, "capability", result.capability);
     addResource(config, player, "trust", result.trust);
-    player.runway -= result.runwaySpent;
-    player.safety -= result.safetySpent;
+    player.researchProtection -= Math.min(
+      player.researchProtection,
+      result.researchProtectionSpent
+    );
     addScrutiny(config, player, result.scrutiny);
     state.metrics.researchCapabilityGains.push({
       round: state.round,
@@ -712,26 +744,48 @@ export function networkedFacilityIds(
   const result = new Set();
   const startingId = player.startingGridConnection?.assignedFacilityId;
   if (startingId) result.add(startingId);
-  for (const facility of player.facilities) {
-    const tile = board.find((entry) => entry.instanceId === facility.tileId);
-    if (player.generators.some((generator) => {
-      const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
-      return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
-    })) result.add(facility.id);
+  if (!networkInfrastructureEnabled) {
+    for (const facility of player.facilities) {
+      const tile = board.find((entry) => entry.instanceId === facility.tileId);
+      if (player.generators.some((generator) => {
+        const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
+        return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
+      })) result.add(facility.id);
+    }
+    return result;
   }
-  if (!networkInfrastructureEnabled) return result;
   for (const id of player.links || []) result.add(id);
+  const connectedGenerators = new Set();
   let changed = true;
   while (changed) {
     changed = false;
+    for (const generator of player.generators) {
+      if (connectedGenerators.has(generator.id)) continue;
+      const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
+      if (player.facilities.some((facility) => {
+        if (!result.has(facility.id)) return false;
+        const facilityTile = board.find((entry) => entry.instanceId === facility.tileId);
+        return generatorTile && facilityTile &&
+          axialDistance(generatorTile, facilityTile) <= 1;
+      })) {
+        connectedGenerators.add(generator.id);
+        changed = true;
+      }
+    }
     for (const facility of player.facilities) {
       if (result.has(facility.id)) continue;
       const tile = board.find((entry) => entry.instanceId === facility.tileId);
-      if (player.facilities.some((candidate) => {
+      const adjacentFacility = player.facilities.some((candidate) => {
         if (!result.has(candidate.id)) return false;
         const candidateTile = board.find((entry) => entry.instanceId === candidate.tileId);
         return tile && candidateTile && axialDistance(tile, candidateTile) <= 1;
-      })) {
+      });
+      const adjacentGenerator = player.generators.some((generator) => {
+        if (!connectedGenerators.has(generator.id)) return false;
+        const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
+        return tile && generatorTile && axialDistance(tile, generatorTile) <= 1;
+      });
+      if (adjacentFacility || adjacentGenerator) {
         result.add(facility.id);
         changed = true;
       }
@@ -792,7 +846,8 @@ function advanceAfterRealignment(config, headlines, state) {
     state.round += 1;
     state.cycle = 1;
     state.player.actionsUsed = [];
-    state.player.escalation = config.rounds[state.round - 1].escalationAvailability;
+    state.player.programUses = config.rounds[state.round - 1].programUses;
+    state.player.researchProtection = state.player.factionId === "safety_laboratory" ? 2 : 1;
     state.headlines = shuffle(
       availableHeadlines(headlines, state.round, playProfile(config, state)),
       createRng(`${state.seed}:headlines:${state.round}`)
@@ -879,8 +934,8 @@ export function resolveSelectedAction(config, headlines, state, pieceId, tileId,
     summary = resolveCore(config, state, state.selectedAction.id, destination, options);
     state.player.actionsUsed.push(state.selectedAction.id);
   } else {
-    if (state.player.escalation < 1) throw new Error("No Escalation is currently available.");
-    state.player.escalation -= 1;
+    if (state.player.programUses < 1) throw new Error("No Program use is currently available.");
+    state.player.programUses -= 1;
     state.player.escalationsUsed.push(state.selectedAction.id);
     summary = `${state.selectedAction.id} committed at ${destination.name}; detailed Escalation resolution is recorded for manual study.`;
   }

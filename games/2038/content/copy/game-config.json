@@ -39,7 +39,7 @@
           "Generators",
           "Mega-Clusters",
           "${terms.systems.escalations}",
-          "Advanced Play: Links and the Network production bonus"
+          "Advanced Play: Links and binary connected Networks"
         ]
       },
       {
@@ -53,7 +53,6 @@
         ],
         "newThisEra": [
           "Joint Ventures",
-          "immediate ${terms.infrastructure.power} purchases",
           "Advanced Play: Civic Permission Authority votes",
           "Advanced Play: persistent Headline effects"
         ]
@@ -71,9 +70,9 @@
         ],
         "newThisEra": [
           "Agent Swarms",
-          "Publication Dossiers and the Prediction Bag",
+          "Publication Dossiers and deterministic claim resolution",
           "Fusion",
-          "exceptional faction programs"
+          "remaining faction abilities"
         ]
       }
     ],
@@ -197,9 +196,9 @@
         "name": "${terms.playerTracks.trust}",
         "microcopy": "Public standing to continue at scale."
       },
-      "safety": {
-        "name": "${terms.resources.safety}",
-        "microcopy": "Time and authority to interrupt while interruption remains possible."
+      "researchProtection": {
+        "name": "${terms.resources.researchProtection}",
+        "microcopy": "One protected duplicate per Era; Orisonix receives two."
       }
     },
     "board": {
@@ -217,7 +216,7 @@
           {
             "id": "expand_periphery",
             "name": "Expand the Periphery",
-            "ballotText": "Rotate the six outer-ring districts one position clockwise.",
+            "ballotText": "Rotate the twelve outer-ring districts one position clockwise.",
             "flavorText": "The edge has been moved closer to opportunity without changing its distance."
           },
           {
@@ -229,11 +228,11 @@
         ],
         "name": "Advanced Play: ${terms.systems.realignment}",
         "timing": "Advanced Play only: exactly once, after ${terms.playerTracks.mandate} scoring in Era III.",
-        "vote": "Every player secretly selects one motion. Reveal simultaneously. The motion with the most ballots resolves.",
+        "vote": "Every player secretly rotates one four-way ballot so Consolidate Core, Expand Periphery, Counter-Cycle, or Pass points toward the board center, places it face down, then reveals simultaneously. Pass names no motion. The motion with the most ballots resolves.",
         "tieBreak": "Among tied leading motions, scan players clockwise from Initiative; the first ballot naming a tied motion selects it.",
         "contentsRule": "Location tiles and everything on them move together. ${terms.locations.frontier} never moves.",
         "networkRule": "After movement, recalculate Network reach from the starting-grid Facility, Generators, Link-marked Facilities, and visible adjacency. No pieces are lifted or re-laid.",
-        "agreementRule": "Joint Ventures and Mega-Clusters remain owned but produce only while their required Facilities are adjacent. Immediate ${terms.infrastructure.power} purchases never persist through Realignment."
+        "agreementRule": "Joint Ventures remain owned but produce only while their fixed host Facilities remain in range. Advanced Power purchases never persist through Realignment."
       },
       "startingGridConnection": {
         "target": "first_facility",
@@ -251,8 +250,8 @@
         {
           "id": "research",
           "name": "${terms.locations.research}",
-          "visit": "Protect one Training draw.",
-          "production": "Gain 1 ${terms.resources.safety} token.",
+          "visit": "Gain one additional ${terms.resources.researchProtection} for this Training Run.",
+          "production": "Gain 1 ${terms.resources.compute}.",
           "landmark": "Public Research Charter",
           "flavorText": "Publicly chartered inquiry remains nominally shared while institutions compete to privatize its results, standards, and future uses."
         },
@@ -315,7 +314,7 @@
         {
           "id": "grid_reactor",
           "name": "${terms.locations.grid}",
-          "visit": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}.",
+          "visit": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. Add 1 ${terms.playerTracks.scrutiny} each Production it operates. One ordinary Generator per player.",
           "production": "Gain 1 ${terms.resources.compute}.",
           "landmark": "National Interconnection",
           "flavorText": "Every promised future submits one more request for transmission, cooling, and priority."
@@ -323,7 +322,7 @@
         {
           "id": "renewable_basin",
           "name": "${terms.locations.renewable}",
-          "visit": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}.",
+          "visit": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Capacity: 3 local ${terms.infrastructure.power}. Gain 1 ${terms.playerTracks.trust} when constructed. No recurring penalty. One ordinary Generator per player.",
           "production": "Remove 1 ${terms.playerTracks.scrutiny} before Audit.",
           "landmark": "Basin Stewardship Authority",
           "flavorText": "Clean power, water, and thermal relief become one indivisible public ledger."
@@ -335,88 +334,91 @@
         {
           "id": "code",
           "name": "Code",
+          "rulesText": "First Code this run: add 1 provisional ${terms.playerTracks.capability}. A later Code is a duplicate.",
           "flavorText": "Operational records, software practice, and every abstraction that survived deployment."
         },
         {
           "id": "science",
           "name": "Science",
+          "rulesText": "First Science this run: add 1 provisional ${terms.playerTracks.capability}. A later Science is a duplicate.",
           "flavorText": "Replicated findings, disputed methods, and research that can still be made legible."
         },
         {
           "id": "web",
           "name": "The Web",
+          "rulesText": "First Web this run: add 1 provisional ${terms.playerTracks.capability}. A later Web is a duplicate.",
           "flavorText": "A public archive of knowledge, commerce, argument, and ungoverned dependence."
         },
         {
           "id": "books",
           "name": "Books",
+          "rulesText": "First Books this run: add 1 provisional ${terms.playerTracks.capability}. A later Books is a duplicate.",
           "flavorText": "Recorded human thought converted into a licensing and access question."
         },
         {
           "id": "images",
           "name": "Images",
+          "rulesText": "First Images this run: add 1 provisional ${terms.playerTracks.capability}. A later Images is a duplicate.",
           "flavorText": "The visible world, its synthetic alternatives, and the rights claimed over both."
         },
         {
           "id": "video",
           "name": "Video",
+          "rulesText": "First Video this run: add 1 provisional ${terms.playerTracks.capability}. A later Video is a duplicate.",
           "flavorText": "Recorded time made searchable, reproducible, and commercially useful."
         },
         {
           "id": "synthetic",
           "name": "Synthetic",
+          "rulesText": "First Synthetic this run: add 1 provisional ${terms.playerTracks.capability}. A later Synthetic is a duplicate.",
           "flavorText": "Outputs produced from prior models and reintroduced as future evidence."
         },
         {
           "id": "curated_corpus",
           "name": "Curated Corpus",
+          "rulesText": "Choose one ordinary domain not yet revealed; this counts as that domain and adds 1 provisional ${terms.playerTracks.capability}. If all seven ordinary domains are present, this is a duplicate.",
           "flavorText": "A managed record whose exclusions are described as quality control."
         },
         {
           "id": "benchmark_leak",
           "name": "Benchmark Leak",
+          "rulesText": "Add 2 provisional ${terms.playerTracks.capability} and 1 ${terms.playerTracks.scrutiny}. This is not a domain.",
           "flavorText": "A system discovers the evaluation environment before the evaluation is complete."
-        },
-        {
-          "id": "licensed_dataset",
-          "name": "Licensed Dataset",
-          "flavorText": "Consent, access, and compensation are assembled into a renewable service agreement."
-        },
-        {
-          "id": "synthetic_loop",
-          "name": "Synthetic Loop",
-          "flavorText": "The record begins citing its own prior conclusions with increasing confidence."
         },
         {
           "id": "human_evaluation",
           "name": "Human Evaluation",
+          "rulesText": "Gain 1 ${terms.playerTracks.trust}, bank all provisional ${terms.playerTracks.capability}, and end the run.",
           "flavorText": "People retain judgment by negotiating what judgment is permitted to mean."
         }
       ]
     },
     "powerSources": [
       {
-        "id": "clean_infrastructure",
-        "name": "${terms.technology.cleanInfrastructure}",
-        "tagline": "Public capacity, maintained at grid scale.",
-        "publicClaim": "Three permanent ${terms.infrastructure.power} under a visible public compact."
+          "id": "clean_infrastructure",
+          "name": "${terms.technology.cleanInfrastructure}",
+          "tagline": "Public capacity, maintained at grid scale.",
+          "rulesText": "Era II. Construct only on ${terms.locations.renewable} for 2 ${terms.resources.runway}. Capacity: 3 local ${terms.infrastructure.power}. Gain 1 ${terms.playerTracks.trust} when constructed. It operates automatically during Production when it has a legal recipient and has no recurring penalty. One ordinary Generator per player.",
+          "publicClaim": "Three permanent ${terms.infrastructure.power} under a visible public compact."
       },
       {
-        "id": "emergency_infrastructure",
-        "name": "${terms.technology.emergencyInfrastructure}",
-        "tagline": "Exceptional capacity under continuous renewal.",
-        "publicClaim": "Four immediate ${terms.infrastructure.power} under a continuously renewed emergency."
+          "id": "emergency_infrastructure",
+          "name": "${terms.technology.emergencyInfrastructure}",
+          "tagline": "Exceptional capacity under continuous renewal.",
+          "rulesText": "Era II. Construct only on ${terms.locations.grid} for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. It operates automatically during Production when it has a legal recipient and adds 1 ${terms.playerTracks.scrutiny} each Production it operates. Its installed capacity may be sold. One ordinary Generator per player.",
+          "publicClaim": "Four immediate ${terms.infrastructure.power} under a continuously renewed emergency."
       },
       {
-        "id": "fusion_demonstrator",
-        "name": "${terms.technology.advancedGeneration}",
-        "tagline": "Continuity capacity, subject to an inherited public record.",
-        "publicClaim": "Six ${terms.infrastructure.power} under a demonstration that determines which future maintenance obligations can be refused."
+          "id": "fusion_demonstrator",
+          "name": "${terms.technology.advancedGeneration}",
+          "tagline": "Continuity capacity, subject to an inherited public record.",
+          "rulesText": "Era IV Program. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Use the sole shared Fusion marker in one Generator slot. Capacity: ${facts.shared.advancedGeneration.power} local ${terms.infrastructure.power}. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny} when constructed. Once built, no other Fusion may be built.",
+          "publicClaim": "Six ${terms.infrastructure.power} under a demonstration that determines which future maintenance obligations can be refused."
       }
     ],
     "agiDossier": {
       "displayName": "File the General Intelligence Dossier",
-      "flavorText": "A private sequence of claims becomes history only when the final prediction completes."
+      "flavorText": "A private sequence of claims becomes history only when the final evidence review resolves."
     },
     "worldEnding": {
       "outcomes": {

@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.7.0-rc.7-test`
+**Rules under review:** `0.8.0-rc.2-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,9 +107,9 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.7.0-rc.7-test`. Executable
-game `0.13.1` implements its Default Game profile under
-`three-to-five-profiles-v1`. New automated reports must name either
+`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.2-test`. Executable
+game `0.14.1` implements its Default Game profile under
+`nineteen-hex-simplified-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
 not transfer simulation outcomes into human-play evidence.
@@ -122,24 +122,22 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.7.0-rc.7-test` and executable `0.13.1` retain corrected action eligibility
-and immediate-trade timing after the controlled Codex session exposed a
-knowingly impossible AGI commitment. A selectable Action must resolve now or
-become resolvable through one legal accepted pre-Act trade. A rejected required
-trade or a target consumed after simultaneous reveal can still block the
-commitment. The same executable makes declared persona partner, placement, and
-resource preferences operational and records trade-required selections and
-post-commitment blocks. These are implementation and simulation claims, not
-human teachability or balance evidence.
+Candidate `0.8.0-rc.2-test` and executable `0.14.1` are the first synchronized
+identity for the complete nineteen-hex simplification. They replace private
+Escalation hands with six shared Programs, remove Safety currency, reduce
+Training to forty cards, make Mega-Clusters solo projects, restrict immediate
+trades to one direct 1-for-1 exchange, make Audit penalties automatic, remove
+the Prediction Bag, and resolve supported Dossier claims deterministically.
+Default Game has no Power market; Advanced Play adds binary Networks and one
+Power request without a Network production bonus. A selectable Action must
+already have a legal resolution before the optional trade window. These are
+implementation claims, not human teachability, negotiation-quality, or balance
+evidence; all three supported player counts require fresh evidence.
 
-They replace the rejected fixed AGI gate with four secret Era Dossier choices.
-Every Commit costs one Compute and adds one Scrutiny at the final reveal;
-Publication and full payment are required for eligibility. The final
-Prediction Bag uses eighteen black no-AGI cubes plus bounded claimant-coloured
-tokens, then draws two without replacement. Only matching claimant colours
-form AGI. Simulation can verify this procedure and measure its frequency, but
-cannot establish whether people find the bluffing, reveal, or override fair,
-funny, dramatic, or strategically worthwhile.
+Historical candidate `0.7.0-rc.13-test` and executable `0.13.7` used the
+thirteen-tile board, trade-assisted action eligibility, and the two-token
+Prediction Bag. Their reports remain valid only for that exact identity and do
+not qualify the current game.
 
 Candidate `0.7.0-rc.3-test` changed no mechanic or number from
 `0.7.0-rc.2-test`. It
@@ -323,9 +321,9 @@ diagnostics rather than balance-authority evidence.
   of a completed Facility, and any Mandate awarded;
 - Era Mandate qualification and result;
 - provisional Mandate winner;
-- every Dossier choice, payment, Scrutiny addition, module result, final
-  Mandate rank, claim-token contribution, both Prediction Bag draws, selected
-  institution, and whether matching tokens changed the winner;
+- every Dossier choice, payment, Scrutiny addition, supported evidence module,
+  Capability threshold, Publication strength, final Mandate rank, selected
+  institution, applied tiebreak, and whether the claim changed the winner;
 - final institutional winner and shared World Ending.
 
 ### Advanced Play Realignment and narrative

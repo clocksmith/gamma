@@ -8,10 +8,12 @@ five-player games are fully supported configurations with their own evidence
 gates; they are not shortened or extended afterthoughts.
 
 The standard game lasts four rounds with three simultaneous action selections
-per player per round. Players build networks across a thirteen-tile hex
+per player per round. Players build networks across a complete nineteen-tile
+radius-two hex
 economy, push risky Training Runs, negotiate shared infrastructure, and manage
 public scrutiny without direct combat or elimination. Each Faction has two
-programs, each player has one location-defined Generator, and political control
+abilities, six shared Programs create public one-use opportunities, each player
+has one location-defined Generator, and political control
 uses visible CEO, Team, and Facility presence rather than Influence cubes.
 Default Game keeps the jurisdiction static; bundled Advanced Play adds the
 former late-game spatial Realignment and full public-market procedure.
@@ -24,7 +26,7 @@ This repository is a **prototype**, not a manufactured or published product.
   [Core Rules](dist/docs/core-rules.md),
   [Map Reference](dist/docs/map-reference.md),
   [Component Reference](dist/docs/component-reference.md), and
-  [Card Reference](dist/docs/card-reference.md). Together, these four
+  [Card and Board Reference](dist/docs/card-reference.md). Together, these four
   documents contain the complete Default Game procedure, board, component,
   and card information needed to play.
 - The browser’s First Game Guide teaches those rules interactively; it is an
@@ -63,11 +65,15 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.7.0-rc.7-test`.
-Executable game `0.13.1` implements that candidate under
-`three-to-five-profiles-v1`, including temporary Production Power state, immediate
-Production power trades, the reduced two-source energy contract, four secret
-Era Dossier choices, and the physical two-token Prediction Bag. Synchronization means
+`0.8.0-rc.2-test`.
+Executable game `0.14.1` implements that candidate under
+`nineteen-hex-simplified-v1`, including retained Production Power snapshots,
+one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
+Power contracts, Research Protection, four secret Era Dossier choices, and
+deterministic evidence-backed claim resolution. Its
+Governance Board now owns Era progression and the current Mandate ledger;
+the complete nineteen-district map, shared Program display, foldout aids, and
+captive sliders remove duplicate setup pieces. Synchronization means
 the browser and simulator execute the selected contract; it does not claim
 physical teachability, numerical balance, or that the AGI coda is enjoyable.
 
@@ -96,9 +102,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.13.1` game and export its
+- `http://localhost:8038/` — play the synchronized `0.14.1` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.13.1` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.14.1` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -172,8 +178,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.13.1`
-bundle, its synchronized `0.7.0-rc.7-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.14.1`
+bundle, its synchronized `0.8.0-rc.2-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

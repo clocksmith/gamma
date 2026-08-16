@@ -108,7 +108,7 @@ export class WeightedPlayerPolicy {
     const values = this.profile.strategy.resourceValues || {
       runway: 1,
       compute: 1,
-      safety: 1
+      researchProtection: 1
     };
     const responder = parameters.tradePerspective === "responder";
     const giveResource = responder
