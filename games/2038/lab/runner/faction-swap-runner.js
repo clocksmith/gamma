@@ -6,6 +6,7 @@ import {
   Worker
 } from "node:worker_threads";
 import { ClaudeCliCaller, CodexCliCaller } from "../callers/index.js";
+import { outcomeRanks } from "../balance/outcome-placement.js";
 import {
   captureSimulationLaunchIdentity,
   createSimulation
@@ -437,18 +438,10 @@ function winCredit(observation, seat) {
 }
 
 function standingAt(observation, seat) {
-  const ordered = [...observation.standings].sort(
-    (left, right) =>
-      right.score - left.score ||
-      right.trust - left.trust ||
-      right.customers - left.customers ||
-      right.compute - left.compute ||
-      left.seat - right.seat
-  );
-  const standing = ordered.find((entry) => entry.seat === seat);
+  const standing = observation.standings.find((entry) => entry.seat === seat);
   return {
     ...standing,
-    rank: ordered.findIndex((entry) => entry.seat === seat) + 1
+    rank: outcomeRanks(observation).get(seat)
   };
 }
 

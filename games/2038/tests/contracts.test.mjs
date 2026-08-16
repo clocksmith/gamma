@@ -12,10 +12,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.14.3");
-  assert.equal(current.rulesCandidate.version, "0.8.0-rc.4-test");
+  assert.equal(current.gameVersion, "0.14.4");
+  assert.equal(current.rulesCandidate.version, "0.8.0-rc.5-test");
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.14.3");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.14.4");
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -122,8 +122,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.8.0-rc.4-test",
-    "synchronized with executable game 0.14.3",
+    "**Rules version:** 0.8.0-rc.5-test",
+    "synchronized with executable game 0.14.4",
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A Mega-Cluster uses two adjacent Facilities you own",

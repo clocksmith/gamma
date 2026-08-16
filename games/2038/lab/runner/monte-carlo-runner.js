@@ -2,6 +2,10 @@ import {
   classifyWinningPath,
   WINNING_PATH_CLASSIFIER
 } from "../balance/winning-path.js";
+import {
+  outcomePlacementPoint,
+  outcomeRanks
+} from "../balance/outcome-placement.js";
 
 function increment(target, key, amount = 1) {
   target[key] = (target[key] || 0) + amount;
@@ -175,7 +179,7 @@ function profileMatchups(outcomes) {
           wins: 0
         };
         row.comparisons += 1;
-        row.placementPoints += left.score === right.score ? 0.5 : Number(left.score > right.score);
+        row.placementPoints += outcomePlacementPoint(outcome, left, right);
         if (outcome.winnerSeats.includes(left.seat)) row.wins += 1 / outcome.winnerSeats.length;
         pairs.set(key, row);
       }
@@ -420,9 +424,11 @@ function aggregateMatchMetrics(outcomes) {
         .flatMap((entry) => entry.supportingSeats || [])
     );
     if (supportingSeats.size) totals.cooperativeDeclarationMatches += 1;
-    const standingsBySeat = new Map(
-      outcome.standings.map((entry, index) => [entry.seat, { ...entry, rank: index + 1 }])
-    );
+    const ranks = outcomeRanks(outcome);
+    const standingsBySeat = new Map(outcome.standings.map((entry, index) => [
+      entry.seat,
+      { ...entry, rank: ranks.get(entry.seat) || index + 1 }
+    ]));
     const winnerScore = outcome.standings[0]?.score || 0;
     const round4BySeat = new Map(
       (metrics.round4Start || []).map((entry) => [entry.seat, entry.score])
@@ -743,7 +749,7 @@ class BatchAccumulator {
           comparisons: 0, placementPoints: 0, wins: 0
         };
         row.comparisons += 1;
-        row.placementPoints += left.score === right.score ? 0.5 : Number(left.score > right.score);
+        row.placementPoints += outcomePlacementPoint(outcome, left, right);
         if (winningSeats.has(left.seat)) row.wins += winnerCredit;
         this.matchups.set(key, row);
       }
@@ -830,7 +836,11 @@ class BatchAccumulator {
     const supportingSeats = new Set((metrics.declarationReadiness || [])
       .filter((entry) => entry.ready).flatMap((entry) => entry.supportingSeats || []));
     if (supportingSeats.size) totals.cooperativeDeclarationMatches += 1;
-    const standingsBySeat = new Map(outcome.standings.map((entry, index) => [entry.seat, { ...entry, rank: index + 1 }]));
+    const ranks = outcomeRanks(outcome);
+    const standingsBySeat = new Map(outcome.standings.map((entry, index) => [
+      entry.seat,
+      { ...entry, rank: ranks.get(entry.seat) || index + 1 }
+    ]));
     const winnerScore = outcome.standings[0]?.score || 0;
     const round4BySeat = new Map((metrics.round4Start || []).map((entry) => [entry.seat, entry.score]));
     const round4Lead = Math.max(0, ...round4BySeat.values());
