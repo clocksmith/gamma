@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "reportType": "strategy_profile_proposal",
+  "evidenceLabel": "simulation_candidate",
+  "sourceReport": {
+    "path": "2026-08-15-current-power-evolution-v1.raw.json",
+    "sha256": "be77914d441b9b7b46e18c5b1be9ce82c5f012cddc8b64595e5e038c4ba9212a"
+  },
+  "championProfile": {
+    "id": "power_broker",
+    "name": "The Capacity Operator",
+    "description": "Builds one dependable local Power base, then converts it into research, deployment, and late Programs. Advanced Play adds optional Power sales.",
+    "defaultBackend": "greedy",
+    "persona": {
+      "identity": "An infrastructure operator that treats dependable capacity as the base of a competitive institution.",
+      "worldview": "Power matters when it turns an operating plan into public capability and useful deployment.",
+      "riskPosture": "Accepts bounded infrastructure risk, but refuses to overbuild idle capacity.",
+      "negotiationStyle": "Concrete, priced, and willing to sell spare Power when Advanced Play permits it.",
+      "voice": "Measured, contractual, and operational."
+    },
+    "strategy": {
+      "selection": "greedy",
+      "negotiation": {
+        "promiseWeight": 1.001,
+        "fulfillWeight": 0.733,
+        "betrayWeight": 1.151,
+        "reciprocityWeight": 0.439
+      },
+      "resourceValues": {
+        "runway": 1.5,
+        "compute": 1.2,
+        "researchProtection": 0.8
+      },
+      "objectives": [
+        "Construct one Facility and one locally useful Generator without overbuilding.",
+        "Convert powered capacity into Capability, Customers, and a competitive late Program.",
+        "In Advanced Play, sell spare Power only when the payment preserves the finishing plan."
+      ],
+      "actionWeights": {
+        "fund": 1.249,
+        "research": 17.697,
+        "build": 3.268,
+        "organize": 1.963,
+        "deploy": 13.076,
+        "influence": 3.129,
+        "mega_cluster": 1.098,
+        "reorganization": 1.415,
+        "open_weights": 0.559,
+        "narrative_capture": 6.197,
+        "agent_swarm": 20,
+        "agi_dossier": 10.083,
+        "fusion_demonstrator": 3.325
+      },
+      "decisionWeights": {
+        "build_facility": 6.313,
+        "build_generator_clean_infrastructure": 7.115,
+        "build_generator_emergency_infrastructure": 20,
+        "power_sale_accept_": 12.59,
+        "power_sale_reject_": 0.05
+      },
+      "consequenceWeights": {
+        "poweredFacilities": 8,
+        "powerDemand": 1
+      },
+      "rules": [
+        {
+          "when": [
+            {
+              "path": "self.generators",
+              "operator": "gte",
+              "value": 1
+            }
+          ],
+          "target": {
+            "decisionIdPrefix": "build_generator"
+          },
+          "multiplier": 0.1
+        },
+        {
+          "when": [
+            {
+              "path": "self.facilities",
+              "operator": "gte",
+              "value": 1
+            },
+            {
+              "path": "self.generators",
+              "operator": "gte",
+              "value": 1
+            }
+          ],
+          "target": {
+            "actionId": "build"
+          },
+          "multiplier": 0.08
+        },
+        {
+          "when": [
+            {
+              "path": "self.runway",
+              "operator": "lte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "fund"
+          },
+          "multiplier": 4
+        },
+        {
+          "when": [
+            {
+              "path": "self.canDeploy",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "target": {
+            "actionId": "deploy"
+          },
+          "multiplier": 6
+        }
+      ]
+    },
+    "provenance": {
+      "kind": "curated_strategy_candidate",
+      "parentId": "power_broker",
+      "sourceEvolutionSha256": "be77914d441b9b7b46e18c5b1be9ce82c5f012cddc8b64595e5e038c4ba9212a",
+      "intendedPlayProfile": "default-game"
+    }
+  }
+}
