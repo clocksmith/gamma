@@ -28,6 +28,7 @@ const report = await runExperiment({
   generations: input.generations,
   population: input.population,
   magnitude: input.magnitude,
+  backendId: input.backend,
   iterations: input.iterations,
   targetAgiRate: input["target-agi-rate"],
   profileIds: input.profiles?.split(",").filter(Boolean)

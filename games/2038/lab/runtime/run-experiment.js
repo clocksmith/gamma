@@ -30,6 +30,7 @@ export async function runExperiment(options = {}, onProgress) {
       playerCount: integer(options.playerCount, 4, 3, 5, "playerCount"),
       seed: options.seed,
       magnitude: options.magnitude === undefined ? undefined : Number(options.magnitude),
+      backendId: options.backendId,
       rulesVariant: options.rulesVariant,
       signal: options.signal,
       onProgress
