@@ -1,41 +1,46 @@
-# CATSCAN: Gamma
+# CATSCAN: Gamma Repository
+
+Component: `gamma`
 
 Parent: none
 
 ## Target
 
-Provide one trustworthy workbench for inspecting, comparing, measuring, and improving model or algorithm behavior under explicit evidence contracts.
+Provide an empirical workbench for model evaluation, translation distillation (`TranslateGemma-4B -> Gemma-3-1B`), SAME-R capability transfer, and multi-backend inference comparison under verifiable run contracts.
 
 ## Authority
 
-- Owns repository-wide product boundaries, shared evidence discipline, and component precedence.
-- Does not own lane-specific algorithms, datasets, or promotion thresholds.
+- Owns model evaluation harnesses, distillation pipelines, training checkpoint evaluators, benchmark scoreboards, and simulation prototypes (`games/2038/`).
+- Does not own production inference runtimes (Doppler), formal hardware attestation (Doe), or multi-agent rooms (Reploid).
 
 ## Scope
 
-- Applies to repository-wide product boundaries, shared evidence discipline, and component precedence.
+- Evaluation runners (`src/engines/`, `src/benchmarks/`, `src/comparison/`, `src/mind_meld/`).
+- Distillation pipelines (`projects/distillation/translation/`, `projects/distillation/wgsl/`).
+- Capability transfer (`projects/samer/`).
+- Simulation lab (`games/2038/`, `src/game/`).
 
 ## Contracts
 
-- Input: Mission and durable strategy from [GOALS.md](GOALS.md) and public navigation from [README.md](README.md).
-- Output: The [`gamma.py`](gamma.py) CLI, reusable packages, research lanes, and auditable evidence.
+- Input: Hugging Face / GGUF / local model weights, training pairs, and evaluation datasets.
+- Output: Standardized run contracts, `manifest.jsonl`, `scoreboard.md`, and normalized translation results bundles.
 
 ## Invariants
 
-- Results remain bound to exact inputs, runtime, metric, and replay evidence.
-- Missing or conflicting promotion evidence fails closed.
-- Research evidence is not silently promoted into a general product claim.
+- Proven compute probe on ROCm/CUDA before launching training or eval sweeps.
+- Every run logs an explicit `[run-contract]` line with dataset, schedule, and device spec.
+- Reporting rebuilds are strictly decoupled from raw training/eval execution and safe against in-flight jobs.
 
 ## Acceptance
 
-- CLI and documentation remain aligned and core routing remains explicit.
-- Evidence: [CLI parity test](tests/test_docs_cli_parity.py), [router test](tests/test_command_router.py), and [CI](.github/workflows/ci.yml).
+- Run index and results bundle rebuilds execute cleanly:
+  - `python3 projects/distillation/translation/pipeline/build_run_index.py`
+  - `python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py`
 
 ## Non-goals
 
-- Declaring every experiment a supported product surface.
-- Hiding component-specific policy in repository-wide prose.
+- Production JavaScript runtime packaging, cloud model hosting, or unverified marketing claims.
 
 ## Freedom
 
-Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.
+Any internal algorithm or model training recipe is permitted if it preserves declared run contracts and produces verified scoreboards.
