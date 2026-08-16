@@ -1,0 +1,100 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The decoder-causal BF16 per-sample loss residual and open final hidden state are sufficient for the complete production output-head parameter gradient under the frozen chunked FMA reduction."
+  },
+  "candidateId": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+    "candidateTreeSha256": "sha256:d60492371e5e0fb121f5ab54b3917ffa960ca607f10edff9cabf016ed0b6ae2e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_matrix_gradient_64_q0_v1/20260816T040419916942Z_d60492371e5e.json",
+      "sha256": "sha256:55ca3379c47d9c353b4ce15ba503156de54096b68d61bf48b8406201b3d724f8"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Authorize a prospectively frozen successor that computes the final-hidden activation residual from the same exact open loss residual and initial embed_out parameters, while retaining this full parameter-gradient gate unchanged.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:29e33d5cdea5254050465b70a05f659ef1d4f4d60ba54711487f12c74d06e34d"
+    },
+    {
+      "path": "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/execution.json",
+      "sha256": "sha256:148105e73840df4872a40f6c32b7754b9bc8acfa42fed756d1f7e133fca5d61d"
+    },
+    {
+      "path": "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/guard.json",
+      "sha256": "sha256:7e7bc89892f431aa2d0bebc9f2d7ada1bddb15ed58cd25d5b4a9560c0a848504"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_output_matrix_gradient_64_q0_v1.json",
+    "sha256": "sha256:9d149592f29a7d09591671a69e6a33101369520bc1d7bde076b900520dd8ef89"
+  },
+  "generatedUtc": "2026-08-16T04:20:34+00:00",
+  "hypothesis": {
+    "rationale": "Both fresh open replays reproduced all 16,785,408 retained BF16 embed_out gradient words, all 16,392 output-bias words, and all 640 layer-input checkpoints exactly; the shifted-target control changed and replay remained byte-identical.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T040455Z_f7722f8e27.json",
+    "sha256": "sha256:9ff07ec36624561d0aa760a9f531fe256ec06f8f6f9ba4d2f82ae314fede7fc8"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Promote the complete open output-head parameter-gradient tail as a teacher-removal antecedent.",
+      "The next causal boundary is the final-hidden activation gradient through embed_out, not another output-head parameter experiment."
+    ],
+    "uncertainties": [
+      "This 2,048-symbol first-update oracle proves no final-hidden residual, normalization backward, transformer-layer backward, recursive training, transfer, archive score, package closure, full-corpus result, or Hutter objective credit. The resource receipt is diagnostic rather than an official release receipt."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/decision.json",
+        "sha256": "sha256:29e33d5cdea5254050465b70a05f659ef1d4f4d60ba54711487f12c74d06e34d"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t040455z_f7722f8e27",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen all-stream experiment completed under the bound candidate revision and guard; every artifact, predicate, delayed-oracle boundary, and source-closure contract validated."
+    ],
+    "valid": true
+  }
+}

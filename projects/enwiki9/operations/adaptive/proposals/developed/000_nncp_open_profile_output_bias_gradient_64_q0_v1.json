@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "claimed_at": "2026-08-16T03:03:29+00:00",
+  "created_at": "2026-08-16T03:03:28+00:00",
+  "developed_at": "2026-08-16T03:04:11+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_v1.json",
+    "sha256": "sha256:b67c3067fa65c6a9f619a080b5c0247c2899873722d8799f6d8c55534bad13d5"
+  },
+  "hypothesis": "The exact Gamma open forward, evaluated over all 32 production streams, and the explicit decoder-causal negative-log-likelihood residual reproduce every BF16 word of the retained production out_bias gradient without consuming teacher probabilities or gradients as inputs.",
+  "interfaces_exposed": [
+    "causal production loss residual to output-bias gradient"
+  ],
+  "kill_condition": "any valid all-stream layer-input or out_bias gradient mismatch",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+  "parent_proposal_id": null,
+  "priority": 1480,
+  "promotion_condition": "all 640 layer-input checkpoints and all 16392 BF16 out_bias gradient words exact across two replays",
+  "proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "retired_neighborhoods": [
+    "teacher-probability injection, captured-gradient replay, and output-head-only compression attribution"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1498,
+  "state": "developed",
+  "title": "Production open output-bias gradient tail"
+}

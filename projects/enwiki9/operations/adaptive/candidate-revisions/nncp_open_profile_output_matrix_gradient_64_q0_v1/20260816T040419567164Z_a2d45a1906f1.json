@@ -1,0 +1,77 @@
+{
+  "candidateId": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "candidateTreeSha256": "sha256:a2d45a1906f1fa15dec392bb30c12285e39bfb189eaa29ba357e197053d13442",
+  "change": {
+    "evidence": [
+      "projects/enwiki9/operations/adaptive/experiments/nncp_open_profile_output_matrix_gradient_64_q0_v1.json"
+    ],
+    "hypothesis": "The exact open BF16 per-sample logit residual and exact open final hidden states reproduce every BF16 word of the production embed_out gradient while retaining output-bias parity and a live shifted-target control.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Materialize exact all-stream final hidden states and probabilities, round each decoder-causal residual at the BF16 boundary, reduce the full output matrix twice in standalone open C++, delay retained gradient access until both fresh payloads exist, and retain output-bias parity plus a shifted-target liveness control."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/28/28f3fc13fef5fab241256109ca1e547286f43d7adf56e837cf84d7ba83fd3aec",
+      "bytes": 982,
+      "normalization": "verbatim",
+      "path": "CMakeLists.txt",
+      "sha256": "28f3fc13fef5fab241256109ca1e547286f43d7adf56e837cf84d7ba83fd3aec"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d3/d354fb91b07c5839739cdb28cf7011930fd95483e7e50195b0fe940e3254ea4a",
+      "bytes": 2124,
+      "normalization": "verbatim",
+      "path": "materialize_forward.py",
+      "sha256": "d354fb91b07c5839739cdb28cf7011930fd95483e7e50195b0fe940e3254ea4a"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/4a/4adf2d0787e9d98032480464c0db3d570968b8a609ce2a2efb052133540110dd",
+      "bytes": 1248,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "4adf2d0787e9d98032480464c0db3d570968b8a609ce2a2efb052133540110dd"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/f5/f5211267faf45b595519f1e0699b4b4a9e958ee960fe8dcb826a75d2029cda21",
+      "bytes": 10096,
+      "normalization": "verbatim",
+      "path": "output_matrix_gradient.cpp",
+      "sha256": "f5211267faf45b595519f1e0699b4b4a9e958ee960fe8dcb826a75d2029cda21"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/88/88335ee9e87c94fb6e82e8d33d461912cf6958ddb08bfbda3b59b69e99c619a1",
+      "bytes": 238,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "88335ee9e87c94fb6e82e8d33d461912cf6958ddb08bfbda3b59b69e99c619a1"
+    }
+  ],
+  "generatedUtc": "2026-08-16T04:04:19+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:d73272e60c5047608a5579bec3463de64dc66f600ceac7ce7c57cb005ff96fbc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/20260816T033426131927Z_d73272e60c50.json",
+      "sha256": "sha256:9338915d0e07774f95aac6c601239267d0e31644c79ccecb32e762d562050a48"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_matrix_gradient_64_q0_v1/20260816T035211452545Z_fd204b68a390.json",
+    "sha256": "sha256:fd12a13f091d5690739f33cee60e8061e4351fb470ebe64e8cc9905593c08661"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

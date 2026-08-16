@@ -59,6 +59,11 @@ new validity oracle may bind stricter consequences with
 `--additional-promotion-predicate` and `--additional-kill-predicate`, each using
 `ID=MEASUREMENT=OPERATOR=JSON_THRESHOLD`; `--additional-invariant` records the
 corresponding durable condition without rewriting inherited science.
+When a failed negative control is the implementation defect, use
+`--replace-negative-control-id` together with the replacement control fields;
+the optional negative-control measurement fields and exact
+`--replace-invariant OLD=NEW` spelling keep the inherited contract internally
+consistent without weakening any decision predicate.
 
 ## Filename Families
 

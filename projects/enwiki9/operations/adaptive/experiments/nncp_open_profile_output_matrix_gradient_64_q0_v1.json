@@ -1,0 +1,515 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound initial parameters and memory, decoder-visible inputs and targets, exact open final hidden states and probabilities, fixed source, and frozen predicates.",
+      "Retained train_h, out_bias gradient, and embed_out gradient only after each corresponding open payload is complete."
+    ],
+    "forbiddenInformation": [
+      "Teacher probabilities, teacher activations as calculation inputs, captured gradient values, post-update parameters, future symbols, fitted corrections, or LibNC/NNCP execution.",
+      "Claiming any hidden-state residual, broader backward, recursive-training, archive, transfer, package, or objective result."
+    ]
+  },
+  "changedMechanism": "Propagate the exact open BF16 logit residual through the open final hidden states with a frozen 128-sample chunked FMA reduction, producing the complete BF16 embed_out gradient.",
+  "controls": [
+    {
+      "definition": "The unchanged exact forward emits final hidden states and probabilities for every retained production stream before the open matrix reduction.",
+      "id": "exact-open-all-stream-forward",
+      "role": "treatment"
+    },
+    {
+      "definition": "The already promoted output-bias gradient remains exact in each matrix-gradient replay.",
+      "id": "exact-output-bias-tail",
+      "role": "comparator"
+    },
+    {
+      "definition": "The captured BF16 embed_out gradient is read only after the complete fresh open payload exists.",
+      "id": "retained-embed-out-gradient",
+      "role": "comparator"
+    },
+    {
+      "definition": "The complete 32-stream forward and both gradient reductions execute twice and must reproduce identical bytes.",
+      "id": "independent-open-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "Cyclic successor targets must change the first eight feature columns of the output-matrix gradient while probabilities and hidden states remain fixed.",
+      "id": "cyclic-vocabulary-target-shift",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "generatedUtc": "2026-08-16T04:03:11+00:00",
+  "hypothesis": {
+    "claim": "The exact open BF16 per-sample logit residual and exact open final hidden states reproduce every BF16 word of the production embed_out gradient while retaining output-bias parity and a live shifted-target control.",
+    "falsification": "Any antecedent drift, all-stream forward mismatch, output-bias or embed_out gradient mismatch, replay difference, dead target control, dependency violation, source overflow, or guard failure prevents promotion and forbids an output-matrix backward claim."
+  },
+  "inputs": [
+    {
+      "id": "exact-forward-decision",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "id": "exact-forward-reflection",
+      "path": "operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json",
+      "sha256": "sha256:15aff130d15795fb0644ae8b95827e4a5212d2c74ecdfee44d26576f15a7297a"
+    },
+    {
+      "id": "joint-transition-decision",
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5"
+    },
+    {
+      "id": "joint-transition-reflection",
+      "path": "operations/adaptive/reflections/20260816T024338Z_3839f396a6.json",
+      "sha256": "sha256:1c4f88906a2f0ae20c9613b33a9e55fbaeec968baef97c309bfc59fd0078faf9"
+    },
+    {
+      "id": "gradient-oracle-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "gradient-oracle-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "gradient-oracle-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "gradient-oracle-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "miniature-output-head-decision",
+      "path": "results/nncp_ggml_output_head_update_parity_qm2_v1/decision.json",
+      "sha256": "sha256:87fa87838530eee077598d27a80435539f39950250e198e16cb905d851f53693"
+    },
+    {
+      "id": "exact-forward-source",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:891e8c50b6c9e66c7a9f4d5019d009fab24955e7b7b83386fd6c8a70f22a7314"
+    },
+    {
+      "id": "output-bias-tail-decision",
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:d2da26227d4cc1dfa6233e826f94b81c9bcf1d760867f62a52827db2172b9d1c"
+    },
+    {
+      "id": "output-bias-tail-reflection",
+      "path": "operations/adaptive/reflections/20260816T033450Z_727c49438a.json",
+      "sha256": "sha256:05fb82c6d1a5566318ea760c56bbbf485efb29c08087ac7cb5144af1135b3662"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_profile_output_matrix_gradient_64_q0.py",
+      "sha256": "sha256:bd4b4901e6a71c0ae0bc4f8c4dfbed475d245f7a996d609b92b6f2d83e0c9cdf"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_profile_output_matrix_gradient_64_q0_materializer.py",
+      "sha256": "sha256:12c00a6bfc818f4e8effd640b4b4bddcb0d411c36e2d0d1dfc05ab070b51bb4e"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "Production geometry, initial state, targets, exact forward arithmetic, per-sample BF16 residual boundary, and output-bias reduction remain unchanged.",
+    "All open final hidden states and matrix-gradient words are generated before the retained embed_out gradient comparator is read.",
+    "The retained output-bias tail must remain exact in the same replay.",
+    "No teacher probability, activation, or gradient payload may calculate an open gradient.",
+    "The closed teacher, LibNC, and NNCP are not executed during retained replay.",
+    "This experiment proves at most the loss-to-embed_out parameter-gradient tail; it proves no hidden-state residual, normalization, transformer-layer, recursive-training, compression, transfer, package, or Hutter claim."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-layer-input-mismatch",
+      "measurement": "layerInputMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-output-bias-mismatch",
+      "measurement": "outputBiasMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-output-matrix-mismatch",
+      "measurement": "outputMatrixMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Every exact forward, open transition, complete gradient fixture, and open output-bias antecedent remains valid and digest-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete production streams evaluated from retained causal input and memory state.",
+      "id": "streamCount",
+      "unit": "streams"
+    },
+    {
+      "definition": "Production loss samples evaluated across all streams and states.",
+      "id": "sampleCount",
+      "unit": "symbols"
+    },
+    {
+      "definition": "Open attention-input tensors compared against retained train_h state.",
+      "id": "layerInputCheckpointCount",
+      "unit": "stream-layer tensors"
+    },
+    {
+      "definition": "Open layer-input elements that differ from retained BF16 train_h values.",
+      "id": "layerInputMismatchCount",
+      "unit": "float32 elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained layer-input difference.",
+      "id": "maximumLayerInputAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete production output-bias gradient population retained as a tail control.",
+      "id": "outputBiasElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 output-bias words that differ from the retained comparator.",
+      "id": "outputBiasMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained output-bias difference.",
+      "id": "maximumOutputBiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete production embed_out gradient population.",
+      "id": "outputMatrixElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 embed_out words that differ from the retained comparator.",
+      "id": "outputMatrixMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained embed_out difference.",
+      "id": "maximumOutputMatrixAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Two complete all-stream executions emit byte-identical output-bias, output-matrix, control, and checkpoint summaries.",
+      "id": "openGradientDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "A cyclic target remap changes the first retained feature columns of the open output-matrix gradient.",
+      "id": "shiftedTargetControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Dynamic LibNC, NNCP, GGML, CUDA, OpenMP, or BLAS dependencies in built open executables.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed orchestration and open-gradient source package.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Generated builds and forward outputs remained under and were removed with the guarded work root.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/decision.json",
+    "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/execution.json",
+    "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/open-out-bias-gradient.bf16",
+    "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/open-embed-out-gradient.bf16",
+    "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/20260816T033426131927Z_d73272e60c50.json",
+      "sha256": "sha256:9338915d0e07774f95aac6c601239267d0e31644c79ccecb32e762d562050a48"
+    }
+  },
+  "population": {
+    "coordinate": "Production update over original transformed-symbol coordinates [256,320) independently within each of 32 contiguous streams.",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All 32 streams, all 64 states, all 20 layer attention inputs, all 16,392 out_bias words, and all 16,785,408 embed_out words at the first retained production update.",
+    "unit": "one production stream-layer checkpoint or BF16 parameter-gradient word"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedentspass",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-streamcount",
+      "measurement": "streamCount",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-samplecount",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-layerinputcheckpointcount",
+      "measurement": "layerInputCheckpointCount",
+      "operator": "eq",
+      "threshold": 640
+    },
+    {
+      "id": "p-layerinputmismatchcount",
+      "measurement": "layerInputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumlayerinputabsoluteerror",
+      "measurement": "maximumLayerInputAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-outputbiaselementcount",
+      "measurement": "outputBiasElementCount",
+      "operator": "eq",
+      "threshold": 16392
+    },
+    {
+      "id": "p-outputbiasmismatchcount",
+      "measurement": "outputBiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumoutputbiasabsoluteerror",
+      "measurement": "maximumOutputBiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-outputmatrixelementcount",
+      "measurement": "outputMatrixElementCount",
+      "operator": "eq",
+      "threshold": 16785408
+    },
+    {
+      "id": "p-outputmatrixmismatchcount",
+      "measurement": "outputMatrixMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumoutputmatrixabsoluteerror",
+      "measurement": "maximumOutputMatrixAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-opengradientdeterministic",
+      "measurement": "openGradientDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-shiftedtargetcontroldiffers",
+      "measurement": "shiftedTargetControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-forbiddendynamicdependencycount",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-guardedworkrootpass",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-incrementalsourcebytes",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "proposalId": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.3,
+    "uncertaintyRisk": 0.4
+  },
+  "status": "frozen"
+}

@@ -1,0 +1,78 @@
+{
+  "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "candidateTreeSha256": "sha256:4067f537ac3aa38031c637cc465a1e52671c49b83b468aa47cfefd9f083816bc",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_v1.json",
+      "operations/adaptive/proposals/developed/000_nncp_open_profile_output_bias_gradient_64_q0_v1.json"
+    ],
+    "hypothesis": "The exact Gamma open forward, evaluated over all 32 production streams, and the explicit decoder-causal negative-log-likelihood residual reproduce every BF16 word of the retained production out_bias gradient without consuming teacher probabilities or gradients as inputs.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Materialize the promoted exact forward with sparse outputs, drive it from all 32 retained initial parameter/memory/input/target streams, compare every generated layer attention input with train_h only after generation, and compute the BF16 out_bias NLL gradient plus a cyclic-target liveness control in standalone open C++."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d2/d25f4ca126dcabab6e3b062876a7583af90a8e7703f4b676728635c6c365dfe2",
+      "bytes": 896,
+      "normalization": "verbatim",
+      "path": "CMakeLists.txt",
+      "sha256": "d25f4ca126dcabab6e3b062876a7583af90a8e7703f4b676728635c6c365dfe2"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/c5/c5b794e4a97c70a3e3a631283facebede3c7f83f4e5161c3a47dfa3746bd07af",
+      "bytes": 2092,
+      "normalization": "verbatim",
+      "path": "materialize_forward.py",
+      "sha256": "c5b794e4a97c70a3e3a631283facebede3c7f83f4e5161c3a47dfa3746bd07af"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/f9/f92d4bcb43df303ee4e004b723a7506197bf3f3462428edbc4efd57dea49795d",
+      "bytes": 1171,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "f92d4bcb43df303ee4e004b723a7506197bf3f3462428edbc4efd57dea49795d"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/24/24fa5ea905bb3ee9c05610b0002d738eebc854927b61c9249de56be9840797dd",
+      "bytes": 6773,
+      "normalization": "verbatim",
+      "path": "output_bias_gradient.cpp",
+      "sha256": "24fa5ea905bb3ee9c05610b0002d738eebc854927b61c9249de56be9840797dd"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/34/345cd3ec68383090524eb7192ff948650fc2a6f294f76c7bc8f347f6871045e3",
+      "bytes": 234,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "345cd3ec68383090524eb7192ff948650fc2a6f294f76c7bc8f347f6871045e3"
+    }
+  ],
+  "generatedUtc": "2026-08-16T03:11:46+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+    "candidateTreeSha256": "sha256:fb5d0217c71765672a4f450109b812820873549449573dbfa960425163d18ed7",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/20260816T021547957585Z_fb5d0217c717.json",
+      "sha256": "sha256:fa49a072ad4121256e89664c1f4ef136e91b4059494f27b47c77566a44b0795f"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_bias_gradient_64_q0_v1/20260816T030411084008Z_d21168778c24.json",
+    "sha256": "sha256:16a1f32089e113182add57b9a946125ec2a6166896d526057f05eaff000d9dea"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

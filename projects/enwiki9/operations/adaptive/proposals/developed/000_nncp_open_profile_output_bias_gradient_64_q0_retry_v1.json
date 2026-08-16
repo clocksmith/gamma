@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T03:34:11+00:00",
+  "created_at": "2026-08-16T03:34:10+00:00",
+  "developed_at": "2026-08-16T03:34:26+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T031213Z_57a9477621.json",
+      "sha256": "sha256:c227f572b346ee0a205ac197fb645f59b4c235c6428cee3eadbe1f66e6d33e2b"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:280d5d989a78e8f78e5b19d6993433840570e5ceacd0e6e1c9618b2fb9650e04"
+  },
+  "hypothesis": "The exact Gamma open forward, evaluated over all 32 production streams, and the explicit decoder-causal negative-log-likelihood residual reproduce every BF16 word of the retained production out_bias gradient without consuming teacher probabilities or gradients as inputs.",
+  "interfaces_exposed": [
+    "exact open probabilities -> BF16 per-sample residuals -> open output-bias gradient"
+  ],
+  "kill_condition": "Any antecedent drift, forward mismatch, gradient mismatch, replay difference, dead control, forbidden dependency, source overflow, or guard failure prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "priority": 1481,
+  "promotion_condition": "Require two complete exact all-stream forwards, 640 exact layer checkpoints, all 16,392 exact BF16 output-bias gradient words, deterministic replay, a live vocabulary-successor target control, dependency closure, and resource compliance.",
+  "proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "No F32-only residual reduction, state-permutation control, teacher probability input, LibNC execution, tolerance, broader backward claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1481,
+  "state": "developed",
+  "title": "Exact BF16-boundary output-bias gradient retry"
+}

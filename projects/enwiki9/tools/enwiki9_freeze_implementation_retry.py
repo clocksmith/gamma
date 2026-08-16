@@ -87,6 +87,15 @@ def parse_predicate(specification: str) -> dict[str, Any]:
     }
 
 
+def parse_replacement(specification: str, option: str) -> tuple[str, str]:
+    if "=" not in specification:
+        raise ValueError(f"{option} must use OLD=NEW")
+    old, new = specification.split("=", 1)
+    if not old or not new:
+        raise ValueError(f"{option} must use OLD=NEW")
+    return old, new
+
+
 def source_identifier(path: Path) -> str:
     relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
     digest = hashlib.sha256(relative.encode()).hexdigest()[:12]
@@ -115,6 +124,14 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
         "revision": reference(revision_path),
     }
     experiment["changedMechanism"] = args.changed_mechanism
+    for specification in args.replace_invariant:
+        old, new = parse_replacement(specification, "--replace-invariant")
+        if experiment["invariants"].count(old) != 1:
+            raise ValueError(
+                "implementation-retry invariant replacement is not unique: "
+                f"{old}"
+            )
+        experiment["invariants"][experiment["invariants"].index(old)] = new
     for invariant in args.additional_invariant:
         if invariant in experiment["invariants"]:
             raise ValueError(f"duplicate implementation-retry invariant: {invariant}")
@@ -189,14 +206,58 @@ def freeze(args: argparse.Namespace) -> dict[str, Any]:
                 )
             experiment[field].append(predicate)
             predicate_ids.add(predicate["id"])
-    experiment["controls"] = [
-        *experiment["controls"],
-        {
-            "id": args.negative_control_id,
-            "role": "negative",
-            "definition": args.negative_control_definition,
-        },
-    ]
+    negative_control = {
+        "id": args.negative_control_id,
+        "role": "negative",
+        "definition": args.negative_control_definition,
+    }
+    if args.replace_negative_control_id is None:
+        if any(
+            control["id"] == args.negative_control_id
+            for control in experiment["controls"]
+        ):
+            raise ValueError(
+                f"duplicate implementation-retry control: {args.negative_control_id}"
+            )
+        experiment["controls"].append(negative_control)
+    else:
+        matches = [
+            index
+            for index, control in enumerate(experiment["controls"])
+            if control["id"] == args.replace_negative_control_id
+            and control["role"] == "negative"
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                "negative-control replacement must identify exactly one inherited "
+                f"negative control: {args.replace_negative_control_id}"
+            )
+        if any(
+            control["id"] == args.negative_control_id and index != matches[0]
+            for index, control in enumerate(experiment["controls"])
+        ):
+            raise ValueError(
+                f"duplicate replacement control id: {args.negative_control_id}"
+            )
+        experiment["controls"][matches[0]] = negative_control
+    if (args.negative_control_measurement_id is None) != (
+        args.negative_control_measurement_definition is None
+    ):
+        raise ValueError(
+            "negative-control measurement id and definition must be supplied together"
+        )
+    if args.negative_control_measurement_id is not None:
+        matches = [
+            measurement
+            for measurement in experiment["measurements"]
+            if measurement["id"] == args.negative_control_measurement_id
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                "negative-control measurement replacement must identify exactly one "
+                f"measurement: {args.negative_control_measurement_id}"
+            )
+        matches[0]["definition"] = args.negative_control_measurement_definition
     experiment["outputs"] = [
         value.replace(parent_proposal_id, args.candidate_id)
         for value in experiment["outputs"]
@@ -236,8 +297,12 @@ def main() -> int:
     parser.add_argument("--runner", type=Path, required=True)
     parser.add_argument("--materializer", type=Path, required=True)
     parser.add_argument("--changed-mechanism", required=True)
+    parser.add_argument("--replace-negative-control-id")
     parser.add_argument("--negative-control-id", required=True)
     parser.add_argument("--negative-control-definition", required=True)
+    parser.add_argument("--negative-control-measurement-id")
+    parser.add_argument("--negative-control-measurement-definition")
+    parser.add_argument("--replace-invariant", action="append", default=[])
     parser.add_argument("--additional-invariant", action="append", default=[])
     parser.add_argument("--evidence", action="append", default=[])
     parser.add_argument("--additional-output", action="append", default=[])

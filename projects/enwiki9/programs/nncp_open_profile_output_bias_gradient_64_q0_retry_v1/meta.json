@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-15",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1"
+  ],
+  "description": "Production open output-bias gradient tail",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The open loss tail reproduces every production out_bias gradient word when each sample residual crosses the declared F32-to-BF16 logit boundary before the broadcast-bias reduction, with a vocabulary-successor target remap providing a live negative control.",
+  "id": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+  "measured": {
+    "reflections": {
+      "20260816T033450Z_727c49438a": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260816T033450Z_727c49438a.json",
+        "sha256": "sha256:05fb82c6d1a5566318ea760c56bbbf485efb29c08087ac7cb5144af1135b3662",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_retry_v1.json",
+      "sha256": "sha256:280d5d989a78e8f78e5b19d6993433840570e5ceacd0e6e1c9618b2fb9650e04"
+    },
+    "interfaces_exposed": [
+      "exact open probabilities -> BF16 per-sample residuals -> open output-bias gradient"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+    "proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+    "retired_neighborhoods": [
+      "No F32-only residual reduction, state-permutation control, teacher probability input, LibNC execution, tolerance, broader backward claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "status": "active",
+  "verdict": "Retain this exact loss-tail boundary as the next backward antecedent. The next honest gate should propagate the same open BF16 residual through the output matrix without consuming captured deeper gradients."
+}

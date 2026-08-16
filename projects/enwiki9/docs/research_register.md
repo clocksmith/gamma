@@ -1,5 +1,75 @@
 # enwiki9 Research Register
 
+## 2026-08-16 - The complete output-head parameter gradient is open and exact
+
+Candidate `nncp_open_profile_output_matrix_gradient_64_q0_v1` advances the
+promoted BF16 loss residual through the complete open final hidden state. The
+standalone reducer consumes only digest-bound initial parameters and state,
+decoder-visible targets, and freshly generated probabilities and hidden
+states. Both retained gradient comparators are hash-verified only after two
+complete open payloads exist.
+
+The prospectively frozen gate passed every predicate. Two independently built
+32-stream executions match all 640 layer-input checkpoints, all 16,392
+`out_bias` gradient words, and all 16,785,408 `embed_out` gradient words
+exactly. Both gradients and the forward trees replay byte-for-byte, while a
+cyclic target remap changes an independently reduced matrix slice. The open
+executables have no forbidden dynamic dependency, the counted incremental
+source remains below its frozen ceiling, and the guarded work tree is removed.
+See the
+[`decision`](../results/nncp_open_profile_output_matrix_gradient_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_output_matrix_gradient_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_profile_output_matrix_gradient_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T040455Z_f7722f8e27.json).
+
+This removes the complete output-head parameter-gradient tail from the closed
+teacher. It does not yet prove the residual propagated into the final hidden
+state, normalization backward, any transformer layer, recursive training,
+transfer, archive size, package eligibility, or full-corpus reconstruction. It
+has zero Hutter objective credit. The next frozen boundary is the
+`embed_out`-transpose activation residual, independently checked through the
+retained final-normalization bias gradient before any deeper-backward claim.
+
+## 2026-08-15 - The production loss-to-output-bias backward tail is exact
+
+The first all-stream open backward attempt completed both forward populations
+but failed before evidence finalization because its source packer treated a
+candidate-owned materializer as a project tool. It also exposed a control-design
+error: permuting target states preserves the target histogram and therefore
+cannot change a bias-only gradient. The failed job and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T031213Z_57a9477621.json)
+retain those defects as implementation evidence; its scientific hypothesis was
+not tested.
+
+Diagnosis from the independently generated outputs localized the remaining
+arithmetic boundary. The production graph converts each per-sample F32 softmax
+residual to BF16 before reducing the broadcast output bias. An F32-only
+reduction was close but not identical. Candidate
+`nncp_open_profile_output_bias_gradient_64_q0_retry_v1` preserves the complete
+forward and loss population, applies that BF16 boundary explicitly, packages
+candidate source without broadening the tool closure, and replaces the dead
+state permutation with a cyclic vocabulary-successor target remap.
+
+The guarded retry passed every frozen predicate. Two independently rebuilt
+32-stream populations match all 640 retained layer-input checkpoints and all
+16,392 BF16 output-bias gradient words exactly, with zero maximum error,
+byte-identical replay, a live negative control, no forbidden dynamic
+dependency, and a dependency-closed source package below its frozen ceiling.
+See the
+[`decision`](../results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/execution.json),
+[`guard`](../results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T033450Z_727c49438a.json).
+
+This proves only the production negative-log-likelihood tail through
+`out_bias`. It has zero objective credit and proves no output-matrix,
+normalization, transformer-layer, embedding, recursive-training, archive,
+transfer, package, or full-corpus result. The next teacher-removal boundary is
+the output-matrix gradient and hidden-state residual generated from this exact
+open BF16 logit residual.
+
 ## 2026-08-15 - One causal open production segment transition is exact
 
 The post-update boundary is no longer an incumbent-state-only forward probe.

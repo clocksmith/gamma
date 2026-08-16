@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-15",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_output_bias_gradient_64_q0_retry_v1"
+  ],
+  "description": "Production open output-matrix gradient tail",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The exact open BF16 per-sample logit residual and exact open final hidden states reproduce every BF16 word of the production embed_out gradient while retaining output-bias parity and a live shifted-target control.",
+  "id": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T040455Z_f7722f8e27": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260816T040455Z_f7722f8e27.json",
+        "sha256": "sha256:87aed4a6fa705e9bcc997a17a80fcbf37f1e6157a46c279368762a8ce642d009",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_output_matrix_gradient_64_q0_v1.json",
+      "sha256": "sha256:9d149592f29a7d09591671a69e6a33101369520bc1d7bde076b900520dd8ef89"
+    },
+    "interfaces_exposed": [
+      "exact open BF16 residual plus final hidden states -> complete embed_out gradient"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+    "proposal_id": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+    "retired_neighborhoods": [
+      "No captured-gradient input, teacher activation input, LibNC execution, tolerance, deeper-backward claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+  "status": "active",
+  "verdict": "Authorize a prospectively frozen successor that computes the final-hidden activation residual from the same exact open loss residual and initial embed_out parameters, while retaining this full parameter-gradient gate unchanged."
+}
