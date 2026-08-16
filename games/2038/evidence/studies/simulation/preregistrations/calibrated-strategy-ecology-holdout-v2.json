@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "calibrated-strategy-ecology-holdout-v2",
+  "registeredBeforeResults": true,
+  "question": "After winner-aware placement correction, do the frozen Trust Governor, Capacity Operator, and parity-calibrated AGI Candidate pass the complete strategy-ecology contract under unchanged physical rules?",
+  "sourceEvidence": [
+    "2026-08-15-calibrated-strategy-ecology-holdout-v1",
+    "202a8a9b-winner-aware-placement-correction"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    },
+    {
+      "path": "studies/simulation/2026-08-15-current-agi-greedy-calibration-v3.raw.json",
+      "sha256": "ba674a7febbc18eeda6b18e1cae5cda03ecaf0ce8f218af0b67cf668807cb75c",
+      "profileId": "agi_candidate"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-calibrated-strategy-ecology-holdout-v2",
+  "selectionRule": {
+    "balance": "Select only if every three-, four-, and five-player faction, seat, profile, diversity, fallback, and forced-no-op bound passes with no credible homogeneous or pairwise dominance.",
+    "measuredDefects": "Winner-aware pairwise cells must not recreate the invalid raw-Mandate dominance. The three- and five-player profile ranges and five-player winning-path entropy must pass rather than inheriting the descriptive failures in v1.",
+    "trustIdentity": "Trust Governor must average at least one Influence selection per appearance, keep Influence below its largest Core Action, reach Trust 4 in at least 85 percent of appearances, and retain mean Mandate of at least 16.",
+    "capacityIdentity": "Capacity Operator must average at least two Build selections per appearance, select Research plus Deploy more often than Build, and retain mean Mandate of at least 16.",
+    "agiIdentity": "AGI Candidate must be the largest profile contributor to AGI-declaration winner credit, supply at least 30 percent of that credit overall, retain mean Mandate of at least 14, and keep Dossier as its highest Program weight.",
+    "rulesBoundary": "The study changes deterministic profile policy and evidence placement only. Physical rules and faction starting states remain canonical.",
+    "failure": "Any failed supported-count bound, credible winner-aware dominance, or identity check rejects canonical profile promotion. Repeated corrected failure may nominate a separate physical mechanism study, but cannot itself select a physical change."
+  },
+  "requiredDiagnostics": [
+    "profile Action selections and Mandate sources",
+    "profile and faction win shares by supported player count",
+    "backend-specific strategy cells",
+    "winner-aware head-to-head dominance cells",
+    "winning-path attribution by profile",
+    "opening and winning-path diversity",
+    "AGI emergence and winner override rates",
+    "integrity, fallback, and forced-no-op rates"
+  ]
+}
