@@ -1,0 +1,101 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Declared-path validation plus manifest-bound raw replay recovers the completed source oracle without recomputation and eliminates the prior receipt-only failure."
+  },
+  "candidateId": "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:7a3bb8fdcc41e77b9b165236a7c1c84e7206308054a443c05b237e3eb13beb92",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/20260816T162337175064Z_7a3bb8fdcc41.json",
+      "sha256": "sha256:44e9bc844263a6bfd6addb6cfc6c75dc79e65a3e858d2336f8550b3af964cb46"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Advance to a LibNC-free layer-19 w_o_19 matrix-gradient slice using the exact source input only as a comparator, the already-open exact post-w_o adjoint as the causal operand, the retained gradient as oracle, and the previously attributed chronological BF16/FMA schedule; then validate the transpose residual independently.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5ab66cfbd3b4e21d367ab9819da89f3ab3f73c8755a326175808d24b7b43ccd3"
+    },
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:9d7c025e350ef09e01a31472556d0615e230b5031b105a72234058e3b99a6660"
+    },
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:69902d08b7b5c0e68f0afc0c6046082303d64f10ab2d4f6d903834db49a6b9f4"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:ae64f7b903514f44f9e955eff836b8441ad6fe7881ce2796607130558b747f06"
+  },
+  "generatedUtc": "2026-08-16T16:25:55+00:00",
+  "hypothesis": {
+    "rationale": "Every prospectively frozen salvage predicate passed: two exact raw manifests, deterministic complete captures, exact probe population, zero raw/sealed tensor mismatches, unchanged fixture, exact initial matrix, declared-output validation, resource compliance, and cleanup.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T162351Z_97a6519638.json",
+    "sha256": "sha256:c5b56c5bc918df7312a4785292076ff996d719c16cbaaa499e3b1b6c57aafb1b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Rerunning the production teacher to repair this receipt-only failure"
+    ],
+    "transferableLessons": [
+      "A source capture is safely salvageable without rerun when its exact raw manifests, probe namespace, durable tensors, fixture identity, guard, and failed receipt are all hash-bound and replayed before cleanup."
+    ],
+    "uncertainties": [
+      "The source oracle proves only the exact layer-19 pre-w_o boundary on this retained production population; it does not yet prove a LibNC-free forward input, weight gradient, transpose residual, codec, or byte gain."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sourceInputElementCount",
+      "source": {
+        "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/decision.json",
+        "sha256": "sha256:5ab66cfbd3b4e21d367ab9819da89f3ab3f73c8755a326175808d24b7b43ccd3"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2097152,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t162351z_97a6519638",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The receipt-only retry bound the failed capture, re-hashed both complete 10.7GB raw trees against sealed manifests, enumerated the exact probe namespaces, reassembled both input and adjoint captures with zero BF16 mismatches, preserved non-probe fixture and matrix identity, validated decision.json at its declared path, and removed both work roots inside guards without teacher execution."
+    ],
+    "valid": true
+  }
+}

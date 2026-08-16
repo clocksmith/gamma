@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "claimed_at": "2026-08-16T18:01:43+00:00",
+  "created_at": "2026-08-16T18:01:42+00:00",
+  "developed_at": "2026-08-16T18:01:45+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T175422Z_91aae07812.json",
+      "sha256": "sha256:a05c513aebdef149e64e3aab32bf6fbc969449632de744a9057ed17357692859"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T174722Z_8b88b4a53d.json",
+      "sha256": "sha256:a2191bedd789d7f7ca55076d87c36cf367ba6789ec0cbc380cbfaa7077b2083a"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_attention_forward_inputs_64_q0_v1.json",
+    "sha256": "sha256:dcc82956f8b0eb547cfa75e30353ad696924cae1cdeb94e30b2733b2ac9de56b"
+  },
+  "hypothesis": "The independently exact static open forward exposes a layer-19 attention-probability population that matches all 5,242,880 source BF16 words, retains exact attended output and layer checkpoints, and produces a deterministic live value-state population sufficient for the next LibNC-free value-attention transpose.",
+  "interfaces_exposed": [
+    "sealed initial fixture plus pinned open forward -> exact layer-19 probability and value-state inputs"
+  ],
+  "kill_condition": "Any probability mismatch, stale attended or layer checkpoint, incomplete population, dead value state or control, replay drift, undeclared dependency, source failure, or resource failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_concat_head_identity_64_q0_v1",
+  "parent_proposal_id": "nncp_open_concat_head_identity_64_q0_v1",
+  "priority": 1544,
+  "promotion_condition": "Zero probability mismatches across 5,242,880 words; zero attended and layer-input mismatches; complete live 10,485,760-word value state; live order control; exact full replay; explicit static source; no forbidden dynamic dependency; green source and cleanup gates.",
+  "proposal_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "retired_neighborhoods": [
+    "Implementing value-attention transpose before independently validating the open probability population and retaining its value state"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1544,
+  "state": "developed",
+  "title": "Exact open top-attention forward inputs"
+}

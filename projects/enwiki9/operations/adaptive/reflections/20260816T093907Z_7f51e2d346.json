@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Production FF2 transpose arithmetic maps SIMD lanes to adjacent output features, accumulates each ordered 128-feature reduction panel from zero, and combines completed panels into the prior output before the final BF16 conversion. The missing panel boundary caused both earlier mismatch populations."
+  },
+  "candidateId": "nncp_libnc_ff2_transpose_block128_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_ff2_transpose_block128_64_q0_v1",
+    "candidateTreeSha256": "sha256:796d49a3e71aab9d199df3f7217fc93c5fd83c0d829f07f07b7b93d98db49453",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff2_transpose_block128_64_q0_v1/20260816T093851239011Z_796d49a3e71a.json",
+      "sha256": "sha256:050168a5371a57812c9b239cbf8f10c05482166055927bcd9c32ac16c94c8575"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Install the uniform 128-panel transpose into the complete open top-FF1 backward candidate, preserve the captured source adjoint as an independent regression, and rerun the retained ff_bias1_19 gate before changing GEGLU arithmetic.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:18883f7654a60ece9cc2b67095f2ec44c8f123c10cc77ea295f3623970110acd"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2bace14a8458018ed979c17eb9bdd1771e89a90ba0b3429fab58a5e43bd97fd8"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:b845d3ac1132486165418e472b932370cff6bdde59ace31eec91fae4d834ab19"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff2_transpose_block128_64_q0_v1.json",
+    "sha256": "sha256:d2b7f124b84f2a6190ad06888599e3d8fb9122ef94357277b913096253c2e9e9"
+  },
+  "generatedUtc": "2026-08-16T09:40:46+00:00",
+  "hypothesis": {
+    "rationale": "The ordered 128-feature panel reset-and-combine treatment reproduces all 6,291,456 source FF2-input-adjoint BF16 words with zero maximum error.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T093907Z_7f51e2d346.json",
+    "sha256": "sha256:c1f0b5e8dc5e0aa8184536ca3e0cc9fe597d712c61f76196b7148a60a8411731"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Exact LibNC matmul replay requires both the selected lane kernel and its driver-level reduction panel schedule; kernel-loop order alone is not the full numerical contract."
+    ],
+    "uncertainties": [
+      "GEGLU branch-product and GELU-derivative parity remain untested after installing the now-exact FF2 transpose."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t093907z_7f51e2d346",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen 128-panel evaluator completed two full 6,291,456-word treatment populations byte-identically, preserved the 775-word horizontal and 929-word unblocked-lane control mismatches, changed both controls, bound the LibNC and parameter digests, validated strict outputs, and passed source, memory, scratch, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

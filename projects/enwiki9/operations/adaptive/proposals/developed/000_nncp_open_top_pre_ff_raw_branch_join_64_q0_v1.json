@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+  "claimed_at": "2026-08-16T14:41:16+00:00",
+  "created_at": "2026-08-16T14:41:04+00:00",
+  "developed_at": "2026-08-16T14:41:17+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:fcdf9d0109eddaa9c2a4eeed1be275e344a38a863c91c3a51e6fd5efcec8e9a3"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T143328Z_5fb15662ea.json",
+      "sha256": "sha256:dc542c8a7d947ba7003042c39b25b5f9efa84583e6b3f02d25c7d472cf45e2ad"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1.json",
+    "sha256": "sha256:9652323efe0d69224a26e32c263035dbf4c657b61e20710c150bfc18fb623067"
+  },
+  "hypothesis": "Retaining the exact RMSNorm input-adjoint branch in F32 until the residual join reproduces both the separately rounded branch oracle and every source total-adjoint word.",
+  "interfaces_exposed": [
+    "sealed pre-FF inputs plus exact RMSNorm backward and direct residual -> exact branch and total adjoints"
+  ],
+  "kill_condition": "Any total-adjoint mismatch or control, replay, dependency, source, resource, or receipt failure rejects the raw-branch join.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "priority": 1448,
+  "promotion_condition": "Exact complete branch and source-total parity, exact gain and bias gradients, a live negated-branch control, byte-identical replay, open dependencies, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+  "retired_neighborhoods": [
+    "separately pre-rounded residual branches"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1466,
+  "state": "developed",
+  "title": "Retain the raw RMSNorm branch through the pre-FF join"
+}

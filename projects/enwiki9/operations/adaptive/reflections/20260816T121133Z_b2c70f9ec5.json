@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The complete ff1_19 parameter gradient uses one uniform eight-lane contract: chronological states, 32-stream dot from zero by sequential AVX2 FMA, decoded prior BF16 addition after the dot, then one BF16 round-to-nearest-even materialization."
+  },
+  "candidateId": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+    "candidateTreeSha256": "sha256:6e2ac2d4df3e35bb44d58a12cd2f5bd187cfa87778c6f8e6bd2d9b4585a7e62b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/20260816T121122586543Z_6e2ac2d4df3e.json",
+      "sha256": "sha256:d8f70c4777bf03b7819d788f16e2f07f9889e7a28e849331ae409017c39c2afa"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Use the now-open exact full FF1 parameter boundary to attribute the remaining FF1 input-adjoint transpose and continue the teacher-removal chain toward the previous layer.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:ad7c357d30e97874141277b4d544ad74b215533bda72cd477480e424a571e709"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:3d43650d6e6071821ebf8f0566f450fa35d26d122b2e7c9711c283017319cc80"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/guard.json",
+      "sha256": "sha256:5f5f99506da9c9d1e3bf32bc335172d63667815da1071030ab177dad98804a31"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1.json",
+    "sha256": "sha256:908975fcc3c4f58aac149cd9449a4ab632a1ce587e9e46fc0339b44668521c7d"
+  },
+  "generatedUtc": "2026-08-16T12:12:49+00:00",
+  "hypothesis": {
+    "rationale": "The uniform post-dot prior-add kernel transferred from the first 128 rows to every one of the 6,144 ff1_19 output rows with zero mismatches and zero maximum error.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T121133Z_b2c70f9ec5.json",
+    "sha256": "sha256:c7933d74310058ead739031b1c1fa17721a8938af31eaab5c87d9ef7bd7f7cd8"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "LibNC dependency for the complete ff1_19 parameter gradient",
+      "Slice-only evidence for the FF1 matrix-gradient update schedule"
+    ],
+    "transferableLessons": [
+      "The full top-FF1 parameter gradient is reproducible from open BF16 operands with no LibNC, GGML, BLAS, OpenMP, or CUDA dependency; the retained artifact hash is reproduced exactly."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t121133z_b2c70f9ec5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound full projection completed two byte-identical 6,291,456-word evaluations; all 48 fixed output partitions, the retained full comparator, and the inherited parent slice matched exactly; and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

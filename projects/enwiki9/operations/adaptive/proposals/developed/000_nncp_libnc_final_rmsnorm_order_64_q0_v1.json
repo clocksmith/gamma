@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "claimed_at": "2026-08-16T07:19:49+00:00",
+  "created_at": "2026-08-16T07:19:48+00:00",
+  "developed_at": "2026-08-16T07:19:49+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:dd2b633ab786acaa462522745a5d58a83ad6affff99b8d3e60a7a9a8f4c5eca8"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T065037Z_1d8853ab41.json",
+      "sha256": "sha256:2ccc2f10006e66ca6838cc4910bb6b41cd31bf79a54921a7c9dfc09fcebb6405"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5a1e60ab3d85fc069fae03e19280190d670afbb59ba768a8055f0d46689ddd5d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_order_64_q0_v1.json",
+    "sha256": "sha256:0fb10cd3e18cc5844a06cb125885bc9a43e4c1d6a43ee4b30fab1c2e8bcf1f34"
+  },
+  "hypothesis": "Exactly one member of the frozen six-order BF16 family reproduces all 2,097,152 production final-RMSNorm input-adjoint words, while the current pre-centered FMA order retains a nonzero mismatch.",
+  "interfaces_exposed": [
+    "production BF16 final-RMSNorm input/output plus exact source adjoint -> frozen arithmetic-order attribution"
+  ],
+  "kill_condition": "Retire this finite operation-order family on a nonunique exact match or an exact current-order match; otherwise localize the next arithmetic boundary without tolerance.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "priority": 1475,
+  "promotion_condition": "Two identity-preserving production captures and evaluator replays are byte-identical, the frozen forward contract is exact, the current order differs, and exactly one of six frozen orders matches all BF16 source-adjoint words.",
+  "proposal_id": "nncp_libnc_final_rmsnorm_order_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not reuse the width-8 F32 non-concat RMSNorm probe as production BF16 operation-order evidence."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1493,
+  "state": "developed",
+  "title": "Exact production BF16 final-RMSNorm operation order"
+}

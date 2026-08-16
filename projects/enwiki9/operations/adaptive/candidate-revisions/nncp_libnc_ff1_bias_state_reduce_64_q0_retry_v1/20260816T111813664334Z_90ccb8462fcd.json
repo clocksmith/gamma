@@ -1,0 +1,63 @@
+{
+  "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "candidateTreeSha256": "sha256:90ccb8462fcde899df48e28ae526976fccba81693f005e8fa20f58e1769e9857",
+  "change": {
+    "evidence": [
+      "operations/adaptive/reflections/20260816T111413Z_c720568e7a.json"
+    ],
+    "hypothesis": "Applying LibNC's production add_dup1 backward schedule\u2014one nc_reduce_sum(existing_gradient, 6144x32 BF16 state panel, 1) call for each of 64 chronological states\u2014to the source-exact FF1-output adjoint reproduces every retained ff_bias1_19 gradient word.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Changed only the runner compile invocation to add -Wno-unused-parameter after -Werror and rebound the candidate descriptor; evaluator arithmetic is unchanged."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/7d/7d6260870071586df10343a8d5f419df086f73583aea9e22eda748927dacdb51",
+      "bytes": 4392,
+      "normalization": "verbatim",
+      "path": "ff1_bias_state_reduce.c",
+      "sha256": "7d6260870071586df10343a8d5f419df086f73583aea9e22eda748927dacdb51"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/da/dab3cb109d03aee7ea160a2647098ca3447bb61a38555528ccb001c22f37a125",
+      "bytes": 1162,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "dab3cb109d03aee7ea160a2647098ca3447bb61a38555528ccb001c22f37a125"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d3/d39a22c5dcc429d898bfebbe46c4261367cf232b831e397449e4fcaf5c079fd8",
+      "bytes": 234,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "d39a22c5dcc429d898bfebbe46c4261367cf232b831e397449e4fcaf5c079fd8"
+    }
+  ],
+  "generatedUtc": "2026-08-16T11:18:13+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:6388499ba45c2b33bb99a6f75032f32009ce4cb67e46c158a66fec8e30830d14",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_v1/20260816T111347680001Z_6388499ba45c.json",
+      "sha256": "sha256:6a0e66b712004e46a61563e8da02069791fffb41d8c325136353843c936b96c7"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/20260816T111710776368Z_3b6360b8bc69.json",
+    "sha256": "sha256:12a837670c7477bb7224c95170b15f000184a33a337e35f7a98c5f962a404a3d"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

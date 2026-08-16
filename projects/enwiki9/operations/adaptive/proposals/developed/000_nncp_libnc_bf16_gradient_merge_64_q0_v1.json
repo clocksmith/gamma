@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+  "claimed_at": "2026-08-16T14:50:28+00:00",
+  "created_at": "2026-08-16T14:50:28+00:00",
+  "developed_at": "2026-08-16T14:50:28+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_raw_branch_join_64_q0_v1/decision.json",
+      "sha256": "sha256:b1e36418e6eddb05c751fbca60dbcebdc9c748359ff6bfeed1b28308e397c479"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T144129Z_cbf5902ca5.json",
+      "sha256": "sha256:73c5aa4d5b76832cb74aa2053a56c252a2c0d96012ebc4b7c20d2c122bdc0314"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_v1.json",
+    "sha256": "sha256:c2c1543dec78d1dee23fe483a5844b911274dd35135ddfcb3460e58ca10cf9d5"
+  },
+  "hypothesis": "A digest-bound LibNC shared-parameter graph fed the exact BF16 branch and direct adjoints reproduces the sealed source pre-FF total and identifies the graph-order merge contract.",
+  "interfaces_exposed": [
+    "two BF16 adjoint tensors plus graph order -> shared-tensor LibNC gradient"
+  ],
+  "kill_condition": "No exact graph-order merge or any control, replay, library, source, resource, or receipt failure rejects the primitive oracle.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_pre_ff_raw_branch_join_64_q0_v1",
+  "priority": 1449,
+  "promotion_condition": "Exact single-path controls and at least one exact complete graph-order merge, a live negated control, deterministic replay, the attributed LibNC digest, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_v1",
+  "retired_neighborhoods": [
+    "standalone-float-add-as-autodiff-merge"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1467,
+  "state": "developed",
+  "title": "Attribute the BF16 shared-gradient merge"
+}

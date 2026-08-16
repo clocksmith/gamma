@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The retry experiment materializer rewrote candidate and input bindings but did not replace the nine ancestor paths in experiment.outputs with retry-owned paths."
+  },
+  "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:057a090c25de77d133b5389795f82f040de46ced16415389d981338365fb3593",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/20260816T080438629494Z_057a090c25de.json",
+      "sha256": "sha256:aca8bb3a3ea36a611d2453aca2c6f27b38432246a2888643043a0ba8e42c7eed"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create a manifest-only immutable retry, replace all nine declared outputs with candidate-owned paths before freezing, preserve the C++ algorithm and scientific predicates, and rerun under the same guard.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:a4819244e488282d76470b1ac6a83486eb7c74e1544c02c95f7c323bd18b65d6"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:07921579d602a76d1c430fed03791cf0b6bdc3ccbcb41512ec7111ae400cf542"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:820af4393e5fafd026bbb8df5d8474bd5cdaf467fae8281895b565250e2c9672"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1.json",
+    "sha256": "sha256:e611020297fb1bd6307723ce682b15d7f92cd8b39431057e029e697198960f4c"
+  },
+  "generatedUtc": "2026-08-16T08:20:57+00:00",
+  "hypothesis": {
+    "rationale": "The raw decision reports zero source-residual and ff2_19 mismatches with deterministic replay and live controls, but the experiment contract cannot admit that result because its strict output manifest names another candidate.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T080451Z_d5838c6e4e.json",
+    "sha256": "sha256:532515bd6990e1b87e6fa58426db80bdefbdfa8d7fcdbf4482194d0ec3f9cf1b"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A cloned strict experiment must rewrite every candidate-owned output path along with proposal, revision, runner, and materializer bindings; scientifically complete raw output is not promotable when its manifest points elsewhere."
+    ],
+    "uncertainties": [
+      "A schema-valid independent rerun is still required before promoting the exact open output-head through ff2_19 tail."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t080451z_d5838c6e4e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete open populations and all scientific comparisons finished, but strict result validation rejected decision.json because the cloned experiment output manifest retained the ancestor candidate's result paths."
+    ],
+    "valid": false
+  }
+}

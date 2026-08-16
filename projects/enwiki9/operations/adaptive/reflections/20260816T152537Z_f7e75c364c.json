@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner selected nncp_libnc_top_ff1_input_adjoint_64_q0_v1.compare_bf16, but that module does not export the comparator; the intended shared comparator is available from nncp_libnc_top_ff2_input_adjoint_64_q0_v1."
+  },
+  "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:7059f6ed3a0e76aa89a1243b3ca829c5e191f0e35ca7a915be29575874cf65dc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v1/20260816T152524950246Z_7059f6ed3a0e.json",
+      "sha256": "sha256:4014300cb4af3aaf2cff65cde5690d34ee798ccbb7e4a3141b02a48fcc4de723"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze a new candidate that consumes and validates the completed failed-job scratch, binds the failed job/guard/log/reflection, uses the correct comparator, emits the full result contract, and removes the superseded scratch only after durable staging.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260816T152537Z_f7e75c364c.json",
+      "sha256": "sha256:9100a30cabf62fb70b0085b56fa81caa2f97b301fa9c98a4594029e1048da558"
+    },
+    {
+      "path": "results/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:99603f6c9c1f71f39dd169e4fa65d5d00e464f091a89d63343374bc150448f61"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T152537Z_f7e75c364c.log",
+      "sha256": "sha256:8c7c0ed815cfc2a6d317a5f67a316a611c762aaf4521a5a94336a36dd1fcdf4d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_pre_ff_same_run_contributions_64_q0_retry_v1.json",
+    "sha256": "sha256:b16f6cc1dfbc5587a5eac526e9569f662b3d494165b507e6741da594a599c98e"
+  },
+  "generatedUtc": "2026-08-16T15:38:03+00:00",
+  "hypothesis": {
+    "rationale": "Read-only inspection is promising, but the prospectively frozen result contract did not finish and therefore cannot support or refute the hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T152537Z_f7e75c364c.json",
+    "sha256": "sha256:9100a30cabf62fb70b0085b56fa81caa2f97b301fa9c98a4594029e1048da558"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Rerunning complete source capture solely to repair a post-capture comparator import."
+    ],
+    "transferableLessons": [
+      "Resolve and exercise the comparator binding before expensive capture, and salvage completed immutable capture populations through a hash-bound manifest-only retry instead of rerunning the teacher."
+    ],
+    "uncertainties": [
+      "The terminal promotion predicates remain formally unevaluated until the salvage retry validates both manifests, exact replay, controls, and comparisons."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t152537z_f7e75c364c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both production source captures completed with every declared probe population and stayed inside resource limits, but result finalization raised AttributeError before the contract comparisons or decision receipt were emitted."
+    ],
+    "valid": false
+  }
+}

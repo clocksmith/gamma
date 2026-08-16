@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The initial develop --enqueue path selected tools/candidate_triage.py instead of the custom run_with_rss_guard.py invocation."
+  },
+  "candidateId": "nncp_libnc_geglu_gate_avx2_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_geglu_gate_avx2_64_q0_v1",
+    "candidateTreeSha256": "sha256:ca2e74efdc875e316cdf4a24f9a3e7a98987769ee5434d4d8064ba3e75c580fc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_geglu_gate_avx2_64_q0_v1/20260816T103949260608Z_ca2e74efdc87.json",
+      "sha256": "sha256:602a0bf49ee42eac149e5adea44ee423d2e60b99ffc61662a67019ce4b8147bb"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retry the same immutable candidate revision with the prospectively frozen experiment and explicit guarded tool invocation.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/cancelled/000_20260816T103949Z_779ae217b0.json",
+      "sha256": "sha256:4c73903bcdd1c43cf905b981e90f6c20df4c53093036e48c04f2a2df54e2b628"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_geglu_gate_avx2_64_q0_v1.json",
+    "sha256": "sha256:5486de99889f103ff7415588aceab17a1ea93614d95d37e5013c3e237fde767e"
+  },
+  "generatedUtc": "2026-08-16T10:40:44+00:00",
+  "hypothesis": {
+    "rationale": "No evaluator compiled and no source-adjoint comparison ran.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/cancelled/000_20260816T103949Z_779ae217b0.json",
+    "sha256": "sha256:4c73903bcdd1c43cf905b981e90f6c20df4c53093036e48c04f2a2df54e2b628"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Queue custom zero-credit arithmetic oracles with enqueue-tool and the complete experiment/output argument vector; do not use the generic candidate gate."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t103949z_779ae217b0",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The generic candidate-triage job was cancelled before execution because this zero-credit oracle requires its explicit guarded runner and complete frozen arguments."
+    ],
+    "valid": false
+  }
+}

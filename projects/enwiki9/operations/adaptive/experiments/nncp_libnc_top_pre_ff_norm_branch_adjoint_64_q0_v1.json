@@ -1,0 +1,570 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound source, production fixture, sealed pre-FF input and total adjoint, frozen probe placement, and the previously materialized open branch adjoint.",
+      "The open branch comparator only after both complete source adjoints exist."
+    ],
+    "forbiddenInformation": [
+      "Using source adjoints as codec inputs, fitting coordinate corrections, tolerance, future symbols, teacher probabilities, or objective credit.",
+      "Claiming recursive-update parity, compression improvement, transfer, package compliance, or Hutter progress from this oracle alone."
+    ]
+  },
+  "changedMechanism": "Duplicate the layer-19 direct residual first, then attach one zero-valued marked tensor only to the pre-FF normalization input and capture that node's complete source adjoint twice.",
+  "controls": [
+    {
+      "definition": "Attach the marked zero after the direct residual duplication and before layer-19 pre-FF normalization.",
+      "id": "normalization-only-marked-zero",
+      "role": "treatment"
+    },
+    {
+      "definition": "Repeat the complete source execution and require both tensors and manifests to be byte-identical.",
+      "id": "independent-source-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "Exclude only the exact declared probe paths and require every other fixture file to retain its bound digest.",
+      "id": "exact-fixture-identity",
+      "role": "comparator"
+    },
+    {
+      "definition": "Require the branch probe input to equal the independently sealed pre-FF hidden input exactly.",
+      "id": "pre-ff-input-identity",
+      "role": "shifted"
+    },
+    {
+      "definition": "Require the branch-only adjoint to differ from the sealed total adjoint so an upstream or misplaced probe cannot pass.",
+      "id": "total-adjoint-separation",
+      "role": "negative"
+    },
+    {
+      "definition": "Measure exact source/open branch mismatch only after both complete source captures exist; either result selects the next boundary.",
+      "id": "open-branch-comparator",
+      "role": "treatment"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+  "generatedUtc": "2026-08-16T13:58:02+00:00",
+  "hypothesis": {
+    "claim": "A marked-zero node placed only on the layer-19 pre-FF normalization branch yields a deterministic complete source adjoint that distinguishes branch-backward arithmetic from residual-join accumulation.",
+    "falsification": "Any incomplete, nondeterministic, fixture-changing, dead, wrong-input, source-failing, or resource-failing capture rejects the oracle; source/open equality is measured rather than required."
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/decision.json",
+      "sha256": "sha256:ddb739cb1fb00e1275ed093cd32105a52d86697345e8f26d6e4dbc17e37aa9df"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/execution.json",
+      "sha256": "sha256:2605090e06d34c5bcae56b3fa28def91fdfbe2de142cf693c14cb3871e20046f"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/guard.json",
+      "sha256": "sha256:489a7b51c74566fc043daf310f617127b7c0646f3e26d41d8b9a90fc6a8054ed"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T135007Z_c0fde22dd2.json",
+      "sha256": "sha256:78a315070ec613d33d7deffb34de86fc5775f1058df9ac9e204c76da91302d2f"
+    },
+    {
+      "id": "open-normalization-branch-adjoint",
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/open-pre-ff-norm-input-adjoint.bf16",
+      "sha256": "sha256:67e2b40638a3280b1bee1a17736c239081861848892d6d0fcb033ee91ae03d6a"
+    },
+    {
+      "id": "source-pre-ff-hidden",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/source-pre-ff-hidden.bf16",
+      "sha256": "sha256:14d68fc21722dd9ff36b7d4059d5f11c4b4efa42f37d26b94f1bd2509c19fb5f"
+    },
+    {
+      "id": "source-pre-ff-total-adjoint",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/source-pre-ff-hidden-adjoint.bf16",
+      "sha256": "sha256:da8bce1c0725e80cb73c492f2de12490bfcc6b04bc3eefe3724f4409191521b6"
+    },
+    {
+      "id": "fixture-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "fixture-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "fixture-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "probe-source",
+      "path": "tools/nncp_libnc_top_pre_ff_norm_branch_probe_q0.c",
+      "sha256": "sha256:7b8638ac25993bf02c97d8de2f297d44510b6bcc86410bf488f2428a0b26f191"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0.py",
+      "sha256": "sha256:1c7afb80e881da53b5ad3de784a78dc58108b7a966422b20183316581f1a7065"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_materializer.py",
+      "sha256": "sha256:18b4e47d2cac1bfe73a1df1d2af6651ad67c49e96e1885af52a61f0774dc720f"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/program.py",
+      "sha256": "sha256:e171a59393aeda4d5a199ce443cfb7298454bdc3667ff58b20f962d4065e2559"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_ggml_profile_arithmetic_64_q0-955947d36655",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q0.py",
+      "sha256": "sha256:37935a72cbe0285982ed56c2b5cb80a3733ff1bf6982da7b595012a9f2ca0a86"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_weight_slice_schedule_64_q0-81ccaf96e207",
+      "path": "tools/nncp_libnc_ff1_weight_slice_schedule_64_q0.py",
+      "sha256": "sha256:702a27a5b4dfd602a98102f6b2cd7ac49b62353203e45027a76b8e97f26240f0"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q0-e156f67dd132",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q0.py",
+      "sha256": "sha256:b4d85d218f810c780b52f09cd6d9d7728d3c487076b903981045c2a9edee50ec"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q1-ebbc8356d739",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q1.py",
+      "sha256": "sha256:150a6abad24acb239ae268b2588f2fc1d9402abe9f3c993f71717afd8f784771"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q2-9a8f8fa668eb",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q2.py",
+      "sha256": "sha256:ba72018217eaa051da020d7d5f64fff57bf16670a8ac1ca5b1f34695f6315929"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q3-987bb1a2ec41",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q3.py",
+      "sha256": "sha256:f526f7a4178268057656e672e4eb6e9b394bc0669d35eb0bc942fc00df8930ea"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_top_ff1_input_adjoint_64_q0_v1-e0d02a7143f1",
+      "path": "tools/nncp_libnc_top_ff1_input_adjoint_64_q0_v1.py",
+      "sha256": "sha256:c60a4bf47fc5bd521a86ce82a2b788ba7fdcbc417a5d76e05d93c441c272d90d"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_top_ff2_adjoint_64_q0-23f8fc6e02df",
+      "path": "tools/nncp_libnc_top_ff2_adjoint_64_q0.py",
+      "sha256": "sha256:6827289fe1719e6404b659b55f85d5101a087386d6ec147d29bca040d30e0b8b"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_top_ff2_input_adjoint_64_q0_v1-25a3ecb61862",
+      "path": "tools/nncp_libnc_top_ff2_input_adjoint_64_q0_v1.py",
+      "sha256": "sha256:70db401277470bd1f52beff89a0992e0d97b88c4e7bfdab6ffb777a818ca141a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_v1-b0673f7cdacd",
+      "path": "tools/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_v1.py",
+      "sha256": "sha256:93c8bcc72b03481c94349c223865c7f61b5f758e2d8286ea41a8a56349b03db6"
+    },
+    {
+      "id": "runtime-source-nncp_midpoint_phase_attribution_qm0-267a1e377783",
+      "path": "tools/nncp_midpoint_phase_attribution_qm0.py",
+      "sha256": "sha256:0c636c36e14b611b5f8ada01a06a974607610ea7793545af27c9cbd68ca214cc"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_final_hidden_residual_64_q0-0f3e6dd226ef",
+      "path": "tools/nncp_open_profile_final_hidden_residual_64_q0.py",
+      "sha256": "sha256:f00196e474d415d70793e29cb00c3a9ece0668d7e84e3f2872759498cb543d77"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_output_bias_gradient_64_q0_retry-efc2da2a5e80",
+      "path": "tools/nncp_open_profile_output_bias_gradient_64_q0_retry.py",
+      "sha256": "sha256:fbccaed51aa223a7c3e3c3bc3f729bf8623dfc76fb410ef203c00d1535a3c5c6"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff1_bias_gradient_64_q0_v1-fb6b32dc96f9",
+      "path": "tools/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.py",
+      "sha256": "sha256:b8085f7dfeff8b79599ccb4e562e0433fd93097fe8b5c4f480f753b148587a39"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_64_q0_retry_v1-c3b7f3df680f",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.py",
+      "sha256": "sha256:e42d745b9884260af00a3515cda818572893cf1ac1f3e03b1da0048f147f0a47"
+    },
+    {
+      "id": "runtime-source-nncp_open_top_pre_ff_rmsnorm_backward_64_q0_materializer-016d6ae93de8",
+      "path": "tools/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_materializer.py",
+      "sha256": "sha256:48d40392ddbb08faeddb5090ba2c5ac54c8e46a052e55bcc0c0011ced1ab0645"
+    },
+    {
+      "id": "runtime-source-nncp_symbol_cache32_marginal_qm0-416cc03bb17c",
+      "path": "tools/nncp_symbol_cache32_marginal_qm0.py",
+      "sha256": "sha256:deec3ba812ebe1524d1b1e126ca9f55a18936008cd9857f549402edaa147af27"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The production source, target block, model, parameters, optimizer, gradients, probabilities, and update remain unchanged.",
+    "The marked zero changes no forward value and is absent from the already-duplicated direct residual branch.",
+    "Each capture contains exactly the declared branch input and adjoint files with zero non-probe fixture drift.",
+    "The open branch artifact is used only after both source populations exist and no comparison result changes the captured tensors.",
+    "All captured source tensors remain zero-credit teacher evidence and cannot ship in a Gamma codec."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-input",
+      "measurement": "inputMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "All source, fixture, open, and parent receipts remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Independent complete source capture populations.",
+      "id": "captureCount",
+      "unit": "captures"
+    },
+    {
+      "definition": "Chronological layer-19 pre-FF samples.",
+      "id": "sampleCount",
+      "unit": "state-stream samples"
+    },
+    {
+      "definition": "Words in the combined normalization input.",
+      "id": "inputElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Words in the combined normalization-branch adjoint.",
+      "id": "adjointElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Both complete source populations reproduce byte-for-byte.",
+      "id": "sourceCaptureDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Exact input/adjoint, 64-state, bin/meta files across both captures.",
+      "id": "declaredProbeFileCount",
+      "unit": "files"
+    },
+    {
+      "definition": "Each manifest contains exactly the enumerated probe path set.",
+      "id": "declaredProbePopulationExact",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Non-probe files differing from the retained fixture across both captures.",
+      "id": "nonProbeFixtureMismatchCount",
+      "unit": "files"
+    },
+    {
+      "definition": "Source branch-input words differing from the sealed pre-FF hidden input.",
+      "id": "inputMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Source branch-adjoint words differing from the open formula.",
+      "id": "openBranchMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum source/open branch-adjoint error.",
+      "id": "maximumOpenBranchAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Branch-only words differing from the sealed total adjoint.",
+      "id": "totalAdjointControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "The captured branch adjoint is not all zero.",
+      "id": "adjointComparatorLive",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Compressed dependency-closed oracle source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All transient build and capture payloads were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/decision.json",
+    "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/execution.json",
+    "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/source-pre-ff-norm-input.bf16",
+    "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/source-pre-ff-norm-branch-adjoint.bf16",
+    "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/20260816T134949657610Z_6f38cc393882.json",
+      "sha256": "sha256:20012e4aa8c48c8e17dead0e28d7e549ce672012aadb33276cabf3a1f4236bc5"
+    }
+  },
+  "population": {
+    "coordinate": "state-major, stream-major, feature-major",
+    "scopeBytes": 4194304,
+    "scopeSymbols": 2097152,
+    "selection": "Every one of 1,024 features for all 64 chronological states and 32 streams at production block 256.",
+    "unit": "BF16 layer-19 pre-FF normalization-branch adjoint words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-captures",
+      "measurement": "captureCount",
+      "operator": "eq",
+      "threshold": 2
+    },
+    {
+      "id": "p-samples",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-input-elements",
+      "measurement": "inputElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-adjoint-elements",
+      "measurement": "adjointElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-replay",
+      "measurement": "sourceCaptureDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-probe-files",
+      "measurement": "declaredProbeFileCount",
+      "operator": "eq",
+      "threshold": 512
+    },
+    {
+      "id": "p-probe-population",
+      "measurement": "declaredProbePopulationExact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-fixture",
+      "measurement": "nonProbeFixtureMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-input",
+      "measurement": "inputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-total-separation",
+      "measurement": "totalAdjointControlMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-live",
+      "measurement": "adjointComparatorLive",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 0.9,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.05,
+    "uncertaintyRisk": 0.05
+  },
+  "status": "frozen"
+}

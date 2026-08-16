@@ -1,0 +1,40 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+    "nncp_open_top_ff1_input_adjoint_block128_64_q0_v1"
+  ],
+  "description": "LibNC-free ordered-panel layer-19 w_o_19 transpose residual",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Eight ordered 128-feature FMA panels over the sealed initial w_o_19 matrix and exact open post-w_o adjoint reproduce all 2,097,152 source pre-w_o input-adjoint words, while an unblocked reduction and sign-negated input differ.",
+  "id": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T164348Z_ff5718724e": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+        "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_w_o_input_adjoint_block128_64_q0_v1.json",
+      "sha256": "sha256:d34660d8a1d4df0e6c0f0edd0005ed88097e5221aef4ee36cc34c48a7e4c99f3"
+    },
+    "interfaces_exposed": [
+      "initial w_o_19 plus open post-w_o adjoint -> exact LibNC-free pre-w_o input adjoint"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unvalidated transfer of ordered 128-feature transpose panels to w_o_19"
+    ]
+  },
+  "parent": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Descend to the pre-w_o forward attention value next. Freeze an exact source comparator and validate a LibNC-free generation path before using this residual in a shippable adaptation mechanism."
+}

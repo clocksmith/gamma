@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T075342Z_b33521b4a0.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t075342z_b33521b4a0",
+  "failure": "The source/open eight-word disagreement is caused entirely by the dot-reduction tree: one ordered eight-lane BF16 FMA accumulator plus the source horizontal tree is exact, while mean-scaled versus width-scaled scalar placement is observationally identical after BF16 rounding on all 2,097,152 words.",
+  "mechanism": "Hold the exact forward normalization, generic BF16 sum, incoming residual, and final BF16 rounding fixed while crossing generic versus streaming dot reduction with mean-scaled versus width-scaled fused backward evaluation.",
+  "population": "one production state or BF16 gradient word; All retained 64 states across 32 streams and all 1,024 final-normalization features.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T07:55:26+00:00",
+  "retired_dimensions": [
+    "Generic 64-block product reduction for the final-RMSNorm g*y dot when source-exact LibNC replay is required.",
+    "Mean-scaled versus width-scaled final-RMSNorm backward scalar placement on this retained production population."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

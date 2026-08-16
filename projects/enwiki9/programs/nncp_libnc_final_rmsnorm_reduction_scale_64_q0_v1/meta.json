@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1"
+  ],
+  "description": "Exact production BF16 final-RMSNorm reduction and scaling",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Exactly the disassembly-derived combination of a streaming eight-lane BF16 dot reduction and width-scaled fused backward expression reproduces every retained source final-RMSNorm input-adjoint word; the other three factorial combinations do not.",
+  "id": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T075342Z_b33521b4a0": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T075342Z_b33521b4a0.json",
+        "sha256": "sha256:b0fe08c38bbfa92a727cb3149d80377bf2e7fbfc34a982ad8b8c43b3c6307b18",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1.json",
+      "sha256": "sha256:506f504ad38fa82ff201bf1ee6675042ff3ab079cb6a2aae2dc18ae35023faf2"
+    },
+    "interfaces_exposed": [
+      "retained production tensors plus exact affine replay -> source-exact final-RMSNorm backward evaluator"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+    "proposal_id": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+    "retired_neighborhoods": [
+      "Do not resweep per-element mean-scaled subtraction/FMA orders at the generic dot reduction."
+    ]
+  },
+  "parent": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Freeze a successor that installs only the streaming BF16 dot in the open backward tail, preserves the mean-scaled expression because it is already exact after BF16 rounding, and tests the next deeper source-captured boundary."
+}

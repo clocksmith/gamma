@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The reused fixture_identity function hardcodes the top_ff2_ probe prefix; it does not parameterize the prospectively declared probe namespace, so it compared top_ff1_ measurement files as production fixture outputs."
+  },
+  "candidateId": "nncp_libnc_top_ff1_input_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_ff1_input_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:dae9c3fd68715ce9478b6fa836c6c0169e2c8addaa73c25f28f9e6a5ffe742e7",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff1_input_adjoint_64_q0_v1/20260816T121858407893Z_dae9c3fd6871.json",
+      "sha256": "sha256:00399be9812904752741991a4cd12bdfaeee0647848659d5ab68a4c28c17614a"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Create an immutable manifest-accounting retry that does not rerun the teacher, enumerates the exact top_ff1 input/adjoint, 64-state, bin/meta probe population, requires all 512 stale mismatches to equal that set across two captures, and copies the sealed tensors byte-for-byte.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:b71b23944c542b8ab76e2a64ebedb6199593e9044693b4e91ccea6009f4ee20d"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_v1/execution.json",
+      "sha256": "sha256:97d68cd99e3acfb51348eb89d8cfe30476b389de6fdd96c55b4b7d3bde98038b"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:cde574cfdbe835a9084156edcef2a2c4942db6689884f49998e1925796e425f6"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff1_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:c3d02b9de33d086f70498910c04ebed52c4d826d5c8568fa67a27d36bfdae916"
+  },
+  "generatedUtc": "2026-08-16T12:31:56+00:00",
+  "hypothesis": {
+    "rationale": "The sealed tensors support deterministic exact capture, but the frozen promotion contract cannot accept them until a manifest-only retry proves that every one of the 512 recorded mismatches is an expected probe path and that all non-probe fixture payloads are unchanged.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T121911Z_d066eaf1cf.json",
+    "sha256": "sha256:63b48f04a5e04a76d580b9c38a5dd98ac9d84cfe4208c170f1ab01933594a9c2"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Fixture identity must exclude an exact enumerated probe population owned by the experiment, then compare every remaining path by size and digest; a hardcoded historical probe prefix is not reusable accounting."
+    ],
+    "uncertainties": [
+      "A sealed manifest-only correction must still prove the exact 256-file probe set in each capture and zero non-probe mismatch before the adjoint oracle can be promoted."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t121911z_d066eaf1cf",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete source captures, exact input comparison, live adjoint, and initial-matrix extraction succeeded, but the inherited fixture-identity helper excludes only top_ff2_ and therefore classified all 256 declared top_ff1_ probe files in each manifest as fixture mutations."
+    ],
+    "valid": false
+  }
+}

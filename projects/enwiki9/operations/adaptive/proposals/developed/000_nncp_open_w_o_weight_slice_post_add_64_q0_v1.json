@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "claimed_at": "2026-08-16T16:29:56+00:00",
+  "created_at": "2026-08-16T16:29:56+00:00",
+  "developed_at": "2026-08-16T16:29:57+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T162351Z_97a6519638.json",
+      "sha256": "sha256:235cf7e5745ceca67971e34f74d7ef146403061302e2dbd7653a863360a7a9b5"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json",
+      "sha256": "sha256:06b1cfac355d97a5bf88790c36ab32cab4c5da8eb390c91f02624af16a3c1cbf"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_weight_slice_post_add_64_q0_v1.json",
+    "sha256": "sha256:ca9c7fefe4abd79a88164ad8700982180a55d0f059d0ff1e025896abe559d766"
+  },
+  "hypothesis": "The previously attributed LibNC-free chronological post-dot prior-add BF16/FMA kernel exactly reconstructs the first 128 output rows of the retained w_o_19 gradient from the sealed pre-w_o input and independently opened post-w_o adjoint, while reversed and sign-negated controls differ.",
+  "interfaces_exposed": [
+    "sealed pre-w_o input plus open post-w_o adjoint -> independently checked w_o_19 gradient slice"
+  ],
+  "kill_condition": "Any treatment mismatch or failed replay, dependency, source, control, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+  "parent_proposal_id": null,
+  "priority": 1534,
+  "promotion_condition": "Zero mismatches across the 131,072-word treatment slice; live reverse and negated controls; byte-identical replay; no forbidden dependencies; green source and resource guards.",
+  "proposal_id": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unvalidated transfer of FF1 weight-gradient arithmetic to w_o_19"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1549,
+  "state": "developed",
+  "title": "Open layer-19 w_o gradient slice"
+}

@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "combine_probe expected dims 128,1,32,8 and 320,1,32,8, while LibNC emitted 128,1,8,32 and 320,1,8,32; write_axis traverses the highest dimension first, so the raw bytes are already stream-major then head-major and the planned attended_to_concat permutation is also unnecessary."
+  },
+  "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_attention_product_oracle_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:3c41763080b755d48c62786f5415535b240cdb3aa58b5b502cdc34ddbdd5556b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_attention_product_oracle_64_q0_retry_v1/20260816T172801478655Z_3c41763080b7.json",
+      "sha256": "sha256:50ddae448c2fee643dbd38cc7b1af4a09716ad33961d624444483cfdcc3aecff"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create a receipt-only salvage that freezes complete per-file manifests, re-hashes both preserved capture trees, parses the observed dimensions, assembles direct stream-head order, and reruns every scientific comparator without teacher execution.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:e771cb905889e6cc9c0b20e61e24881fd6fa350c07c02a16a9243614d8ce9c8a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_product_oracle_64_q0_retry_v1.json",
+    "sha256": "sha256:8eaf88419de45fd38e28326ee1a3376771892782b8546776412187d5b68aad89"
+  },
+  "generatedUtc": "2026-08-16T17:42:36+00:00",
+  "hypothesis": {
+    "rationale": "The source executions completed, but the prospectively frozen tensor-coordinate comparator could not parse their observed metadata and therefore never tested determinism, fixture identity, concat identity, or the full promotion conjunction.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T172814Z_45054e4c3f.json",
+    "sha256": "sha256:aacc9728889ac73d7ca7dbec1111fda520ba09db33e58b1c8fcb2ee93a64484e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Treat LibNC metadata dimension numbering and serialized traversal as separate contracts: derive byte order from write_axis traversal and validate it against an independently exact downstream tensor before adding a permutation."
+    ],
+    "uncertainties": [
+      "The two raw adjoint populations are not yet hash-bound by a durable manifest or accepted by a schema-valid experiment result."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t172814z_45054e4c3f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both production captures completed with the declared 1,013-file population, but the runner rejected state zero during post-capture combination because its frozen metadata expected the stream and head dimension values in the wrong order. No concat comparison or promotion predicates completed; resource guards remained green and both raw trees were preserved."
+    ],
+    "valid": false
+  }
+}

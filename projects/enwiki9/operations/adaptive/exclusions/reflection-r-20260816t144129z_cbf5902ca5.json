@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T144129Z_cbf5902ca5.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t144129z_cbf5902ca5",
+  "failure": "The source residual accumulation consumes the rounded RMSNorm branch for almost all coordinates; wholesale post-join branch conversion is wrong, and the remaining three-coordinate parent discrepancy belongs to the source backward accumulator or tensor-gradient merge rule.",
+  "mechanism": "Remove only the per-coordinate BF16 conversion immediately after the exact RMSNorm formula; preserve that conversion for the branch oracle and affine bookkeeping, but let the live residual join add the raw F32 branch to the unchanged BF16 direct residual before the existing round-to-nearest-even BF16 output conversion.",
+  "population": "BF16 layer-19 pre-FF branch and total-adjoint words; Every one of 1,024 features for all 64 chronological states and 32 streams at production block 256.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T14:45:29+00:00",
+  "retired_dimensions": [
+    "raw-f32-rmsnorm-branch-through-entire-pre-ff-residual-join"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

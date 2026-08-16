@@ -1,0 +1,45 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "claimed_at": "2026-08-16T10:49:36+00:00",
+  "created_at": "2026-08-16T10:49:36+00:00",
+  "developed_at": "2026-08-16T10:49:37+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T104055Z_2c469fd001.json",
+      "sha256": "sha256:26baff773f39943e6abeb607f8c14cc8d5d4350fee8ad5c7c562aa3b79bfd7fe"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1.json",
+    "sha256": "sha256:dd84f60f6341331edd9e8ef183a81ed0c1c8a56f9bcde62993d75de114f55642"
+  },
+  "hypothesis": "Installing only the source-exact AVX2 GEGLU gate-backward contract into the exact-FF2 open replay reproduces both complete source branch adjoints and the retained ff_bias1_19 gradient exactly.",
+  "interfaces_exposed": [
+    "source-exact FF2 adjoint -> exact AVX2 GEGLU backward -> retained ff_bias1_19"
+  ],
+  "kill_condition": "Any nonzero source branch or retained bias mismatch, or failed forward, replay, control, dependency, source, strict-output, memory, disk, or cleanup predicate.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+  "parent_proposal_id": null,
+  "priority": 1464,
+  "promotion_condition": "Exact FF2, gate, value, and ff_bias1_19 parity over the complete retained population with deterministic replay, live sign control, dependency closure, and green guards.",
+  "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1464,
+  "state": "developed",
+  "title": "Complete top-FF1 backward with exact AVX2 GEGLU gate"
+}

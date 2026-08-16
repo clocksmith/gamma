@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T151453Z_cbf1bff98d.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t151453z_cbf1bff98d",
+  "failure": "Generic shared BF16 parameter-gradient accumulation is not the source of the three exceptional words; they arise before or within the actual combined residual-plus-RMSNorm backward topology, or from isolation-dependent branch/direct captures.",
+  "mechanism": "Keep the shared BF16 parameter, exact coefficient words, graph orders, controls, comparators, full-config ABI, and library digest; convert each duplicate parameter path to F32, multiply by an exact F32 expansion of its BF16 adjoint, reduce, and observe the BF16 parameter-gradient merge.",
+  "population": "BF16 pre-FF adjoint elements; Every branch and direct adjoint coordinate from all 64 states, 32 streams, and 1,024 features.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T15:16:31+00:00",
+  "retired_dimensions": [
+    "standalone rounded branch/direct adjoints through generic shared-BF16 parameter accumulation as an exact source pre-FF join"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

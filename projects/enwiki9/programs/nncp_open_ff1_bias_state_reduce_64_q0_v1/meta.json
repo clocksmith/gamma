@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1"
+  ],
+  "description": "LibNC-free FF1 bias reduction with chronological BF16 state boundaries",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A LibNC-free reducer that accumulates 32 BF16 stream adjoints sequentially into the prior BF16 gradient and materializes BF16 once after each of 64 chronological states reproduces every independent oracle ff_bias1_19 word.",
+  "id": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T112548Z_7841e2cc5b": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T112548Z_7841e2cc5b.json",
+        "sha256": "sha256:247818ccd5a497e869eea82af9a138c3eb89cf8418e29d587574ffbc8206dc76",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_ff1_bias_state_reduce_64_q0_v1.json",
+      "sha256": "sha256:4f5b7f65ae02e5ef2377da6278bbd6103a9091281daa08a96014dd9c5dc133b6"
+    },
+    "interfaces_exposed": [
+      "source-exact FF1-output BF16 adjoint -> LibNC-free source-exact bias gradient"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+    "retired_neighborhoods": [
+      "Single flat reduction across all 2,048 samples"
+    ]
+  },
+  "parent": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "status": "measured_negative",
+  "verdict": "Integrate the now-open exact bias reducer into the full top-layer backward replay, then localize the next remaining parameter-gradient boundary without re-opening exact FF2, GEGLU, or bias arithmetic."
+}

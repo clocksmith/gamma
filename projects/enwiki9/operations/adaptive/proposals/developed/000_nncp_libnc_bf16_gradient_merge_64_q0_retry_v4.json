@@ -1,0 +1,49 @@
+{
+  "candidate_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+  "claimed_at": "2026-08-16T15:09:09+00:00",
+  "created_at": "2026-08-16T15:09:04+00:00",
+  "developed_at": "2026-08-16T15:09:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T150314Z_242a539ae9.json",
+      "sha256": "sha256:b7f9ac5d8111b836167d284541cb091b5c99b854fb612305cbc9e53a3f3c897c"
+    },
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v3/guard.json",
+      "sha256": "sha256:a609ebe211c513c9e36c03c5554c5b2842a60030f7d8c75410b11bf52eb951b2"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v4.json",
+    "sha256": "sha256:6609b5f2ac9533c183f1299118bf47adb6225a1d1149ada4997658fbab9fa131"
+  },
+  "hypothesis": "A digest-bound LibNC shared-parameter graph fed the exact BF16 branch and direct adjoints reproduces the sealed source pre-FF total and identifies the graph-order merge contract.",
+  "interfaces_exposed": [
+    "two production-shaped BF16 adjoint tensors plus matmul graph order -> shared-tensor LibNC gradient"
+  ],
+  "kill_condition": "No exact graph-order merge or any control, replay, ABI, library, source, resource, or receipt failure rejects the production-shaped matmul oracle.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v3",
+  "parent_proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v3",
+  "priority": 1453,
+  "promotion_condition": "Exact single-path matmul controls and at least one exact complete graph-order merge, a live negated control, deterministic replay, production rank and ABI, the attributed LibNC digest, guarded source closure, and strict receipt validation.",
+  "proposal_id": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v4",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1471,
+  "state": "developed",
+  "title": "Inject the BF16 merge oracle through production matmul"
+}

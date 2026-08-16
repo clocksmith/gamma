@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The candidate backward reduction and rounding schedule differs from LibNC at layer 19: gain mismatch 798/1024, bias mismatch 764/1024, and total-adjoint mismatch 2083707/2097152 despite exact hidden and normalized inputs."
+  },
+  "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+    "candidateTreeSha256": "sha256:c6f14e1d70bdfbb890c952f5751e8b91a8d36c7c24533dc809174dc050b7a729",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1/20260816T130737191329Z_c6f14e1d70bd.json",
+      "sha256": "sha256:c0a9bd76e51641ddb8841e9ad1f55ecca0d359918f733e5f4b01478b0e461e60"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this arithmetic instance and mutate only the layer-19 RMSNorm backward schedule against the retained exact source oracle; do not advance to attention until total adjoint and parameter gradients are exact.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1/decision.json",
+      "sha256": "sha256:b0ea39487ed5dadfa34b2d838fbb6eb010ecd18b852e521c94fe1ca803150fc3"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1/execution.json",
+      "sha256": "sha256:0f922fc7da46c197c17129cdd799375befc70baaa930f48c39b73425cfefa56d"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1/guard.json",
+      "sha256": "sha256:321329e34d5184ef3efd1442fd4c9ea114a7c949c7ac7f4c5524943ee6f20302"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1.json",
+    "sha256": "sha256:68e5d9f2f52a48a518bd2f84035fee2f424451a220423829ce1caef56b211685"
+  },
+  "generatedUtc": "2026-08-16T13:20:13+00:00",
+  "hypothesis": {
+    "rationale": "Retargeting the prior final-RMSNorm backward arithmetic by gain identity reconstructs the forward boundary exactly but does not reproduce the production layer-19 pre-FF gain, bias, or total-adjoint BF16 words.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T130752Z_2641246e8c.json",
+    "sha256": "sha256:8a4f851745810ed5082e241396eb897ca8455a38aecda544ec8a64391c254450"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Exact forward parity does not license reuse of a backward reducer at a new normalization boundary; freeze and attribute accumulation precision, axis order, and BF16 conversion placement separately."
+    ],
+    "uncertainties": [
+      "The receipt localizes the mismatch to RMSNorm backward arithmetic but does not yet distinguish reduction tree order from intermediate conversion placement."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t130752z_2641246e8c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The frozen candidate completed both open populations, exact forward/input checks, live controls, dependency closure, and resource accounting without infrastructure or bookkeeping failure."
+    ],
+    "valid": true
+  }
+}

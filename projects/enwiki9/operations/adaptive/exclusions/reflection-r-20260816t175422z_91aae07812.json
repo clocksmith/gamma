@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T175422Z_91aae07812.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t175422z_91aae07812",
+  "failure": "Once both tensors use state-major, stream-major, head-major, feature-major serialization, LibNC concat_head reshape/permutation changes only logical tensor metadata; the retained bytes and their backward adjoints are already in the downstream feature order.",
+  "mechanism": "Treat concat_head as an explicit serialized identity contract, compare both forward and adjoint full populations directly, retain head-major permutations as negative controls, and emit the exact open attended adjoint without teacher execution.",
+  "population": "BF16 attended forward and adjoint words; Every feature for 64 states, 32 streams, and eight 128-feature heads.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T17:57:02+00:00",
+  "retired_dimensions": [
+    "A runtime concat-head transpose or inverse transpose in the retained state-stream-head-feature serialization"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

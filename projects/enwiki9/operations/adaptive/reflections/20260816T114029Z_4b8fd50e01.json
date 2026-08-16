@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The production ff1_19 weight gradient preserves decoder graph-state boundaries: each 128-by-32 FF1-output adjoint panel is multiplied by the transposed 1,024-by-32 BF16 FF1 input and accumulated into the existing BF16 gradient before the next chronological state."
+  },
+  "candidateId": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+    "candidateTreeSha256": "sha256:d12034d7392c4218501ccbc8a139e2e4746bf5ab03d7ec03bb1b513d6b60d5d4",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/20260816T114005594198Z_d12034d7392c.json",
+      "sha256": "sha256:0b5d9089c19a85d0d7d368615964e619434e5e824f13cc516beb623a5b01432c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Freeze a LibNC-free arithmetic grid over the retained open FF1 operands and independent exact slice, identify the within-state accumulation contract, and then expand only an exact open cell toward the complete ff1_19 gradient.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/decision.json",
+      "sha256": "sha256:59b3e6118a7bfa8f3a66a07a0430d6b09bd21bb863f95b2e7e3e5c146af45b8c"
+    },
+    {
+      "path": "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/execution.json",
+      "sha256": "sha256:af7372f1af2e213d277a7a13a655a053f79d58272c2bdb89ba9fcff9f40307e4"
+    },
+    {
+      "path": "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/guard.json",
+      "sha256": "sha256:3ac7383da8605722952815a178b9af5112231d77fb8360787aa8700e279e5e7d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1.json",
+    "sha256": "sha256:596b5defd05e35d43c0d23e4f6a4cae1d3fc1ad875610f96033f760fac25faac"
+  },
+  "generatedUtc": "2026-08-16T11:53:53+00:00",
+  "hypothesis": {
+    "rationale": "Sixty-four chronological nc_matmul_add2 state updates reproduced all 131,072 retained ff1_19 slice words with zero error; the flat and reverse controls retained 101,753 and 110,634 mismatches respectively.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T114029Z_4b8fd50e01.json",
+    "sha256": "sha256:d31857d6e8995a14c240a6fc7983403ae2087ff7dbdac235b428d5ed3afe777c"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "One flat 2,048-sample FF1 weight-gradient matrix product as a source-exact projection"
+    ],
+    "transferableLessons": [
+      "Matrix-parameter gradients, like broadcast-bias gradients, must preserve chronological graph-state accumulation and BF16 materialization; a mathematically equivalent whole-population matrix product is not source-equivalent."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t114029z_4b8fd50e01",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound attribution regenerated two complete exact open forward populations, produced every frozen treatment/control slice twice, and passed all comparator, replay, digest, dependency, source, cleanup, memory, and scratch predicates."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,463 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -500000,
+    "maximumAddedPackageBytes": 500000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The complete exact open FF1 input and FF1-output adjoint.",
+      "The exact parent slice arithmetic contract and reflection.",
+      "The retained complete comparator after each projection exists."
+    ],
+    "forbiddenInformation": [
+      "Row-specific arithmetic, fitted corrections, tolerance, comparator-derived values, or any teacher dependency in the executable."
+    ]
+  },
+  "changedMechanism": "Expand the exact post-dot-add eight-lane kernel without arithmetic changes from 128 prospectively frozen FF1 output rows to all 6,144 rows.",
+  "controls": [
+    {
+      "definition": "Apply the frozen post-dot-add kernel uniformly to all ff1_19 coordinates.",
+      "id": "full-open-projection",
+      "role": "treatment"
+    },
+    {
+      "definition": "Compare only after a complete open projection against the retained production ff1_19 gradient.",
+      "id": "retained-full-gradient",
+      "role": "comparator"
+    },
+    {
+      "definition": "Extract the first 128 output rows and compare them independently with the exact parent slice.",
+      "id": "parent-slice-retention",
+      "role": "shifted"
+    },
+    {
+      "definition": "Require exact parity independently in every prospectively fixed 128-row output partition.",
+      "id": "partition-transfer",
+      "role": "shifted"
+    },
+    {
+      "definition": "Retain the parent's exact 43-word failure populations as the excluded arithmetic alternatives.",
+      "id": "prior-and-nonfused-failures",
+      "role": "negative"
+    },
+    {
+      "definition": "Execute the complete 6,291,456-word projection twice.",
+      "id": "independent-replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "generatedUtc": "2026-08-16T12:11:05+00:00",
+  "hypothesis": {
+    "claim": "The exact post-dot prior-add schedule transfers uniformly from the frozen 128-row slice to all 6,144 ff1_19 output rows and reproduces the retained 6,291,456-word gradient byte-for-byte.",
+    "falsification": "Any complete-gradient or inherited-slice mismatch, inexact 128-row partition, replay failure, forbidden dependency, source failure, or resource failure rejects the uniform open boundary."
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:c796fa9fef6cb0485f55a91ff8fff6cf58468827ecda6549735b7908b0e42f62"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:da552c5a75ac79b42de1dabc8065ca939871c111d91d425740f6c18a3d41965c"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/guard.json",
+      "sha256": "sha256:629c3e0301dee8aa910d3a392a6af80f9a8e23e5e3b764f22be285ee8a2edab4"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json",
+      "sha256": "sha256:06b1cfac355d97a5bf88790c36ab32cab4c5da8eb390c91f02624af16a3c1cbf"
+    },
+    {
+      "id": "parent-exact-slice",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/open-treatment-slice.bf16",
+      "sha256": "sha256:34061e5182d9a265130916c5998bf87b135ca1093b12849edf45d9f2f0833977"
+    },
+    {
+      "id": "open-ff1-input",
+      "path": "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/open-ff1-input.bf16",
+      "sha256": "sha256:8dedf609838e4e3bf5f114d87d336dbc0890cf18f3920fbd193d55e278987463"
+    },
+    {
+      "id": "source-exact-ff1-output-residual",
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1/open-ff1-output-residual.bf16",
+      "sha256": "sha256:5271b61af446063837f14a0d8c0374bafac71d97ce774a634adf5ed4a278007c"
+    },
+    {
+      "id": "fixture-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "retained-ff1-19-gradient",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0002_ff1_19.bin",
+      "sha256": "sha256:dafaebb39bcfba3aac62f4cdba9c67ddba043704948a091f049050b9bae6287c"
+    },
+    {
+      "id": "retained-ff1-19-gradient-meta",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0002_ff1_19.meta",
+      "sha256": "sha256:32ae37c1512a7cd9d6c02c86d1a54a0262bf85603f301063e36e1fe7a3f78c22"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_profile_top_ff1_gradient_post_add_64_q0.py",
+      "sha256": "sha256:0647f28833836773478d6a9f71f257e4c16eb1f43bf98b0ba23882bfca50b632"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_profile_top_ff1_gradient_post_add_64_q0_materializer.py",
+      "sha256": "sha256:dd348e32afb5371f9c04cd6a3bfe87d9f68e74d84c63a05ca1b0a90a782187d5"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/ff1_weight_gradient.cpp",
+      "sha256": "sha256:fe59cf554d8705814129c73fff12a8b0ce8a64907f7b6b2c1fd9d518dc444ac8"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/program.py",
+      "sha256": "sha256:f2f5438db85ac2ea0c1ca49ce448df2ab1691fb3522a34772eba9837037d0b6c"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The exact open FF1 input, FF1-output adjoint, chronological state and stream order, BF16 conversion, and input-major output layout remain unchanged.",
+    "One uniform arithmetic kernel covers all 6,291,456 coordinates; tolerance, coordinate repair, and row-specific selection are forbidden.",
+    "The retained full gradient is consulted only after each complete open projection exists.",
+    "The first 128 rows must independently retain the exact parent slice.",
+    "No LibNC, GGML, BLAS, OpenMP, or CUDA dependency is permitted in the projection executable."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The exact slice, operands, retained comparator, reflection, and guards remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Input features covered by the complete projection.",
+      "id": "inputFeatureCount",
+      "unit": "features"
+    },
+    {
+      "definition": "FF1 output features covered by the complete projection.",
+      "id": "outputFeatureCount",
+      "unit": "features"
+    },
+    {
+      "definition": "Words in the complete ff1_19 gradient.",
+      "id": "gradientElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Prospectively partitioned output-row blocks.",
+      "id": "outputBlockCount",
+      "unit": "128-row blocks"
+    },
+    {
+      "definition": "Partitions with zero comparator mismatches.",
+      "id": "exactOutputBlockCount",
+      "unit": "128-row blocks"
+    },
+    {
+      "definition": "Complete open-gradient words differing from the retained comparator.",
+      "id": "treatmentMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum complete-gradient comparator error.",
+      "id": "maximumTreatmentAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "First 128 full-output rows differing from the exact parent slice.",
+      "id": "parentSliceMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Two complete projections reproduce byte-for-byte.",
+      "id": "evaluationReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "LibNC, GGML, BLAS, OpenMP, or CUDA dependencies in the open executable.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed candidate source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All transient build and evaluation payloads were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/decision.json",
+    "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/execution.json",
+    "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/source-exact-ff1-19-gradient.bf16",
+    "results/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_weight_slice_post_add_64_q0_v1/20260816T120550629545Z_d9354e9ada67.json",
+      "sha256": "sha256:4fa48da95251e08c9c6e229b3dbb6b75786fac65dd6d5279c3793f1af4cf4b20"
+    }
+  },
+  "population": {
+    "coordinate": "input-feature-major, then output-feature-major",
+    "scopeBytes": 12582912,
+    "scopeSymbols": 6291456,
+    "selection": "Every coordinate in the complete 1,024-input by 6,144-output ff1_19 gradient, partitioned prospectively into 48 adjacent 128-row blocks.",
+    "unit": "BF16 ff1_19 gradient words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-inputs",
+      "measurement": "inputFeatureCount",
+      "operator": "eq",
+      "threshold": 1024
+    },
+    {
+      "id": "p-outputs",
+      "measurement": "outputFeatureCount",
+      "operator": "eq",
+      "threshold": 6144
+    },
+    {
+      "id": "p-elements",
+      "measurement": "gradientElementCount",
+      "operator": "eq",
+      "threshold": 6291456
+    },
+    {
+      "id": "p-blocks",
+      "measurement": "outputBlockCount",
+      "operator": "eq",
+      "threshold": 48
+    },
+    {
+      "id": "p-exact-blocks",
+      "measurement": "exactOutputBlockCount",
+      "operator": "eq",
+      "threshold": 48
+    },
+    {
+      "id": "p-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximum",
+      "measurement": "maximumTreatmentAbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-parent-slice",
+      "measurement": "parentSliceMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-replay",
+      "measurement": "evaluationReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 500000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.05,
+    "uncertaintyRisk": 0.1
+  },
+  "status": "frozen"
+}

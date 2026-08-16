@@ -1,0 +1,475 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The sealed artifacts, complete aggregate manifest digests, exact fixture-identity rows, normalized branch operands, and hash-bound failure receipts."
+    ],
+    "forbiddenInformation": [
+      "Teacher execution, reconstruction of deleted capture scratch, artifact modification, tolerance, coordinate correction, fitted values, or objective credit."
+    ]
+  },
+  "changedMechanism": "Do not execute or reconstruct the teacher. Copy the two sealed artifacts, retain the two identical complete capture-manifest digests and exact fixture-identity rows, and recompute only the two BF16 comparison records through their named fields.",
+  "controls": [
+    {
+      "definition": "Copy both digest-bound tensors from the completed first seal without modification.",
+      "id": "sealed-artifacts",
+      "role": "treatment"
+    },
+    {
+      "definition": "Require the two complete original capture manifests to retain one aggregate digest.",
+      "id": "twin-manifest-aggregate",
+      "role": "replay"
+    },
+    {
+      "definition": "Require both exact declared probe populations and zero non-probe drift from the sealed execution.",
+      "id": "exact-fixture-identity",
+      "role": "comparator"
+    },
+    {
+      "definition": "Read mismatchCount from the named comparison record and require both boundary controls to remain live.",
+      "id": "typed-boundary-comparisons",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2",
+  "generatedUtc": "2026-08-16T13:05:48+00:00",
+  "hypothesis": {
+    "claim": "The first seal retained both exact source artifacts and two byte-identical complete capture manifests before misreading a named comparator result as a tuple; recomputing only the two comparisons yields a valid oracle without teacher execution.",
+    "falsification": "Any sealed-artifact drift, manifest disagreement, probe-population failure, non-probe drift, dead boundary control, typed comparison failure, or result-validation failure rejects finalization."
+  },
+  "inputs": [
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:1e09a75cd7ce2038408d0701cc6c43c48aa0afcda4e846396c7ffe9c649aafc3"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:ba204a604a67c08da63c4f52c624b7720846eb16172bbee6460866d8557326fb"
+    },
+    {
+      "id": "parent-job",
+      "path": "operations/adaptive/failed/000_20260816T130215Z_9a50367a99.json",
+      "sha256": "sha256:816d166ba31694869450a0380a7d00291f38b131608404115ca1bcda793b9b11"
+    },
+    {
+      "id": "parent-log",
+      "path": "run_logs/adaptive/20260816T130215Z_9a50367a99.log",
+      "sha256": "sha256:c77dc7e8fa89f546b1e6680851d7659e9a5d564824c5d0897def65451d58a042"
+    },
+    {
+      "id": "parent-revision",
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/20260816T130158991978Z_0472db71dab5.json",
+      "sha256": "sha256:e85a68e8ca28b6af8c5d9351d72e63b6c99cbd5d2fcaa161705d1fffb22afe7d"
+    },
+    {
+      "id": "sealed-pre-ff-hidden",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/source-pre-ff-hidden.bf16",
+      "sha256": "sha256:14d68fc21722dd9ff36b7d4059d5f11c4b4efa42f37d26b94f1bd2509c19fb5f"
+    },
+    {
+      "id": "sealed-pre-ff-hidden-adjoint",
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/source-pre-ff-hidden-adjoint.bf16",
+      "sha256": "sha256:da8bce1c0725e80cb73c492f2de12490bfcc6b04bc3eefe3724f4409191521b6"
+    },
+    {
+      "id": "normalized-ff1-input",
+      "path": "results/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/open-ff1-input.bf16",
+      "sha256": "sha256:8dedf609838e4e3bf5f114d87d336dbc0890cf18f3920fbd193d55e278987463"
+    },
+    {
+      "id": "normalized-ff1-input-adjoint",
+      "path": "results/nncp_open_top_ff1_input_adjoint_block128_64_q0_v1/source-exact-ff1-input-adjoint.bf16",
+      "sha256": "sha256:9be6125a639c3c7dc0d819cd13e815eae367baee756465a158a240c57defbaf4"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2.py",
+      "sha256": "sha256:2e0d8506e895c6a574467d0ae1d3951e4fd251914dffdcdcf07c30fbe3c28801"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2_materializer.py",
+      "sha256": "sha256:275b175b710bd2a975085fa473e0cc36c83c29af21455011444d125ec9b75d80"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/program.py",
+      "sha256": "sha256:ec80981053875ce3d77d1418c594e7e693827b195a4c8be1d587571d4231f9f6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The failed seal job, candidate revision, guard, log, execution manifest, and both sealed artifact digests remain bound.",
+    "Both complete source capture manifests have one identical aggregate digest.",
+    "Both exact probe populations and all non-probe fixture identity rows remain valid.",
+    "No teacher, model, optimizer, source graph, or deleted transient capture is executed or reconstructed.",
+    "The finalized tensors remain zero-credit oracle evidence and cannot ship in a Gamma codec."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-adjoint-live",
+      "measurement": "adjointComparatorLive",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The open FF1 input adjoint, production fixture, normalized operands, and source probe remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Independent complete source capture populations.",
+      "id": "captureCount",
+      "unit": "captures"
+    },
+    {
+      "definition": "Chronological layer-19 pre-FF hidden samples.",
+      "id": "sampleCount",
+      "unit": "state-stream samples"
+    },
+    {
+      "definition": "Words in the combined source pre-FF hidden input.",
+      "id": "hiddenElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Words in the combined source pre-FF total adjoint.",
+      "id": "adjointElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Two complete hidden and adjoint captures reproduce byte-for-byte.",
+      "id": "sourceCaptureDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Exact input/adjoint, 64-state, bin/meta probe files across both captures.",
+      "id": "declaredProbeFileCount",
+      "unit": "files"
+    },
+    {
+      "definition": "Each manifest contains exactly the declared top_pre_ff_ probe path set.",
+      "id": "declaredProbePopulationExact",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Non-probe files differing from the retained production fixture across both captures.",
+      "id": "nonProbeFixtureMismatchCount",
+      "unit": "files"
+    },
+    {
+      "definition": "Every non-probe fixture file retains its bound size and digest.",
+      "id": "fixturePayloadIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "The captured pre-FF hidden input is not all zero.",
+      "id": "hiddenComparatorLive",
+      "unit": "boolean"
+    },
+    {
+      "definition": "The captured total adjoint is not all zero.",
+      "id": "adjointComparatorLive",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Pre-normalization hidden words differing from the exact normalized FF1 input.",
+      "id": "preVsPostNormInputMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Total hidden-adjoint words differing from the normalized FF branch adjoint.",
+      "id": "totalVsNormBranchAdjointMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Compressed dependency-closed oracle source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All transient build and capture payloads were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/decision.json",
+    "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/execution.json",
+    "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/source-pre-ff-hidden.bf16",
+    "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/source-pre-ff-hidden-adjoint.bf16",
+    "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/20260816T130158991978Z_0472db71dab5.json",
+      "sha256": "sha256:e85a68e8ca28b6af8c5d9351d72e63b6c99cbd5d2fcaa161705d1fffb22afe7d"
+    }
+  },
+  "population": {
+    "coordinate": "state-major, stream-major, feature-major",
+    "scopeBytes": 4194304,
+    "scopeSymbols": 2097152,
+    "selection": "Every one of 1,024 features for all 64 chronological states and 32 streams at production block 256.",
+    "unit": "BF16 layer-19 pre-FF hidden-adjoint words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-captures",
+      "measurement": "captureCount",
+      "operator": "eq",
+      "threshold": 2
+    },
+    {
+      "id": "p-samples",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-hidden-elements",
+      "measurement": "hiddenElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-adjoint-elements",
+      "measurement": "adjointElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-deterministic",
+      "measurement": "sourceCaptureDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-probe-files",
+      "measurement": "declaredProbeFileCount",
+      "operator": "eq",
+      "threshold": 512
+    },
+    {
+      "id": "p-probe-population",
+      "measurement": "declaredProbePopulationExact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-fixture-count",
+      "measurement": "nonProbeFixtureMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-fixture",
+      "measurement": "fixturePayloadIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-hidden-live",
+      "measurement": "hiddenComparatorLive",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-adjoint-live",
+      "measurement": "adjointComparatorLive",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-input-boundary",
+      "measurement": "preVsPostNormInputMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-adjoint-boundary",
+      "measurement": "totalVsNormBranchAdjointMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v2",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 0.0,
+    "interactionRisk": 0.1,
+    "uncertaintyRisk": 0.1
+  },
+  "status": "frozen"
+}

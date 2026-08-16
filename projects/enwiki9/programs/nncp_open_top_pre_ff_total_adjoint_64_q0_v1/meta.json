@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1"
+  ],
+  "description": "Exact composition of the open RMSNorm branch and direct residual adjoints",
+  "family": "nncp_update_schedule",
+  "hypothesis": "BF16 addition of the exact open RMSNorm branch adjoint and exact direct residual reproduces every source pre-FF total-adjoint word.",
+  "id": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T143328Z_5fb15662ea": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T143328Z_5fb15662ea.json",
+        "sha256": "sha256:dc542c8a7d947ba7003042c39b25b5f9efa84583e6b3f02d25c7d472cf45e2ad",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_v1.json",
+      "sha256": "sha256:8ea99017f16526400dd0f1874a21b0204fc42999f36ebb6b4c5d98b9a4546984"
+    },
+    "interfaces_exposed": [
+      "exact RMSNorm branch adjoint plus direct residual -> exact pre-FF total adjoint"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+    "proposal_id": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+    "retired_neighborhoods": [
+      "post-merge-only branch conversion"
+    ]
+  },
+  "parent": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "status": "measured_negative",
+  "verdict": "Preserve the exact RMSNorm formula and direct residual, then replay the live join with the raw F32 normalization branch before its BF16 conversion and compare the complete population."
+}

@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T074218Z_9b38a51094.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t074218z_9b38a51094",
+  "failure": "The remaining source/open disagreement is not in FF2, final RMSNorm forward normalization, affine gain/bias handling, or the tested per-element backward expression orders; it is upstream in the two scalar backward reductions, mean(g) and/or mean(g*y).",
+  "mechanism": "Replace the false zero-bias assumption with digest-bound ln_g_40/ln_b_40 extraction, validate the reconstructed normalized output by exact affine replay against the retained production output, then apply the unchanged six-order family to the retained production input and independent source adjoint.",
+  "population": "one production state or BF16 activation/gradient word; All retained 64 states across 32 streams: 2,097,152 input, affine-output, incoming-residual, open-adjoint, and source-adjoint words plus 1,024 gain and bias words.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T07:45:42+00:00",
+  "retired_dimensions": [
+    "Per-element centered/standard subtraction and FMA/split order at fixed current scalar reductions."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

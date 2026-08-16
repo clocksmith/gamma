@@ -1,0 +1,101 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The source w_o_19 transpose uses eight ordered 128-feature FMA panels whose completed sums are accumulated before a single BF16 materialization; one unblocked 1,024-feature chain changes 285 BF16 outputs."
+  },
+  "candidateId": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+    "candidateTreeSha256": "sha256:4c152e1e9e2b7117e60f4b4b8cc9ae4e937415a73e2aa03ac49d6525a81aeaa5",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_w_o_input_adjoint_block128_64_q0_v1/20260816T164250658353Z_4c152e1e9e2b.json",
+      "sha256": "sha256:35ec0e121c4f107658c0e8f4f1c23578c6c3dc4a8f14055d1968c264f8efcc8c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Descend to the pre-w_o forward attention value next. Freeze an exact source comparator and validate a LibNC-free generation path before using this residual in a shippable adaptation mechanism.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:a3a5b8b76cd878ac904acd2b674a2972b0a13c740d8a2748ef18977c16f1ed75"
+    },
+    {
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2ca946fa990a0b07ab6c70c0fdda90f54a4f0b491ba4abce76793db828df4ede"
+    },
+    {
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:c5a43f9f7d3446521259ca8a0366c9842466960329e58ab9ba984dd623504fa6"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_input_adjoint_block128_64_q0_v1.json",
+    "sha256": "sha256:d34660d8a1d4df0e6c0f0edd0005ed88097e5221aef4ee36cc34c48a7e4c99f3"
+  },
+  "generatedUtc": "2026-08-16T16:45:10+00:00",
+  "hypothesis": {
+    "rationale": "The ordered eight-panel treatment had zero mismatches and zero maximum error across the complete pre-w_o input-adjoint population, while both prospectively frozen arithmetic and sign controls remained live.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T164348Z_ff5718724e.json",
+    "sha256": "sha256:d1ee7daf92519f14609bac0c549ba87686ec902ebbba16a1fe2af60001b81f49"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Treating an unblocked 1,024-feature transpose reduction as arithmetically equivalent to the source w_o_19 backward path"
+    ],
+    "transferableLessons": [
+      "The independently attributed 128-feature transpose-panel schedule transfers exactly to the complete w_o_19 residual when initial weights and the open incoming adjoint are fixed prospectively."
+    ],
+    "uncertainties": [
+      "This closes only the layer-19 w_o backward transpose. The initial matrix is sealed source state, the pre-w_o forward input remains teacher-produced, and the result earns zero Hutter objective credit."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/adjointElementCount",
+      "source": {
+        "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/decision.json",
+        "sha256": "sha256:a3a5b8b76cd878ac904acd2b674a2972b0a13c740d8a2748ef18977c16f1ed75"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2097152,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t164348z_ff5718724e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound LibNC-free evaluator completed two byte-identical treatment and control populations; all 2,097,152 ordered-panel treatment words matched the independently captured source input adjoint; the unblocked control differed at 285 coordinates; the sign-negated control differed everywhere; and dependency, source, memory, disk, and cleanup guards passed."
+    ],
+    "valid": true
+  }
+}

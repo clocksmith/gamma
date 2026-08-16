@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "claimed_at": "2026-08-16T12:11:21+00:00",
+  "created_at": "2026-08-16T12:11:14+00:00",
+  "developed_at": "2026-08-16T12:11:22+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json",
+      "sha256": "sha256:06b1cfac355d97a5bf88790c36ab32cab4c5da8eb390c91f02624af16a3c1cbf"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1.json",
+    "sha256": "sha256:908975fcc3c4f58aac149cd9449a4ab632a1ce587e9e46fc0339b44668521c7d"
+  },
+  "hypothesis": "The exact post-dot prior-add schedule transfers uniformly from the frozen 128-row slice to all 6,144 ff1_19 output rows and reproduces the retained 6,291,456-word gradient byte-for-byte.",
+  "interfaces_exposed": [
+    "exact open BF16 FF1 operands -> full source-exact ff1_19 gradient"
+  ],
+  "kill_condition": "Any nonzero complete-gradient mismatch or failed antecedent, partition, parent-slice, replay, dependency, source, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1458,
+  "promotion_condition": "Exact parity over all 6,291,456 words and every 128-row partition; exact parent-slice retention; deterministic full replay; no forbidden dependency; green source and resource guards.",
+  "proposal_id": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "retired_neighborhoods": [
+    "Slice-only FF1 matrix-gradient evidence"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1473,
+  "state": "developed",
+  "title": "Full exact open top-FF1 weight gradient"
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+  "claimed_at": "2026-08-16T07:52:25+00:00",
+  "created_at": "2026-08-16T07:52:25+00:00",
+  "developed_at": "2026-08-16T07:52:26+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T074218Z_9b38a51094.json",
+      "sha256": "sha256:55500e68a263270062961de2fc3efaf9d33ca2dcc0e73f6e6befcb948be97a32"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1/decision.json",
+      "sha256": "sha256:39040df3109f8c23bb3980a0c97f30730ae8aa4bafd764559f564353c1c28983"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:e347e0ac04dbf614daf2283a9530a081457a207f510afe97a39af14c19f6a482"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1.json",
+    "sha256": "sha256:506f504ad38fa82ff201bf1ee6675042ff3ab079cb6a2aae2dc18ae35023faf2"
+  },
+  "hypothesis": "Exactly the disassembly-derived combination of a streaming eight-lane BF16 dot reduction and width-scaled fused backward expression reproduces every retained source final-RMSNorm input-adjoint word; the other three factorial combinations do not.",
+  "interfaces_exposed": [
+    "retained production tensors plus exact affine replay -> source-exact final-RMSNorm backward evaluator"
+  ],
+  "kill_condition": "Retire only a nonunique source-exact factorial family; otherwise localize the next unmodeled production arithmetic boundary.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "priority": 1474,
+  "promotion_condition": "Exact baseline-open replay, two byte-identical evaluator runs, exactly one source-exact cell identified as streaming-dot plus width-scaled fusion, live negative control, bound source digest, and green guards.",
+  "proposal_id": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not resweep per-element mean-scaled subtraction/FMA orders at the generic dot reduction."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1492,
+  "state": "developed",
+  "title": "Exact production BF16 final-RMSNorm reduction and scaling"
+}

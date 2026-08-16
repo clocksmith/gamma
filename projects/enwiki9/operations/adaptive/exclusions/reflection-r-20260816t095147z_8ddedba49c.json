@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T095147Z_8ddedba49c.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t095147z_8ddedba49c",
+  "failure": "The first remaining divergence is after the source-exact FF2-input adjoint and before or within the ff_bias1_19 projection: the GEGLU split-branch backward arithmetic and BF16 boundaries.",
+  "mechanism": "No arithmetic or scientific predicate changes. Bind the terminal implementation-failure reflection and restore the complete guarded runner invocation with explicit experiment and output arguments.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T10:03:51+00:00",
+  "retired_dimensions": [
+    "FF2 transpose arithmetic as the cause of the retained ff_bias1_19 mismatch."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

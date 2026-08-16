@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "invalid-experiment",
+    "localizedCause": "The gate correctly established ln_g_40 is all one but incorrectly treated ln_b_40 as zero; its 561 distinct BF16 bias words span nonzero values."
+  },
+  "candidateId": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:8c6e24f42831442418774a558e6071a1f48bffe8642a7a5899a49439e364f1fa",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/20260816T072334216369Z_8c6e24f42831.json",
+      "sha256": "sha256:33bb9a1f328ebeb78ff8771b7195b68526e19fb443c7788765703d0d87192fad"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a successor that extracts the digest-bound ln_b_40 bias, validates reconstructed normalized output through exact affine replay, replays the current order against the retained open residual, and only then classifies the unchanged six-order family.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:17693abf5b68cadc86490090ee60a40f6ef0ff87d740b15cc5d17b1e54035df3"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:e347e0ac04dbf614daf2283a9530a081457a207f510afe97a39af14c19f6a482"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:05b37b52c8c0d844676b4e9e8bac6fe6c448e085723417747511079e48d63115"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1.json",
+    "sha256": "sha256:831b55dffebece6bc2ee02c146203c2c137a1acc4920eef9415b885b149d46fe"
+  },
+  "generatedUtc": "2026-08-16T07:37:34+00:00",
+  "hypothesis": {
+    "rationale": "The captured post-affine tensor differs from the raw normalized tensor by the nonzero digest-bound ln_b_40 bias, so the six backward-order comparisons used the wrong normalized operand and cannot test the frozen hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T072401Z_436d248c4d.json",
+    "sha256": "sha256:a72a8e639a977de8a78fe8e06d4a49ea028ba2dc5bddfaa349ad52054d1035b3"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A final-normalization oracle must distinguish raw RMSNorm output from post-gain/post-bias affine output and validate the affine reconstruction explicitly.",
+      "The repeated production input and affine-output captures remain valid zero-credit evidence and can support a bounded replay without another teacher execution."
+    ],
+    "uncertainties": [
+      "Which frozen subtraction/FMA order, if any, exactly reproduces the source input adjoint remains unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t072401z_436d248c4d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "invalid-experiment",
+    "reasons": [
+      "Both production captures and fixture controls are valid, but the gate compared the reconstructed raw RMSNorm output with the captured post-affine output while falsely assuming ln_b_40 was zero."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "candidate_id": "nncp_open_top_w_o_input_forward_64_q0_v1",
+  "claimed_at": "2026-08-16T16:53:07+00:00",
+  "created_at": "2026-08-16T16:53:06+00:00",
+  "developed_at": "2026-08-16T16:53:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+      "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T033450Z_727c49438a.json",
+      "sha256": "sha256:05fb82c6d1a5566318ea760c56bbbf485efb29c08087ac7cb5144af1135b3662"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T162351Z_97a6519638.json",
+      "sha256": "sha256:235cf7e5745ceca67971e34f74d7ef146403061302e2dbd7653a863360a7a9b5"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_w_o_input_forward_64_q0_v1.json",
+    "sha256": "sha256:10791780a10e39691304a1e5664c2e9e78615287c54d6e2a2b3650030f7549f3"
+  },
+  "hypothesis": "The independently exact open 32-stream forward, with only its layer-19 merged-attention value exposed, reproduces every one of the 2,097,152 source pre-w_o BF16 words in state-major, stream-major, feature-major order, while a stream-major assembly control differs.",
+  "interfaces_exposed": [
+    "sealed initial fixture plus pinned open forward -> exact layer-19 pre-w_o value"
+  ],
+  "kill_condition": "Any treatment mismatch, stale layer checkpoint, dead coordinate control, nondeterministic replay, undeclared dependency, or resource failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1537,
+  "promotion_condition": "Zero treatment mismatches across all 2,097,152 words; all 640 layer-input checkpoints exact; live order control; exact complete replay; explicit static source; green dependency and resource guards.",
+  "proposal_id": "nncp_open_top_w_o_input_forward_64_q0_v1",
+  "retired_neighborhoods": [
+    "Assuming downstream forward parity alone proves the unexposed pre-w_o intermediate"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1537,
+  "state": "developed",
+  "title": "Open layer-19 pre-w_o forward value"
+}

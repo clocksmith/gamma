@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": false,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The evaluator compiled libnc.h without -DLIBNC_CONFIG_FULL, so its conditional NC type configuration did not match the digest-bound full-config libnc.so ABI."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:661eebb24d2ac5b37193c939b38ae23ff14a3942ea022e1da819e206dfc178d1",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_retry_v2/20260816T145915084414Z_661eebb24d2a.json",
+      "sha256": "sha256:a104e627b089e82200aca2c6a728b1d4bc8413233c2d46558ca413b20a7c8722"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Keep the rank-2 evaluator and scientific contract unchanged; compile it with the production LIBNC_CONFIG_FULL definition plus the already-scoped external-header warning suppression.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:db3cb2518783f9c096504f7110abe1528dc8011c5e34ed2a8354401d803a3231"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T145928Z_74068bcb9c.log",
+      "sha256": "sha256:54f526d5583f53ef4a293572d0050bbb912ebe8263a8c3d5553f8ca665ddc120"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v2.json",
+    "sha256": "sha256:8952bf503c9dd8a4ef65204175505892d60f38adda91a9a87034c84e0ba8dea4"
+  },
+  "generatedUtc": "2026-08-16T15:02:06+00:00",
+  "hypothesis": {
+    "rationale": "No single-path control or merge population was produced, so the graph-order merge hypothesis remains untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T145928Z_74068bcb9c.json",
+    "sha256": "sha256:5aab4fd1be9f6812a4f91bda5c4e7c8efa1898432728da42b01a8c741dbb3342"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A digest-bound shared library is not sufficient evidence of ABI identity when public type enums or layouts depend on compile-time configuration."
+    ],
+    "uncertainties": [
+      "Whether the full-config rank-2 evaluator reproduces each adjoint and the source total."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t145928z_74068bcb9c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The production-shaped evaluator compiled and resolved the attributed library, but the first nc_mul still aborted before any gradient because the client omitted the LIBNC_CONFIG_FULL ABI configuration used by the production NNCP build."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "claimed_at": "2026-08-16T07:41:50+00:00",
+  "created_at": "2026-08-16T07:41:49+00:00",
+  "developed_at": "2026-08-16T07:41:52+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T072401Z_436d248c4d.json",
+      "sha256": "sha256:c5be9786695fcd132fe457daada04730da171b473c672b7915e9e2cbb243745e"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_order_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:17693abf5b68cadc86490090ee60a40f6ef0ff87d740b15cc5d17b1e54035df3"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:dd2b633ab786acaa462522745a5d58a83ad6affff99b8d3e60a7a9a8f4c5eca8"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_affine_order_64_q0_v1.json",
+    "sha256": "sha256:4eee63a5d6d2576113c5df0b48e1b4516603c79d33731dd337643aa3ae30c4e9"
+  },
+  "hypothesis": "The digest-bound ln_b_40 affine replay validates the reconstructed raw normalized output, the current pre-centered FMA order exactly reproduces the retained open residual but differs from source, and exactly one unchanged alternative order reproduces every source-adjoint word.",
+  "interfaces_exposed": [
+    "retained production input plus exact affine replay -> source-exact final-RMSNorm arithmetic order"
+  ],
+  "kill_condition": "Retire this finite order family only on a nonunique source-exact result or an exact current-source result; otherwise localize the next numerical boundary.",
+  "max_program_bytes": 1000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_libnc_final_rmsnorm_order_64_q0_retry_v1",
+  "priority": 1473,
+  "promotion_condition": "Exact affine replay, exact current-open replay, two identical evaluator runs, one unique source-exact alternative, live controls, bound inputs, and green source/resource guards.",
+  "proposal_id": "nncp_libnc_final_rmsnorm_affine_order_64_q0_v1",
+  "retired_neighborhoods": [
+    "Never conflate raw RMSNorm output with post-bias affine output, even when the gain tensor is exactly one."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1491,
+  "state": "developed",
+  "title": "Bias-aware exact production BF16 final-RMSNorm order"
+}

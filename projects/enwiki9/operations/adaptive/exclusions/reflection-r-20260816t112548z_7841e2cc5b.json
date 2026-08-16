@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T112548Z_7841e2cc5b.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t112548z_7841e2cc5b",
+  "failure": "FF1 broadcast-bias reduction is exactly a chronological sequence of 64 state-panel reductions: decode the prior BF16 parameter gradient, add streams 0 through 31 in float32, and materialize round-to-nearest-even BF16 once after every state.",
+  "mechanism": "Replace the digest-bound LibNC teacher call with explicit float32 sequential stream adds and round-to-nearest-even BF16 materialization at every chronological state boundary.",
+  "population": "BF16 FF1-output adjoint elements; All 64 states, 32 streams, and 6,144 features from the source-exact parent artifact.; scopeBytes=25165824; scopeSymbols=12582912",
+  "recorded_at": "2026-08-16T11:28:43+00:00",
+  "retired_dimensions": [
+    "LibNC as a runtime or oracle dependency for FF1 bias-gradient reduction"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

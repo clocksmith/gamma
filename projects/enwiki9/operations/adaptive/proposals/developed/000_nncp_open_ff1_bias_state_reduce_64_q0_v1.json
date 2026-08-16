@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+  "claimed_at": "2026-08-16T11:24:23+00:00",
+  "created_at": "2026-08-16T11:24:23+00:00",
+  "developed_at": "2026-08-16T11:24:24+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T111831Z_64dcc1173e.json",
+      "sha256": "sha256:952235d52c0fa2074825454daf5cea177d5e33bce9fe010f3e16290853333f37"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_bias_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:4f5b7f65ae02e5ef2377da6278bbd6103a9091281daa08a96014dd9c5dc133b6"
+  },
+  "hypothesis": "A LibNC-free reducer that accumulates 32 BF16 stream adjoints sequentially into the prior BF16 gradient and materializes BF16 once after each of 64 chronological states reproduces every independent oracle ff_bias1_19 word.",
+  "interfaces_exposed": [
+    "source-exact FF1-output BF16 adjoint -> LibNC-free source-exact bias gradient"
+  ],
+  "kill_condition": "Any nonzero treatment/oracle mismatch or failed antecedent, replay, control, dependency, source, or guard predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "parent_proposal_id": null,
+  "priority": 1462,
+  "promotion_condition": "Exact parity over all 6,144 independent oracle words, exact frozen control populations, deterministic replay, no forbidden dynamic dependency, and green guards.",
+  "proposal_id": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+  "retired_neighborhoods": [
+    "Single flat reduction across all 2,048 samples"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1477,
+  "state": "developed",
+  "title": "Open FF1 bias state-boundary reduction"
+}

@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The first remaining divergence is after the source-exact FF2-input adjoint and before or within the ff_bias1_19 projection: the GEGLU split-branch backward arithmetic and BF16 boundaries."
+  },
+  "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:926794f9e1d37c20365b3f1641eec2f58c6f2452d64d95c64deb28c8279da380",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/20260816T095132877494Z_926794f9e1d3.json",
+      "sha256": "sha256:340cf37b59db29854bb22cb19b545a2e054cfeab4c0b53bb8ce8c4d89d228203"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a production source capture of both layer-19 GEGLU split-branch adjoints, compare only after complete branch payloads exist, and attribute each branch independently before another open formula retry.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:26440050deda40eba87aa567c6230a3ef8988ca03b1d4d57047e0547658d783d"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:467b80c245e9769b54cced512e04b93a9e5b8ff7b3cd7bea60d0255429d7c805"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:36dd2d130eb56ea0b4f592e91264fe23f99315ed111ee06295574b035ef91916"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2.json",
+    "sha256": "sha256:771cdaf5680bc07cbd97576752715c3ee355bee2a404af631567b36ac1850c9e"
+  },
+  "generatedUtc": "2026-08-16T10:03:51+00:00",
+  "hypothesis": {
+    "rationale": "The exact 128-panel FF2 residual matched all 6,291,456 captured source BF16 words with zero error, but the unchanged GEGLU path still differed from retained ff_bias1_19 in 4,708 of 6,144 words with maximum absolute error 1.52587890625e-05.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T095147Z_8ddedba49c.json",
+    "sha256": "sha256:4049a891b0ff025e5cc75dfdfaa482653d35bfd2a154d4969b44a310ac9bf9c0"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "FF2 transpose arithmetic as the cause of the retained ff_bias1_19 mismatch."
+    ],
+    "transferableLessons": [
+      "The exact FF2 transpose generalizes inside the full replay; do not revisit its horizontal or unblocked variants. Capture the two production GEGLU branch adjoints before changing formulas."
+    ],
+    "uncertainties": [
+      "Exact multiply, GELU-derivative, and BF16 materialization order inside the two GEGLU branches remains unresolved."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t095147z_8ddedba49c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen invocation-corrected gate completed two full 32-stream populations, reproduced all 640 forward checkpoints, emitted byte-identical replay artifacts, retained a live sign control, validated strict outputs, and passed dependency, source, memory, scratch, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

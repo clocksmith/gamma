@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The residual topology is correct, but three source coordinates retain arithmetic information not present in the two separately rounded BF16 branch artifacts; the remaining boundary is conversion placement or branch precision at the live source residual join."
+  },
+  "candidateId": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_total_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:322ee5e1e8d44e61b73118053bd9f46c6d6c210f2e947ffb3b7267b328061c25",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/20260816T143219486538Z_322ee5e1e8d4.json",
+      "sha256": "sha256:bc4640c3ea37e93ecd90424b34f4d8c0d15efd7929cf40d7d5c2a3d60ec46212"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Preserve the exact RMSNorm formula and direct residual, then replay the live join with the raw F32 normalization branch before its BF16 conversion and compare the complete population.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/decision.json",
+      "sha256": "sha256:fcdf9d0109eddaa9c2a4eeed1be275e344a38a863c91c3a51e6fd5efcec8e9a3"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/execution.json",
+      "sha256": "sha256:9c776bbfcaf36ef730d6316b548acbaebc7da6be4e6c041f9d5f07242a6b4c2e"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:c9311fdc7dcc6666f313a20f020da75498b70d560d943d5222f9982a821161e6"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_total_adjoint_64_q0_v1.json",
+    "sha256": "sha256:8ea99017f16526400dd0f1874a21b0204fc42999f36ebb6b4c5d98b9a4546984"
+  },
+  "generatedUtc": "2026-08-16T14:36:59+00:00",
+  "hypothesis": {
+    "rationale": "BF16 addition of the exact branch and direct artifacts matched 2,097,149 words but differed from the sealed source total at three coordinates, so artifact-level pre-rounded composition is not byte-exact.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T143328Z_5fb15662ea.json",
+    "sha256": "sha256:9e511d5b1af94ea7f4ad141eae419a467c2fac62abf82ca48c7318a49460d663"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "pre-rounded-bf16-branch-plus-pre-rounded-bf16-direct-as-exact-pre-ff-join"
+    ],
+    "transferableLessons": [
+      "Exact component artifacts do not prove that the live join consumes those rounded representations; separately probing a branch can insert a conversion boundary absent from the original graph.",
+      "Three isolated mismatches are sufficient to block promotion of an exact codec update even when every other word matches."
+    ],
+    "uncertainties": [
+      "Whether the source join consumes the raw F32 RMSNorm branch, a differently rounded direct branch, or another fused arithmetic form at the three boundary coordinates."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t143328z_5fb15662ea",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The complete 2,097,152-word composition ran twice from sealed teacher-free inputs, replayed identically, preserved a live negated control, used no forbidden dependency, passed resource guards, and validated its strict result receipt."
+    ],
+    "valid": true
+  }
+}

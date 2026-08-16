@@ -1,0 +1,464 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -500000,
+    "maximumAddedPackageBytes": 500000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The sealed source pre-w_o input, exact open post-w_o adjoint, prior exact FF1 arithmetic contract, and retained w_o_19 comparator slice.",
+      "Only the prospectively frozen cells are evaluated."
+    ],
+    "forbiddenInformation": [
+      "LibNC execution, fitting to mismatch coordinates, tolerance, future symbols, or editing the sealed source oracle.",
+      "Claiming open forward completion, a full w_o_19 gradient, compression improvement, or Hutter credit from this slice."
+    ]
+  },
+  "changedMechanism": "Apply the already attributed LibNC-free 32-stream post-dot prior-add BF16/FMA state update to a prospectively frozen 128-row w_o_19 slice, with prior-initialized, nonfused, reverse-state, and sign-negated controls.",
+  "controls": [
+    {
+      "definition": "Accumulate 32 sequential AVX2 FMAs from zero, add the prior BF16 value, then round to BF16 after each chronological state.",
+      "id": "post-dot-add",
+      "role": "treatment"
+    },
+    {
+      "definition": "Initialize the FMA chain with the decoded prior gradient.",
+      "id": "prior-fma",
+      "role": "comparator"
+    },
+    {
+      "definition": "Use separate multiply and add operations.",
+      "id": "nonfused",
+      "role": "comparator"
+    },
+    {
+      "definition": "Apply the treatment in reverse state order.",
+      "id": "reverse-state",
+      "role": "shifted"
+    },
+    {
+      "definition": "Negate every incoming adjoint while preserving the treatment schedule.",
+      "id": "negated",
+      "role": "negative"
+    },
+    {
+      "definition": "Repeat all five cells byte-for-byte.",
+      "id": "replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "generatedUtc": "2026-08-16T16:29:41+00:00",
+  "hypothesis": {
+    "claim": "The previously attributed LibNC-free chronological post-dot prior-add BF16/FMA kernel exactly reconstructs the first 128 output rows of the retained w_o_19 gradient from the sealed pre-w_o input and independently opened post-w_o adjoint, while reversed and sign-negated controls differ.",
+    "falsification": "Any treatment mismatch, dead control, nondeterministic replay, forbidden dependency, source failure, or resource failure rejects transfer of the arithmetic contract to w_o_19."
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5ab66cfbd3b4e21d367ab9819da89f3ab3f73c8755a326175808d24b7b43ccd3"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:9d7c025e350ef09e01a31472556d0615e230b5031b105a72234058e3b99a6660"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:69902d08b7b5c0e68f0afc0c6046082303d64f10ab2d4f6d903834db49a6b9f4"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T162351Z_97a6519638.json",
+      "sha256": "sha256:235cf7e5745ceca67971e34f74d7ef146403061302e2dbd7653a863360a7a9b5"
+    },
+    {
+      "id": "source-w-o-input",
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/source-w-o-input.bf16",
+      "sha256": "sha256:15fcaea4146ec1f6c361c527ef74ac740b8a0ab1458ea5909c5df8ce2109265e"
+    },
+    {
+      "id": "upstream-decision",
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:eb24b73027541b2120941a2c60dacccd02b62c5e64d1edeaea19710cac26409b"
+    },
+    {
+      "id": "upstream-execution",
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:96357b7028b80a33ea55d4bacdc31a273a46d18c4b2fa73efaba98813e842870"
+    },
+    {
+      "id": "upstream-guard",
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:aa543079d0782be754c2726621e5f861916db00f3da907ba3f5ccc6b78b44187"
+    },
+    {
+      "id": "upstream-reflection",
+      "path": "operations/adaptive/reflections/20260816T155508Z_53d5388d2c.json",
+      "sha256": "sha256:14b8cd6e29d2e19f31b43de9b5d679c8f4a468f0a49326d595ce834558d1dec8"
+    },
+    {
+      "id": "open-post-w-o-adjoint",
+      "path": "results/nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1/source-exact-pre-ff-total-adjoint.bf16",
+      "sha256": "sha256:da8bce1c0725e80cb73c492f2de12490bfcc6b04bc3eefe3724f4409191521b6"
+    },
+    {
+      "id": "schedule-decision",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/decision.json",
+      "sha256": "sha256:c796fa9fef6cb0485f55a91ff8fff6cf58468827ecda6549735b7908b0e42f62"
+    },
+    {
+      "id": "schedule-execution",
+      "path": "results/nncp_open_ff1_weight_slice_post_add_64_q0_v1/execution.json",
+      "sha256": "sha256:da552c5a75ac79b42de1dabc8065ca939871c111d91d425740f6c18a3d41965c"
+    },
+    {
+      "id": "schedule-reflection",
+      "path": "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json",
+      "sha256": "sha256:06b1cfac355d97a5bf88790c36ab32cab4c5da8eb390c91f02624af16a3c1cbf"
+    },
+    {
+      "id": "retained-w-o-gradient",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0007_w_o_19.bin",
+      "sha256": "sha256:1f0d7beb11f45cd349ad340ea02a44d7ece9a40461bf84a78ebe74732bf4bc8d"
+    },
+    {
+      "id": "retained-w-o-gradient-meta",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0007_w_o_19.meta",
+      "sha256": "sha256:5db00194eefba04f6fcce6a980a9eeda53bfb8ab73af870777e6844864a48c08"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_open_w_o_weight_slice_post_add_64_q0_v1/w_o_weight_slice_post_add.cpp",
+      "sha256": "sha256:eab11a5a1ecde2e3a850498976de28d62e1fd830907c88ffa2d4d163a7664c1b"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_w_o_weight_slice_post_add_64_q0.py",
+      "sha256": "sha256:45ceddbd68342c7b0ade7f51beb412574b2ec4bbd139b07485b27089ad7d56e7"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_w_o_weight_slice_post_add_64_q0_materializer.py",
+      "sha256": "sha256:12a66c10a78e07bda839696364860befcaec1fc5b53ad92c25d153d4b8748879"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_w_o_weight_slice_post_add_64_q0_v1/program.py",
+      "sha256": "sha256:4a1dc90168e18850ca8603fa28acf55e4a99694434770ac3c7a9543fbfea2b44"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The source pre-w_o input and independently opened post-w_o adjoint are used verbatim in state-major order.",
+    "The comparator is a prospectively bound slice of the retained production w_o_19 gradient.",
+    "The evaluator has no LibNC, GGML, CUDA, OpenMP, or BLAS dependency.",
+    "No source tensor or retained gradient can ship in a Gamma codec; this lane earns zero objective credit."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The exact source input, open output adjoint, retained gradient, and prior arithmetic contract remain hash-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Words in the 128-by-1,024 w_o_19 gradient slice.",
+      "id": "sliceElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Post-dot-add treatment words differing from the retained gradient slice.",
+      "id": "treatmentMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum treatment/comparator error.",
+      "id": "maximumTreatmentAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Prior-initialized FMA control words differing from the retained slice.",
+      "id": "priorControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Nonfused control words differing from the retained slice.",
+      "id": "nonfusedControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Reverse-state control words differing from the retained slice.",
+      "id": "reverseControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Sign-negated control words differing from the retained slice.",
+      "id": "negatedControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Two complete open evaluations are byte-identical.",
+      "id": "evaluationReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Evaluator dependencies on LibNC, GGML, CUDA, OpenMP, or BLAS.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "libraries"
+    },
+    {
+      "definition": "Compressed dependency-closed source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Transient work was removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/decision.json",
+    "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/execution.json",
+    "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/source-exact-w-o-gradient-slice.bf16",
+    "results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_w_o_input_adjoint_64_q0_retry_v1/20260816T162337175064Z_7a3bb8fdcc41.json",
+      "sha256": "sha256:44e9bc844263a6bfd6addb6cfc6c75dc79e65a3e858d2336f8550b3af964cb46"
+    }
+  },
+  "population": {
+    "coordinate": "input-feature-major, output-feature-minor",
+    "scopeBytes": 262144,
+    "scopeSymbols": 131072,
+    "selection": "The first 128 output features for all 1,024 input features over all 64 chronological states and 32 streams.",
+    "unit": "BF16 w_o_19 matrix-gradient words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-elements",
+      "measurement": "sliceElementCount",
+      "operator": "eq",
+      "threshold": 131072
+    },
+    {
+      "id": "p-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximum",
+      "measurement": "maximumTreatmentAbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-reverse-control",
+      "measurement": "reverseControlMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-negated-control",
+      "measurement": "negatedControlMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-replay",
+      "measurement": "evaluationReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 500000
+    },
+    {
+      "id": "p-work",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_open_w_o_weight_slice_post_add_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.1,
+    "uncertaintyRisk": 0.1
+  },
+  "status": "frozen"
+}

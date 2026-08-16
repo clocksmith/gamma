@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T142835Z_50298bd574.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t142835z_50298bd574",
+  "failure": "The inherited open pre-FF backward applied a LayerNorm-only mean-upstream subtraction to a production RMSNorm node; the previously measured LibNC output-order RMS formula is byte-exact.",
+  "mechanism": "Change only the normalization input-adjoint formula from the LayerNorm-style mean-upstream subtraction to the previously measured LibNC RMSNorm output order: inverse times upstream minus normalized output times mean upstream-output product.",
+  "population": "BF16 layer-19 pre-FF normalization-branch adjoint words; Every one of 1,024 features for all 64 chronological states and 32 streams at production block 256.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T14:29:32+00:00",
+  "retired_dimensions": [
+    "pre-ff-layernorm-mean-upstream-subtraction"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

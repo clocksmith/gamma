@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T114029Z_4b8fd50e01.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t114029z_4b8fd50e01",
+  "failure": "The production ff1_19 weight gradient preserves decoder graph-state boundaries: each 128-by-32 FF1-output adjoint panel is multiplied by the transposed 1,024-by-32 BF16 FF1 input and accumulated into the existing BF16 gradient before the next chronological state.",
+  "mechanism": "Expose the exact layer-19 FF1 matrix input, then replace an unspecified whole-population projection with the statically attributed backward call: nc_matmul_add2(state_residual, state_input, existing_gradient, false, true, 1, 0) for 64 chronological states.",
+  "population": "BF16 FF1 matrix-gradient operands; All 64 states, all 32 streams, all 1,024 FF1 inputs, the complete 6,144-feature adjoint, and a prospectively frozen adjacent 128-output gradient slice.; scopeBytes=29360128; scopeSymbols=14680064",
+  "recorded_at": "2026-08-16T11:53:53+00:00",
+  "retired_dimensions": [
+    "One flat 2,048-sample FF1 weight-gradient matrix product as a source-exact projection"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

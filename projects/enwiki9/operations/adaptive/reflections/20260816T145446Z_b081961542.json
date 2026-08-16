@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": false,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The oracle flattened the production 1,024-feature by 2,048-column BF16 tensor into rank 1, outside LibNC nc_mul type/geometry support."
+  },
+  "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_bf16_gradient_merge_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:ca3fe5ace0d44118beedb0a697b0f0325625fb33ca3df60dc9ecb4e58002252c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_bf16_gradient_merge_64_q0_retry_v1/20260816T145434832864Z_ca3fe5ace0d4.json",
+      "sha256": "sha256:fecb5bc77b119c3914e3a6ee058426258d4eb650a76f261ccb76b0f67f639154"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retry with a 1,024 by 2,048 BF16 tensor and state-stream columns while preserving every value, graph variant, comparator, and library digest.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_bf16_gradient_merge_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:f9c94bf98f87610964de1d45696fab556c94811a59da86598925640139a8128c"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T145446Z_b081961542.log",
+      "sha256": "sha256:7b2c32a96dfb88fc4deb3724123694bdf63e05207418616d3079f742586923a7"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_bf16_gradient_merge_64_q0_retry_v1.json",
+    "sha256": "sha256:ad865f1cfe6f2421eb9909f72c68b231aad96347638508adcbb5b7fe357630b5"
+  },
+  "generatedUtc": "2026-08-16T14:57:33+00:00",
+  "hypothesis": {
+    "rationale": "Neither a single-path control nor a merge population was materialized, so the scientific merge hypothesis remains untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T145446Z_b081961542.json",
+    "sha256": "sha256:f4e0ac75eb121f534c38a50f36966c91ac424b61059f04d96d278756ebf0c4ad"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Primitive arithmetic oracles must preserve tensor rank and axis layout as well as element values and type."
+    ],
+    "uncertainties": [
+      "Whether production-shaped BF16 paths reproduce the individual adjoints and reveal an exact source merge order."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t145446z_b081961542",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The unchanged evaluator compiled and resolved the attributed LibNC, but its first single-branch graph aborted before producing a gradient because nc_mul rejects the flattened rank-1 BF16 geometry."
+    ],
+    "valid": false
+  }
+}

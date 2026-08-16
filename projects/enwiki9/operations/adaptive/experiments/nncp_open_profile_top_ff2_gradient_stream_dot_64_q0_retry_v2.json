@@ -1,0 +1,903 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound initial parameters and memory, decoder-visible inputs and targets, exact open forward tensors, promoted open output-head backward source, and frozen predicates.",
+      "Retained train_h, output-head, ln_g_40, ln_b_40, and ff_bias2_19 gradients only after both corresponding open payloads are complete.",
+      "Fresh open layer-19 GEGLU activations and the freshly reconstructed centered final-normalization residual; retained ff2_19 values only after both treatment and replay payloads are complete.",
+      "The parent mismatch count and its coordinate concentration justify one uniform BF16 affine-product boundary; no retained gradient value is available during calculation.",
+      "The terminal four-cell attribution proves the streaming BF16 dot, not scalar placement, explains the entire eight-word residual boundary."
+    ],
+    "forbiddenInformation": [
+      "Teacher probabilities, teacher activations as calculation inputs, captured gradient values, post-update parameters, future symbols, fitted corrections, or LibNC/NNCP execution.",
+      "Claiming a transformer-block backward, recursive training, archive, transfer, package, or objective result.",
+      "Captured ff2_19 values as calculation inputs, teacher activations, an unmeasured reduction order, or any FF2 activation-residual claim.",
+      "Coordinate-specific patches, comparator-derived residuals, tolerance, or any change to the frozen FF2 reduction order.",
+      "Using the source-exact adjoint as a calculation input, applying coordinate-specific corrections, changing FF2 reduction, or tolerating any mismatch.",
+      "Claiming any deeper activation residual, GEGLU/FF1 gradient, complete transformer backward, recursive update, compression, transfer, package, or Hutter result."
+    ]
+  },
+  "changedMechanism": "Replace only the generic 64-block g*y product reduction in the open final-RMSNorm input backward with the source-attributed ordered eight-lane streaming BF16 FMA dot; preserve the mean-scaled expression and every other forward, backward, FF2, and control operation.",
+  "controls": [
+    {
+      "definition": "Each fresh all-stream execution reproduces both output-head parameter gradients and the promoted final-hidden residual before the final RMSNorm backward runs.",
+      "id": "promoted-output-head-backward",
+      "role": "treatment"
+    },
+    {
+      "definition": "Captured BF16 ln_g_40 and ln_b_40 gradients are read only after both fresh normalization payloads exist.",
+      "id": "retained-final-norm-parameters",
+      "role": "comparator"
+    },
+    {
+      "definition": "Captured BF16 ff_bias2_19 is an independent broadcast projection of the final-normalization input residual and is read only after both fresh projections exist.",
+      "id": "retained-top-feedforward-bias",
+      "role": "comparator"
+    },
+    {
+      "definition": "The complete 32-stream forward, output-head backward, final RMSNorm backward, and projection execute twice and must reproduce identical bytes.",
+      "id": "independent-open-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "A sign-inverted incoming residual traverses the unchanged centered normalization backward and BF16 gain-product boundary and must change the top-layer bias projection.",
+      "id": "negated-incoming-residual-retry-v2",
+      "role": "negative"
+    },
+    {
+      "definition": "Sign-negating the incoming residual must remain live through the new BF16 affine-product boundary, centered normalization backward, and complete ff2_19 reduction.",
+      "id": "negated-top-ff2-upstream-retry-v1",
+      "role": "negative"
+    },
+    {
+      "definition": "The separately captured and exactly reconstructed source final-RMSNorm input adjoint is read only after both open residuals are complete.",
+      "id": "independent-source-final-rms-adjoint",
+      "role": "comparator"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "generatedUtc": "2026-08-16T08:21:46+00:00",
+  "hypothesis": {
+    "claim": "Installing only the source-attributed streaming eight-lane BF16 g*y dot in the otherwise unchanged open final-RMSNorm backward makes the complete normalization-input residual and ff2_19 parameter gradient source-exact while preserving every inherited forward, output-head, normalization-parameter, projection, replay, control, dependency, source, and resource predicate.",
+    "falsification": "Any inherited predicate failure, nonzero source residual or ff2_19 mismatch, replay drift, dead control, dependency violation, source overflow, or guard failure prevents promotion."
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2.py",
+      "sha256": "sha256:bea7cd6e41e11daab56130b69bb1a03ae82f8db4d91fd094518b7a6d803d81a0"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2_materializer.py",
+      "sha256": "sha256:2ea93d1a2b1c1422d099df65f85b34bcab67c94a40b9c4da2ff5e4e9ec97e9f8"
+    },
+    {
+      "id": "exact-forward-decision",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "id": "exact-forward-reflection",
+      "path": "operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json",
+      "sha256": "sha256:15aff130d15795fb0644ae8b95827e4a5212d2c74ecdfee44d26576f15a7297a"
+    },
+    {
+      "id": "joint-transition-decision",
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5"
+    },
+    {
+      "id": "joint-transition-reflection",
+      "path": "operations/adaptive/reflections/20260816T024338Z_3839f396a6.json",
+      "sha256": "sha256:1c4f88906a2f0ae20c9613b33a9e55fbaeec968baef97c309bfc59fd0078faf9"
+    },
+    {
+      "id": "gradient-oracle-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "gradient-oracle-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "gradient-oracle-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "gradient-oracle-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "miniature-output-head-decision",
+      "path": "results/nncp_ggml_output_head_update_parity_qm2_v1/decision.json",
+      "sha256": "sha256:87fa87838530eee077598d27a80435539f39950250e198e16cb905d851f53693"
+    },
+    {
+      "id": "exact-forward-source",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:891e8c50b6c9e66c7a9f4d5019d009fab24955e7b7b83386fd6c8a70f22a7314"
+    },
+    {
+      "id": "output-bias-tail-decision",
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:d2da26227d4cc1dfa6233e826f94b81c9bcf1d760867f62a52827db2172b9d1c"
+    },
+    {
+      "id": "output-bias-tail-reflection",
+      "path": "operations/adaptive/reflections/20260816T033450Z_727c49438a.json",
+      "sha256": "sha256:05fb82c6d1a5566318ea760c56bbbf485efb29c08087ac7cb5144af1135b3662"
+    },
+    {
+      "id": "output-matrix-tail-decision",
+      "path": "results/nncp_open_profile_output_matrix_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:29e33d5cdea5254050465b70a05f659ef1d4f4d60ba54711487f12c74d06e34d"
+    },
+    {
+      "id": "output-matrix-tail-reflection",
+      "path": "operations/adaptive/reflections/20260816T040455Z_f7722f8e27.json",
+      "sha256": "sha256:87aed4a6fa705e9bcc997a17a80fcbf37f1e6157a46c279368762a8ce642d009"
+    },
+    {
+      "id": "final-hidden-residual-decision",
+      "path": "results/nncp_open_profile_final_hidden_residual_64_q0_v1/decision.json",
+      "sha256": "sha256:6391a0afc2234526adc34bcab807d45713a023ce79674d9061ec70ccaa7c6469"
+    },
+    {
+      "id": "final-hidden-residual-reflection",
+      "path": "operations/adaptive/reflections/20260816T043203Z_ca54b4761d.json",
+      "sha256": "sha256:aceb41ca3f69c8338587e03bb1f69d865ff594c2ecfebc10feaae4ebf7fec7f1"
+    },
+    {
+      "id": "promoted-final-hidden-residual",
+      "path": "results/nncp_open_profile_final_hidden_residual_64_q0_v1/open-final-hidden-residual.bf16",
+      "sha256": "sha256:f1deed48a6fb43252e0b9d9e23b51b970979ed68a1b4f674695df696c78847c6"
+    },
+    {
+      "id": "rmsnorm-output-order-decision",
+      "path": "results/nncp_v33_libnc_rmsnorm_backward_order_parity_v1/decision.json",
+      "sha256": "sha256:0d3adc28b066473342aace795a227164b82c93f716df3e9176678331771e9fa0"
+    },
+    {
+      "id": "failed-attempt-reflection",
+      "path": "operations/adaptive/reflections/20260816T045714Z_6eb299ed8d.json",
+      "sha256": "sha256:6d3f85121ca59da0cbf66ce575cde29c933b0157bb0c5fc586c12ac72dcae7f1"
+    },
+    {
+      "id": "failed-attempt-guard",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/guard.json",
+      "sha256": "sha256:e2c70f9d374b0aa000abb7141b099cece25a5762f669220c2539a27421a959ba"
+    },
+    {
+      "id": "failed-ln-g-diagnostic",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/open-final-norm-gain-gradient.bf16",
+      "sha256": "sha256:e41e3b748c3dcf0d014e86f7e937f4ceb295deb4f7cd67dd109d51bdea97e7bf"
+    },
+    {
+      "id": "failed-ff-bias-projection",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/open-ff-bias2-19-gradient.bf16",
+      "sha256": "sha256:de197a304e31e85d958a3c40985e97613cc3e9086321b63a7216288948db87ec"
+    },
+    {
+      "id": "concat-rmsnorm-contract",
+      "path": "results/nncp_v33_libnc_concat_rmsnorm_backward_contract_v1/decision.json",
+      "sha256": "sha256:91f69cd98a923ee17022156f244d3b04955208c0d3e5f41c9e371f4db2de4d0a"
+    },
+    {
+      "id": "parent-valid-reflection",
+      "path": "operations/adaptive/reflections/20260816T051419Z_4df92ec3b4.json",
+      "sha256": "sha256:5fe7b2862df54fe872b51c948e0342077da741f2f89f52daa33d24fe5ceba66e"
+    },
+    {
+      "id": "parent-valid-decision",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5aee40914e2f431931c783b28aa7641bd67c1b30cdeecd4f34d498bead15df64"
+    },
+    {
+      "id": "final-norm-backward-reflection",
+      "path": "operations/adaptive/reflections/20260816T053159Z_b79233ecb1.json",
+      "sha256": "sha256:7e6b3e549eae6183c3a7c735d4930843d533a20fdc68d18c6e79b57389139e35"
+    },
+    {
+      "id": "final-norm-backward-decision",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:b52a25e8ce1d5c2a33858ef092288ccfe0ac9ededf4045066cb3c4db63701a14"
+    },
+    {
+      "id": "promoted-final-norm-hidden-residual",
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/open-final-hidden-residual.bf16",
+      "sha256": "sha256:f1deed48a6fb43252e0b9d9e23b51b970979ed68a1b4f674695df696c78847c6"
+    },
+    {
+      "id": "parent-ff2-reflection",
+      "path": "operations/adaptive/reflections/20260816T055603Z_52a69ff065.json",
+      "sha256": "sha256:17ea2d341daefac41f349b69ebe1af22746d5f884479d1c4cdb0676b02465346"
+    },
+    {
+      "id": "parent-ff2-decision",
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:25636c40ebce64cdf795f4bf137fa04bf97b3a80c5f7c02f94b5de9c9d2c86f6"
+    },
+    {
+      "id": "promoted-parent-ff2-hidden-residual",
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_v1/open-final-hidden-residual.bf16",
+      "sha256": "sha256:f1deed48a6fb43252e0b9d9e23b51b970979ed68a1b4f674695df696c78847c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_freeze_implementation_retry-daeefdf11c8d",
+      "path": "tools/enwiki9_freeze_implementation_retry.py",
+      "sha256": "sha256:505280b8caca6edc5fda129fd4646bdf7e5cc54c9910096c8c92bcc18e048816"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_final_hidden_residual_64_q0-0f3e6dd226ef",
+      "path": "tools/nncp_open_profile_final_hidden_residual_64_q0.py",
+      "sha256": "sha256:f00196e474d415d70793e29cb00c3a9ece0668d7e84e3f2872759498cb543d77"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    },
+    {
+      "id": "stream-dot-parent-decision",
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5a1e60ab3d85fc069fae03e19280190d670afbb59ba768a8055f0d46689ddd5d"
+    },
+    {
+      "id": "stream-dot-parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json",
+      "sha256": "sha256:b026cff744099c08468a382220a8a02772527a14cfeb32f978f482afb460c7e1"
+    },
+    {
+      "id": "stream-dot-decision",
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/decision.json",
+      "sha256": "sha256:fc8d605b526879d1ca5318cd61027f2b4aac28e4c84fb4cf3b4d42e3ce376f39"
+    },
+    {
+      "id": "stream-dot-execution",
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/execution.json",
+      "sha256": "sha256:5ade47c2eeeb36ed7127e4d25e0d508e6bfde7b28f5ab0364fb2cc9c40f14fb7"
+    },
+    {
+      "id": "stream-dot-reflection",
+      "path": "operations/adaptive/reflections/20260816T075342Z_b33521b4a0.json",
+      "sha256": "sha256:b0fe08c38bbfa92a727cb3149d80377bf2e7fbfc34a982ad8b8c43b3c6307b18"
+    },
+    {
+      "id": "source-exact-final-rms-adjoint",
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/source-exact-final-rms-adjoint.bf16",
+      "sha256": "sha256:8e301350a133e76b6926b410743856764aff939a8be04860df3bf8e714eee8a3"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_64_q0_retry_v1-c3b7f3df680f",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.py",
+      "sha256": "sha256:e42d745b9884260af00a3515cda818572893cf1ac1f3e03b1da0048f147f0a47"
+    },
+    {
+      "id": "failed-preflight-guard",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1/guard.json",
+      "sha256": "sha256:332678edf081e9fc278309efe176c7e93ac6f6baed75c73af95b5c5469050195"
+    },
+    {
+      "id": "failed-preflight-reflection",
+      "path": "operations/adaptive/reflections/20260816T080014Z_9da1ba0532.json",
+      "sha256": "sha256:1f64a1d22b463f4651ad98ab6685659c855501301145941630b144c411f32a0c"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1_materializer-291d7f8fd948",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1_materializer.py",
+      "sha256": "sha256:3480ce5942296b22192bd63898abadff2054645315878396a18aad316fac6448"
+    },
+    {
+      "id": "manifest-failure-guard",
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:820af4393e5fafd026bbb8df5d8474bd5cdaf467fae8281895b565250e2c9672"
+    },
+    {
+      "id": "manifest-failure-reflection",
+      "path": "operations/adaptive/reflections/20260816T080451Z_d5838c6e4e.json",
+      "sha256": "sha256:21c6af32c655a1e73f7d47959cc3a6fbcb09918232332bba0b4cd432d2ad2ea0"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1-3ff406a5614d",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1.py",
+      "sha256": "sha256:600b7f595c774f717f7be82f5c0a0cc12b5ec224ffa5c306f537434d508168b8"
+    }
+  ],
+  "invariants": [
+    "Production geometry, initial parameters and state, targets, exact forward arithmetic, BF16 loss-residual boundary, output-head reductions, and promoted final-hidden residual remain unchanged.",
+    "Both complete final RMSNorm backward payloads are generated before any retained ln_g_40, ln_b_40, or ff_bias2_19 comparator is read.",
+    "The complete output-head parameter and activation-residual tails must remain exact in the same replay.",
+    "No teacher probability, teacher activation, or captured gradient may calculate an open normalization gradient or input residual.",
+    "The closed teacher, LibNC, and NNCP are not executed during retained replay.",
+    "This experiment proves at most the final RMSNorm parameter gradients and an input residual with an exact top-layer bias projection; it proves no transformer-block backward, recursive training, compression, transfer, package, or Hutter result.",
+    "Each per-sample ln_g_40 normalized-state times incoming-gradient product and each final RMSNorm incoming-gradient times gain product is rounded to BF16 at its tensor boundary; the centered formula, reductions, and every other backward operation remain unchanged.",
+    "The concat-root final RMSNorm input residual is inverse times gradient minus mean-gradient minus normalized-output times mean of gradient times normalized-output.",
+    "All output element counts are cached from persisted result artifacts before the guarded work root is removed.",
+    "Every ff2_19 word is generated from fresh open GEGLU activations and the exact centered residual before the retained ff2_19 comparator is read.",
+    "The ff2_19 outer-product reduction uses 128-sample partial FMA accumulation and ordered partial addition without a teacher activation or captured gradient as input.",
+    "This experiment proves only the top-layer FF2 parameter gradient; it proves no FF2 activation residual, GEGLU backward, recursive update, compression, or Hutter result.",
+    "The retained ff2_19 comparator is not used to select or correct coordinates; the single BF16 affine boundary applies uniformly to the complete population.",
+    "The source-attributed streaming dot is applied uniformly to every one of the 2,048 samples and no source adjoint word is available during calculation.",
+    "The complete open normalization-input residual is compared directly with the independently captured source-exact adjoint only after both open populations are complete.",
+    "The final-RMSNorm expression remains mean-scaled because the attribution gate proved mean- and width-scaled forms BF16-identical on the complete retained population."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-final-norm-gain-mismatch",
+      "measurement": "finalNormGainMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-top-feedforward-bias-mismatch",
+      "measurement": "topFeedforwardBiasMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-topff2mismatch",
+      "measurement": "topFf2MismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Every exact forward, open output-head backward, promoted final-hidden residual, complete gradient fixture, and measured RMSNorm operation-order antecedent remains valid and digest-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete production streams evaluated from retained causal input and memory state.",
+      "id": "streamCount",
+      "unit": "streams"
+    },
+    {
+      "definition": "Production loss samples evaluated across all streams and states.",
+      "id": "sampleCount",
+      "unit": "symbols"
+    },
+    {
+      "definition": "Open attention-input tensors compared against retained train_h state.",
+      "id": "layerInputCheckpointCount",
+      "unit": "stream-layer tensors"
+    },
+    {
+      "definition": "Open layer-input elements that differ from retained BF16 train_h values across both replays.",
+      "id": "layerInputMismatchCount",
+      "unit": "float32 elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained layer-input difference.",
+      "id": "maximumLayerInputAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Retained output-bias tail words that differ in the successor replay.",
+      "id": "outputBiasMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute output-bias tail difference.",
+      "id": "maximumOutputBiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Retained embed_out tail words that differ in the successor replay.",
+      "id": "outputMatrixMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute embed_out tail difference.",
+      "id": "maximumOutputMatrixAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Fresh final-hidden residual words that differ from the promoted open residual artifact.",
+      "id": "promotedHiddenResidualMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute fresh-versus-promoted final-hidden residual difference.",
+      "id": "maximumPromotedHiddenResidualAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete production ln_g_40 gradient population.",
+      "id": "finalNormGainElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 ln_g_40 words that differ from the retained comparator.",
+      "id": "finalNormGainMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained ln_g_40 difference.",
+      "id": "maximumFinalNormGainAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete production ln_b_40 gradient population.",
+      "id": "finalNormBiasElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 ln_b_40 words that differ from the retained comparator.",
+      "id": "finalNormBiasMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained ln_b_40 difference.",
+      "id": "maximumFinalNormBiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete freshly generated BF16 final RMSNorm input-residual population.",
+      "id": "finalNormInputResidualElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Complete production ff_bias2_19 gradient projection.",
+      "id": "topFeedforwardBiasElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 ff_bias2_19 projection words that differ from the retained comparator.",
+      "id": "topFeedforwardBiasMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained ff_bias2_19 difference.",
+      "id": "maximumTopFeedforwardBiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Two complete executions emit byte-identical forwards, retained tails, normalization gradients, input residuals, projections, and controls.",
+      "id": "openBackwardDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "The retained cyclic target remap still changes the final-normalization bias projection.",
+      "id": "shiftedTargetControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Negating the independently generated incoming residual changes the unchanged exact centered top-layer feedforward-bias projection.",
+      "id": "negatedResidualControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Dynamic LibNC, NNCP, GGML, CUDA, OpenMP, or BLAS dependencies in built open executables.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed orchestration and open-backward source package.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Generated builds and forward outputs remained under and were removed with the guarded work root.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete production ff2_19 parameter-gradient population.",
+      "id": "topFf2ElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 ff2_19 words that differ from the delayed retained comparator.",
+      "id": "topFf2MismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained ff2_19 difference.",
+      "id": "maximumTopFf2AbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Negating the incoming residual before the BF16 affine-product boundary changes the complete ff2_19 gradient.",
+      "id": "negatedTopFf2ControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete open normalization-input residual words differing from the independent source-exact final-RMSNorm adjoint.",
+      "id": "sourceFinalNormResidualMismatchCount",
+      "unit": "BF16 gradient elements"
+    },
+    {
+      "definition": "Maximum complete open versus source-exact normalization-input residual absolute difference.",
+      "id": "maximumSourceFinalNormResidualAbsoluteError",
+      "unit": "float32 value"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/decision.json",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/execution.json",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-final-hidden-residual.bf16",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-final-norm-gain-gradient.bf16",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-final-norm-bias-gradient.bf16",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-final-norm-input-residual.bf16",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-ff-bias2-19-gradient.bf16",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/incremental_source.tar.xz",
+    "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/open-ff2-19-gradient.bf16"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v1/20260816T080438629494Z_057a090c25de.json",
+      "sha256": "sha256:aca8bb3a3ea36a611d2453aca2c6f27b38432246a2888643043a0ba8e42c7eed"
+    }
+  },
+  "population": {
+    "coordinate": "Production update over original transformed-symbol coordinates [256,320) independently within each of 32 contiguous streams.",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.",
+    "unit": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedentspass",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-streamcount",
+      "measurement": "streamCount",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-samplecount",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-layerinputcheckpointcount",
+      "measurement": "layerInputCheckpointCount",
+      "operator": "eq",
+      "threshold": 640
+    },
+    {
+      "id": "p-layerinputmismatchcount",
+      "measurement": "layerInputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumlayerinputabsoluteerror",
+      "measurement": "maximumLayerInputAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-outputbiasmismatchcount",
+      "measurement": "outputBiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumoutputbiasabsoluteerror",
+      "measurement": "maximumOutputBiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-outputmatrixmismatchcount",
+      "measurement": "outputMatrixMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumoutputmatrixabsoluteerror",
+      "measurement": "maximumOutputMatrixAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-promotedhiddenresidualmismatchcount",
+      "measurement": "promotedHiddenResidualMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumpromotedhiddenresidualabsoluteerror",
+      "measurement": "maximumPromotedHiddenResidualAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-finalnormgainelementcount",
+      "measurement": "finalNormGainElementCount",
+      "operator": "eq",
+      "threshold": 1024
+    },
+    {
+      "id": "p-finalnormgainmismatchcount",
+      "measurement": "finalNormGainMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumfinalnormgainabsoluteerror",
+      "measurement": "maximumFinalNormGainAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-finalnormbiaselementcount",
+      "measurement": "finalNormBiasElementCount",
+      "operator": "eq",
+      "threshold": 1024
+    },
+    {
+      "id": "p-finalnormbiasmismatchcount",
+      "measurement": "finalNormBiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumfinalnormbiasabsoluteerror",
+      "measurement": "maximumFinalNormBiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-finalnorminputresidualelementcount",
+      "measurement": "finalNormInputResidualElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-topfeedforwardbiaselementcount",
+      "measurement": "topFeedforwardBiasElementCount",
+      "operator": "eq",
+      "threshold": 1024
+    },
+    {
+      "id": "p-topfeedforwardbiasmismatchcount",
+      "measurement": "topFeedforwardBiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumtopfeedforwardbiasabsoluteerror",
+      "measurement": "maximumTopFeedforwardBiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-openbackwarddeterministic",
+      "measurement": "openBackwardDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-shiftedtargetcontroldiffers",
+      "measurement": "shiftedTargetControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-negatedresidualcontroldiffers",
+      "measurement": "negatedResidualControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-forbiddendynamicdependencycount",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-guardedworkrootpass",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-incrementalsourcebytes",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    },
+    {
+      "id": "p-topff2elementcount",
+      "measurement": "topFf2ElementCount",
+      "operator": "eq",
+      "threshold": 3145728
+    },
+    {
+      "id": "p-topff2mismatchcount",
+      "measurement": "topFf2MismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumtopff2absoluteerror",
+      "measurement": "maximumTopFf2AbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-negatedtopff2controldiffers",
+      "measurement": "negatedTopFf2ControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-source-final-rms-residual",
+      "measurement": "sourceFinalNormResidualMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source-final-rms-maximum",
+      "measurement": "maximumSourceFinalNormResidualAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    }
+  ],
+  "proposalId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.35,
+    "uncertaintyRisk": 0.45
+  },
+  "status": "frozen"
+}

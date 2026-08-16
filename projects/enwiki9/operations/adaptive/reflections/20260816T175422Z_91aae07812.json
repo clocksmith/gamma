@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Once both tensors use state-major, stream-major, head-major, feature-major serialization, LibNC concat_head reshape/permutation changes only logical tensor metadata; the retained bytes and their backward adjoints are already in the downstream feature order."
+  },
+  "candidateId": "nncp_open_concat_head_identity_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_concat_head_identity_64_q0_v1",
+    "candidateTreeSha256": "sha256:81be57418ae72fd8958b9f4473987002ca7555644122002c736213ca5955382d",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_concat_head_identity_64_q0_v1/20260816T175411153887Z_81be57418ae7.json",
+      "sha256": "sha256:1df7991a81298a19d018f5f8efa4a44af8c2bd3863adea5d79b749a3fcb25ffd"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Expose the exact open layer-19 value state and attention probabilities across all streams, then implement the value-attention transpose against the source probability adjoint with full-population arithmetic controls.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/decision.json",
+      "sha256": "sha256:f0dc7bf5832700ac458be3cd0bdddfb8fb4a2f1c7242d1a14e180ccf6fd155e5"
+    },
+    {
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/execution.json",
+      "sha256": "sha256:fe3b310868a9a702b81eb4c1061d591acd39a2e46103794b45bdccd31998a4b0"
+    },
+    {
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/guard.json",
+      "sha256": "sha256:40e3e3865fa6664ef5cdfbc0055ebce6c52018cfd6f0a157b4ee585d759efac0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_concat_head_identity_64_q0_v1.json",
+    "sha256": "sha256:8e1a7e1779bd890244b92804190d7e0eac943e4d7a750554d9cabfe37011b12d"
+  },
+  "generatedUtc": "2026-08-16T17:57:02+00:00",
+  "hypothesis": {
+    "rationale": "Every prospectively frozen predicate passed: direct forward and backward identities were exact, both rejected head-major controls were broadly nonidentical, replay and artifact digests were exact, and no teacher or transient work remained.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T175422Z_91aae07812.json",
+    "sha256": "sha256:fc810ef0e629977aa546f3c9475ef96aad767df44f22683ba423c45c9f46613e"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "A runtime concat-head transpose or inverse transpose in the retained state-stream-head-feature serialization"
+    ],
+    "transferableLessons": [
+      "When a tensor reshape/permutation is representation-only in the retained byte contract, freeze it as an explicit identity regression with live alternate-order controls instead of adding runtime data movement."
+    ],
+    "uncertainties": [
+      "The exact identity does not yet prove the value-attention matmul transpose, value-state exposure, or softmax backward, and it earns zero Hutter credit."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t175422z_91aae07812",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound LibNC-free identity gate compared all 2,097,152 forward words and all 2,097,152 adjoint words with zero mismatches and zero maximum error, retained live wrong-order controls with 2,078,456 forward and 2,078,955 adjoint mismatches, reproduced the durable artifact exactly, executed no teacher, stayed within resources, and emitted a schema-valid authorize-successor result."
+    ],
+    "valid": true
+  }
+}

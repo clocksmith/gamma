@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T104952Z_2204470800.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t104952z_2204470800",
+  "failure": "The first remaining divergence is after exact branch adjoints, at the broadcast-bias gradient reduction across the 2,048 sample dimension; scalar chronological accumulation is not the production reduction contract.",
+  "mechanism": "Replace only scalar libm-tanh GELU backward with the digest-attributed eight-lane bounded-exp polynomial and FMA order proven exact by the complete branch-adjoint oracle. Preserve the exact FF2 transpose, branch multiplication, BF16 boundaries, and bias reduction.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T11:05:08+00:00",
+  "retired_dimensions": [
+    "Do not attribute the remaining top-FF1 bias mismatch to FF2 transpose or either GEGLU branch."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

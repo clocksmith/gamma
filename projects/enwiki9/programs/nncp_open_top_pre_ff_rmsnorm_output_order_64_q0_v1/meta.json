@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2"
+  ],
+  "description": "Exact output-order RMSNorm backward against the sealed source branch oracle",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Removing the LayerNorm-only mean-upstream term and using LibNC's output-order RMSNorm backward reproduces every sealed branch-adjoint word.",
+  "id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T142835Z_50298bd574": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T142835Z_50298bd574.json",
+        "sha256": "sha256:180f9bc4a4b9235a1a326e7e8b751ea67846d631a2b7d10665a4119297ca8c48",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1.json",
+      "sha256": "sha256:ffee20b8491a290ddf57aae3e04708e0dbc10bccb681e7963ca78a5f74194020"
+    },
+    "interfaces_exposed": [
+      "sealed pre-FF input and normalized adjoint -> open RMSNorm branch adjoint"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2",
+    "proposal_id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+    "retired_neighborhoods": [
+      "LayerNorm mean-upstream subtraction at the pre-FF RMSNorm boundary"
+    ]
+  },
+  "parent": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2",
+  "status": "measured_negative",
+  "verdict": "Promote the exact branch formula into the full residual composition, then replay the complete top-layer update and preserve this population as the focused regression."
+}

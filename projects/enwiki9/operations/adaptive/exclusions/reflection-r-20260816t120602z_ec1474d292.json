@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T120602Z_ec1474d292.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t120602z_ec1474d292",
+  "failure": "LibNC forms every FF1 matrix-gradient element by accumulating the 32-stream dot from zero with sequential fused FMAs, adds the decoded prior BF16 gradient after the dot, and rounds to BF16 once per chronological state.",
+  "mechanism": "Promote only the prospectively frozen post-dot prior-add cell: accumulate each 32-stream dot from zero with sequential AVX2 FMAs, add the decoded prior BF16 gradient, then materialize BF16 once per state.",
+  "population": "BF16 ff1_19 gradient words; Every coordinate in the prospectively frozen 128-adjacent-output by 1,024-input slice across all 64 states and 32 streams.; scopeBytes=262144; scopeSymbols=131072",
+  "recorded_at": "2026-08-16T12:07:02+00:00",
+  "retired_dimensions": [
+    "LibNC dependency for the attributed 128-row ff1_19 gradient slice",
+    "Prior-initialized FMA and nonfused arithmetic as source-exact FF1 matrix-gradient kernels"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

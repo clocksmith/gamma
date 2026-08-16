@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The production top-FF1 input adjoint is now a trustworthy 2,097,152-word source oracle; the only prior gate failure was hardcoded top_ff2_ fixture accounting, not graph or tensor drift."
+  },
+  "candidateId": "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:3dc9797c6f85ef0f9815a201bf8adc6a795d3523034b1598775d54b48ad34959",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/20260816T123432539258Z_3dc9797c6f85.json",
+      "sha256": "sha256:2c3fea496db406eafdc0123b193f578be793780673374674b88d2fa4acab1b27"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Freeze and run the open FF1 transpose using the exact source adjoint, verbatim initial matrix, exact incoming output adjoint, and independently attributed 128-feature matmul panel contract.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:e52df55685dee87ea74af9b8bd87739129f0dab148a83f8d65ad2e6d2af7a340"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:19477b53a94b05ba2383f312caf17d6cd1155bcdee9f2d759a86c3b004e61037"
+    },
+    {
+      "path": "results/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:eee9f2a97c8e64b30472b8c21247b388fd518e68b9f5cd3b94f59d7b0d968e69"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff1_input_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:394ad45e7581e3111d62baf4d3d35eebf39a0f9db7aeead588dd109145e24f18"
+  },
+  "generatedUtc": "2026-08-16T12:35:43+00:00",
+  "hypothesis": {
+    "rationale": "After excluding only the exact enumerated probe set, both sealed captures retain identical production fixture payloads, deterministic exact source inputs and adjoints, and the unchanged initial BF16 ff1_19 matrix.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T123446Z_5cbfc56c6d.json",
+    "sha256": "sha256:401614591a14884d044935a5efb079dd240c12dc21cb862db64bcad7414a0e43"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Absence of a deterministic production ff1_19 input-adjoint oracle",
+      "Hardcoded top_ff2_-only source-probe fixture accounting"
+    ],
+    "transferableLessons": [
+      "Probe-aware fixture accounting must enumerate the complete permitted measurement namespace and prove every remaining production path identical; this correction preserves the sealed source tensors without rerunning the teacher."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t123446z_5cbfc56c6d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The immutable correction enumerated exactly 256 declared top_ff1_ probe paths per sealed manifest, proved all 512 stale mismatches across both captures were exactly that population, found zero non-probe fixture mismatches, preserved all three tensor digests, and passed strict outputs, source, memory, disk, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

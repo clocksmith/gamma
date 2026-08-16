@@ -1,0 +1,93 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "Affine reduction and direct-branch identity are now exact; the remaining discrepancy is confined to conversion or accumulation placement between the normalization input residual and the residual-join total adjoint."
+  },
+  "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:6c625d083864bdae6cd83641d506a0307c2bd34bc838c951acae363e0e173620",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/20260816T132903146864Z_6c625d083864.json",
+      "sha256": "sha256:28cec6de129f143ff27d06a1f53539bf8ba6227c9533663f1c7c01d5d7ddd929"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retain the exact direct branch and affine reductions; isolate only pre-merge versus post-merge BF16 conversion using the retained complete population before authorizing another full replay.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/decision.json",
+      "sha256": "sha256:4721c458ca68851dd407f94427613f976b82fedcbeba083a33193e36befa2b25"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/execution.json",
+      "sha256": "sha256:5a7e6953ccb28136fccb4f1cc801d09ca4ed03129075f7c2822ab35078986066"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1/guard.json",
+      "sha256": "sha256:4626177948d4b7aca6ffe5105ceb4f9e65294bf618e24336bbfffee11499d832"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:27a5433ecf292447d014bfea8ebee87b348781ee4eb7988e3de1a277a7d81d33"
+  },
+  "generatedUtc": "2026-08-16T13:45:17+00:00",
+  "hypothesis": {
+    "rationale": "The corrected direct branch and chronological BF16 state reductions make both affine gradients exact, but width-scaled centered backward still leaves 1093739 of 2097152 total-adjoint words different by at most one BF16 ulp.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T133105Z_4b045b57ce.json",
+    "sha256": "sha256:71190ff0cd10dae0d43d9432615cee7e3c025c687db268ab3081210f93167223"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "flat-affine-gradient-reduction",
+      "pre-final-normalization-direct-adjoint"
+    ],
+    "transferableLessons": [
+      "Treat parameter-gradient reduction and activation-adjoint accumulation as separate arithmetic contracts: exact state-wise affine gradients do not determine the BF16 conversion point at a residual join."
+    ],
+    "uncertainties": [
+      "Whether LibNC retains the normalization input residual in F32 until the residual add or uses another equivalent fused accumulation boundary."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t133105z_4b045b57ce",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Both complete open populations, forward checkpoints, exact hidden and normalized operands, parameter-gradient comparators, replay controls, dependency closure, and resource guards completed successfully."
+    ],
+    "valid": true
+  }
+}

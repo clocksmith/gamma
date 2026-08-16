@@ -1,0 +1,63 @@
+{
+  "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1",
+  "candidateTreeSha256": "sha256:da07d1f56e34ca980323e62e711001460ef1761760cb7af7aa0ed3ec33d69391",
+  "change": {
+    "evidence": [
+      "operations/adaptive/proposals/claimed/000_nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1.json"
+    ],
+    "hypothesis": "Applying LibNC's production add_dup1 backward schedule\u2014one nc_reduce_sum(existing_gradient, 6144x32 BF16 state panel, 1) call for each of 64 chronological states\u2014to the source-exact FF1-output adjoint reproduces every retained ff_bias1_19 gradient word.",
+    "kind": "proposal-development",
+    "replacements": [],
+    "summary": [
+      "Bound candidate to algorithm proposal nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/7d/7d6260870071586df10343a8d5f419df086f73583aea9e22eda748927dacdb51",
+      "bytes": 4392,
+      "normalization": "verbatim",
+      "path": "ff1_bias_state_reduce.c",
+      "sha256": "7d6260870071586df10343a8d5f419df086f73583aea9e22eda748927dacdb51"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/5f/5fa3ae9c06616a6b0ba29e81607dd3bff21d394081fa2f009e2b81116c4309a8",
+      "bytes": 1213,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "5fa3ae9c06616a6b0ba29e81607dd3bff21d394081fa2f009e2b81116c4309a8"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d3/d39a22c5dcc429d898bfebbe46c4261367cf232b831e397449e4fcaf5c079fd8",
+      "bytes": 234,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "d39a22c5dcc429d898bfebbe46c4261367cf232b831e397449e4fcaf5c079fd8"
+    }
+  ],
+  "generatedUtc": "2026-08-16T11:18:18+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_libnc_ff1_bias_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:6388499ba45c2b33bb99a6f75032f32009ce4cb67e46c158a66fec8e30830d14",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_v1/20260816T111347680001Z_6388499ba45c.json",
+      "sha256": "sha256:6a0e66b712004e46a61563e8da02069791fffb41d8c325136353843c936b96c7"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_bias_state_reduce_64_q0_retry_v1/20260816T111813664334Z_90ccb8462fcd.json",
+    "sha256": "sha256:7b00b5451f15ab140a415c8d5eeca19888dc4c0159cd3a7c4e1e3ad51f2d7727"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

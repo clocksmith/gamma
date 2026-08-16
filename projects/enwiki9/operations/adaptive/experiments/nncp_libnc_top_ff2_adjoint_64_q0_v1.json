@@ -1,0 +1,531 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound production source, model, vocabulary, preprocessed corpus, complete q3 fixture, failed open residual, frozen reducer, and prospective predicates.",
+      "Source FF2 inputs and adjoints only as zero-credit teacher attribution evidence; retained ff2_19 only after both reconstruction payloads are complete."
+    ],
+    "forbiddenInformation": [
+      "Using any source-captured tensor, teacher executable, hidden trace, LibNC dependency, or uncounted probability in a submitted codec.",
+      "Changing coordinates, applying comparator-derived corrections, tolerating differing BF16 words, or claiming compression benefit from this attribution gate."
+    ]
+  },
+  "changedMechanism": "Attach a zero-valued LibNC parameter after the production layer-19 FF2 bias at update block 256, capture its exact BF16 backward adjoint and the corresponding FF2 input, then reconstruct the full ff2_19 gradient with the frozen reduction before reading the retained comparator.",
+  "controls": [
+    {
+      "definition": "A zero-valued marked tensor exposes the post-FF2 residual-join adjoint without changing the production computation.",
+      "id": "zero-add-production-capture",
+      "role": "treatment"
+    },
+    {
+      "definition": "Every non-probe artifact must match the retained production fixture byte-for-byte in both captures.",
+      "id": "retained-complete-fixture",
+      "role": "comparator"
+    },
+    {
+      "definition": "The retained ff2_19 gradient is read only after both complete source reconstructions exist.",
+      "id": "retained-ff2-gradient-delayed",
+      "role": "comparator"
+    },
+    {
+      "definition": "The complete instrumented production capture and reconstruction execute twice and must reproduce identical bytes.",
+      "id": "independent-source-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "Sign-negating every captured source-adjoint value must change the reconstructed ff2_19 gradient.",
+      "id": "negated-source-adjoint",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "generatedUtc": "2026-08-16T06:44:27+00:00",
+  "hypothesis": {
+    "claim": "The source-captured post-FF2 adjoint differs from the open final-normalization residual, while source input plus source adjoint reconstruct every retained ff2_19 word under the frozen reducer.",
+    "falsification": "Any antecedent drift, production-fixture mutation, capture or replay difference, dead control, geometry drift, guard or source-bound violation, exact source-adjoint equality, or one source-reconstructed ff2_19 mismatch prevents the proposed attribution."
+  },
+  "inputs": [
+    {
+      "id": "parent-open-decision",
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5a1e60ab3d85fc069fae03e19280190d670afbb59ba768a8055f0d46689ddd5d"
+    },
+    {
+      "id": "parent-open-reflection",
+      "path": "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json",
+      "sha256": "sha256:b026cff744099c08468a382220a8a02772527a14cfeb32f978f482afb460c7e1"
+    },
+    {
+      "id": "parent-open-residual",
+      "path": "results/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/open-final-norm-input-residual.bf16",
+      "sha256": "sha256:da2253e3a6cf2a0142a637f71ec5cceecf340ed896a3b1186edbe7dc1fe76575"
+    },
+    {
+      "id": "production-fixture-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "production-fixture-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "production-fixture-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "retained-ff2-gradient",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0001_ff2_19.bin",
+      "sha256": "sha256:2e2877664c1e7b1fd7369d5e9e1d96663f256ef1dddf6f3d8d3fb35052dcf856"
+    },
+    {
+      "id": "retained-ff2-gradient-meta",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture/gradients/0001_ff2_19.meta",
+      "sha256": "sha256:225c2e4b2a759372ba7a1636a9f5d76ac637c28bb2bc736ee8824342766f992a"
+    },
+    {
+      "id": "probe-source",
+      "path": "programs/nncp_libnc_top_ff2_adjoint_64_q0_v1/top_ff2_probe.inc.c",
+      "sha256": "sha256:878c07af8dffa25db52e9b144a177d253ab90fd6c5f69abb21ccb8df8135ebaf"
+    },
+    {
+      "id": "reducer-source",
+      "path": "programs/nncp_libnc_top_ff2_adjoint_64_q0_v1/source_ff2_gradient.cpp",
+      "sha256": "sha256:70cf2a97d1626253110a7d838a1e162d5b0992f0d1a8b7dd7447bcc8f28eabf0"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_libnc_top_ff2_adjoint_64_q0_v1/program.py",
+      "sha256": "sha256:64b4670130bcbe9092ec68e60c3a78c123cb533142083f79ebae986c9b20f7ea"
+    },
+    {
+      "id": "production-fixture-hook",
+      "path": "tools/nncp_profile_update_fixture_hook_q3.c",
+      "sha256": "sha256:6cb18c789dd2d8eda474b20b3e8e4e78eed5b7277e5d28bb5d3e3d892b481047"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_libnc_top_ff2_adjoint_64_q0.py",
+      "sha256": "sha256:6827289fe1719e6404b659b55f85d5101a087386d6ec147d29bca040d30e0b8b"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_libnc_top_ff2_adjoint_64_q0_materializer.py",
+      "sha256": "sha256:42c67a1b45cb50f239dbd2191b2db5b2e7a7508833c1c67f2fb79f6659ddc607"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_ggml_profile_arithmetic_64_q0-955947d36655",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q0.py",
+      "sha256": "sha256:37935a72cbe0285982ed56c2b5cb80a3733ff1bf6982da7b595012a9f2ca0a86"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q0-e156f67dd132",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q0.py",
+      "sha256": "sha256:b4d85d218f810c780b52f09cd6d9d7728d3c487076b903981045c2a9edee50ec"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q1-ebbc8356d739",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q1.py",
+      "sha256": "sha256:150a6abad24acb239ae268b2588f2fc1d9402abe9f3c993f71717afd8f784771"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q2-9a8f8fa668eb",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q2.py",
+      "sha256": "sha256:ba72018217eaa051da020d7d5f64fff57bf16670a8ac1ca5b1f34695f6315929"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_profile_update_fixture_64_q3-987bb1a2ec41",
+      "path": "tools/nncp_libnc_profile_update_fixture_64_q3.py",
+      "sha256": "sha256:f526f7a4178268057656e672e4eb6e9b394bc0669d35eb0bc942fc00df8930ea"
+    },
+    {
+      "id": "runtime-source-nncp_midpoint_phase_attribution_qm0-267a1e377783",
+      "path": "tools/nncp_midpoint_phase_attribution_qm0.py",
+      "sha256": "sha256:0c636c36e14b611b5f8ada01a06a974607610ea7793545af27c9cbd68ca214cc"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_final_hidden_residual_64_q0-0f3e6dd226ef",
+      "path": "tools/nncp_open_profile_final_hidden_residual_64_q0.py",
+      "sha256": "sha256:f00196e474d415d70793e29cb00c3a9ece0668d7e84e3f2872759498cb543d77"
+    },
+    {
+      "id": "runtime-source-nncp_open_profile_top_ff2_gradient_64_q0_retry_v1-c3b7f3df680f",
+      "path": "tools/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1.py",
+      "sha256": "sha256:e42d745b9884260af00a3515cda818572893cf1ac1f3e03b1da0048f147f0a47"
+    },
+    {
+      "id": "runtime-source-nncp_symbol_cache32_marginal_qm0-416cc03bb17c",
+      "path": "tools/nncp_symbol_cache32_marginal_qm0.py",
+      "sha256": "sha256:deec3ba812ebe1524d1b1e126ca9f55a18936008cd9857f549402edaa147af27"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "Instrumentation adds only a zero tensor after ff_bias2_19; every pre-existing fixture file from both captures must remain byte-identical to the retained production fixture.",
+    "All 64 states across all 32 streams are captured and both complete runs finish before the open residual or retained ff2_19 comparator is read.",
+    "The source reconstruction uses the same 128-sample partial FMA accumulation and ordered partial addition already frozen for the open FF2 reducer.",
+    "The closed teacher, its executable, captured inputs, adjoints, gradients, traces, and fixture receive zero objective score credit and may not ship in a submitted codec.",
+    "This gate attributes one production backward boundary; it proves no open transformer backward, recursive adaptation, archive saving, package, transfer, or Hutter result."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-source-ff2-mismatch",
+      "measurement": "sourceFf2MismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-open-adjoint-equal",
+      "measurement": "openAdjointMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The exact production fixture and failed deterministic open FF2 reconstruction antecedents remain valid and digest-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Two independently instrumented production captures have identical complete directory aggregates.",
+      "id": "sourceCaptureRepeatIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Both captures combine to byte-identical FF2 inputs, adjoints, reconstructed gradients, and negative controls.",
+      "id": "combinedReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Every non-probe file in each instrumented capture is byte-identical to the retained production fixture.",
+      "id": "parentFixtureIdentity",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Sequential production states captured at the first retained update.",
+      "id": "capturedStateCount",
+      "unit": "states"
+    },
+    {
+      "definition": "Complete BF16 source post-FF2 residual-join adjoint population.",
+      "id": "sourceAdjointElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Complete BF16 source layer-19 FF2 input population.",
+      "id": "sourceInputElementCount",
+      "unit": "activation elements"
+    },
+    {
+      "definition": "Complete reconstructed BF16 source ff2_19 parameter-gradient population.",
+      "id": "sourceFf2ElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Source BF16 post-FF2 adjoint words that differ from the frozen open final-normalization input residual.",
+      "id": "openAdjointMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute source-adjoint versus open-residual difference.",
+      "id": "maximumOpenAdjointAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Distinct output coordinates containing any source-adjoint versus open-residual mismatch.",
+      "id": "openAdjointMismatchFeatureCount",
+      "unit": "output features"
+    },
+    {
+      "definition": "Source-input and source-adjoint reconstruction words that differ from retained production ff2_19.",
+      "id": "sourceFf2MismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute source reconstruction versus retained ff2_19 difference.",
+      "id": "maximumSourceFf2AbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Sign-negating the complete source adjoint changes the reconstructed ff2_19 gradient.",
+      "id": "negatedSourceAdjointControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Compressed dependency-closed instrumentation, reduction, and orchestration source package.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Generated builds and complete teacher captures remained under and were removed with the guarded work root.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/decision.json",
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/execution.json",
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/source-top-ff2-input.bf16",
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/source-top-ff2-adjoint.bf16",
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/source-ff2-19-gradient.bf16",
+    "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/20260816T061820040240Z_b914054b9184.json",
+      "sha256": "sha256:d00ef7d9ef61ef8132ee445d4e582579cdd79920285df91f210a1eaecffbc9e2"
+    }
+  },
+  "population": {
+    "coordinate": "First retained production update over original transformed-symbol coordinates [256,320) independently within each of 32 contiguous streams.",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All 64 sequential states across all 32 streams at update block 256, all 6,291,456 FF2 input words, all 2,097,152 post-FF2 adjoint words, and all 3,145,728 ff2_19 words.",
+    "unit": "one production state, BF16 activation word, adjoint word, or parameter-gradient word"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedentspass",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-sourcecapturerepeatidentical",
+      "measurement": "sourceCaptureRepeatIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-combinedreplayidentical",
+      "measurement": "combinedReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-parentfixtureidentity",
+      "measurement": "parentFixtureIdentity",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-capturedstatecount",
+      "measurement": "capturedStateCount",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "p-sourceadjointelementcount",
+      "measurement": "sourceAdjointElementCount",
+      "operator": "eq",
+      "threshold": 2097152
+    },
+    {
+      "id": "p-sourceinputelementcount",
+      "measurement": "sourceInputElementCount",
+      "operator": "eq",
+      "threshold": 6291456
+    },
+    {
+      "id": "p-sourceff2elementcount",
+      "measurement": "sourceFf2ElementCount",
+      "operator": "eq",
+      "threshold": 3145728
+    },
+    {
+      "id": "p-sourceff2mismatchcount",
+      "measurement": "sourceFf2MismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumsourceff2absoluteerror",
+      "measurement": "maximumSourceFf2AbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-negatedsourceadjointcontroldiffers",
+      "measurement": "negatedSourceAdjointControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-guardedworkrootpass",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-open-adjoint-differs",
+      "measurement": "openAdjointMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-incremental-source-bytes",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "proposalId": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.2,
+    "uncertaintyRisk": 0.3
+  },
+  "status": "frozen"
+}

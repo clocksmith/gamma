@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "reference(experiment_path, experiment) returned an input-style object with id, while adaptive-experiment-result.v1 requires only path and sha256 for its experiment field."
+  },
+  "candidateId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:05688e9742bd23e4b21e9acef0b8b72696ac8dfafa8bb6077e8fd6acf00fe912",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1/20260816T141735480097Z_05688e9742bd.json",
+      "sha256": "sha256:9ae7d919bbc1bdd797b38c9218ed23ac1e657ec552e8aca09352e64cea2e084b"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "A receipt-only successor can copy the sealed artifacts, reuse the completed execution measurements, remove the forbidden id field, validate the result schema, and perform zero teacher or arithmetic executions.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:820104699c0776ece9af72f5818ee041c977e6869a04e94d282234356ae967be"
+    },
+    {
+      "path": "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:cf8f5653de675404581ade9989ec0fdbf25c885699784c8535ddf6d4785df510"
+    },
+    {
+      "path": "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:ae19b301ffc14cda6a22fedd987c3cee28b5e3cec171fb046529ac25bd15a638"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:2353bd0841250690562b3af0ec8c0da649fc610233883af5019911a620f7122a"
+  },
+  "generatedUtc": "2026-08-16T14:19:13+00:00",
+  "hypothesis": {
+    "rationale": "All scientific measurements were computed and the draft predicates passed, but strict result validation failed before a valid decision receipt existed.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T141750Z_04014220dc.json",
+    "sha256": "sha256:2f26dd9653c722697b6007f3e5ecedde69dddc8a290c2785d9bc537bd6f14556"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Artifact reference helpers need output-context types; input references with id must not be reused in schema fields that require bare digest references.",
+      "Finalize from the sealed tensors and execution manifest without reconstructing deleted capture scratch or recomputing normalization arithmetic."
+    ],
+    "uncertainties": [
+      "A schema-valid receipt has not yet bound the already observed source/open mismatch count."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t141750z_04014220dc",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The retry sealed both source tensors, exact manifests, comparisons, controls, and zero-teacher accounting, then constructed the experiment receipt with an extra id field forbidden by the adaptive-result schema."
+    ],
+    "valid": false
+  }
+}

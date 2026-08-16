@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T13:58:35+00:00",
+  "created_at": "2026-08-16T13:58:35+00:00",
+  "developed_at": "2026-08-16T13:58:36+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/decision.json",
+      "sha256": "sha256:ddb739cb1fb00e1275ed093cd32105a52d86697345e8f26d6e4dbc17e37aa9df"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T135007Z_c0fde22dd2.json",
+      "sha256": "sha256:78a315070ec613d33d7deffb34de86fc5775f1058df9ac9e204c76da91302d2f"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1.json",
+    "sha256": "sha256:8dd30fb8033d74255dcccbe94c8ddc758b6446c22c560ba8fb65ad20deba5fdc"
+  },
+  "hypothesis": "A marked-zero node placed only on the layer-19 pre-FF normalization branch yields a deterministic complete source adjoint that distinguishes branch-backward arithmetic from residual-join accumulation.",
+  "interfaces_exposed": [
+    "layer-19 pre-FF normalization input -> branch-only source adjoint"
+  ],
+  "kill_condition": "Any incomplete, nondeterministic, fixture-changing, dead, wrong-input, source-failing, or resource-failing capture rejects the oracle.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+  "priority": 1451,
+  "promotion_condition": "Two deterministic complete source captures, exact fixture and input identity, a live branch-only adjoint distinct from the total adjoint, and a measured source/open branch comparison.",
+  "proposal_id": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "post-merge-only-bf16-conversion"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1451,
+  "state": "developed",
+  "title": "Capture the pre-FF normalization-only source adjoint"
+}

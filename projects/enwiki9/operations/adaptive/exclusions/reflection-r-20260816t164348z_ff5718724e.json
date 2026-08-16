@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t164348z_ff5718724e",
+  "failure": "The source w_o_19 transpose uses eight ordered 128-feature FMA panels whose completed sums are accumulated before a single BF16 materialization; one unblocked 1,024-feature chain changes 285 BF16 outputs.",
+  "mechanism": "Apply the independently exact ordered 128-feature panel transpose contract to the 1,024-feature w_o_19 reduction, with unblocked and sign-negated controls and complete replay.",
+  "population": "BF16 pre-w_o input-adjoint words; Every one of 1,024 input features for all 64 states and 32 streams.; scopeBytes=4194304; scopeSymbols=2097152",
+  "recorded_at": "2026-08-16T16:45:10+00:00",
+  "retired_dimensions": [
+    "Treating an unblocked 1,024-feature transpose reduction as arithmetically equivalent to the source w_o_19 backward path"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

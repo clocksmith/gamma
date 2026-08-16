@@ -1,0 +1,40 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1"
+  ],
+  "description": "Production source oracle for the layer-19 pre-w_o input, its adjoint, and the initial matrix",
+  "family": "nncp_source_adjoint",
+  "hypothesis": "A marked zero node immediately before the production layer-19 w_o matmul captures deterministic complete pre-w_o values and input adjoints without changing any non-probe fixture payload, while the initial w_o_19 BF16 matrix is extracted verbatim from the bound parameter container.",
+  "id": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T160641Z_9c2e81181b": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T160641Z_9c2e81181b.json",
+        "sha256": "sha256:2699798e8fca3e91463e6af00bb4f5a7e16c3dc6506b2ba573ac4d31d8d9671c",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_w_o_input_adjoint_64_q0_v1.json",
+      "sha256": "sha256:22165254fb3552016b9c11deed72dcd085774f39a1680ee1909a2ea6cb24485f"
+    },
+    "interfaces_exposed": [
+      "production layer-19 w_o graph -> zero-credit exact pre-w_o input-adjoint oracle",
+      "bound initial parameter container -> exact BF16 w_o_19 matrix"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unmeasured layer-19 w_o input-adjoint arithmetic"
+    ]
+  },
+  "parent": "nncp_open_top_pre_ff_total_adjoint_64_q0_retry_v1",
+  "status": "candidate",
+  "verdict": "Create a prospectively frozen receipt-only retry that binds the failed job, guard, staged decision, execution manifests, and sealed tensor artifacts; validate the final declared decision, then remove the prior 10.7GB work root."
+}

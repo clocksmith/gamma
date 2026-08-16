@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T06:50:11+00:00",
+  "created_at": "2026-08-16T06:50:11+00:00",
+  "developed_at": "2026-08-16T06:50:21+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T064522Z_bd9f01360c.json",
+      "sha256": "sha256:7b245184c4a9aed140553b05fdbdcaeed63215ea10d0b457886f22586e1eb777"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:4e73b2ae969e0536d7c420b4e74f0588970c198af12c6afe23c0ab512a5ce3c1"
+  },
+  "hypothesis": "The source-captured post-FF2 adjoint differs from the open final-normalization residual, while source input plus source adjoint reconstruct every retained ff2_19 word under the frozen reducer.",
+  "interfaces_exposed": [
+    "declared zero-add source FF2 probe -> exact top-layer adjoint attribution"
+  ],
+  "kill_condition": "Retire the attribution if source operands do not reconstruct retained ff2_19 exactly or if the source adjoint equals the open residual; retry only another explicit pre-measurement infrastructure failure.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "priority": 1476,
+  "promotion_condition": "The declaration-only retry compiles, both zero-add production captures preserve the retained fixture and replay identically, source operands reconstruct every ff2_19 BF16 word, and the source adjoint differs from the open residual.",
+  "proposal_id": "nncp_libnc_top_ff2_adjoint_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Do not change scientific predicates in response to the compile-only failed attempt; it produced no source tensor or comparator measurement."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1494,
+  "state": "developed",
+  "title": "Declared production top-layer FF2 adjoint attribution retry"
+}

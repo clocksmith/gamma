@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The total-adjoint mismatch is not explained by pre- versus post-residual BF16 conversion; the remaining uncertainty lies inside the normalization branch input-adjoint arithmetic or its source graph boundary."
+  },
+  "candidateId": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1",
+    "candidateTreeSha256": "sha256:6f38cc393882e78e1a9ffcc4bfc521f3e2572a135733be720a60cfa9194f6bb6",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/20260816T134949657610Z_6f38cc393882.json",
+      "sha256": "sha256:20012e4aa8c48c8e17dead0e28d7e549ce672012aadb33276cabf3a1f4236bc5"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retain pre-merge conversion and exact state-wise affine reductions; capture the source normalization-only input adjoint at layer 19 before changing arithmetic again.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/decision.json",
+      "sha256": "sha256:ddb739cb1fb00e1275ed093cd32105a52d86697345e8f26d6e4dbc17e37aa9df"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/execution.json",
+      "sha256": "sha256:2605090e06d34c5bcae56b3fa28def91fdfbe2de142cf693c14cb3871e20046f"
+    },
+    {
+      "path": "results/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1/guard.json",
+      "sha256": "sha256:489a7b51c74566fc043daf310f617127b7c0646f3e26d41d8b9a90fc6a8054ed"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_residual_conversion_order_64_q0_v1.json",
+    "sha256": "sha256:0b145f20a5e5c04feecd27262b6a26617f8f39599213e9af2980cf8f8041a45f"
+  },
+  "generatedUtc": "2026-08-16T13:51:26+00:00",
+  "hypothesis": {
+    "rationale": "Post-merge conversion produced 1109443 mismatches, more than the 1093739 preconverted baseline, so retaining the normalization residual in F32 through the residual add is not the production boundary.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T135007Z_c0fde22dd2.json",
+    "sha256": "sha256:401453a842aad70be68088a7c7a3a765ac4d35c5767f188b00b8115fa662797b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "post-merge-only-bf16-conversion"
+    ],
+    "transferableLessons": [
+      "When two conversion placements are one-ulp-close, retain both as explicit variants and require the source comparator; numerical intuition alone selected the worse boundary here."
+    ],
+    "uncertainties": [
+      "Whether the preconverted normalization branch itself matches LibNC before the residual join; the total-adjoint oracle cannot distinguish branch arithmetic from join accumulation."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t135007z_c0fde22dd2",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Both conversion variants and controls were generated twice from hash-bound complete inputs; affine gradients, replay, dependency closure, source closure, and resource guards all passed."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1",
+  "claimed_at": "2026-08-16T07:58:08+00:00",
+  "created_at": "2026-08-16T07:58:07+00:00",
+  "developed_at": "2026-08-16T07:58:08+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T075342Z_b33521b4a0.json",
+      "sha256": "sha256:b0fe08c38bbfa92a727cb3149d80377bf2e7fbfc34a982ad8b8c43b3c6307b18"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/decision.json",
+      "sha256": "sha256:fc8d605b526879d1ca5318cd61027f2b4aac28e4c84fb4cf3b4d42e3ce376f39"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T061837Z_1dfa2ae8f8.json",
+      "sha256": "sha256:b026cff744099c08468a382220a8a02772527a14cfeb32f978f482afb460c7e1"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1.json",
+    "sha256": "sha256:3c633276de8cc15c2789712ab827d8d0c18893932fdbb94ba6c28a35d88a2b40"
+  },
+  "hypothesis": "Installing only the source-attributed streaming eight-lane BF16 g*y dot in the otherwise unchanged open final-RMSNorm backward makes the complete normalization-input residual and ff2_19 parameter gradient source-exact while preserving every inherited forward, output-head, normalization-parameter, projection, replay, control, dependency, source, and resource predicate.",
+  "interfaces_exposed": [
+    "decoder-visible all-stream workload -> source-exact open output-head, final-RMSNorm, and top-FF2 parameter-gradient tail"
+  ],
+  "kill_condition": "Any nonzero source residual or ff2_19 mismatch after the isolated streaming-dot substitution refutes this integration.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+  "priority": 1475,
+  "promotion_condition": "Every inherited exact tail remains exact; both fresh executions are identical; the complete final-RMSNorm input residual and ff2_19 gradient match their independent source comparators word-for-word; controls, dependencies, source closure, and guards pass.",
+  "proposal_id": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1",
+  "retired_neighborhoods": [
+    "Do not alter scalar placement or FF2 reduction while integrating the source-exact streaming final-RMSNorm dot."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1493,
+  "state": "developed",
+  "title": "Source-exact open final-RMSNorm and top-FF2 backward tail"
+}

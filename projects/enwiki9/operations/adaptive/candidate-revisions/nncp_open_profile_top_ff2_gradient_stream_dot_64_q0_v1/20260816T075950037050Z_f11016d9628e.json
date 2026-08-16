@@ -1,0 +1,84 @@
+{
+  "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1",
+  "candidateTreeSha256": "sha256:f11016d9628e2f0db730a35855bd6f6bff795639360c29a2d463e8542f76930e",
+  "change": {
+    "evidence": [
+      "operations/adaptive/proposals/developed/000_nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1.json"
+    ],
+    "hypothesis": "Installing only the source-attributed streaming eight-lane BF16 g*y dot in the otherwise unchanged open final-RMSNorm backward makes the complete normalization-input residual and ff2_19 parameter gradient source-exact while preserving every inherited forward, output-head, normalization-parameter, projection, replay, control, dependency, source, and resource predicate.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Replace only the generic 64-block g*y product reduction in the open final-RMSNorm input backward with the source-attributed ordered eight-lane streaming BF16 FMA dot; preserve the mean-scaled expression and every other forward, backward, FF2, and control operation."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/8d/8d6fe671fb1570651bf002d7b40ec6c29d9210acb221d956c21b78dbf3bd06a9",
+      "bytes": 1261,
+      "normalization": "verbatim",
+      "path": "CMakeLists.txt",
+      "sha256": "8d6fe671fb1570651bf002d7b40ec6c29d9210acb221d956c21b78dbf3bd06a9"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/e4/e4dea5eb25530581447a32463bac5bb2f063d376501b62733ddbf45e081a3fb5",
+      "bytes": 15951,
+      "normalization": "verbatim",
+      "path": "final_norm_backward.cpp",
+      "sha256": "e4dea5eb25530581447a32463bac5bb2f063d376501b62733ddbf45e081a3fb5"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/35/35e58baed7d56153e5cb8d458c8b40fcb5691184016ae8d3dbf49dea32414f80",
+      "bytes": 2861,
+      "normalization": "verbatim",
+      "path": "materialize_forward.py",
+      "sha256": "35e58baed7d56153e5cb8d458c8b40fcb5691184016ae8d3dbf49dea32414f80"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/74/74324c879e73a436c64ac1151aafa1bf99a4f6d4c8718ba68a6025ccc0a47091",
+      "bytes": 1420,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "74324c879e73a436c64ac1151aafa1bf99a4f6d4c8718ba68a6025ccc0a47091"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/a0/a055c6293186052712c035f6aac2ca25a23b1ebbaba76c379459bb3832d424f0",
+      "bytes": 259,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "a055c6293186052712c035f6aac2ca25a23b1ebbaba76c379459bb3832d424f0"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/ca/ca996964960c9385a0f1754fadb116152491f4619b61b817b6ad0f3fff75b53d",
+      "bytes": 6467,
+      "normalization": "verbatim",
+      "path": "top_ff2_gradient.cpp",
+      "sha256": "ca996964960c9385a0f1754fadb116152491f4619b61b817b6ad0f3fff75b53d"
+    }
+  ],
+  "generatedUtc": "2026-08-16T07:59:50+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:b914054b9184437491fa727ad50609c5ac1d832465adcac50621da187fc64adf",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_64_q0_retry_v1/20260816T061820040240Z_b914054b9184.json",
+      "sha256": "sha256:d00ef7d9ef61ef8132ee445d4e582579cdd79920285df91f210a1eaecffbc9e2"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_v1/20260816T075808734149Z_17e48d0856d7.json",
+    "sha256": "sha256:b3ee5130fd7565940009fa91ad4fd2a1e32b891549450cc8af848598c5d50df4"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

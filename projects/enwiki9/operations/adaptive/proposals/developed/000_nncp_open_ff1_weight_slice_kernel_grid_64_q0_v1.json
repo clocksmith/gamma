@@ -1,0 +1,47 @@
+{
+  "candidate_id": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "claimed_at": "2026-08-16T11:57:49+00:00",
+  "created_at": "2026-08-16T11:57:49+00:00",
+  "developed_at": "2026-08-16T11:57:49+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T114029Z_4b8fd50e01.json",
+      "sha256": "sha256:5b04913d1496dc33923ad2637b69722ab985c3e3f3aba6edec8a6164a3070e70"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1.json",
+    "sha256": "sha256:b8c2d959c6bbf689ec3656d88ab2573d4ee4ddf6a4b339f51e192b3040869d3a"
+  },
+  "hypothesis": "Initializing eight adjacent output-feature lanes from the prior BF16 gradient and applying 32 sequential AVX2 FMAs before one BF16 state-boundary conversion reproduces the exact LibNC ff1_19 slice and its reverse/sign controls.",
+  "interfaces_exposed": [
+    "open BF16 FF1 operands -> LibNC-free exact ff1_19 gradient slice"
+  ],
+  "kill_condition": "Any nonzero prior-FMA/oracle mismatch or failed antecedent, reverse/sign alignment, replay, dependency, source, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1460,
+  "promotion_condition": "Exact prior-FMA parity over all 131,072 oracle words and reverse/sign controls; distinct post-add and nonfused cells; deterministic replay; no forbidden dependency; green source and resource guards.",
+  "proposal_id": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unattributed within-state FF1 matrix-gradient arithmetic"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1475,
+  "state": "developed",
+  "title": "Open FF1 weight-slice arithmetic grid"
+}

@@ -1,0 +1,94 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The source/open eight-word disagreement is caused entirely by the dot-reduction tree: one ordered eight-lane BF16 FMA accumulator plus the source horizontal tree is exact, while mean-scaled versus width-scaled scalar placement is observationally identical after BF16 rounding on all 2,097,152 words."
+  },
+  "candidateId": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1",
+    "candidateTreeSha256": "sha256:a44090a6acc27f221f6fb688447cb29cc98d207a3d84083ccc95758a7918dfe1",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/20260816T075342260293Z_a44090a6acc2.json",
+      "sha256": "sha256:6a35d1004fbd9dd485d1c7878313a17cc86ab6c69db953a613ad50dae7d5742d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a successor that installs only the streaming BF16 dot in the open backward tail, preserves the mean-scaled expression because it is already exact after BF16 rounding, and tests the next deeper source-captured boundary.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/decision.json",
+      "sha256": "sha256:fc8d605b526879d1ca5318cd61027f2b4aac28e4c84fb4cf3b4d42e3ce376f39"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/execution.json",
+      "sha256": "sha256:5ade47c2eeeb36ed7127e4d25e0d508e6bfde7b28f5ab0364fb2cc9c40f14fb7"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/guard.json",
+      "sha256": "sha256:078cf496ff267ec54b5de033a4d492e8eb7964a2b69aa8b165e25504d630a2b9"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1.json",
+    "sha256": "sha256:506f504ad38fa82ff201bf1ee6675042ff3ab079cb6a2aae2dc18ae35023faf2"
+  },
+  "generatedUtc": "2026-08-16T07:55:26+00:00",
+  "hypothesis": {
+    "rationale": "The streaming-dot width-scaled treatment was source-exact, but the streaming-dot mean-scaled cell was independently source-exact too; therefore the frozen claim of one unique combination and three nonexact alternatives is false.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T075342Z_b33521b4a0.json",
+    "sha256": "sha256:2bd3b65338796b561653d6345045122d4807e7de1544b230b6f6ea581d4da269"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Generic 64-block product reduction for the final-RMSNorm g*y dot when source-exact LibNC replay is required.",
+      "Mean-scaled versus width-scaled final-RMSNorm backward scalar placement on this retained production population."
+    ],
+    "transferableLessons": [
+      "Replacing only the generic product reduction with the source streaming BF16 dot turns the retained open final-RMSNorm adjoint into the exact source adjoint.",
+      "Source-exact reconstruction need not identify every algebraically different implementation when final BF16 rounding collapses them; promotion predicates must distinguish causal factor identification from unique implementation identification."
+    ],
+    "uncertainties": [
+      "Whether the source streaming dot is sufficient to make the next deeper complete backward boundary exact, or another reduction kernel differs below final RMSNorm."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t075342z_b33521b4a0",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All retained inputs and the source-library digest remained bound, the unchanged generic-dot mean-scaled cell reproduced every open-adjoint word, both executions were byte-identical, the negative control differed everywhere, and all guards passed."
+    ],
+    "valid": true
+  }
+}

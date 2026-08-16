@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Replacing only the generic block-combined final-RMS g*y dot with the ordered eight-lane streaming FMA accumulator removed the entire eight-word residual discrepancy, which in turn removed every ff2_19 gradient discrepancy."
+  },
+  "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:fc66142d71c1e752ff437798017e3bc92e70227cbe5fb823915a1a6d7522d776",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/20260816T082216196136Z_fc66142d71c1.json",
+      "sha256": "sha256:8249fa66a10ae97c5b4484682020a06ea0eb34b1974d89a6d6e17fd0f31bfff9"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Retain this schema-valid exact tail as the antecedent and open the next decoder-visible boundary: FF2 transpose residual through GEGLU and top-layer FF1/bias gradients, with independent source comparators and no teacher calculation input.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:040273f09a8e0eedea0bae7901c70bab4aaa9a0afb6cfcdb9bde325b75cc12ed"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:5dbeb1b404f8145b11d5181a1b9891ba06843e58fccda6ad8e8b8d50471c8d81"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:d522219f1f1c2903a4775517df28f795556d4dcc007c1d628a7a8b391f95e72d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff2_gradient_stream_dot_64_q0_retry_v2.json",
+    "sha256": "sha256:f45b6984a4003c5cd1efcfde79c2f819bc4a0ad43a66e32838a249feff7f13e4"
+  },
+  "generatedUtc": "2026-08-16T08:38:01+00:00",
+  "hypothesis": {
+    "rationale": "The source-attributed streaming g*y dot made all 2,097,152 final-RMS input-residual words and all 3,145,728 ff2_19 gradient words exact while preserving inherited exact forward/output-head/norm gradients, deterministic replay, and live controls.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T082228Z_f0bff9b6df.json",
+    "sha256": "sha256:bd47abd131ea605a7cac1335341ce95aa33600d394d0d8888f60de151f0bc3c5"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Generic 64-element block-combined product reduction as a source-equivalent implementation of the final-RMSNorm g*y dot."
+    ],
+    "transferableLessons": [
+      "The open backward tail is now source-exact from output-head gradients through final RMSNorm and the top-layer ff2_19 parameter gradient; LibNC's streaming BF16 product-reduction order is causally necessary at this boundary, while mean-versus-width scalar placement is not observable on the population."
+    ],
+    "uncertainties": [
+      "The ff2 input residual, GEGLU derivative, ff1_19 and bias gradients, and all earlier transformer layers remain unopened; no recursive update or compression gain is established."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t082228z_f0bff9b6df",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen manifest-corrected experiment completed both 32-stream populations, validated its strict nine-output manifest, passed every promotion predicate, and stayed within guarded memory, scratch, dependency, and source limits."
+    ],
+    "valid": true
+  }
+}

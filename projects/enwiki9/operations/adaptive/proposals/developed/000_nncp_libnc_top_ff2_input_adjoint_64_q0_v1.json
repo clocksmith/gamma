@@ -1,0 +1,45 @@
+{
+  "candidate_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T09:07:51+00:00",
+  "created_at": "2026-08-16T09:07:51+00:00",
+  "developed_at": "2026-08-16T09:07:52+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T084751Z_2949ede196.json",
+      "sha256": "sha256:87b65ea886efa0c3a54ead47471edfbf1942f3931362879d6fd6194ba55e2d71"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:0ac15f0e191e32383ddbf305bf58c577be33fc734cea4c563ba1acd3e6253278"
+  },
+  "hypothesis": "The complete production BF16 adjoint at the layer-19 GEGLU output is byte-identical to the open streaming-dot ff2_19 transpose residual, localizing the remaining ff_bias1_19 discrepancy strictly to GEGLU backward or its later projection.",
+  "interfaces_exposed": [
+    "source-ff2-input-adjoint"
+  ],
+  "kill_condition": "Any nonzero source/open FF2-input residual mismatch refutes the open transpose contract and localizes the first divergence before GEGLU backward.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "priority": 1473,
+  "promotion_condition": "Both complete source captures replay, all non-probe fixture payloads remain identical, the adjoint is live, and every source/open FF2-input residual word matches exactly under strict source and resource guards.",
+  "proposal_id": "nncp_libnc_top_ff2_input_adjoint_64_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1473,
+  "state": "developed",
+  "title": "Capture production top-layer FF2-input adjoint"
+}

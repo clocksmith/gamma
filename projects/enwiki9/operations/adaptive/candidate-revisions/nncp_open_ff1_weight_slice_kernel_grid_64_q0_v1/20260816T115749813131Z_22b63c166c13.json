@@ -1,0 +1,63 @@
+{
+  "candidateId": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "candidateTreeSha256": "sha256:22b63c166c1311a664b85f92ff72049033d9ff740a041e27aef22db0f653685e",
+  "change": {
+    "evidence": [
+      "operations/adaptive/proposals/claimed/000_nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1.json"
+    ],
+    "hypothesis": "Initializing eight adjacent output-feature lanes from the prior BF16 gradient and applying 32 sequential AVX2 FMAs before one BF16 state-boundary conversion reproduces the exact LibNC ff1_19 slice and its reverse/sign controls.",
+    "kind": "proposal-development",
+    "replacements": [],
+    "summary": [
+      "Bound candidate to algorithm proposal nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/55/55c241191ceebbcc5d956ea781d79b4afaac470c0327dfef7fb44a7681278422",
+      "bytes": 6441,
+      "normalization": "verbatim",
+      "path": "ff1_weight_slice_kernel_grid.cpp",
+      "sha256": "55c241191ceebbcc5d956ea781d79b4afaac470c0327dfef7fb44a7681278422"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/06/065583f8317dbc5e6cbdcec0b49a8c4dd377a772590bb0f69769e0fd09bfb4ba",
+      "bytes": 1123,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "065583f8317dbc5e6cbdcec0b49a8c4dd377a772590bb0f69769e0fd09bfb4ba"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/73/73b1083d5274e8ae348835816b8ae8c39d59a3c0f357674df2479ef4eb83b78a",
+      "bytes": 227,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "73b1083d5274e8ae348835816b8ae8c39d59a3c0f357674df2479ef4eb83b78a"
+    }
+  ],
+  "generatedUtc": "2026-08-16T11:57:49+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_libnc_ff1_weight_slice_schedule_64_q0_v1",
+    "candidateTreeSha256": "sha256:d12034d7392c4218501ccbc8a139e2e4746bf5ab03d7ec03bb1b513d6b60d5d4",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_ff1_weight_slice_schedule_64_q0_v1/20260816T114005594198Z_d12034d7392c.json",
+      "sha256": "sha256:0b5d9089c19a85d0d7d368615964e619434e5e824f13cc516beb623a5b01432c"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1/20260816T115749699576Z_c88fcc100b3c.json",
+    "sha256": "sha256:bb74d42046ef03cdd147270a9c243d26afaa4a682daacf583601a16882327ca4"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

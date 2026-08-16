@@ -1,0 +1,48 @@
+{
+  "candidate_id": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "claimed_at": "2026-08-16T12:05:43+00:00",
+  "created_at": "2026-08-16T12:05:36+00:00",
+  "developed_at": "2026-08-16T12:05:50+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T115801Z_99a2e7695e.json",
+      "sha256": "sha256:19a3a1d50a9f6b9d12edd95c2126ce271ee815756673209e22dc8166c6503272"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_weight_slice_post_add_64_q0_v1.json",
+    "sha256": "sha256:0466252f258cc995f209c9807c4162314c17722be3661c5fe649156d43c873af"
+  },
+  "hypothesis": "The post-dot prior-add AVX2 cell reproduces the complete LibNC treatment, reverse-state, and sign-negated FF1 weight slices exactly while retaining the frozen prior-initialized and nonfused mismatch populations.",
+  "interfaces_exposed": [
+    "open BF16 FF1 operands -> exact post-dot-add ff1_19 gradient slice"
+  ],
+  "kill_condition": "Any nonzero post-dot treatment/oracle mismatch or failed antecedent, reverse/sign, replay, dependency, source, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1459,
+  "promotion_condition": "Exact parity over all 131,072 treatment words and reverse/sign controls; frozen 43-word prior-initialized and nonfused control populations; deterministic replay; no forbidden dependency; green source and resource guards.",
+  "proposal_id": "nncp_open_ff1_weight_slice_post_add_64_q0_v1",
+  "retired_neighborhoods": [
+    "Prior-initialized FF1 matrix-gradient accumulation",
+    "Nonfused FF1 matrix-gradient accumulation"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1474,
+  "state": "developed",
+  "title": "Exact post-dot-add open FF1 weight slice"
+}

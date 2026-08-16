@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "FF1 broadcast-bias reduction is exactly a chronological sequence of 64 state-panel reductions: decode the prior BF16 parameter gradient, add streams 0 through 31 in float32, and materialize round-to-nearest-even BF16 once after every state."
+  },
+  "candidateId": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_ff1_bias_state_reduce_64_q0_v1",
+    "candidateTreeSha256": "sha256:733fecc39a59daca514af60450532aee58d8729c9bcf02cd100dda9bb21ea249",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_ff1_bias_state_reduce_64_q0_v1/20260816T112424357780Z_733fecc39a59.json",
+      "sha256": "sha256:f46393cb88f1facb7b38dd17f5b4bdee1b5166dd1050006a934e102fc16706ad"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Integrate the now-open exact bias reducer into the full top-layer backward replay, then localize the next remaining parameter-gradient boundary without re-opening exact FF2, GEGLU, or bias arithmetic.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/decision.json",
+      "sha256": "sha256:ea998fc37737a5a69f0f830346415c16b260b6f52666a539365a9ce2bb42d370"
+    },
+    {
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/execution.json",
+      "sha256": "sha256:2b4624ea8155efe8b35716855ab5fcb6215dc1ff77968054141f6eeba2aca377"
+    },
+    {
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/guard.json",
+      "sha256": "sha256:34ce918a90f5f83b28335ab8409e6891f688cfae817bfd82b5c2a02df854c257"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_ff1_bias_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:4f5b7f65ae02e5ef2377da6278bbd6103a9091281daa08a96014dd9c5dc133b6"
+  },
+  "generatedUtc": "2026-08-16T11:28:43+00:00",
+  "hypothesis": {
+    "rationale": "The open chronological 64-state reducer reproduced all 6,144 independent LibNC oracle words with zero absolute error; flat and reverse-order controls retained exactly their frozen mismatch populations.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T112548Z_7841e2cc5b.json",
+    "sha256": "sha256:f2072ad2d43be078375796ae0bfceb8c4e834629dd7ba2e960c64f0f9398435b"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "LibNC as a runtime or oracle dependency for FF1 bias-gradient reduction"
+    ],
+    "transferableLessons": [
+      "Per-state BF16 materialization fully explains the LibNC FF1 broadcast-bias reduction, so this boundary can be replayed with open scalar arithmetic while preserving chronological graph-state boundaries."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t112548z_7841e2cc5b",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The revision-bound LibNC-free evaluator completed two full populations and every frozen antecedent, treatment, control, dependency, source, replay, and guarded-work predicate passed."
+    ],
+    "valid": true
+  }
+}

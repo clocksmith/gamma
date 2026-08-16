@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T09:46:47+00:00",
+  "created_at": "2026-08-16T09:46:46+00:00",
+  "developed_at": "2026-08-16T09:46:56+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T084751Z_2949ede196.json",
+      "sha256": "sha256:87b65ea886efa0c3a54ead47471edfbf1942f3931362879d6fd6194ba55e2d71"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T093907Z_7f51e2d346.json",
+      "sha256": "sha256:41aa8505ee92820f71d7e7d0b9188152b77ecf13b511d84d82f1a5124008c9ee"
+    },
+    {
+      "path": "results/nncp_libnc_ff2_transpose_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:18883f7654a60ece9cc2b67095f2ec44c8f123c10cc77ea295f3623970110acd"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:0edc832f1db21d5bc16e6e401fd030ed4f4be4d18f0f835fef8545e08e1af087"
+  },
+  "hypothesis": "Replacing only the FF2 transpose with the source-exact ordered 128-feature panel schedule preserves the exact upstream residual and reconstructs the retained ff_bias1_19 gradient through the frozen GEGLU backward contract.",
+  "interfaces_exposed": [
+    "source-exact FF2 input adjoint -> open GEGLU backward -> retained ff_bias1_19"
+  ],
+  "kill_condition": "A nonzero ff_bias1_19 mismatch after an exact source FF2-input residual refutes the frozen GEGLU backward contract as sufficient.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd",
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "priority": 1470,
+  "promotion_condition": "Two complete exact forward replays, zero source FF2-input-adjoint mismatch, zero retained ff_bias1_19 mismatch, deterministic outputs, live control, closed dependencies, strict outputs, and green resource guards.",
+  "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "Do not restore horizontal or unblocked FF2 transpose accumulation."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1488,
+  "state": "developed",
+  "title": "Open top-layer FF1 projection with exact FF2 transpose"
+}

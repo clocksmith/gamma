@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner selected nncp_libnc_top_ff1_input_adjoint_64_q0_v1.compare_bf16, but that module does not define the comparator; the established tuple comparator is in nncp_libnc_top_ff2_input_adjoint_64_q0_v1."
+  },
+  "candidateId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:51519aaa3638cbad8160fd54b8732b1fb628b08912db2619da08c0a84a13cebb",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/20260816T135835969917Z_51519aaa3638.json",
+      "sha256": "sha256:f040145ae3e9380ea0ea5abd08f7a58058588e9880fbd514f9b5a2929b435a1e"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "A narrow no-teacher retry can consume the completed capture directories, validate their full manifests, invoke the explicit typed comparator, seal the oracle, and delete the transient 10.7 GB tree.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260816T135852Z_0445009531.json",
+      "sha256": "sha256:c1062fdeb9bc2174ab939b353c231d71446e384d812bfcc1d76db4a01c2b45a3"
+    },
+    {
+      "path": "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:c38b4da84734ebf128bcad1f66cb35cefc15905cb448789ea8eaa8d0ddef4a70"
+    },
+    {
+      "path": "run_logs/adaptive/20260816T135852Z_0445009531.log",
+      "sha256": "sha256:d4fa54ec2bd7e5975e75b1deea1e3f6fdd4abf7b445d3ce583f759a9306dc17d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_v1.json",
+    "sha256": "sha256:8dd30fb8033d74255dcccbe94c8ddc758b6446c22c560ba8fb65ad20deba5fdc"
+  },
+  "generatedUtc": "2026-08-16T14:13:13+00:00",
+  "hypothesis": {
+    "rationale": "The source/open branch comparison did not execute, so the branch-arithmetic versus residual-join hypothesis remains untested even though the capture population exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T135852Z_0445009531.json",
+    "sha256": "sha256:c1062fdeb9bc2174ab939b353c231d71446e384d812bfcc1d76db4a01c2b45a3"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Preserve and seal the two complete immutable capture directories without rerunning the zero-credit teacher.",
+      "Resolve and bind comparator implementations through an explicit canonical module instead of assuming a transitive parent exposes compare_bf16."
+    ],
+    "uncertainties": [
+      "The exact source/open branch mismatch remains unknown until the sealed retry executes."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t135852z_0445009531",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete source populations were captured under passing memory and disk guards, but the runner referenced a nonexistent compare_bf16 attribute before any scientific comparison or result sealing."
+    ],
+    "valid": false
+  }
+}

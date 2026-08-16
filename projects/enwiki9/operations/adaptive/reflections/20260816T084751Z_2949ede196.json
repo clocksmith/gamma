@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "causal-failure",
+    "localizedCause": "The combined streaming FF2-transpose plus current BF16 GEGLU-backward arithmetic is not source-exact. Mismatches affect both gate and value halves, so the retained bias projection alone cannot yet distinguish the shared transpose adjoint from activation-product and derivative boundaries."
+  },
+  "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_top_ff1_bias_gradient_64_q0_v1",
+    "candidateTreeSha256": "sha256:6b8e56c63be9e21e331e75fa83b1ecbf5ecc23899ed850a8eea74f7d0fc817de",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/20260816T084738538470Z_6b8e56c63be9.json",
+      "sha256": "sha256:3b9b5b2195d25f39c13c9c12d6f4ac434c81ca20f183e0c9690053fce17c25cb"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a source-attributed FF2-input-adjoint capture or an equivalent independent primitive comparator before changing any activation formula; do not tune against the retained ff_bias1_19 vector.",
+    "verdict": "mutate"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/decision.json",
+      "sha256": "sha256:0253383eeb227ceaac5ebf945afba9f5526e713c8e8615e8afd37f479a5ca898"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/execution.json",
+      "sha256": "sha256:9b57294a3e2c26d901bb36a29df6c4dd8ff4fd414c6b53c5648e857a636e4141"
+    },
+    {
+      "path": "results/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1/guard.json",
+      "sha256": "sha256:636f0ff33d5a06a00b56f28421e1dc5b05f72062fd0e2ffd2e5e8a200db120a8"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_64_q0_v1.json",
+    "sha256": "sha256:68bd6212ac9717ea15354618f9e23daeaf7b264ac41e9ab635259d1676029a7d"
+  },
+  "generatedUtc": "2026-08-16T09:03:14+00:00",
+  "hypothesis": {
+    "rationale": "The complete open projection differs from retained ff_bias1_19 in 4,708 of 6,144 BF16 words with maximum absolute error 1.52587890625e-05 despite deterministic replay and a live sign control.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T084751Z_2949ede196.json",
+    "sha256": "sha256:cb52a86f9f7704cf767e9a33eaa03b933b5fd24deb6a9d97f4e70d00a741b5e7"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "The unqualified combination of one streaming FF2-transpose dot, BF16-rounded transpose output, BF16 gate-product boundary, and the current explicit unfused tanh-GELU derivative as a source-exact top-layer backward contract."
+    ],
+    "transferableLessons": [
+      "Exact final-RMS and ff2_19 parameter gradients do not imply an exact FF2 input adjoint. Before propagating into ff1_19, capture or independently validate the production FF2-transpose adjoint and then test GEGLU branches separately."
+    ],
+    "uncertainties": [
+      "Whether the first divergence is FF2-transpose reduction/output rounding, GEGLU multiplication rounding, GELU derivative operation order, or their composition remains unresolved."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t084751z_2949ede196",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen two-population gate completed, validated all strict outputs, reproduced all 640 forward checkpoints, retained byte-identical treatment and control artifacts, and passed dependency, source, memory, scratch, and cleanup guards."
+    ],
+    "valid": true
+  }
+}

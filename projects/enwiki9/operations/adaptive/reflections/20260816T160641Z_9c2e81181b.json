@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner wrote and validated decision.precleanup.json while the prospectively frozen strict output manifest declared only decision.json; validation rejected the undeclared result path before cleanup or finalization."
+  },
+  "candidateId": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_w_o_input_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:0f292bad07cd4cd01cf0dd8d6dce55a71eb22e14c6bd21a5c7e3650dea3beb5d",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_w_o_input_adjoint_64_q0_v1/20260816T160609159553Z_0f292bad07cd.json",
+      "sha256": "sha256:2a6969dae8bf9a3e778cf10287d783240c573d5d94e4c17ff17fe9ec4280981f"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Create a prospectively frozen receipt-only retry that binds the failed job, guard, staged decision, execution manifests, and sealed tensor artifacts; validate the final declared decision, then remove the prior 10.7GB work root.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_v1/decision.precleanup.json",
+      "sha256": "sha256:6f7e692d6b6856b5f49efc453e416112e99e54977c01426a79647c96cf6a19f2"
+    },
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_v1/execution.json",
+      "sha256": "sha256:8cd1c049857bff04389375b6363cc2de42bcc176c739f22c931a21e4b88aba3c"
+    },
+    {
+      "path": "results/nncp_libnc_top_w_o_input_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:41f6e332be3b1bf4d74ac79dc75187ef844ebb9f6bd1db041e5fd6e403ba37ce"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_w_o_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:22165254fb3552016b9c11deed72dcd085774f39a1680ee1909a2ea6cb24485f"
+  },
+  "generatedUtc": "2026-08-16T16:20:19+00:00",
+  "hypothesis": {
+    "rationale": "The staged measurements support the capture hypothesis, but the terminal job did not emit a schema-valid declared decision.json, so promotion remains closed pending receipt-only salvage.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T160641Z_9c2e81181b.json",
+    "sha256": "sha256:e378b34c427831193746e82a09be344e8eb5ac4d45047c65b6e31ac070aafb16"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Validating an adaptive-experiment result at an undeclared pre-cleanup path"
+    ],
+    "transferableLessons": [
+      "Strict-output validation must use the declared decision path; a pre-cleanup recovery receipt must use a non-result recovery schema or be declared prospectively. Preserve the complete captures and finalize them through a new immutable receipt-only candidate without rerunning the teacher."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t160641z_9c2e81181b",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete source captures, exact declared probe populations, unchanged non-probe fixture identity, live tensors, verbatim initial matrix, durable manifests, and resource guards were obtained, but the pre-cleanup result was validated at an undeclared strict-output path and the schema rejected only that receipt path."
+    ],
+    "valid": false
+  }
+}

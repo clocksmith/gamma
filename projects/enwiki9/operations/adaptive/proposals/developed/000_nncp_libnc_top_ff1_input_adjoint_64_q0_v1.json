@@ -1,0 +1,48 @@
+{
+  "candidate_id": "nncp_libnc_top_ff1_input_adjoint_64_q0_v1",
+  "claimed_at": "2026-08-16T12:18:57+00:00",
+  "created_at": "2026-08-16T12:18:51+00:00",
+  "developed_at": "2026-08-16T12:18:58+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T121133Z_b2c70f9ec5.json",
+      "sha256": "sha256:b97976505d70e01e6b1997f03baf861e96ee87e56ccbb3c793fb555405d12c53"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff1_input_adjoint_64_q0_v1.json",
+    "sha256": "sha256:c3d02b9de33d086f70498910c04ebed52c4d826d5c8568fa67a27d36bfdae916"
+  },
+  "hypothesis": "A marked zero node immediately before the production ff1_19 matmul captures deterministic complete FF1 input and adjoint populations without changing fixture payloads; the source forward input matches the exact open input and the initial BF16 matrix is extracted without conversion.",
+  "interfaces_exposed": [
+    "production ff1_19 graph -> zero-credit exact FF1 input-adjoint oracle",
+    "bound initial parameter container -> exact BF16 ff1_19 matrix"
+  ],
+  "kill_condition": "Any source/open input mismatch or failed completeness, determinism, liveness, fixture, matrix, source, or resource predicate.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_profile_top_ff1_gradient_post_add_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1457,
+  "promotion_condition": "Two deterministic complete 2,097,152-word captures; exact source/open forward-input identity; live adjoint; verbatim 6,291,456-word initial matrix; unchanged fixture; green source and resource guards.",
+  "proposal_id": "nncp_libnc_top_ff1_input_adjoint_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unmeasured FF1 input-adjoint arithmetic"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1457,
+  "state": "developed",
+  "title": "Production top-FF1 input-adjoint oracle"
+}

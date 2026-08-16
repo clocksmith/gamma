@@ -1,0 +1,38 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+    "nncp_libnc_geglu_gate_avx2_64_q0_v1"
+  ],
+  "description": "Complete open top-FF1 backward with exact AVX2 GEGLU gate arithmetic",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Installing only the source-exact AVX2 GEGLU gate-backward contract into the exact-FF2 open replay reproduces both complete source branch adjoints and the retained ff_bias1_19 gradient exactly.",
+  "id": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T104952Z_2204470800": {
+        "decision": "mutate",
+        "path": "operations/adaptive/reflections/20260816T104952Z_2204470800.json",
+        "sha256": "sha256:717923ae9726710672c3fc94984d0b31066799298d99f668c042427196974782",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1.json",
+      "sha256": "sha256:dd84f60f6341331edd9e8ef183a81ed0c1c8a56f9bcde62993d75de114f55642"
+    },
+    "interfaces_exposed": [
+      "source-exact FF2 adjoint -> exact AVX2 GEGLU backward -> retained ff_bias1_19"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_profile_top_ff1_bias_gradient_avx2_64_q0_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_open_profile_top_ff1_bias_gradient_64_q0_retry_v2",
+  "status": "measured_negative",
+  "verdict": "Freeze one source-motivated bias-reduction order attribution over the exact 12,582,912-word residual, compare complete 6,144-word outputs, and do not rerun the teacher."
+}

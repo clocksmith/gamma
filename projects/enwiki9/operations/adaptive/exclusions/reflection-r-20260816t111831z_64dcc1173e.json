@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T111831Z_64dcc1173e.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t111831z_64dcc1173e",
+  "failure": "LibNC reduces each 6,144-by-32 BF16 state panel into the existing BF16 parameter gradient with nc_reduce_sum before the next state, making state-boundary rounding and chronological graph order part of the arithmetic contract.",
+  "mechanism": "No arithmetic, population, control, metric, or predicate change. Add only -Wno-unused-parameter after -Werror so warning-bearing external LibNC headers compile under the existing strict policy.",
+  "population": "BF16 FF1-output adjoint elements; All 64 chronological decoder states, all 32 streams, and all 6,144 FF1-output features from the source-exact parent artifact.; scopeBytes=25165824; scopeSymbols=12582912",
+  "recorded_at": "2026-08-16T11:21:18+00:00",
+  "retired_dimensions": [
+    "Flattened 2,048-sample FF1 bias accumulation as a source-exact projection"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

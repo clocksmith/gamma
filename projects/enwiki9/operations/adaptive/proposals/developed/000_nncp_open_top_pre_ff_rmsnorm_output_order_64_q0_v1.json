@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "claimed_at": "2026-08-16T14:28:21+00:00",
+  "created_at": "2026-08-16T14:28:20+00:00",
+  "developed_at": "2026-08-16T14:28:23+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:cfa7ad52756e102c02909182dc29a8ff830b3dabfb9cc0e7203c29fbaf493bb0"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T142138Z_ac31397e1d.json",
+      "sha256": "sha256:ebddd3a841ab5272fdde04cd9fa1c3fbbc33b129764146792f71de3a34f88b8c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1.json",
+    "sha256": "sha256:ffee20b8491a290ddf57aae3e04708e0dbc10bccb681e7963ca78a5f74194020"
+  },
+  "hypothesis": "Removing the LayerNorm-only mean-upstream term and using LibNC's output-order RMSNorm backward reproduces every sealed branch-adjoint word.",
+  "interfaces_exposed": [
+    "sealed pre-FF input and normalized adjoint -> open RMSNorm branch adjoint"
+  ],
+  "kill_condition": "Any treatment mismatch or failure of affine, control, replay, dependency, source, or resource gates rejects the output-order formula.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_libnc_top_pre_ff_norm_branch_adjoint_64_q0_retry_v2",
+  "priority": 1448,
+  "promotion_condition": "Exact complete branch-adjoint parity, exact retained affine gradients, a live non-exact baseline and negated control, deterministic replay, open dependencies, and guarded source closure.",
+  "proposal_id": "nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1",
+  "retired_neighborhoods": [
+    "LayerNorm mean-upstream subtraction at the pre-FF RMSNorm boundary"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1466,
+  "state": "developed",
+  "title": "Remove the LayerNorm term from pre-FF RMSNorm backward"
+}

@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T082228Z_f0bff9b6df.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t082228z_f0bff9b6df",
+  "failure": "Replacing only the generic block-combined final-RMS g*y dot with the ordered eight-lane streaming FMA accumulator removed the entire eight-word residual discrepancy, which in turn removed every ff2_19 gradient discrepancy.",
+  "mechanism": "Replace only the generic 64-block g*y product reduction in the open final-RMSNorm input backward with the source-attributed ordered eight-lane streaming BF16 FMA dot; preserve the mean-scaled expression and every other forward, backward, FF2, and control operation.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All inherited exact forward, output-head, final RMSNorm, and ff_bias2_19 populations plus all 3,145,728 BF16 ff2_19 gradient words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T08:38:01+00:00",
+  "retired_dimensions": [
+    "Generic 64-element block-combined product reduction as a source-equivalent implementation of the final-RMSNorm g*y dot."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

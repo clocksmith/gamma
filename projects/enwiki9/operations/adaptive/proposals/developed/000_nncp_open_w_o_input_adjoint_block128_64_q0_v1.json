@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+  "claimed_at": "2026-08-16T16:40:50+00:00",
+  "created_at": "2026-08-16T16:40:50+00:00",
+  "developed_at": "2026-08-16T16:40:50+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T163533Z_7a29124cd9.json",
+      "sha256": "sha256:e766508c71985955c381d1793afa5a467ec136997d024c0a3b8fb6a98cdd73fb"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T123635Z_f1f6615808.json",
+      "sha256": "sha256:b864e1b5d06cd2f1148ac601e1c844453e921deba2bf98e24f68d436bb6c0d40"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_w_o_input_adjoint_block128_64_q0_v1.json",
+    "sha256": "sha256:d34660d8a1d4df0e6c0f0edd0005ed88097e5221aef4ee36cc34c48a7e4c99f3"
+  },
+  "hypothesis": "Eight ordered 128-feature FMA panels over the sealed initial w_o_19 matrix and exact open post-w_o adjoint reproduce all 2,097,152 source pre-w_o input-adjoint words, while an unblocked reduction and sign-negated input differ.",
+  "interfaces_exposed": [
+    "initial w_o_19 plus open post-w_o adjoint -> exact LibNC-free pre-w_o input adjoint"
+  ],
+  "kill_condition": "Any ordered-panel treatment mismatch or failed replay, dependency, source, control, or resource predicate.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_w_o_gradient_full_post_add_64_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1536,
+  "promotion_condition": "Zero mismatches across all 2,097,152 ordered-panel words; live unblocked and sign-negated controls; byte-identical replay; no forbidden dependencies; green source and resource guards.",
+  "proposal_id": "nncp_open_w_o_input_adjoint_block128_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unvalidated transfer of ordered 128-feature transpose panels to w_o_19"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1536,
+  "state": "developed",
+  "title": "Open layer-19 w_o transpose residual"
+}

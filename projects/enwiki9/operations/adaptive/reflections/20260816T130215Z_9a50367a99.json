@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The sealer assumed positional tuple semantics for a named comparison record."
+  },
+  "candidateId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:0472db71dab585f285a385f5ab2ff33053b56350b0399c63ccb319bced08f376",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/20260816T130158991978Z_0472db71dab5.json",
+      "sha256": "sha256:e85a68e8ca28b6af8c5d9351d72e63b6c99cbd5d2fcaa161705d1fffb22afe7d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Finalize from sealed artifacts and identical aggregate manifests, recomputing only named mismatch fields.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:1e09a75cd7ce2038408d0701cc6c43c48aa0afcda4e846396c7ffe9c649aafc3"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_pre_ff_hidden_adjoint_64_q0_retry_v1.json",
+    "sha256": "sha256:552ff33fd7bbf3f6304b60b22d5bb21764e00c019adb3b6bd29d23dea3f82bfe"
+  },
+  "generatedUtc": "2026-08-16T13:08:55+00:00",
+  "hypothesis": {
+    "rationale": "All source data were sealed, but strict result construction failed before a valid decision existed.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T130215Z_9a50367a99.json",
+    "sha256": "sha256:816d166ba31694869450a0380a7d00291f38b131608404115ca1bcda793b9b11"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Comparison APIs must retain named result fields across module boundaries; mapping iteration is not a typed substitute for tuple return values."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t130215z_9a50367a99",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The first seal preserved both artifacts and both exact manifests, then unpacked the mapping returned by the shared comparator as a tuple and supplied string keys to numeric predicates."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The patch inserted complete static probe definitions near the fixture helper but did not insert prototypes before trf_eval and backward_cb."
+  },
+  "candidateId": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_top_ff2_adjoint_64_q0_v1",
+    "candidateTreeSha256": "sha256:ed387aa92bbf98a25619c37d5970faa5601a30341239c32d7b43934b5550d041",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_top_ff2_adjoint_64_q0_v1/20260816T064453191091Z_ed387aa92bbf.json",
+      "sha256": "sha256:115bce3e94132ceff8b93be5bf0b1c3542172efd8d1a474bd826c9bee61d800b"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create an immutable retry that changes only the missing forward declarations, preserves the prospective attribution predicates, and reruns both complete guarded captures.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_libnc_top_ff2_adjoint_64_q0_v1/guard.json",
+      "sha256": "sha256:4adc2cfa38f7ca66789877ac6dbc6259772103f1b4b4befb1b0f8bcab580ace6"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_ff2_adjoint_64_q0_v1.json",
+    "sha256": "sha256:c7bb37335850685bd6b15b73e72681faef5d629a7a978e67171d4f61a7beaf96"
+  },
+  "generatedUtc": "2026-08-16T06:47:15+00:00",
+  "hypothesis": {
+    "rationale": "No teacher execution, source adjoint, source input, reconstructed gradient, comparator, or scientific control was produced.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T064522Z_bd9f01360c.json",
+    "sha256": "sha256:23ce8eccc10ae9c538423150da3fb2c6218cc9a02836230e5b7ea0d5d5eda2f4"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Production source probes inserted below their call sites require digest-bound forward declarations at a unique pre-trf_eval boundary."
+    ],
+    "uncertainties": [
+      "The source-adjoint versus open-residual relationship and exact source reconstruction remain wholly unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t064522z_bd9f01360c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The instrumented translation unit failed to compile before either source capture: probe definitions were inserted after their first use without forward declarations."
+    ],
+    "valid": false
+  }
+}

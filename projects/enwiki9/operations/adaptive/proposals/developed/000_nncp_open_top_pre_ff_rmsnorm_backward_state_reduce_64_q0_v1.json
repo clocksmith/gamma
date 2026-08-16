@@ -1,0 +1,56 @@
+{
+  "candidate_id": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "claimed_at": "2026-08-16T13:29:02+00:00",
+  "created_at": "2026-08-16T13:28:42+00:00",
+  "developed_at": "2026-08-16T13:29:03+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1/decision.json",
+      "sha256": "sha256:b0ea39487ed5dadfa34b2d838fbb6eb010ecd18b852e521c94fe1ca803150fc3"
+    },
+    {
+      "path": "results/nncp_open_ff1_bias_state_reduce_64_q0_v1/decision.json",
+      "sha256": "sha256:ea998fc37737a5a69f0f830346415c16b260b6f52666a539365a9ce2bb42d370"
+    },
+    {
+      "path": "results/nncp_libnc_final_rmsnorm_reduction_scale_64_q0_v1/decision.json",
+      "sha256": "sha256:fc8d605b526879d1ca5318cd61027f2b4aac28e4c84fb4cf3b4d42e3ce376f39"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1.json",
+    "sha256": "sha256:27a5433ecf292447d014bfea8ebee87b348781ee4eb7988e3de1a277a7d81d33"
+  },
+  "hypothesis": "The correct final-normalization input adjoint, width-scaled centered normalization arithmetic, and chronological 32-stream BF16 state reductions reproduce every layer-19 pre-FF total-adjoint, ln_g_39, and ln_b_39 word exactly.",
+  "interfaces_exposed": [
+    "exact pre-FF hidden plus normalized/direct adjoints -> exact affine gradients and total layer-19 hidden adjoint"
+  ],
+  "kill_condition": "Any complete-population total-adjoint mismatch rejects the combined boundary correction.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_pre_ff_rmsnorm_backward_64_q0_v1",
+  "priority": 1453,
+  "promotion_condition": "Exact open hidden, normalized operand, affine gradients, total adjoint, replay, dependency closure, and live controls.",
+  "proposal_id": "nncp_open_top_pre_ff_rmsnorm_backward_state_reduce_64_q0_v1",
+  "retired_neighborhoods": [
+    "pre-final-normalization-direct-adjoint",
+    "flat-affine-gradient-reduction"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1468,
+  "state": "developed",
+  "title": "Correct the layer-19 pre-FF backward schedule"
+}
