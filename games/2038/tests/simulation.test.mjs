@@ -4005,6 +4005,15 @@ test("strategy and rule mutations are deterministic, bounded, and do not edit so
   assert.deepEqual(profile, before);
   assert.notDeepEqual(first.strategy.actionWeights, profile.strategy.actionWeights);
 
+  const highWeightProfile = structuredClone(profile);
+  highWeightProfile.strategy.actionWeights.agi_dossier = 60;
+  const highWeightMutation = mutateStrategy(
+    highWeightProfile,
+    "high-weight-mutation-contract"
+  );
+  assert.ok(highWeightMutation.strategy.actionWeights.agi_dossier > 20);
+  assert.ok(highWeightMutation.strategy.actionWeights.agi_dossier <= 60);
+
   const rules = mutateRulesVariant({}, "rule-contract", { mutations: 3 });
   assert.deepEqual(rules, mutateRulesVariant({}, "rule-contract", { mutations: 3 }));
   assert.ok(rules.changed.length >= 1);

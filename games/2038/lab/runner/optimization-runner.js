@@ -50,7 +50,11 @@ function average(values) {
 function mutateWeightMap(weights, rng, magnitude) {
   return Object.fromEntries(Object.entries(weights).map(([key, value]) => {
     const factor = Math.exp((rng() * 2 - 1) * magnitude);
-    return [key, round(clamp(value * factor, 0.05, 20))];
+    // Existing authored profiles may intentionally use a weight above the
+    // ordinary search ceiling. A mutation may reduce that weight, but the
+    // optimizer must not silently replace it with 20 before comparison.
+    const upperBound = Math.max(20, value);
+    return [key, round(clamp(value * factor, 0.05, upperBound))];
   }));
 }
 
