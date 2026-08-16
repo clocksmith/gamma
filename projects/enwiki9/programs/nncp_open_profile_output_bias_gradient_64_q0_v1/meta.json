@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-15",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1"
+  ],
+  "description": "Production open output-bias gradient tail",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The exact Gamma open forward, evaluated over all 32 production streams, and the explicit decoder-causal negative-log-likelihood residual reproduce every BF16 word of the retained production out_bias gradient without consuming teacher probabilities or gradients as inputs.",
+  "id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T031213Z_57a9477621": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T031213Z_57a9477621.json",
+        "sha256": "sha256:c227f572b346ee0a205ac197fb645f59b4c235c6428cee3eadbe1f66e6d33e2b",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_v1.json",
+      "sha256": "sha256:b67c3067fa65c6a9f619a080b5c0247c2899873722d8799f6d8c55534bad13d5"
+    },
+    "interfaces_exposed": [
+      "causal production loss residual to output-bias gradient"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+    "retired_neighborhoods": [
+      "teacher-probability injection, captured-gradient replay, and output-head-only compression attribution"
+    ]
+  },
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+  "status": "candidate",
+  "verdict": "Preserve q0 as failed evidence and freeze a new retry with only the source-closure boundary fix and a non-invariant target control; do not edit or promote this measured attempt."
+}

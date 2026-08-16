@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": false,
+    "failureClass": "implementation-failure",
+    "localizedCause": "source_package called local_source_closure with programs/nncp_open_profile_output_bias_gradient_64_q0_v1/materialize_forward.py; the helper intentionally accepts only project tools. The shifted-state control was additionally invariant for a bias-only gradient."
+  },
+  "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+    "candidateTreeSha256": "sha256:4067f537ac3aa38031c637cc465a1e52671c49b83b468aa47cfefd9f083816bc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_bias_gradient_64_q0_v1/20260816T031146382932Z_4067f537ac3a.json",
+      "sha256": "sha256:430dc086ccce29e24b32b0db2200a47b6577a6fefe80053e26998952e85f29f7"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Preserve q0 as failed evidence and freeze a new retry with only the source-closure boundary fix and a non-invariant target control; do not edit or promote this measured attempt.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_v1/guard.json",
+      "sha256": "sha256:95467bddae1424e706b57ef5459839a0cf318858ee3733156e7e81b053b9e49a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_v1.json",
+    "sha256": "sha256:b67c3067fa65c6a9f619a080b5c0247c2899873722d8799f6d8c55534bad13d5"
+  },
+  "generatedUtc": "2026-08-16T03:27:26+00:00",
+  "hypothesis": {
+    "rationale": "The scientific gate cannot be decided from an unfinalized run. Post-failure diagnosis also found that the frozen cyclic-state target control preserves the target histogram and therefore cannot distinguish an output-bias gradient.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T031213Z_57a9477621.json",
+    "sha256": "sha256:19e038ad8e5585a28b7c8fa01b520e1ce72f6b88c972c5c5184d6242b59297a2"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Keep candidate-owned materializers as explicit package members rather than Python tool-closure roots, and use a vocabulary-remapped target control whose symbol histogram differs before rerunning the exact gate."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t031213z_57a9477621",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both all-stream open-forward replays completed, but evidence finalization rejected a candidate-owned materializer passed to the tools-only Python source-closure helper, so no decision receipt was written."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The production backward path converts each per-sample F32 softmax residual to BF16 at the logit boundary before reducing the broadcast output bias; preserving that type boundary removes the 104-word F32-only mismatch."
+  },
+  "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_output_bias_gradient_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:d73272e60c5047608a5579bec3463de64dc66f600ceac7ce7c57cb005ff96fbc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/20260816T033426131927Z_d73272e60c50.json",
+      "sha256": "sha256:9338915d0e07774f95aac6c601239267d0e31644c79ccecb32e762d562050a48"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Retain this exact loss-tail boundary as the next backward antecedent. The next honest gate should propagate the same open BF16 residual through the output matrix without consuming captured deeper gradients.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:d2da26227d4cc1dfa6233e826f94b81c9bcf1d760867f62a52827db2172b9d1c"
+    },
+    {
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:da50d25bbfa131a30731221842c03a7d17f5240fe59dd7ca6730a06005da79a7"
+    },
+    {
+      "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:3237722cb8dffc19727459ce20a28e4c9f8fc5c280704d791eeabae5670a41d1"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_output_bias_gradient_64_q0_retry_v1.json",
+    "sha256": "sha256:280d5d989a78e8f78e5b19d6993433840570e5ceacd0e6e1c9618b2fb9650e04"
+  },
+  "generatedUtc": "2026-08-16T03:50:29+00:00",
+  "hypothesis": {
+    "rationale": "Both replays matched all 640 layer-input checkpoints and every one of 16,392 BF16 out_bias gradient words exactly; maximum error was zero, replay bytes were identical, and the vocabulary-successor target remap changed the gradient.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T033450Z_727c49438a.json",
+    "sha256": "sha256:23868b35b90a700678460d3cabe1e33fce4b62bfb23133797bc6eaba19aea6e5"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "The production loss-to-output-bias tail is now generated causally in open Gamma code over the complete retained 32-stream update population.",
+      "Type boundaries are part of the algorithm: the open backward must quantize each sample residual to BF16 before any broadcast-parameter reduction."
+    ],
+    "uncertainties": [
+      "Output-matrix, final-normalization, transformer-layer, embedding, recursive-training, archive, transfer, and full-corpus behavior remain unproven; this oracle has zero Hutter objective credit."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_output_bias_gradient_64_q0_retry_v1/decision.json",
+        "sha256": "sha256:d2da26227d4cc1dfa6233e826f94b81c9bcf1d760867f62a52827db2172b9d1c"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t033450z_727c49438a",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen retry rebuilt and ran two independent 32-stream populations, generated all comparators before opening retained oracle values, satisfied every exact forward, gradient, replay, control, dependency, source, and guarded-work predicate, and produced a contract-valid result."
+    ],
+    "valid": true
+  }
+}

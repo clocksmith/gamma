@@ -120,6 +120,13 @@ artifacts nor aliased evidence roles. Historical v1 contracts remain readable,
 but absence of this policy is not evidence of output-manifest completeness.
 The implementation-retry freezer now enables this policy by default.
 
+The retry freezer can also replace one explicitly named inherited negative
+control, its measurement definition, and an exact control-specific invariant.
+This closes a bookkeeping defect where a mathematically dead control could only
+be supplemented by a second control, leaving contradictory frozen metadata.
+Replacement remains explicit, refuses ambiguous identifiers or invariant text,
+and cannot alter inherited decision predicates.
+
 `pythonSourceClosureEntries` closes the corresponding prospective runtime-source
 boundary. The contract validator recursively resolves each named entry's local
 imports and rejects an experiment whose hash-bound inputs omit any module. When

@@ -1,0 +1,327 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound initial parameters and recurrent memory, decoder-visible inputs, decoded targets, fixed source, and frozen predicates.",
+      "Retained train_h checkpoints and out_bias gradient only after each corresponding open output is complete."
+    ],
+    "forbiddenInformation": [
+      "Teacher probabilities, teacher internal activations as calculation inputs, captured gradient values, post-update parameters, future symbols, fitted corrections, or LibNC/NNCP execution.",
+      "Claiming any broader backward, recursive-training, archive, transfer, package, or objective result."
+    ]
+  },
+  "changedMechanism": "Replace the captured production out_bias gradient with a fresh open computation from initial parameters, decoder-visible state, input symbols, target symbols, exact forward probabilities, and the frozen 1/(32*64) loss scale.",
+  "controls": [
+    {
+      "definition": "The unchanged exact forward is driven independently for every retained production stream and feeds the open loss-tail reduction.",
+      "id": "exact-open-all-stream-forward",
+      "role": "treatment"
+    },
+    {
+      "definition": "The captured BF16 out_bias gradient is read only after the fresh open payload is complete.",
+      "id": "retained-gradient-oracle",
+      "role": "comparator"
+    },
+    {
+      "definition": "The complete 32-stream forward and gradient reduction execute twice and must reproduce identical bytes.",
+      "id": "independent-open-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "Targets are shifted by one state within each stream while probabilities remain fixed; the resulting gradient must differ.",
+      "id": "cyclic-target-shift",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "generatedUtc": "2026-08-16T03:03:04+00:00",
+  "hypothesis": {
+    "claim": "The exact Gamma open forward, evaluated over all 32 production streams, and the explicit decoder-causal negative-log-likelihood residual reproduce every BF16 word of the retained production out_bias gradient without consuming teacher probabilities or gradients as inputs.",
+    "falsification": "Any antecedent drift, all-stream layer-input mismatch, output-bias gradient mismatch, replay difference, dead target control, dependency violation, source overflow, or guard failure prevents promotion and forbids an open-backward-tail claim."
+  },
+  "inputs": [
+    {
+      "id": "exact-forward-decision",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "id": "exact-forward-reflection",
+      "path": "operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json",
+      "sha256": "sha256:15aff130d15795fb0644ae8b95827e4a5212d2c74ecdfee44d26576f15a7297a"
+    },
+    {
+      "id": "joint-transition-decision",
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5"
+    },
+    {
+      "id": "joint-transition-reflection",
+      "path": "operations/adaptive/reflections/20260816T024338Z_3839f396a6.json",
+      "sha256": "sha256:1c4f88906a2f0ae20c9613b33a9e55fbaeec968baef97c309bfc59fd0078faf9"
+    },
+    {
+      "id": "gradient-oracle-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "gradient-oracle-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "gradient-oracle-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "gradient-oracle-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "miniature-output-head-decision",
+      "path": "results/nncp_ggml_output_head_update_parity_qm2_v1/decision.json",
+      "sha256": "sha256:87fa87838530eee077598d27a80435539f39950250e198e16cb905d851f53693"
+    },
+    {
+      "id": "exact-forward-source",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:891e8c50b6c9e66c7a9f4d5019d009fab24955e7b7b83386fd6c8a70f22a7314"
+    }
+  ],
+  "invariants": [
+    "The production geometry, parameters, initial memory, inputs, targets, BF16 boundaries, and exact forward arithmetic remain unchanged.",
+    "All 20 attention-input checkpoints for every stream are generated before their retained train_h comparator values are read.",
+    "The retained out_bias gradient is opened only after the complete open gradient payload is written.",
+    "No teacher probability, internal activation, or gradient payload is used to calculate the open gradient.",
+    "A cyclic within-stream target shift is a liveness control only and receives no score or promotion credit.",
+    "The closed teacher, LibNC, and NNCP are not executed during retained replay.",
+    "This experiment proves at most the production loss-to-output-bias tail; it proves no output-matrix, final-normalization, transformer-layer, embedding, recursive-training, compression, transfer, package, or Hutter claim."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-layer-input-mismatch",
+      "measurement": "layerInputMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-output-bias-mismatch",
+      "measurement": "outputBiasMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "The exact forward, joint segment transition, gradient oracle, and miniature head-gradient antecedents remain valid and digest-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete production streams evaluated from the retained causal input and memory state.",
+      "id": "streamCount",
+      "unit": "streams"
+    },
+    {
+      "definition": "Production loss samples evaluated across all streams and states.",
+      "id": "sampleCount",
+      "unit": "symbols"
+    },
+    {
+      "definition": "Open attention-input tensors compared against the retained train_h state.",
+      "id": "layerInputCheckpointCount",
+      "unit": "stream-layer tensors"
+    },
+    {
+      "definition": "Open layer-input elements that differ from the retained BF16 train_h values.",
+      "id": "layerInputMismatchCount",
+      "unit": "float32 elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained layer-input difference.",
+      "id": "maximumLayerInputAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete production output-bias gradient population.",
+      "id": "outputBiasElementCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Open BF16 output-bias gradient words that differ from the retained comparator.",
+      "id": "outputBiasMismatchCount",
+      "unit": "gradient elements"
+    },
+    {
+      "definition": "Maximum absolute open-versus-retained output-bias gradient difference.",
+      "id": "maximumOutputBiasAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Two complete open all-stream executions emit byte-identical gradient and checkpoint summaries.",
+      "id": "openGradientDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "A cyclic within-stream target shift changes the open gradient payload.",
+      "id": "shiftedTargetControlDiffers",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Dynamic LibNC, NNCP, GGML, CUDA, OpenMP, or BLAS dependencies in the built open executable.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed orchestration and open-gradient source package.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All generated builds and forward outputs remained under and were removed with the guarded work root.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_output_bias_gradient_64_q0_v1/decision.json",
+    "results/nncp_open_profile_output_bias_gradient_64_q0_v1/execution.json",
+    "results/nncp_open_profile_output_bias_gradient_64_q0_v1/open-out-bias-gradient.bf16",
+    "results/nncp_open_profile_output_bias_gradient_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/20260816T021547957585Z_fb5d0217c717.json",
+      "sha256": "sha256:fa49a072ad4121256e89664c1f4ef136e91b4059494f27b47c77566a44b0795f"
+    }
+  },
+  "population": {
+    "coordinate": "Production update over original transformed-symbol coordinates [256,320) independently within each of 32 contiguous streams.",
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "selection": "All 32 streams, all 64 states, all 20 layer attention inputs, and all 16,392 output-bias gradient words at the first retained production update boundary.",
+    "unit": "one production stream-layer checkpoint or output-bias gradient word"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedentspass",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-streamcount",
+      "measurement": "streamCount",
+      "operator": "eq",
+      "threshold": 32
+    },
+    {
+      "id": "p-samplecount",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-layerinputcheckpointcount",
+      "measurement": "layerInputCheckpointCount",
+      "operator": "eq",
+      "threshold": 640
+    },
+    {
+      "id": "p-layerinputmismatchcount",
+      "measurement": "layerInputMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumlayerinputabsoluteerror",
+      "measurement": "maximumLayerInputAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-outputbiaselementcount",
+      "measurement": "outputBiasElementCount",
+      "operator": "eq",
+      "threshold": 16392
+    },
+    {
+      "id": "p-outputbiasmismatchcount",
+      "measurement": "outputBiasMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumoutputbiasabsoluteerror",
+      "measurement": "maximumOutputBiasAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-opengradientdeterministic",
+      "measurement": "openGradientDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-shiftedtargetcontroldiffers",
+      "measurement": "shiftedTargetControlDiffers",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-forbiddendynamicdependencycount",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-guardedworkrootpass",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-incrementalsourcebytes",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "proposalId": "nncp_open_profile_output_bias_gradient_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.2,
+    "uncertaintyRisk": 0.3
+  },
+  "status": "frozen"
+}
