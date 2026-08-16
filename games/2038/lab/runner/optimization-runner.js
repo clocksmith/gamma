@@ -104,6 +104,31 @@ export function opponentProfileWindows({
   );
 }
 
+export function mergeStrategyProfiles(baseProfiles, profileOverrides = []) {
+  if (!Array.isArray(baseProfiles) || !Array.isArray(profileOverrides)) {
+    throw new TypeError("Strategy evolution profiles and overrides must be arrays.");
+  }
+  const baseIds = new Set(baseProfiles.map((profile) => profile.id));
+  const overrides = new Map();
+  for (const profile of profileOverrides) {
+    validatePlayerProfile(profile);
+    if (!baseIds.has(profile.id)) {
+      throw new TypeError(
+        `Strategy evolution override has unknown profile id: ${profile.id}.`
+      );
+    }
+    if (overrides.has(profile.id)) {
+      throw new TypeError(
+        `Strategy evolution override repeats profile id: ${profile.id}.`
+      );
+    }
+    overrides.set(profile.id, structuredClone(profile));
+  }
+  return baseProfiles.map((profile) =>
+    overrides.get(profile.id) || structuredClone(profile)
+  );
+}
+
 function runsByWindow(runsPerSeat, windowCount) {
   if (runsPerSeat < windowCount) {
     throw new RangeError(
@@ -227,7 +252,9 @@ async function evaluateStrategyCandidate({
           seed: `${seed}:players:${playerCount}:seat:${seat}:window:${windowIndex}`,
           sampleReplays: 0,
           profileIds,
-          profileOverrides: [profile],
+          profileOverrides: profiles.map((candidate) =>
+            candidate.id === profile.id ? profile : candidate
+          ),
           backends: [backendId],
           rotateProfiles: false,
           projection: "batch",
@@ -304,6 +331,8 @@ export async function evolveStrategy({
   backendId = "weighted",
   targetWinShare,
   opponentCoverage = "all_windows",
+  profileOverrides = [],
+  profileOverrideSources = [],
   rulesVariant,
   signal,
   onProgress
@@ -320,7 +349,7 @@ export async function evolveStrategy({
     );
   }
   const selectedPlayerCounts = normalizePlayerCounts(playerCount, playerCounts);
-  const profiles = await loadPlayerProfiles();
+  const profiles = mergeStrategyProfiles(await loadPlayerProfiles(), profileOverrides);
   const source = profiles.find((profile) => profile.id === targetProfileId);
   if (!source) throw new TypeError(`Unknown player profile: ${targetProfileId}.`);
   for (const selectedPlayerCount of selectedPlayerCounts) {
@@ -404,6 +433,8 @@ export async function evolveStrategy({
       resolvedTargetWinShare(targetWinShare, count)
     ])),
     opponentCoverage,
+    profileOverrideSources: structuredClone(profileOverrideSources),
+    ecologyProfiles: structuredClone(profiles),
     evaluatedMatchesPerCandidate: selectedPlayerCounts.reduce(
       (sum, count) => sum + count * runsPerSeat,
       0

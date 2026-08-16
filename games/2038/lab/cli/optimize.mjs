@@ -1,4 +1,5 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { stderr, stdout } from "node:process";
 import { runExperiment } from "../runtime/run-experiment.js";
 
@@ -18,6 +19,25 @@ function parseArguments(values) {
 }
 
 const input = parseArguments(process.argv.slice(2));
+const profileOverrideArtifacts = input["profile-override-reports"]
+  ? await Promise.all(
+    input["profile-override-reports"].split(",").filter(Boolean).map(async (path) => {
+      const contents = await readFile(path);
+      const report = JSON.parse(contents);
+      if (!report.championProfile) {
+        throw new TypeError(`Evolution report ${path} has no championProfile.`);
+      }
+      return {
+        profile: report.championProfile,
+        source: {
+          path,
+          profileId: report.championProfile.id,
+          sha256: createHash("sha256").update(contents).digest("hex")
+        }
+      };
+    })
+  )
+  : [];
 const report = await runExperiment({
   mode: input.mode || "strategy-evolution",
   seed: input.seed,
@@ -32,6 +52,8 @@ const report = await runExperiment({
   backendId: input.backend,
   targetWinShare: input["target-win-share"],
   opponentCoverage: input["opponent-coverage"],
+  profileOverrides: profileOverrideArtifacts.map((entry) => entry.profile),
+  profileOverrideSources: profileOverrideArtifacts.map((entry) => entry.source),
   iterations: input.iterations,
   targetAgiRate: input["target-agi-rate"],
   profileIds: input.profiles?.split(",").filter(Boolean)
