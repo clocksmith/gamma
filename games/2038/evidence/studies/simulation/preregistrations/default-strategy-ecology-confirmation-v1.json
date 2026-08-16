@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "default-strategy-ecology-confirmation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does a higher-precision fresh-seed holdout confirm that the frozen Trust Governor and Capacity Operator remain inside every supported player-count balance bound while retaining their claimed behavior?",
+  "sourceEvidence": [
+    "2026-08-15-default-strategy-ecology-v1"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-default-strategy-ecology-confirmation-v1",
+  "selectionRule": {
+    "balance": "Select only if every three-, four-, and five-player faction, seat, profile, diversity, fallback, and forced-no-op bound passes with no credible homogeneous or pairwise dominance.",
+    "trustIdentity": "Trust Governor must average at least one Influence selection per appearance, keep Influence below its largest Core Action, reach Trust 4 in at least 85 percent of appearances, and retain mean Mandate of at least 16.",
+    "capacityIdentity": "Capacity Operator must average at least two Build selections per appearance, select Research plus Deploy more often than Build, and retain mean Mandate of at least 16.",
+    "failure": "If any supported player-count balance bound fails again, reject canonical profile promotion and investigate the named strategy or Action through a separate preregistered intervention. Do not alter faction starts from a profile-only failure.",
+    "agiBoundary": "AGI emergence is diagnostic only in this study. Dossier costs require a separate one-lever physical-rules study."
+  },
+  "requiredDiagnostics": [
+    "profile Action selections and Mandate sources",
+    "profile and faction win shares by supported player count",
+    "backend-specific strategy cells",
+    "opening and winning-path diversity",
+    "AGI emergence and winner override rates",
+    "integrity, fallback, and forced-no-op rates"
+  ]
+}
