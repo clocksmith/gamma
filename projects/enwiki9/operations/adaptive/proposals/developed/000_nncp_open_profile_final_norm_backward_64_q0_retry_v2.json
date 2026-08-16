@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "claimed_at": "2026-08-16T05:31:47+00:00",
+  "created_at": "2026-08-16T05:31:38+00:00",
+  "developed_at": "2026-08-16T05:31:48+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T051419Z_4df92ec3b4.json",
+      "sha256": "sha256:5fe7b2862df54fe872b51c948e0342077da741f2f89f52daa33d24fe5ceba66e"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5aee40914e2f431931c783b28aa7641bd67c1b30cdeecd4f34d498bead15df64"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_retry_v2.json",
+    "sha256": "sha256:9a302102221161a646a029dd92d3f6820457b204ab64df16f9186064fd3a68b7"
+  },
+  "hypothesis": "Rounding each per-sample normalized-state times incoming-gradient product to BF16 before the frozen reduction reproduces ln_g_40 exactly while preserving the already exact centered RMSNorm input residual and every upstream tail.",
+  "interfaces_exposed": [
+    "exact open final-hidden residual -> BF16 gain product and centered final RMSNorm backward -> top-layer residual projection"
+  ],
+  "kill_condition": "Any inherited predicate failure or any remaining ln_g_40 mismatch after the single frozen BF16 product boundary prevents promotion and retires this boundary without reduction-order sweeps.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+  "priority": 1480,
+  "promotion_condition": "Require two complete exact all-stream forwards, every inherited output-head and centered final-normalization predicate, zero ln_g_40 mismatches after the BF16 product boundary, byte-identical replay, live controls, dependency closure, finalization, and resource compliance.",
+  "proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "retired_neighborhoods": [
+    "Unrounded ln_g_40 products, reduction-order sweeps, uncentered RMSNorm input backward, cleanup-before-measurement, teacher calculation, compression claim, and objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1498,
+  "state": "developed",
+  "title": "BF16 gain-product final RMSNorm retry"
+}

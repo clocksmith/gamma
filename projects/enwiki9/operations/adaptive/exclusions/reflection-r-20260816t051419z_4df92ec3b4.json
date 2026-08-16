@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T051419Z_4df92ec3b4.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t051419z_4df92ec3b4",
+  "failure": "The concat-root mean-gradient centering term is necessary and sufficient for the retained input-residual projection, while reduction reassociation is not the ln_g_40 cause. The remaining boundary is the BF16 output of the per-sample elementwise normalized-state times incoming-gradient product before broadcast reduction.",
+  "mechanism": "Preserve the complete open forward and output-head backward, but reduce ln_g_40 in the already proved 128-sample chunked FMA order, apply the measured concat-root RMSNorm input backward with both mean-gradient and output-weighted centering terms, and cache output counts before cleanup.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All 32 streams, all 64 states, all 20 layer attention inputs, both complete output-head gradients, all final-hidden residual words, all final RMSNorm parameter-gradient words, all 2,097,152 normalization-input residual words, and all 1,024 ff_bias2_19 projection words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T05:29:38+00:00",
+  "retired_dimensions": [
+    "Unrounded sequential or 128-sample-chunked ln_g_40 accumulation is insufficient; do not sweep reduction order again without a new mechanism."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_profile_final_norm_backward_64_q0_v1",
+  "claimed_at": "2026-08-16T04:56:41+00:00",
+  "created_at": "2026-08-16T04:56:36+00:00",
+  "developed_at": "2026-08-16T04:56:42+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T043203Z_ca54b4761d.json",
+      "sha256": "sha256:aceb41ca3f69c8338587e03bb1f69d865ff594c2ecfebc10feaae4ebf7fec7f1"
+    },
+    {
+      "path": "results/nncp_v33_libnc_rmsnorm_backward_order_parity_v1/decision.json",
+      "sha256": "sha256:0d3adc28b066473342aace795a227164b82c93f716df3e9176678331771e9fa0"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_v1.json",
+    "sha256": "sha256:bc7ecfbc63789203fbab977350fed199f1214f4ef9f28a071d7f8871157239bf"
+  },
+  "hypothesis": "The promoted final-hidden residual and exact open pre-normalization state reproduce both final RMSNorm parameter gradients and an input residual whose broadcast projection equals the retained top-layer ff_bias2_19 gradient under the measured LibNC output-order RMSNorm backward.",
+  "interfaces_exposed": [
+    "exact open final-hidden residual -> final RMSNorm parameter gradients -> top-layer residual projection"
+  ],
+  "kill_condition": "Any antecedent drift, retained tail or promoted-residual mismatch, final-normalization parameter-gradient mismatch, ff_bias2_19 projection mismatch, replay difference, dead control, forbidden dependency, source overflow, or guard failure prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+  "parent_proposal_id": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+  "priority": 1482,
+  "promotion_condition": "Require two complete exact all-stream forwards, exact retained output-head tails, the promoted final-hidden residual, exact ln_g_40 and ln_b_40 gradients, a deterministic 2,097,152-word final-normalization input residual, exact parity for all 1,024 ff_bias2_19 projection words, live controls, dependency closure, and resource compliance.",
+  "proposal_id": "nncp_open_profile_final_norm_backward_64_q0_v1",
+  "retired_neighborhoods": [
+    "No teacher activation input, captured-gradient calculation, LibNC execution, transformer-block backward claim, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1500,
+  "state": "developed",
+  "title": "Open final RMSNorm backward"
+}

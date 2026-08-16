@@ -1,0 +1,102 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "The concat-root mean-gradient centering term is necessary and sufficient for the retained input-residual projection, while reduction reassociation is not the ln_g_40 cause. The remaining boundary is the BF16 output of the per-sample elementwise normalized-state times incoming-gradient product before broadcast reduction."
+  },
+  "candidateId": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:5339ca4d5ddff194aa3b5d64cd8c5f52d0bca247747df07ed808e058fc0c1463",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_final_norm_backward_64_q0_retry_v1/20260816T051403354222Z_5339ca4d5ddf.json",
+      "sha256": "sha256:073809b32804938fa35dd6967ba260cb30c3c628280a754548c275b8e461e718"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Authorize one prospectively frozen gain-only boundary retry. Every upstream operation and the exact centered final-normalization input residual remain immutable.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:5aee40914e2f431931c783b28aa7641bd67c1b30cdeecd4f34d498bead15df64"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/execution.json",
+      "sha256": "sha256:48523f298cff48891737c2811fa5c0ab6cf518b7723b4160784b3426ed5ecaca"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:71d29584085a9e3ad5a136103ab3d51b0fbdc9d72cd6acaa6c169e1a6d8dc020"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_retry_v1.json",
+    "sha256": "sha256:863437ec8a762b46c05bbe40e38df263f4dd09e33b6dbf0673772429fcbe1d8c"
+  },
+  "generatedUtc": "2026-08-16T05:29:38+00:00",
+  "hypothesis": {
+    "rationale": "The centered final RMSNorm input backward reproduced all 1,024 retained ff_bias2_19 words exactly and every inherited tail remained exact, but the 128-sample chunked unrounded gain-product reduction still missed the same 234 ln_g_40 BF16 words with maximum absolute error 1.52587890625e-05.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T051419Z_4df92ec3b4.json",
+    "sha256": "sha256:7c4e700c91c71b3081e0aaab028d2d85467eef46485740e530b72b10ef034ad1"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Unrounded sequential or 128-sample-chunked ln_g_40 accumulation is insufficient; do not sweep reduction order again without a new mechanism."
+    ],
+    "transferableLessons": [
+      "Freeze one gain-only retry that rounds each per-sample normalized-state times incoming-gradient product to BF16 before the unchanged 128-sample reduction; retain the now-exact centered input residual unchanged.",
+      "Promote the centered concat-root RMSNorm input-backward rule as a retained exact sub-result, but do not promote the combined final-normalization gate yet."
+    ],
+    "uncertainties": [
+      "The per-sample BF16 gain-product boundary is strongly localized but unproven. No transformer-block backward, recursive training, compression gain, transfer, package closure, full-corpus reconstruction, or Hutter objective credit follows."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/decision.json",
+        "sha256": "sha256:5aee40914e2f431931c783b28aa7641bd67c1b30cdeecd4f34d498bead15df64"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t051419z_4df92ec3b4",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen retry completed both all-stream populations under its bound revision and guard, finalized from persisted artifacts, and emitted a schema-valid result with every declared artifact and control."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner called shutil.rmtree(WORK) before statting replay-local gradient paths for measurement counts. This ordering bug is independent of the compiled forward and backward executables."
+  },
+  "candidateId": "nncp_open_profile_final_norm_backward_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_final_norm_backward_64_q0_v1",
+    "candidateTreeSha256": "sha256:9fbf51f9725b93184303d1396208757581c70897fbe814071a516031b51232ed",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_final_norm_backward_64_q0_v1/20260816T045642195441Z_9fbf51f9725b.json",
+      "sha256": "sha256:e3658f966ca953f8e1ee2aaf31283f73c0f2da8b7843be8307673de0c94c651b"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze one immutable retry that caches counts before cleanup, uses the same 128-sample chunked reduction already exact for output-head parameter gradients, and applies the previously measured concat-root centered RMSNorm backward; retain every other population, oracle, and guard unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/execution.json",
+      "sha256": "sha256:aba12b7e31623a35e5196e863fbbe7b1656fdcf69067576ccb4b52a8c6429ffa"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/guard.json",
+      "sha256": "sha256:e2c70f9d374b0aa000abb7141b099cece25a5762f669220c2539a27421a959ba"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/open-ff-bias2-19-gradient.bf16",
+      "sha256": "sha256:de197a304e31e85d958a3c40985e97613cc3e9086321b63a7216288948db87ec"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_v1/open-final-norm-gain-gradient.bf16",
+      "sha256": "sha256:e41e3b748c3dcf0d014e86f7e937f4ceb295deb4f7cd67dd109d51bdea97e7bf"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_v1.json",
+    "sha256": "sha256:bc7ecfbc63789203fbab977350fed199f1214f4ef9f28a071d7f8871157239bf"
+  },
+  "generatedUtc": "2026-08-16T05:10:27+00:00",
+  "hypothesis": {
+    "rationale": "The terminal experiment contract was not evaluated because finalization failed after cleanup. Persisted replay-A diagnostics are useful localization evidence but cannot replace the missing revision-bound result and deleted replay-B payloads.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T045714Z_6eb299ed8d.json",
+    "sha256": "sha256:6eb9a47009574dc9ace6acb126cdd59057dc2c969a49be105e86ace922466765"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not retry the uncentered final RMSNorm input backward or sequential ln_g_40 broadcast reduction unchanged."
+    ],
+    "transferableLessons": [
+      "Cache output element counts before guarded cleanup or derive them from the persisted result artifacts.",
+      "Post-failure replay-A diagnostics show exact retained output-head and ln_b_40 parity, 234 symmetric ln_g_40 misses consistent with the missing frozen chunked reduction, and 1,006 one-sided ff_bias2_19 misses identifying the already measured concat-root minus-mean-gradient term; both require an immutable replay."
+    ],
+    "uncertainties": [
+      "Replay B was deleted before its payload hashes and predicate result were persisted, so determinism and the corrected arithmetic remain unproven. This job has zero Hutter objective credit."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t045714z_6eb299ed8d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both complete fresh populations and all declared open outputs were generated, but the runner removed its guarded work tree before reading cached element counts, raised FileNotFoundError, and emitted no schema-valid decision artifact."
+    ],
+    "valid": false
+  }
+}
