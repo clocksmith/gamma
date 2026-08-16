@@ -805,10 +805,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   finalMandate(player) {
+    const poweredFacilityMandate = this.latestPoweredFacilities(player).length *
+      this.rulesVariant.finalPoweredFacilityMandate;
     const offlinePenalty = this.latestOfflineFacilities(player).length *
       this.config.scoring.finalOnly.offlineFacilityPenalty;
     return {
-      score: Math.max(0, this.currentScore(player) - offlinePenalty),
+      score: Math.max(
+        0,
+        this.currentScore(player) + poweredFacilityMandate - offlinePenalty
+      ),
+      poweredFacilityMandate,
       offlinePenalty
     };
   }
@@ -5380,7 +5386,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         );
     }
     const standings = this.players.map((player) => {
-      const { score, offlinePenalty } = this.finalMandate(player);
+      const {
+        score,
+        poweredFacilityMandate,
+        offlinePenalty
+      } = this.finalMandate(player);
       return {
         seat: player.seat,
         factionId: player.factionId,
@@ -5395,6 +5405,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         compute: player.compute,
         capability: player.capability,
         facilities: player.facilities.length,
+        poweredFacilityMandate,
         offlinePenalty,
         agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,

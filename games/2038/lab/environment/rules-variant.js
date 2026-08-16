@@ -85,6 +85,7 @@ export function canonicalRulesVariant(config) {
     agiScrutinyPerCommit: config.agiDossier.scrutinyPerCommit,
     agiMinimumSupportedEvidenceClaims:
       config.agiDossier.claimResolution?.minimumSupportedEvidenceClaims ?? 2,
+    finalPoweredFacilityMandate: 0,
     customerCapabilityOffset: 0,
     startingTeamsDeployed: 1,
     coalitionStartingRunway: null,
