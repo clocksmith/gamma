@@ -109,6 +109,7 @@ async function evaluateStrategyCandidate({
   runsPerSeat,
   seed,
   rulesVariant,
+  backendId,
   signal
 }) {
   const opponents = profiles.filter((candidate) => candidate.id !== profile.id);
@@ -125,7 +126,7 @@ async function evaluateStrategyCandidate({
       sampleReplays: 0,
       profileIds,
       profileOverrides: [profile],
-      backends: ["weighted"],
+      backends: [backendId],
       rotateProfiles: false,
       rulesVariant,
       signal
@@ -152,10 +153,14 @@ export async function evolveStrategy({
   playerCount = 4,
   seed = "frontier-strategy-evolution",
   magnitude = 0.45,
+  backendId = "weighted",
   rulesVariant,
   signal,
   onProgress
 } = {}) {
+  if (!["weighted", "greedy"].includes(backendId)) {
+    throw new TypeError("Strategy evolution backendId must be weighted or greedy.");
+  }
   const profiles = await loadPlayerProfiles();
   const source = profiles.find((profile) => profile.id === targetProfileId);
   if (!source) throw new TypeError(`Unknown player profile: ${targetProfileId}.`);
@@ -178,6 +183,7 @@ export async function evolveStrategy({
         runsPerSeat,
         seed: evaluationSeed,
         rulesVariant,
+        backendId,
         signal
       });
       evaluated.push({ profile, evaluation });
@@ -219,6 +225,7 @@ export async function evolveStrategy({
     generations,
     population,
     runsPerSeat,
+    backendId,
     scope: structuredClone(simulationCopy.coverage.strategyEvolution),
     baselineProfile: source,
     championProfile: incumbent,
@@ -229,7 +236,7 @@ export async function evolveStrategy({
     rulesVariant: rulesVariant || {},
     variantOverlay: rulesVariant,
     profiles,
-    backends: ["weighted"],
+    backends: [backendId],
     model: null,
     experimentKind: "strategy_evolution"
   });
