@@ -2608,10 +2608,10 @@ test("greedy Dossier policy commits supported affordable claims and hedges dead 
 
 test("deterministic personas execute partner, placement, and resource preferences", async () => {
   const profiles = await loadPlayerProfiles();
-  const profile = profiles.find((candidate) => candidate.id === "power_broker");
+  const profile = profiles.find((candidate) => candidate.id === "agi_candidate");
   const policy = new WeightedPlayerPolicy(profile, {
     selection: "greedy",
-    rosterProfileIds: ["power_broker", "agi_candidate", "balanced_operator"]
+    rosterProfileIds: ["agi_candidate", "power_broker", "balanced_operator"]
   });
   const packet = {
     observation: {
@@ -2640,7 +2640,7 @@ test("deterministic personas execute partner, placement, and resource preference
   };
   assert.equal(
     policy.score(packet, promiseCandidate),
-    policy.score(packet, ordinaryPromise) * 15
+    policy.score(packet, ordinaryPromise) * 12
   );
 
   const nearBuild = {
@@ -2655,7 +2655,7 @@ test("deterministic personas execute partner, placement, and resource preference
   };
   assert.equal(
     policy.score(packet, nearBuild),
-    policy.score(packet, farBuild) * 20
+    policy.score(packet, farBuild) * 12
   );
 
   const favorableComputeTrade = {

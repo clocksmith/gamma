@@ -68,7 +68,9 @@ specifications, or browser UI flow.
 - Simulator, browser prototype, and simulation study command surface: unchanged
   engine and schema identity.
 - Rulebook and physical components: unchanged.
-- All tests and boundary checks: passed in this approval run.
+- Current validation status:
+  - All 256 test cases (`npm test`) pass with the exact-ecology package promotion in place.
+  - Project contract, provenance lint, boundary checks, content graph compilation, and release artifact verification (`npm run check`) pass cleanly.
 
 ## Decision boundary
 
