@@ -22,6 +22,10 @@ import {
   WINNING_PATH_CLASSIFIER,
   winningPathMargin
 } from "../balance/winning-path.js";
+import {
+  outcomePlacementPoint,
+  outcomeRanks
+} from "../balance/outcome-placement.js";
 import { simulationCopy } from "../content/simulation-copy.js";
 import { mutateStrategy } from "./optimization-runner.js";
 
@@ -669,11 +673,7 @@ function cooperationSummary(observations) {
     if (observation.declarations > 0 && necessarySeats.size) {
       declarationsWithNecessarySupplier += 1;
     }
-    const rankBySeat = new Map(
-      [...observation.standings]
-        .sort((left, right) => right.score - left.score)
-        .map((entry, index) => [entry.seat, index + 1])
-    );
+    const rankBySeat = outcomeRanks(observation);
     for (const seat of necessarySeats) {
       suppliers += 1;
       if ((rankBySeat.get(seat) || Infinity) <= Math.ceil(observation.standings.length / 2)) {
@@ -812,6 +812,7 @@ function outcomeSummary(observations) {
         1 / observation.winnerSeats.length
       ])
     );
+    const rankBySeat = outcomeRanks(observation);
     for (const [index, standing] of observation.standings.entries()) {
       auditHits += standing.auditHits || 0;
       forcedNoOps += standing.forcedNoOps || 0;
@@ -826,21 +827,21 @@ function outcomeSummary(observations) {
         factionStandingTotals,
         standing.factionId,
         standing,
-        index + 1,
+        rankBySeat.get(standing.seat) || index + 1,
         standingWinCredit
       );
       recordStandingTotal(
         profileStandingTotals,
         standing.profileId,
         standing,
-        index + 1,
+        rankBySeat.get(standing.seat) || index + 1,
         standingWinCredit
       );
       recordStandingTotal(
         seatStandingTotals,
         String(standing.seat),
         standing,
-        index + 1,
+        rankBySeat.get(standing.seat) || index + 1,
         standingWinCredit
       );
       const actions = factionActionSelections[standing.factionId] || {};
@@ -1118,12 +1119,8 @@ function pairedRuleComparisons(
         seat,
         1 / candidate.winnerSeats.length
       ]));
-      const baselineRanks = new Map(
-        baseline.standings.map((entry, index) => [entry.seat, index + 1])
-      );
-      const candidateRanks = new Map(
-        candidate.standings.map((entry, index) => [entry.seat, index + 1])
-      );
+      const baselineRanks = outcomeRanks(baseline);
+      const candidateRanks = outcomeRanks(candidate);
       for (const left of baseline.standings) {
         const right = candidate.standings.find((entry) => entry.seat === left.seat);
         if (
@@ -1768,9 +1765,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
             backendRegime: cell.backendRegime,
             profileId: standing.profileId,
             opponentProfileId: opponent.profileId,
-            winCredit: standing.score === opponent.score
-              ? 0.5
-              : Number(standing.score > opponent.score)
+            winCredit: outcomePlacementPoint(observation, standing, opponent)
           });
         }
       }
