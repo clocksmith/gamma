@@ -15,6 +15,7 @@ import {
 } from "../lab/policies/policy-factory.js";
 import {
   compareStrategyEvaluations,
+  mergeStrategyProfiles,
   mutateRulesVariant,
   mutateStrategy,
   opponentProfileWindows
@@ -3504,7 +3505,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.14.5");
+  assert.equal(first.game.version, "0.14.6");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -4022,6 +4023,15 @@ test("strategy and rule mutations are deterministic, bounded, and do not edit so
 });
 
 test("strategy evolution and rule search return inspectable recommendations", async () => {
+  const exactOpponent = structuredClone(
+    (await loadPlayerProfiles()).find((profile) => profile.id === "trust_governor")
+  );
+  exactOpponent.strategy.actionWeights.influence = 8.75;
+  exactOpponent.provenance = {
+    kind: "test_evolution_ecology_override",
+    parentId: exactOpponent.id,
+    seed: "evolution-contract"
+  };
   const evolution = await runExperiment({
     mode: "strategy-evolution",
     targetProfileId: "balanced_operator",
@@ -4031,6 +4041,12 @@ test("strategy evolution and rule search return inspectable recommendations", as
     playerCount: 3,
     backendId: "greedy",
     targetWinShare: 1 / 3,
+    profileOverrides: [exactOpponent],
+    profileOverrideSources: [{
+      path: "fixture/trust.json",
+      profileId: exactOpponent.id,
+      sha256: "a".repeat(64)
+    }],
     seed: "evolution-contract"
   });
   assert.equal(evolution.reportType, "strategy_evolution");
@@ -4040,6 +4056,12 @@ test("strategy evolution and rule search return inspectable recommendations", as
   assert.equal(evolution.targetWinShare, 1 / 3);
   assert.equal(evolution.opponentCoverage, "all_windows");
   assert.equal(evolution.evaluatedMatchesPerCandidate, 18);
+  assert.equal(
+    evolution.ecologyProfiles.find((profile) => profile.id === exactOpponent.id)
+      .strategy.actionWeights.influence,
+    8.75
+  );
+  assert.equal(evolution.profileOverrideSources[0].sha256, "a".repeat(64));
   assert.equal(
     evolution.history[0].candidates[0].evaluation
       .playerCountEvaluations[3].opponentWindows.length,
@@ -4095,6 +4117,41 @@ test("strategy evolution covers every opponent and fails closed on incomplete co
       targetWinShare: "neutral"
     }),
     /runsPerSeat must be at least 6/
+  );
+});
+
+test("strategy evolution merges exact opponent artifacts without mutating authored profiles", async () => {
+  const profiles = await loadPlayerProfiles();
+  const authored = structuredClone(profiles);
+  const override = structuredClone(
+    profiles.find((profile) => profile.id === "trust_governor")
+  );
+  override.strategy.actionWeights.influence = 9.125;
+  override.provenance = {
+    kind: "test_exact_ecology_override",
+    parentId: override.id,
+    seed: "exact-ecology-fixture"
+  };
+  const merged = mergeStrategyProfiles(profiles, [override]);
+  assert.deepEqual(profiles, authored);
+  assert.equal(
+    merged.find((profile) => profile.id === override.id)
+      .strategy.actionWeights.influence,
+    9.125
+  );
+  assert.equal(
+    merged.find((profile) => profile.id === override.id).provenance.kind,
+    "test_exact_ecology_override"
+  );
+  assert.throws(
+    () => mergeStrategyProfiles(profiles, [override, override]),
+    /repeats profile id/
+  );
+  const unknown = structuredClone(override);
+  unknown.id = "unknown_ecology_profile";
+  assert.throws(
+    () => mergeStrategyProfiles(profiles, [unknown]),
+    /unknown profile id/
   );
 });
 
@@ -4196,7 +4253,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.14.5");
+  assert.equal(first.game.version, "0.14.6");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

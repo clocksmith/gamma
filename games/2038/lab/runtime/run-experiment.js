@@ -55,6 +55,8 @@ export async function runExperiment(options = {}, onProgress) {
       backendId: options.backendId,
       targetWinShare: strategyTarget(options.targetWinShare),
       opponentCoverage: options.opponentCoverage,
+      profileOverrides: options.profileOverrides,
+      profileOverrideSources: options.profileOverrideSources,
       rulesVariant: options.rulesVariant,
       signal: options.signal,
       onProgress

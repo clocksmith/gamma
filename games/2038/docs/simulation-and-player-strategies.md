@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.5` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.6-test`
+**Executable game:** `0.14.6` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.7-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -423,6 +423,7 @@ provider latency cannot estimate human setup, teaching, or play duration.
 npm run simulate:monte-carlo -- --runs 100 --players 4
 npm run simulate:evolve -- --profile balanced_operator --generations 4 --population 6 --runs-per-seat 12 --opponent-coverage all_windows
 npm run simulate:evolve -- --profile agi_candidate --player-counts 3,4,5 --target-win-share neutral --generations 4 --population 6 --runs-per-seat 96 --opponent-coverage all_windows
+npm run simulate:evolve -- --profile infrastructure_compounder --player-counts 3,4,5 --target-win-share neutral --profile-override-reports evidence/studies/simulation/proposals/full-ecology-agi-candidate-v1.json,evidence/studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json,evidence/studies/simulation/proposals/capacity-operator-v1.json --generations 4 --population 6 --runs-per-seat 12 --opponent-coverage all_windows
 npm run simulate:balance -- --iterations 12 --runs 80 --players 4
 ```
 
@@ -433,6 +434,10 @@ calibration minimizes the largest miss from the declared target before its mean
 miss and ordinary fitness. `neutral` means `1 / player count` separately at
 three, four, and five players. `fixed_window` exists only to reconstruct older
 diagnostic studies and must not support a promotion claim.
+`profile-override-reports` loads exact frozen `championProfile` artifacts for
+non-target opponents. Their paths, byte hashes, complete profiles, and strategy
+fingerprints are retained in the evolution report. A promotable training claim
+must use the exact opponent artifacts named by its intended holdout ecology.
 Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits

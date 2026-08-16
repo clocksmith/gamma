@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.6-test`
+**Rules reference:** `0.8.0-rc.7-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.6-test` test:
+controlled `0.8.0-rc.7-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.5` implements `0.8.0-rc.6-test` under engine coverage
+Executable game `0.14.6` implements `0.8.0-rc.7-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -244,9 +244,17 @@ Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract.
 
-Candidate `0.8.0-rc.6-test` changes no physical mechanic from rc.5.
-Executable `0.14.5` makes strategy evolution distribute each focal-seat match
-budget across every circular opponent window. It can calibrate three-, four-,
+Candidate `0.8.0-rc.7-test` changes no physical mechanic from rc.6.
+Executable `0.14.6` lets strategy evolution inject exact frozen opponent
+profile artifacts. It validates profile identity, rejects duplicate and unknown
+overrides, executes the complete substituted profiles, and records their source
+paths, byte hashes, snapshots, and strategy fingerprints. This closes the gap
+between a training ecology's opponent IDs and the exact policy versions used by
+its intended holdout. No setup value, Core Action, score, or component changes.
+
+Historical candidate `0.8.0-rc.6-test` and executable `0.14.5` made strategy
+evolution distribute each focal-seat match budget across every circular
+opponent window. It can calibrate three-, four-,
 and five-player fields together against their separate neutral shares, ranks
 the largest target miss before mean miss and fitness, and records every roster
 window in the report. The historical fixed-window mode remains available only
@@ -255,8 +263,8 @@ resource, Core Action, scoring rule, or physical component.
 
 Historical candidate `0.8.0-rc.5-test` and executable `0.14.4` made every
 simulation placement measure follow the authoritative institutional winner,
-including an AGI declaration that replaces
-the provisional Mandate result. Mandate remains a separately reported score.
+including an AGI declaration that replaces the provisional Mandate result.
+Mandate remains a separately reported score.
 This corrects matchup, rank, supplier-finish, and paired-rule evidence without
 changing any playable number or action.
 
