@@ -2499,6 +2499,110 @@ test("greedy policy resolves equal utility without leaking lexicographic decisio
   assert.deepEqual(selected, new Set(decisions.map((decision) => decision.decisionId)));
 });
 
+test("Dossier decisions expose support and payment facts to every policy", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "dossier-decision-assessment" },
+    () => {}
+  );
+  const player = match.players[0];
+  player.capability = 3;
+  player.compute = 2;
+  const benchmark = match.config.agiDossier.modules.find(
+    (module) => module.id === "benchmark_claim"
+  );
+  const assessment = match.agiDossierDecisionAssessment(
+    player,
+    benchmark,
+    "commit"
+  );
+  assert.deepEqual(assessment, {
+    moduleId: "benchmark_claim",
+    metric: "capability",
+    orientation: "commit",
+    currentEvidenceValue: 3,
+    currentEvidenceThreshold: 3,
+    supportedNow: true,
+    supportedCommittedEvidenceClaims: 0,
+    minimumSupportedEvidenceClaims: 2,
+    committedBefore: 0,
+    projectedCommittedCount: 1,
+    projectedComputeCost: 1,
+    currentCompute: 2,
+    canPayProjectedCost: true
+  });
+});
+
+test("greedy Dossier policy commits supported affordable claims and hedges dead claims", async () => {
+  const profiles = await loadPlayerProfiles();
+  const profile = profiles.find((candidate) => candidate.id === "infrastructure_compounder");
+  const policy = new WeightedPlayerPolicy(profile, { selection: "greedy" });
+  const packetFor = (assessment) => ({
+    schemaVersion: 1,
+    requestId: `dossier-semantic-${assessment.moduleId}-${assessment.supportedNow}`,
+    matchId: "dossier-semantic",
+    seed: "dossier-semantic",
+    seat: 0,
+    factionId: "coalition_lab",
+    round: assessment.metric === "publication" ? 4 : 1,
+    cycle: 3,
+    observation: { self: {} },
+    legalDecisions: [
+      {
+        decisionId: `agi_dossier_commit_${assessment.moduleId}`,
+        label: "Commit",
+        actionId: "agi_dossier",
+        parameters: { orientation: "commit", dossierAssessment: assessment },
+        consequences: { agiClaim: 1, compute: -1, scrutiny: 1 }
+      },
+      {
+        decisionId: `agi_dossier_hedge_${assessment.moduleId}`,
+        label: "Hedge",
+        actionId: "agi_dossier",
+        parameters: {
+          orientation: "hedge",
+          dossierAssessment: {
+            ...assessment,
+            orientation: "hedge",
+            projectedCommittedCount: assessment.projectedCommittedCount - 1,
+            projectedComputeCost: assessment.projectedComputeCost - 1,
+            canPayProjectedCost: true
+          }
+        },
+        consequences: { agiClaim: 0 }
+      }
+    ]
+  });
+  const supported = {
+    moduleId: "benchmark_claim",
+    metric: "capability",
+    orientation: "commit",
+    supportedNow: true,
+    projectedCommittedCount: 1,
+    projectedComputeCost: 1,
+    canPayProjectedCost: true
+  };
+  assert.equal(
+    (await policy.decide(packetFor(supported))).decision.decisionId,
+    "agi_dossier_commit_benchmark_claim"
+  );
+  assert.equal(
+    (await policy.decide(packetFor({
+      ...supported,
+      moduleId: "publication_claim",
+      metric: "publication",
+      supportedNow: false
+    }))).decision.decisionId,
+    "agi_dossier_hedge_publication_claim"
+  );
+  assert.equal(
+    (await policy.decide(packetFor({
+      ...supported,
+      canPayProjectedCost: false
+    }))).decision.decisionId,
+    "agi_dossier_hedge_benchmark_claim"
+  );
+});
+
 test("deterministic personas execute partner, placement, and resource preferences", async () => {
   const profiles = await loadPlayerProfiles();
   const profile = profiles.find((candidate) => candidate.id === "power_broker");
@@ -3398,7 +3502,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.14.1");
+  assert.equal(first.game.version, "0.14.2");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3980,7 +4084,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.14.1");
+  assert.equal(first.game.version, "0.14.2");
   assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.1` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.2-test`
+**Executable game:** `0.14.2` / `nineteen-hex-simplified-v1`
+**Physical rules under review:** `0.8.0-rc.3-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -101,6 +101,15 @@ more legal decisions have exactly the same top score, the policy uses a seeded
 deterministic tie draw and records the number of tied choices in its receipt.
 This keeps replay exact while preventing labels such as `commit` and `hedge`
 from acquiring accidental priority through lexicographic ordering.
+
+Each Dossier choice also carries a public-to-that-player assessment: the
+current evidence value and threshold, prior supported commitments, projected
+total payment, and whether the player can pay that total now. Deterministic
+policies prefer supported, affordable commitments and hedge unsupported or
+currently unaffordable claims. A profile's explicit decision weights can still
+authorize a forward-looking wager. This is decision semantics, not
+future-state access: later Actions may make an early Hedge or Commit look
+better or worse at reveal.
 
 `coalition_conversion_v1` is a bounded diagnostic treatment. It activates only
 for Coalition Lab while an earned Deal Flow Runway credit remains unspent. It

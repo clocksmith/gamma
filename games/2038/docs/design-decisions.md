@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.2-test`
+**Rules reference:** `0.8.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.2-test` test:
+controlled `0.8.0-rc.3-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.1` implements `0.8.0-rc.2-test` under engine coverage
+Executable game `0.14.2` implements `0.8.0-rc.3-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
