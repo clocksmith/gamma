@@ -1,0 +1,100 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The production final RMSNorm backward consists of a BF16 elementwise gain-product boundary plus the measured concat-root centered input rule. Both complete parameter gradients and the top-layer input-residual projection are now exact under fresh open replay."
+  },
+  "candidateId": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:2aa6a39d41e452335028a08d1ec7cca4f72b4a32927e92619fdd7279fc0c842b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_final_norm_backward_64_q0_retry_v2/20260816T053148075770Z_2aa6a39d41e4.json",
+      "sha256": "sha256:00c9f389ccb66afbbf111f1ec5c9f57068b303e6ee529ce9a470c2bac6de5dee"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Authorize one prospectively frozen top-layer FF2 parameter-gradient successor while retaining every complete final-normalization and output-head predicate unchanged.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:b52a25e8ce1d5c2a33858ef092288ccfe0ac9ededf4045066cb3c4db63701a14"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:02cd8bb275d8aff394552f8f7e731b8cb028a342a956f19efd9c3711e50faff8"
+    },
+    {
+      "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:d23ca9fb65c1886ac5482019c21c7415254086eda50b5153326d6138ffc2643c"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_retry_v2.json",
+    "sha256": "sha256:9a302102221161a646a029dd92d3f6820457b204ab64df16f9186064fd3a68b7"
+  },
+  "generatedUtc": "2026-08-16T05:47:28+00:00",
+  "hypothesis": {
+    "rationale": "Rounding each per-sample normalized-state times incoming-gradient product to BF16 before reduction eliminated all 234 prior ln_g_40 mismatches while preserving exact ln_b_40, ff_bias2_19, promoted final-hidden residual, output-head gradients, centered input residual replay, and controls.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T053159Z_b79233ecb1.json",
+    "sha256": "sha256:fe58041bb2064b8947fed2fb3d028845e0767f362d2ee937289a344baeb077dd"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Promote the complete final RMSNorm affine and centered input-backward tail as an open teacher-removal antecedent.",
+      "The next smallest independently retained top-block boundary is the complete ff2_19 parameter gradient, using the exact final-normalization input residual and freshly generated layer-19 GEGLU output under the already proved 128-sample matmul reduction."
+    ],
+    "uncertainties": [
+      "The 2,097,152-word normalization-input residual is witnessed by exact ff_bias2_19 projection rather than a direct per-word teacher comparator. No FF2 activation residual, GEGLU backward, earlier normalization, attention, recursive training, compression gain, transfer, package closure, full-corpus reconstruction, or Hutter objective credit follows."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/sampleCount",
+      "source": {
+        "path": "results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/decision.json",
+        "sha256": "sha256:b52a25e8ce1d5c2a33858ef092288ccfe0ac9ededf4045066cb3c4db63701a14"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t053159z_b79233ecb1",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The prospectively frozen BF16-product retry completed both all-stream populations under its bound revision and guard; every artifact, delayed comparator, replay, control, dependency, finalization, and source-closure predicate validated."
+    ],
+    "valid": true
+  }
+}

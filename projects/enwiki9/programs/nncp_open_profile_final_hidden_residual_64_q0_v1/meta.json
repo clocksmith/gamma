@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_output_matrix_gradient_64_q0_v1"
+  ],
+  "description": "Production open final-hidden activation-residual projection",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The exact open BF16 loss residual propagated through the initial embed_out transpose produces a deterministic BF16 final-hidden activation residual whose broadcast reduction reproduces every retained ln_b_40 gradient word while preserving both exact output-head parameter gradients and a live shifted-target control.",
+  "id": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T043203Z_ca54b4761d": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260816T043203Z_ca54b4761d.json",
+        "sha256": "sha256:aceb41ca3f69c8338587e03bb1f69d865ff594c2ecfebc10feaae4ebf7fec7f1",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_final_hidden_residual_64_q0_v1.json",
+      "sha256": "sha256:404e619539ea711219a59f52598df205fc1896f223eac0f1aa3259bb0f4793a8"
+    },
+    "interfaces_exposed": [
+      "exact open output-head loss residual -> final-hidden activation residual -> ln_b_40 gradient projection"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+    "proposal_id": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+    "retired_neighborhoods": [
+      "No teacher activation input, captured-gradient calculation, LibNC execution, per-sample oracle-identity claim, normalization-input backward claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_output_matrix_gradient_64_q0_v1",
+  "status": "active",
+  "verdict": "Authorize one prospectively frozen successor that reconstructs final RMSNorm parameter gradients and its normalization-input residual while retaining this complete output-head gate unchanged."
+}

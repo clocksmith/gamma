@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T045714Z_6eb299ed8d.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t045714z_6eb299ed8d",
+  "failure": "The runner called shutil.rmtree(WORK) before statting replay-local gradient paths for measurement counts. This ordering bug is independent of the compiled forward and backward executables.",
+  "mechanism": "Expose the exact pre-final-normalization hidden state, reconstruct the final RMSNorm unit value with the promoted forward reduction, apply the measured output-order backward to the promoted incoming residual, and validate the resulting parameter gradients and input residual through separate retained projections.",
+  "population": "one production stream-layer checkpoint, BF16 gradient word, activation-residual word, or projection word; All 32 streams, all 64 states, all 20 layer attention inputs, both complete output-head gradients, all final-hidden residual words, all final RMSNorm parameter-gradient words, all 2,097,152 normalization-input residual words, and all 1,024 ff_bias2_19 projection words at the first retained production update.; scopeBytes=None; scopeSymbols=2048",
+  "recorded_at": "2026-08-16T05:10:27+00:00",
+  "retired_dimensions": [
+    "Do not retry the uncentered final RMSNorm input backward or sequential ln_g_40 broadcast reduction unchanged."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_final_hidden_residual_64_q0_v1"
+  ],
+  "description": "Production open final RMSNorm affine and input backward",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The promoted final-hidden residual and exact open pre-normalization state reproduce both final RMSNorm parameter gradients and an input residual whose broadcast projection equals the retained top-layer ff_bias2_19 gradient under the measured LibNC output-order RMSNorm backward.",
+  "id": "nncp_open_profile_final_norm_backward_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T045714Z_6eb299ed8d": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T045714Z_6eb299ed8d.json",
+        "sha256": "sha256:6d3f85121ca59da0cbf66ce575cde29c933b0157bb0c5fc586c12ac72dcae7f1",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_v1.json",
+      "sha256": "sha256:bc7ecfbc63789203fbab977350fed199f1214f4ef9f28a071d7f8871157239bf"
+    },
+    "interfaces_exposed": [
+      "exact open final-hidden residual -> final RMSNorm parameter gradients -> top-layer residual projection"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+    "proposal_id": "nncp_open_profile_final_norm_backward_64_q0_v1",
+    "retired_neighborhoods": [
+      "No teacher activation input, captured-gradient calculation, LibNC execution, transformer-block backward claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_final_hidden_residual_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Freeze one immutable retry that caches counts before cleanup, uses the same 128-sample chunked reduction already exact for output-head parameter gradients, and applies the previously measured concat-root centered RMSNorm backward; retain every other population, oracle, and guard unchanged."
+}

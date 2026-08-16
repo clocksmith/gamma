@@ -1,5 +1,82 @@
 # enwiki9 Research Register
 
+## 2026-08-16 - The complete final RMSNorm backward tail is open and exact
+
+The first `nncp_open_profile_final_norm_backward_64_q0_v1` execution generated
+both full open populations but failed during result finalization because its
+runner removed the work tree before reading cached element counts. Its
+terminal
+[`reflection`](../operations/adaptive/reflections/20260816T045714Z_6eb299ed8d.json)
+classifies that attempt as an implementation failure rather than scientific
+evidence.
+
+The first immutable retry fixed finalization, applied the already measured
+concat-root centered RMSNorm input rule, and changed `ln_g_40` to the promoted
+chunked reduction. Its valid result isolated two different outcomes. The
+centered input residual reproduced every retained top-layer `ff_bias2_19`
+projection word exactly, but the gain gradient retained the same mismatches as
+the unchunked attempt. This retired reduction reassociation as the gain cause.
+See its
+[`decision`](../results/nncp_open_profile_final_norm_backward_64_q0_retry_v1/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T051419Z_4df92ec3b4.json).
+
+Candidate `nncp_open_profile_final_norm_backward_64_q0_retry_v2` changed one
+remaining boundary: every per-sample normalized-state times incoming-gradient
+product is rounded to BF16 before the unchanged reduction. The prospectively
+frozen gate then passed every predicate. Both full executions reproduce all
+retained output-head gradients, the promoted final-hidden residual, all
+`ln_g_40` and `ln_b_40` words, and all `ff_bias2_19` projection words exactly.
+The complete centered normalization-input residual replays byte-for-byte, both
+negative controls remain live, the open executables have no forbidden dynamic
+dependency, and source and resource guards pass. See the
+[`decision`](../results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/decision.json),
+[`execution receipt`](../results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/execution.json),
+[`guard`](../results/nncp_open_profile_final_norm_backward_64_q0_retry_v2/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T053159Z_b79233ecb1.json).
+
+This opens the complete production final-normalization affine and centered
+input-backward tail. It proves no FF2 activation residual, GEGLU backward,
+earlier normalization, attention, recursive training, transfer, archive
+score, package eligibility, or full-corpus reconstruction and has zero Hutter
+objective credit. The next frozen boundary is the complete top-layer
+`ff2_19` parameter gradient from the exact normalization-input residual and a
+fresh open GEGLU output.
+
+## 2026-08-16 - The complete output-head activation residual is open
+
+Candidate `nncp_open_profile_final_hidden_residual_64_q0_v1` advances the
+exact open BF16 loss residual through the digest-bound initial `embed_out`
+transpose. The standalone reducer consumes only decoder-visible targets,
+freshly generated probabilities and final hidden states, and initial
+parameters. It generates both complete activation-residual payloads before
+hash-verifying or reading any retained gradient comparator.
+
+The prospectively frozen gate passed every predicate. Two independent
+32-stream executions emitted byte-identical 2,097,152-word BF16 final-hidden
+residuals. Their broadcast reductions reproduce all 1,024 retained `ln_b_40`
+gradient words exactly, while both previously promoted output-head parameter
+gradients remain exact and the cyclic target-shift control changes. The open
+executables have no forbidden dynamic dependency, the dependency-closed
+incremental source remains within its frozen ceiling, and the guarded work
+tree was removed. See the
+[`decision`](../results/nncp_open_profile_final_hidden_residual_64_q0_v1/decision.json),
+[`execution receipt`](../results/nncp_open_profile_final_hidden_residual_64_q0_v1/execution.json),
+[`guard`](../results/nncp_open_profile_final_hidden_residual_64_q0_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T043203Z_ca54b4761d.json).
+
+This independently validates the complete output-head activation residual by
+an exact retained final-normalization bias projection. It does not provide a
+direct retained comparator for every per-sample residual word and proves no
+final-normalization gain or input gradient, transformer-layer backward,
+recursive training, transfer, archive score, package eligibility, or
+full-corpus reconstruction. It has zero Hutter objective credit. The next
+frozen boundary reconstructs `ln_g_40` and the final-normalization input
+residual separately, using the retained top-layer `ff_bias2_19` gradient as an
+independent projection before entering the transformer block.
+
 ## 2026-08-16 - The complete output-head parameter gradient is open and exact
 
 Candidate `nncp_open_profile_output_matrix_gradient_64_q0_v1` advances the

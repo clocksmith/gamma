@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_profile_final_norm_backward_64_q0_retry_v1"
+  ],
+  "description": "BF16 gain-product final RMSNorm backward retry",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Rounding each per-sample normalized-state times incoming-gradient product to BF16 before the frozen reduction reproduces ln_g_40 exactly while preserving the already exact centered RMSNorm input residual and every upstream tail.",
+  "id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+  "measured": {
+    "reflections": {
+      "20260816T053159Z_b79233ecb1": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260816T053159Z_b79233ecb1.json",
+        "sha256": "sha256:7e6b3e549eae6183c3a7c735d4930843d533a20fdc68d18c6e79b57389139e35",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_final_norm_backward_64_q0_retry_v2.json",
+      "sha256": "sha256:9a302102221161a646a029dd92d3f6820457b204ab64df16f9186064fd3a68b7"
+    },
+    "interfaces_exposed": [
+      "exact open final-hidden residual -> BF16 gain product and centered final RMSNorm backward -> top-layer residual projection"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+    "proposal_id": "nncp_open_profile_final_norm_backward_64_q0_retry_v2",
+    "retired_neighborhoods": [
+      "Unrounded ln_g_40 products, reduction-order sweeps, uncentered RMSNorm input backward, cleanup-before-measurement, teacher calculation, compression claim, and objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_final_norm_backward_64_q0_retry_v1",
+  "status": "active",
+  "verdict": "Authorize one prospectively frozen top-layer FF2 parameter-gradient successor while retaining every complete final-normalization and output-head predicate unchanged."
+}
