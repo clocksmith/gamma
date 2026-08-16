@@ -12,10 +12,10 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
 
-  assert.equal(current.gameVersion, "0.14.7");
-  assert.equal(current.rulesCandidate.version, "0.8.0-rc.8-test");
+  assert.match(current.gameVersion, /^\d+\.\d+\.\d+$/);
+  assert.match(current.rulesCandidate.version, /^0\.8\.0-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
-  assert.equal(current.rulesCandidate.implementedByGameVersion, "0.14.7");
+  assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -114,6 +114,7 @@ test("release artifacts are immutable once a version path exists", async () => {
 });
 
 test("complexity-reduction review rules preserve precision and remove table accounting", async () => {
+  const current = await readJson("versions/current-release.json");
   const [rules, mapReference, componentReference, advanced] = await Promise.all([
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
     readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
@@ -122,8 +123,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   ]);
   const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.8.0-rc.8-test",
-    "synchronized with executable game 0.14.7",
+    `**Rules version:** ${current.rulesCandidate.version}`,
+    `synchronized with executable game ${current.gameVersion}`,
     "Political control uses the CEO, Teams, and Facilities already on the board",
     "cards without an **Advanced Play** badge",
     "A Mega-Cluster uses two adjacent Facilities you own",
