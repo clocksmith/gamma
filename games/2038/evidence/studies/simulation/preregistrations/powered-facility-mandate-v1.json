@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "powered-facility-mandate-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "causal_one_lever",
+  "question": "Does awarding one final Mandate per Facility in the latest powered Production snapshot make infrastructure investment competitive without creating faction, profile, seat, opening, or winning-path dominance?",
+  "sourceEvidence": [
+    "2026-08-15-canonical_v3_control-confirm-800x4",
+    "2026-08-15-balanced_v3_candidate-confirm-800x4",
+    "2026-08-15-infrastructure_v3_candidate-confirm-800x4"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/powered-facility-mandate-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "powered_facility_mandate",
+      "overlay": {
+        "finalPoweredFacilityMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 6000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-powered-facility-mandate-v1",
+  "requiredDiagnostics": [
+    "profile and faction win shares by supported player count",
+    "powered and offline Facility counts by profile",
+    "Core Action and Program selection frequencies",
+    "opening and winning-path diversity",
+    "faction by strategy interactions",
+    "AGI funnel and World Ending rates",
+    "integrity, fallback, and forced-no-op rates"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "Select the candidate only if the four-player infrastructure profiles improve without exceeding registered profile, faction, interaction, or pairwise bounds, and three- and five-player guards introduce no credible regression.",
+    "canonicalPreferred": "Retain canonical scoring if the bonus rewards incidental Facilities, creates a compulsory Build line, amplifies Vertical or Foundry beyond the faction bound, or fails to improve infrastructure viability.",
+    "interpretation": "The one-lever result may select a candidate for human review. It does not establish human balance or promote the rule automatically.",
+    "physicalBoundary": "Any selected rule requires synchronized player-facing copy, scoring aids, browser behavior, tests, a fresh release candidate, and explicit user approval."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no change; this is a simulation-only candidate",
+    "semanticGraph": "no player-facing change",
+    "machineData": "no generated-content change",
+    "simulator": "one final powered-Facility Mandate overlay",
+    "browserPrototype": "no change",
+    "referenceAids": "no change",
+    "tests": "latest Production snapshot and final scoring probe covered",
+    "playtestDocumentation": "no change before candidate selection"
+  }
+}
