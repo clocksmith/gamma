@@ -90,6 +90,8 @@ export async function runExperiment(options = {}, onProgress) {
       batchSize: integer(options.batchSize, 2, 1, 100, "batchSize"),
       playerCounts: options.playerCounts,
       mandateModes: options.mandateModes,
+      profileOverrides: options.profileOverrides,
+      profileOverrideSources: options.profileOverrideSources,
       seed: options.seed,
       preRegistrationId: options.preRegistrationId,
       rulesVariant: options.rulesVariant,

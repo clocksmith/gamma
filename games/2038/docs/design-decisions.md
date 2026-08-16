@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.7-test`
+**Rules reference:** `0.8.0-rc.8-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.7-test` test:
+controlled `0.8.0-rc.8-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.6` implements `0.8.0-rc.7-test` under engine coverage
+Executable game `0.14.7` implements `0.8.0-rc.8-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -244,8 +244,14 @@ Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract.
 
-Candidate `0.8.0-rc.7-test` changes no physical mechanic from rc.6.
-Executable `0.14.6` lets strategy evolution inject exact frozen opponent
+Candidate `0.8.0-rc.8-test` changes no physical mechanic from rc.7.
+Executable `0.14.7` carries exact profile-artifact paths and byte hashes into
+the unified balance matrix, retains the complete executed ecology, and rejects
+source/profile identity mismatches before a holdout starts. No setup value,
+Core Action, score, or component changes.
+
+Historical candidate `0.8.0-rc.7-test` and executable `0.14.6` let strategy
+evolution inject exact frozen opponent
 profile artifacts. It validates profile identity, rejects duplicate and unknown
 overrides, executes the complete substituted profiles, and records their source
 paths, byte hashes, snapshots, and strategy fingerprints. This closes the gap

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { runUnifiedMatrix } from "../runner/unified-matrix-runner.js";
 import { archiveSimulationReport } from "../report-archive.js";
 import { projectRoot } from "../versioning/game-identity.js";
@@ -18,17 +19,25 @@ const args = argumentsMap(process.argv.slice(2));
 const rulesConfigurations = args["rules-configurations"]
   ? JSON.parse(await readFile(args["rules-configurations"], "utf8"))
   : undefined;
-const profileOverrideReports = args["profile-override-reports"]
+const profileOverrideArtifacts = args["profile-override-reports"]
   ? await Promise.all(
     String(args["profile-override-reports"]).split(",").filter(Boolean).map(async (path) => {
-      const report = JSON.parse(await readFile(path, "utf8"));
+      const contents = await readFile(path);
+      const report = JSON.parse(contents);
       if (!report.championProfile) {
         throw new TypeError(`Evolution report ${path} has no championProfile.`);
       }
-      return report.championProfile;
+      return {
+        profile: report.championProfile,
+        source: {
+          path,
+          profileId: report.championProfile.id,
+          sha256: createHash("sha256").update(contents).digest("hex")
+        }
+      };
     })
   )
-  : undefined;
+  : [];
 const numberArgument = (...names) => {
   const value = names.map((name) => args[name]).find((candidate) =>
     candidate !== undefined
@@ -47,7 +56,8 @@ const report = await runUnifiedMatrix({
     : undefined,
   rulesConfigurations,
   comparisonKind: args["comparison-kind"],
-  profileOverrides: profileOverrideReports,
+  profileOverrides: profileOverrideArtifacts.map((entry) => entry.profile),
+  profileOverrideSources: profileOverrideArtifacts.map((entry) => entry.source),
   seed: args.seed || "mandate-2038-unified-matrix",
   preRegistrationId: args["pre-registration-id"],
   projection: args.projection,

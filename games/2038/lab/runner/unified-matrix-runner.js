@@ -1499,9 +1499,49 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     readFile(matrixUrl, "utf8").then(JSON.parse),
     loadBalanceContract()
   ]);
+  const overrideProfiles = options.profileOverrides || [];
+  const overrideIds = new Set();
+  for (const profile of overrideProfiles) {
+    validatePlayerProfile(profile);
+    if (overrideIds.has(profile.id)) {
+      throw new TypeError(`Duplicate profile override: ${profile.id}.`);
+    }
+    overrideIds.add(profile.id);
+  }
+  const profileOverrideSources = structuredClone(options.profileOverrideSources || []);
+  if (profileOverrideSources.length) {
+    if (profileOverrideSources.length !== overrideProfiles.length) {
+      throw new TypeError(
+        "Profile override sources must identify every supplied profile override."
+      );
+    }
+    const sourceIds = new Set();
+    for (const source of profileOverrideSources) {
+      if (
+        !source?.path ||
+        !source?.profileId ||
+        !/^[a-f0-9]{64}$/.test(source.sha256 || "")
+      ) {
+        throw new TypeError(
+          "Every profile override source requires path, profileId, and SHA-256."
+        );
+      }
+      if (sourceIds.has(source.profileId)) {
+        throw new TypeError(`Duplicate profile override source: ${source.profileId}.`);
+      }
+      sourceIds.add(source.profileId);
+    }
+    if (
+      sourceIds.size !== overrideIds.size ||
+      [...overrideIds].some((id) => !sourceIds.has(id))
+    ) {
+      throw new TypeError(
+        "Profile override source identities must match the supplied profiles."
+      );
+    }
+  }
   const profileOverrides = new Map(
-    (options.profileOverrides || []).map((profile) => {
-      validatePlayerProfile(profile);
+    overrideProfiles.map((profile) => {
       return [profile.id, structuredClone(profile)];
     })
   );
@@ -1644,6 +1684,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       options.mandateModes === undefined &&
       options.rulesConfigurations === undefined &&
       options.profileOverrides === undefined &&
+      options.profileOverrideSources === undefined &&
       options.projection === undefined &&
       options.workers === undefined &&
       options.chunkSize === undefined
@@ -1653,6 +1694,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     rulesConfigurations,
     comparisonKind,
     mandateModes,
+    profileOverrideSources,
     backendSet: ["weighted", "greedy"],
     backendRegimes: [
       "homogeneous_weighted",
@@ -2008,6 +2050,8 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       excluded: simulationCopy.coverage.balanceAudit.excluded
     },
     preRegistration,
+    profileOverrideSources,
+    ecologyProfiles: structuredClone(profiles),
     matrixContract: {
       id: matrixContract.id,
       fingerprint: preRegistration.matrixContractFingerprint,
