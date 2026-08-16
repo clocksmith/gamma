@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "exact-ecology-infrastructure-training-v1",
+  "registeredBeforeResults": true,
+  "question": "Can Infrastructure Compounder remove its three-player greedy dominance and approach neutral share across all supported counts when trained against the exact frozen Trust, Capacity, and AGI artifacts from the failed full-ecology holdout?",
+  "sourceCommit": "dc30386c",
+  "sourceEvidence": [
+    "2026-08-15-full-ecology-agi-holdout-v1",
+    "dc30386c-exact-ecology-profile-injection"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    },
+    {
+      "path": "studies/simulation/proposals/full-ecology-agi-candidate-v1.json",
+      "sha256": "3bca97e398eab032ae5befe322f266f67b21119ed68848f2cc2f4661016c94a6",
+      "profileId": "agi_candidate"
+    }
+  ],
+  "job": {
+    "profileId": "infrastructure_compounder",
+    "backend": "greedy",
+    "playerCounts": [3, 4, 5],
+    "opponentCoverage": "all_windows",
+    "targetWinShare": "neutral",
+    "generations": 5,
+    "population": 6,
+    "runsPerSeat": 12,
+    "mutationMagnitude": 0.25,
+    "seed": "mandate-2038-exact-ecology-infrastructure-training-v1",
+    "rulesVariant": {}
+  },
+  "selectionRule": {
+    "ordering": "Minimize the largest absolute miss from 1/player-count, then mean miss, then ordinary fitness. Every candidate receives common seeds within its generation and equal exposure to all six circular opponent windows.",
+    "nomination": "Nominate only if the candidate improves the authored baseline's largest neutral-share miss, retains mean score of at least 16 at every supported count, keeps the authored Generator and two-Facility transition rules, and retains Build as a material Core Action rather than becoming a generic research profile.",
+    "holdoutIdentity": "A fresh holdout must average at least two Build selections per Infrastructure appearance, retain mean Mandate of at least 16, and remove the registered three-player greedy diagnostic dominance.",
+    "pathGate": "The package must also raise five-player winning-path entropy to at least 0.60. Training may not claim this from focal-profile win share alone.",
+    "rejection": "If no candidate passes the training score and identity floors, reject the intervention without another adaptive run.",
+    "physicalBoundary": "This study changes only Infrastructure policy weights. Starting resources, factions, Core Action rules, Dossier mechanics, scoring, and physical components remain canonical."
+  },
+  "knownLimits": [
+    "The failed AGI proposal is a frozen experimental component, not a promoted canonical profile.",
+    "Deterministic policies are strategy probes, not human play.",
+    "Simulation cannot establish fun, negotiation quality, teachability, duration, or physical handling."
+  ]
+}
