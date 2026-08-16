@@ -3387,6 +3387,54 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return this.declarationReadiness(player).ready;
   }
 
+  agiDossierDecisionAssessment(player, module, orientation) {
+    const choices = player.agiDossier?.choices || {};
+    const committedBefore = Object.entries(choices)
+      .filter(([moduleId, choice]) =>
+        moduleId !== module.id && choice === "commit"
+      ).length;
+    const projectedCommittedCount = committedBefore + Number(orientation === "commit");
+    const projectedComputeCost = projectedCommittedCount *
+      this.rulesVariant.agiComputePerCommit;
+    const evidenceModules = this.config.agiDossier.modules
+      .filter((candidate) => candidate.metric !== "publication");
+    const evidenceValue = (candidate) => {
+      if (candidate.metric === "capability") return player.capability;
+      if (candidate.metric === "poweredFacilities") {
+        return this.latestPoweredFacilities(player).length;
+      }
+      if (candidate.metric === "trust") return player.trust;
+      return 0;
+    };
+    const supportedCommittedEvidenceClaims = evidenceModules.filter((candidate) =>
+      choices[candidate.id] === "commit" &&
+      evidenceValue(candidate) >= candidate.threshold
+    ).length;
+    const publication = module.metric === "publication";
+    const currentEvidenceValue = publication
+      ? supportedCommittedEvidenceClaims
+      : evidenceValue(module);
+    const currentEvidenceThreshold = publication
+      ? this.rulesVariant.agiMinimumSupportedEvidenceClaims
+      : module.threshold;
+    return {
+      moduleId: module.id,
+      metric: module.metric,
+      orientation,
+      currentEvidenceValue,
+      currentEvidenceThreshold,
+      supportedNow: currentEvidenceValue >= currentEvidenceThreshold,
+      supportedCommittedEvidenceClaims,
+      minimumSupportedEvidenceClaims:
+        this.rulesVariant.agiMinimumSupportedEvidenceClaims,
+      committedBefore,
+      projectedCommittedCount,
+      projectedComputeCost,
+      currentCompute: player.compute,
+      canPayProjectedCost: player.compute >= projectedComputeCost
+    };
+  }
+
   recordEligibility(player, timing) {
     this.recordAgiCoreRequirements(player, timing);
     if (!player.metrics.earliestAgiEligibility && this.isAgiEligible(player)) {
@@ -3403,27 +3451,54 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       (candidate) => candidate.round === this.round
     );
     if (!module) throw new Error(`Missing AGI Dossier module for Era ${this.round}.`);
-    const choices = await Promise.all(this.players.map((player) => this.choose(
-      policies,
-      player.seat,
-      `agi_dossier_${module.id}`,
-      [
+    const choices = await Promise.all(this.players.map((player) => {
+      const legalDecisions = [
         {
           decisionId: `agi_dossier_commit_${module.id}`,
           label: `Commit the ${module.id.replaceAll("_", " ")} Dossier.`,
           actionId: "agi_dossier",
-          parameters: { moduleId: module.id, orientation: "commit" },
+          parameters: {
+            moduleId: module.id,
+            orientation: "commit",
+            dossierAssessment: this.agiDossierDecisionAssessment(
+              player,
+              module,
+              "commit"
+            )
+          },
           consequences: { agiClaim: 1, compute: -1, scrutiny: 1 }
         },
         {
           decisionId: `agi_dossier_hedge_${module.id}`,
           label: `Hedge the ${module.id.replaceAll("_", " ")} Dossier.`,
           actionId: "agi_dossier",
-          parameters: { moduleId: module.id, orientation: "hedge" },
+          parameters: {
+            moduleId: module.id,
+            orientation: "hedge",
+            dossierAssessment: this.agiDossierDecisionAssessment(
+              player,
+              module,
+              "hedge"
+            )
+          },
           consequences: { agiClaim: 0 }
         }
-      ]
-    )));
+      ];
+      const scenarioOrientation = this.scenario?.applied &&
+        this.scenario.focalSeat === player.seat
+        ? player.agiDossier.choices[module.id]
+        : null;
+      return this.choose(
+        policies,
+        player.seat,
+        `agi_dossier_${module.id}`,
+        scenarioOrientation
+          ? legalDecisions.filter((decision) =>
+            decision.parameters.orientation === scenarioOrientation
+          )
+          : legalDecisions
+      );
+    }));
     for (const [seat, choice] of choices.entries()) {
       this.players[seat].agiDossier.choices[module.id] = choice.parameters.orientation;
     }
