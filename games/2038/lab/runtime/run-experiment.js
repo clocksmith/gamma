@@ -18,6 +18,15 @@ function integer(value, fallback, minimum, maximum, label) {
   return parsed;
 }
 
+function unitInterval(value, label) {
+  if (value === undefined) return undefined;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0 || parsed > 1) {
+    throw new RangeError(`${label} must be a number from zero to one.`);
+  }
+  return parsed;
+}
+
 export async function runExperiment(options = {}, onProgress) {
   const mode = options.mode || "tournament";
   if (mode === "tournament") return createSimulation(options, onProgress);
@@ -31,6 +40,7 @@ export async function runExperiment(options = {}, onProgress) {
       seed: options.seed,
       magnitude: options.magnitude === undefined ? undefined : Number(options.magnitude),
       backendId: options.backendId,
+      targetWinShare: unitInterval(options.targetWinShare, "targetWinShare"),
       rulesVariant: options.rulesVariant,
       signal: options.signal,
       onProgress
