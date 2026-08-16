@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "two-compute-dossier-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "causal_one_lever",
+  "question": "Does charging two Compute per committed Dossier card reduce frequent AGI winner overrides and strategic dominance while preserving multiple viable two-of-three evidence routes?",
+  "sourceEvidence": [
+    "2026-08-15-dossier-policy-validity-v1",
+    "2026-08-15-three-evidence-dossier-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/two-compute-dossier-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "two_compute_dossier",
+      "overlay": {
+        "agiComputePerCommit": 2
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 6000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-two-compute-dossier-v1",
+  "requiredDiagnostics": [
+    "profile and faction win shares by supported player count",
+    "Dossier commitments, payment failures, supported evidence, declaration, and winner override rates",
+    "Core Action and Program selection frequencies",
+    "opening and winning-path diversity",
+    "faction by strategy interactions",
+    "World Ending rates",
+    "integrity, fallback, and forced-no-op rates"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "Select the candidate only if AGI remains reachable near the registered five-percent target and four-player homogeneous strategy dominance falls without exceeding faction, seat, interaction, pairwise, diversity, or three/five-player bounds.",
+    "canonicalPreferred": "Retain one Compute per Commit if the higher reserve deletes the AGI path, makes Fund compulsory, strengthens Compute-rich factions beyond bounds, or fails to improve strategy dominance.",
+    "interpretation": "The one-lever result may select a candidate for human review. It does not establish human balance or promote the rule automatically.",
+    "physicalBoundary": "Any selected cost requires synchronized Dossier copy, player aids, browser behavior, tests, a fresh release candidate, and explicit user approval."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no change; this is a simulation-only candidate",
+    "semanticGraph": "no player-facing change",
+    "machineData": "no generated-content change",
+    "simulator": "existing per-Commit Compute overlay only",
+    "browserPrototype": "no change",
+    "referenceAids": "no change",
+    "tests": "existing Dossier payment and assessment coverage",
+    "playtestDocumentation": "no change before candidate selection"
+  }
+}
