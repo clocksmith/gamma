@@ -1,0 +1,205 @@
+{
+  "adamA": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/adam_payloads",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/adam-a.json",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/parameters-a"
+    ],
+    "elapsedSeconds": 1.0515299220569432,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "adamB": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/adam_payloads",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/adam-b.json",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/parameters-b"
+    ],
+    "elapsedSeconds": 1.0533975108992308,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "buildAdam": {
+    "command": [
+      "c++",
+      "-std=c++20",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-mavx2",
+      "-mfma",
+      "-fno-math-errno",
+      "-fno-trapping-math",
+      "/home/x/deco/gamma/projects/enwiki9/programs/nncp_open_profile_update_forward_chain_64_q0_v1/adam_payloads.cpp",
+      "-o",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/adam_payloads"
+    ],
+    "elapsedSeconds": 1.822166734142229,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "buildForward": {
+    "command": [
+      "cmake",
+      "--build",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build",
+      "--parallel",
+      "4"
+    ],
+    "elapsedSeconds": 13.291112893028185,
+    "returncode": 0,
+    "stderr": "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp: In function \u2018float libnc_sum_squares64(const float*)\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp:327:25: warning: ignoring attributes on template argument \u2018__m256\u2019 [-Wignored-attributes]\n  327 |     std::array<__m256, 8> x;\n      |                         ^\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp: At global scope:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp:451:52: warning: ignoring attributes on template argument \u2018__m256\u2019 [-Wignored-attributes]\n  451 | static float libnc_sum64(const std::array<__m256, 8> & x) {\n      |                                                    ^\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp: In function \u2018float libnc_sum_values(const float*, int)\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp:503:29: warning: ignoring attributes on template argument \u2018__m256\u2019 [-Wignored-attributes]\n  503 |         std::array<__m256, 8> values;\n      |                             ^\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp:517:29: warning: ignoring attributes on template argument \u2018__m256\u2019 [-Wignored-attributes]\n  517 |         std::array<__m256, 8> values;\n      |                             ^\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp: In function \u2018std::vector<float> softmax_rows(std::vector<float>, int)\u2019:\n/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source/profile_forward_parity.cpp:547:33: warning: ignoring attributes on template argument \u2018__m256\u2019 [-Wignored-attributes]\n  547 |             std::array<__m256, 8> exponentials;\n      |                                 ^\n",
+    "stderrSha256": "9b0a5e5e8d456e7be33f165722037efc6aaa774373694d15a331143891d42a48",
+    "stdout": "[  6%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o\n[  6%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o\n[ 13%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o\n[ 13%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o\n[ 17%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o\n[ 20%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o\n[ 24%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o\n[ 27%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o\n[ 31%] Linking CXX static library libggml-base.a\n[ 31%] Built target ggml-base\n[ 34%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o\n[ 44%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o\n[ 44%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o\n[ 44%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o\n[ 48%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o\n[ 51%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o\n[ 55%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o\n[ 58%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o\n[ 62%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o\n[ 65%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o\n[ 68%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o\n[ 72%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o\n[ 75%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o\n[ 79%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o\n[ 82%] Linking CXX static library libggml-cpu.a\n[ 82%] Built target ggml-cpu\n[ 86%] Building CXX object ggml/src/CMakeFiles/ggml.dir/ggml-backend-dl.cpp.o\n[ 89%] Building CXX object ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o\n[ 93%] Linking CXX static library libggml.a\n[ 93%] Built target ggml\n[ 96%] Building CXX object CMakeFiles/nncp_ggml_profile_forward_parity.dir/profile_forward_parity.cpp.o\n[100%] Linking CXX executable nncp_ggml_profile_forward_parity\n[100%] Built target nncp_ggml_profile_forward_parity\n",
+    "stdoutSha256": "7e13fee9d8b5d54ca57c5c22fabb29abbb6981296e7b534a74af0e2fd5f87f18"
+  },
+  "configureForward": {
+    "command": [
+      "cmake",
+      "-S",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source",
+      "-B",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "elapsedSeconds": 0.32920121494680643,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "-- The C compiler identification is GNU 15.2.0\n-- The CXX compiler identification is GNU 15.2.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- The ASM compiler identification is GNU\n-- Found assembler: /usr/bin/cc\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n-- Found Threads: TRUE\n-- CMAKE_SYSTEM_PROCESSOR: x86_64\n-- GGML_SYSTEM_ARCH: x86\n-- Including CPU backend\n-- x86 detected\n-- Adding CPU backend variant ggml-cpu: -msse4.2;-mf16c;-mfma;-mbmi2;-mavx;-mavx2 GGML_SSE42;GGML_F16C;GGML_FMA;GGML_BMI2;GGML_AVX;GGML_AVX2\n-- ggml version: 0.9.5\n-- ggml commit:  4c458758\n-- Configuring done (0.3s)\n-- Generating done (0.0s)\n-- Build files have been written to: /home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build\n",
+    "stdoutSha256": "aa7f9b4a455404c44ad066b0f8927c88232296bb9545046bf8268436ff2727b8"
+  },
+  "extractPostFixture": {
+    "command": [
+      "tar",
+      "--extract",
+      "--xz",
+      "--no-same-owner",
+      "--no-same-permissions",
+      "--file",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/production_forward_fixture.tar.xz",
+      "--directory",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/post-fixture"
+    ],
+    "elapsedSeconds": 4.632442192174494,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "extractPreFixture": {
+    "command": [
+      "tar",
+      "--extract",
+      "--xz",
+      "--no-same-owner",
+      "--no-same-permissions",
+      "--file",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_ggml_profile_forward_parity_64_qm18_v1/production_forward_fixture.tar.xz",
+      "--directory",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/pre-fixture"
+    ],
+    "elapsedSeconds": 4.3751941819209605,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "extractSource": {
+    "command": [
+      "tar",
+      "--extract",
+      "--xz",
+      "--no-same-owner",
+      "--no-same-permissions",
+      "--file",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/ggml_profile_forward_source_closure.tar.xz",
+      "--directory",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/source"
+    ],
+    "elapsedSeconds": 0.03254014486446977,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "forwardLdd": {
+    "command": [
+      "ldd",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build/nncp_ggml_profile_forward_parity"
+    ],
+    "elapsedSeconds": 0.005633275955915451,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "\tlinux-vdso.so.1 (0x000075ce20886000)\n\tlibstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x000075ce20400000)\n\tlibm.so.6 => /usr/lib/x86_64-linux-gnu/libm.so.6 (0x000075ce202da000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000075ce202ac000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x000075ce20000000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000075ce20888000)\n",
+    "stdoutSha256": "710c07e0d56835c70897ff4667664218301a2e4fecb93ba8df97218b56bfba54"
+  },
+  "postForwardA": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build/nncp_ggml_profile_forward_parity",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/post-fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/post-open-a"
+    ],
+    "elapsedSeconds": 22.73764547985047,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "postForwardB": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build/nncp_ggml_profile_forward_parity",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/post-fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/post-open-b"
+    ],
+    "elapsedSeconds": 22.36992657184601,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "preForwardA": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build/nncp_ggml_profile_forward_parity",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/pre-fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/pre-open-a"
+    ],
+    "elapsedSeconds": 22.285862975055352,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "preForwardB": {
+    "command": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/build/nncp_ggml_profile_forward_parity",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/pre-fixture",
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_open_profile_update_forward_chain_64_q0_v1/work/pre-open-b"
+    ],
+    "elapsedSeconds": 22.335912779904902,
+    "returncode": 0,
+    "stderr": "",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

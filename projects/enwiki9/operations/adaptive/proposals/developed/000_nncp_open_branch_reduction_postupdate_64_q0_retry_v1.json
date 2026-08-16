@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_open_branch_reduction_postupdate_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T01:53:04+00:00",
+  "created_at": "2026-08-16T01:53:02+00:00",
+  "developed_at": "2026-08-16T01:53:08+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T014708Z_6572106ab8.json",
+      "sha256": "sha256:dd5553296250a4f0e42c84283240a1ebe8b23db51f698799c59e533dcd13a193"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_v1/replay.json",
+      "sha256": "sha256:752079cdc56dba2c77fda6a6b0b889cc60eb089cde8e79f61bdfda1fc0877f08"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_branch_reduction_postupdate_64_q0_retry_v1.json",
+    "sha256": "sha256:67b8823fd5090c1ed133b4bf749f4e37d8e45824dea97c21616ce88563960f16"
+  },
+  "hypothesis": "The post-update forward's nonzero branch-count difference is caused only by the scalar left-fold reduction order; over the retained 64 tensors and 896 oracle rows, that reducer reproduces the observed discrepancy while the previously proven LibNC-compatible reduction is exact.",
+  "interfaces_exposed": [
+    "unchanged retained branch controls + complete predicate evaluator -> contract-valid causal attribution"
+  ],
+  "kill_condition": "Any antecedent drift, control-source drift, incomplete population, exact-reducer mismatch, nondeterminism, work-root escape, or source overflow retires this attribution.",
+  "max_program_bytes": 250000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "parent_proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "priority": 1466,
+  "promotion_condition": "Require the unchanged 64-tensor and 896-row population, scalar 19-row/max-two discrepancy, zero exact-reducer discrepancy, deterministic replay, guarded work containment, and complete predicate evaluation.",
+  "proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "No control changes, teacher rerun, tolerance, fitted correction, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1466,
+  "state": "developed",
+  "title": "Predicate-complete branch-attribution retry"
+}

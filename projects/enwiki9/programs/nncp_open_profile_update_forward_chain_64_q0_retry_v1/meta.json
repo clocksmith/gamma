@@ -1,0 +1,41 @@
+{
+  "added": "2026-08-15",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+    "nncp_open_profile_adam_replay_64_q0_retry_v2",
+    "nncp_ggml_profile_memory_transition_64_q0_v1"
+  ],
+  "description": "Canonical-emitter retry of the joint open update, memory, and next-forward chain.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Writing predicted parameter payloads directly from the canonical exact Adam replay functions, then chaining those outputs with the already exact open recurrent-memory transition and unchanged exact next-forward, reproduces every retained payload, tensor, and arithmetic branch.",
+  "id": "nncp_open_profile_update_forward_chain_64_q0_retry_v1",
+  "measured": {
+    "reflections": {
+      "20260816T024338Z_3839f396a6": {
+        "decision": "promote",
+        "path": "operations/adaptive/reflections/20260816T024338Z_3839f396a6.json",
+        "sha256": "sha256:1c4f88906a2f0ae20c9613b33a9e55fbaeec968baef97c309bfc59fd0078faf9",
+        "valid": true
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_profile_update_forward_chain_64_q0_retry_v1.json",
+      "sha256": "sha256:3f91f9cdae011033887582930da019e61abcaa5c922f8563596c82d78ea3413e"
+    },
+    "interfaces_exposed": [
+      "canonical exact Adam values -> emitted payloads -> open memory + unchanged next-forward -> one causal open segment transition"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_profile_update_forward_chain_64_q0_v1",
+    "proposal_id": "nncp_open_profile_update_forward_chain_64_q0_retry_v1",
+    "retired_neighborhoods": [
+      "No duplicated update arithmetic, incumbent payload splice, tolerance, closed replay call, compression claim, recursive-training claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "status": "active",
+  "verdict": "Retain this exact joint transition as the integration oracle. The next honest teacher-removal gate must generate the same dense gradients with an open backward pass before chaining through this unchanged update and forward."
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "deps": [
+    "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+    "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2"
+  ],
+  "description": "Complete retained post-update open GGML forward with the exact production branch-reduction order.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "Integrating the independently attributed LibNC-compatible subtree reducer into the complete open post-update forward preserves exact tensors and makes every retained branch count exact without the closed teacher at replay time.",
+  "id": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "measured": {
+    "reflections": {
+      "20260816T020543Z_916769ea99": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T020543Z_916769ea99.json",
+        "sha256": "sha256:45535ce8f5547022839bb01a71f40d3424d0edb46d5d647a60675499d432fd80",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q1_v1.json",
+      "sha256": "sha256:dfae05099e92daa682148d35581495a21f99223b22f57b645f2efac0e4a90587"
+    },
+    "interfaces_exposed": [
+      "retained incumbent-produced post-update state + exact Gamma GGML forward and branch reducer -> complete exact replay"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+    "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+    "retired_neighborhoods": [
+      "No teacher rerun, LibNC call, tolerance, captured-output computation, backward claim, joint open-chain claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+  "status": "candidate",
+  "verdict": "Retry with unchanged candidate C++ and experiment predicates; change only the comparator import to the promoted Q18 sequential chain and bind this reflection."
+}

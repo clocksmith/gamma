@@ -1,0 +1,407 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "proposalId": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/20260816T011958119826Z_b07e5741488b.json",
+      "sha256": "sha256:1f0dcdf2da9943c367f5b61389ec219b3f748de5f133940abc8f23327da7fa97"
+    }
+  },
+  "hypothesis": {
+    "claim": "The post-update forward's nonzero branch-count difference is caused only by the scalar left-fold reduction order; over the retained 64 tensors and 896 oracle rows, that reducer reproduces the observed discrepancy while the previously proven LibNC-compatible reduction is exact.",
+    "falsification": "Any antecedent drift, incomplete selective extraction, population mismatch, scalar discrepancy other than the retained result, nonzero exact-reducer mismatch, nondeterministic replay, work-root escape, or source-closure overflow prevents causal attribution and exact-reducer integration."
+  },
+  "changedMechanism": "Hold the retained output tensors and branch oracle fixed, evaluate scalar left-fold and Gamma-authored LibNC-order reductions independently, and separate a scientific mismatch from process success.",
+  "invariants": [
+    "The diagnostic reads only the 64 retained final probability tensors and 896 retained branch-oracle rows; it does not call LibNC, NNCP, the teacher executable, or the full open forward.",
+    "The probability tensors are comparator outputs used only to attribute arithmetic termination after full tensor parity was already established; they do not become inputs to a claimed open forward or codec.",
+    "Scalar and exact reducers receive identical float32 tables, tree coordinates, truth bits, and probability quantization rules.",
+    "The exact reducer source is the same Gamma-authored reduction order previously promoted by the Q1 open arithmetic gate.",
+    "A supported attribution returns process status zero and a valid adaptive result; scientific non-promotion is data rather than a process failure.",
+    "All extracted fixture bytes and build outputs remain under the candidate-owned guarded work root and are removed after successful measurement.",
+    "This experiment contributes zero objective credit and authorizes no open update-to-forward, compression, backward, training, transfer, or score claim."
+  ],
+  "controls": [
+    {
+      "id": "libnc-order-reducer",
+      "role": "treatment",
+      "definition": "The Gamma-authored exact block/tree reduction computes branch probabilities from the retained post-update probability tables."
+    },
+    {
+      "id": "retained-branch-oracle",
+      "role": "comparator",
+      "definition": "The digest-bound closed run's 896 branch rows provide expected integer counts and immutable tree coordinates."
+    },
+    {
+      "id": "scalar-left-fold",
+      "role": "negative",
+      "definition": "The unchanged scalar left-fold reducer must reproduce the localized nonzero discrepancy rather than accidentally matching the oracle."
+    },
+    {
+      "id": "exact-replay",
+      "role": "replay",
+      "definition": "A second fresh process over the same selectively extracted bytes must emit a byte-identical report."
+    }
+  ],
+  "population": {
+    "unit": "one integer arithmetic-branch probability count",
+    "scopeBytes": null,
+    "scopeSymbols": 64,
+    "selection": "Every branch row for every symbol in the retained first complete post-update segment.",
+    "coordinate": "preprocessed original-symbol coordinates [320,384), comprising 896 binary-tree rows over 64 probability tensors"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The digest-bound retained post-update probability tensors, branch rows, prior failed-job reflection, prior exact arithmetic decision, fixed reducer sources, and frozen predicates.",
+      "The branch oracle's expected integer counts are used only after each reducer independently computes its corresponding count from a retained float32 table."
+    ],
+    "forbiddenInformation": [
+      "Calling the teacher or LibNC at measurement time, modifying retained tensor values or tree rows, fitting a correction to mismatches, or using expected counts as reducer inputs.",
+      "Treating exact arithmetic termination over teacher-produced probabilities as a complete open forward, open update-to-forward chain, compression result, or Hutter-score improvement."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "retained-postupdate-fixture",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/production_forward_fixture.tar.xz",
+      "sha256": "sha256:aa598cc0a70090544fd0524e0ec693c7f59637d83f5c7c70500124e2469c8485"
+    },
+    {
+      "id": "legacy-postupdate-forward-decision",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/decision.json",
+      "sha256": "sha256:2d74410a7735a3988ac8881d74e3648893185bec7e631760ea9b86ab713aaa52"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T012011Z_35b4885e21.json",
+      "sha256": "sha256:85bf3a29fb12211827cbf1c7277c8b23e7b0a2de500123eee3ab6e363ace9bc3"
+    },
+    {
+      "id": "prior-exact-arithmetic-decision",
+      "path": "results/nncp_ggml_profile_arithmetic_64_q1_v1/decision.json",
+      "sha256": "sha256:117e334d854688a747a8eff7e469f58621741e39692607005adf22efdb7abbea"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-contract-schema-json-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-result-schema-json-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-job-schema-json-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-algorithm-proposal-schema-json-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-candidate-revision-schema-json-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-attempt-schema-json-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-replay-schema-json-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-delta-midas-probe-result-schema-json-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-dependency-closure-schema-json-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-driver-run-ledger-row-schema-json-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-contract-schema-json-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-result-schema-json-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-mechanism-graph-schema-json-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-named-gradient-detail-schema-json-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-json-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-schema-json-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-reflection-receipt-schema-json-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-release-receipt-index-schema-json-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-resource-guard-receipt-schema-json-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-run-receipt-schema-json-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-json-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-schema-json-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-programs-nncp_open_branch_reduction_postupdate_64_q0_v1-CMakeLists-txt-c4306f1de3ad",
+      "path": "programs/nncp_open_branch_reduction_postupdate_64_q0_v1/CMakeLists.txt",
+      "sha256": "sha256:73f6bbd22d6a8869b608b4edd462c6df32adc1d1f21de105fda383eeb70fcc05"
+    },
+    {
+      "id": "runtime-source-programs-nncp_open_branch_reduction_postupdate_64_q0_v1-branch_reduction-cpp-ae7feeeb258c",
+      "path": "programs/nncp_open_branch_reduction_postupdate_64_q0_v1/branch_reduction.cpp",
+      "sha256": "sha256:2b861ffdf158469f27add5c173312b80e889ef70a595d08323c697ba41d8c3af"
+    },
+    {
+      "id": "runtime-source-programs-nncp_open_branch_reduction_postupdate_64_q0_v1-program-py-49f92cdb9b75",
+      "path": "programs/nncp_open_branch_reduction_postupdate_64_q0_v1/program.py",
+      "sha256": "sha256:b3e5515294cefe588661fb80695135a97bd9bc34449ab60a7ee9f9ae2d63abd0"
+    },
+    {
+      "id": "runtime-source-tools-enwiki9_python_source_closure-py-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-tools-nncp_open_branch_reduction_postupdate_64_q0-py-60f940ca2168",
+      "path": "tools/nncp_open_branch_reduction_postupdate_64_q0.py",
+      "sha256": "sha256:2a8be2b538bb741286c830eab8118e8d2a17a71ec46ac3f112a6ef2ec59a8ec3"
+    },
+    {
+      "id": "runtime-source-tools-research_contracts-py-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "pythonSourceClosureEntries": [
+    "runtime-source-tools-nncp_open_branch_reduction_postupdate_64_q0-py-60f940ca2168"
+  ],
+  "outputs": [
+    "results/nncp_open_branch_reduction_postupdate_64_q0_v1/decision.json",
+    "results/nncp_open_branch_reduction_postupdate_64_q0_v1/selective-extraction.json",
+    "results/nncp_open_branch_reduction_postupdate_64_q0_v1/build-receipt.json",
+    "results/nncp_open_branch_reduction_postupdate_64_q0_v1/replay.json",
+    "results/nncp_open_branch_reduction_postupdate_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "measurements": [
+    {
+      "id": "antecedentsPass",
+      "unit": "boolean",
+      "definition": "All digest-bound attribution antecedents satisfy their declared verdicts."
+    },
+    {
+      "id": "probabilityTensorCount",
+      "unit": "tensors",
+      "definition": "Retained final probability tensors evaluated by both reducers."
+    },
+    {
+      "id": "branchRows",
+      "unit": "integer counts",
+      "definition": "Complete retained arithmetic-branch population evaluated by both reducers."
+    },
+    {
+      "id": "scalarMismatchCount",
+      "unit": "rows",
+      "definition": "Rows where the scalar left-fold count differs from the retained oracle."
+    },
+    {
+      "id": "scalarMaximumDifference",
+      "unit": "integer probability counts",
+      "definition": "Maximum absolute scalar left-fold count error."
+    },
+    {
+      "id": "exactMismatchCount",
+      "unit": "rows",
+      "definition": "Rows where the LibNC-order reducer count differs from the retained oracle."
+    },
+    {
+      "id": "exactMaximumDifference",
+      "unit": "integer probability counts",
+      "definition": "Maximum absolute LibNC-order reducer count error."
+    },
+    {
+      "id": "legacyMaximumDifference",
+      "unit": "integer probability counts",
+      "definition": "Maximum discrepancy recorded by the complete post-update open-forward comparison."
+    },
+    {
+      "id": "deterministicReplay",
+      "unit": "boolean",
+      "definition": "Two fresh reducer processes emit byte-identical reports."
+    },
+    {
+      "id": "guardedWorkRootPass",
+      "unit": "boolean",
+      "definition": "All ephemeral extraction/build state remained under and was removed with the candidate work root."
+    },
+    {
+      "id": "incrementalSourceBytes",
+      "unit": "bytes",
+      "definition": "Compressed dependency-closed attribution source package."
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-tensors",
+      "measurement": "probabilityTensorCount",
+      "operator": "eq",
+      "threshold": 64
+    },
+    {
+      "id": "p-rows",
+      "measurement": "branchRows",
+      "operator": "eq",
+      "threshold": 896
+    },
+    {
+      "id": "p-scalar-mismatches",
+      "measurement": "scalarMismatchCount",
+      "operator": "eq",
+      "threshold": 19
+    },
+    {
+      "id": "p-scalar-maximum",
+      "measurement": "scalarMaximumDifference",
+      "operator": "eq",
+      "threshold": 2
+    },
+    {
+      "id": "p-exact-mismatches",
+      "measurement": "exactMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-exact-maximum",
+      "measurement": "exactMaximumDifference",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-legacy-maximum",
+      "measurement": "legacyMaximumDifference",
+      "operator": "eq",
+      "threshold": 2
+    },
+    {
+      "id": "p-replay",
+      "measurement": "deterministicReplay",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-work-root",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 250000
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-exact-mismatches",
+      "measurement": "exactMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 250000
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 250000,
+    "expectedNetSavingsBytes": -250000
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.05,
+    "interactionRisk": 0.05
+  },
+  "generatedUtc": "2026-08-16T01:45:24+00:00"
+}

@@ -1,0 +1,96 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The local evaluate operator map implemented eq and lte but omitted the frozen gt operator."
+  },
+  "candidateId": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+    "candidateTreeSha256": "sha256:77267d2ef21e558f1c0f1e9e03f07b6c1f52c3e14d558dccf30c3e2849ce12c2",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_branch_reduction_postupdate_64_q0_v1/20260816T014638446499Z_77267d2ef21e.json",
+      "sha256": "sha256:4f26792081d8fc4bb6260912b186a518eb8d4274019a8e0544ae723b98a2fc1d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retry with the identical C++ controls, retained fixture, population, and predicates; change only the evaluator to support gt and bind this failed-job reflection.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_v1/build-receipt.json",
+      "sha256": "sha256:9d669a0cff1bd95c399bc578abf1977008a8beb013f87a8f818537e510d457de"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_v1/guard.json",
+      "sha256": "sha256:707593a6215fe3d2665969fee5ed1893d31e76b0319fe07f3da36308f12d8360"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_v1/replay.json",
+      "sha256": "sha256:752079cdc56dba2c77fda6a6b0b889cc60eb089cde8e79f61bdfda1fc0877f08"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_v1/selective-extraction.json",
+      "sha256": "sha256:804ae4c69ee0ad5e8108478023dce735ddc3cee3a4ecc7cb793ff75fcb145a71"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_branch_reduction_postupdate_64_q0_v1.json",
+    "sha256": "sha256:f535994ad26ead0fb978d79463ca40d5410258f24d4652092059d4e16110268a"
+  },
+  "generatedUtc": "2026-08-16T01:50:40+00:00",
+  "hypothesis": {
+    "rationale": "The retained replay is informative but the failed process produced no contract-valid adaptive result, so it cannot prospectively support the hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T014708Z_6572106ab8.json",
+    "sha256": "sha256:c0c02ac82eaddee417c835f0b3c145afc4573a0e4873a876eb326479721779f2"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not interpret control output without a validated adaptive result as prospective hypothesis support."
+    ],
+    "transferableLessons": [
+      "Adaptive experiment runners must implement every comparison operator admitted by the shared schema before a frozen predicate is accepted; preserve successful control receipts across late bookkeeping failures."
+    ],
+    "uncertainties": [
+      "The measured attribution must be replayed unchanged through a complete evaluator."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t014708z_6572106ab8",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Both frozen reducer controls completed and emitted deterministic measurements, but the adaptive-result evaluator raised KeyError on the schema-valid gt kill-predicate operator before writing or validating the result."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "deps": [
+    "nncp_open_profile_adam_replay_64_q0_retry_v2",
+    "nncp_ggml_profile_forward_parity_64_qm18_v1"
+  ],
+  "description": "Zero-credit post-update segment fixture and exact open GGML forward parity at original-symbol coordinates 320 through 384.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The exact open production forward transfers unchanged to the first post-update segment when given the incumbent's updated parameters and recurrent state.",
+  "id": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T005343Z_d612abab3e": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T005343Z_d612abab3e.json",
+        "sha256": "sha256:91413410fb953cec94889a5d71f56a87dd7e6af1d74eeac8bad8b1a6c597891a",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q0_v1.json",
+      "sha256": "sha256:94c8ed931f36d838af6af187da677cebe8968d8448c75ba2e244d22e8d35747f"
+    },
+    "interfaces_exposed": [
+      "incumbent post-update state + next segment -> unchanged open GGML forward -> exact tensors and arithmetic branches"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+    "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+    "retired_neighborhoods": [
+      "No captured-output input, teacher call, tolerance, open-chain claim, backward claim, recursive-training claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_open_profile_adam_replay_64_q0_retry_v2",
+  "status": "candidate",
+  "verdict": "Authorize one prospectively frozen receipt-preserving retry that keeps the forward implementation and hypothesis unchanged while exposing the exporter failure boundary."
+}

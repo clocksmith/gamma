@@ -1,0 +1,59 @@
+{
+  "candidate_id": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "claimed_at": "2026-08-16T02:34:08+00:00",
+  "created_at": "2026-08-16T02:34:03+00:00",
+  "developed_at": "2026-08-16T02:34:46+00:00",
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json",
+      "sha256": "sha256:15aff130d15795fb0644ae8b95827e4a5212d2c74ecdfee44d26576f15a7297a"
+    },
+    {
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:0a800a91ab13ab45c24c6b8008c78d461ed923cb74db94030f0c2c425f7bcdc3"
+    },
+    {
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+      "sha256": "sha256:a930f6ed9f441f8db2bd404741b804cf5de4cac055dd3c220270f3a05a3eb23d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_update_forward_chain_64_q0_v1.json",
+    "sha256": "sha256:0681600ff06aaae97d87634a199c9e3dccff4bbd355691ad138d1cd799c1dfd0"
+  },
+  "hypothesis": "A Gamma-authored open Adam update and open recurrent-memory transition, fed directly into the unchanged exact post-update forward, reproduce every retained next-segment tensor and arithmetic branch without consuming incumbent post-update parameter or memory payloads.",
+  "interfaces_exposed": [
+    "teacher-captured gradients + open Adam + open recurrent transition + unchanged exact forward -> one causal open segment transition"
+  ],
+  "kill_condition": "Any generated parameter/state mismatch, forward tensor/branch mismatch, replay difference, input drift, forbidden dependency, resource violation, or source overflow prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+  "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+  "priority": 1475,
+  "promotion_condition": "Require two exact open Adam payload generations, two exact pre-update forwards, two exact recurrent-memory transitions, removal of incumbent post-update containers, and two exact next-forwards over all frozen tensor and branch populations.",
+  "proposal_id": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "retired_neighborhoods": [
+    "No incumbent post-update payload splice, tolerance, closed replay call, compression claim, recursive-training claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1475,
+  "state": "developed",
+  "title": "Joint open update-to-forward chain"
+}

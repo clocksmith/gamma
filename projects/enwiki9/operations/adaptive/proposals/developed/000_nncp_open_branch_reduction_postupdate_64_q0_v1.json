@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "claimed_at": "2026-08-16T01:46:35+00:00",
+  "created_at": "2026-08-16T01:46:18+00:00",
+  "developed_at": "2026-08-16T01:46:39+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T012011Z_35b4885e21.json",
+      "sha256": "sha256:85bf3a29fb12211827cbf1c7277c8b23e7b0a2de500123eee3ab6e363ace9bc3"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/decision.json",
+      "sha256": "sha256:2d74410a7735a3988ac8881d74e3648893185bec7e631760ea9b86ab713aaa52"
+    },
+    {
+      "path": "results/nncp_ggml_profile_arithmetic_64_q1_v1/decision.json",
+      "sha256": "sha256:117e334d854688a747a8eff7e469f58621741e39692607005adf22efdb7abbea"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_branch_reduction_postupdate_64_q0_v1.json",
+    "sha256": "sha256:f535994ad26ead0fb978d79463ca40d5410258f24d4652092059d4e16110268a"
+  },
+  "hypothesis": "The post-update forward's nonzero branch-count difference is caused only by the scalar left-fold reduction order; over the retained 64 tensors and 896 oracle rows, that reducer reproduces the observed discrepancy while the previously proven LibNC-compatible reduction is exact.",
+  "interfaces_exposed": [
+    "retained post-update probability tables + two frozen float32 reduction orders -> exact causal branch attribution"
+  ],
+  "kill_condition": "Any antecedent drift, incomplete population, nonzero exact-reducer mismatch, nondeterminism, work-root escape, or source overflow retires this attribution.",
+  "max_program_bytes": 250000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+  "priority": 1465,
+  "promotion_condition": "Require 64 probability tensors, all 896 branch rows, the retained scalar mismatch population and maximum, zero exact-reducer mismatches, deterministic replay, guarded work containment, and the frozen source ceiling.",
+  "proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "retired_neighborhoods": [
+    "No teacher rerun, LibNC call, fitted correction, tolerance, captured-output forward claim, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1465,
+  "state": "developed",
+  "title": "Post-update branch-reduction attribution"
+}

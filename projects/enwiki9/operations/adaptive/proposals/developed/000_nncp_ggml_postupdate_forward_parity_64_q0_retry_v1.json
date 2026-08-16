@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+  "claimed_at": "2026-08-16T01:08:25+00:00",
+  "created_at": "2026-08-16T01:08:24+00:00",
+  "developed_at": "2026-08-16T01:08:25+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T005343Z_d612abab3e.json",
+      "sha256": "sha256:91413410fb953cec94889a5d71f56a87dd7e6af1d74eeac8bad8b1a6c597891a"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1.json",
+    "sha256": "sha256:4491041dee9ba9e174a66aebdc71e84fb81eff6aa84962b34451eb5e641d346d"
+  },
+  "hypothesis": "With exporter input identity and stderr retained, the exact open production forward transfers unchanged to the first post-update segment when given the incumbent's updated parameters and recurrent state.",
+  "interfaces_exposed": [
+    "receipt-bound incumbent post-update state + next segment -> unchanged open GGML forward -> exact tensors and arithmetic branches"
+  ],
+  "kill_condition": "Any antecedent drift, coordinate error, incomplete or unreceipted export, wrong tensor population, nondeterminism, nonzero tensor error, nonzero arithmetic-branch count difference, forbidden dependency, or source-closure overflow prevents promotion and forbids a joint open update-to-forward claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+  "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+  "priority": 1464,
+  "promotion_condition": "Require the reflected failed preflight, two complete exporter receipts covering 246 parameter and 22 state tensors, exact block-320 coordinates, a complete fixture, two byte-identical open reports, zero tensor error, zero branch-count difference, no forbidden dependency, and a dependency-closed source package within the frozen ceiling.",
+  "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+  "retired_neighborhoods": [
+    "No opaque exporter failure, captured-output input, teacher call, tolerance, open-chain claim, backward claim, recursive-training claim, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1464,
+  "state": "developed",
+  "title": "Receipt-preserving post-update forward retry"
+}

@@ -1,0 +1,105 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Q18 compare_forward already requires exactly 64 manifest records for each of 244 unique labels; the wrapper incorrectly required the raw manifest record count to equal the grouped comparison count."
+  },
+  "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1",
+    "candidateTreeSha256": "sha256:06da274da5600070b0652b997d06d75a45c7cad2527c1c3abe894d2ab434ee34",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/20260816T021016668914Z_06da274da560.json",
+      "sha256": "sha256:d760a6729baa2abc4ecbaec572cdf4b9ef8713b14d1f4de116ecccb8f25dd490"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Finalize the retained exact measurements by deriving fixtureComplete from the sequential comparator postcondition and 244-group population; preserve all scientific artifacts and reevaluate every frozen predicate.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/decision.json",
+      "sha256": "sha256:f723c6779562ee1291b01abaa789d4e548ba203c2d67792ae5327f1a7c2d9423"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/execution.json",
+      "sha256": "sha256:958a3e110b24ca5e20a17dba89a5d8410356689028d66698a0d6902f7f946740"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:891e8c50b6c9e66c7a9f4d5019d009fab24955e7b7b83386fd6c8a70f22a7314"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/guard.json",
+      "sha256": "sha256:d256c12f66ccc74a51a03dea8cf6ffe30d03e261e277e8a42b7e4037824689b9"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1.json",
+    "sha256": "sha256:fd3805a1510e4d7b07601ab628a938a28e3286c6afb50c35194a5d820ecb46c7"
+  },
+  "generatedUtc": "2026-08-16T02:13:38+00:00",
+  "hypothesis": {
+    "rationale": "The retained measurements strongly indicate exact forward parity, but the frozen promotion decision used an incorrectly implemented completeness measurement and cannot support the hypothesis until corrected and revalidated.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T021035Z_f751ae43e8.json",
+    "sha256": "sha256:5425f0fbbacd01cd85f8fb386a077d5c761f800cd058f7c1fb7f4da96650924e"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not compare raw sequential fixture record count directly with grouped tensor-comparison count."
+    ],
+    "transferableLessons": [
+      "Completeness predicates must use the comparator population unit: sequential per-position fixture records and grouped output tensors are different cardinalities even when coverage is complete."
+    ],
+    "uncertainties": [
+      "A receipt-bound finalizer must verify that the promoted sequential comparator completed, returned all 244 groups, and was bound in the parent source closure before setting fixtureComplete."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/branchRows",
+      "source": {
+        "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1/decision.json",
+        "sha256": "sha256:f723c6779562ee1291b01abaa789d4e548ba203c2d67792ae5327f1a7c2d9423"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 896,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t021035z_f751ae43e8",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The process and result were schema-valid and every substantive tensor, branch, replay, dependency, guard, and source measurement passed, but fixtureComplete compared 15616 per-position manifest records with 244 sequentially grouped comparison records and therefore reported false."
+    ],
+    "valid": false
+  }
+}
