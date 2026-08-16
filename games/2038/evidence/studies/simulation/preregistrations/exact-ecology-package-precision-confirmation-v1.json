@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "exact-ecology-package-precision-confirmation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does the unchanged frozen exact-ecology package retain its observed balance and identity passes while reaching the unified matrix's registered confidence-sequence precision target?",
+  "sourceCommit": "8fcb5d064a9d6aef679c03e4d437d6ffbb69a68e",
+  "sourceEvidence": [
+    "2026-08-15-exact-ecology-package-holdout-v1"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    },
+    {
+      "path": "studies/simulation/proposals/full-ecology-agi-candidate-v1.json",
+      "sha256": "3bca97e398eab032ae5befe322f266f67b21119ed68848f2cc2f4661016c94a6",
+      "profileId": "agi_candidate"
+    },
+    {
+      "path": "studies/simulation/proposals/exact-ecology-infrastructure-candidate-v1.json",
+      "sha256": "af0cefe1680c20469430dc94cfa78572ac6150d1e9e7234708a468e6872e3566",
+      "profileId": "infrastructure_compounder"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 36000,
+  "initialRunsPerCell": 8,
+  "batchSize": 24,
+  "seed": "mandate-2038-exact-ecology-package-precision-confirmation-v1",
+  "selectionRule": {
+    "precision": "The unified matrix must set precisionReached to true and maximumCoreHalfWidth must be at most the committed 0.12 target.",
+    "balance": "Every three-, four-, and five-player faction, seat, profile, diversity, fallback, forced-no-op, homogeneous dominance, pairwise dominance, and adversarial bound must pass.",
+    "measuredDefects": "Five-player winning-path entropy must remain at least 0.60, and the three-player Infrastructure Compounder plus greedy-backend cell must not appear in diagnosticDominance.",
+    "trustIdentity": "Trust Governor must average at least one Influence selection per appearance, keep Influence below its largest Core Action, reach Trust 4 in at least 85 percent of appearances, and retain mean Mandate of at least 16.",
+    "capacityIdentity": "Capacity Operator must average at least two Build selections per appearance, select Research plus Deploy more often than Build, and retain mean Mandate of at least 16.",
+    "agiIdentity": "AGI Candidate must be the largest profile contributor to AGI-declaration winner credit, supply at least 30 percent of that credit overall, retain mean Mandate of at least 14, and keep Dossier as its highest Program weight.",
+    "infrastructureIdentity": "Infrastructure Compounder must average at least two Build selections per appearance, retain mean Mandate of at least 16 at every supported count, and retain its authored Generator and two-Facility transition rules.",
+    "rulesBoundary": "The exact four profile artifacts, physical rules, starts, actions, scoring, model, projection, and evidence contract are unchanged from holdout v1. Only seed and preregistered sample design differ.",
+    "promotion": "A complete pass may nominate the strategy package for explicit human approval. It does not prove fun, negotiation quality, teachability, duration, or human counterplay.",
+    "failure": "Any precision, balance, measured-defect, or identity failure rejects certification. Do not tune profiles, change rules, or escalate the sample again from this confirmation."
+  },
+  "sampleRationale": "Holdout v1 used 11,998 matches and reached maximumCoreHalfWidth 0.1895 against a 0.12 target, with the widest core family at 359 minimum exposures. A 36,000-match cap and 24-match batches provide approximately three times the observations without increasing sequential looks proportionally.",
+  "requiredDiagnostics": [
+    "exact profile source paths and SHA-256 digests",
+    "complete executed ecology profiles and fingerprints",
+    "maximum core half-width and precisionReached",
+    "profile Action selections and Mandate sources",
+    "profile and faction win shares by supported player count",
+    "backend-specific strategy cells",
+    "winner-aware head-to-head dominance cells",
+    "winning-path attribution by profile",
+    "opening and winning-path diversity",
+    "AGI emergence and winner override rates",
+    "integrity, fallback, and forced-no-op rates"
+  ]
+}
