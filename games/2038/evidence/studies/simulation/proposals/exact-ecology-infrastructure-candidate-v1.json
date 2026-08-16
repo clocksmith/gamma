@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "reportType": "strategy_profile_proposal",
+  "evidenceLabel": "simulation_candidate",
+  "sourceReport": {
+    "path": "2026-08-15-exact-ecology-infrastructure-training-v1.raw.json",
+    "sha256": "36cae447340ca34787781563563b219d13b44232bdcbe434557d7a36ef189c07"
+  },
+  "trainingContract": {
+    "preregistration": "exact-ecology-infrastructure-training-v1",
+    "playerCounts": [3, 4, 5],
+    "opponentCoverage": "all_windows",
+    "targetWinShare": "neutral",
+    "backend": "greedy",
+    "evaluatedMatchesPerCandidate": 144
+  },
+  "championProfile": {
+    "id": "infrastructure_compounder",
+    "name": "The Infrastructure Compounder",
+    "description": "Builds a compact powered engine, then converts it into public thresholds and late Customers.",
+    "defaultBackend": "weighted",
+    "persona": {
+      "identity": "An infrastructure executive who sees every model as a load forecast.",
+      "worldview": "Unpowered ambition is theater; durable capacity wins long contests.",
+      "riskPosture": "Prefers capital risk to research risk.",
+      "negotiationStyle": "Offers capacity from strength and dislikes dependency.",
+      "voice": "Concrete, logistical, and systems-minded."
+    },
+    "strategy": {
+      "selection": "weighted",
+      "negotiation": {
+        "promiseWeight": 0.847,
+        "fulfillWeight": 1.87,
+        "betrayWeight": 0.556,
+        "reciprocityWeight": 0.657
+      },
+      "resourceValues": {
+        "runway": 1.5,
+        "compute": 1,
+        "researchProtection": 0.8
+      },
+      "objectives": [
+        "Establish two connected, powered Facilities without overbuilding.",
+        "Use the engine to cross Capability and Customer Mandate thresholds.",
+        "Keep enough late tempo and Compute for Fusion, Agent Swarm, or a paid AGI Dossier."
+      ],
+      "actionWeights": {
+        "fund": 2.993,
+        "research": 4.209,
+        "build": 6.53,
+        "organize": 1.222,
+        "deploy": 2.512,
+        "influence": 0.851,
+        "mega_cluster": 4.974,
+        "reorganization": 1.013,
+        "open_weights": 2.987,
+        "narrative_capture": 1.633,
+        "agent_swarm": 3.472,
+        "agi_dossier": 22.006,
+        "fusion_demonstrator": 4.227
+      },
+      "decisionWeights": {
+        "build_facility_cloud": 1.811,
+        "build_facility_capital": 1.821,
+        "build_generator_clean_infrastructure": 2.61
+      },
+      "consequenceWeights": {
+        "poweredFacilities": 8,
+        "powerDemand": 1
+      },
+      "rules": [
+        {
+          "when": [{ "path": "self.unpoweredFacilities", "operator": "gt", "value": 0 }],
+          "target": { "decisionIdPrefix": "build_generator_clean_infrastructure" },
+          "multiplier": 6
+        },
+        {
+          "when": [{ "path": "self.facilities", "operator": "gte", "value": 2 }],
+          "target": { "actionId": "deploy" },
+          "multiplier": 3
+        },
+        {
+          "when": [{ "path": "self.facilities", "operator": "gte", "value": 2 }],
+          "target": { "actionId": "build" },
+          "multiplier": 0.45
+        },
+        {
+          "when": [{ "path": "self.canDeploy", "operator": "eq", "value": false }],
+          "target": { "actionId": "research" },
+          "multiplier": 1.8
+        }
+      ]
+    },
+    "provenance": {
+      "kind": "curated_strategy_candidate",
+      "parentId": "infrastructure_compounder",
+      "sourceEvolutionSha256": "36cae447340ca34787781563563b219d13b44232bdcbe434557d7a36ef189c07",
+      "preregistration": "exact-ecology-infrastructure-training-v1",
+      "intendedPlayProfile": "default-game"
+    }
+  }
+}
