@@ -1,0 +1,55 @@
+{
+  "candidate_id": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "claimed_at": "2026-08-16T02:05:20+00:00",
+  "created_at": "2026-08-16T02:05:18+00:00",
+  "developed_at": "2026-08-16T02:05:24+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T015840Z_2429c2251f.json",
+      "sha256": "sha256:f1a1f1ce218554b83b43ca40689f8882d23bc2e935f539eabf2a09d52aa75ec7"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:1b11d316b8fe072de577437c970444b1fb26ee175796fca22a72a60d686598a5"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/decision.json",
+      "sha256": "sha256:2d74410a7735a3988ac8881d74e3648893185bec7e631760ea9b86ab713aaa52"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q1_v1.json",
+    "sha256": "sha256:dfae05099e92daa682148d35581495a21f99223b22f57b645f2efac0e4a90587"
+  },
+  "hypothesis": "Integrating the independently attributed LibNC-compatible subtree reducer into the complete open post-update forward preserves exact tensors and makes every retained branch count exact without the closed teacher at replay time.",
+  "interfaces_exposed": [
+    "retained incumbent-produced post-update state + exact Gamma GGML forward and branch reducer -> complete exact replay"
+  ],
+  "kill_condition": "Any antecedent, coordinate, population, tensor, branch, replay, dependency, guard, or source failure prevents promotion and all open-chain claims.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+  "parent_proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+  "priority": 1468,
+  "promotion_condition": "Require the reflected attribution, retained coordinate and population, exact comparison of all 244 forward tensors and 896 branch rows in two byte-identical executions, zero topology/truth differences, no forbidden dependency, guarded work containment, and both source ceilings.",
+  "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "retired_neighborhoods": [
+    "No teacher rerun, LibNC call, tolerance, captured-output computation, backward claim, joint open-chain claim, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1468,
+  "state": "developed",
+  "title": "Exact complete post-update open forward"
+}

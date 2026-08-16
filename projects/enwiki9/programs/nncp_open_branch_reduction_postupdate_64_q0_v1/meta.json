@@ -1,0 +1,39 @@
+{
+  "added": "2026-08-16",
+  "deps": [
+    "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+    "nncp_ggml_profile_arithmetic_64_q1_v1"
+  ],
+  "description": "Focused zero-credit attribution of the post-update branch-count mismatch to the scalar probability-reduction order.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "The retained post-update forward tensors are exact, and the remaining branch discrepancy is caused only by the scalar left-fold reducer: the previously proven LibNC-compatible reducer exactly reconstructs all retained branch counts.",
+  "id": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260816T014708Z_6572106ab8": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260816T014708Z_6572106ab8.json",
+        "sha256": "sha256:dd5553296250a4f0e42c84283240a1ebe8b23db51f698799c59e533dcd13a193",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_branch_reduction_postupdate_64_q0_v1.json",
+      "sha256": "sha256:f535994ad26ead0fb978d79463ca40d5410258f24d4652092059d4e16110268a"
+    },
+    "interfaces_exposed": [
+      "retained post-update probability tables + two frozen float32 reduction orders -> exact causal branch attribution"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+    "proposal_id": "nncp_open_branch_reduction_postupdate_64_q0_v1",
+    "retired_neighborhoods": [
+      "No teacher rerun, LibNC call, fitted correction, tolerance, captured-output forward claim, compression claim, or objective credit."
+    ]
+  },
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+  "status": "candidate",
+  "verdict": "Retry with the identical C++ controls, retained fixture, population, and predicates; change only the evaluator to support gt and bind this failed-job reflection."
+}

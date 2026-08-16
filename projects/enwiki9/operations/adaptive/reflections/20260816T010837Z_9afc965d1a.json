@@ -1,0 +1,88 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "The inherited oracle uses tempfile.TemporaryDirectory on /tmp; the raw capture plus parameter materialization exceeded that filesystem quota even though the main filesystem and the objective temporary-disk budget had ample capacity."
+  },
+  "candidateId": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+    "candidateTreeSha256": "sha256:814657073e95a5def16be9a196e38911dabd778eef9efb4e290a7e58dfa24155",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1/20260816T010825577559Z_814657073e95.json",
+      "sha256": "sha256:54fbb4f10829ecaa0a8dabb662996bacef2df5a35aac82fee41e44b6b04b01b9"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Authorize a separately frozen retry with the same capture and forward sources, a candidate-owned main-filesystem work root, and the canonical under-100GB temporary-disk guard.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1/export-receipts.json",
+      "sha256": "sha256:37fd9329df65f02ce8b5e067d6ab8c2c901aaed3296369a9ace676f2ed74f523"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1/guard.json",
+      "sha256": "sha256:391fb8db7850ff1f9102c0d6636f3eb7a082e6f5af1d0c90d2d4d4c0acf8b85a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1.json",
+    "sha256": "sha256:4491041dee9ba9e174a66aebdc71e84fb81eff6aa84962b34451eb5e641d346d"
+  },
+  "generatedUtc": "2026-08-16T01:18:05+00:00",
+  "hypothesis": {
+    "rationale": "The exporter never materialized the complete fixture and neither open forward executed, so no tensor or branch comparison tested the hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T010837Z_9afc965d1a.json",
+    "sha256": "sha256:cbb7c25e64a2cfae120fbde18cbf36dbae261750ad12cbdb99e14d1d1ac27756"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not stage multi-gigabyte production fixtures in unmeasured system tmpfs or classify quota exhaustion as a model result."
+    ],
+    "transferableLessons": [
+      "Place large oracle work trees under the candidate result boundary on the main filesystem and measure them with the official scratch guard. Retain exporter receipts: they proved the 659578911-byte captured parameter container exactly matches the Q3 final-container digest."
+    ],
+    "uncertainties": [
+      "State export, fixture packaging, both open forwards, tensor identity, and arithmetic-branch identity remain untested."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t010837z_9afc965d1a",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "The receipt-bound parameter export failed with write payload: Disk quota exceeded on the system tmpfs before fixture completion or either open-forward run."
+    ],
+    "valid": false
+  }
+}

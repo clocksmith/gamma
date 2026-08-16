@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1",
+  "claimed_at": "2026-08-16T02:10:13+00:00",
+  "created_at": "2026-08-16T02:10:11+00:00",
+  "developed_at": "2026-08-16T02:10:17+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T020543Z_916769ea99.json",
+      "sha256": "sha256:45535ce8f5547022839bb01a71f40d3424d0edb46d5d647a60675499d432fd80"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_v1/guard.json",
+      "sha256": "sha256:95746814420ec0ecb02155e0505db4aa1c3589371de022065d88ff310e784076"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q1_retry_v1.json",
+    "sha256": "sha256:fd3805a1510e4d7b07601ab628a938a28e3286c6afb50c35194a5d820ecb46c7"
+  },
+  "hypothesis": "Integrating the independently attributed LibNC-compatible subtree reducer into the complete open post-update forward preserves exact tensors and makes every retained branch count exact without the closed teacher at replay time.",
+  "interfaces_exposed": [
+    "unchanged exact post-update open forward + Q18 sequential comparator -> complete exact parity receipt"
+  ],
+  "kill_condition": "Any source drift, antecedent drift, sequential population mismatch, tensor or branch error, nondeterminism, dependency, guard, or source-ceiling failure prevents promotion.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "priority": 1469,
+  "promotion_condition": "Require the unchanged exact-reducer forward and frozen predicates, plus the promoted Q18 sequential grouping/transposition comparator over all 244 tensors and 896 branch rows in both executions.",
+  "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v1",
+  "retired_neighborhoods": [
+    "No model/reducer change, single-position comparator, teacher rerun, tolerance, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1469,
+  "state": "developed",
+  "title": "Sequential-comparator exact-forward retry"
+}

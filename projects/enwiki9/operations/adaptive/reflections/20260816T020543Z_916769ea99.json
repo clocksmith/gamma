@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner imported nncp_ggml_profile_forward_parity_64_qm0.compare_forward instead of the Q18 chain patched with the qm2 sequential grouping/transposition comparator."
+  },
+  "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_v1",
+    "candidateTreeSha256": "sha256:0b3f0566b4a3ec8121df3f537876d90f5d87af9239e0a761952c89ac7ff8eaaa",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q1_v1/20260816T020523256843Z_0b3f0566b4a3.json",
+      "sha256": "sha256:bc8cddda3edfd08ffc655078ff89e4196cb299fa34029072789867cc68e744d1"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retry with unchanged candidate C++ and experiment predicates; change only the comparator import to the promoted Q18 sequential chain and bind this reflection.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_v1/guard.json",
+      "sha256": "sha256:95746814420ec0ecb02155e0505db4aa1c3589371de022065d88ff310e784076"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q1_v1.json",
+    "sha256": "sha256:dfae05099e92daa682148d35581495a21f99223b22f57b645f2efac0e4a90587"
+  },
+  "generatedUtc": "2026-08-16T02:09:04+00:00",
+  "hypothesis": {
+    "rationale": "No contract-valid tensor or branch comparison was emitted; completed open executions alone cannot support the full-forward hypothesis.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T020543Z_916769ea99.json",
+    "sha256": "sha256:500ca717e27cf33e2709d11caeef0a078e450c8045e9cb6e4c17146125b590de"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Do not apply the single-snapshot qm0 tensor comparator to the 64-position production fixture."
+    ],
+    "transferableLessons": [
+      "A retained fixture contract includes its comparison geometry; bind the promoted sequential comparator, not merely the underlying model implementation."
+    ],
+    "uncertainties": [
+      "The identical exact-reducer open source must be rerun and compared with the Q18 sequential tensor contract."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t020543z_916769ea99",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The exact-reducer source built and two complete open forwards finished, but the runner selected the original single-position qm0 comparator for a 64-position sequential fixture and failed on embedding_input geometry before parity evaluation."
+    ],
+    "valid": false
+  }
+}

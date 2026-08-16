@@ -1,0 +1,91 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": false,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The candidate duplicated the AVX update loop in a second payload writer instead of emitting the predicted high words from the canonical replay functions; exact comparator reports alongside 203 payload mismatches localize the divergence to that emitter boundary."
+  },
+  "candidateId": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_open_profile_update_forward_chain_64_q0_v1",
+    "candidateTreeSha256": "sha256:568c07d8089842512336d23587f1c6ab44f0e15b35346524a5bbae3cc30e7b6a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_update_forward_chain_64_q0_v1/20260816T023444492299Z_568c07d80898.json",
+      "sha256": "sha256:152df0f7a4afc8e0fa18d42101978e2a10d4dc63eeef3e95dea34eff1d8e6e6f"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Freeze a new candidate that injects payload writes into the canonical exact replay functions, retain every population and control, and rerun the same guarded joint chain.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_v1/chain-receipt.json",
+      "sha256": "sha256:a2c047c1d76da7052776041f8c2a6ed04e475f447e07d7346fee8cabd7df1794"
+    },
+    {
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_v1/decision.json",
+      "sha256": "sha256:ab7f05c7fa8c40f32fe2e1e94778b6def0045b5a90419d786d54c222af082338"
+    },
+    {
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_v1/guard.json",
+      "sha256": "sha256:6bf20a92320edd6ab3ea6b35469a7e9a7e90d00db590284335c00c0eb5ec64fc"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_profile_update_forward_chain_64_q0_v1.json",
+    "sha256": "sha256:0681600ff06aaae97d87634a199c9e3dccff4bbd355691ad138d1cd799c1dfd0"
+  },
+  "generatedUtc": "2026-08-16T02:39:37+00:00",
+  "hypothesis": {
+    "rationale": "Exact recurrent-state generation and exact pre-forward controls passed, but the next-forward consumed defective emitted parameter files rather than the canonical exact replay values, so the joint open-chain hypothesis was not tested with equivalent controls.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T023511Z_83fa6c7a64.json",
+    "sha256": "sha256:74f32d8e91618d18706f177306fa8d4ead85d651ee08727b1546abf647fdfbee"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Do not duplicate a proven floating-point replay loop to materialize its outputs; instrument the canonical computed values at the serialization point so comparison and emission share one arithmetic path.",
+      "The open recurrent-memory serialization is independently exact and can remain frozen in the retry."
+    ],
+    "uncertainties": [
+      "The specific compiler-level reason the duplicated loop diverged is not needed for the retry because the duplicate path will be removed."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t023511z_83fa6c7a64",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The frozen chain executed completely and retained exact controls, but its newly duplicated payload-emission loop produced 203 parameter payload mismatches even though both canonical open Adam comparison reports remained exact; the injected treatment therefore did not represent the proven open update."
+    ],
+    "valid": false
+  }
+}

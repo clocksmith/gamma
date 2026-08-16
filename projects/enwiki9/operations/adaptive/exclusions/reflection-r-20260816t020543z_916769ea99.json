@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "operations/adaptive/reflections/20260816T020543Z_916769ea99.json"
+  ],
+  "exclusion_id": "reflection-r-20260816t020543z_916769ea99",
+  "failure": "The runner imported nncp_ggml_profile_forward_parity_64_qm0.compare_forward instead of the Q18 chain patched with the qm2 sequential grouping/transposition comparator.",
+  "mechanism": "Replace the open forward's scalar subtree left-fold with the already-proven LibNC block/tree reduction, leaving every model operation, fixture byte, branch coordinate, quantization rule, and comparison boundary unchanged.",
+  "population": "one retained tensor element or arithmetic-branch probability count; All 244 named forward tensors and all 896 branch rows for target stream zero in the first complete segment after the production train-step-four update.; scopeBytes=None; scopeSymbols=64",
+  "recorded_at": "2026-08-16T02:09:06+00:00",
+  "retired_dimensions": [
+    "Do not apply the single-snapshot qm0 tensor comparator to the 64-position production fixture."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": []
+}

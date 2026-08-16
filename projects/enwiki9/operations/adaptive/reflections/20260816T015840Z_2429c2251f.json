@@ -1,0 +1,109 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Floating-point subtree reduction order alone caused the branch discrepancy; the Gamma-authored LibNC block/tree reduction restores exact integer probability counts without changing forward tensors."
+  },
+  "candidateId": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_branch_reduction_postupdate_64_q0_retry_v2",
+    "candidateTreeSha256": "sha256:15cb73952c0e7bcb7fd7772f83f9e13f4c3f5b7a69a92c769f7072da8c3ea50f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/20260816T015821136204Z_15cb73952c0e.json",
+      "sha256": "sha256:0b81fd5f2791c1ccf2fe11f4ea838c45ac0a4a944c44f3891eb08cdac9703c43"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Authorize one prospectively frozen full-forward mutation that integrates the already-proven exact reducer and reuses the retained fixture without rerunning the closed teacher.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/build-receipt.json",
+      "sha256": "sha256:104b714a0c50eba2cd7985e93d443f012f0d793970c00d66fe001d81a0682a90"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:1b11d316b8fe072de577437c970444b1fb26ee175796fca22a72a60d686598a5"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:1c1f208a79714820fd4a0706815103df0ff2cf4d07648c3690930332f3d2cf9d"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/incremental_source.tar.xz",
+      "sha256": "sha256:cb1c8d68c74267c24e9611c6fc00719f6b7dbd1672d8f11c8e5c37e7d3b00584"
+    },
+    {
+      "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/replay.json",
+      "sha256": "sha256:752079cdc56dba2c77fda6a6b0b889cc60eb089cde8e79f61bdfda1fc0877f08"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_branch_reduction_postupdate_64_q0_retry_v2.json",
+    "sha256": "sha256:96db38f50432b858c61b3409069110e9d33cbb40ae61c8b5a5781a3d88d1ef32"
+  },
+  "generatedUtc": "2026-08-16T02:00:33+00:00",
+  "hypothesis": {
+    "rationale": "Across all 64 retained post-update probability tensors and 896 branch rows, scalar left-fold reproduced 19 mismatches with maximum two counts while the LibNC-order reducer had zero mismatches and zero maximum difference; replay was deterministic.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260816T015840Z_2429c2251f.json",
+    "sha256": "sha256:5caa47216ab4d88ff433143b419b0c5bcef397ac3fb98d15cae283ad87ba122f"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Scalar left-fold subtree probability reduction is not exact enough for the production NNCP branch stream."
+    ],
+    "transferableLessons": [
+      "When complete expensive controls fail only during terminal bookkeeping, bind their artifacts and failure reflection, reevaluate every predicate, and finalize without recomputing immutable scientific work."
+    ],
+    "uncertainties": [
+      "The exact reducer still must be integrated into and replayed through the full retained post-update open forward; this attribution alone is not an open update-to-forward chain."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/probabilityTensorCount",
+      "source": {
+        "path": "results/nncp_open_branch_reduction_postupdate_64_q0_retry_v2/decision.json",
+        "sha256": "sha256:1b11d316b8fe072de577437c970444b1fb26ee175796fca22a72a60d686598a5"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 64,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t015840z_2429c2251f",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The schema-valid finalizer revalidated the complete digest-bound parent controls, all frozen measurements and predicates, every retained artifact, the parent failure classification, and its own dependency-closed source package."
+    ],
+    "valid": true
+  }
+}

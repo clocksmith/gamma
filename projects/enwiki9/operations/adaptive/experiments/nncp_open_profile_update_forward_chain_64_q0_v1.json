@@ -1,0 +1,750 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -2000000,
+    "maximumAddedPackageBytes": 2000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Digest-bound initial parameters, optimizer moments and low words, all named teacher-captured dense gradients, pre-update recurrent memory, pre-update inputs, next-segment inputs, fixed source, and frozen predicates.",
+      "Retained final payloads and next-forward outputs only after each corresponding open payload or forward output has been completely generated."
+    ],
+    "forbiddenInformation": [
+      "Calling LibNC or NNCP, copying any incumbent post-update parameter or recurrent-memory payload into the open input, or fitting a correction to expected outputs.",
+      "Claiming open backward generation, recursive training, compression gain, transfer, package viability, or Hutter objective credit."
+    ]
+  },
+  "changedMechanism": "Replace the retained incumbent-produced post-update parameter and recurrent-memory payloads with freshly generated outputs from the already proven open Adam and open shift-and-append mechanisms before running the unchanged exact next-segment forward.",
+  "controls": [
+    {
+      "definition": "Fresh Gamma open Adam payloads and fresh Gamma open recurrent-memory payloads are injected into the unchanged exact next-forward.",
+      "id": "joint-open-chain",
+      "role": "treatment"
+    },
+    {
+      "definition": "Digest-bound incumbent payloads, tensors, and branch rows are read only to score independently generated outputs.",
+      "id": "retained-postupdate-oracle",
+      "role": "comparator"
+    },
+    {
+      "definition": "Every open generator and forward executes twice and must reproduce the same bytes.",
+      "id": "independent-open-replay",
+      "role": "replay"
+    },
+    {
+      "definition": "The original monolithic post-update parameter and state containers are deleted, and every parameter and recurrent-memory payload is overwritten from a fresh open output before the next-forward.",
+      "id": "incumbent-splice-ban",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "generatedUtc": "2026-08-16T02:33:41+00:00",
+  "hypothesis": {
+    "claim": "A Gamma-authored open Adam update and open recurrent-memory transition, fed directly into the unchanged exact post-update forward, reproduce every retained next-segment tensor and arithmetic branch without consuming incumbent post-update parameter or memory payloads.",
+    "falsification": "Any bound-input drift, generated parameter or memory mismatch, pre-forward error, next-forward tensor or branch error, replay difference, dependency violation, guard failure, or source overflow prevents promotion and forbids a causal open segment-transition claim."
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_profile_update_forward_chain_64_q0.py",
+      "sha256": "sha256:aa9e49a7d71f484f8f5c39e642f657e913f6ac5bc774a53f95247dbf9327b608"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_profile_update_forward_chain_64_q0_materializer.py",
+      "sha256": "sha256:61bd1a78a30e1a40c6ea623fa59baa0da4ca1cbdb4ea88f65a84e437217fd58a"
+    },
+    {
+      "id": "open-adam-payload-source",
+      "path": "programs/nncp_open_profile_update_forward_chain_64_q0_v1/adam_payloads.cpp",
+      "sha256": "sha256:96b7c0037f4f9f5931f770ad74dddee790401b2e3bb842085b556d86152f4635"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_profile_update_forward_chain_64_q0_v1/program.py",
+      "sha256": "sha256:88ef98a9e7384b0ddc336249afebe0d7f1023aaee1052af40d8b1e9b5bdd1637"
+    },
+    {
+      "id": "q3-update-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "q3-update-manifest",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/fixture-manifest.json",
+      "sha256": "sha256:49e5107dbde4c88e5a79552dcb620f53946980b87ad93e635c1d267324c88667"
+    },
+    {
+      "id": "q3-update-guard",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/guard.json",
+      "sha256": "sha256:3ac678fad9e375b1b34f9dac427ca25c789d1513498c48392df33085a9f81bcb"
+    },
+    {
+      "id": "q3-update-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "open-adam-decision",
+      "path": "results/nncp_open_profile_adam_replay_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:0a800a91ab13ab45c24c6b8008c78d461ed923cb74db94030f0c2c425f7bcdc3"
+    },
+    {
+      "id": "open-adam-reflection",
+      "path": "operations/adaptive/reflections/20260816T003855Z_aab09244b0.json",
+      "sha256": "sha256:c06c2a81a2e41ac7c446063e82dce207a7978e52902747c049eb002c0954d11b"
+    },
+    {
+      "id": "open-memory-decision",
+      "path": "results/nncp_ggml_profile_memory_transition_64_q0_v1/decision.json",
+      "sha256": "sha256:a930f6ed9f441f8db2bd404741b804cf5de4cac055dd3c220270f3a05a3eb23d"
+    },
+    {
+      "id": "open-memory-reflection",
+      "path": "operations/adaptive/reflections/20260815T231108Z_4912fe7f1f.json",
+      "sha256": "sha256:936bd383ca40602224bf8e735b8b7f88d99631adb97447654696cdc3294d2811"
+    },
+    {
+      "id": "preupdate-forward-decision",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/decision.json",
+      "sha256": "sha256:f1898e98d8633b2c872db37bd4931ca838b7c13fc273ad88f44a8cda9e15c45d"
+    },
+    {
+      "id": "preupdate-forward-fixture",
+      "path": "results/nncp_ggml_profile_forward_parity_64_qm18_v1/production_forward_fixture.tar.xz",
+      "sha256": "sha256:fd70eec90d704be322f44b17198c14c2b862b30082d20176a709e223bf14c7b6"
+    },
+    {
+      "id": "postupdate-forward-decision",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json",
+      "sha256": "sha256:36cc8832cd7ddb2087c8e73d26b24817b6073497fd23b7ea8a4fc93260aa585e"
+    },
+    {
+      "id": "postupdate-forward-reflection",
+      "path": "operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json",
+      "sha256": "sha256:15aff130d15795fb0644ae8b95827e4a5212d2c74ecdfee44d26576f15a7297a"
+    },
+    {
+      "id": "postupdate-forward-fixture",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2/artifacts/production_forward_fixture.tar.xz",
+      "sha256": "sha256:aa598cc0a70090544fd0524e0ec693c7f59637d83f5c7c70500124e2469c8485"
+    },
+    {
+      "id": "exact-forward-source",
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/ggml_profile_forward_source_closure.tar.xz",
+      "sha256": "sha256:891e8c50b6c9e66c7a9f4d5019d009fab24955e7b7b83386fd6c8a70f22a7314"
+    },
+    {
+      "id": "open-adam-parent-source",
+      "path": "programs/nncp_open_profile_adam_replay_64_q0_retry_v2/adam_replay.cpp",
+      "sha256": "sha256:e4f1f168b0fe14ba9b92aaaedf9fd24f2c1fc0558b9429e565c050689d0d24ae"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-contract-schema-json-bbe2e7b532b2",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-experiment-result-schema-json-05fa224b9ac7",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-adaptive-job-schema-json-d01a141c6a45",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-algorithm-proposal-schema-json-2e6bc3df456f",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-candidate-revision-schema-json-26d20c11848a",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-attempt-schema-json-9dd5a65f778d",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-clean-room-replay-schema-json-556c8a20b5ba",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-delta-midas-probe-result-schema-json-1534b8c62fb6",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-dependency-closure-schema-json-56ede659d6ec",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-driver-run-ledger-row-schema-json-564eb9da8f1d",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-contract-schema-json-ddc50b7a26c9",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-experiment-result-schema-json-f67a74ccefdf",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-mechanism-graph-schema-json-4defbca57d45",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-named-gradient-detail-schema-json-dc5bafaae829",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-json-774aab7b321c",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-objective-contract-schema-json-de1760e03688",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-reflection-receipt-schema-json-74dcb037d60b",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-release-receipt-index-schema-json-b98f33bbd2bb",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-resource-guard-receipt-schema-json-ed672266f4ca",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-run-receipt-schema-json-b1c279150e0c",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-json-b4863eb5bb14",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-contracts-research-v1-search-policy-schema-json-7b83f8a5d789",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-tools-enwiki9-python-source-closure-py-b78ecd909e4b",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-open-cpu-kernel-closure-qm0-py-cec726f230f7",
+      "path": "tools/nncp_ggml_open_cpu_kernel_closure_qm0.py",
+      "sha256": "sha256:cec726f230f73b3f853afa8126e4fd46b73a8e948fc81c132f94ed476e0af036"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-arithmetic-64-q0-py-37935a72cbe0",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q0.py",
+      "sha256": "sha256:37935a72cbe0285982ed56c2b5cb80a3733ff1bf6982da7b595012a9f2ca0a86"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-arithmetic-64-q1-py-fc0bd37fa5f4",
+      "path": "tools/nncp_ggml_profile_arithmetic_64_q1.py",
+      "sha256": "sha256:fc0bd37fa5f44bdf9beab471fcfabbc3d2cee29b79ceabbaa27d77020c60d607"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm0-py-7644bbcfa41c",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm0.py",
+      "sha256": "sha256:7644bbcfa41cf915822c01976b0334d4415eeae1ab57bf291d65e61e3085abe2"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm1-py-5c9d16be7cc4",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm1.py",
+      "sha256": "sha256:5c9d16be7cc4b4fdefa190fc2d8b7595e10ae701d44b4f92f7438a12e40aa085"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm13-py-e7dc8508d8e8",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm13.py",
+      "sha256": "sha256:e7dc8508d8e8a24105d80102e129067c50a9fed191d09c3da9576cec7bed7d2a"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm14-py-0e25ced673be",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm14.py",
+      "sha256": "sha256:0e25ced673be188194f96577752a3e27d809f210194dfc158eaa2b69c39dd208"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm15-py-b2df407be951",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm15.py",
+      "sha256": "sha256:b2df407be9513203849adfa7f24aaef861b0dae95c0cbc564613d50c0356f66c"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm16-py-277d582aaa66",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm16.py",
+      "sha256": "sha256:277d582aaa66be87068da35ee031e31705bc6550d43f07eef591d9b83ba98a79"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm17-py-af278f437854",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm17.py",
+      "sha256": "sha256:af278f4378547ea8e33817eb286502432008c0075d8d156a30fe5e3bd06d4d6e"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm18-py-440bd1f81595",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm18.py",
+      "sha256": "sha256:440bd1f81595c36a16ec1c3ff7a29fcdd7eac3ed732137208ff69e6395917877"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm2-py-b36516b98cad",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm2.py",
+      "sha256": "sha256:b36516b98cadf8cfe333cfd1d660c09d79c9b17922bfb5a48d1e7ad15be6ac3b"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm3-py-c2713991d181",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm3.py",
+      "sha256": "sha256:c2713991d181af55d876184c886c99265c9bc673cd4dbdbb0a59ea12c4da86a9"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm4-py-2dc884101165",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm4.py",
+      "sha256": "sha256:2dc884101165e1c64e1b5202fcd084b045e890beb48559eb62db192231477a23"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm5-py-946ea444efae",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm5.py",
+      "sha256": "sha256:946ea444efaeefd1184b838db97f025abd7b5a0c60ca362f2c6e328e04f5cdad"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm6-py-426facbfab20",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm6.py",
+      "sha256": "sha256:426facbfab20c160a079672073bead20c14f366c77ceac8a721569f7c084fee5"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm7-py-518411f1bfaf",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm7.py",
+      "sha256": "sha256:518411f1bfafde9a35d60106355ba2834a2bd349c3ba02cc9eb2eedce42f8dee"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm8-py-0bc22f95ee18",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm8.py",
+      "sha256": "sha256:0bc22f95ee189c448ca460556335bc11c4dff59a310ea2a0e264b7df5266cb44"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-forward-parity-64-qm9-py-4e8611faf848",
+      "path": "tools/nncp_ggml_profile_forward_parity_64_qm9.py",
+      "sha256": "sha256:4e8611faf84829aa001714f347d5f1c86ca9b97254bf97247aa482402a205b7a"
+    },
+    {
+      "id": "runtime-source-tools-nncp-ggml-profile-memory-transition-64-q0-py-f24de684d2e8",
+      "path": "tools/nncp_ggml_profile_memory_transition_64_q0.py",
+      "sha256": "sha256:f24de684d2e843ee0bed555c3e88612dd1a16eca14f7bd5474b324436d4a4853"
+    },
+    {
+      "id": "runtime-source-tools-nncp-midpoint-phase-attribution-qm0-py-0c636c36e14b",
+      "path": "tools/nncp_midpoint_phase_attribution_qm0.py",
+      "sha256": "sha256:0c636c36e14b611b5f8ada01a06a974607610ea7793545af27c9cbd68ca214cc"
+    },
+    {
+      "id": "runtime-source-tools-nncp-open-profile-adam-replay-64-q0-retry-v2-py-b31d073e5492",
+      "path": "tools/nncp_open_profile_adam_replay_64_q0_retry_v2.py",
+      "sha256": "sha256:b31d073e5492e54e49d8e973b2a8c93be70f30873df3f403397221b7d5c6c3d5"
+    },
+    {
+      "id": "runtime-source-tools-nncp-symbol-cache32-marginal-qm0-py-deec3ba812eb",
+      "path": "tools/nncp_symbol_cache32_marginal_qm0.py",
+      "sha256": "sha256:deec3ba812ebe1524d1b1e126ca9f55a18936008cd9857f549402edaa147af27"
+    },
+    {
+      "id": "runtime-source-tools-research-contracts-py-9fb46117c2f5",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The Q3 initial parameters, optimizer state, named dense gradients, and pre-update recurrent state remain digest-bound oracle inputs.",
+    "Open parameter payloads are written before final comparator containers are opened, and no retained final parameter word is copied into a generated payload.",
+    "Open recurrent memory is derived only from pre-update BF16 memory and fresh exact pre-update forward attention inputs, then serialized with deterministic BF16 round-to-nearest-even.",
+    "The incumbent post-update parameter and state containers are removed before the unchanged exact next-forward executable runs.",
+    "Expected post-update payloads, tensors, and branch rows are comparator outputs only and never correction inputs.",
+    "Both pre-update and next-segment forward paths execute twice, and all generated parameter, memory, tensor, and branch evidence must be exact.",
+    "The closed teacher, LibNC, and NNCP are not executed during the retained replay.",
+    "This experiment has zero objective credit: dense gradients remain teacher-captured, no open backward pass exists, and no archive, transfer, or full-corpus claim is authorized."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-parameter-mismatch",
+      "measurement": "openParameterPayloadMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-state-mismatch",
+      "measurement": "openStateMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "k-forward-mismatch",
+      "measurement": "maximumTensorAbsoluteError",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Every promoted open update, memory, and exact-forward antecedent remains digest-bound and valid.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "The complete retained initial-parameter, optimizer, gradient, and state fixture matches its Q3 aggregate digest.",
+      "id": "updateFixtureIdentityPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Both fresh open Adam executions exactly match every retained comparator word.",
+      "id": "openAdamExact",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Fresh parameter payloads generated from initial parameters, optimizer state, and gradients.",
+      "id": "openParameterPayloadCount",
+      "unit": "parameter tensors"
+    },
+    {
+      "definition": "Generated parameter payloads whose digest differs from the retained post-update comparator.",
+      "id": "openParameterPayloadMismatchCount",
+      "unit": "parameter tensors"
+    },
+    {
+      "definition": "Two fresh open Adam payload directories and reports are byte-identical.",
+      "id": "openParameterDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete pre-update open-forward tensors compared to the retained oracle.",
+      "id": "preComparedTensorCount",
+      "unit": "forward tensors"
+    },
+    {
+      "definition": "Maximum complete pre-update tensor error in the first open execution.",
+      "id": "maximumPreTensorAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Maximum complete pre-update tensor error in the repeated open execution.",
+      "id": "maximumPreRepeatTensorAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Two fresh pre-update open forwards emit byte-identical outputs.",
+      "id": "preForwardDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Fresh recurrent-memory payloads generated by shift, append, and BF16 serialization.",
+      "id": "openStateLayerCount",
+      "unit": "recurrent layers"
+    },
+    {
+      "definition": "Generated recurrent-memory payloads whose digest differs from the retained post-update comparator.",
+      "id": "openStateMismatchCount",
+      "unit": "recurrent layers"
+    },
+    {
+      "definition": "Two fresh open forward-to-memory transitions emit identical payload digests.",
+      "id": "openStateDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "The monolithic incumbent post-update parameter and state containers were removed before the chained forward.",
+      "id": "incumbentPostupdateContainersRemoved",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete next-segment tensors compared after open payload injection.",
+      "id": "comparedTensorCount",
+      "unit": "forward tensors"
+    },
+    {
+      "definition": "Maximum next-segment tensor error in the first chained execution.",
+      "id": "maximumTensorAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Maximum next-segment tensor error in the repeated chained execution.",
+      "id": "maximumRepeatTensorAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Complete next-segment arithmetic-branch rows compared.",
+      "id": "branchRows",
+      "unit": "integer branch counts"
+    },
+    {
+      "definition": "Maximum next-segment branch-count error.",
+      "id": "maximumBranchCountDifference",
+      "unit": "integer probability counts"
+    },
+    {
+      "definition": "Maximum repeated next-segment branch-count error.",
+      "id": "repeatMaximumBranchCountDifference",
+      "unit": "integer probability counts"
+    },
+    {
+      "definition": "Next-segment tree topology or symbol-order disagreements.",
+      "id": "topologyDisagreementCount",
+      "unit": "tree fields"
+    },
+    {
+      "definition": "Next-segment truth-path disagreements.",
+      "id": "truthPathDisagreementCount",
+      "unit": "truth bits"
+    },
+    {
+      "definition": "Two fresh chained next-segment forwards emit byte-identical outputs.",
+      "id": "postForwardDeterministic",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Dynamic teacher, LibNC, GGML, CUDA, OpenMP, or BLAS dependencies in the built forward.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "dependencies"
+    },
+    {
+      "definition": "Compressed dependency-closed joint orchestration and open-update source package.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "All generated payloads, extractions, builds, and open outputs remained under and were removed with the guarded work root.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_profile_update_forward_chain_64_q0_v1/decision.json",
+    "results/nncp_open_profile_update_forward_chain_64_q0_v1/chain-receipt.json",
+    "results/nncp_open_profile_update_forward_chain_64_q0_v1/execution.json",
+    "results/nncp_open_profile_update_forward_chain_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q1_retry_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/20260816T021547957585Z_fb5d0217c717.json",
+      "sha256": "sha256:fa49a072ad4121256e89664c1f4ef136e91b4059494f27b47c77566a44b0795f"
+    }
+  },
+  "population": {
+    "coordinate": "32-stream update [256,320), followed by target stream zero next-forward original-symbol coordinates [320,384).",
+    "scopeBytes": null,
+    "scopeSymbols": 64,
+    "selection": "All 246 parameter tensors, all 20 target-stream recurrent-memory layers, all 244 next-forward tensor groups, and all 896 next-segment branch rows at the first production update boundary.",
+    "unit": "one complete production segment-transition payload, forward tensor element, or arithmetic-branch count"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedentspass",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-updatefixtureidentitypass",
+      "measurement": "updateFixtureIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-openadamexact",
+      "measurement": "openAdamExact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-openparameterpayloadcount",
+      "measurement": "openParameterPayloadCount",
+      "operator": "eq",
+      "threshold": 246
+    },
+    {
+      "id": "p-openparameterpayloadmismatchcount",
+      "measurement": "openParameterPayloadMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-openparameterdeterministic",
+      "measurement": "openParameterDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-precomparedtensorcount",
+      "measurement": "preComparedTensorCount",
+      "operator": "eq",
+      "threshold": 244
+    },
+    {
+      "id": "p-maximumpretensorabsoluteerror",
+      "measurement": "maximumPreTensorAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumprerepeattensorabsoluteerror",
+      "measurement": "maximumPreRepeatTensorAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-preforwarddeterministic",
+      "measurement": "preForwardDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-openstatelayercount",
+      "measurement": "openStateLayerCount",
+      "operator": "eq",
+      "threshold": 20
+    },
+    {
+      "id": "p-openstatemismatchcount",
+      "measurement": "openStateMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-openstatedeterministic",
+      "measurement": "openStateDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-incumbentpostupdatecontainersremoved",
+      "measurement": "incumbentPostupdateContainersRemoved",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-comparedtensorcount",
+      "measurement": "comparedTensorCount",
+      "operator": "eq",
+      "threshold": 244
+    },
+    {
+      "id": "p-maximumtensorabsoluteerror",
+      "measurement": "maximumTensorAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximumrepeattensorabsoluteerror",
+      "measurement": "maximumRepeatTensorAbsoluteError",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-branchrows",
+      "measurement": "branchRows",
+      "operator": "eq",
+      "threshold": 896
+    },
+    {
+      "id": "p-maximumbranchcountdifference",
+      "measurement": "maximumBranchCountDifference",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-repeatmaximumbranchcountdifference",
+      "measurement": "repeatMaximumBranchCountDifference",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-topologydisagreementcount",
+      "measurement": "topologyDisagreementCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-truthpathdisagreementcount",
+      "measurement": "truthPathDisagreementCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-postforwarddeterministic",
+      "measurement": "postForwardDeterministic",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-forbiddendynamicdependencycount",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-guardedworkrootpass",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-incrementalsourcebytes",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 2000000
+    }
+  ],
+  "proposalId": "nncp_open_profile_update_forward_chain_64_q0_v1",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.2,
+    "uncertaintyRisk": 0.1
+  },
+  "status": "frozen"
+}

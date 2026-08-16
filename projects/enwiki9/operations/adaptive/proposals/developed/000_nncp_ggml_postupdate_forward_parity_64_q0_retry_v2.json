@@ -1,0 +1,51 @@
+{
+  "candidate_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+  "claimed_at": "2026-08-16T01:19:57+00:00",
+  "created_at": "2026-08-16T01:19:57+00:00",
+  "developed_at": "2026-08-16T01:19:58+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T010837Z_9afc965d1a.json",
+      "sha256": "sha256:deae15c53f51f77e21ab9794ee54c4a22e88d3c6f3cd951b69449f1fdfe8d84c"
+    },
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_retry_v1/export-receipts.json",
+      "sha256": "sha256:37fd9329df65f02ce8b5e067d6ab8c2c901aaed3296369a9ace676f2ed74f523"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q0_retry_v2.json",
+    "sha256": "sha256:7ca6a305bc563999e038c24b086f805ec0d4ab79c4bbc91267e5663bbd29a522"
+  },
+  "hypothesis": "With the multi-gigabyte work tree on the guarded main filesystem, the exact open production forward transfers unchanged to the first post-update segment when given the incumbent's updated parameters and recurrent state.",
+  "interfaces_exposed": [
+    "guarded main-filesystem work tree + receipt-bound post-update state -> unchanged open GGML forward -> exact tensors and arithmetic branches"
+  ],
+  "kill_condition": "Any antecedent drift, work-root escape, incomplete or unreceipted export, wrong tensor population, nondeterminism, nonzero tensor error, nonzero arithmetic-branch count difference, forbidden dependency, resource violation, or source-closure overflow prevents promotion and forbids a joint open update-to-forward claim.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-amd-vulkan-20260815",
+  "parent": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+  "parent_proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v1",
+  "priority": 1464,
+  "promotion_condition": "Require both reflected preflights, candidate-owned main-filesystem work containment, two complete exporter receipts covering 246 parameter and 22 state tensors, exact block-320 coordinates, a complete fixture, two byte-identical open reports, zero tensor error, zero branch-count difference, no forbidden dependency, resource compliance, and a dependency-closed source package within the frozen ceiling.",
+  "proposal_id": "nncp_ggml_postupdate_forward_parity_64_q0_retry_v2",
+  "retired_neighborhoods": [
+    "No system-tmpfs fixture staging, opaque exporter failure, captured-output input, teacher call, tolerance, open-chain claim, backward claim, recursive-training claim, compression claim, or objective credit."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1464,
+  "state": "developed",
+  "title": "Guarded-work-root post-update forward retry"
+}

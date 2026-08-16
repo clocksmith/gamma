@@ -1,0 +1,64 @@
+{
+  "candidateId": "nncp_open_profile_update_forward_chain_64_q0_retry_v1",
+  "candidateTreeSha256": "sha256:4e147ccba6b5050c8642943e9958bdde8538e21f4dd41b6760515c627f2286f7",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/nncp_open_profile_update_forward_chain_64_q0_retry_v1.json",
+      "operations/adaptive/reflections/20260816T023511Z_83fa6c7a64.json"
+    ],
+    "hypothesis": "Writing predicted parameter payloads directly from the canonical exact Adam replay functions, then chaining those outputs with the already exact open recurrent-memory transition and unchanged exact next-forward, reproduces every retained payload, tensor, and arithmetic branch.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Delete duplicated Adam update arithmetic and reproducibly inject payload writes into the canonical exact replay functions; retain all other joint-chain mechanisms and predicates."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/dd/dda1cfe6756edfba7f0f81035a3c3ecbe91ac523665fc89352cb0bb4db2fba59",
+      "bytes": 37337,
+      "normalization": "verbatim",
+      "path": "adam_payloads.cpp",
+      "sha256": "dda1cfe6756edfba7f0f81035a3c3ecbe91ac523665fc89352cb0bb4db2fba59"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/79/79ad96a03b233ebd614257755597578ee47277f9dd6d9523c234d37bbd8f6b9e",
+      "bytes": 768,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "79ad96a03b233ebd614257755597578ee47277f9dd6d9523c234d37bbd8f6b9e"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/55/5518489e2f1eb567495dbbf84a4db6022d51fc2cdc27530e82ebee1b9d7ff478",
+      "bytes": 247,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "5518489e2f1eb567495dbbf84a4db6022d51fc2cdc27530e82ebee1b9d7ff478"
+    }
+  ],
+  "generatedUtc": "2026-08-16T02:43:12+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_open_profile_update_forward_chain_64_q0_v1",
+    "candidateTreeSha256": "sha256:568c07d8089842512336d23587f1c6ab44f0e15b35346524a5bbae3cc30e7b6a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_profile_update_forward_chain_64_q0_v1/20260816T023444492299Z_568c07d80898.json",
+      "sha256": "sha256:152df0f7a4afc8e0fa18d42101978e2a10d4dc63eeef3e95dea34eff1d8e6e6f"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_profile_update_forward_chain_64_q0_retry_v1/20260816T024016436498Z_87389c0a5416.json",
+    "sha256": "sha256:6c7d7d5830582380c9153ea62b362dfa3da99f2979c9ef0e9fbaa9ad368bc0ba"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

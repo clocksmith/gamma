@@ -1,5 +1,55 @@
 # enwiki9 Research Register
 
+## 2026-08-15 - One causal open production segment transition is exact
+
+The post-update boundary is no longer an incumbent-state-only forward probe.
+The retained post-update fixture first exposed a small arithmetic mismatch:
+the complete open forward matched all tensors, while a scalar left-fold tree
+reduction changed a subset of integer branch counts. Focused candidate
+`nncp_open_branch_reduction_postupdate_64_q0_retry_v2` proved that the
+previously promoted LibNC-order reducer eliminates the difference. Candidate
+`nncp_ggml_postupdate_forward_parity_64_q1_retry_v2` then replayed the complete
+retained next segment twice with exact tensor, topology, truth-path, and branch
+parity. See its
+[`decision`](../results/nncp_ggml_postupdate_forward_parity_64_q1_retry_v2/decision.json)
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T021607Z_81c2c9ae94.json).
+
+The first joint integration attempt was deliberately retained as an
+implementation failure. Its canonical Adam reports and all recurrent-memory
+layers were exact, but a separately duplicated output loop emitted `203`
+parameter payloads differently. The resulting next-forward error was therefore
+not evidence against the open update. Its
+[`decision`](../results/nncp_open_profile_update_forward_chain_64_q0_v1/decision.json)
+and
+[`reflection`](../operations/adaptive/reflections/20260816T023511Z_83fa6c7a64.json)
+record the non-equivalent treatment and authorize only an emitter retry.
+
+Candidate `nncp_open_profile_update_forward_chain_64_q0_retry_v1` removes that
+duplicate arithmetic. A reproducible source patch writes each predicted word
+from the canonical exact Adam replay function immediately before its existing
+comparison. Two fresh chains independently generate all `246` parameter
+payloads, both complete pre-update forwards, all `20` target-stream recurrent
+memory layers, and both complete next-segment forwards. The incumbent
+post-update parameter and state containers are removed before the chained
+forward. All `244` next-forward tensor groups and `896` arithmetic branches are
+exact in both repetitions, with byte-deterministic outputs and no forbidden
+dynamic dependency. The guarded run stayed below the frozen decimal-memory and
+scratch limits. See the
+[`decision`](../results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json),
+[`chain receipt`](../results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/chain-receipt.json),
+[`guard`](../results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/guard.json),
+and terminal
+[`reflection`](../operations/adaptive/reflections/20260816T024338Z_3839f396a6.json).
+
+This is one causal open production segment transition, not recursive training.
+Its dense gradients remain captured teacher outputs. It has zero objective
+credit and proves no open backward pass, archive gain, transfer, package
+economics, or full-corpus result. The next honest teacher-removal boundary is
+an open backward pass that reproduces the same named dense gradients and then
+feeds this unchanged update-to-forward chain. The best source-bound forecast
+and target debt are unchanged.
+
 ## 2026-08-15 - Complete open production optimizer replay is exact
 
 The segment-transition program now has a complete, retained production update

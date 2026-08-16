@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The inherited fixture extractor suppresses exporter stdout/stderr through subprocess capture and deletes its temporary coefficient container on exception, making a post-capture exporter failure opaque."
+  },
+  "candidateId": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_ggml_postupdate_forward_parity_64_q0_v1",
+    "candidateTreeSha256": "sha256:dc963f0a8015d47fb8b83cf50123292cb56d32694e90a83f83532b393f568078",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_ggml_postupdate_forward_parity_64_q0_v1/20260816T005315687297Z_dc963f0a8015.json",
+      "sha256": "sha256:8458b5f1a60dc14b71730baa0d29e92d4023ec15c44fefe1a8ad7500080e939c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Authorize one prospectively frozen receipt-preserving retry that keeps the forward implementation and hypothesis unchanged while exposing the exporter failure boundary.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/nncp_ggml_postupdate_forward_parity_64_q0_v1/guard.json",
+      "sha256": "sha256:ba9c397fe53ac5fb656f3282baf932572a5778f4006bafd994bfc7113bfd226b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_ggml_postupdate_forward_parity_64_q0_v1.json",
+    "sha256": "sha256:94c8ed931f36d838af6af187da677cebe8968d8448c75ba2e244d22e8d35747f"
+  },
+  "generatedUtc": "2026-08-16T01:04:05+00:00",
+  "hypothesis": {
+    "rationale": "Neither the open GGML forward nor any tensor or arithmetic-branch comparison ran, so the frozen transfer hypothesis was not tested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260816T005343Z_d612abab3e.json",
+    "sha256": "sha256:dc51256eaf32d3cca7ada472ef4bdac75053eda0bc9b27de31f09ccd66915279"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Opaque exporter failures that discard the captured container and report only CalledProcessError are not acceptable oracle evidence."
+    ],
+    "transferableLessons": [
+      "Treat fixture export as an explicit receipt boundary: retain command stderr, container size/hash, and failure context. A separate control export of the bound Q3 post-update container succeeds for all 246 tensors, so do not retire the forward hypothesis."
+    ],
+    "uncertainties": [
+      "The failed temporary parameters.coefs was deleted, so its exact digest and the exporter stderr are unavailable; no claim can distinguish malformed capture, tensor access, or host resource failure."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260816t005343z_d612abab3e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The closed capture reached the selected evaluation, but the fixture exporter returned nonzero before fixture materialization or either open-forward execution; no parity measurement exists."
+    ],
+    "valid": false
+  }
+}
