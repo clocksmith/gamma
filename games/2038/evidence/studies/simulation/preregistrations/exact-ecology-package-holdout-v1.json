@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "exact-ecology-package-holdout-v1",
+  "registeredBeforeResults": true,
+  "question": "Does the frozen exact-ecology package remove the registered three-player Infrastructure dominance and five-player path-concentration defect while preserving every profile's named play identity under unchanged physical rules?",
+  "sourceCommit": "2c6e01f2bbb67ae0c4a1b7e2d40fdc831faf5543",
+  "sourceEvidence": [
+    "2026-08-15-full-ecology-agi-holdout-v1",
+    "2026-08-15-exact-ecology-infrastructure-training-v1"
+  ],
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/2026-08-15-current-trust-evolution-v1.raw.json",
+      "sha256": "a2a26d027b06d85c75178e6c6c468aa6ad3c5ae32b82292e3d84caeca173a462",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/proposals/capacity-operator-v1.json",
+      "sha256": "186bb26d4eaf01fedbb03bb3e7e0ad89a4aa6e544dcf6737142be70a7672b6f7",
+      "profileId": "power_broker"
+    },
+    {
+      "path": "studies/simulation/proposals/full-ecology-agi-candidate-v1.json",
+      "sha256": "3bca97e398eab032ae5befe322f266f67b21119ed68848f2cc2f4661016c94a6",
+      "profileId": "agi_candidate"
+    },
+    {
+      "path": "studies/simulation/proposals/exact-ecology-infrastructure-candidate-v1.json",
+      "sha256": "af0cefe1680c20469430dc94cfa78572ac6150d1e9e7234708a468e6872e3566",
+      "profileId": "infrastructure_compounder"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 8,
+  "seed": "mandate-2038-exact-ecology-package-holdout-v1",
+  "selectionRule": {
+    "balance": "Select only if every three-, four-, and five-player faction, seat, profile, diversity, fallback, forced-no-op, homogeneous dominance, pairwise dominance, and adversarial bound passes.",
+    "measuredDefects": "Five-player winning-path entropy must be at least 0.60, and the registered three-player Infrastructure Compounder plus greedy-backend cell must not appear in diagnosticDominance.",
+    "trustIdentity": "Trust Governor must average at least one Influence selection per appearance, keep Influence below its largest Core Action, reach Trust 4 in at least 85 percent of appearances, and retain mean Mandate of at least 16.",
+    "capacityIdentity": "Capacity Operator must average at least two Build selections per appearance, select Research plus Deploy more often than Build, and retain mean Mandate of at least 16.",
+    "agiIdentity": "AGI Candidate must be the largest profile contributor to AGI-declaration winner credit, supply at least 30 percent of that credit overall, retain mean Mandate of at least 14, and keep Dossier as its highest Program weight.",
+    "infrastructureIdentity": "Infrastructure Compounder must average at least two Build selections per appearance, retain mean Mandate of at least 16 at every supported count, and retain its authored Generator and two-Facility transition rules.",
+    "rulesBoundary": "Only the four frozen strategy profile artifacts differ from the authored baseline. Starting resources, faction abilities, Core Actions, legal actions, Dossier mechanics, scoring, and physical components remain canonical.",
+    "promotion": "A complete pass may nominate the four-profile package for explicit human approval. It cannot silently change physical rules or prove fun, negotiation quality, teachability, duration, or human counterplay.",
+    "failure": "Any failed supported-count bound, registered defect, or identity check rejects the package. Do not adaptively retrain from this holdout. If a physical lever is implicated, preregister one separate common-seed intervention."
+  },
+  "requiredDiagnostics": [
+    "exact profile source paths and SHA-256 digests",
+    "complete executed ecology profiles and fingerprints",
+    "profile Action selections and Mandate sources",
+    "profile and faction win shares by supported player count",
+    "backend-specific strategy cells",
+    "winner-aware head-to-head dominance cells",
+    "winning-path attribution by profile",
+    "opening and winning-path diversity",
+    "AGI emergence and winner override rates",
+    "integrity, fallback, and forced-no-op rates"
+  ]
+}
