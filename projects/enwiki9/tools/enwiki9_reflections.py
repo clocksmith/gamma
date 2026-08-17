@@ -367,8 +367,38 @@ def sync_reflection_exclusions() -> dict[str, int]:
     return {"reflections": reflected, "projectedExclusions": projected}
 
 
+def _collect_inherited_non_actionable_proposals(
+    proposals: list[dict[str, Any]]
+) -> set[str]:
+    by_id: dict[str, dict[str, Any]] = {}
+    for proposal in proposals:
+        proposal_id = proposal.get("proposal_id")
+        if isinstance(proposal_id, str):
+            by_id[proposal_id] = proposal
+
+    non_actionable: set[str] = set()
+    for proposal_id, proposal in by_id.items():
+        if proposal.get("operational_status", "actionable") != "actionable":
+            non_actionable.add(proposal_id)
+
+    changed = True
+    while changed:
+        changed = False
+        for proposal_id, proposal in by_id.items():
+            if proposal_id in non_actionable:
+                continue
+            parent = proposal.get("parent_proposal_id")
+            if not isinstance(parent, str):
+                parent = proposal.get("parent")
+            if isinstance(parent, str) and parent in non_actionable:
+                non_actionable.add(proposal_id)
+                changed = True
+    return non_actionable
+
+
 def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
     policy = research_contracts.validate_search_policy()
+    non_actionable = _collect_inherited_non_actionable_proposals(proposals)
     latest: dict[str, dict[str, Any]] = {}
     for reflection in iter_reflections(strict=False):
         if reflection.get("_validation_error"):
@@ -433,7 +463,13 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
         )
         uncertainty_risk = float(search.get("uncertaintyRisk", 1.0))
         interaction_risk = float(search.get("interactionRisk", 1.0))
-        operational = proposal.get("operational_status", "actionable") == "actionable"
+        proposal_id = proposal.get("proposal_id")
+        effective_status = (
+            "superseded"
+            if isinstance(proposal_id, str) and proposal_id in non_actionable
+            else proposal.get("operational_status", "actionable")
+        )
+        operational = effective_status == "actionable"
         parent_evidence_valid = (
             parent is None
             or (reflection is not None and reflection["validity"]["valid"])
@@ -477,9 +513,7 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "experimentValid": experiment_valid,
                 "experimentError": experiment_error,
                 "eligible": eligible,
-                "operationalStatus": proposal.get(
-                    "operational_status", "actionable"
-                ),
+                "operationalStatus": effective_status,
                 "rankKey": list(rank_key[:-1]),
                 "searchPriority": proposal.get(
                     "search_priority", proposal.get("priority", 0)
