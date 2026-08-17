@@ -1,9 +1,9 @@
 {
   "attribution": {
-    "causalConfidence": "none",
-    "controlsEquivalent": null,
-    "failureClass": "infrastructure-failure",
-    "localizedCause": "Cancelled placeholder job before exact frozen replay was queued."
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "Terminal replay preserved all required antecedents and produced an authorize-successor decision."
   },
   "candidateId": "nncp_open_top_attention_forward_inputs_64_q0_v1",
   "candidateRevision": {
@@ -15,13 +15,17 @@
     }
   },
   "decision": {
-    "killPredicatesPass": null,
-    "nextGateBytes": null,
-    "promotionPredicatesPass": null,
-    "rationale": "Replace placeholder with direct rerun.",
-    "verdict": "retry"
+    "killPredicatesPass": false,
+    "nextGateBytes": 10485760,
+    "promotionPredicatesPass": true,
+    "rationale": "Authorize the exact value-attention transpose next gate.",
+    "verdict": "next-gate"
   },
   "evidence": [
+    {
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/decision.json",
+      "sha256": "sha256:67e97ef019583d4fe6e8d7d31b62c5b2b4bc1494350dea62519c23fbf8086558"
+    },
     {
       "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/guard.json",
       "sha256": "sha256:2e9ffa542921cdc3748d53737aa959c71d3bc87d6179b0d48d23b1837d4e966c"
@@ -31,19 +35,20 @@
     "path": "operations/adaptive/experiments/nncp_open_top_attention_forward_inputs_64_q0_v1.json",
     "sha256": "sha256:dcc82956f8b0eb547cfa75e30353ad696924cae1cdeb94e30b2733b2ac9de56b"
   },
-  "generatedUtc": "2026-08-17T00:00:20+00:00",
+  "generatedUtc": "2026-08-16T23:51:19+00:00",
   "hypothesis": {
-    "rationale": "This placeholder terminal does not represent scientific execution.",
-    "verdict": "not-tested"
+    "rationale": "Exact top-attention forward inputs and value-state outputs were produced under frozen source revision and are the required gate input for the next value-attention transpose candidate.",
+    "verdict": "supported"
   },
   "job": {
-    "path": "operations/adaptive/cancelled/959_20260816T210252Z_0f6276c8e0.json",
-    "sha256": "sha256:298cb4e51162b8bd20e365bdb703f6ec7b54971d956b4e8a61f3132fbbba6406"
+    "path": "operations/adaptive/completed/959_20260816T220926Z_56872cd576.json",
+    "sha256": "sha256:0537fbe9b16231a621b9f30f38dd7dff95e5c2adb4cf64d4e8f93e4a3e86470e"
   },
   "knowledge": {
     "retiredDimensions": [],
     "transferableLessons": [
-      "Preserve orphaned evidence and run exact guard-bound command."
+      "Preserve all artifacts produced during exact rerun.",
+      "Top-attention forward replay now serves as a valid bridge to the next gate."
     ],
     "uncertainties": []
   },
@@ -68,13 +73,13 @@
     "objectivePath": "contracts/research/v1/objective-contract.json",
     "targetScoreBytes": 105000000
   },
-  "reflectionId": "r-20260816t210252z_0f6276c8e0",
+  "reflectionId": "r-20260816t220926z_56872cd576",
   "schema": "gamma.enwiki9.reflection-receipt.v1",
   "validity": {
-    "classification": "infrastructure-failure",
+    "classification": "valid",
     "reasons": [
-      "temporary triage placeholder replacement requires direct replay"
+      "Completed top-attention forward run produced complete terminal artifacts and authorize-successor decision under exact frozen replay."
     ],
-    "valid": false
+    "valid": true
   }
 }
