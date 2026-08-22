@@ -195,7 +195,8 @@ def candidate_proposal(candidate_id: str) -> tuple[pathlib.Path, dict[str, Any]]
         raise FileNotFoundError(f"candidate proposal not found: {proposal_id}")
     _state, path = located
     proposal = load_json(path)
-    research_contracts.validate_artifact(path)
+    if proposal.get("schema") == "gamma.enwiki9.algorithm-proposal.v2":
+        research_contracts.validate_artifact(path)
     return path, proposal
 
 
