@@ -1,0 +1,48 @@
+{
+  "candidate_id": "cmix_obias_bithead_delta_midas512_q0_v2",
+  "claimed_at": "2026-08-22T21:28:17+00:00",
+  "created_at": "2026-08-22T21:20:00+00:00",
+  "developed_at": "2026-08-22T21:28:17+00:00",
+  "evidence": [
+    {
+      "path": "docs/cmix_obias_bithead_delta_midas512_q0_v2_contract.md",
+      "sha256": "sha256:d090dffb7645338b57bcf200b05fab0fef4d9d9a5c96fcd9381d9fd96c67df28"
+    }
+  ],
+  "expected_savings_bytes": 4079243,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_bithead_delta_midas512_q0_v2.json",
+    "sha256": "sha256:8b85a94131beea89ed3063af6ae1dc3c246b53bebec1f22df13c50a848d89f1e"
+  },
+  "hypothesis": "A rank-8 decoder-synchronized projected local gradient collected over coded bits 0-255 lowers second-half code length when injected into the terminal bit-LSTM input/candidate preactivations and logit.",
+  "interfaces_exposed": [
+    "exact integer coder residual -> local bit-head gate tangent -> Q20 Walsh projection -> midpoint gate/logit injection"
+  ],
+  "kill_condition": "Any parent/K mismatch, invalid inverse, dead control, D loss against P/K/O/R/S, nondeterminism, package overflow, or RSS violation rejects v2.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "mixture_expansion",
+  "mechanism_change_bonus": -15,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-openai-20260822",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1602,
+  "promotion_condition": "Exact P/K identity and roundtrip; D beats P/K/O/R/S at 250KB before 1MB, disjoint 10MB, 100MB, or full-corpus promotion.",
+  "proposal_id": "cmix_obias_bithead_delta_midas512_q0_v2",
+  "retired_neighborhoods": [
+    "Random independent gate maps as the target-bearing D arm.",
+    "Byte-LSTM midpoint injection without a causal midpoint backward path."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1587,
+  "state": "developed",
+  "title": "cmix-obias bit-head DELTA-MIDAS projected-gradient adapter (512 coded bits)"
+}

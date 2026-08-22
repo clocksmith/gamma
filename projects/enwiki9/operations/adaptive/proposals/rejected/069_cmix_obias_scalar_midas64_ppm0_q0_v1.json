@@ -1,0 +1,45 @@
+{
+  "created_at": "2026-08-22T22:43:11+00:00",
+  "evidence": [
+    {
+      "path": "docs/cmix_obias_scalar_midas64_ppm0_q0_v1_contract.md",
+      "sha256": "sha256:da4bcb9b329ac5ddb1feb9bd3e0a9b79133c0efb2f3605d48689ac11d158dfac"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_scalar_midas64_ppm0_q0_v1.json",
+    "sha256": "sha256:5006feeecdc45a35c31e5aacc0207db0b0b8c28cce5342aeab4634b3bd5e8a5e"
+  },
+  "hypothesis": "A decoder-synchronized scalar Newton correction constructed from the first 32 bytes of each 64-byte transformed-stream segment improves the second-half arithmetic payload relative to the exact constant-0.15 parent and matched controls.",
+  "interfaces_exposed": [
+    "constant PPMd output-logit exponent -> decoder-synchronized 64-byte episodic scalar Newton correction"
+  ],
+  "kill_condition": "Retire this realization on parent/bookkeeping drift, dead or non-finite shadow arithmetic, synchronization/inverse/resource failure, or nonpositive D savings versus P or S on the frozen gate.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parent": "cmix_obias_ppm_always_purge_q0_v1",
+  "parent_proposal_id": "cmix_obias_ppm_always_purge_q0_v1",
+  "priority": 920,
+  "promotion_condition": "Promote only after P equals the clean parent byte-for-byte, P equals live-shadow K in probabilities/state/payload/archive, all inverses/repeats/resources/packages pass, and D has positive measured payload savings versus both P and S.",
+  "proposal_id": "cmix_obias_scalar_midas64_ppm0_q0_v1",
+  "rejected_at": "2026-08-22T22:43:40+00:00",
+  "rejection_reason": "Superseded before execution: parent byte 0 has no obias prior, and the frozen contract did not bind midpoint/reset relative to Advance(byte31,p32) and Advance(byte63,p64). No archive or compression result exists.",
+  "retired_neighborhoods": [
+    "PPMd-likelihood-only gate updates that omit the competing Byte-LSTM softmax distribution"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 930,
+  "state": "rejected",
+  "title": "Scalar-MIDAS64 adaptive PPMd output-prior gate"
+}

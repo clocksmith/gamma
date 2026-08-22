@@ -1,0 +1,48 @@
+{
+  "candidate_id": "nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v1",
+  "claimed_at": "2026-08-22T22:48:50+00:00",
+  "created_at": "2026-08-22T22:48:42+00:00",
+  "developed_at": "2026-08-22T22:48:51+00:00",
+  "evidence": [
+    {
+      "path": "docs/nncp_top_attention_softmax_backward_frontier_v1.md",
+      "sha256": "sha256:cc3d00af9347433c69ea0474faa39f63e456440244f94d05b001d273c346e38f"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v2.json",
+    "sha256": "sha256:af46a8014fb67ec6b1f31d4e3fe74cd92d2953e6a8472bdbdeaf2a07de84db8e"
+  },
+  "hypothesis": "A marked-zero probe immediately before the layer-19 attention softmax yields complete, live, deterministic BF16 score input and score-adjoint populations while preserving the proven attention-product captures and every non-probe fixture payload.",
+  "interfaces_exposed": [
+    "production pre-softmax layer-19 attention score boundary -> complete BF16 score input and score-adjoint oracle"
+  ],
+  "kill_condition": "Reject on incomplete, dead, nondeterministic, fixture-changing, product-capture-changing, source-failing, resource-failing, or cleanup-failing evidence.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "Gamma",
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "priority": 910,
+  "promotion_condition": "Authorize only a separately frozen open softmax-backward gate after two complete source captures, exact repeat, live score input and adjoint, unchanged attended/probability captures, unchanged fixtures, and passing resource and cleanup gates.",
+  "proposal_id": "nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v1",
+  "retired_neighborhoods": [
+    "Inferring dS from dP without an independently captured source score adjoint",
+    "Binding the score-oracle experiment to the pre-product w_o parent rather than the exact product-oracle revision"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 910,
+  "state": "developed",
+  "title": "Layer-19 attention score-input and score-adjoint source oracle"
+}

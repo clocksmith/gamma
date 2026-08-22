@@ -1,0 +1,213 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_scalar_midas64_ppm0_q0_v2",
+  "proposalId": "cmix_obias_scalar_midas64_ppm0_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "candidate-gate",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "cmix_obias_ppm_always_purge_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_ppm_always_purge_q0_v1/20260822T213650405223Z_dcbaf7a69d65.json",
+      "sha256": "sha256:b459ca292c5a0792b8555ee2c48fb2e2dcf1ceeae73567478ade2e6b124a1ae0"
+    }
+  },
+  "hypothesis": {
+    "claim": "A call-order-exact decoder-synchronized scalar Newton correction constructed from eligible first-half observations in each 64-byte transformed-stream segment improves the second-half arithmetic payload relative to the exact constant-0.15 parent and matched controls.",
+    "falsification": "Reject if transformed byte zero receives a synthetic prior/statistic, midpoint or reset occurs after the corresponding Advance call, the parent or bookkeeping arms drift, any inverse/repeat/state/resource/package gate fails, the Newton state is dead or non-finite, or D is not smaller than P, K, and the shifted control on the frozen population."
+  },
+  "changedMechanism": "Retain the parent PPMd log-prior and all ordinary updates, but before Advance(byte31,p32) select one clipped scalar Newton correction from eligible first-half Byte-LSTM softmax errors, apply it to bytes 32..63, and restore 0.15 before Advance(byte63,p64); transformed byte zero remains on the parent's zero-bias cold start.",
+  "invariants": [
+    "P is the untouched constant-gate parent and must be byte-identical to its clean comparator.",
+    "K executes the complete live G/H/midpoint/clip/reset arithmetic but applies an exact zero correction and must remain probability-, state-, payload-, and archive-identical to P.",
+    "Ordinary PPMd, Byte-LSTM, Bit-LSTM, mixer, SSE, optimizer, memory, preprocessing, and coder updates remain at their original call sites and cadence.",
+    "The first adapted probability is for byte 32 and uses no truth from byte 32 or later.",
+    "Global transformed byte zero has the parent's all-zero initial obias row and contributes no synthetic statistic.",
+    "The midpoint gate is selected before Advance(byte31,p32), and the parent gate is restored before Advance(byte63,p64).",
+    "The episodic scalar is discarded after byte 63; no encoder-only information exists.",
+    "The PPM0 residency correction must independently pass clean/treatment byte identity before it is inherited.",
+    "All savings remain zero-credit until actual coder, exact inverse, deterministic repeat, package, resource, and control gates pass."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Untouched parent with compiled constant gate 0.15f."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Execute complete Scalar-MIDAS64 shadow arithmetic and reset schedule while applying an exact zero output-bias correction."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Apply the current segment first-half clipped scalar Newton correction to bytes 32 through 63."
+    },
+    {
+      "id": "S",
+      "role": "shifted",
+      "definition": "Apply the preceding segment's first-half correction to the current segment's bytes 32 through 63; segment zero uses zero."
+    }
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible pipeline",
+    "scopeBytes": 250000,
+    "scopeSymbols": 2000000,
+    "selection": "Frozen opening 250KB diagnostic; larger and distant populations require separately frozen promotion contracts.",
+    "coordinate": "Nonoverlapping 64-byte transformed-stream segments with first-half bytes 0..31 and second-half bytes 32..63."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The exact PPMd log-prior row already used for each completed first-half byte.",
+      "The exact normalized Byte-LSTM output row used for that byte before its ordinary truth update.",
+      "The decoded byte truth, existing vocabulary map, segment position, and deterministic parent state."
+    ],
+    "forbiddenInformation": [
+      "Any byte truth from the adapted half before that byte is decoded.",
+      "Future segment statistics, encoder-only traces, source score tensors, fitted post-result parameters, or external runtime assets."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "external-parent-descriptor",
+      "path": "programs/cmix_obias_source_1m_roundtrip_qm3_v1/program.py",
+      "sha256": "sha256:9529c4552432f4abfe4003911abf7c252a450065c2ece63e9d179e2e5109ec21"
+    },
+    {
+      "id": "ppm0-disk-infrastructure-contract",
+      "path": "operations/adaptive/experiments/cmix_obias_ppm_disk_joint_q0_v3.json",
+      "sha256": "sha256:4335c88ebafc7e7487d463d0816ba01b98ecf14e52a8987e0a2fd2e159037079"
+    },
+    {
+      "id": "scientific-contract",
+      "path": "docs/cmix_obias_scalar_midas64_ppm0_q0_v2_contract.md",
+      "sha256": "sha256:c18dff2db137575448d4875db549a038c98c015da6c109bdb7002dd6516164a5"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 1.02,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.8,
+    "interactionRisk": 0.4
+  },
+  "measurements": [
+    {
+      "id": "allRoundtripExact",
+      "definition": "Every completed P/K/D/S arm restores the frozen population exactly.",
+      "unit": "boolean"
+    },
+    {
+      "id": "allRepeatPayloadIdentity",
+      "definition": "Each arm's repeated encode produces byte-identical durable payload.",
+      "unit": "boolean"
+    },
+    {
+      "id": "parentCleanIdentity",
+      "definition": "P payload equals the clean constant-gate parent payload by byte count, SHA-256, and direct comparison.",
+      "unit": "boolean"
+    },
+    {
+      "id": "bookkeepingIdentity",
+      "definition": "P and K probabilities, parent state, payload, and archive are exactly identical.",
+      "unit": "boolean"
+    },
+    {
+      "id": "bookkeepingShadowLive",
+      "definition": "K executes at least one finite nonzero gradient/curvature accumulation and midpoint construction.",
+      "unit": "boolean"
+    },
+    {
+      "id": "stateSynchronized",
+      "definition": "Within each arm, encode, repeat, and bare decode receipts match segment index, G, H, delta, gate, Byte-LSTM state, parent state, and coder state.",
+      "unit": "boolean"
+    },
+    {
+      "id": "allFinite",
+      "definition": "Every G, H, delta, gate, probability, and state maximum is finite in every stage.",
+      "unit": "boolean"
+    },
+    {
+      "id": "dPayloadBytes",
+      "definition": "Durable arithmetic payload bytes for D.",
+      "unit": "bytes"
+    },
+    {
+      "id": "pPayloadBytes",
+      "definition": "Durable arithmetic payload bytes for P.",
+      "unit": "bytes"
+    },
+    {
+      "id": "sPayloadBytes",
+      "definition": "Durable arithmetic payload bytes for S.",
+      "unit": "bytes"
+    },
+    {
+      "id": "dSavingsVsParentBytes",
+      "definition": "Signed durable payload savings P minus D.",
+      "unit": "bytes"
+    },
+    {
+      "id": "dSavingsVsShiftBytes",
+      "definition": "Signed durable payload savings S minus D.",
+      "unit": "bytes"
+    },
+    {
+      "id": "resourcesWithinLimits",
+      "definition": "All process-tree RSS and allocated non-memory-backed scratch limits pass.",
+      "unit": "boolean"
+    },
+    {
+      "id": "packageWithinCeiling",
+      "definition": "Incremental required package bytes are at most 65,536.",
+      "unit": "boolean"
+    },
+    {
+      "id": "cleanupComplete",
+      "definition": "All bounded scratch is removed after each terminal receipt.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {"id": "p-inverse", "measurement": "allRoundtripExact", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "allRepeatPayloadIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-parent", "measurement": "parentCleanIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-bookkeeping", "measurement": "bookkeepingIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-shadow", "measurement": "bookkeepingShadowLive", "operator": "eq", "threshold": true},
+    {"id": "p-sync", "measurement": "stateSynchronized", "operator": "eq", "threshold": true},
+    {"id": "p-finite", "measurement": "allFinite", "operator": "eq", "threshold": true},
+    {"id": "p-d-below-parent", "measurement": "dSavingsVsParentBytes", "operator": "gt", "threshold": 0},
+    {"id": "p-d-below-shift", "measurement": "dSavingsVsShiftBytes", "operator": "gt", "threshold": 0},
+    {"id": "p-resources", "measurement": "resourcesWithinLimits", "operator": "eq", "threshold": true},
+    {"id": "p-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": true},
+    {"id": "p-cleanup", "measurement": "cleanupComplete", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-inverse", "measurement": "allRoundtripExact", "operator": "eq", "threshold": false},
+    {"id": "k-parent", "measurement": "parentCleanIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-bookkeeping", "measurement": "bookkeepingIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-sync", "measurement": "stateSynchronized", "operator": "eq", "threshold": false},
+    {"id": "k-finite", "measurement": "allFinite", "operator": "eq", "threshold": false},
+    {"id": "k-resources", "measurement": "resourcesWithinLimits", "operator": "eq", "threshold": false}
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/cmix_obias_scalar_midas64_ppm0_q0_v2_joint/decision.json"
+  ],
+  "generatedUtc": "2026-08-22T22:41:20.718Z"
+}

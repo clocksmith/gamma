@@ -1,0 +1,24 @@
+{
+  "schema": "gamma.enwiki9.composite-candidate-contract.v1",
+  "candidateId": "cmix_obias_bithead_delta_midas512_ppm0_q0_v3",
+  "algorithmParent": {
+    "candidateId": "cmix_obias_bithead_delta_midas512_q0_v2",
+    "candidateTreeSha256": "sha256:ab2f1cf596911e45194bc5e1c7959ccb51c925031232eff12f27281b51acff4e"
+  },
+  "resourceDependency": {
+    "candidateId": "cmix_obias_ppm_always_purge_q0_v1",
+    "candidateTreeSha256": "sha256:dcbaf7a69d65cb3200173b20d260b36e3590c39d282f0271a572067995bb8114"
+  },
+  "compileDefinitions": [
+    "-DKH_DELTA_MIDAS_ARM={0..5}",
+    "-DCMIX_PPMD_RSS_BUDGET_MB=0ULL"
+  ],
+  "scientificArms": ["P", "K", "O", "R", "D", "S"],
+  "externalBuildControl": "C",
+  "sourceOrder": [
+    "export pinned cmix-obias tracked source",
+    "apply sealed v2 bit-head overlay",
+    "compile one arm with sealed PPM budget-zero definition"
+  ],
+  "compressionCreditPolicy": "Only measured D counted savings after complete package accounting; memory policy receives zero savings credit."
+}
