@@ -1,0 +1,41 @@
+{
+  "created_at": "2026-08-22T10:48:20+00:00",
+  "evidence": [
+    {
+      "path": "docs/research_register.md",
+      "sha256": "sha256:cc50ba73d90bd46b4920819d74100e187789da43f0785f5914757a4c0fefe31c"
+    }
+  ],
+  "expected_savings_bytes": 4079243,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_deep_delta_midas64_q0_v1.json",
+    "sha256": "sha256:17acc6729862203e36d42375463a564a29e3b59d4bca4258e5e4a77b4567caf8"
+  },
+  "hypothesis": "Episodic causal fast-weight adaptation on 64-byte segments (forming an eligibility state over bytes 0-31 and adapting the recurrent head/top mixer for bytes 32-63) produces lower net score than parent cmix-obias while strictly preserving causal roundtrip and determinism.",
+  "interfaces_exposed": [
+    "64-byte segment stream -> bytes 0-31 causal eligibility state -> recurrent/mixer fast-weight adapter -> bytes 32-63 adapted prediction"
+  ],
+  "kill_condition": "Failing to beat parent P, losing on distant 10M slices, missing the 407925B gate at 100M, or any nondeterminism or memory guard breach permanently rejects this candidate.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "mixture_expansion",
+  "mechanism_change_bonus": -15,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parent": "delta_midas_deep_residual_65536_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 1600,
+  "promotion_condition": "Beat parent P on 250KB (>=1020B), 1MB (>=4080B), 10MB (>=40793B), and 100M (>=407925B) across disjoint populations; beat controls K, O, S; exact roundtrip and deterministic reproduction under decimal 10GB RSS guard.",
+  "proposal_id": "cmix_obias_deep_delta_midas64_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1585,
+  "state": "proposed",
+  "title": "cmix-obias deep DELTA-MIDAS recurrent adapter (64B segments)"
+}

@@ -70,18 +70,34 @@ def load_row(path: pathlib.Path) -> Row | None:
     except (OSError, json.JSONDecodeError):
         return None
 
-    program_id = data.get("program_id")
+    program_id = data.get("program_id") or data.get("candidate_id")
     if not isinstance(program_id, str) or not program_id:
         return None
 
     data_size = as_int(data, "data_size")
+    if not data_size and isinstance(data.get("restored"), dict):
+        data_size = as_int(data["restored"], "bytes")
+    if not data_size and isinstance(data.get("canonical"), dict):
+        data_size = as_int(data["canonical"], "bytes")
+
     compressed_size = as_int(data, "compressed_size")
+    if not compressed_size and isinstance(data.get("archive"), dict):
+        compressed_size = as_int(data["archive"], "bytes")
+
     program_size = as_int(data, "program_size")
-    score = as_int(data, "hutter_score")
+    if not program_size and isinstance(data.get("program"), dict):
+        program_size = as_int(data["program"], "total_bytes")
+
+    score = as_int(data, "hutter_score") or as_int(data, "counted_score_bytes")
     if score == 0 and (compressed_size or program_size):
         score = compressed_size + program_size
 
-    roundtrip = data.get("roundtrip_ok") is True
+    roundtrip = (
+        data.get("roundtrip_ok") is True
+        or data.get("overall_pass") is True
+        or (isinstance(data.get("gates"), dict) and data["gates"].get("raw_roundtrip_exact") is True)
+        or (isinstance(data.get("restored"), dict) and data["restored"].get("byte_identical_to_canonical") is True)
+    )
     det = data.get("determinism")
     determinism: bool | None = None
     if isinstance(det, dict) and isinstance(det.get("single_host_byte_equal"), bool):
