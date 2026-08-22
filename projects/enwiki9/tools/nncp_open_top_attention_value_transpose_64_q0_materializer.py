@@ -160,7 +160,7 @@ def main() -> int:
         ],
         "controls": [
             {"id": "source-order", "role": "treatment", "definition": "Compute dProbability in state, head, stream, key order."},
-            {"id": "stream-major", "role": "negative", "definition": "Serialize the same values in state, stream, head, key order and require mismatches."},
+            {"id": "stream-major", "role": "comparator", "definition": "Serialize the same values in state, stream, head, key order and require mismatches."},
             {"id": "negated", "role": "negative", "definition": "Negate dAttended before the same transpose and require mismatches."},
             {"id": "replay", "role": "replay", "definition": "Repeat all complete treatment and control populations byte-for-byte."},
         ],

@@ -1,0 +1,57 @@
+{
+  "claimed_at": "2026-08-22T20:59:07+00:00",
+  "created_at": "2026-08-22T20:59:07+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260816T220926Z_56872cd576.json",
+      "sha256": "sha256:6629f6923b631c87e7ff83fbfc8787c4590bc4b7be50c84178faf94e00b1022d"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T174722Z_8b88b4a53d.json",
+      "sha256": "sha256:a2191bedd789d7f7ca55076d87c36cf367ba6789ec0cbc380cbfaa7077b2083a"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T175422Z_91aae07812.json",
+      "sha256": "sha256:a05c513aebdef149e64e3aab32bf6fbc969449632de744a9057ed17357692859"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+      "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_attention_value_transpose_64_q0_v1.json",
+    "sha256": "sha256:d7a4a4ce592be614fe1a44e44545e0c551a45bc5f03e512f5dc05ec97ae06931"
+  },
+  "hypothesis": "A LibNC-free 128-feature AVX2 FMA transpose over the exact open layer-19 value state and attended adjoint reproduces all 5,242,880 source probability-adjoint BF16 words, while stream-major and sign-negated controls differ.",
+  "interfaces_exposed": [
+    "exact open value state plus attended adjoint -> source-coordinate probability adjoint"
+  ],
+  "kill_condition": "Any treatment mismatch, incomplete population, replay drift, dead control, forbidden dependency, package overflow, or resource failure rejects this arithmetic boundary.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-openai-20260822",
+  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "priority": 1601,
+  "promotion_condition": "All 5,242,880 treatment words match the source adjoint exactly across two deterministic replays; both controls differ; dependency, package, and cleanup predicates pass.",
+  "proposal_id": "nncp_open_top_attention_value_transpose_64_q0_v1",
+  "retired_neighborhoods": [
+    "Unvalidated transfer of generic transpose arithmetic or alternate tensor layouts to layer-19 attention."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1601,
+  "state": "claimed",
+  "title": "Exact open layer-19 value-attention transpose"
+}

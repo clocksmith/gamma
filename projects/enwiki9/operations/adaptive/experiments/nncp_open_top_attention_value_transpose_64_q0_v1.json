@@ -1,0 +1,512 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -500000,
+    "maximumAddedPackageBytes": 500000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The exact open value state, exact open attended adjoint, independent source probability-adjoint comparator, and validated 128-feature FMA schedule."
+    ],
+    "forbiddenInformation": [
+      "LibNC execution, tolerance, fitting to mismatch coordinates, editing the source comparator, future symbols, or future experiments.",
+      "Claiming softmax backward, value-state adjoints, a compact predictor, compression gain, or Hutter credit."
+    ]
+  },
+  "changedMechanism": "Implement only the layer-19 value-matrix transpose from exact open value state and exact open attended adjoint to the independently captured source probability adjoint.",
+  "controls": [
+    {
+      "definition": "Compute dProbability in state, head, stream, key order.",
+      "id": "source-order",
+      "role": "treatment"
+    },
+    {
+      "definition": "Serialize the same values in state, stream, head, key order and require mismatches.",
+      "id": "stream-major",
+      "role": "comparator"
+    },
+    {
+      "definition": "Negate dAttended before the same transpose and require mismatches.",
+      "id": "negated",
+      "role": "negative"
+    },
+    {
+      "definition": "Repeat all complete treatment and control populations byte-for-byte.",
+      "id": "replay",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "oracle",
+  "experimentId": "nncp_open_top_attention_value_transpose_64_q0_v1",
+  "generatedUtc": "2026-08-22T20:58:43+00:00",
+  "hypothesis": {
+    "claim": "A LibNC-free 128-feature AVX2 FMA transpose over the exact open layer-19 value state and attended adjoint reproduces all 5,242,880 source probability-adjoint BF16 words, while stream-major and sign-negated controls differ.",
+    "falsification": "Any source mismatch, incomplete population, dead control, replay drift, undeclared dependency, source-closure overflow, or resource failure rejects this arithmetic boundary."
+  },
+  "inputs": [
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/decision.json",
+      "sha256": "sha256:67e97ef019583d4fe6e8d7d31b62c5b2b4bc1494350dea62519c23fbf8086558"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/execution.json",
+      "sha256": "sha256:713a9c20bb48bb4b0eebea831d48f5867a8bccb47095f57155780684461a1f0d"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/guard.json",
+      "sha256": "sha256:2e9ffa542921cdc3748d53737aa959c71d3bc87d6179b0d48d23b1837d4e966c"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T220926Z_56872cd576.json",
+      "sha256": "sha256:6629f6923b631c87e7ff83fbfc8787c4590bc4b7be50c84178faf94e00b1022d"
+    },
+    {
+      "id": "open-value-state",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/open-exact-value-state.bf16",
+      "sha256": "sha256:71968ffd71811ef06db7064c675872bcbd98344abd7e9d09f2231dd538e3f790"
+    },
+    {
+      "id": "source-decision",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:e9011ea1891c14d82db1d3c1d733f183efaf63c1c04091fa91d9e4debd14a37d"
+    },
+    {
+      "id": "source-execution",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:4fd30f759b0665a48a5359d6382e0d8520bd211a2b719a39d564add94ae31b4c"
+    },
+    {
+      "id": "source-guard",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:4978f9d430bf78eaf69d992e995deeb4b9af18ea951c8f41f1df4a9543e9fa31"
+    },
+    {
+      "id": "source-reflection",
+      "path": "operations/adaptive/reflections/20260816T174722Z_8b88b4a53d.json",
+      "sha256": "sha256:a2191bedd789d7f7ca55076d87c36cf367ba6789ec0cbc380cbfaa7077b2083a"
+    },
+    {
+      "id": "source-probability-adjoint",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/source-attention-probability-adjoint.bf16",
+      "sha256": "sha256:94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22"
+    },
+    {
+      "id": "concat-decision",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/decision.json",
+      "sha256": "sha256:f0dc7bf5832700ac458be3cd0bdddfb8fb4a2f1c7242d1a14e180ccf6fd155e5"
+    },
+    {
+      "id": "concat-execution",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/execution.json",
+      "sha256": "sha256:fe3b310868a9a702b81eb4c1061d591acd39a2e46103794b45bdccd31998a4b0"
+    },
+    {
+      "id": "concat-guard",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/guard.json",
+      "sha256": "sha256:40e3e3865fa6664ef5cdfbc0055ebce6c52018cfd6f0a157b4ee585d759efac0"
+    },
+    {
+      "id": "concat-reflection",
+      "path": "operations/adaptive/reflections/20260816T175422Z_91aae07812.json",
+      "sha256": "sha256:a05c513aebdef149e64e3aab32bf6fbc969449632de744a9057ed17357692859"
+    },
+    {
+      "id": "open-attended-adjoint",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/open-exact-attended-adjoint.bf16",
+      "sha256": "sha256:481b6d3c8ec04a8302adca1ed7c0d43ad47c2459aa4586b4950726af05c2e27a"
+    },
+    {
+      "id": "panel-decision",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:a3a5b8b76cd878ac904acd2b674a2972b0a13c740d8a2748ef18977c16f1ed75"
+    },
+    {
+      "id": "panel-execution",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2ca946fa990a0b07ab6c70c0fdda90f54a4f0b491ba4abce76793db828df4ede"
+    },
+    {
+      "id": "panel-guard",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:c5a43f9f7d3446521259ca8a0366c9842466960329e58ab9ba984dd623504fa6"
+    },
+    {
+      "id": "panel-reflection",
+      "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+      "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_open_top_attention_value_transpose_64_q0_v1/attention_value_transpose.cpp",
+      "sha256": "sha256:82af7e00f81ef9304e87e6a9635d43e08d785a52935037c0937bda55833f1c50"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_top_attention_value_transpose_64_q0.py",
+      "sha256": "sha256:5f8d979a9930df07af9de7d062a775bfac327aa54c38dcb295adcbf8a0008865"
+    },
+    {
+      "id": "materializer",
+      "path": "tools/nncp_open_top_attention_value_transpose_64_q0_materializer.py",
+      "sha256": "sha256:d81e6dfb89c3ef88805a1b341e5facc55c472683b368a95f956287bb38e3f403"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_top_attention_value_transpose_64_q0_v1/program.py",
+      "sha256": "sha256:82c9160993beb37c99e91b6970e3a77cdd628f9613c9ae7c01f8932465fa1d81"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-contract.schema-546a75306f6a",
+      "path": "contracts/research/v1/adaptive-experiment-contract.schema.json",
+      "sha256": "sha256:bbe2e7b532b2a2ebc877d0918847b6efddcc4d08216378981c0fc6e4f2a588c6"
+    },
+    {
+      "id": "runtime-source-adaptive-experiment-result.schema-d0dc032e4c8a",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    },
+    {
+      "id": "runtime-source-adaptive-job.schema-92b785812ad4",
+      "path": "contracts/research/v1/adaptive-job.schema.json",
+      "sha256": "sha256:d01a141c6a45cc6236a63a03684b12078d8e7cf8c71868c2c66e6a2e75fe132a"
+    },
+    {
+      "id": "runtime-source-algorithm-proposal.schema-160d08b3f0de",
+      "path": "contracts/research/v1/algorithm-proposal.schema.json",
+      "sha256": "sha256:2e6bc3df456f4226c4e4338e909c90e6a61f8bcccb3eac4edadf7a79a3db2842"
+    },
+    {
+      "id": "runtime-source-candidate-revision.schema-271f724fd720",
+      "path": "contracts/research/v1/candidate-revision.schema.json",
+      "sha256": "sha256:26d20c11848a47f63aa62246ef74ce4e6f1fb47cf08c5a7a3d7602a433769007"
+    },
+    {
+      "id": "runtime-source-clean-room-attempt.schema-7723dbb1a3ec",
+      "path": "contracts/research/v1/clean-room-attempt.schema.json",
+      "sha256": "sha256:9dd5a65f778dc92c2aa5618e1916dcc97aacd9aee2267b9cf7ec447c5b82c594"
+    },
+    {
+      "id": "runtime-source-clean-room-replay.schema-cfd4a05e8789",
+      "path": "contracts/research/v1/clean-room-replay.schema.json",
+      "sha256": "sha256:556c8a20b5ba348082cb26152d41724ab62b2977e2749ce3526d41cc2e7f12b4"
+    },
+    {
+      "id": "runtime-source-delta-midas-probe-result.schema-a655d1e52fd7",
+      "path": "contracts/research/v1/delta-midas-probe-result.schema.json",
+      "sha256": "sha256:1534b8c62fb60d7539ebe9baa82e2186f06e35ee1b023344ade1e04104ab09b0"
+    },
+    {
+      "id": "runtime-source-dependency-closure.schema-223ed0499b02",
+      "path": "contracts/research/v1/dependency-closure.schema.json",
+      "sha256": "sha256:56ede659d6ec840275ab49396acf2c502ca5a00e6fcdea459ed28ec0ab0edc35"
+    },
+    {
+      "id": "runtime-source-driver-run-ledger-row.schema-c3176eb7dfda",
+      "path": "contracts/research/v1/driver-run-ledger-row.schema.json",
+      "sha256": "sha256:564eb9da8f1d3d5436754894cafdf5fe45184f1ffdfc40be268aa1e8c50e99be"
+    },
+    {
+      "id": "runtime-source-experiment-contract.schema-c554d8d6c298",
+      "path": "contracts/research/v1/experiment-contract.schema.json",
+      "sha256": "sha256:ddc50b7a26c92c250b580845379b3caabb9376900ea435088621d2ba5fb8e356"
+    },
+    {
+      "id": "runtime-source-experiment-result.schema-1fa19d2aee21",
+      "path": "contracts/research/v1/experiment-result.schema.json",
+      "sha256": "sha256:f67a74ccefdf35f7bde55c557bdaebea3a2c7fd9e29ae37e6d9b62357c2942a2"
+    },
+    {
+      "id": "runtime-source-mechanism-graph.schema-dffc0a49042c",
+      "path": "contracts/research/v1/mechanism-graph.schema.json",
+      "sha256": "sha256:4defbca57d4586323348ed7585a68d0477db8df2c4941eeaf3cc0102cb318935"
+    },
+    {
+      "id": "runtime-source-named-gradient-detail.schema-414928c3ecb8",
+      "path": "contracts/research/v1/named-gradient-detail.schema.json",
+      "sha256": "sha256:dc5bafaae829b1700518a31bade6e1559b570a559e2b1368c6e3a881e42442b1"
+    },
+    {
+      "id": "runtime-source-objective-contract-dc994d21745d",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-objective-contract.schema-a4da36d4a19f",
+      "path": "contracts/research/v1/objective-contract.schema.json",
+      "sha256": "sha256:de1760e03688cd29085d4e64ac1e25c571da08542191a66106859b59ccac404d"
+    },
+    {
+      "id": "runtime-source-reflection-receipt.schema-eb6148afefe3",
+      "path": "contracts/research/v1/reflection-receipt.schema.json",
+      "sha256": "sha256:74dcb037d60bf4132dfa7f4c4cb45c4745ebb815461bdbdbf2225cced1c82996"
+    },
+    {
+      "id": "runtime-source-release-receipt-index.schema-182930bef554",
+      "path": "contracts/research/v1/release-receipt-index.schema.json",
+      "sha256": "sha256:b98f33bbd2bb65a26d31a995cadaaea1ffe1817f17f7ab2064b683c7bcbd1af0"
+    },
+    {
+      "id": "runtime-source-resource-guard-receipt.schema-88c1eac44a3f",
+      "path": "contracts/research/v1/resource-guard-receipt.schema.json",
+      "sha256": "sha256:ed672266f4cae8ae1a03b6da846316bbb743ab742c298cda0a0f53f3fe4c43d0"
+    },
+    {
+      "id": "runtime-source-run-receipt.schema-c21bbd0767d9",
+      "path": "contracts/research/v1/run-receipt.schema.json",
+      "sha256": "sha256:b1c279150e0c096ac69b3e8aef86eb3a332d5d8988528e2b740c518d18a18016"
+    },
+    {
+      "id": "runtime-source-search-policy-47c557079e1e",
+      "path": "contracts/research/v1/search-policy.json",
+      "sha256": "sha256:b4863eb5bb14cc1b463ac30dd8968736a800dcf03d1121ca3317cf0d7faef0f7"
+    },
+    {
+      "id": "runtime-source-search-policy.schema-70022c36f17b",
+      "path": "contracts/research/v1/search-policy.schema.json",
+      "sha256": "sha256:7b83f8a5d78917a0088a65d972ad3dba23c659115fe138a25b9d6d9d072b669e"
+    },
+    {
+      "id": "runtime-source-enwiki9_python_source_closure-7418e479faad",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_ff1_bias_state_reduce_64_q0-6db2f92614f9",
+      "path": "tools/nncp_libnc_ff1_bias_state_reduce_64_q0.py",
+      "sha256": "sha256:1c0a56998c745214e1ac66d63b4dd2517fb3fcdda3a424acd353f14c22528a64"
+    },
+    {
+      "id": "runtime-source-nncp_libnc_top_w_o_input_adjoint_64_q0_v1_materializer-18e4e8ad9254",
+      "path": "tools/nncp_libnc_top_w_o_input_adjoint_64_q0_v1_materializer.py",
+      "sha256": "sha256:8c71e4099db45027798626b980f8f64a6212799b12645a17ef404365c7603a28"
+    },
+    {
+      "id": "runtime-source-research_contracts-1ded46655fbb",
+      "path": "tools/research_contracts.py",
+      "sha256": "sha256:9fb46117c2f501f602c7aac6acde965771c03a75874bfed62719e78d74669f58"
+    }
+  ],
+  "invariants": [
+    "The parent forward, concat identity, source comparator, and all retained tensors are immutable and hash-bound.",
+    "Each output key accumulates exactly 128 sequential AVX2 fused multiply-add steps from zero and rounds once to BF16.",
+    "The treatment emits source coordinate order: state, head, stream, key.",
+    "No teacher executable or captured source tensor may ship in a Gamma codec."
+  ],
+  "killPredicates": [
+    {
+      "id": "k-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "k-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "All exact source, forward, concat, and panel antecedents remain digest-bound.",
+      "id": "antecedentsPass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Complete 64 by 32 production population.",
+      "id": "sampleCount",
+      "unit": "state-stream samples"
+    },
+    {
+      "definition": "Complete attention-head population.",
+      "id": "headCount",
+      "unit": "heads"
+    },
+    {
+      "definition": "Complete retained key population.",
+      "id": "keyCount",
+      "unit": "keys"
+    },
+    {
+      "definition": "Exact head-feature reduction width.",
+      "id": "reductionWidth",
+      "unit": "features"
+    },
+    {
+      "definition": "Complete source-coordinate probability-adjoint population.",
+      "id": "adjointElementCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Treatment words differing from the source adjoint.",
+      "id": "treatmentMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Maximum treatment/source error.",
+      "id": "maximumTreatmentAbsoluteError",
+      "unit": "float32 value"
+    },
+    {
+      "definition": "Wrong output-axis order mismatches.",
+      "id": "streamMajorControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Sign-negated treatment mismatches.",
+      "id": "negatedControlMismatchCount",
+      "unit": "BF16 elements"
+    },
+    {
+      "definition": "Two complete evaluations reproduce byte-for-byte.",
+      "id": "evaluationReplayIdentical",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Dynamic LibNC, GGML, CUDA, OpenMP, or BLAS dependencies.",
+      "id": "forbiddenDynamicDependencyCount",
+      "unit": "libraries"
+    },
+    {
+      "definition": "Compressed dependency-closed source.",
+      "id": "incrementalSourceBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Transient build and evaluation files were removed.",
+      "id": "guardedWorkRootPass",
+      "unit": "boolean"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/nncp_open_top_attention_value_transpose_64_q0_v1/decision.json",
+    "results/nncp_open_top_attention_value_transpose_64_q0_v1/execution.json",
+    "results/nncp_open_top_attention_value_transpose_64_q0_v1/source-exact-attention-probability-adjoint.bf16",
+    "results/nncp_open_top_attention_value_transpose_64_q0_v1/incremental_source.tar.xz"
+  ],
+  "parent": {
+    "candidateId": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_forward_inputs_64_q0_v1/20260816T180145043560Z_42fbc4bdbdc3.json",
+      "sha256": "sha256:95975e0f794c3958681fd8bd81a9a4004582f0a5f0e2eb6f8f76097198b46c5f"
+    }
+  },
+  "population": {
+    "coordinate": "state-major, head-major, stream-major, key-major",
+    "scopeBytes": 10485760,
+    "scopeSymbols": 5242880,
+    "selection": "Every key for 64 states, 32 streams, and eight heads.",
+    "unit": "BF16 layer-19 attention-probability adjoint words"
+  },
+  "promotionPredicates": [
+    {
+      "id": "p-antecedents",
+      "measurement": "antecedentsPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-samples",
+      "measurement": "sampleCount",
+      "operator": "eq",
+      "threshold": 2048
+    },
+    {
+      "id": "p-heads",
+      "measurement": "headCount",
+      "operator": "eq",
+      "threshold": 8
+    },
+    {
+      "id": "p-keys",
+      "measurement": "keyCount",
+      "operator": "eq",
+      "threshold": 320
+    },
+    {
+      "id": "p-reduction",
+      "measurement": "reductionWidth",
+      "operator": "eq",
+      "threshold": 128
+    },
+    {
+      "id": "p-elements",
+      "measurement": "adjointElementCount",
+      "operator": "eq",
+      "threshold": 5242880
+    },
+    {
+      "id": "p-treatment",
+      "measurement": "treatmentMismatchCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-maximum",
+      "measurement": "maximumTreatmentAbsoluteError",
+      "operator": "eq",
+      "threshold": 0.0
+    },
+    {
+      "id": "p-layout-control",
+      "measurement": "streamMajorControlMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-sign-control",
+      "measurement": "negatedControlMismatchCount",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "p-replay",
+      "measurement": "evaluationReplayIdentical",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-dependencies",
+      "measurement": "forbiddenDynamicDependencyCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "p-source",
+      "measurement": "incrementalSourceBytes",
+      "operator": "lte",
+      "threshold": 500000
+    },
+    {
+      "id": "p-work",
+      "measurement": "guardedWorkRootPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "nncp_open_top_attention_value_transpose_64_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedTransferRetention": 1.0,
+    "interactionRisk": 0.08,
+    "uncertaintyRisk": 0.12
+  },
+  "status": "frozen"
+}
