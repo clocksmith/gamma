@@ -1,0 +1,116 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_bithead_delta_midas512_ppm0_q0_v3",
+  "proposalId": "cmix_obias_bithead_delta_midas512_ppm0_q0_v3",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "candidate-gate",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "cmix_obias_bithead_delta_midas512_q0_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_bithead_delta_midas512_q0_v2/20260822T212817346364Z_ab2f1cf59691.json",
+      "sha256": "sha256:205334c8fafcc0fb7ffdc6a88ac2ecfd86586d0a34c9a7a5ec7f9a70bf8338c8"
+    }
+  },
+  "hypothesis": {
+    "claim": "The sealed tied projected-gradient D arm lowers exact payload bytes under a composed PPM budget-zero policy that preserves probabilities and satisfies strict RSS.",
+    "falsification": "Reject v3 if clean/P or P/K identity fails, D fails to beat P/K/O/R/S, inverse/repeat fails, any receipt desynchronizes, package exceeds 65,536 incremental bytes, scratch leaks, or RSS crosses 9,765,625 KiB."
+  },
+  "changedMechanism": "Compose sealed Delta-MIDAS v2 with sealed exact PPM always-purge residency; no learning hyperparameter or modeled state changes.",
+  "invariants": [
+    "Every Delta-MIDAS v2 arithmetic, causal, gate, reset, and control definition is unchanged.",
+    "Every arm uses the same PPM budget-zero residency policy.",
+    "PPM eviction changes residency only and reloads exact shared-file state.",
+    "No future truth, encoder-only state, or external teacher is available.",
+    "Exact repeat archive, canonical inverse, package accounting, scratch cleanup, and strict process-tree RSS are mandatory."
+  ],
+  "controls": [
+    {"id": "C", "role": "comparator", "definition": "Clean source plus budget-zero PPM build, no Gamma bit-head overlay."},
+    {"id": "P", "role": "comparator", "definition": "Instrumented v2 parent plus budget-zero PPM, no eligibility or injection."},
+    {"id": "K", "role": "replay", "definition": "Complete v2 eligibility bookkeeping plus budget-zero PPM, zero injection."},
+    {"id": "O", "role": "negative", "definition": "Current-segment terminal-logit update only."},
+    {"id": "R", "role": "negative", "definition": "Current gradient reconstructed through orthogonal Walsh rows plus logit."},
+    {"id": "D", "role": "treatment", "definition": "Current gradient reconstructed through tied Walsh transpose plus logit."},
+    {"id": "S", "role": "shifted", "definition": "Prior segment's tied gate and logit gradient applied to current second half."}
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible pipeline",
+    "scopeBytes": 250000,
+    "scopeSymbols": 2000000,
+    "selection": "Opening 250KB joint diagnostic; later scopes require separate prospectively frozen successors.",
+    "coordinate": "Post-preprocessing coded-bit stream in 512-bit segments with a 256-bit midpoint."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Post-head integer coder probabilities and coded truths at phases 0 through 255.",
+      "Current native bit-head gate activations and output weights.",
+      "Current process RSS and exact file-backed PPM state."
+    ],
+    "forbiddenInformation": [
+      "Any truth at phase 256 or later before decoding.",
+      "Future symbols, encoder-only state, external teachers, or changed context capacity."
+    ]
+  },
+  "inputs": [
+    {"id": "composition", "path": "programs/cmix_obias_bithead_delta_midas512_ppm0_q0_v3/composition.json", "sha256": "sha256:8c3223d5a070226276678a04ad87e3281ee9a1be225a37cc1f4e64fc3c486bc0"},
+    {"id": "delta-overlay", "path": "programs/cmix_obias_bithead_delta_midas512_q0_v2/overlay.py", "sha256": "sha256:243a2de75c4f256604bc0e5540862272c7e1b4410a02e69a30b55b275c8343c7"},
+    {"id": "memory-contract", "path": "programs/cmix_obias_ppm_always_purge_q0_v1/build_contract.json", "sha256": "sha256:83afdd26c94dd9e38278e36ae20761133861eed342a54360248e960f73a4bb9f"},
+    {"id": "arm-runner", "path": "tools/cmix_obias_bithead_delta_midas512_q0_v2.py", "sha256": "sha256:833eaa0c5db226e3084a6ea4c5b1663157a930066449666e07c0ca7fca97d964"},
+    {"id": "joint-evaluator", "path": "tools/cmix_obias_bithead_delta_midas512_joint_q0_v2.py", "sha256": "sha256:8b5f27b2b464910947270181800ab949f548725b565aadb3080e1630185fff75"},
+    {"id": "composite-contract", "path": "docs/cmix_obias_bithead_delta_midas512_ppm0_q0_v3_contract.md", "sha256": "sha256:774e5f4df9dedbad4cf7a8f802b56e9a60477089d42902d381c20a8affd06a16"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 4079243,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": 4013707
+  },
+  "search": {
+    "expectedTransferRetention": 0.85,
+    "expectedRuntimeRatio": 1.65,
+    "expectedMemoryRatio": 0.9,
+    "uncertaintyRisk": 0.45,
+    "interactionRisk": 0.2
+  },
+  "measurements": [
+    {"id": "roundtripExact", "definition": "Every arm restores the exact frozen population.", "unit": "boolean"},
+    {"id": "repeatArchiveIdentity", "definition": "Every arm repeats payload and archive byte-identically.", "unit": "boolean"},
+    {"id": "cleanParentIdentity", "definition": "C and P payload bytes are identical.", "unit": "boolean"},
+    {"id": "pEqualsK", "definition": "P and K probability, state, and payload receipts are identical.", "unit": "boolean"},
+    {"id": "beatsControls", "definition": "D payload is smaller than P, K, O, R, and S.", "unit": "boolean"},
+    {"id": "finiteAdapter", "definition": "All adapter receipts are finite and active controls are nonzero.", "unit": "boolean"},
+    {"id": "peakRssWithinGuard", "definition": "Every process-tree peak is below 9,765,625 KiB.", "unit": "boolean"},
+    {"id": "packageWithinCeiling", "definition": "Incremental required package bytes are at most 65,536.", "unit": "boolean"},
+    {"id": "scratchClean", "definition": "All bounded scratch is removed after terminal receipts.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "repeatArchiveIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-clean-parent", "measurement": "cleanParentIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-k", "measurement": "pEqualsK", "operator": "eq", "threshold": true},
+    {"id": "p-controls", "measurement": "beatsControls", "operator": "eq", "threshold": true},
+    {"id": "p-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": true},
+    {"id": "p-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": true},
+    {"id": "p-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": true},
+    {"id": "p-scratch", "measurement": "scratchClean", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": false},
+    {"id": "k-clean-parent", "measurement": "cleanParentIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-k", "measurement": "pEqualsK", "operator": "eq", "threshold": false},
+    {"id": "k-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": false},
+    {"id": "k-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": false},
+    {"id": "k-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": false}
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": ["results/cmix_obias_bithead_delta_midas512_ppm0_joint_q0_v3/decision.json"],
+  "generatedUtc": "2026-08-22T21:42:11Z"
+}

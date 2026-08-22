@@ -1,0 +1,123 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_bithead_ftrl512_ppm0_q0_v5",
+  "proposalId": "cmix_obias_bithead_ftrl512_ppm0_q0_v5",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "candidate-gate",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "cmix_obias_bithead_ftrl512_ppm0_q0_v4",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_bithead_ftrl512_ppm0_q0_v4/20260822T220804971601Z_36981afceedb.json",
+      "sha256": "sha256:724c00670428aac24e4dcf181a35a8d6b4f9f427ec1614200f6dd3d8cd5937a1"
+    }
+  },
+  "hypothesis": {
+    "claim": "The unchanged tied rank-8 D treatment lowers exact arithmetic-coded payload relative to P, fully matched K, O, R, and S while preserving exact inverse, package, disk, and memory boundaries.",
+    "falsification": "Reject v4 if C/P or P/K identity fails, D does not beat every control, any inverse/repeat/receipt fails, arithmetic is nonfinite, incremental package exceeds 65,536 bytes, scratch is memory-backed or exceeds 100,000,000,000 bytes, cleanup fails, or process-tree RSS exceeds 9,765,625 KiB."
+  },
+  "changedMechanism": "Make K execute D's complete gradient, curvature, tied reconstruction, logit refresh, clipping, and receipt arithmetic while preserving zero injection; D/O/R/S trajectories are unchanged from v4.",
+  "invariants": [
+    "The external cmix-obias source, model blob, preprocessing, coder, persistent parent updates, and package boundary remain unchanged.",
+    "The adapter used for bit t depends only on probabilities, recurrent state, and truths from bits preceding t in the current 512-bit segment.",
+    "K executes D's full sidecar arithmetic but applies neither gate nor logit correction.",
+    "Native bit-head hidden and cell state reset every 64 coded bits remains unchanged.",
+    "Every arm uses the identical PPM budget-zero residency policy and disk-backed scratch boundary.",
+    "No PRNG, coefficient blob, future truth, encoder-only state, external teacher, or uncounted model is available.",
+    "Exact repeat archive, canonical inverse, package accounting, cleanup, storage, and process-tree RSS receipts are mandatory."
+  ],
+  "controls": [
+    {"id": "C", "role": "comparator", "definition": "Clean external source with PPM0 and disk-backed scratch; no Gamma bit-head overlay."},
+    {"id": "P", "role": "comparator", "definition": "Instrumented parent with no collection or injection."},
+    {"id": "K", "role": "replay", "definition": "Complete D gradient, curvature, tied reconstruction, logit refresh, clipping, and receipt bookkeeping with zero injection."},
+    {"id": "O", "role": "negative", "definition": "Online scalar terminal-logit FTRL correction only."},
+    {"id": "R", "role": "negative", "definition": "D analysis rows reconstructed through orthogonal Walsh rows 9 through 16, plus logit."},
+    {"id": "D", "role": "treatment", "definition": "Tied Walsh rows 1 through 8 analysis and reconstruction, plus logit."},
+    {"id": "S", "role": "shifted", "definition": "Prior-bit residual paired with the current Jacobian, otherwise identical to D."}
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible pipeline",
+    "scopeBytes": 250000,
+    "scopeSymbols": 2000000,
+    "selection": "Opening 250KB joint diagnostic; every larger scope requires a separate prospectively frozen successor.",
+    "coordinate": "Post-preprocessing coded-bit stream in 512-bit segments; adapter update follows each decoder-visible eligible truth and first affects the next bit."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The current bit's exact post-head integer coder probability after it has been used for the range split.",
+      "The current truth only after it has been encoded or decoded.",
+      "Current native bit-head gate activations, output weights, and episodic accumulators.",
+      "Current process-tree RSS and disk-backed PPM state."
+    ],
+    "forbiddenInformation": [
+      "The current truth before prediction or any future truth.",
+      "Encoder-only state, external teachers, uncounted assets, or changed context capacity."
+    ]
+  },
+  "inputs": [
+    {"id": "ftrl-overlay", "path": "programs/cmix_obias_bithead_ftrl512_ppm0_q0_v5/overlay.py", "sha256": "sha256:5c618d156c832192ca636ed63cce98d02ddf1abd26e3ea56d4ab88820708bbe3"},
+    {"id": "ftrl-contract", "path": "programs/cmix_obias_bithead_ftrl512_ppm0_q0_v5/contract.md", "sha256": "sha256:b4e206252a00abb60a52ebcc5ee7d9e9282a77fb9347c3f66ab8861a7fc4c1bf"},
+    {"id": "memory-contract", "path": "programs/cmix_obias_ppm_always_purge_q0_v1/build_contract.json", "sha256": "sha256:83afdd26c94dd9e38278e36ae20761133861eed342a54360248e960f73a4bb9f"},
+    {"id": "disk-scratch-helper", "path": "tools/cmix_obias_disk_scratch.py", "sha256": "sha256:4e29af0a4724a05bc8a1af467c428ed332c287445c991b21aa8bb39dbf829c08"},
+    {"id": "arm-runner", "path": "tools/cmix_obias_bithead_ftrl512_disk_q0_v5.py", "sha256": "sha256:6c3c16460883ab169a1b35ce535736b039f75678f0b0de9f74c17acfee493854"},
+    {"id": "joint-evaluator", "path": "tools/cmix_obias_bithead_ftrl512_joint_disk_q0_v5.py", "sha256": "sha256:034805c466e592652515991f11d07369e0e817bfcfb736969da17bbcde8750a3"},
+    {"id": "disk-correction-contract", "path": "docs/cmix_obias_disk_scratch_correction_v1.md", "sha256": "sha256:06757d9f7a8fb25a602f769f512db6d1e23b37c3b82c4d4d8e608f008633ecd0"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 4079243,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": 4013707
+  },
+  "search": {
+    "expectedTransferRetention": 0.75,
+    "expectedRuntimeRatio": 1.9,
+    "expectedMemoryRatio": 0.9,
+    "uncertaintyRisk": 0.55,
+    "interactionRisk": 0.25
+  },
+  "measurements": [
+    {"id": "roundtripExact", "definition": "Every arm restores the exact frozen population.", "unit": "boolean"},
+    {"id": "repeatArchiveIdentity", "definition": "Every arm repeats payload and archive byte-identically.", "unit": "boolean"},
+    {"id": "cleanParentIdentity", "definition": "C and P payload bytes are identical.", "unit": "boolean"},
+    {"id": "pEqualsK", "definition": "P and K probability, state, and payload receipts are identical.", "unit": "boolean"},
+    {"id": "beatsControls", "definition": "D payload is smaller than P, K, O, R, and S.", "unit": "boolean"},
+    {"id": "finiteAdapter", "definition": "All adapter receipts are finite and active controls are nonzero.", "unit": "boolean"},
+    {"id": "peakRssWithinGuard", "definition": "Every process-tree peak is at most 9,765,625 KiB.", "unit": "boolean"},
+    {"id": "diskScratchWithinGuard", "definition": "Every arm uses non-memory-backed scratch with peak allocation from zero through 100,000,000,000 bytes.", "unit": "boolean"},
+    {"id": "packageWithinCeiling", "definition": "Incremental required package bytes are at most 65,536.", "unit": "boolean"},
+    {"id": "scratchClean", "definition": "All bounded scratch is removed after terminal receipts.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "repeatArchiveIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-clean-parent", "measurement": "cleanParentIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-k", "measurement": "pEqualsK", "operator": "eq", "threshold": true},
+    {"id": "p-controls", "measurement": "beatsControls", "operator": "eq", "threshold": true},
+    {"id": "p-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": true},
+    {"id": "p-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": true},
+    {"id": "p-disk", "measurement": "diskScratchWithinGuard", "operator": "eq", "threshold": true},
+    {"id": "p-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": true},
+    {"id": "p-scratch", "measurement": "scratchClean", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": false},
+    {"id": "k-clean-parent", "measurement": "cleanParentIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-k", "measurement": "pEqualsK", "operator": "eq", "threshold": false},
+    {"id": "k-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": false},
+    {"id": "k-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": false},
+    {"id": "k-disk", "measurement": "diskScratchWithinGuard", "operator": "eq", "threshold": false},
+    {"id": "k-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": false}
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": ["results/cmix_obias_bithead_ftrl512_ppm0_joint_disk_q0_v4/decision.json"],
+  "generatedUtc": "2026-08-22T22:11:22Z"
+}

@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-22",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+    "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2"
+  ],
+  "description": "Production layer-19 pre-softmax score-input and score-adjoint source oracle with complete replay and fixture controls.",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A zero-valued marked probe immediately before the layer-19 attention softmax captures complete, live, deterministic BF16 score inputs and score adjoints without changing production fixture payloads.",
+  "id": "nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v1",
+  "measured": {},
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v2.json",
+      "sha256": "sha256:af46a8014fb67ec6b1f31d4e3fe74cd92d2953e6a8472bdbdeaf2a07de84db8e"
+    },
+    "interfaces_exposed": [
+      "production pre-softmax layer-19 attention score boundary -> complete BF16 score input and score-adjoint oracle"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+    "proposal_id": "nncp_libnc_top_attention_softmax_input_adjoint_oracle_64_q0_v1",
+    "retired_neighborhoods": [
+      "Inferring dS from dP without an independently captured source score adjoint",
+      "Binding the score-oracle experiment to the pre-product w_o parent rather than the exact product-oracle revision"
+    ]
+  },
+  "parent": "nncp_libnc_top_attention_product_oracle_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Run only after Arm B terminalizes and the already frozen open probability-adjoint gate completes; grant zero compression credit and authorize open softmax backward only on exact complete source capture."
+}

@@ -1,0 +1,47 @@
+{
+  "candidate_id": "cmix_obias_ppm_always_purge_q0_v1",
+  "claimed_at": "2026-08-22T21:36:50+00:00",
+  "created_at": "2026-08-22T21:45:00+00:00",
+  "developed_at": "2026-08-22T21:36:50+00:00",
+  "evidence": [
+    {
+      "path": "docs/cmix_obias_ppm_always_purge_q0_v1_contract.md",
+      "sha256": "sha256:44907dc576d3522f573c8de1b46696888c55ab15cd45144e545269e83bc19590"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_ppm_always_purge_q0_v1.json",
+    "sha256": "sha256:b411c36830711c4aa9ff3bf4f33de65d4ff764c2de7205d03378477278db6602"
+  },
+  "hypothesis": "Setting the existing file-backed PPM residency budget to zero preserves exact payload bytes while reducing process-tree RSS below the strict limit.",
+  "interfaces_exposed": [
+    "file-backed PPM page residency policy -> exact state with bounded RSS"
+  ],
+  "kill_condition": "Any payload/probability mismatch, invalid inverse, nondeterminism, package overflow, scratch leak, or RSS violation rejects this infrastructure candidate.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-openai-20260822",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1603,
+  "promotion_condition": "Exact matched payload/probability identity plus strict process-tree RSS compliance before any larger correction-only replay.",
+  "proposal_id": "cmix_obias_ppm_always_purge_q0_v1",
+  "retired_neighborhoods": [
+    "Changing context capacity, collision policy, or model state to reduce memory."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1603,
+  "state": "developed",
+  "title": "cmix-obias exact PPM always-purge memory policy"
+}

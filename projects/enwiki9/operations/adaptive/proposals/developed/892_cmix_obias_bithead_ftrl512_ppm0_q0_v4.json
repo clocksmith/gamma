@@ -1,0 +1,45 @@
+{
+  "candidate_id": "cmix_obias_bithead_ftrl512_ppm0_q0_v4",
+  "claimed_at": "2026-08-22T22:08:04+00:00",
+  "created_at": "2026-08-22T22:07:47+00:00",
+  "developed_at": "2026-08-22T22:08:05+00:00",
+  "evidence": [
+    {
+      "path": "programs/cmix_obias_bithead_ftrl512_ppm0_q0_v4/contract.md",
+      "sha256": "sha256:699dd269fe55b99f7f7d853fff012057f7d561565fa30704882d2dcfee6e856a"
+    }
+  ],
+  "expected_savings_bytes": 4079243,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_bithead_ftrl512_ppm0_q0_v4.json",
+    "sha256": "sha256:9c938a996e7b1a596b4bb2b4758cc2f0e9f2b5e15a36ecc2165b6255246f3eca"
+  },
+  "hypothesis": "The tied rank-8 D arm's strictly causal next-bit FTRL update lowers exact arithmetic-coded payload relative to P, K, O, R, and S while preserving exact inverse, package, disk, and memory boundaries.",
+  "interfaces_exposed": [
+    "32-cell terminal bit-head input/candidate preactivations and terminal logit; 512-coded-bit episodic reset; post-truth next-bit update."
+  ],
+  "kill_condition": "Kill on any inverse, repeat, synchronization, identity, finite-arithmetic, disk, RSS, package, cleanup, or D-versus-control failure.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "gamma",
+  "parent": "cmix_obias_bithead_delta_midas512_ppm0_q0_v3",
+  "parent_proposal_id": null,
+  "priority": 92,
+  "promotion_condition": "Promote only if every 250KB arm roundtrips and repeats exactly, C=P, P=K in probability/state/payload, D beats P/K/O/R/S, all controls are live and finite, disk/RSS/package/cleanup gates pass.",
+  "proposal_id": "cmix_obias_bithead_ftrl512_ppm0_q0_v4",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 107,
+  "state": "developed",
+  "title": "Decoder-synchronized online FTRL bit-head adapter"
+}

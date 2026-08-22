@@ -1,0 +1,123 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_bithead_delta_midas512_q0_v2",
+  "proposalId": "cmix_obias_bithead_delta_midas512_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "candidate-gate",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "A rank-8 decoder-synchronized projected local gradient collected over coded bits 0-255 lowers second-half code length when injected into the terminal bit-LSTM input/candidate preactivations and logit.",
+    "falsification": "Reject v2 if P differs from the clean parent payload, K differs from P probabilities/state/payload, D fails exact inversion or fails to beat P/K/O/R/S, any control is dead, or any resource/package gate fails."
+  },
+  "changedMechanism": "Gamma-owned 512-coded-bit episodic Q20 projected-gradient sidecar on the external 32-cell terminal bit LSTM; exact realization is bound by the contract input.",
+  "invariants": [
+    "No future truth, external teacher, stored side channel, or encoder-only state.",
+    "Native 64-coded-bit recurrent resets and all parent updates remain at their original call sites.",
+    "Only i/g preactivations and the additive terminal logit can be injected.",
+    "Other parent predictor, optimizer, recurrent, feature, preprocessing, and coder state remains unchanged.",
+    "Exact canonical inverse and repeat archive identity are mandatory.",
+    "Process-tree peak RSS must remain below 9,765,625 KiB."
+  ],
+  "controls": [
+    {"id": "P", "role": "comparator", "definition": "Instrumented parent, no eligibility or injection."},
+    {"id": "K", "role": "replay", "definition": "Complete eligibility and receipt bookkeeping, zero injection."},
+    {"id": "O", "role": "negative", "definition": "Current-segment terminal-logit update only."},
+    {"id": "R", "role": "negative", "definition": "Current gradient reconstructed through orthogonal Walsh rows plus the matched logit update."},
+    {"id": "D", "role": "treatment", "definition": "Current gradient reconstructed through the tied Walsh transpose plus the matched logit update."},
+    {"id": "S", "role": "shifted", "definition": "Prior segment's tied gate and logit gradient applied to the current second half."}
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible pipeline",
+    "scopeBytes": 250000,
+    "scopeSymbols": 2000000,
+    "selection": "Opening 250KB diagnostic; later scopes require separate prospectively frozen successors.",
+    "coordinate": "Post-preprocessing CMIX coded-bit stream in 512-bit segments with a 256-bit midpoint."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Post-head integer coder probabilities and coded truths at segment phases 0 through 255.",
+      "Current native bit-head gate activations and output weights.",
+      "The frozen Q20 Walsh projection, clipping, reset, and injection contract."
+    ],
+    "forbiddenInformation": [
+      "Any truth at segment phase 256 or later before that bit is decoded.",
+      "Encoder-only state, external teacher output, future bytes, or stored side channels."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "external-parent-descriptor",
+      "path": "programs/cmix_obias_source_1m_roundtrip_qm3_v1/program.py",
+      "sha256": "sha256:9529c4552432f4abfe4003911abf7c252a450065c2ece63e9d179e2e5109ec21"
+    },
+    {
+      "id": "gamma-overlay",
+      "path": "programs/cmix_obias_bithead_delta_midas512_q0_v2/overlay.py",
+      "sha256": "sha256:243a2de75c4f256604bc0e5540862272c7e1b4410a02e69a30b55b275c8343c7"
+    },
+    {
+      "id": "realization-contract",
+      "path": "docs/cmix_obias_bithead_delta_midas512_q0_v2_contract.md",
+      "sha256": "sha256:d090dffb7645338b57bcf200b05fab0fef4d9d9a5c96fcd9381d9fd96c67df28"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 4079243,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": 4013707
+  },
+  "search": {
+    "expectedTransferRetention": 0.85,
+    "expectedRuntimeRatio": 1.10,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.45,
+    "interactionRisk": 0.35
+  },
+  "measurements": [
+    {"id": "roundtripExact", "definition": "Restored bytes exactly equal the frozen opening population.", "unit": "boolean"},
+    {"id": "repeatArchiveIdentity", "definition": "Two independent encodes produce byte-identical payload and archive artifacts.", "unit": "boolean"},
+    {"id": "parentPayloadIdentity", "definition": "P payload equals the clean source-built parent payload for the same population.", "unit": "boolean"},
+    {"id": "pEqualsKProbabilityHash", "definition": "P and K return identical integer coder-probability receipt hashes.", "unit": "boolean"},
+    {"id": "pEqualsKStateHash", "definition": "P and K produce identical sampled terminal-head recurrent-state receipt hashes.", "unit": "boolean"},
+    {"id": "grossSavingsBytes", "definition": "P counted bytes minus D counted bytes under matched package accounting.", "unit": "bytes"},
+    {"id": "beatsP_K_O_R_S", "definition": "D counted bytes are lower than every matched control.", "unit": "boolean"},
+    {"id": "finiteAdapter", "definition": "Treatment receipt reports finite arithmetic and bounded Q20 injection.", "unit": "boolean"},
+    {"id": "peakRssWithinGuard", "definition": "Every process-tree peak is below 9,765,625 KiB.", "unit": "boolean"},
+    {"id": "packageWithinCeiling", "definition": "Incremental required package material is at most 65,536 bytes.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "repeatArchiveIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-parent", "measurement": "parentPayloadIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-k-prob", "measurement": "pEqualsKProbabilityHash", "operator": "eq", "threshold": true},
+    {"id": "p-k-state", "measurement": "pEqualsKStateHash", "operator": "eq", "threshold": true},
+    {"id": "p-controls", "measurement": "beatsP_K_O_R_S", "operator": "eq", "threshold": true},
+    {"id": "p-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": true},
+    {"id": "p-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": true},
+    {"id": "p-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-roundtrip", "measurement": "roundtripExact", "operator": "eq", "threshold": false},
+    {"id": "k-parent", "measurement": "parentPayloadIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-k-prob", "measurement": "pEqualsKProbabilityHash", "operator": "eq", "threshold": false},
+    {"id": "k-k-state", "measurement": "pEqualsKStateHash", "operator": "eq", "threshold": false},
+    {"id": "k-finite", "measurement": "finiteAdapter", "operator": "eq", "threshold": false},
+    {"id": "k-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": false},
+    {"id": "k-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": false}
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/cmix_obias_bithead_delta_midas512_joint_q0_v2/decision.json"
+  ],
+  "generatedUtc": "2026-08-22T21:20:00Z"
+}

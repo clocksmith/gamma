@@ -1,0 +1,168 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_ppm_disk_joint_q0_v3",
+  "proposalId": "cmix_obias_ppm_always_purge_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "On the frozen opening 250,000-byte population, setting the existing file-backed PPM residency budget to zero preserves exact clean-control payload bytes while moving scratch to a non-memory-backed filesystem and satisfying resource, inverse, repeat, package, and cleanup gates.",
+    "falsification": "Reject if either arm lacks a valid terminal receipt, inverse or repeat fails, payload byte count/SHA-256/direct comparison differs, PPM0 is not the only treatment definition, scratch is memory-backed, any process tree exceeds 9,765,625 KiB, allocated scratch exceeds 100,000,000,000 bytes, package delta exceeds 65,536 bytes, or cleanup is incomplete."
+  },
+  "changedMechanism": "Infrastructure-only: compare a clean disk-scratch build against CMIX_PPMD_RSS_BUDGET_MB=0ULL, which evicts the unchanged file-backed PPM mapping at the existing check interval.",
+  "invariants": [
+    "No context capacity, replacement policy, state byte, probability, preprocessing step, or arithmetic-coder operation changes.",
+    "The clean and PPM0 arms use the same source revision, corpus prefix, toolchain family, package boundary, disk helper, and runner accounting.",
+    "Encoder, repeat encoder, and bare decoder use the same arm-specific executable and residency policy.",
+    "Payload identity requires byte count, SHA-256, and direct durable-file byte comparison; equal size alone is insufficient.",
+    "Scratch must be mounted on neither tmpfs nor ramfs.",
+    "Every missing receipt or decision field fails closed.",
+    "This experiment earns zero compression and objective credit."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Matched clean non-PGO source build with the parent PPM residency policy and disk-backed scratch."
+    },
+    {
+      "id": "N",
+      "role": "treatment",
+      "definition": "Matched source build with CMIX_PPMD_RSS_BUDGET_MB=0ULL and disk-backed scratch."
+    }
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible pipeline",
+    "scopeBytes": 250000,
+    "scopeSymbols": 2000000,
+    "selection": "Frozen opening 250KB infrastructure diagnostic; larger populations require separately frozen contracts.",
+    "coordinate": "Complete cmix-obias pipeline with matched clean and PPM0 source builds."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Current process RSS and the existing fixed PPM purge check.",
+      "The file-backed PPM heap containing decoder-visible modeled state.",
+      "Disk mount metadata and allocated scratch accounting."
+    ],
+    "forbiddenInformation": [
+      "Future corpus symbols or encoder-only model state.",
+      "Any context-table capacity, modeled-state, probability, or coder change.",
+      "Memory-backed scratch represented as disk compliance."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "clean-disk-runner",
+      "path": "tools/cmix_obias_ppm_clean_250k_disk_q0_v1.py",
+      "sha256": "sha256:26c5858bcd036b574618ddb367ed565b948045e2dd50652535695af00e723751"
+    },
+    {
+      "id": "ppm0-disk-runner",
+      "path": "tools/cmix_obias_ppm_always_purge_250k_disk_q0_v2.py",
+      "sha256": "sha256:1ca9f2d978b45a1ff30b638ffe3ddbb2fe9e68070f2b59de194048ebe4173c39"
+    },
+    {
+      "id": "joint-evaluator",
+      "path": "tools/cmix_obias_ppm_disk_joint_q0_v3.py",
+      "sha256": "sha256:dbc171b46b55acd3514df925d8908c1922739ac1e699616db1ca28cd0248b8e1"
+    },
+    {
+      "id": "disk-scratch-helper",
+      "path": "tools/cmix_obias_disk_scratch.py",
+      "sha256": "sha256:4e29af0a4724a05bc8a1af467c428ed332c287445c991b21aa8bb39dbf829c08"
+    },
+    {
+      "id": "scientific-contract",
+      "path": "docs/cmix_obias_ppm_disk_joint_q0_v3_contract.md",
+      "sha256": "sha256:665cad1030685d4300f82b7b56817b1e4e0f477e4fc6aea3e5e953ad4c2d67b8"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.5,
+    "expectedMemoryRatio": 0.9,
+    "uncertaintyRisk": 0.2,
+    "interactionRisk": 0.05
+  },
+  "measurements": [
+    {
+      "id": "bothRoundtripExact",
+      "definition": "Clean and PPM0 restored bytes exactly equal the frozen population.",
+      "unit": "boolean"
+    },
+    {
+      "id": "bothRepeatPayloadIdentity",
+      "definition": "Each arm's repeated encode produces identical durable payload bytes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "treatmentPayloadIdentityToClean",
+      "definition": "Clean and PPM0 durable payload byte counts and SHA-256 values match and direct chunked comparison is byte-equal.",
+      "unit": "boolean"
+    },
+    {
+      "id": "treatmentDefinitionExact",
+      "definition": "The only treatment compile definition is CMIX_PPMD_RSS_BUDGET_MB=0ULL.",
+      "unit": "boolean"
+    },
+    {
+      "id": "diskScratchBound",
+      "definition": "Every scratch path is non-memory-backed and allocated scratch never exceeds 100,000,000,000 bytes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "peakRssWithinGuard",
+      "definition": "Every observed process-tree peak RSS is at most 9,765,625 KiB.",
+      "unit": "boolean"
+    },
+    {
+      "id": "packageWithinCeiling",
+      "definition": "PPM0 incremental required package bytes are at most 65,536.",
+      "unit": "boolean"
+    },
+    {
+      "id": "scratchClean",
+      "definition": "All bounded scratch is removed and zero attributable bytes remain after cleanup.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {"id": "p-roundtrip", "measurement": "bothRoundtripExact", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "bothRepeatPayloadIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-payload", "measurement": "treatmentPayloadIdentityToClean", "operator": "eq", "threshold": true},
+    {"id": "p-definition", "measurement": "treatmentDefinitionExact", "operator": "eq", "threshold": true},
+    {"id": "p-disk", "measurement": "diskScratchBound", "operator": "eq", "threshold": true},
+    {"id": "p-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": true},
+    {"id": "p-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": true},
+    {"id": "p-clean", "measurement": "scratchClean", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-roundtrip", "measurement": "bothRoundtripExact", "operator": "eq", "threshold": false},
+    {"id": "k-payload", "measurement": "treatmentPayloadIdentityToClean", "operator": "eq", "threshold": false},
+    {"id": "k-definition", "measurement": "treatmentDefinitionExact", "operator": "eq", "threshold": false},
+    {"id": "k-disk", "measurement": "diskScratchBound", "operator": "eq", "threshold": false},
+    {"id": "k-rss", "measurement": "peakRssWithinGuard", "operator": "eq", "threshold": false},
+    {"id": "k-package", "measurement": "packageWithinCeiling", "operator": "eq", "threshold": false},
+    {"id": "k-clean", "measurement": "scratchClean", "operator": "eq", "threshold": false}
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/cmix_obias_ppm_disk_joint_q0_v3/decision.json"
+  ],
+  "generatedUtc": "2026-08-22T22:27:30.355Z"
+}
