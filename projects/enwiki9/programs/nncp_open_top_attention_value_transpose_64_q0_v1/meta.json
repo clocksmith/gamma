@@ -1,0 +1,29 @@
+{
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "nncp_open_concat_head_identity_64_q0_v1",
+    "nncp_open_w_o_input_adjoint_block128_64_q0_v1"
+  ],
+  "description": "LibNC-free exact layer-19 value-attention transpose",
+  "family": "nncp_update_schedule",
+  "hypothesis": "A LibNC-free 128-feature AVX2 FMA transpose over the exact open layer-19 value state and attended adjoint reproduces all 5,242,880 source probability-adjoint BF16 words, while stream-major and sign-negated controls differ.",
+  "id": "nncp_open_top_attention_value_transpose_64_q0_v1",
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_attention_value_transpose_64_q0_v1.json",
+      "sha256": "sha256:d7a4a4ce592be614fe1a44e44545e0c551a45bc5f03e512f5dc05ec97ae06931"
+    },
+    "interfaces_exposed": [
+      "exact open value state plus attended adjoint -> source-coordinate probability adjoint"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "proposal_id": "nncp_open_top_attention_value_transpose_64_q0_v1",
+    "retired_neighborhoods": [
+      "Unvalidated transfer of generic transpose arithmetic or alternate tensor layouts to layer-19 attention."
+    ]
+  },
+  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1"
+}
