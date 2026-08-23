@@ -1,0 +1,37 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v2",
+  "experimentId": "cmix_obias_full_midpoint_oracle64_q0_v1",
+  "proposalId": "cmix_obias_full_midpoint_oracle64_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle-ceiling",
+  "objectiveCreditBytes": 0,
+  "question": "Does the actual CMIX parent contain target-scale causal value from an extra midpoint learning operation?",
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Unchanged memory-safe parent."
+    },
+    {
+      "id": "K",
+      "role": "replay",
+      "definition": "Bookkeeping/replay without midpoint update."
+    },
+    {
+      "id": "F",
+      "role": "oracle",
+      "definition": "Full admissible CMIX midpoint update."
+    },
+    {
+      "id": "S",
+      "role": "shifted",
+      "definition": "Causally misaligned full midpoint update."
+    }
+  ],
+  "scopes": [
+    250000,
+    1000000,
+    10000000
+  ]
+}

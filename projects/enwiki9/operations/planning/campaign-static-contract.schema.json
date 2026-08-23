@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "campaign-static-contract.schema.json",
+  "title": "Gamma enwik9 dormant campaign artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "artifact_id",
+    "revision",
+    "operational_status",
+    "claim_authority",
+    "objective",
+    "dependencies",
+    "contract",
+    "activation_requirements",
+    "claim_boundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "campaign-static-contract.schema.json"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "operational_status": {
+      "enum": [
+        "design_only",
+        "dormant_dependency",
+        "superseded_before_execution"
+      ]
+    },
+    "claim_authority": {
+      "const": "none"
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id", "corpus_bytes", "target_complete_counted_bytes"],
+      "properties": {
+        "objective_id": {"const": "gamma-enwik9-hutter-105m-v1"},
+        "corpus_bytes": {"const": 1000000000},
+        "target_complete_counted_bytes": {"const": 105000000}
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact", "required_evidence"],
+        "properties": {
+          "artifact": {"type": "string", "minLength": 1},
+          "required_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "contract": {
+      "type": "object"
+    },
+    "activation_requirements": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "claim_boundary": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

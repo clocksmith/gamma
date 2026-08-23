@@ -1,0 +1,84 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_deep_delta_midas64_q0_v2",
+  "revision": 2,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_memory_safe_parent_q0_v1",
+      "required_evidence": "exact memory-compliant parent receipt"
+    },
+    {
+      "artifact": "cmix_obias_full_midpoint_oracle64_q0_v1",
+      "required_evidence": "target-scale F-over-P gain with causal S control"
+    }
+  ],
+  "contract": {
+    "segment_bytes": 64,
+    "first_half_bit_events": 256,
+    "selected_cells": 32,
+    "adapter_rank": 8,
+    "coder_residual": "r_code[t] = y[t] - c[t] / C, where c[t] and C are the exact integer arithmetic-coder probability inputs",
+    "gradient_interpretation": "straight-through causal eligibility signal, not the exact derivative of the quantized coder",
+    "sensitivities": [
+      "s_i[t] = partial parent_prequantization_logit[t] / partial input_gate_preactivation[0:32,t]",
+      "s_z[t] = partial parent_prequantization_logit[t] / partial candidate_gate_preactivation[0:32,t]"
+    ],
+    "dimensions": {
+      "B_i": "8x32",
+      "B_z": "8x32",
+      "B_phi": "8x32",
+      "w_l": "8",
+      "m": "8",
+      "a": "8"
+    },
+    "eligibility": "e[t] = B_i * (r_code[t] * s_i[t]) + B_z * (r_code[t] * s_z[t])",
+    "midpoint_state": "m = clip(sum(e[t], t=0..255), -2, 2)",
+    "second_half_adapter": [
+      "a[u] = (B_phi * phi[u]) elementwise_mul m",
+      "delta_g_i[u] = eta_i * transpose(B_i) * a[u]",
+      "delta_g_z[u] = eta_z * transpose(B_z) * a[u]",
+      "delta_logit[u] = eta_l * dot(w_l, a[u])"
+    ],
+    "arms": {
+      "P": "original memory-safe parent",
+      "K": "compute all residual, sensitivity, feature, eligibility, and adapter state but inject zero",
+      "O": "inject delta_logit only",
+      "R": "inject through independent matched-norm random reconstruction maps",
+      "D": "inject through tied transpose B_i and B_z reconstruction maps",
+      "S": "use D with a frozen causal permutation of first-half event associations"
+    },
+    "unchanged_state": "cells 32:256, forget gates, output gates, and all unselected arithmetic receive zero injection",
+    "parent_update_invariant": "ordinary persistent CMIX updates continue at exactly their original call sites and cadence",
+    "reset_invariant": "byte 64 clears episodic state only",
+    "maximum_added_package_bytes": 65536,
+    "design_target_added_package_bytes": 4096,
+    "unbound_fields_that_block_activation": [
+      "exact 32 feature taps and normalization",
+      "exact source-level sensitivity formulas",
+      "residual quantizer and clip law",
+      "coefficient generation or fitted coefficient digests",
+      "FP32 accumulation order and conversion rules",
+      "FMA, FTZ, DAZ, and rounding policy",
+      "exact gate and logit injection symbols",
+      "S-arm permutation",
+      "block reset ordering"
+    ]
+  },
+  "activation_requirements": [
+    "Every unbound field is frozen byte-for-byte in a new executable experiment contract",
+    "P/K identity is established before any treatment result is interpreted",
+    "The finite-coder package ceiling and resource guard are bound to the invocation"
+  ],
+  "claim_boundary": [
+    "v2 is a dormant mathematical design and has produced no archive",
+    "Random reconstruction is control R and cannot represent target-bearing D",
+    "No projected gain is treated as measured savings"
+  ]
+}

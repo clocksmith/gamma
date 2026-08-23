@@ -1,0 +1,117 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v2",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_deep_delta_midas64_q0_v2",
+  "proposalId": "cmix_obias_deep_delta_midas64_q0_v2",
+  "operational_status": "dormant_dependency",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "candidate-gate",
+  "objectiveCreditBytes": 0,
+  "activation_dependencies": [
+    "memory_safe_cmix_parent_receipt",
+    "cmix_full_midpoint_oracle_pass",
+    "candidate_revision_verified",
+    "complete_numerical_contract_frozen",
+    "validated_p_k_synchronization_harness"
+  ],
+  "hypothesis": {
+    "claim": "Straight-through causal eligibility adaptation on 64-byte blocks (accumulating errors over bytes 0-31 and adapting Byte-LSTM preactivations via tied transpose projection for bytes 32-63) achieves net compression gain over memory-safe parent while preserving exact roundtrip.",
+    "falsification": "Retire candidate if D fails to beat P, fails to beat random control R or shifted control S, or misses the required gross savings ladder."
+  },
+  "mathematical_specification": {
+    "residual": "r_t_code = y_t - (c_t / C)",
+    "sensitivities": "s_i_t = d_ell_t / d_g_i_t, s_z_t = d_ell_t / d_g_z_t",
+    "projections": {
+      "B_i": "8x32 FP32",
+      "B_z": "8x32 FP32",
+      "B_phi": "8x32 FP32",
+      "U_l": "1x8 FP32"
+    },
+    "eligibility_event": "e_t = B_i * (r_t_code * s_i_t) + B_z * (r_t_code * s_z_t)",
+    "midpoint_state": "m = clip_{[-2, 2]}(sum_{t=0}^{255} e_t) in R^8",
+    "second_half_adapter": "a_u = (B_phi * phi_u) odot m",
+    "preactivation_injection": {
+      "delta_g_i_u": "eta_i * B_i^T * a_u",
+      "delta_g_z_u": "eta_z * B_z^T * a_u",
+      "delta_ell_u": "eta_ell * w_ell^T * a_u"
+    },
+    "injection_sites": "Before LSTM activation nonlinearities (preactivations only); cell state c_u updated through ordinary recurrent transition."
+  },
+  "controls": [
+    {
+      "id": "P",
+      "role": "parent",
+      "definition": "Original memory-safe CMIX parent."
+    },
+    {
+      "id": "K",
+      "role": "replay",
+      "definition": "Computes all features, sensitivities, residuals, and state m, but injects zero (P === K exact bit match)."
+    },
+    {
+      "id": "O",
+      "role": "output_logit",
+      "definition": "Injects only delta_ell_u into top mixer."
+    },
+    {
+      "id": "R",
+      "role": "random_reconstruction",
+      "definition": "Injects through independent matched-norm random maps."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Injects through tied B_i^T and B_z^T transpose maps."
+    },
+    {
+      "id": "S",
+      "role": "shifted_control",
+      "definition": "Uses identical D machinery but with frozen causal permutation of first-half event associations."
+    }
+  ],
+  "economic_gates": {
+    "required_gross_savings_bytes": 4079243,
+    "ladder": [
+      {
+        "scope_bytes": 250000,
+        "name": "250K Diagnostic",
+        "target_gross_bytes": 1020,
+        "hard": false
+      },
+      {
+        "scope_bytes": 1000000,
+        "name": "1M Calibration",
+        "target_gross_bytes": 4080,
+        "hard": false
+      },
+      {
+        "scope_bytes": 10000000,
+        "name": "10M First Economic Gate",
+        "target_gross_bytes": 40793,
+        "hard": true
+      },
+      {
+        "scope_bytes": 100000000,
+        "name": "100M Mandatory Gate",
+        "target_gross_bytes": 407925,
+        "hard": true
+      },
+      {
+        "scope_bytes": 1000000000,
+        "name": "1GB Final Canonical Objective",
+        "target_gross_bytes": 4079243,
+        "hard": true
+      }
+    ],
+    "hard_max_added_package_bytes": 65536,
+    "design_target_added_package_bytes": 4096
+  }
+}

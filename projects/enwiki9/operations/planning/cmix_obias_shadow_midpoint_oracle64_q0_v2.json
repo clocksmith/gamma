@@ -1,0 +1,180 @@
+{
+  "schema": "gamma.enwiki9.cmix-shadow-midpoint-oracle-contract.v2",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "title": "CMIX-native 32-event truncated-BPTT midpoint oracle with deterministic state rebuild",
+  "role": "oracle_only",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "target_complete_counted_bytes": 105000000,
+    "corpus_bytes": 1000000000,
+    "corpus_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "claim": "Test whether one additional source-defined deep CMIX learning operation after each causally decoded 32-byte first half produces target-scale arithmetic archive gain. This oracle does not claim that a compact adapter preserves that gain.",
+  "non_claims": [
+    "The operation is not an unchanged donor update because the donor horizon is 128 events.",
+    "NNCP full-minus-output evidence is motivation, not CMIX transfer evidence.",
+    "Diagnostic or ideal-bit gains earn no score credit.",
+    "This contract is not a prize package."
+  ],
+  "parent": {
+    "candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+    "requirements": [
+      "probability_identity_pass",
+      "payload_identity_pass",
+      "archive_identity_pass",
+      "raw_inverse_pass",
+      "memory_pass_under_9765625_KiB",
+      "clean_build_receipt_pass"
+    ]
+  },
+  "activation_dependencies": [
+    "cmix_obias_source_full1g_roundtrip_b_qm0_v1 is terminal and the exclusive_full1g lease is absent",
+    "cmix_obias_memory_safe_parent_q0_v1 has a terminal qualifying receipt",
+    "the v2 implementation build is content addressed",
+    "P and K pass exact synchronization on a synthetic fixture"
+  ],
+  "independent_of": [
+    "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+    "all closed LibNC runtime artifacts"
+  ],
+  "source_facts": {
+    "byte_mixer_perceive_cadence": "one call per decoded byte",
+    "donor_lstm_horizon_events": 128,
+    "donor_update_entry": "epoch_ == 0",
+    "donor_update_order": [
+      "ComputeOutputBptt",
+      "reverse layer BackwardPass traversal",
+      "ApplyOutputUpdates"
+    ],
+    "midpoint_events_available": 32
+  },
+  "population": {
+    "segment_bytes": 64,
+    "first_half_bytes": 32,
+    "second_half_bytes": 32,
+    "midpoint_after_byte_count": 32,
+    "scopes_bytes": [
+      250000,
+      1000000,
+      10000000
+    ],
+    "opening_scope_only_until_transfer_authorized": true
+  },
+  "arms": {
+    "P": {
+      "name": "parent",
+      "semantics": "Execute the qualified memory-safe parent without oracle collection, extra update, or replay."
+    },
+    "K": {
+      "name": "bookkeeping_identity",
+      "semantics": "Collect every F cache and compute the complete 32-event update into detached write-suppressed buffers. Rebuild with unchanged parameters. Commit no parameter, optimizer, gradient, or trajectory delta.",
+      "required_identity": "Every integer probability, coder state, payload byte, persistent state hash, archive byte, and inverse byte equals P."
+    },
+    "F": {
+      "name": "full_truncated_midpoint_update",
+      "semantics": "At each midpoint, apply the frozen 32-event truncated-BPTT update to live Byte-LSTM trainable parameters and optimizer state, rebuild the recurrent trajectory, and continue ordinary parent execution."
+    },
+    "S": {
+      "name": "causally_misaligned_full_update",
+      "semantics": "Execute F with the 32 first-half native target associations rotated by exactly 16 events modulo 32 while preserving caches, target multiset, arithmetic, write set, update order, and compute shape."
+    }
+  },
+  "first_half_collection": {
+    "events": "bytes 0 through 31 inclusive",
+    "inputs": "Cache the exact Byte-LSTM input vector supplied by the parent at each event.",
+    "targets": "Cache the exact native Byte-LSTM target used by ComputeOutputBptt after that byte is decoded.",
+    "forward_cache": "Retain all native layer activations, recurrent states, output activations, ring indices, and loss inputs required by donor backward equations.",
+    "causality": "All cached inputs and targets are decoder-visible before the midpoint."
+  },
+  "midpoint_update": {
+    "window_events": 32,
+    "loss": "The exact native Byte-LSTM output objective and target representation used by ComputeOutputBptt.",
+    "output_backward": "Run donor ComputeOutputBptt equations over only the 32 cached events.",
+    "recurrent_backward": "Traverse events 31 down to 0 and layers in the donor reverse order using donor BackwardPass equations.",
+    "boundary": "Set temporal adjoints entering after event 31 and before event 0 to exact zero; the segment-start recurrent state is a stop-gradient boundary.",
+    "normalization": "Preserve every donor gradient scale, clip, epsilon, decay, learning-rate, and update expression. Change only the event loop bound from 128 to 32; apply no 128/32 rescaling.",
+    "write_order": "Preserve donor parameter enumeration and update order: output gradient construction, reverse recurrent layer updates, then output updates.",
+    "optimizer": "F and S write the live donor optimizer moments and increment the corresponding live optimizer step exactly once per midpoint. K performs identical arithmetic in detached buffers and discards it.",
+    "parameter_closure": "All Byte-LSTM parameters and output parameters touched by the donor 128-event update are touched by the 32-event oracle update; no mixer, SSE, context-model, preprocessor, or coder parameter is added to this update."
+  },
+  "state_rebuild": {
+    "snapshot": "At byte 0 of each segment, retain the Byte-LSTM recurrent hidden state, cell state, recurrent input state, ring cursor, and the empty destination cache slots for the next 32 events.",
+    "after_update": "Restore only the segment-start recurrent dynamic state and ring cursor. Do not restore updated parameters or optimizer state.",
+    "replay_inputs": "Replay the 32 cached Byte-LSTM input vectors in original order under the updated F or S parameters.",
+    "disabled_during_replay": [
+      "arithmetic coder emission",
+      "top-level probability production",
+      "context-model mutation",
+      "mixer and SSE mutation",
+      "loss accumulation",
+      "gradient accumulation",
+      "optimizer updates"
+    ],
+    "committed_from_replay": "Commit rebuilt hidden states, cell states, recurrent dynamic state, ring cursor, and recurrent forward-cache slots. Retain original decoded targets in the corresponding slots.",
+    "already_coded_prefix": "Never recode or revise first-half arithmetic decisions.",
+    "persistence": "The added update, optimizer state, rebuilt trajectory, and ordinary downstream parent updates remain live after byte 64. No episodic reset is performed.",
+    "native_cadence": "Every ordinary parent update remains at its original source call site and cadence. The oracle adds one separately identified midpoint update; it does not defer, duplicate, or relocate an ordinary call."
+  },
+  "numeric_contract": {
+    "reference": "scalar source-order execution",
+    "thread_count": 1,
+    "rounding_mode": "FE_TONEAREST",
+    "fast_math": false,
+    "fma_contraction": false,
+    "ftz": false,
+    "daz": false,
+    "reduction_order": "event descending, donor layer descending, donor parameter enumeration",
+    "libm_new_dependencies": "forbidden",
+    "non_finite_policy": "abort before coder use and retain receipt"
+  },
+  "synchronization": {
+    "boundary_bytes": 64,
+    "rolling_hashes": [
+      "integer probability",
+      "arithmetic interval and coder state",
+      "payload prefix",
+      "Byte-LSTM hidden and cell state",
+      "Byte-LSTM parameters",
+      "optimizer moments and step",
+      "mixer state",
+      "SSE state",
+      "persistent context mutations",
+      "oracle caches and replay state"
+    ],
+    "P_K_abort": "Abort on the first P/K mismatch and retain full local state around that boundary.",
+    "encoder_decoder_requirement": "All hashes capable of affecting future probabilities match at every preregistered boundary."
+  },
+  "economics": {
+    "full_corpus_required_gross_savings_bytes": 4079243,
+    "estimate_status": "unmeasured",
+    "measured_oracle_ceiling_bytes": null,
+    "maximum_added_package_bytes_for_successor_screening": 65536,
+    "gates": {
+      "250000": "exact finite archive, exact inverse, P equals K, F finite, F repeat identity; diagnostic only",
+      "1000000": "F archive gain over P is at least 4080 bytes, F beats S, and all exactness predicates pass",
+      "10000000": "F archive gain over P is at least 40793 bytes, F beats S globally and in every preregistered third, and all exactness predicates pass"
+    },
+    "authority": "Only actual finite arithmetic archive bytes count. A passing 10MB oracle authorizes compact-adapter implementation; it does not award score credit."
+  },
+  "resources": {
+    "limit_mode": "tree",
+    "limit_kib": 9765625,
+    "official_decimal_limit_kib": 9765625,
+    "max_logical_cpus": 1,
+    "sample_interval_seconds": 0.5,
+    "cgroup_memory_max_bytes": 10000000000,
+    "maximum_incremental_live_bytes": 268435456,
+    "scratch_logical_and_allocated_bytes_required": true
+  },
+  "terminal_router": {
+    "P_K_mismatch": "correction_only_implementation_successor",
+    "F_subscale_at_1000000": "retire_cmix_midpoint_family",
+    "F_target_scale_and_beats_S_at_10000000": "authorize_dormant_delta_midas_v2_implementation",
+    "F_beats_P_but_not_S": "retire_causal_alignment_claim",
+    "compression_pass_memory_fail": "memory_compilation_successor_only",
+    "non_finite_or_inverse_fail": "infrastructure_or_implementation_failure_no_scientific_verdict"
+  }
+}

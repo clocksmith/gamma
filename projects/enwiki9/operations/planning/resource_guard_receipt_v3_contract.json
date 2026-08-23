@@ -1,0 +1,47 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "resource_guard_receipt_v3_contract",
+  "revision": 3,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [],
+  "contract": {
+    "principal_memory_metric": "continuous process-tree VmRSS",
+    "hard_fail_safe": "cgroup-v2 memory.max = 10000000000 bytes",
+    "required_invocation": [
+      "--limit-mode tree",
+      "--limit-kib 9765625",
+      "--official-decimal-limit-kib 9765625",
+      "--max-logical-cpus 1",
+      "--sample-interval 0.5"
+    ],
+    "required_receipt_fields": [
+      "continuous_process_tree_vmrss",
+      "per_process_vmhwm",
+      "cgroup_v2_memory_current",
+      "cgroup_v2_memory_peak",
+      "cgroup_v2_memory_events",
+      "smaps_rollup_checkpoints",
+      "scratch_logical_bytes",
+      "scratch_allocated_bytes",
+      "cpu_affinity",
+      "runnable_thread_count",
+      "phase_markers"
+    ],
+    "failure_semantics": "Any observed process VmHWM or cgroup peak above the strict ceiling is terminal for memory qualification even if later RSS falls."
+  },
+  "activation_requirements": [
+    "Implement as a versioned successor rather than silently changing receipt v2",
+    "Exercise only with synthetic fixtures or on a non-Arm-B host before campaign use",
+    "Bind the cgroup identity and memory.events before launching a prize-facing job"
+  ],
+  "claim_boundary": [
+    "This design does not retrofit Arm B memory compliance",
+    "A sampled RSS pass cannot override a VmHWM or cgroup peak failure"
+  ]
+}

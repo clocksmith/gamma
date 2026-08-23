@@ -1,0 +1,87 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "nncp_open_concat_head_identity_64_q0_v1",
+    "nncp_open_w_o_input_adjoint_block128_64_q0_v1"
+  ],
+  "contract": {
+    "v1_disposition": {
+      "candidate_id": "nncp_open_top_attention_value_transpose_64_q0_v1",
+      "operational_status": "superseded_before_execution",
+      "scientific_verdict": "none",
+      "objective_credit_bytes": 0,
+      "reason": "The frozen experiment binds only the AVX2/FMA treatment and does not expose or predicate a scalar reference output."
+    },
+    "candidate_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+    "mathematical_edge": "dP = dAttended * transpose(V)",
+    "output_name": "probability_adjoint",
+    "geometry": {
+      "states": 64,
+      "streams": 32,
+      "heads": 8,
+      "keys": 320,
+      "reduction_width": 128,
+      "output_bf16_elements": 5242880
+    },
+    "inputs": {
+      "value_state": {
+        "layout": "stream, head, key, feature",
+        "bytes": 20971520,
+        "sha256": "71968ffd71811ef06db7064c675872bcbd98344abd7e9d09f2231dd538e3f790"
+      },
+      "attended_adjoint": {
+        "layout": "state, stream, head, feature",
+        "bytes": 4194304,
+        "sha256": "481b6d3c8ec04a8302adca1ed7c0d43ad47c2459aa4586b4950726af05c2e27a"
+      },
+      "source_probability_adjoint": {
+        "layout": "state, head, stream, key",
+        "bytes": 10485760,
+        "sha256": "94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22"
+      }
+    },
+    "arithmetic": {
+      "input_materialization": "BF16 words widened exactly by placement in the upper sixteen FP32 bits",
+      "scalar_reference": "One explicit scalar hardware FMA per feature in ascending feature order, accumulated from +0.0f.",
+      "avx_treatment": "Eight adjacent keys per AVX2 vector, one explicit fused multiply-add per feature in ascending feature order, accumulated from +0.0f.",
+      "output_materialization": "One round-to-nearest-even FP32-to-BF16 conversion after the 128th FMA.",
+      "compiler_policy": "fast-math and implicit contraction disabled; explicit FMA intrinsics only",
+      "threading": "single process, single thread, fixed iteration and serialization order"
+    },
+    "controls": {
+      "source": "Both scalar and AVX outputs equal the independently captured source probability adjoint byte-for-byte.",
+      "cross_implementation": "Scalar and AVX outputs are byte-identical.",
+      "wrong_layout": "Serialize AVX values in state, stream, head, key order and require a nonzero source mismatch count.",
+      "negated": "Negate dAttended before the same AVX reduction and require a nonzero source mismatch count.",
+      "replay": "Two complete evaluations reproduce all four outputs byte-for-byte."
+    },
+    "execution": {
+      "maximum_incremental_source_bytes": 500000,
+      "forbidden_dynamic_dependencies": ["LibNC", "GGML", "CUDA", "OpenMP", "GOMP", "BLAS"],
+      "exclusive_host_rule": "Run only after Arm B terminalizes or on separately bound hardware.",
+      "result_authority": "A pass proves one exact backward arithmetic edge and increments the post-dP primitive budget; it proves no integrated replay or compression gain."
+    }
+  },
+  "activation_requirements": [
+    "Every antecedent receipt and tensor matches its frozen SHA-256",
+    "The pinned compiler and linker identities are retained",
+    "All temporary output is removed after retained artifacts are materialized",
+    "A valid exclusive resource receipt accompanies execution"
+  ],
+  "claim_boundary": [
+    "Objective and compression credit are zero",
+    "No captured oracle tensor may ship in a Gamma codec",
+    "A pass does not prove softmax backward, value adjoints, midpoint learning, an integrated predictor, or an archive gain"
+  ]
+}

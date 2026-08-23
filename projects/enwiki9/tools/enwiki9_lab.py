@@ -51,6 +51,60 @@ NORMALIZE = ROOT / "tools" / "enwiki9_normalize_receipts.py"
 GATES = (1_024, 250_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)
 DEFAULT_STATUSES = ("candidate", "active", "benchmark_or_retire")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9_.-]*$")
+RUNTIME_DIR = OPERATIONS / "runtime"
+EXCLUSIVE_FULL1G_PATH = RUNTIME_DIR / "exclusive_full1g.json"
+
+
+def _proc_start_ticks(pid: int) -> int | None:
+    try:
+        stat = (pathlib.Path("/proc") / str(pid) / "stat").read_text()
+        fields = stat[stat.rfind(")") + 2 :].split()
+        return int(fields[19])
+    except (OSError, ValueError, IndexError):
+        return None
+
+
+def _proc_command_sha256(pid: int) -> str | None:
+    try:
+        command = (pathlib.Path("/proc") / str(pid) / "cmdline").read_bytes()
+    except OSError:
+        return None
+    return hashlib.sha256(command).hexdigest() if command else None
+
+
+def get_exclusive_lease() -> dict[str, Any] | None:
+    if not EXCLUSIVE_FULL1G_PATH.is_file():
+        return None
+    try:
+        data = json.loads(EXCLUSIVE_FULL1G_PATH.read_text())
+        if not isinstance(data, dict):
+            return None
+        pid = data.get("pid")
+        if not isinstance(pid, int) or pid <= 0:
+            return None
+        if data.get("resource_class") != "exclusive_full1g":
+            return None
+        if _proc_start_ticks(pid) != data.get("proc_start_ticks"):
+            return None
+        if _proc_command_sha256(pid) != data.get("command_sha256"):
+            return None
+        return data
+    except Exception:
+        pass
+    return None
+
+
+def require_no_exclusive_lease() -> None:
+    lease = get_exclusive_lease()
+    if lease is not None:
+        raise ValueError(
+            f"machine-wide exclusive lease active for candidate={lease.get('candidate_id')} (PID {lease.get('pid')})"
+        )
+    if EXCLUSIVE_FULL1G_PATH.exists():
+        raise ValueError(
+            "machine-wide exclusive lease file exists but its process identity "
+            "cannot be validated; resolve it explicitly before launching work"
+        )
 
 
 def utc_now() -> str:
@@ -725,6 +779,7 @@ def enqueue_job(
     runner: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     ensure_layout()
+    require_no_exclusive_lease()
     candidate_meta(candidate_id)
     require_terminal_reflections(candidate_id, "enter another gate")
     proposal_path_value, proposal = candidate_proposal(candidate_id)
@@ -1321,6 +1376,9 @@ def status_payload() -> dict[str, Any]:
         min_free_mib=0,
         max_load=float("inf"),
     )
+    lease = get_exclusive_lease()
+    if lease is not None:
+        ready = False
     return {
         "schema": "enwiki9_adaptive_status_v1",
         "generated_at": utc_now(),
@@ -1330,6 +1388,8 @@ def status_payload() -> dict[str, Any]:
         "latest_terminal_jobs": latest[:10],
         "resources": resources,
         "resource_probe_ok": ready,
+        "exclusive_lease": lease,
+        "safe_to_launch_candidate_gate": ready and lease is None,
     }
 
 
@@ -1600,9 +1660,14 @@ def build_parser() -> argparse.ArgumentParser:
     reflect.add_argument("--evidence", action="append", type=pathlib.Path, default=[])
     reflect.add_argument("--experiment", type=pathlib.Path)
 
-    subparsers.add_parser(
+    next_experiment = subparsers.add_parser(
         "next-experiment",
         help="rank live proposals using validated parent reflections",
+    )
+    next_experiment.add_argument(
+        "--action",
+        action="store_true",
+        help="fail closed under an exclusive lease before returning an actionable selection",
     )
     subparsers.add_parser(
         "sync-reflection-exclusions",
@@ -1872,6 +1937,8 @@ def main() -> int:
             )
             return 0
         if args.command == "next-experiment":
+            if args.action:
+                require_no_exclusive_lease()
             proposals = iter_proposals({"proposed", "claimed", "developed"})
             print(
                 json.dumps(

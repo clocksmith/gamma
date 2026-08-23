@@ -1,0 +1,72 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "delta_midas_harness_and_state_hash_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_deep_delta_midas64_q0_v2",
+      "required_evidence": "activated executable revision with source-bound arm semantics"
+    }
+  ],
+  "contract": {
+    "binary_interface": [
+      "--arm P|K|O|R|D|S",
+      "--scope-manifest PATH",
+      "--audit-state",
+      "--archive-ceiling BYTES"
+    ],
+    "execution_rule": "compile one source revision once and execute arms sequentially, never as simultaneous parent state copies",
+    "modes": {
+      "debug-shadow": [
+        "tiny scope",
+        "complete local state tracing",
+        "probability or ideal-bit diagnostics permitted",
+        "zero promotion authority"
+      ],
+      "archive-proof": [
+        "finite arithmetic coder",
+        "exact decode",
+        "exact raw inverse",
+        "deterministic repeat",
+        "complete package and resource receipts"
+      ]
+    },
+    "rolling_hash_fields": [
+      "integer_probabilities",
+      "arithmetic_interval_and_coder_state",
+      "payload_prefix",
+      "LSTM_hidden_state",
+      "LSTM_cell_state",
+      "mixer_state",
+      "SSE_state",
+      "Adam_moments_and_step",
+      "persistent_context_table_changes",
+      "episodic_state"
+    ],
+    "trace_policy": "rolling hashes at every 64-byte boundary; full details only at preregistered checkpoints and around first divergence",
+    "conditional_schedule": {
+      "250000": "P/K/O/R/D/S",
+      "1000000": "P/K/D; add O/R/S and deterministic D repeat only if D is positive and stable",
+      "10000000": "P then D; stop on economic miss; add O/R/S and D repeat only on pass",
+      "distant_10000000": "P/D; add S only after D passes",
+      "100000000": "P/D and deterministic D repeat"
+    },
+    "abort_rule": "P/K abort at first state or probability mismatch and retain a bounded divergence trace"
+  },
+  "activation_requirements": [
+    "The executable candidate contract binds all command flags and artifacts",
+    "Debug-shadow and archive-proof outputs use distinct receipt classes",
+    "A shadow result can authorize only an archive-proof run"
+  ],
+  "claim_boundary": [
+    "Ideal-bit and probability diagnostics never earn compression credit",
+    "Only archive-proof mode can support promotion"
+  ]
+}

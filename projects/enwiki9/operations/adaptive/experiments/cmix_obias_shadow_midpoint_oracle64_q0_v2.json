@@ -1,0 +1,73 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment.v2",
+  "experiment_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "operational_status": "dormant_dependency",
+  "evidence_class": "oracle",
+  "score_credit_bytes": 0,
+  "planning_contract": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+  "parent_candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "arms": [
+    "P",
+    "K",
+    "F",
+    "S"
+  ],
+  "scopes": [
+    {
+      "bytes": 250000,
+      "execution_order": ["P", "K", "F", "F-repeat", "S"],
+      "authority": "diagnostic_exactness"
+    },
+    {
+      "bytes": 1000000,
+      "dependency": "250000 terminal pass",
+      "execution_order": ["P", "K", "F", "F-repeat", "S"],
+      "authority": "provisional_oracle_ceiling"
+    },
+    {
+      "bytes": 10000000,
+      "dependency": "1000000 gross gain >= 4080 and F > S",
+      "execution_order": ["P", "F", "F-repeat", "S"],
+      "authority": "target_scale_oracle_ceiling"
+    }
+  ],
+  "activation_predicates": [
+    "exclusive_full1g lease absent",
+    "Arm B terminal receipt preserved",
+    "memory-safe parent qualification passed",
+    "candidate source revision frozen",
+    "program lock and independent build receipts passed",
+    "P/K synthetic synchronization passed"
+  ],
+  "required_terminal_fields": [
+    "archive_bytes_by_arm",
+    "archive_sha256_by_arm_and_repeat",
+    "exact_decode_by_arm",
+    "exact_raw_inverse_by_arm",
+    "P_K_probability_identity",
+    "P_K_state_identity",
+    "F_repeat_archive_identity",
+    "F_over_P_gross_bytes",
+    "F_over_S_gross_bytes",
+    "thirdwise_F_over_P_bytes",
+    "thirdwise_F_over_S_bytes",
+    "process_tree_peak_kib",
+    "per_process_vmhwm_kib",
+    "scratch_logical_peak_bytes",
+    "scratch_allocated_peak_bytes",
+    "encode_return_codes",
+    "decode_return_codes",
+    "dependency_closure_pass",
+    "complete_counted_bytes",
+    "scientific_verdict",
+    "score_credit_bytes"
+  ],
+  "forbidden_actions": [
+    "execute before activation predicates pass",
+    "substitute ideal bits for archive bytes",
+    "change update horizon, target permutation, numeric order, population, or thresholds after observing an archive",
+    "infer CMIX gain from NNCP evidence",
+    "activate Delta-MIDAS from a 250KB diagnostic"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "nncp_probability_adjoint_and_replay_budget_v1",
+  "revision": 2,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+      "required_evidence": "terminal v2 scalar/source, AVX/source, scalar/AVX, replay, controls, dependency, package, cleanup, and resource receipt"
+    }
+  ],
+  "contract": {
+    "mathematical_edge": "dP = dAttended * transpose(V)",
+    "output_name": "probability_adjoint",
+    "population_elements": 5242880,
+    "required_implementations": [
+      "scalar non-contracted reference",
+      "AVX2/FMA treatment with frozen contraction and accumulation semantics"
+    ],
+    "required_controls": [
+      "scalar equals captured oracle",
+      "AVX2 equals scalar after frozen BF16 materialization",
+      "repeat byte identity",
+      "wrong-layout mismatch",
+      "negated-adjoint mismatch"
+    ],
+    "versioning_rule": "Do not mutate frozen v1 to add the missing scalar path; create a versioned successor if v1 does not already bind both implementations.",
+    "v1_disposition": "superseded_before_execution; scientific verdict none; objective credit zero",
+    "authorized_versioned_successor": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+    "primitive_budget_after_dp": 3,
+    "required_integrated_replay": [
+      "first-half open forward",
+      "first-half loss",
+      "open backward",
+      "midpoint update",
+      "state rebuild",
+      "second-half forward",
+      "exact probability comparison"
+    ],
+    "independence_rule": "The NNCP dP lane is not an activation dependency for CMIX Delta-MIDAS."
+  },
+  "activation_requirements": [
+    "Execute only after Arm B terminalizes or on separately bound hardware",
+    "Bind scalar compiler flags disabling contraction and fast-math",
+    "Preserve complete oracle and negative-control identities"
+  ],
+  "claim_boundary": [
+    "A dP pass proves one backward arithmetic edge only",
+    "It earns zero compression credit and does not prove an open NNCP codec"
+  ]
+}
