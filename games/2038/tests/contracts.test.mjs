@@ -16,6 +16,7 @@ test("current release declaration separates executable game from physical rules 
   assert.match(current.rulesCandidate.version, /^0\.8\.0-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
+  assert.equal(current.contracts.mechanicsProjectionVersion, 2);
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
@@ -682,7 +683,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
     headlines.every((headline) => allowedResolutionTypes.has(headline.resolutionType)),
     "every Headline has exactly one supported resolution type"
   );
-  assert.equal(byId.talent_gold_rush.name, "Research Talent Receives Diplomatic Status");
+  assert.equal(byId.talent_gold_rush.name, "The Reverse Acquihire Opens");
   assert.ok(
     headlines.every((headline) => headline.resolutionType !== "REGIME"),
     "standard Headline instructions use the procedural DIRECTIVE badge"
@@ -701,11 +702,11 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
   );
   assert.equal(
     byId.agent_swarm_escapes_scope.name,
-    "Posthumous Labor Continuation"
+    "The Dead Remain on Shift"
   );
   assert.equal(
     byId.room_temperature_superconductor.name,
-    "Entanglement Custody"
+    "The First Stellar Collector Replicates"
   );
 });
 

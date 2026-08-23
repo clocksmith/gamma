@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.8-test`
+**Rules reference:** `0.8.0-rc.10-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.8-test` test:
+controlled `0.8.0-rc.10-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.7` implements `0.8.0-rc.8-test` under engine coverage
+Executable game `0.14.9` implements `0.8.0-rc.10-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -244,11 +244,32 @@ Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract.
 
-Candidate `0.8.0-rc.8-test` changes no physical mechanic from rc.7.
-Executable `0.14.7` carries exact profile-artifact paths and byte hashes into
-the unified balance matrix, retains the complete executed ecology, and rejects
-source/profile identity mismatches before a holdout starts. No setup value,
-Core Action, score, or component changes.
+Candidate `0.8.0-rc.10-test` changes no physical mechanic from rc.9.
+Executable `0.14.9` preserves every stable Headline ID, rules instruction,
+profile boundary, Era rule, and unlock instruction while replacing the four-Era
+world narrative and all twenty-four Headline presentations. The selected arc
+now moves from cheap intelligence and harvested institutional memory through
+utility capture and modeled human authority to reproducible minds, matter, and
+stellar infrastructure. Existing balance evidence remains evidence for the
+unchanged mechanics; it does not validate the new prose, tone, or commercial
+presentation.
+
+Mechanics projection contract v2 also removes Headline newswire, quotation,
+labels, and other presentation-only fields from the mechanics fingerprint. The
+historical v1 fingerprint included those fields, so its digest cannot be
+compared directly with v2. Reprojecting the `0.14.8` and `0.14.9` rulesets
+through v2 produces the same mechanics digest. Ruleset, playtest-kit, content,
+and engine identities still change and remain separately attributable.
+
+Historical candidate `0.8.0-rc.9-test` and executable `0.14.8` aligned the
+release declaration and version-independent contract tests without changing a
+setup value, Core Action, score, component, or Headline mechanic.
+
+Historical candidate `0.8.0-rc.8-test` and executable `0.14.7` carried exact
+profile-artifact paths and byte hashes into
+the unified balance matrix, retained the complete executed ecology, and rejected
+source/profile identity mismatches before a holdout started. No setup value,
+Core Action, score, or component changed.
 
 Historical candidate `0.8.0-rc.7-test` and executable `0.14.6` let strategy
 evolution inject exact frozen opponent

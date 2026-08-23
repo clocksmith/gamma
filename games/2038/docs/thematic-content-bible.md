@@ -305,12 +305,18 @@ player-facing claims.
 
 Relevant horizons:
 
-- AI capability, autonomous research, and claims of recursive improvement;
-- labor displacement, AI attachment, material security, and post-work purpose;
-- power, land, water, chips, data centers, grids, laboratories, and orbital
-  compute;
+- cheap local inference, strategic open weights, total-demand rebound, and
+  subscription collapse;
+- bankruptcy data estates, employee archives, reverse acquihires, and the
+  training value of failed institutions;
+- remotely supervised household robots, domestic telemetry, grief services,
+  accessibility, medicine, education, and hazardous-work automation;
+- power, land, water, chips, utility capture, liability custodians, compute
+  borders, model asylum, orbital generation, and simulated markets;
 - brain-computer interfaces, neural decoding, cognitive mediation, and mental
-  privacy;
+  privacy, including compensated memory reads and writes;
+- machine-parsable courts, environmental accounting, synthetic family law,
+  civic telemetry dividends, analog districts, and unequal refusal;
 - post-quantum cryptography, secure identity, signatures, archives, and
   verification;
 - agent-native markets that create wealth through transactions people cannot
@@ -319,7 +325,8 @@ Relevant horizons:
   dependence on systems that humans can no longer operate;
 - controlled vocabulary, transactional privacy, distributed identity, and the
   right to inspect or leave a maintained reality;
-- conscious transfer, nanotechnology, self-replication, femtobots, and
+- conscious transfer, mind trusts, cryptographic snapshots, programmable
+  matter, self-replication, stellar collectors, planetary computation, and
   containment;
 - intelligence without consciousness, consciousness without economic utility,
   digital afterlives, and simultaneous copies;
@@ -374,12 +381,13 @@ Do not reproduce a source's signature plot, vocabulary, protected character,
 or visual identity. Combine multiple lineages with the game's own mechanics and
 fictional institutions until the resulting event stands independently.
 
-## Concept backlog by Era
+## Concept inventory by Era
 
 The concepts below are original design territory identified from those inputs.
-They are not cards, approved rules, or player-facing copy. Before any enters
-the game, map it to an existing mechanical surface and use the event-design
-questions below.
+Their presence here does not make them cards, approved rules, or player-facing
+copy. The traceability table below is the sole record of adoption. Before any
+unadopted concept enters the game, map it to an existing mechanical surface and
+use the event-design questions below.
 
 | Era | Concept | Institutional premise |
 | --- | --- | --- |
@@ -422,17 +430,31 @@ when the named surface expresses it without changing the listed mechanic.
 
 | Concept | Status | Era | Surface ID | Mechanic retained |
 | --- | --- | --- | --- | --- |
-| Universal Semantic Standard | Adopted | Authority | `headline:ai_written_law` | Civic Permission Authority selects one Core Action. |
-| Cognitive Service Covenant | Adopted | Authority | `headline:benchmark_is_economy` | A successful Training Run grants later deployment access. |
-| Memory Escrow | Adopted | Authority | `headline:quantum_advantage_procurement` | Table adopts or defers a shared standard. |
-| Proxy Citizenship | Adopted | Authority | `headline:synthetic_candidate` | Civic Permission Authority vote. |
-| Negotiated Self Protocol | Adopted | Authority | `headline:election_deepfake_panic` | Civic Permission Authority vote determines a Era regime. |
+| Cheap Token Rebound | Adopted | Progress | `headline:ten_dollar_intelligence` | Research and Deploy lose Compute cost while adding Scrutiny. |
+| Bankruptcy Data Estates | Adopted | Progress | `headline:employee_free_unicorn` | Organize converts returned Teams into Runway and Scrutiny. |
+| Supervised-Autonomy Homes | Adopted | Progress | `headline:synthetic_celebrity` | The next Consumer or Media Deploy becomes easier and riskier. |
+| Strategic Open Weights | Adopted | Progress | `headline:open_weights_drop` | Everyone gains Capability and the lowest-Customer player gains Trust. |
+| Reverse Acquihire | Adopted | Progress | `headline:talent_gold_rush` | A secret Runway auction moves the winner's CEO and grants Trust. |
+| Abundance Constituency | Adopted | Progress | `headline:professional_exam_sweep` | Strong Research grants Trust and may remove Scrutiny. |
+| Liability Custodians | Adopted | Capacity | `headline:boardroom_coup` | The Mandate leader pays or transfers public backing to preserve CEO action. |
+| Utility Capture | Adopted | Capacity | `headline:data_center_buys_county` | A secret Runway auction moves the winner into infrastructure and returns capacity. |
+| Hazard Shift Retirement | Adopted | Capacity | `headline:humanoid_factory_gate` | Organize recruits additional Teams cheaply while adding Scrutiny. |
+| Orbital Beam Corridor | Adopted | Capacity | `headline:reactor_restart_one_model` | The first clean infrastructure build is cheaper and scores Mandate. |
+| Compute Blocs and Model Asylum | Adopted | Capacity | `headline:export_controls` | Compute trade stops while Chip and Government controllers gain Runway. |
+| Counterfactual Casinos | Adopted | Capacity | `headline:emergency_power_authority` | Players may assign future capacity now at Scrutiny and Systemic Risk cost. |
+| Semantic Court Mandate | Adopted | Authority | `headline:ai_written_law` | Government names a rewarded Core Action that also adds Scrutiny. |
+| Sacrifice-Zone Accounting | Adopted | Authority | `headline:benchmark_is_economy` | Strong Research immediately scores Mandate. |
+| Cognitive Donor Clinics | Adopted | Authority | `headline:quantum_advantage_procurement` | Players adopt or defer a shared standard with different Capability, Trust, and Scrutiny effects. |
+| Synthetic Family Law | Adopted | Authority | `headline:synthetic_candidate` | A Government vote resolves competing public treatments. |
+| Passive Citizen Dividend | Adopted | Authority | `headline:weights_on_internet` | The lowest-Capability player receives production and the highest gains Trust. |
+| Analog Havens | Adopted | Authority | `headline:election_deepfake_panic` | A Government vote establishes a persistent Deploy regime. |
 | Pre-Consent Standard | Deferred | Authority | — | No current Headline mechanic expresses inferred consent cleanly. |
-| The Successor Registry | Adopted | Continuity | `headline:autonomous_corporation` | The most-selected Core Action receives a continuity advantage. |
-| Molecular Remediation Authority | Adopted | Continuity | `headline:recursive_self_improvement` | Accelerated Research raises both gains and containment risk. |
-| Posthumous Labor Continuation | Adopted | Continuity | `headline:agent_swarm_escapes_scope` | Agent Swarm becomes generally selectable for one cycle. |
-| Consciousness Efficiency Review | Adopted | Continuity | `headline:agi_personhood` | Person/property decision persists. |
-| Entanglement Custody | Adopted | Continuity | `headline:room_temperature_superconductor` | Volatility certifies one of two infrastructure outcomes. |
+| Metropolitan Mind Trust | Adopted | Continuity | `headline:autonomous_corporation` | The most-selected Core Action rewards every player who selected it. |
+| Matter Compiler | Adopted | Continuity | `headline:recursive_self_improvement` | Accelerated Research raises both gains and containment risk. |
+| Posthumous Labor | Adopted | Continuity | `headline:agent_swarm_escapes_scope` | Agent Swarm becomes generally selectable for one cycle. |
+| Snapshot Continuity | Adopted | Continuity | `headline:agi_personhood` | A persistent Person or Property decision alters an emerged AGI outcome. |
+| Stellar Collector | Adopted | Continuity | `headline:room_temperature_superconductor` | Volatility resolves as generation expansion or speculative finance. |
+| AGI Refinancing Declaration | Adopted | Continuity | `headline:agi_blog_post` | Publication adds additional final claim strength. |
 | Instance Quorum | Adopted framing | Continuity | `faction:coalition_lab:wildcard_governance` | The printed replacement-Headline choice is unchanged. |
 | Substrate-neutral verification | Adopted framing | Continuity | `faction:imperial_research_lab:scaling_law_breakthrough` | The printed multi-domain Research gain is unchanged. |
 | Right of Exit Certification | Adopted framing | Continuity | `faction:safety_laboratory:emergency_pause`, `mandate:responsible_acceleration` | The printed pause and Capability/Trust qualification are unchanged. |
@@ -440,13 +462,13 @@ when the named surface expresses it without changing the listed mechanic.
 | Jurisdictional succession | Adopted framing | Continuity | `faction:vertical_empire:orbital_compute` | The printed Facility transfer is unchanged. |
 | Human Compatibility Office | Adopted framing | Continuity | `faction:foundry:everybody_gets_a_gpu` | The printed Era IV Compute distribution is unchanged. |
 
-The remaining research backlog is not approved component copy. Its strongest
-unexpressed concepts are Human-Original Guarantee, Thermal Citizenship,
-Developmental Companion Standard, Public Purpose Service, Manual Operations
-Retirement, Casualty Settlement Network, Non-Interference Office, and Nonhuman
-Standing Commission. They cover original-person claims, post-work purpose,
-lost operational competence, intervention, and unfamiliar minds without
-pretending that an existing card already expresses them.
+The remaining research inventory is not approved component copy. Its strongest
+unexpressed concepts are Human-Original Guarantee, Developmental Companion
+Standard, Public Purpose Service, Manual Operations Retirement, Casualty
+Settlement Network, Non-Interference Office, and Nonhuman Standing Commission.
+They cover original-person claims, post-work purpose, lost operational
+competence, intervention, and unfamiliar minds without pretending that an
+existing card already expresses them.
 
 For every candidate card or revision, answer these questions before drafting
 copy:
