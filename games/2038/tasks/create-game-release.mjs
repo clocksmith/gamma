@@ -79,6 +79,7 @@ const manifest = {
   releaseDate: versionDocument.releaseDate,
   rulesetFingerprint: identity.game.rulesetFingerprint,
   mechanicsFingerprint: identity.game.mechanicsFingerprint,
+  mechanicsProjectionVersion: versionDocument.contracts.mechanicsProjectionVersion,
   playtestKitFingerprint: identity.game.playtestKitFingerprint,
   contentGraphFingerprint: contentIdentity.fingerprint,
   contentGraphFiles: contentIdentity.files,
@@ -101,6 +102,7 @@ const bundle = {
   gameVersion: versionDocument.gameVersion,
   rulesetFingerprint: identity.game.rulesetFingerprint,
   mechanicsFingerprint: identity.game.mechanicsFingerprint,
+  mechanicsProjectionVersion: versionDocument.contracts.mechanicsProjectionVersion,
   playtestKitFingerprint: identity.game.playtestKitFingerprint,
   contentGraphFingerprint: contentIdentity.fingerprint,
   canonicalVariantFingerprint: identity.variant.fingerprint,
@@ -116,6 +118,7 @@ const current = {
   bundle: `versions/${versionDocument.gameVersion}/game-bundle.json`,
   rulesetFingerprint: identity.game.rulesetFingerprint,
   mechanicsFingerprint: identity.game.mechanicsFingerprint,
+  mechanicsProjectionVersion: versionDocument.contracts.mechanicsProjectionVersion,
   playtestKitFingerprint: identity.game.playtestKitFingerprint,
   contentGraphFingerprint: contentIdentity.fingerprint,
   canonicalVariantFingerprint: identity.variant.fingerprint

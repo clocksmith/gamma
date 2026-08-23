@@ -1581,7 +1581,7 @@ test("Boardroom Coup removes the leader's CEO from legal action movement", async
     ).id));
 });
 
-test("Entanglement Custody Replicates does not discount Links or Fusion", async () => {
+test("Stellar Collector Replicates does not discount Links or Fusion", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -2796,7 +2796,7 @@ test("ordinary successful Era I actions populate opening evidence exactly once",
   assert.equal(player.metrics.actions.fund, 1);
 });
 
-test("mechanics fingerprints ignore faction presentation copy", () => {
+test("mechanics fingerprints ignore faction and Headline presentation copy", () => {
   const firstPresentation = {
     factions: [{
       id: "coalition_lab",
@@ -2804,6 +2804,15 @@ test("mechanics fingerprints ignore faction presentation copy", () => {
       name: "Dovetalis Labs",
       motto: "Named wording",
       starts: { runway: 5 }
+    }],
+    headlines: [{
+      id: "fixture_headline",
+      name: "Named event",
+      strapline: "INSTITUTIONAL FRAMING",
+      newswire: "One account of the event.",
+      quote: "A reassuring statement.",
+      rulesLabel: "Regulatory",
+      resolutionType: "DIRECTIVE"
     }]
   };
   const secondPresentation = {
@@ -2813,12 +2822,18 @@ test("mechanics fingerprints ignore faction presentation copy", () => {
       name: "The Coalition Lab",
       motto: "Alias wording",
       starts: { runway: 5 }
+    }],
+    headlines: [{
+      id: "fixture_headline",
+      name: "Renamed event",
+      strapline: "DIFFERENT INSTITUTIONAL FRAMING",
+      newswire: "A different account of the event.",
+      quote: "A different reassuring statement.",
+      rulesLabel: "Directive",
+      resolutionType: "DIRECTIVE"
     }]
   };
-  assert.deepEqual(
-    mechanicsProjection(firstPresentation).factions,
-    mechanicsProjection(secondPresentation).factions
-  );
+  assert.deepEqual(mechanicsProjection(firstPresentation), mechanicsProjection(secondPresentation));
 });
 
 test("four-player tournaments rotate through all six factions without duplicate seats", () => {

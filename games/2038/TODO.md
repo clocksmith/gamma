@@ -44,7 +44,7 @@ release identities.
   - Closure: expose one reaction decision listing every legal protection plus crash, then test resource use and once-per-Era state for each choice.
 
 - [x] **G2038-006 — Unique-domain effects use Capability gained instead of the domains actually banked.**
-  - Evidence: the Training result already returns `distinctDomains` in `web/src/engine.js:324-338`. The Demonstration Holds Mandate, Scaling-Law Breakthrough, and Molecular Remediation Authority count domains in `content/copy/mandates.json:48-51`, `content/copy/factions.json:77-81`, and `content/copy/headlines.json:166-169`. `lab/environment/selected-rules-match.js:2642-2658,2677-2680` uses the Capability delta instead.
+  - Evidence: the Training result already returns `distinctDomains` in `web/src/engine.js:324-338`. The Demonstration Holds Mandate, Scaling-Law Breakthrough, and The Matter Compiler Enters Public Maintenance count domains in `content/copy/mandates.json:48-51`, `content/copy/factions.json:77-81`, and `content/copy/headlines.json`. `lab/environment/selected-rules-match.js:2642-2658,2677-2680` uses the Capability delta instead.
   - Problem: Benchmark Leak contributes two false domains, Scientific Method penalties can erase real domains, and Synthetic Loop is included in `seen.size` despite being a special Training type rather than an ordinary domain.
   - Closure: return and consume an explicit banked ordinary-domain set, define whether any special counts for each effect, and test every special card against all three consumers.
 
@@ -60,7 +60,7 @@ release identities.
 
 - [x] **G2038-009 — Immediate Facility effects are counted as Compute produced during Production.**
   - Evidence: `content/copy/core-rules.md:871-873` says immediate Facility production is not a second Production. `lab/environment/selected-rules-match.js:3458-3527` increments `roundMetrics.computeProduced` inside `produceFacility()` regardless of its `stage`; that helper is also called by immediate effects at `lab/environment/selected-rules-match.js:1392-1397,4670-4675`.
-  - Problem: Capability Exits Ownership and Orbital Compute can inflate the Compute Becomes a Public Condition Mandate.
+  - Problem: The Passive Citizen Dividend Activates and Orbital Compute can inflate the Compute Becomes a Public Condition Mandate.
   - Closure: count Compute only when the helper runs in the Production or Partner boxes, and test identical Facility output in immediate and Production contexts.
 
 - [x] **G2038-010 — Joint Venture Compute is omitted from Compute produced during Production.**
@@ -88,7 +88,7 @@ release identities.
   - Problem: control and adjacency can change without player choice; the selected decision's movement fields do not govern resolution.
   - Closure: collect a destination or stay choice for each Team and an explicit optional return identity, then verify the exact chosen pieces move.
 
-- [x] **G2038-015 — Productivity No Longer Requires Employment replaces Organize instead of modifying it.**
+- [x] **G2038-015 — The Company Brain Survives Bankruptcy replaces Organize instead of modifying it.**
   - Evidence: the Headline says “During Organize” in `content/copy/headlines.json:14-19`. `lab/environment/selected-rules-match.js:1885-1903,2529-2537` creates a standalone `employee_free` resolution, returns the first N Teams, and performs none of Organize's three modes.
   - Problem: using the Headline forfeits the printed Organize action and prevents choosing which positioned Teams return.
   - Closure: make Team returns an optional modifier around a normal Organize resolution and require explicit Team identities.
@@ -96,7 +96,7 @@ release identities.
 - [x] **G2038-016 — Cost reductions are applied after base legality has already removed actions.**
   - Evidence: replacement, surcharge, and discount order is defined in `content/copy/core-rules.md:241-242`. Base generation requires one Compute for Research and two Runway for a Facility in `lab/environment/core-economy-match.js:422-445`; selected-rule adjustments occur later in `lab/environment/selected-rules-match.js:2058-2144`.
   - Problem: legal zero-Compute Cloud Research and one-Runway discounted Facility or Clean Infrastructure builds can be absent before their waiver or discount is evaluated.
-  - Closure: compute the effective cost before affordability filtering for every action lane and test Cloud, Chip, Industrial Velocity, and The Model Receives an Energy Charter at the exact reduced cost.
+  - Closure: compute the effective cost before affordability filtering for every action lane and test Cloud, Chip, Industrial Velocity, and Orbital Power Receives a Beam Corridor at the exact reduced cost.
 
 - [x] **G2038-017 — The deepfake Regulate surcharge can resolve without being paid.**
   - Evidence: `content/copy/headlines.json:149-155` adds one Compute to Deploy. `lab/environment/selected-rules-match.js:2759-2761` subtracts it only after resolution and clamps the balance at zero, rather than including it in legal cost calculation.
@@ -113,7 +113,7 @@ release identities.
   - Problem: Customers gained in earlier cycles receive unearned additional Production income.
   - Closure: snapshot Customer count when the vote resolves and calculate only later gains, including gains from non-Deploy effects.
 
-- [x] **G2038-020 — Universal Semantic Standard hard-codes two rivals instead of half rounded up.**
+- [x] **G2038-020 — The Court Adopts Supported Meaning hard-codes two rivals instead of half rounded up.**
   - Evidence: `content/copy/headlines.json:106-111` requires at least half of the controller's rivals, rounded up. `lab/environment/selected-rules-match.js:4713-4721` checks `rivals.length >= 2` for every player count.
   - Problem: the threshold is wrong in supported three-player and six-player games.
   - Closure: derive `Math.ceil((playerCount - 1) / 2)` and test every supported player count.
