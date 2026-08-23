@@ -1,0 +1,58 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_memory_phase_attribution_q0_v1",
+      "required_evidence": "terminal phase attribution identifying removable or lifetime-reducible high-water allocations"
+    },
+    {
+      "artifact": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+      "required_evidence": "terminal archive, inverse, package, and resource receipts"
+    }
+  ],
+  "contract": {
+    "parent_kind": "probability_identical_memory_compilation_successor",
+    "strict_memory_ceiling_kib": 9765625,
+    "engineering_memory_target_kib": 9000000,
+    "required_identity": [
+      "integer_probability_stream",
+      "arithmetic_payload",
+      "archive_bytes",
+      "decoded_canonical_bytes",
+      "persistent_state_hashes"
+    ],
+    "permitted_change_class": [
+      "allocation_lifetime",
+      "storage_representation_with_exact_reconstruction",
+      "scratch_placement",
+      "streaming_or_chunking_that_preserves_probability_order"
+    ],
+    "forbidden_change_class": [
+      "probability_change",
+      "model_parameter_change",
+      "update_cadence_change",
+      "corpus_or_preprocessing_change",
+      "accounting_boundary_change"
+    ],
+    "reclassification_rule": "Any probability or archive change creates a new compression candidate and restarts the archive ladder."
+  },
+  "activation_requirements": [
+    "A source-level allocation hypothesis is bound before execution",
+    "the successor runs alone under resource-guard receipt v3",
+    "package and dependency closure are counted",
+    "exact state and payload comparators are enabled"
+  ],
+  "claim_boundary": [
+    "This is a dormant successor contract, not evidence of memory compliance",
+    "No size saving or Gamma score credit is asserted"
+  ]
+}

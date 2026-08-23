@@ -1,0 +1,213 @@
+diff --git a/src/models/ppmd.cpp b/src/models/ppmd.cpp
+--- a/src/models/ppmd.cpp
++++ b/src/models/ppmd.cpp
+@@ -76,3 +76,3 @@
+ #ifndef CMIX_PPMD_RSS_BUDGET_MB
+-#define CMIX_PPMD_RSS_BUDGET_MB 9216ULL
++#define CMIX_PPMD_RSS_BUDGET_MB 8192ULL
+ #endif
+diff --git a/src/runner.cpp b/src/runner.cpp
+--- a/src/runner.cpp
++++ b/src/runner.cpp
+@@ -30,3 +30,18 @@
+ namespace {
+   const int kMinVocabFileSize = 10000;
++
++  void ResourcePhaseMarker(const char* phase, const char* event) {
++    const char* path = std::getenv("GAMMA_RESOURCE_PHASE_MARKERS");
++    if (path == NULL || path[0] == '\0') return;
++    FILE* marker = fopen(path, "ab");
++    if (marker == NULL) {
++      fprintf(stderr, "cannot open resource phase marker stream\n");
++      exit(EXIT_FAILURE);
++    }
++    const int written = fprintf(marker, "{\"phase\":\"%s\",\"event\":\"%s\"}\n", phase, event);
++    if (written < 0 || fclose(marker) != 0) {
++      fprintf(stderr, "cannot write resource phase marker stream\n");
++      exit(EXIT_FAILURE);
++    }
++  }
+ }
+@@ -234,11 +249,13 @@ bool RunCompression(bool enable_preprocess, const std::string& input_path,
++  ResourcePhaseMarker("wrt_preprocessing", "start");
+   if (enable_preprocess) {
+     fprintf(stderr, "\rpreprocessing...");
+     fflush(stderr);
+     preprocessor::Encode(data_in, temp_out, *input_bytes, temp_path,
+         dictionary);
+   } else {
+     preprocessor::NoPreprocess(data_in, temp_out, *input_bytes);
+   }
+   fclose(data_in);
+   fclose(temp_out);
++  ResourcePhaseMarker("wrt_preprocessing", "end");
+ 
+@@ -251,34 +268,45 @@ bool RunCompression(bool enable_preprocess, const std::string& input_path,
+   if (std::getenv("FX_PREPARE_ONLY")) {
+     printf("\nprepare-only: original_input_bytes=%llu ready_stream_bytes=%zu\n",
+         *input_bytes, getFileSize(temp_path));
+     remove(output_path.c_str());
+     std::exit(0);
+   }
++  ResourcePhaseMarker("pre_predictor_cleanup", "start");
++  // Reordering and preprocessing have completed and released their owned
++  // containers. Return any free allocator pages before constructing the
++  // multi-gigabyte predictor. This changes residency only; no live model or
++  // coder state exists at this boundary.
++  malloc_trim(0);
++  ResourcePhaseMarker("pre_predictor_cleanup", "end");
+ 
+   std::ifstream temp_in(temp_path, std::ios::in | std::ios::binary);
+   if (!temp_in.is_open()) return false;
+ 
+   std::ofstream data_out(output_path, std::ios::out | std::ios::binary);
+   if (!data_out.is_open()) return false;
+ 
+   temp_in.seekg(0, std::ios::end);
+   unsigned long long temp_bytes = temp_in.tellg();
+   temp_in.seekg(0, std::ios::beg);
+ 
+   std::vector<bool> vocab(256, false);
+   if (temp_bytes < kMinVocabFileSize) {
+     std::fill(vocab.begin(), vocab.end(), true);
+   } else {
+     ExtractVocab(temp_bytes, &temp_in, &vocab);
+     temp_in.seekg(0, std::ios::beg);
+   }
+ 
+   WriteHeader(temp_bytes, vocab, dictionary != NULL, &data_out);
++  ResourcePhaseMarker("predictor_construction", "start");
+   Predictor p(vocab);
+   if (enable_preprocess) preprocessor::Pretrain(&p, dictionary);
++  ResourcePhaseMarker("predictor_construction", "end");
++  ResourcePhaseMarker("encode_steady_state", "start");
+   Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);
++  ResourcePhaseMarker("encode_steady_state", "end");
+   temp_in.close();
+   data_out.close();
+   remove(temp_path.c_str());
+   return true;
+ }
+@@ -468,38 +496,42 @@ int main(int argc, char** argv) {
++    ResourcePhaseMarker("package_asset_extraction", "start");
+     // unpack a) cmix dictionary, b) new order of articles, c) actual cmix binary
+     if (selfextract_comp() != 0) {
+       return Help();
+     }
++    ResourcePhaseMarker("package_asset_extraction", "end");
++    ResourcePhaseMarker("outer_preprocessing", "start");
+ 
+ #ifdef KH_ISBN_FOLD
+     // ISBN fold is applied OUTERMOST on the raw input, before any
+     // split/reorder/phda9/WRT stage consumes it. Folding only substitutes
+     // check-digit bytes with '0' (same length, digit stays a digit, never a
+     // newline), so downstream line-based splitting and preprocessing see an
+     // identical structure. The escape side-stream is carried into archive9.
+     if (!isbn::ForwardFile(input_path, ".isbn_folded", ".isbn_side")) {
+       return Help();
+     }
+     // Preparing (folded) enwik9 for reordering
+     split4Comp(".isbn_folded");
+ #else
+     // Preparing enwik9 for reordering
+     split4Comp(input_path.c_str());
+ #endif
+ 
+     // change the order of articles in the input
+     reorder();
+ 
+     // apply phda9 preprocessor
+     phda9_prepr();
+ 
+     // merge all input parts after preprocessing
+     cat(".main_phda9prepr", ".intro", "un1");
+     cat("un1", ".coda", ".ready4cmix");
++    ResourcePhaseMarker("outer_preprocessing", "end");
+ 
+     // run compression
+     input_path = ".ready4cmix";
+     dictionary = fopen(".dict", "rb");
+     if (!RunCompression(enable_preprocess, input_path, temp_path, output_path,
+         dictionary, &input_bytes, &output_bytes, ".r1_payload_lex_side")) {
+       return Help();
+     }
+ 
+@@ -507,75 +539,77 @@ int main(int argc, char** argv) {
++    ResourcePhaseMarker("archive_construction", "start");
+     // construct a selfextracting decompressor binary
+     // archive9 = decomp_binary(upxed) + comp_dict + cmix_output + header.dat
+     cat(".decomp_bin", ".dict.comp", "dec1");
+ 
+     // get the size of the output file
+     size_t output_size = getFileSize(output_path);
+ 
+     HeaderInfo header;
+     read("test.dat", header);
+     header.decomp_input_size = output_size;
+ #ifdef KH_ISBN_FOLD
+     header.isbn_side_size = (int)getFileSize(".isbn_side");
+ #endif
+ #ifdef KH_BITLSTM32_ARCHIVE
+     // Single-binary shape: carry the head weight blob (from the encode-time
+     // KH_BITLSTM32 env path) inside archive9 as a raw appended asset (x1 in
+     // S) so a bare `./archive9` decode is standalone. Env unset -> no head
+     // was used for the encode -> carry nothing (size 0).
+     {
+       const char* kh_blob_env = getenv("KH_BITLSTM32");
+       if (kh_blob_env && kh_blob_env[0]) {
+         std::string cp_cmd = std::string("cp -f '") + kh_blob_env + "' .head_blob4archive";
+         if (system(cp_cmd.c_str()) != 0) return Help();
+         header.head_blob_size = (int)getFileSize(".head_blob4archive");
+       } else {
+         FILE* hb = fopen(".head_blob4archive", "wb");
+         fclose(hb);
+         header.head_blob_size = 0;
+       }
+     }
+ #endif
+ #ifdef KH_OBIAS_ARCHIVE
+     // Same single-binary asset shape for the obias upstream blob (encode-time
+     // KH_OBIAS env path). Env unset -> obias-less encode -> 0-byte slice.
+     {
+       const char* kh_obias_env = getenv("KH_OBIAS");
+       if (kh_obias_env && kh_obias_env[0]) {
+         std::string cp_cmd = std::string("cp -f '") + kh_obias_env + "' .obias_blob4archive";
+         if (system(cp_cmd.c_str()) != 0) return Help();
+         header.obias_blob_size = (int)getFileSize(".obias_blob4archive");
+       } else {
+         FILE* ob = fopen(".obias_blob4archive", "wb");
+         fclose(ob);
+         header.obias_blob_size = 0;
+       }
+     }
+ #endif
+     write("header4archive.dat", header);
+ 
+     cat("dec1", output_path.c_str(), "dec2");
+     // archive9 = decomp_bin + dict.comp + cmix_output [+ isbn_side]
+     //            [+ head_blob] [+ obias_blob] + header
+     // (same asset order as the selfextract_decomp() offsets).
+     {
+       const char* cur = "dec2";
+ #ifdef KH_ISBN_FOLD
+       cat(cur, ".isbn_side", "dec2b");
+       cur = "dec2b";
+ #endif
+ #ifdef KH_BITLSTM32_ARCHIVE
+       cat(cur, ".head_blob4archive", "dec2c");
+       cur = "dec2c";
+ #endif
+ #ifdef KH_OBIAS_ARCHIVE
+       cat(cur, ".obias_blob4archive", "dec2d");
+       cur = "dec2d";
+ #endif
+       cat(cur, "header4archive.dat", "archive9");
+     }
+ 
+     // make the decompressor binary executable
+     char mode[] = "0777";
+     char buf[100] = "archive9";
+     int i = strtol(mode, 0, 8);
+     chmod(buf, i);
++    ResourcePhaseMarker("archive_construction", "end");
+ 

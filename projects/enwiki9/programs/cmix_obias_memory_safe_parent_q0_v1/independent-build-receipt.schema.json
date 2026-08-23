@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma://enwiki9/cmix-obias-memory-safe-parent/independent-build-receipt/v1",
+  "title": "Memory-safe CMIX parent independent-build comparison receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "operational_status",
+    "build_a",
+    "build_b",
+    "comparison",
+    "independent_build_identity_pass",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix_obias_memory_safe_parent.independent_build_receipt.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_memory_safe_parent_q0_v1"
+    },
+    "operational_status": {
+      "const": "terminal"
+    },
+    "build_a": {
+      "$ref": "#/$defs/build"
+    },
+    "build_b": {
+      "$ref": "#/$defs/build"
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distinct_build_ids",
+        "distinct_build_roots",
+        "source_identity_pass",
+        "build_contract_identity_pass",
+        "cmix_identity_pass",
+        "head_identity_pass"
+      ],
+      "properties": {
+        "distinct_build_ids": {
+          "const": true
+        },
+        "distinct_build_roots": {
+          "const": true
+        },
+        "source_identity_pass": {
+          "const": true
+        },
+        "build_contract_identity_pass": {
+          "const": true
+        },
+        "cmix_identity_pass": {
+          "const": true
+        },
+        "head_identity_pass": {
+          "const": true
+        }
+      }
+    },
+    "independent_build_identity_pass": {
+      "const": true
+    },
+    "claim_boundary": {
+      "const": "Proves two clean cache-disabled builds under matching recorded source and toolchain contracts produced byte-identical cmix and head artifacts; it grants no compression, inverse, determinism, resource, eligibility, or submission authority."
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_id",
+        "program_reference",
+        "receipt",
+        "cmix",
+        "head"
+      ],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "program_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt": {
+          "$ref": "#/$defs/artifact"
+        },
+        "cmix": {
+          "$ref": "#/$defs/artifact"
+        },
+        "head": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_full_midpoint_oracle64_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_memory_safe_parent_q0_v1",
+      "required_evidence": "probability-identical full roundtrip and memory receipt below the strict ceiling"
+    }
+  ],
+  "contract": {
+    "question": "Does an admissible full CMIX midpoint learning operation contain target-scale causal second-half value?",
+    "segment_bytes": 64,
+    "midpoint_byte": 32,
+    "arms": {
+      "P": "unchanged memory-safe parent",
+      "K": "identical collection and replay bookkeeping with no midpoint update",
+      "F": "full source-bound admissible CMIX midpoint update",
+      "S": "same full update with frozen causal misalignment"
+    },
+    "scope_ladder_bytes": [250000, 1000000, 10000000],
+    "promotion_logic": [
+      "250000 requires exact inverse, P/K probability identity, state synchronization, and bounded finite arithmetic",
+      "1000000 measures a provisional full-mechanism ceiling",
+      "10000000 is authorized only when the 1000000-byte ceiling is target-bearing"
+    ],
+    "ordinary_parent_updates": "continue at their original call sites and cadence",
+    "required_before_execution": [
+      "exact source symbols for the midpoint update",
+      "complete optimizer and recurrent state synchronization set",
+      "frozen S-arm event permutation",
+      "actual arithmetic archive and exact inverse"
+    ]
+  },
+  "activation_requirements": [
+    "The memory-safe parent has passed full identity and resource qualification",
+    "F is fully source-bound and decoder-reproducible",
+    "P/K synchronization instrumentation has passed on a tiny synthetic fixture"
+  ],
+  "claim_boundary": [
+    "A positive oracle is a ceiling measurement, not a compact codec result",
+    "A subscale full oracle retires CMIX-MIDAS rather than authorizing rank reduction",
+    "This contract has zero promotion authority until activated as a versioned experiment"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "scheduler_economics_v2",
+  "revision": 2,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [],
+  "contract": {
+    "formula": "requiredGrossSavings(scope) = ceil((parentScore - targetScore + maximumAddedPackageBytes + frozenTransferResourceReserveBytes - realizedExactPackageSavingBytes) * scopeBytes / 1000000000)",
+    "reference_values": {
+      "parentScore": 108513707,
+      "targetScore": 105000000,
+      "maximumAddedPackageBytes": 65536,
+      "frozenTransferResourceReserveBytes": 500000,
+      "realizedExactPackageSavingBytes": 0,
+      "requiredGrossSavingsBytesAtFullCorpus": 4079243,
+      "requiredGrossSavingsBytesAt10000000": 40793,
+      "requiredGrossSavingsBytesAt100000000": 407925
+    },
+    "replacement_fields": [
+      "requiredGrossSavingsBytes",
+      "requiredNetSavingsBytes",
+      "measuredOracleCeilingBytes",
+      "measuredOracleCeilingEvidence",
+      "priorMedianSavingsBytes",
+      "priorP90SavingsBytes",
+      "priorEvidence",
+      "maximumAddedPackageBytes"
+    ],
+    "new_mechanism_defaults": {
+      "requiredGrossSavingsBytes": 4079243,
+      "measuredOracleCeilingBytes": null,
+      "priorMedianSavingsBytes": null,
+      "priorP90SavingsBytes": null
+    },
+    "ranking_order": [
+      "actionable",
+      "valid_contract",
+      "dependencies_passed",
+      "resource_feasible",
+      "package_feasible",
+      "measured_parent_decision",
+      "measured_lower_bound_gain",
+      "measured_transfer",
+      "decision_value_per_cpu_hour",
+      "evidence_bound_optimistic_ceiling",
+      "uncertainty",
+      "interaction_risk",
+      "manual_priority"
+    ],
+    "invariants": [
+      "required gain is never copied into expected or prior savings",
+      "10M and 100M thresholds are gross archive-gain screening gates",
+      "the actual complete counted 1G total is authoritative"
+    ]
+  },
+  "activation_requirements": [
+    "Publish versioned proposal, experiment, and search-policy schemas together",
+    "Migrate existing records without fabricating null evidence",
+    "Update validation and selection atomically before making v2 discoverable"
+  ],
+  "claim_boundary": [
+    "Reference thresholds are policy inputs, not measured candidate gains",
+    "This migration plan does not alter the active scheduler yet"
+  ]
+}

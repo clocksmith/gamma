@@ -1,0 +1,119 @@
+{
+  "schema": "gamma.enwiki9.memory-safe-parent-implementation.v1",
+  "candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000,
+    "strict_decimal_memory_ceiling_kib": 9765625,
+    "engineering_memory_target_kib": 9000000
+  },
+  "parent": {
+    "candidate_id": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+    "authorship": "external cmix-obias/CMIX/PAQ substrate",
+    "score_credit_bytes": 0
+  },
+  "source_binding": {
+    "outer_commit": "51488a0c1228dbeab7c1be837fc90ceaed351728",
+    "tracked_tree": "23de249ff899db5ba84dd3514a6a1bb52a83d0f5",
+    "input_files": [
+      {
+        "path": "src/models/ppmd.cpp",
+        "sha256": "d54d27616f756efa1fd5d08aaec85fe4688004b5dcd49f411caba92812cbb7e1"
+      },
+      {
+        "path": "src/runner.cpp",
+        "sha256": "3344fabe7a9474eac370269afeee2fa9fe0597e50fbc370888b2a537c04e652c"
+      }
+    ],
+    "patch": "memory-safe-parent.patch",
+    "applicator": "apply_memory_safe_parent.sh",
+    "apply_command": [
+      "sh",
+      "./apply_memory_safe_parent.sh",
+      "BOUND_SOURCE_ROOT"
+    ]
+  },
+  "observed_parent_evidence": {
+    "arm_b_progress_observation_percent": 77.62,
+    "vmhwm_kib": 10435724,
+    "strict_ceiling_excess_kib": 670099,
+    "concurrent_vmrss_kib": 8508652,
+    "threads": 1,
+    "resident_memory_class": "predominantly anonymous CMIX model tables plus transient file-backed PPMd residency",
+    "sparse_ppmd_mapping": {
+      "virtual_kib": 14336000,
+      "observed_rss_kib": 92464,
+      "backing_file": "ppm.temp"
+    },
+    "dominant_context_map_pattern": {
+      "resident_512_mib_mappings": 4,
+      "source_explanation": "ContextMap3 doubles four 256 MiB m1 parameters into 512 MiB tables",
+      "semantic_change_authorized": false
+    }
+  },
+  "implementation": {
+    "changes": [
+      {
+        "id": "pre_predictor_allocator_trim",
+        "file": "src/runner.cpp",
+        "effect": "call malloc_trim(0) after all encode preprocessing and before Predictor construction"
+      },
+      {
+        "id": "tighter_ppmd_residency_trigger",
+        "file": "src/models/ppmd.cpp",
+        "effect": "change the default total-RSS purge trigger from 9216 MiB to 8192 MiB"
+      },
+      {
+        "id": "deterministic_resource_phase_markers",
+        "file": "src/runner.cpp",
+        "effect": "append fixed JSONL events only when GAMMA_RESOURCE_PHASE_MARKERS is bound by resource-guard v3"
+      }
+    ],
+    "unchanged": [
+      "PPMd heap capacity and backing-file bytes",
+      "all CMIX context table capacities and layouts",
+      "all predictor parameters and neural assets",
+      "preprocessing output bytes and coding order",
+      "persistent update call sites and cadence",
+      "arithmetic coder implementation and framing",
+      "package accounting boundary"
+    ],
+    "output_neutral_argument": [
+      "malloc_trim is called before Predictor exists and can return only allocator pages not owned by live preprocessing objects",
+      "the existing PPMd DropPpmHeapResidency path uses MADV_DONTNEED on a MAP_SHARED file mapping and reloads the same backing bytes at the same virtual addresses",
+      "only purge timing changes; no model state, pointer value, prediction, or update order is intentionally changed",
+      "phase markers write only fixed evidence events outside model and coder state when explicitly enabled"
+    ]
+  },
+  "activation_dependencies": [
+    "Arm B terminal archive, inverse, cleanup, and resource evidence is retained",
+    "resource-guard receipt v3 has synthetic evidence on noncontending hardware",
+    "the patch applies to the exact bound input hashes",
+    "a frozen program-lock.json binds the independently built cmix and head artifacts",
+    "the original build flags, linker flags, assets, corpus, and package contract remain unchanged"
+  ],
+  "required_evidence": [
+    "phase markers before preprocessing, before Predictor, encode steady state, archive construction, and cleanup",
+    "parent and child integer probability stream identity",
+    "parent and child out.cmix payload byte identity",
+    "explicitly expected parent and child executable/archive difference caused only by the memory patch",
+    "exact canonical inverse",
+    "two independent child out.cmix payload repeats",
+    "two independent child archive repeats",
+    "process-tree RSS, sampled per-process VmHWM, cgroup memory.peak/events, and smaps checkpoints",
+    "temporary disk logical and allocated peaks",
+    "runtime receipt under the bound single-CPU environment",
+    "complete source, package, dependency, license, and provenance closure"
+  ],
+  "decision": {
+    "compression_credit_bytes": 0,
+    "memory_qualification": "unmeasured",
+    "promotion_authorized": false,
+    "on_probability_mismatch": "reclassify as a new compression candidate and restart the archive ladder",
+    "on_memory_miss": "preserve terminal evidence and authorize no parameter sweep",
+    "on_identity_and_memory_pass": "admit as the exact parent for the CMIX full-midpoint oracle"
+  }
+}

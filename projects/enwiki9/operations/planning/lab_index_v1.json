@@ -1,0 +1,47 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "lab_index_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [],
+  "contract": {
+    "path": "operations/adaptive/lab_index.sqlite",
+    "authoritative": false,
+    "cache_keys": [
+      "artifact_digest",
+      "schema_digest",
+      "validator_version",
+      "candidate_revision",
+      "experiment_digest",
+      "reflection_digest",
+      "dependency_edges",
+      "operational_status"
+    ],
+    "commands": {
+      "status --live": "inspect process table, exclusive lease, and active guard only",
+      "next-experiment --fast": "select from the index, then fully revalidate the selected candidate and transitive authority chain",
+      "audit --full": "perform deliberate complete repository traversal"
+    },
+    "fail_closed_rules": [
+      "missing cache entry triggers authoritative validation",
+      "digest or validator-version change invalidates the entry",
+      "selection cannot execute until its full transitive chain revalidates",
+      "the index cannot create or upgrade evidence"
+    ]
+  },
+  "activation_requirements": [
+    "Define a transactional rebuild and corruption recovery path",
+    "Keep the generated SQLite file outside authoritative evidence",
+    "Add selected-chain equivalence checks against full validation using synthetic fixtures"
+  ],
+  "claim_boundary": [
+    "The index is a performance cache only",
+    "No cached row is experiment authority"
+  ]
+}

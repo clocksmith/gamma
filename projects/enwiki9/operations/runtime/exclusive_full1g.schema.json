@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.exclusive-full1g-lease.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "pid",
+    "proc_start_ticks",
+    "command_sha256",
+    "runner_sha256",
+    "guard_path",
+    "result_path",
+    "scratch_path",
+    "resource_class",
+    "started_utc",
+    "heartbeat_utc",
+    "lease_mode"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": { "const": "gamma.enwiki9.exclusive-full1g-lease.v1" },
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "pid": { "type": "integer", "minimum": 1 },
+    "codec_pid": { "type": "integer", "minimum": 1 },
+    "proc_start_ticks": { "type": "integer", "minimum": 1 },
+    "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "codec_command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "runner_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "guard_path": { "type": "string", "minLength": 1 },
+    "result_path": { "type": "string", "minLength": 1 },
+    "scratch_path": { "type": "string", "minLength": 1 },
+    "resource_class": { "const": "exclusive_full1g" },
+    "started_utc": { "type": "string", "minLength": 1 },
+    "heartbeat_utc": { "type": "string", "minLength": 1 },
+    "lease_mode": { "enum": ["managed", "read_only_sidecar"] },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  }
+}

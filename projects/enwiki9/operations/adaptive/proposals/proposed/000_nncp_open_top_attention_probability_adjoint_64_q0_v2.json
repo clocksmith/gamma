@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-08-23T02:00:00+00:00",
+  "evidence": [
+    "operations/adaptive/experiments/nncp_open_top_attention_value_transpose_64_q0_v1.json",
+    "operations/planning/nncp_probability_adjoint_and_replay_budget_v1.json",
+    "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "A LibNC-free scalar explicit-FMA reference and an eight-key AVX2/FMA treatment produce the same complete BF16 layer-19 probability adjoint and both exactly match the independently captured 5,242,880-word oracle.",
+  "interfaces_exposed": [
+    "exact open value state plus attended adjoint to scalar probability adjoint",
+    "same inputs to AVX2 probability adjoint",
+    "cross-implementation, source, layout, sign, and replay comparators"
+  ],
+  "kill_condition": "Any antecedent drift, incomplete output, scalar/source mismatch, AVX/source mismatch, scalar/AVX mismatch, dead negative control, replay drift, forbidden dependency, source-package overflow, cleanup failure, or resource failure rejects v2. No tolerance or fitted correction is permitted.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "exact_arithmetic_reconstruction",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "owner": "codex-root",
+  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_attention_value_transpose_64_q0_v1",
+  "operational_status": "dormant_dependency",
+  "priority": 1602,
+  "promotion_condition": "All scalar, AVX, source, control, replay, dependency, package, cleanup, and resource predicates pass exactly; success authorizes only the bounded path toward integrated open segment replay.",
+  "proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "retired_neighborhoods": [
+    "AVX-only probability-adjoint claims without an exposed scalar reference",
+    "tolerance, comparator-derived correction, alternate tensor layouts, and captured-output substitution"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 1602,
+  "state": "proposed",
+  "title": "Exact scalar and AVX attention-probability adjoint v2"
+}

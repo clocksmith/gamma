@@ -1,0 +1,59 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_phase_attribution_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+      "required_evidence": "terminal retained resource receipt and phase logs"
+    }
+  ],
+  "contract": {
+    "observed_arm_b_vmhwm_kib": 10425744,
+    "strict_decimal_ceiling_kib": 9765625,
+    "strict_ceiling_excess_kib": 660119,
+    "engineering_parent_target_kib": 9000000,
+    "reduction_to_engineering_target_kib": 1425744,
+    "phases": [
+      "preprocessing",
+      "dictionary_order_construction",
+      "model_initialization",
+      "encoding_steady_state",
+      "termination_archive_construction",
+      "decode_initialization",
+      "decode_steady_state",
+      "raw_reconstruction",
+      "cleanup"
+    ],
+    "required_measurements": [
+      "continuous_process_tree_vmrss",
+      "per_process_vmhwm",
+      "cgroup_v2_memory_current",
+      "cgroup_v2_memory_peak",
+      "cgroup_v2_memory_events",
+      "smaps_rollup_checkpoints",
+      "major_mapping_identity_and_size",
+      "buffer_creation_and_release_phase",
+      "scratch_logical_bytes",
+      "scratch_allocated_bytes",
+      "phase_markers"
+    ]
+  },
+  "activation_requirements": [
+    "Arm B has terminalized and its result directory is immutable",
+    "the attribution runner is bound to a new experiment revision",
+    "the strict decimal memory ceiling is enforced rather than inferred from samples"
+  ],
+  "claim_boundary": [
+    "This document launches no process and grants no compression credit",
+    "Arm B memory qualification remains failed even if later archive checks pass",
+    "Attribution identifies a successor target but does not prove a compliant parent"
+  ]
+}

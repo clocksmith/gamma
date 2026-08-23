@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.contract-supersession.v1",
+  "candidate_id": "cmix_obias_full_midpoint_oracle64_q0_v1",
+  "frozen_contract_path": "operations/planning/cmix_obias_full_midpoint_oracle64_q0_v1.json",
+  "frozen_experiment_path": "operations/adaptive/experiments/cmix_obias_full_midpoint_oracle64_q0_v1.json",
+  "operational_status": "superseded_before_execution",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "archive_observed": false,
+  "reason": {
+    "code": "native_horizon_and_midpoint_boundary_underdetermined",
+    "source_findings": [
+      "ByteMixer invokes Lstm::Perceive once per decoded byte.",
+      "The donor LSTM training horizon is 128 byte events.",
+      "The native update is entered only when epoch_ equals zero after the 128-event horizon.",
+      "The proposed midpoint occurs after 32 byte events and therefore cannot invoke an unchanged native full update.",
+      "Moving the native update call would leave output updates, recurrent BPTT, Adam moments, history ownership, and state reconstruction undefined."
+    ]
+  },
+  "forbidden_interpretations": [
+    "No compression rejection is recorded.",
+    "No evidence about CMIX midpoint value is recorded.",
+    "The v1 contract must not be silently completed after execution evidence exists.",
+    "NNCP midpoint evidence does not resolve the CMIX optimizer boundary."
+  ],
+  "successor": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+    "planning_path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+    "relationship": "correction_only_semantic_completion"
+  }
+}

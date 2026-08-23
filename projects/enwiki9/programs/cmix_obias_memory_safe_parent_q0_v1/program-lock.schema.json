@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma://enwiki9/cmix-obias-memory-safe-parent/program-lock/v1",
+  "title": "Memory-safe CMIX parent frozen program lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "operational_status",
+    "candidate_id",
+    "program_reference",
+    "cmix",
+    "head",
+    "source_binding",
+    "build_receipt",
+    "independent_build_identity_pass"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix_obias_memory_safe_parent.program_lock.v1"
+    },
+    "operational_status": {
+      "const": "frozen"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_memory_safe_parent_q0_v1"
+    },
+    "program_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cmix": {
+      "$ref": "#/$defs/artifact"
+    },
+    "head": {
+      "$ref": "#/$defs/artifact"
+    },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outer_commit",
+        "tracked_tree",
+        "patch_sha256",
+        "input_files"
+      ],
+      "properties": {
+        "outer_commit": {
+          "$ref": "#/$defs/gitObject"
+        },
+        "tracked_tree": {
+          "$ref": "#/$defs/gitObject"
+        },
+        "patch_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_files": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        }
+      }
+    },
+    "build_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "independent_build_identity_pass": {
+      "const": true
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
