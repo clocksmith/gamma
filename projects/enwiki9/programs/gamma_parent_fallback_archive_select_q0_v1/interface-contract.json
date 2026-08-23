@@ -1,0 +1,119 @@
+{
+  "schema_version": "gamma.native-program-interface.v1",
+  "program_id": "gamma_parent_fallback_archive_select_q0_v1",
+  "operational_status": "dormant_dependency",
+  "execution_authority": false,
+  "source": "archive-select.cpp",
+  "language": "C++17 with Linux/POSIX file operations",
+  "purpose": "Create or extract the exact 14-byte GAFS parent-fallback frame without launching either codec.",
+  "commands": {
+    "create": {
+      "argv": [
+        "archive-select",
+        "create",
+        "P_PAYLOAD",
+        "C_PAYLOAD",
+        "OUTPUT"
+      ],
+      "stdout": "exactly P or C followed by newline on success",
+      "stderr": "diagnostic only",
+      "success_return_code": 0,
+      "usage_return_code": 2,
+      "failure_return_code": 1
+    },
+    "extract": {
+      "argv": [
+        "archive-select",
+        "extract",
+        "ARCHIVE",
+        "OUTPUT"
+      ],
+      "stdout": "exactly P or C followed by newline on success",
+      "stderr": "diagnostic only",
+      "success_return_code": 0,
+      "usage_return_code": 2,
+      "failure_return_code": 1
+    }
+  },
+  "frame": {
+    "header_bytes": 14,
+    "byte_order": "little-endian",
+    "fields": [
+      {
+        "offset": 0,
+        "bytes": 4,
+        "value_ascii": "GAFS"
+      },
+      {
+        "offset": 4,
+        "bytes": 1,
+        "value": 1,
+        "name": "version"
+      },
+      {
+        "offset": 5,
+        "bytes": 1,
+        "name": "mode",
+        "values": {
+          "0": "P",
+          "1": "C"
+        }
+      },
+      {
+        "offset": 6,
+        "bytes": 8,
+        "name": "payload_bytes"
+      }
+    ],
+    "payload_offset": 14,
+    "trailing_bytes": "forbidden"
+  },
+  "selection": {
+    "metric": "logical payload bytes",
+    "tie_break": "P",
+    "equation": "selected=P when bytes(P)<=bytes(C), otherwise selected=C",
+    "archive_equation": "bytes(output)=14+min(bytes(P),bytes(C))"
+  },
+  "file_contract": {
+    "inputs": "O_RDONLY|O_CLOEXEC|O_NOFOLLOW regular files",
+    "output": "same-directory exclusive temporary regular file committed with a no-overwrite hard link",
+    "mutation_detection": "device, inode, size, and nanosecond mtime unchanged across copy",
+    "durability": "fsync output then fsync parent directory",
+    "failure": "no authoritative final output; partial temporary path is removed",
+    "existing_output": "hard failure without overwrite"
+  },
+  "claim_boundary": {
+    "grants": [
+      "deterministic framing after a passing native receipt",
+      "deterministic payload extraction after a passing native receipt"
+    ],
+    "does_not_grant": [
+      "parent or candidate codec validity",
+      "exact decompression",
+      "package closure",
+      "resource or runtime eligibility",
+      "complete counted score",
+      "compression credit"
+    ]
+  },
+  "build_contract": {
+    "compiler": "source-locked C++17 compiler",
+    "required_flags": [
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror"
+    ],
+    "linkage": "must be reported and included in dependency/package closure",
+    "build_log_sha256": null,
+    "binary_sha256": null
+  },
+  "activation_dependencies": [
+    "Arm B terminal evidence frozen",
+    "program lock materialized with non-null source, compiler, build-log, and binary hashes",
+    "native create/extract fixture receipt passes",
+    "tamper and no-overwrite controls pass",
+    "binary and required runtime closure included in union package accounting"
+  ]
+}

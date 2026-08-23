@@ -1,0 +1,120 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "post_arm_b_prize_transition_v1",
+  "revision": 1,
+  "operational_status": "waiting_on_exclusive_terminal",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "active_exclusive_run": {
+    "candidate_id": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+    "allowed_action": "continue unchanged to wrapper terminal",
+    "forbidden_action": "launch any compiler, codec, oracle, scanner, or proof workload while the live exclusive lease remains",
+    "established_memory_verdict": "fail",
+    "memory_failure_is_irrevocable_for_this_execution": true
+  },
+  "terminal_sequence": [
+    {
+      "sequence": 1,
+      "artifact": "cmix_obias_full1g_ab_audit_v2.py",
+      "mode": "read_only",
+      "requirements": [
+        "Arm B wrapper has exited",
+        "active result and scratch paths are retained unchanged",
+        "encode, decode, raw inverse, cleanup, resource, and dependency receipts are terminal"
+      ],
+      "outputs": [
+        "package_identity_pass",
+        "payload_identity_pass",
+        "archive_identity_pass",
+        "raw_inverse_pass",
+        "two_run_determinism_pass",
+        "memory_pass=false",
+        "cleanup_pass",
+        "dependency_closure_pass"
+      ]
+    },
+    {
+      "sequence": 2,
+      "artifact": "cmix_obias_memory_phase_attribution_q0_v2",
+      "mode": "retained_receipt_analysis_then_bounded_replay",
+      "requirements": [
+        "existing cmix_memory_phase_attribution.py consumes retained phase/resource evidence under the v2 correction-only contract",
+        "no memory pass is inferred from sampled RSS when VmHWM or cgroup peak fails",
+        "the attributed high-water phase and allocation class are frozen before q1 scope promotion",
+        "q1 must reach the 9000000 KiB engineering target, not merely cross below 9765625 KiB"
+      ]
+    },
+    {
+      "sequence": 3,
+      "artifact": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+      "mode": "proof_chain",
+      "requirements": [
+        "retained Arm B memory-phase attribution is terminal and content-addressed",
+        "q1 pending program lock materialized and independently verified",
+        "synthetic allocator and build-chain negative controls pass",
+        "disjoint A/B clean builds are byte-identical",
+        "selected binary equals its build receipt and dependency closure"
+      ],
+      "promotion_ladder": [
+        "synthetic allocation and failure controls",
+        "250KB probability, state, coder, payload, decode, and inverse identity",
+        "1MB repeated identity and resource attribution",
+        "10MB file-backed residency and scratch accounting",
+        "100MB only if the measured full-corpus memory ceiling remains feasible",
+        "1GB exact parent qualification under the hard decimal memory limit"
+      ]
+    },
+    {
+      "sequence": 4,
+      "artifact": "cmix_obias_full_midpoint_oracle64_q0_v1",
+      "mode": "P_K_F_S_actual_finite_coder",
+      "requirements": [
+        "memory-safe exact parent terminal pass",
+        "P/K probability and complete persistent-state identity",
+        "exact decode and raw inverse",
+        "target-scale F gain and S causal control before compactization"
+      ]
+    },
+    {
+      "sequence": 5,
+      "artifact": "cmix_obias_midpoint_persistence_attribution64_q0_v1",
+      "mode": "P_F_J_S_actual_finite_coder",
+      "decision": {
+        "J_retains_at_least_0_80": "authorize one SAFE-FORK MIDAS realization wrapped by SAFE-MIX",
+        "J_below_0_80_and_functional_JVP_strong": "authorize one persistent tangent or curvature realization",
+        "F_subscale_or_causal_controls_fail": "retire CMIX-MIDAS"
+      }
+    }
+  ],
+  "independent_scientific_lanes_after_lease": [
+    {
+      "family": "orthogonal_structure",
+      "artifact": "wiki_pda_structural_replay_q0_v1",
+      "rule": "run its frozen impossibility and donor-surprise gates before native integration"
+    },
+    {
+      "family": "open_nncp_midas",
+      "artifact": "nncp_open_top_attention_value_transpose_64_q0_v1",
+      "rule": "allow at most three additional primitive gates before one integrated open segment replay"
+    },
+    {
+      "family": "reusable_safe_mixture",
+      "artifact": "gamma_safe_mix_v1",
+      "rule": "zero discovery-family and archive credit until native/reference, build, controls, and finite-coder P/K/D/M evidence pass"
+    }
+  ],
+  "global_invariants": [
+    "Only one substantial process runs on this host.",
+    "Actual complete counted archive economics outrank ideal bits and projected savings.",
+    "Changed probability trajectories require a fresh joint archive.",
+    "No mechanism activates from a dormant contract without all named dependencies.",
+    "Every terminal failure authorizes at most one materially different successor."
+  ],
+  "execution_authority": false,
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

@@ -11,6 +11,7 @@ from pathlib import Path
 import shutil
 import struct
 import subprocess
+import sys
 import tarfile
 import tempfile
 import traceback
@@ -27,6 +28,11 @@ DESCRIPTOR = PROGRAM / "program.py"
 CONTRACT = ROOT / "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2.json"
 PROPOSAL = ROOT / "operations/adaptive/proposals/proposed/000_nncp_open_top_attention_probability_adjoint_64_q0_v2.json"
 LEASE = ROOT / "operations/runtime/exclusive_full1g.json"
+RESOURCE_GUARD = ROOT / "tools/run_with_resource_guard_v3.py"
+TASKSET = Path("/usr/bin/taskset")
+SHELL = Path("/bin/sh")
+RESOURCE_MEMORY_BYTES = 10_000_000_000
+TEMPORARY_DISK_LIMIT_BYTES = 2_000_000_000
 
 VALUE = ROOT / "results/nncp_open_top_attention_forward_inputs_64_q0_v1/open-exact-value-state.bf16"
 ATTENDED = ROOT / "results/nncp_open_concat_head_identity_64_q0_v1/open-exact-attended-adjoint.bf16"
@@ -128,6 +134,114 @@ def run(argv: list[str], cwd: Path, stdout: Path, stderr: Path) -> dict[str, Any
             "stderr": artifact(stderr)}
 
 
+def require_empty_cgroup(environment_name: str) -> Path:
+    raw = os.environ.get(environment_name)
+    if not raw:
+        raise RuntimeError(f"{environment_name} must name a pre-created empty cgroup v2 directory")
+    path = Path(raw)
+    procs = path / "cgroup.procs"
+    if not path.is_dir() or not procs.is_file():
+        raise RuntimeError(f"invalid cgroup v2 directory in {environment_name}: {path}")
+    if procs.read_text(encoding="ascii").strip():
+        raise RuntimeError(f"cgroup is not empty: {path}")
+    return path
+
+
+def verify_resource_guard_receipt(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {"path": str(path), "terminal_pass": False, "reason": "receipt absent"}
+    value = json.loads(path.read_text(encoding="utf-8"))
+    measurements = value.get("measurements")
+    guards = value.get("guards")
+    cgroup = value.get("cgroup")
+    terminal_pass = (
+        value.get("schema") == "gamma.enwiki9.resource-guard-receipt.v3"
+        and value.get("status") == "complete"
+        and value.get("returncode") == 0
+        and isinstance(measurements, dict)
+        and bool(measurements)
+        and all(item is True for item in measurements.values())
+        and isinstance(guards, dict)
+        and bool(guards)
+        and all(item is False for item in guards.values())
+        and isinstance(cgroup, dict)
+        and cgroup.get("joined_before_exec") is True
+    )
+    return {
+        "artifact": artifact(path),
+        "terminal_pass": terminal_pass,
+        "status": value.get("status"),
+        "returncode": value.get("returncode"),
+        "cgroup_joined_before_exec": cgroup.get("joined_before_exec") if isinstance(cgroup, dict) else None,
+    }
+
+
+def run_guarded_evaluation(
+    evaluator: Path,
+    paths: dict[str, Path],
+    replay: str,
+    work: Path,
+    cgroup: Path,
+    cpu: int,
+) -> dict[str, Any]:
+    marker = work / f"evaluation-{replay}.phase-markers.jsonl"
+    marker.write_bytes(b"")
+    guard_path = RESULT / f"evaluation-{replay}.guard.json"
+    begin = json.dumps(
+        {"detail": f"evaluation-{replay}", "event": "begin", "phase": "diagnostic"},
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    end = json.dumps(
+        {"detail": f"evaluation-{replay}", "event": "end", "phase": "diagnostic"},
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    script = (
+        f"printf '%s\\n' '{begin}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\"\n"
+        "\"$@\"\n"
+        "rc=$?\n"
+        f"printf '%s\\n' '{end}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\"\n"
+        "exit \"$rc\"\n"
+    )
+    child = [
+        str(TASKSET), "-c", str(cpu), str(SHELL), "-c", script,
+        "guarded-evaluator", str(evaluator), str(VALUE), str(ATTENDED),
+        *(str(paths[name]) for name in ("scalar", "avx", "wrong_layout", "negated")),
+    ]
+    argv = [
+        sys.executable,
+        str(RESOURCE_GUARD),
+        "--limit-mode", "tree",
+        "--limit-kib", "9765625",
+        "--official-decimal-limit-kib", "9765625",
+        "--sample-interval", "0.5",
+        "--cgroup-path", str(cgroup),
+        "--cgroup-memory-max-bytes", str(RESOURCE_MEMORY_BYTES),
+        "--scratch-path", str(work),
+        "--temporary-disk-limit-bytes", str(TEMPORARY_DISK_LIMIT_BYTES),
+        "--phase-marker-path", str(marker),
+        "--smaps-growth-checkpoint-kib", "65536",
+        "--max-smaps-checkpoints", "128",
+        "--max-logical-cpus", "1",
+        "--guard-json", str(guard_path),
+        "--label", f"{CANDIDATE_ID}-{replay}",
+        "--phase", "diagnostic",
+        "--",
+        *child,
+    ]
+    invocation = run(
+        argv,
+        work,
+        RESULT / f"evaluation-{replay}.stdout",
+        RESULT / f"evaluation-{replay}.stderr",
+    )
+    guard = verify_resource_guard_receipt(guard_path)
+    if invocation["returncode"] != 0 or guard["terminal_pass"] is not True:
+        raise RuntimeError(f"evaluation {replay} external resource guard failed")
+    return {"invocation": invocation, "resource_guard": guard}
+
+
 def bf16_float(word: int) -> float:
     return struct.unpack("<f", struct.pack("<I", word << 16))[0]
 
@@ -150,7 +264,7 @@ def compare(left: Path, right: Path) -> dict[str, Any]:
 
 
 def source_package(path: Path) -> None:
-    members = sorted((SOURCE, META, DESCRIPTOR, Path(__file__).resolve(), CONTRACT, PROPOSAL),
+    members = sorted((SOURCE, META, DESCRIPTOR, Path(__file__).resolve(), RESOURCE_GUARD, CONTRACT, PROPOSAL),
                      key=lambda item: str(item.relative_to(ROOT)))
     tar_path = path.with_suffix("")
     with tarfile.open(tar_path, "w") as archive:
@@ -169,9 +283,18 @@ def source_package(path: Path) -> None:
 
 def main() -> int:
     assert_exclusive_host_released()
-    for path in (SOURCE, META, DESCRIPTOR, CONTRACT, PROPOSAL, COMPILER, LINKER):
+    for path in (SOURCE, META, DESCRIPTOR, CONTRACT, PROPOSAL, COMPILER, LINKER, RESOURCE_GUARD, TASKSET, SHELL):
         if not path.is_file():
             raise FileNotFoundError(path)
+    cgroups = [require_empty_cgroup("GAMMA_NNCP_CGROUP_A"), require_empty_cgroup("GAMMA_NNCP_CGROUP_B")]
+    if cgroups[0].resolve() == cgroups[1].resolve():
+        raise RuntimeError("GAMMA_NNCP_CGROUP_A and GAMMA_NNCP_CGROUP_B must be distinct")
+    try:
+        cpu = int(os.environ["GAMMA_NNCP_CPU"])
+    except (KeyError, ValueError) as error:
+        raise RuntimeError("GAMMA_NNCP_CPU must be a nonnegative logical CPU index") from error
+    if cpu < 0:
+        raise RuntimeError("GAMMA_NNCP_CPU must be a nonnegative logical CPU index")
     verify(VALUE, VALUE_BYTES, VALUE_SHA256, "value state")
     verify(ATTENDED, ATTENDED_BYTES, ATTENDED_SHA256, "attended adjoint")
     verify(SOURCE_ADJOINT, OUTPUT_BYTES, SOURCE_SHA256, "source probability adjoint")
@@ -196,7 +319,15 @@ def main() -> int:
                    "source_probability_adjoint": artifact(SOURCE_ADJOINT)},
         "program": {"source": artifact(SOURCE), "contract": artifact(CONTRACT),
                     "proposal": artifact(PROPOSAL), "compiler": artifact(COMPILER),
-                    "linker": artifact(LINKER), "flags": FLAGS},
+                    "linker": artifact(LINKER), "resource_guard": artifact(RESOURCE_GUARD),
+                    "flags": FLAGS},
+        "resource_contract": {
+            "cpu": cpu,
+            "cgroups": [str(path) for path in cgroups],
+            "memory_max_bytes": RESOURCE_MEMORY_BYTES,
+            "temporary_disk_limit_bytes": TEMPORARY_DISK_LIMIT_BYTES,
+            "limit_mode": "tree",
+        },
     }
     try:
         with tempfile.TemporaryDirectory(prefix=f"{CANDIDATE_ID}-", dir="/dev/shm") as temporary:
@@ -218,14 +349,11 @@ def main() -> int:
             names = ("scalar", "avx", "wrong_layout", "negated")
             outputs: list[dict[str, Path]] = []
             evaluations = []
-            for replay in ("a", "b"):
+            for replay_index, replay in enumerate(("a", "b")):
                 paths = {name: work / f"{name}-{replay}.bf16" for name in names}
-                receipt = run([str(evaluator), str(VALUE), str(ATTENDED),
-                               *(str(paths[name]) for name in names)], work,
-                              RESULT / f"evaluation-{replay}.stdout",
-                              RESULT / f"evaluation-{replay}.stderr")
-                if receipt["returncode"] != 0:
-                    raise RuntimeError(f"evaluation {replay} failed")
+                receipt = run_guarded_evaluation(
+                    evaluator, paths, replay, work, cgroups[replay_index], cpu
+                )
                 for name, path in paths.items():
                     if path.stat().st_size != OUTPUT_BYTES:
                         raise RuntimeError(f"{name} {replay} geometry mismatch")
@@ -257,6 +385,10 @@ def main() -> int:
             "wrong_layout_control_live": comparisons["wrong_layout_source"]["mismatch_count"] > 0,
             "negated_control_live": comparisons["negated_source"]["mismatch_count"] > 0,
             "repeat_byte_identity": decision["execution"]["replay_identity"],
+            "external_resource_receipts_pass": all(
+                evaluation["receipt"]["resource_guard"]["terminal_pass"] is True
+                for evaluation in decision["execution"]["evaluations"]
+            ),
             "dependency_closure_pass": not decision["execution"]["forbidden_dynamic_dependencies"],
             "source_package_pass": (RESULT / "incremental_source.tar.xz").stat().st_size <= SOURCE_CEILING,
             "work_cleanup_pass": True,

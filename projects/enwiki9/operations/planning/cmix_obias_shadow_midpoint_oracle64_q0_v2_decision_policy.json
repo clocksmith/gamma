@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.cmix-shadow-midpoint-oracle-decision-policy.v1",
+  "policy_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2_decision_policy",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "operational_status": "dormant_dependency",
+  "receipt_schema": "contracts/research/v1/cmix-shadow-midpoint-oracle-receipt.schema.json",
+  "planning_contract": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+  "experiment_contract": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+  "purpose": "Measure the actual finite-archive ceiling of one exact CMIX-native midpoint update before compacting that update into DELTA-MIDAS.",
+  "activation_dependencies": [
+    "Arm B is terminal or the experiment executes on genuinely separate hardware under a corrected host-specific lease policy.",
+    "A probability-identical memory-safe CMIX parent passes its preregistered archive, inverse, state, and resource gates.",
+    "The P/K/F/S source realization, midpoint mathematics, optimizer write, state rebuild, S permutation, build, runtime root, corpus scope, and economics receipt are content-addressed.",
+    "The active host has an exclusive experiment lease and no concurrent substantial compression, NNCP, build, or hashing workload."
+  ],
+  "arm_semantics": {
+    "P": "The unchanged memory-safe CMIX parent, including every ordinary persistent update at its native call site and cadence.",
+    "K": "Execute the same first-half capture, backward bookkeeping, replay, allocation, hashing, and control flow as F, but commit an exact zero midpoint write and preserve every parent-visible state value.",
+    "F": "Execute the complete admissible first-half truncated backward graph, one exact live midpoint optimizer write, the frozen state rebuild, and second-half coding, while ordinary parent updates remain unchanged.",
+    "S": "Execute the identical F implementation and update magnitude after applying one frozen decoder-visible cyclic permutation of first-half event associations across segments."
+  },
+  "synchronization_requirements": [
+    "P and K integer probability streams are byte-identical over the complete population.",
+    "P and K payload, archive, coder state, recurrent state, mixer state, SSE state, optimizer state, context tables, and every future-affecting persistent state are byte-identical in archive-proof mode.",
+    "F encoder and decoder independently derive byte-identical midpoint updates, integer probabilities, coder state transitions, rolling state hashes, payload, archive inverse, and terminal state.",
+    "S satisfies the same encoder/decoder synchronization requirements as F.",
+    "Every 64-byte boundary has a rolling hash over probabilities, coder state, persistent predictor state, optimizer state, and episodic or replay state.",
+    "The first mismatch terminates the arm as an implementation failure and preserves a bounded divergence trace.",
+    "Equal archive size, equal ideal bits, or equal decoded output cannot substitute for synchronization identity."
+  ],
+  "mode_authority": {
+    "debug_shadow": {
+      "allowed_use": "Implementation localization and ideal-bit diagnostics only.",
+      "scientific_verdict": "none",
+      "delta_midas_activation_authority": false,
+      "archive_required": false
+    },
+    "archive_proof": {
+      "allowed_use": "Scientific oracle decision only after all finite archive, decode, inverse, repeat, resource, and dependency fields pass.",
+      "delta_midas_activation_authority": true,
+      "archive_required": true
+    }
+  },
+  "scope_ladder": {
+    "diagnostic_250k": {
+      "raw_bytes": 250000,
+      "required_gross_archive_gain_bytes": 1020,
+      "promotion_gate": "P equals K exactly; F and S synchronize and roundtrip; F archive gain is strictly positive and strictly greater than S. The 1,020-byte value is reported but not required at this implementation scope."
+    },
+    "calibration_1m": {
+      "raw_bytes": 1000000,
+      "required_gross_archive_gain_bytes": 4080,
+      "promotion_gate": "F gross archive gain is at least 4,080 bytes, F strictly beats S, all exactness and repeat gates pass, and no futility or resource gate fails."
+    },
+    "opening_10m": {
+      "raw_bytes": 10000000,
+      "required_gross_archive_gain_bytes": 40793,
+      "promotion_gate": "F gross archive gain is at least 40,793 bytes, F strictly beats S, all exactness and repeat gates pass, and resource feasibility supports compact-child development."
+    },
+    "distant_10m": {
+      "raw_bytes": 10000000,
+      "required_gross_archive_gain_bytes": 40793,
+      "promotion_gate": "On a preregistered disjoint distant population, F gross archive gain is at least 40,793 bytes and F strictly beats S under the unchanged realization."
+    }
+  },
+  "economic_rules": [
+    "Gross archive gain is P archive bytes minus treatment archive bytes on the identical frozen scope.",
+    "The economics receipt supplies the authoritative threshold; hardcoded values in this policy must equal it before execution.",
+    "Oracle code size is diagnostic and receives zero score credit, but the full update must demonstrate enough gross value to cover the compact candidate's conservative package ceiling and transfer reserve.",
+    "Ideal-bit savings, separate probability trajectories, or gains from another candidate cannot be added to archive gain.",
+    "A result below the gate is terminal for this full-update mechanism on the frozen parent; do not rescue it through rank, scale, layer, horizon, or optimizer sweeps."
+  ],
+  "terminal_branches": {
+    "bookkeeping_mismatch": {
+      "condition": "Any P/K probability, state, payload, coder, optimizer, archive, or inverse identity fails.",
+      "classification": "fail_bookkeeping_identity",
+      "authorized_successor": "One correction-only oracle implementation successor at the first divergence; scientific verdict remains none."
+    },
+    "synchronization_or_roundtrip_failure": {
+      "condition": "F or S fails encoder/decoder synchronization, finite archive, decode, inverse, or repeat identity.",
+      "classification": "implementation failure",
+      "authorized_successor": "One correction-only oracle implementation successor with unchanged population and mathematics."
+    },
+    "subscale_full_update": {
+      "condition": "A valid F archive misses the applicable 1M, opening 10M, or distant 10M gross-gain gate.",
+      "classification": "fail_subscale_full_midpoint",
+      "authorized_successor": "None. Retire CMIX-MIDAS because a compact approximation cannot be justified to recover target-scale value absent from the full oracle."
+    },
+    "causal_alignment_failure": {
+      "condition": "F does not strictly beat S in gross archive gain on a valid population.",
+      "classification": "fail_causal_alignment",
+      "authorized_successor": "None. Retire the causal midpoint claim; do not reinterpret generic perturbation as learning."
+    },
+    "target_scale_causal_pass": {
+      "condition": "Archive-proof F meets the applicable gross-gain gate, strictly beats S, P equals K exactly, and all synchronization, inverse, repeat, resource, and dependency gates pass.",
+      "classification": "pass_target_scale_causal_midpoint_value",
+      "authorized_successor": "At 1M authorize the preregistered 10M scope; after opening and distant 10M passes authorize one compact cmix_obias_deep_delta_midas64_q0_v2 realization."
+    }
+  },
+  "delta_midas_activation": {
+    "requires": [
+      "A valid archive-proof oracle receipt on 1M.",
+      "A valid archive-proof oracle receipt on opening 10M.",
+      "A valid archive-proof oracle receipt on one preregistered distant 10M population.",
+      "The same memory-safe parent, source realization, midpoint mathematics, and control permutation across scopes.",
+      "Measured target-scale F value and strict F-over-S causal separation on both 10M populations."
+    ],
+    "does_not_authorize": [
+      "Direct 100M or 1G execution.",
+      "Changing DELTA-MIDAS dimensions, taps, scale, arithmetic, update cadence, or injection point after observing compact-arm results.",
+      "Claiming compact recovery before P/K/O/R/D/S finite archives pass."
+    ]
+  },
+  "claim_boundary": {
+    "oracle_compression_credit_bytes": 0,
+    "oracle_score_credit_bytes": 0,
+    "pass_claim": "The full exact CMIX midpoint update contains target-scale causal archive value on the bound populations.",
+    "not_proven": [
+      "A compact adapter recovers that value.",
+      "A 100M or full-1G archive gain.",
+      "A complete score at or below 105,000,000 bytes.",
+      "Official Hutter Prize eligibility."
+    ]
+  },
+  "execution_authorized": false
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_safe_mix_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "role": "reusable two-expert causal mixture and experimental wrapper; not a separate discovery family",
+  "contract": {
+    "event_alphabet": "binary arithmetic-coder event",
+    "experts": {
+      "P": "authoritative parent integer probability count",
+      "D": "causal treatment integer probability count derived from decoder-visible state",
+      "sleeping_behavior": "When D is inactive it must emit exactly P's count, making the mixture and posterior update algebraically neutral."
+    },
+    "common_probability_scale": "P and D supply counts cP and cD in [1,C-1] under the exact same integer coder scale C.",
+    "ideal_reference": {
+      "initial_parent_weight": "1/2",
+      "mixture": "m_t(y)=w_t P_t(y)+(1-w_t)D_t(y)",
+      "posterior": "w_{t+1}=w_t P_t(y_t)/(w_t P_t(y_t)+(1-w_t)D_t(y_t))",
+      "sequence_bound": "Ideal unquantized Bayesian sequence log loss is at most min(L_P,L_D)+1 bit for two experts with equal prior.",
+      "authority_boundary": "The bound does not establish finite arithmetic archive size, Q63 rounding loss, switching/reset cost, package cost, runtime, memory, or enwik9 gain."
+    },
+    "finite_codec_realization": {
+      "name": "global_q63_bayes_two_expert",
+      "weight_total": 9223372036854775807,
+      "initial_parent_weight": 4611686018427387903,
+      "intermediate_width": "unsigned integer width sufficient for every declared product; reference uses arbitrary precision and native implementation must prove equality or bind divergence",
+      "mixed_count": "round_ties_to_even((w*cP+(T-w)*cD)/T), clamped to [1,C-1]",
+      "truth_count": "c when y=1 and C-c when y=0",
+      "posterior_update": "round_ties_to_even(T*w*pP_truth/(w*pP_truth+(T-w)*pD_truth)), clamped to [1,T-1]",
+      "posterior_scope": "one global posterior from first coded bit through terminal payload; no block, segment, article, or file reset",
+      "switch_tracking": "forbidden in v1",
+      "floating_point": "forbidden",
+      "network": "forbidden"
+    },
+    "arms": {
+      "P": "parent without wrapper",
+      "K": "wrapper active with D exactly equal to P; mixed count, posterior, integer probability stream, coder state, payload, archive, and parent state must equal P",
+      "D": "raw causal treatment expert",
+      "M": "Q63 mixture of P and D"
+    },
+    "proof_ladder": [
+      "tiny exhaustive integer-equation population against arbitrary-precision reference",
+      "250KB P/K exactness and finite archive diagnostic",
+      "1MB P/D/M calibration with ideal-reference regret accounting",
+      "opening and distant 10MB actual archives only after exactness",
+      "100MB and 1G only when package-aware economics pass"
+    ],
+    "receipt_schema": "contracts/research/v1/gamma-safe-mix-receipt.schema.json",
+    "maximum_added_package_bytes": 65536,
+    "design_target_added_package_bytes": 4096
+  },
+  "activation_requirements": [
+    "selected execution host has no active exclusive_full1g lease",
+    "P and D are independently content-addressed causal predictors",
+    "integer probability scale and range-coder quantization are frozen",
+    "arbitrary-precision reference and Q63 implementation have a frozen comparison population",
+    "external resource guard and dependency-closure receipts are bound"
+  ],
+  "claim_boundary": [
+    "Ideal regret is mathematical reference evidence only.",
+    "Only M's actual finite archive can establish compression value.",
+    "A joint mixture archive replaces, rather than adds, separate expert savings.",
+    "Switching and specialist priors require a separately versioned successor."
+  ],
+  "theory_sources": [
+    "https://proceedings.mlr.press/v76/orseau17a.html",
+    "https://mlanthology.org/mlj/1998/herbster1998mlj-tracking/"
+  ]
+}

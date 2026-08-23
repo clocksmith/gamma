@@ -1,0 +1,36 @@
+{
+  "schema": "gamma.enwiki9.submission-package-accounting-policy.v1",
+  "policy_id": "submission_package_accounting_policy_v1",
+  "rule_contract": "operations/planning/hutter_prize_eligibility_and_gamma_105m_v1.json",
+  "manifest_schema": "contracts/research/v1/submission-package-manifest.schema.json",
+  "receipt_schema": "contracts/research/v1/submission-package-receipt.schema.json",
+  "tool": "tools/enwiki9_package_accounting.py",
+  "principles": [
+    "Count physical submitted files with the multiplier required by the selected official formula.",
+    "Count each physical file independently even when two files have identical bytes.",
+    "Do not count an embedded component a second time; bind its offset, length, role, and SHA-256 within its counted container.",
+    "Count exact required option text as ASCII bytes.",
+    "Compute Gamma expanded closure separately from the official score.",
+    "Never infer build, inverse, determinism, resource, dependency, or license authority from package size.",
+    "A score below a threshold is a size statement, not submission authority."
+  ],
+  "required_evidence_kinds": [
+    "build",
+    "inverse",
+    "determinism",
+    "resource",
+    "dependency",
+    "license"
+  ],
+  "official_thresholds": {
+    "previous_record_bytes": 110793128,
+    "minimum_award_maximum_bytes": 109685196
+  },
+  "gamma_target_bytes": 105000000,
+  "current_status": {
+    "Arm_B_terminal": false,
+    "current_manifest_authorized": false,
+    "reason": "Arm B has no terminal archive, inverse, cleanup, dependency, or resource receipt."
+  },
+  "execution_policy": "Do not seal a current external-parent manifest until Arm B terminal evidence exists. Preparing schemas and code carries zero compression or score credit."
+}

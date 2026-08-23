@@ -1,0 +1,59 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment.v2",
+  "experiment_id": "wiki_pda_structural_replay_q0_v2",
+  "candidate_id": "wiki_pda_structural_replay_q0_v2",
+  "operational_status": "dormant_dependency",
+  "evidence_class": "archive",
+  "score_credit_bytes": 0,
+  "planning_contract": "operations/planning/wiki_pda_structural_replay_q0_v2.json",
+  "receipt_schema": "contracts/research/v1/wiki-pda-structural-replay-receipt.schema.json",
+  "parent_candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "primary_antecedent_id": "wiki_pda_structural_replay_q0_v1",
+  "execution_mode": "single_binary_sequential_arms",
+  "arm_environment": "KH_WIKI_PDA_ARM",
+  "activation_predicates": [
+    "selected execution host has no active exclusive_full1g lease; on the sole current host Arm B must terminalize and release its lease",
+    "memory-safe parent terminal pass",
+    "v1 scanner opening and distant ceiling pass",
+    "program lock terminal",
+    "independent build terminal",
+    "P/K fixture identity"
+  ],
+  "required_terminal_fields": [
+    "arm",
+    "population_manifest_sha256",
+    "archive_bytes",
+    "archive_sha256",
+    "decoded_sha256",
+    "raw_inverse_sha256",
+    "return_codes",
+    "rolling_probability_hash",
+    "rolling_coder_hash",
+    "rolling_persistent_state_hash",
+    "wiki_pda_state_hash",
+    "P_K_parent_identity",
+    "K_overlay_bookkeeping_live",
+    "D_repeat_identity",
+    "D_over_P_bytes",
+    "D_over_R_bytes",
+    "D_over_S_bytes",
+    "thirdwise_margins",
+    "complete_counted_bytes",
+    "process_tree_peak_kib",
+    "per_process_vmhwm_kib",
+    "scratch_logical_peak_bytes",
+    "scratch_allocated_peak_bytes",
+    "scientific_verdict",
+    "score_credit_bytes"
+    ,"output_manifest_sha256"
+    ,"output_verification_sha256"
+    ,"output_verification_pass"
+  ],
+  "forbidden_actions": [
+    "execute while exclusive_full1g lease is active",
+    "change parser, confidence prior, stack limits, controls, population, or thresholds after observing an archive",
+    "claim gain from the v1 scanner",
+    "add WIKI-PDA gain to another changed probability stream without a fresh joint replay"
+    ,"promote any arm whose output directory has undeclared files, symlinks, hardlinks, special files, or an unverified output manifest"
+  ]
+}

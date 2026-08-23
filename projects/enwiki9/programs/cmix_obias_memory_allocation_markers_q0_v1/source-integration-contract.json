@@ -1,0 +1,173 @@
+{
+  "schema": "gamma.enwiki9.cmix-allocation-marker-source-integration-contract.v1",
+  "candidate_id": "cmix_obias_memory_allocation_markers_q0_v1",
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "compile_gate": "KH_ALLOCATION_MARKERS",
+  "unmarked_reference": "A build without KH_ALLOCATION_MARKERS must preprocess to an identical source translation unit after conditional blocks are removed and receives final memory authority only through a fresh uninstrumented run.",
+  "insertions": [
+    {
+      "id": "fxcm_alloc",
+      "source": "src/models/fxcmv1.cpp",
+      "symbol": "template<class T> void alloc(T*& ptr, int c)",
+      "position": "after successful calloc and hugepage advice, before return",
+      "label": "fxcm_alloc",
+      "allocation_base": "ptr",
+      "usable_pointer": "ptr",
+      "allocation_bytes": "size_t(c) * sizeof(T)",
+      "usable_bytes": "size_t(c) * sizeof(T)",
+      "alignment": "alignof(T)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "fxcm_alloc_aligned",
+      "source": "src/models/fxcmv1.cpp",
+      "symbol": "template<class T> void alloc1(T*& data, int c, T*& ptr, int align)",
+      "position": "after data is aligned, before return",
+      "label": "fxcm_alloc_aligned",
+      "allocation_base": "ptr",
+      "usable_pointer": "data",
+      "allocation_bytes": "(size_t(c) + extra) * sizeof(T)",
+      "usable_bytes": "size_t(c) * sizeof(T)",
+      "alignment": "align",
+      "events": ["allocation"]
+    },
+    {
+      "id": "context_history",
+      "source": "src/context-manager.cpp",
+      "symbol": "ContextManager::ContextManager()",
+      "position": "first constructor-body statement after history_ member construction",
+      "label": "context_history",
+      "allocation_base": "history_.data()",
+      "usable_pointer": "history_.data()",
+      "allocation_bytes": "history_.capacity() * sizeof(unsigned char)",
+      "usable_bytes": "history_.size() * sizeof(unsigned char)",
+      "alignment": "alignof(unsigned char)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "context_shared_map",
+      "source": "src/context-manager.cpp",
+      "symbol": "ContextManager::ContextManager()",
+      "position": "immediately after shared_map_.resize",
+      "label": "context_shared_map",
+      "allocation_base": "shared_map_.data()",
+      "usable_pointer": "shared_map_.data()",
+      "allocation_bytes": "shared_map_.capacity() * sizeof(unsigned char)",
+      "usable_bytes": "shared_map_.size() * sizeof(unsigned char)",
+      "alignment": "alignof(unsigned char)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "context_indirect_1",
+      "source": "src/context-manager.cpp",
+      "symbol": "ContextManager::ContextManager()",
+      "position": "immediately after hashes_ind1.resize",
+      "label": "context_indirect_1",
+      "allocation_base": "hashes_ind1.data()",
+      "usable_pointer": "hashes_ind1.data()",
+      "allocation_bytes": "hashes_ind1.capacity() * sizeof(unsigned long long)",
+      "usable_bytes": "hashes_ind1.size() * sizeof(unsigned long long)",
+      "alignment": "alignof(unsigned long long)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "context_indirect_2",
+      "source": "src/context-manager.cpp",
+      "symbol": "ContextManager::ContextManager()",
+      "position": "immediately after hashes_ind2.resize",
+      "label": "context_indirect_2",
+      "allocation_base": "hashes_ind2.data()",
+      "usable_pointer": "hashes_ind2.data()",
+      "allocation_bytes": "hashes_ind2.capacity() * sizeof(unsigned long long)",
+      "usable_bytes": "hashes_ind2.size() * sizeof(unsigned long long)",
+      "alignment": "alignof(unsigned long long)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "context_indirect_3",
+      "source": "src/context-manager.cpp",
+      "symbol": "ContextManager::ContextManager()",
+      "position": "immediately after hashes_ind3.resize",
+      "label": "context_indirect_3",
+      "allocation_base": "hashes_ind3.data()",
+      "usable_pointer": "hashes_ind3.data()",
+      "allocation_bytes": "hashes_ind3.capacity() * sizeof(unsigned long long)",
+      "usable_bytes": "hashes_ind3.size() * sizeof(unsigned long long)",
+      "alignment": "alignof(unsigned long long)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "mixer_slab",
+      "source": "src/mixer/mixer.cpp",
+      "symbol": "Mixer::Mixer",
+      "position": "after successful aligned_alloc and before first memset",
+      "label": "mixer_slab",
+      "allocation_base": "slab_.get()",
+      "usable_pointer": "slab_.get()",
+      "allocation_bytes": "slab_bytes",
+      "usable_bytes": "slab_bytes",
+      "alignment": "64",
+      "events": ["allocation"]
+    },
+    {
+      "id": "ppmd_arena_anonymous",
+      "source": "src/models/ppmd.cpp",
+      "symbol": "StartSubAllocator",
+      "position": "after successful new byte[t] and before return",
+      "label": "ppmd_arena_anonymous",
+      "allocation_base": "HeapStart",
+      "usable_pointer": "HeapStart",
+      "allocation_bytes": "t",
+      "usable_bytes": "t",
+      "alignment": "alignof(byte)",
+      "events": ["allocation"]
+    },
+    {
+      "id": "ppmd_arena_file_backed",
+      "source": "src/models/ppmd.cpp",
+      "symbol": "StartSubAllocator",
+      "position": "after successful MAP_SHARED mmap and before return",
+      "label": "ppmd_arena_file_backed",
+      "allocation_base": "HeapStart",
+      "usable_pointer": "HeapStart",
+      "allocation_bytes": "t",
+      "usable_bytes": "t",
+      "alignment": "system_page_size",
+      "events": ["allocation"]
+    },
+    {
+      "id": "terminal_marker_health",
+      "source": "src/runner.cpp",
+      "symbol": "RunCompression and RunDecompression",
+      "position": "after codec terminal state and before successful return",
+      "label": null,
+      "allocation_base": null,
+      "usable_pointer": null,
+      "allocation_bytes": null,
+      "usable_bytes": null,
+      "alignment": null,
+      "events": ["health_check"]
+    }
+  ],
+  "release_policy": {
+    "explicit_release": "Emit release through the fixed registry before every source-explicit free or munmap for a recorded allocation.",
+    "implicit_destructor": "A recorded allocation released only by C++ member destruction may omit a source release record if the integration manifest names process_exit as its lifetime end.",
+    "process_exit": "Live-at-stream-terminal allocations are diagnostic facts, not stream-integrity failures; the terminal process receipt proves kernel reclamation separately.",
+    "free_without_record": "Invalid when the source integration manifest declares an explicit release site."
+  },
+  "runner_contract": {
+    "descriptor": "fresh inherited O_APPEND descriptor, absent from the codec command text only if separately bound in the environment manifest",
+    "descriptor_identity": "fstat regular-file device and inode or pipe identity captured before and after execution",
+    "environment": "GAMMA_ALLOCATION_MARKER_FD contains only the decimal descriptor",
+    "close": "runner closes its copy after fork/exec handoff and closes the evidence descriptor after child terminal",
+    "health": "missing records, invalid descriptor syntax, a latched marker failure, or a terminal health-check failure makes attribution invalid"
+  },
+  "authority": {
+    "instrumented_memory_qualification": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0,
+    "source_patch_execution_authority": false
+  },
+  "terminal_manifest_schema": "contracts/research/v1/cmix-allocation-marker-source-integration.schema.json"
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "gamma.enwiki9.safe-fork-native-interface.v1",
+  "candidate_id": "cmix_obias_safe_fork_midas64_q0_v1",
+  "operational_status": "dormant_dependency",
+  "execution_authority": false,
+  "single_binary": true,
+  "arm_selection": {
+    "environment_variable": "KH_SAFE_FORK_ARM",
+    "accepted_values": ["P", "K", "D", "R", "S"],
+    "read_cadence": "once during predictor construction",
+    "invalid_value_behavior": "exit nonzero before opening output files",
+    "release_behavior": "compile D as the only arm and remove environment-dependent arm selection"
+  },
+  "audit_selection": {
+    "environment_variable": "KH_SAFE_FORK_AUDIT",
+    "accepted_values": ["off", "rolling", "fixture_full"],
+    "default": "off",
+    "promotion_mode": "rolling",
+    "fixture_mode": "fixture_full only on synthetic and diagnostic populations"
+  },
+  "immutable_runtime_inputs": [
+    "memory-safe parent runtime root",
+    "frozen adapted-branch coefficients",
+    "SAFE-MIX integer constants",
+    "scope manifest",
+    "corpus"
+  ],
+  "forbidden_runtime_inputs": [
+    "target-derived tuning data",
+    "network resources",
+    "unmanifested model or coefficient files",
+    "wall-clock or host-random entropy",
+    "mutable arm configuration after construction"
+  ],
+  "required_audit_streams": [
+    "parent_integer_probability",
+    "adapted_integer_probability",
+    "mixture_integer_probability",
+    "mixture_posterior",
+    "coder_state",
+    "parent_persistent_state",
+    "adapted_ephemeral_state",
+    "fork_join_lifecycle"
+  ],
+  "resource_policy": {
+    "process_tree_limit_kib": 9765625,
+    "maximum_added_live_memory_kib": 524288,
+    "maximum_added_package_bytes": 65536,
+    "threads": 1,
+    "shared_host_execution_while_exclusive_lease_active": false
+  }
+}

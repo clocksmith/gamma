@@ -1,0 +1,67 @@
+{
+  "schema": "gamma.enwiki9.functional-jvp-program-interface.v1",
+  "candidate_id": "delta_midas_functional_jvp_65536_q0_v1",
+  "operational_status": "dormant_dependency",
+  "implementation_language": "C++",
+  "entrypoint_contract": {
+    "mode": "single process integrated replay",
+    "arguments": [
+      "--population-manifest",
+      "--F-trace",
+      "--O-trace",
+      "--output-trace",
+      "--state-receipt",
+      "--resource-receipt"
+    ],
+    "threads": 1,
+    "gpu": false
+  },
+  "output_trace": {
+    "row_coordinate": "original transformed-symbol ordinal",
+    "per_branch_fields": [
+      "branch ordinal",
+      "truth bit",
+      "O integer probability",
+      "F integer probability",
+      "T_theta integer probability",
+      "T_state integer probability",
+      "T_joint integer probability",
+      "S integer probability",
+      "N integer probability"
+    ],
+    "probability_scale": 32768,
+    "required_rows": 65536,
+    "required_branches": 917527,
+    "trailing_bytes": "forbidden"
+  },
+  "state_receipt": {
+    "per_segment_fields": [
+      "segment ordinal",
+      "segment-start state hash",
+      "O post-update hash",
+      "F post-update hash",
+      "O rebuilt-state hash",
+      "F rebuilt-state hash",
+      "delta parameter hash",
+      "delta optimizer hash",
+      "delta recurrent-state hash",
+      "delta KV-state hash",
+      "second-half terminal O hash",
+      "second-half terminal F hash",
+      "T_theta hash",
+      "T_state hash",
+      "T_joint hash"
+    ],
+    "hash": "SHA-256",
+    "complete_segment_count": 1024
+  },
+  "build_lock_required": [
+    "source tree digest",
+    "compiler binary digest",
+    "compiler and linker flags",
+    "scalar arithmetic flags",
+    "binary digest",
+    "independent build receipt"
+  ],
+  "execution_authority": false
+}

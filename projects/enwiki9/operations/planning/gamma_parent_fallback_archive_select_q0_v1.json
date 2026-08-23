@@ -1,0 +1,172 @@
+{
+  "schema_version": "gamma.archive-selection-contract.v1",
+  "candidate_id": "gamma_parent_fallback_archive_select_q0_v1",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": "none",
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0,
+  "purpose": "Provide a finite-archive parent fallback that is independent of ideal SAFE-MIX regret claims.",
+  "claim_boundary": {
+    "proved_by_construction_after_valid_execution": "The selected framed archive is the smaller of two independently completed valid payload alternatives under the frozen frame contract.",
+    "not_proved_by_construction": [
+      "a smaller complete counted score after union package cost",
+      "runtime eligibility after sequential dual encoding",
+      "memory eligibility",
+      "temporary-disk eligibility",
+      "candidate scientific attribution",
+      "gain on any unmeasured population"
+    ]
+  },
+  "activation_dependencies": [
+    "A memory-safe authoritative parent has an exact archive, inverse, resource, package, and dependency receipt.",
+    "The Gamma candidate has an independent exact archive, inverse, resource, package, and dependency receipt on the identical sealed population.",
+    "Both alternatives use the identical reversible frontend and raw target identity, or their distinct frontends are both included and mode-selected inside the counted package.",
+    "The combined decoder closure and mode frame are materialized before selection authority is granted.",
+    "No exclusive full-corpus lease is active on the execution host."
+  ],
+  "alternatives": {
+    "P": {
+      "role": "authoritative parent fallback",
+      "required": [
+        "encode return code zero",
+        "decode return code zero",
+        "exact raw inverse",
+        "complete payload identity",
+        "dependency closure"
+      ]
+    },
+    "C": {
+      "role": "Gamma candidate",
+      "required": [
+        "encode return code zero",
+        "decode return code zero",
+        "exact raw inverse",
+        "complete payload identity",
+        "dependency closure"
+      ]
+    }
+  },
+  "execution_contract": {
+    "encoding_order": "P then C",
+    "concurrency": "none",
+    "scratch_isolation": "separate clean alternative directories under one counted execution boundary",
+    "input_identity": "same sealed byte population and SHA-256 for both alternatives",
+    "selection_time": "only after both encodes and both exact inverses terminalize",
+    "selection_metric": "final framed archive bytes for the frozen population",
+    "tie_break": "select P",
+    "failure_rule": "If one alternative is invalid, it is ineligible; if P is invalid, the wrapper is invalid even when C passes.",
+    "retention": "retain both complete receipts; retain only the selected payload in the final framed archive",
+    "repeat": "repeat the complete dual-encode selection and require mode and archive byte identity"
+  },
+  "frame_contract": {
+    "magic_ascii": "GAFS",
+    "version": 1,
+    "byte_order": "little-endian",
+    "fields_in_order": [
+      {
+        "name": "magic",
+        "bytes": 4
+      },
+      {
+        "name": "version",
+        "bytes": 1
+      },
+      {
+        "name": "mode",
+        "bytes": 1,
+        "values": {
+          "0": "P",
+          "1": "C"
+        }
+      },
+      {
+        "name": "payload_bytes",
+        "bytes": 8
+      },
+      {
+        "name": "payload",
+        "bytes": "payload_bytes"
+      }
+    ],
+    "fixed_header_bytes": 14,
+    "trailing_bytes": "forbidden",
+    "unknown_mode": "hard decode failure",
+    "length_mismatch": "hard decode failure",
+    "payload_interpretation": "selected alternative decoder receives exactly payload_bytes bytes"
+  },
+  "finite_archive_envelope": {
+    "equation": "A_select = 14 + min(A_P, A_C)",
+    "conditions": [
+      "A_P and A_C are complete alternative payload byte lengths before the selection frame",
+      "both alternatives are valid under the execution contract",
+      "no alignment or container padding exists beyond the declared frame",
+      "the tie rule is applied exactly"
+    ],
+    "complete_score_equation": "S_select = A_select + P_union",
+    "package_rule": "P_union is the actual byte size of every program, model, table, frame decoder, and dependency required to decode either emitted mode; shared bytes are counted once and no hypothetical deduplication is credited.",
+    "authority": "Only measured A_select and measured P_union determine score."
+  },
+  "resource_contract": {
+    "process_tree_memory_max_bytes": 10000000000,
+    "single_logical_cpu": true,
+    "alternative_runs_sequential": true,
+    "peak_rule": "maximum observed process-tree peak across wrapper, P, C, frame construction, and verification",
+    "scratch_rule": "maximum live logical and allocated bytes across both isolated alternative directories plus retained best payload",
+    "runtime_rule": "complete wall and CPU accounting includes both encodes, both decodes, selection, framing, verification, and cleanup",
+    "cleanup_rule": "both alternative scratch directories and transient unselected payload are removed only after their identities and sizes are frozen"
+  },
+  "required_receipt": {
+    "identity": [
+      "contract SHA-256",
+      "wrapper source and binary SHA-256",
+      "P contract, package, binary, and receipt SHA-256",
+      "C contract, package, binary, and receipt SHA-256",
+      "input bytes and SHA-256",
+      "command and environment SHA-256"
+    ],
+    "selection": [
+      "P payload bytes and SHA-256",
+      "C payload bytes and SHA-256",
+      "selected mode",
+      "selection reason",
+      "framed archive bytes and SHA-256",
+      "repeat mode and archive identity"
+    ],
+    "inverse": [
+      "P exact inverse",
+      "C exact inverse",
+      "selected framed inverse",
+      "canonical raw size and SHA-256"
+    ],
+    "accounting": [
+      "fixed frame bytes",
+      "union package manifest and bytes",
+      "complete counted score",
+      "resource guard receipt",
+      "temporary-disk and cleanup receipt",
+      "runtime receipt",
+      "dependency closure"
+    ]
+  },
+  "controls": {
+    "K": "Construct and decode a P-mode frame around the exact P payload; the extracted payload and raw inverse must equal standalone P.",
+    "T": "Flip the mode byte without changing the payload; decode must fail or produce a noncanonical inverse and must never verify.",
+    "L": "Alter payload_bytes without changing the payload; decode must fail closed.",
+    "R": "Repeat the complete selector; selected mode and every archive byte must match."
+  },
+  "promotion_rule": {
+    "required": [
+      "P, C, and selected frame exact inverses pass",
+      "selected frame repeat identity passes",
+      "union package is dependency-sealed",
+      "complete counted score is at most 105000000 bytes",
+      "process-tree memory passes",
+      "temporary disk passes",
+      "runtime eligibility passes",
+      "cleanup passes"
+    ],
+    "raw_payload_gain_is_insufficient": true
+  },
+  "execution_authority": false,
+  "reason_execution_is_forbidden": "No eligible memory-safe parent and Gamma candidate pair is terminally bound, and Arm B remains active."
+}

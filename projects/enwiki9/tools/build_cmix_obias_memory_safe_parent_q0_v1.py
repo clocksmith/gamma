@@ -270,11 +270,12 @@ def main() -> int:
             if tree_path.read_text().strip() != TRACKED_TREE:
                 raise RuntimeError("tracked tree mismatch")
 
-            run_step(
+            archive_path, _ = run_step(
                 steps, result, "extract_tracked_source",
-                ["git", "-C", str(DONOR), "archive", "--format=tar", "--output=source.tar", "HEAD:cmix-obias"],
+                ["git", "-C", str(DONOR), "archive", "--format=tar", "HEAD:cmix-obias"],
                 scratch, common_environment,
             )
+            shutil.copy2(archive_path, source_tar)
             retained_tar = result / "source.tar"
             shutil.copy2(source_tar, retained_tar)
             run_step(

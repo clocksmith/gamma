@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.safe-mix-trace-contract.v1",
+  "candidate_id": "gamma_safe_mix_v1",
+  "operational_status": "dormant_dependency",
+  "input": {
+    "encoding": "ASCII NDJSON",
+    "maximum_events": 65536,
+    "canonical_row_grammar": "{\"parent_count\":UINT32,\"scale\":UINT32,\"treatment_count\":UINT32,\"truth\":BOOL}\\n",
+    "probability_scale_rule": "constant for the complete stream",
+    "count_rule": "parent_count and treatment_count are in [1,scale-1]"
+  },
+  "output": {
+    "encoding": "ASCII NDJSON",
+    "canonical_row_grammar": "{\"mixed_count\":UINT32,\"parent_weight_after\":UINT64}\\n",
+    "cardinality": "exactly one output row per accepted input row"
+  },
+  "execution": {
+    "stdin_only": true,
+    "stdout_only": true,
+    "dynamic_allocation": false,
+    "floating_point": false,
+    "success_return_code": 0,
+    "rejection_return_code": 2
+  },
+  "authority": {
+    "diagnostic_only": true,
+    "archive_promotion_authority": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0
+  }
+}

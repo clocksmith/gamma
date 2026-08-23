@@ -1,0 +1,149 @@
+{
+  "schema_version": "gamma.memory-attribution-contract.v1",
+  "candidate_id": "cmix_obias_source_labelled_memory_attribution_q0_v1",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": "none",
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0,
+  "purpose": "Bind the CMIX process-tree memory high-water to source-labelled allocation lifetimes and resident mappings before authorizing one probability-identical memory child.",
+  "dependencies": [
+    "cmix_obias_memory_allocation_markers_q0_v1 source integration is materialized, reviewed, hashed, and compiled",
+    "allocation-marker parser passes fixed-record and lifetime checks",
+    "resource-guard-receipt.v3 is available",
+    "cmix memory phase-attribution observer is available",
+    "managed exclusive lease transition log and offline verification are terminally valid",
+    "Arm B terminal evidence is preserved before any execution"
+  ],
+  "execution_authority": false,
+  "authority": {
+    "compression": false,
+    "runtime": false,
+    "memory_eligibility": false,
+    "successor_selection": "only after a terminal valid receipt"
+  },
+  "collection_protocol": {
+    "marker_transport": "inherited pipe file descriptor in GAMMA_ALLOCATION_MARKER_FD",
+    "marker_record_bytes": 64,
+    "marker_sequence_origin": 1,
+    "marker_sequence_rule": "strictly contiguous with no duplicate, gap, or reordering",
+    "timestamp_rule": "no child timestamp is used",
+    "checkpoint_trigger": "every new continuously sampled process-tree RSS maximum, every phase transition, and terminal cleanup",
+    "coherent_checkpoint": [
+      "send SIGSTOP through pidfds to the codec process and every bound descendant",
+      "verify every PID and proc_start_ticks identity and wait until every target reports stopped",
+      "drain all complete marker records and record marker_sequence_before_checkpoint",
+      "capture process-tree status, codec maps, codec smaps, and page size",
+      "read the present and swapped bits for every fully contained usable-range page from /proc/<codec_pid>/pagemap",
+      "repeat the complete pagemap read without resuming the codec",
+      "drain markers again and require an unchanged marker sequence",
+      "send SIGCONT to exactly the stopped bound process set"
+    ],
+    "exact_allocation_lifetime_rule": "An allocation is live at a checkpoint only when its allocation event precedes the checkpoint marker bound and no matching release precedes that bound.",
+    "conservative_residency_rule": "Credit only base pages whose complete byte range lies inside the marker usable range, lies inside an observed VMA, and has the pagemap present bit set in both stopped-process reads. The intersection is the resident lower bound; the union is the upper bound.",
+    "partial_page_rule": "The first or last page is excluded whenever any byte lies outside the usable range.",
+    "vma_rule": "VMA containment and smaps RSS are reconciliation evidence only and may never be assigned wholesale to an allocation label.",
+    "ambiguous_window_rule": "Any marker change while the process is declared stopped, PID identity change, pagemap short read, inaccessible pagemap, VMA mutation, or failed stop/resume operation invalidates that checkpoint.",
+    "phase_source": "explicit runner phase marker plus resource-guard phase state",
+    "sample_interval_seconds": 0.5,
+    "smaps_scope": "codec process at every coherent attribution checkpoint; process-tree RSS remains the principal rule metric",
+    "pagemap_scope": "present and swapped bits only; PFNs are neither required nor retained",
+    "observer_accounting": "observer resource use and stop durations are reported separately; the diagnostic run has no runtime authority"
+  },
+  "required_source_labels": [
+    "fxcm_alloc",
+    "fxcm_aligned_alloc",
+    "context_history",
+    "context_shared_map",
+    "context_indirect_1",
+    "context_indirect_2",
+    "context_indirect_3",
+    "mixer_slab",
+    "ppm_anonymous_arena",
+    "ppm_file_backed_arena"
+  ],
+  "mapping_contract": {
+    "identity": "device, inode, pathname, VMA start, VMA end, permissions, and offset",
+    "vma_reconciliation_fields_kib": [
+      "Rss",
+      "Pss",
+      "Private_Clean",
+      "Private_Dirty",
+      "Shared_Clean",
+      "Shared_Dirty",
+      "Anonymous",
+      "AnonHugePages",
+      "Swap"
+    ],
+    "allocation_geometry": [
+      "allocation_base",
+      "usable_pointer",
+      "allocation_bytes",
+      "usable_bytes",
+      "alignment"
+    ],
+    "allocation_range_page_fields": [
+      "first_fully_contained_page",
+      "fully_contained_page_count",
+      "present_in_read_one_count",
+      "present_in_read_two_count",
+      "present_intersection_count",
+      "present_union_count"
+    ],
+    "containment_not_ownership": true,
+    "rule": "Marker allocation geometry must never be represented as VMA geometry, and VMA RSS must never be credited to a label. Only conservative pagemap page-range bounds are source-attributed."
+  },
+  "high_water_contract": {
+    "official_limit_kib": 9765625,
+    "engineering_parent_target_kib": 9000000,
+    "arm_b_confirmed_vmhwm_lower_bound_kib": 10472880,
+    "required_reduction_from_arm_b_kib": 1472880,
+    "principal_metric": "continuous process-tree VmRSS maximum",
+    "corroborating_metrics": [
+      "per-process VmHWM",
+      "cgroup-v2 memory.peak",
+      "smaps mapping RSS at coherent stopped checkpoints",
+      "double-read pagemap lower and upper bounds over fully contained allocation pages"
+    ],
+    "continuous_peak_ownership_claimed": false,
+    "attribution_checkpoint_lower_bound_required": true,
+    "unattributed_checkpoint_rss_upper_bound_required": true,
+    "selection_rule": "A memory successor may be authorized from a coherent checkpoint lower bound, but only a later probability-identical child run can prove memory eligibility."
+  },
+  "successor_selection": {
+    "eligible_strategy": "cmix_obias_filebacked_fxcm_allocator_strategy_q0_v1",
+    "activation_requirements": [
+      "a coherent checkpoint is triggered by a new continuous process-tree RSS maximum in the high-water phase",
+      "eligible live FXCM usable ranges have a conservative pagemap intersection lower bound of at least 1472880 KiB",
+      "file backing and pageout do not alter any modeled bytes",
+      "temporary-disk and cleanup ceilings remain feasible"
+    ],
+    "if_requirements_fail": "Do not activate file-backed FXCM; authorize one successor targeted at the largest exactly attributed eligible allocation family.",
+    "probability_identity_requirement": "Any memory child must reproduce the parent integer probability stream, state hashes, payload, archive, and inverse before receiving memory credit."
+  },
+  "invalidity_conditions": [
+    "marker sequence gap, duplicate, or malformed record",
+    "marker registry failure",
+    "unmatched release",
+    "required source label absent without an explicit not-allocated reason",
+    "codec PID or process start identity mismatch",
+    "checkpoint cannot be bound to an unchanged marker sequence while the codec process tree is stopped",
+    "pagemap is unavailable, short, changes mapping identity, or cannot be read twice",
+    "VMA RSS is represented as allocation-owned resident memory",
+    "continuous global high-water ownership is claimed from a diagnostic checkpoint",
+    "observer changes codec command, affinity, environment, input, scratch, or package",
+    "runtime conclusions drawn from the diagnostic run"
+  ],
+  "terminal_outputs": [
+    "allocation marker receipt hash",
+    "phase-attribution receipt hash",
+    "resource-guard v3 receipt hash",
+    "source-integration receipt hash",
+    "managed lease transition-log, verification, and terminal-lease hashes",
+    "source-label-by-phase resident table",
+    "coherent-checkpoint allocation-range page table",
+    "continuous high-water and attribution-checkpoint separation",
+    "unattributed checkpoint resident upper bound",
+    "eligible reclaimable resident lower bound",
+    "single authorized memory successor or none"
+  ]
+}

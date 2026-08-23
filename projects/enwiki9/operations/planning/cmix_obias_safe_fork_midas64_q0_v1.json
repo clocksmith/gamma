@@ -1,0 +1,264 @@
+{
+  "schema_version": "gamma.experiment-contract.v1",
+  "candidate_id": "cmix_obias_safe_fork_midas64_q0_v1",
+  "title": "Parent-preserving causal midpoint adaptation with proof-bounded expert mixing",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": "none",
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0,
+  "authorship": {
+    "mechanism": "Gamma-authored",
+    "parent": "externally authored cmix-obias/CMIX substrate",
+    "claim_boundary": "A Gamma-authored causal adaptation child of an attributed external parent"
+  },
+  "objective": {
+    "complete_counted_score_max_bytes": 105000000,
+    "maximum_added_package_bytes": 65536,
+    "design_target_added_package_bytes": 4096,
+    "claim": "A bounded adapted expert can improve second-half coding while the authoritative parent state remains unchanged by the expert and protected by a causal mixture.",
+    "not_claimed": [
+      "archive gain before an exact finite-coder receipt",
+      "memory eligibility before process-tree measurement",
+      "a one-bit bound for the quantized implementation unless separately proved",
+      "universal determinism",
+      "Gamma authorship of the parent codec"
+    ]
+  },
+  "activation_dependencies": [
+    {
+      "candidate_id": "cmix_obias_memory_safe_parent_full1g_roundtrip_a_q0_v1",
+      "required_decision": "pass",
+      "required_facts": [
+        "integer probability identity against the qualified parent",
+        "payload identity",
+        "archive identity",
+        "exact canonical inverse",
+        "process-tree peak at or below 9765625 KiB",
+        "sufficient measured headroom for fork state"
+      ]
+    },
+    {
+      "candidate_id": "cmix_obias_full_midpoint_oracle64_q0_v1",
+      "required_decision": "target_scale_pass",
+      "required_facts": [
+        "P and K are probability- and state-identical",
+        "F beats P on an actual finite archive",
+        "F beats the causally misaligned control",
+        "exact inverse and synchronization pass"
+      ]
+    },
+    {
+      "candidate_id": "cmix_obias_midpoint_persistence_attribution64_q0_v1",
+      "required_decision": "local_value_pass",
+      "required_facts": [
+        "J retains at least 80 percent of F gross archive gain",
+        "J rejoins the untouched parent at byte 64",
+        "J exact inverse passes",
+        "J repeat identity passes"
+      ]
+    },
+    {
+      "candidate_id": "gamma_safe_mix_v1",
+      "required_decision": "reference_pass",
+      "required_facts": [
+        "integer update law frozen",
+        "encoder and decoder weight traces are identical",
+        "quantization and rounding policy frozen",
+        "ideal-theory and finite-coder claim scopes are separated"
+      ]
+    }
+  ],
+  "block_contract": {
+    "block_bytes": 64,
+    "first_half_bytes": [0, 31],
+    "second_half_bytes": [32, 63],
+    "midpoint_bit_events": 256,
+    "activation_point": "after ordinary parent processing of byte 31 and before prediction of byte 32",
+    "join_point": "after ordinary parent processing of byte 63 and before prediction of the next block",
+    "mixture_reset": "never at a 64-byte boundary",
+    "adapted_branch_reset": "discard at every join point",
+    "parent_update_cadence": "unchanged at every original call site"
+  },
+  "state_contract": {
+    "authoritative_parent": {
+      "role": "the only state allowed to survive the join",
+      "transition": "ordinary parent transition and ordinary persistent learning only",
+      "forbidden_writes": [
+        "midpoint optimizer update",
+        "adapter state",
+        "adapted recurrent state",
+        "adapted mixer state",
+        "adapted optimizer moments"
+      ]
+    },
+    "adapted_expert": {
+      "origin": "exact midpoint snapshot of every parent state component whose future transition can differ",
+      "transition": "frozen midpoint treatment followed by ordinary decoded-symbol transitions within bytes 32 through 63",
+      "lifetime": "midpoint through join only",
+      "persistent_writes": [],
+      "join_action": "discard without copying any value into the authoritative parent"
+    },
+    "sharing_rule": "Mutable state may be shared only when a frozen dependency proof establishes that its update is prediction-independent and byte-identical in both branches; otherwise it is duplicated.",
+    "join_identity_requirement": "After join, every state capable of affecting future parent probabilities equals a P-only execution at the same boundary.",
+    "parent_rejoin_identity_hashes": [
+      "LSTM hidden state",
+      "LSTM cell state",
+      "mixer parameters",
+      "SSE state",
+      "optimizer moments and step",
+      "persistent context tables"
+    ],
+    "nonrejoined_coder_continuity_hashes": [
+      "mixed integer probability history",
+      "arithmetic coder state",
+      "emitted payload prefix",
+      "global SAFE-MIX posterior"
+    ],
+    "continuity_rule": "Coder state, emitted payload, mixed probability history, and the global mixture posterior are never rewound or replaced by P-only values at join; only the authoritative predictor state rejoins P."
+  },
+  "prediction_contract": {
+    "parent_probability": "exact parent integer count p_count over coder scale C",
+    "expert_probability": "exact adapted-branch integer count d_count over the same coder scale C",
+    "mixture": "inherit the frozen integer arithmetic, normalization, clipping, update, and serialization rules from gamma_safe_mix_v1",
+    "posterior_scope": "one global causal parent-versus-adapted posterior across the stream",
+    "posterior_update_point": "after the decoded bit is known to both encoder and decoder",
+    "expert_availability": "the adapted expert sleeps outside bytes 32 through 63",
+    "coder_input": "the exact finite integer mixture count after the inherited deterministic quantizer",
+    "theorem_scope": "The ideal Bayesian log-loss inequality applies only to the ideal real-valued mixture. Any finite-integer regret statement requires a separate proof; archive measurements remain authoritative."
+  },
+  "arms": {
+    "P": {
+      "description": "Memory-safe authoritative parent only",
+      "promotion_role": "baseline"
+    },
+    "K": {
+      "description": "Performs snapshot, fork bookkeeping, state hashing, and sleeping-expert bookkeeping but injects no update and supplies a parent-identical expert",
+      "required_identity": "probabilities, states, payload, archive, and inverse exactly equal P"
+    },
+    "D": {
+      "description": "Raw aligned adapted fork without SAFE-MIX",
+      "purpose": "measure the specialist independently of mixture protection",
+      "promotion_role": "scientific treatment only"
+    },
+    "M": {
+      "description": "Aligned adapted fork combined with the parent through gamma_safe_mix_v1",
+      "purpose": "target-bearing SAFE-FORK treatment"
+    },
+    "R": {
+      "description": "Matched-norm random-direction fork combined through the identical mixture machinery",
+      "purpose": "separate causal learning direction from generic perturbation"
+    },
+    "S": {
+      "description": "Frozen causally misaligned first-half association with otherwise identical fork and mixture machinery",
+      "purpose": "test correct causal association"
+    }
+  },
+  "control_requirements": [
+    "P equals K before any treatment comparison",
+    "M must beat P on an actual finite archive",
+    "D must establish that the adapted expert itself carries value",
+    "M must beat or safely contain D on preregistered transfer populations",
+    "M must beat R to support a gradient-alignment claim",
+    "M must beat S to support a causal-association claim",
+    "all arms use the same source revision, frontend, coder, corpus bytes, compiler, and accounting boundary"
+  ],
+  "resource_contract": {
+    "official_process_tree_peak_max_kib": 9765625,
+    "memory_safe_parent_engineering_target_kib": 9000000,
+    "fork_headroom_must_be_measured_before_activation": true,
+    "single_logical_cpu": true,
+    "concurrent_heavy_jobs": 0,
+    "scratch_logical_and_allocated_bytes_required": true,
+    "fail_closed": true,
+    "forbidden_shortcut": "No full duplicate of prediction-independent large tables without a measured and justified state dependency."
+  },
+  "promotion_ladder": [
+    {
+      "scope_bytes": 250000,
+      "required": [
+        "P/K exact identity",
+        "all arms finite",
+        "all arms exact inverse",
+        "join-state identity",
+        "repeatable mixture trace"
+      ]
+    },
+    {
+      "scope_bytes": 1000000,
+      "required": [
+        "M gross archive gain positive",
+        "M beats R and S",
+        "resource receipt passes",
+        "package manifest complete"
+      ]
+    },
+    {
+      "scope_bytes": 10000000,
+      "required": [
+        "dynamic package-aware gross gate passes",
+        "D and M attribution retained",
+        "deterministic repeat passes"
+      ]
+    },
+    {
+      "scope": "two_distant_10M_populations",
+      "required": [
+        "M is positive on both",
+        "M beats causal controls",
+        "no population retuning"
+      ]
+    },
+    {
+      "scope_bytes": 100000000,
+      "required": [
+        "dynamic package-aware gross gate passes",
+        "exact inverse",
+        "resource and dependency closure pass"
+      ]
+    },
+    {
+      "scope_bytes": 1000000000,
+      "required": [
+        "complete counted score at or below 105000000 bytes",
+        "exact canonical inverse",
+        "deterministic replay",
+        "source and package closure",
+        "memory, disk, runtime, and cleanup receipts pass"
+      ]
+    }
+  ],
+  "economics": {
+    "required_gain_source": "computed from measured parent counted score, maximum added package, frozen reserve, and realized exact package savings",
+    "expected_savings_bytes": null,
+    "measured_oracle_ceiling_bytes": null,
+    "prior_median_savings_bytes": null,
+    "prior_p90_savings_bytes": null,
+    "rule": "Target debt must never be copied into an expected-savings field."
+  },
+  "decision_router": {
+    "dependency_failure": "remain dormant or retire according to the dependency receipt",
+    "K_mismatch": "reject implementation before scientific interpretation",
+    "D_not_better_than_P": "retire SAFE-FORK MIDAS",
+    "M_better_than_P_but_not_R": "retain only a generic specialist-mixture observation; reject causal-gradient claim",
+    "M_better_than_P_and_R_but_not_S": "reject correct-causal-association claim",
+    "M_positive_but_memory_fail": "authorize one memory-compilation successor; no compression promotion",
+    "M_transfer_pass": "promote through the frozen archive ladder",
+    "M_and_WIKI_PDA_independently_pass": "authorize one fresh joint PDA-conditioned SAFE-MIDAS contract"
+  },
+  "immutability": {
+    "freeze_before_first_archive": [
+      "block boundaries",
+      "state ownership and sharing proof",
+      "midpoint update",
+      "mixture arithmetic",
+      "posterior initialization and persistence",
+      "controls",
+      "numeric format",
+      "package ceiling",
+      "promotion gates"
+    ],
+    "change_after_observation": "requires a new candidate identifier and complete joint replay"
+  },
+  "execution_authority": false,
+  "reason_execution_is_forbidden": "Arm B is active and activation dependencies are not terminally passed."
+}

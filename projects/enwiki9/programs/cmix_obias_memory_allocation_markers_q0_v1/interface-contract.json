@@ -1,0 +1,70 @@
+{
+  "schema": "gamma.enwiki9.cmix-allocation-marker-interface.v1",
+  "candidate_id": "cmix_obias_memory_allocation_markers_q0_v1",
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "purpose": "Bind source allocation classes and lifetimes to externally sampled VMAs without changing predictor bytes or allocating marker memory.",
+  "transport": {
+    "environment": "GAMMA_ALLOCATION_MARKER_FD",
+    "ownership": "The runner opens a fresh O_APPEND evidence file or pipe before exec and passes only its decimal descriptor number.",
+    "record_bytes": 64,
+    "endianness": "little",
+    "write_order": "single codec thread, source order",
+    "dynamic_allocation": false,
+    "fixed_registry_entries": 4096,
+    "fixed_registry_authority": "Marker builds use a zero-initialized fixed BSS registry to bind explicit releases; registry exhaustion, duplicate live bases, or unknown releases fail attribution.",
+    "timestamp": false,
+    "short_write": "retry until the complete fixed record is written",
+    "failure": "latch marker state invalid; authority-bearing runner must fail when the terminal marker-health check is false",
+    "disabled": "With the environment absent, marker calls perform no write and receive zero attribution authority."
+  },
+  "record_layout": [
+    "u64 magic GAMALLOC",
+    "u16 version",
+    "u16 record_bytes",
+    "u32 sequence",
+    "u32 event",
+    "u32 label",
+    "u64 allocation_base",
+    "u64 usable_pointer",
+    "u64 allocation_bytes",
+    "u64 usable_bytes",
+    "u32 alignment",
+    "u32 reserved_zero"
+  ],
+  "events": {
+    "1": "allocation",
+    "2": "release",
+    "3": "pageout"
+  },
+  "source_insertions": [
+    "fxcmv1::alloc after successful calloc and before first model-visible use",
+    "fxcmv1::alloc1 after both base and aligned pointers are fixed and before first model-visible use",
+    "ContextManager constructor after each history/shared/indirect vector reaches final capacity",
+    "Mixer constructor after slab allocation and before its first memset",
+    "PPMd StartSubAllocator after anonymous or file-backed arena creation",
+    "Every source-bound explicit release before free or munmap",
+    "Every file-backed allocator MADV_PAGEOUT call after a zero return"
+  ],
+  "required_labels": [
+    "fxcm_alloc",
+    "fxcm_alloc_aligned",
+    "context_history",
+    "context_shared_map",
+    "context_indirect_1",
+    "context_indirect_2",
+    "context_indirect_3",
+    "mixer_slab",
+    "ppmd_arena_anonymous",
+    "ppmd_arena_file_backed"
+  ],
+  "synchronization": "The external observer associates each allocator-returned usable pointer with the containing /proc VMA by PID plus proc_start_ticks and monotonic sample sequence. allocation_base is the allocator-returned storage base, not an asserted VMA start. Raw pointer values never enter codec state hashes.",
+  "receipt_parser": "tools/cmix_allocation_marker_receipt.py",
+  "receipt_schema": "contracts/research/v1/cmix-allocation-marker-receipt.schema.json",
+  "claim_boundary": [
+    "Marker evidence is diagnostic-only and has zero memory qualification authority.",
+    "An instrumented binary cannot substitute for an uninstrumented guarded memory qualification.",
+    "Missing, malformed, duplicate, reordered, or geometrically invalid records invalidate attribution.",
+    "Allocation attribution cannot prove reclaimability or probability identity."
+  ]
+}

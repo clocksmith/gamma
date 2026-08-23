@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/managed-exclusive-lease-transition-log.schema.json",
+  "title": "Managed Exclusive Lease Transition Log",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "lease_id",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "managed-exclusive-lease-transition-log.v1"
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lease_id": {
+      "$ref": "#/$defs/sha256"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "event",
+        "event_utc",
+        "previous_entry_sha256",
+        "lease_sha256",
+        "lease",
+        "entry_sha256"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "event": {
+          "enum": [
+            "lease_acquired",
+            "codec_activated",
+            "activation_rollback",
+            "signals_deauthorized",
+            "terminal_evidence_frozen"
+          ]
+        },
+        "event_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "previous_entry_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "lease_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "lease": {
+          "type": "object"
+        },
+        "terminal_evidence_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "entry_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "terminal_evidence_frozen"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "terminal_evidence_sha256"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

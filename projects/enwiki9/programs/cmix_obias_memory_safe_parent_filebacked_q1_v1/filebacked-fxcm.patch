@@ -1,0 +1,333 @@
+diff --git a/src/models/fxcmv1.h b/src/models/fxcmv1.h
+--- a/src/models/fxcmv1.h
++++ b/src/models/fxcmv1.h
+@@ -22,7 +22,7 @@ class FXCM : public Model {
+   float RawPredictionProbability(short raw) const;
+   unsigned int NumOutputs();
+   void Perceive(int bit);
+-  void ByteUpdate() {};
++  void ByteUpdate();
+   void FreeMemory();
+ 
+  private:
+diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -1,3 +1,18 @@
++#ifdef GAMMA_FILEBACKED_FXCM
++#include <cerrno>
+ #include <climits>
+ #include <cstdint>
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
++#include <dirent.h>
++#include <climits>
++#include <cstdint>
++#include <cstdio>
++#include <cstdlib>
++#include <cstring>
++#include <fcntl.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
++#ifndef MADV_PAGEOUT
++#error "GAMMA_FILEBACKED_FXCM requires Linux MADV_PAGEOUT"
++#endif
++#endif
++
+ #include "fxcmv1.h"
+@@ -94,6 +109,230 @@ namespace fxcmv1 {
+ namespace fxcmv1 {
++#ifdef GAMMA_FILEBACKED_FXCM
++namespace gamma_filebacked_fxcm {
++
++constexpr size_t kMinimumBackedBytes = 64ULL * 1024ULL * 1024ULL;
++constexpr size_t kMaximumMappings = 4096;
++constexpr uint64_t kPageoutCadenceBytes = 1048576ULL;
++
++struct Mapping {
++  void* base;
++  size_t bytes;
++  dev_t device;
++  ino_t inode;
++  char name[64];
++  bool live;
++};
++
++Mapping mappings[kMaximumMappings] = {};
++size_t mapping_count = 0;
++int scratch_dir_fd = -1;
++uint64_t modeled_bytes = 0;
++bool cleanup_registered = false;
++
++[[noreturn]] void Fail(const char* operation) {
++  std::fprintf(stderr, "GAMMA_FILEBACKED_FXCM failure: %s errno=%d\n",
++               operation, errno);
++  std::exit(EXIT_FAILURE);
++}
++
++[[noreturn]] void TerminalFail(const char* operation) {
++  dprintf(STDERR_FILENO,
++          "GAMMA_FILEBACKED_FXCM terminal cleanup failure: %s errno=%d\n",
++          operation, errno);
++  _exit(EXIT_FAILURE);
++}
++
++int OpenAbsoluteDirectoryNoSymlinks(const char* path) {
++  if (path == nullptr || path[0] != '/') Fail("missing absolute backing directory");
++  int current = open("/", O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
++  if (current < 0) Fail("open root directory");
++  const char* cursor = path + 1;
++  while (*cursor != '\0') {
++    const char* slash = std::strchr(cursor, '/');
++    const size_t length = slash == nullptr ? std::strlen(cursor)
++                                            : static_cast<size_t>(slash - cursor);
++    if (length == 0 || length > NAME_MAX ||
++        (length == 1 && cursor[0] == '.') ||
++        (length == 2 && cursor[0] == '.' && cursor[1] == '.')) {
++      close(current);
++      Fail("noncanonical backing directory path");
++    }
++    char component[NAME_MAX + 1];
++    std::memcpy(component, cursor, length);
++    component[length] = '\0';
++    const int next = openat(current, component,
++        O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
++    if (next < 0) {
++      close(current);
++      Fail("open backing directory component");
++    }
++    if (close(current) != 0) {
++      close(next);
++      Fail("close backing directory component");
++    }
++    current = next;
++    if (slash == nullptr) break;
++    cursor = slash + 1;
++    if (*cursor == '\0') {
++      close(current);
++      Fail("trailing slash in backing directory path");
++    }
++  }
++  return current;
++}
++
++void RequireEmptyDirectory(int descriptor) {
++  const int duplicate = dup(descriptor);
++  if (duplicate < 0) Fail("duplicate backing directory descriptor");
++  DIR* directory = fdopendir(duplicate);
++  if (directory == nullptr) {
++    close(duplicate);
++    Fail("open backing directory stream");
++  }
++  errno = 0;
++  while (dirent* entry = readdir(directory)) {
++    if (std::strcmp(entry->d_name, ".") != 0 &&
++        std::strcmp(entry->d_name, "..") != 0) {
++      closedir(directory);
++      Fail("backing directory is not empty");
++    }
++  }
++  if (errno != 0) {
++    closedir(directory);
++    Fail("read backing directory");
++  }
++  if (closedir(directory) != 0) Fail("close backing directory stream");
++}
++
++void EnsureScratchDirectory() {
++  if (scratch_dir_fd >= 0) return;
++  const char* path = std::getenv("GAMMA_FXCM_BACKING_DIR");
++  scratch_dir_fd = OpenAbsoluteDirectoryNoSymlinks(path);
++  struct stat metadata = {};
++  if (fstat(scratch_dir_fd, &metadata) != 0 || !S_ISDIR(metadata.st_mode)) {
++    Fail("validate backing directory");
++  }
++  RequireEmptyDirectory(scratch_dir_fd);
++}
++
++void SafeUnlink(const Mapping& mapping, bool terminal = false) {
++  struct stat metadata = {};
++  if (fstatat(scratch_dir_fd, mapping.name, &metadata,
++              AT_SYMLINK_NOFOLLOW) != 0) {
++    if (terminal) TerminalFail("stat backing file before unlink");
++    Fail("stat backing file before unlink");
++  }
++  if (!S_ISREG(metadata.st_mode) || metadata.st_dev != mapping.device ||
++      metadata.st_ino != mapping.inode) {
++    if (terminal) TerminalFail("backing file identity mismatch");
++    Fail("backing file identity mismatch");
++  }
++  if (unlinkat(scratch_dir_fd, mapping.name, 0) != 0) {
++    if (terminal) TerminalFail("unlink backing file");
++    Fail("unlink backing file");
++  }
++}
++
++void CleanupAll() {
++  for (size_t i = mapping_count; i > 0; --i) {
++    Mapping& mapping = mappings[i - 1];
++    if (!mapping.live) continue;
++    if (munmap(mapping.base, mapping.bytes) != 0) TerminalFail("terminal munmap");
++    SafeUnlink(mapping, true);
++    mapping.live = false;
++  }
++  if (scratch_dir_fd >= 0) {
++    if (close(scratch_dir_fd) != 0) TerminalFail("close backing directory");
++    scratch_dir_fd = -1;
++  }
++}
++
++void RegisterCleanup() {
++  if (cleanup_registered) return;
++  if (std::atexit(CleanupAll) != 0) Fail("register terminal cleanup");
++  cleanup_registered = true;
++}
++
++void* Allocate(size_t bytes) {
++  if (bytes < kMinimumBackedBytes) {
++    void* result = std::calloc(1, bytes);
++    if (result == nullptr) Fail("calloc");
++    AdviseHugePages(result, bytes);
++    return result;
++  }
++  EnsureScratchDirectory();
++  RegisterCleanup();
++  if (mapping_count >= kMaximumMappings) Fail("mapping registry capacity");
++  Mapping& mapping = mappings[mapping_count];
++  const int length = std::snprintf(mapping.name, sizeof(mapping.name),
++      "fxcm-%04zu.bin", mapping_count);
++  if (length <= 0 || static_cast<size_t>(length) >= sizeof(mapping.name)) {
++    Fail("format backing filename");
++  }
++  const int fd = openat(scratch_dir_fd, mapping.name,
++      O_CREAT | O_EXCL | O_NOFOLLOW | O_CLOEXEC | O_RDWR, 0600);
++  if (fd < 0) Fail("create backing file");
++  const int reserve_result = posix_fallocate(fd, 0, static_cast<off_t>(bytes));
++  if (reserve_result != 0) {
++    errno = reserve_result;
++    close(fd);
++    unlinkat(scratch_dir_fd, mapping.name, 0);
++    Fail("reserve backing file");
++  }
++  struct stat metadata = {};
++  if (fstat(fd, &metadata) != 0 || !S_ISREG(metadata.st_mode) ||
++      metadata.st_size != static_cast<off_t>(bytes)) {
++    close(fd);
++    unlinkat(scratch_dir_fd, mapping.name, 0);
++    Fail("validate backing file");
++  }
++  void* base = mmap(nullptr, bytes, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++  const int map_errno = errno;
++  if (close(fd) != 0 && base != MAP_FAILED) {
++    munmap(base, bytes);
++    unlinkat(scratch_dir_fd, mapping.name, 0);
++    Fail("close mapped backing file");
++  }
++  if (base == MAP_FAILED) {
++    errno = map_errno;
++    unlinkat(scratch_dir_fd, mapping.name, 0);
++    Fail("map backing file");
++  }
++  mapping.base = base;
++  mapping.bytes = bytes;
++  mapping.device = metadata.st_dev;
++  mapping.inode = metadata.st_ino;
++  mapping.live = true;
++  ++mapping_count;
++  return base;
++}
++
++void Release(void* pointer) {
++  if (pointer == nullptr) return;
++  const uintptr_t address = reinterpret_cast<uintptr_t>(pointer);
++  for (size_t i = 0; i < mapping_count; ++i) {
++    Mapping& mapping = mappings[i];
++    if (!mapping.live) continue;
++    const uintptr_t begin = reinterpret_cast<uintptr_t>(mapping.base);
++    const uintptr_t end = begin + mapping.bytes;
++    if (address == begin) {
++      if (munmap(mapping.base, mapping.bytes) != 0) Fail("munmap");
++      SafeUnlink(mapping);
++      mapping.live = false;
++      return;
++    }
++    if (address > begin && address < end) Fail("attempt to free interior mapping pointer");
++  }
++  std::free(pointer);
++}
++
++void PageOutAll() {
++  for (size_t i = 0; i < mapping_count; ++i) {
++    Mapping& mapping = mappings[i];
++    if (!mapping.live) continue;
++    if (madvise(mapping.base, mapping.bytes, MADV_PAGEOUT) != 0) {
++      Fail("MADV_PAGEOUT");
++    }
++  }
++}
++
++void ByteBoundary() {
++  ++modeled_bytes;
++  if (modeled_bytes % kPageoutCadenceBytes == 0) PageOutAll();
++}
++
++}  // namespace gamma_filebacked_fxcm
++
++void GammaFxcmFree(void* pointer) {
++  gamma_filebacked_fxcm::Release(pointer);
++}
++
++#define free GammaFxcmFree
++#endif
+ 
+ #ifndef min
+@@ -142,17 +381,25 @@ template <class T> void alloc(T*&ptr, int c) {
+ // Array
+ template <class T> void alloc(T*&ptr, int c) {
++#ifdef GAMMA_FILEBACKED_FXCM
++  if (c < 0 || static_cast<size_t>(c) > SIZE_MAX / sizeof(T))
++    gamma_filebacked_fxcm::Fail("allocation size overflow");
++  ptr = static_cast<T*>(gamma_filebacked_fxcm::Allocate(
++      static_cast<size_t>(c) * sizeof(T)));
++#else
+   ptr=(T*)calloc(c, sizeof(T));
+   if (!ptr) exit(1);
+   AdviseHugePages(ptr, (size_t)c*sizeof(T));
++#endif
+ }
+ 
+ // for aligned data
+ template <class T> void alloc1(T*&data, int c,T*&ptr,const int align=16) {
+   const size_t extra=(align+sizeof(T)-1)/sizeof(T);
++#ifdef GAMMA_FILEBACKED_FXCM
++  if (c < 0 || static_cast<size_t>(c) > SIZE_MAX / sizeof(T) - extra)
++    gamma_filebacked_fxcm::Fail("aligned allocation size overflow");
++  ptr = static_cast<T*>(gamma_filebacked_fxcm::Allocate(
++      (static_cast<size_t>(c) + extra) * sizeof(T)));
++#else
+   ptr=(T*)calloc((size_t)c+extra, sizeof(T));
+   if (!ptr) exit(1);
+   AdviseHugePages(ptr, ((size_t)c+extra)*sizeof(T));
++#endif
+   data=(T*)(((uintptr_t)ptr+(align-1)) & ~(uintptr_t)(align-1));
+ }
+@@ -6080,6 +6327,9 @@ inline Predictor::Predictor()  {
+     alloc1(model_predictions1,num_models+64,model_predictions1_ptr,64);
+     dosym();
+     PredictorInit();
++#ifdef GAMMA_FILEBACKED_FXCM
++    gamma_filebacked_fxcm::PageOutAll();
++#endif
+ }
+@@ -6102,6 +6352,12 @@ FXCM::FXCM() {
+     predictor_.reset(new fxcmv1::Predictor());
+ }
++
++void FXCM::ByteUpdate() {
++#ifdef GAMMA_FILEBACKED_FXCM
++  fxcmv1::gamma_filebacked_fxcm::ByteBoundary();
++#endif
++}

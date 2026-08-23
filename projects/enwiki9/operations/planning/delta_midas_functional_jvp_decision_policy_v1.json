@@ -1,0 +1,119 @@
+{
+  "schema": "gamma.enwiki9.delta-midas-functional-jvp-decision-policy.v1",
+  "policy_id": "delta_midas_functional_jvp_decision_policy_v1",
+  "candidate_id": "delta_midas_functional_jvp_65536_q0_v1",
+  "operational_status": "dormant_dependency",
+  "receipt_schema": "contracts/research/v1/delta-midas-functional-jvp-receipt.schema.json",
+  "planning_contract": "operations/planning/delta_midas_functional_jvp_65536_q0_v1.json",
+  "experiment_contract": "operations/adaptive/experiments/delta_midas_functional_jvp_65536_q0_v1.json",
+  "purpose": "Determine whether the exact first-half full-update direction functionally explains the retained second-half F-minus-O improvement through immediate parameter effects, propagated state effects, or their joint tangent.",
+  "activation_dependencies": [
+    "Arm B is terminal or execution occurs on separately leased hardware under a corrected host-specific exclusivity policy.",
+    "nncp_open_integrated_midpoint_segment_replay_65536_q0_v1 passes every forward, loss, backward, update, rebuild, second-half, repeat, resource, and dependency gate.",
+    "The complete open F and O trajectories are byte-identical to their captured oracle artifacts.",
+    "The population, model, initial state, optimizer state, update direction, permutation, arithmetic, build, and runtime root are content-addressed.",
+    "No closed LibNC or NNCP runtime participates in treatment execution beyond immutable captured oracle inputs."
+  ],
+  "target_definition": {
+    "per_event_target": "delta_logit_target[u] = F_logit[u] - O_logit[u]",
+    "population": "All 65,536 frozen second-half events in original segment and event order.",
+    "truth_path_gain_bits": "sum_u(loss_bits(O_logit[u], truth[u]) - loss_bits(candidate_logit[u], truth[u]))",
+    "oracle_gain_bits": "sum_u(loss_bits(O_logit[u], truth[u]) - loss_bits(F_logit[u], truth[u]))",
+    "loss_evaluator": "A content-addressed scalar software implementation with frozen correctly-rounded logistic semantics; host libm is forbidden.",
+    "zero_denominator_rule": "If oracle gain is not strictly positive or target delta energy is zero, the receipt is invalid rather than assigned an arbitrary recovery value."
+  },
+  "arms": {
+    "parameter": {
+      "definition": "J_theta[u] times delta_theta_F, linearized at the O midpoint parameters and O midpoint state, with state perturbation forced to zero.",
+      "surrogate_logit": "O_logit[u] + parameter_jvp[u]"
+    },
+    "state": {
+      "definition": "The complete propagated J_state[u] times delta_state_F, linearized at the O midpoint parameters and O midpoint state, with parameter perturbation forced to zero.",
+      "state_scope": "Every decoder-visible recurrent, attention, cache, and other future-affecting midpoint state represented by the integrated replay contract.",
+      "surrogate_logit": "O_logit[u] + state_jvp[u]"
+    },
+    "joint": {
+      "definition": "parameter_jvp[u] + state_jvp[u] under the same O tangent point and frozen reduction order.",
+      "surrogate_logit": "O_logit[u] + joint_jvp[u]"
+    },
+    "shifted": {
+      "definition": "The joint tangent computed after applying the preregistered content-addressed cyclic segment permutation to first-half update directions while preserving event positions and norms.",
+      "surrogate_logit": "O_logit[u] + shifted_joint_jvp[u]"
+    },
+    "negated": {
+      "definition": "The exact sign-negated joint update direction, including both parameter and state components, with no refitting or rescaling.",
+      "surrogate_logit": "O_logit[u] + negated_joint_jvp[u]"
+    }
+  },
+  "no_fit_rules": [
+    "Every tangent uses unit scale exactly as produced by the full midpoint oracle.",
+    "No scalar calibration, least-squares projection, clipping search, rank search, layer search, segment selection, sign selection, temperature, or normalization is fitted on the 65,536-event population.",
+    "The shifted permutation and negation operation are frozen before any treatment metric is observed.",
+    "Parameter, state, and joint arms consume identical events and truths in identical order.",
+    "The joint input must equal the elementwise source-order sum of the separately materialized parameter and state JVP vectors before loss evaluation.",
+    "Any arithmetic-, population-, direction-, state-scope-, or scale-affecting correction requires one versioned correction-only successor."
+  ],
+  "metrics": {
+    "truth_path_gain_recovery_fraction": "arm_truth_path_gain_bits / oracle_gain_bits",
+    "logit_energy_recovery_fraction": "1 - sum_u((arm_jvp[u] - delta_logit_target[u])^2) / sum_u(delta_logit_target[u]^2)",
+    "cosine_alignment": "dot(arm_jvp, delta_logit_target) / sqrt(dot(arm_jvp, arm_jvp) * dot(delta_logit_target, delta_logit_target))",
+    "thirds": "Three contiguous event-order partitions whose boundaries are fixed by the population manifest before execution.",
+    "positive_segment_fraction": "Number of frozen segments with positive truth-path gain divided by the complete segment count.",
+    "accumulation": "Scalar non-contracted fixed source order under FE_TONEAREST, with finite operands and outputs required."
+  },
+  "principal_pass_gate": {
+    "joint_truth_path_gain_recovery_fraction_minimum": 0.5,
+    "joint_truth_path_gain_bits": "strictly_positive",
+    "joint_gain_by_third_bits": "all_three_strictly_positive",
+    "joint_positive_segment_fraction": "strictly_greater_than_0.5",
+    "joint_vs_shifted_truth_path_gain": "strictly_greater",
+    "joint_vs_negated_truth_path_gain": "strictly_greater",
+    "joint_vs_shifted_logit_energy_recovery": "strictly_greater",
+    "joint_vs_negated_logit_energy_recovery": "strictly_greater",
+    "repeat": "byte_identical",
+    "resources_and_dependency_closure": "pass"
+  },
+  "terminal_branches": {
+    "parameter_dominant_pass": {
+      "condition": "The principal joint gate passes; parameter truth_path_gain_recovery_fraction is at least 0.5; parameter truth_path_gain_bits is at least state truth_path_gain_bits; and parameter strictly beats shifted and negated controls on truth-path gain and logit-energy recovery.",
+      "authorized_successor": "One compact tied parameter adapter that approximates the exact update direction; no parameter cloud."
+    },
+    "state_dominant_pass": {
+      "condition": "The principal joint gate passes; state truth_path_gain_recovery_fraction is at least 0.5; state truth_path_gain_bits exceeds parameter truth_path_gain_bits; and state strictly beats shifted and negated controls on truth-path gain and logit-energy recovery.",
+      "authorized_successor": "One stateful decay or retention adapter that preserves the measured propagated state effect; do not enlarge a static projection."
+    },
+    "joint_only_pass": {
+      "condition": "The principal joint gate passes; both parameter and state truth_path_gain_recovery_fraction are below 0.5; and the joint treatment passes.",
+      "authorized_successor": "One joint parameter-state adapter with the same frozen interaction boundary."
+    },
+    "subscale_with_state_signal": {
+      "condition": "Joint recovery misses 0.5, but state recovery is positive in every third, beats controls, and predicts later rather than immediate gain.",
+      "authorized_successor": "One stateful compact student or retention mechanism; exact primitive porting pauses."
+    },
+    "subscale_without_state_signal": {
+      "condition": "Joint recovery misses 0.5 and neither parameter nor state arm demonstrates control-separated transfer.",
+      "authorized_successor": "Retire this NNCP-to-MIDAS interface and preserve the open parent evidence; do not tune rank, scale, or layer subsets."
+    },
+    "causal_control_failure": {
+      "condition": "Joint does not strictly beat shifted and negated controls on truth-path gain and logit-energy recovery.",
+      "authorized_successor": "None; causal alignment is unproven and the interface is retired."
+    },
+    "implementation_failure": {
+      "condition": "Integrated parity, complete population, finite arithmetic, repeat, resource, or dependency evidence fails before a valid metric decision.",
+      "authorized_successor": "At most one correction-only implementation successor at the first divergence; scientific verdict remains none."
+    }
+  },
+  "claim_boundary": {
+    "compression_credit_bytes": 0,
+    "archive_promotion_authority": false,
+    "package_score_authority": false,
+    "pass_proves": "A no-fit first-order tangent recovers a specified fraction of the retained full midpoint functional effect on the bound population and separates from causal controls.",
+    "pass_does_not_prove": [
+      "A compact adapter preserves the effect.",
+      "Any finite arithmetic archive is smaller.",
+      "Transfer to distant enwik9 populations.",
+      "Package, memory, runtime, determinism, or Hutter Prize eligibility."
+    ]
+  },
+  "execution_authorized": false
+}

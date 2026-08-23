@@ -1,0 +1,98 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_phase_attribution_q0_v2",
+  "revision": 2,
+  "operational_status": "dormant_until_arm_b_terminal",
+  "claim_authority": "none",
+  "supersedes_before_execution": "cmix_obias_memory_phase_attribution_q0_v1",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+      "required_evidence": "terminal retained resource, process, phase, scratch, and cleanup evidence"
+    }
+  ],
+  "evidence_lower_bounds": {
+    "arm_b_codec_vmhwm_proc_kib_lower_bound": 10472880,
+    "arm_b_codec_vmhwm_bytes_lower_bound": 10724229120,
+    "strict_decimal_ceiling_kib": 9765625,
+    "strict_decimal_ceiling_bytes": 10000000000,
+    "hard_limit_excess_kib_lower_bound": 707255,
+    "hard_limit_excess_bytes_lower_bound": 724229120,
+    "engineering_parent_target_kib": 9000000,
+    "engineering_parent_target_bytes": 9216000000,
+    "engineering_target_reduction_kib_lower_bound": 1472880,
+    "engineering_target_reduction_bytes_lower_bound": 1508229120,
+    "final_arm_b_peak_unknown_until_terminal": true
+  },
+  "canonical_phases": [
+    "process_start",
+    "preprocessing",
+    "dictionary_or_order_construction",
+    "model_initialization",
+    "encode_steady_state",
+    "encode_termination_or_archive_construction",
+    "decode_initialization",
+    "decode_steady_state",
+    "raw_reconstruction",
+    "cleanup",
+    "process_terminal",
+    "unknown"
+  ],
+  "legacy_name_mapping": {
+    "dictionary_order_construction": "dictionary_or_order_construction",
+    "encoding_steady_state": "encode_steady_state",
+    "termination_archive_construction": "encode_termination_or_archive_construction"
+  },
+  "implementation": {
+    "observer": "tools/cmix_memory_phase_attribution.py",
+    "interface_contract": "programs/cmix_obias_memory_phase_attribution_q0_v1/interface-contract.json",
+    "receipt_schema": "contracts/research/v1/cmix-memory-phase-attribution-receipt.schema.json",
+    "observer_error_schema": "contracts/research/v1/cmix-memory-phase-attribution-observer-error.schema.json"
+  },
+  "terminal_modes": {
+    "retained_evidence_analysis": {
+      "execution": "read_only",
+      "rule": "Consume only terminal Arm B evidence. Do not infer a phase when markers, complete peak-interval samples, or process identities are absent.",
+      "authority": "diagnostic_only"
+    },
+    "bounded_observer_replay": {
+      "activation": "retained evidence cannot attribute the authoritative peak interval",
+      "rule": "Run one correction-only observer replay on the smallest frozen scope reproducing the suspected allocation lifetimes, with an observer-only K control.",
+      "authority": "diagnostic_only"
+    }
+  },
+  "required_measurements": [
+    "continuous_process_tree_vmrss",
+    "per_process_vmhwm",
+    "cgroup_v2_memory_current",
+    "cgroup_v2_memory_peak",
+    "cgroup_v2_memory_events",
+    "smaps_rollup_checkpoints",
+    "major_mapping_identity_and_size",
+    "buffer_creation_and_release_phase",
+    "scratch_logical_bytes",
+    "scratch_allocated_bytes",
+    "canonical_phase_markers"
+  ],
+  "q1_authorization": [
+    "authoritative peak phase or explicit unattributed_peak classification is terminal",
+    "one coherent probability-identical allocation-lifetime hypothesis is named",
+    "reclaimable overlapping-lifetime lower bound reaches at least 1508229120 bytes",
+    "no sampled RSS value overrides VmHWM or cgroup memory.peak",
+    "instrumented diagnostic receipts confer zero resource qualification"
+  ],
+  "claim_boundary": [
+    "Arm B remains a strict memory failure regardless of archive outcome",
+    "attribution grants no compression, archive, or resource credit",
+    "a probability-affecting memory child becomes a new compression candidate",
+    "one correction-only observer successor is allowed; no scope or flag sweep is allowed"
+  ],
+  "execution_authority": false,
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

@@ -26,7 +26,8 @@
     "required_identity": [
       "integer_probability_stream",
       "arithmetic_payload",
-      "archive_bytes",
+      "parent_child_compressed_payload_bytes",
+      "child_A_B_full_archive_bytes",
       "decoded_canonical_bytes",
       "persistent_state_hashes"
     ],
@@ -43,7 +44,7 @@
       "corpus_or_preprocessing_change",
       "accounting_boundary_change"
     ],
-    "reclassification_rule": "Any probability or archive change creates a new compression candidate and restarts the archive ladder."
+    "reclassification_rule": "Any parent/child integer-probability, arithmetic-coder, compressed-payload, decoded-stream, raw-inverse, or probability-affecting persistent-state change creates a new compression candidate and restarts the archive ladder. Parent/child self-extracting archives are expected to differ through separately counted program material; child A/B full-archive inequality is a deterministic-build or replay failure."
   },
   "activation_requirements": [
     "A source-level allocation hypothesis is bound before execution",

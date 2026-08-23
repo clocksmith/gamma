@@ -1,0 +1,95 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_filebacked_fxcm_allocator_strategy_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "role": "subordinate correction-only implementation strategy for cmix_obias_memory_safe_parent_q0_v1; not a compression candidate",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "gamma_memory_limit_bytes": 10000000000,
+    "engineering_parent_target_bytes": 9216000000,
+    "temporary_disk_limit_bytes": 100000000000
+  },
+  "hypothesis": "Large FXCM calloc-backed anonymous tables can retain identical bytes and access semantics in preallocated MAP_SHARED scratch files while fixed-cadence MADV_PAGEOUT permits clean or written-back cold pages to leave process RSS.",
+  "evidence_boundary": {
+    "current_mapping_observations": "diagnostic motivation only",
+    "activation_requires": "A terminal phase-attribution receipt must bind the parent high-water to eligible anonymous FXCM allocations and show enough reclaimable bytes to reach the engineering target.",
+    "no_inference": "File backing, virtual size, or a lower sampled RSS at one checkpoint does not prove peak memory qualification."
+  },
+  "allocation_contract": {
+    "source_scope": [
+      "fxcmv1::alloc",
+      "fxcmv1::alloc1"
+    ],
+    "minimum_backed_allocation_bytes": 67108864,
+    "threshold_status": "frozen_before_execution",
+    "smaller_allocations": "retain exact parent allocation path",
+    "backing_file_policy": [
+      "Create one unique regular file per eligible allocation beneath the receipt-bound scratch directory.",
+      "Use openat with O_CREAT, O_EXCL, O_NOFOLLOW, O_CLOEXEC and mode 0600.",
+      "Reserve the complete rounded mapping length with posix_fallocate before mmap so later writes cannot SIGBUS from disk exhaustion.",
+      "Map PROT_READ|PROT_WRITE and MAP_SHARED at file offset zero.",
+      "Close the file descriptor after successful mmap; retain the mapping registry until source-bound release or process terminal.",
+      "A newly created and fully reserved file supplies calloc-equivalent zero bytes before first write.",
+      "alloc1 preserves its declared returned-pointer alignment and records both mapping base and aligned pointer.",
+      "No mapping address, file descriptor, filename, page residency, or pageout result may enter predictor state or probability calculations."
+    ],
+    "failure_policy": "Any open, allocation, truncation, reservation, mapping, alignment, registry, pageout, unmap, or cleanup failure terminates as infrastructure failure; fallback to anonymous allocation is forbidden in an authority-bearing run."
+  },
+  "pageout_contract": {
+    "operation": "madvise(MADV_PAGEOUT) over every live eligible mapping",
+    "cadence": "At a source-bound byte boundary after each 1048576 modeled bytes and once after predictor initialization before the first coded byte.",
+    "cadence_bytes": 1048576,
+    "thread_count": 1,
+    "source_order": "Allocation-registry insertion order",
+    "return_policy": "Every call must return zero; unsupported kernels fail before candidate evidence begins.",
+    "forbidden_operations": [
+      "MADV_DONTNEED on anonymous state",
+      "discarding dirty state",
+      "resetting a mapping",
+      "changing predictor update cadence",
+      "memory-pressure-triggered semantic branches"
+    ],
+    "semantic_boundary": "Page residency and page-fault timing may change; mapped bytes and all model-visible values must not."
+  },
+  "cleanup_contract": {
+    "normal_terminal": "munmap every registered region and unlink every backing file in reverse allocation order",
+    "failure_terminal": "retain a receipt-bound manifest and remove only files whose inode identity matches the registry",
+    "scratch_before_cleanup_required": true,
+    "scratch_after_cleanup_required": true,
+    "foreign_file_deletion_forbidden": true
+  },
+  "proof_ladder": [
+    "Synthetic allocator semantics and zero/alignment identity with no codec authority.",
+    "250KB P/K integer-probability, coder, persistent-state, payload, archive, inverse, pageout, and cleanup identity.",
+    "1MB probability-identical replay with external cgroup and process-tree receipts.",
+    "10MB only if measured peak reduction projects past the engineering target without archive divergence.",
+    "Full 1G parent qualification only after opening and distant scope identity and runtime feasibility."
+  ],
+  "required_identities": [
+    "integer probability stream",
+    "coder state",
+    "payload",
+    "archive",
+    "persistent model and optimizer state",
+    "decoded preprocessed stream",
+    "raw inverse"
+  ],
+  "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-allocator-receipt.schema.json",
+  "activation_requirements": [
+    "selected execution host has no active exclusive_full1g lease",
+    "Arm B terminal evidence and irrevocable Gamma memory failure are preserved",
+    "phase-attribution and allocation-lifetime receipts identify eligible FXCM mappings",
+    "required reclaimable-byte lower bound reaches the engineering target",
+    "exact source revision, patch, compiler, linker, flags, runtime root, scratch filesystem, cgroup, and corpus are content-addressed",
+    "unsupported MADV_PAGEOUT is rejected before evidence collection"
+  ],
+  "claim_boundary": [
+    "Probability identity makes this a memory-compilation child, not a new compressor.",
+    "Any probability or archive difference creates a new parent candidate and restarts the archive ladder.",
+    "A passing cgroup cap does not substitute for process-tree RSS and per-process VmHWM receipts.",
+    "Disk-backed state, page faults, runtime, and cleanup are independently measured gates.",
+    "This strategy has zero Gamma compression and score credit."
+  ]
+}

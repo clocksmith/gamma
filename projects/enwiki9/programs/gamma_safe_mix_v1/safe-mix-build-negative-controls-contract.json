@@ -1,0 +1,36 @@
+{
+  "schema": "gamma.enwiki9.safe-mix-build-negative-controls-contract.v1",
+  "candidate_id": "gamma_safe_mix_v1",
+  "operational_status": "dormant_dependency",
+  "capture_controls": [
+    "pending_program_lock",
+    "duplicate_program_lock_path",
+    "program_lock_file_digest_mutation",
+    "contract_digest_mismatch",
+    "builder_digest_mismatch",
+    "identity_probe_mutation",
+    "command_order_mutation",
+    "source_digest_mutation",
+    "failed_compile",
+    "failed_link",
+    "live_source_path_retention"
+  ],
+  "verification_controls": [
+    "identical_build_root",
+    "nested_build_root",
+    "altered_artifact",
+    "forged_artifact_digest",
+    "wrong_build_role",
+    "changed_input_lock",
+    "changed_command_receipt",
+    "omitted_artifact"
+  ],
+  "terminal_requirement": "Every mutation is rejected independently while an unmodified synthetic A/B fixture passes.",
+  "fixture_boundary": "Synthetic compiler/build fixtures only; no compression, archive, score, or promotion authority.",
+  "authority": {
+    "execution_authority": false,
+    "archive_authority": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0
+  }
+}
