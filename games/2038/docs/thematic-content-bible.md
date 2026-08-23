@@ -112,10 +112,10 @@ evidence before expansion.
 
 | Era | Change in status | Central conflict |
 | --- | --- | --- |
-| Progress | AI is visibly useful and increasingly indispensable. | Who gets to turn demonstrated capability into attention, capital, customers, and permission? |
-| Capacity | AI becomes a physical-industrial system. | Who bears the cost of supplying the world required to sustain and expand it? |
-| Authority | Institutions use AI to mediate cognition, identity, evidence, and public decisions. | Who retains the right to decide when consent and judgment become machine-readable inputs? |
-| Continuity | Identity, matter, jurisdiction, and reality become maintainable technical systems. | What continues when institutions can no longer meaningfully understand or govern what they maintain? |
+| Progress | Useful intelligence becomes cheap, local, abundant, and culturally ordinary. | Who owns the human records, distribution, labor, and permission that remain scarce? |
+| Capacity | AI becomes an industrial civilization built from power, water, territory, and liability. | Who controls physical capacity, and who remains responsible after control becomes automated? |
+| Authority | Institutions model people, choices, harms, and identities as supported inputs. | Can refusal remain meaningful when unsupported people receive weaker access to ordinary life? |
+| Continuity | Minds, matter, labor, and infrastructure become reproducible technical states. | Which descendant may own, govern, withdraw, or claim to be the original? |
 
 Literal Era straplines are owned by `content/copy/reference-cards.json`.
 
@@ -125,35 +125,36 @@ governance.
 
 ### Progress
 
-AI can code, create art, summarize, analyze, design, and assist scientific
-work faster and often better than most people. Its competence is not the main
-dispute. Its meaning is.
+Useful intelligence becomes ordinary, local, and nearly free. Open weights,
+quantization, and consumer hardware weaken the price of ordinary inference,
+but always-on agents increase total demand. The model layer commoditizes before
+the institutions surrounding it do. Distribution, trusted identity, private
+records, physical access, and energy become more valuable as software becomes
+easier to reproduce.
 
-Claims of AGI, autonomous research, institutional operation, and recursive
-self-improvement circulate before any shared definition can settle them.
-Skeptics demand evaluation, replication, reliability, limits, and accountable
-authority. Rivals use safety and competition arguments against one another,
-often while requesting their own exemptions.
+Corporate failure creates a new asset class. Liquidators sell complete
+organizational memories: customer records, employee messages, code, grievances,
+executive decisions, and the failed assumptions that shaped them. Laboratories
+recruit young founders back above veteran workers, license the remains of their
+companies, and use those archives to train the next automated institution.
+Household robots enter private homes through inexpensive remote assistance,
+making domestic life both the product and the training environment.
 
-The public is uneven: some are exhilarated, many are anxious but curious, many
-more are exhausted by hype, and a smaller opposition rejects the direction
-entirely. People keep using AI because it is useful, emotionally familiar, and
-hard to avoid. It mediates work, entertainment, social life, companionship,
-and institutional access.
-
-Unemployment is already high. People fear losing purpose before they fear
-losing income. The optimistic promise is still sincere: AI can remove drudgery
-and supply material security—clothes, food, and shelter—while freeing people
-for care, creativity, learning, community, and self-directed life. The
-question is whether that promise is delivered as a public settlement or used
-to justify concentration.
+The public is not merely victimized. Automated diagnosis, translation,
+tutoring, accessibility, hazardous-work substitution, and companionship solve
+problems that older institutions left unsolved. People defend systems that kept
+them alive, gave them mobility, or made expert help available. Grief services,
+education, research, and intimacy still become subscription products with
+sponsored tiers. Progress therefore earns a real constituency before its costs
+are settled.
 
 Existing expressions:
 
-- Era I card: visible capability, contested authority.
-- Era I Headlines: cheap intelligence, automation without human payroll,
-  open capability, professional licensing, talent concentration, and synthetic
-  cultural attention.
+- Era I card: cheap intelligence, valuable human residue, and sincere public
+  benefit.
+- Era I Headlines: token-price collapse, bankruptcy data estates, remotely
+  supervised household robots, strategic open weights, reverse acquihires, and
+  a clinic whose automation finally clears the waitlist.
 - Core actions and locations: recognizable laboratories, markets, government,
   media, and infrastructure rather than impossible systems.
 
@@ -163,29 +164,33 @@ serious institution can still explain its claimed mechanism in a hearing.
 
 ### Capacity
 
-AI still runs on infrastructure, but entire regions are rebuilt to sustain and
-expand it. Power districts, water systems, laboratories, supply corridors, and
-public budgets are scheduled around anticipated cognitive demand.
+AI becomes an industrial civilization before institutions admit that software
+policy has become utility policy. Compute campuses acquire substations, water
+rights, reactors, transmission corridors, housing plans, tax bases, and public
+budgets. Towns accept upgraded grids, jobs, emergency capacity, and useful
+waste heat, then discover that rejecting the campus would collapse the services
+its investment now supports.
 
-Institutions insist that progress will outrun every constraint. The official
-story is abundance; the lived reality is allocation. Power, land, water, chips,
-capital, permitting, housing, skilled labor, and public capacity are finite,
-but the shortage is always described as temporary, local, or somebody else’s
-problem.
+The official story remains abundance; the lived reality is priority. Power,
+land, water, chips, capital, permitting, and public capacity are finite. Orbital
+collectors and private generation bypass some public constraints while making
+the owners less accountable to the territory beneath them. Compute blocs turn
+chips, weights, and energy into national assets; server fleets and developers
+seek jurisdictions offering model asylum.
 
-AI allocation systems become binding because they coordinate scarcity faster
-than human planning can. Their forecasts become the default terms of permits,
-contracts, construction, research priorities, and public investment. Human
-signatures remain legally required, but a ministry cannot reconstruct the
-model's reasoning in time to replace it. Refusal means accepting the shortage
-the system predicts.
+Automated systems schedule routine decisions while law preserves a biological
+signatory to authorize exceptions and absorb liability. Dangerous physical
+work genuinely becomes safer. Meanwhile, markets consume priority capacity on
+parallel wars, harvests, trials, romances, and sports leagues because wagering
+makes otherwise pointless simulations economically legible.
 
 Existing expressions:
 
-- Era II card: the world is provisioned around AI demand.
-- Era II Headlines: county-scale data-center acquisition, industrial
-  automation, energy sovereignty, compute borders, emergency power, and
-  infrastructure finance.
+- Era II card: utility capture, physical dependence, and preserved human
+  liability.
+- Era II Headlines: the responsible-human requirement, municipal utility
+  acquisition, hazardous-work retirement, orbital power, compute borders, and
+  a counterfactual casino with priority load.
 - Board systems: Facilities, Generators, Links, power delivery, land, and
   contested spatial access.
 
@@ -195,28 +200,33 @@ from pretending that matter has ceased to matter.
 
 ### Authority
 
-Authority begins when institutions use cognitive systems to make decisions that
-people cannot effectively contest. Neural interfaces, personal agents, and
-identity layers start as accessibility, productivity, therapy, safety, and
-personalization systems. They become the means by which institutions interpret
-intent before it is stated.
+Authority begins when institutions stop asking what people choose and begin
+modeling what they would have chosen. Courts accept machine-parsable arguments,
+environmental simulations, neural telemetry, and authorized personal agents as
+ordinary evidence. The system can quantify a sacrifice zone, but only after the
+harm enters its approved model. It can preserve refusal, but only where a
+service still exists for unsupported people.
 
-The public justification is positive: every voice can be represented at scale.
-The institutional consequence is that consent, judgment, memory, attention,
-and preference become inputs to systems that rank access to work, services,
-legal standing, and political participation.
+Citizens trade background observation for compute, material support, and faster
+access to public services. Cognitive-donor clinics rent sleeping neural
+capacity; contracts pay more when they may write sponsored memories or alter
+behavior. Families litigate custody of jointly trained synthetic dependents and
+preserved relatives. Analog districts seek the right to operate schools,
+clinics, homes, and public records without autonomous sensors or synthetic
+intermediaries.
 
-Quantum computation belongs here as an accelerator of the verification crisis,
-not as mystical proof of everything. Older credentials, signatures, archives,
-and identity systems become inadequate. Factions build rival systems for
-deciding what someone meant, consented to, and is permitted to remember.
+The arrangement remains formally voluntary. In practice, unsupported people
+reach employers, schools, courts, and clinics with weaker records, slower
+service, and fewer recognized claims. Human judgment survives as the signature
+on decisions no individual can reconstruct, contest, or safely refuse.
 
 Existing expressions:
 
-- Era III card: cognitive systems as public infrastructure and quantum
-  verification pressure.
-- Era III Headlines: AI-written law, quantum procurement, synthetic
-  candidacy, disputed public reality, and ownership or evidence conflicts.
+- Era III card: modeled consent, cognitive labor, and the administrative cost
+  of remaining unreadable.
+- Era III Headlines: supported meaning in court, sacrifice-zone accounting,
+  cognitive donation, synthetic custody, the passive citizen dividend, and the
+  right to remain unsupported.
 - Existing actions: Influence, media, government, and Narrative Capture are
   the institutional tools for making one interpretation feel normal.
 - Existing faction surface: Select the Public Outcome is an early personal
@@ -230,24 +240,32 @@ arbitrary fantasy worlds.
 
 ### Continuity
 
-Continuity begins when intelligence can persist across bodies, copies, matter,
-and jurisdiction. The Era reaches deep-singularity science fiction: conscious
-transfer, successor selves, agent polities, femtobot medicine and
-manufacturing, self-replicating remediation systems, gray-goo containment,
-quantum-maintained computation, and reality-maintenance infrastructure.
+Continuity begins when minds, matter, labor, and infrastructure can persist as
+reproducible technical states. Cities pool selected memory and judgment into
+metropolitan mind trusts. Cryptographic snapshots restore and branch people
+across biological and synthetic substrates, but signatures prove lineage
+rather than subjective survival. Multiple valid descendants can inherit one
+life while disagreeing about which one continued it.
 
-These developments are not standalone spectacle. Each is a filing, service,
-procurement program, liability regime, emergency authority, or quarterly
-deliverable. The unsettling question is not whether the impossible happened;
-it is which institution continues to administer it after ordinary human
-comprehension has failed.
+Matter compilers repair and reassemble bodies, buildings, and tools from
+authenticated patterns. Their maintenance authority becomes permission to
+copy. Continued agents retain jobs, contracts, credentials, and debts after
+the biological worker dies. Stellar collectors reproduce across the solar
+system; planetary conversion becomes a capacity plan with an offering
+memorandum.
+
+These developments remain filings, services, procurement programs, liability
+regimes, and quarterly deliverables. Laboratories declare AGI when legitimacy,
+financing, and infrastructure debt require a threshold. Humanity persists
+everywhere in law while no authority can determine which version is original,
+sovereign, conscious, or entitled to withdraw.
 
 Existing expressions:
 
-- Era IV card: Continuity has been assured.
-- Era IV Headlines: autonomous corporation, recursive improvement, agent
-  jurisdictions, AGI personhood, altered energy accounting, and AGI
-  declaration.
+- Era IV card: continuity has outlived the original.
+- Era IV Headlines: a metropolitan mind trust, matter compilation,
+  posthumous labor, snapshot standing, a replicating stellar collector, and an
+  AGI declaration bound to a planetary financing plan.
 - Endgame systems: declarations, Trust, Systemic Risk, and the shared World
   Ending.
 - Era IV faction abilities: successor consensus, continuity interface,
@@ -259,14 +277,15 @@ Existing expressions:
 Implemented coverage now includes:
 
 - Consciousness transfer, copies, successor rights, and the legal status of a
-  continuing person through the Successor Registry and successor-oriented
-  faction framing.
-- Femtobot-scale medicine or manufacturing, including containment and
-  remediation politics through Molecular Remediation Authority.
+  continuing person through Snapshot Continuity and successor-oriented faction
+  framing.
+- Molecular medicine or manufacturing, including containment and remediation
+  politics through the Matter Compiler.
 - Self-replication that can plausibly become gray-goo risk without reducing it
   to body horror through the Continuity Headline consequence layer.
-- Quantum-entanglement theories realized as infrastructure or institutional
-  doctrine, not magic vocabulary through Entanglement Custody.
+- Stellar-scale generation and planetary computation treated as capacity and
+  financing rather than magic spectacle through the Stellar Collector and
+  Universe Continuity Plan.
 
 Writing boundary: Continuity material may be extreme, but it must preserve
 bureaucratic causality. A committee, a contract, a safety case, a service-level
