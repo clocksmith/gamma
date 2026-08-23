@@ -1,0 +1,110 @@
+{
+  "schema": "gamma.enwiki9.reject-only-archive-futility-policy.v1",
+  "policy_id": "reject_only_archive_futility_policy_v1",
+  "operational_status": "dormant_until_bound_by_candidate_lock",
+  "receipt_schema": "contracts/research/v1/reject-only-archive-futility-receipt.schema.json",
+  "purpose": "Stop a candidate only after irreversible output proves that its final archive or complete counted score cannot satisfy a frozen ceiling, while granting no promotion authority to partial execution.",
+  "safe_inequalities": {
+    "archive_lower_bound_bytes": "irreversible_archive_prefix_bytes + minimum_remaining_archive_bytes",
+    "counted_total_lower_bound_bytes": "archive_lower_bound_bytes + counted_nonarchive_lower_bound_bytes",
+    "scope_reject": "archive_lower_bound_bytes > archive_ceiling_bytes",
+    "full_score_reject": "counted_total_lower_bound_bytes > full_counted_score_ceiling_bytes",
+    "equality_rule": "Equality continues because a terminal artifact equal to the ceiling may pass.",
+    "negative_or_overflow_rule": "Any negative operand, arithmetic overflow, unknown unit, or inconsistent formula invalidates the proof and forbids termination."
+  },
+  "ceiling_modes": {
+    "scope_archive_gain": {
+      "formula": "archive_ceiling_bytes = parent_archive_bytes - required_gross_savings_bytes",
+      "required_inputs": [
+        "Exact parent archive bytes on the identical frozen scope.",
+        "Required gross archive savings from the versioned economics receipt.",
+        "Identical corpus population, preprocessing, archive framing, and comparison boundary."
+      ],
+      "forbidden_substitutes": [
+        "Ideal-bit estimates.",
+        "Projected full-corpus gain.",
+        "Archive sizes from a different slice or coder framing.",
+        "Net package gain described as gross archive gain."
+      ]
+    },
+    "full_counted_score": {
+      "target_bytes": 105000000,
+      "formula": "counted_total_lower_bound_bytes = archive_lower_bound_bytes + counted_nonarchive_lower_bound_bytes",
+      "required_inputs": [
+        "A content-addressed lower-bound manifest for every already-required nonarchive component.",
+        "A proof that omitted future components cannot reduce or replace already-counted bytes.",
+        "The same official or Gamma accounting option frozen for the final comparison."
+      ],
+      "unknown_package_rule": "An unknown package contribution may be conservatively set to zero for rejection safety, but it cannot support promotion or a complete-score claim."
+    }
+  },
+  "irreversibility_requirements": [
+    "Bind the output by device and inode before using its size.",
+    "Bind the producer by PID plus proc start ticks and exact command digest.",
+    "Prove that the counted prefix cannot be truncated, overwritten, replaced, sparsified, deduplicated, reordered into fewer final bytes, or excluded by later framing.",
+    "For append-only output, prove append mode and reject any seek, truncate, rename-over, unlink-recreate, or second writer event.",
+    "For staged payload output, bind a format contract proving how payload bytes map monotonically into final archive bytes.",
+    "Logical file size, not allocated filesystem blocks, is the default archive-byte measure. Allocated bytes remain resource evidence only.",
+    "A self-extracting wrapper, footer, checksum, index, alignment, or termination code contributes only through a proved minimum; zero is always the safe fallback.",
+    "Buffered bytes not yet emitted are not irreversible archive bytes.",
+    "Scratch growth, RSS growth, processed-input percentage, entropy estimates, and elapsed runtime are never archive lower bounds."
+  ],
+  "observation_requirements": [
+    "Start observation before the output path is created or bind a pre-existing prefix through a content-addressed prelaunch receipt.",
+    "Use PID plus proc start ticks to prevent producer identity reuse.",
+    "Record monotonic time, device, inode, logical size, allocated size, and proved irreversible prefix.",
+    "Require two consecutive complete observations with the same device, inode, producer identity, and nondecreasing irreversible prefix before authorizing termination.",
+    "A disappeared path, replaced inode, reduced size, unexpected writer, unreadable process record, or dropped observation invalidates the proof.",
+    "Do not hash a growing archive on the active Arm B host merely to support futility observation; identity hashing is terminal evidence."
+  ],
+  "termination_protocol": [
+    "Recompute every locked ceiling and lower-bound operand from receipt-bound integers.",
+    "Require strict greater-than excess of at least one byte.",
+    "Write and fsync the reject decision before signaling the candidate process.",
+    "Signal only the bound candidate process tree through the resource guard's frozen termination mechanism.",
+    "Preserve command, return code, stdout, stderr, partial output identity, scratch state, resource state, and the complete futility receipt.",
+    "Do not decode, re-encode, or package a reject-only partial archive.",
+    "Classify the result as an economic rejection on the frozen scope, not an invalid codec or compression correctness failure.",
+    "Release the resource lease only through normal terminal receipt processing."
+  ],
+  "authority_boundary": {
+    "continue_below_ceiling_means": "The irreversible lower bound has not yet proved failure. It says nothing about likely or final performance.",
+    "reject_above_ceiling_means": "No continuation under the bound output and accounting contracts can satisfy the frozen ceiling.",
+    "partial_archive_score_credit_bytes": 0,
+    "partial_archive_compression_verdict": "none",
+    "promotion_from_futility_receipt": false,
+    "inverse_after_early_reject_required": false,
+    "full_success_requirements_unchanged": [
+      "Terminal finite archive.",
+      "Exact decode and raw inverse.",
+      "Deterministic repeat.",
+      "Complete package accounting.",
+      "Resource compliance.",
+      "Dependency closure.",
+      "Distant transfer and full-corpus promotion where required."
+    ]
+  },
+  "candidate_binding_required": {
+    "fields": [
+      "candidate_id",
+      "candidate_revision",
+      "experiment_digest",
+      "scope_manifest_sha256",
+      "parent_candidate_id",
+      "parent_archive_sha256",
+      "parent_archive_bytes",
+      "required_gross_savings_bytes",
+      "archive_ceiling_bytes",
+      "full_counted_score_ceiling_bytes",
+      "counted_nonarchive_lower_bound_manifest_sha256",
+      "output_format_contract_sha256",
+      "minimum_remaining_archive_bytes",
+      "monitor_binary_sha256",
+      "termination_mechanism_sha256"
+    ],
+    "freeze_before_launch": true,
+    "post_result_threshold_change_forbidden": true
+  },
+  "arm_b_rule": "Do not attach, enable, or act on this futility policy for the already-running Arm B execution. Arm B continues unchanged to terminal.",
+  "execution_authorized": false
+}

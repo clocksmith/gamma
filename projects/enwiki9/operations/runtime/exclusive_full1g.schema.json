@@ -26,6 +26,7 @@
     "candidate_id": { "type": "string", "minLength": 1 },
     "pid": { "type": "integer", "minimum": 1 },
     "codec_pid": { "type": "integer", "minimum": 1 },
+    "codec_proc_start_ticks": { "type": "integer", "minimum": 1 },
     "proc_start_ticks": { "type": "integer", "minimum": 1 },
     "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
     "codec_command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
@@ -37,6 +38,52 @@
     "started_utc": { "type": "string", "minLength": 1 },
     "heartbeat_utc": { "type": "string", "minLength": 1 },
     "lease_mode": { "enum": ["managed", "read_only_sidecar"] },
+    "lease_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "signal_authority": { "type": "boolean" },
     "claim_boundary": { "type": "string", "minLength": 1 }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lease_mode": {
+            "const": "read_only_sidecar"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "signal_authority": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal_authority": {
+            "const": true
+          }
+        },
+        "required": [
+          "signal_authority"
+        ]
+      },
+      "then": {
+        "required": [
+          "lease_id",
+          "codec_pid",
+          "codec_proc_start_ticks",
+          "codec_command_sha256",
+          "claim_boundary"
+        ],
+        "properties": {
+          "lease_mode": {
+            "const": "managed"
+          }
+        }
+      }
+    }
+  ]
 }

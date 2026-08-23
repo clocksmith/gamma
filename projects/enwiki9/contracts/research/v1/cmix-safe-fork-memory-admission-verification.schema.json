@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-safe-fork-memory-admission-verification.v1",
+  "title": "CMIX SAFE-FORK memory admission verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "admitted", "errors", "admission_failures", "receipt_sha256", "parent_receipt_sha256", "parent_verification_sha256", "dynamic_incremental_limit_bytes", "measured_incremental_peak_bytes", "derived_decisions", "claim_authority", "promotion_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-safe-fork-memory-admission-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_safe_fork_midas64_q0_v1"},
+    "verified": {"type": "boolean"},
+    "admitted": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "admission_failures": {"type": "array", "items": {"type": "string"}},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "parent_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "parent_verification_sha256": {"$ref": "#/$defs/sha256"},
+    "dynamic_incremental_limit_bytes": {"type": "integer", "minimum": 0},
+    "measured_incremental_peak_bytes": {"type": "integer", "minimum": 0},
+    "derived_decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_below_engineering_target", "allocation_arithmetic_pass", "arm_capacity_identity_pass", "forbidden_duplication_absent", "incremental_budget_pass", "resource_guard_pass", "p_k_identity_pass", "memory_admission_pass"],
+      "properties": {
+        "parent_below_engineering_target": {"type": "boolean"},
+        "allocation_arithmetic_pass": {"type": "boolean"},
+        "arm_capacity_identity_pass": {"type": "boolean"},
+        "forbidden_duplication_absent": {"type": "boolean"},
+        "incremental_budget_pass": {"type": "boolean"},
+        "resource_guard_pass": {"type": "boolean"},
+        "p_k_identity_pass": {"type": "boolean"},
+        "memory_admission_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "gamma.enwiki9.memory-safe-parent-filebacked-contract.v1",
+  "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "parent_candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "role": "correction_only_memory_compilation_successor",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": null,
+  "compression_credit_bytes": 0,
+  "execution_authority": false,
+  "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-allocator-receipt-v2.schema.json",
+  "objective": {
+    "strict_process_tree_peak_kib": 9765625,
+    "engineering_process_tree_peak_kib": 9000000,
+    "temporary_disk_limit_bytes": 100000000000,
+    "minimum_backed_allocation_bytes": 67108864,
+    "pageout_cadence_modeled_bytes": 1048576
+  },
+  "activation_dependencies": [
+    "Arm B terminal evidence and memory failure are frozen",
+    "the exclusive full-1G lease is released",
+    "source-labelled allocation attribution binds sufficient peak RSS to eligible fxcmv1 allocations",
+    "q0 malloc-trim/PPMd correction misses the engineering target or attribution proves it cannot supply the required margin",
+    "the exact donor source and integration patch are content-addressed",
+    "synthetic allocator, alignment, pageout, cleanup, and failure controls pass before codec execution"
+  ],
+  "implementation": {
+    "program_path": "programs/cmix_obias_memory_safe_parent_filebacked_q1_v1",
+    "implementation_revision": "shared_allocator_module_v2",
+    "superseded_before_execution": "embedded filebacked-fxcm.patch",
+    "shared_allocator_module": "gamma-filebacked-fxcm.h included directly by both codec and negative-control harness",
+    "layering": "Apply the frozen q0 malloc-trim/PPMd correction first, then apply the q1 FXCM patch to that exact patched tree.",
+    "source_scope": ["src/models/fxcmv1.h", "src/models/fxcmv1.cpp"],
+    "allocation_scope": ["fxcmv1::alloc", "fxcmv1::alloc1"],
+    "eligible_threshold_bytes": 67108864,
+    "storage": "one preallocated MAP_SHARED regular scratch file per eligible allocation",
+    "pageout": "source-ordered MADV_PAGEOUT after predictor initialization and every 1,048,576 modeled bytes",
+    "cleanup": "reverse-order munmap and inode-verified unlinkat, including process-terminal cleanup",
+    "fallback": "forbidden for eligible allocations",
+    "small_allocations": "unchanged calloc/free path"
+  },
+  "semantic_invariants": [
+    "new files provide calloc-equivalent zero bytes",
+    "alloc1 returned-pointer alignment is unchanged",
+    "mapping base, filename, inode, residency, faults, and pageout results never enter predictor state",
+    "ordinary CMIX prediction and update call sites remain unchanged",
+    "pageout changes residency only and never discards model-visible bytes",
+    "integer probability stream, coder state, compressed payload, decoded stream, raw inverse, and persistent state hashes equal the exact parent",
+    "parent and child self-extracting archives are expected to differ only through their separately counted program/package material",
+    "two independent q1 builds and runs produce byte-identical complete q1 archives"
+  ],
+  "failure_policy": "Any scratch-directory, open, reserve, mmap, registry, alignment, pageout, unmap, inode, or cleanup failure is an infrastructure failure. Eligible allocations never fall back to anonymous memory.",
+  "promotion_ladder": [
+    "allocator-only deterministic synthetic fixtures",
+    "250KB parent/child probability and archive identity",
+    "1MB resource and identity calibration",
+    "opening and distant 10MB exact identity with measured memory reduction",
+    "full 1GB A/B only after the engineering target projects feasible"
+  ],
+  "reclassification_rule": "Any integer probability, coder, payload, archive, or persistent-state difference creates a new compression candidate and restarts the archive ladder."
+}

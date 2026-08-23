@@ -1,0 +1,116 @@
+{
+  "schema": "gamma.enwiki9.cmix-memory-phase-attribution-receipt-policy.v1",
+  "policy_id": "cmix_memory_phase_attribution_receipt_policy_v1",
+  "experiment_contract": "operations/planning/cmix_obias_memory_phase_attribution_q0_v1.json",
+  "receipt_schema": "contracts/research/v1/cmix-memory-phase-attribution-receipt.schema.json",
+  "operational_status": "dormant_until_arm_b_terminal",
+  "execution_authorized": false,
+  "purpose": "Identify the phase and allocation lifetime responsible for the CMIX high-water mark, then authorize only a probability-identical memory child unless evidence proves that semantics must change.",
+  "current_evidence_lower_bounds": {
+    "arm_b_candidate_id": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+    "codec_vmhwm_proc_kib_lower_bound": 10472880,
+    "codec_vmhwm_bytes_lower_bound": 10724229120,
+    "gamma_hard_limit_bytes": 10000000000,
+    "hard_limit_excess_bytes_lower_bound": 724229120,
+    "engineering_target_kib": 9000000,
+    "engineering_target_bytes": 9216000000,
+    "engineering_target_reduction_bytes_lower_bound": 1508229120,
+    "final_arm_b_peak_unknown_until_terminal": true
+  },
+  "phase_order": [
+    "process_start",
+    "preprocessing",
+    "dictionary_or_order_construction",
+    "model_initialization",
+    "encode_steady_state",
+    "encode_termination_or_archive_construction",
+    "decode_initialization",
+    "decode_steady_state",
+    "raw_reconstruction",
+    "cleanup",
+    "process_terminal"
+  ],
+  "measurement_rules": [
+    "Record all memory quantities in bytes. Preserve the raw procfs kB values separately when procfs is the source.",
+    "Identify every process by PID plus /proc start ticks so PID reuse cannot alter tree membership.",
+    "Sample process-tree RSS continuously and retain every per-process VmHWM observed before process exit.",
+    "When available, place the complete invocation in a dedicated cgroup-v2 subtree and retain memory.current, memory.peak, memory.events, and memory.stat.",
+    "At phase boundaries, capture smaps_rollup and a normalized mapping inventory for every live process.",
+    "Record logical and allocated scratch bytes separately.",
+    "A lower sampled RSS never overrides a larger per-process VmHWM or cgroup memory.peak.",
+    "A missing short-lived process, unreadable procfs record, dropped sample, clock regression, or observer failure makes the affected peak interval incomplete.",
+    "The observer may terminate a future run at a hard limit but must never mutate codec state, files, affinity, allocation policy, or process priority."
+  ],
+  "phase_marker_rules": [
+    "Source markers may identify phase transitions but must not report memory values as authority.",
+    "Each marker carries a monotonic timestamp, process identity, sequence number, phase name, event kind, and canonical payload hash.",
+    "Markers must be emitted before the first phase operation and after the last phase operation.",
+    "Unexpected, duplicated, skipped, or reordered markers invalidate phase attribution but do not erase independently observed memory evidence.",
+    "Instrumentation overhead must be measured against an observer-only K control on the same bounded scope."
+  ],
+  "allocation_attribution_rules": [
+    "Name a dominant allocation only when mapping, allocator, or source evidence binds its owner and lifetime to the high-water interval.",
+    "Do not infer reclaimability from virtual size alone.",
+    "Do not classify file-backed or shared pages as uncounted merely because they are not anonymous heap.",
+    "For each proposed reduction, identify whether it changes model capacity, probability arithmetic, context retention, preprocessing, archive construction, or decoder-visible state.",
+    "Sum reclaimable bytes only for allocations whose lifetimes overlap at the authoritative peak.",
+    "Do not add mutually exclusive counterfactual reductions.",
+    "A probability-identical proposal must explain why allocation order, initialization, table contents, state cadence, and arithmetic results remain unchanged."
+  ],
+  "probability_identity_required": {
+    "integer_probability_stream": "byte_identical",
+    "arithmetic_payload": "byte_identical",
+    "archive": "byte_identical",
+    "persistent_state_checkpoints": "byte_identical",
+    "preprocessor_output": "byte_identical",
+    "raw_inverse": "byte_identical",
+    "coder_return_codes": "equal_zero",
+    "rule": "If any probability-, state-, payload-, archive-, or inverse-affecting value changes, the memory child is a new compression candidate and restarts the archive ladder."
+  },
+  "diagnostic_population": {
+    "first_scope": "smallest scope that reproduces model initialization and all suspected high-water allocation lifetimes",
+    "scope_manifest_required": true,
+    "parent_and_child_same_population": true,
+    "observer_only_control_required": true,
+    "instrumented_result_qualification_authority": "none"
+  },
+  "decision_requirements": {
+    "attribution_pass": [
+      "Every phase has ordered begin and end evidence or an explicit terminal exception.",
+      "The authoritative peak interval has complete process-tree and per-process evidence.",
+      "Dominant allocation identities cover enough simultaneously resident bytes to explain the measured excess.",
+      "Reclaimable lower bounds are based on overlapping lifetimes rather than summed maxima.",
+      "The receipt names one exact memory-child hypothesis or concludes that only semantics-changing reductions remain."
+    ],
+    "memory_child_authorization": [
+      "The proposed probability-identical reduction lower bound exceeds 1,508,229,120 bytes using the current Arm B lower-bound peak, or is recomputed upward from the terminal peak.",
+      "The proposal targets at most one coherent allocation-lifetime mechanism.",
+      "The source revision, patch digest, build recipe, corpus, parameters, coder, and comparison parent are frozen before compilation.",
+      "One correction-only implementation successor is permitted for implementation failure; no flag sweep is permitted."
+    ]
+  },
+  "qualification_sequence": [
+    "Run attribution diagnostically after Arm B terminalizes and the exclusive lease is released.",
+    "Freeze one memory-child realization from the dominant overlapping allocation evidence.",
+    "At 250KB, require probability, payload, state, and inverse identity plus observer integrity.",
+    "At 1MB, require repeat identity and a measured memory reduction consistent with the attributed allocation lifetime.",
+    "At the smallest scope reproducing peak allocation lifetimes, require the engineering target with both instrumented and observer-only comparisons.",
+    "Run one uninstrumented guarded qualification from a clean build; diagnostic instrumentation cannot confer resource authority.",
+    "Authorize a new full-1G parent qualification only after the uninstrumented evidence is below 9,216,000,000 bytes with sufficient phase-independent margin.",
+    "At full 1G, require exact archive and inverse identity against the external parent plus a terminal resource-guard receipt."
+  ],
+  "terminal_branches": {
+    "probability_identical_reduction_reaches_engineering_target": "Promote the exact memory-safe parent through the archive ladder.",
+    "probability_identical_reduction_only_crosses_hard_limit": "Do not run full 1G; seek one correction-only lifetime reduction that reaches the engineering target.",
+    "only_semantics_changing_reduction_available": "Version a new parent candidate and restart compression, inverse, determinism, package, and transfer gates.",
+    "attribution_incomplete": "Preserve the receipt and authorize one correction-only observer or marker successor.",
+    "reduction_subscale": "Retire the memory-child hypothesis; do not combine non-overlapping or mutually exclusive estimates."
+  },
+  "claim_boundary": {
+    "attribution_receipt_credit": 0,
+    "instrumented_run_memory_qualification": false,
+    "official_memory_interpretation": null,
+    "gamma_memory_policy": "strict",
+    "compression_gain_claim": false
+  }
+}

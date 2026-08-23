@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.safe-mix-oracle-suite-contract.v1",
+  "candidate_id": "gamma_safe_mix_v1",
+  "operational_status": "dormant_dependency",
+  "generator": "safe-mix-population.py",
+  "native_trace": "safe-mix-trace.cpp",
+  "arbitrary_precision_reference": "safe-mix-reference.py",
+  "populations": [
+    {"population_id": "exhaustive_scale17", "scale": 17, "event_count": 512, "purpose": "all parent/treatment count pairs and both truths at one complete small scale"},
+    {"population_id": "boundary_scale3", "scale": 3, "event_count": 8, "purpose": "minimum legal scale and all legal counts"},
+    {"population_id": "boundary_scale4096", "scale": 4096, "event_count": 72, "purpose": "coder-scale endpoint, center, and adjacent-count boundaries"},
+    {"population_id": "boundary_scale4294967295", "scale": 4294967295, "event_count": 72, "purpose": "maximum uint32 scale endpoint, center, and adjacent-count boundaries"},
+    {"population_id": "trajectory_scale4096", "scale": 4096, "event_count": 65536, "purpose": "maximum allowed deterministic posterior trajectory with periodic P-equals-D identity events"}
+  ],
+  "trajectory_prng": {
+    "algorithm": "LCG modulo 2^64",
+    "seed_hex": "6a09e667f3bcc909",
+    "multiplier": 6364136223846793005,
+    "increment": 1442695040888963407,
+    "uint_to_count": "1 + ((state >> 16) mod 4095)",
+    "truth": "least significant bit after the third transition",
+    "identity_event_rule": "treatment_count equals parent_count when zero-based event mod 257 equals zero"
+  },
+  "terminal_requirement": "every population is complete and the native mixed_count and parent_weight_after match the arbitrary-precision reference at every event",
+  "authority": {
+    "diagnostic_only": true,
+    "archive_promotion_authority": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "gamma.enwiki9.memory-safe-parent-filebacked-interface.v1",
+  "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "operational_status": "dormant_dependency",
+  "execution_authority": false,
+  "implementation_revision": "shared_allocator_module_v2",
+  "evidence_revision": "allocator_controls_v2_build_bound",
+  "supersedes_without_execution": "filebacked-fxcm.patch",
+  "shared_allocator_module": "gamma-filebacked-fxcm.h",
+  "integration_patch": "integration-v2.patch",
+  "applicator": "apply-filebacked-fxcm-v2.sh",
+  "compile_definition": "GAMMA_FILEBACKED_FXCM=1",
+  "runtime_environment": {
+    "GAMMA_FXCM_BACKING_DIR": "required absolute path to a precreated empty non-symlink directory on the receipt-bound scratch filesystem",
+    "GAMMA_FXCM_EVENT_FD": "required inherited writable descriptor for authority-bearing evidence runs; optional and absent in the final submission execution"
+  },
+  "constants": {
+    "minimum_backed_allocation_bytes": 67108864,
+    "maximum_registered_allocations": 4096,
+    "pageout_cadence_modeled_bytes": 1048576,
+    "backing_file_mode_octal": "0600"
+  },
+  "forbidden": [
+    "anonymous fallback for an eligible allocation",
+    "relative or symlinked scratch directory",
+    "reuse or overwrite of an existing backing filename",
+    "deleting a backing file whose device/inode identity differs from the registry",
+    "memory-pressure-dependent pageout cadence",
+    "page identity or residency entering predictor calculations"
+  ],
+  "test_boundary": {
+    "harness": "allocator-negative-control-harness.cpp",
+    "shared_source_rule": "Separate release and harness build receipts must bind their actual binary hashes, source closures, compile definitions, and the exact same content-addressed gamma-filebacked-fxcm.h.",
+    "build_receipt_schema": "../../contracts/research/v1/cmix-filebacked-fxcm-build-receipt.schema.json",
+    "build_verification_schema": "../../contracts/research/v1/cmix-filebacked-fxcm-build-verification.schema.json",
+    "negative_control_schema": "../../contracts/research/v1/cmix-filebacked-fxcm-negative-controls.schema.json",
+    "independent_build_rule": "Release and harness authority each require two successful receipts from distinct clean build-root identities plus a third comparison receipt proving identical source closure, toolchain, commands, environment, macro boundary, allocator header, and binary bytes.",
+    "compiler_invocation_rule": "Manifest-declared compile definitions have no authority. Every actual compiler invocation must be captured, root-normalized, content-addressed, and checked for the production/testing macro boundary before a build receipt is valid.",
+    "fault_injection": "Only the harness defines GAMMA_FILEBACKED_FXCM_TESTING and may replace syscall hooks.",
+    "release_rule": "The prize-facing codec must define GAMMA_FILEBACKED_FXCM=1 and must not define GAMMA_FILEBACKED_FXCM_TESTING.",
+    "residual_identity_rule": "Every preexisting scratch entry is compared byte-for-byte and by device, inode, mode, logical size, and allocated size before and after each control; expected allocator residuals have frozen names and shape constraints."
+  },
+  "event_protocol": {
+    "record_bytes": 64,
+    "magic_hex": "31465847",
+    "version": 1,
+    "sequence_origin": 1,
+    "event_types": {
+      "1": "allocation",
+      "2": "pageout_initial",
+      "3": "pageout_cadence",
+      "4": "release",
+      "5": "cleanup_complete"
+    },
+    "partial_gap_duplicate_or_reordered_record": "terminal invalidity",
+    "write_failure": "infrastructure failure",
+    "runner_requirement": "bind the inherited descriptor to an exclusively created regular evidence file, retain exact event bytes, and fsync the file before classification"
+  }
+}

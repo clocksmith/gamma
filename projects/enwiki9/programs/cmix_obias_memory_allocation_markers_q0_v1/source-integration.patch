@@ -1,0 +1,308 @@
+diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -1,0 +1,4 @@
++#ifdef KH_ALLOCATION_MARKERS
++#include "../utils/allocation-marker.h"
++#endif
++
+@@ -139,12 +143,32 @@ template <class T> void alloc(T*&ptr, int c) {
+   ptr=(T*)calloc(c, sizeof(T));
+   if (!ptr) exit(1);
+   AdviseHugePages(ptr, (size_t)c*sizeof(T));
++#ifdef KH_ALLOCATION_MARKERS
++  if (!gamma_allocation_marker::RecordAllocation(
++          gamma_allocation_marker::kFxcmAlloc,
++          ptr,
++          ptr,
++          (size_t)c*sizeof(T),
++          (size_t)c*sizeof(T),
++          alignof(T))) {
++    exit(1);
++  }
++#endif
+ }
+ 
+ // for aligned data
+ template <class T> void alloc1(T*&data, int c,T*&ptr,const int align=16) {
+   const size_t extra=(align+sizeof(T)-1)/sizeof(T);
+   ptr=(T*)calloc((size_t)c+extra, sizeof(T));
+   if (!ptr) exit(1);
+   AdviseHugePages(ptr, ((size_t)c+extra)*sizeof(T));
+   data=(T*)(((uintptr_t)ptr+(align-1)) & ~(uintptr_t)(align-1));
++#ifdef KH_ALLOCATION_MARKERS
++  if (!gamma_allocation_marker::RecordAllocation(
++          gamma_allocation_marker::kFxcmAllocAligned,
++          ptr,
++          data,
++          ((size_t)c+extra)*sizeof(T),
++          (size_t)c*sizeof(T),
++          (unsigned int)align)) {
++    exit(1);
++  }
++#endif
+ }
+@@ -6110,11 +6134,23 @@ void Predictor::FreeMemory() {
+     for (int i=0;i<21;i++) {
++#ifdef KH_ALLOCATION_MARKERS
++        if (!gamma_allocation_marker::RecordReleaseByAllocationBase(cmC2[i].ts))
++            exit(1);
++#endif
+         free(cmC2[i].ts);
+         cmC2[i].ts=nullptr;
++#ifdef KH_ALLOCATION_MARKERS
++        if (!gamma_allocation_marker::RecordReleaseByAllocationBase(cmC2[i].ptr))
++            exit(1);
++#endif
+         free(cmC2[i].ptr);
+         cmC2[i].ptr=nullptr;
+         cmC2[i].t=nullptr;
+     }
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordReleaseByAllocationBase(mhptr))
++        exit(1);
++#endif
+     free(mhptr);
+     mhptr=nullptr;
+     mhashtable=nullptr;
+diff --git a/src/context-manager.h b/src/context-manager.h
+--- a/src/context-manager.h
++++ b/src/context-manager.h
+@@ -18,6 +18,9 @@
+ 
+ struct ContextManager {
+   ContextManager();
++#ifdef KH_ALLOCATION_MARKERS
++  ~ContextManager();
++#endif
+ 
+   template<typename ... Args>
+   const BracketContext& AddBracketContext(Args&& ...args) {
+diff --git a/src/context-manager.cpp b/src/context-manager.cpp
+--- a/src/context-manager.cpp
++++ b/src/context-manager.cpp
+@@ -1,5 +1,8 @@
+ #include "context-manager.h"
+ #include "utils/hugepage.h"
++#ifdef KH_ALLOCATION_MARKERS
++#include "utils/allocation-marker.h"
++#endif
+ 
+ extern unsigned long long wrtcxt;
+ 
+@@ -61,20 +64,107 @@ ContextManager::ContextManager() : history_(60000000, 0),
+     words_(8, 0), recent_bytes_(8, 0) {
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kContextHistory,
++            history_.data(),
++            history_.data(),
++            history_.capacity()*sizeof(unsigned char),
++            history_.size()*sizeof(unsigned char),
++            alignof(unsigned char))) {
++      std::exit(EXIT_FAILURE);
++    }
++#endif
+     // shared_map_ and the big hashes_ind tables are randomly accessed
+     // 100-256 MB arrays: reserve, flag for transparent huge pages, THEN
+     // fill, so the zero-fill first touch faults in 2 MB pages.
+     shared_map_.reserve(256*400000);
+     AdviseHugePages(shared_map_.data(), (size_t)256*400000);
+     shared_map_.resize(256*400000, 0);
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kContextSharedMap,
++            shared_map_.data(),
++            shared_map_.data(),
++            shared_map_.capacity()*sizeof(unsigned char),
++            shared_map_.size()*sizeof(unsigned char),
++            alignof(unsigned char))) {
++      std::exit(EXIT_FAILURE);
++    }
++#endif
+     hashes_ind1.reserve(0x1000000);
+     AdviseHugePages(hashes_ind1.data(), (size_t)0x1000000*sizeof(unsigned long long));
+     hashes_ind1.resize(0x1000000, 0);
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kContextIndirect1,
++            hashes_ind1.data(),
++            hashes_ind1.data(),
++            hashes_ind1.capacity()*sizeof(unsigned long long),
++            hashes_ind1.size()*sizeof(unsigned long long),
++            alignof(unsigned long long))) {
++      std::exit(EXIT_FAILURE);
++    }
++#endif
+     hashes_ind2.reserve(0x1000000);
+     AdviseHugePages(hashes_ind2.data(), (size_t)0x1000000*sizeof(unsigned long long));
+     hashes_ind2.resize(0x1000000, 0);
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kContextIndirect2,
++            hashes_ind2.data(),
++            hashes_ind2.data(),
++            hashes_ind2.capacity()*sizeof(unsigned long long),
++            hashes_ind2.size()*sizeof(unsigned long long),
++            alignof(unsigned long long))) {
++      std::exit(EXIT_FAILURE);
++    }
++#endif
+     hashes_ind3.reserve(0x2000000);
+     AdviseHugePages(hashes_ind3.data(), (size_t)0x2000000*sizeof(unsigned long long));
+     hashes_ind3.resize(0x2000000, 0);
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kContextIndirect3,
++            hashes_ind3.data(),
++            hashes_ind3.data(),
++            hashes_ind3.capacity()*sizeof(unsigned long long),
++            hashes_ind3.size()*sizeof(unsigned long long),
++            alignof(unsigned long long))) {
++      std::exit(EXIT_FAILURE);
++    }
++#endif
+     hashes_ind4.resize(0x100, 0);
+     hashes_ind5.resize(0x100, 0);
+ }
++
++#ifdef KH_ALLOCATION_MARKERS
++ContextManager::~ContextManager() {
++  if (!gamma_allocation_marker::RecordReleaseByAllocationBase(history_.data()) ||
++      !gamma_allocation_marker::RecordReleaseByAllocationBase(shared_map_.data()) ||
++      !gamma_allocation_marker::RecordReleaseByAllocationBase(hashes_ind1.data()) ||
++      !gamma_allocation_marker::RecordReleaseByAllocationBase(hashes_ind2.data()) ||
++      !gamma_allocation_marker::RecordReleaseByAllocationBase(hashes_ind3.data())) {
++    std::exit(EXIT_FAILURE);
++  }
++}
++#endif
+ 
+ void ContextManager::UpdateLineState(unsigned char c) {
+diff --git a/src/mixer/mixer.h b/src/mixer/mixer.h
+--- a/src/mixer/mixer.h
++++ b/src/mixer/mixer.h
+@@ -10,6 +10,9 @@ public:
+   Mixer(const MixerInput& layer, const unsigned long long& context,
+       float learning_rate, unsigned int extra_input_size);
++#ifdef KH_ALLOCATION_MARKERS
++  ~Mixer();
++#endif
+   // Phase-5 two-pass protocol: the mixer's context is fixed for the whole
+   // bit by the time Predictor::Predict() reaches the mixer block, so the
+diff --git a/src/mixer/mixer.cpp b/src/mixer/mixer.cpp
+--- a/src/mixer/mixer.cpp
++++ b/src/mixer/mixer.cpp
+@@ -2,6 +2,9 @@
+ 
+ #include "sigmoid.h"
+ #include "../utils/hugepage.h"
++#ifdef KH_ALLOCATION_MARKERS
++#include "../utils/allocation-marker.h"
++#endif
+ 
+ #include <numeric>
+ #include <utility>
+@@ -44,6 +47,19 @@ Mixer::Mixer(const MixerInput& layer, const unsigned long long& context,
+   // cached pointers stay valid for the whole bit.
+   slab_.reset(static_cast<float*>(std::aligned_alloc(64, slab_bytes)));
++#ifdef KH_ALLOCATION_MARKERS
++  if (!gamma_allocation_marker::RecordAllocation(
++          gamma_allocation_marker::kMixerSlab,
++          slab_.get(),
++          slab_.get(),
++          slab_bytes,
++          slab_bytes,
++          64)) {
++    std::exit(EXIT_FAILURE);
++  }
++#endif
+   AdviseHugePages(slab_.get(), slab_bytes);
+@@ -58,6 +74,15 @@ Mixer::Mixer(const MixerInput& layer, const unsigned long long& context,
+   context_map_.reserve(kContextLimit);
+ }
++
++#ifdef KH_ALLOCATION_MARKERS
++Mixer::~Mixer() {
++  if (!gamma_allocation_marker::RecordReleaseByAllocationBase(slab_.get())) {
++    std::exit(EXIT_FAILURE);
++  }
++}
++#endif
+ 
+ float* Mixer::FindSlot() {
+diff --git a/src/models/ppmd.cpp b/src/models/ppmd.cpp
+--- a/src/models/ppmd.cpp
++++ b/src/models/ppmd.cpp
+@@ -1,0 +1,4 @@
++#ifdef KH_ALLOCATION_MARKERS
++#include "../utils/allocation-marker.h"
++#endif
++
+@@ -195,6 +199,19 @@ int StartSubAllocator( qword SASize ) {
+     if (madvise(HeapStart, t, MADV_RANDOM) != 0) {
+       exit(EXIT_FAILURE);
+     }
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kPpmdArenaFileBacked,
++            HeapStart,
++            HeapStart,
++            t,
++            t,
++            (unsigned int)sysconf(_SC_PAGESIZE))) {
++      exit(EXIT_FAILURE);
++    }
++#endif
+     close(fd);
+   } else {
+     HeapStart = new byte[t];
+@@ -204,6 +221,18 @@ int StartSubAllocator( qword SASize ) {
+     // THP, and MADV_DONTNEED purging works on 4 KB granularity anyway).
+     AdviseHugePages(HeapStart, t);
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::RecordAllocation(
++            gamma_allocation_marker::kPpmdArenaAnonymous,
++            HeapStart,
++            HeapStart,
++            t,
++            t,
++            alignof(byte))) {
++      exit(EXIT_FAILURE);
++    }
++#endif
+   }
+ 
+   if( HeapStart==NULL ) return 0;
+diff --git a/src/runner.cpp b/src/runner.cpp
+--- a/src/runner.cpp
++++ b/src/runner.cpp
+@@ -1,0 +1,4 @@
++#ifdef KH_ALLOCATION_MARKERS
++#include "utils/allocation-marker.h"
++#endif
++
+@@ -280,6 +284,11 @@ bool RunCompression(const std::string& input_path,
+   Predictor p(vocab);
+   if (enable_preprocess) preprocessor::Pretrain(&p, dictionary);
+   Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);
++#ifdef KH_ALLOCATION_MARKERS
++  if (!gamma_allocation_marker::MarkerHealthy()) {
++    return false;
++  }
++#endif
+   temp_in.close();
+   data_out.close();
+   remove(temp_path.c_str());
+@@ -326,6 +335,11 @@ bool RunDecompression(const std::string& input_path,
+ 
+     Decompress(*output_bytes, &data_in, &temp_out, &p);
+     p.FreeFxcmMemory();
++#ifdef KH_ALLOCATION_MARKERS
++    if (!gamma_allocation_marker::MarkerHealthy()) {
++      return false;
++    }
++#endif
+     data_in.close();
+     temp_out.close();
+   }

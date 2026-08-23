@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-causal-closure.v1",
+  "title": "Gamma Mechanism IR causal closure v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "mechanism_ir",
+    "operational_status",
+    "events",
+    "source_availability",
+    "state_roles",
+    "arms",
+    "join",
+    "claim_authority",
+    "execution_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-causal-closure.v1"},
+    "mechanism_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "mechanism_ir": {"type": "string", "minLength": 1},
+    "operational_status": {"const": "design_only"},
+    "events": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "ordinal", "boundary"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+          "ordinal": {"type": "integer", "minimum": 0},
+          "boundary": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "source_availability": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "available_at_event", "first_use_event"],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "available_at_event": {"type": "string", "minLength": 1},
+          "first_use_event": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "state_roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["state_id", "authority", "lifetime", "readable_arms", "writable_arms"],
+        "properties": {
+          "state_id": {"type": "string", "minLength": 1},
+          "authority": {
+            "enum": [
+              "authoritative_parent",
+              "authoritative_coder",
+              "mechanism_persistent",
+              "mechanism_ephemeral",
+              "causal_evidence"
+            ]
+          },
+          "lifetime": {"enum": ["event", "segment", "persistent", "coder"]},
+          "readable_arms": {"$ref": "#/$defs/arms"},
+          "writable_arms": {"$ref": "#/$defs/arms"}
+        }
+      }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm", "role", "event_access"],
+        "properties": {
+          "arm": {"enum": ["P", "K", "D", "M", "R", "S"]},
+          "role": {"type": "string", "minLength": 1},
+          "event_access": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["event", "source_ids", "read_state_ids", "write_state_ids"],
+              "properties": {
+                "event": {"type": "string", "minLength": 1},
+                "source_ids": {"$ref": "#/$defs/ids"},
+                "read_state_ids": {"$ref": "#/$defs/ids"},
+                "write_state_ids": {"$ref": "#/$defs/ids"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "join": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "retain_state_ids", "discard_state_ids", "forbidden_copy_pairs"],
+      "properties": {
+        "event": {"type": "string", "minLength": 1},
+        "retain_state_ids": {"$ref": "#/$defs/ids"},
+        "discard_state_ids": {"$ref": "#/$defs/ids"},
+        "forbidden_copy_pairs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to"],
+            "properties": {
+              "from": {"type": "string", "minLength": 1},
+              "to": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {
+    "arms": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["P", "K", "D", "M", "R", "S"]}
+    },
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

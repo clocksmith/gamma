@@ -1,0 +1,36 @@
+{
+  "schema": "gamma.enwiki9.cmix-memory-phase-attribution-receipt-policy.v2",
+  "policy_id": "cmix_memory_phase_attribution_receipt_policy_v2",
+  "supersedes": "cmix_memory_phase_attribution_receipt_policy_v1",
+  "inherits_unchanged_policy": "operations/planning/cmix_memory_phase_attribution_receipt_policy_v1.json",
+  "inherited_sections": [
+    "measurement_rules",
+    "phase_marker_rules",
+    "allocation_attribution_rules",
+    "probability_identity_required",
+    "diagnostic_population",
+    "decision_requirements",
+    "qualification_sequence",
+    "terminal_branches",
+    "claim_boundary"
+  ],
+  "v2_overrides_only": [
+    "experiment_contract",
+    "current_evidence_lower_bounds",
+    "canonical_phase_vocabulary",
+    "retained_vs_bounded_replay_governance",
+    "engineering_target_reduction_lower_bound"
+  ],
+  "experiment_contract": "operations/planning/cmix_obias_memory_phase_attribution_q0_v2.json",
+  "receipt_schema": "contracts/research/v1/cmix-memory-phase-attribution-receipt.schema.json",
+  "observer_error_schema": "contracts/research/v1/cmix-memory-phase-attribution-observer-error.schema.json",
+  "operational_status": "dormant_until_arm_b_terminal",
+  "execution_authorized": false,
+  "retained_evidence_rule": "Classify missing peak-interval markers or samples as incomplete; never synthesize phase attribution.",
+  "bounded_replay_rule": "Authorize one correction-only diagnostic replay only when retained evidence is terminally insufficient.",
+  "engineering_target_bytes": 9216000000,
+  "required_reduction_bytes_lower_bound": 1508229120,
+  "qualification_authority": "none",
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

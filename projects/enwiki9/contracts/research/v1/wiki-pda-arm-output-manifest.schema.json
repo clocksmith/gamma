@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-arm-output-manifest.v1",
+  "title": "WIKI-PDA per-arm closed output manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "run_id",
+    "arm",
+    "mode",
+    "binary_sha256",
+    "population_manifest_sha256",
+    "command_sha256",
+    "phase_status",
+    "return_codes",
+    "expected_raw",
+    "artifacts"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-arm-output-manifest.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_q0_v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["P", "K", "D", "R", "S"]},
+    "mode": {"enum": ["debug_shadow", "archive_proof"]},
+    "binary_sha256": {"$ref": "#/$defs/sha256"},
+    "population_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
+    "phase_status": {"enum": ["encode_failed", "decode_failed", "raw_inverse_failed", "complete"]},
+    "return_codes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encode", "decode", "raw_inverse"],
+      "properties": {
+        "encode": {"type": ["integer", "null"]},
+        "decode": {"type": ["integer", "null"]},
+        "raw_inverse": {"type": ["integer", "null"]}
+      }
+    },
+    "expected_raw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bytes", "sha256"],
+      "properties": {
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"$ref": "#/$defs/artifact"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "bytes", "sha256"],
+      "properties": {
+        "role": {
+          "enum": [
+            "command_manifest",
+            "stdout",
+            "stderr",
+            "archive",
+            "decoded_stream",
+            "raw_inverse",
+            "integer_probability_stream",
+            "coder_state_manifest",
+            "parent_persistent_state_manifest",
+            "wiki_pda_state_manifest",
+            "resource_receipt",
+            "dependency_closure_receipt"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+        },
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema": "gamma.enwiki9.dependency-sealed-decode-contract.v2",
+  "candidate_id": "cmix_obias_full1g_dependency_sealed_decode_q0_v2",
+  "title": "Arm-B-bound full-enwik9 decode from an enumerated minimal runtime root",
+  "operational_status": "dormant_dependency",
+  "evidence_class": "external_inverse_and_dependency_closure",
+  "score_credit_bytes": 0,
+  "gamma_authorship_credit_bytes": 0,
+  "parent": {
+    "candidate_id": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+    "archive_bytes": null,
+    "archive_sha256": null,
+    "terminal_receipt_path": null
+  },
+  "canonical": {
+    "bytes": 1000000000,
+    "sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "mounted_inside_sandbox": false
+  },
+  "supersedes": {
+    "candidate_id": "cmix_obias_full1g_sealedfs_decode_qm0_v1",
+    "reason": "stale archive identity and broad host base visibility"
+  },
+  "activation_dependencies": [
+    "exclusive_full1g lease absent",
+    "Arm B terminal archive identity frozen",
+    "Arm B exact raw inverse passed",
+    "Arm B cleanup receipt terminal",
+    "minimal runtime root manifest complete",
+    "discovery trace terminal",
+    "resource-guard v3 bound",
+    "scratch has at least the preregistered free-space margin"
+  ],
+  "phases": [
+    {
+      "id": "discovery",
+      "authority": "diagnostic_only",
+      "method": "Trace the terminal Arm B archive under a broad read-only base to enumerate execve, open/openat, stat-family, access, readlink, mmap-backed objects, environment reads, and network syscalls for every descendant.",
+      "outputs": [
+        "raw syscall trace",
+        "normalized successful read paths",
+        "executed image inventory",
+        "dynamic object inventory",
+        "runtime-generated file inventory",
+        "network-attempt inventory"
+      ]
+    },
+    {
+      "id": "materialize",
+      "authority": "root_identity_only",
+      "method": "Copy only the submission archive and exact discovered base files into a new content-addressed root. Replace loader symlinks with bound regular files or prove every link target remains inside the root.",
+      "forbidden": [
+        "whole /usr bind",
+        "whole /bin bind",
+        "whole /lib bind",
+        "whole /lib64 bind",
+        "undeclared symlink",
+        "special host file"
+      ]
+    },
+    {
+      "id": "sealed_decode",
+      "authority": "candidate_dependency_proof",
+      "method": "Read-only bind the minimal root as sandbox /, add only declared writable work/output/tmp mounts and kernel interfaces, clear the environment, unshare all namespaces, and execute the archive with no input.",
+      "canonical_comparison": "Compare the output to canonical enwik9 outside the sandbox after execution; canonical enwik9 is never visible to the decoder."
+    },
+    {
+      "id": "trace_audit",
+      "authority": "closure_proof",
+      "method": "Normalize the sealed replay trace and require every successful read to resolve to a root-manifest file, an archive-extracted child, a declared writable artifact, or an allowed kernel interface. Require no network syscall attempts."
+    },
+    {
+      "id": "repeat",
+      "authority": "bounded_reproducibility",
+      "method": "Recreate the root and scratch from retained manifests and repeat the complete decode. Require output, process closure, file-access closure, and resource-boundary identity."
+    }
+  ],
+  "sandbox": {
+    "engine": "bubblewrap",
+    "root_mount": "content-addressed minimal root read-only at /",
+    "network_namespace": "unshared",
+    "pid_namespace": "unshared",
+    "ipc_namespace": "unshared",
+    "uts_namespace": "unshared",
+    "cgroup_namespace": "unshared where supported",
+    "host_root_visible": false,
+    "environment": {
+      "LC_ALL": "C",
+      "LANG": "C",
+      "TZ": "UTC",
+      "PATH": "/submission/bin:/base/bin"
+    },
+    "environment_additions": "forbidden after freeze",
+    "writable_mounts": [
+      "/work",
+      "/tmp",
+      "/output"
+    ],
+    "kernel_interfaces": [
+      "proc_self",
+      "proc_process_tree",
+      "dev_null",
+      "dev_zero",
+      "dev_fd"
+    ]
+  },
+  "process_closure": {
+    "require_every_exec_hashed": true,
+    "origins": [
+      "runtime_root",
+      "extracted_from_archive"
+    ],
+    "extracted_child_requirement": "Bind each child executable hash to an offset/length or deterministic extraction hash from the terminal archive.",
+    "dynamic_object_requirement": "Every loaded object must be present in the root manifest with exact path, bytes, SHA-256, provider class, and counted status."
+  },
+  "file_closure": {
+    "successful_read_allowlist": [
+      "minimal root manifest file",
+      "archive-extracted file under writable work",
+      "runtime-generated file under declared writable mount",
+      "declared kernel interface"
+    ],
+    "successful_write_allowlist": [
+      "/work",
+      "/tmp",
+      "/output"
+    ],
+    "undeclared_successful_reads_allowed": 0,
+    "writes_outside_declared_mounts_allowed": 0,
+    "network_syscall_attempts_allowed": 0
+  },
+  "resource": {
+    "limit_mode": "tree",
+    "limit_kib": 9765625,
+    "official_decimal_limit_kib": 9765625,
+    "cgroup_memory_max_bytes": 10000000000,
+    "temporary_storage_limit_bytes": 100000000000,
+    "max_logical_cpus": 1,
+    "sample_interval_seconds": 0.5,
+    "receipt_schema": "dependency-sealed-decode-receipt.v2"
+  },
+  "terminal_gates": [
+    "archive identity equals terminal Arm B",
+    "minimal root manifest complete",
+    "all root files identity verified",
+    "return code zero",
+    "decoded bytes equal 1000000000",
+    "decoded SHA-256 equals canonical",
+    "bytewise canonical identity",
+    "all executed images declared or archive-derived",
+    "all dynamic objects declared",
+    "zero undeclared successful reads",
+    "zero writes outside declared mounts",
+    "zero network syscall attempts",
+    "declared environment exact",
+    "resource receipt pass",
+    "scratch cleanup pass",
+    "repeat output and closure identity"
+  ],
+  "official_boundary": {
+    "official_eligibility_pass": null,
+    "reason": "The official rules allow standard file-I/O libraries but do not define the exact permitted base-system closure. This receipt proves Gamma's enumerated dependency boundary; committee interpretation remains separate.",
+    "forbidden_claims": [
+      "A dependency-sealed decode proves compressor eligibility.",
+      "A dependency-sealed decode proves official memory or runtime eligibility.",
+      "The 1MB broad-base preflight proves this full-corpus closure.",
+      "External CMIX receives Gamma score or authorship credit."
+    ]
+  },
+  "result_path": "results/cmix_obias_full1g_dependency_sealed_decode_q0_v2/decision.json"
+}

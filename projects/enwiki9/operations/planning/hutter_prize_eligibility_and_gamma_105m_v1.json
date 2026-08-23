@@ -1,0 +1,148 @@
+{
+  "schema": "gamma.enwiki9.hutter-eligibility-contract.v1",
+  "contract_id": "hutter_prize_eligibility_and_gamma_105m_v1",
+  "rule_snapshot": {
+    "receipt_path": "operations/provenance/hutter_prize_rules_20260822/receipt.json",
+    "task_sha256": "065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7",
+    "rules_sha256": "e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163",
+    "faq_sha256": "9233864b9ab2ce7b75ca2092416b518b196fcd498ab4e70e8c8f20b1bc42f52b",
+    "retrieved_utc": "2026-08-23T02:03:08Z"
+  },
+  "official_baseline": {
+    "previous_record_total_bytes": 110793128,
+    "minimum_award_fraction": 0.01,
+    "largest_integer_score_meeting_one_percent_improvement": 109685196,
+    "published_task_shorthand": "S < 109685197",
+    "award_formula": "500000 EUR * (L - S) / L",
+    "submission_order_matters": true,
+    "public_comment_period_minimum_days": 30
+  },
+  "official_task": {
+    "input_name": "enwik9",
+    "input_bytes": 1000000000,
+    "lossless": true,
+    "primary_compressor_output": "archive9.exe",
+    "primary_inverse_behavior": "Running archive9.exe with no input produces a 1000000000-byte data9 identical to enwik9.",
+    "specialization_to_enwik9_allowed": true,
+    "only_submitted_version_and_option_combination_eligible": true
+  },
+  "official_score_alternatives": {
+    "primary": {
+      "formula": "length(comp9.exe_or_zip) + length(archive9.exe)",
+      "required_files": [
+        "comp9.exe or source zip",
+        "archive9.exe"
+      ]
+    },
+    "separate_archive": {
+      "formula": "length(comp9a.exe_or_zip) + 2 * length(decomp9.exe_or_zip) + length(archive9.bhm)",
+      "same_program_relaxation": "If comp9a and decomp9 are the same program, the decompressor multiplier may be reduced from two to one.",
+      "required_files": [
+        "comp9a.exe or source zip",
+        "decomp9.exe or source zip",
+        "archive9.bhm"
+      ]
+    },
+    "command_text": "Lengths of necessary compilation or execution command-line options are added to S.",
+    "authoritative_rule": "The selected official formula, not an informal payload-plus-package subtotal, determines prize score."
+  },
+  "official_execution": {
+    "platforms": [
+      "Windows x86 32-bit or 64-bit",
+      "Linux x86 32-bit or 64-bit"
+    ],
+    "external_runtime_input": "forbidden",
+    "additional_installations": "forbidden",
+    "standard_file_io_libraries": "allowed",
+    "gpu": "forbidden",
+    "time_formula_hours": "less than 70000 / T for each program, where T is the test machine Geekbench5 score",
+    "main_page_summary": "approximately 50 hours on a single CPU core",
+    "ram_wording": "at most 10GB RAM",
+    "temporary_hdd_wording": "at most 100GB HDD",
+    "resource_measurement_semantics": "not numerically defined beyond the published wording"
+  },
+  "official_source_and_publication": {
+    "documented_source_public_before_payment": true,
+    "license": "OSI-approved",
+    "source_zip_with_makefile_may_replace_executable": true,
+    "accepted_named_languages": [
+      "C++",
+      "Python",
+      "Assembler"
+    ],
+    "submission_requires_download_links": true,
+    "submission_requires_algorithm_description": true,
+    "submission_requires_build_and_usage_instructions": true,
+    "submission_requires_reported_time_memory_and_machine": true
+  },
+  "gamma_internal_objective": {
+    "target_complete_counted_bytes": 105000000,
+    "distance_below_official_record_bytes": 5793128,
+    "distance_below_minimum_award_threshold_bytes": 4685196,
+    "corpus_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "counting_policy": "Count the selected official score formula and also retain an expanded closure total covering archive, required program and model material, dictionaries, tables, framing, command text, build files, runtime support, and every nonstandard dependency.",
+    "expanded_closure_is": "a stricter internal reproducibility and economics gate, not a replacement for the official formula",
+    "memory_limit_mode": "process_tree",
+    "memory_limit_kib": 9765625,
+    "memory_limit_bytes": 10000000000,
+    "temporary_storage_limit_bytes": 100000000000,
+    "single_logical_cpu": true,
+    "deterministic_repeats_required": 2,
+    "clean_independent_build_required": true,
+    "dependency_sealed_decode_required": true
+  },
+  "external_cmix_obias_baseline": {
+    "reported_archive_bytes": 108022224,
+    "reported_complete_counted_bytes": 108513707,
+    "reported_package_delta_bytes": 491483,
+    "official_record_margin_if_score_formula_and_eligibility_are_confirmed_bytes": 2279421,
+    "minimum_award_threshold_margin_if_score_formula_and_eligibility_are_confirmed_bytes": 1171489,
+    "gamma_authorship_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0,
+    "current_classification": "record_capable_external_candidate_not_officially_verified",
+    "required_before_submission_ready": [
+      "terminal Arm B archive and exact inverse receipt",
+      "selected official score formula with exact file accounting",
+      "official resource interpretation and compliant rerun",
+      "runtime normalization on an admissible machine",
+      "self-contained execution proof",
+      "documented source and OSI license closure",
+      "upstream authorship and attribution coordination"
+    ]
+  },
+  "arm_b_classification": {
+    "observed_internal_vmhwm_kib": 10425744,
+    "gamma_internal_memory_limit_kib": 9765625,
+    "gamma_internal_memory_pass": false,
+    "official_memory_pass": null,
+    "official_memory_reason": "The official page says 10GB RAM but the captured rules do not define decimal versus binary units, process-tree aggregation, sampled RSS, VmHWM, cgroup peak, or another measurement.",
+    "still_open": [
+      "payload identity",
+      "archive identity",
+      "raw inverse",
+      "two-run determinism under the bound environment",
+      "runtime measurement",
+      "cleanup",
+      "dependency closure"
+    ],
+    "forbidden_claims": [
+      "Gamma internal memory failure proves official rejection.",
+      "A sampled RSS below 9765625 KiB repairs the recorded VmHWM failure.",
+      "An exact Arm A/B match proves cross-machine universal determinism.",
+      "A record-capable score proves submission readiness."
+    ]
+  },
+  "committee_clarifications_required": [
+    "Exact RAM unit and measurement boundary used during official verification",
+    "Whether peak process-tree resident memory, per-process peak, cgroup peak, or another measure is authoritative",
+    "How shared mappings and page cache are treated",
+    "Whether the current test-machine Geekbench5 T and core configuration differ from the published examples",
+    "Which executable/source-zip alternative the committee prefers for a shared compressor/decompressor binary",
+    "Whether command and environment text beyond literal command-line options contributes to S"
+  ],
+  "governance": {
+    "internal_gate_policy": "Do not weaken Gamma's decimal process-tree gate while official interpretation is unresolved.",
+    "official_claim_policy": "Use record-capable, not officially eligible or verified, until committee or terminal verification evidence resolves every official gate.",
+    "rule_refresh_policy": "Refresh and content-address official pages before any submission or public eligibility claim."
+  }
+}

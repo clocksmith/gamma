@@ -1,0 +1,142 @@
+{
+  "schema_version": "gamma.runner-transaction-contract.v1",
+  "runner_id": "cmix_obias_source_labelled_memory_attribution_runner_q0_v1",
+  "candidate_id": "cmix_obias_source_labelled_memory_attribution_q0_v1",
+  "operational_status": "dormant_dependency",
+  "execution_authority": false,
+  "claim_boundary": "Diagnostic source-labelled memory attribution only; no compression, runtime, or memory-eligibility authority.",
+  "activation_dependencies": [
+    "Arm B is terminal and its complete evidence is frozen",
+    "no machine-wide exclusive lease exists",
+    "allocation-marker source integration is reviewed, hashed, and compiled",
+    "instrumented and uninstrumented small-scope probability identity passes",
+    "resource guard v3, marker parser, page-state capture, and all offline verifiers are source-locked",
+    "codec command, input, scratch, environment, and result paths are frozen"
+  ],
+  "preflight": [
+    "fail if exclusive_full1g.json or its acquisition lock exists",
+    "fail if result or scratch directory is nonempty",
+    "verify runner, codec, contract, source-integration, compiler, command, input, and environment hashes",
+    "verify one logical CPU binding and process-tree memory ceiling 10000000000 bytes",
+    "create marker pipe and a separately fsynced marker-sequence state file",
+    "prepare but do not yet authorize the page-state capture path"
+  ],
+  "transaction": [
+    {
+      "sequence": 0,
+      "operation": "acquire managed exclusive lease",
+      "postcondition": "lease_mode=managed, signal_authority=false, lease_acquired transition retained"
+    },
+    {
+      "sequence": 1,
+      "operation": "launch the instrumented codec through resource guard v3 with the marker write FD inherited",
+      "postcondition": "runner owns the complete codec descendant tree and resource guard begins before model initialization"
+    },
+    {
+      "sequence": 2,
+      "operation": "bind codec PID, proc_start_ticks, and codec command SHA-256",
+      "postcondition": "managed lease emits codec_activated and only then sets signal_authority=true"
+    },
+    {
+      "sequence": 3,
+      "operation": "drain marker records continuously",
+      "postcondition": "only complete contiguous 64-byte records update the active-allocation registry and fsynced marker-sequence file"
+    },
+    {
+      "sequence": 4,
+      "operation": "sample process-tree resources every 0.5 seconds",
+      "postcondition": "every new process-tree RSS maximum and every phase transition enqueues one checkpoint request; no checkpoint runs concurrently"
+    },
+    {
+      "sequence": 5,
+      "operation": "materialize a live-allocation set at a drained marker boundary",
+      "postcondition": "live set PID/start identity and marker sequence equal the managed lease and sequence state"
+    },
+    {
+      "sequence": 6,
+      "operation": "invoke attach-only page-state capture",
+      "postcondition": "codec tree resumes, maps and marker sequence remain stable, and a PFN-free double-read page-state manifest is retained"
+    },
+    {
+      "sequence": 7,
+      "operation": "continue codec and guard to terminal",
+      "postcondition": "codec return code, marker EOF, guard terminal state, phase receipt, scratch, and cleanup evidence are frozen independently"
+    },
+    {
+      "sequence": 8,
+      "operation": "revoke signaling and release managed lease",
+      "postcondition": "codec identity is no longer live, terminal lease is frozen, terminal transition is last, and runtime lease plus lock are removed"
+    },
+    {
+      "sequence": 9,
+      "operation": "run offline verifiers",
+      "postcondition": "lease, marker, page-state, phase, guard, source integration, and attribution decisions are independently hashed"
+    },
+    {
+      "sequence": 10,
+      "operation": "emit source-labelled attribution receipt",
+      "postcondition": "successor is null unless every authority predicate and conservative reclaimable lower-bound requirement passes"
+    }
+  ],
+  "resource_contract": {
+    "limit_mode": "tree",
+    "official_process_tree_limit_bytes": 10000000000,
+    "official_process_tree_limit_kib": 9765625,
+    "sample_interval_seconds": 0.5,
+    "logical_cpus": 1,
+    "concurrent_codec_jobs": 0,
+    "checkpoint_serialization": "one stopped-process capture at a time",
+    "runtime_authority": false,
+    "reason_runtime_authority_is_false": "stopped-process pagemap checkpoints deliberately perturb execution"
+  },
+  "marker_contract": {
+    "record_bytes": 64,
+    "sequence_origin": 1,
+    "partial_record": "terminal invalidity",
+    "gap_duplicate_or_reorder": "terminal invalidity",
+    "registry_failure": "terminal invalidity",
+    "unmatched_release": "terminal invalidity",
+    "pipe_backpressure": "terminal invalidity; marker writes may not be silently dropped",
+    "sequence_state_update": "write temporary, fsync, atomic rename, fsync parent directory"
+  },
+  "failure_semantics": {
+    "before_codec_launch": "release a non-signaling lease only after preserving the failure receipt",
+    "after_codec_launch": "do not remove the managed lease while the bound codec identity remains live",
+    "capture_failure": "resume every pidfd-bound process, revoke signal authority, preserve partial evidence, and classify the attribution receipt invalid",
+    "resource_failure": "terminate through the resource guard, preserve marker and lease evidence, and grant no memory or compression verdict",
+    "codec_failure": "preserve return code, stdout, stderr, marker stream, scratch state, and all completed checkpoints",
+    "verifier_failure": "retain failed verification receipts and hashes; successor_authorized remains null",
+    "cleanup_failure": "preserve paths and allocated/logical byte counts; do not rewrite or rotate evidence"
+  },
+  "required_terminal_artifacts": [
+    "managed lease transition log",
+    "managed lease verification receipt",
+    "terminal managed lease",
+    "raw allocation-marker stream",
+    "allocation-marker receipt",
+    "marker sequence state history",
+    "resource guard v3 receipt",
+    "phase-attribution receipt",
+    "source-integration receipt",
+    "each live-allocation set",
+    "each maps and smaps snapshot",
+    "each pair of page-state byte streams",
+    "each page-state manifest",
+    "source-labelled attribution receipt",
+    "source-labelled attribution verification receipt",
+    "stdout, stderr, command, environment, and cleanup receipts"
+  ],
+  "immutability": {
+    "freeze_before_launch": [
+      "runner source and command",
+      "all tool and schema hashes",
+      "checkpoint triggers",
+      "resource limits",
+      "marker labels and binary format",
+      "page-range lower-bound arithmetic",
+      "successor threshold",
+      "failure classification"
+    ],
+    "change_after_launch": "requires a new runner and candidate identifier"
+  }
+}

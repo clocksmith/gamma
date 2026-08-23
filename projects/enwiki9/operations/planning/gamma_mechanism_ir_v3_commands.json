@@ -1,0 +1,64 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v3_commands",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "environment": {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONHASHSEED": "0",
+    "TZ": "UTC"
+  },
+  "shell_interpretation": false,
+  "commands": {
+    "materialize_program_lock": [
+      "python3",
+      "projects/enwiki9/tools/gamma_mechanism_ir_program_lock_materialize.py",
+      "--root", "/home/x/deco/gamma",
+      "--contract", "projects/enwiki9/operations/planning/gamma_mechanism_ir_v3_source_contract.json",
+      "--exclusive-lease", "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+      "--output", "${PROGRAM_LOCK}"
+    ],
+    "verify_program_lock": [
+      "python3",
+      "projects/enwiki9/tools/gamma_mechanism_ir_program_lock_verify.py",
+      "--root", "/home/x/deco/gamma",
+      "--contract", "projects/enwiki9/operations/planning/gamma_mechanism_ir_v3_source_contract.json",
+      "--lock", "${PROGRAM_LOCK}",
+      "--exclusive-lease", "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+      "--receipt", "${PROGRAM_LOCK_VERIFICATION}"
+    ],
+    "compile": [
+      "python3",
+      "projects/enwiki9/tools/gamma_mechanism_ir_compile_v2.py",
+      "--ir", "projects/enwiki9/operations/planning/cmix_obias_safe_fork_midas64_q0_v1.mechanism-ir.json",
+      "--closure", "projects/enwiki9/operations/planning/cmix_obias_safe_fork_midas64_q0_v1.causal-closure.json",
+      "--exclusive-lease", "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+      "--evidence-dir", "${COMPILER_EVIDENCE}",
+      "--output-dir", "${GENERATED_ARTIFACTS}",
+      "--receipt", "${COMPILATION_RECEIPT}"
+    ],
+    "verify_compilation": [
+      "python3",
+      "projects/enwiki9/tools/gamma_mechanism_ir_compile_v2_verify.py",
+      "--compiler", "projects/enwiki9/tools/gamma_mechanism_ir_compile_v2.py",
+      "--ir", "projects/enwiki9/operations/planning/cmix_obias_safe_fork_midas64_q0_v1.mechanism-ir.json",
+      "--closure", "projects/enwiki9/operations/planning/cmix_obias_safe_fork_midas64_q0_v1.causal-closure.json",
+      "--exclusive-lease", "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+      "--evidence-root", "${INDEPENDENT_EVIDENCE}",
+      "--verification", "${COMPILATION_VERIFICATION}"
+    ],
+    "verify_program_gate": [
+      "python3",
+      "projects/enwiki9/tools/gamma_mechanism_ir_v3_gate.py",
+      "--program-lock", "${PROGRAM_LOCK}",
+      "--program-lock-verification", "${PROGRAM_LOCK_VERIFICATION}",
+      "--compilation-verification", "${COMPILATION_VERIFICATION}",
+      "--exclusive-lease", "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+      "--receipt", "${PROGRAM_GATE_RECEIPT}"
+    ]
+  },
+  "substitution_rule": "Each ${NAME} is replaced once by a new nonexisting path under one frozen result directory; no other argv element or environment entry may change.",
+  "execution_authority": false,
+  "claim_authority": "none"
+}

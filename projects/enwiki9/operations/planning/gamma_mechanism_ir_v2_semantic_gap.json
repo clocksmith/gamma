@@ -1,0 +1,32 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v2_semantic_gap",
+  "revision": 1,
+  "operational_status": "superseded_before_execution",
+  "claim_authority": "none",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "affected_planning_contract": "operations/planning/gamma_mechanism_ir_v2.json",
+  "affected_compiler": "tools/gamma_mechanism_ir_compile.py",
+  "affected_realization": "operations/planning/cmix_obias_safe_fork_midas64_q0_v1.mechanism-ir.json",
+  "scientific_verdict": "none",
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0,
+  "reason": "The v2 planning contract advertises causal-order, complete-join, and arm-write-set enforcement that the current compiler does not mechanically establish. In particular, generated raw D is constructed from the complete IR write set even though its frozen semantics require the SAFE-MIX posterior to remain unchanged.",
+  "replacement_prerequisites": [
+    "Verify the paired causal-closure artifact with tools/gamma_mechanism_causal_closure_verify.py.",
+    "Make the successor compiler consume the verified per-arm event access and write sets rather than hard-coded state identifiers.",
+    "Require raw D to exclude every mechanism-persistent mixture state while mixed M writes each declared mixture state.",
+    "Require K, M, R, and S to have identical declared read/write access sets.",
+    "Require byte-64 join closure to retain every authoritative state, discard every ephemeral/evidence state, and forbid every ephemeral-to-parent copy.",
+    "Run independent deterministic compiler A/B output comparison and frozen negative controls before granting execution authority."
+  ],
+  "new_static_artifacts": {
+    "closure_schema": "contracts/research/v1/gamma-mechanism-causal-closure.schema.json",
+    "verification_schema": "contracts/research/v1/gamma-mechanism-causal-closure-verification.schema.json",
+    "verifier": "tools/gamma_mechanism_causal_closure_verify.py",
+    "safe_fork_closure": "operations/planning/cmix_obias_safe_fork_midas64_q0_v1.causal-closure.json"
+  },
+  "activation_rule": "No generated Mechanism IR arm or control may execute until a correction-only compiler consumes a verified causal closure and receives a deterministic independent-build verification receipt.",
+  "historical_preservation_rule": "Preserve the affected planning contract, compiler, and realization byte-for-byte as pre-execution design history; do not infer a scientific or compression result from this supersession."
+}

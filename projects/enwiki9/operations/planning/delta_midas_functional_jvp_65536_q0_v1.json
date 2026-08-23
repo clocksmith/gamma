@@ -1,0 +1,223 @@
+{
+  "schema": "gamma.enwiki9.delta-midas-functional-jvp-contract.v1",
+  "candidate_id": "delta_midas_functional_jvp_65536_q0_v1",
+  "title": "Integrated open F/O segment replay and extended-state functional JVP",
+  "family": "open_nncp_midas",
+  "role": "integrated_diagnostic_successor",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "target_complete_counted_bytes": 105000000,
+    "corpus_bytes": 1000000000,
+    "corpus_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "antecedent_evidence": {
+    "experiment_id": "delta_midas_deep_residual_65536_q0_v1",
+    "decision_path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+    "status": "pass",
+    "F_trace": {
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/F_trace.bin",
+      "sha256": "73ae287ac4c55d3c24eb0d4805054e38e50e72bb9873c1f4b3a28d44cb76d569"
+    },
+    "O_trace": {
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/O_trace.bin",
+      "sha256": "f0a7c9185c93f58316209810c2f7515b86934af188ca1a1ffc933f552bd8a54c"
+    },
+    "second_half_ideal_savings_bits": 22783.981772296793,
+    "second_half_third_savings_bits": [
+      7908.8632879600245,
+      8858.916162046517,
+      6016.202322290252
+    ],
+    "second_half_positive_segment_fraction": 0.9775390625,
+    "changed_branch_count": 900939,
+    "archive_F_bytes": 143414,
+    "archive_O_bytes": 148709,
+    "interpretation": "The full deep midpoint branch contains a large persistent effect absent from output-head-only adaptation, but the retained traces expose probabilities rather than a realizable decoder-visible mechanism."
+  },
+  "claim": "Determine whether the exact first-order effect of the full-minus-output midpoint update recovers enough of the observed second-half truth-path gain to justify a compact tangent adapter, and whether that effect is carried primarily by parameter writes or rebuilt recurrent/KV state.",
+  "non_claims": [
+    "JVP ideal bits are arithmetic archive savings.",
+    "Teacher parameters or hidden states are eligible submission inputs.",
+    "A single-population diagnostic transfers to enwik9.",
+    "Exact reconstruction of this segment path completes an open NNCP codec.",
+    "The result can be added to any CMIX gain without a fresh joint archive."
+  ],
+  "population": {
+    "unit": "transformed_symbol",
+    "row_count": 65536,
+    "branch_count": 917527,
+    "segments": 1024,
+    "segment_length": 64,
+    "first_half_length": 32,
+    "second_half_length": 32,
+    "coordinate": "original transformed-symbol ordinal",
+    "selection": "identical to the retained F/O indexed population"
+  },
+  "activation_dependencies": [
+    "exclusive_full1g lease absent",
+    "Arm B terminal evidence preserved",
+    "nncp_open_top_attention_probability_adjoint_64_q0_v2 passes exact arithmetic and a terminal external resource-guard receipt",
+    "no more than two additional isolated backward primitives are admitted after the probability-adjoint gate",
+    "all open forward tensors and all 246 midpoint Adam parameter updates remain exact against the bound oracle",
+    "candidate source revision and scalar arithmetic contract frozen"
+  ],
+  "primitive_budget": {
+    "probability_adjoint_gate_counts_as": 1,
+    "maximum_additional_isolated_primitives_after_it": 2,
+    "next_required_boundary": "this complete first-half forward, loss, backward, update, state rebuild, second-half replay, and JVP experiment",
+    "forbidden": "Extending the primitive queue instead of attempting integrated replay."
+  },
+  "extended_state": {
+    "symbol": "z",
+    "members": [
+      "all model parameters",
+      "all Adam first moments",
+      "all Adam second moments",
+      "optimizer step counters",
+      "recurrent hidden and cell state",
+      "attention KV state",
+      "linear-attention or other persistent model state",
+      "midpoint state-rebuild buffers",
+      "every mutable value capable of affecting a later probability"
+    ],
+    "O_midpoint": "z_O is the output-head-only branch immediately after its midpoint update and state rebuild.",
+    "F_midpoint": "z_F is the full-update branch immediately after its midpoint update and state rebuild.",
+    "delta": "delta_z_0 = z_F - z_O using exact bound tensor layouts and materialization.",
+    "exclusions": [
+      "arithmetic coder interval and payload state",
+      "future symbols or truth bits",
+      "unrecorded closed-runtime state",
+      "noncausal trace-derived features"
+    ]
+  },
+  "open_replay": {
+    "first_half": [
+      "open forward from the exact segment-start state",
+      "exact first-half loss",
+      "exact full and output-only backward paths",
+      "exact optimizer updates in source order",
+      "exact F and O state rebuilds"
+    ],
+    "second_half": [
+      "open O and F forward probabilities",
+      "all ordinary online updates at original call sites",
+      "complete extended-state evolution",
+      "integer probability materialization at scale 32768"
+    ],
+    "parity_requirement": "Before JVP interpretation, every open F and O integer branch probability and all probability-capable state hashes must match the retained teacher traces and captured state receipts.",
+    "failure_class": "A parity failure is an implementation or reconstruction failure with no JVP scientific verdict."
+  },
+  "tangent_equations": {
+    "base_trajectory": "O",
+    "state_transition": "z_(u+1) = f_u(z_u, y_u)",
+    "probability_logit": "ell_u = g_u(z_u)",
+    "joint_initial_tangent": "delta_z_0 = z_F - z_O",
+    "joint_propagation": "delta_z_(u+1) = J_f_u(z_O,u) * delta_z_u, including derivatives through every ordinary online update",
+    "joint_logit": "delta_ell_u = J_g_u(z_O,u) * delta_z_u",
+    "parameter_component": "T_theta starts with only parameter, optimizer-moment, and optimizer-step coordinates of delta_z_0 nonzero.",
+    "state_component": "T_state starts with only recurrent, KV, linear-attention, and rebuilt dynamic-state coordinates of delta_z_0 nonzero.",
+    "joint_component": "T_joint starts with the complete delta_z_0 and must equal T_theta plus T_state within the frozen arithmetic tolerance.",
+    "scale": 1.0,
+    "fitted_scale": false,
+    "intercept": 0.0,
+    "training": "none"
+  },
+  "arms": {
+    "O": "Exact open output-head-only base trajectory.",
+    "F": "Exact open full-update oracle trajectory.",
+    "T_theta": "No-fit tangent initialized from parameter and optimizer coordinates only.",
+    "T_state": "No-fit tangent initialized from rebuilt recurrent, KV, and persistent dynamic-state coordinates only.",
+    "T_joint": "No-fit tangent initialized from the complete F-minus-O extended-state delta.",
+    "S": "T_joint delta_z_0 cyclically reassigned by 257 segments modulo 1024 before second-half propagation.",
+    "N": "Exact negation of each segment's T_joint initial tangent."
+  },
+  "controls": {
+    "segment_shift": 257,
+    "segment_modulus": 1024,
+    "shift_is_bijective": true,
+    "shift_preserves": [
+      "tensor layouts",
+      "per-segment delta sizes",
+      "global delta population",
+      "arithmetic path",
+      "compute shape"
+    ],
+    "negation_preserves": [
+      "tensor support",
+      "delta norm",
+      "arithmetic path",
+      "compute shape"
+    ]
+  },
+  "probability_materialization": {
+    "base_scale": 32768,
+    "logit_arm_probability": "sigmoid(logit(O) + delta_ell_arm)",
+    "quantization": "Apply the exact bound NNCP integer-probability conversion and clipping used by the retained traces.",
+    "legal_range": "[1, 32767]",
+    "truth_path_bits": "identical retained branch truths",
+    "branch_topology": "identical retained branch tree"
+  },
+  "measurements": {
+    "oracle_second_half_bits": "sum log2(realized_F / realized_O)",
+    "arm_second_half_bits": "sum log2(realized_arm / realized_O)",
+    "recovery_fraction": "arm_second_half_bits / oracle_second_half_bits",
+    "third_recovery_fraction": "arm thirdwise truth-path gain divided by F thirdwise truth-path gain",
+    "positive_segment_fraction": "fraction of segments with positive arm-versus-O second-half ideal gain",
+    "logit_cosine": "cosine between T_joint and F-minus-O branch-logit deltas",
+    "explained_logit_energy_fraction": "1 - squared_error(T_joint, F-minus-O) / squared_norm(F-minus-O)",
+    "joint_additivity_error": "maximum absolute difference between T_joint and T_theta plus T_state logit deltas"
+  },
+  "gates": {
+    "reconstruction": [
+      "all 65536 rows and 917527 branches present",
+      "open O integer probabilities equal retained O",
+      "open F integer probabilities equal retained F",
+      "truth, symbol, tree, row, and execution coordinates identical",
+      "all extended-state hashes match at preregistered checkpoints",
+      "repeat output byte identity",
+      "external resource receipt terminal pass"
+    ],
+    "functional_recovery": {
+      "minimum_joint_second_half_bits": 11391.990886148397,
+      "minimum_joint_recovery_fraction": 0.5,
+      "minimum_each_third_recovery_fraction": 0.5,
+      "minimum_positive_segment_fraction": 0.75,
+      "minimum_explained_logit_energy_fraction": 0.5,
+      "minimum_joint_over_shifted_bits": 0.0,
+      "minimum_joint_over_negated_bits": 0.0,
+      "maximum_joint_additivity_absolute_logit_error": 0.000001
+    }
+  },
+  "terminal_router": {
+    "reconstruction_failure": "one correction-only open implementation successor; no scientific verdict",
+    "joint_pass_theta_dominant": "authorize one compact tied-tangent adapter contract",
+    "joint_pass_state_dominant": "authorize one bounded stateful write-retain adapter contract",
+    "joint_pass_definition": "all functional recovery gates pass",
+    "state_dominant_definition": "T_state truth-path gain is at least 1.25 times T_theta gain and T_state recovery fraction is at least 0.25",
+    "joint_beats_O_but_not_S": "retire causal association claim",
+    "joint_beats_O_but_not_N": "retire tangent direction claim",
+    "joint_recovery_below_half_with_weak_state": "retire compact linear Delta-MIDAS on this parent",
+    "open_F_O_pass_but_all_tangents_fail": "preserve open parent and pivot to one compact nonlinear student; no further primitive gates"
+  },
+  "resources": {
+    "thread_count": 1,
+    "gpu": false,
+    "tree_memory_limit_kib": 9765625,
+    "temporary_storage_limit_bytes": 100000000000,
+    "scalar_reference_required": true,
+    "fast_math": false,
+    "fma_contraction": false,
+    "rounding_mode": "FE_TONEAREST",
+    "ftz": false,
+    "daz": false
+  },
+  "authority": {
+    "evidence_class": "causal_shadow_and_open_reconstruction",
+    "archive_authority": false,
+    "compression_credit_bytes": 0,
+    "promotion_ceiling": "one prospectively frozen compact implementation candidate"
+  }
+}

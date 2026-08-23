@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1",
+  "title": "CMIX file-backed FXCM compiler-trace controls",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "positive_manifest_sha256", "controls", "all_controls_rejected_pass", "execution_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "positive_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence_gap", "foreign_file", "symlink_record", "wrong_proxy", "wrong_linker", "response_file", "live_root", "failed_invocation", "missing_production", "testing_leak", "macro_undefine", "split_definition", "no_compile_event", "missing_linker_selection", "competing_linker_selection", "link_source_input", "compile_only_mode"],
+      "properties": {
+        "sequence_gap": {"const": true},
+        "foreign_file": {"const": true},
+        "symlink_record": {"const": true},
+        "wrong_proxy": {"const": true},
+        "wrong_linker": {"const": true},
+        "response_file": {"const": true},
+        "live_root": {"const": true},
+        "failed_invocation": {"const": true},
+        "missing_production": {"const": true},
+        "testing_leak": {"const": true},
+        "macro_undefine": {"const": true},
+        "split_definition": {"const": true},
+        "no_compile_event": {"const": true},
+        "missing_linker_selection": {"const": true},
+        "competing_linker_selection": {"const": true},
+        "link_source_input": {"const": true},
+        "compile_only_mode": {"const": true}
+      }
+    },
+    "all_controls_rejected_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

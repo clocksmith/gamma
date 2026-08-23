@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-safe-fork-native-transaction-verification.v1",
+  "title": "SAFE-FORK native transaction verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "archive_execution_authorized", "errors", "computed"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-safe-fork-native-transaction-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_safe_fork_midas64_q0_v1"},
+    "verified": {"type": "boolean"},
+    "archive_execution_authorized": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "computed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_index_sha256", "receipt_sha256", "entry_count", "projected_headroom_kib", "package_headroom_bytes"],
+      "properties": {
+        "evidence_index_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "entry_count": {"type": "integer", "minimum": 0},
+        "projected_headroom_kib": {"type": "integer"},
+        "package_headroom_bytes": {"type": "integer"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

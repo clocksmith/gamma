@@ -1,0 +1,139 @@
+{
+  "schema": "gamma.enwiki9.wiki-pda-structural-replay-contract.v2",
+  "candidate_id": "wiki_pda_structural_replay_q0_v2",
+  "title": "Post-WRT XML closing-name replay through the existing bracket-model slot",
+  "family": "orthogonal_representation_state_machine",
+  "role": "correction_only_implementation_successor",
+  "operational_status": "dormant_dependency",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "parent_candidate_id": "cmix_obias_memory_safe_parent_q0_v1",
+  "antecedent": {
+    "candidate_id": "wiki_pda_structural_replay_q0_v1",
+    "role": "scanner_only_ceiling_and_control_qualification",
+    "archive_authority": false
+  },
+  "hypothesis": "The already-decoded transformed byte sequence of an opening XML tag name supplies an exact causal prediction for the corresponding closing name. The donor bracket model predicts only closing delimiters from distance statistics and does not retain tag names.",
+  "source_boundary": {
+    "coder_stream": "dictionary-preprocessed post-WRT stream after r1 encoded-tail block reordering",
+    "raw_lt_mapping": "L",
+    "raw_gt_mapping": "N",
+    "slash_mapping": "/",
+    "dictionary_decode_required": false,
+    "new_dictionary_or_table_required": false,
+    "r1_behavior": "Reorders complete line blocks inside the fixed encoded tail but preserves byte order within each block.",
+    "r1_reset_marker": "an exact line with bytes df 99 4e followed by LF, or df 99 4e 0d followed by LF",
+    "side_and_footer": "Remain in the modeled stream. The overlay is neutral unless a complete structural closing-name condition is active; no untransmitted content-end boundary is assumed."
+  },
+  "overlap_audit": {
+    "donor_bracket_pairs": [
+      "parentheses",
+      "transformed braces P/R",
+      "square brackets",
+      "transformed angle brackets L/N",
+      "quotes"
+    ],
+    "donor_bracket_signal": "one-byte closing-delimiter probability indexed by opener and distance",
+    "new_signal": "bounded stack of exact transformed opening-tag name byte sequences and position-wise closing-name replay",
+    "new_mixer_dimension": false,
+    "integration": "Temporarily replace the existing bracket-model byte distribution only while predicting a closing-name byte."
+  },
+  "parser": {
+    "stack_depth": 16,
+    "maximum_name_bytes": 64,
+    "opening": "After transformed L, capture bytes through the first whitespace, slash, or transformed N. Ignore declarations and processing instructions. Do not push self-closing tags.",
+    "attributes": "Track single and double quotes so transformed N inside a quoted attribute does not terminate an opening tag.",
+    "closing": "After transformed L and slash, compare and replay the top stored name. On terminator, pop through the deepest exact matching stack entry.",
+    "recovery": "Reset parser and stack immediately after each exact r1 D99 block-marker line.",
+    "overflow": "An overlength name becomes invalid and is neither pushed nor predicted.",
+    "causality": "Every stored name byte was previously decoded from the same arithmetic stream."
+  },
+  "confidence": {
+    "buckets": "closing-name positions 0 through 14 and one 15-plus bucket",
+    "prior": "one correct event and 256 total outcomes",
+    "probability": "(correct + 1) / (total + 256), clamped to [1/256, 65535/65536]",
+    "rescale": "At 2^20 trials in a bucket, round both correct and total upward while halving.",
+    "control_strength": "D, R, and S use confidence learned from correctness of the true top-of-stack name, so controls have the same probability magnitude."
+  },
+  "arms": {
+    "P": "Overlay parser disabled; donor bracket probabilities unchanged.",
+    "K": "Execute parser, stack, confidence, random permutation, and hashes; never replace donor bracket probabilities. P and K must be bit-identical.",
+    "D": "Predict the exact top-of-stack closing-name byte at the current position.",
+    "R": "Predict a deterministic xorshift64star-seeded permutation of the same top name, preserving length and byte multiset.",
+    "S": "Predict the same top name cyclically shifted left by one byte, preserving length and byte multiset."
+  },
+  "implementation": {
+    "program_path": "programs/wiki_pda_structural_replay_q0_v2",
+    "arm_selection": "KH_WIKI_PDA_ARM is read once at predictor construction; accepted values are P, K, D, R, and S. The release child must compile D as the default and remove experimental arm dependence.",
+    "default_arm": "D",
+    "state_digest": "FNV-1a over arm, parser mode, active stack names, current name, quote and delimiter state, replay position, expected/control bytes, confidence counters, random permutation, line-marker prefix, and line-marker length",
+    "receipt_schema": "contracts/research/v1/wiki-pda-structural-replay-receipt.schema.json",
+    "receipt_schema_identity": "gamma.enwiki9.wiki-pda-structural-replay-receipt.v3",
+    "arm_output_manifest_schema": "contracts/research/v1/wiki-pda-arm-output-manifest.schema.json",
+    "arm_output_verifier": "tools/wiki_pda_arm_output_manifest_verify.py",
+    "output_authority_manifest_schema": "contracts/research/v1/wiki-pda-output-authority-manifest.schema.json",
+    "output_authority_verifier": "tools/wiki_pda_output_authority_verify.py",
+    "maximum_added_package_bytes": 65536,
+    "design_target_added_package_bytes": 8192,
+    "dynamic_allocation_after_construction": false
+  },
+  "activation_dependencies": [
+    "selected execution host has no active exclusive_full1g lease; on the sole current host Arm B must terminalize and release its lease",
+    "Arm B terminal evidence preserved",
+    "memory-safe parent qualification passed",
+    "v1 scanner absolute target-scale ceiling passed on opening and distant populations",
+    "program lock materialized",
+    "independent clean build receipt passed",
+    "P/K synthetic and 250KB identity passed"
+  ],
+  "scopes": [
+    {
+      "bytes": 250000,
+      "arms": ["P", "K", "D", "R", "S"],
+      "authority": "synchronization_and_archive_diagnostic"
+    },
+    {
+      "bytes": 1000000,
+      "arms": ["P", "K", "D", "R", "S", "D-repeat"],
+      "dependency": "250KB exactness pass",
+      "authority": "calibration"
+    },
+    {
+      "bytes": 10000000,
+      "arms": ["P", "D", "R", "S", "D-repeat"],
+      "dependency": "1MB positive D and D beats R and S",
+      "authority": "opening economic gate"
+    },
+    {
+      "bytes": 10000000,
+      "population": "distant preregistered slice",
+      "arms": ["P", "D", "S"],
+      "dependency": "opening 10MB gate pass",
+      "authority": "transfer gate"
+    }
+  ],
+  "promotion": {
+    "required_full_corpus_gross_savings_bytes": 4079243,
+    "opening_10MB_required_gross_archive_gain_bytes": 40793,
+    "estimate_status": "unmeasured",
+    "conditions": [
+      "finite arithmetic archive",
+      "exact decode and raw inverse",
+      "P equals K in integer probabilities, coder state, payload, archive, and all future-affecting parent state while K overlay bookkeeping is independently proven live",
+      "D repeat archive identity",
+      "D beats P, R, and S globally",
+      "D beats P and S in every preregistered third",
+      "complete package and resource receipts pass"
+      ,"every arm output manifest has exact regular-file closure and independent verification"
+    ],
+    "authority": "Only actual archive gain can authorize 100MB. Scanner ceilings and ideal bits receive zero credit."
+  },
+  "kill_router": {
+    "scanner_subscale": "retire_wiki_pda_family_without_compilation",
+    "P_K_mismatch": "one_correction_only_implementation_successor",
+    "D_not_better_than_R": "retire_exact_name_alignment_claim",
+    "D_not_better_than_S": "retire_causal_association_claim",
+    "opening_10MB_below_40793": "retire_before_distant_or_100MB",
+    "compression_pass_memory_fail": "memory_compilation_successor_only"
+  }
+}

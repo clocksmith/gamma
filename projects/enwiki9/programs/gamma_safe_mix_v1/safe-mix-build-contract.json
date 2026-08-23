@@ -1,0 +1,80 @@
+{
+  "schema": "gamma.enwiki9.safe-mix-build-contract.v1",
+  "candidate_id": "gamma_safe_mix_v1",
+  "operational_status": "dormant_dependency",
+  "compiler_family": "clang++",
+  "source_files": [
+    "safe-mix.h",
+    "safe-mix.cpp",
+    "safe-mix-trace.cpp",
+    "safe-mix-negative-controls.cpp"
+  ],
+  "environment": {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "SOURCE_DATE_EPOCH": "0",
+    "TZ": "UTC"
+  },
+  "umask_octal": "077",
+  "identity_probes": {
+    "compiler": ["{COMPILER}", "--version"],
+    "linker": ["{LINKER}", "--version"]
+  },
+  "compile_flags": [
+    "-std=c++17",
+    "-O2",
+    "-DNDEBUG",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-fno-exceptions",
+    "-fno-rtti",
+    "-fno-ident",
+    "-fno-record-gcc-switches",
+    "-fvisibility=hidden",
+    "-I{SOURCE_ROOT}"
+  ],
+  "link_flags": [
+    "--ld-path={LINKER}",
+    "-Wl,--build-id=none",
+    "-Wl,--fatal-warnings",
+    "-Wl,--no-undefined"
+  ],
+  "commands": [
+    {
+      "sequence": 1,
+      "phase": "compile",
+      "argv": ["{COMPILER}", "-std=c++17", "-O2", "-DNDEBUG", "-fno-fast-math", "-ffp-contract=off", "-fno-exceptions", "-fno-rtti", "-fno-ident", "-fno-record-gcc-switches", "-fvisibility=hidden", "-I{SOURCE_ROOT}", "-c", "{SOURCE_ROOT}/safe-mix.cpp", "-o", "{BUILD_ROOT}/safe-mix.o"]
+    },
+    {
+      "sequence": 2,
+      "phase": "compile",
+      "argv": ["{COMPILER}", "-std=c++17", "-O2", "-DNDEBUG", "-fno-fast-math", "-ffp-contract=off", "-fno-exceptions", "-fno-rtti", "-fno-ident", "-fno-record-gcc-switches", "-fvisibility=hidden", "-I{SOURCE_ROOT}", "-c", "{SOURCE_ROOT}/safe-mix-trace.cpp", "-o", "{BUILD_ROOT}/safe-mix-trace.o"]
+    },
+    {
+      "sequence": 3,
+      "phase": "compile",
+      "argv": ["{COMPILER}", "-std=c++17", "-O2", "-DNDEBUG", "-fno-fast-math", "-ffp-contract=off", "-fno-exceptions", "-fno-rtti", "-fno-ident", "-fno-record-gcc-switches", "-fvisibility=hidden", "-I{SOURCE_ROOT}", "-c", "{SOURCE_ROOT}/safe-mix-negative-controls.cpp", "-o", "{BUILD_ROOT}/safe-mix-negative-controls.o"]
+    },
+    {
+      "sequence": 4,
+      "phase": "link",
+      "argv": ["{COMPILER}", "--ld-path={LINKER}", "-Wl,--build-id=none", "-Wl,--fatal-warnings", "-Wl,--no-undefined", "{BUILD_ROOT}/safe-mix.o", "{BUILD_ROOT}/safe-mix-trace.o", "-o", "{BUILD_ROOT}/safe-mix-trace"]
+    },
+    {
+      "sequence": 5,
+      "phase": "link",
+      "argv": ["{COMPILER}", "--ld-path={LINKER}", "-Wl,--build-id=none", "-Wl,--fatal-warnings", "-Wl,--no-undefined", "{BUILD_ROOT}/safe-mix.o", "{BUILD_ROOT}/safe-mix-negative-controls.o", "-o", "{BUILD_ROOT}/safe-mix-negative-controls"]
+    }
+  ],
+  "products": {
+    "native_trace_binary": "safe-mix-trace",
+    "negative_controls_binary": "safe-mix-negative-controls"
+  },
+  "independent_build_requirement": "Build A and Build B use disjoint new roots, the same frozen source closure and tool identities, and produce byte-identical objects and binaries.",
+  "authority": {
+    "diagnostic_only": true,
+    "archive_promotion_authority": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0
+  }
+}

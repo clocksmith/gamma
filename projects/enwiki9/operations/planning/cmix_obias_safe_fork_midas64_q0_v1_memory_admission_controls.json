@@ -1,0 +1,102 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_safe_fork_midas64_q0_v1_memory_admission_controls",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "candidate_id": "cmix_obias_safe_fork_midas64_q0_v1",
+  "verifier": "tools/cmix_safe_fork_memory_admission_verify.py",
+  "control_population": [
+    {
+      "id": "positive_admission",
+      "mutation": "none",
+      "expected_verified": true,
+      "expected_admitted": true
+    },
+    {
+      "id": "truthful_parent_above_engineering_target",
+      "mutation": "Set the bound qualified parent peak to 9,216,000,001 bytes and declare parent_below_engineering_target=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "truthful_incremental_over_dynamic_limit",
+      "mutation": "Increase one phase's valid allocation classes and exact total above the recomputed dynamic limit; declare incremental_budget_pass=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "truthful_forbidden_duplication",
+      "mutation": "Set context_tables to one byte; declare forbidden_duplication_absent=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "truthful_arm_capacity_mismatch",
+      "mutation": "Replace R capacity SHA-256 with a different valid digest; declare arm_capacity_identity_pass=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "truthful_resource_failure",
+      "mutation": "Set measured process-tree peak to 10,000,000,001 bytes; declare resource_guard_pass=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "truthful_p_k_identity_failure",
+      "mutation": "Set P/K probability identity false; declare p_k_identity_pass=false and memory_admission_pass=false.",
+      "expected_verified": true,
+      "expected_admitted": false
+    },
+    {
+      "id": "malformed_phase_total",
+      "mutation": "Increment total_incremental_bytes without changing any allocation class.",
+      "expected_verified": false,
+      "expected_admitted": false
+    },
+    {
+      "id": "malformed_post_rejoin_live_branch",
+      "mutation": "Leave one recurrent-state byte allocated after_rejoin while preserving the declared allocation arithmetic pass.",
+      "expected_verified": false,
+      "expected_admitted": false
+    },
+    {
+      "id": "malformed_capacity_digest",
+      "mutation": "Replace every arm capacity digest with the same non-SHA string.",
+      "expected_verified": false,
+      "expected_admitted": false
+    },
+    {
+      "id": "contradictory_declared_decision",
+      "mutation": "Create a valid measured memory failure but leave memory_admission_pass=true.",
+      "expected_verified": false,
+      "expected_admitted": false
+    },
+    {
+      "id": "unqualified_parent_dependency",
+      "mutation": "Supply a q1 verification with verified=true and qualified=false.",
+      "expected_verified": false,
+      "expected_admitted": false
+    },
+    {
+      "id": "active_exclusive_lease",
+      "mutation": "Supply a valid lease document with active=true.",
+      "expected_output_present": false,
+      "expected_return_code_nonzero": true
+    }
+  ],
+  "exact_population_rule": "Every listed control executes once from an independently rendered positive fixture. No additional control, mutation, or expected decision may be added after observing output.",
+  "activation_dependencies": [
+    "Arm B terminal audit complete.",
+    "q1 qualification verifier control suite passed.",
+    "q1 parent receipt verified=true and qualified=true.",
+    "Persistence-attribution state closure frozen.",
+    "Exclusive full1g lease explicitly inactive."
+  ],
+  "terminal_rule": "Any unexpected control decision keeps SAFE-FORK memory admission unauthorized. Controls have zero compression, score, and promotion authority.",
+  "claim_authority": "none",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

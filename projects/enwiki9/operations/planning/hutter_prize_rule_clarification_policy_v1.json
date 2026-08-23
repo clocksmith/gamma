@@ -1,0 +1,117 @@
+{
+  "schema": "gamma.enwiki9.hutter-prize-rule-clarification-policy.v1",
+  "policy_id": "hutter_prize_rule_clarification_policy_v1",
+  "operational_status": "draft_not_sent",
+  "official_authority": false,
+  "request_path": "operations/planning/hutter_prize_rule_clarification_request_v1.md",
+  "rule_snapshot_receipt": "operations/provenance/hutter_prize_rules_20260822/receipt.json",
+  "purpose": "Prevent an unanswered question, informal recollection, or self-authored interpretation from becoming official eligibility evidence.",
+  "question_groups": {
+    "memory": [1, 2, 3, 4, 5, 6],
+    "runtime_dependency": [7, 8, 9, 10, 11],
+    "score_accounting": [12, 13, 14, 15, 16],
+    "runtime_execution": [17, 18, 19],
+    "source_licensing_attribution": [20, 21, 22]
+  },
+  "conservative_defaults_until_bound_answer": {
+    "official_memory_limit_bytes": null,
+    "official_memory_metric": null,
+    "official_memory_process_boundary": null,
+    "official_memory_phase_boundary": null,
+    "official_memory_pass": null,
+    "gamma_internal_memory_limit_bytes": 10000000000,
+    "gamma_internal_memory_limit_kib_floor": 9765625,
+    "gamma_internal_memory_boundary": "Process tree sampled continuously, with any observed per-process high-water excess independently terminal for that execution.",
+    "standard_runtime_dependencies": [],
+    "unknown_dependency_classification": "counted_nonstandard_until_officially_excluded",
+    "network_access": "forbidden",
+    "official_score_pass": null,
+    "official_runtime_pass": null,
+    "official_source_eligibility_pass": null,
+    "officially_verified": false,
+    "public_claim_rule": "Describe measured component sizes and internal policy results; do not claim official eligibility, verification, or acceptance."
+  },
+  "answer_authority": {
+    "acceptable_sources": [
+      "A direct response from the published Hutter Prize administrator contact.",
+      "A revision to an official hutter1.net rule or FAQ page.",
+      "A public statement by the prize administrator that unambiguously answers a numbered question."
+    ],
+    "insufficient_sources": [
+      "This request or policy file.",
+      "A repository issue, model response, private interpretation, third-party summary, or prior campaign receipt.",
+      "An answer whose sender identity or source page cannot be independently authenticated.",
+      "An answer that addresses a different candidate, historical rule version, platform, or resource boundary without stating transferability."
+    ]
+  },
+  "response_provenance_required": {
+    "email": [
+      "raw_rfc822_message",
+      "raw_rfc822_sha256",
+      "message_id",
+      "date_header",
+      "from_header",
+      "to_header",
+      "subject_header",
+      "received_header_chain",
+      "dkim_or_equivalent_authentication_result_if_present",
+      "attachment_manifest_if_present"
+    ],
+    "web": [
+      "canonical_url",
+      "retrieved_utc",
+      "http_status",
+      "response_headers_sha256",
+      "raw_body_sha256",
+      "content_addressed_snapshot_path",
+      "quoted_answer_location"
+    ],
+    "manual_attestation": [
+      "collector_identity",
+      "collection_command_or_method",
+      "host_clock_source",
+      "receipt_sha256"
+    ]
+  },
+  "binding_procedure": [
+    "Preserve the response byte-for-byte before interpretation.",
+    "Authenticate the response source using the strongest available transport or publication evidence.",
+    "Map each answer only to the numbered question or questions it directly resolves.",
+    "Record the exact answer text with a source offset or message-part identity; do not paraphrase it as authority.",
+    "Separate explicit answers from campaign inference.",
+    "Create a versioned interpretation receipt containing the rule snapshot, request digest, response digest, question mapping, effective scope, and unresolved ambiguities.",
+    "Require independent review before changing an official eligibility field from null.",
+    "Retain the prior policy and interpretation history; never mutate an already-bound answer receipt."
+  ],
+  "answer_scope_rules": [
+    "A memory-unit answer does not define the memory metric, process boundary, or phase boundary unless it explicitly says so.",
+    "Acceptance of one measurement receipt does not establish universal acceptance of all future receipt implementations.",
+    "Classification of one library does not classify its transitive dependencies.",
+    "Permission to use a system component does not imply its bytes are excluded from score accounting.",
+    "A score-formula answer does not establish that a candidate's package manifest is complete.",
+    "A licensing answer does not establish provenance or license compliance for a particular package.",
+    "An official interpretation may classify official eligibility but cannot alter Gamma's stricter internal result fields."
+  ],
+  "arm_b_effect": {
+    "current_gamma_memory_pass": false,
+    "immutable_for_execution": "cmix_obias_source_full1g_roundtrip_b_qm0_v1",
+    "current_official_memory_pass": null,
+    "allowed_future_change": "A bound official answer may change only official_memory_pass or its prerequisites; gamma_memory_pass remains false.",
+    "archive_inverse_determinism_independent": true
+  },
+  "state_machine": {
+    "states": [
+      "draft_not_sent",
+      "sent_unanswered",
+      "response_received_unbound",
+      "response_authenticated",
+      "interpretation_review_pending",
+      "bound",
+      "superseded"
+    ],
+    "current": "draft_not_sent",
+    "automatic_promotion_forbidden": true
+  },
+  "network_action_authorized": false,
+  "send_action_authorized": false
+}

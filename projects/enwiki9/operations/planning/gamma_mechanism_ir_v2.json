@@ -1,0 +1,42 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v2",
+  "revision": 2,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "role": "declarative algorithm-compiler input that generates matched controls and proof surfaces; it does not execute experiments or create evidence",
+  "schema": "contracts/research/v1/gamma-mechanism-ir.schema.json",
+  "compiler": "tools/gamma_mechanism_ir_compile.py",
+  "supersedes_without_execution": "gamma_mechanism_ir_v1",
+  "compiler_receipt_schema": "contracts/research/v1/gamma-mechanism-ir-compilation-receipt.schema.json",
+  "semantic_axes": [
+    "information_source",
+    "state_target",
+    "solver_or_preconditioner",
+    "persistence_reset_or_join",
+    "mixture_or_switch_rule"
+  ],
+  "single_mutation_rule": "A scientific successor changes exactly one semantic axis unless terminal interaction evidence explicitly authorizes a fresh joint candidate.",
+  "generated_artifacts": [
+    "P parent control",
+    "K zero-write identity control",
+    "D raw treatment when an expert mixture is declared",
+    "M mixed target-bearing treatment when an expert mixture is declared",
+    "R matched random-direction control when directionality is claimed",
+    "S causal-misalignment control when association is claimed",
+    "rolling synchronization hash specification",
+    "reject-only futility ceiling",
+    "result receipt schema",
+    "package manifest template",
+    "reflection skeleton"
+  ],
+  "compiler_fail_closed_rules": [
+    "Reject any read before its declared decoder-visible availability point.",
+    "Reject undeclared state reads or writes.",
+    "Reject a join that does not name every persistent state class.",
+    "Reject treatment/control write-set asymmetry not explicitly required by the tested mechanism.",
+    "Reject floating arithmetic without exact order, rounding, contraction, FTZ, DAZ, and library contracts.",
+    "Reject missing package or resource ceilings.",
+    "Generated output has no execution authority until independently validated and content-addressed."
+  ]
+}

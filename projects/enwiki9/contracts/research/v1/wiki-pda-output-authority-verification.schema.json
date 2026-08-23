@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-output-authority-verification.v1",
+  "title": "WIKI-PDA cross-arm output authority verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "errors", "computed"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-output-authority-verification.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_q0_v2"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "computed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_manifest_sha256", "receipt_sha256", "arm_output_verifier_sha256", "arms"],
+      "properties": {
+        "authority_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "arm_output_verifier_sha256": {"$ref": "#/$defs/sha256"},
+        "arms": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["P", "K", "D", "R", "S"],
+          "properties": {
+            "P": {"$ref": "#/$defs/armHashes"},
+            "K": {"$ref": "#/$defs/armHashes"},
+            "D": {"$ref": "#/$defs/armHashes"},
+            "R": {"$ref": "#/$defs/armHashes"},
+            "S": {"$ref": "#/$defs/armHashes"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "armHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["output_manifest_sha256", "output_verification_sha256"],
+      "properties": {
+        "output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "output_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

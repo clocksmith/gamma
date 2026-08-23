@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/economics-receipt.schema.json",
+  "title": "gamma.enwiki9.economics-receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidateId",
+    "input",
+    "calculation",
+    "scopeGates",
+    "authority",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.economics-receipt.v1" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "calculation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parentCompleteCountedBytes",
+        "targetCompleteCountedBytes",
+        "baseDebtBytes",
+        "maximumAddedPackageBytes",
+        "transferReserveBytes",
+        "realizedExactPackageSavingsBytes",
+        "requiredNetSavingsBytes",
+        "requiredGrossArchiveSavingsBytes"
+      ],
+      "properties": {
+        "parentCompleteCountedBytes": { "type": "integer", "minimum": 0 },
+        "targetCompleteCountedBytes": { "type": "integer", "minimum": 1 },
+        "baseDebtBytes": { "type": "integer", "minimum": 0 },
+        "maximumAddedPackageBytes": { "type": "integer", "minimum": 0 },
+        "transferReserveBytes": { "type": "integer", "minimum": 0 },
+        "realizedExactPackageSavingsBytes": { "type": "integer", "minimum": 0 },
+        "requiredNetSavingsBytes": { "type": "integer", "minimum": 0 },
+        "requiredGrossArchiveSavingsBytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "scopeGates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["scopeBytes", "requiredGrossArchiveSavingsBytes"],
+        "properties": {
+          "scopeBytes": { "type": "integer", "minimum": 1 },
+          "requiredGrossArchiveSavingsBytes": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parentTerminal",
+        "scoreFormulaBound",
+        "dependenciesPassed",
+        "resourceFeasible",
+        "measuredOraclePresent",
+        "measuredOracleScopeBytes",
+        "measuredOracleRequiredGrossBytes",
+        "measuredLowerBoundPresent",
+        "measuredLowerBoundScopeBytes",
+        "measuredLowerBoundRequiredGrossBytes",
+        "measuredTransferPassed",
+        "screeningAuthorized",
+        "promotionAuthorized",
+        "reasons"
+      ],
+      "properties": {
+        "parentTerminal": { "type": "boolean" },
+        "scoreFormulaBound": { "type": "boolean" },
+        "dependenciesPassed": { "type": "boolean" },
+        "resourceFeasible": { "type": "boolean" },
+        "measuredOraclePresent": { "type": "boolean" },
+        "measuredOracleScopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "measuredOracleRequiredGrossBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "measuredLowerBoundPresent": { "type": "boolean" },
+        "measuredLowerBoundScopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "measuredLowerBoundRequiredGrossBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "measuredTransferPassed": { "type": ["boolean", "null"] },
+        "screeningAuthorized": { "type": "boolean" },
+        "promotionAuthorized": { "type": "boolean" },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  }
+}

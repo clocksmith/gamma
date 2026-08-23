@@ -1,0 +1,163 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-ir.v1",
+  "mechanism_id": "cmix_obias_safe_fork_midas64_q0_v1",
+  "revision": 2,
+  "operational_status": "dormant_dependency",
+  "parent_id": "cmix_obias_memory_safe_parent_full1g_roundtrip_a_q0_v1",
+  "semantic_axis_changed": "persistence_reset_or_join",
+  "information_sources": [
+    {
+      "id": "decoded_first_half_truths",
+      "value_type": "256 ordered binary symbols",
+      "decoder_visible_at": "after byte 31 has been decoded and before byte 32 is predicted",
+      "source_identity": "cmix_obias_full_midpoint_oracle64_q0_v1 sealed first-half event stream"
+    },
+    {
+      "id": "first_half_parent_integer_probabilities",
+      "value_type": "ordered integer coder counts with common scale C",
+      "decoder_visible_at": "with each first-half truth event",
+      "source_identity": "exact count supplied by the authoritative parent to the arithmetic coder"
+    },
+    {
+      "id": "midpoint_parent_snapshot",
+      "value_type": "closed set of branch-dependent parent state",
+      "decoder_visible_at": "after ordinary parent processing of byte 31",
+      "source_identity": "state closure proved by cmix_obias_midpoint_persistence_attribution64_q0_v1"
+    },
+    {
+      "id": "second_half_parent_probability",
+      "value_type": "integer coder count p_u over scale C",
+      "decoder_visible_at": "before each second-half bit is coded",
+      "source_identity": "authoritative parent prediction boundary"
+    },
+    {
+      "id": "second_half_adapted_probability",
+      "value_type": "integer coder count d_u over scale C",
+      "decoder_visible_at": "before each second-half bit is coded",
+      "source_identity": "bounded adapted expert prediction boundary"
+    }
+  ],
+  "state_reads": [
+    {
+      "id": "authoritative_parent_state",
+      "lifetime": "persistent",
+      "source_location": "memory-safe-parent:complete_probability_affecting_state_closure",
+      "audit_hash": "authoritative_parent_state"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "parent:integer_probability_to_coder_boundary",
+      "audit_hash": "arithmetic_coder_state"
+    },
+    {
+      "id": "safe_mix_global_posterior",
+      "lifetime": "persistent",
+      "source_location": "gamma_safe_mix_v1:two_expert_integer_posterior",
+      "audit_hash": "safe_mix_posterior"
+    },
+    {
+      "id": "first_half_midpoint_evidence",
+      "lifetime": "segment",
+      "source_location": "cmix_obias_full_midpoint_oracle64_q0_v1:aligned_full_update_inputs",
+      "audit_hash": "first_half_midpoint_evidence"
+    }
+  ],
+  "state_writes": [
+    {
+      "id": "authoritative_parent_ordinary_transition",
+      "lifetime": "persistent",
+      "source_location": "parent:original_update_call_sites_only",
+      "audit_hash": "authoritative_parent_state"
+    },
+    {
+      "id": "adapted_expert_branch_state",
+      "lifetime": "segment",
+      "source_location": "safe-fork:midpoint_snapshot_through_byte_63",
+      "audit_hash": "adapted_expert_branch_state"
+    },
+    {
+      "id": "safe_mix_global_posterior",
+      "lifetime": "persistent",
+      "source_location": "gamma_safe_mix_v1:post_truth_integer_update",
+      "audit_hash": "safe_mix_posterior"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "safe-fork:mixture_integer_count_to_coder",
+      "audit_hash": "arithmetic_coder_state"
+    }
+  ],
+  "prediction_boundary": {
+    "variable": "q_u integer coder count over frozen scale C",
+    "source_location": "safe-fork:after both branch predictions and SAFE-MIX integer combination",
+    "before": "parent count p_u, adapted count d_u, and pre-truth posterior state w_u are available",
+    "after": "q_u is clipped and quantized exactly once and supplied unchanged to the arithmetic coder"
+  },
+  "update": {
+    "equation": "At byte 32, copy every branch-dependent parent state sigma_P to sigma_D and apply the frozen full admissible midpoint update only to sigma_D. For each bit u in bytes 32..63, compute parent count p_u and adapted count d_u, obtain coder count q_u=SAFE_MIX_V1(p_u,d_u,w_u), code/decode the bit with q_u, advance sigma_P only through ordinary parent transitions, advance sigma_D through adapted transitions, and update w_u only after the truth is decoder-visible. At byte 64, discard sigma_D, retain sigma_P exactly, and retain the global SAFE-MIX posterior.",
+    "equation_sha256": "19e521a999ae9d8f1e2788c54b183811e3b3e762f0668121c24291e044406ba9",
+    "ordinary_parent_update_cadence_unchanged": true
+  },
+  "lifecycle": {
+    "activate": "byte 32 after the complete first-half truth and ordinary parent state are synchronized",
+    "reset": "discard adapted_expert_branch_state at byte 64; do not reset safe_mix_global_posterior",
+    "join": "retain the authoritative parent state byte-for-byte and copy no adapted branch value into it",
+    "persistent_write_policy": "declared_and_hashed"
+  },
+  "numeric_contract": {
+    "format": "parent arithmetic unchanged; full midpoint update inherits its frozen parent format; mixture uses gamma_safe_mix_v1 fixed integer format",
+    "rounding": "inherit each frozen dependency exactly; no additional conversion is permitted",
+    "overflow": "fail closed before coder output on any dependency overflow or marker condition",
+    "accumulation_order": "parent source order, frozen full-midpoint source order, then frozen SAFE-MIX integer operations",
+    "thread_count": 1,
+    "fast_math": false,
+    "fma_contraction": false,
+    "ftz": false,
+    "daz": false
+  },
+  "mixture": {
+    "rule": "gamma_safe_mix_v1 two-expert integer law over authoritative parent and bounded adapted expert",
+    "posterior_scope": "one global causal posterior retained across 64-byte blocks",
+    "sleeping_behavior": "adapted expert sleeps outside bytes 32 through 63; sleeping events do not reset or charge a new prior"
+  },
+  "controls": {
+    "P": "memory-safe authoritative parent",
+    "K": "identical snapshot, fork, hashing, and sleeping bookkeeping with parent-identical expert and zero midpoint update; must equal P",
+    "R": "independent matched-norm random-direction midpoint update inside the same bounded fork and mixture",
+    "S": "frozen causal misalignment of first-half event associations with otherwise identical fork and mixture"
+  },
+  "hashes": [
+    "integer_probability_stream",
+    "arithmetic_coder_state",
+    "payload_prefix",
+    "authoritative_parent_state",
+    "first_half_midpoint_evidence",
+    "adapted_expert_branch_state",
+    "safe_mix_posterior",
+    "byte64_rejoin_state"
+  ],
+  "ceilings": {
+    "maximum_added_package_bytes": 65536,
+    "process_tree_memory_bytes": 10000000000,
+    "temporary_disk_bytes": 100000000000,
+    "reject_only_futility_rule": "At any sealed scope, stop only after the target-bearing M archive has irreversibly exceeded the dynamic package-aware archive ceiling; the partial result receives no compression verdict."
+  },
+  "generated_outputs": [
+    "P_control",
+    "K_control",
+    "D_raw_treatment",
+    "M_mixed_treatment",
+    "R_control",
+    "S_control",
+    "rolling_hash_spec",
+    "futility_contract",
+    "receipt_schema",
+    "package_manifest_template",
+    "reflection_skeleton",
+    "arm_difference_manifest",
+    "state_access_manifest",
+    "native_control_header"
+  ]
+}

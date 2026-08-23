@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v1",
+  "title": "CMIX memory-safe parent qualification verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "verified",
+    "qualified",
+    "errors",
+    "qualification_failures",
+    "receipt_sha256",
+    "checks",
+    "derived_decisions",
+    "claim_authority",
+    "promotion_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "qualified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "qualification_failures": {"type": "array", "items": {"type": "string"}},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_pass",
+        "source_build_evidence_pass",
+        "probability_identity_evidence_pass",
+        "roundtrip_evidence_pass",
+        "two_run_identity_evidence_pass",
+        "resource_measurement_pass",
+        "package_arithmetic_pass",
+        "evidence_closure_pass",
+        "decision_consistency_pass"
+      ],
+      "properties": {
+        "identity_pass": {"type": "boolean"},
+        "source_build_evidence_pass": {"type": "boolean"},
+        "probability_identity_evidence_pass": {"type": "boolean"},
+        "roundtrip_evidence_pass": {"type": "boolean"},
+        "two_run_identity_evidence_pass": {"type": "boolean"},
+        "resource_measurement_pass": {"type": "boolean"},
+        "package_arithmetic_pass": {"type": "boolean"},
+        "evidence_closure_pass": {"type": "boolean"},
+        "decision_consistency_pass": {"type": "boolean"}
+      }
+    },
+    "derived_decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_identity_pass",
+        "probability_identity_pass",
+        "payload_identity_pass",
+        "archive_identity_pass",
+        "two_run_determinism_pass",
+        "exact_inverse_pass",
+        "cleanup_pass",
+        "memory_pass",
+        "temporary_disk_pass",
+        "package_accounting_complete",
+        "runtime_eligible",
+        "memory_safe_parent_qualified"
+      ],
+      "properties": {
+        "build_identity_pass": {"type": "boolean"},
+        "probability_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "archive_identity_pass": {"type": "boolean"},
+        "two_run_determinism_pass": {"type": "boolean"},
+        "exact_inverse_pass": {"type": "boolean"},
+        "cleanup_pass": {"type": "boolean"},
+        "memory_pass": {"type": "boolean"},
+        "temporary_disk_pass": {"type": "boolean"},
+        "package_accounting_complete": {"type": "boolean"},
+        "runtime_eligible": {"type": "boolean"},
+        "memory_safe_parent_qualified": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

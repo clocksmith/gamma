@@ -1,0 +1,66 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_midpoint_persistence_attribution64_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_full_midpoint_oracle64_q0_v1",
+      "required_evidence": "target-scale F archive gain, exact inverse, P/K synchronization, F/S causal control, deterministic repeat, and resource pass"
+    },
+    {
+      "artifact": "cmix_obias_memory_safe_parent_q0_v1",
+      "required_evidence": "probability-identical full roundtrip and strict memory qualification"
+    }
+  ],
+  "contract": {
+    "question": "Is target-scale full-midpoint gain primarily local to bytes 32-63 or dependent on persistent parameter, optimizer, and recurrent-state changes?",
+    "segment_bytes": 64,
+    "midpoint_byte": 32,
+    "arms": {
+      "P": "qualified memory-safe parent",
+      "F": "full persistent midpoint update from the qualified oracle",
+      "J": "run an untouched parent branch and an identical adapted branch from byte 32 through byte 63; code with the adapted branch; at byte 64 discard it and rejoin the untouched parent parameter, optimizer, recurrent, mixer, SSE, context, and memory state",
+      "S": "the oracle's frozen causally misaligned persistent midpoint update"
+    },
+    "J_branch_rules": [
+      "Both branches consume the exact same already decoded truths.",
+      "Ordinary parent learning continues at original call sites in the untouched branch.",
+      "The adapted branch applies the same F update and ordinary cadence used by F.",
+      "The arithmetic coder consumes only J's selected adapted probabilities during the second half.",
+      "At byte 64 only model state rejoins; coder state and emitted payload continue normally.",
+      "No persistent write from the adapted branch may survive rejoin."
+    ],
+    "measurement": {
+      "F_gain_bytes": "archive(P)-archive(F)",
+      "J_gain_bytes": "archive(P)-archive(J)",
+      "retention_fraction": "J_gain_bytes/F_gain_bytes, defined only when F_gain_bytes>0",
+      "fork_threshold": 0.8
+    },
+    "terminal_routes": {
+      "F_subscale": "retire CMIX-MIDAS",
+      "J_retains_at_least_0_8": "authorize one cmix_obias_safe_fork_midas64_q0_v1 realization",
+      "J_below_0_8_and_functional_jvp_strong": "authorize one persistent Tangent-MIDAS or Curvature-MIDAS realization selected by the JVP receipt",
+      "J_below_0_8_and_functional_jvp_weak": "retire compact CMIX-MIDAS"
+    },
+    "scopes": [250000, 1000000, 10000000],
+    "receipt_schema": "contracts/research/v1/cmix-midpoint-persistence-attribution-receipt.schema.json"
+  },
+  "activation_requirements": [
+    "selected execution host has no active exclusive_full1g lease",
+    "full midpoint oracle terminal pass is content-addressed",
+    "J's complete persistent write set and rejoin state hash are frozen",
+    "actual finite coder, exact decode, raw inverse, repeat, package, dependency, and resource receipts are bound"
+  ],
+  "claim_boundary": [
+    "The 0.80 branch is immutable after the first J archive.",
+    "J attribution does not itself prove compact adapter value.",
+    "Ideal bits and shadow trajectories have zero promotion authority."
+  ]
+}

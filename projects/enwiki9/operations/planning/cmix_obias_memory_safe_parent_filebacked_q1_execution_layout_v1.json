@@ -1,0 +1,56 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_safe_parent_filebacked_q1_execution_layout_v1",
+  "revision": 1,
+  "operational_status": "dormant_until_arm_b_terminal",
+  "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "workspace_root": "/home/x/deco/gamma",
+  "result_root": "projects/enwiki9/results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_v1",
+  "result_root_precondition": "Path must not exist and every parent component must be a non-symlink directory.",
+  "exclusive_lease": "projects/enwiki9/operations/runtime/exclusive_full1g.json",
+  "lease_precondition": "Lease exists as a single-link regular file and records active=false before any phase creates output.",
+  "command_manifest_schema": "contracts/research/v1/cmix-memory-safe-parent-command-manifest.schema.json",
+  "command_manifest": "00_authority/exact-commands.json",
+  "phase_layout": [
+    {"ordinal": 0, "id": "authority", "path": "00_authority", "immutable_after": "command manifest and authority identities frozen"},
+    {"ordinal": 1, "id": "source_closure", "path": "01_source_closure", "immutable_after": "source closure and program lock verified"},
+    {"ordinal": 2, "id": "build_a", "path": "02_build_a", "immutable_after": "build A terminal receipt"},
+    {"ordinal": 3, "id": "build_b", "path": "03_build_b", "immutable_after": "build B terminal receipt"},
+    {"ordinal": 4, "id": "build_verification", "path": "04_build_verification", "immutable_after": "binary A/B and compiler trace decision"},
+    {"ordinal": 5, "id": "controls", "path": "05_controls", "immutable_after": "allocator and compiler negative-control decisions"},
+    {"ordinal": 6, "id": "scope_identity", "path": "06_scope_identity", "immutable_after": "three frozen integer-probability and state populations terminal"},
+    {"ordinal": 7, "id": "full_roundtrip_a", "path": "07_full_roundtrip_a", "immutable_after": "full A encode, decode, resource, package, and cleanup terminal"},
+    {"ordinal": 8, "id": "full_roundtrip_b", "path": "08_full_roundtrip_b", "immutable_after": "full B encode, decode, resource, package, and cleanup terminal"},
+    {"ordinal": 9, "id": "qualification", "path": "09_qualification", "immutable_after": "consolidated receipt and independent verification terminal"}
+  ],
+  "scratch_roots": {
+    "scope_identity": "/dev/shm/cmix_obias_memory_safe_parent_filebacked_q1_scope_identity_v1",
+    "full_roundtrip_a": "/dev/shm/cmix_obias_memory_safe_parent_filebacked_q1_full_a_v1",
+    "full_roundtrip_b": "/dev/shm/cmix_obias_memory_safe_parent_filebacked_q1_full_b_v1"
+  },
+  "scratch_precondition": "Each scratch path must be absent before its phase; no path may be shared between scope, A, or B.",
+  "scratch_terminal_rule": "Each phase records logical and allocated peaks before cleanup, removes only its own scratch root, and records zero bytes afterward.",
+  "write_isolation_rules": [
+    "A phase may write only 07_full_roundtrip_a and its dedicated scratch root.",
+    "B phase may write only 08_full_roundtrip_b and its dedicated scratch root.",
+    "Qualification phase is read-only over phases 00 through 08 and writes only 09_qualification.",
+    "No phase may rotate, truncate, rename, or replace a prior phase directory.",
+    "No terminal failure may reuse a result root; correction-only successors receive a new versioned root."
+  ],
+  "independent_build_rule": "Full A executes build-A binary and full B executes build-B binary; their source closures are identical and their binaries must be byte-identical before parent qualification.",
+  "phase_transition_rule": "A phase starts only after every prerequisite phase is terminal and its required decision is positive; a truthful negative decision routes to the frozen terminal branch instead of continuing.",
+  "required_terminal_artifacts": [
+    "exact command manifest and digest",
+    "source closure and program-lock verification",
+    "build A and B receipts",
+    "independent build verification",
+    "compiler-trace and allocator controls",
+    "three scope probability/state identity receipts",
+    "full A and B archive, inverse, resource, package, and cleanup receipts",
+    "consolidated qualification receipt",
+    "qualification verification receipt"
+  ],
+  "claim_authority": "none",
+  "execution_authority": false,
+  "promotion_authority": false
+}

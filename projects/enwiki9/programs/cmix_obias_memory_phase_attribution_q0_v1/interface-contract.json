@@ -1,0 +1,180 @@
+{
+  "schema": "gamma.enwiki9.cmix-memory-phase-attribution-interface.v1",
+  "program_id": "cmix_obias_memory_phase_attribution_q0_v1",
+  "implementation_status": "interface_only",
+  "execution_authorized": false,
+  "receipt_schema": "contracts/research/v1/cmix-memory-phase-attribution-receipt.schema.json",
+  "policy": "operations/planning/cmix_memory_phase_attribution_receipt_policy_v1.json",
+  "experiment_contract": "operations/planning/cmix_obias_memory_phase_attribution_q0_v1.json",
+  "purpose": "Observe phase-bound process-tree memory, cgroup memory, mappings, scratch, and allocation lifetimes without changing codec behavior or treating instrumented evidence as resource qualification.",
+  "authority": {
+    "mode": "diagnostic_only",
+    "compression_credit_bytes": 0,
+    "instrumented_memory_qualification": false,
+    "retrospective_arm_b_attachment_authority": false,
+    "reason": "A retrospective observer cannot recover samples before attachment, vanished processes, short peaks, cgroup history, or missing source phase markers."
+  },
+  "command_interface": {
+    "prepare": {
+      "syntax": "prepare --experiment-lock PATH --output-root PATH --receipt PATH",
+      "effect": "Validate immutable inputs, create an empty evidence directory, materialize a cgroup plan, and emit a prelaunch receipt. It does not launch or migrate a codec process."
+    },
+    "observe": {
+      "syntax": "observe --experiment-lock PATH --root-pid PID --root-start-ticks TICKS --cgroup PATH --phase-stream PATH --scratch PATH --output-root PATH --receipt PATH",
+      "effect": "Read process, cgroup, marker, mapping, and scratch state until the bound root process terminalizes."
+    },
+    "compare": {
+      "syntax": "compare --parent-receipt PATH --child-receipt PATH --identity-manifest PATH --receipt PATH",
+      "effect": "Compare memory evidence and independently supplied probability, payload, archive, inverse, and state identities."
+    },
+    "decide": {
+      "syntax": "decide --observation-receipt PATH --comparison-receipt PATH --receipt PATH",
+      "effect": "Apply the frozen hard-limit, engineering-target, overlap, and identity rules without launching work."
+    }
+  },
+  "prelaunch_requirements": [
+    "The experiment lock concretely binds source revision, patch digest, build receipt, binary digest, corpus digest, command, environment, affinity, thread limit, sample interval, scratch path, and output root.",
+    "The cgroup-v2 subtree is created before the codec process is launched.",
+    "The launcher, codec, descendants, helper processes, and observer membership policy are explicit. The observer itself is outside the measured codec cgroup.",
+    "memory.max is fixed before launch when the run is a guarded diagnostic. A later write to memory.max invalidates the run.",
+    "The phase stream and output root are empty, newly created, and unavailable as codec inputs.",
+    "Network isolation, filesystem assumptions, clock source, kernel release, procfs identity, and privileges are receipt-bound.",
+    "The observer starts before the launcher and records the first cgroup membership before codec initialization."
+  ],
+  "passive_observer_invariants": [
+    "Never send a signal to the launcher, codec, descendant, or helper process except a separately configured hard-limit guardian acting under its own receipt.",
+    "Never use ptrace, process_vm_writev, /proc/PID/mem, debugger attachment, LD_PRELOAD, allocator interposition, priority changes, affinity changes, page migration, cache dropping, or cgroup migration after launch.",
+    "Never create, delete, truncate, rotate, rename, compress, or modify a codec input, archive, inverse, scratch artifact, result artifact, or active log.",
+    "Open procfs, cgroupfs, phase-stream, and scratch metadata read-only.",
+    "Write only beneath the dedicated observer output root using create-new semantics.",
+    "Do not invoke shell utilities from the sampling loop. Read kernel interfaces directly through the implementation runtime.",
+    "Do not hash large codec artifacts while the measured process is active.",
+    "Do not infer a phase transition from progress percentage or scratch growth. Only source markers or frozen runner lifecycle events may name a phase.",
+    "Unknown intervals remain phase=unknown and cannot support dominant-allocation attribution."
+  ],
+  "process_tree_semantics": {
+    "identity": "pid_plus_proc_start_ticks",
+    "membership_sources": [
+      "cgroup.procs",
+      "cgroup.threads",
+      "/proc/PID/stat parent identity",
+      "frozen launcher lifecycle events"
+    ],
+    "sampling_order": [
+      "Read monotonic clock.",
+      "Read cgroup membership and memory.current, memory.peak, memory.events, and memory.stat.",
+      "Resolve each PID and proc start ticks.",
+      "Read stat, status, and scheduled smaps_rollup checkpoints.",
+      "Read phase-stream prefix through its last complete record.",
+      "Read scratch logical and allocated metadata.",
+      "Write one canonical sample and fsync according to the frozen batching policy."
+    ],
+    "pid_reuse_rule": "A PID with different proc start ticks is a new process identity.",
+    "vanished_process_rule": "Retain the last complete sample and mark the exit interval incomplete unless cgroup peak evidence bounds the missing high water.",
+    "tree_rss_rule": "Sum RSS only across one membership snapshot. Never combine process maxima observed at different times as a simultaneous tree peak.",
+    "high_water_rule": "Preserve sampled tree RSS, each observed per-process VmHWM, and cgroup memory.peak independently. The authoritative observed lower bound is their maximum, without asserting metric equivalence."
+  },
+  "phase_stream": {
+    "transport": "append_only_file_descriptor_inherited_at_launch",
+    "encoding": "One canonical ASCII JSON object followed by LF per record.",
+    "maximum_record_bytes": 1024,
+    "required_fields": [
+      "sequence",
+      "monotonic_nanoseconds",
+      "pid",
+      "proc_start_ticks",
+      "phase",
+      "event",
+      "payload_sha256"
+    ],
+    "writer_requirements": [
+      "Use one bounded write per marker with no heap allocation, formatting locale, clock conversion, lock acquisition, or file rotation.",
+      "Do not read from the marker stream.",
+      "Marker failure is diagnostic and must not change codec control flow, arithmetic, return code, or output.",
+      "The writer implementation and emitted phase table are content-addressed before compilation."
+    ],
+    "observer_requirements": [
+      "Reject duplicate or nonmonotonic sequence numbers.",
+      "Reject unknown phase or event names.",
+      "Ignore no malformed suffix; preserve it and classify phase evidence invalid.",
+      "Associate samples with the most recent valid begin or checkpoint only after process identity and monotonic ordering agree."
+    ]
+  },
+  "mapping_capture": {
+    "sources": [
+      "/proc/PID/maps",
+      "/proc/PID/smaps_rollup",
+      "/proc/PID/status",
+      "/proc/PID/statm",
+      "cgroup memory.stat"
+    ],
+    "checkpoints": [
+      "first process observation",
+      "every phase begin",
+      "every phase end",
+      "first hard-limit crossing",
+      "sampled tree high-water replacement",
+      "process terminal observation"
+    ],
+    "normalization": [
+      "Represent addresses, permissions, offsets, device, inode, mapped path, and source process identity separately.",
+      "Do not use absolute virtual addresses as cross-run allocation identity.",
+      "Group mappings only by a frozen rule using owner evidence, mapped object identity, permissions, and overlapping phase lifetime.",
+      "Retain anonymous, file-backed, shared, allocator-arena, stack, and unknown classes separately.",
+      "A mapping group without owner evidence remains unknown."
+    ]
+  },
+  "scratch_measurement": {
+    "logical_bytes": "Sum file logical sizes beneath the bound scratch root without following symlinks or crossing mount boundaries.",
+    "allocated_bytes": "Sum allocated blocks in bytes beneath the bound scratch root without following symlinks or crossing mount boundaries.",
+    "mutation_forbidden": true,
+    "directory_walk_budget": "The interval and maximum entries are frozen before launch; an incomplete walk is explicit and cannot be treated as zero usage."
+  },
+  "identity_manifest": {
+    "producer": "A separate probability/state instrumentation path or retained exact archive evidence; the memory observer does not manufacture identity claims.",
+    "required_fields": [
+      "parent_candidate_id",
+      "child_candidate_id",
+      "scope_manifest_sha256",
+      "integer_probability_stream_sha256_parent",
+      "integer_probability_stream_sha256_child",
+      "payload_sha256_parent",
+      "payload_sha256_child",
+      "archive_sha256_parent",
+      "archive_sha256_child",
+      "inverse_sha256_parent",
+      "inverse_sha256_child",
+      "persistent_state_manifest_sha256_parent",
+      "persistent_state_manifest_sha256_child"
+    ],
+    "rule": "A missing identity is null. Equal lengths, ideal-bit totals, archive sizes, decoded hashes alone, or partial checkpoint equality cannot substitute for a required identity."
+  },
+  "fail_closed_conditions": [
+    "Experiment-lock digest mismatch or mutable input.",
+    "Observer starts after the measured launcher.",
+    "Measured process exists outside the bound cgroup or an unexplained process enters it.",
+    "PID reuse ambiguity, membership gap, dropped sample, clock regression, or unreadable required kernel interface.",
+    "Phase-marker corruption, omission, duplication, unknown phase, or order violation.",
+    "Output-root preexistence, path escape, symlink traversal, mount-boundary crossing, or create-new failure.",
+    "Observer mutation of measured process state or artifacts.",
+    "Use of sampled RSS to override a larger observed VmHWM or cgroup peak.",
+    "Summation of allocation maxima that did not overlap at the authoritative peak.",
+    "Promotion from an instrumented or retrospectively attached run."
+  ],
+  "terminal_outputs": [
+    "prelaunch-receipt.json",
+    "phase-stream.raw",
+    "phase-events.json",
+    "samples.jsonl",
+    "process-lifetimes.json",
+    "mapping-checkpoints.jsonl",
+    "cgroup-snapshots.jsonl",
+    "scratch-snapshots.jsonl",
+    "allocation-lifetimes.json",
+    "first-limit-crossing.json",
+    "high-water.json",
+    "identity-comparison.json",
+    "receipt.json"
+  ],
+  "implementation_rule": "The first implementation must realize this interface without relaxing the passive boundary, membership identity, phase semantics, unit semantics, hard-limit rule, engineering target, or diagnostic-only authority. Behavior-affecting corrections require one versioned correction-only successor."
+}

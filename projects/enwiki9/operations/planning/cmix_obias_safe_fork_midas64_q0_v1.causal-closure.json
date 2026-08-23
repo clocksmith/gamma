@@ -1,0 +1,111 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-causal-closure.v1",
+  "mechanism_id": "cmix_obias_safe_fork_midas64_q0_v1",
+  "mechanism_ir": "projects/enwiki9/operations/planning/cmix_obias_safe_fork_midas64_q0_v1.mechanism-ir.json",
+  "operational_status": "design_only",
+  "events": [
+    {"id": "block_start", "ordinal": 0, "boundary": "before byte 0"},
+    {"id": "first_half_event", "ordinal": 1, "boundary": "each decoded bit in bytes 0 through 31"},
+    {"id": "midpoint_ready", "ordinal": 2, "boundary": "after byte 31 and all 256 first-half truths"},
+    {"id": "fork_activate", "ordinal": 3, "boundary": "after midpoint update and before byte 32 prediction"},
+    {"id": "second_half_predict", "ordinal": 4, "boundary": "before each bit in bytes 32 through 63"},
+    {"id": "coder_commit", "ordinal": 5, "boundary": "after integer count selection and before truth"},
+    {"id": "second_half_truth", "ordinal": 6, "boundary": "after each second-half bit is decoded"},
+    {"id": "branch_advance", "ordinal": 7, "boundary": "after truth, at the parent's original transition call sites"},
+    {"id": "byte64_rejoin", "ordinal": 8, "boundary": "after byte 63 transitions and before byte 64"}
+  ],
+  "source_availability": [
+    {"source_id": "decoded_first_half_truths", "available_at_event": "midpoint_ready", "first_use_event": "midpoint_ready"},
+    {"source_id": "first_half_parent_integer_probabilities", "available_at_event": "first_half_event", "first_use_event": "first_half_event"},
+    {"source_id": "midpoint_parent_snapshot", "available_at_event": "midpoint_ready", "first_use_event": "midpoint_ready"},
+    {"source_id": "second_half_parent_probability", "available_at_event": "second_half_predict", "first_use_event": "second_half_predict"},
+    {"source_id": "second_half_adapted_probability", "available_at_event": "second_half_predict", "first_use_event": "second_half_predict"}
+  ],
+  "state_roles": [
+    {"state_id": "authoritative_parent_state", "authority": "authoritative_parent", "lifetime": "persistent", "readable_arms": ["P", "K", "D", "M", "R", "S"], "writable_arms": []},
+    {"state_id": "authoritative_parent_ordinary_transition", "authority": "authoritative_parent", "lifetime": "persistent", "readable_arms": [], "writable_arms": ["P", "K", "D", "M", "R", "S"]},
+    {"state_id": "arithmetic_coder_state", "authority": "authoritative_coder", "lifetime": "coder", "readable_arms": ["P", "K", "D", "M", "R", "S"], "writable_arms": ["P", "K", "D", "M", "R", "S"]},
+    {"state_id": "safe_mix_global_posterior", "authority": "mechanism_persistent", "lifetime": "persistent", "readable_arms": ["K", "M", "R", "S"], "writable_arms": ["K", "M", "R", "S"]},
+    {"state_id": "first_half_midpoint_evidence", "authority": "causal_evidence", "lifetime": "segment", "readable_arms": ["K", "D", "M", "R", "S"], "writable_arms": []},
+    {"state_id": "adapted_expert_branch_state", "authority": "mechanism_ephemeral", "lifetime": "segment", "readable_arms": [], "writable_arms": ["K", "D", "M", "R", "S"]}
+  ],
+  "arms": [
+    {
+      "arm": "P",
+      "role": "authoritative memory-safe parent",
+      "event_access": [
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state"], "write_state_ids": ["authoritative_parent_ordinary_transition"]}
+      ]
+    },
+    {
+      "arm": "K",
+      "role": "matched bookkeeping and fork with parent-identical expert and zero midpoint injection",
+      "event_access": [
+        {"event": "first_half_event", "source_ids": ["first_half_parent_integer_probabilities"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "midpoint_ready", "source_ids": ["decoded_first_half_truths", "midpoint_parent_snapshot"], "read_state_ids": ["authoritative_parent_state", "first_half_midpoint_evidence"], "write_state_ids": ["adapted_expert_branch_state"]},
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability", "second_half_adapted_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state", "safe_mix_global_posterior"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state", "safe_mix_global_posterior"], "write_state_ids": ["authoritative_parent_ordinary_transition", "adapted_expert_branch_state", "safe_mix_global_posterior"]}
+      ]
+    },
+    {
+      "arm": "D",
+      "role": "raw adapted fork without SAFE-MIX posterior mutation",
+      "event_access": [
+        {"event": "first_half_event", "source_ids": ["first_half_parent_integer_probabilities"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "midpoint_ready", "source_ids": ["decoded_first_half_truths", "midpoint_parent_snapshot"], "read_state_ids": ["authoritative_parent_state", "first_half_midpoint_evidence"], "write_state_ids": ["adapted_expert_branch_state"]},
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability", "second_half_adapted_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state"], "write_state_ids": ["authoritative_parent_ordinary_transition", "adapted_expert_branch_state"]}
+      ]
+    },
+    {
+      "arm": "M",
+      "role": "target-bearing SAFE-MIX combination of authoritative and adapted branches",
+      "event_access": [
+        {"event": "first_half_event", "source_ids": ["first_half_parent_integer_probabilities"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "midpoint_ready", "source_ids": ["decoded_first_half_truths", "midpoint_parent_snapshot"], "read_state_ids": ["authoritative_parent_state", "first_half_midpoint_evidence"], "write_state_ids": ["adapted_expert_branch_state"]},
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability", "second_half_adapted_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state", "safe_mix_global_posterior"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state", "safe_mix_global_posterior"], "write_state_ids": ["authoritative_parent_ordinary_transition", "adapted_expert_branch_state", "safe_mix_global_posterior"]}
+      ]
+    },
+    {
+      "arm": "R",
+      "role": "matched-norm random-direction fork control",
+      "event_access": [
+        {"event": "first_half_event", "source_ids": ["first_half_parent_integer_probabilities"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "midpoint_ready", "source_ids": ["decoded_first_half_truths", "midpoint_parent_snapshot"], "read_state_ids": ["authoritative_parent_state", "first_half_midpoint_evidence"], "write_state_ids": ["adapted_expert_branch_state"]},
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability", "second_half_adapted_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state", "safe_mix_global_posterior"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state", "safe_mix_global_posterior"], "write_state_ids": ["authoritative_parent_ordinary_transition", "adapted_expert_branch_state", "safe_mix_global_posterior"]}
+      ]
+    },
+    {
+      "arm": "S",
+      "role": "causally misaligned midpoint-association control",
+      "event_access": [
+        {"event": "first_half_event", "source_ids": ["first_half_parent_integer_probabilities"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state"], "write_state_ids": []},
+        {"event": "midpoint_ready", "source_ids": ["decoded_first_half_truths", "midpoint_parent_snapshot"], "read_state_ids": ["authoritative_parent_state", "first_half_midpoint_evidence"], "write_state_ids": ["adapted_expert_branch_state"]},
+        {"event": "second_half_predict", "source_ids": ["second_half_parent_probability", "second_half_adapted_probability"], "read_state_ids": ["authoritative_parent_state", "arithmetic_coder_state", "safe_mix_global_posterior"], "write_state_ids": []},
+        {"event": "coder_commit", "source_ids": [], "read_state_ids": ["arithmetic_coder_state"], "write_state_ids": ["arithmetic_coder_state"]},
+        {"event": "branch_advance", "source_ids": [], "read_state_ids": ["authoritative_parent_state", "safe_mix_global_posterior"], "write_state_ids": ["authoritative_parent_ordinary_transition", "adapted_expert_branch_state", "safe_mix_global_posterior"]}
+      ]
+    }
+  ],
+  "join": {
+    "event": "byte64_rejoin",
+    "retain_state_ids": ["authoritative_parent_state", "authoritative_parent_ordinary_transition", "arithmetic_coder_state", "safe_mix_global_posterior"],
+    "discard_state_ids": ["first_half_midpoint_evidence", "adapted_expert_branch_state"],
+    "forbidden_copy_pairs": [
+      {"from": "first_half_midpoint_evidence", "to": "authoritative_parent_state"},
+      {"from": "first_half_midpoint_evidence", "to": "authoritative_parent_ordinary_transition"},
+      {"from": "adapted_expert_branch_state", "to": "authoritative_parent_state"},
+      {"from": "adapted_expert_branch_state", "to": "authoritative_parent_ordinary_transition"}
+    ]
+  },
+  "claim_authority": "none",
+  "execution_authority": false
+}
