@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma-safe-mix-plan.schema.json",
+  "title": "Gamma SAFE-MIX v1 dormant execution plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "planning_schema_sha256",
+    "artifact_id",
+    "revision",
+    "operational_status",
+    "claim_authority",
+    "execution_authorized",
+    "objective",
+    "role",
+    "dependencies",
+    "contract",
+    "activation_requirements",
+    "claim_boundary",
+    "theory_sources",
+    "static_audit"
+  ],
+  "properties": {
+    "$schema": {"const": "gamma-safe-mix-plan.schema.json"},
+    "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_id": {"const": "gamma_safe_mix_v1"},
+    "revision": {"const": 2},
+    "operational_status": {"const": "dormant_dependency"},
+    "claim_authority": {"const": "none"},
+    "execution_authorized": {"const": false},
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id", "corpus_bytes", "target_complete_counted_bytes"],
+      "properties": {
+        "objective_id": {"const": "gamma-enwik9-hutter-105m-v1"},
+        "corpus_bytes": {"const": 1000000000},
+        "target_complete_counted_bytes": {"const": 105000000}
+      }
+    },
+    "role": {"$ref": "#/$defs/text"},
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact", "required_evidence"],
+        "properties": {
+          "artifact": {"$ref": "#/$defs/text"},
+          "required_evidence": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "contract": {"type": "object"},
+    "activation_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "claim_boundary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "theory_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "format": "uri"}
+    },
+    "static_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generic_schema_mismatch_closed",
+        "program_lock_transitive_coverage",
+        "finite_guarantee_boundary",
+        "execution_status"
+      ],
+      "properties": {
+        "generic_schema_mismatch_closed": {"const": true},
+        "program_lock_transitive_coverage": {"$ref": "#/$defs/text"},
+        "finite_guarantee_boundary": {"$ref": "#/$defs/text"},
+        "execution_status": {"const": "static_only_unexecuted"}
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
