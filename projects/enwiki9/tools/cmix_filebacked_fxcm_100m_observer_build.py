@@ -12,6 +12,8 @@ import shutil
 import subprocess
 from typing import Any
 
+import jsonschema
+
 import cmix_filebacked_fxcm_build_capture as capture
 import cmix_filebacked_fxcm_build_stage as stage
 import cmix_filebacked_fxcm_scope_build as scope_build
@@ -20,9 +22,10 @@ import cmix_filebacked_fxcm_scope_build as scope_build
 SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PLAN_ARTIFACT_ID = "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"
-OBSERVER_PROGRAM_SHA256 = "4d9d96b23032adf1858512b80eb2fbb69f3c29b06142bf2aa5226b9910d56fb9"
+OBSERVER_PROGRAM_SHA256 = "5a5264aa4fed2e255ab014fcdc87bc2069148fa07a85a1bc2686a324d01ed9d9"
 OBSERVER_HEADER_SHA256 = "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515"
 OBSERVER_PATCH_SHA256 = "b86fa8b3a20d1628ad4d257318c3a27e42489189ff52510ba5ca46a9c4fc8431"
+RECEIPT_SCHEMA_SHA256 = "1b785761b11f03328fecc3db86e28498a27d66f2842805a6bdb60640df53c2ea"
 OBSERVER_DEFINITION = "GAMMA_FULL_IDENTITY_OBSERVER=1"
 PARENT_DEFINITIONS = tuple(
     definition
@@ -178,6 +181,7 @@ def main() -> int:
     parser.add_argument("--observer-program", type=Path, required=True)
     parser.add_argument("--observer-header", type=Path, required=True)
     parser.add_argument("--observer-patch", type=Path, required=True)
+    parser.add_argument("--receipt-schema", type=Path, required=True)
     parser.add_argument("--head-blob", type=Path, required=True)
     parser.add_argument("--compiler", type=Path, required=True)
     parser.add_argument("--compiler-proxy", type=Path, required=True)
@@ -204,6 +208,9 @@ def main() -> int:
     )
     observer_header = capture.existing_regular(args.observer_header, "observer header")
     observer_patch = capture.existing_regular(args.observer_patch, "observer patch")
+    receipt_schema_path = capture.existing_regular(
+        args.receipt_schema, "observer-build receipt schema"
+    )
     head_blob = capture.existing_regular(args.head_blob, "head blob")
     compiler = capture.existing_regular(args.compiler, "compiler")
     proxy = capture.existing_regular(args.compiler_proxy, "compiler proxy")
@@ -211,6 +218,7 @@ def main() -> int:
     require_digest(observer_program, OBSERVER_PROGRAM_SHA256, "observer program")
     require_digest(observer_header, OBSERVER_HEADER_SHA256, "observer header")
     require_digest(observer_patch, OBSERVER_PATCH_SHA256, "observer patch")
+    require_digest(receipt_schema_path, RECEIPT_SCHEMA_SHA256, "receipt schema")
     observer_contract = plan.get("identity_observer_source", {})
     for name, path, digest in (
         ("program", observer_program, OBSERVER_PROGRAM_SHA256),
@@ -222,6 +230,16 @@ def main() -> int:
             or observer_contract.get(f"{name}_sha256") != digest
         ):
             raise RuntimeError(f"planning contract {name} binding mismatch")
+    observer_build_contract = plan.get("observer_build", {})
+    if (
+        observer_build_contract.get("receipt_schema")
+        != str(receipt_schema_path.relative_to(capture.PROJECT))
+        or observer_build_contract.get("receipt_schema_sha256")
+        != RECEIPT_SCHEMA_SHA256
+    ):
+        raise RuntimeError("planning contract observer-build schema binding mismatch")
+    receipt_schema = json.loads(receipt_schema_path.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(receipt_schema)
 
     if (
         not args.output_root.is_absolute()
@@ -349,6 +367,7 @@ def main() -> int:
         "gamma_compression_credit_bytes": 0,
         "gamma_score_credit_bytes": 0,
     }
+    jsonschema.validate(receipt, receipt_schema)
     write_new(output_root / "observer-build-receipt.json", receipt)
     return 0
 
