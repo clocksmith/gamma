@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-24T13:59:25+00:00`
+- Generated at UTC: `2026-08-24T14:39:35+00:00`
 
 ## Target State
 
@@ -27,15 +27,15 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `encode`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `111,935`
+- RSS samples: `116,572`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `8,978,032`
-- Latest sampled single RSS KiB: `8,350,016`
+- Latest sampled single RSS KiB: `8,732,932`
 - Tightest binary single-process margin KiB: `1,507,728`
 - Tightest decimal single-process margin KiB: `787,593`
-- Latest binary single-process margin KiB: `2,135,744`
-- Latest decimal single-process margin KiB: `1,415,609`
+- Latest binary single-process margin KiB: `1,752,828`
+- Latest decimal single-process margin KiB: `1,032,693`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `48`
@@ -65,10 +65,10 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - RSS guard JSON: `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/guard.json`
 - RSS guard present: `true`
 - Active scorer observed: `true`
-- Codec progress: `23.18%`
-- Reported payload bytes: `30,579,166`
+- Codec progress: `23.96%`
+- Reported payload bytes: `31,674,759`
 - Progress log: `projects/enwiki9/scratch/cmix_filebacked_fxcm_full_a_qm8_v1/encode/progress.log`
-- Progress log modified UTC: `2026-08-24T13:59:07+00:00`
+- Progress log modified UTC: `2026-08-24T14:39:35+00:00`
 - Live gate: `true`
 - Liveness classification: `live_observed_owner`
 - Matching adaptive jobs: `1`
@@ -77,24 +77,24 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `57,641`
-- RSS guard JSON modified UTC: `2026-08-24T13:59:24+00:00`
-- RSS guard JSON SHA-256: `81ad399e472ea3996424f9e5acdf6b74abb28afc33927088aa3127f30a15400c`
-- RSS samples: `111,935`
+- RSS guard JSON modified UTC: `2026-08-24T14:39:35+00:00`
+- RSS guard JSON SHA-256: `7f5c7a8d15d018a75390bd21797abeb6ec960e887416ef25f669e00bc6e28bbf`
+- RSS samples: `116,572`
 - Max sampled single RSS KiB: `8,978,032`
 - Max sampled tree RSS KiB: `8,998,152`
 - Single-process RSS margin KiB: `1,507,728`
 - Single-process decimal `10GB` margin KiB: `787,593`
 - Tree RSS margin KiB: `1,487,608`
 - Tree decimal `10GB` margin KiB: `767,473`
-- Latest sampled single RSS KiB: `8,350,016`
-- Latest sampled tree RSS KiB: `8,368,656`
-- Latest sampled single-process margin KiB: `2,135,744`
-- Latest sampled single-process decimal `10GB` margin KiB: `1,415,609`
-- Latest sampled tree margin KiB: `2,117,104`
-- Latest sampled tree decimal `10GB` margin KiB: `1,396,969`
+- Latest sampled single RSS KiB: `8,732,932`
+- Latest sampled tree RSS KiB: `8,751,572`
+- Latest sampled single-process margin KiB: `1,752,828`
+- Latest sampled single-process decimal `10GB` margin KiB: `1,032,693`
+- Latest sampled tree margin KiB: `1,734,188`
+- Latest sampled tree decimal `10GB` margin KiB: `1,014,053`
 - Cgroup memory peak bytes: `9,002,086,400`
-- Latest cgroup current bytes: `8,999,256,064`
-- Cgroup event deltas: `{'high': 317302, 'low': 0, 'max': 0, 'oom': 0, 'oom_group_kill': 0, 'oom_kill': 0, 'sock_throttled': 0}`
+- Latest cgroup current bytes: `8,999,657,472`
+- Cgroup event deltas: `{'high': 337142, 'low': 0, 'max': 0, 'oom': 0, 'oom_group_kill': 0, 'oom_kill': 0, 'sock_throttled': 0}`
 
 ## Gate Evidence Status
 
@@ -168,14 +168,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `resource_guard_soft_high` | 4,135,986 | 4,135,830 | 18,796 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3_soft_high.py --limit-kib 9765625 --limit-mode tree --official...` |
 | `resource_guard` | 4,135,989 | 4,135,986 | 67,360 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765625 --limit-mode tree --official-decimal-l...` |
 | `q1_full_stage` | 4,136,006 | 4,135,989 | 18,640 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/cmix_filebacked_fxcm_full_stage.py --mode encode --corpus /home/x/enwiki9-quarantine/mat...` |
-| `native_cmix` | 4,136,098 | 4,136,006 | 8,368,220 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
+| `native_cmix` | 4,136,098 | 4,136,006 | 8,745,472 | `./cmix -e /home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9 out.cmix` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/guard.json` | 57,641 | `2026-08-24T14:00:39+00:00` |
-| `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/encode.codec.stderr` | 568,109 | `2026-08-24T14:00:12+00:00` |
+| `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/guard.json` | 57,641 | `2026-08-24T14:40:49+00:00` |
+| `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/encode.codec.stderr` | 569,435 | `2026-08-24T14:40:44+00:00` |
 | `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/encode.codec.stdout` | 115 | `2026-08-23T21:54:49+00:00` |
 | `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/encode/phase-markers.jsonl` | 41 | `2026-08-23T21:52:04+00:00` |
 | `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/package/head.blob` | 23,002 | `2026-08-23T21:52:03+00:00` |
@@ -188,14 +188,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Max cmix PID: `4136098`
 - Active cmix mode: `encode`
-- Max cmix RSS KiB: `8,368,220`
-- Active process tree RSS KiB: `8,549,112`
+- Max cmix RSS KiB: `8,745,472`
+- Active process tree RSS KiB: `8,926,364`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `2,117,540`
-- Single-process decimal margin KiB: `1,397,405`
-- Active process tree margin KiB (binary): `1,936,648`
-- Active process tree decimal margin KiB: `1,216,513`
+- Single-process binary margin KiB: `1,740,288`
+- Single-process decimal margin KiB: `1,020,153`
+- Active process tree margin KiB (binary): `1,559,396`
+- Active process tree decimal margin KiB: `839,261`
 - Temp input path: `/home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9`
 - Temp output path: `/home/x/deco/gamma/projects/enwiki9/scratch/cmix_filebacked_fxcm_full_a_qm8_v1/encode/out.cmix`
 - Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/scratch/cmix_filebacked_fxcm_full_a_qm8_v1/encode/out.cmix.cmix.temp`
@@ -205,8 +205,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Temp input modified UTC: `2011-06-01T15:29:40+00:00`
 - Temp output modified UTC: `2026-08-23T21:55:26+00:00`
 - Temp output staging modified UTC: `2026-08-23T21:55:26+00:00`
-- Process read bytes: `491,950,809,088`
-- Process write bytes: `32,560,404,570,112`
+- Process read bytes: `522,935,787,520`
+- Process write bytes: `33,733,350,932,480`
 
 ## Contingencies
 
