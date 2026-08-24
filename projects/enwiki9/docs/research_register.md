@@ -55,6 +55,21 @@ self-extracting files are not expected to be byte-identical because q1
 necessarily contains different allocator code; requiring that equality would
 confuse predictor preservation with package identity.
 
+The diagnostic observer source for this 100M gate is now sealed, but the gate
+runner and all execution receipts remain absent. The observer registers the
+same source-ordered semantic ranges in both arms and requires exactly `26`
+allocations of at least `67,108,864` bytes. At coded-byte checkpoints `0`,
+`16,777,216`, `33,554,432`, `50,331,648`, and terminal, it hashes each range's
+ordinal, requested semantic size, alignment, and exact semantic bytes. It also
+hashes every post-head `uint16` probability immediately before the arithmetic
+split and records clone-finalized coder checkpoints. Virtual addresses,
+mapping padding, filenames, inode identities, page residency, and fault history
+are excluded. The q1 diagnostic arm may page out already-hashed file-backed
+ranges; therefore neither diagnostic arm has memory authority. The independent
+`R-Q` arm remains the observer-free sealed release. Exact `--fuzz=0` patch
+application and frozen-definition C++ syntax validation pass; no observer build,
+calibration, 100M identity result, or resource result is claimed.
+
 `cmix_filebacked_fxcm_full_a_qm8_v1` was already running when this launch-order
 correction was adopted. It remains an unchanged zero-credit diagnostic and is
 not killed or retroactively promoted. No new independent full-1G arm or native
