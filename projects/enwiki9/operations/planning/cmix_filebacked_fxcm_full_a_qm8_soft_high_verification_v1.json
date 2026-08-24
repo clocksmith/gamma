@@ -20,7 +20,7 @@
     },
     {
       "artifact": "revision-2 activation",
-      "required_evidence": "A future revision at least 2 sets execution_authorized=true only after binding the actual passing terminal receipt SHA-256."
+      "required_evidence": "The terminal dispatcher binds the exact descriptor-witnessed passing receipt, changes exactly four activation fields, and retains the displaced dormant inode as recovery evidence."
     }
   ],
   "contract": {
@@ -31,13 +31,13 @@
     "bindings": {
       "verifier": {
         "path": "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
-        "bytes": 33739,
-        "sha256": "bab93845fd85f0e4615d6ac970199c636276fae202e2d1dc745098dae5805ba2"
+        "bytes": 35858,
+        "sha256": "cf692e86d8f8a8f9bcfcb3f4b67f7cb9d4d5013e85c0f87df9f4d1f32058463f"
       },
       "verification_schema": {
         "path": "contracts/research/v1/cmix-filebacked-fxcm-full-soft-high-verification.schema.json",
-        "bytes": 4393,
-        "sha256": "042b461527352c78fc259d3fb9b210e81c809caa23707ae41f5f926839777141"
+        "bytes": 4710,
+        "sha256": "a1f0597f5e328c98a043e37d1e5ea453dfb2df5678bd380fafc6276ee44c61ba"
       },
       "research_contracts": {
         "path": "tools/research_contracts.py",
@@ -98,10 +98,18 @@
         "path": "tools/run_with_resource_guard_v3.py",
         "bytes": 31807,
         "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+      },
+      "terminal_closure_helper": {
+        "path": "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
+        "bytes": 37695,
+        "sha256": "0768f56d8574c709e63d45f23f190ee694e149183d4ac71dde84f0bd80744154"
       }
     },
     "required_independent_checks": [
       "canonical 1,000,000,000-byte corpus artifact identity",
+      "descriptor-bound terminal receipt identity and schema revalidation before output",
+      "exact terminal-dispatch intent and activation receipt binding to this selected plan",
+      "every available receipt-recorded PID/start identity, including the native codec when recorded, plus command, cwd, cgroup, lease, and cgroup-occupant closure under the canonical full-1G lock",
       "all frozen build, source-lock, scope, and transfer antecedent artifact and contract identities",
       "exact roundtrip, stage, soft-pressure wrapper, and underlying guard implementations",
       "complete encode and decode guard measurements with every guard flag false",
@@ -129,7 +137,7 @@
       "--output",
       "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json"
     ],
-    "promotion_condition": "A schema-valid verification_pass=true receipt may authorize freezing an independent Arm B plan that binds both the Arm-A source receipt and this verification. It does not qualify q1.",
+    "promotion_condition": "A schema-valid verification_pass=true receipt, atomically published only after the verifier releases the canonical full-1G lock, may authorize freezing an independent Arm B plan that binds both the Arm-A source receipt and this verification. It does not qualify q1.",
     "kill_condition": "Any source failure, artifact drift, plan activation mismatch, live qm8 process, counter inconsistency, cleanup gap, accounting mismatch, or verifier/schema hash drift stops the A-to-B transition.",
     "promotion_authority": false,
     "memory_safe_parent_qualification_authority": false,
@@ -138,9 +146,10 @@
   },
   "activation_requirements": [
     "Do not execute revision 1. The verifier rejects any plan revision below 2 or execution_authorized=false before opening the output path.",
-    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=true with no live qm8 process.",
+    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=true with descriptor-bound receipt identity and the shared terminal-closure proof.",
+    "Require the terminal dispatcher activation receipt to bind this exact revision-2 plan, its intent, the unchanged failure plan, and the same terminal receipt.",
     "Create revision 2 by changing only activation status, execution authority, revision, and the terminal receipt SHA-256 unless a bound implementation file has actually drifted.",
-    "Execute the frozen command only while the canonical output is absent."
+    "Execute only the exact frozen runtime and argv while the canonical output is absent; prepare and fsync the complete receipt under the full-1G lock, release that lock, then atomically publish the canonical path without replacement."
   ],
   "claim_boundary": [
     "Revision 1 is dormant and has no execution authority.",

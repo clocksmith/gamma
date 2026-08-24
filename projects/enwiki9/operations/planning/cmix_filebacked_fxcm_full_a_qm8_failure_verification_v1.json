@@ -20,7 +20,7 @@
     },
     {
       "artifact": "revision-2 activation",
-      "required_evidence": "A future revision at least 2 sets execution_authorized=true only after binding the actual terminal receipt SHA-256."
+      "required_evidence": "The terminal dispatcher intent and activation receipt select only the failure branch, bind the descriptor-witnessed terminal receipt and the exact four-field revision-2 derivation, retain the displaced dormant inode, and preserve the success plan unchanged."
     }
   ],
   "contract": {
@@ -31,13 +31,13 @@
     "implementation": {
       "verifier": {
         "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
-        "bytes": 44146,
-        "sha256": "78c1c9678bd628492404377f7ce8902079b242875152cba5fc887649e043f02f"
+        "bytes": 46413,
+        "sha256": "8509f5b7a5c5c194829e83c442fc09e8aca81fd7691ba980dbb95654a6c3d922"
       },
       "verification_schema": {
         "path": "contracts/research/v1/cmix-filebacked-fxcm-full-qm8-failure-verification.schema.json",
-        "bytes": 7742,
-        "sha256": "abd71295af6feed09708d83b2d3f5c53d93c52c4c502249ae09ff99a66c8980b"
+        "bytes": 8059,
+        "sha256": "615cd562a78ea2e6d8cac2bee6d026a8ae272c4c6032894b4f38eb7c3c77e58c"
       },
       "research_contracts": {
         "path": "tools/research_contracts.py",
@@ -58,6 +58,11 @@
         "path": "/usr/bin/python3.14",
         "bytes": 7481192,
         "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+      },
+      "terminal_closure_helper": {
+        "path": "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
+        "bytes": 37695,
+        "sha256": "0768f56d8574c709e63d45f23f190ee694e149183d4ac71dde84f0bd80744154"
       }
     },
     "source_bindings": {
@@ -146,9 +151,10 @@
   },
   "activation_requirements": [
     "Do not execute revision 1. The verifier itself rejects any plan revision below 2 or execution_authorized=false.",
-    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=false with no live qm8 process.",
+    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=false with descriptor-bound receipt identity and the shared PID-start, command, cwd, cgroup, lease, and occupant closure proof under the canonical full-1G lock.",
+    "Require the terminal dispatcher activation receipt to bind this exact revision-2 plan, its durable intent, the unchanged success plan, and the same terminal receipt.",
     "Create revision 2 by changing only activation status, execution authority, revision, and the terminal receipt SHA-256 unless a bound implementation file has actually drifted.",
-    "Execute the frozen command only while the canonical output is absent and both managed-lease namespace paths reflect terminal cleanup."
+    "Execute only the exact frozen runtime and argv while the canonical output is absent; prepare and fsync the complete receipt under the full-1G lock, release that lock, then atomically publish the canonical path without replacement."
   ],
   "claim_boundary": [
     "Revision 1 is a dormant failure-proof closure and has no execution authority.",

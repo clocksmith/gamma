@@ -5,7 +5,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema", "candidate_id", "arm", "source_receipt", "evidence", "observed",
+    "schema", "candidate_id", "arm", "source_receipt", "evidence", "observed", "terminal_closure", "terminal_dispatch_activation",
     "checks", "errors", "verification_pass", "claim_boundary",
     "gamma_score_credit_bytes"
   ],
@@ -70,6 +70,8 @@
         }
       ]
     },
+    "terminal_closure": {"type": ["object", "null"]},
+    "terminal_dispatch_activation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
     "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
     "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "verification_pass": {"type": "boolean"},
@@ -85,6 +87,8 @@
           "source_receipt": {"$ref": "#/$defs/file"},
           "evidence": {"type": "object"},
           "observed": {"type": "object"},
+          "terminal_closure": {"type": "object"},
+          "terminal_dispatch_activation": {"$ref": "#/$defs/file"},
           "checks": {"minProperties": 1, "additionalProperties": {"const": true}},
           "errors": {"maxItems": 0}
         }

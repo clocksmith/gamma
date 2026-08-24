@@ -1,80 +1,126 @@
 {
   "schema": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-audit.v1",
   "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_audit_q0_v1",
-  "operational_status": "terminal_static_correction",
+  "operational_status": "corrected_static_audit",
   "scientific_verdict": null,
   "archive_observed": false,
   "score_credit_bytes": 0,
   "audited_candidate": "cmix_filebacked_fxcm_full_a_qm8_v1",
-  "audited_sources": {
+  "corrected_sources": {
+    "closure_helper": {
+      "path": "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
+      "bytes": 37695,
+      "sha256": "0768f56d8574c709e63d45f23f190ee694e149183d4ac71dde84f0bd80744154"
+    },
+    "dispatcher": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_activate.py",
+      "bytes": 22597,
+      "sha256": "59ed7c470148168de84470a4a2cb9b28771fdde3e78e57e18ea84b538e79169f"
+    },
     "success_verifier": {
       "path": "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
-      "bytes": 33739,
-      "sha256": "bab93845fd85f0e4615d6ac970199c636276fae202e2d1dc745098dae5805ba2"
+      "bytes": 35858,
+      "sha256": "cf692e86d8f8a8f9bcfcb3f4b67f7cb9d4d5013e85c0f87df9f4d1f32058463f"
     },
-    "failure_verifier_before_correction": {
+    "failure_verifier": {
       "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
-      "bytes": 43813,
-      "sha256": "6772c6ea450f6d30e33d9d56d7edfbf2906d2b004c09f2be50170c64bcde6d45"
+      "bytes": 46413,
+      "sha256": "8509f5b7a5c5c194829e83c442fc09e8aca81fd7691ba980dbb95654a6c3d922"
+    },
+    "intent_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-intent.schema.json",
+      "bytes": 5509,
+      "sha256": "fd9e30010cf993db65318133499899b04000df627512a336dab893a8662713a6"
+    },
+    "activation_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-activation.schema.json",
+      "bytes": 5072,
+      "sha256": "75bbe30f13a07191894357da9262da8854974e4661bf0668e0aac94422c38528"
     },
     "success_plan": {
       "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
-      "sha256": "9545db2ff58b7da363f4519d2ab7859d98c92a122f8ecdbef3d34095b3467851"
+      "bytes": 8777,
+      "sha256": "dfd11217037b8f5df421a6ef776dee90b39ddb5f2e543c279418846da45ba5f8"
     },
-    "failure_plan_before_correction": {
+    "failure_plan": {
       "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
-      "sha256": "226c74116a3f78457013902518e31a07dc09168ce13459a750bea8de481bc689"
+      "bytes": 8422,
+      "sha256": "2a4cb99a02962b73e215b762ca3d3cea109911c08cd569888b8382431808d5d8"
+    },
+    "activation_contract": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_activation_q0_v1.json",
+      "bytes": 7669,
+      "sha256": "d85cbfc8ff077f0633433d95f1a71431e280d6bc9aa8c9f090d3c44cd4014fd5"
     }
   },
-  "proved_source_facts": [
-    {
-      "id": "success_preflight_is_terminal_class_closed",
-      "fact": "The success verifier loads the terminal receipt during preflight and rejects a non-q1 candidate, a non-A arm, terminal_pass other than true, or any remaining qm8 process before entering its caught verification body or opening the canonical output."
-    },
-    {
-      "id": "failure_preflight_was_only_plan_closed",
-      "fact": "The previous failure verifier preflight checked the activated plan and receipt hash but did not require the receipt to be q1 Arm A with terminal_pass=false and did not require qm8 process closure. Those checks existed only as booleans inside verify()."
-    },
-    {
-      "id": "caught_body_can_occupy_output",
-      "fact": "main() catches exceptions and ordinary false evidence from verify(), validates a failure-shaped receipt, and writes it with O_EXCL to the one canonical failure-verification path. Therefore a wrong-branch or still-live invocation could consume that path even though no terminal failure classification passed."
-    },
-    {
-      "id": "arm_b_remains_causally_gated",
-      "fact": "The Arm-A contract authorizes freezing independent Arm B only after a terminal passing Arm-A receipt and independent success verification. No Arm-B plan or execution is authorized by this audit."
-    }
-  ],
-  "correction": {
-    "semantic_axis": "terminal_dispatch_preflight",
-    "changed_source": {
-      "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
-      "bytes": 44146,
-      "sha256": "78c1c9678bd628492404377f7ce8902079b242875152cba5fc887649e043f02f"
-    },
-    "updated_plan": {
-      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
-      "bytes": 7658,
-      "sha256": "dc18deed6af512b6e4cf9d27f8f05d1c5dd95a70da448278dd445f18a2127be1"
-    },
-    "new_preflight_requirements": [
-      "source schema is gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1",
-      "source candidate is cmix_obias_memory_safe_parent_filebacked_q1_v1",
-      "source arm is a",
-      "source terminal_pass is exactly false",
-      "no qm8 process remains live"
-    ],
-    "unchanged_semantics": [
-      "failure classification order",
-      "single authorized successor routing",
-      "receipt and output schemas",
-      "zero promotion and score authority",
-      "future revision-2 receipt-hash activation requirement"
+  "rejected_first_draft": {
+    "status": "superseded_before_execution",
+    "findings": [
+      "The process scan excluded ancestors and could miss an orphan native codec whose argv was only ./cmix.",
+      "Receipt branch selection and receipt hashing used separate path reads.",
+      "The planning sibling lock did not reserve the canonical full-1G namespace.",
+      "No durable activation intent, displaced predecessor, or recovery evidence survived a post-publication failure.",
+      "The verifiers did not independently bind the dispatch chain or its exact four-field derivation."
     ]
   },
+  "corrected_proofs": [
+    {
+      "id": "descriptor_receipt_end_to_end",
+      "fact": "One no-follow receipt descriptor supplies the parsed source value, branch boolean, SHA-256, verifier inputs, and final revalidation; the verifiers no longer reread the terminal receipt by pathname."
+    },
+    {
+      "id": "orphan_and_namespace_closure",
+      "fact": "The shared scan considers every process except itself, with only a shell-launcher ancestry exception when command binding is the sole reason. Candidate/result/scratch/cgroup argv tokens, scratch cwd, cgroup membership, recorded PID/start identities, cgroup occupants, live lease ownership, and the canonical acquisition lock are all closed."
+    },
+    {
+      "id": "exact_branch_derivation",
+      "fact": "The activation receipt, intent, dispatch contract, selected plan, non-selected plan, schemas, runtime, helper, dispatcher, and source schema are rebound. Reverting revision, activation status, execution_authorized, and terminal_receipt_sha256 from the activated plan reproduces the exact frozen dormant bytes and SHA-256."
+    },
+    {
+      "id": "displaced_inode_retained",
+      "fact": "RENAME_EXCHANGE retains the exact displaced dormant inode at a deterministic recovery path, and the activation receipt binds that artifact instead of deleting it."
+    },
+    {
+      "id": "output_authority_after_lock_release",
+      "fact": "Each verifier prepares and fsyncs a complete schema-valid output under the full-1G lock, releases that lock, and only then publishes the canonical output with renameat2(RENAME_NOREPLACE). A lock-release failure therefore cannot leave an authoritative passing receipt."
+    },
+    {
+      "id": "no_execution_bridge",
+      "fact": "The dispatcher imports neither subprocess nor signal, executes no verifier, creates no verifier receipt, and grants no Arm-B or parent-qualification authority."
+    }
+  ],
+  "remaining_non_authority_limits": [
+    "A post-intent failure is fail-closed and retains reconstructive artifacts, but an inode-bound recovery transaction is not yet implemented.",
+    "The qm8 failure, dispatch-intent, and dispatch-activation schemas are direct-validated but are not yet registered in research_contracts.py; that live-bound module was intentionally not edited during qm8.",
+    "The terminal lease normally records the coordinator identity only. Native-codec closure is supplied by the all-process command, scratch-cwd, and cgroup scan unless a codec PID/start pair is actually present."
+  ],
+  "static_checks": {
+    "python_ast_parse_pass": true,
+    "no_subprocess_or_signal_import_in_dispatch_path_pass": true,
+    "json_schema_meta_validation_pass": true,
+    "campaign_plan_schema_validation_pass": true,
+    "template_serialization_identity_pass": true,
+    "all_declared_file_bindings_pass": true,
+    "git_diff_check_pass": true,
+    "runtime_dispatch_or_verifier_executed": false
+  },
+  "live_lane_observation": {
+    "qm8_terminal_receipt_present": false,
+    "qm8_process_tree_present": true,
+    "observed_stage": "encode",
+    "observed_progress_percent": 25.64,
+    "peak_process_tree_rss_kib": 8998152,
+    "peak_cgroup_bytes": 9002086400,
+    "cgroup_max_events": 0,
+    "cgroup_oom_events": 0,
+    "cgroup_oom_kill_events": 0,
+    "activation_attempted": false,
+    "verifier_executed": false,
+    "arm_b_authorized": false
+  },
   "claim_boundary": [
-    "This is source-level infrastructure evidence, not a qm8 result.",
-    "No verifier was executed and no canonical success or failure output exists.",
-    "The live qm8 codec, coordinator, guards, source, lease, result tree, and scratch tree were not modified or signaled.",
-    "The correction prevents premature output creation; it does not predict whether qm8 will pass."
+    "This is static source and contract evidence, not a qm8 measurement or terminal result.",
+    "The live qm8 process, lease, cgroup, result tree, scratch tree, and candidate source were observed read-only and were not modified or signaled.",
+    "No q1 qualification, archive gain, inverse, runtime eligibility, Gamma compression credit, or Hutter score follows from this audit."
   ]
 }

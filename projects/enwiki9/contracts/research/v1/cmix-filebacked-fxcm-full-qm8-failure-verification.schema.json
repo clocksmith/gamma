@@ -6,7 +6,7 @@
   "required": [
     "schema", "candidate_id", "source_receipt", "source_terminal_pass",
     "evidence_checks", "failure_predicates", "primary_failure_class",
-    "authorized_successor", "observed", "errors", "verification_pass",
+    "authorized_successor", "observed", "terminal_closure", "terminal_dispatch_activation", "errors", "verification_pass",
     "promotion_authorized", "memory_safe_parent_qualified", "archive_authority",
     "claim_authority", "claim_boundary", "gamma_compression_credit_bytes",
     "gamma_score_credit_bytes"
@@ -47,6 +47,8 @@
     },
     "authorized_successor": {"type": "string", "minLength": 1},
     "observed": {"type": ["object", "null"]},
+    "terminal_closure": {"type": ["object", "null"]},
+    "terminal_dispatch_activation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
     "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "verification_pass": {"type": "boolean"},
     "promotion_authorized": {"const": false},
@@ -78,6 +80,8 @@
           },
           "primary_failure_class": {"not": {"const": "verification_failure"}},
           "observed": {"type": "object"},
+          "terminal_closure": {"type": "object"},
+          "terminal_dispatch_activation": {"$ref": "#/$defs/file"},
           "errors": {"maxItems": 0},
           "claim_authority": {"const": "independent_terminal_failure_classification_only"}
         }

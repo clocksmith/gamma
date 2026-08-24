@@ -18,6 +18,8 @@ from typing import Any
 import jsonschema
 import research_contracts
 
+import cmix_filebacked_fxcm_qm8_terminal_closure as terminal_closure
+
 
 SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-qm8-failure-verification.v1"
 SOURCE_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"
@@ -138,7 +140,8 @@ def plan_binding(record: Any, expected: Path, label: str) -> None:
         raise RuntimeError(f"{label} plan identity mismatch")
 
 
-def validate_plan(receipt_path: Path) -> None:
+def validate_plan(receipt: terminal_closure.ReceiptWitness) -> None:
+    receipt_path = receipt.path
     plan_path = regular(PLAN, "qm8 failure-verification plan")
     schema_path = regular(PLAN_SCHEMA, "campaign static-contract schema")
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
@@ -147,7 +150,7 @@ def validate_plan(receipt_path: Path) -> None:
     jsonschema.Draft202012Validator(schema).validate(plan)
     contract = plan.get("contract", {})
     activation = contract.get("activation", {})
-    source = json.loads(receipt_path.read_text(encoding="utf-8"))
+    source = receipt.value
     if (
         plan.get("artifact_id")
         != "cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1"
@@ -159,13 +162,12 @@ def validate_plan(receipt_path: Path) -> None:
         != str(RESULT / "full-terminal-failure-verification.json")
         or activation.get("status") != "activated_after_terminal_failed_qm8"
         or activation.get("execution_authorized") is not True
-        or activation.get("terminal_receipt_sha256") != sha256(receipt_path)
+        or activation.get("terminal_receipt_sha256") != receipt.sha256
         or source.get("schema") != SOURCE_SCHEMA
         or source.get("candidate_id")
         != "cmix_obias_memory_safe_parent_filebacked_q1_v1"
         or source.get("arm") != "a"
         or source.get("terminal_pass") is not False
-        or live_qm8_processes()
         or contract.get("promotion_authority") is not False
         or contract.get("memory_safe_parent_qualification_authority") is not False
         or contract.get("archive_authority") is not False
@@ -180,6 +182,8 @@ def validate_plan(receipt_path: Path) -> None:
         "lease_verifier": LEASE_VERIFIER,
         "plan_schema": PLAN_SCHEMA,
         "python_runtime": Path("/usr/bin/python3.14"),
+        "terminal_closure_helper": PROJECT
+        / "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
     }
     implementation = contract.get("implementation", {})
     for name, expected in expected_bindings.items():
@@ -230,25 +234,6 @@ def load_module(path: Path, name: str) -> ModuleType:
     return module
 
 
-def write_new(path: Path, value: dict[str, Any]) -> None:
-    raw = json.dumps(value, sort_keys=True, indent=2).encode("ascii") + b"\n"
-    descriptor = os.open(
-        path,
-        os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC | os.O_NOFOLLOW,
-        0o600,
-    )
-    try:
-        cursor = 0
-        while cursor < len(raw):
-            written = os.write(descriptor, raw[cursor:])
-            if written <= 0:
-                raise OSError(f"short write: {path}")
-            cursor += written
-        os.fsync(descriptor)
-    finally:
-        os.close(descriptor)
-
-
 def validate_output(value: dict[str, Any]) -> None:
     schema_path = regular(SCHEMA_PATH, "qm8 failure-verification schema")
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
@@ -258,31 +243,6 @@ def validate_output(value: dict[str, Any]) -> None:
 
 def command_sha256(argv: list[str]) -> str:
     return hashlib.sha256(b"\0".join(os.fsencode(item) for item in argv)).hexdigest()
-
-
-def live_qm8_processes() -> list[int]:
-    ancestors: set[int] = set()
-    cursor = os.getpid()
-    while cursor > 1 and cursor not in ancestors:
-        ancestors.add(cursor)
-        try:
-            suffix = (Path("/proc") / str(cursor) / "stat").read_text(
-                encoding="ascii"
-            ).rsplit(")", 1)[1]
-            cursor = int(suffix.split()[1])
-        except (OSError, IndexError, ValueError):
-            break
-    found: list[int] = []
-    for path in Path("/proc").iterdir():
-        if not path.name.isdigit() or int(path.name) in ancestors:
-            continue
-        try:
-            command = (path / "cmdline").read_bytes().replace(b"\0", b" ")
-        except OSError:
-            continue
-        if b"cmix_filebacked_fxcm_full_a_qm8_v1" in command:
-            found.append(int(path.name))
-    return sorted(found)
 
 
 def latest_progress(path: Path) -> dict[str, Any]:
@@ -651,12 +611,17 @@ def package_checks(package: Any, checks: dict[str, bool]) -> None:
     )
 
 
-def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
-    receipt_path = regular(receipt_path, "qm8 terminal receipt")
+def verify(
+    receipt: terminal_closure.ReceiptWitness,
+    closure_snapshot: dict[str, Any],
+    full1g_lock: terminal_closure.OwnedLock,
+) -> tuple[dict[str, Any], bool]:
+    full1g_lock.verify()
+    receipt_path = receipt.path
     if receipt_path != RESULT / "full-roundtrip-receipt.json":
         raise RuntimeError("qm8 terminal receipt path mismatch")
-    validate_plan(receipt_path)
-    source = load_contract(receipt_path, SOURCE_SCHEMA, "qm8 terminal receipt")
+    validate_plan(receipt)
+    source = receipt.value
     evidence_checks: dict[str, bool] = {
         "source_is_failed_qm8_arm_a": source.get("arm") == "a"
         and source.get("terminal_pass") is False
@@ -668,7 +633,12 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         and source.get("gamma_compression_credit_bytes") == 0
         and source.get("gamma_score_credit_bytes") == 0,
         "source_errors_nonempty": bool(source.get("errors")),
-        "qm8_process_closed": live_qm8_processes() == [],
+        "qm8_process_closed": closure_snapshot.get("matching_processes") == []
+        and closure_snapshot.get("live_recorded_identities") == []
+        and closure_snapshot.get("cgroup_occupants") == [],
+        "terminal_closure_pass": closure_snapshot.get("errors") == []
+        and all(closure_snapshot.get("checks", {}).values())
+        and closure_snapshot.get("lease_owner_live") is False,
         "population_artifact": artifact_matches(source.get("population"), "population")
         and source["population"]["bytes"] == CANONICAL_BYTES
         and source["population"]["sha256"] == CANONICAL_SHA256,
@@ -847,8 +817,8 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         and cleanup.get("scratch_preserved_on_failure")
         is Path(cleanup.get("scratch_root", "/nonexistent")).is_dir()
         and cleanup.get("cgroup_removed_pass")
-        is (not CGROUP.exists())
-        and cleanup.get("lease_removed_pass") is (not LEASE.exists() and not LOCK.exists())
+        is (not closure_snapshot["cgroup_present"])
+        and cleanup.get("lease_removed_pass") is (not closure_snapshot["lease_present"])
     )
 
     stages = (encode, decode)
@@ -929,7 +899,7 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
     output = {
         "schema": SCHEMA,
         "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
-        "source_receipt": artifact(receipt_path),
+        "source_receipt": receipt.record(),
         "source_terminal_pass": False,
         "evidence_checks": evidence_checks,
         "failure_predicates": failure_predicates,
@@ -940,10 +910,12 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
             "encode": encode,
             "decode": decode,
             "scratch_present": Path(cleanup.get("scratch_root", "/nonexistent")).is_dir(),
-            "lease_present": LEASE.exists(),
-            "lock_present": LOCK.exists(),
+            "lease_present": closure_snapshot["lease_present"],
+            "lock_present": False,
+            "verification_lock_owned": full1g_lock.path == LOCK,
             "lease_transition_verified": lease_verified,
         },
+        "terminal_closure": closure_snapshot,
         "errors": [f"evidence check failed: {name}" for name in evidence_errors],
         "verification_pass": verified,
         "promotion_authorized": False,
@@ -970,6 +942,17 @@ def main() -> int:
     parser.add_argument("--receipt", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    expected_command = [
+        "/usr/bin/python3.14",
+        "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
+        "--receipt",
+        "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+        "--output",
+        "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-terminal-failure-verification.json",
+    ]
+    actual_command = [str(Path(sys.executable).resolve(strict=True)), *sys.argv]
+    if actual_command != expected_command:
+        raise SystemExit("qm8 failure verifier requires the frozen command and runtime")
     if (
         args.output.absolute()
         != RESULT / "full-terminal-failure-verification.json"
@@ -978,45 +961,94 @@ def main() -> int:
         or args.output.is_symlink()
     ):
         raise SystemExit("output must be the new canonical qm8 failure verification")
-    preflight_receipt = regular(args.receipt, "qm8 terminal receipt")
-    if preflight_receipt != RESULT / "full-roundtrip-receipt.json":
-        raise SystemExit("qm8 terminal receipt path mismatch")
-    validate_plan(preflight_receipt)
-    try:
-        output, passed = verify(preflight_receipt)
-    except Exception as exc:
-        output = {
-            "schema": SCHEMA,
-            "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
-            "source_receipt": None,
-            "source_terminal_pass": False,
-            "evidence_checks": {},
-            "failure_predicates": {
-                "resource_hard_cap_or_oom": False,
-                "resource_rss_or_decimal_limit": False,
-                "resource_disk_cpu_or_runtime": False,
-                "encode_codec_or_stage": False,
-                "payload_or_parent_identity": False,
-                "decode_codec_or_inverse": False,
-                "cleanup_or_lease": False,
-                "infrastructure_unclassified": False,
-            },
-            "primary_failure_class": "verification_failure",
-            "authorized_successor": "none_until_verifier_correction",
-            "observed": None,
-            "errors": [f"{type(exc).__name__}: {exc}"],
-            "verification_pass": False,
-            "promotion_authorized": False,
-            "memory_safe_parent_qualified": False,
-            "archive_authority": False,
-            "claim_authority": "none_verification_failure",
-            "claim_boundary": "The qm8 terminal failure could not be independently classified.",
-            "gamma_compression_credit_bytes": 0,
-            "gamma_score_credit_bytes": 0,
-        }
-        passed = False
-    validate_output(output)
-    write_new(args.output, output)
+    output_published = False
+    release_attempted = False
+    prepared_output: terminal_closure.PreparedOutput | None = None
+    lock: terminal_closure.OwnedLock | None = None
+    with terminal_closure.open_terminal_receipt(args.receipt) as receipt:
+        if receipt.value["terminal_pass"] is not False:
+            raise SystemExit("failure verifier requires terminal_pass=false")
+        lock, closure_snapshot = terminal_closure.reserve_full1g(
+            receipt, False, "qm8_failure_verification"
+        )
+        try:
+            receipt.revalidate()
+            dispatch_activation = terminal_closure.validate_dispatch_activation(
+                receipt,
+                "failure",
+                PLAN,
+                PROJECT
+                / "operations/planning/"
+                "cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
+            )
+            validate_plan(receipt)
+            try:
+                output, passed = verify(receipt, closure_snapshot, lock)
+            except Exception as exc:
+                output = {
+                    "schema": SCHEMA,
+                    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+                    "source_receipt": None,
+                    "source_terminal_pass": False,
+                    "evidence_checks": {},
+                    "failure_predicates": {
+                        "resource_hard_cap_or_oom": False,
+                        "resource_rss_or_decimal_limit": False,
+                        "resource_disk_cpu_or_runtime": False,
+                        "encode_codec_or_stage": False,
+                        "payload_or_parent_identity": False,
+                        "decode_codec_or_inverse": False,
+                        "cleanup_or_lease": False,
+                        "infrastructure_unclassified": False,
+                    },
+                    "primary_failure_class": "verification_failure",
+                    "authorized_successor": "none_until_verifier_correction",
+                    "observed": None,
+                    "terminal_closure": closure_snapshot,
+                    "terminal_dispatch_activation": dispatch_activation["record"],
+                    "errors": [f"{type(exc).__name__}: {exc}"],
+                    "verification_pass": False,
+                    "promotion_authorized": False,
+                    "memory_safe_parent_qualified": False,
+                    "archive_authority": False,
+                    "claim_authority": "none_verification_failure",
+                    "claim_boundary": "The qm8 terminal failure could not be independently classified.",
+                    "gamma_compression_credit_bytes": 0,
+                    "gamma_score_credit_bytes": 0,
+                }
+                passed = False
+            receipt.revalidate()
+            closure_snapshot = terminal_closure.closure_snapshot(
+                receipt.value, False, lock
+            )
+            final_dispatch_activation = terminal_closure.validate_dispatch_activation(
+                receipt,
+                "failure",
+                PLAN,
+                PROJECT
+                / "operations/planning/"
+                "cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
+            )
+            if final_dispatch_activation["record"] != dispatch_activation["record"]:
+                raise RuntimeError("terminal-dispatch activation changed during verification")
+            output["terminal_closure"] = closure_snapshot
+            output["terminal_dispatch_activation"] = dispatch_activation["record"]
+            validate_output(output)
+            prepared_output = terminal_closure.PreparedOutput.prepare(
+                args.output, output
+            )
+            release_attempted = True
+            lock.release()
+            prepared_output.publish()
+            output_published = True
+        finally:
+            if prepared_output is not None and not prepared_output.published:
+                prepared_output.discard()
+            if lock is not None and not lock.released:
+                if release_attempted or output_published:
+                    lock.preserve()
+                else:
+                    lock.release()
     sys.stdout.write(json.dumps(output, sort_keys=True, indent=2) + "\n")
     return 0 if passed else 1
 
