@@ -137,6 +137,13 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1": (
         CONTRACT_ROOT / "cmix-filebacked-fxcm-full-soft-high-verification.schema.json"
     ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-identity-resource.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
