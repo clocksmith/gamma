@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-source-lock.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "candidate_tree_sha256", "plan", "bindings",
+    "qm8_terminal_pass", "claim_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-source-lock.v1"},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "candidate_tree_sha256": {"const": "eb9c5f669cf05cbe1b361065ff4faefbe70fcea905c14e2483e6e97427ad1a44"},
+    "plan": {"$ref": "#/$defs/artifact"},
+    "bindings": {"type": "object", "minProperties": 20, "additionalProperties": {"$ref": "#/$defs/artifact"}},
+    "qm8_terminal_pass": {"type": "boolean"},
+    "claim_authority": {"const": "infrastructure_only"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

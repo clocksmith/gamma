@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-work-manifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "root", "entries", "entry_count", "manifest_sha256"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-work-manifest.v1"},
+    "root": {"type": "string", "minLength": 1},
+    "entries": {"type": "array", "items": {"type": "object"}},
+    "entry_count": {"type": "integer", "minimum": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

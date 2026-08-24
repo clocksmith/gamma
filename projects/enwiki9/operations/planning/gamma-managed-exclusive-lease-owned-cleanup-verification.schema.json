@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-verification.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "verified", "decision_sha256", "manifest_sha256",
+    "checks", "errors", "verdict", "canonical_migration_authorized",
+    "claim_authority", "archive_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-verification.v1"},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "verified": {"type": "boolean"},
+    "decision_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "verdict": {"enum": ["authorize_canonical_owned_cleanup_migration", "retire_exact_owned_cleanup_transaction", "none_verification_failure"]},
+    "canonical_migration_authorized": {"type": "boolean"},
+    "claim_authority": {"const": "infrastructure_only"},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  }
+}
