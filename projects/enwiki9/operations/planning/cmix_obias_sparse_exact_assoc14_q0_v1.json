@@ -1,7 +1,7 @@
 {
   "$schema": "gamma.enwiki9.sparse-exact-associativity-design.v1",
   "artifact_id": "cmix_obias_sparse_exact_assoc14_q0_v1",
-  "revision": 1,
+  "revision": 2,
   "operational_status": "dormant_dependency",
   "claim_authority": "none",
   "title": "Sparse exact fourteen-way ContextMap3 associativity",
@@ -50,10 +50,30 @@
     "base_record_bytes": 96,
     "base_record_layout_bytes": {
       "checksums_10x_u16": 20,
-      "recent_indexes": 1,
-      "bit_history_10x7": 70,
       "overflow_index_plus_one_u32": 4,
-      "reserved": 1
+      "recent_indexes": 1,
+      "reserved": 1,
+      "bit_history_10x7": 70
+    },
+    "base_record_layout_offsets": {
+      "checksums_10x_u16": "[0,20)",
+      "overflow_index_plus_one_u32": "[20,24)",
+      "recent_indexes": "[24,25)",
+      "reserved": "[25,26)",
+      "bit_history_10x7": "[26,96)"
+    },
+    "native_layout_contract": {
+      "natural_alignment_bytes": 4,
+      "packed_attribute_forbidden": true,
+      "unaligned_typed_access_forbidden": true,
+      "required_static_asserts": [
+        "sizeof(SparseBase) == 96",
+        "offsetof(SparseBase, overflow_index_plus_one) == 20",
+        "offsetof(SparseBase, last) == 24",
+        "offsetof(SparseBase, bh) == 26",
+        "sizeof(SparseOverflow) == 36",
+        "offsetof(SparseOverflow, bh) == 8"
+      ]
     },
     "base_allocated_bytes_including_alignment_elements": 4000309248,
     "static_bytes_released_before_overflow": 1333436416,
@@ -61,6 +81,10 @@
     "overflow_record_layout_bytes": {
       "checksums_slots_10_through_13": 8,
       "bit_history_slots_10_through_13": 28
+    },
+    "overflow_record_layout_offsets": {
+      "checksums_slots_10_through_13": "[0,8)",
+      "bit_history_slots_10_through_13": "[8,36)"
     },
     "overflow_allocation": {
       "records_per_chunk": 4096,

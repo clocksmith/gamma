@@ -7,7 +7,10 @@ page-cache tuning. CMIX's 41 `ContextMap3` instances contain exactly
 `41,664,640` semantic `E1<14,128>` buckets. Including each instance's frozen
 alignment tail, those arrays allocate `5,333,745,664` bytes. A 96-byte base
 can hold slots 0--9, the unchanged two-recent-index byte, a four-byte overflow
-handle, and one reserved byte. A separately owned 36-byte record holds the
+handle, and one reserved byte. The handle is naturally aligned at bytes 20--23;
+the recency and reserved bytes occupy 24--25 and the ten seven-byte histories
+occupy 26--95, so the representation requires no packed or unaligned typed
+access. A separately owned 36-byte record holds the
 complete checksums and seven state bytes for logical slots 10--13, and is
 allocated only when the original fourteen-way transition first selects one of
 those slots.
