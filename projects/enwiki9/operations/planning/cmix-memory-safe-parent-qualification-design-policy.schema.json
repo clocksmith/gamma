@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmix-memory-safe-parent-qualification-design-policy.schema.json",
+  "title": "CMIX q1 dormant policy-bound qualification design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "artifact_id", "revision", "operational_status",
+    "claim_authority", "objective", "dependencies", "contract",
+    "activation_requirements", "claim_boundary"
+  ],
+  "properties": {
+    "$schema": {"const": "cmix-memory-safe-parent-qualification-design-policy.schema.json"},
+    "artifact_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v6"},
+    "revision": {"const": 1},
+    "operational_status": {"const": "dormant_dependency"},
+    "claim_authority": {"const": "none"},
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id", "corpus_bytes", "target_complete_counted_bytes"],
+      "properties": {
+        "objective_id": {"const": "gamma-enwiki9-hutter-105m-v1"},
+        "corpus_bytes": {"const": 1000000000},
+        "target_complete_counted_bytes": {"const": 105000000}
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact", "required_evidence"],
+        "properties": {
+          "artifact": {"type": "string", "minLength": 1},
+          "required_evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supersedes", "superseded_policy_sha256", "supersession_reason",
+        "objective_raw_sha256", "retired_v2_verifier",
+        "authority_policy_schema", "authority_router_schema",
+        "authority_verification_schema", "authority_verifier",
+        "authority_python_source_closure", "full_identity", "opening_100m",
+        "runtime", "future_active_policy_rule",
+        "v1_qualification_authority_revoked",
+        "v2_qualification_authority_revoked_in_code",
+        "v3_authority_requires_future_active_policy", "v4_bound_successors_stale",
+        "v5_has_no_qualification_authority"
+      ],
+      "properties": {
+        "supersedes": {"type": "string", "minLength": 1},
+        "superseded_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "supersession_reason": {"type": "string", "minLength": 1},
+        "objective_raw_sha256": {"$ref": "#/$defs/sha256"},
+        "retired_v2_verifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "behavior"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"$ref": "#/$defs/sha256"},
+            "behavior": {"type": "string", "minLength": 1}
+          }
+        },
+        "authority_policy_schema": {"$ref": "#/$defs/pathDigest"},
+        "authority_router_schema": {"$ref": "#/$defs/pathDigest"},
+        "authority_verification_schema": {"$ref": "#/$defs/pathDigest"},
+        "authority_verifier": {"$ref": "#/$defs/pathDigest"},
+        "authority_python_source_closure": {"$ref": "#/$defs/closure"},
+        "full_identity": {"$ref": "#/$defs/planClosure"},
+        "opening_100m": {"$ref": "#/$defs/planClosure"},
+        "runtime": {"$ref": "#/$defs/planClosure"},
+        "future_active_policy_rule": {"type": "string", "minLength": 1},
+        "v1_qualification_authority_revoked": {"const": true},
+        "v2_qualification_authority_revoked_in_code": {"const": true},
+        "v3_authority_requires_future_active_policy": {"const": true},
+        "v4_bound_successors_stale": {"const": true},
+        "v5_has_no_qualification_authority": {"const": true}
+      }
+    },
+    "activation_requirements": {"$ref": "#/$defs/nonemptyStrings"},
+    "claim_boundary": {"$ref": "#/$defs/nonemptyStrings"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pathDigest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "members"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "members": {"type": "integer", "minimum": 1}
+      }
+    },
+    "planClosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan", "plan_sha256", "python_source_closure",
+        "python_source_closure_sha256", "members"
+      ],
+      "properties": {
+        "plan": {"type": "string", "minLength": 1},
+        "plan_sha256": {"$ref": "#/$defs/sha256"},
+        "python_source_closure": {"type": "string", "minLength": 1},
+        "python_source_closure_sha256": {"$ref": "#/$defs/sha256"},
+        "members": {"type": "integer", "minimum": 1}
+      }
+    },
+    "nonemptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

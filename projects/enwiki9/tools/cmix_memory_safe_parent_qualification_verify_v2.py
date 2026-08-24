@@ -44,6 +44,10 @@ CANONICAL_SHA256 = "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa37
 ENGINEERING_RSS_KIB = 9_000_000
 CGROUP_LIMIT_BYTES = 10_000_000_000
 TARGET_BYTES = 105_000_000
+AUTHORITY_REVOKED_REASON = (
+    "qualification authority revoked: v2 does not bind the superseding "
+    "qualification policy or its exact activated phase-11 plan"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -294,8 +298,9 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
     runtime_limit = runtime_verification["derived"]["wall_time_limit_seconds"]
     errors: list[str] = []
     failures = [f"qualification predicate failed: {name}" for name, passed in checks.items() if not passed]
+    failures.append(AUTHORITY_REVOKED_REASON)
     verified = not errors
-    qualified = verified and not failures
+    qualified = False
     output = {
         "schema": OUTPUT_SCHEMA_ID,
         "candidate_id": CANDIDATE_ID,
