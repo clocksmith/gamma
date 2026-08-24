@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1",
+  "title": "CMIX file-backed FXCM soft-pressure full-arm verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "arm", "source_receipt", "evidence", "observed",
+    "checks", "errors", "verification_pass", "claim_boundary",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "arm": {"type": ["string", "null"], "enum": ["a", "b", null]},
+    "source_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+    "evidence": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "encode_guard", "encode_stage", "encode_soft_high",
+            "decode_guard", "decode_stage", "decode_soft_high",
+            "roundtrip_runner", "stage_runner", "resource_guard_wrapper",
+            "verifier", "verification_schema"
+          ],
+          "properties": {
+            "encode_guard": {"$ref": "#/$defs/file"},
+            "encode_stage": {"$ref": "#/$defs/file"},
+            "encode_soft_high": {"$ref": "#/$defs/file"},
+            "decode_guard": {"$ref": "#/$defs/file"},
+            "decode_stage": {"$ref": "#/$defs/file"},
+            "decode_soft_high": {"$ref": "#/$defs/file"},
+            "roundtrip_runner": {"$ref": "#/$defs/file"},
+            "stage_runner": {"$ref": "#/$defs/file"},
+            "resource_guard_wrapper": {"$ref": "#/$defs/file"},
+            "verifier": {"$ref": "#/$defs/file"},
+            "verification_schema": {"$ref": "#/$defs/file"}
+          }
+        }
+      ]
+    },
+    "observed": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "payload_bytes", "archive_bytes", "program_bytes",
+            "counted_score_bytes", "encode_cgroup_peak_bytes",
+            "decode_cgroup_peak_bytes", "encode_tree_peak_rss_kib",
+            "decode_tree_peak_rss_kib", "encode_high_events",
+            "decode_high_events"
+          ],
+          "properties": {
+            "payload_bytes": {"const": 107730531},
+            "archive_bytes": {"type": "integer", "minimum": 1},
+            "program_bytes": {"type": "integer", "minimum": 1},
+            "counted_score_bytes": {"type": "integer", "minimum": 1},
+            "encode_cgroup_peak_bytes": {"type": "integer", "minimum": 1, "maximum": 9999998976},
+            "decode_cgroup_peak_bytes": {"type": "integer", "minimum": 1, "maximum": 9999998976},
+            "encode_tree_peak_rss_kib": {"type": "integer", "minimum": 1, "maximum": 9765624},
+            "decode_tree_peak_rss_kib": {"type": "integer", "minimum": 1, "maximum": 9765624},
+            "encode_high_events": {"type": "integer", "minimum": 1},
+            "decode_high_events": {"type": "integer", "minimum": 0}
+          }
+        }
+      ]
+    },
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "verification_pass": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verification_pass": {"const": true}}},
+      "then": {
+        "properties": {
+          "arm": {"enum": ["a", "b"]},
+          "source_receipt": {"$ref": "#/$defs/file"},
+          "evidence": {"type": "object"},
+          "observed": {"type": "object"},
+          "checks": {"minProperties": 1, "additionalProperties": {"const": true}},
+          "errors": {"maxItems": 0}
+        }
+      },
+      "else": {"properties": {"errors": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

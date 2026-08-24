@@ -208,10 +208,10 @@ def main() -> int:
     parser.add_argument("--receipt", type=Path, required=True)
     args = parser.parse_args()
     verifier = regular_file(args.verifier, "verifier")
-    lease = regular_file(args.exclusive_lease, "exclusive lease")
-    lease_document = json.loads(lease.read_text(encoding="utf-8"))
-    if not isinstance(lease_document, dict) or lease_document.get("active") is not False:
-        raise SystemExit("exclusive lease is active or lacks an explicit inactive decision")
+    lease = args.exclusive_lease.absolute()
+    lock_path = lease.with_name(f"{lease.name}.lock")
+    if lease.exists() or lease.is_symlink() or lock_path.exists() or lock_path.is_symlink():
+        raise SystemExit("exclusive lease namespace is occupied")
     if args.evidence_root.exists() or args.evidence_root.is_symlink():
         raise SystemExit("evidence root already exists")
     if args.receipt.exists() or args.receipt.is_symlink():

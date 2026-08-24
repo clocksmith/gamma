@@ -1,0 +1,49 @@
+{
+  "candidate_id": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "claimed_at": "2026-08-23T21:33:48+00:00",
+  "created_at": "2026-08-23T21:33:48+00:00",
+  "developed_at": "2026-08-23T21:33:49+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm7_v2.json",
+      "sha256": "sha256:035c1096124142472fa91e27c7d16c4a50b64ff18458db781f6da66b856e82b8"
+    },
+    {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-verification.json",
+      "sha256": "sha256:b5ef4d965f11914c85a9e259cc35469757e7ed48eef27a9cddf1a61468435145"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v2.json",
+    "sha256": "sha256:0989a41f8b4d9e1d8b4e3ded1983959dce57d148d0fca0fd003450a827a3b000"
+  },
+  "hypothesis": "The candidate-owned q1 release-A run reproduces the authoritative CMIX payload and exact canonical inverse on full enwik9 while remaining below the strict decimal memory limit under file-backed FXCM state.",
+  "interfaces_exposed": [
+    "full-corpus-file-backed-parent-qualification"
+  ],
+  "kill_condition": "Stop q1 qualification and preserve artifacts on any bound-input drift, payload/inverse mismatch, guard violation, backing leak, or terminal cleanup failure.",
+  "max_program_bytes": 742863,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1600,
+  "promotion_condition": "Authorize only independent Arm B after exact payload, inverse, both diagnostic guard-v3 receipts, backing cleanup, and terminal cleanup pass.",
+  "proposal_id": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1600,
+  "state": "developed",
+  "title": "Candidate-owned q1 guarded full-1G Arm A"
+}

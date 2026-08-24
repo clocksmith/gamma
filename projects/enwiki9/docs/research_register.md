@@ -1,5 +1,149 @@
 # enwiki9 Research Register
 
+## 2026-08-23 - cmix-obias Arm B terminalizes as an OOM/resource failure
+
+The source-built full-1G Arm A remains an exact host-bound external baseline.
+Its `108,022,224`-byte archive and `107,730,531`-byte payload decode to the
+canonical `1,000,000,000` bytes with SHA-256
+`159b8535...744bc`. Charging the independently reproduced `491,483`-byte
+program package gives a counted total of `108,513,707` bytes. This is an
+external-candidate measurement, not Gamma-authored score credit.
+
+Arm B completed encoding and reproduced Arm A's archive and payload
+byte-for-byte, but it did not complete inversion. Its decode log stops at
+`39.07%` at the same host event where the kernel OOM snapshot contains the
+wrapper and `archive9` decoder and the enclosing tmux scope failed with
+`oom-kill`. The preserved strict-memory observation records
+`VmHWM=10,425,744 KiB`, exceeding the decimal `9,765,625 KiB` limit by
+`660,119 KiB`; the independent tmpfs-aware receipt is also a resource failure.
+The incomplete scratch tree remains unchanged in `/dev/shm` as evidence.
+
+Recovery-only terminalization archived both stale runtime sidecars before
+removing them from the live lease namespace. The independent verification
+rehashed every retained archive, payload, log, sidecar snapshot, and OOM log;
+all 18 checks pass. The terminal A/B audit consequently records
+`correctness_pass=false` and `strict_resource_pass=false`: the pair proves
+repeat encode identity on this host, but not a second exact inverse or a
+resource-qualified deterministic full-1G package. Arm B receives zero score
+and authorship credit and must never be resumed or rerun. Evidence:
+[`Arm A`](../results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/decision.json),
+[`Arm B terminal receipt`](../results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-receipt.json),
+[`independent verification`](../results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-verification.json),
+and [`A/B audit`](../results/cmix_obias_source_full1g_ab_terminal_audit_v2/decision.json).
+
+The unique authorized successor is the correction-only file-backed
+memory-safe parent. It must first prove output identity and process-tree plus
+file-backed residency compliance at the smallest frozen gate. No midpoint,
+mixture, or structural mechanism may inherit compression credit from this
+resource correction.
+
+## 2026-08-23 - q1 file-backed parent passes reset scopes and cumulative 1M
+
+The q1 correction now has a clean, content-addressed qm7 build lineage. Two
+release builds are byte-identical with SHA-256 `610edd6a...5a8808`; two harness
+builds are byte-identical with SHA-256 `8fc7b519...b65f`. All 17 compiler
+controls and the isolated allocator positive fixture plus all 15 allocator
+negative controls pass. The packaged shared allocator event descriptor is not
+used as a lifecycle sequence: package creation launches helper CMIX processes
+that inherit the descriptor, so its stream contains three concatenated
+lifecycles. Lifecycle authority remains the isolated fixture and controls,
+while each codec arm must leave its backing directory empty.
+
+The corrected v2 reset-scope receipt passes opening, middle, and tail 250KB
+cold-start populations. Parent and q1 have identical post-head integer
+probabilities, complete residual and byte traces, payloads, and decoded output
+within every scope. The aggregate scoped probability hash is
+`cc232442...11afe9`. Opening restores the exact 250,000 raw bytes. The
+specialized preprocessor restores 249,871 bytes for the middle fragment and
+249,350 for the tail fragment; those two populations therefore require exact
+parent/q1 decoded-output identity rather than the invalid claim that an
+arbitrary interior fragment is a standalone raw round trip. All 12 guards
+pass, with worst sampled tree RSS `8,351,304 KiB`, and q1 backing cleanup is
+exact. See the
+[`scope receipt`](../results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/06_scope_identity/fixed-reset-scopes/scope-identity-receipt.json).
+
+The cumulative opening-1M successor also passes. Both arms emit the same
+`172,605`-byte payload (`a723ca62...d70db7`), the same exact probability stream
+(`d34a8d4b...5458d`), and byte-identical complete traces; both restore the
+canonical 1,000,000-byte prefix with SHA-256 `369b6889...52cad`. Its four
+guards pass at worst sampled tree RSS `8,388,568 KiB`, worst sampled scratch
+`20,991,792,710` bytes, and one allowed CPU. See the
+[`cumulative receipt`](../results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/07_cumulative_identity_1m/cumulative-identity-receipt.json).
+
+These are exact parent-preservation and resource-feasibility results, not a
+compression improvement. q1 remains unqualified for full-stream authority,
+Gamma compression credit, or score credit. The next bounded gate is the
+frozen opening-prefix and distant cold-reset 10M transfer pair; the latter is
+explicitly not a byte-zero persistent-state claim.
+
+## 2026-08-23 - q1 passes 10M transfer, then exposes a cgroup-cache full-1G failure
+
+The opening and distant cold-reset 10M transfer phase passes. Opening q1 emits
+the same `1,599,341`-byte payload as its qualified parent and restores the
+canonical opening 10M bytes. The distant scope emits the same `459,091`-byte
+payload and decoded stream as its parent. Both scopes have exact post-head
+integer-probability identity; worst sampled tree RSS is `8,503,092 KiB`, worst
+scratch is about `23.5 GB`, every guard passes, and the independent verifier
+rehashes both populations and receipts. This remains bounded reset/transfer
+evidence and does not establish the byte-zero persistent full-1G trajectory.
+
+Candidate-owned full Arm A `cmix_filebacked_fxcm_full_a_qm7_v2` then failed at
+a new phase boundary. The two package-helper compressions completed and the
+real transformed-payload compressor reached pretraining `0.39%`, but its
+cgroup hit the effective page-rounded hard cap of `9,999,998,976` bytes and
+recorded `537` `memory.events.max` events. The guard terminated the tree with
+SIGTERM. There was no OOM kill, process-tree RSS itself peaked at only
+`7,395,300 KiB`, no encode-stage receipt was written, decode never started,
+and all output, inverse, qualification, and score claims correctly remain
+false. The scratch tree is preserved. All independent failure-verifier checks
+pass; see the
+[`terminal receipt`](../results/cmix_filebacked_fxcm_full_a_qm7_v2/full-roundtrip-receipt.json),
+[`verification`](../results/cmix_filebacked_fxcm_full_a_qm7_v2/full-failure-verification.json),
+and
+[`reflection`](../operations/adaptive/reflections/20260823T213424Z_653b446c89.json).
+
+The single correction-only successor is
+`cmix_filebacked_fxcm_full_a_qm8_v1`. It leaves the q1 binary, package bytes,
+model, coder, preprocessing, corpus, accounting, and 10,000,000,000-byte hard
+cap unchanged. A bound wrapper instead sets cgroup `memory.high` to a
+page-rounded `8,999,997,440` bytes so Linux initiates cache reclaim before the
+hard cap, then restores the prior value. The wrapper preflight passes and is
+schema-validated. Adaptive job `20260823T215147Z_7827ad9bc5` is the only
+authorized full-1G execution for this correction. It receives zero score
+credit unless a later exact package receipt independently closes every prize
+gate.
+
+## 2026-08-23 - phase-11 audit preserves post-head evidence and finds a dead residency hook
+
+A harder read-only audit corrected a false concern before it could mutate the
+qualification route. The source closure's stock `KH_TRACE` call is pre-head,
+but the retained qm7 identity populations did not execute that source
+unchanged. Their content-addressed diagnostic build applies
+`exact-integer-probability-trace.patch` (`09c87e09...71e`), which moves
+`KhWriteRes` after `KhBitLstm32Head::Adjust` and immediately before the
+arithmetic range split. The materialized build confirms that placement, and
+its receipt explicitly binds the patch and post-head contract. The opening and
+distant 10M probability hashes `d6512550...4e97a` and
+`4ab13c5d...ec59` therefore remain valid exact coder-probability evidence.
+
+The same audit found a real resource-observer defect. q1 defines
+`FXCM::ByteUpdate()` to invoke the 1,048,576-modeled-byte pageout cadence, but
+`Predictor::Perceive()` never calls `fxcm_model_.ByteUpdate()`. Source-wide
+call-site inspection finds only the method definition. Thus qm8 exercises the
+constructor's initial `PageOutAll` plus kernel reclaim under `memory.high`, not
+the declared periodic hook. This does not change predictor arithmetic or
+invalidate the live run, but its resource receipt must be interpreted under
+that actual mechanism. Repairing the hook inside qm8 is forbidden; any repair
+would be a new correction-only candidate.
+
+The unbound phase-11 successor is recorded only as a draft at
+[`cmix_filebacked_fxcm_full_probability_state_identity_q0_v1`](../operations/planning/cmix_filebacked_fxcm_full_probability_state_identity_q0_v1.json).
+It replaces the infeasible full `KH_TRACE` with an online post-head uint16
+SHA-256 stream calibrated against both retained 10M digests, coder-state
+checkpoints, and source-ordered semantic hashes of every large allocation that
+the q1 mutation can affect. It has no execution authority until exact,
+independently verified full A/B roundtrips release the full-1G lease.
+
 ## 2026-08-16 - The layer-19 output projection is open in both directions
 
 A same-run production probe sealed the tensor immediately after

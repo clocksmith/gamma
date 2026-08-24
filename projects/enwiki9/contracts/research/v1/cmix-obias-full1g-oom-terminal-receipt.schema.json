@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/cmix-obias-full1g-oom-terminal-receipt.schema.json",
+  "title": "CMIX-OBIAS Full-1G OOM Terminal Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "terminal_status",
+    "failure_class",
+    "claim_boundary",
+    "score_credit_bytes",
+    "observed",
+    "artifacts",
+    "resource",
+    "scratch",
+    "runtime_marker_disposition",
+    "next_action"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "minLength": 1},
+    "schema": {"const": "gamma.enwiki9.cmix-obias-full1g-oom-terminal.v1"},
+    "candidate_id": {"const": "cmix_obias_source_full1g_roundtrip_b_qm0_v1"},
+    "terminal_status": {"const": "infrastructure_failure"},
+    "failure_class": {"const": "host_oom_scope_termination"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "score_credit_bytes": {"const": 0},
+    "observed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wrapper_pid",
+        "bound_encode_codec_pid",
+        "decode_pid",
+        "all_bound_processes_absent",
+        "decode_last_progress_percent",
+        "oom_event_utc",
+        "oom_selected_victim_pid",
+        "oom_selected_victim_anon_rss_kib",
+        "archive9_rss_kib_at_oom",
+        "wrapper_present_in_oom_snapshot",
+        "archive9_present_in_oom_snapshot",
+        "tmux_scope_failed_oom"
+      ],
+      "properties": {
+        "wrapper_pid": {"const": 1545589},
+        "bound_encode_codec_pid": {"const": 1545692},
+        "decode_pid": {"const": 1318929},
+        "all_bound_processes_absent": {"const": true},
+        "decode_last_progress_percent": {"const": 39.07},
+        "oom_event_utc": {"const": "2026-08-23T12:39:47Z"},
+        "oom_selected_victim_pid": {"const": 2389293},
+        "oom_selected_victim_anon_rss_kib": {"const": 84222224},
+        "archive9_rss_kib_at_oom": {"const": 9029448},
+        "wrapper_present_in_oom_snapshot": {"const": true},
+        "archive9_present_in_oom_snapshot": {"const": true},
+        "tmux_scope_failed_oom": {"const": true}
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive",
+        "payload",
+        "encode_log",
+        "decode_log",
+        "terminal_lease_snapshot",
+        "memory_observation_snapshot",
+        "oom_journal"
+      ],
+      "properties": {
+        "archive": {"$ref": "#/$defs/artifact"},
+        "payload": {"$ref": "#/$defs/artifact"},
+        "encode_log": {"$ref": "#/$defs/artifact"},
+        "decode_log": {"$ref": "#/$defs/artifact"},
+        "terminal_lease_snapshot": {"$ref": "#/$defs/artifact"},
+        "memory_observation_snapshot": {"$ref": "#/$defs/artifact"},
+        "oom_journal": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strict_decimal_limit_kib",
+        "observed_vmhwm_kib",
+        "over_limit_kib",
+        "strict_memory_pass",
+        "memory_failure_irrevocable_for_execution"
+      ],
+      "properties": {
+        "strict_decimal_limit_kib": {"const": 9765625},
+        "observed_vmhwm_kib": {"const": 10425744},
+        "over_limit_kib": {"const": 660119},
+        "strict_memory_pass": {"const": false},
+        "memory_failure_irrevocable_for_execution": {"const": true}
+      }
+    },
+    "scratch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "present",
+        "retained_unchanged",
+        "content_hash_claimed",
+        "logical_bytes",
+        "allocated_bytes",
+        "files"
+      ],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "present": {"const": true},
+        "retained_unchanged": {"const": true},
+        "content_hash_claimed": {"const": false},
+        "logical_bytes": {"type": "integer", "minimum": 1},
+        "allocated_bytes": {"type": "integer", "minimum": 1},
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "logical_bytes", "allocated_bytes", "mtime_ns"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "logical_bytes": {"type": "integer", "minimum": 0},
+              "allocated_bytes": {"type": "integer", "minimum": 0},
+              "mtime_ns": {"type": "integer", "minimum": 1}
+            }
+          }
+        }
+      }
+    },
+    "runtime_marker_disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lease_archived_before_removal",
+        "memory_observation_archived_before_removal",
+        "live_lease_removed",
+        "live_memory_observation_removed"
+      ],
+      "properties": {
+        "lease_archived_before_removal": {"const": true},
+        "memory_observation_archived_before_removal": {"const": true},
+        "live_lease_removed": {"const": true},
+        "live_memory_observation_removed": {"const": true}
+      }
+    },
+    "next_action": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

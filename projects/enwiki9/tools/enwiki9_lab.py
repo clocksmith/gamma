@@ -64,12 +64,37 @@ def _proc_start_ticks(pid: int) -> int | None:
         return None
 
 
-def _proc_command_sha256(pid: int) -> str | None:
+def _file_sha256(path: pathlib.Path) -> str | None:
+    try:
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            for block in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(block)
+        return digest.hexdigest()
+    except OSError:
+        return None
+
+
+def _proc_command_sha256_candidates(pid: int, runner_sha256: str) -> set[str]:
     try:
         command = (pathlib.Path("/proc") / str(pid) / "cmdline").read_bytes()
     except OSError:
-        return None
-    return hashlib.sha256(command).hexdigest() if command else None
+        return set()
+    fields = command.rstrip(b"\0").split(b"\0") if command else []
+    if not fields or any(not field for field in fields):
+        return set()
+    candidates = {hashlib.sha256(b"\0".join(fields)).hexdigest()}
+    # Managed Python runners bind command_sha256 to their own sys.argv, which
+    # starts at the script path rather than the interpreter recorded by procfs.
+    # Locate that boundary only by matching the separately bound runner digest.
+    for index, field in enumerate(fields):
+        try:
+            path = pathlib.Path(os.fsdecode(field))
+        except UnicodeDecodeError:
+            continue
+        if path.is_file() and _file_sha256(path) == runner_sha256:
+            candidates.add(hashlib.sha256(b"\0".join(fields[index:])).hexdigest())
+    return candidates
 
 
 def get_exclusive_lease() -> dict[str, Any] | None:
@@ -86,7 +111,11 @@ def get_exclusive_lease() -> dict[str, Any] | None:
             return None
         if _proc_start_ticks(pid) != data.get("proc_start_ticks"):
             return None
-        if _proc_command_sha256(pid) != data.get("command_sha256"):
+        runner_sha256 = data.get("runner_sha256")
+        command_sha256 = data.get("command_sha256")
+        if not isinstance(runner_sha256, str) or not isinstance(command_sha256, str):
+            return None
+        if command_sha256 not in _proc_command_sha256_candidates(pid, runner_sha256):
             return None
         return data
     except Exception:

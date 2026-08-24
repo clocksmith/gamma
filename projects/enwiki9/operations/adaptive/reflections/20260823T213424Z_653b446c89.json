@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "File-backed predictor pages plus package preprocessing and finalization page cache exhausted the 9,999,998,976-byte effective cgroup cap; process-tree RSS alone peaked at 7,395,300 KiB and therefore did not expose the cgroup charge."
+  },
+  "candidateId": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "candidateRevision": {
+    "candidateId": "cmix_filebacked_fxcm_full_a_qm7_v2",
+    "candidateTreeSha256": "sha256:d3dfc8921e652beeb4d6303e4615fba00b699bcbb7a100c0459838749e041c3c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/cmix_filebacked_fxcm_full_a_qm7_v2/20260823T213349048330Z_d3dfc8921e65.json",
+      "sha256": "sha256:2b6f3858c8e75390609d21ef7633e405ae10cf1d33f87c44e49a235c1f0fe7a6"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Preserve q1 as failed evidence and authorize one correction-only successor that reduces cgroup file-cache pressure while keeping model probabilities, package inputs, corpus, and accounting unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/cmix_filebacked_fxcm_full_a_qm7_v2/encode/guard.json",
+      "sha256": "sha256:2d2a372856c0dba9d892adeb945567637fdd1ec303a413dd6297c330995e222d"
+    },
+    {
+      "path": "results/cmix_filebacked_fxcm_full_a_qm7_v2/full-roundtrip-receipt.json",
+      "sha256": "sha256:8ea516842eff2db01d44d42563089ad8b6e8cc4c997a0cb87ba2ad60ea737ea0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v2.json",
+    "sha256": "sha256:0989a41f8b4d9e1d8b4e3ded1983959dce57d148d0fca0fd003450a827a3b000"
+  },
+  "generatedUtc": "2026-08-23T21:41:10+00:00",
+  "hypothesis": {
+    "rationale": "The run conclusively failed its resource precondition at maximum_cgroup_memory_peak_bytes=9999998976, but archive identity and exact inversion were not measured because no encode-stage receipt or decode was produced.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260823T213424Z_653b446c89.json",
+    "sha256": "sha256:409e05c9d1a99e3a201f94e78f39b48b4f9889ce8d67a387ae90822838447c9f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Full-corpus memory safety must control cgroup-charged file cache during package finalization, not only mapped predictor RSS; opening and distant 10M evidence was insufficient for that phase transition."
+    ],
+    "uncertainties": [
+      "The exact split between dirty mapped FXCM/PPM pages and preprocessing or archive page cache was not sampled in memory.stat, so the correction must remain resource-only and be retested under the same cap."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260823t213424z_653b446c89",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The bound full-1G Arm A executed on the canonical corpus, but encode finalization reached the effective cgroup-v2 memory.max and the guard terminated it before an encode-stage receipt or decode."
+    ],
+    "valid": false
+  }
+}

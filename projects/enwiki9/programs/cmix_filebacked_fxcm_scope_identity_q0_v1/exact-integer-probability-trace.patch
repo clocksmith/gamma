@@ -1,0 +1,40 @@
+diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
+--- a/src/coder/encoder.cpp
++++ b/src/coder/encoder.cpp
+@@ -201,19 +201,6 @@
+ 
+ void Encoder::Encode(int bit) {
+   unsigned int p = Discretize(p_->Predict());
+-#ifdef KH_TRACE
+-  if (kh_on_) {
+-    // -log2 P(actual bit) using the SAME discretized p the coder uses below, so
+-    // the per-byte cost sum tracks the true compressed size closely.
+-    // (If KH_BITLSTM32 is also active the trace records the BASE probability,
+-    // i.e. the head's input, not its corrected output.)
+-    const double p1 = p / 65536.0;
+-    double pc = bit ? p1 : (1.0 - p1);
+-    if (pc < 1e-12) pc = 1e-12;
+-    kh_cur_bits_ += -std::log2(pc);
+-    KhWriteRes(bit, p);
+-  }
+-#endif
+ #ifdef KH_BITLSTM32
+   if (bitlstm_) {
+     // Features come from the BASE discretized p and the freshly staged
+@@ -223,6 +210,16 @@
+                          p_->kh_m1raw_, p_->kh_override_);
+   }
+ #endif
++#ifdef KH_TRACE
++  if (kh_on_) {
++    // Record the exact post-head integer probability consumed by the coder.
++    const double p1 = p / 65536.0;
++    double pc = bit ? p1 : (1.0 - p1);
++    if (pc < 1e-12) pc = 1e-12;
++    kh_cur_bits_ += -std::log2(pc);
++    KhWriteRes(bit, p);
++  }
++#endif
+   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
+       (((x2_ - x1_) & 0xffff) * p >> 16);
+   if (bit) {

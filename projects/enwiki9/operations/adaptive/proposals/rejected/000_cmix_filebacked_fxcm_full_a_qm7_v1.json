@@ -1,0 +1,49 @@
+{
+  "claimed_at": "2026-08-23T21:30:35+00:00",
+  "created_at": "2026-08-23T21:30:34+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_execution_layout_v1.json",
+      "sha256": "sha256:19e5b5ac4413fba0477df0ebe84c821ec5f62b1879fb5d4fbc628f9ac280be9f"
+    },
+    {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-verification.json",
+      "sha256": "sha256:b5ef4d965f11914c85a9e259cc35469757e7ed48eef27a9cddf1a61468435145"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v1.json",
+    "sha256": "sha256:839a84947805955ea9679066be6e9cb4c6f589af04db9d266e4c87ccd5a7ad2a"
+  },
+  "hypothesis": "The independently built q1 release package reproduces the authoritative CMIX payload and exact canonical inverse on full enwik9 while remaining below the strict decimal memory limit under file-backed FXCM state.",
+  "interfaces_exposed": [
+    "full-corpus-file-backed-parent-qualification"
+  ],
+  "kill_condition": "Stop q1 parent qualification on any frozen-input drift, payload or inverse mismatch, resource violation, backing leak, or terminal cleanup failure.",
+  "max_program_bytes": 742863,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1600,
+  "promotion_condition": "Promote only to independent Arm B after exact parent payload identity, canonical inverse, both guard-v3 passes, backing cleanup, and terminal lease/cgroup/scratch cleanup.",
+  "proposal_id": "cmix_filebacked_fxcm_full_a_qm7_v1",
+  "rejected_at": "2026-08-23T21:31:58+00:00",
+  "rejection_reason": "Adaptive development correctly rejected reuse of a candidate identity that already owns q1 evidence; successor v2 uses its own candidate-owned precreated result root.",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1600,
+  "state": "rejected",
+  "title": "q1 guarded full-1G release Arm A"
+}

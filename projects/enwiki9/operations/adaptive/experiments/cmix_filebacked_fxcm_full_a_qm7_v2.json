@@ -1,0 +1,84 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "proposalId": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "The candidate-owned q1 release-A run reproduces the authoritative CMIX payload and exact canonical inverse on full enwik9 while remaining below the strict decimal memory limit under file-backed FXCM state.",
+    "falsification": "Reject Arm A if any frozen antecedent drifts, the authoritative payload or canonical inverse differs, either diagnostic resource guard is incomplete, a memory/CPU/disk limit is reached, backing state survives exit, or managed lease, cgroup, or successful-run scratch cleanup fails."
+  },
+  "changedMechanism": "Use a candidate-owned adaptive result root precreated empty by the worker, then execute the frozen q1 disk-backed FXCM release package without changing model, coder, preprocessing, or package assets.",
+  "invariants": [
+    "The independent release-A build, package assets, program lock, 10M transfer receipt, and independent transfer verification remain hash-bound.",
+    "The full payload must remain exactly 107,730,531 bytes with SHA-256 889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490.",
+    "The emitted archive must restore canonical 1,000,000,000-byte enwik9 exactly.",
+    "This diagnostic-timing arm grants no runtime, probability-stream, qualification, compression, or objective credit."
+  ],
+  "controls": [
+    {"id": "q1-release-a", "role": "treatment", "definition": "Independent release-A q1 binary with exact q7 package assets and disk-backed FXCM lifecycle."},
+    {"id": "authoritative-payload", "role": "comparator", "definition": "Retained exact full-1G authoritative parent payload."},
+    {"id": "bare-inverse", "role": "replay", "definition": "Clean self-extracting archive decode into the candidate's dedicated scratch root."}
+  ],
+  "population": {
+    "unit": "canonical raw enwik9 byte",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 8000000000,
+    "selection": "Complete canonical enwik9 from byte zero.",
+    "coordinate": "Full reversible preprocessing, arithmetic coding, archive construction, and raw inverse."
+  },
+  "causalBoundary": {
+    "availableInformation": ["Frozen release/package inputs, current and prior decoded symbols, and codec-owned disk-backed state."],
+    "forbiddenInformation": ["Future bytes, teacher state, retained probability traces as inputs, tmpfs backing, or unmeasured runtime claims."]
+  },
+  "inputs": [
+    {"id": "execution-plan", "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm7_v2.json", "sha256": "sha256:035c1096124142472fa91e27c7d16c4a50b64ff18458db781f6da66b856e82b8"},
+    {"id": "coordinator", "path": "tools/cmix_filebacked_fxcm_full_roundtrip.py", "sha256": "sha256:b196cddcef51e890794fa3877e5763b13c695ddd3ad1e1065eb9a584fce2f20b"},
+    {"id": "stage-runner", "path": "tools/cmix_filebacked_fxcm_full_stage.py", "sha256": "sha256:e8aed4cbe68ba162a1d30a66bdf3243c70226268a9f23dbdb4bc4bef31354741"},
+    {"id": "resource-guard", "path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"},
+    {"id": "stage-schema", "path": "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json", "sha256": "sha256:31d513dc92344dd27d7848d1ba06c54a1c38f44dc1d740019c8ab7f141d05c2d"},
+    {"id": "roundtrip-schema", "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json", "sha256": "sha256:8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"},
+    {"id": "release-a-build", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-receipt.json", "sha256": "sha256:7aa4f2b2ce0bec5b010ef2b38cc72a72eba61a7964bd57b38b9951e80c2b46f4"},
+    {"id": "release-verification", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/04_build_verification/release.json", "sha256": "sha256:0e6eea5d7e2799b260bc09ab6eb5fd0e42a943ee6ebbedeb5d9f6c8b35ce7a61"},
+    {"id": "release-a-binary", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-root/cmix", "sha256": "sha256:610edd6aa20fe44c8231593b6151f499e484ebba97535044a1c02f554b648808"},
+    {"id": "scope-build", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/06_scope_identity/diagnostic-build/build-receipt.json", "sha256": "sha256:8eb1c74cc93ee2854d389f81145844897d30b9f12558609fdce83c470ca463f7"},
+    {"id": "program-lock", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json", "sha256": "sha256:fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149"},
+    {"id": "transfer", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-receipt.json", "sha256": "sha256:5a814ad39f21f0053e253ffed49bd71f5ab1bdb80e1596e4b489067895a2d1a7"},
+    {"id": "transfer-verification", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-verification.json", "sha256": "sha256:b5ef4d965f11914c85a9e259cc35469757e7ed48eef27a9cddf1a61468435145"},
+    {"id": "authoritative-parent-payload", "path": "results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/out.cmix", "sha256": "sha256:889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490"}
+  ],
+  "budget": {"expectedGrossSavingsBytes": 0, "maximumAddedPackageBytes": 742863, "expectedNetSavingsBytes": -742863},
+  "search": {"expectedTransferRetention": 1.0, "expectedRuntimeRatio": 1.0, "expectedMemoryRatio": 0.9, "uncertaintyRisk": 0.2, "interactionRisk": 0.0},
+  "measurements": [
+    {"id": "payloadIdentity", "definition": "q1 payload equals the authoritative payload byte-for-byte.", "unit": "boolean"},
+    {"id": "exactInverse", "definition": "Archive restores canonical enwik9 exactly.", "unit": "boolean"},
+    {"id": "resourceGuards", "definition": "Encode and decode diagnostic guard-v3 receipts pass all limits and measurements.", "unit": "boolean"},
+    {"id": "terminalCleanup", "definition": "Backing state, successful-run scratch, cgroup, and lease are absent.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-payload", "measurement": "payloadIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-inverse", "measurement": "exactInverse", "operator": "eq", "threshold": true},
+    {"id": "p-resources", "measurement": "resourceGuards", "operator": "eq", "threshold": true},
+    {"id": "p-cleanup", "measurement": "terminalCleanup", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-payload", "measurement": "payloadIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-inverse", "measurement": "exactInverse", "operator": "eq", "threshold": false},
+    {"id": "k-resources", "measurement": "resourceGuards", "operator": "eq", "threshold": false},
+    {"id": "k-cleanup", "measurement": "terminalCleanup", "operator": "eq", "threshold": false}
+  ],
+  "outputs": ["results/cmix_filebacked_fxcm_full_a_qm7_v2/full-roundtrip-receipt.json"],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-23T21:32:43Z"
+}

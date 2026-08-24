@@ -88,6 +88,18 @@ def normalize(
             return token
         if result.startswith(prefix + "/"):
             return token + result[len(prefix):]
+        for attached in ("-I", "-L"):
+            attached_prefix = attached + prefix
+            if result == attached_prefix:
+                return attached + token
+            if result.startswith(attached_prefix + "/"):
+                return attached + token + result[len(attached_prefix):]
+        option, separator, operand = result.partition("=")
+        if separator:
+            if operand == prefix:
+                return option + separator + token
+            if operand.startswith(prefix + "/"):
+                return option + separator + token + operand[len(prefix):]
     return result
 
 

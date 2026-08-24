@@ -104,6 +104,7 @@ def rejected(
         capture.compiler_trace_manifest(
             trace,
             "release",
+            ["GAMMA_FILEBACKED_FXCM=1"],
             PROXY_SHA256,
             COMPILER_SHA256,
             LINKER_SHA256,
@@ -155,6 +156,7 @@ def main() -> int:
     positive_manifest, _, positive_pass = capture.compiler_trace_manifest(
         positive_trace,
         "release",
+        ["GAMMA_FILEBACKED_FXCM=1"],
         PROXY_SHA256,
         COMPILER_SHA256,
         LINKER_SHA256,

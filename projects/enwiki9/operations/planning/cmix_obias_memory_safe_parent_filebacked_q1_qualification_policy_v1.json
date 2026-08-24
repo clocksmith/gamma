@@ -1,8 +1,8 @@
 {
   "$schema": "campaign-static-contract.schema.json",
   "artifact_id": "cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v1",
-  "revision": 1,
-  "operational_status": "dormant_until_arm_b_terminal",
+  "revision": 4,
+  "operational_status": "full_roundtrip_a_ready_diagnostic_runtime",
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
   "receipt_schema": "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt.schema.json",
@@ -16,7 +16,13 @@
   "command_manifest_materializer": "tools/cmix_memory_safe_parent_command_manifest_materialize.py",
   "command_manifest_verifier": "tools/cmix_memory_safe_parent_command_manifest_verify.py",
   "command_manifest_verification_schema": "contracts/research/v1/cmix-memory-safe-parent-command-manifest-verification.schema.json",
-  "execution_authorized": false,
+  "identity_verifier": "tools/cmix_filebacked_fxcm_identity_verify.py",
+  "identity_verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-identity-verification.schema.json",
+  "full_roundtrip_runner": "tools/cmix_filebacked_fxcm_full_roundtrip.py",
+  "full_roundtrip_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+  "full_stage_runner": "tools/cmix_filebacked_fxcm_full_stage.py",
+  "full_stage_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json",
+  "execution_authorized": true,
   "activation_dependencies": [
     "Arm B terminal evidence preserved and read-only audit complete.",
     "Exclusive full1g lease explicitly inactive.",
@@ -27,12 +33,15 @@
     "One clean correction-only result root and one clean scratch root per full roundtrip."
   ],
   "qualification_order": [
-    "Prove integer-probability and persistent-state identity on at least three frozen diagnostic scopes.",
+    "Prove exact integer-probability, full trace, payload, and inverse identity from reset state on the frozen opening, middle, and tail 250KB scopes.",
     "Prove file-backed mapping lifecycle, deterministic initialization, page-out safety, and cleanup.",
-    "Run full canonical roundtrip A alone under process-tree and cgroup-v2 guards.",
+    "Prove cumulative opening-1MB identity and resource feasibility, then opening-prefix and distant cold-reset 10MB transfer before any full-corpus launch.",
+    "Independently rehash and rederive every scope, cumulative, and transfer identity receipt before it can authorize a successor phase.",
+    "Run full canonical roundtrip A alone under diagnostic process-tree and cgroup-v2 guards; do not claim current-host runtime eligibility without measured Geekbench 5 evidence.",
     "Require exact canonical inverse and complete resource/package receipt.",
     "Run full canonical roundtrip B alone from a clean scratch root and independent clean build.",
-    "Require A/B binary, probability stream, payload, archive, and inverse identity.",
+    "Require A/B binary, payload, archive, and inverse identity.",
+    "Validate an online probability digest against the retained opening and distant 10M exact-trace digests, then require full byte-zero parent/q1 probability-stream identity.",
     "Emit one consolidated qualification receipt with independent booleans."
   ],
   "hard_limits": {
@@ -43,8 +52,9 @@
     "temporary_disk_bytes": 100000000000
   },
   "memory_pass_rule": "Pass only when process-tree peak RSS is at most 9,765,625 KiB, cgroup memory.peak is at most 10,000,000,000 bytes, largest-process VmHWM is reported, and memory.events records zero oom and oom_kill.",
-  "identity_rule": "A memory-only child must reproduce the authoritative parent's exact integer probability stream, persistent state checkpoints, payload, and archive. Any mismatch creates a new compression candidate and invalidates parent-preserving qualification.",
-  "determinism_rule": "Two clean source builds and two clean full-corpus executions must produce byte-identical binaries and archives under the bound host, toolchain, command, environment, and package closure.",
+  "identity_rule": "A memory-only child must reproduce the authoritative parent's exact integer probability stream, persistent state checkpoints, and payload; clean q1 A/B executions must also reproduce their package and archive. Reset-state scope identity and full payload identity do not substitute for a byte-zero full-stream online probability digest. Any mismatch creates a new compression candidate and invalidates parent-preserving qualification.",
+  "determinism_rule": "Two clean source builds and two clean full-corpus executions must produce byte-identical binaries, packages, payloads, archives, and inverses under the bound host, toolchain, command, environment, and package closure.",
+  "runtime_rule": "The full A/B diagnostic guards establish memory, disk, CPU-affinity, phase, cleanup, and cgroup evidence only. Runtime eligibility remains false until this host has an exact Geekbench 5 single-core receipt and compression/decompression guards are replayed with that bound score.",
   "package_rule": "Record archive, required program/model material, and every other counted byte separately; the complete sum is authoritative.",
   "terminal_pass_branch": "Authorize this realization as the memory-safe authoritative external parent for CMIX-native oracle work. Do not award Gamma compression or score credit.",
   "terminal_identity_failure_branch": "Classify q1 as a new compression candidate with no parent-preserving authority; restart the archive ladder if evidence justifies it.",

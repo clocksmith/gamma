@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import tarfile
 from pathlib import Path
 from typing import Any
 
@@ -262,6 +263,40 @@ def artifact_identity(record: dict[str, Any]) -> tuple[int, str]:
 
 def source_identity(receipt: dict[str, Any]) -> tuple[Any, ...]:
     source = receipt["source"]
+    archive_path = root_path(source["source_archive"]["path"], "source archive")
+    archive_members: list[tuple[str, str, int, int, str]] = []
+    with tarfile.open(archive_path, mode="r:") as archive:
+        for member in archive:
+            path = Path(member.name)
+            if path.is_absolute() or any(part in {"", ".", ".."} for part in path.parts):
+                raise RuntimeError("source archive contains an unsafe member path")
+            if member.isfile():
+                stream = archive.extractfile(member)
+                if stream is None:
+                    raise RuntimeError("source archive regular member has no payload")
+                digest = hashlib.sha256()
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    digest.update(block)
+                kind = "file"
+                payload_sha256 = digest.hexdigest()
+            elif member.isdir():
+                kind = "directory"
+                payload_sha256 = hashlib.sha256(b"").hexdigest()
+            elif member.issym():
+                kind = "symlink"
+                payload_sha256 = hashlib.sha256(member.linkname.encode("utf-8")).hexdigest()
+            else:
+                raise RuntimeError("source archive contains an unsupported member type")
+            archive_members.append(
+                (member.name, kind, member.mode, member.size, payload_sha256)
+            )
+    archive_content_identity = hashlib.sha256(
+        json.dumps(
+            archive_members,
+            ensure_ascii=True,
+            separators=(",", ":"),
+        ).encode("ascii")
+    ).hexdigest()
     files = tuple(
         sorted(
             (item["logical_path"], item["bytes"], item["sha256"])
@@ -271,7 +306,7 @@ def source_identity(receipt: dict[str, Any]) -> tuple[Any, ...]:
     return (
         source["outer_commit"],
         source["tracked_tree"],
-        artifact_identity(source["source_archive"]),
+        archive_content_identity,
         artifact_identity(source["patch"]),
         files,
     )
