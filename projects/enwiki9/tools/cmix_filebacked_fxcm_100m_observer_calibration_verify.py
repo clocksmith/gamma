@@ -24,7 +24,7 @@ OUTPUT_SCHEMA = (
     / "contracts/research/v1/"
     "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
 )
-INPUT_SCHEMA_SHA256 = "009de365b89e83bc395d2f55332bc5b4f39de4ff0f0ddcb2727d6f1bba45c18a"
+INPUT_SCHEMA_SHA256 = "43e74c5e7a78846cf0cd5ef56e901e8e82f931bb9d23b3346c530a4848d87758"
 OUTPUT_SCHEMA_SHA256 = "d107e2bb9949c138c71a281a566a8c04318bdae3e345be1b5c0e1edde9a42cd3"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 RUN_CONTRACT = (
@@ -182,6 +182,7 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
         receipt["antecedents"]["planning_contract"], "planning contract"
     )
     proof.validate_planning_contract(plan)
+    harness_closure_path = proof.validate_python_source_closure(plan)
     calibration_contract = plan.get("observer_calibration", {})
     joint_verification_contract = plan.get("independent_verification", {})
     verifier_path = Path(__file__).resolve()
@@ -200,6 +201,8 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
         == str(proof_path.relative_to(proof.PROJECT))
         and joint_verification_contract.get("verifier_sha256")
         == proof.digest_file(proof_path)
+        and receipt["antecedents"]["python_source_closure"]
+        == artifact(harness_closure_path)
     )
     if not plan_binding:
         errors.append("planning contract verifier binding failed")
@@ -211,6 +214,12 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
     )
     jsonschema.Draft202012Validator.check_schema(build_schema)
     jsonschema.validate(build, build_schema)
+    build_closure_pass = (
+        build.get("python_source_closure")
+        == receipt["antecedents"]["python_source_closure"]
+    )
+    if not build_closure_pass:
+        errors.append("observer build Python source closure binding failed")
     mutation_control = build["state_mutation_control"]
     for field in (
         "source",
@@ -238,7 +247,10 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
         for run in receipt["runs"]
     )
     fixed_run_contract = (
-        plan_binding and fixed_scopes == FIXED_SCOPES and run_shape == RUN_CONTRACT
+        plan_binding
+        and build_closure_pass
+        and fixed_scopes == FIXED_SCOPES
+        and run_shape == RUN_CONTRACT
     )
 
     geometry_results: list[bool] = []

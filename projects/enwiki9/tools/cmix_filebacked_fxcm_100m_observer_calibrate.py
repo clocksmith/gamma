@@ -23,7 +23,7 @@ BUILD_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1"
 TRANSFER_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PLAN_ARTIFACT_ID = "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"
-CALIBRATION_SCHEMA_SHA256 = "009de365b89e83bc395d2f55332bc5b4f39de4ff0f0ddcb2727d6f1bba45c18a"
+CALIBRATION_SCHEMA_SHA256 = "43e74c5e7a78846cf0cd5ef56e901e8e82f931bb9d23b3346c530a4848d87758"
 RUN_SPECS = (
     (0, "I-P", "parent", "post_head", True),
     (0, "I-Q", "candidate", "post_head", True),
@@ -474,6 +474,7 @@ def main() -> int:
     capture.require_lease_released()
     plan_path, plan = scope.load_json(args.plan, "100M planning contract")
     proof.validate_planning_contract(plan)
+    harness_closure_path = proof.validate_python_source_closure(plan)
     build_path, build = scope.load_json(
         args.observer_build_receipt, "observer build receipt"
     )
@@ -527,6 +528,8 @@ def main() -> int:
     build_plan = verify_artifact(build.get("planning_contract"), "build planning contract")
     if build_plan != plan_path or scope.sha256_file(build_plan) != scope.sha256_file(plan_path):
         raise RuntimeError("observer build used a different planning contract")
+    if build.get("python_source_closure") != artifact(harness_closure_path):
+        raise RuntimeError("observer build used a different Python source closure")
     if (
         transfer_verification.get("verification_pass") is not True
         or transfer_verification.get("candidate_id") != CANDIDATE_ID
@@ -585,6 +588,7 @@ def main() -> int:
         "candidate_id": CANDIDATE_ID,
         "antecedents": {
             "planning_contract": artifact(plan_path),
+            "python_source_closure": artifact(harness_closure_path),
             "observer_build": artifact(build_path),
             "observer_build_schema": artifact(build_schema_path),
             "opening_distant_10m_receipt": artifact(transfer_path),

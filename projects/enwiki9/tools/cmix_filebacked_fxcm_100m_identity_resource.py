@@ -32,7 +32,7 @@ ENGINEERING_LIMIT_KIB = 9_000_000
 MEMORY_HIGH_BYTES = 9_000_000_000
 DISK_LIMIT_BYTES = 100_000_000_000
 PHASES = proof.PHASES
-PLAN_SCHEMA_SHA256 = "214e083eb8dee2b54d30fcd0e1454b041cda0e6f1bda6140670627b28cb5df40"
+PLAN_SCHEMA_SHA256 = "4e975fda5d3ebdf69c3b973597d26a629c9e3928db5c610c3dbc4c3ae1a6aeb1"
 
 
 def artifact(path: Path) -> dict[str, Any]:
@@ -435,6 +435,7 @@ def main() -> int:
         or plan.get("planning_schema_sha256") != PLAN_SCHEMA_SHA256
     ):
         raise RuntimeError("100M planning contract identity mismatch")
+    harness_closure_path = proof.validate_python_source_closure(plan)
     observer_build_path, observer_build = load_contract(
         args.observer_build,
         "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1",
@@ -530,6 +531,10 @@ def main() -> int:
         != scope.sha256_file(plan_path)
         or calibration.get("antecedents", {}).get("observer_build", {}).get("sha256")
         != scope.sha256_file(observer_build_path)
+        or observer_build.get("python_source_closure")
+        != artifact(harness_closure_path)
+        or calibration.get("antecedents", {}).get("python_source_closure")
+        != artifact(harness_closure_path)
         or lock.get("verified") is not True
         or transfer.get("terminal_pass") is not True
         or transfer_verification.get("verification_pass") is not True
@@ -595,7 +600,6 @@ def main() -> int:
         or plan.get("receipt_schema", {}).get("sha256") != scope.sha256_file(receipt_schema_path)
     ):
         raise RuntimeError("planning contract coordinator binding mismatch")
-
     if corpus.stat().st_size < PREFIX_BYTES or proof.digest_prefix(corpus, PREFIX_BYTES) != PREFIX_SHA256:
         raise RuntimeError("canonical opening-100M population identity mismatch")
     result_root, _ = scope.absent_root(args.result_root, "100M result root")
@@ -819,6 +823,7 @@ def main() -> int:
         },
         "antecedents": {
             "planning_contract": artifact(plan_path),
+            "python_source_closure": artifact(harness_closure_path),
             "observer_build": artifact(observer_build_path),
             "observer_build_schema": artifact(observer_build_schema_path),
             "observer_calibration": artifact(calibration_path),
