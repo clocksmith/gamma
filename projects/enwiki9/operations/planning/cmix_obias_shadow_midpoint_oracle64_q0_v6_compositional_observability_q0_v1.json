@@ -1,0 +1,204 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1.json",
+      "required_evidence": "The exact v1 ABI is retained as a superseded-before-implementation design input; it requires six full state partitions at every 64 events."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1.json",
+      "required_evidence": "Exact 25,832-byte source layout with SHA-256 b8441e585391bf3d631230d96413f1cc8f00ac9bcb7cd2daa8a2fb9e1e816c01."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/predictor.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 ad58c1f776e37eb515ac900e2f78f47433a8854b226ac4e43566b103af72aace."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/predictor.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 05b72fed2697d9db1bd92ecd0d69a49220513cf2af5d639b772ea8af551a20f6."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 4fd473cfbb8d88ddd7a8c466622fdaa0bee75338cc54735960c9446ee99aeb94."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 8e475594d488cf9bf47ff875b2064685bdae65b322e954a48493bafe6bb8b229."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/model.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/byte-model.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 41e639a9df3c9cfafb6d5e0fc05cd33e1474eda95a18830d473ddd3df7f8cc07."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/byte-model.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 e6aa3516ce375a44babb08a1eea6bc2cc3f9f22e4b0948babd10e0e4e6a7171b."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/integration.patch",
+      "required_evidence": "Exact dormant v4 integration overlay with SHA-256 36421ecf395ed324425368bf37db1452217e0e73f8af410970a8d6b7bd5d2fb7."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6",
+    "parent_design_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "scientific_parent_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+    "changed_semantic_axis": "observability_scope_only",
+    "scientific_mechanism_unchanged": {
+      "arms": ["P", "K", "F", "S"],
+      "segment_events": 64,
+      "capture_events": 32,
+      "first_adapted_prediction_offset": 33,
+      "shifted_target_rotation": 16,
+      "populations": [250000, 1000000, 10000000],
+      "prediction_arithmetic_change_from_v4": false
+    },
+    "v1_cost_diagnosis": {
+      "five_partition_logical_bytes": 17802103,
+      "checkpoint_formula": "floor(modeled_events/64)+3",
+      "full_five_partition_input_projections": [
+        {"modeled_events": 250000, "checkpoints": 3909, "bytes": 69588420627},
+        {"modeled_events": 1000000, "checkpoints": 15628, "bytes": 278211265684},
+        {"modeled_events": 10000000, "checkpoints": 156253, "bytes": 2781632000059}
+      ],
+      "midpoint_clear_dirty_lower_bounds": {
+        "logical_bytes_written_per_closure": 4096154,
+        "derivation": "The 4,096,163-byte midpoint partition minus only the one-byte arm and eight-byte modeled-event counter is explicitly written by MidpointClearScratch at every closure. Soft-dirty remains set for a write even when memset restores an already-zero value, so all intersecting canonical leaves must be conservatively rehashed.",
+        "populations": [
+          {"modeled_events": 250000, "closures": 3906, "minimum_rehash_input_bytes": 15999577524},
+          {"modeled_events": 1000000, "closures": 15625, "minimum_rehash_input_bytes": 64002406250},
+          {"modeled_events": 10000000, "closures": 156250, "minimum_rehash_input_bytes": 640024062500}
+        ]
+      },
+      "external_cost": "The external-predictor partition would add the complete CMIX state. Literal reuse of only q1's 26 large-range observer already has a retained lower-bound estimate of at least 6.8 TB of reads on the 250KB population.",
+      "decision": "Reject every-64 complete-state Merkle roots as an observability design failure before source implementation. This says nothing about midpoint compression value."
+    },
+    "component_boundary": {
+      "component": "ByteMixer, its ByteModel base, its owned Lstm, and all midpoint state",
+      "environment": "The remainder of Predictor, including PPMD, obias, FXCM, contexts, mixers, SSE, the bit head, coder, frontend, and reversible transform.",
+      "environment_to_component_calls": [
+        "ByteMixer::Perceive(bit) once per modeled bit",
+        "ByteMixer::SetOutputBias(bias256 or null) at each modeled-byte update under the bound KH_OBIAS configuration",
+        "ByteMixer::SetInput(raw_byte_index, probability) for each active auxiliary row under the bound keep-aux configuration",
+        "ByteMixer::ByteUpdate() once per completed modeled byte",
+        "ByteMixer::Predict() once after each modeled bit"
+      ],
+      "component_to_environment_values": [
+        "ByteMixer::Predict()[0] copied to byte_mixer_output after every modeled bit",
+        "ByteModel::ex copied to lstmex only; exhaustive bound-source search finds no read of lstmex or lstmpr after their assignments"
+      ],
+      "source_separation": "The v4 overlay changes only makefile and Lstm/LstmLayer files. It has no Predictor, manager, model, context, mixer, SSE, bit-head, coder, frontend, or transform pointer/reference and cannot directly write environment state."
+    },
+    "causal_noninterference_certificate": {
+      "state_equations": [
+        "C_(t+1), O_t = F_arm(C_t, I_t, x_t)",
+        "E_(t+1), I_(t+1) = G(E_t, O_t, x_t)",
+        "q_t = H(E_t, O_(t-1), x_<t)"
+      ],
+      "base_case": "P and K use the same sealed source, seed, compiler contract, pretraining, raw/modeled input, and environment construction. The runtime arm selector is stored only inside the component.",
+      "inductive_step": "If P and K have equal environment state before bit t and emit bit-identical component boundary output O_t, then deterministic G receives the same O_t and decoded bit x_t, produces equal environment state and equal next component input. The midpoint source cannot bypass this interface.",
+      "component_obligation": "K performs the same local update arithmetic on detached storage, writes no live parameter or optimizer state, restores and replays hidden/cell state, and aborts at every closure unless its dynamic state equals the captured closure state bit-for-bit.",
+      "longitudinal_obligation": "A rolling digest covers every component boundary output float bit pattern and count. P/K equality is required for the complete population, not only checkpoint samples.",
+      "whole_codec_obligation": "Every final uint16 arithmetic probability, payload byte, modeled inverse byte, raw inverse byte, terminal return code, and package member must match P/K exactly.",
+      "conclusion_if_all_obligations_pass": "K has no behaviorally observable effect on the complete frozen population, and any F/S archive difference is attributable to the only source-authorized live writes inside the component. No claim is made about unobserved populations."
+    },
+    "evidence_streams": {
+      "probability": {
+        "storage": "online SHA-256 plus count; no two-byte record file",
+        "preimage": "Every exact final uint16 probability in little-endian order immediately before the arithmetic split",
+        "checkpoints": "start, first closure, native-horizon boundary, each fixed population boundary, terminal pre-flush, and finalization",
+        "comparisons": "encoder/decode within arm, repeats within F/S, and P/K across arms"
+      },
+      "component_boundary": {
+        "storage": "online SHA-256 plus call count; no per-call record file",
+        "preimage": "domain tag, modeled-bit ordinal, canonical uint32 bits of ByteMixer::Predict()[0], and canonical int32 bits of ByteModel::ex",
+        "why_outputs_only": "All component inputs are deterministic functions of equal environment state, the fixed decoded bit stream, and the previous observed component output under the source-bound interface. Recording the derived input vectors would restate the inductive conclusion while hashing about 2 KiB per modeled byte under the bound aux-plus-obias path.",
+        "comparisons": "P/K complete equality and encoder/decode equality within every arm"
+      },
+      "midpoint_update": {
+        "storage": "one bounded record per closure",
+        "fields": [
+          "update ordinal",
+          "segment start and closure coordinates",
+          "arm, committed, detached, and target rotation",
+          "SHA-256 of the 32 source-order decoded symbols",
+          "SHA-256 of the 32 source-order targets before rotation",
+          "SHA-256 of pre-restore hidden plus cell state",
+          "SHA-256 of post-replay hidden plus cell state",
+          "K bitwise-equality boolean",
+          "cumulative boundary-output and probability digests"
+        ],
+        "excluded": "Full gradients, parameters, optimizer tensors, external state, and cleared scratch are not repeatedly rehashed. Their behavioral consequences remain covered by exact longitudinal outputs, source write-set closure, matched controls, repeats, payloads, and inverses."
+      },
+      "sparse_component_state": {
+        "storage": "typed roots over the 130 phase-1 tensors plus the small ByteMixer wrapper at no more than six fixed coordinates per run",
+        "coordinates": ["start", "first closure", "first native-horizon boundary", "population midpoint", "terminal pre-flush", "finalization"],
+        "role": "diagnostic localization and terminal repeat evidence, not a substitute for longitudinal output identity",
+        "dirty_tracking": "not required; each sparse coordinate performs one bounded typed rebuild"
+      },
+      "payload_and_inverse": {
+        "storage": "native finite coder payload/archive plus exact modeled and raw inverse digests",
+        "requirements": "clean EOF, deterministic repeats, complete package accounting, resources, and independent parser/verifier"
+      }
+    },
+    "matched_controls": {
+      "P": "No midpoint capture, backward, restore, replay, or update.",
+      "K": "Complete detached midpoint arithmetic plus mandatory dynamic restoration; must equal P on boundary output, final probability, payload, inverse, and terminal sparse component state.",
+      "F": "Aligned causal targets and authorized live recurrent/output writes.",
+      "S": "Identical F compute and write shape with only the 16-position target association changed.",
+      "repeat": "Independent F-A/F-B and S-A/S-B builds/runs must reproduce source, boundary, probability, payload, inverse, update transcript, and package bytes."
+    },
+    "promotion_logic": {
+      "observer_or_identity_failure": "Correct observability only; infer no midpoint result.",
+      "P_or_K_divergence": "Reject implementation identity and locate the first boundary/update mismatch.",
+      "F_not_better_than_P_or_F_not_better_than_S": "Retire the midpoint causal oracle at that population.",
+      "F_beats_P_K_and_S_at_target_scale": "Authorize persistence attribution P/F/J/S as a distinct successor; do not yet claim score credit.",
+      "archive_credit": "Only native counted archives with exact inverse and package accounting receive compression evidence; this causal oracle remains zero score credit."
+    },
+    "supersession": {
+      "supersedes_design": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+      "reason": "V5's every-64 six-partition Merkle topology is not proportional to the scientific claim. Full five-partition scans project to multiple terabytes at 10M, and v4's mandatory scratch clear alone forces at least 640,024,062,500 bytes of canonical rehash input before dynamic or external CMIX state. V6 preserves the algorithm and replaces internal omniscience with a source-proved component boundary plus longitudinal exact behavior.",
+      "v5_phase1_reuse": "The exact 130-tensor layout remains useful for sparse component-state localization and future implementation visitors.",
+      "v5_soft_dirty_reuse": "Parked. Soft-dirty may be reconsidered only for a future genuinely sparse mutation map; it is not part of V6's required evidence."
+    },
+    "current_state": {
+      "abi_v2_exists": false,
+      "receipt_schemas_exist": false,
+      "source_exists": false,
+      "independent_parser_exists": false,
+      "build_exists": false,
+      "archive_exists": false,
+      "q1_v3_qualification_exists": false,
+      "execution_authority": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    }
+  },
+  "activation_requirements": [
+    "Freeze a new compositional observability ABI and receipt schemas; do not edit the v1 ABI or its schemas in place.",
+    "Bind an independently reviewed source-interface audit that proves ByteMixer is the complete component/environment boundary for the exact sealed source.",
+    "Extend the phase-1 typed layout with the small ByteMixer/ByteModel wrapper state used by the sparse component roots.",
+    "Q1-v3 qualification, v4 materialization, a new v6 observability-only source delta, two clean builds, parser independence, and observer-off/on neutrality must pass.",
+    "The full-1G lease and lock must be absent before any source materialization, build, fixture, coder, or corpus execution.",
+    "No experiment or candidate activation is authorized by this design artifact."
+  ],
+  "claim_boundary": [
+    "This is a proof-topology correction, not an implementation or experimental result.",
+    "The causal equations are conditional on exact source-interface closure and the declared runtime evidence; they do not predict compression gain.",
+    "No midpoint arm has produced an archive, and all Gamma compression and Hutter score credits remain zero.",
+    "The external cmix-obias baseline, q1 live gate, and all prior receipts remain unchanged."
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1.json",
+      "required_evidence": "Exact 25,832-byte phase-1 source layout with SHA-256 b8441e585391bf3d631230d96413f1cc8f00ac9bcb7cd2daa8a2fb9e1e816c01."
+    },
+    {
+      "artifact": "operations/planning/campaign-static-contract.schema.json",
+      "required_evidence": "Exact 1,887-byte static-contract schema with SHA-256 6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "review_mode": "read_only_source_geometry_layout_arithmetic_and_fail_closed_boundary",
+    "checks": {
+      "static_schema_pass": true,
+      "sealed_source_hashes_match_pass": true,
+      "sealed_overlay_hashes_match_pass": true,
+      "bound_geometry_rederived_pass": true,
+      "dynamic_totals_rederived_pass": true,
+      "parameter_totals_rederived_pass": true,
+      "optimizer_totals_rederived_pass": true,
+      "ordinary_tape_totals_rederived_pass": true,
+      "midpoint_totals_rederived_pass": true,
+      "five_partition_totals_rederived_pass": true,
+      "interleaved_slab_canonicalization_explicit_pass": true,
+      "simd_padding_policy_explicit_pass": true,
+      "pointer_and_object_padding_excluded_pass": true,
+      "source_method_write_groups_present_pass": true,
+      "soft_dirty_evidence_exclusion_pass": true,
+      "terminal_full_rebuild_required_pass": true,
+      "external_predictor_open_recorded_pass": true,
+      "six_partition_completeness_false_required_pass": true,
+      "execution_authority_false_required_pass": true,
+      "zero_gamma_credit_required_pass": true
+    },
+    "independent_derivation": {
+      "geometry": [
+        "layer_input_len = 1 + cells + vocabulary = 513",
+        "sli = Pad16(513) = 528",
+        "hidden_size = cells*layers + 1 = 257",
+        "soh = Pad16(257) = 272",
+        "so = Pad16(256) = 256",
+        "layer constructor input = 513 + 256 = 769",
+        "dense_width = 769 - 256 = 513",
+        "sdense = Pad16(513) = 528",
+        "transpose rows = 769 - (256 + 256) = 257"
+      ],
+      "partition_rows": [
+        {"partition": "dynamic", "tensors": 2, "logical_bytes": 2112, "leaves": 2, "maximum_tree_nodes": 2, "maximum_digest_storage_bytes": 64},
+        {"partition": "parameters", "tensors": 15, "logical_bytes": 3643392, "leaves": 894, "maximum_tree_nodes": 1773, "maximum_digest_storage_bytes": 56736},
+        {"partition": "optimizer", "tensors": 25, "logical_bytes": 4829192, "leaves": 1189, "maximum_tree_nodes": 2353, "maximum_digest_storage_bytes": 75296},
+        {"partition": "ordinary_tape", "tensors": 47, "logical_bytes": 5231244, "leaves": 1295, "maximum_tree_nodes": 2543, "maximum_digest_storage_bytes": 81376},
+        {"partition": "midpoint", "tensors": 41, "logical_bytes": 4096163, "leaves": 1021, "maximum_tree_nodes": 2001, "maximum_digest_storage_bytes": 64032}
+      ],
+      "aggregate": {
+        "tensors": 130,
+        "logical_bytes": 17802103,
+        "leaves": 4401,
+        "maximum_tree_nodes": 8672,
+        "maximum_digest_storage_bytes": 277504
+      },
+      "calculation_rule": "For every positive-byte tensor, leaves=ceil(logical_bytes/4096), maximum_tree_nodes=2*leaves-1, and digest storage is 32 bytes per node; totals sum expanded tensor families rather than treating a partition as one tensor."
+    },
+    "scientific_boundary": {
+      "completed": "Exact typed layout and grouped source-write surface for Byte-LSTM dynamic, parameters, optimizer, ordinary tape, and dormant v4 midpoint state.",
+      "not_completed": "The external predictor partition, physical-segment visitor implementation, soft-dirty calibration, independent parser, v5 source, and every runtime gate.",
+      "why_phase1_is_not_activation": "The v1 ABI requires all six partitions. A complete five-partition layout cannot substitute for missing mixers, SSE, context tables, small FXCM state, bit head, frontend, and reversible transform state.",
+      "execution_authority": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    }
+  },
+  "activation_requirements": [
+    "An independent future auditor must reproduce this review from the exact bound source rather than trusting the stored true values.",
+    "The external predictor typed map and physical-segment coverage must close before a six-partition source-completeness receipt can exist.",
+    "Soft-dirty calibration and mutation controls must pass before incremental roots can be interpreted.",
+    "Q1-v3 qualification, v4 source materialization, and the absence of the full-1G lease remain mandatory before v5 source work."
+  ],
+  "claim_boundary": [
+    "This review checks JSON structure and layout arithmetic only; it is not a compiler, AST completeness, runtime, parser, mutation, synchronization, compression, inverse, resource, package, or Hutter result.",
+    "The explicit open external partition prevents accidental promotion of phase 1 as complete observability.",
+    "No score or compression credit is granted."
+  ]
+}
