@@ -1,0 +1,158 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+      "required_evidence": "A future schema-valid terminal Arm-A receipt with terminal_pass=false, explicit zero credit, and no remaining qm8 process."
+    },
+    {
+      "artifact": "qm8 exact source and receipt-schema closure",
+      "required_evidence": "All bound runner, wrapper, guard, stage, source-schema, antecedent, package, stage, output, cleanup, and lease artifacts retain their frozen identities."
+    },
+    {
+      "artifact": "revision-2 activation",
+      "required_evidence": "A future revision at least 2 sets execution_authorized=true only after binding the actual terminal receipt SHA-256."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+    "evidence_class": "infrastructure_terminal_failure_classification",
+    "source_receipt": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+    "output": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-terminal-failure-verification.json",
+    "implementation": {
+      "verifier": {
+        "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
+        "bytes": 43813,
+        "sha256": "6772c6ea450f6d30e33d9d56d7edfbf2906d2b004c09f2be50170c64bcde6d45"
+      },
+      "verification_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-qm8-failure-verification.schema.json",
+        "bytes": 7742,
+        "sha256": "abd71295af6feed09708d83b2d3f5c53d93c52c4c502249ae09ff99a66c8980b"
+      },
+      "research_contracts": {
+        "path": "tools/research_contracts.py",
+        "bytes": 128519,
+        "sha256": "744d3cc2cf5433c86251194ec1421256f1d6b745fdc012ec2ec6fb982df1fa5b"
+      },
+      "lease_verifier": {
+        "path": "tools/managed_exclusive_lease_verify.py",
+        "bytes": 9081,
+        "sha256": "68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"
+      },
+      "plan_schema": {
+        "path": "operations/planning/campaign-static-contract.schema.json",
+        "bytes": 1887,
+        "sha256": "6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64"
+      },
+      "python_runtime": {
+        "path": "/usr/bin/python3.14",
+        "bytes": 7481192,
+        "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+      }
+    },
+    "source_bindings": {
+      "full_roundtrip_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+        "bytes": 16848,
+        "sha256": "8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"
+      },
+      "stage_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json",
+        "bytes": 4201,
+        "sha256": "31d513dc92344dd27d7848d1ba06c54a1c38f44dc1d740019c8ab7f141d05c2d"
+      },
+      "guard_schema": {
+        "path": "contracts/research/v1/resource-guard-receipt.v3.schema.json",
+        "bytes": 12756,
+        "sha256": "f51442e839bdfc11db5eb40f74faead81ef00e930a54b5ac98b6d0c681477cce"
+      },
+      "soft_high_schema": {
+        "path": "contracts/research/v1/resource-guard-soft-high.schema.json",
+        "bytes": 2694,
+        "sha256": "06f65a47321f2b94cb0d2a85108b148ad28696f3ec5babc57d61524bd43fa2b4"
+      },
+      "roundtrip_runner": {
+        "path": "tools/cmix_filebacked_fxcm_full_roundtrip.py",
+        "bytes": 33758,
+        "sha256": "b196cddcef51e890794fa3877e5763b13c695ddd3ad1e1065eb9a584fce2f20b"
+      },
+      "stage_runner": {
+        "path": "tools/cmix_filebacked_fxcm_full_stage.py",
+        "bytes": 9927,
+        "sha256": "e8aed4cbe68ba162a1d30a66bdf3243c70226268a9f23dbdb4bc4bef31354741"
+      },
+      "soft_high_wrapper": {
+        "path": "tools/run_with_resource_guard_v3_soft_high.py",
+        "bytes": 6061,
+        "sha256": "d2838c816bf17c5108fd0cf7170180ea8d47decbd3009f26ddf6bb7a02d05bae"
+      },
+      "resource_guard": {
+        "path": "tools/run_with_resource_guard_v3.py",
+        "bytes": 31807,
+        "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+      }
+    },
+    "classification_order": [
+      "resource_hard_cap_or_oom",
+      "resource_rss_or_decimal_limit",
+      "resource_disk_cpu_or_runtime",
+      "payload_or_parent_identity",
+      "decode_codec_or_inverse",
+      "cleanup_or_lease",
+      "encode_codec_or_stage",
+      "infrastructure_unclassified"
+    ],
+    "single_authorized_routes": {
+      "resource_hard_cap_or_oom": "one_phase_specific_memory_successor",
+      "resource_rss_or_decimal_limit": "one_phase_specific_memory_successor",
+      "resource_disk_cpu_or_runtime": "one_resource_correction_successor",
+      "payload_or_parent_identity": "first_divergence_localization_only",
+      "decode_codec_or_inverse": "one_decode_or_inverse_correction_successor",
+      "cleanup_or_lease": "one_cleanup_transaction_correction_successor",
+      "encode_codec_or_stage": "one_encode_infrastructure_correction_successor",
+      "infrastructure_unclassified": "one_receipt_bound_infrastructure_diagnostic"
+    },
+    "activation": {
+      "status": "waiting_for_terminal_failed_qm8",
+      "execution_authorized": false,
+      "minimum_activation_revision": 2,
+      "terminal_receipt_sha256": null
+    },
+    "command": [
+      "/usr/bin/python3.14",
+      "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
+      "--receipt",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+      "--output",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-terminal-failure-verification.json"
+    ],
+    "promotion_condition": "No compression promotion exists. A schema-valid verification_pass=true receipt freezes exactly one primary failure class and its single authorized correction route.",
+    "kill_condition": "Any source, artifact, schema, plan activation, process closure, command, lease transition, cleanup observation, output-schema, or zero-credit inconsistency withholds classification authority and authorizes only verifier correction.",
+    "promotion_authority": false,
+    "memory_safe_parent_qualification_authority": false,
+    "archive_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Do not execute revision 1. The verifier itself rejects any plan revision below 2 or execution_authorized=false.",
+    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=false with no live qm8 process.",
+    "Create revision 2 by changing only activation status, execution authority, revision, and the terminal receipt SHA-256 unless a bound implementation file has actually drifted.",
+    "Execute the frozen command only while the canonical output is absent and both managed-lease namespace paths reflect terminal cleanup."
+  ],
+  "claim_boundary": [
+    "Revision 1 is a dormant failure-proof closure and has no execution authority.",
+    "A future passing verification may classify one terminal qm8 failure and authorize one correction route only.",
+    "It cannot qualify q1, establish an archive or inverse, claim Gamma compression value, or receive Hutter score credit."
+  ]
+}

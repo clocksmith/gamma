@@ -269,6 +269,33 @@ remained zero. The split was about `2.55 GB` anonymous and `6.23 GB` file,
 including about `6.01 GB` mapped file state. This strengthens the same
 non-terminal attribution and does not qualify q1.
 
+The terminal proof route is now symmetric for success and failure. The
+existing soft-high verifier accepts only a terminally passing qm8 arm; the
+older failure verifier was specific to qm7's exact hard-cap event. A new
+prospective qm8 failure verifier can classify any schema-valid terminal Arm-A
+failure through one ordered branch: hard-cap/OOM, RSS/decimal memory, other
+resource limit, payload identity, decode/inverse, cleanup/lease, encode/stage,
+or otherwise unclassified infrastructure. Exactly one correction route is
+selected, and every branch retains zero promotion, parent-qualification,
+archive, compression, and score authority.
+
+Revision 1 is deliberately dormant. The verifier itself refuses to run until
+a future revision at least 2 binds the actual failed terminal-receipt SHA-256,
+sets the activated status and execution authority, and observes no remaining
+qm8 process. The preflight occurs outside the receipt-writing exception path,
+so an early invocation cannot poison the canonical output name with a
+verification-failure file. The verifier reopens exact antecedent contracts,
+package concatenation, stage and guard commands, result/scratch ownership,
+soft-high state, outputs, managed-lease transitions, cleanup state, and its own
+strict output schema. The plan validates against the campaign static-contract
+schema and binds the Python runtime plus all source and schema files by byte
+count and SHA-256. The new output schema is self-validated but is not yet added
+to `research_contracts.py`, because qm8 imported that file before launch and
+live source integrity takes precedence. No verifier execution or output
+receipt exists. At the sealing snapshot encode progress was `18.02%`, cgroup
+current use was `8,999,391,232` bytes, peak was `9,002,086,400` bytes, and
+`memory.events.high` was `192,968`; hard-cap and OOM counters remained zero.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before
