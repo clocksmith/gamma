@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-decision.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "operational_status", "claim_boundary",
+    "claim_authority", "bindings", "parent_qualification", "population",
+    "exclusive_lease", "compile", "scans", "resource_summary", "measurements",
+    "gates", "scientific_verdict", "promotion_authorized", "next_authority",
+    "archive_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes", "error"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-decision.v2"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "operational_status": {"enum": ["terminal", "terminal_infrastructure_failure"]},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "claim_authority": {"const": "causal_shadow_opportunity_screen_only"},
+    "bindings": {"type": "object", "minProperties": 10, "additionalProperties": {"$ref": "#/$defs/artifact"}},
+    "parent_qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt", "verification", "independent_reverification",
+        "active_policy", "authority_design_policy", "fully_positive"
+      ],
+      "properties": {
+        "receipt": {"$ref": "#/$defs/artifact"},
+        "verification": {"$ref": "#/$defs/artifact"},
+        "independent_reverification": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "active_policy": {"$ref": "#/$defs/artifact"},
+        "authority_design_policy": {"$ref": "#/$defs/artifact"},
+        "fully_positive": {"type": "boolean"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "verified"],
+      "properties": {
+        "path": {"type": "string"}, "bytes": {"const": 587138826},
+        "sha256": {"const": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"},
+        "verified": {"type": "boolean"}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lease_id", "release_pass", "evidence", "transitions"],
+      "properties": {
+        "lease_id": {"type": ["string", "null"]}, "release_pass": {"type": "boolean"},
+        "evidence": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "transitions": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]}
+      }
+    },
+    "compile": {"anyOf": [{"$ref": "#/$defs/command"}, {"type": "null"}]},
+    "scans": {
+      "type": "object", "additionalProperties": false, "required": ["a", "b"],
+      "properties": {"a": {"$ref": "#/$defs/scan"}, "b": {"$ref": "#/$defs/scan"}}
+    },
+    "resource_summary": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+    "measurements": {"type": ["object", "null"]},
+    "gates": {"type": "object", "additionalProperties": {"type": ["boolean", "null"]}},
+    "scientific_verdict": {"type": "string", "minLength": 1},
+    "promotion_authorized": {"type": "boolean"},
+    "next_authority": {"type": "string", "minLength": 1},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0},
+    "error": {"type": ["string", "null"]}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "command": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "argv", "cwd", "environment", "command_sha256", "returncode", "stdout", "stderr"],
+      "properties": {
+        "id": {"type": "string"}, "argv": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "cwd": {"type": "string"}, "environment": {"type": "object", "additionalProperties": {"type": "string"}},
+        "command_sha256": {"$ref": "#/$defs/sha"}, "returncode": {"type": "integer"},
+        "stdout": {"$ref": "#/$defs/artifact"}, "stderr": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "scan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["command", "receipt", "guard", "sampled_cgroup_file_peak_bytes", "sampled_cgroup_current_peak_bytes"],
+      "properties": {
+        "command": {"anyOf": [{"$ref": "#/$defs/command"}, {"type": "null"}]},
+        "receipt": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "guard": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "sampled_cgroup_file_peak_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "sampled_cgroup_current_peak_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}
