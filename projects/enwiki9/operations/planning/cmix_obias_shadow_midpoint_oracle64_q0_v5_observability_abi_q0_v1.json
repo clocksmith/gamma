@@ -1,0 +1,263 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_evidence_contract_q0_v1.json",
+      "required_evidence": "Exact 10,772-byte v4 evidence contract with SHA-256 3db8410aa7827b9facc165672846c864496f268f3ff717a8faa52579029c19a2."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_observability_audit_q0_v1.json",
+      "required_evidence": "Exact 9,327-byte observability audit with SHA-256 b80900097f232045532ced78d57742eb139928ea540aa50059ae519dfe7e700f."
+    },
+    {
+      "artifact": "contracts/research/v1/cmix-midpoint-observability-parse-v1.schema.json",
+      "required_evidence": "Exact 8,844-byte Draft 2020-12 parse schema with SHA-256 c2f3e8d8082bfc01df2d54e264d515ca4cd7c5f722ca6c2c352653937c489a42."
+    },
+    {
+      "artifact": "contracts/research/v1/cmix-shadow-midpoint-oracle-v5-receipt.schema.json",
+      "required_evidence": "Exact 14,459-byte Draft 2020-12 joint receipt schema with SHA-256 5c15015c4573504f7991f4febd5da44930153acb4c335bdf5c4cbabf00b3f145."
+    },
+    {
+      "artifact": "tools/research_contracts.py",
+      "required_evidence": "The live-qm8-bound canonical schema registry remains the exact 128,519-byte artifact with SHA-256 744d3cc2cf5433c86251194ec1421256f1d6b745fdc012ec2ec6fb982df1fa5b; v5 schemas are direct-bound and must not mutate this registry while qm8 is live."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "parent_algorithm_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+    "changed_semantic_axis": "observability_only",
+    "format_id": "gamma-midpoint-observability-abi-v1",
+    "format_version": 1,
+    "normative_terms": {
+      "byte": "An unsigned 8-bit octet.",
+      "sha256": "FIPS 180-4 SHA-256; binary records contain the 32 digest bytes in standard output order and JSON receipts contain lowercase hexadecimal.",
+      "little_endian": "Unsigned integers are serialized least-significant byte first at their declared width.",
+      "float_bits": "Finite IEEE-754 binary16 or binary32 values are bit-cast to uint16 or uint32 and serialized little-endian; NaN and infinity abort before a record is published.",
+      "logical_bytes": "Only named initialized semantic elements are hashed; pointers, addresses, allocator padding, mapping slack, filenames, inodes, page residency, and uninitialized storage are forbidden preimage bytes.",
+      "ascii_name": "One to 255 bytes matching [A-Za-z0-9_.:/-]+ with no NUL, encoded exactly as ASCII."
+    },
+    "common_header": {
+      "bytes": 160,
+      "fields_in_order": [
+        "offset 0: 8 bytes ASCII GMIDOB1 followed by one NUL byte",
+        "offset 8: uint16 format_version=1",
+        "offset 10: uint16 stream_kind; 1=layout, 2=probability, 3=checkpoint, 4=update",
+        "offset 12: uint8 arm; 0=P, 1=K, 2=F, 3=S",
+        "offset 13: uint8 replicate; 0=A, 1=B",
+        "offset 14: uint8 direction; 0=encode, 1=decode",
+        "offset 15: uint8 reserved=0",
+        "offset 16: uint64 raw population bytes",
+        "offset 24: uint64 modeled event count",
+        "offset 32: 32 raw bytes of the complete v5 candidate source-tree SHA-256",
+        "offset 64: 32 raw bytes of this ABI artifact SHA-256",
+        "offset 96: 32 raw bytes of the exact raw-population SHA-256",
+        "offset 128: 32 raw bytes of the exact reversible modeled-stream SHA-256"
+      ],
+      "open_rule": "Create each stream with O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC beneath a pre-opened absolute output-directory descriptor; any open, write, seek, flush, fsync, close, or geometry error aborts the arm.",
+      "identity_rule": "All four streams for one run have byte-identical common fields except stream_kind. Encoder and decoder differ only in direction and direction-specific records."
+    },
+    "common_footer": {
+      "bytes": 56,
+      "fields_in_order": [
+        "4 bytes ASCII END1",
+        "uint32 footer_bytes=56",
+        "uint64 record_count",
+        "uint64 body_bytes",
+        "32 raw bytes SHA-256 over every byte after the 160-byte header and before this footer"
+      ],
+      "clean_eof_rule": "The footer is written only after complete successful observation, fsynced, and followed immediately by EOF. Missing, duplicate, partial, trailing, or count-inconsistent footers reject the stream. The body digest starts after the 160-byte common header."
+    },
+    "stream_contracts": {
+      "layout": {
+        "stream_kind": 1,
+        "record_tag": "LY01",
+        "record_framing": "tag[4], uint32 record_bytes including framing, uint8 partition, uint8 dtype, uint8 rank, uint8 flags=0, uint32 tensor_ordinal, uint64 logical_bytes, uint32 leaf_bytes=4096, uint16 name_bytes, uint16 reserved=0, rank uint64 dimensions, then name_bytes ASCII name bytes",
+        "partition_codes": {
+          "1": "dynamic",
+          "2": "parameters",
+          "3": "optimizer",
+          "4": "ordinary_tape",
+          "5": "external_predictor",
+          "6": "midpoint"
+        },
+        "dtype_codes": {
+          "1": "uint8 raw semantic bytes",
+          "2": "uint16",
+          "3": "uint32",
+          "4": "uint64",
+          "5": "finite IEEE-754 binary16 bits",
+          "6": "finite IEEE-754 binary32 bits"
+        },
+        "ordering": "Partition-code ascending, then one source-frozen tensor_ordinal sequence beginning at zero within each partition; ordinals and names are unique and contiguous.",
+        "struct_rule": "C++ structs, bitfields, bools, enums, pointers, and padded rows must be exposed as separately typed logical tensors rather than hashed through object memory."
+      },
+      "probability": {
+        "stream_kind": 2,
+        "record_bytes": 2,
+        "record": "One final uint16 probability in little-endian order after all heads and immediately before the arithmetic range split.",
+        "count_rule": "Exactly one record per coded bit; coded_bits equals modeled_events multiplied by 8 for the frozen byte-LSTM population.",
+        "direction_rule": "Encoder and decoder use the same hook and must emit byte-identical bodies for a synchronized arm and replicate."
+      },
+      "checkpoint": {
+        "stream_kind": 3,
+        "record_tag": "CP01",
+        "record_framing": "Exactly 332 bytes: tag[4], uint32 record_bytes=332, uint8 checkpoint_kind, uint8 hook_phase, uint16 reserved=0, uint32 range_low, uint32 range_high, uint32 range_code, uint32 coder_aux, uint64 modeled_events, uint64 coded_bits, uint64 probability_records, uint64 payload_prefix_bytes, uint64 dirty_leaf_events, uint64 midpoint_update_records, probability_sha256[32], payload_prefix_sha256[32], then six partition_root_sha256[32] in partition-code order",
+        "checkpoint_kinds": {
+          "0": "start",
+          "1": "periodic",
+          "2": "terminal_pre_flush",
+          "3": "finalization"
+        },
+        "hook_phases": {
+          "0": "After model construction and retained pretraining, layout publication, and initial full state-root build; immediately before the first modeled BeginTraceByte.",
+          "1": "Immediately after EndTraceByte for every completed modeled-event coordinate divisible by 64, after all predictor effects of that event and after any midpoint clear, before the next BeginTraceByte.",
+          "2": "Immediately after the final EndTraceByte and before Encoder::Flush or decoder finalization; emitted even when a periodic row has the same coordinate.",
+          "3": "Immediately after Encoder::Flush or successful decoder stream finalization; state roots must equal terminal_pre_flush roots while final payload-prefix evidence includes every payload byte."
+        },
+        "count_formula": "floor(modeled_events / 64) + 3: one start, every periodic coordinate, one terminal_pre_flush, and one finalization row.",
+        "coder_fields": "Encoder sets range_code=0 and records its exact low/high plus declared coder_aux; decoder records low/high/code plus declared coder_aux. No encoder/decoder coder-state equality is inferred.",
+        "rolling_digest_rule": "probability_sha256 is a clone-finalized digest over all preceding probability records without resetting the live hash.",
+        "payload_prefix_rule": "payload_prefix_sha256 hashes exactly the first payload_prefix_bytes in payload-file order. Encoder hashes logically emitted bytes including its in-memory output buffer; decoder hashes physically consumed payload bytes. Equality is compared only between matched arms in the same direction and at the same coordinate.",
+        "state_rule": "Each partition root is the current canonical Merkle-forest state after all dirty leaves for the checkpoint are refreshed."
+      },
+      "update": {
+        "stream_kind": 4,
+        "record_tag": "UP01",
+        "record_framing": "Exactly 328 bytes: tag[4], uint32 record_bytes=328, uint64 update_ordinal, uint64 segment_start_event, uint32 native_start_phase, uint32 closure_phase, uint8 arm, uint8 committed, uint8 detached, uint8 target_rotation, uint32 reserved=0, then nine SHA-256 fields in this order: closure_target, captured_inputs, output_error_adjoint, recurrent_gradient_and_adam, output_gradient, pre_restore_dynamic, post_replay_dynamic, detached_before_clear, scratch_after_clear",
+        "update_formula": "zero when modeled_events < 33; otherwise floor((modeled_events - 33) / 64) + 1",
+        "arm_rule": "P emits no rows. K emits the formula count with committed=0, detached=1, target_rotation=0. F emits the formula count with committed=1, detached=0, target_rotation=0. S emits the formula count with committed=1, detached=0, target_rotation=16.",
+        "timing": "All nine digests are computed inline while their complete preimages exist. The row is emitted only after scratch clear and post-replay state are available, using locally retained digests rather than rereading cleared storage.",
+        "aggregate_rule": "Each aggregate follows update_aggregate_contract below; tensor groups and order are declared by the content-addressed v5 source layout manifest and independently checked against source members.",
+        "synchronization_rule": "For K, F, and S, matched encoder and decoder update bodies are byte-identical."
+      }
+    },
+    "update_aggregate_contract": {
+      "domain": "8 ASCII bytes GMDAGGR1",
+      "preimage": "domain, aggregate_code uint8, three reserved zero bytes, tensor_count uint32LE, then for each tensor in source-frozen group order: metadata_digest[32], logical_bytes uint64LE, content_sha256[32]. Each content digest hashes the exact canonical tensor bytes at the named observation point.",
+      "empty_aggregate": "When a group is inapplicable, tensor_count is zero and no tensor rows follow; the digest is still computed from the domain, aggregate_code, three zero bytes, and uint32LE zero.",
+      "aggregate_codes": {
+        "1": "closure_target",
+        "2": "captured_inputs",
+        "3": "output_error_adjoint",
+        "4": "recurrent_gradient_and_adam",
+        "5": "output_gradient",
+        "6": "pre_restore_dynamic",
+        "7": "post_replay_dynamic",
+        "8": "detached_before_clear",
+        "9": "scratch_after_clear"
+      },
+      "group_population": {
+        "closure_target": "The 32 source-order midpoint_targets_ uint32 values before S association rotation; target_rotation in the record is the only F/S association difference.",
+        "captured_inputs": "Source-order midpoint symbols, auxiliary inputs, output probabilities, hidden features, pending rows, and every layer local-32 captured history, gate state, gate normalization, inverse variance, start state, and closure state needed by backward or replay.",
+        "output_error_adjoint": "Complete source-order midpoint output-error and output-adjoint logical tensors after construction and before recurrent backward mutates shared scratch.",
+        "recurrent_gradient_and_adam": "Every complete recurrent dense/symbol/gamma/beta gradient plus the corresponding post-update master, first moment, second moment, shadow, and update-step value. K hashes hypothetical detached values; F/S hash committed live values.",
+        "output_gradient": "The complete output gradient plus every affected post-update output master and compile-selected shadow. K hashes hypothetical detached rows; F/S hash committed live rows.",
+        "pre_restore_dynamic": "The closure hidden vector and every layer closure cell-state vector captured immediately before restoring segment-start state.",
+        "post_replay_dynamic": "The live hidden vector and every layer live cell-state vector immediately after state-only replay and before scratch clear.",
+        "detached_before_clear": "K hashes every detached recurrent/output master, moment, and shadow logical value after its hypothetical update. P/F/S use the canonical empty aggregate.",
+        "scratch_after_clear": "Every midpoint-partition tensor and scalar after MidpointClearScratch, including zeroed sinks, flags, counters, vectors, and buffers at their declared logical lengths. Persistent modeled-event and arm identity fields are excluded and remain separately recorded."
+      }
+    },
+    "state_root_contract": {
+      "leaf_bytes": 4096,
+      "domains": {
+        "metadata": "8 ASCII bytes GMDMETA1",
+        "leaf": "8 ASCII bytes GMDLEAF1",
+        "node": "8 ASCII bytes GMDNODE1",
+        "lone_node": "8 ASCII bytes GMDLONE1",
+        "tensor": "8 ASCII bytes GMDTENS1",
+        "partition": "8 ASCII bytes GMDPART1"
+      },
+      "metadata_digest": "SHA-256(metadata domain, partition uint8, dtype uint8, rank uint8, flags uint8=0, tensor_ordinal uint32LE, logical_bytes uint64LE, leaf_bytes uint32LE, name_bytes uint16LE, reserved uint16LE=0, dimensions uint64LE in order, ASCII name).",
+      "leaf_digest": "SHA-256(leaf domain, metadata_digest, leaf_index uint64LE, leaf_length uint32LE, exact canonical logical bytes). The final leaf uses its actual positive length; zero-length tensors are forbidden.",
+      "node_digest": "At level zero, pair adjacent leaves. A pair is SHA-256(node domain, metadata_digest, level uint32LE, node_index uint64LE, left_digest, right_digest). When a level has an unpaired final child, its parent is SHA-256(lone-node domain, metadata_digest, level uint32LE, node_index uint64LE, child_digest). Repeat over each resulting level until one root remains; no padding leaves exist.",
+      "tensor_root": "SHA-256(tensor domain, metadata_digest, logical_leaf_count uint64LE, tree_root).",
+      "partition_root": "SHA-256(partition domain, partition_code uint8, three reserved zero bytes, tensor_count uint32LE, ordered tensor roots).",
+      "update_algorithm": "Build every leaf at start using bounded reads. Every semantic write marks all intersecting logical leaves dirty after the write. At a checkpoint, recompute dirty leaves in tensor/leaf order, update only affected ancestors, then derive tensor and partition roots.",
+      "terminal_control": "After the last modeled event, independently reread every logical tensor in bounded chunks and rebuild all six forests from zero. Incremental and full terminal roots must match before finalization publication.",
+      "write_completeness": "A source audit must map every named future-affecting state object and every write site to exactly one typed tensor and dirty-range hook. Missing, overlapping, aliased without declaration, unordered, or unreachable mappings reject implementation closure.",
+      "mutation_controls": "For every partition, a source-bound harness flips one canonical byte in one copied leaf. Exactly that tensor and partition root must change; all other partition roots must remain equal. Restoring the byte must restore the original roots."
+    },
+    "partition_population": {
+      "dynamic": "Byte-LSTM hidden_ and every LstmLayer running cell state.",
+      "parameters": "Recurrent dense/symbol/gamma/beta masters, output masters, and compile-selected fp16 shadows.",
+      "optimizer": "All recurrent first/second moments and update_steps_ counters.",
+      "ordinary_tape": "layer_input_, input_history_, output_, h_hist_, err0_, recurrent native histories, native epochs, and ordinary gradient scratch at their defined logical lengths.",
+      "external_predictor": "Mixer, SSE, context tables, all q1 file-backed semantic state, frontend, and reversible-transform state that can affect a future coded probability or inverse byte.",
+      "midpoint": "Capture, gradient, replay, detached-control, phase, arm, canonical-clear state, and every retained update-observation accumulator."
+    },
+    "neutrality_contract": {
+      "arms": [
+        "v4 materialized P without v5 source",
+        "v5 P compiled with observer disabled",
+        "v5 P compiled with observer enabled"
+      ],
+      "requirements": [
+        "Two clean builds are byte-identical within each compile configuration.",
+        "All three arms emit identical every-bit probabilities, payload, archive, modeled inverse, raw inverse, and terminal future-affecting state on the frozen fixture.",
+        "Observer-enabled encoder and decoder probability streams are identical.",
+        "Every partition mutation control passes and terminal incremental roots equal independent full recomputation.",
+        "Observer-disabled source contains no active output path and remains the separate release/resource candidate."
+      ]
+    },
+    "resource_contract": {
+      "observer_runs_are_diagnostic": true,
+      "release_resource_authority": "Only the observer-disabled build may establish prize memory/runtime eligibility.",
+      "observer_incremental_live_ceiling_bytes": 268435456,
+      "merkle_storage_rule": "Store each real leaf digest and every pair-or-lone ancestor exactly once. A tensor with N leaves has fewer than 2N stored 32-byte nodes; dirty marking uses one bit per real leaf. The build receipt must derive the exact aggregate allocation from the source-bound layout and reject before execution if all observer storage and scratch exceed 268,435,456 bytes.",
+      "maximum_logical_cpus": 1,
+      "temporary_disk_ceiling_bytes": 100000000000,
+      "full_range_policy": "Initial and terminal state-root builds use bounded chunks. Dirty-leaf checkpoint refresh may page out only the exact fully hashed q1 mapping pages it touched; no complete 26-range scan or complete pageout occurs at a periodic checkpoint."
+    },
+    "receipt_contract": {
+      "parse_schema": "contracts/research/v1/cmix-midpoint-observability-parse-v1.schema.json",
+      "joint_schema": "contracts/research/v1/cmix-shadow-midpoint-oracle-v5-receipt.schema.json",
+      "schema_registry_policy": "Validate both schemas directly while qm8 is live. A future registry revision may add them only after qm8 terminal dispatch and must rebind every then-active dependent contract rather than silently invalidating frozen evidence.",
+      "required_runs": ["P", "K", "F_A", "F_B", "S_A", "S_B"],
+      "direction_rule": "Every run has independently parsed encoder and decoder streams.",
+      "failure_rule": "A missing stream, footer, record, partition, update, digest, parser result, inverse, guard, package member, or source-completeness row makes evidence_complete_pass=false and forbids a scientific gain verdict."
+    },
+    "unchanged_scientific_contract": {
+      "segment_events": 64,
+      "capture_events": 32,
+      "closure_after_event_offset": 32,
+      "first_adapted_prediction_offset": 33,
+      "arms": ["P", "K", "F", "S"],
+      "shifted_target_rotation": 16,
+      "persistent_parameter_writes": ["F", "S"],
+      "detached_update_arm": "K",
+      "populations": [250000, 1000000, 10000000],
+      "incremental_package_ceiling_bytes": 65536,
+      "incremental_live_ceiling_bytes": 268435456,
+      "proof_credit": "zero-credit causal oracle only"
+    },
+    "execution_authority": false,
+    "archive_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "The active q1-v3 qualification receipt and independent verification must pass under the current policy, and the canonical full-1G lease and lock must be absent.",
+    "V4 source must materialize under its exact existing source-only contract before v5 is derived without editing v4 in place.",
+    "A new source-difference manifest must prove that v5 changes only observability, schema, receipt, and build plumbing while P/K/F/S prediction arithmetic is byte-identical to v4.",
+    "An independent parser and source-completeness auditor must be content-addressed and must not import the emitter implementation.",
+    "Canonical registry integration is deferred until qm8 terminal dispatch; direct schema validation is mandatory in the meantime.",
+    "The frozen neutrality fixture and all six partition mutation controls must pass before any native finite-coder archive is interpreted.",
+    "No source build, fixture, coder arm, or corpus run is authorized by this design-only ABI."
+  ],
+  "claim_boundary": [
+    "This artifact freezes serialization and proof topology; it does not implement an observer or prove that v4 or v5 compiles.",
+    "Merkle roots and update records provide collision-resistant audit evidence, not a compression gain or Hutter score.",
+    "No q1 qualification, P/K identity, encoder/decoder synchronization, archive improvement, inverse, package, memory, runtime, or dependency fact is inferred.",
+    "All v4/v5 midpoint evidence remains zero Gamma compression and objective score credit until fresh counted archives exist."
+  ]
+}

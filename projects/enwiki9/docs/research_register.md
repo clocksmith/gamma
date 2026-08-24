@@ -1,5 +1,54 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint v5 receives a canonical observability ABI
+
+The observability-only successor reserved by the v4 audit now has a frozen
+binary evidence contract and two direct-bound Draft 2020-12 receipt schemas.
+This remains design infrastructure: no v5 source, parser, build, fixture, or
+archive exists, and the P/K/F/S midpoint arithmetic has not changed.
+
+`gamma-midpoint-observability-abi-v1` defines four independently parsed
+streams for every encoder and decoder run: tensor layout, every final uint16
+coder probability, rolling checkpoints, and midpoint updates. A 160-byte
+header binds the exact candidate source tree, ABI artifact, raw population,
+modeled stream, arm, replicate, and direction. A 56-byte footer binds body
+bytes, record count, body SHA-256, and clean EOF. Checkpoints have an exact
+332-byte representation at start, every 64 modeled events, terminal pre-flush,
+and finalization. Updates have an exact 328-byte representation and preserve
+all nine aggregate witnesses before detached buffers are cleared.
+
+The six state partitions now have a reproducible current-state definition.
+Every named initialized logical tensor is split into 4,096-byte leaves and
+hashed through a domain-separated pair-or-lone SHA-256 tree. Dirty leaves and
+only their ancestors are refreshed after semantic writes, avoiding v4's
+infeasible repeated scan of all large FXCM ranges. Start builds read every
+leaf in bounded chunks; terminal control independently rebuilds all six trees
+from zero. A tree with N leaves stores fewer than 2N digest nodes, and the
+future build must reject if its exact layout makes observer storage and
+scratch exceed `268,435,456` bytes.
+
+The update aggregate ABI fixes type tags, tensor metadata, logical lengths,
+content digests, observation timing, canonical empty groups, and source-order
+population for targets, capture, errors/adjoints, recurrent gradient plus
+Adam result, output gradient plus result, pre-restore state, post-replay
+state, complete detached values, and post-clear scratch. F and S retain the
+same target vector; the record's frozen rotation field remains their only
+association difference.
+
+The parse schema requires exactly the dynamic, parameter, optimizer,
+ordinary-tape, external-predictor, and midpoint partitions. The joint receipt
+requires P, K, F-A, F-B, S-A, and S-B, with encoder/decode observations,
+roundtrips, resources, package accounting, matched comparisons, and zero
+Gamma credit. In-memory positive controls validate both schemas; duplicate
+partition and wrong-repeat negatives are rejected.
+
+The global schema registry was deliberately left byte-identical because qm8's
+live terminal dispatcher binds it by SHA-256. V5 schemas remain directly bound
+until qm8 terminal dispatch; any later registry revision must rebind all
+active dependents. Evidence:
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1.json`
+and its adjacent review artifact.
+
 ## 2026-08-24 - midpoint oracle v4 has an observability-only pre-archive gap
 
 A source-level audit separated the midpoint algorithm from the proof harness
