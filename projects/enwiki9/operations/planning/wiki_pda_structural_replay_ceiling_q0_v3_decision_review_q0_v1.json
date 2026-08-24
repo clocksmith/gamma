@@ -1,0 +1,87 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "wiki_pda_structural_replay_ceiling_q0_v3_decision_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "wiki_pda_structural_replay_ceiling_q0_v3",
+      "required_evidence": "Dormant decision contract at SHA-256 3efd4601dd9ffeefde02dbe8548529398cf27687c27b0287e6a1af8c195c1be7."
+    },
+    {
+      "artifact": "wiki-pda-ceiling-decision-v3.schema.json",
+      "required_evidence": "Draft 2020-12 schema at SHA-256 0df58abe974a00dfe6478e8ccdf6abb88d36a1dd538a01b4dcca4b56c7c02d15."
+    },
+    {
+      "artifact": "wiki_pda_structural_replay_ceiling_q0_v2 sealed scanner",
+      "required_evidence": "Unchanged scanner source SHA-256 3e9aebfa0b32aa57fc23eb41b91bfc6dde737ff0428fbe28a7fa1ac52af4b82f and scan schema SHA-256 fb863fa4b119599264ad78aee5251e73b224178545788a079adc02784d8d79d8."
+    }
+  ],
+  "contract": {
+    "role": "adjacent static review of v3 decision representation and terminal-branch separation",
+    "reviewed_facts": [
+      "The generic campaign schema accepts the v3 design contract.",
+      "Draft202012Validator.check_schema accepts the v3 decision schema.",
+      "The v3 pass branch can remain valid when both legacy complete-correct-byte diagnostic booleans are false.",
+      "A pass requires all ten gates true, a fully positive parent, non-null parent receipts and independent verification, a verified population, a released evidenced lease, two non-null scan receipts, a non-null resource summary, complete measurements, D.active at least 254,953, and positive D correctness in every third.",
+      "Scientific retirement requires valid parent/population authority, complete measurements, all_promotion_predicates_pass=false, and at least one named scientific/resource gate false.",
+      "A measured resource failure before a scan receipt is a distinct zero-credit terminal retirement with a non-null resource artifact, resource_pass=false, and no fabricated measurements.",
+      "An infrastructure failure requires every gate and measurement null, a nonempty error, no promotion, and exactly one correction-only runner successor.",
+      "The schema cannot compare D/R/S/N counts or independently rederive hashes; the future independent verifier remains mandatory and must implement the equations frozen in the v3 contract."
+    ],
+    "positive_controls": [
+      "passing scientific receipt with legacy complete-correct diagnostics false",
+      "scientific retirement with active-envelope failure",
+      "resource retirement before either scan receipt",
+      "infrastructure failure with null evidence and gates"
+    ],
+    "negative_controls": [
+      "pass with active_envelope_pass=false",
+      "pass with promotion_authorized=false",
+      "wrong 4,079,243 active threshold",
+      "v2 candidate identity in a v3 receipt",
+      "archive_authority=true",
+      "legacy complete-correct gate used for v3 decision",
+      "retirement while all gates are true",
+      "resource-failure branch with resource_pass=true",
+      "infrastructure branch with a non-null gate",
+      "pass without measurements",
+      "scientific terminal branch without parent receipt",
+      "pass with D.active=254,952",
+      "pass with a zero-correct treatment third",
+      "resource-failure branch without parent verification"
+    ],
+    "static_result": {
+      "positive_controls_passed": 4,
+      "negative_controls_rejected": 14,
+      "schema_meta_validation_pass": true,
+      "contract_validation_pass": true,
+      "diff_check_pass": true
+    },
+    "open_implementation_work": [
+      "future v3 adaptive experiment and proposal",
+      "source-bound runner and independent verifier",
+      "strict execution, resource, verification, and output-manifest schemas",
+      "candidate/source closure and compiler binding",
+      "q1-v3 parent activation binding",
+      "two guarded full transformed-stream scans"
+    ]
+  },
+  "activation_requirements": [
+    "Qm8 and its managed namespace are terminally absent.",
+    "Q1-v3 parent qualification is independently terminal positive.",
+    "Every open implementation item is content-addressed and independently reviewed before execution.",
+    "The future verifier rederives all cross-field arithmetic and identity predicates that JSON Schema cannot express."
+  ],
+  "claim_boundary": [
+    "The controls are in-memory schema objects, not scanner or codec executions.",
+    "No transformed input, parent probability, donor surprise, archive, inverse, resource result, package, Gamma credit, or Hutter score exists.",
+    "The live qm8 process and all owned paths remain untouched."
+  ]
+}
