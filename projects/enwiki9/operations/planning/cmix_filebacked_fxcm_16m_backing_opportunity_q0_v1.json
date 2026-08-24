@@ -1,0 +1,188 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_16m_backing_opportunity_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_filebacked_fxcm_full_a_qm8_v1",
+      "required_evidence": "A terminal independently classified qm8 receipt; this planning artifact may not branch from a live guard or prefix observation."
+    },
+    {
+      "artifact": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+      "required_evidence": "The exact q1 source closure, bounded probability-identity receipts, and terminal qm8 result remain immutable and independently reopenable."
+    }
+  ],
+  "contract": {
+    "evidence_class": "source_geometry_plus_nonterminal_read_only_live_observation",
+    "scientific_verdict": null,
+    "candidate_materialized": false,
+    "execution_authorized": false,
+    "compression_credit_bytes": 0,
+    "score_credit_bytes": 0,
+    "source_bindings": {
+      "materialized_fxcm_source": {
+        "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/fxcmv1.cpp",
+        "bytes": 226837,
+        "sha256": "f634c53aad2c19e760d2ee1c84774e751b65dae07b28c07e6fe410314920c110"
+      },
+      "q1_allocator_header": {
+        "path": "programs/cmix_obias_memory_safe_parent_filebacked_q1_v1/gamma-filebacked-fxcm.h",
+        "bytes": 16083,
+        "sha256": "cd4ee24cd81569768f62b7ab717ff6375dcee1a942cc3e197d63b300f3b5182d"
+      },
+      "q1_program_lock": {
+        "path": "programs/cmix_obias_memory_safe_parent_filebacked_q1_v1/program-lock.json",
+        "bytes": 6647,
+        "sha256": "edd1252e090a1cc82eba195ddf69fa0f0a8ce317765e989b8e6fa8b7d8cf5787"
+      },
+      "live_qm8_package_binary": {
+        "path": "results/cmix_filebacked_fxcm_full_a_qm8_v1/package/cmix",
+        "bytes": 719861,
+        "sha256": "64369cca294dd32576f59a07ca46059c6af8069c92da4e8a34900160f03dc3be"
+      }
+    },
+    "single_axis_hypothesis": {
+      "axis": "storage_backing_threshold_only",
+      "q1_minimum_backed_bytes": 67108864,
+      "prospective_q2_minimum_backed_bytes": 16777216,
+      "source_delta": "In a new candidate only, change kMinimumBackedBytes from 64 MiB to 16 MiB. Preserve allocator implementation, predictor values, initialization, coder, preprocessing, pageout reachability, memory.high policy, numeric formats, package assets, and every call site.",
+      "reason_for_16m_boundary": "It is the largest power-of-two boundary that captures the first repeated anonymous ContextMap3 cohort. Going lower would add many small allocations without a source-measured high-water justification.",
+      "forbidden_rescue_axes": [
+        "do not connect the currently unreachable ByteUpdate pageout hook",
+        "do not change pageout cadence or advice type",
+        "do not change table sizes, hashes, replacement policy, mixer dimensions, or probabilities",
+        "do not change cgroup memory.high or memory.max",
+        "do not add adaptive residency or pressure observations to predictor behavior"
+      ]
+    },
+    "exact_new_allocation_geometry": {
+      "derivation": "Evaluate the sealed fxcmv1 alloc and alloc1 byte formulas at every source-ordered PredictorInit call. Include allocator alignment slack in allocation_bytes and exclude that slack from semantic_bytes.",
+      "rows": [
+        {
+          "source_objects": "maps1.Data and maps2.Data",
+          "allocation_template": "alloc<U32>",
+          "count": 2,
+          "allocation_bytes_each": 66846720,
+          "semantic_bytes_each": 66846720
+        },
+        {
+          "source_objects": "dcsmN.CxtState",
+          "allocation_template": "alloc<U8>",
+          "count": 1,
+          "allocation_bytes_each": 33554432,
+          "semantic_bytes_each": 33554432
+        },
+        {
+          "source_objects": "mxA[0].wx",
+          "allocation_template": "alloc1<short, align=32>",
+          "count": 1,
+          "allocation_bytes_each": 35651680,
+          "semantic_bytes_each": 35651648
+        },
+        {
+          "source_objects": "mxA[6].wx, mxA[7].wx, and mxA[11].wx",
+          "allocation_template": "alloc1<short, align=32>",
+          "count": 3,
+          "allocation_bytes_each": 17825888,
+          "semantic_bytes_each": 17825856
+        },
+        {
+          "source_objects": "mxA2[2].wx",
+          "allocation_template": "alloc1<short, align=32>",
+          "count": 1,
+          "allocation_bytes_each": 36700256,
+          "semantic_bytes_each": 36700224
+        },
+        {
+          "source_objects": "rcmA[0].t",
+          "allocation_template": "alloc1<U8, align=64>",
+          "count": 1,
+          "allocation_bytes_each": 16777280,
+          "semantic_bytes_each": 16777216
+        },
+        {
+          "source_objects": "cmC44.t, cmcr[0].t, and cmcr2[0..3].t",
+          "allocation_template": "alloc1<E1<14,128>, align=128>",
+          "count": 6,
+          "allocation_bytes_each": 33570944,
+          "semantic_bytes_each": 33570816
+        },
+        {
+          "source_objects": "cmcr[1..8].t and cmC2[16].t",
+          "allocation_template": "alloc1<E1<14,128>, align=128>",
+          "count": 9,
+          "allocation_bytes_each": 16793728,
+          "semantic_bytes_each": 16793600
+        }
+      ],
+      "additional_mapping_count": 24,
+      "additional_allocation_bytes": 662423968,
+      "additional_semantic_bytes": 662421824,
+      "additional_allocation_mib": 631.7367248535156,
+      "q1_mapping_count": 26,
+      "prospective_q2_mapping_count": 50,
+      "q1_backing_file_bytes_observed": 6067358880,
+      "prospective_q2_backing_file_bytes": 6729782848
+    },
+    "nonterminal_live_observation": {
+      "sample_utc": "2026-08-24T19:36:14.290359+00:00",
+      "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+      "stage": "encode",
+      "progress_percent": 29.53,
+      "reported_payload_bytes": 38690602,
+      "codec_pid": 4136098,
+      "codec_proc_start_ticks": 61806195,
+      "terminal_receipt_present": false,
+      "guard_status": "running",
+      "live_process_modified_or_signaled": false,
+      "observed_q1_file_mapping_count": 26,
+      "observed_q1_file_mapping_virtual_kib": 5925244,
+      "observed_subthreshold_anonymous_vma_cohort": {
+        "interpretation": "Anonymous VMAs interleaved in allocation order among the 26 q1 mappings are geometrically consistent with the named mixer and ContextMap3 cohorts. This is mapping reconciliation, not allocation-owned residency authority.",
+        "vma_size_kib": 432292,
+        "vma_rss_kib": 432112,
+        "vma_referenced_kib": 432112,
+        "vma_private_dirty_kib": 432112,
+        "unattributed_planned_range_bytes": 219676832,
+        "unattributed_reason": "The remaining planned ranges occupy allocator-coalesced heap VMAs and cannot receive source-owned RSS credit without the dormant marker/pagemap protocol."
+      },
+      "working_set_interpretation": "Every reconciled subthreshold VMA page was effectively resident and referenced at this sample. The threshold mutation can change anonymous state into reclaimable file cache, but it does not prove that the semantic working set shrinks; measured RSS may improve only through writeback, eviction, and refault."
+    },
+    "decision_router": {
+      "qm8_exact_and_peak_tree_at_or_below_9000000_kib": "Do not activate q2. Freeze q1 as the resource-qualified experimental parent after all remaining identity, inverse, cleanup, repeat, and verifier gates pass.",
+      "qm8_exact_but_peak_tree_above_9000000_kib_or_terminal_memory_failure": "Authorize only a newly materialized 16 MiB-threshold q2 candidate, provided the terminal classifier attributes failure to residency pressure rather than probability, inverse, cleanup, or infrastructure.",
+      "qm8_probability_payload_or_inverse_failure": "Do not activate q2. Locate and correct the first semantic divergence only.",
+      "qm8_infrastructure_incomplete": "Do not activate q2. Correct only the exact infrastructure defect and retain the q1 source unchanged.",
+      "q2_first_matched_gate": "Re-run the exact opening and distant 10M q1 populations with parent/q2 integer-probability, payload, inverse, mapping-manifest, cleanup, scratch, process-tree RSS, VmHWM, cgroup, and runtime evidence.",
+      "q2_promotion_condition": "All exact identity and cleanup predicates pass, the worst matched process-tree peak is at least 262144 KiB below q1, and the q2 peak is at or below 8750000 KiB.",
+      "q2_kill_condition": "Any probability, payload, inverse, allocation-count, cleanup, or deterministic-repeat mismatch retires the mutation. Resource improvement below 262144 KiB also retires this storage threshold; do not rescue it by changing cadence, table geometry, or cgroup policy."
+    },
+    "proof_limits": [
+      "The 631.736 MiB figure is exact storage geometry, not measured RSS reduction.",
+      "The live VMA cohort is diagnostic and non-terminal; it does not prove allocation ownership, high-water attribution, cleanup, or prize eligibility.",
+      "File-backed hot pages remain charged while resident and may cause writeback/refault runtime costs.",
+      "No q2 source, build, package, run, archive, or inverse exists."
+    ]
+  },
+  "activation_requirements": [
+    "qm8 is terminal and independently classified from its immutable full-roundtrip receipt",
+    "the exact terminal branch is memory pressure with otherwise intact q1 semantics, not a live prefix inference",
+    "qm8 fails the already frozen 9000000 KiB engineering-parent peak target",
+    "the full-1G lease and acquisition lock are absent and no qm8 process remains",
+    "one new candidate revision changes only kMinimumBackedBytes from 67108864 to 16777216 and rebinds the expected mapping manifest from 26 to 50",
+    "the smallest matched identity/resource gate and its numeric kill condition are frozen before execution"
+  ],
+  "claim_boundary": [
+    "This artifact records one conditional storage algorithm and its exact opportunity geometry; it is not an executed candidate.",
+    "The active qm8 process, candidate, result tree, scratch tree, cgroup, and lease were observed read-only and were not modified or signaled.",
+    "No compression bytes, archive gain, inverse, memory qualification, runtime qualification, Gamma authorship score, or Hutter Prize credit follows.",
+    "A terminal qm8 pass at or below 9000000 KiB suppresses this successor rather than authorizing an unnecessary mutation."
+  ]
+}
