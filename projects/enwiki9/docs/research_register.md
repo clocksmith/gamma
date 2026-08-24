@@ -20,6 +20,13 @@ and midpoint partitions required at every 64-event checkpoint by the v4
 evidence contract. Retained `KH_TRACE` likewise covers arithmetic probability
 and residual evidence, not those partitions.
 
+Literal reuse would also be computationally invalid. The q1 observer is
+encoder-only, omits payload-prefix digests, and rereads then pages out all 26
+large ranges at each state checkpoint. Applying that operation every 64 events
+would read at least 6.8 TB on the 250KB gate alone. The existing midpoint
+receipt schema is bound to the obsolete v2 candidate and cannot represent the
+v4 six-partition or update-row evidence.
+
 The contract also names hashes without freezing their canonical preimages.
 It does not define field tags, traversal order, integer byte order,
 floating-point object encoding, tensor geometry rows, checkpoint hook order,
@@ -38,9 +45,12 @@ Because its source changes, it receives a new candidate identity rather than
 editing v4 in place.
 
 The correction must compose the calibrated q1 observer for every-bit
-probability, coder, and large-FXCM evidence, extend it for the missing LSTM and
-midpoint partitions, pass a one-byte mutation control for every new partition,
-freeze an independently parsed canonical serialization, and prove
+probability and coder primitives, not its repeated full-range pageout path.
+V5 needs matched encoder/decoder hooks, payload-prefix hashes, complete LSTM
+and midpoint visitors, and an incremental canonical mutation transcript for
+large external state with bounded snapshots. It must pass a one-byte mutation
+control for every new partition, freeze an independently parsed canonical
+serialization and receipt schema, and prove
 instrumented/uninstrumented probability and payload neutrality
 before F/S results are interpretable. This audit is dormant while qm8 owns the
 full-1G lane and while q1-v3 qualification receipts are absent. It grants no
