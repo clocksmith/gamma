@@ -32,6 +32,12 @@ ENGINEERING_LIMIT_KIB = 9_000_000
 MEMORY_HIGH_BYTES = 9_000_000_000
 DISK_LIMIT_BYTES = 100_000_000_000
 PHASES = proof.PHASES
+PLAN_SCHEMA = (
+    proof.PROJECT
+    / "operations/planning/"
+    "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json"
+)
+PLAN_SCHEMA_SHA256 = "eb8970b91fbf809c93f8a876c316883bb39d03aac1b96d6b0f1a1dcec0e656bc"
 
 
 def artifact(path: Path) -> dict[str, Any]:
@@ -427,7 +433,16 @@ def main() -> int:
 
     proof.require_released_lease(args.exclusive_lease)
     plan_path, plan = scope.load_json(args.plan, "100M planning contract")
-    if plan.get("artifact_id") != PLAN_ID or plan.get("candidate_id") != CANDIDATE_ID:
+    if scope.sha256_file(PLAN_SCHEMA) != PLAN_SCHEMA_SHA256:
+        raise RuntimeError("100M planning schema hash drift")
+    plan_schema = json.loads(PLAN_SCHEMA.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(plan_schema)
+    jsonschema.validate(plan, plan_schema)
+    if (
+        plan.get("artifact_id") != PLAN_ID
+        or plan.get("candidate_id") != CANDIDATE_ID
+        or plan.get("planning_schema_sha256") != PLAN_SCHEMA_SHA256
+    ):
         raise RuntimeError("100M planning contract identity mismatch")
     observer_build_path, observer_build = load_contract(
         args.observer_build,
@@ -542,6 +557,11 @@ def main() -> int:
         args.identity_resource_schema, "identity/resource schema"
     )
     identity_guard = scope.existing_regular(args.identity_resource_guard, "identity guard v2")
+    identity_guard_schema_path, identity_guard_schema = scope.load_json(
+        proof.PROJECT / "contracts/research/v1/resource-guard-receipt.schema.json",
+        "identity guard v2 schema",
+    )
+    jsonschema.Draft202012Validator.check_schema(identity_guard_schema)
     soft_guard = scope.existing_regular(args.release_soft_guard, "release soft-high guard")
     release_guard = scope.existing_regular(
         soft_guard.with_name("run_with_resource_guard_v3.py"), "release resource guard v3"
@@ -571,6 +591,10 @@ def main() -> int:
         or coordinator.get("identity_resource_guard")
         != str(identity_guard.relative_to(proof.PROJECT))
         or coordinator.get("identity_resource_guard_sha256") != scope.sha256_file(identity_guard)
+        or coordinator.get("identity_resource_guard_schema")
+        != str(identity_guard_schema_path.relative_to(proof.PROJECT))
+        or coordinator.get("identity_resource_guard_schema_sha256")
+        != scope.sha256_file(identity_guard_schema_path)
         or coordinator.get("release_soft_high_guard")
         != str(soft_guard.relative_to(proof.PROJECT))
         or coordinator.get("release_soft_high_guard_sha256") != scope.sha256_file(soft_guard)
