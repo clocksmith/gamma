@@ -310,6 +310,15 @@ accounting fields, verifies managed-lease transition semantics, and validates
 its output against the registered schema. No success-verification output or
 Arm B authority exists while qm8 is live.
 
+The post-audit read-only qm8 sample remains non-terminal at `18.57%` of the
+encode. The codec, stage, nested guards, coordinator, and adaptive owner remain
+live. Cgroup current use is `8,998,580,224` bytes and the peak remains
+`9,002,086,400` bytes; `memory.events.high` has reached `205,484`, while
+`max`, OOM, and OOM-kill remain zero. The codec is still alternating runnable
+and disk-wait states under a one-CPU guard. This is continued pressure evidence
+only: payload identity, inverse, cleanup, runtime, and q1 qualification remain
+unknown until the terminal receipt and the matching independent verifier exist.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before
@@ -518,6 +527,27 @@ finite CMIX range state, archive termination, package bytes, or runtime. Native
 versus arbitrary-precision identity can prove only that the frozen integer law
 was implemented; fresh P/K/D/M arithmetic archives remain the sole compression
 authority.
+
+A subsequent activation audit found that the source closure is not yet a safe
+execution closure. All four proof entry points that inspect the exclusive lane
+still require an obsolete `active=true` field before treating a lease as live.
+The canonical managed-lease schema has no `active` property, and the current
+schema-valid qm8 lease therefore passes those functions as apparently absent
+even while its owner PID and descendants are live. Separately, the frozen build
+contract requires `clang++` plus `ld.lld`, neither of which exists on the
+selected host. These are an execution-control contract-drift error and an
+environment dependency absence, respectively; neither is evidence against the
+Q63 mixture law.
+
+The exact v1 files remain immutable and their program-lock verification remains
+valid. Direct v1 execution is now quarantined. The only authorized mutation is
+a separately identified `gamma_safe_mix_v2` proof envelope that preserves the
+v1 arithmetic and populations, requires receipt-bound activation, rejects any
+extant lease or acquisition-lock path under no-follow inspection, proves qm8
+process closure, and binds a compiler/linker pair that actually exists. No
+dependency installation, compiler substitution, proof execution, archive, or
+score claim was authorized. See the
+[`activation audit`](../operations/planning/gamma_safe_mix_v1_activation_audit_q0_v1.json).
 
 ## 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring
 

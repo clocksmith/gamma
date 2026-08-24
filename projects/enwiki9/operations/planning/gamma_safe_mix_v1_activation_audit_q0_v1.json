@@ -1,0 +1,136 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_safe_mix_v1_activation_audit_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "gamma_safe_mix_v1 content-addressed source closure",
+      "required_evidence": "The existing program lock and independent verification remain byte-identical and retain zero execution, archive, compression, and score authority."
+    },
+    {
+      "artifact": "canonical managed exclusive-full1g lease contract",
+      "required_evidence": "The lease schema and the current qm8 managed lease determine occupancy; an obsolete optional active boolean may not override that contract."
+    },
+    {
+      "artifact": "frozen SAFE-MIX build toolchain",
+      "required_evidence": "Any future execution binds an available compiler and linker that actually satisfy the frozen build contract without installing or silently substituting dependencies."
+    }
+  ],
+  "contract": {
+    "audited_candidate_id": "gamma_safe_mix_v1",
+    "evidence_class": "static_execution_authorization_failure",
+    "program_lock": {
+      "path": "programs/gamma_safe_mix_v1/program-lock.json",
+      "bytes": 4598,
+      "sha256": "0234709ab983eea4f1f3bffaa0ee83bc5fb4a72bbb94bb996d3582d538c6f41c"
+    },
+    "program_lock_verification": {
+      "path": "results/gamma_safe_mix_v1/01_program_lock/program-lock-verification.json",
+      "bytes": 815,
+      "sha256": "8ff09542dff97ac60b1afba052401f546c49db85df0c6e762c859ebab8a3ad65"
+    },
+    "lease_schema": {
+      "path": "operations/runtime/exclusive_full1g.schema.json",
+      "bytes": 2468,
+      "sha256": "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96",
+      "required_occupancy_fields": [
+        "schema",
+        "candidate_id",
+        "pid",
+        "proc_start_ticks",
+        "command_sha256",
+        "runner_sha256",
+        "guard_path",
+        "result_path",
+        "scratch_path",
+        "resource_class",
+        "started_utc",
+        "heartbeat_utc",
+        "lease_mode"
+      ],
+      "active_boolean_declared": false
+    },
+    "affected_entry_points": [
+      {
+        "path": "programs/gamma_safe_mix_v1/safe-mix-build-capture.py",
+        "bytes": 15773,
+        "sha256": "9c171a0b8b5784a7169adf6a0c574061d0cdd9785bddaa31d44c7304efb9cc43"
+      },
+      {
+        "path": "programs/gamma_safe_mix_v1/safe-mix-build-negative-controls.py",
+        "bytes": 16731,
+        "sha256": "7f2a495431b75263a75e560731212fdfe2af44063a5baa53e4b813676fb02b07"
+      },
+      {
+        "path": "programs/gamma_safe_mix_v1/safe-mix-negative-controls-capture.py",
+        "bytes": 9564,
+        "sha256": "b53f8551246f7f10a78dc5d061f805b61c50db6dd591e4becb79854aa4ed7e09"
+      },
+      {
+        "path": "programs/gamma_safe_mix_v1/safe-mix-oracle-suite.py",
+        "bytes": 15274,
+        "sha256": "23e7bcd7ef75bc6f31bad1470c5bbf080aeb732e138cf5665b7ebfbf543f07ab"
+      }
+    ],
+    "counterexample": {
+      "entry_point_predicate": "value.get('active') is True and the declared pid is live",
+      "canonical_managed_lease_fact": "The v1 lease schema declares no active property; a schema-valid live managed lease therefore makes value.get('active') return null.",
+      "derived_result": "Every affected active_lease function returns false for the current live qm8 managed lease.",
+      "safety_effect": "Direct SAFE-MIX proof entry points can pass their lease preflight while the exclusive full-1G lane is occupied."
+    },
+    "toolchain_observation": {
+      "build_contract": {
+        "path": "programs/gamma_safe_mix_v1/safe-mix-build-contract.json",
+        "bytes": 3075,
+        "sha256": "973f4f39627ce94e651d52438a05dc27742301dc053597b91dc965645ed69851",
+        "declared_compiler_family": "clang++",
+        "declared_link_argument": "--ld-path={LINKER}"
+      },
+      "selected_host_clangxx_present": false,
+      "selected_host_ld_lld_present": false,
+      "classification": "environment_dependency_absent",
+      "authority": "No compiler substitution or dependency installation is authorized by this audit."
+    },
+    "root_cause": {
+      "lease_failure_class": "execution-control contract drift",
+      "toolchain_failure_class": "environment dependency absence",
+      "mixture_algorithm_implicated": false,
+      "q63_source_closure_implicated": false
+    },
+    "decision": {
+      "v1_program_lock_status": "retain_verified_source_closure",
+      "v1_direct_execution_status": "quarantine_until_separately_versioned_activation_envelope",
+      "single_authorized_mutation": "Create gamma_safe_mix_v2 by changing only the proof-execution envelope: require receipt-bound activation, reject any extant lease or acquisition-lock namespace path including symlinks, bind process closure, and bind an actually available frozen compiler/linker pair. Preserve the v1 Q63 arithmetic, posterior scope, arms, controls, proof populations, and zero-authority boundaries byte-for-byte where applicable.",
+      "execution_authorized": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    },
+    "successor_requirements": [
+      "A revisioned activation plan binds the exact qm8 terminal receipt and independently verified terminal classification.",
+      "Both operations/runtime/exclusive_full1g.json and its acquisition-lock path are absent under no-follow inspection, and no qm8 descendant remains live.",
+      "Every proof entry point validates the activated plan itself; observing a free path alone is insufficient.",
+      "The program lock, program-lock verification, activation envelope, compiler, linker, Python runtime, commands, outputs, and receipt schemas are content-addressed.",
+      "The build and oracle suite run under an external resource guard in new disjoint result and scratch roots.",
+      "Direct v1 receipts lacking the successor activation-chain receipt remain quarantined and grant no evidence authority."
+    ]
+  },
+  "activation_requirements": [
+    "Do not execute any affected gamma_safe_mix_v1 proof entry point from this revision.",
+    "Do not edit the verified gamma_safe_mix_v1 program lock or any file it binds.",
+    "Materialize a separately identified successor only after preserving one semantic change axis: proof-execution authorization and environment binding.",
+    "Do not launch the successor while qm8 owns the exclusive full-1G lane."
+  ],
+  "claim_boundary": [
+    "This audit proves an execution-control counterexample and an absent host toolchain dependency; it does not test SAFE-MIX arithmetic.",
+    "The verified v1 source closure remains valid static evidence, but no v1 build, oracle, finite coder, archive, or score claim is authorized.",
+    "The result changes neither the external 108,513,707-byte baseline nor Gamma's zero score credit."
+  ]
+}
