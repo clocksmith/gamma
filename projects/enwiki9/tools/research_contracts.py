@@ -148,6 +148,14 @@ SCHEMA_PATHS = {
         CONTRACT_ROOT
         / "cmix-filebacked-fxcm-100m-observer-build.schema.json"
     ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-calibration.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
