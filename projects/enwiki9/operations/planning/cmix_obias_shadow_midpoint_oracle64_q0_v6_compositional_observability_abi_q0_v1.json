@@ -1,0 +1,274 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_abi_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_q0_v1.json",
+      "required_evidence": "Exact 15,309-byte compositional-boundary design with SHA-256 f3bdcad4fc25084ddfee512ea255cf8e78dd06c7d177d6f658af7884a0eba7df."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_source_layout_q0_v1.json",
+      "required_evidence": "Exact 13,726-byte component layout with SHA-256 6dd5492cbe3f06de9f9a6d1c954ca7138ccead3b9139cc9139962013e40ec245."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1.json",
+      "required_evidence": "Superseded-before-implementation ABI retained only for its exact typed-tensor Merkle domains and canonicalization; v6 does not retain its periodic full-state topology."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/integration.patch",
+      "required_evidence": "Exact dormant v4 mechanism overlay with SHA-256 36421ecf395ed324425368bf37db1452217e0e73f8af410970a8d6b7bd5d2fb7."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6",
+    "parent_algorithm_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+    "superseded_observer_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "format_id": "gamma-midpoint-compositional-abi-v2",
+    "format_version": 2,
+    "changed_semantic_axis": "observability_scope_only",
+    "normative_terms": {
+      "byte_order": "little-endian for every integer and IEEE-754 bit pattern",
+      "hash": "SHA-256 with the exact bytes and domain tags declared below; hexadecimal appears only in JSON receipts",
+      "ascii": "Every tag and tensor name is exact 7-bit ASCII with no implicit terminator except the common-header magic's declared NUL",
+      "integer_width": "uint8, uint16, uint32, and uint64 have exactly 1, 2, 4, and 8 bytes",
+      "float_width": "float observations are exact finite IEEE-754 binary32 bits bit-cast to uint32; NaN or infinity aborts",
+      "write_rule": "Every stream uses complete retry-on-EINTR writes, rejects short writes and arithmetic overflow, fsyncs before close, and publishes no footer after any observation failure",
+      "comparison_rule": "Digests are comparable only when population, coordinate, count, format, source, and layout bindings match; arm and direction comparisons are those explicitly authorized below"
+    },
+    "common_header": {
+      "bytes": 192,
+      "fields_in_order": [
+        "offset 0: 7 ASCII bytes GMCOBS2 followed by one NUL byte",
+        "offset 8: uint16 format_version=2",
+        "offset 10: uint16 stream_kind; 1=checkpoint, 2=update",
+        "offset 12: uint8 arm; 0=P, 1=K, 2=F, 3=S",
+        "offset 13: uint8 replicate; 0=A, 1=B",
+        "offset 14: uint8 direction; 0=encode, 1=decode",
+        "offset 15: uint8 reserved=0",
+        "offset 16: uint64 raw population bytes",
+        "offset 24: uint64 modeled event count",
+        "offset 32: 32 raw bytes complete v6 candidate source-tree SHA-256",
+        "offset 64: 32 raw bytes this exact ABI artifact SHA-256",
+        "offset 96: 32 raw bytes exact v6 component-layout artifact SHA-256",
+        "offset 128: 32 raw bytes exact raw-population SHA-256",
+        "offset 160: 32 raw bytes exact reversible modeled-stream SHA-256"
+      ],
+      "open_rule": "Create each stream with O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC beneath a pre-opened absolute result-directory descriptor. Reject symlinks, existing paths, non-regular files, path escape, open/write/seek/fsync/close failure, and geometry overflow.",
+      "identity_rule": "Both streams for one run have byte-identical common fields except stream_kind. Encoder and decoder differ only in direction and direction-specific observations."
+    },
+    "common_footer": {
+      "bytes": 56,
+      "fields_in_order": [
+        "4 ASCII bytes END2",
+        "uint32 footer_bytes=56",
+        "uint64 record_count",
+        "uint64 body_bytes",
+        "32 raw bytes SHA-256 over every byte after the 192-byte header and before this footer"
+      ],
+      "clean_eof_rule": "Write the footer only after complete successful observation, fsync it, close successfully, and require immediate EOF. Missing, duplicate, partial, trailing, count-inconsistent, body-size-inconsistent, or digest-inconsistent footers reject the stream."
+    },
+    "rolling_digests": {
+      "probability": {
+        "initial_preimage": "8 ASCII bytes GMCPROB2",
+        "record_preimage": "For every coded bit in order, append the exact final uint16 probability immediately before the arithmetic split.",
+        "record_bytes": 2,
+        "count_rule": "Exactly modeled_events*8 records for the frozen byte population.",
+        "checkpoint_rule": "Clone-finalize the live SHA-256 context without reset at each sparse checkpoint."
+      },
+      "component_boundary": {
+        "initial_preimage": "8 ASCII bytes GMCBOUND",
+        "record_preimage": "For every completed coded-bit Predictor::Perceive in order, append uint64 zero-based coded-bit ordinal, uint32 exact bits of ByteMixer::Predict()[0] assigned to byte_mixer_output, and uint32 bit-cast bits of ByteModel::ex.",
+        "record_bytes": 16,
+        "count_rule": "Exactly one boundary record after every coded bit and exactly modeled_events*8 records total.",
+        "checkpoint_rule": "Clone-finalize the live SHA-256 context without reset at each sparse checkpoint.",
+        "source_rule": "The observer hook runs immediately after byte_mixer_output and lstmex are assigned and before Predictor::Perceive returns. It must not call Predict again or mutate component/environment state."
+      },
+      "payload_prefix": {
+        "initial_preimage": "8 ASCII bytes GMCPAYL2",
+        "record_preimage": "Append each payload byte in payload-file order exactly once.",
+        "encoder_rule": "Hash logically emitted bytes, including bytes still in the coder's output buffer, and report that logical prefix length.",
+        "decoder_rule": "Hash physically consumed payload bytes and report that consumed prefix length.",
+        "comparison_rule": "Intermediate values compare only across arms or repeats in the same direction at the same coordinate. Final payload files and their ordinary file SHA-256 must match encoder/decode within arm."
+      }
+    },
+    "stream_contracts": {
+      "checkpoint": {
+        "stream_kind": 1,
+        "record_tag": "CP02",
+        "record_bytes": 204,
+        "record_framing": "tag[4], uint32 record_bytes=204, uint8 checkpoint_kind, uint8 hook_phase, uint16 reserved=0, uint32 range_low, uint32 range_high, uint32 range_code, uint32 coder_aux, uint64 modeled_events, uint64 coded_bits, uint64 probability_records, uint64 component_records, uint64 midpoint_update_records, uint64 payload_prefix_bytes, probability_sha256[32], component_boundary_sha256[32], payload_prefix_sha256[32], component_state_root_sha256[32]",
+        "checkpoint_kinds": {
+          "0": "start",
+          "1": "first_closure",
+          "2": "first_native_horizon",
+          "3": "population_midpoint",
+          "4": "terminal_pre_flush",
+          "5": "finalization"
+        },
+        "hook_phases": {
+          "0": "After model construction, retained pretraining, observer initialization, and the start component-state rebuild; immediately before the first modeled BeginTraceByte.",
+          "1": "Immediately after EndTraceByte at modeled-event coordinate 33, after the first closure's adapted boundary output and update record are available.",
+          "2": "Immediately after EndTraceByte at modeled-event coordinate 128.",
+          "3": "Immediately after EndTraceByte at floor(population modeled_events/2).",
+          "4": "Immediately after the final EndTraceByte and before Encoder::Flush or decoder finalization.",
+          "5": "Immediately after Encoder::Flush or successful decoder finalization; component state and probability/component digests must equal terminal_pre_flush while payload evidence may advance."
+        },
+        "coordinate_rule": "Every allowed population is at least 250,000 modeled events, so the six rows are ordered start=0, first_closure=33, first_native_horizon=128, population_midpoint=floor(N/2), terminal_pre_flush=N, finalization=N. Exactly one row of every kind exists; the two terminal-coordinate rows remain distinct.",
+        "count_rule": "Exactly six checkpoint records per stream.",
+        "coder_fields": "Encoder sets range_code=0 and records exact low/high/coder_aux; decoder records low/high/code/coder_aux. No encoder/decoder coder-state equality is inferred.",
+        "state_rule": "Every row contains a fresh full component root over all 141 typed tensors and partition codes 1,2,3,4,6,7 under the exact v6 layout."
+      },
+      "update": {
+        "stream_kind": 2,
+        "record_tag": "UP02",
+        "record_bytes": 256,
+        "record_framing": "tag[4], uint32 record_bytes=256, uint64 update_ordinal, uint64 segment_start_modeled_events, uint64 closure_modeled_events, uint64 boundary_record_count, uint64 probability_record_count, uint32 native_start_phase, uint32 closure_phase, uint8 arm, uint8 committed, uint8 detached, uint8 target_rotation, uint8 k_dynamic_equal, three reserved zero bytes, source_symbols_sha256[32], unrotated_targets_sha256[32], pre_restore_dynamic_sha256[32], post_replay_dynamic_sha256[32], cumulative_probability_sha256[32], cumulative_component_boundary_sha256[32]",
+        "update_formula": "zero when modeled_events < 33; otherwise floor((modeled_events-33)/64)+1",
+        "coordinate_formula": "For zero-based update ordinal u: segment_start_modeled_events=64*u, closure_modeled_events=33+64*u, native_start_phase=(64*u)%128, closure_phase=native_start_phase+32, and both rolling record counts equal 8*closure_modeled_events.",
+        "arm_rule": "P emits no rows. K emits the formula count with arm=1, committed=0, detached=1, target_rotation=0, k_dynamic_equal=1. F emits the formula count with arm=2, committed=1, detached=0, target_rotation=0, k_dynamic_equal=0. S emits the formula count with arm=3, committed=1, detached=0, target_rotation=16, k_dynamic_equal=0.",
+        "timing": "Retain the four local digests while their preimages exist, clear scratch, finish the component boundary observation for the closure event, then append the row before its matching first_closure checkpoint or the next modeled event. No full gradient, parameter, optimizer, or cleared-scratch reread is required.",
+        "source_symbols_digest": "SHA-256 over 8 ASCII bytes GMCSYMB2 followed by the 32 source-order midpoint_symbols_ values as uint32LE.",
+        "unrotated_targets_digest": "SHA-256 over 8 ASCII bytes GMCTARG2 followed by the 32 source-order midpoint_targets_ values as uint32LE before the S association rotation.",
+        "pre_restore_dynamic_digest": "SHA-256 over 8 ASCII bytes GMCPRED2, uint32LE hidden_count=272, the 272 closure-hidden f32 bit patterns, uint32LE layer_count=1, uint32LE cell_count=256, then the 256 layer-0 closure-cell f32 bit patterns.",
+        "post_replay_dynamic_digest": "SHA-256 over 8 ASCII bytes GMCPOST2, uint32LE hidden_count=272, the 272 live post-replay hidden f32 bit patterns, uint32LE layer_count=1, uint32LE cell_count=256, then the 256 live post-replay layer-0 cell f32 bit patterns.",
+        "k_identity_rule": "K performs bytewise comparison of the same canonical dynamic preimages, requires both digests equal, sets k_dynamic_equal=1, and aborts before publication on any mismatch."
+      }
+    },
+    "file_geometry": {
+      "checkpoint_file_bytes": 1472,
+      "checkpoint_derivation": "192 header + 6*204 records + 56 footer",
+      "update_file_formula": "248 + 256*U bytes, where U is the update count",
+      "population_rows": [
+        {
+          "modeled_events": 250000,
+          "updates": 3906,
+          "non_parent_update_file_bytes": 1000184,
+          "parent_update_file_bytes": 248
+        },
+        {
+          "modeled_events": 1000000,
+          "updates": 15625,
+          "non_parent_update_file_bytes": 4000248,
+          "parent_update_file_bytes": 248
+        },
+        {
+          "modeled_events": 10000000,
+          "updates": 156250,
+          "non_parent_update_file_bytes": 40000248,
+          "parent_update_file_bytes": 248
+        }
+      ],
+      "sparse_state_rebuild_input_bytes_per_run": 106837344,
+      "sparse_state_derivation": "6*17,806,224 canonical component bytes",
+      "interpretation": "These are exact observer stream and sparse-read geometries, not codec package bytes, compression savings, or runtime measurements."
+    },
+    "chronological_third_shadow_coders": {
+      "role": "Exact diagnostic control for the preregistered requirement that aligned F beat shifted S in every original-coordinate third; these payloads are not the native archive and receive no score credit.",
+      "coordinate_rule": "For raw population size N and zero-based original raw-byte coordinate r, third 0 is 0 <= r < floor(N/3), third 1 is floor(N/3) <= r < floor(2*N/3), and third 2 is floor(2*N/3) <= r < N. The reversible frontend must expose the bound original coordinate for each coded modeled byte; a non-bijective, missing, duplicated, or reordered association rejects this diagnostic.",
+      "coder_rule": "Instantiate one fresh copy of the exact native integer range coder at the first modeled byte associated with each third. Feed it the identical final uint16 probabilities and actual decoded bits used by the native coder for exactly those associated bytes, in modeled coding order, then perform the same deterministic flush at that third's end.",
+      "artifacts": "Each arm/direction emits three raw shadow payload files plus path, bytes, ordinary file SHA-256, input coded-bit count, first/last raw coordinates, return code, and clean-flush boolean. Encoder and decoder artifacts must be byte-identical within an arm; repeats must be byte-identical.",
+      "control_rule": "At 10MB, for each third independently, F shadow payload bytes must be strictly smaller than both P and S. The global 40,793-byte threshold is still measured only on the native complete arithmetic archive.",
+      "isolation_rule": "Shadow coders never feed probabilities, state, bytes, or flush effects back into the native coder, component, environment, frontend, inverse, or package. Observer-off neutrality must prove their complete absence from the release path."
+    },
+    "comparison_contract": {
+      "within_arm_direction": "Encoder/decode probability and component digests/counts must match at corresponding semantic coordinates; final payload file, modeled inverse, and raw inverse must match the bound population.",
+      "p_k": "P-A and K-A must match every complete probability and component digest, payload/archive/inverse artifact, corresponding sparse component root, and final package member. Every K update row must pass its inline dynamic identity rule.",
+      "f_repeat": "F-A and F-B must match source, binary, checkpoint/update streams after normalizing replicate header byte, every digest/count, payload/archive/inverse, package, and resource-policy decision.",
+      "s_repeat": "S-A and S-B must satisfy the same complete repeat surface.",
+      "aligned_shifted": "Before their first update, F and S must match. At each corresponding update, source-symbol and unrotated-target digests match; source audit proves target_rotation is the sole treatment/control association difference. No state equality is expected after the first update. At 10MB, the three fresh-start third shadow payloads must each place F strictly below P and S.",
+      "failure_rule": "The first missing, malformed, non-finite, misordered, count-inconsistent, digest-inconsistent, P/K-different, encoder/decode-different, repeat-different, inverse-failing, or source-closure-failing fact is an implementation/observability failure and forbids scientific interpretation."
+    },
+    "neutrality_contract": {
+      "arms": [
+        "materialized v4 P without v6 source",
+        "v6 P with fixed wrapper storage and observer output disabled",
+        "v6 P with fixed wrapper storage and observer output enabled"
+      ],
+      "requirements": [
+        "Two clean builds are byte-identical within each compile configuration.",
+        "All three arms emit identical every-bit final probabilities, payload, archive, modeled inverse, raw inverse, and terminal component output on the frozen neutrality population.",
+        "The fixed folded_bias_ allocation and selector exposure change no prediction or persistent learning state.",
+        "Observer-enabled encoder/decode digests synchronize and every copied-leaf component-root mutation control passes.",
+        "Only the observer-disabled build may provide release resource authority."
+      ]
+    },
+    "scientific_contract": {
+      "populations": [250000, 1000000, 10000000],
+      "segment_events": 64,
+      "capture_events": 32,
+      "first_adapted_prediction_offset": 33,
+      "shifted_target_rotation": 16,
+      "incremental_package_ceiling_bytes": 65536,
+      "incremental_live_ceiling_bytes": 268435456,
+      "thresholds": {
+        "250000": "F archive is strictly smaller than P and S after every exactness predicate passes.",
+        "1000000": "F saves at least 4,080 arithmetic archive bytes over P and strictly beats S.",
+        "10000000": "F saves at least 40,793 native arithmetic archive bytes over P, strictly beats S globally, and its fresh-start diagnostic shadow payload is strictly smaller than both P and S in each preregistered original-coordinate third."
+      },
+      "authority": "The midpoint oracle remains zero objective credit even on a positive causal result; it authorizes only the separately identified persistence-attribution successor."
+    },
+    "receipt_contract": {
+      "parse_schema": "contracts/research/v1/cmix-midpoint-compositional-parse-v2.schema.json",
+      "joint_schema": "contracts/research/v1/cmix-shadow-midpoint-oracle-v6-receipt.schema.json",
+      "required_logical_runs": ["P_A", "K_A", "F_A", "F_B", "S_A", "S_B"],
+      "direction_rule": "Every logical run has independently emitted and independently parsed encode and decode streams.",
+      "parser_independence": "The parser/verifier must not import, compile, link, or invoke observer-emitter code. It independently rederives binary framing, body/file hashes, record geometry, count and coordinate formulas, flag semantics, and cross-run comparisons. Online probability, boundary, and component-state digests are observed values whose preimage-hook correctness is established separately by source audit, mutation controls, and observer neutrality; the parser must not pretend to reconstruct absent per-bit or tensor preimages.",
+      "registry_policy": "Validate schemas directly while qm8 is live. Canonical research_contracts.py registry integration is deferred until the active source-bound dispatcher terminalizes because changing its bound hash would invalidate live authority.",
+      "failure_rule": "Missing evidence yields an incomplete or invalid receipt, never an inferred false or positive scientific result."
+    },
+    "negative_controls": [
+      "wrong magic, version, stream kind, arm, direction, ABI hash, layout hash, population hash, or nonzero reserved byte",
+      "truncated, duplicated, reordered, wrong-sized, digest-corrupt, footerless, or trailing-byte stream",
+      "missing, duplicated, or wrong-coordinate sparse checkpoint",
+      "wrong probability, boundary, update, or payload count",
+      "wrong update coordinate/phase/flag/rotation or K dynamic equality false",
+      "single-bit corruption in each rolling digest and sparse component root",
+      "wrong, overlapping, missing, reordered, unflushed, encoder/decode-different, or native-feedback-contaminated third shadow coder",
+      "joint receipt missing one direction/run, failed parse, P/K mismatch, F/S repeat mismatch, failed inverse/resource/package closure, or positive verdict with a failed antecedent"
+    ],
+    "resource_contract": {
+      "observer_runs_are_diagnostic": true,
+      "release_resource_authority": "observer-disabled build only",
+      "observer_incremental_live_ceiling_bytes": 268435456,
+      "maximum_logical_cpus": 1,
+      "temporary_disk_ceiling_bytes": 100000000000,
+      "sparse_rebuild_rule": "Use bounded reads and O(number of tensors plus one leaf) working memory; do not retain complete copied state.",
+      "no_soft_dirty_dependency": true
+    },
+    "current_state": {
+      "layout_frozen": true,
+      "abi_frozen": true,
+      "receipt_schemas_exist": true,
+      "source_exists": false,
+      "parser_exists": false,
+      "build_exists": false,
+      "archive_exists": false,
+      "q1_v3_qualification_exists": false,
+      "execution_authority": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    }
+  },
+  "activation_requirements": [
+    "The active qm8 full-1G gate must terminalize, receive independent classification, and release the exclusive lease and lock before source, parser, build, fixture, or codec execution.",
+    "Strict direct-bound parse and joint receipt schemas plus positive and negative static controls must freeze without modifying the live dispatcher's research-contract registry.",
+    "A separately content-addressed independent parser, source-interface auditor, v6 observability-only source delta, two clean builds, and neutrality fixture must pass before native population evidence is interpreted.",
+    "The qualified q1 parent and v4 materialization prerequisites remain mandatory; this ABI grants no bypass.",
+    "Every larger population requires the exact preceding population decision and a fresh joint replay; no forecast addition is allowed."
+  ],
+  "claim_boundary": [
+    "This artifact freezes a bounded binary observation format and comparison topology; it does not implement or execute them.",
+    "The six sparse roots are diagnostic and do not claim whole-CMIX state omniscience.",
+    "No q1 qualification, P/K identity, F gain, S control result, build, archive, inverse, package, resource eligibility, or Hutter score is proved.",
+    "All midpoint, SAFE-MIX, and successor compression and objective credits remain zero until fresh native counted evidence exists."
+  ]
+}

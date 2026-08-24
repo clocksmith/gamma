@@ -1,5 +1,63 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint v6 freezes a bounded compositional ABI and fail-closed receipts
+
+The compositional-boundary successor now has a fixed typed layout, binary ABI,
+direct-bound parse schema, joint finite-coder schema, and adjacent static
+review. This closes the design-only activation item left by the prior v6
+entry; it does not materialize source or authorize execution.
+
+The sparse component layout reuses the exact 130 Byte-LSTM/midpoint tensors
+without renumbering them and adds eleven canonical ByteMixer/ByteModel wrapper
+tensors. The complete component is therefore 141 tensors, `17,806,224`
+logical bytes, 4,412 leaves, at most 8,683 tree nodes, and `277,856` digest
+bytes. The wrapper includes the one-output probability, byte-model search
+state, 256 probabilities, byte map, inputs, folded obias row, offset, and a
+one-byte output-bias binding selector. Raw pointer bits are forbidden. Because
+the sealed source lazily sizes `folded_bias_`, future v6 source must allocate
+its fixed 256-float positive-zero extent at construction and prove exact
+probability neutrality; this is an allocation-only prospective change, not a
+current source fact.
+
+`gamma-midpoint-compositional-abi-v2` replaces v5's four large streams with
+two compact files. A 192-byte header binds source, ABI, layout, population,
+arm, replicate, and direction. The checkpoint file is exactly 1,472 bytes:
+six 204-byte rows at start, first closure, native horizon, population midpoint,
+terminal pre-flush, and finalization. Probability and component-boundary
+values are hashed online rather than written per bit. The update file contains
+one 256-byte row per causal closure, or `1,000,184`, `4,000,248`, and
+`40,000,248` bytes at 250KB, 1MB, and 10MB for K/F/S. Six full component roots
+read `106,837,344` canonical bytes per run instead of scanning all state every
+64 events.
+
+Two review corrections matter. First, an independent parser cannot recompute
+online digest preimages that the compact streams intentionally omit. It must
+rederive framing, body hashes, formulas, flags, and comparisons; a separate
+source-hook audit, mutation controls, and observer neutrality establish the
+online preimages. Second, six sparse roots cannot prove the preregistered
+10MB rule that aligned F beats P and shifted S in every chronological third.
+V6 therefore binds three isolated fresh-start copies of the exact integer
+range coder, fed the final probabilities and decoded bits for their original
+coordinate thirds. Their encoder/decode-identical payloads are exact causal
+controls, never native archive savings and never score credit.
+
+Draft 2020-12 static controls accept all twelve P/K/F/F/S/S encode/decode
+parse shapes, all three positive population decisions, and complete subscale
+failure receipts at all three populations. Nine malformed parse cases and
+twelve false joint-pass cases are rejected, including wrong ABI/layout
+bindings, reordered checkpoints, false K restoration, 4,079-byte and
+40,792-byte threshold misses, a nonpositive third, OOM evidence, an oversized
+package, a failed parse, and false persistence authority.
+
+Source visitor/emitter/parser implementation, final source-interface audit,
+mutation controls, clean builds, neutrality, and every native archive remain
+absent. Q1 is still unqualified while qm8 owns the full-1G lane. V6 therefore
+retains zero compression and objective credit. Evidence:
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_source_layout_q0_v1.json`,
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_abi_q0_v1.json`,
+the two named v2/v6 schemas under `contracts/research/v1/`, and the adjacent
+ABI review artifact.
+
 ## 2026-08-24 - midpoint observability pivots to a compositional boundary proof
 
 The every-64 six-partition Merkle design is superseded before implementation.
