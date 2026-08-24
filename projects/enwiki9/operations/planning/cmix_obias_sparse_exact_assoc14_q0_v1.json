@@ -1,7 +1,7 @@
 {
   "$schema": "gamma.enwiki9.sparse-exact-associativity-design.v1",
   "artifact_id": "cmix_obias_sparse_exact_assoc14_q0_v1",
-  "revision": 3,
+  "revision": 4,
   "operational_status": "dormant_dependency",
   "claim_authority": "none",
   "title": "Sparse exact fourteen-way ContextMap3 associativity",
@@ -30,6 +30,20 @@
       "path": "docs/fxcm_bucket_packing_solution.md",
       "sha256": "c558c82460bed6e6a0f92a3e5723b2fe5b270989f1c91077f4e9385a66904ac8",
       "relationship": "The 96-byte ten-way base geometry is reused, but the logical predictor remains fourteen-way through sparse overflow."
+    },
+    "bounded_transition_verifier": {
+      "path": "tools/cmix_obias_sparse_exact_assoc14_transition_verify.cpp",
+      "sha256": "f321b2f541466b5b17ddd2c1646f14eb2f0330e2a9eb8925f822681ebe22e06f",
+      "receipt_schema_path": "contracts/research/v1/cmix-sparse-exact-assoc-transition-verification.schema.json",
+      "receipt_schema_sha256": "0279505231fddfb8b54ad4daff97a12237f5409c2e438c7a941cb6637eb41f4c",
+      "relationship": "A standalone differential model of the frozen parent and sparse transitions; it does not compile or observe the sealed q1 CMIX candidate."
+    },
+    "bounded_transition_proof_receipt": {
+      "path": "results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-verification.json",
+      "sha256": "25c41933f308d9132c19dbb30cd9c7468d8f732cc007a0b42131b23ca29aab72",
+      "semantic_repeat_sha256": "ed61546e48cb79347aa881940aa29d52805b545b4e5ea200496b1686c882a097",
+      "verdict": "bounded_transition_semantics_pass",
+      "relationship": "Two guarded deterministic executions matched byte-for-byte after 500,065 modeled operations and passed the receipt schema. Authority is limited to that bounded transition population."
     }
   },
   "parent_geometry": {
@@ -130,7 +144,7 @@
     "suppression_rule": "If q1 passes exact A/B memory and exact-package runtime with sufficient adaptation headroom, retain q1 and do not build this correction merely because its static bound is attractive."
   },
   "future_gate_ladder": [
-    "source-level exhaustive get/update equivalence over empty, hit, checksum-collision, every victim index, both protected indexes, overflow allocation, reset/decommit, and arena-page-boundary cases",
+    "bounded standalone transition-model gate passed; native source materialization and direct q1 get/update observation remain pending",
     "250KB P/K/D exact post-head integer-probability, coder-checkpoint, payload, inverse, and repeat identity",
     "opening and distant cold-reset 10M P/K/D identity plus overflow counts, process-tree RSS, VmHWM, cgroup, I/O, scratch, and runtime",
     "100M cumulative identity and resource gate",
@@ -143,6 +157,11 @@
     "A runtime, virtual-address, or package failure retires the exact sparse representation without changing base ways, overflow ways, record size, arena policy, or replacement semantics in a rescue."
   ],
   "proof_boundary": {
+    "finite_transition_harness_created": true,
+    "finite_transition_harness_passed": true,
+    "finite_transition_deterministic_repeat_passed": true,
+    "finite_transition_population_exhaustive": false,
+    "native_source_transition_identity_proved": false,
     "source_candidate_created": false,
     "execution_authorized": false,
     "opportunity_measured": false,

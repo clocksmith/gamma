@@ -35,6 +35,27 @@ preserves a `262,144 KiB` user-page reduction. Page tables and other kernel
 costs still require cgroup measurement. The actual overflow demand is unknown
 and receives no inferred credit.
 
+A standalone differential transition verifier now supplies the first bounded
+implementation evidence. It models both the frozen 128-byte fourteen-way
+parent record and the 96-byte base plus owned 36-byte overflow record, compares
+the returned slot, access class, and normalized logical bucket after every
+operation, and mutates saved history pointers later to exercise pointer
+stability. Two guarded executions each covered `500,065` operations across 257
+buckets, observed all fourteen returned slots and all fourteen miss victims,
+crossed overflow-record page boundaries, exercised absent-overflow checksum-zero
+selection and reset/decommit, and emitted byte-identical semantic receipts with
+SHA-256 `ed61546e...82a097`. Both receipts validate against the frozen schema.
+
+This is a bounded differential model, not exhaustive state-space proof and not
+native CMIX evidence. A preliminary invocation that mixed verifier stdout with
+the resource guard's stdout was excluded because guard labels, PIDs, RSS, and
+elapsed fields made the combined files non-identical. Requiring `--output`
+separated semantic output before the two bound repeats; no transition mismatch
+was observed. The result proves neither source integration nor probability,
+coder, payload, inverse, memory, runtime, package, or compression identity.
+Evidence:
+`results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-verification.json`.
+
 `cmix_obias_sparse_exact_assoc14_q0_v1` is therefore frozen as a dormant,
 one-mechanism semantic contingency. It may activate only after qm8
 terminalizes and either misses engineering headroom or a later exact-package
@@ -43,8 +64,8 @@ match q1's post-head probabilities, coder checkpoints, payload, and inverse;
 plain ten-way packing is only the lossy C control. Any identity mismatch,
 overflow-bound failure, less than `262,144 KiB` measured peak reduction, peak
 above `8,750,000 KiB`, or runtime/package failure retires it without changing
-the layout in rescue. No source candidate, run, archive, inverse, memory gain,
-compression gain, or score credit exists. Evidence:
+the layout in rescue. No native source candidate, native coder run, archive,
+inverse, memory gain, compression gain, or score credit exists. Evidence:
 `operations/planning/cmix_obias_sparse_exact_assoc14_q0_v1.json`.
 
 ## 2026-08-24 - q1 memory pressure now carries a measured runtime-risk warning
