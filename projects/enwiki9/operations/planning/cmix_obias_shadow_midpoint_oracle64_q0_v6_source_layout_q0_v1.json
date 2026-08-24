@@ -1,0 +1,289 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6_source_layout_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_q0_v1.json",
+      "required_evidence": "Exact 15,309-byte compositional-boundary design with SHA-256 f3bdcad4fc25084ddfee512ea255cf8e78dd06c7d177d6f658af7884a0eba7df."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1.json",
+      "required_evidence": "Exact 25,832-byte base layout with SHA-256 b8441e585391bf3d631230d96413f1cc8f00ac9bcb7cd2daa8a2fb9e1e816c01."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/model.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/byte-model.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 41e639a9df3c9cfafb6d5e0fc05cd33e1474eda95a18830d473ddd3df7f8cc07."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/byte-model.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 e6aa3516ce375a44babb08a1eea6bc2cc3f9f22e4b0948babd10e0e4e6a7171b."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 4fd473cfbb8d88ddd7a8c466622fdaa0bee75338cc54735960c9446ee99aeb94."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 8e475594d488cf9bf47ff875b2064685bdae65b322e954a48493bafe6bb8b229."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/lstm.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 fb7be096545d2b6c8d0a7748c47b95e0b6fdf25a158d4bbbabe0f47de7e87b61."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v6",
+    "layout_id": "gamma-cmix-midpoint-component-layout-v2",
+    "changed_semantic_axis": "observability_scope_only",
+    "base_layout_binding": {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1.json",
+      "bytes": 25832,
+      "sha256": "b8441e585391bf3d631230d96413f1cc8f00ac9bcb7cd2daa8a2fb9e1e816c01",
+      "included_partition_codes": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "excluded_partition_code": 5,
+      "excluded_reason": "The complete external predictor is the environment in the v6 source-proved component boundary and is intentionally not a sparse component-state partition."
+    },
+    "bound_geometry": {
+      "vocabulary": 256,
+      "vocab_size": 256,
+      "num_aux_models": 1,
+      "cells": 256,
+      "layers": 1,
+      "native_horizon": 128,
+      "midpoint_rows": 32,
+      "midpoint_segment": 64,
+      "kh_obias": true,
+      "kh_obias_keep_aux": true,
+      "simd_act_f16": true
+    },
+    "canonicalization": {
+      "leaf_bytes": 4096,
+      "inherited_rule": "Every base tensor, ordinal, dtype, dimension, logical byte, padding rule, strided-slab rule, and family order is exactly the bound v5 phase-1 layout; it is not restated or renumbered here.",
+      "wrapper_partition_code": 7,
+      "wrapper_order": "The eleven records below have exact contiguous tensor ordinals 0 through 10 in listed order.",
+      "signed_integer_rule": "Every source int is bit-cast without arithmetic conversion to canonical uint32 little-endian bits.",
+      "float_rule": "Every finite source float is serialized as its exact IEEE-754 binary32 bit pattern in little-endian order.",
+      "pointer_rule": "No pointer, address, capacity, allocator padding, or object padding is hashed. The Lstm output-bias pointer is represented only by the canonical uint8 selector output_bias_active after its permitted referent is checked.",
+      "fixed_storage_rule": "The v6 observability source must construct folded_bias_ at exactly vocab_size entries initialized to positive zero even before the first SetOutputBias call. This allocation-only change must pass observer-off/on probability neutrality."
+    },
+    "wrapper_partition": {
+      "partition_id": "component_wrapper",
+      "partition_code": 7,
+      "tensors": [
+        {
+          "ordinal": 0,
+          "name": "byte_mixer.model.outputs",
+          "dtype": "f32",
+          "dtype_code": 6,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "Model::outputs_"
+        },
+        {
+          "ordinal": 1,
+          "name": "byte_mixer.byte_model.ex_bits",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "bit-cast ByteModel::ex"
+        },
+        {
+          "ordinal": 2,
+          "name": "byte_mixer.byte_model.top_bits",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "bit-cast ByteModel::top_"
+        },
+        {
+          "ordinal": 3,
+          "name": "byte_mixer.byte_model.mid_bits",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "bit-cast ByteModel::mid_"
+        },
+        {
+          "ordinal": 4,
+          "name": "byte_mixer.byte_model.bot_bits",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "bit-cast ByteModel::bot_"
+        },
+        {
+          "ordinal": 5,
+          "name": "byte_mixer.byte_model.probabilities",
+          "dtype": "f32",
+          "dtype_code": 6,
+          "dimensions": [256],
+          "logical_bytes": 1024,
+          "leaves": 1,
+          "source": "ByteModel::probs_"
+        },
+        {
+          "ordinal": 6,
+          "name": "byte_mixer.byte_map_bits",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [256],
+          "logical_bytes": 1024,
+          "leaves": 1,
+          "source": "element-wise bit-cast ByteMixer::byte_map_"
+        },
+        {
+          "ordinal": 7,
+          "name": "byte_mixer.inputs",
+          "dtype": "f32",
+          "dtype_code": 6,
+          "dimensions": [256],
+          "logical_bytes": 1024,
+          "leaves": 1,
+          "source": "ByteMixer::inputs_"
+        },
+        {
+          "ordinal": 8,
+          "name": "byte_mixer.folded_bias",
+          "dtype": "f32",
+          "dtype_code": 6,
+          "dimensions": [256],
+          "logical_bytes": 1024,
+          "leaves": 1,
+          "source": "ByteMixer::folded_bias_ under KH_OBIAS"
+        },
+        {
+          "ordinal": 9,
+          "name": "byte_mixer.offset",
+          "dtype": "u32",
+          "dtype_code": 3,
+          "dimensions": [1],
+          "logical_bytes": 4,
+          "leaves": 1,
+          "source": "ByteMixer::offset_"
+        },
+        {
+          "ordinal": 10,
+          "name": "byte_mixer.output_bias_active",
+          "dtype": "u8",
+          "dtype_code": 1,
+          "dimensions": [1],
+          "logical_bytes": 1,
+          "leaves": 1,
+          "source": "0 when Lstm::out_bias_ is null; 1 only when it equals the first element of ByteMixer::folded_bias_"
+        }
+      ],
+      "source_invariants": [
+        "Model::outputs_.size() equals 1.",
+        "ByteModel::probs_.size(), ByteMixer::byte_map_.size(), ByteMixer::inputs_.size(), and ByteMixer::folded_bias_.size() each equal 256.",
+        "ByteMixer::num_models_ equals 1 and ByteMixer::vocab_size_ equals 256; these immutable build/configuration facts are metadata-bound rather than state tensors.",
+        "Every byte_map_ value is in [0,255], every source int is exactly 32 bits, and every serialized float is finite.",
+        "Lstm::out_bias_ is either null or exactly aliases ByteMixer::folded_bias_[0]; any other referent aborts observation.",
+        "The referenced Predictor bit context and vocabulary are environment inputs/configuration, not owned component state.",
+        "The diagnostic globals lstmpr and lstmex are excluded because the bound source never reads them after assignment; byte_mixer_output is excluded because every assigned value is already in the complete longitudinal boundary-output digest."
+      ]
+    },
+    "derived_totals": {
+      "base_five_partitions": {
+        "tensors": 130,
+        "logical_bytes": 17802103,
+        "leaves": 4401,
+        "maximum_tree_nodes": 8672,
+        "maximum_digest_storage_bytes": 277504
+      },
+      "component_wrapper": {
+        "tensors": 11,
+        "logical_bytes": 4121,
+        "leaves": 11,
+        "maximum_tree_nodes": 11,
+        "maximum_digest_storage_bytes": 352
+      },
+      "complete_component": {
+        "partitions": 6,
+        "partition_codes_in_root_order": [1, 2, 3, 4, 6, 7],
+        "tensors": 141,
+        "logical_bytes": 17806224,
+        "leaves": 4412,
+        "maximum_tree_nodes": 8683,
+        "maximum_digest_storage_bytes": 277856
+      },
+      "bound_rule": "maximum_tree_nodes is the sum over tensors of 2*leaves-1; all wrapper tensors have one leaf."
+    },
+    "component_root": {
+      "domain": "8 ASCII bytes GMDCOMP2",
+      "preimage": "domain, uint32LE partition_count=6, then for partition codes 1,2,3,4,6,7 in that order: partition_code uint8, three reserved zero bytes, partition_root_sha256[32].",
+      "base_partition_roots": "Use the v1 metadata, leaf, node, lone-node, tensor, and partition digest rules without modification so the five base partition roots remain definitionally stable.",
+      "wrapper_partition_root": "Use the same v1 rules with partition_code=7 and exact wrapper ordinals above.",
+      "rebuild_rule": "At each of the six sparse coordinates, rebuild every one of the 141 tensor roots and all six partition roots from canonical logical bytes; no dirty tracking or incremental root is accepted.",
+      "role": "Diagnostic localization and repeat evidence only. Longitudinal component-output and final-probability digests, payloads, inverses, and the source-interface proof carry the P/K noninterference claim."
+    },
+    "wrapper_write_map": [
+      {
+        "source_methods": ["Model constructors", "ByteModel::ByteModel", "ByteMixer::ByteMixer"],
+        "writes": ["all wrapper initialization"],
+        "observation": "start sparse root after retained pretraining and before the first modeled event"
+      },
+      {
+        "source_methods": ["ByteModel::Perceive", "ByteModel::Predict", "ByteModel::ByteUpdate"],
+        "writes": ["outputs, ex, top, mid, bot, probabilities"],
+        "observation": "complete longitudinal boundary stream plus sparse roots"
+      },
+      {
+        "source_methods": ["ByteMixer::SetInput", "ByteMixer::SetOutputBias", "ByteMixer::ByteUpdate"],
+        "writes": ["inputs, folded_bias, offset, output_bias_active, probabilities"],
+        "observation": "complete longitudinal boundary stream plus sparse roots"
+      }
+    ],
+    "current_state": {
+      "base_layout_frozen": true,
+      "wrapper_layout_frozen": true,
+      "wrapper_layout_implemented": false,
+      "source_visitor_exists": false,
+      "component_root_exists": false,
+      "q1_v3_qualification_exists": false,
+      "execution_authority": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    }
+  },
+  "activation_requirements": [
+    "The active qm8 full-1G gate must terminalize and release its lease before any source materialization, build, fixture, or codec execution.",
+    "An independent source-layout expander must reproduce the 130 base tensors and eleven wrapper tensors, their names, ordinals, dimensions, byte totals, leaves, and roots from exact source bindings.",
+    "The v6 source must fixed-allocate folded_bias_, expose only the checked output-bias selector, and prove observer-off/on every-probability neutrality before evidence is interpreted.",
+    "A copied-leaf mutation control must change exactly the selected tensor, its partition root, and the component root, then restore all three roots when the byte is restored.",
+    "No source, parser, build, archive, or experimental authority is granted by this design-only layout."
+  ],
+  "claim_boundary": [
+    "This artifact completes only the typed sparse-state layout for the source-proved ByteMixer/ByteModel/Lstm/midpoint component.",
+    "It intentionally excludes external Predictor state and does not revive v5 every-64 whole-state hashing.",
+    "The folded-bias construction rule is prospective and must pass neutrality; it is not an implemented source fact.",
+    "No q1 qualification, compilation, probability identity, archive gain, inverse, resource result, package score, or Hutter credit is claimed."
+  ]
+}
