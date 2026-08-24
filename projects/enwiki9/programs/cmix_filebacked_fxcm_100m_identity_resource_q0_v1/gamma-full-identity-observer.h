@@ -17,9 +17,20 @@
 
 namespace gamma_full_identity {
 
-inline constexpr size_t kMinimumSemanticBytes = 64ULL * 1024ULL * 1024ULL;
-inline constexpr size_t kExpectedRanges = 26;
+#ifndef GAMMA_FULL_IDENTITY_MINIMUM_SEMANTIC_BYTES
+#define GAMMA_FULL_IDENTITY_MINIMUM_SEMANTIC_BYTES (64ULL * 1024ULL * 1024ULL)
+#endif
+#ifndef GAMMA_FULL_IDENTITY_EXPECTED_RANGES
+#define GAMMA_FULL_IDENTITY_EXPECTED_RANGES 26
+#endif
+
+inline constexpr size_t kMinimumSemanticBytes =
+    static_cast<size_t>(GAMMA_FULL_IDENTITY_MINIMUM_SEMANTIC_BYTES);
+inline constexpr size_t kExpectedRanges =
+    static_cast<size_t>(GAMMA_FULL_IDENTITY_EXPECTED_RANGES);
 inline constexpr size_t kMaximumRanges = 64;
+static_assert(kExpectedRanges > 0 && kExpectedRanges <= kMaximumRanges,
+              "semantic range count must fit observer registry");
 inline constexpr uint64_t kFixedCheckpoints[] = {
     16777216ULL,
     33554432ULL,

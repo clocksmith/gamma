@@ -23,6 +23,7 @@
     "linker_sha256",
     "builds",
     "packages",
+    "state_mutation_control",
     "decisions",
     "claim_authority",
     "execution_authority",
@@ -62,18 +63,21 @@
       "maxItems": 3,
       "items": {"$ref": "#/$defs/package"}
     },
+    "state_mutation_control": {"$ref": "#/$defs/stateMutationControl"},
     "decisions": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "two_build_identity_pass",
         "negative_control_build_present",
+        "state_mutation_control_pass",
         "package_asset_identity_pass",
         "observer_build_pass"
       ],
       "properties": {
         "two_build_identity_pass": {"const": true},
         "negative_control_build_present": {"const": true},
+        "state_mutation_control_pass": {"const": true},
         "package_asset_identity_pass": {"const": true},
         "observer_build_pass": {"const": true}
       }
@@ -170,6 +174,48 @@
         "article_order_payload": {"$ref": "#/$defs/artifact"},
         "header": {"$ref": "#/$defs/artifact"},
         "backing_cleanup_pass": {"const": true}
+      }
+    },
+    "stateMutationControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "binary",
+        "compile",
+        "execute",
+        "persistent_state",
+        "coder_checkpoints",
+        "probability_summary",
+        "start_range_sha256",
+        "mutation_range_sha256",
+        "terminal_range_sha256",
+        "start_manifest_sha256",
+        "mutation_manifest_sha256",
+        "terminal_manifest_sha256",
+        "range_digest_changed",
+        "aggregate_digest_changed",
+        "terminal_matches_mutation",
+        "pass"
+      ],
+      "properties": {
+        "source": {"$ref": "#/$defs/artifact"},
+        "binary": {"$ref": "#/$defs/artifact"},
+        "compile": {"$ref": "#/$defs/command"},
+        "execute": {"$ref": "#/$defs/command"},
+        "persistent_state": {"$ref": "#/$defs/artifact"},
+        "coder_checkpoints": {"$ref": "#/$defs/artifact"},
+        "probability_summary": {"$ref": "#/$defs/artifact"},
+        "start_range_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_range_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_range_sha256": {"$ref": "#/$defs/sha256"},
+        "start_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "range_digest_changed": {"const": true},
+        "aggregate_digest_changed": {"const": true},
+        "terminal_matches_mutation": {"const": true},
+        "pass": {"const": true}
       }
     }
   }
