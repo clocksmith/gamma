@@ -155,6 +155,17 @@ def validate_schema_hashes() -> tuple[dict[str, Any], dict[str, Any]]:
     return input_schema, output_schema
 
 
+def validate_planning_contract(value: dict[str, Any]) -> dict[str, Any]:
+    if digest_file(PLAN_SCHEMA) != PLAN_SCHEMA_SHA256:
+        raise RuntimeError("planning contract schema hash drift")
+    schema = json.loads(PLAN_SCHEMA.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(schema)
+    jsonschema.validate(value, schema)
+    if value.get("planning_schema_sha256") != PLAN_SCHEMA_SHA256:
+        raise RuntimeError("planning contract schema binding mismatch")
+    return schema
+
+
 def resolve_artifact(record: dict[str, Any], label: str) -> Path:
     path = regular_file(Path(record["path"]), label, project_only=True)
     if path.stat().st_size != record["bytes"]:
@@ -441,11 +452,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
             receipt["antecedents"]["planning_contract"], "planning contract antecedent"
         )
         plan = json.loads(plan_path.read_text(encoding="utf-8"))
-        if digest_file(PLAN_SCHEMA) != PLAN_SCHEMA_SHA256:
-            raise RuntimeError("planning contract schema hash drift")
-        plan_schema = json.loads(PLAN_SCHEMA.read_text(encoding="utf-8"))
-        jsonschema.Draft202012Validator.check_schema(plan_schema)
-        jsonschema.validate(plan, plan_schema)
+        validate_planning_contract(plan)
         coordinator = plan.get("coordinator", {})
         calibration_contract = plan.get("observer_calibration", {})
         frozen = plan.get("frozen_parent_and_candidate", {})
