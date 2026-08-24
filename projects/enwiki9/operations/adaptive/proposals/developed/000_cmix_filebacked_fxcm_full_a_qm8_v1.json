@@ -1,0 +1,59 @@
+{
+  "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+  "claimed_at": "2026-08-23T21:51:11+00:00",
+  "created_at": "2026-08-23T21:51:06+00:00",
+  "developed_at": "2026-08-23T21:51:12+00:00",
+  "evidence": [
+    {
+      "path": "results/cmix_filebacked_fxcm_full_a_qm7_v2/full-roundtrip-receipt.json",
+      "sha256": "sha256:8ea516842eff2db01d44d42563089ad8b6e8cc4c997a0cb87ba2ad60ea737ea0"
+    },
+    {
+      "path": "results/cmix_filebacked_fxcm_full_a_qm7_v2/full-failure-verification.json",
+      "sha256": "sha256:7ebbbaecce541389a4d248d6451cf811a10e46a0132ee8768eca7ff1e08267a3"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260823T213424Z_653b446c89.json",
+      "sha256": "sha256:046d67709c7fdd84fe9272225c72237543386cbecaecbad90ef9dcc32761ba61"
+    },
+    {
+      "path": "results/resource_guard_soft_high_preflight_v1/soft-high-receipt.json",
+      "sha256": "sha256:44069cec05a8b4073037b774706e76bf90312a657518d45d176c0bd3da946d8e"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm8_v1.json",
+    "sha256": "sha256:6f8f7f7350c1b02fab6a278735b57f95ddeeb37dd21c4df617850ab3daeed4e4"
+  },
+  "hypothesis": "The unchanged q1 release-A package reproduces the authoritative CMIX payload and exact canonical inverse on full enwik9 when a page-rounded 9.0GB cgroup memory.high boundary initiates cache reclaim below the unchanged 10.0GB hard cap.",
+  "interfaces_exposed": [
+    "full-corpus-file-backed-parent-soft-pressure-qualification"
+  ],
+  "kill_condition": "Any identity mismatch, hard-cap event, wrapper failure, incomplete measurement, backing leak, or cleanup failure.",
+  "max_program_bytes": 742863,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "cmix_filebacked_fxcm_full_a_qm7_v2",
+  "parent_proposal_id": null,
+  "priority": 1600,
+  "promotion_condition": "Arm A payload and inverse exact; both guard-v3 receipts complete with zero hard-cap events; both soft-high sidecars pass; cleanup passes.",
+  "proposal_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+  "retired_neighborhoods": [
+    "No codec, model, table-size, or hard-cap change; this retries only the cgroup cache-pressure boundary exposed by qm7."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1600,
+  "state": "developed",
+  "title": "q1 full Arm A with proactive cgroup cache pressure"
+}

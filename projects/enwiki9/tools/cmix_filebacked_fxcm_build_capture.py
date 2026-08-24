@@ -217,6 +217,7 @@ def run_stage(
 def compiler_trace_manifest(
     trace_directory: Path,
     role: str,
+    expected_compile_definitions: list[str],
     proxy_sha256: str,
     compiler_sha256: str,
     linker_sha256: str,
@@ -237,6 +238,9 @@ def compiler_trace_manifest(
     if observed_names != expected_names:
         raise RuntimeError("compiler trace directory is incomplete or contains foreign entries")
     normalized_records: list[dict[str, Any]] = []
+    expected_trace_definitions = sorted(
+        f"-D{definition}" for definition in expected_compile_definitions
+    )
     compile_count = 0
     link_count = 0
     forbidden_roots = (str(source_root), str(build_root))
@@ -305,6 +309,10 @@ def compiler_trace_manifest(
             expected_testing = [TESTING_DEFINITION] if role == "harness" else []
             if testing_variants != expected_testing:
                 raise RuntimeError(f"compiler invocation {sequence} violates the testing macro boundary")
+            if definitions != expected_trace_definitions:
+                raise RuntimeError(
+                    f"compiler invocation {sequence} differs from the command-manifest definitions"
+                )
         else:
             link_count += 1
             linker_selections = [
@@ -487,6 +495,7 @@ def main() -> int:
     invocation_manifest_sha256, invocation_count, macro_boundary_trace_pass = compiler_trace_manifest(
         trace_directory,
         args.role,
+        definitions,
         compiler_proxy_sha256,
         compiler_sha256,
         linker_sha256,

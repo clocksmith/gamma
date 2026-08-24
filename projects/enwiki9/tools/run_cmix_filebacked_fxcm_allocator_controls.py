@@ -288,7 +288,8 @@ def load_build_verification(
         "compiler_binary_sha256", "linker_binary_sha256", "build_id_distinct_pass",
         "build_root_identity_distinct_pass", "source_closure_identity_pass",
         "toolchain_identity_pass", "command_identity_pass", "environment_identity_pass",
-        "shared_allocator_identity_pass", "macro_boundary_pass", "binary_identity_pass",
+        "shared_allocator_identity_pass", "macro_boundary_pass",
+        "compiler_invocation_identity_pass", "binary_identity_pass",
         "independent_build_pass", "authority", "execution_authority",
     }
     if not isinstance(value, dict) or set(value) != required:
@@ -375,7 +376,7 @@ def prepare_scratch(name: str, scratch_parent: Path, control_root: Path) -> tupl
         return scratch, f"{link}/scratch"
     scratch.mkdir()
     if name == "nonempty_directory":
-        (scratch / "foreign-marker.bin").write_bytes(b"foreign-marker-v1\n")
+        write_bytes_fsynced(scratch / "foreign-marker.bin", b"foreign-marker-v1\n")
     return scratch, str(scratch)
 
 
@@ -404,30 +405,12 @@ def main() -> int:
         "release",
         release_binary_sha256,
         header_sha256,
-        release_build["source_closure_sha256"],
-        release_build["capture_tool_sha256"],
-        release_build["compiler_proxy_sha256"],
-        release_build["command_manifest_sha256"],
-        release_build["stage_executable_manifest_sha256"],
-        release_build["compiler_invocation_manifest_sha256"],
-        release_build["compiler_invocation_count"],
-        release_build["compiler_binary_sha256"],
-        release_build["linker_binary_sha256"],
     )
     harness_build, harness_build_receipt_sha256 = load_build_receipt(
         args.harness_build_receipt,
         "harness",
         harness_sha256,
         header_sha256,
-        harness_build["source_closure_sha256"],
-        harness_build["capture_tool_sha256"],
-        harness_build["compiler_proxy_sha256"],
-        harness_build["command_manifest_sha256"],
-        harness_build["stage_executable_manifest_sha256"],
-        harness_build["compiler_invocation_manifest_sha256"],
-        harness_build["compiler_invocation_count"],
-        harness_build["compiler_binary_sha256"],
-        harness_build["linker_binary_sha256"],
     )
     shared_source_identity_pass = (
         release_build["shared_allocator_header_sha256"]
@@ -442,6 +425,15 @@ def main() -> int:
         release_build_receipt_sha256,
         release_binary_sha256,
         header_sha256,
+        release_build["source_closure_sha256"],
+        release_build["capture_tool_sha256"],
+        release_build["compiler_proxy_sha256"],
+        release_build["command_manifest_sha256"],
+        release_build["stage_executable_manifest_sha256"],
+        release_build["compiler_invocation_manifest_sha256"],
+        release_build["compiler_invocation_count"],
+        release_build["compiler_binary_sha256"],
+        release_build["linker_binary_sha256"],
     )
     harness_build_verification_sha256 = load_build_verification(
         args.harness_build_verification,
@@ -449,6 +441,15 @@ def main() -> int:
         harness_build_receipt_sha256,
         harness_sha256,
         header_sha256,
+        harness_build["source_closure_sha256"],
+        harness_build["capture_tool_sha256"],
+        harness_build["compiler_proxy_sha256"],
+        harness_build["command_manifest_sha256"],
+        harness_build["stage_executable_manifest_sha256"],
+        harness_build["compiler_invocation_manifest_sha256"],
+        harness_build["compiler_invocation_count"],
+        harness_build["compiler_binary_sha256"],
+        harness_build["linker_binary_sha256"],
     )
     if args.result_root.exists() or args.result_root.is_symlink():
         raise FileExistsError(args.result_root)

@@ -80,8 +80,14 @@ def _prepare_cgroup(cgroup_path: pathlib.Path, memory_max_bytes: int) -> dict[st
         memory_max_path.write_text(f"{memory_max_bytes}\n")
     except OSError as exc:
         raise SystemExit(f"cannot set {memory_max_path}: {exc}") from exc
-    if _read_int(memory_max_path) != memory_max_bytes:
-        raise SystemExit(f"cgroup memory.max did not bind to {memory_max_bytes}")
+    effective_memory_max_bytes = _read_int(memory_max_path)
+    page_size = os.sysconf("SC_PAGE_SIZE")
+    rounding_bytes = memory_max_bytes - effective_memory_max_bytes
+    if rounding_bytes < 0 or rounding_bytes >= page_size:
+        raise SystemExit(
+            "cgroup memory.max did not bind to a page-rounded safe cap: "
+            f"requested={memory_max_bytes} effective={effective_memory_max_bytes}"
+        )
 
     memory_peak_path = cgroup_path / "memory.peak"
     try:
@@ -97,7 +103,9 @@ def _prepare_cgroup(cgroup_path: pathlib.Path, memory_max_bytes: int) -> dict[st
         "path": str(cgroup_path),
         "inode": cgroup_path.stat().st_ino,
         "previous_memory_max": previous_memory_max,
-        "memory_max_bytes": memory_max_bytes,
+        "requested_memory_max_bytes": memory_max_bytes,
+        "memory_max_bytes": effective_memory_max_bytes,
+        "memory_max_rounding_bytes": rounding_bytes,
         "memory_peak_reset": True,
         "joined_before_exec": False,
         "events_baseline": _read_events(cgroup_path / "memory.events"),

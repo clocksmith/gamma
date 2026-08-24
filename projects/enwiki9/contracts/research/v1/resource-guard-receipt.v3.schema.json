@@ -137,7 +137,9 @@
         "path",
         "inode",
         "previous_memory_max",
+        "requested_memory_max_bytes",
         "memory_max_bytes",
+        "memory_max_rounding_bytes",
         "memory_peak_reset",
         "joined_before_exec"
       ],
@@ -145,7 +147,9 @@
         "path": {"type": "string", "minLength": 1},
         "inode": {"type": "integer", "minimum": 1},
         "previous_memory_max": {"type": "string", "minLength": 1},
+        "requested_memory_max_bytes": {"const": 10000000000},
         "memory_max_bytes": {"type": "integer", "minimum": 1},
+        "memory_max_rounding_bytes": {"type": "integer", "minimum": 0, "maximum": 4095},
         "memory_peak_reset": {"type": "boolean"},
         "joined_before_exec": {"type": "boolean"}
       }

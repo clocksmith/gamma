@@ -47,9 +47,9 @@ def regular_file(path: Path, label: str) -> Path:
 
 
 def require_clear_lease(path: Path) -> None:
-    lease = json.loads(regular_file(path, "exclusive lease").read_text(encoding="utf-8"))
-    if not isinstance(lease, dict) or lease.get("active") is not False:
-        raise SystemExit("exclusive lease is active or lacks an explicit inactive decision")
+    lock_path = path.with_name(f"{path.name}.lock")
+    if path.exists() or path.is_symlink() or lock_path.exists() or lock_path.is_symlink():
+        raise SystemExit("exclusive lease namespace is occupied")
 
 
 def object_value(value: Any) -> dict[str, Any]:

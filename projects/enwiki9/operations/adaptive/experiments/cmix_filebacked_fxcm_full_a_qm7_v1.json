@@ -1,0 +1,121 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_filebacked_fxcm_full_a_qm7_v1",
+  "proposalId": "cmix_filebacked_fxcm_full_a_qm7_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "The independently built q1 release package reproduces the authoritative CMIX payload and exact canonical inverse on full enwik9 while remaining below the strict decimal memory limit under file-backed FXCM state.",
+    "falsification": "Reject Arm A if any frozen antecedent or package asset drifts, the payload differs from the authoritative parent, the inverse is not exact, either diagnostic guard is incomplete, process-tree or cgroup memory reaches the limit, more than one logical CPU is visible, temporary disk reaches 100,000,000,000 bytes, backing state survives exit, or lease/cgroup/scratch cleanup fails."
+  },
+  "changedMechanism": "Replace anonymous FXCM residency with the frozen q1 disk-backed allocation lifecycle while preserving the release model, coder, preprocessing assets, and authoritative output probabilities.",
+  "invariants": [
+    "The q1 program lock, independent release builds, q7 package assets, opening/cold-reset 10M transfer, and independent transfer verification remain hash-bound.",
+    "The full encode payload must be exactly 107,730,531 bytes with SHA-256 889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490.",
+    "The self-extracting archive must restore the exact canonical 1,000,000,000-byte corpus.",
+    "Encode and decode run separately beneath resource-guard v3 in one dedicated cgroup and one managed exclusive-full1g lease.",
+    "Diagnostic timing grants no current-host runtime eligibility and this external parent grants no Gamma compression or objective credit."
+  ],
+  "controls": [
+    {
+      "id": "q1-release-arm-a",
+      "role": "treatment",
+      "definition": "The clean release-A raw binary mechanically packaged with the exact q7 dictionary, order, header, and head assets, using disk-backed FXCM state."
+    },
+    {
+      "id": "authoritative-parent-payload",
+      "role": "comparator",
+      "definition": "The retained exact full-1G source-parent payload is the immutable byte-for-byte output comparator."
+    },
+    {
+      "id": "bare-archive-inverse",
+      "role": "replay",
+      "definition": "The emitted self-extracting archive runs in a clean decode work root and must reconstruct canonical enwik9 exactly."
+    }
+  ],
+  "population": {
+    "unit": "canonical raw enwik9 byte",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 8000000000,
+    "selection": "The complete canonical enwik9 corpus from byte zero.",
+    "coordinate": "Full reversible CMIX preprocessing, arithmetic coding, self-extracting archive, and raw inverse."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Frozen release binary, dictionary/order/header/head package assets, prior decoded symbols, and exact disk-backed state owned by the codec."
+    ],
+    "forbiddenInformation": [
+      "Future corpus bytes, teacher probabilities, retained trace values as codec inputs, tmpfs backing, unmeasured current-host Geekbench claims, or objective credit from the external parent."
+    ]
+  },
+  "inputs": [
+    {"id": "full-coordinator", "path": "tools/cmix_filebacked_fxcm_full_roundtrip.py", "sha256": "sha256:e81abe1af7ab00fa31c394fb094efe55e9671c0ae4c27f17180981b5656c500f"},
+    {"id": "full-stage", "path": "tools/cmix_filebacked_fxcm_full_stage.py", "sha256": "sha256:e8aed4cbe68ba162a1d30a66bdf3243c70226268a9f23dbdb4bc4bef31354741"},
+    {"id": "resource-guard-v3", "path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"},
+    {"id": "scope-identity-primitives", "path": "tools/cmix_filebacked_fxcm_scope_identity.py", "sha256": "sha256:f4797b6f32691e6e6aec077b4900fe67006e3c773d4fda208da694c18478cc24"},
+    {"id": "managed-lease", "path": "tools/managed_exclusive_lease.py", "sha256": "sha256:c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1"},
+    {"id": "contract-validator", "path": "tools/research_contracts.py", "sha256": "sha256:04725a29af1811f6ac389e8b1e87ec535a15647fab0f7973838eff184d6feb03"},
+    {"id": "full-stage-schema", "path": "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json", "sha256": "sha256:31d513dc92344dd27d7848d1ba06c54a1c38f44dc1d740019c8ab7f141d05c2d"},
+    {"id": "full-roundtrip-schema", "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json", "sha256": "sha256:8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"},
+    {"id": "resource-guard-v3-schema", "path": "contracts/research/v1/resource-guard-receipt.v3.schema.json", "sha256": "sha256:f51442e839bdfc11db5eb40f74faead81ef00e930a54b5ac98b6d0c681477cce"},
+    {"id": "execution-layout", "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_execution_layout_v1.json", "sha256": "sha256:19e5b5ac4413fba0477df0ebe84c821ec5f62b1879fb5d4fbc628f9ac280be9f"},
+    {"id": "qualification-policy", "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v1.json", "sha256": "sha256:56bfd270182396a9fe09f7265fc94dcb3a4e5da5116e272a04c70691aea111f8"},
+    {"id": "release-a-build", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-receipt.json", "sha256": "sha256:7aa4f2b2ce0bec5b010ef2b38cc72a72eba61a7964bd57b38b9951e80c2b46f4"},
+    {"id": "release-build-verification", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/04_build_verification/release.json", "sha256": "sha256:0e6eea5d7e2799b260bc09ab6eb5fd0e42a943ee6ebbedeb5d9f6c8b35ce7a61"},
+    {"id": "release-a-binary", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-root/cmix", "sha256": "sha256:610edd6aa20fe44c8231593b6151f499e484ebba97535044a1c02f554b648808"},
+    {"id": "scope-build", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/06_scope_identity/diagnostic-build/build-receipt.json", "sha256": "sha256:8eb1c74cc93ee2854d389f81145844897d30b9f12558609fdce83c470ca463f7"},
+    {"id": "program-lock-verification", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json", "sha256": "sha256:fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149"},
+    {"id": "transfer-10m", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-receipt.json", "sha256": "sha256:5a814ad39f21f0053e253ffed49bd71f5ab1bdb80e1596e4b489067895a2d1a7"},
+    {"id": "transfer-10m-verification", "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/08_opening_distant_transfer_10m/transfer-10m-verification.json", "sha256": "sha256:b5ef4d965f11914c85a9e259cc35469757e7ed48eef27a9cddf1a61468435145"},
+    {"id": "authoritative-parent-payload", "path": "results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/out.cmix", "sha256": "sha256:889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 742863,
+    "expectedNetSavingsBytes": -742863
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 0.9,
+    "uncertaintyRisk": 0.2,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {"id": "payloadIdentity", "definition": "Full q1 payload equals the retained authoritative parent payload byte-for-byte.", "unit": "boolean"},
+    {"id": "exactInverse", "definition": "Bare archive decode restores canonical enwik9 exactly.", "unit": "boolean"},
+    {"id": "resourceGuards", "definition": "Both diagnostic guard-v3 receipts are complete beneath all memory, CPU, and disk limits.", "unit": "boolean"},
+    {"id": "backingCleanup", "definition": "No file-backed FXCM state survives either codec exit.", "unit": "boolean"},
+    {"id": "terminalCleanup", "definition": "Managed lease, dedicated cgroup, and successful-run scratch are absent at terminalization.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-payload", "measurement": "payloadIdentity", "operator": "eq", "threshold": true},
+    {"id": "p-inverse", "measurement": "exactInverse", "operator": "eq", "threshold": true},
+    {"id": "p-resources", "measurement": "resourceGuards", "operator": "eq", "threshold": true},
+    {"id": "p-backing", "measurement": "backingCleanup", "operator": "eq", "threshold": true},
+    {"id": "p-cleanup", "measurement": "terminalCleanup", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "k-payload", "measurement": "payloadIdentity", "operator": "eq", "threshold": false},
+    {"id": "k-inverse", "measurement": "exactInverse", "operator": "eq", "threshold": false},
+    {"id": "k-resources", "measurement": "resourceGuards", "operator": "eq", "threshold": false},
+    {"id": "k-backing", "measurement": "backingCleanup", "operator": "eq", "threshold": false},
+    {"id": "k-cleanup", "measurement": "terminalCleanup", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/09_full_roundtrip_a/full-roundtrip-receipt.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-23T21:29:03Z"
+}

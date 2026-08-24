@@ -1,0 +1,54 @@
+{
+  "schema": "gamma.enwiki9.wiki-schema-vm-interface.v1",
+  "candidate_id": "wiki_schema_vm_ceiling_q0_v1",
+  "role": "causal_shadow_impossibility_ceiling",
+  "archive_authority": false,
+  "score_credit_bytes": 0,
+  "population": {
+    "bytes": 587138826,
+    "sha256": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce",
+    "coordinate": "post-WRT transformed byte"
+  },
+  "alphabet": {
+    "P": "transformed left brace",
+    "Q": "transformed vertical bar",
+    "M": "transformed equals",
+    "R": "transformed right brace"
+  },
+  "parser": {
+    "template_open": "PP",
+    "template_close": "RR",
+    "field_boundary": "top-frame Q",
+    "named_key_end": "top-frame M before value state",
+    "maximum_stack_depth": 32,
+    "maximum_template_name_bytes": 48,
+    "maximum_field_key_bytes": 48,
+    "overflow": "suppress the over-depth subtree or overlength atom without prediction or learning until its causal delimiter closes"
+  },
+  "program_table": {
+    "sets": 32768,
+    "ways": 4,
+    "candidates_per_state": 2,
+    "state": "exact current template-name hash, previous completed field-key hash or positional marker, and zero-based field index",
+    "target": "next named field-key bytes followed by transformed equals M",
+    "update": "deterministic two-candidate Space-Saving heavy hitters after the target key has been fully decoded",
+    "selection": "candidate lower-bound support at least two and strict majority of the state's completed observations",
+    "set_replacement": "lowest observation count, then lowest source-ordered way",
+    "dynamic_allocation_after_construction": false
+  },
+  "treatment": "At a decoded field boundary, replay the selected next-key program until completion or the first treatment mismatch.",
+  "controls": {
+    "K": "identical parsing, lookup, state writes, counters, collisions, and hashes with prediction disabled",
+    "R": "splitmix64 bytes at the exact D opportunity positions",
+    "S": "program selected from the immediately preceding completed template name with the same prior-key and field-index coordinates; if absent, rotate D's target by one byte so activation and length remain matched"
+  },
+  "gates": {
+    "minimum_correct_treatment_bytes": 4079243,
+    "all_chronological_thirds_positive": true,
+    "treatment_must_beat_random": true,
+    "treatment_must_beat_shifted": true,
+    "repeat_identity_required": true
+  },
+  "next_gate_on_pass": "retained-parent donor-surprise trace over the exact D opportunity manifest",
+  "terminal_on_miss": "retire this exact schema-program information source without parser, table, support, or state-key sweep"
+}

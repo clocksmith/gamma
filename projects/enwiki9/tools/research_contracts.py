@@ -71,8 +71,80 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.named-gradient-detail.v1": (
         CONTRACT_ROOT / "named-gradient-detail.schema.json"
     ),
+    "gamma.enwiki9.cmix-obias-full1g-oom-terminal.v1": (
+        CONTRACT_ROOT / "cmix-obias-full1g-oom-terminal-receipt.schema.json"
+    ),
+    "gamma.enwiki9.cmix-obias-full1g-oom-terminal-verification.v1": (
+        CONTRACT_ROOT / "cmix-obias-full1g-oom-terminal-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-source-materialization.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-source-closure.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-command.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-receipt.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-compiler-invocation.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-compiler-invocation.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-compiler-trace-controls.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-negative-controls.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-program-lock.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-program-lock.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-program-lock-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-build.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v2": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-identity-v2.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-cumulative-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-transfer-10m.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-identity-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-stage.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-stage.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-roundtrip.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-failure-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-soft-high-verification.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
+    ),
+    "gamma.enwiki9.resource-guard-receipt.v3": (
+        CONTRACT_ROOT / "resource-guard-receipt.v3.schema.json"
+    ),
+    "gamma.enwiki9.resource-guard-soft-high.v1": (
+        CONTRACT_ROOT / "resource-guard-soft-high.schema.json"
     ),
     "gamma.enwiki9.reflection-receipt.v1": (
         CONTRACT_ROOT / "reflection-receipt.schema.json"
@@ -2879,8 +2951,162 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_mechanism_graph(value, artifact_path)
     elif schema_id == "gamma.enwiki9.named-gradient-detail.v1":
         result = _validate_named_gradient_detail(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.cmix-obias-full1g-oom-terminal.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "terminalStatus": value["terminal_status"],
+            "scoreCreditBytes": value["score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-obias-full1g-oom-terminal-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verified": value["verified"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "materialized": value["materialized"],
+            "files": len(value["files"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "entries": len(value["entries"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "buildId": value["build_id"],
+            "buildSucceeded": value["build_succeeded"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "independentBuildPass": value["independent_build_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-compiler-invocation.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "sequence": value["sequence"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "allControlsRejectedPass": value["all_controls_rejected_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "sharedSourceIdentityPass": value["shared_source_identity_pass"],
+            "controls": len(value["controls"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-program-lock.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "files": len(value["files"]),
+            "sourceImplementationFrozen": value["source_implementation_frozen"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verified": value["verified"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "packages": len(value["packages"]),
+            "packageAssetIdentityPass": value["package_asset_identity_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "bytes": value["bytes"],
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "sourceSchema": value["source_schema"],
+            "scopes": value["scope_count"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-stage.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "mode": value["mode"],
+            "stagePass": value["stage_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "arm": value["arm"],
+            "terminalPass": value["terminal_pass"],
+            "runtimeEligibilityEstablished": value["resources"]["runtime_eligibility_established"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "arm": value["arm"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
         result = _validate_resource_guard(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.resource-guard-receipt.v3":
+        result = {
+            "label": value["label"],
+            "phase": value["phase"],
+            "status": value["status"],
+            "returncode": value["returncode"],
+            "cgroupMemoryPeakBytes": value["peaks"]["cgroup_memory_peak_bytes"],
+            "processTreePeakRssKiB": value["peaks"]["max_sampled_tree_rss_kib"],
+            "maximumAllowedCpuCount": value["peaks"]["max_sampled_allowed_cpu_count"],
+        }
+    elif schema_id == "gamma.enwiki9.resource-guard-soft-high.v1":
+        result = {
+            "wrapperPass": value["wrapper_pass"],
+            "effectiveMemoryHighBytes": value["effective_memory_high_bytes"],
+            "guardStatus": value["guard_status"],
+        }
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":
         result = _validate_reflection_receipt(value, artifact_path)
     elif schema_id == "gamma.enwiki9.release-receipt-index.v1":

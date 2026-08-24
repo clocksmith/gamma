@@ -1,7 +1,7 @@
 diff --git a/src/models/fxcmv1.h b/src/models/fxcmv1.h
 --- a/src/models/fxcmv1.h
 +++ b/src/models/fxcmv1.h
-@@ -22,7 +22,7 @@ class FXCM : public Model {
+@@ -26,7 +26,7 @@ class FXCM : public Model {
    float RawPredictionProbability(short raw) const;
    unsigned int NumOutputs();
    void Perceive(int bit);
@@ -13,13 +13,13 @@ diff --git a/src/models/fxcmv1.h b/src/models/fxcmv1.h
 diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
 --- a/src/models/fxcmv1.cpp
 +++ b/src/models/fxcmv1.cpp
-@@ -1,3 +1,7 @@
+@@ -27,1 +27,5 @@
 +#ifdef GAMMA_FILEBACKED_FXCM
 +#include "gamma-filebacked-fxcm.h"
 +#endif
 +
  #include "fxcmv1.h"
-@@ -94,6 +98,10 @@ namespace fxcmv1 {
+@@ -94,3 +98,7 @@ namespace fxcmv1 {
  namespace fxcmv1 {
 +#ifdef GAMMA_FILEBACKED_FXCM
 +#define free ::gamma_filebacked_fxcm::Release
@@ -27,7 +27,7 @@ diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
 +
  
  #ifndef min
-@@ -142,17 +150,35 @@ template <class T> void alloc(T*&ptr, int c) {
+@@ -139,15 +147,43 @@ template <class T> void alloc(T*&ptr, int c) {
  // Array
  template <class T> void alloc(T*&ptr, int c) {
 +#ifdef GAMMA_FILEBACKED_FXCM
@@ -71,20 +71,22 @@ diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
 +  }
    data=(T*)(((uintptr_t)ptr+(align-1)) & ~(uintptr_t)(align-1));
  }
-@@ -6080,6 +6106,9 @@ inline Predictor::Predictor()  {
-     alloc1(model_predictions1,num_models+64,model_predictions1_ptr,64);
-     dosym();
+@@ -6074,2 +6110,5 @@ inline Predictor::Predictor()  {
      PredictorInit();
 +#ifdef GAMMA_FILEBACKED_FXCM
 +    ::gamma_filebacked_fxcm::PageOutAll(true);
 +#endif
  }
-@@ -6102,6 +6131,12 @@ FXCM::FXCM() {
+@@ -6098,6 +6137,12 @@
      predictor_.reset(new fxcmv1::Predictor());
  }
-+
+ 
 +void FXCM::ByteUpdate() {
 +#ifdef GAMMA_FILEBACKED_FXCM
 +  ::gamma_filebacked_fxcm::ByteBoundary();
 +#endif
 +}
++
+ void FXCM::FreeMemory() {
+     predictor_->FreeMemory();
+ }
