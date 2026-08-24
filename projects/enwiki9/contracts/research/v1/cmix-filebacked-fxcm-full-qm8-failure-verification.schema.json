@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-qm8-failure-verification.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "source_receipt", "source_terminal_pass",
+    "evidence_checks", "failure_predicates", "primary_failure_class",
+    "authorized_successor", "observed", "errors", "verification_pass",
+    "promotion_authorized", "memory_safe_parent_qualified", "archive_authority",
+    "claim_authority", "claim_boundary", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-qm8-failure-verification.v1"},
+    "candidate_id": {"const": "cmix_filebacked_fxcm_full_a_qm8_v1"},
+    "source_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+    "source_terminal_pass": {"const": false},
+    "evidence_checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "failure_predicates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource_hard_cap_or_oom", "resource_rss_or_decimal_limit",
+        "resource_disk_cpu_or_runtime", "encode_codec_or_stage",
+        "payload_or_parent_identity", "decode_codec_or_inverse",
+        "cleanup_or_lease", "infrastructure_unclassified"
+      ],
+      "properties": {
+        "resource_hard_cap_or_oom": {"type": "boolean"},
+        "resource_rss_or_decimal_limit": {"type": "boolean"},
+        "resource_disk_cpu_or_runtime": {"type": "boolean"},
+        "encode_codec_or_stage": {"type": "boolean"},
+        "payload_or_parent_identity": {"type": "boolean"},
+        "decode_codec_or_inverse": {"type": "boolean"},
+        "cleanup_or_lease": {"type": "boolean"},
+        "infrastructure_unclassified": {"type": "boolean"}
+      }
+    },
+    "primary_failure_class": {
+      "enum": [
+        "resource_hard_cap_or_oom", "resource_rss_or_decimal_limit",
+        "resource_disk_cpu_or_runtime", "encode_codec_or_stage",
+        "payload_or_parent_identity", "decode_codec_or_inverse",
+        "cleanup_or_lease", "infrastructure_unclassified", "verification_failure"
+      ]
+    },
+    "authorized_successor": {"type": "string", "minLength": 1},
+    "observed": {"type": ["object", "null"]},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "verification_pass": {"type": "boolean"},
+    "promotion_authorized": {"const": false},
+    "memory_safe_parent_qualified": {"const": false},
+    "archive_authority": {"const": false},
+    "claim_authority": {"enum": ["independent_terminal_failure_classification_only", "none_verification_failure"]},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verification_pass": {"const": true}}, "required": ["verification_pass"]},
+      "then": {
+        "properties": {
+          "source_receipt": {"$ref": "#/$defs/file"},
+          "evidence_checks": {"minProperties": 1, "additionalProperties": {"const": true}},
+          "failure_predicates": {
+            "anyOf": [
+              {"properties": {"resource_hard_cap_or_oom": {"const": true}}},
+              {"properties": {"resource_rss_or_decimal_limit": {"const": true}}},
+              {"properties": {"resource_disk_cpu_or_runtime": {"const": true}}},
+              {"properties": {"encode_codec_or_stage": {"const": true}}},
+              {"properties": {"payload_or_parent_identity": {"const": true}}},
+              {"properties": {"decode_codec_or_inverse": {"const": true}}},
+              {"properties": {"cleanup_or_lease": {"const": true}}},
+              {"properties": {"infrastructure_unclassified": {"const": true}}}
+            ]
+          },
+          "primary_failure_class": {"not": {"const": "verification_failure"}},
+          "observed": {"type": "object"},
+          "errors": {"maxItems": 0},
+          "claim_authority": {"const": "independent_terminal_failure_classification_only"}
+        }
+      },
+      "else": {
+        "properties": {
+          "errors": {"minItems": 1},
+          "primary_failure_class": {"const": "verification_failure"},
+          "authorized_successor": {"const": "none_until_verifier_correction"},
+          "claim_authority": {"const": "none_verification_failure"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "resource_hard_cap_or_oom"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"resource_hard_cap_or_oom": {"const": true}}},
+        "authorized_successor": {"const": "one_phase_specific_memory_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "resource_rss_or_decimal_limit"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"resource_rss_or_decimal_limit": {"const": true}}},
+        "authorized_successor": {"const": "one_phase_specific_memory_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "resource_disk_cpu_or_runtime"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"resource_disk_cpu_or_runtime": {"const": true}}},
+        "authorized_successor": {"const": "one_resource_correction_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "payload_or_parent_identity"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"payload_or_parent_identity": {"const": true}}},
+        "authorized_successor": {"const": "first_divergence_localization_only"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "decode_codec_or_inverse"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"decode_codec_or_inverse": {"const": true}}},
+        "authorized_successor": {"const": "one_decode_or_inverse_correction_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "cleanup_or_lease"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"cleanup_or_lease": {"const": true}}},
+        "authorized_successor": {"const": "one_cleanup_transaction_correction_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "encode_codec_or_stage"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"encode_codec_or_stage": {"const": true}}},
+        "authorized_successor": {"const": "one_encode_infrastructure_correction_successor"}
+      }}
+    },
+    {
+      "if": {"properties": {"primary_failure_class": {"const": "infrastructure_unclassified"}}, "required": ["primary_failure_class"]},
+      "then": {"properties": {
+        "failure_predicates": {"properties": {"infrastructure_unclassified": {"const": true}}},
+        "authorized_successor": {"const": "one_receipt_bound_infrastructure_diagnostic"}
+      }}
+    }
+  ],
+  "$defs": {
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
