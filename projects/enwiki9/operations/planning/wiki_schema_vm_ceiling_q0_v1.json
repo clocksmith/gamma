@@ -1,7 +1,8 @@
 {
-  "$schema": "campaign-static-contract.schema.json",
+  "$schema": "wiki-schema-vm-ceiling-plan.schema.json",
+  "planning_schema_sha256": "45530cb540f43fcae512bd76460d5f00bff36dd42e09d9e3350e6e8376415de7",
   "artifact_id": "wiki_schema_vm_ceiling_q0_v1",
-  "revision": 1,
+  "revision": 2,
   "candidate_id": "wiki_schema_vm_ceiling_q0_v1",
   "operational_status": "frozen_waiting_for_qualified_q1_parent_and_released_full1g_lease",
   "role": "zero_credit_causal_shadow_impossibility_ceiling",
@@ -26,15 +27,23 @@
     "interface": "programs/wiki_schema_vm_ceiling_q0_v1/interface-contract.json",
     "interface_sha256": "9864e17ab54b73fc5159af1df76b4ca5042e93f3bdc03a02c40507fe0ccaacbb",
     "runner": "tools/wiki_schema_vm_ceiling_q0_v1.py",
-    "runner_sha256": "2f965708a888f8aa1670b5f0fd157731edef21af382d73a3f2a5d5c3e4217b67"
+    "runner_sha256": "bd08150e728c0b35be2a676d0a1643c5011be9929b33bf8be81af4be21cb83d4"
   },
   "schemas": {
+    "plan": "contracts/research/v1/wiki-schema-vm-ceiling-plan.schema.json",
     "scan": "contracts/research/v1/wiki-schema-vm-scan.schema.json",
     "scan_sha256": "016e33bb94bf9c1fd8bd1dbce7f365fbb680eb5a18e96e6002d8c504c5ce621c",
     "decision": "contracts/research/v1/wiki-schema-vm-ceiling-decision.schema.json",
-    "decision_sha256": "050e9dc179cf789f14292ac629de950bb55cea3682ad25613da3fb159bf55460",
+    "decision_sha256": "76436efbe90f8d40be1059dc32735dd43f9f7b923d6efafdce33bd98cb9b55f8",
     "output_manifest": "contracts/research/v1/wiki-schema-vm-output-manifest.schema.json",
-    "output_manifest_sha256": "2754749bf9f546b7745456234f9f69bb9db1369f0c5129c05bd8d79caa4e962b"
+    "output_manifest_sha256": "b054e1e6c06f514681aef13d7890ef1b87c1f314d61e8583389e183cd8f842eb"
+  },
+  "exclusive_lane": {
+    "implementation": "tools/managed_exclusive_lease.py",
+    "implementation_sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1",
+    "schema": "operations/runtime/exclusive_full1g.schema.json",
+    "schema_sha256": "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96",
+    "policy": "The runner atomically acquires the managed exclusive_full1g lane before population hashing, compilation, or either scan; it releases only after both child processes terminate and freezes lease evidence plus the complete transition chain."
   },
   "population": {
     "path": "/home/x/enwiki9-nonproof/cmix_lex_payload_gate/cmix_lex_payload_transfer_v1_retry2/transformed_ready.bin",
@@ -46,7 +55,7 @@
     "A schema-valid q1 consolidated qualification receipt reports exact build, probability, persistent-state, payload, archive, inverse, memory, temporary-disk, runtime, package, dependency, and license closure.",
     "The q1 process-tree peak is at most the 9,000,000 KiB engineering target and cgroup peak is at most 10,000,000,000 bytes with zero OOM events.",
     "A schema-valid independent q1 qualification verification is fully positive, hash-binds that receipt, and has no errors or qualification failures.",
-    "The runner, candidate revision, experiment, proposal, source, interface, schemas, compiler, and population reproduce their frozen hashes."
+    "The strict planning schema validates this plan and the runner, candidate revision, experiment, proposal, source, interface, schemas, compiler, lease primitive, and population reproduce their frozen hashes."
   ],
   "command_template": [
     "python3",
@@ -57,6 +66,8 @@
     "<schema-valid-independent-q1-verification>"
   ],
   "outputs": [
+    "results/wiki_schema_vm_ceiling_q0_v1/lease-evidence.json",
+    "results/wiki_schema_vm_ceiling_q0_v1/lease-transitions.json",
     "results/wiki_schema_vm_ceiling_q0_v1/scan-a.json",
     "results/wiki_schema_vm_ceiling_q0_v1/scan-b.json",
     "results/wiki_schema_vm_ceiling_q0_v1/decision.json",

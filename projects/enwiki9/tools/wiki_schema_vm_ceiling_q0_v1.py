@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import stat
 import subprocess
+import sys
 from typing import Any
 
 import jsonschema
@@ -31,6 +32,8 @@ CANDIDATE_REVISION = (
     / "operations/adaptive/candidate-revisions/wiki_schema_vm_ceiling_q0_v1/"
     "20260824T004226768889Z_3d110ac42c80.json"
 )
+PLAN = PROJECT / "operations/planning/wiki_schema_vm_ceiling_q0_v1.json"
+PLAN_SCHEMA = PROJECT / "contracts/research/v1/wiki-schema-vm-ceiling-plan.schema.json"
 SCAN_SCHEMA = PROJECT / "contracts/research/v1/wiki-schema-vm-scan.schema.json"
 DECISION_SCHEMA = (
     PROJECT / "contracts/research/v1/wiki-schema-vm-ceiling-decision.schema.json"
@@ -46,6 +49,8 @@ PARENT_VERIFICATION_SCHEMA = (
     PROJECT
     / "contracts/research/v1/cmix-memory-safe-parent-qualification-verification.schema.json"
 )
+MANAGED_LEASE_IMPLEMENTATION = PROJECT / "tools/managed_exclusive_lease.py"
+EXCLUSIVE_LEASE_SCHEMA = PROJECT / "operations/runtime/exclusive_full1g.schema.json"
 LEASE = PROJECT / "operations/runtime/exclusive_full1g.json"
 LEASE_LOCK = PROJECT / "operations/runtime/exclusive_full1g.json.lock"
 INPUT = Path(
@@ -68,11 +73,14 @@ EXPECTED_SHA256 = {
     CANDIDATE_REVISION: "b704edd93d67329fafa1141d881993304552ef759c1a98a4d489e18c4e8e1a52",
     INTERFACE: "9864e17ab54b73fc5159af1df76b4ca5042e93f3bdc03a02c40507fe0ccaacbb",
     SOURCE: "d54ff0bb169f44ca695f943d6a119c9a780783479b3187ecdbc88322c3732691",
+    PLAN_SCHEMA: "45530cb540f43fcae512bd76460d5f00bff36dd42e09d9e3350e6e8376415de7",
     SCAN_SCHEMA: "016e33bb94bf9c1fd8bd1dbce7f365fbb680eb5a18e96e6002d8c504c5ce621c",
-    DECISION_SCHEMA: "050e9dc179cf789f14292ac629de950bb55cea3682ad25613da3fb159bf55460",
-    MANIFEST_SCHEMA: "2754749bf9f546b7745456234f9f69bb9db1369f0c5129c05bd8d79caa4e962b",
+    DECISION_SCHEMA: "76436efbe90f8d40be1059dc32735dd43f9f7b923d6efafdce33bd98cb9b55f8",
+    MANIFEST_SCHEMA: "b054e1e6c06f514681aef13d7890ef1b87c1f314d61e8583389e183cd8f842eb",
     PARENT_QUALIFICATION_SCHEMA: "31eb692bf80eaa9472b8feb74bb0cdfe498446a052c4165c345bed847ab48177",
     PARENT_VERIFICATION_SCHEMA: "afec74a401e1351ace4b03b22c96c9699de32c95fa273d7b61bad4c7e4798ca1",
+    MANAGED_LEASE_IMPLEMENTATION: "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1",
+    EXCLUSIVE_LEASE_SCHEMA: "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96",
     COMPILER: "011362d67c1a55636e9e1fa8fb87705980ebe94037213686897e1dadba007e43",
 }
 COMPILE_FLAGS = [
@@ -184,6 +192,78 @@ def verify_locked_file(path: Path, expected_sha256: str) -> dict[str, Any]:
             f"locked file SHA-256 mismatch: {path}: expected {expected_sha256}, got {actual}"
         )
     return artifact(path, actual)
+
+
+def validate_planning_contract(plan: dict[str, Any], runner_sha256: str) -> None:
+    validate_with_schema(plan, PLAN_SCHEMA)
+    if plan["planning_schema_sha256"] != EXPECTED_SHA256[PLAN_SCHEMA]:
+        raise RuntimeError("planning schema digest mismatch")
+    expected_bindings = (
+        (plan["candidate_revision"], CANDIDATE_REVISION, EXPECTED_SHA256[CANDIDATE_REVISION]),
+        (plan["experiment"], EXPERIMENT, EXPECTED_SHA256[EXPERIMENT]),
+        (plan["proposal"], PROPOSAL, EXPECTED_SHA256[PROPOSAL]),
+    )
+    for record, path, digest in expected_bindings:
+        if record.get("path") != display_path(path) or record.get("sha256") != digest:
+            raise RuntimeError(f"planning artifact binding mismatch: {path}")
+    if plan["candidate_revision"]["candidate_tree_sha256"] != CANDIDATE_TREE_SHA256.removeprefix(
+        "sha256:"
+    ):
+        raise RuntimeError("planning candidate-tree binding mismatch")
+    expected_implementation = {
+        "source": display_path(SOURCE),
+        "source_sha256": EXPECTED_SHA256[SOURCE],
+        "interface": display_path(INTERFACE),
+        "interface_sha256": EXPECTED_SHA256[INTERFACE],
+        "runner": display_path(Path(__file__).resolve()),
+        "runner_sha256": runner_sha256,
+    }
+    if plan["implementation"] != expected_implementation:
+        raise RuntimeError("planning implementation closure mismatch")
+    expected_schemas = {
+        "plan": display_path(PLAN_SCHEMA),
+        "scan": display_path(SCAN_SCHEMA),
+        "scan_sha256": EXPECTED_SHA256[SCAN_SCHEMA],
+        "decision": display_path(DECISION_SCHEMA),
+        "decision_sha256": EXPECTED_SHA256[DECISION_SCHEMA],
+        "output_manifest": display_path(MANIFEST_SCHEMA),
+        "output_manifest_sha256": EXPECTED_SHA256[MANIFEST_SCHEMA],
+    }
+    if plan["schemas"] != expected_schemas:
+        raise RuntimeError("planning schema closure mismatch")
+    expected_lane = {
+        "implementation": display_path(MANAGED_LEASE_IMPLEMENTATION),
+        "implementation_sha256": EXPECTED_SHA256[MANAGED_LEASE_IMPLEMENTATION],
+        "schema": display_path(EXCLUSIVE_LEASE_SCHEMA),
+        "schema_sha256": EXPECTED_SHA256[EXCLUSIVE_LEASE_SCHEMA],
+        "policy": plan["exclusive_lane"]["policy"],
+    }
+    if plan["exclusive_lane"] != expected_lane:
+        raise RuntimeError("planning exclusive-lane closure mismatch")
+    if plan["population"] != {
+        "path": str(INPUT),
+        "bytes": INPUT_BYTES,
+        "sha256": INPUT_SHA256,
+    }:
+        raise RuntimeError("planning population binding mismatch")
+    if plan["command_template"] != [
+        "python3",
+        display_path(Path(__file__).resolve()),
+        "--parent-qualification-receipt",
+        "<schema-valid-q1-qualification-receipt>",
+        "--parent-qualification-verification",
+        "<schema-valid-independent-q1-verification>",
+    ]:
+        raise RuntimeError("planning command template mismatch")
+    if plan["outputs"] != [
+        f"results/{CANDIDATE_ID}/lease-evidence.json",
+        f"results/{CANDIDATE_ID}/lease-transitions.json",
+        f"results/{CANDIDATE_ID}/scan-a.json",
+        f"results/{CANDIDATE_ID}/scan-b.json",
+        f"results/{CANDIDATE_ID}/decision.json",
+        f"results/{CANDIDATE_ID}/output-manifest.json",
+    ]:
+        raise RuntimeError("planning output-set mismatch")
 
 
 def proc_start_ticks(pid: int) -> int | None:
@@ -344,6 +424,8 @@ def empty_gates() -> dict[str, None]:
 
 def result_manifest(complete: bool) -> dict[str, Any]:
     roles = [
+        ("lease_evidence", "lease-evidence.json"),
+        ("lease_transitions", "lease-transitions.json"),
         ("compile_stdout", "compile.stdout"),
         ("compile_stderr", "compile.stderr"),
         ("scanner_binary", "wiki-schema-vm-scan"),
@@ -364,12 +446,26 @@ def result_manifest(complete: bool) -> dict[str, Any]:
             record["path"] = relative
             artifacts.append(record)
     expected_roles = {role for role, _ in roles}
+    expected_files = {relative for _, relative in roles}
     actual_roles = {record["role"] for record in artifacts}
+    observed_entries = sorted(path.name for path in RESULT.iterdir())
+    unexpected_entries = sorted(set(observed_entries) - expected_files)
+    exact_file_set = (
+        set(observed_entries) == expected_files
+        and all(
+            path.is_file() and not path.is_symlink()
+            for path in RESULT.iterdir()
+        )
+    )
     return {
         "schema": "gamma.enwiki9.wiki-schema-vm-output-manifest.v1",
         "candidate_id": CANDIDATE_ID,
         "result_root": "results/wiki_schema_vm_ceiling_q0_v1",
-        "complete_result_artifacts_pass": complete and actual_roles == expected_roles,
+        "pre_manifest_exact_file_set_pass": exact_file_set,
+        "unexpected_pre_manifest_entries": unexpected_entries,
+        "complete_result_artifacts_pass": (
+            complete and exact_file_set and actual_roles == expected_roles
+        ),
         "artifacts": artifacts,
     }
 
@@ -380,15 +476,6 @@ def main() -> int:
     parser.add_argument("--parent-qualification-verification", type=Path, required=True)
     args = parser.parse_args()
     assert_exclusive_host_released()
-    assert_no_symlink_components(INPUT)
-    input_metadata = INPUT.stat()
-    if (
-        not stat.S_ISREG(input_metadata.st_mode)
-        or input_metadata.st_nlink != 1
-        or input_metadata.st_size != INPUT_BYTES
-        or sha256(INPUT) != INPUT_SHA256
-    ):
-        raise RuntimeError("transformed-ready population identity mismatch")
 
     parent_receipt_path = args.parent_qualification_receipt
     if not parent_receipt_path.is_absolute():
@@ -409,6 +496,8 @@ def main() -> int:
         ),
         "interface_contract": verify_locked_file(INTERFACE, EXPECTED_SHA256[INTERFACE]),
         "scanner_source": verify_locked_file(SOURCE, EXPECTED_SHA256[SOURCE]),
+        "planning_contract": artifact(PLAN),
+        "planning_schema": verify_locked_file(PLAN_SCHEMA, EXPECTED_SHA256[PLAN_SCHEMA]),
         "scanner_schema": verify_locked_file(SCAN_SCHEMA, EXPECTED_SHA256[SCAN_SCHEMA]),
         "decision_schema": verify_locked_file(
             DECISION_SCHEMA, EXPECTED_SHA256[DECISION_SCHEMA]
@@ -422,11 +511,20 @@ def main() -> int:
         "parent_verification_schema": verify_locked_file(
             PARENT_VERIFICATION_SCHEMA, EXPECTED_SHA256[PARENT_VERIFICATION_SCHEMA]
         ),
+        "managed_lease_implementation": verify_locked_file(
+            MANAGED_LEASE_IMPLEMENTATION,
+            EXPECTED_SHA256[MANAGED_LEASE_IMPLEMENTATION],
+        ),
+        "exclusive_lease_schema": verify_locked_file(
+            EXCLUSIVE_LEASE_SCHEMA, EXPECTED_SHA256[EXCLUSIVE_LEASE_SCHEMA]
+        ),
         "parent_qualification_receipt": parent_receipt,
         "parent_qualification_verification": parent_verification,
         "runner": artifact(Path(__file__).resolve()),
         "compiler": verify_locked_file(COMPILER, EXPECTED_SHA256[COMPILER]),
     }
+    planning = json.loads(PLAN.read_text(encoding="utf-8"))
+    validate_planning_contract(planning, bindings["runner"]["sha256"])
     revision = json.loads(CANDIDATE_REVISION.read_text(encoding="utf-8"))
     if (
         revision.get("candidateId") != CANDIDATE_ID
@@ -437,6 +535,35 @@ def main() -> int:
     if RESULT.exists():
         raise FileExistsError(f"refusing to overwrite result root: {RESULT}")
     RESULT.mkdir(mode=0o700, parents=True)
+
+    invocation_contract = {
+        "argv": [str(Path(__file__).resolve()), *sys.argv[1:]],
+        "cwd": str(PROJECT),
+        "environment": ENVIRONMENT,
+    }
+    # Import only after the implementation bytes have matched the frozen digest.
+    # A top-level import would execute an unverified transitive dependency.
+    from managed_exclusive_lease import ManagedExclusiveLease
+
+    lease: Any = None
+    try:
+        lease = ManagedExclusiveLease.acquire(
+            lease_path=LEASE,
+            transition_path=RESULT / "lease-transitions.json",
+            candidate_id=CANDIDATE_ID,
+            command_sha256=canonical_sha256(invocation_contract),
+            runner_sha256=bindings["runner"]["sha256"],
+            guard_path=str(RESULT),
+            result_path=str(RESULT),
+            scratch_path=str(RESULT),
+            claim_boundary=(
+                "Managed exclusive lane for two zero-credit full transformed-stream "
+                "WIKI-SCHEMA-VM scans; no signaling authority."
+            ),
+        )
+    except Exception:
+        RESULT.rmdir()
+        raise
 
     decision: dict[str, Any] = {
         "schema": "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1",
@@ -450,6 +577,12 @@ def main() -> int:
             "sha256": INPUT_SHA256,
         },
         "bindings": bindings,
+        "exclusive_lease": {
+            "lease_id": lease.record["lease_id"],
+            "release_pass": False,
+            "evidence": None,
+            "transitions": None,
+        },
         "compile_flags": COMPILE_FLAGS,
         "compile": None,
         "scanner": None,
@@ -469,6 +602,17 @@ def main() -> int:
         "error": None,
     }
     try:
+        assert_no_symlink_components(INPUT)
+        input_metadata = INPUT.stat()
+        if (
+            not stat.S_ISREG(input_metadata.st_mode)
+            or input_metadata.st_nlink != 1
+            or input_metadata.st_size != INPUT_BYTES
+            or sha256(INPUT) != INPUT_SHA256
+        ):
+            raise RuntimeError("transformed-ready population identity mismatch")
+        lease.heartbeat()
+
         binary = RESULT / "wiki-schema-vm-scan"
         compile_argv = [str(COMPILER), *COMPILE_FLAGS, str(SOURCE), "-o", str(binary)]
         decision["compile"] = run_command(
@@ -477,6 +621,7 @@ def main() -> int:
         if decision["compile"]["returncode"] != 0:
             raise RuntimeError("scanner compilation failed")
         decision["scanner"] = artifact(binary)
+        lease.heartbeat()
 
         scan_a_path = RESULT / "scan-a.json"
         scan_a_argv = [str(binary), str(INPUT), str(scan_a_path)]
@@ -489,6 +634,7 @@ def main() -> int:
         validate_with_schema(summary_a, SCAN_SCHEMA)
         semantic_scan_checks(summary_a)
         decision["scan_a"] = artifact(scan_a_path)
+        lease.heartbeat()
 
         scan_b_path = RESULT / "scan-b.json"
         scan_b_argv = [str(binary), str(INPUT), str(scan_b_path)]
@@ -501,6 +647,7 @@ def main() -> int:
         validate_with_schema(summary_b, SCAN_SCHEMA)
         semantic_scan_checks(summary_b)
         decision["scan_b"] = artifact(scan_b_path)
+        lease.heartbeat()
 
         repeat_identity = scan_a_path.read_bytes() == scan_b_path.read_bytes()
         measurements = {
@@ -565,6 +712,40 @@ def main() -> int:
         )
     except Exception as error:  # A terminal failure receipt is mandatory after creation.
         decision["error"] = f"{type(error).__name__}: {error}"
+    finally:
+        try:
+            lease.heartbeat()
+            lease.release(evidence_path=RESULT / "lease-evidence.json")
+            decision["exclusive_lease"] = {
+                "lease_id": lease.record["lease_id"],
+                "release_pass": True,
+                "evidence": artifact(RESULT / "lease-evidence.json"),
+                "transitions": artifact(RESULT / "lease-transitions.json"),
+            }
+        except Exception as lease_error:
+            lease_message = f"lease release failure: {type(lease_error).__name__}: {lease_error}"
+            decision["error"] = (
+                lease_message
+                if decision["error"] is None
+                else f"{decision['error']}; {lease_message}"
+            )
+            decision.update(
+                {
+                    "operational_status": "terminal_infrastructure_failure",
+                    "scientific_verdict": "none_infrastructure_failure",
+                    "next_authority": "one_correction_only_runner_successor",
+                }
+            )
+            evidence_path = RESULT / "lease-evidence.json"
+            transition_path = RESULT / "lease-transitions.json"
+            decision["exclusive_lease"] = {
+                "lease_id": lease.record["lease_id"],
+                "release_pass": False,
+                "evidence": artifact(evidence_path) if evidence_path.is_file() else None,
+                "transitions": (
+                    artifact(transition_path) if transition_path.is_file() else None
+                ),
+            }
 
     validate_with_schema(decision, DECISION_SCHEMA)
     write_json_exclusive(RESULT / "decision.json", decision)

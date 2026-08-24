@@ -12,6 +12,7 @@
     "claim_authority",
     "population",
     "bindings",
+    "exclusive_lease",
     "compile_flags",
     "compile",
     "scanner",
@@ -48,11 +49,15 @@
         "candidate_revision",
         "interface_contract",
         "scanner_source",
+        "planning_contract",
+        "planning_schema",
         "scanner_schema",
         "decision_schema",
         "output_manifest_schema",
         "parent_qualification_schema",
         "parent_verification_schema",
+        "managed_lease_implementation",
+        "exclusive_lease_schema",
         "parent_qualification_receipt",
         "parent_qualification_verification",
         "runner",
@@ -64,15 +69,30 @@
         "candidate_revision": {"$ref": "#/$defs/artifact"},
         "interface_contract": {"$ref": "#/$defs/artifact"},
         "scanner_source": {"$ref": "#/$defs/artifact"},
+        "planning_contract": {"$ref": "#/$defs/artifact"},
+        "planning_schema": {"$ref": "#/$defs/artifact"},
         "scanner_schema": {"$ref": "#/$defs/artifact"},
         "decision_schema": {"$ref": "#/$defs/artifact"},
         "output_manifest_schema": {"$ref": "#/$defs/artifact"},
         "parent_qualification_schema": {"$ref": "#/$defs/artifact"},
         "parent_verification_schema": {"$ref": "#/$defs/artifact"},
+        "managed_lease_implementation": {"$ref": "#/$defs/artifact"},
+        "exclusive_lease_schema": {"$ref": "#/$defs/artifact"},
         "parent_qualification_receipt": {"$ref": "#/$defs/artifact"},
         "parent_qualification_verification": {"$ref": "#/$defs/artifact"},
         "runner": {"$ref": "#/$defs/artifact"},
         "compiler": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lease_id", "release_pass", "evidence", "transitions"],
+      "properties": {
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "release_pass": {"type": "boolean"},
+        "evidence": {"$ref": "#/$defs/nullableArtifact"},
+        "transitions": {"$ref": "#/$defs/nullableArtifact"}
       }
     },
     "compile_flags": {
@@ -173,6 +193,26 @@
     "gamma_score_credit_bytes": {"const": 0},
     "error": {"type": ["string", "null"]}
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"operational_status": {"const": "terminal"}},
+        "required": ["operational_status"]
+      },
+      "then": {
+        "properties": {
+          "exclusive_lease": {
+            "properties": {
+              "release_pass": {"const": true},
+              "evidence": {"$ref": "#/$defs/artifact"},
+              "transitions": {"$ref": "#/$defs/artifact"}
+            }
+          },
+          "error": {"const": null}
+        }
+      }
+    }
+  ],
   "$defs": {
     "count": {"type": "integer", "minimum": 0},
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
