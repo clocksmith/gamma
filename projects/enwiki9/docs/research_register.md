@@ -1,5 +1,48 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - exact 16 MiB threshold geometry bounds one q1 memory contingency
+
+A source-and-live-map audit now identifies one attributable q1 memory
+contingency without modifying or signaling the active qm8 process. The sealed
+FXCM allocation templates currently file-back exactly 26 allocations at or
+above 64 MiB. Evaluating those same templates at a 16 MiB boundary finds
+exactly 24 additional source allocations: two stationary maps, `dcsmN` state,
+five mixer slabs, one run-context table, six 32 MiB `ContextMap3` tables, and
+nine 16 MiB `ContextMap3` tables. Together they contain `662,421,824`
+semantic bytes and require `662,423,968` allocation bytes, or
+`631.7367248535156 MiB`. The expected mapping count would change from 26 to
+50; no table dimension, value, hash, predictor, or coder operation changes.
+
+The live allocation order provides a conservative reconciliation, not a
+source-owned RSS claim. Anonymous VMAs interleaved among q1's file mappings
+totaled `432,292 KiB`, with `432,112 KiB` resident and effectively all of it
+referenced and dirty. Their geometry matches the named mixer and ContextMap3
+cohorts. The other planned ranges occupy allocator-coalesced heap VMAs and
+cannot receive allocation-level residency credit without the dormant marker
+and pagemap protocol. The important negative result is that these are hot
+pages: lowering the threshold can make another 631.7 MiB reclaimable, but it
+does not reduce the semantic working set and may exchange RSS for writeback
+and refault cost.
+
+The exact one-axis contingency is therefore
+`cmix_filebacked_fxcm_16m_backing_opportunity_q0_v1`: in a new candidate only,
+change `kMinimumBackedBytes` from 64 MiB to 16 MiB. Connecting the dead
+`ByteUpdate` hook, changing pageout cadence, resizing tables, or changing the
+cgroup policy is forbidden. This is not yet an authorized candidate. If qm8
+terminalizes exact at or below the already frozen `9,000,000 KiB` engineering
+target, q1 remains the parent and this contingency is suppressed. Only an
+otherwise-semantic-clean qm8 memory failure or peak above that target may
+authorize q2. Its first matched gate must preserve integer probabilities,
+payload, inverse, mapping count, and cleanup while reducing peak tree RSS by
+at least `262,144 KiB` to no more than `8,750,000 KiB`; a smaller reduction
+retires this threshold without a cadence rescue.
+
+At the bound non-terminal observation qm8 was still encoding at `29.53%` with
+no terminal receipt. No q2 source, build, run, archive, inverse, resource
+qualification, compression gain, or score credit exists. Evidence:
+`operations/planning/cmix_filebacked_fxcm_16m_backing_opportunity_q0_v1.json`
+(`1bf1c0b0...756aa9f`).
+
 ## 2026-08-24 - verification v2 prevents a schema pass from impersonating native causality
 
 Generalizing causal closure exposed an authority bug in the historical
