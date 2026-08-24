@@ -431,6 +431,37 @@ and disk-wait states under a one-CPU guard. This is continued pressure evidence
 only: payload identity, inverse, cleanup, runtime, and q1 qualification remain
 unknown until the terminal receipt and the matching independent verifier exist.
 
+### qm8 terminal dispatch is fail-closed on both receipt classes
+
+A static success/failure dispatch comparison found that the dormant failure
+verifier did not enforce its terminal class at the preflight boundary. The
+success verifier already loaded the receipt and rejected a non-q1 candidate,
+non-A arm, `terminal_pass` other than true, or any remaining qm8 process before
+entering its caught verification body. The failure verifier checked its plan
+and receipt hash in preflight, but left `terminal_pass=false` and qm8 process
+closure as ordinary booleans inside `verify()`.
+
+That difference was operationally significant. `main()` catches verification
+exceptions and also accepts false evidence as a nonpassing verification
+object, then creates the one canonical failure-verification output with
+`O_EXCL`. A wrong-branch activation or invocation during the coordinator's
+terminal-cleanup interval could therefore consume the canonical output path
+without producing a valid failure classification.
+
+The correction changes only terminal-dispatch preflight. The failure verifier
+now requires the exact full-roundtrip schema, q1 candidate, Arm A,
+`terminal_pass=false`, and no remaining qm8 process before any caught body or
+output write is reachable. Its corrected source is
+`78c1c967...f02f`; the dormant plan binds that exact source at
+`dc18deed...7be1`. Classification order, single-successor routing, schemas,
+zero-credit authority, and the future receipt-hash-bound revision-2 activation
+remain unchanged. The static audit is preserved in
+`operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_audit_q0_v1.json`.
+
+No verifier, Arm B, codec, or new proof workload ran. Arm B remains causally
+blocked until qm8 produces a terminal passing receipt and the independently
+activated success verifier passes.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before

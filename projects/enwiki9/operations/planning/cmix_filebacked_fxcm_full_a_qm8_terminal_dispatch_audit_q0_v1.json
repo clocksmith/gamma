@@ -1,0 +1,80 @@
+{
+  "schema": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-audit.v1",
+  "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_audit_q0_v1",
+  "operational_status": "terminal_static_correction",
+  "scientific_verdict": null,
+  "archive_observed": false,
+  "score_credit_bytes": 0,
+  "audited_candidate": "cmix_filebacked_fxcm_full_a_qm8_v1",
+  "audited_sources": {
+    "success_verifier": {
+      "path": "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
+      "bytes": 33739,
+      "sha256": "bab93845fd85f0e4615d6ac970199c636276fae202e2d1dc745098dae5805ba2"
+    },
+    "failure_verifier_before_correction": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
+      "bytes": 43813,
+      "sha256": "6772c6ea450f6d30e33d9d56d7edfbf2906d2b004c09f2be50170c64bcde6d45"
+    },
+    "success_plan": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
+      "sha256": "9545db2ff58b7da363f4519d2ab7859d98c92a122f8ecdbef3d34095b3467851"
+    },
+    "failure_plan_before_correction": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
+      "sha256": "226c74116a3f78457013902518e31a07dc09168ce13459a750bea8de481bc689"
+    }
+  },
+  "proved_source_facts": [
+    {
+      "id": "success_preflight_is_terminal_class_closed",
+      "fact": "The success verifier loads the terminal receipt during preflight and rejects a non-q1 candidate, a non-A arm, terminal_pass other than true, or any remaining qm8 process before entering its caught verification body or opening the canonical output."
+    },
+    {
+      "id": "failure_preflight_was_only_plan_closed",
+      "fact": "The previous failure verifier preflight checked the activated plan and receipt hash but did not require the receipt to be q1 Arm A with terminal_pass=false and did not require qm8 process closure. Those checks existed only as booleans inside verify()."
+    },
+    {
+      "id": "caught_body_can_occupy_output",
+      "fact": "main() catches exceptions and ordinary false evidence from verify(), validates a failure-shaped receipt, and writes it with O_EXCL to the one canonical failure-verification path. Therefore a wrong-branch or still-live invocation could consume that path even though no terminal failure classification passed."
+    },
+    {
+      "id": "arm_b_remains_causally_gated",
+      "fact": "The Arm-A contract authorizes freezing independent Arm B only after a terminal passing Arm-A receipt and independent success verification. No Arm-B plan or execution is authorized by this audit."
+    }
+  ],
+  "correction": {
+    "semantic_axis": "terminal_dispatch_preflight",
+    "changed_source": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_failure_verify.py",
+      "bytes": 44146,
+      "sha256": "78c1c9678bd628492404377f7ce8902079b242875152cba5fc887649e043f02f"
+    },
+    "updated_plan": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
+      "bytes": 7658,
+      "sha256": "dc18deed6af512b6e4cf9d27f8f05d1c5dd95a70da448278dd445f18a2127be1"
+    },
+    "new_preflight_requirements": [
+      "source schema is gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1",
+      "source candidate is cmix_obias_memory_safe_parent_filebacked_q1_v1",
+      "source arm is a",
+      "source terminal_pass is exactly false",
+      "no qm8 process remains live"
+    ],
+    "unchanged_semantics": [
+      "failure classification order",
+      "single authorized successor routing",
+      "receipt and output schemas",
+      "zero promotion and score authority",
+      "future revision-2 receipt-hash activation requirement"
+    ]
+  },
+  "claim_boundary": [
+    "This is source-level infrastructure evidence, not a qm8 result.",
+    "No verifier was executed and no canonical success or failure output exists.",
+    "The live qm8 codec, coordinator, guards, source, lease, result tree, and scratch tree were not modified or signaled.",
+    "The correction prevents premature output creation; it does not predict whether qm8 will pass."
+  ]
+}
