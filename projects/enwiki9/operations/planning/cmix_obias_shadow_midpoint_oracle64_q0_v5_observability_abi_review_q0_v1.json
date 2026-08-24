@@ -1,0 +1,110 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1.json",
+      "required_evidence": "Exact 21,994-byte ABI artifact with SHA-256 8c0e4d8f806e5e35880f9517ecc48ac6724e64926f08c26268fec1f62ccb0f07."
+    },
+    {
+      "artifact": "contracts/research/v1/cmix-midpoint-observability-parse-v1.schema.json",
+      "required_evidence": "Exact 8,844-byte parse schema with SHA-256 c2f3e8d8082bfc01df2d54e264d515ca4cd7c5f722ca6c2c352653937c489a42."
+    },
+    {
+      "artifact": "contracts/research/v1/cmix-shadow-midpoint-oracle-v5-receipt.schema.json",
+      "required_evidence": "Exact 14,459-byte joint receipt schema with SHA-256 5c15015c4573504f7991f4febd5da44930153acb4c335bdf5c4cbabf00b3f145."
+    },
+    {
+      "artifact": "operations/planning/campaign-static-contract.schema.json",
+      "required_evidence": "Exact 1,887-byte static-contract schema with SHA-256 6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64."
+    },
+    {
+      "artifact": "tools/research_contracts.py",
+      "required_evidence": "Exact live-qm8-bound 128,519-byte registry with SHA-256 744d3cc2cf5433c86251194ec1421256f1d6b745fdc012ec2ec6fb982df1fa5b."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "review_mode": "read_only_json_schema_geometry_and_negative_controls",
+    "checks": {
+      "abi_static_schema_pass": true,
+      "parse_schema_draft_2020_12_pass": true,
+      "joint_schema_draft_2020_12_pass": true,
+      "parse_positive_instance_pass": true,
+      "parse_duplicate_partition_negative_rejected": true,
+      "joint_positive_instance_pass": true,
+      "wrong_repeat_identity_negative_rejected": true,
+      "six_exact_partition_ids_required": true,
+      "six_exact_run_slots_required": true,
+      "zero_gamma_credit_required": true,
+      "global_registry_unchanged_pass": true,
+      "common_header_geometry_pass": true,
+      "common_footer_geometry_pass": true,
+      "checkpoint_record_geometry_pass": true,
+      "update_record_geometry_pass": true,
+      "merkle_no_padding_bound_pass": true,
+      "full_terminal_recomputation_required": true,
+      "encoder_decoder_observation_required": true,
+      "payload_prefix_digest_required": true,
+      "instrumentation_neutrality_required": true
+    },
+    "geometry_derivations": {
+      "common_header_bytes": "8 + 2 + 2 + 1 + 1 + 1 + 1 + 8 + 8 + 32 + 32 + 32 + 32 = 160",
+      "common_footer_bytes": "4 + 4 + 8 + 8 + 32 = 56",
+      "checkpoint_record_bytes": "4 + 4 + 1 + 1 + 2 + 4*4 + 6*8 + 2*32 + 6*32 = 332",
+      "update_record_bytes": "4 + 4 + 2*8 + 2*4 + 4*1 + 4 + 9*32 = 328",
+      "layout_record_bytes": "32 + 8*rank + name_bytes",
+      "checkpoint_count": "floor(modeled_events / 64) + 3",
+      "midpoint_update_count": "0 below 33 modeled events; otherwise floor((modeled_events - 33) / 64) + 1",
+      "merkle_node_bound": "For N positive leaves, pair-or-lone reduction stores fewer than 2N total 32-byte nodes and uses no padding leaves."
+    },
+    "closed_gaps": [
+      "Every binary stream binds candidate source, ABI, raw input, modeled stream, arm, replicate, and direction in one fixed header.",
+      "Every stream has a body digest, count, byte count, fail-closed footer, and clean-EOF requirement.",
+      "Every state hash has a canonical typed preimage and an incremental current-state root with independent terminal full recomputation.",
+      "Every v4 update-manifest field has a fixed record position, observation time, canonical aggregate code, and tensor-group rule.",
+      "Encoder and decoder are independently observed and parsed; coder-state equality is never incorrectly required across directions.",
+      "The P/K/F/S run matrix, F/S repeats, exact inverse, resources, package, controls, comparisons, and zero-credit authority are structurally represented."
+    ],
+    "remaining_implementation_gates": [
+      "Freeze the exact source-bound tensor layout and write-site map for all six partitions.",
+      "Implement an emitter without importing parser code and implement an independent parser without importing emitter code.",
+      "Derive exact Merkle allocation bytes from the future layout and reject if total observer storage plus scratch exceeds 268,435,456 bytes.",
+      "Materialize v4 only after q1-v3 qualification, then derive v5 as a new source identity without changing P/K/F/S arithmetic.",
+      "Pass source completeness, six mutation controls, two-build identity, v4/v5/off/on neutrality, and P/K synthetic fixture before a native coder gate."
+    ],
+    "current_state": {
+      "v5_source_exists": false,
+      "independent_parser_exists": false,
+      "source_layout_exists": false,
+      "build_exists": false,
+      "fixture_exists": false,
+      "archive_exists": false,
+      "q1_v3_qualification_exists": false,
+      "qm8_live_at_review": true
+    },
+    "execution_authority": false,
+    "archive_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Do not modify the live-qm8-bound global schema registry before qm8 terminal dispatch.",
+    "Do not implement or materialize v5 before q1-v3 qualification and v4 source materialization pass their existing gates.",
+    "Any change to ABI bytes, domain tags, framing, partition semantics, update groups, schemas, controls, or resource ceilings creates a new ABI revision and rebinds all descendants.",
+    "No proof experiment is authorized by this static review."
+  ],
+  "claim_boundary": [
+    "This review validates static structure and in-memory schema controls only.",
+    "It is not a C++ build, runtime parser, write-site completeness, synchronization, compression, inverse, resource, package, or Hutter result.",
+    "V5 remains an unmaterialized observability-only successor with zero compression and objective credit."
+  ]
+}
