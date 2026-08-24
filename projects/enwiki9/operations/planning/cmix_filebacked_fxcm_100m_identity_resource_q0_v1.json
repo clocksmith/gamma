@@ -51,11 +51,13 @@
   ],
   "identity_observer_source": {
     "program": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/meta.json",
-    "program_sha256": "5a5264aa4fed2e255ab014fcdc87bc2069148fa07a85a1bc2686a324d01ed9d9",
+    "program_sha256": "51eeb770be049e0cfab1554d18e34e96d8835e0e8d9c2733757a77759d3d3205",
     "header": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/gamma-full-identity-observer.h",
-    "header_sha256": "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515",
+    "header_sha256": "557347d41cc57dc96f2c0e662f574dbf488581fc12dff4d7932d54cb69af7ea3",
     "patch": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/full-identity-observer.patch",
     "patch_sha256": "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b",
+    "state_mutation_control": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/observer-state-mutation-control.cpp",
+    "state_mutation_control_sha256": "7d0c4762980973fede8ac908746cbca8117aa39ad013ec08bbe32899d070584f",
     "compile_definition": "GAMMA_FULL_IDENTITY_OBSERVER=1",
     "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; no observer build or execution receipt exists.",
     "runtime_activation": "GAMMA_FULL_IDENTITY_DIR must name an existing absolute output directory; absent activation leaves packaging/helper encoder runs observationally disabled.",
@@ -63,9 +65,9 @@
   },
   "observer_build": {
     "runner": "tools/cmix_filebacked_fxcm_100m_observer_build.py",
-    "runner_sha256": "66272f651b5befc72874714d23102dd82d5ec0163f2154d3dd2ab7a165fceff6",
+    "runner_sha256": "33bee8b3ea0c7fc75a68029226e33c2c2f5f817cd7b04ba3e86a829fbe22b0d2",
     "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-build.schema.json",
-    "receipt_schema_sha256": "9798978a3020a6d530bfabb3321653ebb8d5ad058d17908d40eac2d3dd00d39d",
+    "receipt_schema_sha256": "46ef10067a3ce03e5b3e729d37e02a65b8f40f35c36bcb0f1830f29cdd941eec",
     "replicate_counts": {
       "I-P": 2,
       "I-Q": 2,
@@ -73,6 +75,7 @@
     },
     "required_binary_identity": "A and B are byte-identical within I-P and independently byte-identical within I-Q.",
     "negative_control": "N-P is the parent observer compiled with GAMMA_FULL_IDENTITY_PRE_HEAD=1; its payload must remain identical to I-P while its probability digest must differ.",
+    "state_mutation_control": "Compile the bound harness against the copied observer header with one 4,096-byte semantic range; a one-byte XOR must change its range and aggregate digests, and the following unchanged terminal snapshot must match the mutation snapshot.",
     "package_rule": "Package replicate A for I-P, I-Q, and N-P after within-arm identity passes; dictionary, article-order, and header payloads must match across all three.",
     "execution_status": "sealed_not_run"
   },

@@ -22,10 +22,11 @@ import cmix_filebacked_fxcm_scope_build as scope_build
 SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PLAN_ARTIFACT_ID = "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"
-OBSERVER_PROGRAM_SHA256 = "5a5264aa4fed2e255ab014fcdc87bc2069148fa07a85a1bc2686a324d01ed9d9"
-OBSERVER_HEADER_SHA256 = "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515"
+OBSERVER_PROGRAM_SHA256 = "51eeb770be049e0cfab1554d18e34e96d8835e0e8d9c2733757a77759d3d3205"
+OBSERVER_HEADER_SHA256 = "557347d41cc57dc96f2c0e662f574dbf488581fc12dff4d7932d54cb69af7ea3"
 OBSERVER_PATCH_SHA256 = "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b"
-RECEIPT_SCHEMA_SHA256 = "9798978a3020a6d530bfabb3321653ebb8d5ad058d17908d40eac2d3dd00d39d"
+OBSERVER_MUTATION_CONTROL_SHA256 = "7d0c4762980973fede8ac908746cbca8117aa39ad013ec08bbe32899d070584f"
+RECEIPT_SCHEMA_SHA256 = "46ef10067a3ce03e5b3e729d37e02a65b8f40f35c36bcb0f1830f29cdd941eec"
 OBSERVER_DEFINITION = "GAMMA_FULL_IDENTITY_OBSERVER=1"
 PRE_HEAD_DEFINITION = "GAMMA_FULL_IDENTITY_PRE_HEAD=1"
 PARENT_DEFINITIONS = tuple(
@@ -174,6 +175,178 @@ def write_new(path: Path, value: dict[str, Any]) -> None:
         os.close(descriptor)
 
 
+def command_record(
+    argv: list[str], completed: subprocess.CompletedProcess[bytes]
+) -> dict[str, Any]:
+    return {
+        "argv": argv,
+        "return_code": completed.returncode,
+        "stdout_sha256": hashlib.sha256(completed.stdout).hexdigest(),
+        "stderr_sha256": hashlib.sha256(completed.stderr).hexdigest(),
+    }
+
+
+def state_mutation_control(
+    *,
+    source: Path,
+    source_root: Path,
+    output_root: Path,
+    compiler: Path,
+    linker: Path,
+) -> dict[str, Any]:
+    control_root = output_root / "state-mutation-control"
+    control_root.mkdir(mode=0o700)
+    binary = control_root / "observer-state-mutation-control"
+    compile_argv = [
+        str(compiler),
+        "--driver-mode=g++",
+        "-m64",
+        "-std=c++17",
+        "-O2",
+        "-fno-exceptions",
+        "-DGAMMA_FULL_IDENTITY_OBSERVER=1",
+        "-DGAMMA_FULL_IDENTITY_MINIMUM_SEMANTIC_BYTES=1",
+        "-DGAMMA_FULL_IDENTITY_EXPECTED_RANGES=1",
+        "-I",
+        str(source_root / "src/models"),
+        f"--ld-path={linker}",
+        str(source),
+        "-o",
+        str(binary),
+    ]
+    environment = dict(scope_build.BUILD_ENVIRONMENT)
+    compiled = subprocess.run(
+        compile_argv,
+        cwd=control_root,
+        env=environment,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if compiled.returncode != 0:
+        raise RuntimeError(
+            "state mutation control compilation failed: "
+            + compiled.stderr.decode("utf-8", "replace")[-2000:]
+        )
+    stage.regular(binary, "state mutation control binary")
+    observer_output = control_root / "observer-output"
+    observer_output.mkdir(mode=0o700)
+    execute_argv = [str(binary), str(observer_output)]
+    executed = subprocess.run(
+        execute_argv,
+        cwd=control_root,
+        env={"LANG": "C", "LC_ALL": "C", "PATH": "/usr/bin:/bin", "TZ": "UTC"},
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if executed.returncode != 0:
+        raise RuntimeError(
+            "state mutation control execution failed: "
+            + executed.stderr.decode("utf-8", "replace")[-2000:]
+        )
+
+    state_path = stage.regular(
+        observer_output / "persistent-state.jsonl",
+        "state mutation persistent-state output",
+    )
+    coder_path = stage.regular(
+        observer_output / "coder-checkpoints.jsonl",
+        "state mutation coder output",
+    )
+    probability_path = stage.regular(
+        observer_output / "probability.json",
+        "state mutation probability output",
+    )
+    state_records = [
+        json.loads(line)
+        for line in state_path.read_text(encoding="ascii").splitlines()
+    ]
+    range_records = {
+        record["kind"]: record
+        for record in state_records
+        if "ordinal" in record
+    }
+    manifest_records = {
+        record["kind"]: record
+        for record in state_records
+        if "manifest_sha256" in record
+    }
+    expected_kinds = {"start", "mutation", "terminal"}
+    if (
+        len(state_records) != 6
+        or set(range_records) != expected_kinds
+        or set(manifest_records) != expected_kinds
+        or any(
+            record.get("ordinal") != 0
+            or record.get("bytes") != 4096
+            or record.get("alignment") != 64
+            for record in range_records.values()
+        )
+        or any(
+            record.get("allocation_count") != 1
+            for record in manifest_records.values()
+        )
+    ):
+        raise RuntimeError("state mutation control output geometry mismatch")
+    coder_records = [
+        json.loads(line)
+        for line in coder_path.read_text(encoding="ascii").splitlines()
+    ]
+    probability_record = json.loads(probability_path.read_text(encoding="ascii"))
+    empty_sha256 = hashlib.sha256().hexdigest()
+    if (
+        len(coder_records) != 2
+        or [record.get("kind") for record in coder_records] != ["start", "terminal"]
+        or any(record.get("coded_bits") != 0 for record in coder_records)
+        or any(
+            record.get("probability_sha256") != empty_sha256
+            for record in coder_records
+        )
+        or probability_record
+        != {
+            "coded_bits": 0,
+            "completed_coded_bytes": 0,
+            "post_head_probability_sha256": empty_sha256,
+        }
+    ):
+        raise RuntimeError("state mutation control coder output mismatch")
+
+    start_range = range_records["start"]["sha256"]
+    mutation_range = range_records["mutation"]["sha256"]
+    terminal_range = range_records["terminal"]["sha256"]
+    start_manifest = manifest_records["start"]["manifest_sha256"]
+    mutation_manifest = manifest_records["mutation"]["manifest_sha256"]
+    terminal_manifest = manifest_records["terminal"]["manifest_sha256"]
+    range_changed = start_range != mutation_range
+    aggregate_changed = start_manifest != mutation_manifest
+    terminal_matches = (
+        terminal_range == mutation_range and terminal_manifest == mutation_manifest
+    )
+    passed = range_changed and aggregate_changed and terminal_matches
+    if not passed:
+        raise RuntimeError("state mutation control failed to detect one-byte mutation")
+    return {
+        "source": artifact(source),
+        "binary": artifact(binary),
+        "compile": command_record(compile_argv, compiled),
+        "execute": command_record(execute_argv, executed),
+        "persistent_state": artifact(state_path),
+        "coder_checkpoints": artifact(coder_path),
+        "probability_summary": artifact(probability_path),
+        "start_range_sha256": start_range,
+        "mutation_range_sha256": mutation_range,
+        "terminal_range_sha256": terminal_range,
+        "start_manifest_sha256": start_manifest,
+        "mutation_manifest_sha256": mutation_manifest,
+        "terminal_manifest_sha256": terminal_manifest,
+        "range_digest_changed": range_changed,
+        "aggregate_digest_changed": aggregate_changed,
+        "terminal_matches_mutation": terminal_matches,
+        "pass": passed,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
@@ -183,6 +356,7 @@ def main() -> int:
     parser.add_argument("--observer-program", type=Path, required=True)
     parser.add_argument("--observer-header", type=Path, required=True)
     parser.add_argument("--observer-patch", type=Path, required=True)
+    parser.add_argument("--observer-mutation-control", type=Path, required=True)
     parser.add_argument("--receipt-schema", type=Path, required=True)
     parser.add_argument("--head-blob", type=Path, required=True)
     parser.add_argument("--compiler", type=Path, required=True)
@@ -213,6 +387,9 @@ def main() -> int:
     )
     observer_header = capture.existing_regular(args.observer_header, "observer header")
     observer_patch = capture.existing_regular(args.observer_patch, "observer patch")
+    observer_mutation_control = capture.existing_regular(
+        args.observer_mutation_control, "observer state mutation control"
+    )
     receipt_schema_path = capture.existing_regular(
         args.receipt_schema, "observer-build receipt schema"
     )
@@ -223,12 +400,22 @@ def main() -> int:
     require_digest(observer_program, OBSERVER_PROGRAM_SHA256, "observer program")
     require_digest(observer_header, OBSERVER_HEADER_SHA256, "observer header")
     require_digest(observer_patch, OBSERVER_PATCH_SHA256, "observer patch")
+    require_digest(
+        observer_mutation_control,
+        OBSERVER_MUTATION_CONTROL_SHA256,
+        "observer state mutation control",
+    )
     require_digest(receipt_schema_path, RECEIPT_SCHEMA_SHA256, "receipt schema")
     observer_contract = plan.get("identity_observer_source", {})
     for name, path, digest in (
         ("program", observer_program, OBSERVER_PROGRAM_SHA256),
         ("header", observer_header, OBSERVER_HEADER_SHA256),
         ("patch", observer_patch, OBSERVER_PATCH_SHA256),
+        (
+            "state_mutation_control",
+            observer_mutation_control,
+            OBSERVER_MUTATION_CONTROL_SHA256,
+        ),
     ):
         if (
             observer_contract.get(name) != str(path.relative_to(capture.PROJECT))
@@ -367,6 +554,13 @@ def main() -> int:
     )
     if not package_assets_identity:
         raise RuntimeError("observer package assets differ between arms")
+    mutation_control_result = state_mutation_control(
+        source=observer_mutation_control,
+        source_root=source_root,
+        output_root=output_root,
+        compiler=compiler,
+        linker=linker,
+    )
 
     receipt = {
         "schema": SCHEMA,
@@ -387,13 +581,16 @@ def main() -> int:
         "linker_sha256": sha256_file(linker),
         "builds": builds,
         "packages": packages,
+        "state_mutation_control": mutation_control_result,
         "decisions": {
             "two_build_identity_pass": build_identity,
             "negative_control_build_present": ("N-P", "A") in by_key,
+            "state_mutation_control_pass": mutation_control_result["pass"],
             "package_asset_identity_pass": package_assets_identity,
             "observer_build_pass": (
                 build_identity
                 and ("N-P", "A") in by_key
+                and mutation_control_result["pass"]
                 and package_assets_identity
             ),
         },
