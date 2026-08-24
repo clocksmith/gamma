@@ -1,8 +1,8 @@
 {
   "$schema": "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json",
-  "planning_schema_sha256": "8a47fc88caf1082676b4d8de973a53354b9e732aa006b5b2ddda024f0396eda5",
+  "planning_schema_sha256": "214e083eb8dee2b54d30fcd0e1454b041cda0e6f1bda6140670627b28cb5df40",
   "artifact_id": "cmix_filebacked_fxcm_100m_identity_resource_q0_v1",
-  "revision": 2,
+  "revision": 3,
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent_id": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
   "operational_status": "prospective_build_calibration_and_100m_coordinator_sealed_waiting_for_qm8_terminalization",
@@ -16,11 +16,11 @@
     "schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json",
     "schema_sha256": "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802",
     "verifier": "tools/cmix_filebacked_fxcm_100m_identity_resource_verify.py",
-    "verifier_sha256": "bf6631a554e61c18a04f8568ef74223e1ca18de84b338775f1875e94973be481"
+    "verifier_sha256": "9a8faa353cdf691054e10bf104fad520bd2aa29ad579b9ee288c45cc01915f98"
   },
   "coordinator": {
     "runner": "tools/cmix_filebacked_fxcm_100m_identity_resource.py",
-    "runner_sha256": "b238c21c8a149f4afed9cb2f7915d6fd87eeea4802ce9b4d2b78d9bebadca091",
+    "runner_sha256": "ea4eea87f5010ee7fbf61662893f2075063731471d21c8d6a1c5b8f5165adade",
     "identity_arm_runner": "tools/cmix_filebacked_fxcm_100m_identity_arm.py",
     "identity_arm_runner_sha256": "a8929b0b569276297d3a470e61374defd9a06ef173c742270f42fa831a189eb6",
     "identity_arm_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-arm.schema.json",
@@ -84,7 +84,7 @@
     "program": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/meta.json",
     "program_sha256": "51eeb770be049e0cfab1554d18e34e96d8835e0e8d9c2733757a77759d3d3205",
     "header": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/gamma-full-identity-observer.h",
-    "header_sha256": "557347d41cc57dc96f2c0e662f574dbf488581fc12dff4d7932d54cb69af7ea3",
+    "header_sha256": "f0a1b5d64645c1a7af0f3f7e75daec51864b26b3de7f627bd1b7ebe863a75ebb",
     "patch": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/full-identity-observer.patch",
     "patch_sha256": "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b",
     "state_mutation_control": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/observer-state-mutation-control.cpp",
@@ -96,7 +96,7 @@
   },
   "observer_build": {
     "runner": "tools/cmix_filebacked_fxcm_100m_observer_build.py",
-    "runner_sha256": "aa3ac693690a0fcaa7f34397f312e65ff8686046948ea1941097f57330a53c54",
+    "runner_sha256": "480927c64f7f81e0a7dd570e873713b827ce31a2784c67a61ac4e5fe8d0716f4",
     "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-build.schema.json",
     "receipt_schema_sha256": "46ef10067a3ce03e5b3e729d37e02a65b8f40f35c36bcb0f1830f29cdd941eec",
     "replicate_counts": {
@@ -136,6 +136,7 @@
     "coder_checkpoints": "Hash low/high range state, pending output state, coded-byte count, modeled-byte index, and decoded history at frozen checkpoints.",
     "persistent_state": "At each checkpoint, hash source-ordered requested semantic bytes for all 26 large FXCM allocations affected by q1; exclude virtual addresses, filenames, inode numbers, alignment padding, mapping slack, page residency, and fault history.",
     "modeled_byte_checkpoints": [0, 16777216, 33554432, 50331648, "terminal"],
+    "shared_binary_checkpoint_rule": "The observer binary also contains fixed checkpoints at modeled bytes 100,000,000 and 500,000,000, but reaches them only when GAMMA_FULL_IDENTITY_EXTENDED_CHECKPOINTS=1. This opening-100M gate and all 10M calibration arms omit that environment variable and therefore emit exactly the three historical fixed checkpoints plus start and terminal regardless of transformed-stream length. The full arm sets the variable to 1 and reuses the identical calibrated binary.",
     "diagnostic_separation_rule": "Full state hashing can fault file-backed pages into residency, so I-P/I-Q memory observations are diagnostic only and cannot establish R-Q headroom. R-Q must use the sealed release build without the identity observer.",
     "required_equalities": [
       "I-P and I-Q post-head probability digests",

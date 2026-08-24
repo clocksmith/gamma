@@ -35,6 +35,8 @@ inline constexpr uint64_t kFixedCheckpoints[] = {
     16777216ULL,
     33554432ULL,
     50331648ULL,
+    100000000ULL,
+    500000000ULL,
 };
 
 [[noreturn]] inline void Fail(const char* operation) {
@@ -182,6 +184,7 @@ inline FILE* coder_file = nullptr;
 inline bool enabled = false;
 inline bool begun = false;
 inline bool finished = false;
+inline bool extended_checkpoints = false;
 
 inline void RegisterSemanticRange(const void* pointer, size_t bytes,
                                   size_t alignment) {
@@ -343,6 +346,12 @@ inline void Begin(uint32_t x1, uint32_t x2, size_t payload_bytes) {
     Fail("invalid observer begin state");
   }
   enabled = true;
+  const char* extended = std::getenv(
+      "GAMMA_FULL_IDENTITY_EXTENDED_CHECKPOINTS");
+  if (extended != nullptr && std::strcmp(extended, "1") != 0) {
+    Fail("invalid extended checkpoint mode");
+  }
+  extended_checkpoints = extended != nullptr;
   output_dir_fd = OpenOutputDirectory();
   state_file = NewOutput("persistent-state.jsonl");
   coder_file = NewOutput("coder-checkpoints.jsonl");
@@ -370,7 +379,11 @@ inline void CompletedByte(uint32_t x1, uint32_t x2, size_t payload_bytes) {
     Fail("coded byte counter mismatch");
   }
   ++completed_bytes;
-  for (const uint64_t checkpoint : kFixedCheckpoints) {
+  for (size_t index = 0;
+       index < sizeof(kFixedCheckpoints) / sizeof(kFixedCheckpoints[0]);
+       ++index) {
+    if (index >= 3 && !extended_checkpoints) continue;
+    const uint64_t checkpoint = kFixedCheckpoints[index];
     if (completed_bytes == checkpoint) {
       SnapshotState(checkpoint, "fixed");
       CoderCheckpoint(checkpoint, "fixed", x1, x2, payload_bytes);

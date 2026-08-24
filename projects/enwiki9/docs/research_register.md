@@ -213,10 +213,13 @@ measurements. Diagnostic qm8 timing cannot satisfy this contract.
 
 Phase 11 now states its narrower legitimate claim. It can prove continuous
 byte-zero post-head integer-probability identity and exact coder checkpoints.
-For q1-mutated persistent storage it freezes state digests only after
-initialization and at coded-byte indices `100,000,000`, `500,000,000`, and
-`1,000,000,000`; these are checkpoint identity, not continuously observed
-state-trajectory identity. The independent verifier also requires retained
+For q1-mutated persistent storage it freezes state digests at modeled-stream
+indices `0`, `16,777,216`, `33,554,432`, `50,331,648`, `100,000,000`,
+`500,000,000`, and the dynamically observed terminal modeled byte. These are
+checkpoint identity, not continuously observed state-trajectory identity. The
+raw corpus remains exactly `1,000,000,000` bytes but is a different coordinate;
+retained full preprocessing currently yields `934,220,701` modeled bytes. The
+independent verifier also requires retained
 opening/distant 10M calibration equality, observer-off/on payload identity,
 a differing pre-head negative control, a detected single-byte state mutation,
 and rejected checkpoint omission/reordering controls.
@@ -227,6 +230,59 @@ a positive v2 verification with
 `promotion_authority=true`. No v2 router, phase-11 arm, runtime receipt, or
 qualification verification has been executed. This closure changes no archive
 measurement and grants zero Gamma compression or score credit.
+
+### Phase-11 modeled-coordinate repair and executable observer closure
+
+A pre-execution audit found that the old full-identity schemas could never
+correctly describe the intended run. They required the terminal arithmetic
+checkpoint to be coded byte `1,000,000,000`, but the observer counts bytes only
+after CMIX preprocessing. Retained full q1 scratch proves the coordinates
+differ: the canonical raw corpus is `1,000,000,000` bytes and `.ready4cmix` is
+`934,220,701` bytes. Opening 10M calibration is `5,766,051` modeled bytes.
+This was a contract error, not predictor evidence.
+
+The repaired observer binary now carries fixed modeled checkpoints at
+`16,777,216`, `33,554,432`, `50,331,648`, `100,000,000`, and `500,000,000`.
+The last two are enabled only by
+`GAMMA_FULL_IDENTITY_EXTENDED_CHECKPOINTS=1`. Calibration and opening-100M
+omit it, so their geometry remains start, the first three fixed points, and
+terminal regardless of transformed length. Full arms set it and produce seven
+records: start, five fixed points, and a terminal point required to equal the
+bound transformed-stream artifact. This is the same calibrated binary, so no
+second observer build or compiler-equivalence assumption is needed.
+
+The full arm runner, sequential parent/q1 coordinator, strict plan schema, arm
+and joint schemas, and independent verifier are now source-complete and
+content-addressed. Each arm is single-CPU, owns disjoint result, scratch, and
+backing roots, refuses an active full-1G lease, retains its transformed stream
+and raw observer manifests, and is bounded by an `11,500,000 KiB` diagnostic
+guard. That higher guard is deliberately non-authoritative: the external parent
+is already known to violate prize memory, and hashing semantic ranges faults
+pages. qm8 A/B remain the only resource authority.
+
+The independent verifier does not trust arm summaries. It reparses every
+probability, coder, and 26-range state record; reconstructs ordered aggregate
+digests; reopens the observer build and calibration; reruns the opening-100M
+and full A/B verifiers; and independently rejects omitted, duplicated,
+reordered, wrong-count, and wrong-terminal checkpoint controls. Full execution
+remains disabled until qm8 A, an independent B, observer calibration, and the
+opening-100M gate all terminalize as passes.
+
+The prospective phase-11 Python execution surface is also frozen as an exact
+147-member transitive closure rooted at the coordinator, arm runner, and
+independent verifier. It includes every recursively imported project-local
+Python helper and, because the contract registry is reachable, every research
+contract schema the registry can resolve. Both execution and independent
+verification recompute the ordered path/digest rows. Any omitted, added,
+reordered, or hash-divergent row rejects the evidence before identity authority
+is interpreted; direct top-level script hashes alone are no longer accepted as
+complete implementation provenance.
+
+Qualification policy v2 is preserved byte-for-byte because the dormant
+WIKI-LOOM proposal already hash-binds it. New policy v3 supersedes v2 only for
+future qualification authority and binds the corrected seven-checkpoint plan
+and implementation. None of these static repairs is a run, archive saving,
+Gamma authorship credit, or score credit.
 
 ### SAFE-MIX static closure audit
 

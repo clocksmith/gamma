@@ -1,19 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1",
-  "title": "One byte-zero CMIX full identity observer arm",
+  "title": "One byte-zero CMIX full probability/state observer arm",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema", "role", "candidate_id", "population", "binary",
-    "return_code", "coded_bits", "probability_sha256", "coder_checkpoints",
-    "state_checkpoints", "payload", "observer_outputs", "claim_boundary",
-    "gamma_score_credit_bytes"
+    "schema", "role", "candidate_id", "runner", "receipt_schema",
+    "command_sha256", "population", "observer_build_receipt",
+    "observer_build_schema", "binary", "head", "return_code",
+    "selected_logical_cpu", "scratch_root", "resource_guard",
+    "diagnostic_rss_limit_kib", "modeled_stream",
+    "coded_bits", "probability_sha256", "coder_checkpoints",
+    "state_checkpoints", "payload", "self_extracting_archive",
+    "observer_outputs", "backing_cleanup_pass", "arm_pass",
+    "claim_boundary", "gamma_score_credit_bytes"
   ],
   "properties": {
     "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1"},
     "role": {"enum": ["parent", "q1"]},
     "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "runner": {"$ref": "#/$defs/file"},
+    "receipt_schema": {"$ref": "#/$defs/file"},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
     "population": {
       "allOf": [
         {"$ref": "#/$defs/file"},
@@ -23,28 +31,39 @@
         }}
       ]
     },
+    "observer_build_receipt": {"$ref": "#/$defs/file"},
+    "observer_build_schema": {"$ref": "#/$defs/file"},
     "binary": {"$ref": "#/$defs/file"},
-    "return_code": {"type": "integer"},
-    "coded_bits": {"type": "integer", "minimum": 1},
+    "head": {"$ref": "#/$defs/file"},
+    "return_code": {"const": 0},
+    "selected_logical_cpu": {"type": "integer", "minimum": 0},
+    "scratch_root": {"type": "string", "pattern": "^/"},
+    "resource_guard": {"$ref": "#/$defs/file"},
+    "diagnostic_rss_limit_kib": {"const": 11500000},
+    "modeled_stream": {"$ref": "#/$defs/nonemptyFile"},
+    "coded_bits": {"type": "integer", "minimum": 4000000001},
     "probability_sha256": {"$ref": "#/$defs/sha256"},
     "coder_checkpoints": {
-      "type": "array", "minItems": 4, "maxItems": 4,
-      "items": {"$ref": "#/$defs/checkpoint"}
+      "type": "array", "minItems": 7, "maxItems": 7,
+      "items": {"$ref": "#/$defs/coderCheckpoint"}
     },
     "state_checkpoints": {
-      "type": "array", "minItems": 4, "maxItems": 4,
-      "items": {"$ref": "#/$defs/checkpoint"}
+      "type": "array", "minItems": 7, "maxItems": 7,
+      "items": {"$ref": "#/$defs/stateCheckpoint"}
     },
-    "payload": {"$ref": "#/$defs/file"},
+    "payload": {"$ref": "#/$defs/nonemptyFile"},
+    "self_extracting_archive": {"$ref": "#/$defs/nonemptyFile"},
     "observer_outputs": {
       "type": "object", "additionalProperties": false,
       "required": ["probability_manifest", "coder_manifest", "state_manifest"],
       "properties": {
-        "probability_manifest": {"$ref": "#/$defs/file"},
-        "coder_manifest": {"$ref": "#/$defs/file"},
-        "state_manifest": {"$ref": "#/$defs/file"}
+        "probability_manifest": {"$ref": "#/$defs/nonemptyFile"},
+        "coder_manifest": {"$ref": "#/$defs/nonemptyFile"},
+        "state_manifest": {"$ref": "#/$defs/nonemptyFile"}
       }
     },
+    "backing_cleanup_pass": {"const": true},
+    "arm_pass": {"const": true},
     "claim_boundary": {"type": "string", "minLength": 1},
     "gamma_score_credit_bytes": {"const": 0}
   },
@@ -55,16 +74,43 @@
       "required": ["path", "bytes", "sha256"],
       "properties": {
         "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nonemptyFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
         "bytes": {"type": "integer", "minimum": 1},
         "sha256": {"$ref": "#/$defs/sha256"}
       }
     },
-    "checkpoint": {
+    "coderCheckpoint": {
       "type": "object", "additionalProperties": false,
-      "required": ["coded_bytes", "sha256"],
+      "required": [
+        "modeled_bytes", "kind", "coded_bits", "low", "high",
+        "payload_bytes", "probability_sha256"
+      ],
       "properties": {
-        "coded_bytes": {"enum": [0, 100000000, 500000000, 1000000000]},
-        "sha256": {"$ref": "#/$defs/sha256"}
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "kind": {"enum": ["start", "fixed", "terminal"]},
+        "coded_bits": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "high": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "payload_bytes": {"type": "integer", "minimum": 0},
+        "probability_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stateCheckpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["modeled_bytes", "kind", "allocation_count", "manifest_sha256"],
+      "properties": {
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "kind": {"enum": ["start", "fixed", "terminal"]},
+        "allocation_count": {"const": 26},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
       }
     }
   }
