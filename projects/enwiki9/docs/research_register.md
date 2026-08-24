@@ -483,6 +483,27 @@ authorship-score, and objective credit. See the
 [`execution plan`](../operations/planning/fxcm_fossil_match_q0_v3_execution.json),
 and [`experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v3.json).
 
+An independent post-materialization audit was reconciled against the current
+revisions rather than the superseded drafts it inspected. Its q1 objection
+applies to the authority-revoked v1 qualification receipt and verifier, which
+accepted caller-supplied full-stream digests and a persistent-state boolean.
+Policy v4 instead binds the v2 artifact router and verifier: the verifier
+reopens every retained artifact, reruns both soft-pressure arm verifiers, the
+full probability/state verifier, and the Geekbench-5-bound runtime verifier,
+and requires the recomputed objects to equal the supplied verifications. Thus
+the old v1 weakness is real historical evidence but is not a present v4 proof
+path. Runtime remains a required future measured artifact, not an inferred qm8
+property.
+
+The same audit's FOSSIL-MATCH objections were already the reason v1 was
+rejected and are explicit v3 predicates: cgroup peak includes file cache and
+must stay at or below `760,000,000` bytes with zero max/OOM/OOM-kill events; D
+must beat S/R/N in every chronological third; and the hash constants,
+index/tag split, sentinel, replacement order, no-continuation rule, alias
+off-by-one, and distance buckets are frozen in the interface and sealed source.
+This reconciliation adds no run evidence. It confirms only that v3 tests the
+intended causal mechanism under the corrected proof surface.
+
 ## 2026-08-24 - WIKI-LOOM freezes semantic virtual time as a dormant new source
 
 An exclusion audit rejected three superficially creative routes before any new
