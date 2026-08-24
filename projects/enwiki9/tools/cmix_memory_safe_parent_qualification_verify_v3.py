@@ -175,6 +175,7 @@ def verify(
     )
     expected_source_bindings = {
         "evidence_router_schema": artifact(EVIDENCE_SCHEMA),
+        "evidence_verification_schema": artifact(evidence_v2.OUTPUT_SCHEMA),
         "evidence_verifier": artifact(Path(evidence_v2.__file__).resolve()),
         "authority_router_schema": artifact(SOURCE_SCHEMA),
         "authority_verification_schema": artifact(OUTPUT_SCHEMA),

@@ -692,6 +692,14 @@ emit only `qualified=false`, `claim_authority=none`, and
 `c2b5b298...5139b` digest and therefore fails its own source-binding check
 before execution.
 
+The registered v2 verification schema is retired at the representation layer
+as well. It now requires `qualified=false`, at least one qualification failure,
+`claim_authority=none`, and `promotion_authority=false`; its SHA-256 is
+`a935e041...11490`. Thus a handwritten or legacy positive v2 object cannot
+pass current schema validation even in a consumer that does not rerun the
+verifier. Known v4 consumers bind the older `3bcf4748...8a74d` schema digest,
+so they also fail their frozen schema-closure check.
+
 Policy v6 freezes the replacement authority shape without activating it. A v3
 router binds exactly one v2 evidence router and one future active policy. The
 v3 verifier reopens every v2 evidence predicate, requires the sole remaining
