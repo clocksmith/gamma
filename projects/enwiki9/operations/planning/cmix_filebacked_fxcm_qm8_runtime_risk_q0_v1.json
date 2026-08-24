@@ -1,0 +1,95 @@
+{
+  "$schema": "gamma.enwiki9.nonterminal-runtime-risk.v1",
+  "artifact_id": "cmix_filebacked_fxcm_qm8_runtime_risk_q0_v1",
+  "revision": 1,
+  "recorded_utc": "2026-08-24T19:44:46.603203800Z",
+  "operational_status": "nonterminal_observation",
+  "claim_authority": "runtime_risk_only",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000,
+    "wall_time_limit_equation_seconds_per_phase": "252000000 / measured_geekbench5_single_core_score"
+  },
+  "active_gate": {
+    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+    "job_id": "20260823T215147Z_7827ad9bc5",
+    "stage": "encode",
+    "terminal_receipt_present": false,
+    "guard_status": "running",
+    "codec_pid": 4136098,
+    "codec_proc_start_ticks": 61806195,
+    "progress_percent": 29.66,
+    "reported_payload_bytes": 38878313,
+    "guard_elapsed_seconds": 78762.6988,
+    "sample_window_seconds": 30.1742,
+    "sample_window_progress_percentage_points": 0.01,
+    "sample_window_memory_high_event_delta": 374,
+    "memory": {
+      "peak_process_vmhwm_kib": 8986384,
+      "peak_tree_rss_kib": 8998152,
+      "cgroup_memory_peak_bytes": 9002086400,
+      "cgroup_memory_high_events_at_sample": 494281,
+      "cgroup_memory_max_events_at_sample": 0,
+      "cgroup_oom_events_at_sample": 0,
+      "cgroup_oom_kill_events_at_sample": 0
+    },
+    "process_io_near_sample": {
+      "read_bytes": 780463370240,
+      "write_bytes": 42261831495680,
+      "source": "/proc/4136098/io",
+      "interpretation": "Diagnostic kernel-accounted process I/O only; it is not an archive, semantic-state, or prize-runtime measure."
+    }
+  },
+  "bound_comparators": {
+    "source_arm_a_decision": {
+      "path": "results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/decision.json",
+      "sha256": "1e7b785606d3319b25f72a99ce77083f1fd47c802bdd1261432596fe3ec6b50c",
+      "full_encode_elapsed_seconds_diagnostic": 65024.79,
+      "full_decode_elapsed_seconds_diagnostic": 66377.101263917,
+      "claim_boundary": "Concurrent-run timing is diagnostic; final official eligibility remains separate."
+    },
+    "q1_runtime_plan": {
+      "path": "operations/planning/cmix_filebacked_fxcm_runtime_qualification_q0_v1.json",
+      "sha256": "57ba4c122595b02dc58fe56f8879a49eb0bc695320e148f68594f965ce596e40",
+      "operational_status": "dormant_dependency"
+    },
+    "qm8_plan": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_v1.json",
+      "sha256": "6135b7a0357c4657dc05ed126b1382a22cce3de8cbfcb946aefda51d1f131120"
+    }
+  },
+  "derived_diagnostics": {
+    "elapsed_already_exceeds_prior_full_arm_a_encode_seconds": 13737.9088,
+    "linear_full_encode_projection_seconds": 265551.9177343223,
+    "linear_projection_over_prior_full_arm_a_ratio": 4.0838565989113125,
+    "maximum_geekbench5_score_that_linear_projection_would_pass": 948.9669747070678,
+    "reference_score_1200_limit_seconds": 210000.0,
+    "linear_projection_over_reference_1200_limit_seconds": 55551.9177343223,
+    "donor_reported_score_1216_limit_seconds": 207236.84210526315,
+    "linear_projection_over_donor_1216_limit_seconds": 58315.07562905917,
+    "derivation_rule": "The projection is observed elapsed divided by observed fraction complete. It is a nonterminal linear diagnostic, not a finish forecast or runtime verdict."
+  },
+  "interpretation": [
+    "The qm8 soft-high policy is currently preventing a hard-cap or OOM event, so the earlier failure cannot be classified as a mere environment mistake.",
+    "The active process is repeatedly crossing memory.high while performing very large kernel-accounted I/O. This is evidence that file-backed reclaim can exchange resident-memory headroom for writeback and refault cost.",
+    "Because no retained raw Geekbench 5 report exists for this execution host and progress may be nonlinear, this observation cannot prove official runtime failure.",
+    "File backing remains an eligibility correction with zero compression-byte value. It is not the Gamma-authored target algorithm."
+  ],
+  "routing_rule": {
+    "while_qm8_nonterminal": "Do not signal, mutate, relaunch, or award authority. Continue read-only monitoring until the exact terminal receipt exists.",
+    "if_qm8_exact_and_memory_passes": "Preserve the result as memory evidence, but withhold runtime qualification until the bound exact-package Geekbench-normalized compression and decompression gate passes.",
+    "if_qm8_memory_fails": "Use only the already frozen one-axis memory contingency or a true semantic-compaction successor; do not classify more file backing as a runtime improvement.",
+    "if_exact_package_runtime_fails": "Retain q1 as diagnostic infrastructure only and move the prize-facing parent lane to the compact open NNCP student or another semantically compact codec.",
+    "q2_constraint": "The dormant 16 MiB threshold candidate must measure runtime and may not promote from RSS reduction alone."
+  },
+  "proof_boundary": {
+    "runtime_eligible": false,
+    "memory_eligible": false,
+    "roundtrip_proved_by_qm8": false,
+    "compression_gain_proved": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0,
+    "hutter_prize_objective_achieved": false
+  }
+}

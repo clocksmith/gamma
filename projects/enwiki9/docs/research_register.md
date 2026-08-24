@@ -1,5 +1,37 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - q1 memory pressure now carries a measured runtime-risk warning
+
+The live qm8 Arm A gate remains non-terminal and untouched, but its resource
+trajectory now rules out describing file backing as a free memory repair. At a
+bound observation it was still encoding at `29.66%` after `78,762.6988`
+seconds. That elapsed time already exceeds the complete earlier Arm A encode's
+diagnostic `65,024.79` seconds by `13,737.9088` seconds. The active process had
+recorded `780,463,370,240` read bytes and `42,261,831,495,680` write bytes,
+while the cgroup had crossed `memory.high` `494,281` times without any
+`memory.max`, OOM, or OOM-kill event. Thus soft-high reclaim is successfully
+avoiding the previous hard-cap failure so far, but it is exchanging resident
+headroom for heavy writeback/refault behavior.
+
+A deliberately weak elapsed/fraction projection gives `265,551.9177` seconds
+for the encode. Under the prize equation `252000000 / Geekbench5`, that
+projection would pass only at a score below `948.967`; it exceeds the
+`210,000`-second score-1200 limit by `55,551.9177` seconds. This is not an
+official runtime failure: qm8 has not terminalized, progress may be nonlinear,
+the present host has no retained raw Geekbench 5 report, and the earlier Arm A
+timing was itself diagnostic. It is a receipt-bound risk warning, not a finish
+forecast.
+
+The routing consequence is strict. A qm8 exact memory pass still receives no
+runtime authority until the already sealed exact-package, host-scored encode
+and decode gate passes. A future 16 MiB backing threshold cannot promote on RSS
+alone because additional file-backed hot pages may worsen this I/O trade. If
+the exact-package runtime gate fails, q1 remains diagnostic infrastructure and
+the prize-facing parent moves to a semantically compact codec such as the open
+NNCP student. No roundtrip, memory qualification, runtime qualification,
+compression gain, Gamma score credit, or Hutter objective follows. Evidence:
+`operations/planning/cmix_filebacked_fxcm_qm8_runtime_risk_q0_v1.json`.
+
 ## 2026-08-24 - exact 16 MiB threshold geometry bounds one q1 memory contingency
 
 A source-and-live-map audit now identifies one attributable q1 memory
