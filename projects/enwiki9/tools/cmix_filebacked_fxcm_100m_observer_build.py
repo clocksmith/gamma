@@ -189,6 +189,9 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, required=True)
     args = parser.parse_args()
 
+    lease_lock = Path(str(capture.LEASE) + ".lock")
+    if lease_lock.exists() or lease_lock.is_symlink():
+        raise RuntimeError(f"exclusive full-1G lease lock exists: {lease_lock}")
     capture.require_lease_released()
     plan_path, plan = capture.load_json(args.plan, "100M planning contract")
     if (
