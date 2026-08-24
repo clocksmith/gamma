@@ -1,0 +1,58 @@
+{
+  "schema": "gamma.enwiki9.mechanism-ir-managed-lane-interface.v1",
+  "candidate_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "claim_authority": "infrastructure_only",
+  "scientific_program": "gamma_mechanism_ir_v3",
+  "semantic_axis_changed": "exclusive managed-lane transaction only",
+  "canonical_namespace": {
+    "lease": "operations/runtime/exclusive_full1g.json",
+    "lock": "operations/runtime/exclusive_full1g.json.lock",
+    "released": "both absent",
+    "occupied": "either exists or is a symlink"
+  },
+  "entry_points": {
+    "compile.py": "unchanged gamma_mechanism_ir_compile_v2.py under atomic canonical lock ownership",
+    "compile-verify.py": "unchanged gamma_mechanism_ir_compile_v2_verify.py under one retained canonical lock, with every compiler subprocess borrowing and proving the parent's open ownership witness",
+    "program-lock-materialize.py": "unchanged v3 source-lock materializer under atomic canonical lock ownership",
+    "program-lock-verify.py": "unchanged v3 source-lock verifier under atomic canonical lock ownership",
+    "gate.py": "truthful wrapper-bound final gate that invokes the unchanged v3 static gate on an explicit one-field compiler-identity compatibility projection",
+    "managed-lane-controls.py": "local namespace controls while the canonical acquisition lock is held"
+  },
+  "ownership_invariants": [
+    "O_CREAT|O_EXCL|O_NOFOLLOW on the exact canonical .lock path",
+    "random 256-bit token and PID payload fsynced before wrapped output",
+    "lease absence rechecked after acquisition",
+    "open descriptor, device, inode, link count, and token retained through release",
+    "release unlinks only the exact single-link owned lock and fsyncs its directory",
+    "compiler-verifier children inherit open lock and directory descriptors and must prove the parent PID, path, inode, link count, and payload digest",
+    "no lease JSON write, replacement, signal, parse, or deletion"
+  ],
+  "preserved_v3_invariants": [
+    "causal closure and source availability",
+    "P/K/D/M/R/S arm set and matched K/M/R/S access",
+    "raw D cannot write the SAFE-MIX posterior",
+    "M writes every mechanism-persistent mixture state",
+    "byte-64 retain/discard and forbidden-copy closure",
+    "deterministic A/B generated artifact identity",
+    "all inherited semantic negative controls"
+  ],
+  "provenance_projection": {
+    "actual_receipt": "The independently generated compilation verification binds compile.py exactly.",
+    "compatibility_receipt": "A sidecar changes only compiler_sha256 to the unchanged upstream compiler digest so the unchanged v3 gate can verify its historical source-lock contract.",
+    "final_receipt": "The managed-lane gate binds both receipts, both compiler sources, and the unchanged upstream gate output; the compatibility sidecar has no standalone authority."
+  },
+  "resource_bounds": {
+    "maximum_process_tree_rss_kib": 262144,
+    "maximum_cgroup_memory_bytes": 760000000,
+    "maximum_temporary_disk_bytes": 100000000,
+    "maximum_logical_cpus": 1,
+    "maximum_candidate_program_bytes": 65536
+  },
+  "forbidden": [
+    "execution while either canonical namespace path exists",
+    "synthetic active=false lease sentinel at the canonical path",
+    "unlinking an unowned or substituted lock",
+    "modifying any retained v3 scientific input or generated arm",
+    "archive, inverse, compression, package-score, or objective credit"
+  ]
+}

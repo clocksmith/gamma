@@ -178,6 +178,69 @@ residency successor; infrastructure-incomplete qm8 permits only a retry after
 the exact infrastructure cause is corrected. Bounded evidence may not erase
 contrary full-corpus evidence.
 
+### Mechanism IR managed-lane audit finds a two-sided ownership defect
+
+Mechanism IR v3 had a pre-execution activation contradiction. All five v3
+entry points required `exclusive_full1g.json` to be a regular JSON file with
+`active=false`, but the canonical managed lease has no `active` field and
+represents release by removing both the lease and `.lock` paths. Thus v3
+rejected the live lane correctly but could never execute after a clean managed
+release. No compiler arm or archive had run.
+
+Candidate `gamma_mechanism_ir_v3_managed_lane_q0_v1` implemented the smallest
+prospective correction: exact `O_EXCL|O_NOFOLLOW` ownership of the canonical
+`.lock` namespace, retained directory/lock descriptors and random token,
+inherited ownership witnesses for compiler-verifier children, all inherited
+v3 causal controls, and a truthful wrapper-to-upstream compiler provenance
+projection. Before execution, a harder competitor audit refuted the exact
+wrapper. The bound `c3cedd46...` `ManagedExclusiveLease.acquire()` catches an
+`O_EXCL` collision in a broad exception handler and unconditionally unlinks
+the `.lock` path without proving that this call created it. A competing
+full-1G acquisition can therefore delete the wrapper's foreign lock. This is a
+source-level transaction bug, not an environment condition and not a
+compression result.
+
+The counterexample is frozen in
+[`static rejection`](../operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.static-rejection.json).
+The rejected implementation is preserved at candidate tree
+`6d020fb1d3d2e04ec937c1117c3f56cabb98e11e4c91f491e04e912edc8211b7`;
+it was not executed and receives zero infrastructure promotion, compression,
+or score credit. This rejects only wrapper-only ownership against the current
+manager, not Mechanism IR's P/K/D/M/R/S causal semantics.
+
+Exactly one successor is authorized:
+`gamma_managed_exclusive_lease_owned_cleanup_q0_v1`. Its prospectively frozen
+transaction changes only acquisition/release ownership. An `O_EXCL` collision
+closes local descriptors without touching the existing name; successful
+creation retains directory and lock descriptors, device, inode, single-link
+count, PID, and a random 256-bit token; terminal release removes the exact
+owned lease while the lock still excludes competitors, then removes only the
+reproved owned lock. Ambiguous post-publication failures remain occupied for
+audit. Lease fields, transitions, descendant/signal rules, verifier semantics,
+and public API remain unchanged.
+
+The separate successor source is sealed at tree
+`eb9c5f669cf05cbe1b361065ff4faefbe70fcea905c14e2483e6e97427ad1a44`.
+It includes unexecuted normal/reacquire, foreign-lock, second-manager,
+symlink, post-acquire appearance, inode, hardlink, token, partial-publication,
+schema, and normalized replay controls. The current
+`tools/managed_exclusive_lease.py` remains byte-identical because qm8 is live.
+No control, canonical migration, Mechanism IR operation, or substantial gate
+may run until qm8 terminalizes and releases both namespace paths. Static AST,
+JSON, schema, source-set, candidate-budget, and adaptive-contract validation
+pass; those checks are not execution evidence.
+
+A later read-only qm8 snapshot at `16.80%` remains non-terminal. CMIX
+`VmHWM` is `8,986,384 KiB`, current RSS was `8,366,460 KiB`, and cgroup peak
+is `9,002,086,400` bytes. `memory.events` records `166,799` high-pressure
+events but zero `max`, OOM, or OOM-kill events. Progress continued while the
+process alternated runnable and disk-wait states. Combined with the previously
+measured direct reclaim, file-cache refaults, and 26 mapping residency, this is
+implementation-level working-set and page-reclaim pressure from file-backed
+CMIX, not the old `/dev/shm` placement error recurring. Exact payload,
+inverse, cleanup, runtime, and qualification remain unknown until terminal
+receipts exist.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before

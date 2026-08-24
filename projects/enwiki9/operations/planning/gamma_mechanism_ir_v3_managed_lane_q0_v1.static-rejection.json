@@ -1,0 +1,54 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1_static_rejection",
+  "revision": 1,
+  "generated_utc": "2026-08-24T08:24:28Z",
+  "candidate_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "classification": "unexecuted_static_rejection",
+  "claim_authority": "infrastructure_only",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "objective_credit_bytes": 0,
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0,
+  "bound_inputs": [
+    {
+      "path": "tools/managed_exclusive_lease.py",
+      "bytes": 14324,
+      "sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1"
+    },
+    {
+      "path": "operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.json",
+      "bytes": 6075,
+      "sha256": "843c31bdd0c04e7edc97659b4648f5e42770890739c9ff6d5dfdd35e0760b802"
+    },
+    {
+      "path": "operations/adaptive/experiments/gamma_mechanism_ir_v3_managed_lane_q0_v1.json",
+      "bytes": 10219,
+      "sha256": "49d4e1cc8e9cd64cf82c11bf5ce469bb97d4c31b877a6e793cad7196e7a8c7cf"
+    }
+  ],
+  "static_counterexample": {
+    "precondition": "The wrapper has atomically created and fsynced operations/runtime/exclusive_full1g.json.lock and retains its descriptor, inode, and token.",
+    "competing_operation": "ManagedExclusiveLease.acquire() observes no lease JSON and attempts O_CREAT|O_EXCL on the same .lock path.",
+    "source_boundary": "tools/managed_exclusive_lease.py lines 162-181 in the bound source",
+    "failure_chain": [
+      "The competing os.open fails because the wrapper-owned lock already exists.",
+      "The broad acquisition exception handler does not track whether this call created the lock.",
+      "It unconditionally calls lock_path.unlink(), deleting the wrapper's foreign ownership name.",
+      "The wrapper must then reject because its named lock disappeared, but the competing manager has already violated ownership isolation.",
+      "A later acquisition can create a new lock and lease while the rejected wrapper operation is still unwinding."
+    ],
+    "frozen_predicate_failed": "Any raced or ownership-corrupted namespace must reject without deleting an unowned path and without positive final output.",
+    "environment_dependency": false,
+    "algorithm_dependency": false
+  },
+  "verdict": "retire_exact_wrapper_before_execution",
+  "retired_dimension": "A wrapper-only correction cannot establish mutual exclusion against managed_exclusive_lease.py at the bound c3cedd46 revision.",
+  "single_authorized_successor": {
+    "candidate_id": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1",
+    "semantic_axis": "exclusive-lane acquisition and release ownership only",
+    "required_change": "The managed lease creator must unlink a lock only after proving that this acquisition created and still owns its exact descriptor, device, inode, link count, and token; O_EXCL collision must leave the foreign path untouched.",
+    "activation_boundary": "Do not edit or replace tools/managed_exclusive_lease.py while cmix_filebacked_fxcm_full_a_qm8_v1 is live. Prepare a separately identified source candidate, then migrate the canonical tool and future source locks only after qm8 terminalizes."
+  }
+}

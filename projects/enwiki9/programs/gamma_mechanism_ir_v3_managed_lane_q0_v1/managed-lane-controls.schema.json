@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.mechanism-ir-managed-lane-controls.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "controls", "all_controls_pass",
+    "canonical_namespace_clean_after_pass", "claim_authority",
+    "execution_authority", "promotion_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.mechanism-ir-managed-lane-controls.v1"},
+    "candidate_id": {"const": "gamma_mechanism_ir_v3_managed_lane_q0_v1"},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "released_state_accepts", "live_lease_rejected",
+        "orphan_lock_rejected", "lease_symlink_rejected",
+        "lock_symlink_rejected", "post_acquire_lease_rejected",
+        "lock_inode_substitution_rejected",
+        "lock_token_substitution_rejected", "lock_hardlink_rejected",
+        "canonical_manager_foreign_lock_preserved",
+        "wrapped_failure_cleanup_pass"
+      ],
+      "properties": {
+        "released_state_accepts": {"type": "boolean"},
+        "live_lease_rejected": {"type": "boolean"},
+        "orphan_lock_rejected": {"type": "boolean"},
+        "lease_symlink_rejected": {"type": "boolean"},
+        "lock_symlink_rejected": {"type": "boolean"},
+        "post_acquire_lease_rejected": {"type": "boolean"},
+        "lock_inode_substitution_rejected": {"type": "boolean"},
+        "lock_token_substitution_rejected": {"type": "boolean"},
+        "lock_hardlink_rejected": {"type": "boolean"},
+        "canonical_manager_foreign_lock_preserved": {"type": "boolean"},
+        "wrapped_failure_cleanup_pass": {"type": "boolean"}
+      }
+    },
+    "all_controls_pass": {"type": "boolean"},
+    "canonical_namespace_clean_after_pass": {"type": "boolean"},
+    "claim_authority": {"const": "infrastructure_only"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  }
+}

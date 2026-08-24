@@ -1,0 +1,70 @@
+{
+  "schema": "gamma.enwiki9.mechanism-ir-managed-lane-commands.v1",
+  "candidate_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "working_directory": "/home/x/deco/gamma/projects/enwiki9",
+  "environment": {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONHASHSEED": "0",
+    "TZ": "UTC"
+  },
+  "shell_interpretation": false,
+  "canonical_lease": "operations/runtime/exclusive_full1g.json",
+  "commands": {
+    "materialize_v3_program_lock": [
+      "/usr/bin/python3", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/program-lock-materialize.py",
+      "--root", "/home/x/deco/gamma",
+      "--contract", "operations/planning/gamma_mechanism_ir_v3_source_contract.json",
+      "--exclusive-lease", "operations/runtime/exclusive_full1g.json",
+      "--output", "${PROGRAM_LOCK}"
+    ],
+    "verify_v3_program_lock": [
+      "/usr/bin/python3", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/program-lock-verify.py",
+      "--root", "/home/x/deco/gamma",
+      "--contract", "operations/planning/gamma_mechanism_ir_v3_source_contract.json",
+      "--lock", "${PROGRAM_LOCK}",
+      "--exclusive-lease", "operations/runtime/exclusive_full1g.json",
+      "--receipt", "${PROGRAM_LOCK_VERIFICATION}"
+    ],
+    "verify_compilation": [
+      "/usr/bin/python3", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/compile-verify.py",
+      "--compiler", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/compile.py",
+      "--ir", "operations/planning/cmix_obias_safe_fork_midas64_q0_v1.mechanism-ir.json",
+      "--closure", "operations/planning/cmix_obias_safe_fork_midas64_q0_v1.causal-closure.json",
+      "--exclusive-lease", "operations/runtime/exclusive_full1g.json",
+      "--evidence-root", "${COMPILER_EVIDENCE}",
+      "--verification", "${COMPILATION_VERIFICATION}"
+    ],
+    "managed_lane_controls": [
+      "/usr/bin/python3", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/managed-lane-controls.py",
+      "--exclusive-lease", "operations/runtime/exclusive_full1g.json",
+      "--work-root", "${CONTROL_WORK_ROOT}",
+      "--receipt", "${CONTROL_RECEIPT}"
+    ],
+    "verify_v3_program_gate": [
+      "/usr/bin/python3", "programs/gamma_mechanism_ir_v3_managed_lane_q0_v1/gate.py",
+      "--program-lock", "${PROGRAM_LOCK}",
+      "--program-lock-verification", "${PROGRAM_LOCK_VERIFICATION}",
+      "--compilation-verification", "${COMPILATION_VERIFICATION}",
+      "--exclusive-lease", "operations/runtime/exclusive_full1g.json",
+      "--receipt", "${PROGRAM_GATE_RECEIPT}"
+    ]
+  },
+  "execution_order": [
+    "materialize_v3_program_lock",
+    "verify_v3_program_lock",
+    "verify_compilation",
+    "managed_lane_controls",
+    "verify_v3_program_gate"
+  ],
+  "derived_outputs": {
+    "${PROGRAM_GATE_RECEIPT stem}.v3-compat.json": "one-field compiler identity projection with no standalone authority",
+    "${PROGRAM_GATE_RECEIPT stem}.v3-upstream.json": "unchanged v3 gate output over the compatibility projection"
+  },
+  "final_gate_rule": "${PROGRAM_GATE_RECEIPT} is authoritative only when it binds the truthful wrapper verification, exact compatibility projection, unchanged upstream gate result, and both compiler sources.",
+  "substitution_rule": "Each ${NAME} is replaced once with a new path under one empty source-bound result root. No other argv or environment field changes.",
+  "claim_authority": "infrastructure_only",
+  "execution_authority": false,
+  "promotion_authority": false
+}
