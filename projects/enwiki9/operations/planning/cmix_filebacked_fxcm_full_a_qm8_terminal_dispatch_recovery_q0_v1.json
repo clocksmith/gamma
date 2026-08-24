@@ -1,0 +1,132 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "one durable qm8 terminal-dispatch activation intent",
+      "required_evidence": "The canonical intent or one unique unfinished transaction archive validates, hashes to the transaction ID, binds the exact terminal receipt and dispatch contract, and names the exact planning and full-1G lock inodes."
+    },
+    {
+      "artifact": "dead original dispatcher owner",
+      "required_evidence": "Every surviving exact lock payload names the original owner PID and terminal receipt; rollback requires both payloads, while committed recovery permits only the dispatcher-ordered planning-absent/full-1G-present state. Any live or reused owner PID rejects recovery."
+    },
+    {
+      "artifact": "one recognized publication state",
+      "required_evidence": "Without an activation receipt, the selected/displaced pair is dormant/absent, activated/dormant, or dormant/activated. With an activation receipt, the complete helper-verified activation chain remains intact."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+    "evidence_class": "terminal_dispatch_crash_recovery_infrastructure",
+    "recovery_tool": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_recover.py",
+      "bytes": 46800,
+      "sha256": "912ad16351f85c399ba62de3dbc5704f79187f906947fa917067b6ba646304f4"
+    },
+    "closure_helper": {
+      "path": "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
+      "bytes": 37695,
+      "sha256": "0768f56d8574c709e63d45f23f190ee694e149183d4ac71dde84f0bd80744154"
+    },
+    "dispatcher": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_activate.py",
+      "bytes": 22597,
+      "sha256": "59ed7c470148168de84470a4a2cb9b28771fdde3e78e57e18ea84b538e79169f"
+    },
+    "dispatch_contract": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_activation_q0_v1.json",
+      "bytes": 7669,
+      "sha256": "d85cbfc8ff077f0633433d95f1a71431e280d6bc9aa8c9f090d3c44cd4014fd5"
+    },
+    "plan_schema": {
+      "path": "operations/planning/campaign-static-contract.schema.json",
+      "bytes": 1887,
+      "sha256": "6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64"
+    },
+    "roundtrip_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+      "bytes": 16848,
+      "sha256": "8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"
+    },
+    "intent_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-intent.schema.json",
+      "bytes": 5509,
+      "sha256": "fd9e30010cf993db65318133499899b04000df627512a336dab893a8662713a6"
+    },
+    "activation_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-activation.schema.json",
+      "bytes": 5072,
+      "sha256": "75bbe30f13a07191894357da9262da8854974e4661bf0668e0aac94422c38528"
+    },
+    "preparation_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-preparation.schema.json",
+      "bytes": 6808,
+      "sha256": "808f03eed779a8be58473d922a419bbde94ca68b3f95b6ffd6157d9bb68c71ab"
+    },
+    "completion_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-completion.schema.json",
+      "bytes": 7208,
+      "sha256": "7edbd3b9ca3383876049f17a81f54a45a992db865533ea3779d8f4e1370f0972"
+    },
+    "finalization_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-finalization.schema.json",
+      "bytes": 3265,
+      "sha256": "59c4f15ae434ad7e90056b525b3537ce8aa79bb5e68a1aaf476ee76e133f40d7"
+    },
+    "python_runtime": {
+      "path": "/usr/bin/python3.14",
+      "bytes": 7481192,
+      "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+    },
+    "dormant_plans": {
+      "success": {
+        "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
+        "bytes": 8777,
+        "sha256": "dfd11217037b8f5df421a6ef776dee90b39ddb5f2e543c279418846da45ba5f8"
+      },
+      "failure": {
+        "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
+        "bytes": 8422,
+        "sha256": "2a4cb99a02962b73e215b762ca3d3cea109911c08cd569888b8382431808d5d8"
+      }
+    },
+    "transaction_id_rule": "SHA-256 of the exact immutable activation-intent bytes; every recovery artifact is named by this digest, allowing later activation attempts to retain disjoint crash evidence.",
+    "preparation_rule": "Before any plan or intent rename, rescan process, cgroup, and lease closure under the surviving full-1G lock and publish a schema-valid preparation that binds the canonical intent, current selected/displaced/non-selected plans, optional activation receipt, recovery and dispatch contracts, both lock records, observed lock presence, and the dead dispatcher owner PID.",
+    "rollback_rule": "If no activation receipt exists, reverse only an exact activated/dormant exchange, retain any aborted activated plan at the transaction-addressed archive, move the exact dispatch intent to its transaction archive, require the selected and non-selected plans to be the exact dormant revisions, and require all canonical activation artifacts to be absent.",
+    "committed_rule": "If the activation receipt exists, independently validate the complete receipt-intent-plan-displaced-plan chain through the frozen closure helper and leave every authority-bearing activation artifact unchanged.",
+    "completion_rule": "Rescan process, cgroup, and lease closure immediately before the state action, then publish a durable completion only while descriptors for every surviving exact intent-bound lock inode remain valid. Rollback requires both locks; committed activation recovery also accepts the dispatcher-ordered state in which planning was released and full-1G remains. Completion grants no verifier or promotion authority.",
+    "release_rule": "After completion, remove a lock only if its current single-link regular-file inode, device, and payload hash equal the intent record. An absent exact lock may be recorded only as already_absent_after_completion on crash resumption; any different occupant fails closed. Publish finalization only after both lock paths are absent.",
+    "command": [
+      "/usr/bin/python3.14",
+      "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_recover.py",
+      "--receipt",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json"
+    ],
+    "execution_authority": false,
+    "verifier_execution_authority": false,
+    "arm_b_authority": false,
+    "memory_safe_parent_qualification_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Never run while qm8 or the original dispatcher owner is live.",
+    "Use only after a durable dispatch intent exists and the original dispatcher failed to publish a cleanly unlocked terminal state.",
+    "Inspect and commit every recovery preparation, completion, and finalization before any verifier execution.",
+    "A rollback permits a fresh dispatcher attempt only; a committed finalization preserves the already selected verifier branch.",
+    "Do not infer q1 qualification, Arm-B authority, archive value, or score credit from recovery."
+  ],
+  "claim_boundary": [
+    "This frozen source is a liveness and provenance transaction, not a compression mechanism or qm8 measurement.",
+    "It has not been executed; qm8 remains live and no terminal receipt or dispatch intent exists.",
+    "Recovery cannot invoke a verifier, signal a process, create Arm B, alter a candidate, or award any Hutter or Gamma score credit."
+  ]
+}

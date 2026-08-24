@@ -677,11 +677,11 @@ cannot execute a verifier or Arm B.
 
 Static AST, schema-meta, plan-schema, serialization, recursive binding, branch
 hash, and diff checks pass. The independent audit found no remaining route to
-premature verification or Arm-B authority. Two non-authority gaps remain:
-post-intent recovery is reconstructive and fail-closed but not yet automated,
-and three directly validated receipt schemas are not yet in the shared
-`research_contracts.py` registry because that module is part of the live qm8
-closure.
+premature verification or Arm-B authority. The remaining non-authority gap at
+that snapshot was an executable post-intent recovery transaction; it is closed
+by the separately frozen recovery source below. Six directly validated
+dispatch/recovery schemas are not yet in the shared `research_contracts.py`
+registry because that module is part of the live qm8 closure.
 
 No dispatcher, verifier, recovery path, test, Arm B, or new proof workload ran.
 At the frozen review snapshot qm8 Arm A was still encoding at `25.64%`; peak
@@ -689,6 +689,44 @@ process-tree RSS was `8,998,152 KiB`, cgroup peak was `9,002,086,400` bytes,
 and max, OOM, and OOM-kill events remained zero. No live process, candidate,
 lease, cgroup, result tree, or scratch tree was modified or signaled. The
 corrected audit and review remain zero-credit infrastructure evidence.
+
+### qm8 terminal dispatch now has an inode-bound crash-recovery transaction
+
+`cmix_filebacked_fxcm_full_qm8_terminal_dispatch_recover.py` is frozen for the
+only two legitimate interrupted-dispatch outcomes. With no activation receipt,
+it accepts only the exact dormant/absent, activated/dormant, or
+dormant/activated selected/displaced plan state and rolls back to both frozen
+dormant plans. With a valid activation receipt, it independently revalidates
+the complete activation chain and leaves every authority-bearing artifact
+unchanged. The action is rederived on every resume; a preparation cannot label
+a committed activation as rollback.
+
+The transaction ID is the SHA-256 of the immutable dispatch intent. Before any
+rename it publishes a preparation, verifies that the original owner PID is
+dead, and rescans recorded identities, all process argv/cwd/cgroup bindings,
+cgroup occupants, and lease ownership under the surviving full-1G lock. It
+rescans again immediately before completion. Rollback requires both exact
+locks. Committed recovery additionally recognizes the dispatcher-ordered crash
+state where the planning lock was already released but the exact full-1G lock
+survives.
+
+An uncommitted exchange is reversed with `RENAME_EXCHANGE`; any aborted
+activated inode and the original intent move to transaction-addressed archive
+paths. A durable completion is published while descriptors for every surviving
+lock remain valid. Only then may the exact path/device/inode/link-count/payload
+identity be unlinked, followed by a finalization after both lock paths are
+absent. The preparation/completion split also permits resumption after a crash
+inside recovery itself.
+
+The [`recovery contract`](../operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_q0_v1.json),
+three strict receipt schemas, source, and
+[`static review`](../operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_review_q0_v1.json)
+are hash-bound. AST, schema-meta, rollback/committed/partial-lock instance,
+campaign-plan, artifact-binding, and diff checks pass. No recovery, dispatcher,
+verifier, Arm B, or proof workload ran. At the review snapshot qm8 was still
+encoding at `26.17%`; peak tree RSS remained `8,998,152 KiB`, cgroup peak
+`9,002,086,400` bytes, and max/OOM/OOM-kill events remained zero. This closes
+a liveness/provenance gap only and receives zero compression and score credit.
 
 ### q1 qualification authority is artifact-derived, not self-reported
 

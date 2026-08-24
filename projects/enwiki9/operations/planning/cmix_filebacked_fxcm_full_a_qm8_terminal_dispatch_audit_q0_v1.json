@@ -51,6 +51,16 @@
       "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_activation_q0_v1.json",
       "bytes": 7669,
       "sha256": "d85cbfc8ff077f0633433d95f1a71431e280d6bc9aa8c9f090d3c44cd4014fd5"
+    },
+    "recovery_tool": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_recover.py",
+      "bytes": 46800,
+      "sha256": "912ad16351f85c399ba62de3dbc5704f79187f906947fa917067b6ba646304f4"
+    },
+    "recovery_contract": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_q0_v1.json",
+      "bytes": 8219,
+      "sha256": "b9c2c6c3372e1a7e630def3c4ca26432cc2d68ba8f815af033ef79f629da66c0"
     }
   },
   "rejected_first_draft": {
@@ -87,11 +97,14 @@
     {
       "id": "no_execution_bridge",
       "fact": "The dispatcher imports neither subprocess nor signal, executes no verifier, creates no verifier receipt, and grants no Arm-B or parent-qualification authority."
+    },
+    {
+      "id": "inode_bound_crash_recovery",
+      "fact": "The frozen recovery transaction rederives rollback versus committed finalization, rescans closure under the surviving full-1G lock, reverses only the exact uncommitted exchange, preserves transaction-addressed intent and activated-plan evidence, validates committed activation without changing it, and releases only exact intent-bound lock inodes."
     }
   ],
   "remaining_non_authority_limits": [
-    "A post-intent failure is fail-closed and retains reconstructive artifacts, but an inode-bound recovery transaction is not yet implemented.",
-    "The qm8 failure, dispatch-intent, and dispatch-activation schemas are direct-validated but are not yet registered in research_contracts.py; that live-bound module was intentionally not edited during qm8.",
+    "The qm8 failure, dispatch-intent, dispatch-activation, and three recovery schemas are direct-validated but are not yet registered in research_contracts.py; that live-bound module was intentionally not edited during qm8.",
     "The terminal lease normally records the coordinator identity only. Native-codec closure is supplied by the all-process command, scratch-cwd, and cgroup scan unless a codec PID/start pair is actually present."
   ],
   "static_checks": {
@@ -102,18 +115,19 @@
     "template_serialization_identity_pass": true,
     "all_declared_file_bindings_pass": true,
     "git_diff_check_pass": true,
-    "runtime_dispatch_or_verifier_executed": false
+    "runtime_dispatch_verifier_or_recovery_executed": false
   },
   "live_lane_observation": {
     "qm8_terminal_receipt_present": false,
     "qm8_process_tree_present": true,
     "observed_stage": "encode",
-    "observed_progress_percent": 25.64,
+    "observed_progress_percent": 26.17,
     "peak_process_tree_rss_kib": 8998152,
     "peak_cgroup_bytes": 9002086400,
     "cgroup_max_events": 0,
     "cgroup_oom_events": 0,
     "cgroup_oom_kill_events": 0,
+    "recovery_attempted": false,
     "activation_attempted": false,
     "verifier_executed": false,
     "arm_b_authorized": false
