@@ -1,0 +1,117 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v4_causal_closure_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "gamma_mechanism_ir_v4_causal_closure_q0_v1",
+      "required_evidence": "Generalized closure correction SHA-256 7c1691e1a9993eb2dafe56eac0cbae4a01b8b18c0843f9bc23b2830d266721b4."
+    },
+    {
+      "artifact": "gamma-mechanism-causal-closure-v2.schema.json",
+      "required_evidence": "Draft 2020-12 schema SHA-256 b8286d3bb3a7cb004f23d7048e0dbbd079d59cfdfc85e7ec2631e5ff0b4e4620."
+    },
+    {
+      "artifact": "wiki_pda_structural_replay_ceiling_q0_v3.causal-closure-v2.json",
+      "required_evidence": "Design-only WIKI-PDA closure SHA-256 0c9bdcdbba121a92297a60dc7ceac067416c7175142e6e66007ed5b896b5a6d3."
+    },
+    {
+      "artifact": "bound WIKI-PDA source and IR",
+      "required_evidence": "Scanner SHA-256 3e9aebfa0b32aa57fc23eb41b91bfc6dde737ff0428fbe28a7fa1ac52af4b82f and IR SHA-256 e0a22daa811b6d980b32faf8a46da2fdf6fe78c99a2f5e6788979728c736a27d."
+    }
+  ],
+  "contract": {
+    "role": "adjacent static schema, cross-reference, and epistemic-boundary review",
+    "positive_controls": [
+      "closure v2 schema is valid Draft 2020-12",
+      "WIKI-PDA P/K/C/T/D/R/S/N no-join instance validates",
+      "a schema-only non-null join branch validates with no_join_reason null",
+      "IR and shadow-source byte counts and SHA-256 values match reopened files",
+      "closure arm identities and roles exactly equal the source IR",
+      "closure information-source identities exactly equal the source IR",
+      "nine event ordinals are unique, contiguous, phase-monotone, and contain one truth reveal",
+      "all event/source/state references close and every access is authorized by its state region",
+      "each declared source first-use event equals its earliest actual access",
+      "D/R/S/N matched-control freeze, truth, and score order is strict",
+      "all arm-private score evidence is unreadable and cannot feed another arm"
+    ],
+    "negative_controls": [
+      "empty reason with null join",
+      "lowercase arm identity",
+      "duplicate arm identity",
+      "pretruth score-only truth access",
+      "unknown event reference",
+      "unknown source reference",
+      "unknown state reference",
+      "missing negated arm",
+      "missing causal source",
+      "IR role mismatch",
+      "IR hash mismatch",
+      "shadow source hash mismatch",
+      "duplicate/nonstrict event ordinal",
+      "truth-phase inversion",
+      "private control outcome made readable by D",
+      "control detached from opportunity manifest",
+      "non-null join retaining a textual no-join reason",
+      "current truth consumed in component construction",
+      "arm write without state-region authority",
+      "shadow truth falsely declared physically hidden",
+      "shadow mode without bound source",
+      "native mode falsely declaring truth physically visible"
+    ],
+    "static_result": {
+      "schema_meta_validation_pass": true,
+      "positive_shapes_passed": 2,
+      "negative_shapes_rejected": 22,
+      "cross_reference_pass": true,
+      "artifact_binding_pass": true,
+      "arm_count": 8,
+      "source_count": 6,
+      "event_count": 9,
+      "state_region_count": 20,
+      "diff_check_pass": true
+    },
+    "shadow_source_observation": {
+      "truth_token_occurrences_in_score_before_truth": [
+        "function argument",
+        "T Score comparison",
+        "C Score comparison",
+        "D Score comparison",
+        "R Score comparison",
+        "S Score comparison",
+        "N Score comparison",
+        "write-only opportunity digest"
+      ],
+      "observed_target_dependency": "No inspected target or activation expression text references truth, and Score mutates only private counters. This is a human/static observation, not a transitive AST/use-def proof.",
+      "required_before_execution": "An independent source verifier must prove no truth-to-target, truth-to-activation, truth-to-selector, or truth-to-future-prediction-state path; native coder integration must then prove probability commit before decoder truth."
+    },
+    "remaining_open_work": [
+      "generalized causal-closure verification schema",
+      "compiler v4 source",
+      "independent compiler/closure/source-data-flow verifier",
+      "verification and compilation receipt schemas",
+      "negative fixture corpus and two-empty-root build closure",
+      "program lock, managed gate, command, and output closure",
+      "owned-cleanup managed-lease migration after qm8 terminalizes"
+    ]
+  },
+  "activation_requirements": [
+    "Reopen and revalidate the final correction artifact SHA-256 before any successor uses it.",
+    "Do not treat the inline static cross-check as the future independent verifier.",
+    "Do not materialize or execute compiler v4 while qm8 owns the lane.",
+    "Preserve the exact shadow/native truth distinction in every successor schema and receipt."
+  ],
+  "claim_boundary": [
+    "The review establishes representability and fail-closed static structure only.",
+    "It does not prove the scanner causal, predictive, compressive, reversible, deterministic under execution, or resource compliant.",
+    "No archive or objective credit changes.",
+    "Qm8 remains untouched."
+  ]
+}
