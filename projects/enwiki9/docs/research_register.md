@@ -1,5 +1,48 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - WIKI-PDA v3 separates opportunity, resource, and infrastructure verdicts
+
+The single correction authorized by router v4 now has a dormant decision
+contract and fail-closed receipt shape. `wiki_pda_structural_replay_ceiling_q0_v3`
+does not change the sealed v2 parser, stack, transition table, targets, controls,
+population, or truth order. It reuses the exact unexecuted v2 scanner only as a
+raw opportunity instrument. The scanner's `required_correct_bytes`,
+`target_scale_correct_ceiling_pass`, and `absolute_ceiling_pass` fields are
+retained as source-consistency diagnostics and are explicitly forbidden from
+entering the v3 decision.
+
+V3 rederives its scientific gates from raw D/R/S/N counts. D must activate on
+at least `254,953` positions; every control must use exactly those positions
+globally and by chronological third; D must have a positive correct count in
+every third and strictly beat the maximum R/S/N correct count in every third.
+Both scanner receipts, causal/K-transition identities, resources, qualified
+parent evidence, population, and managed-lease cleanup must also pass. Even a
+complete pass authorizes only a retained-parent integer-probability and
+donor-surprise trace over the frozen opportunity manifest.
+
+The decision schema distinguishes three terminal meanings. A complete
+scientific miss retires the exact WIKI-PDA information source. A measured guard
+failure before a scan receipt also retires it without fabricating counts. A
+binding, authority, input, compiler, schema, lease, output, or observer failure
+has no scientific verdict and authorizes one runner-only correction. This
+prevents both free retries of genuine resource failures and false scientific
+retirements from missing infrastructure.
+
+Four in-memory positive shapes pass: scientific pass with both legacy correct-
+byte diagnostics false, scientific retirement, pre-receipt resource retirement,
+and infrastructure failure. Fourteen adversarial shapes are rejected, including
+a pass below `254,953` active positions, a zero-correct treatment third, absent
+parent evidence, use of the legacy gate, false resource classification, archive
+credit, and a v2 identity in a v3 receipt. JSON Schema cannot compare arm counts
+or rederive receipt hashes, so a future independent verifier remains mandatory.
+
+No v3 source, adaptive proposal, compiler, scan, probability, archive, inverse,
+resource result, package, or compression credit exists. Qm8 remains live and
+untouched. Evidence:
+`operations/planning/wiki_pda_structural_replay_ceiling_q0_v3.json`,
+`operations/planning/wiki-pda-ceiling-decision-v3.schema.json`, and
+`operations/planning/wiki_pda_structural_replay_ceiling_q0_v3_decision_review_q0_v1.json`.
+
 ## 2026-08-24 - router v4 prevents a false WIKI-PDA retirement
 
 A cross-check of the next scientific gate found that WIKI-PDA v2 still used

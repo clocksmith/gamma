@@ -1,0 +1,554 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-decision.v3",
+  "title": "Proof-corrected WIKI-PDA opportunity decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "operational_status",
+    "claim_boundary",
+    "claim_authority",
+    "bindings",
+    "parent_qualification",
+    "population",
+    "exclusive_lease",
+    "scan_receipts",
+    "resource_summary",
+    "thresholds",
+    "legacy_scanner_diagnostics",
+    "measurements",
+    "gates",
+    "scientific_verdict",
+    "promotion_authorized",
+    "next_authority",
+    "archive_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes",
+    "error"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-decision.v3"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v3"},
+    "operational_status": {
+      "enum": [
+        "terminal_scientific",
+        "terminal_resource_failure",
+        "terminal_infrastructure_failure"
+      ]
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "claim_authority": {"const": "causal_shadow_opportunity_screen_only"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "router_v4",
+        "futility_audit",
+        "v3_contract",
+        "decision_schema",
+        "v2_candidate_revision",
+        "v2_scanner_source",
+        "v2_scan_schema",
+        "q1_authority_policy",
+        "managed_lease_schema"
+      ],
+      "properties": {
+        "router_v4": {"$ref": "#/$defs/artifact"},
+        "futility_audit": {"$ref": "#/$defs/artifact"},
+        "v3_contract": {"$ref": "#/$defs/artifact"},
+        "decision_schema": {"$ref": "#/$defs/artifact"},
+        "v2_candidate_revision": {"$ref": "#/$defs/artifact"},
+        "v2_scanner_source": {"$ref": "#/$defs/artifact"},
+        "v2_scan_schema": {"$ref": "#/$defs/artifact"},
+        "q1_authority_policy": {"$ref": "#/$defs/artifact"},
+        "managed_lease_schema": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "parent_qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt", "verification", "independent_reverification", "fully_positive"],
+      "properties": {
+        "receipt": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "verification": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "independent_reverification": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "fully_positive": {"type": ["boolean", "null"]}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "verified"],
+      "properties": {
+        "path": {"type": ["string", "null"]},
+        "bytes": {"const": 587138826},
+        "sha256": {"const": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"},
+        "verified": {"type": ["boolean", "null"]}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lease_id", "evidence", "transitions", "release_pass"],
+      "properties": {
+        "lease_id": {"type": ["string", "null"]},
+        "evidence": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "transitions": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "release_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "scan_receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["a", "b", "normalized_identity_pass"],
+      "properties": {
+        "a": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "b": {"anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+        "normalized_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "resource_summary": {
+      "anyOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen_target_scale_gross_gain_bytes",
+        "maximum_optimistic_leverage_bytes_per_active_byte",
+        "minimum_treatment_active_bytes",
+        "legacy_complete_correct_bytes"
+      ],
+      "properties": {
+        "frozen_target_scale_gross_gain_bytes": {"const": 4079243},
+        "maximum_optimistic_leverage_bytes_per_active_byte": {"const": 16},
+        "minimum_treatment_active_bytes": {"const": 254953},
+        "legacy_complete_correct_bytes": {"const": 4079243}
+      }
+    },
+    "legacy_scanner_diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "used_for_v3_decision",
+        "required_correct_bytes",
+        "target_scale_correct_ceiling_pass",
+        "absolute_ceiling_pass"
+      ],
+      "properties": {
+        "used_for_v3_decision": {"const": false},
+        "required_correct_bytes": {"const": 4079243},
+        "target_scale_correct_ceiling_pass": {"type": ["boolean", "null"]},
+        "absolute_ceiling_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "measurements": {
+      "anyOf": [{"$ref": "#/$defs/measurements"}, {"type": "null"}]
+    },
+    "gates": {
+      "anyOf": [
+        {"$ref": "#/$defs/gates"},
+        {"$ref": "#/$defs/resource_failure_gates"},
+        {"$ref": "#/$defs/null_gates"}
+      ]
+    },
+    "scientific_verdict": {
+      "enum": [
+        "authorize_retained_parent_donor_surprise_trace_zero_credit",
+        "retire_exact_wiki_pda_information_source",
+        "none_infrastructure_failure"
+      ]
+    },
+    "promotion_authorized": {"type": "boolean"},
+    "next_authority": {
+      "enum": [
+        "retained_parent_donor_surprise_trace_only",
+        "one_materially_different_information_source",
+        "one_correction_only_runner_successor"
+      ]
+    },
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0},
+    "error": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"operational_status": {"const": "terminal_infrastructure_failure"}},
+        "required": ["operational_status"]
+      },
+      "then": {
+        "properties": {
+          "measurements": {"type": "null"},
+          "gates": {"$ref": "#/$defs/null_gates"},
+          "scientific_verdict": {"const": "none_infrastructure_failure"},
+          "promotion_authorized": {"const": false},
+          "next_authority": {"const": "one_correction_only_runner_successor"},
+          "error": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"operational_status": {"const": "terminal_scientific"}},
+        "required": ["operational_status"]
+      },
+      "then": {
+        "properties": {
+          "parent_qualification": {
+            "properties": {
+              "receipt": {"$ref": "#/$defs/artifact"},
+              "verification": {"$ref": "#/$defs/artifact"},
+              "independent_reverification": {"$ref": "#/$defs/artifact"},
+              "fully_positive": {"const": true}
+            }
+          },
+          "population": {
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "verified": {"const": true}
+            }
+          },
+          "exclusive_lease": {
+            "properties": {
+              "lease_id": {"type": "string", "minLength": 1},
+              "evidence": {"$ref": "#/$defs/artifact"},
+              "transitions": {"$ref": "#/$defs/artifact"},
+              "release_pass": {"const": true}
+            }
+          },
+          "scan_receipts": {
+            "properties": {
+              "a": {"$ref": "#/$defs/artifact"},
+              "b": {"$ref": "#/$defs/artifact"},
+              "normalized_identity_pass": {"const": true}
+            }
+          },
+          "resource_summary": {"$ref": "#/$defs/artifact"},
+          "measurements": {"$ref": "#/$defs/measurements"},
+          "gates": {"$ref": "#/$defs/gates"},
+          "error": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"operational_status": {"const": "terminal_resource_failure"}},
+        "required": ["operational_status"]
+      },
+      "then": {
+        "properties": {
+          "parent_qualification": {
+            "properties": {
+              "receipt": {"$ref": "#/$defs/artifact"},
+              "verification": {"$ref": "#/$defs/artifact"},
+              "independent_reverification": {"$ref": "#/$defs/artifact"},
+              "fully_positive": {"const": true}
+            }
+          },
+          "population": {
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "verified": {"const": true}
+            }
+          },
+          "exclusive_lease": {
+            "properties": {
+              "lease_id": {"type": "string", "minLength": 1},
+              "evidence": {"$ref": "#/$defs/artifact"},
+              "transitions": {"$ref": "#/$defs/artifact"},
+              "release_pass": {"const": true}
+            }
+          },
+          "resource_summary": {"$ref": "#/$defs/artifact"},
+          "measurements": {"type": "null"},
+          "gates": {"$ref": "#/$defs/resource_failure_gates"},
+          "scientific_verdict": {"const": "retire_exact_wiki_pda_information_source"},
+          "promotion_authorized": {"const": false},
+          "next_authority": {"const": "one_materially_different_information_source"},
+          "error": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scientific_verdict": {
+            "const": "authorize_retained_parent_donor_surprise_trace_zero_credit"
+          }
+        },
+        "required": ["scientific_verdict"]
+      },
+      "then": {
+        "properties": {
+          "operational_status": {"const": "terminal_scientific"},
+          "measurements": {"$ref": "#/$defs/pass_measurements"},
+          "gates": {"$ref": "#/$defs/all_true_gates"},
+          "promotion_authorized": {"const": true},
+          "next_authority": {"const": "retained_parent_donor_surprise_trace_only"},
+          "error": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scientific_verdict": {"const": "retire_exact_wiki_pda_information_source"}
+        },
+        "required": ["scientific_verdict"]
+      },
+      "then": {
+        "anyOf": [
+          {
+            "properties": {
+              "operational_status": {"const": "terminal_scientific"},
+              "gates": {
+                "allOf": [
+                  {"$ref": "#/$defs/gates"},
+                  {
+                    "properties": {
+                      "parent_qualification_pass": {"const": true},
+                      "full_population_pass": {"const": true},
+                      "all_promotion_predicates_pass": {"const": false}
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {"properties": {"active_envelope_pass": {"const": false}}},
+                      {"properties": {"matched_opportunities_pass": {"const": false}}},
+                      {"properties": {"positive_treatment_each_third_pass": {"const": false}}},
+                      {"properties": {"all_thirds_beat_controls_pass": {"const": false}}},
+                      {"properties": {"causal_transition_identity_pass": {"const": false}}},
+                      {"properties": {"repeat_identity_pass": {"const": false}}},
+                      {"properties": {"resource_pass": {"const": false}}}
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "operational_status": {"const": "terminal_resource_failure"},
+              "measurements": {"type": "null"},
+              "gates": {"$ref": "#/$defs/resource_failure_gates"}
+            }
+          }
+        ],
+        "properties": {
+          "promotion_authorized": {"const": false},
+          "next_authority": {"const": "one_materially_different_information_source"},
+          "error": {"type": "null"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "count": {"type": "integer", "minimum": 0},
+    "third": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active", "correct"],
+      "properties": {
+        "active": {"$ref": "#/$defs/count"},
+        "correct": {"$ref": "#/$defs/count"}
+      }
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active", "correct", "thirds"],
+      "properties": {
+        "active": {"$ref": "#/$defs/count"},
+        "correct": {"$ref": "#/$defs/count"},
+        "thirds": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"$ref": "#/$defs/third"}
+        }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scanned_bytes",
+        "arms",
+        "minimum_third_treatment_minus_max_control_correct_bytes",
+        "transition_offset_zero_predictions",
+        "closing_before_offset_two_predictions",
+        "treatment_k_state_identity_pass",
+        "control_outcomes_feed_state"
+      ],
+      "properties": {
+        "scanned_bytes": {"const": 587138826},
+        "arms": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["D", "R", "S", "N"],
+          "properties": {
+            "D": {"$ref": "#/$defs/arm"},
+            "R": {"$ref": "#/$defs/arm"},
+            "S": {"$ref": "#/$defs/arm"},
+            "N": {"$ref": "#/$defs/arm"}
+          }
+        },
+        "minimum_third_treatment_minus_max_control_correct_bytes": {"type": "integer"},
+        "transition_offset_zero_predictions": {"const": 0},
+        "closing_before_offset_two_predictions": {"const": 0},
+        "treatment_k_state_identity_pass": {"const": true},
+        "control_outcomes_feed_state": {"const": false}
+      }
+    },
+    "pass_measurements": {
+      "allOf": [
+        {"$ref": "#/$defs/measurements"},
+        {
+          "properties": {
+            "arms": {
+              "properties": {
+                "D": {
+                  "properties": {
+                    "active": {"minimum": 254953},
+                    "thirds": {
+                      "items": {
+                        "properties": {"correct": {"minimum": 1}}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_qualification_pass",
+        "full_population_pass",
+        "active_envelope_pass",
+        "matched_opportunities_pass",
+        "positive_treatment_each_third_pass",
+        "all_thirds_beat_controls_pass",
+        "causal_transition_identity_pass",
+        "repeat_identity_pass",
+        "resource_pass",
+        "all_promotion_predicates_pass"
+      ],
+      "properties": {
+        "parent_qualification_pass": {"type": "boolean"},
+        "full_population_pass": {"type": "boolean"},
+        "active_envelope_pass": {"type": "boolean"},
+        "matched_opportunities_pass": {"type": "boolean"},
+        "positive_treatment_each_third_pass": {"type": "boolean"},
+        "all_thirds_beat_controls_pass": {"type": "boolean"},
+        "causal_transition_identity_pass": {"type": "boolean"},
+        "repeat_identity_pass": {"type": "boolean"},
+        "resource_pass": {"type": "boolean"},
+        "all_promotion_predicates_pass": {"type": "boolean"}
+      }
+    },
+    "all_true_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_qualification_pass",
+        "full_population_pass",
+        "active_envelope_pass",
+        "matched_opportunities_pass",
+        "positive_treatment_each_third_pass",
+        "all_thirds_beat_controls_pass",
+        "causal_transition_identity_pass",
+        "repeat_identity_pass",
+        "resource_pass",
+        "all_promotion_predicates_pass"
+      ],
+      "properties": {
+        "parent_qualification_pass": {"const": true},
+        "full_population_pass": {"const": true},
+        "active_envelope_pass": {"const": true},
+        "matched_opportunities_pass": {"const": true},
+        "positive_treatment_each_third_pass": {"const": true},
+        "all_thirds_beat_controls_pass": {"const": true},
+        "causal_transition_identity_pass": {"const": true},
+        "repeat_identity_pass": {"const": true},
+        "resource_pass": {"const": true},
+        "all_promotion_predicates_pass": {"const": true}
+      }
+    },
+    "null_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_qualification_pass",
+        "full_population_pass",
+        "active_envelope_pass",
+        "matched_opportunities_pass",
+        "positive_treatment_each_third_pass",
+        "all_thirds_beat_controls_pass",
+        "causal_transition_identity_pass",
+        "repeat_identity_pass",
+        "resource_pass",
+        "all_promotion_predicates_pass"
+      ],
+      "properties": {
+        "parent_qualification_pass": {"type": "null"},
+        "full_population_pass": {"type": "null"},
+        "active_envelope_pass": {"type": "null"},
+        "matched_opportunities_pass": {"type": "null"},
+        "positive_treatment_each_third_pass": {"type": "null"},
+        "all_thirds_beat_controls_pass": {"type": "null"},
+        "causal_transition_identity_pass": {"type": "null"},
+        "repeat_identity_pass": {"type": "null"},
+        "resource_pass": {"type": "null"},
+        "all_promotion_predicates_pass": {"type": "null"}
+      }
+    },
+    "resource_failure_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_qualification_pass",
+        "full_population_pass",
+        "active_envelope_pass",
+        "matched_opportunities_pass",
+        "positive_treatment_each_third_pass",
+        "all_thirds_beat_controls_pass",
+        "causal_transition_identity_pass",
+        "repeat_identity_pass",
+        "resource_pass",
+        "all_promotion_predicates_pass"
+      ],
+      "properties": {
+        "parent_qualification_pass": {"const": true},
+        "full_population_pass": {"type": "null"},
+        "active_envelope_pass": {"type": "null"},
+        "matched_opportunities_pass": {"type": "null"},
+        "positive_treatment_each_third_pass": {"type": "null"},
+        "all_thirds_beat_controls_pass": {"type": "null"},
+        "causal_transition_identity_pass": {"type": "null"},
+        "repeat_identity_pass": {"type": "null"},
+        "resource_pass": {"const": false},
+        "all_promotion_predicates_pass": {"const": false}
+      }
+    }
+  }
+}
