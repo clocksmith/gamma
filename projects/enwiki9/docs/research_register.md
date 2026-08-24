@@ -569,6 +569,19 @@ migrate exactly into the canonical manager, and content-addressed `clang++`
 and `ld.lld` executables to exist. No v2 control, build, oracle, finite coder,
 archive, or inverse has run; Gamma compression and score credit remain zero.
 
+A deeper off-PATH search supersedes only the earlier tool-availability
+observation. It found a single-link regular Clang 17 driver at
+`/home/x/enwiki9-nonproof/cmix-obias-donor/cmix-obias/tools/llvm17-local/bin/clang-17`
+and a single-link regular AMD LLD 23 driver inside the retained ROCm SDK. Under
+the exact v2 scrubbed environment, both `--version` probes return zero and
+contain the required `clang` and `lld` family markers. Their SHA-256 values are
+`d8e99328...a414` and `da235ec5...74b2`. This removes the shallow
+"no suitable binary exists" conclusion; it does not prove that the mixed
+Clang/LLD pair accepts the frozen build, produces byte-identical independent
+builds, or passes any SAFE-MIX population. Those remain guarded activation
+phases after qm8 and managed-lease closure. See the zero-authority
+[`toolchain availability audit`](../operations/planning/gamma_safe_mix_v2_toolchain_availability_q0_v1.json).
+
 ## 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring
 
 `fxcm_fossil_match_q0_v1` is a new zero-credit information-source design, not
