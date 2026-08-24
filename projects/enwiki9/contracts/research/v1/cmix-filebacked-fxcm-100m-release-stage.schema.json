@@ -7,6 +7,9 @@
   "required": [
     "schema",
     "candidate_id",
+    "runner",
+    "receipt_schema",
+    "command_sha256",
     "population",
     "inputs",
     "outputs",
@@ -25,6 +28,9 @@
   "properties": {
     "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-release-stage.v1"},
     "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "runner": {"$ref": "#/$defs/artifact"},
+    "receipt_schema": {"$ref": "#/$defs/artifact"},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
     "population": {"$ref": "#/$defs/artifact"},
     "inputs": {
       "type": "object",

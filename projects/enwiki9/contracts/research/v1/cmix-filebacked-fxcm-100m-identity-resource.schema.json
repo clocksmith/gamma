@@ -48,6 +48,7 @@
       "required": [
         "planning_contract",
         "observer_build",
+        "observer_build_schema",
         "observer_calibration",
         "observer_calibration_verification",
         "source_closure",
@@ -55,12 +56,14 @@
         "q1_release_build_a",
         "q1_release_build_b",
         "build_verification",
+        "scope_build_receipt",
         "opening_distant_10m_receipt",
         "opening_distant_10m_verification"
       ],
       "properties": {
         "planning_contract": {"$ref": "#/$defs/artifact"},
         "observer_build": {"$ref": "#/$defs/artifact"},
+        "observer_build_schema": {"$ref": "#/$defs/artifact"},
         "observer_calibration": {"$ref": "#/$defs/artifact"},
         "observer_calibration_verification": {"$ref": "#/$defs/artifact"},
         "source_closure": {"$ref": "#/$defs/artifact"},
@@ -68,6 +71,7 @@
         "q1_release_build_a": {"$ref": "#/$defs/artifact"},
         "q1_release_build_b": {"$ref": "#/$defs/artifact"},
         "build_verification": {"$ref": "#/$defs/artifact"},
+        "scope_build_receipt": {"$ref": "#/$defs/artifact"},
         "opening_distant_10m_receipt": {"$ref": "#/$defs/artifact"},
         "opening_distant_10m_verification": {"$ref": "#/$defs/artifact"}
       }
@@ -161,6 +165,7 @@
         "scratch_logical_peak_bytes",
         "scratch_allocated_peak_bytes",
         "scratch_after_cleanup_bytes",
+        "resource_guard_receipt",
         "phase_measurement_receipt",
         "memory_high_receipt",
         "phase_measurements",
@@ -185,6 +190,7 @@
         "scratch_logical_peak_bytes": {"type": "integer", "minimum": 0},
         "scratch_allocated_peak_bytes": {"type": "integer", "minimum": 0},
         "scratch_after_cleanup_bytes": {"type": "integer", "minimum": 0},
+        "resource_guard_receipt": {"$ref": "#/$defs/artifact"},
         "phase_measurement_receipt": {"$ref": "#/$defs/artifact"},
         "memory_high_receipt": {"$ref": "#/$defs/artifact"},
         "phase_measurements": {
@@ -273,7 +279,7 @@
         "decoded_transformed",
         "raw_inverse",
         "raw_inverse_pass",
-        "guard_receipt",
+        "execution_receipt",
         "backing_cleanup_pass"
       ],
       "properties": {
@@ -305,7 +311,7 @@
         "decoded_transformed": {"$ref": "#/$defs/nullableArtifact"},
         "raw_inverse": {"$ref": "#/$defs/nullableArtifact"},
         "raw_inverse_pass": {"type": ["boolean", "null"]},
-        "guard_receipt": {"$ref": "#/$defs/artifact"},
+        "execution_receipt": {"$ref": "#/$defs/artifact"},
         "backing_cleanup_pass": {"type": "boolean"}
       }
     },

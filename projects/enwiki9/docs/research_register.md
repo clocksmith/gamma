@@ -55,10 +55,23 @@ self-extracting files are not expected to be byte-identical because q1
 necessarily contains different allocator code; requiring that equality would
 confuse predictor preservation with package identity.
 
-The diagnostic observer source and matched observer-build runner for this 100M
-gate are now sealed, but the gate coordinator and all execution receipts remain
-absent. The build runner requires two byte-identical builds within each I-P/I-Q
-arm before packaging replicate A. The observer registers the
+The diagnostic observer source, matched observer-build runner, calibration
+runner/verifier, and joint 100M coordinator/verifier are now sealed; all
+execution receipts remain absent. The coordinator refuses an active full-1G
+lease, independently hashes the canonical opening prefix before creating its
+result root, then runs instrumented `I-P` and `I-Q` roundtrips followed by one
+observer-free `R-Q` release roundtrip. `R-Q` is guarded by cgroup v2 at the
+strict `10,000,000,000`-byte hard cap and a restorable `9,000,000,000`-byte
+`memory.high` pressure boundary. Its eight ordered phases independently record
+process-tree RSS, per-process VmHWM, cgroup memory composition, and scratch
+logical/allocated peaks. The independent verifier reconstructs every semantic
+state-manifest digest, validates exact observer checkpoint geometry, and proves
+that the release executable is the literal concatenation of the independently
+built q1 binary plus the sealed dictionary, article-order, and header assets.
+No syntax, schema, or hash-closure check is an execution result.
+
+The build runner requires two byte-identical builds within each I-P/I-Q arm
+before packaging replicate A. The observer registers the
 same source-ordered semantic ranges in both arms and requires exactly `26`
 allocations of at least `67,108,864` bytes. At coded-byte checkpoints `0`,
 `16,777,216`, `33,554,432`, `50,331,648`, and terminal, it hashes each range's
