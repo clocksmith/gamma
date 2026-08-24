@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1",
-  "title": "WIKI-SCHEMA-VM zero-credit ceiling decision",
+  "title": "WIKI-SCHEMA-VM zero-credit opportunity-screen decision",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -38,7 +38,7 @@
       "enum": ["terminal", "terminal_infrastructure_failure"]
     },
     "claim_boundary": {"type": "string", "minLength": 1},
-    "claim_authority": {"const": "causal_shadow_ceiling_only"},
+    "claim_authority": {"const": "causal_shadow_opportunity_screen_only"},
     "population": {"$ref": "#/$defs/artifact"},
     "bindings": {
       "type": "object",
@@ -114,6 +114,8 @@
           "additionalProperties": false,
           "required": [
             "scanned_bytes",
+            "opportunity_bytes",
+            "quantized_log_loss_upper_bound_bytes",
             "treatment_correct_bytes",
             "random_correct_bytes",
             "shifted_correct_bytes",
@@ -128,6 +130,8 @@
           ],
           "properties": {
             "scanned_bytes": {"$ref": "#/$defs/count"},
+            "opportunity_bytes": {"$ref": "#/$defs/count"},
+            "quantized_log_loss_upper_bound_bytes": {"$ref": "#/$defs/count"},
             "treatment_correct_bytes": {"$ref": "#/$defs/count"},
             "random_correct_bytes": {"$ref": "#/$defs/count"},
             "shifted_correct_bytes": {"$ref": "#/$defs/count"},
@@ -154,7 +158,8 @@
       "additionalProperties": false,
       "required": [
         "full_population_pass",
-        "target_scale_ceiling_pass",
+        "target_scale_quantized_log_loss_envelope_pass",
+        "one_byte_per_correct_volume_screen_pass",
         "all_thirds_live_pass",
         "beats_random_pass",
         "beats_shifted_pass",
@@ -164,7 +169,8 @@
       ],
       "properties": {
         "full_population_pass": {"type": ["boolean", "null"]},
-        "target_scale_ceiling_pass": {"type": ["boolean", "null"]},
+        "target_scale_quantized_log_loss_envelope_pass": {"type": ["boolean", "null"]},
+        "one_byte_per_correct_volume_screen_pass": {"type": ["boolean", "null"]},
         "all_thirds_live_pass": {"type": ["boolean", "null"]},
         "beats_random_pass": {"type": ["boolean", "null"]},
         "beats_shifted_pass": {"type": ["boolean", "null"]},
