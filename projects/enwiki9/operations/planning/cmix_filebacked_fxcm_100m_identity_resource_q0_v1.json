@@ -4,18 +4,18 @@
   "revision": 1,
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent_id": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
-  "operational_status": "prospective_observer_source_sealed_runner_unimplemented_waiting_for_qm8_terminalization",
+  "operational_status": "prospective_observer_build_runner_sealed_coordinator_unimplemented_waiting_for_qm8_terminalization",
   "execution_authorized": false,
   "purpose": "Qualify q1 for a later full-corpus parent run by combining exact 100M parent preservation with phase-resolved resource headroom evidence, without claiming compression improvement.",
   "receipt_schema": {
     "path": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource.schema.json",
-    "sha256": "1cd47e338618dd16d124fd455a282647856d35a00ecf5aa0d96d2cd571e0b76d"
+    "sha256": "0bf3d6bc4716b369ff7d8d7b6dd9cf89545a07c8a35918f7d5e004c018eef321"
   },
   "independent_verification": {
     "schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json",
     "schema_sha256": "43991c9ec64fdf787e0ba15e5e2491ccbc7e9542df066c5d12e9bb933f263c3f",
     "verifier": "tools/cmix_filebacked_fxcm_100m_identity_resource_verify.py",
-    "verifier_sha256": "641ae0839de0afaa672864f53759fd05c5028d0ba15029283a94a877993a33c4"
+    "verifier_sha256": "ac0f12ac134b94d55a9d5f2810c9cba3a841a69bdb9ad6f037b6139ae04fcec9"
   },
   "population": {
     "selection": "canonical enwik9 opening prefix from byte zero",
@@ -60,6 +60,16 @@
     "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; no observer build or execution receipt exists.",
     "runtime_activation": "GAMMA_FULL_IDENTITY_DIR must name an existing absolute output directory; absent activation leaves packaging/helper encoder runs observationally disabled.",
     "release_authority_excluded": true
+  },
+  "observer_build": {
+    "runner": "tools/cmix_filebacked_fxcm_100m_observer_build.py",
+    "runner_sha256": "dc647b852a108b20211f4fd538c6648be4ccd73ed1f0539b642586449a94f7df",
+    "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-build.schema.json",
+    "receipt_schema_sha256": "1b785761b11f03328fecc3db86e28498a27d66f2842805a6bdb60640df53c2ea",
+    "replicates_per_arm": 2,
+    "required_binary_identity": "A and B are byte-identical within I-P and independently byte-identical within I-Q.",
+    "package_rule": "Package only replicate A after within-arm build identity passes; dictionary, article-order, and header payloads must match across I-P/I-Q.",
+    "execution_status": "sealed_not_run"
   },
   "identity_observer": {
     "post_head_probability": "Online SHA-256 of each exact uint16 probability after KhBitLstm32Head::Adjust and immediately before arithmetic range split; calibrate unchanged instrumentation against both retained 10M digests.",
