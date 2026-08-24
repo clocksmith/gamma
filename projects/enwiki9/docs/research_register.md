@@ -1,5 +1,46 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - sparse exact associativity is the semantic CMIX contingency
+
+The qm8 runtime-pressure audit motivated a source-level alternative to further
+page-cache tuning. CMIX's 41 `ContextMap3` instances contain exactly
+`41,664,640` semantic `E1<14,128>` buckets. Including each instance's frozen
+alignment tail, those arrays allocate `5,333,745,664` bytes. A 96-byte base
+can hold slots 0--9, the unchanged two-recent-index byte, a four-byte overflow
+handle, and one reserved byte. A separately owned 36-byte record holds the
+complete checksums and seven state bytes for logical slots 10--13, and is
+allocated only when the original fourteen-way transition first selects one of
+those slots.
+
+This is not the old false claim that a small shared pool magically recovers
+stranded private capacity. Every overflowed bucket receives all four remaining
+slots with no capacity ceiling. Absent overflow is exactly four zero slots;
+present overflow preserves the parent's indexes, lowest-index checksum match,
+protected recent entries, strict victim tie order, keep bits, run state, and
+updates. A stable 4,096-record chunk arena allows `cp` and `runp` to point into
+overflow without movable storage. Allocation identities and addresses never
+enter prediction state, so a correct implementation should reproduce every
+parent probability and archive byte by induction.
+
+Before overflow, the representation releases exactly `1,333,436,416` bytes.
+With `O` activated buckets, a conservative saving is
+`1,333,436,416 - 81,392 - 36*O - 6,044,220`. Even charging the maximum tail
+waste across all 41 arenas, at most `29,413,204` overflowed buckets
+(`70.5951%`) preserves a `262,144 KiB` static reduction. The actual overflow
+demand is unknown and receives no inferred credit.
+
+`cmix_obias_sparse_exact_assoc14_q0_v1` is therefore frozen as a dormant,
+one-mechanism semantic contingency. It may activate only after qm8
+terminalizes and either misses engineering headroom or a later exact-package
+runtime gate attributes failure to reclaim/writeback pressure. Its D arm must
+match q1's post-head probabilities, coder checkpoints, payload, and inverse;
+plain ten-way packing is only the lossy C control. Any identity mismatch,
+overflow-bound failure, less than `262,144 KiB` measured peak reduction, peak
+above `8,750,000 KiB`, or runtime/package failure retires it without changing
+the layout in rescue. No source candidate, run, archive, inverse, memory gain,
+compression gain, or score credit exists. Evidence:
+`operations/planning/cmix_obias_sparse_exact_assoc14_q0_v1.json`.
+
 ## 2026-08-24 - q1 memory pressure now carries a measured runtime-risk warning
 
 The live qm8 Arm A gate remains non-terminal and untouched, but its resource
