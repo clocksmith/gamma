@@ -437,6 +437,7 @@ def main() -> int:
     observer_build_schema_path, observer_build_schema = scope.load_json(
         args.observer_build_schema, "observer build schema"
     )
+    jsonschema.Draft202012Validator.check_schema(observer_build_schema)
     jsonschema.validate(observer_build, observer_build_schema)
     calibration_path, calibration = load_contract(
         args.observer_calibration,
@@ -504,10 +505,21 @@ def main() -> int:
         for name, path in frozen_paths.items()
     ):
         raise RuntimeError("frozen q1 antecedent path binding failed")
+    calibration_contract = plan.get("observer_calibration", {})
     if (
         calibration.get("terminal_pass") is not True
         or calibration_verification.get("passed") is not True
         or calibration_verification.get("receipt_sha256") != scope.sha256_file(calibration_path)
+        or calibration_verification.get("verifier", {}).get("path")
+        != str(proof.PROJECT / calibration_contract.get("independent_verifier", ""))
+        or calibration_verification.get("verifier", {}).get("sha256")
+        != calibration_contract.get("independent_verifier_sha256")
+        or calibration_verification.get("input_schema", {}).get("sha256")
+        != calibration_contract.get("receipt_schema_sha256")
+        or calibration_verification.get("output_schema", {}).get("sha256")
+        != calibration_contract.get("verification_schema_sha256")
+        or calibration_verification.get("planning_contract")
+        != calibration.get("antecedents", {}).get("planning_contract")
         or calibration.get("antecedents", {}).get("planning_contract", {}).get("sha256")
         != scope.sha256_file(plan_path)
         or calibration.get("antecedents", {}).get("observer_build", {}).get("sha256")

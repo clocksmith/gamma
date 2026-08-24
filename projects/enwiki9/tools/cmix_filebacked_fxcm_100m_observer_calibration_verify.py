@@ -25,7 +25,7 @@ OUTPUT_SCHEMA = (
     "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
 )
 INPUT_SCHEMA_SHA256 = "009de365b89e83bc395d2f55332bc5b4f39de4ff0f0ddcb2727d6f1bba45c18a"
-OUTPUT_SCHEMA_SHA256 = "3e20b4b00680db793fcd28c5f469cbb4eec88d6ac401093df1bdb31d22679e15"
+OUTPUT_SCHEMA_SHA256 = "d107e2bb9949c138c71a281a566a8c04318bdae3e345be1b5c0e1edde9a42cd3"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 RUN_CONTRACT = (
     (0, "I-P", "post_head", True),
@@ -41,6 +41,14 @@ FIXED_SCOPES = {
         "17dfa1d4d228170583555711d5aab51a740475da194657f3db272a0b31a0d7af",
     ),
 }
+
+
+def artifact(path: Path) -> dict[str, Any]:
+    return {
+        "path": str(path),
+        "bytes": path.stat().st_size,
+        "sha256": proof.digest_file(path),
+    }
 
 
 def false_comparisons() -> dict[str, bool]:
@@ -174,7 +182,9 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
         receipt["antecedents"]["planning_contract"], "planning contract"
     )
     calibration_contract = plan.get("observer_calibration", {})
+    joint_verification_contract = plan.get("independent_verification", {})
     verifier_path = Path(__file__).resolve()
+    proof_path = Path(proof.__file__).resolve()
     plan_binding = (
         plan.get("candidate_id") == CANDIDATE_ID
         and calibration_contract.get("independent_verifier")
@@ -185,6 +195,10 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
         == INPUT_SCHEMA_SHA256
         and calibration_contract.get("verification_schema_sha256")
         == OUTPUT_SCHEMA_SHA256
+        and joint_verification_contract.get("verifier")
+        == str(proof_path.relative_to(proof.PROJECT))
+        and joint_verification_contract.get("verifier_sha256")
+        == proof.digest_file(proof_path)
     )
     if not plan_binding:
         errors.append("planning contract verifier binding failed")
@@ -406,6 +420,9 @@ def main() -> int:
     output_path = proof.new_output_path(args.verification)
     receipt_raw = receipt_path.read_bytes()
     receipt = json.loads(receipt_raw)
+    planning_contract = proof.resolve_artifact(
+        receipt["antecedents"]["planning_contract"], "planning contract"
+    )
     errors: list[str] = []
     schema_valid = True
     try:
@@ -446,6 +463,10 @@ def main() -> int:
             "observer-calibration-verification.v1"
         ),
         "candidate_id": CANDIDATE_ID,
+        "verifier": artifact(Path(__file__).resolve()),
+        "input_schema": artifact(INPUT_SCHEMA),
+        "output_schema": artifact(OUTPUT_SCHEMA),
+        "planning_contract": artifact(planning_contract),
         "verified": verified,
         "passed": passed,
         "errors": errors,

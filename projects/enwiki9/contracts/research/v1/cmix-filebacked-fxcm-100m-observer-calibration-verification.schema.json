@@ -7,6 +7,10 @@
   "required": [
     "schema",
     "candidate_id",
+    "verifier",
+    "input_schema",
+    "output_schema",
+    "planning_contract",
     "verified",
     "passed",
     "errors",
@@ -25,6 +29,10 @@
     "candidate_id": {
       "const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"
     },
+    "verifier": {"$ref": "#/$defs/artifact"},
+    "input_schema": {"$ref": "#/$defs/artifact"},
+    "output_schema": {"$ref": "#/$defs/artifact"},
+    "planning_contract": {"$ref": "#/$defs/artifact"},
     "verified": {"type": "boolean"},
     "passed": {"type": "boolean"},
     "errors": {
@@ -60,6 +68,16 @@
     "sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
     },
     "comparisons": {
       "type": "object",
