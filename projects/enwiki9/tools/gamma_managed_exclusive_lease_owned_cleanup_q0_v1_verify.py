@@ -247,7 +247,9 @@ def plan_bindings(plan: dict[str, Any]) -> dict[str, dict[str, Any]]:
     if (
         plan.get("schema") != "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-execution-plan.v1"
         or plan.get("candidate_id") != CANDIDATE_ID
-        or plan.get("execution_authorized") is not False
+        or plan.get("execution_authorized") is not True
+        or plan.get("operational_status") != "activated_after_qm8_terminal"
+        or plan.get("revision", 0) < 2
         or plan.get("claim_authority") != "infrastructure_only"
     ):
         raise RuntimeError("execution plan authority mismatch")
@@ -535,6 +537,7 @@ def verify(args: argparse.Namespace) -> tuple[dict[str, Any], bool]:
         )
         require(
             terminal == (PROJECT / plan["qm8_terminal_dependency"]["path"]).resolve(strict=True)
+            and plan["qm8_terminal_dependency"].get("sha256") == sha256(terminal)
             and terminal_value.get("schema") == "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"
             and terminal_value.get("candidate_id") == "cmix_obias_memory_safe_parent_filebacked_q1_v1"
             and terminal_value.get("arm") == "a"

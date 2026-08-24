@@ -254,8 +254,13 @@ promotion gates from the controls and guard-v3 receipt. A separately bound
 verifier reopens the candidate revision and immutable blobs, every plan source,
 the dynamic qm8 terminal receipt, the scratch tree, phase-marker sequence,
 outer transition hash chain, exact result manifest, resource peaks, and
-zero-credit authority boundary. The execution plan remains explicitly waiting;
-no result directory or control receipt exists while qm8 owns the host.
+zero-credit authority boundary. A harder static audit found that revision 1's
+`execution_authorized=false` declaration was not enforced by the coordinator
+and was incorrectly required by the worker. The closure now fails closed: the
+current revision-1 plan cannot launch, and every entry point requires a future
+revision-2 activation with `execution_authorized=true`, the activated status,
+and the actual qm8 terminal-receipt SHA-256. No result directory or control
+receipt exists while qm8 owns the host.
 
 At the latest read-only sample the encode had advanced to `17.40%`. Cgroup
 current use was `8,999,227,392` bytes with the same `9,002,086,400`-byte peak;

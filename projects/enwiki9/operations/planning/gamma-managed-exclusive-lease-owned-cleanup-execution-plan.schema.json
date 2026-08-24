@@ -15,10 +15,10 @@
     "$schema": {"const": "gamma-managed-exclusive-lease-owned-cleanup-execution-plan.schema.json"},
     "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-execution-plan.v1"},
     "artifact_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1_execution"},
-    "revision": {"const": 1},
+    "revision": {"type": "integer", "minimum": 1},
     "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
-    "operational_status": {"const": "frozen_waiting_for_qm8_terminal_receipt_and_released_lane"},
-    "execution_authorized": {"const": false},
+    "operational_status": {"enum": ["frozen_waiting_for_qm8_terminal_receipt_and_released_lane", "activated_after_qm8_terminal"]},
+    "execution_authorized": {"type": "boolean"},
     "claim_authority": {"const": "infrastructure_only"},
     "candidate": {"$ref": "#/$defs/referenceMap"},
     "contracts": {"$ref": "#/$defs/referenceMap"},
@@ -34,7 +34,8 @@
         "required_schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"},
         "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
         "arm": {"const": "a"},
-        "terminal_pass_may_be": {"type": "array", "prefixItems": [{"const": false}, {"const": true}], "items": false}
+        "terminal_pass_may_be": {"type": "array", "prefixItems": [{"const": false}, {"const": true}], "items": false},
+        "sha256": {"$ref": "#/$defs/sha256"}
       }
     },
     "runtime_configuration": {
@@ -70,6 +71,28 @@
     "gamma_compression_credit_bytes": {"const": 0},
     "gamma_score_credit_bytes": {"const": 0}
   },
+  "allOf": [
+    {
+      "if": {"properties": {"execution_authorized": {"const": false}}, "required": ["execution_authorized"]},
+      "then": {
+        "properties": {
+          "revision": {"const": 1},
+          "operational_status": {"const": "frozen_waiting_for_qm8_terminal_receipt_and_released_lane"},
+          "qm8_terminal_dependency": {"not": {"required": ["sha256"]}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"execution_authorized": {"const": true}}, "required": ["execution_authorized"]},
+      "then": {
+        "properties": {
+          "revision": {"minimum": 2},
+          "operational_status": {"const": "activated_after_qm8_terminal"},
+          "qm8_terminal_dependency": {"required": ["sha256"]}
+        }
+      }
+    }
+  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "reference": {

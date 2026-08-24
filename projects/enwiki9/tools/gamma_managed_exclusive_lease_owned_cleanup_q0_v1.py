@@ -173,6 +173,8 @@ def load_qm8_terminal(path: Path, plan: dict[str, Any]) -> dict[str, Any]:
         or not isinstance(value.get("terminal_pass"), bool)
     ):
         raise RuntimeError("qm8 receipt does not prove terminal Arm-A classification")
+    if plan["qm8_terminal_dependency"].get("sha256") != sha256(terminal):
+        raise RuntimeError("activated plan does not bind the qm8 terminal receipt")
     live = live_lane_competitors()
     if live:
         raise RuntimeError(f"exclusive-lane competitors remain live: {live}")
@@ -355,6 +357,12 @@ def main() -> int:
     parser.add_argument("--qm8-terminal-receipt", required=True, type=Path)
     args = parser.parse_args()
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
+    if (
+        plan.get("execution_authorized") is not True
+        or plan.get("operational_status") != "activated_after_qm8_terminal"
+        or plan.get("revision", 0) < 2
+    ):
+        raise RuntimeError("execution plan is dormant and has no launch authority")
     terminal_value = load_qm8_terminal(args.qm8_terminal_receipt, plan)
     require_free_paths()
     RESULT.mkdir(mode=0o700)

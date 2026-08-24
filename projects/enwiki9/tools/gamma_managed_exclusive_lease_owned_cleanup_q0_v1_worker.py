@@ -180,7 +180,9 @@ def validate_plan() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     if (
         plan.get("schema") != "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-execution-plan.v1"
         or plan.get("candidate_id") != CANDIDATE_ID
-        or plan.get("execution_authorized") is not False
+        or plan.get("execution_authorized") is not True
+        or plan.get("operational_status") != "activated_after_qm8_terminal"
+        or plan.get("revision", 0) < 2
         or plan.get("claim_authority") != "infrastructure_only"
     ):
         raise RuntimeError("execution plan authority boundary mismatch")
@@ -282,6 +284,8 @@ def main() -> int:
         or not isinstance(terminal_value.get("terminal_pass"), bool)
     ):
         raise SystemExit("qm8 receipt is not a terminal Arm-A receipt")
+    if plan["qm8_terminal_dependency"].get("sha256") != sha256(terminal):
+        raise SystemExit("activated plan does not bind the qm8 terminal receipt")
     bindings["runtime.qm8_terminal_receipt"] = artifact(terminal)
     source_lock = {
         "schema": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-source-lock.v1",
