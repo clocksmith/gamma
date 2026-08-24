@@ -1,15 +1,31 @@
 {
-  "$schema": "campaign-static-contract.schema.json",
+  "$schema": "gamma-safe-mix-plan.schema.json",
+  "planning_schema_sha256": "644df7b681a8b5a66f5091dd0649c4bfa49d48d072639590f0dc508d505ea8e1",
   "artifact_id": "gamma_safe_mix_v1",
-  "revision": 1,
+  "revision": 2,
   "operational_status": "dormant_dependency",
   "claim_authority": "none",
+  "execution_authorized": false,
   "objective": {
     "objective_id": "gamma-enwik9-hutter-105m-v1",
     "corpus_bytes": 1000000000,
     "target_complete_counted_bytes": 105000000
   },
   "role": "reusable two-expert causal mixture and experimental wrapper; not a separate discovery family",
+  "dependencies": [
+    {
+      "artifact": "gamma_safe_mix_v1 content-addressed program lock",
+      "required_evidence": "materialized and independently verified lock over the plan, plan schema, implementation, arbitrary-precision reference, build chain, controls, and every receipt schema"
+    },
+    {
+      "artifact": "memory-safe authoritative parent",
+      "required_evidence": "exact probability scale, finite coder, roundtrip, package, dependency, resource, and replay closure before any P/K/D/M archive gate"
+    },
+    {
+      "artifact": "causal treatment expert",
+      "required_evidence": "content-addressed decoder-visible state, matched controls, frozen reset or join boundary, and independent raw-D evidence"
+    }
+  ],
   "contract": {
     "event_alphabet": "binary arithmetic-coder event",
     "experts": {
@@ -71,5 +87,11 @@
   "theory_sources": [
     "https://proceedings.mlr.press/v76/orseau17a.html",
     "https://mlanthology.org/mlj/1998/herbster1998mlj-tracking/"
-  ]
+  ],
+  "static_audit": {
+    "generic_schema_mismatch_closed": true,
+    "program_lock_transitive_coverage": "The pending lock must include this plan and its dedicated schema plus the integer-reference and final SAFE-MIX receipt schemas that the earlier declaration omitted.",
+    "finite_guarantee_boundary": "The ideal one-bit Bayesian bound is not a theorem about Q63 rounding or CMIX arithmetic output. Only native/reference identity proves the integer implementation, and only a fresh finite-coder P/K/D/M archive proves bytes.",
+    "execution_status": "static_only_unexecuted"
+  }
 }

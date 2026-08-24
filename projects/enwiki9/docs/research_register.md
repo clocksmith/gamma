@@ -178,6 +178,34 @@ residency successor; infrastructure-incomplete qm8 permits only a retry after
 the exact infrastructure cause is corrected. Bounded evidence may not erase
 contrary full-corpus evidence.
 
+### SAFE-MIX static closure audit
+
+`gamma_safe_mix_v1` remains unexecuted and zero-credit. Its Q63 native
+implementation, arbitrary-precision reference, transactional controls, build
+capture, and five-population oracle suite are materialized, but the planning
+document was not actually valid under the generic schema named in its
+`$schema` field. The generic schema rejected its extra `role` and
+`theory_sources` fields and also required an absent dependency list. The
+pending program lock separately omitted the integer-reference receipt schema
+and the final SAFE-MIX receipt schema, so a future lock could have appeared
+complete while leaving two authority-bearing shapes outside its closure.
+
+Planning revision 2 closes those static gaps with the dedicated
+`gamma-safe-mix-plan.schema.json`, explicit parent/treatment/lock
+dependencies, and `execution_authorized=false`. The pending lock now includes
+the plan, its schema, the arbitrary-precision receipt schema, and the final
+receipt schema. The interface requires dedicated-plan validation before any
+execution. No program lock was materialized, no compiler or oracle was run,
+and no mixture archive exists.
+
+The proof boundary is unchanged but now explicit. The ideal two-expert
+Bayesian inequality supplies at most a one-bit ideal log-loss penalty. It does
+not prove a bound for Q63 posterior rounding, probability-count rounding, the
+finite CMIX range state, archive termination, package bytes, or runtime. Native
+versus arbitrary-precision identity can prove only that the frozen integer law
+was implemented; fresh P/K/D/M arithmetic archives remain the sole compression
+authority.
+
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
 
 SAFE-FORK is classified as checkpoint/fork/rejoin infrastructure, not a novel
