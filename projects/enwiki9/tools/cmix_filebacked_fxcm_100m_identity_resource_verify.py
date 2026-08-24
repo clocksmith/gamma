@@ -24,7 +24,7 @@ OUTPUT_SCHEMA = (
     / "contracts/research/v1/"
     "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
 )
-INPUT_SCHEMA_SHA256 = "44c81546ac0aeef4056506c29c0e06e884dbfe23073050c5c069fd7cafc2ed77"
+INPUT_SCHEMA_SHA256 = "1cd47e338618dd16d124fd455a282647856d35a00ecf5aa0d96d2cd571e0b76d"
 OUTPUT_SCHEMA_SHA256 = "43991c9ec64fdf787e0ba15e5e2491ccbc7e9542df066c5d12e9bb933f263c3f"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PREFIX_BYTES = 100_000_000
@@ -256,7 +256,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
     payload_identity = all(record is not None for record in payload_records) and len(
         {(record["bytes"], record["sha256"]) for record in payload_records if record}
     ) == 1
-    decoded_records = [arm["decoded_transformed"] for arm in arms.values()]
+    decoded_records = [parent["decoded_transformed"], q1_identity["decoded_transformed"]]
     decoded_identity = all(record is not None for record in decoded_records) and len(
         {(record["bytes"], record["sha256"]) for record in decoded_records if record}
     ) == 1

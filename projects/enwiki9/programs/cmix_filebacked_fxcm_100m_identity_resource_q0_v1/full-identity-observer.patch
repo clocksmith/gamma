@@ -1,0 +1,144 @@
+diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -28,6 +28,9 @@
+ #include "gamma-filebacked-fxcm.h"
+ #endif
+ 
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++#include "gamma-full-identity-observer.h"
++#endif
+ #include "fxcmv1.h"
+ 
+ #include <stdio.h>
+@@ -157,5 +160,8 @@ template <class T> void alloc(T*&ptr, int c) {
+     ptr = static_cast<T*>(::gamma_filebacked_fxcm::AllocateBacked(
+         bytes, bytes, alignof(T)));
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++    ::gamma_full_identity::RegisterSemanticRange(ptr, bytes, alignof(T));
++#endif
+     return;
+   }
+ #endif
+@@ -161,6 +167,10 @@ template <class T> void alloc(T*&ptr, int c) {
+ #endif
+   ptr=(T*)calloc(c, sizeof(T));
+   if (!ptr) exit(1);
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::RegisterSemanticRange(
++      ptr, static_cast<size_t>(c) * sizeof(T), alignof(T));
++#endif
+   AdviseHugePages(ptr, (size_t)c*sizeof(T));
+ }
+ 
+@@ -186,6 +196,11 @@ template <class T> void alloc1(T*&data, int c,T*&ptr,const int align=16) {
+   AdviseHugePages(ptr, ((size_t)c+extra)*sizeof(T));
+   }
+   data=(T*)(((uintptr_t)ptr+(align-1)) & ~(uintptr_t)(align-1));
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::RegisterSemanticRange(
++      data, static_cast<size_t>(c) * sizeof(T),
++      static_cast<size_t>(align));
++#endif
+ }
+ 
+ // Squash returns p = 1/(1 + exp(-d)), d scaled by 8 bits, p scaled by 12 bits
+diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
+--- a/src/coder/encoder.cpp
++++ b/src/coder/encoder.cpp
+@@ -1,5 +1,9 @@
+ #include "encoder.h"
+ 
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++#include "../models/gamma-full-identity-observer.h"
++#endif
++
+ #ifdef KH_TRACE
+ #include <cmath>
+ #include <cstring>
+@@ -40,6 +44,9 @@ Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
+   }
+ #endif
+ #endif
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::Begin(x1_, x2_, out_.size());
++#endif
+ }
+ 
+ #ifdef KH_TRACE
+@@ -223,6 +230,9 @@ void Encoder::Encode(int bit) {
+                          p_->kh_m1raw_, p_->kh_override_);
+   }
+ #endif
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::ObserveProbability(p);
++#endif
+   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
+       (((x2_ - x1_) & 0xffff) * p >> 16);
+   if (bit) {
+@@ -297,6 +307,9 @@ void Encoder::EndTraceByte() {
+     }
+   }
+ #endif
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::CompletedByte(x1_, x2_, out_.size());
++#endif
+ }
+ 
+ void Encoder::Flush() {
+@@ -309,6 +322,9 @@ void Encoder::Flush() {
+ 
+   auto* data = reinterpret_cast<const char*>(out_.data());
+   os_->write(data, out_.size());
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::Finish(x1_, x2_, out_.size());
++#endif
+ #ifdef KH_TRACE
+   if (kh_opened_) {
+     if (kh_res_f_) { std::fclose(kh_res_f_); kh_res_f_ = nullptr; }
+diff --git a/src/runner.cpp b/src/runner.cpp
+--- a/src/runner.cpp
++++ b/src/runner.cpp
+@@ -13,5 +13,9 @@
+ #include "predictor.h"
+ 
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++#include "models/gamma-full-identity-observer.h"
++#endif
++
+ #include "readalike_prepr/article_reorder.h"
+ #include "readalike_prepr/self_extract.h"
+ #include "readalike_prepr/phda9_preprocess.h"
+@@ -167,13 +171,13 @@ void Compress(unsigned long long input_bytes, std::ifstream* is,
+     if (got == 0) break;
+     for (size_t i = 0; i < got; ++i) {
+       unsigned char c = static_cast<unsigned char>(buffer[i]);
+-#ifdef KH_TRACE
++#if defined(KH_TRACE) || defined(GAMMA_FULL_IDENTITY_OBSERVER)
+       e.BeginTraceByte(pos, c, 0);
+ #endif
+       for (int j = 7; j >= 0; --j) {
+         e.Encode((c>>j)&1);
+       }
+-#ifdef KH_TRACE
++#if defined(KH_TRACE) || defined(GAMMA_FULL_IDENTITY_OBSERVER)
+       e.EndTraceByte();
+ #endif
+       if (pos % percent == 0) {
+@@ -265,6 +269,10 @@ bool RunCompression(bool enable_preprocess, const std::string& input_path,
+     return false;
+   }
+ 
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::CopyFileFromEnvironment(
++      "GAMMA_FULL_IDENTITY_TRANSFORMED_INPUT", temp_path.c_str());
++#endif
+   if (std::getenv("FX_PREPARE_ONLY")) {
+     printf("\nprepare-only: original_input_bytes=%llu ready_stream_bytes=%zu\n",
+         *input_bytes, getFileSize(temp_path));
+@@ -360,1 +368,5 @@ bool RunDecompression(const std::string& input_path,
++#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++  ::gamma_full_identity::CopyFileFromEnvironment(
++      "GAMMA_FULL_IDENTITY_TRANSFORMED_OUTPUT", temp_path.c_str());
++#endif
+ #ifndef KH_ENCODE_ONLY

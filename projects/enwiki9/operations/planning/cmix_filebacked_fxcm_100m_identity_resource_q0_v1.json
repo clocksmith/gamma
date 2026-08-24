@@ -4,18 +4,18 @@
   "revision": 1,
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent_id": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
-  "operational_status": "prospective_unimplemented_waiting_for_qm8_terminalization",
+  "operational_status": "prospective_observer_source_sealed_runner_unimplemented_waiting_for_qm8_terminalization",
   "execution_authorized": false,
   "purpose": "Qualify q1 for a later full-corpus parent run by combining exact 100M parent preservation with phase-resolved resource headroom evidence, without claiming compression improvement.",
   "receipt_schema": {
     "path": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource.schema.json",
-    "sha256": "44c81546ac0aeef4056506c29c0e06e884dbfe23073050c5c069fd7cafc2ed77"
+    "sha256": "1cd47e338618dd16d124fd455a282647856d35a00ecf5aa0d96d2cd571e0b76d"
   },
   "independent_verification": {
     "schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json",
     "schema_sha256": "43991c9ec64fdf787e0ba15e5e2491ccbc7e9542df066c5d12e9bb933f263c3f",
     "verifier": "tools/cmix_filebacked_fxcm_100m_identity_resource_verify.py",
-    "verifier_sha256": "1b78fd9ec4eb9f5687a110d0aab9025a1b58b8974cadc4c411857f42499d09b4"
+    "verifier_sha256": "641ae0839de0afaa672864f53759fd05c5028d0ba15029283a94a877993a33c4"
   },
   "population": {
     "selection": "canonical enwik9 opening prefix from byte zero",
@@ -49,6 +49,18 @@
       "resource_authority": true
     }
   ],
+  "identity_observer_source": {
+    "program": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/meta.json",
+    "program_sha256": "4d9d96b23032adf1858512b80eb2fbb69f3c29b06142bf2aa5226b9910d56fb9",
+    "header": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/gamma-full-identity-observer.h",
+    "header_sha256": "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515",
+    "patch": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/full-identity-observer.patch",
+    "patch_sha256": "b86fa8b3a20d1628ad4d257318c3a27e42489189ff52510ba5ca46a9c4fc8431",
+    "compile_definition": "GAMMA_FULL_IDENTITY_OBSERVER=1",
+    "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; no observer build or execution receipt exists.",
+    "runtime_activation": "GAMMA_FULL_IDENTITY_DIR must name an existing absolute output directory; absent activation leaves packaging/helper encoder runs observationally disabled.",
+    "release_authority_excluded": true
+  },
   "identity_observer": {
     "post_head_probability": "Online SHA-256 of each exact uint16 probability after KhBitLstm32Head::Adjust and immediately before arithmetic range split; calibrate unchanged instrumentation against both retained 10M digests.",
     "coder_checkpoints": "Hash low/high range state, pending output state, coded-byte count, modeled-byte index, and decoded history at frozen checkpoints.",
