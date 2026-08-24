@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
 import { mergeContent } from "./merge.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
@@ -7,6 +7,7 @@ const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
 const checkOnly = args.includes("--check");
 const validateOnly = args.includes("--validate");
+const retiredRuntimeDirectory = resolve(projectRoot, "dist/runtime/generated");
 
 function insideProject(path) {
   return path === projectRoot || path.startsWith(`${projectRoot}${sep}`);
@@ -186,6 +187,12 @@ if (validateOnly) {
     }
     if (actual !== artifact.output) stale.push(artifact.target);
   }
+  try {
+    await access(retiredRuntimeDirectory);
+    stale.push("dist/runtime/generated/ (retired duplicate projection)");
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
   if (stale.length) {
     throw new Error(
       `Generated content drift detected:\n${stale.map((path) => `- ${path}`).join("\n")}\n` +
@@ -196,6 +203,7 @@ if (validateOnly) {
     `content-graph: verified ${artifacts.length} generated artifacts\n`
   );
 } else {
+  await rm(retiredRuntimeDirectory, { recursive: true, force: true });
   for (const artifact of artifacts) {
     await mkdir(dirname(artifact.targetPath), { recursive: true });
     await writeFile(artifact.targetPath, artifact.output);

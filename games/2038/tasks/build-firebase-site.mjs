@@ -129,11 +129,13 @@ ${entries.map(pageListItem).join("\n")}
     .join("\n");
 }
 
-export function buildIndexHtml({ identity, pages, library = false }) {
+export function buildIndexHtml({ identity, pages, library = false, worldCopy = null }) {
   const title = library ? "Mandate 2038 · Supporting material" : "Mandate 2038 · Default Game Play Kit";
   const introduction = library
     ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
-    : "The four documents required to set up and play Default Game.";
+    : worldCopy?.box
+      ? `${worldCopy.box.frontStrapline} ${worldCopy.box.shortPitch}`
+      : "The four documents required to set up and play Default Game.";
   const routeLink = library
     ? '<p><a href="../">Return to the Default Game Play Kit.</a></p>'
     : "";
@@ -433,7 +435,15 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     resolve(docsSource, "index.html"),
     resolve(outputRoot, "index.html")
   );
-  const libraryHtml = buildIndexHtml({ identity, pages: libraryPages, library: true });
+  const publishedWorldCopy = JSON.parse(
+    await readFile(resolve(projectRoot, "dist/runtime/world-copy.json"), "utf8")
+  );
+  const libraryHtml = buildIndexHtml({
+    identity,
+    pages: libraryPages,
+    library: true,
+    worldCopy: publishedWorldCopy
+  });
   await mkdir(resolve(outputRoot, "library"), { recursive: true });
   await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);
   const manifest = {

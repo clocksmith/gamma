@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.11-test`
+**Rules reference:** `0.8.0-rc.12-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.11-test` test:
+controlled `0.8.0-rc.12-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.10` implements `0.8.0-rc.11-test` under engine coverage
+Executable game `0.14.11` implements `0.8.0-rc.12-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -244,8 +244,17 @@ Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract.
 
-Candidate `0.8.0-rc.11-test` changes no physical mechanic from rc.10.
-Executable `0.14.10` preserves every stable Headline and Program ID, rules
+Candidate `0.8.0-rc.12-test` changes no physical mechanic from rc.11.
+Executable `0.14.11` preserves every stable component ID and rule while making
+the Thematic Content Bible the sole lore authority. The former scratchpad's
+placement decisions, research boundaries, and retained backlog now live in the
+Bible; the parallel source and orphaned rendered page are removed. All twelve
+deferred Tactics, twelve reserve Specialists, and eighteen Secret Objectives
+now express the same four-Era causal history without entering baseline play.
+The playable browser and documentation index use the current box premise.
+
+Historical candidate `0.8.0-rc.11-test` changed no physical mechanic from
+rc.10. Executable `0.14.10` preserved every stable Headline and Program ID, rules
 effect, profile boundary, Era count, card count, and unlock timing while
 completing the selected four-Era narrative across the world primer, endings,
 Programs, Mandates, faction surfaces, companions, and published galleries. The
