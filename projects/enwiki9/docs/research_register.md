@@ -1,5 +1,43 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - router v4 prevents a false WIKI-PDA retirement
+
+A cross-check of the next scientific gate found that WIKI-PDA v2 still used
+`4,079,243` complete correct bytes as an "absolute eight-bit ceiling." That is
+not a valid impossibility test. CMIX's actual-bit probability floor bounds
+parent surprisal by 16 bits per bit, so one active byte has at most 128 bits,
+or 16 bytes, of optimistic leverage. Complete-byte correctness is also not
+necessary: a byte-level miss can share correct leading bits with truth. The
+valid opportunity-volume screen for the frozen `4,079,243`-byte gross-gain
+requirement is therefore `ceil(4,079,243 / 16) = 254,953` D-active bytes.
+
+The v2 scanner is still useful because it already emits globally and by third
+the exact D/R/S/N active and correct counts, matched opportunity identities,
+causal-offset counters, and K/D transition digests. Its parser, stack,
+transition table, controls, and source remain unchanged and unexecuted. What
+is revoked is only v2's terminal decision authority: it may not run as the
+scientific gate and may not retire WIKI-PDA because complete correct bytes are
+below `4,079,243`.
+
+The static futility audit authorizes exactly one correction-only
+`wiki_pda_structural_replay_ceiling_q0_v3`. It must preserve the v2 scientific
+transition, require at least `254,953` matched active bytes, positive aligned
+correct bytes in every third, strict D-over-R/S/N third margins, duplicate
+receipts, causal identities, and resources. Passing authorizes only an exact
+retained-parent probability/donor-surprise trace. Active or correct counts
+remain zero-credit and cannot establish archive gain.
+
+`evidence_conditioned_mutation_router_v4` now encodes that correction, rebinds
+the future midpoint observation to the compositional v6 proof identity, adds
+the already-frozen WIKI-SCHEMA-VM and FOSSIL-MATCH ladders, and makes the
+WIKI-LOOM source audit genuinely dormant. WIKI-LOOM can be audited only after
+q1 qualifies, CMIX adaptation/open NNCP/WIKI-PDA terminalize subscale, and the
+two already-frozen information-source families are terminally classified.
+None of these static corrections activates source, runs a scan, changes qm8,
+or creates compression, authorship, or objective credit. Evidence:
+`operations/planning/wiki_pda_structural_replay_ceiling_q0_v2_futility_audit_q0_v1.json`
+and `operations/planning/evidence_conditioned_mutation_router_v4.json`.
+
 ## 2026-08-24 - midpoint v6 freezes a bounded compositional ABI and fail-closed receipts
 
 The compositional-boundary successor now has a fixed typed layout, binary ABI,
@@ -1606,8 +1644,9 @@ The [`design`](../operations/planning/wiki_loom_shared_state_lstm_q0_v1.json),
 [`experiment`](../operations/adaptive/experiments/wiki_loom_shared_state_lstm_q0_v1.json),
 and dependency-dormant proposal are schema-valid and hash-bound. No source,
 compiled causal closure, run, probability, archive, inverse, saving, or score
-exists. Router revision 4 authorizes a source audit only if the three current
-scientific families all terminalize subscale and q1 first qualifies. WIKI-LOOM
+exists. Router revision 4 authorizes a source audit only after q1 qualifies,
+CMIX adaptation/open NNCP/WIKI-PDA terminalize subscale, and the already-frozen
+WIKI-SCHEMA and FOSSIL-MATCH routes are terminally classified. WIKI-LOOM
 therefore has zero credit and does not delay the current q1, WIKI-PDA,
 WIKI-SCHEMA, FOSSIL-MATCH, or MIDAS order.
 
