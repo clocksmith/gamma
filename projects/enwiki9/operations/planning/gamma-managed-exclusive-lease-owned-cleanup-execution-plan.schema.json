@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-execution-plan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schema", "artifact_id", "revision", "candidate_id",
+    "operational_status", "execution_authorized", "claim_authority",
+    "candidate", "contracts", "implementation", "schemas", "runtime",
+    "qm8_terminal_dependency", "runtime_configuration", "command_template",
+    "promotion_condition", "kill_condition", "archive_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "gamma-managed-exclusive-lease-owned-cleanup-execution-plan.schema.json"},
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-execution-plan.v1"},
+    "artifact_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1_execution"},
+    "revision": {"const": 1},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "operational_status": {"const": "frozen_waiting_for_qm8_terminal_receipt_and_released_lane"},
+    "execution_authorized": {"const": false},
+    "claim_authority": {"const": "infrastructure_only"},
+    "candidate": {"$ref": "#/$defs/referenceMap"},
+    "contracts": {"$ref": "#/$defs/referenceMap"},
+    "implementation": {"$ref": "#/$defs/referenceMap"},
+    "schemas": {"$ref": "#/$defs/referenceMap"},
+    "runtime": {"$ref": "#/$defs/referenceMap"},
+    "qm8_terminal_dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "required_schema", "candidate_id", "arm", "terminal_pass_may_be"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "required_schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"},
+        "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+        "arm": {"const": "a"},
+        "terminal_pass_may_be": {"type": "array", "prefixItems": [{"const": false}, {"const": true}], "items": false}
+      }
+    },
+    "runtime_configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python_executable", "cpu", "tree_rss_limit_kib",
+        "cgroup_evidence_limit_bytes", "cgroup_hard_limit_bytes",
+        "official_decimal_limit_kib", "temporary_disk_limit_bytes",
+        "maximum_logical_cpus", "cgroup_path", "result_root", "scratch_root",
+        "lease_path", "lock_path"
+      ],
+      "properties": {
+        "python_executable": {"const": "/usr/bin/python3.14"},
+        "cpu": {"const": 0},
+        "tree_rss_limit_kib": {"const": 131072},
+        "cgroup_evidence_limit_bytes": {"const": 380000000},
+        "cgroup_hard_limit_bytes": {"const": 10000000000},
+        "official_decimal_limit_kib": {"const": 9765625},
+        "temporary_disk_limit_bytes": {"const": 50000000},
+        "maximum_logical_cpus": {"const": 1},
+        "cgroup_path": {"type": "string", "minLength": 1},
+        "result_root": {"type": "string", "minLength": 1},
+        "scratch_root": {"type": "string", "minLength": 1},
+        "lease_path": {"type": "string", "minLength": 1},
+        "lock_path": {"type": "string", "minLength": 1}
+      }
+    },
+    "command_template": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+    "promotion_condition": {"type": "string", "minLength": 1},
+    "kill_condition": {"type": "string", "minLength": 1},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "referenceMap": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/reference"}
+    }
+  }
+}

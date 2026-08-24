@@ -241,6 +241,29 @@ CMIX, not the old `/dev/shm` placement error recurring. Exact payload,
 inverse, cleanup, runtime, and qualification remain unknown until terminal
 receipts exist.
 
+The ownership successor now also has a frozen post-qm8 execution closure,
+without executing the candidate. The coordinator requires the exact qm8 Arm-A
+terminal-receipt path, independently rejects any remaining qm8 or
+exclusive-lane controller process, and requires both canonical namespace names
+to be absent. A guarded worker then
+loads the sealed candidate manager by exact path, acquires the canonical lane,
+runs all 13 local controls in a child with a fixed environment, preserves a
+complete scratch-tree manifest, freezes terminal lease evidence, and releases
+the lane. The outer coordinator rederives the nine registered measurements and
+promotion gates from the controls and guard-v3 receipt. A separately bound
+verifier reopens the candidate revision and immutable blobs, every plan source,
+the dynamic qm8 terminal receipt, the scratch tree, phase-marker sequence,
+outer transition hash chain, exact result manifest, resource peaks, and
+zero-credit authority boundary. The execution plan remains explicitly waiting;
+no result directory or control receipt exists while qm8 owns the host.
+
+At the latest read-only sample the encode had advanced to `17.40%`. Cgroup
+current use was `8,999,227,392` bytes with the same `9,002,086,400`-byte peak;
+`memory.events.high` had reached `180,490`, while `max`, OOM, and OOM-kill
+remained zero. The split was about `2.55 GB` anonymous and `6.23 GB` file,
+including about `6.01 GB` mapped file state. This strengthens the same
+non-terminal attribution and does not qualify q1.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before

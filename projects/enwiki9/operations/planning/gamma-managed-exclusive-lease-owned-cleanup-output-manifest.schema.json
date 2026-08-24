@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-output-manifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "artifacts", "artifact_count",
+    "pre_manifest_exact_file_set_pass", "post_manifest_exclusions",
+    "preserved_scratch_root", "complete_result_artifacts_pass",
+    "claim_authority", "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-output-manifest.v1"},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "artifact_count": {"const": 13},
+    "pre_manifest_exact_file_set_pass": {"const": true},
+    "post_manifest_exclusions": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "output-manifest.json"},
+        {"const": "controls-verification.json"}
+      ],
+      "items": false
+    },
+    "preserved_scratch_root": {"type": "string", "minLength": 1},
+    "complete_result_artifacts_pass": {"const": true},
+    "claim_authority": {"const": "infrastructure_only"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "bytes", "sha256"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

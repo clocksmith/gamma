@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-decision.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "operational_status", "qm8_terminal_dependency",
+    "source_lock", "worker", "resource_guard", "outer_lease_verification",
+    "measurements", "gates", "verdict", "canonical_migration_authorized",
+    "claim_authority", "archive_authority", "promotion_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-decision.v1"},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "operational_status": {"const": "terminal"},
+    "qm8_terminal_dependency": {"type": "object"},
+    "source_lock": {"$ref": "#/$defs/artifact"},
+    "worker": {"type": "object"},
+    "resource_guard": {"$ref": "#/$defs/artifact"},
+    "outer_lease_verification": {"type": "object"},
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normalLifecyclePass", "foreignCollisionPreserved",
+        "managerCollisionPreserved", "substitutionControlsRejected",
+        "partialFailureOccupied", "schemaAndTransitionIdentityPass",
+        "repeatIdentityPass", "maximumTreeRssKiB", "maximumCgroupMemoryBytes"
+      ],
+      "properties": {
+        "normalLifecyclePass": {"type": "boolean"},
+        "foreignCollisionPreserved": {"type": "boolean"},
+        "managerCollisionPreserved": {"type": "boolean"},
+        "substitutionControlsRejected": {"type": "boolean"},
+        "partialFailureOccupied": {"type": "boolean"},
+        "schemaAndTransitionIdentityPass": {"type": "boolean"},
+        "repeatIdentityPass": {"type": "boolean"},
+        "maximumTreeRssKiB": {"type": "integer", "minimum": 0},
+        "maximumCgroupMemoryBytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "gates": {"type": "object", "minProperties": 14, "additionalProperties": {"type": "boolean"}},
+    "verdict": {"enum": ["authorize_canonical_owned_cleanup_migration", "retire_exact_owned_cleanup_transaction"]},
+    "canonical_migration_authorized": {"type": "boolean"},
+    "claim_authority": {"const": "infrastructure_only"},
+    "archive_authority": {"const": false},
+    "promotion_authority": {"type": "boolean"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
