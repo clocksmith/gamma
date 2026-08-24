@@ -1,0 +1,130 @@
+{
+  "$schema": "gamma.enwiki9.sparse-exact-associativity-design.v1",
+  "artifact_id": "cmix_obias_sparse_exact_assoc14_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "title": "Sparse exact fourteen-way ContextMap3 associativity",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "role": "probability-identical semantic memory compaction for the authoritative CMIX parent",
+    "compression_byte_hypothesis": "none"
+  },
+  "bound_sources": {
+    "q1_fxcm_source": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/models/fxcmv1.cpp",
+      "sha256": "f634c53aad2c19e760d2ee1c84774e751b65dae07b28c07e6fe410314920c110",
+      "relevant_symbols": [
+        "E1<14,128>",
+        "ContextMap3::Init",
+        "ContextMap3::reset",
+        "ContextMap3::mix"
+      ]
+    },
+    "prior_pooled_overflow_theorem": {
+      "path": "docs/fxcm_pooled_overflow_solution.md",
+      "sha256": "5079020a4199fc923f33f3bbfc1249477b5b45b2090ee2d406ea12509e8a2045",
+      "relationship": "The theorem warns that a fixed private-plus-global-pool layout strands capacity. This design avoids that false inference by allocating one complete four-slot overflow record per owning bucket on first demand, with no fixed global capacity ceiling."
+    },
+    "fixed_bucket_packing_theorem": {
+      "path": "docs/fxcm_bucket_packing_solution.md",
+      "sha256": "c558c82460bed6e6a0f92a3e5723b2fe5b270989f1c91077f4e9385a66904ac8",
+      "relationship": "The 96-byte ten-way base geometry is reused, but the logical predictor remains fourteen-way through sparse overflow."
+    }
+  },
+  "parent_geometry": {
+    "context_map3_instances": 41,
+    "semantic_bucket_count": 41664640,
+    "logical_ways_per_bucket": 14,
+    "bytes_per_bucket": 128,
+    "logical_table_bytes": 5333073920,
+    "allocated_bytes_including_128_alignment_elements_per_instance": 5333745664,
+    "record_layout_bytes": {
+      "checksums_14x_u16": 28,
+      "recent_indexes": 1,
+      "bit_history_14x7": 98,
+      "padding": 1
+    }
+  },
+  "sparse_representation": {
+    "base_record_bytes": 96,
+    "base_record_layout_bytes": {
+      "checksums_10x_u16": 20,
+      "recent_indexes": 1,
+      "bit_history_10x7": 70,
+      "overflow_index_plus_one_u32": 4,
+      "reserved": 1
+    },
+    "base_allocated_bytes_including_alignment_elements": 4000309248,
+    "static_bytes_released_before_overflow": 1333436416,
+    "overflow_record_bytes": 36,
+    "overflow_record_layout_bytes": {
+      "checksums_slots_10_through_13": 8,
+      "bit_history_slots_10_through_13": 28
+    },
+    "overflow_allocation": {
+      "records_per_chunk": 4096,
+      "chunk_bytes": 147456,
+      "chunk_pages_at_4096_bytes": 36,
+      "handle_rule": "overflow_index_plus_one == 0 means no record; otherwise subtract one, use high bits as the stable chunk index and low 12 bits as the record index",
+      "maximum_fixed_chunk_directory_bytes": 81392,
+      "maximum_cross_instance_tail_waste_bytes": 6044220,
+      "pointer_stability": "Chunks never move or free while coding; cp and runp may point into either the base record or an overflow chunk."
+    },
+    "exact_allocated_bytes_equation": "4000309248 + 81392 + sum_i(ceil(O_i/4096) * 147456)",
+    "conservative_saving_equation": "1333436416 - 81392 - 36*O - 6044220, where O=sum_i O_i",
+    "engineering_reduction_gate": {
+      "minimum_peak_tree_rss_reduction_kib": 262144,
+      "conservative_maximum_overflowed_buckets": 29413204,
+      "conservative_maximum_overflow_fraction": 0.7059512334679959
+    }
+  },
+  "logical_equivalence_contract": [
+    "Slots retain the parent indexes 0 through 13; indexes 0 through 9 reside in the base and indexes 10 through 13 reside in the optional owned overflow record.",
+    "An absent overflow record represents four exactly zero parent slots.",
+    "The overflow record is allocated and zeroed exactly when the parent transition first selects a slot from 10 through 13.",
+    "The recent0 fast path, complete lowest-index checksum match, recent0/recent1 protection, strict-lowest-priority victim scan, keep bits, state update, run model, and tie order are identical to the parent over the logical fourteen slots.",
+    "Allocation handles, virtual addresses, chunk boundaries, filenames, page residency, and fault order are excluded from predictor state.",
+    "Encoder and decoder observe the same prior bytes and therefore allocate the same logical overflow record before the same write. Induction then requires identical logical table state, integer probabilities, coder intervals, payload, and inverse."
+  ],
+  "matched_arms": {
+    "P": "sealed q1 parent E1<14,128>",
+    "K": "P with count-only overflow-demand observation and no predictor write",
+    "D": "sparse exact fourteen-way representation",
+    "C": "plain E1<10,96> compact control with no overflow; zero parent-identity authority"
+  },
+  "activation": {
+    "blocked_while": "cmix_filebacked_fxcm_full_a_qm8_v1 or any descendant owns the full-1G lane or managed lease",
+    "authorize_only_if": [
+      "qm8 terminalizes with exact semantics but misses the 9,000,000 KiB engineering target",
+      "or the later exact-package runtime gate attributes failure to q1 reclaim/writeback pressure"
+    ],
+    "suppression_rule": "If q1 passes exact A/B memory and exact-package runtime with sufficient adaptation headroom, retain q1 and do not build this correction merely because its static bound is attractive."
+  },
+  "future_gate_ladder": [
+    "source-level exhaustive get/update equivalence over empty, hit, checksum-collision, every victim index, both protected indexes, overflow allocation, reset, and chunk-boundary cases",
+    "250KB P/K/D exact post-head integer-probability, coder-checkpoint, payload, inverse, and repeat identity",
+    "opening and distant cold-reset 10M P/K/D identity plus overflow counts, process-tree RSS, VmHWM, cgroup, I/O, scratch, and runtime",
+    "100M cumulative identity and resource gate",
+    "full-1G exact payload, archive, inverse, cleanup, memory, runtime, package, dependency, and independent-repeat proof"
+  ],
+  "kill_conditions": [
+    "Any logical state, probability, coder checkpoint, payload, inverse, or repeat mismatch retires D as an implementation failure; it cannot be relabeled a compression candidate.",
+    "A monotonic overflow count above the conservative bound before full scope proves the 262,144 KiB static reduction gate unreachable and retires this representation.",
+    "A full resource gate reducing peak tree RSS by less than 262,144 KiB or failing to reach at most 8,750,000 KiB retires this realization.",
+    "A runtime or package failure retires the exact sparse representation without changing base ways, overflow ways, record size, chunk size, or replacement semantics in a rescue."
+  ],
+  "proof_boundary": {
+    "source_candidate_created": false,
+    "execution_authorized": false,
+    "opportunity_measured": false,
+    "probability_identity_proved": false,
+    "payload_identity_proved": false,
+    "inverse_proved": false,
+    "memory_reduction_proved": false,
+    "runtime_eligible": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0,
+    "hutter_prize_objective_achieved": false
+  }
+}
