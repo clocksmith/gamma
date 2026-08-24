@@ -1,0 +1,200 @@
+{
+  "schema": "gamma.enwiki9.cmix-obias-midpoint-source-overlay.v1",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4_source_overlay_q0_v1",
+  "generated_utc": "2026-08-24T14:26:40Z",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+  "operational_status": "review_only_dormant_non_materialized",
+  "scientific_verdict": null,
+  "candidate_tree_exists": false,
+  "build_exists": false,
+  "archive_observed": false,
+  "execution_authority": false,
+  "score_credit_bytes": 0,
+  "gamma_compression_credit_bytes": 0,
+  "authority": {
+    "activation_route": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_activation.json",
+      "sha256": "7c422c81f32686cdb04ceb254898b96f55bd2e7d5a8915418b27a91badaf1e8a"
+    },
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v4.json",
+      "sha256": "03196a210101a5e6527a8d92d53a3d162a4ac2df7242a8aaf14872fea6f68943"
+    },
+    "semantic_plan": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+      "sha256": "2f91139df7f3de8fcf05692078073b369c215a627156d74652841be5193514f0"
+    },
+    "mechanism_ir": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.mechanism-ir.json",
+      "sha256": "f53c22d83ed03c28ad5c7c0f41526879ee189e746224f214445b3338d4070de0"
+    },
+    "activation_requirement": "The proposal must first pass terminal_parent_qualification_v3 exactly as frozen in the activation route. This review overlay cannot activate, materialize, build, or execute itself."
+  },
+  "sealed_parent": {
+    "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+    "source_root": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source",
+    "program_lock_verification": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json",
+      "sha256": "fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149"
+    },
+    "required_base_files": [
+      {
+        "path": "makefile",
+        "sha256": "41b8fe433d08c1047e8a702c5bbe3303c7c12076fb53f0741c365972ac3f83a2"
+      },
+      {
+        "path": "src/mixer/lstm-layer.h",
+        "sha256": "20b556fadd6d51673085288736837710b184f24936223138b0a9dae53700153f"
+      },
+      {
+        "path": "src/mixer/lstm-layer.hpp",
+        "sha256": "d2995fd0ddb3c36c20fdbe7bb67638e2bfe64fa882d61edd3ebab5a8c70c658c"
+      },
+      {
+        "path": "src/mixer/lstm.h",
+        "sha256": "fb7be096545d2b6c8d0a7748c47b95e0b6fdf25a158d4bbbabe0f47de7e87b61"
+      },
+      {
+        "path": "src/mixer/lstm.hpp",
+        "sha256": "c1c3d6217662253eb8832a2bdd9d242a7873169bd43ad172e9b1d8a0bf4bb019"
+      }
+    ]
+  },
+  "review_overlay": {
+    "read_only_verifier": {
+      "path": "tools/cmix_obias_shadow_midpoint_oracle64_q0_v4_overlay_verify.py",
+      "sha256": "93a6a5968c65880804f9e38cbf04ff43ff4fe9e8e1361159d6fc9a9aded46063",
+      "writes_candidate_state": false
+    },
+    "application_patch": {
+      "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/integration.patch",
+      "sha256": "36421ecf395ed324425368bf37db1452217e0e73f8af410970a8d6b7bd5d2fb7",
+      "bytes": 5695,
+      "future_application": "git apply --whitespace=error-all"
+    },
+    "new_files": [
+      {
+        "source": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint-decls.inc",
+        "destination": "src/mixer/lstm-layer-midpoint-decls.inc",
+        "sha256": "0776f26d9b72e06518ea08c288cf57dbed669d004b35aac3d460b555beee017d",
+        "bytes": 2169
+      },
+      {
+        "source": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint.hpp",
+        "destination": "src/mixer/lstm-layer-midpoint.hpp",
+        "sha256": "47d89d3953ed1ec43081c599f465bbf1c8e5ba8c585350584d837809db699356",
+        "bytes": 21593
+      },
+      {
+        "source": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint-decls.inc",
+        "destination": "src/mixer/lstm-midpoint-decls.inc",
+        "sha256": "a9d4181ee2b2af7e255e47b649c65ef1e994f149c12697a408f4e7d0815c1982",
+        "bytes": 2083
+      },
+      {
+        "source": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint.hpp",
+        "destination": "src/mixer/lstm-midpoint.hpp",
+        "sha256": "780a2f2cd2215731968f8f7fb85cd930c63370b56eb1db3e3e1f3637efab3af4",
+        "bytes": 13322
+      }
+    ],
+    "total_review_bytes": 44862,
+    "official_package_measurement": false
+  },
+  "compile_and_arm_contract": {
+    "compile_gate": "KH_MIDPOINT_ORACLE",
+    "runtime_selector": "KH_MIDPOINT_ARM",
+    "accepted_values": [
+      "P",
+      "K",
+      "F",
+      "S"
+    ],
+    "default": "P",
+    "single_source_binary_required": true,
+    "invalid_value_policy": "abort before prediction"
+  },
+  "implemented_mechanism": {
+    "segment_events": 64,
+    "window_events": 32,
+    "native_horizon_events": 128,
+    "start_phases": [
+      0,
+      64
+    ],
+    "closure_phases": [
+      32,
+      96
+    ],
+    "first_adapted_prediction_offset": 33,
+    "capture": "Copy exact external auxiliary inputs, decoded symbols, normalized output rows, post-forward hidden features, and the compile-selected fp16/fp32 recurrent histories into dedicated local-32 buffers.",
+    "output_adjoint": "Reconstruct each event-time output matrix from the live burst base plus all absolute-phase pending rank-one factors, including phase-zero factors for the phase-64 window.",
+    "recurrent_update": "Run detached reverse local-32 BPTT with separate temporal adjoints, transposes, gradients, and scratch. F/S commit one donor-order Adam step; K applies identical row arithmetic to copies.",
+    "output_update": "After recurrent Adam, accumulate one source-order output SGD gradient. F/S commit and refresh fp16 shadows; K updates and refreshes detached rows.",
+    "replay": "Restore only hidden and per-layer cell state, replay the captured inputs with a history-free numerical clone of ForwardPass, preserve the closure byte's actual pending feature, then call ordinary Predict exactly once.",
+    "shifted_control": "S rotates the 32 aligned target associations by exactly 16 positions and changes no other source path or compute shape."
+  },
+  "write_surface": {
+    "dedicated_midpoint_state": [
+      "local-32 captured histories",
+      "output errors and adjoints",
+      "recurrent gradients and transposes",
+      "detached Adam/output control rows",
+      "start and closure dynamic snapshots",
+      "state-only replay input and activation scratch"
+    ],
+    "arm_f_s_live_writes": [
+      "Byte-LSTM recurrent dense and symbol masters",
+      "Byte-LSTM recurrent gamma and beta masters",
+      "corresponding first and second Adam moments",
+      "one LstmLayer update_steps_ increment per midpoint closure",
+      "recurrent fp16 dense shadows",
+      "Byte-LSTM output masters and fp16 output shadows",
+      "hidden_ and per-layer state_ through restore and state-only replay"
+    ],
+    "arm_k_live_writes": [
+      "hidden_ and per-layer state_ through restore and state-only replay, with mandatory bitwise closure-state equality before ordinary Predict",
+      "dedicated midpoint scratch followed by canonical clear"
+    ],
+    "forbidden_all_arms": [
+      "arithmetic coder state",
+      "mixer or SSE state",
+      "context tables",
+      "frontend or reversible transform state",
+      "ordinary Lstm layer_input_, output_, input_history_, h_hist_, err0_, native recurrent histories, gradient accumulators, or epoch counters",
+      "q1 file-backed allocations or the sealed parent tree"
+    ]
+  },
+  "resource_design_bound": {
+    "sealed_geometry": "V<=256, C=256, one layer, horizon=128",
+    "calculated_buffer_and_vector_payload_bytes_at_v_256": 4096192,
+    "conservative_live_allocation_bound_bytes": 5000000,
+    "frozen_incremental_live_ceiling_bytes": 268435456,
+    "measured": false
+  },
+  "static_review_assertions": [
+    "The integration patch passes exact no-fuzz git-apply checking against the five base hashes.",
+    "No whole-compressor or context-table checkpoint is allocated or copied.",
+    "The local backward path does not call ordinary BackwardPass or use its tape and optimizer scratch.",
+    "ReplayStateOnly contains no epoch advancement and no native-history write.",
+    "The closure hook occurs after target installation and before HHistRow/Predict.",
+    "P bypasses capture, closure, replay, and parameter update logic.",
+    "K uses detached recurrent/output masters and moments and requires bitwise rebuilt dynamic-state identity.",
+    "F and S use identical commit paths; only target_index changes for S."
+  ],
+  "unproved_until_post_activation_gates": [
+    "candidate materialization and complete source-difference closure",
+    "C++ compilation and warning audit",
+    "P probability/payload/archive identity",
+    "K bitwise state replay and complete future identity",
+    "F/S encoder-decoder synchronization and repeatability",
+    "any arithmetic archive gain",
+    "runtime, measured memory, scratch, dependency, inversion, package, and population qualification"
+  ],
+  "claim_boundary": [
+    "This artifact records implementation text and static design facts only.",
+    "It does not activate the proposal or authorize source materialization, compilation, synthetic fixtures, coder arms, or archives.",
+    "No q1 qualification fact is inferred from the live qm8 run.",
+    "No midpoint mechanism has compressed any byte and all objective credits remain zero."
+  ]
+}

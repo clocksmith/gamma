@@ -1,0 +1,157 @@
+diff --git a/makefile b/makefile
+--- a/makefile
++++ b/makefile
+@@ -27,6 +27,12 @@ ifdef KH_OBIAS
+ override CFLAGS_DEFINES += -DKH_OBIAS
+ endif
+-
++# KH_MIDPOINT_ORACLE: decoder-synchronized local-32 Byte-LSTM oracle.
++# One source/binary serves P/K/F/S; KH_MIDPOINT_ARM selects the exact arm.
++# The source is materialized only after the bound q1 v3 qualification gate.
++ifdef KH_MIDPOINT_ORACLE
++override CFLAGS_DEFINES += -DKH_MIDPOINT_ORACLE
++endif
++
+ # Decode-only build (exp_split_decoder / win4). When set, main()'s encode
+ # dispatch (-s/-c/-n/-e/-h/-x) and its forward-transform call graph are compiled
+ # out so --gc-sections drops them, yielding the smaller binary that archive9
+diff --git a/src/mixer/lstm-layer.h b/src/mixer/lstm-layer.h
+--- a/src/mixer/lstm-layer.h
++++ b/src/mixer/lstm-layer.h
+@@ -165,4 +165,7 @@ class LstmLayer {
+   void BackwardPass(NeuronLayer& neurons, const float* input, int epoch,
+       int layer, int input_symbol, float* hidden_error);
++#ifdef KH_MIDPOINT_ORACLE
++#include "lstm-layer-midpoint-decls.inc"
++#endif
+ };
+ #include "lstm-layer.hpp"
+diff --git a/src/mixer/lstm-layer.hpp b/src/mixer/lstm-layer.hpp
+--- a/src/mixer/lstm-layer.hpp
++++ b/src/mixer/lstm-layer.hpp
+@@ -522,4 +522,8 @@ inline void LstmLayer::BackwardPass(NeuronLayer& neurons, const float* input,
+     Adam(p, &neurons.beta_u_[0], &neurons.beta_m_[0], &neurons.beta_v_[0],
+         &neurons.beta_[0], num_cells_);
+   }
+ }
++
++#ifdef KH_MIDPOINT_ORACLE
++#include "lstm-layer-midpoint.hpp"
++#endif
+diff --git a/src/mixer/lstm.h b/src/mixer/lstm.h
+--- a/src/mixer/lstm.h
++++ b/src/mixer/lstm.h
+@@ -88,6 +88,9 @@ class Lstm {
+   unsigned int num_cells_, num_layers_, epoch_, horizon_, input_size_,
+       output_size_, hidden_size_;
+   int last_input_ = -1;
++#ifdef KH_MIDPOINT_ORACLE
++#include "lstm-midpoint-decls.inc"
++#endif
+ };
+ #include "lstm.hpp"
+ #endif
+diff --git a/src/mixer/lstm.hpp b/src/mixer/lstm.hpp
+--- a/src/mixer/lstm.hpp
++++ b/src/mixer/lstm.hpp
+@@ -53,4 +53,7 @@ inline Lstm::Lstm(unsigned int input_size, unsigned int output_size, unsigned int
+     layers_.emplace_back(layer_input_len_[i] + output_size, input_size_,
+         output_size_, num_cells, horizon, gradient_clip, learning_rate);
+   }
++#ifdef KH_MIDPOINT_ORACLE
++  InitMidpointOracle();
++#endif
+ }
+@@ -165,4 +168,9 @@ inline const float* Lstm::Perceive(unsigned int input) {
+ inline const float* Lstm::Perceive(unsigned int input) {
++#ifdef KH_MIDPOINT_ORACLE
++  if (midpoint_modeled_events_ % horizon_ != epoch_) {
++    MidpointAbort("modeled-event/native-epoch disagreement");
++  }
++#endif
+   int last_epoch = epoch_ - 1;
+   if (last_epoch == -1) last_epoch = horizon_ - 1;
+   int old_input = input_history_[last_epoch];
+@@ -187,6 +196,18 @@ inline const float* Lstm::Perceive(unsigned int input) {
+     // pending updates into W before recording the new burst's first update.
+     ApplyOutputUpdates();
+   }
++#ifdef KH_MIDPOINT_ORACLE
++  if (midpoint_arm_ != kMidpointParent &&
++      (epoch_ == 0 || epoch_ == kMidpointSegment)) {
++    MidpointBeginSegment();
++  }
++  bool midpoint_closure = false;
++  if (midpoint_arm_ != kMidpointParent &&
++      (epoch_ == kMidpointRows ||
++       epoch_ == kMidpointSegment + kMidpointRows)) {
++    midpoint_closure = MidpointApplyClosure();
++  }
++#endif
+   // Record this byte's output-layer SGD step as a pending rank-1 factor
+   // instead of materializing a new weight-matrix snapshot: error row =
+   // OutputRow(last_epoch) with the just-arrived byte as target (copied into
+@@ -199,11 +220,30 @@ inline const float* Lstm::Perceive(unsigned int input) {
+     for (unsigned int i = 0; i < output_size_; ++i) e0[i] = outl[i];
+     e0[input] -= 1.0f;
+   }
++#ifdef KH_MIDPOINT_ORACLE
++  if (midpoint_closure && midpoint_preserve_pending_feature_) {
++    memcpy(HHistRow(epoch_), midpoint_closure_hidden_.get(),
++        soh_ * sizeof(float));
++  } else {
++    memcpy(HHistRow(epoch_), hidden_.get(), soh_ * sizeof(float));
++  }
++#else
+   memcpy(HHistRow(epoch_), hidden_.get(), soh_ * sizeof(float));
+-  return Predict(input);
++#endif
++  const float* result = Predict(input);
++#ifdef KH_MIDPOINT_ORACLE
++  ++midpoint_modeled_events_;
++  if (midpoint_arm_ != kMidpointParent && midpoint_closure) {
++    MidpointClearScratch();
++  }
++#endif
++  return result;
+ }
+-
+ inline const float* Lstm::Predict(unsigned int input) {
++#ifdef KH_MIDPOINT_ORACLE
++  const int midpoint_local = midpoint_arm_ == kMidpointParent
++      ? -1 : MidpointBeginCapture(input);
++#endif
+   for (unsigned int i = 0; i < layers_.size(); ++i) {
+     const float* start = hidden_.get() + i * num_cells_;
+     float* row = LayerInputRow(epoch_, i);
+@@ -211,5 +252,10 @@ inline const float* Lstm::Predict(unsigned int input) {
+     std::copy(start, start + num_cells_, row + input_size_);
+     layers_[i].ForwardPass(row, input, hidden_.get(), i * num_cells_);
++#ifdef KH_MIDPOINT_ORACLE
++    if (midpoint_local >= 0) {
++      layers_[i].MidpointCaptureRow(midpoint_local, epoch_, row);
++    }
++#endif
+     if (i < layers_.size() - 1) {
+       std::copy(start, start + num_cells_,
+           LayerInputRow(epoch_, i + 1) + num_cells_ + input_size_);
+@@ -263,6 +302,11 @@ inline const float* Lstm::Predict(unsigned int input) {
+   for (unsigned int i = 0; i < output_size_; ++i) {
+     out[i] /= total;
+   }
++#ifdef KH_MIDPOINT_ORACLE
++  if (midpoint_local >= 0) {
++    MidpointFinishCapture(midpoint_local);
++  }
++#endif
+   int epoch = epoch_;
+   ++epoch_;
+   if (epoch_ == horizon_) epoch_ = 0;
+@@ -270,3 +314,7 @@ inline const float* Lstm::Predict(unsigned int input) {
+   last_input_ = input;
+   return OutputRow(epoch);
+ }
++
++#ifdef KH_MIDPOINT_ORACLE
++#include "lstm-midpoint.hpp"
++#endif
