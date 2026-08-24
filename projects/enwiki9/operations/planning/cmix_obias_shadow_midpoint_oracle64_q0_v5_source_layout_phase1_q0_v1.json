@@ -1,0 +1,277 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_observability_abi_q0_v1.json",
+      "required_evidence": "Exact 21,994-byte observability ABI with SHA-256 8c0e4d8f806e5e35880f9517ecc48ac6724e64926f08c26268fec1f62ccb0f07."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/predictor.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 05b72fed2697d9db1bd92ecd0d69a49220513cf2af5d639b772ea8af551a20f6."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 4fd473cfbb8d88ddd7a8c466622fdaa0bee75338cc54735960c9446ee99aeb94."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/byte-mixer.cpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 8e475594d488cf9bf47ff875b2064685bdae65b322e954a48493bafe6bb8b229."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/lstm.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 fb7be096545d2b6c8d0a7748c47b95e0b6fdf25a158d4bbbabe0f47de7e87b61."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/lstm.hpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 c1c3d6217662253eb8832a2bdd9d242a7873169bd43ad172e9b1d8a0bf4bb019."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/lstm-layer.h",
+      "required_evidence": "Exact sealed q1 source with SHA-256 20b556fadd6d51673085288736837710b184f24936223138b0a9dae53700153f."
+    },
+    {
+      "artifact": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source/src/mixer/lstm-layer.hpp",
+      "required_evidence": "Exact sealed q1 source with SHA-256 d2995fd0ddb3c36c20fdbe7bb67638e2bfe64fa882d61edd3ebab5a8c70c658c."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint-decls.inc",
+      "required_evidence": "Exact dormant v4 declaration overlay with SHA-256 a9d4181ee2b2af7e255e47b649c65ef1e994f149c12697a408f4e7d0815c1982."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint.hpp",
+      "required_evidence": "Exact dormant v4 implementation overlay with SHA-256 780a2f2cd2215731968f8f7fb85cd930c63370b56eb1db3e3e1f3637efab3af4."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint-decls.inc",
+      "required_evidence": "Exact dormant v4 declaration overlay with SHA-256 0776f26d9b72e06518ea08c288cf57dbed669d004b35aac3d460b555beee017d."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint.hpp",
+      "required_evidence": "Exact dormant v4 implementation overlay with SHA-256 47d89d3953ed1ec43081c599f465bbf1c8e5ba8c585350584d837809db699356."
+    },
+    {
+      "artifact": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/integration.patch",
+      "required_evidence": "Exact dormant v4 integration overlay with SHA-256 36421ecf395ed324425368bf37db1452217e0e73f8af410970a8d6b7bd5d2fb7."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v5",
+    "layout_phase": "byte_lstm_and_midpoint_complete_external_predictor_open",
+    "changed_semantic_axis": "observability_only",
+    "source_geometry": {
+      "vocabulary": 256,
+      "cells": 256,
+      "layers": 1,
+      "native_horizon": 128,
+      "midpoint_rows": 32,
+      "midpoint_segment": 64,
+      "layer_input_len": 513,
+      "sli": 528,
+      "hidden_size": 257,
+      "soh": 272,
+      "so": 256,
+      "she": 256,
+      "layer_constructor_input_size": 769,
+      "layer_dense_width": 513,
+      "layer_sdense": 528,
+      "layer_scell": 256,
+      "gate_symbol_width": 256,
+      "gate_transpose_rows": 257,
+      "simd_history_dtype": "binary16",
+      "compile_facts": [
+        "LSTM_NUM_CELLS=256",
+        "UPDATE_LIMIT=3000",
+        "SIMD_ACT_F16 is active for the bound native release target",
+        "one ByteMixer owns one Lstm(256,256,256,1,128,0.03,10)"
+      ]
+    },
+    "canonicalization": {
+      "leaf_bytes": 4096,
+      "float_rule": "Serialize finite IEEE-754 bits at the compile-selected width in little-endian order.",
+      "strided_slab_rule": "The interleaved NeuronLayer symt_ and dense_ slabs are exposed as separate source-order logical tensors. A visitor concatenates the selected w, u, m, or v row from each symbol or cell and never hashes intervening rows as part of that tensor.",
+      "padding_rule": "Include padded numeric lanes when a bound SIMD kernel reads, writes, copies, encodes, or accumulates them. Exclude allocator rounding, object padding, pointers, capacity, addresses, and inactive input_ptrs_ storage.",
+      "scalar_rule": "Enums and booleans are canonical uint8 values; signed last_input_ is bit-cast to uint32; all other integer scalars use their declared unsigned width.",
+      "ordering_rule": "Partition code, then the family order below, then gate order forget/input_node/output, then the row-major dimension order shown. This expansion produces contiguous ordinals beginning at zero in each partition."
+    },
+    "layout_families": {
+      "dynamic": [
+        {"names": ["lstm.hidden"], "dtype": "f32", "dimensions": [272], "logical_bytes": 1088, "leaves": 1, "source": "Lstm::hidden_"},
+        {"names": ["lstm.layer0.cell_state"], "dtype": "f32", "dimensions": [256], "logical_bytes": 1024, "leaves": 1, "source": "LstmLayer::state_"}
+      ],
+      "parameters": [
+        {"names": ["lstm.output.master"], "dtype": "f32", "dimensions": [256, 272], "logical_bytes_each": 278528, "leaves_each": 68, "source": "Lstm::output_layer_"},
+        {"names": ["lstm.output.shadow"], "dtype": "f16", "dimensions": [256, 272], "logical_bytes_each": 139264, "leaves_each": 34, "source": "Lstm::output_layer_h_"},
+        {"name_pattern": "lstm.layer0.{gate}.symbol_master", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [256, 256], "tensor_count": 3, "logical_bytes_each": 262144, "leaves_each": 64, "source": "NeuronLayer::symt_ w rows"},
+        {"name_pattern": "lstm.layer0.{gate}.dense_master", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [256, 528], "tensor_count": 3, "logical_bytes_each": 540672, "leaves_each": 132, "source": "NeuronLayer::dense_ w rows"},
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["gamma", "beta"], "dtype": "f32", "dimensions_each": [256], "tensor_count": 6, "logical_bytes_each": 1024, "leaves_each": 1, "source": "NeuronLayer gamma_/beta_"},
+        {"names": ["lstm.layer0.dense_shadow_fused"], "dtype": "f16", "dimensions": [256, 3, 528], "logical_bytes_each": 811008, "leaves_each": 198, "source": "LstmLayer::wdense3h_ in per-cell forget/input_node/output order"}
+      ],
+      "optimizer": [
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["symbol_m", "symbol_v"], "dtype": "f32", "dimensions_each": [256, 256], "tensor_count": 6, "logical_bytes_each": 262144, "leaves_each": 64, "source": "NeuronLayer::symt_ m/v rows"},
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["dense_m", "dense_v"], "dtype": "f32", "dimensions_each": [256, 528], "tensor_count": 6, "logical_bytes_each": 540672, "leaves_each": 132, "source": "NeuronLayer::dense_ m/v rows"},
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["gamma_m", "gamma_v", "beta_m", "beta_v"], "dtype": "f32", "dimensions_each": [256], "tensor_count": 12, "logical_bytes_each": 1024, "leaves_each": 1, "source": "NeuronLayer optimizer valarrays"},
+        {"names": ["lstm.layer0.update_steps"], "dtype": "u64", "dimensions": [1], "logical_bytes_each": 8, "leaves_each": 1, "source": "LstmLayer::update_steps_"}
+      ],
+      "ordinary_tape": [
+        {"names": ["lstm.input_history"], "dtype": "u8", "dimensions": [128], "logical_bytes_each": 128, "leaves_each": 1},
+        {"names": ["lstm.layer_input"], "dtype": "f32", "dimensions": [128, 1, 528], "logical_bytes_each": 270336, "leaves_each": 66},
+        {"names": ["lstm.output_tape"], "dtype": "f32", "dimensions": [128, 256], "logical_bytes_each": 131072, "leaves_each": 32},
+        {"names": ["lstm.hidden_error"], "dtype": "f32", "dimensions": [256], "logical_bytes_each": 1024, "leaves_each": 1},
+        {"names": ["lstm.hidden_history"], "dtype": "f32", "dimensions": [128, 272], "logical_bytes_each": 139264, "leaves_each": 34},
+        {"names": ["lstm.boundary_error"], "dtype": "f32", "dimensions": [256], "logical_bytes_each": 1024, "leaves_each": 1},
+        {"names": ["lstm.bptt_f"], "dtype": "f32", "dimensions": [129, 256], "logical_bytes_each": 132096, "leaves_each": 33},
+        {"names": ["lstm.bptt_g"], "dtype": "f32", "dimensions": [128, 128], "logical_bytes_each": 65536, "leaves_each": 16},
+        {"names": ["lstm.bptt_v"], "dtype": "f32", "dimensions": [128, 272], "logical_bytes_each": 139264, "leaves_each": 34},
+        {"names": ["lstm.update_scratch"], "dtype": "f32", "dimensions": [16, 272], "logical_bytes_each": 17408, "leaves_each": 5},
+        {"names": ["lstm.epoch", "lstm.last_input_bits"], "dtype": "u32", "dimensions": [1], "tensor_count": 2, "logical_bytes_each": 4, "leaves_each": 1},
+        {"names": ["lstm.layer0.state_error", "lstm.layer0.stored_error"], "dtype": "f32", "dimensions": [256], "tensor_count": 2, "logical_bytes_each": 1024, "leaves_each": 1},
+        {"names": ["lstm.layer0.epoch"], "dtype": "u32", "dimensions": [1], "logical_bytes_each": 4, "leaves_each": 1},
+        {"names": ["lstm.layer0.tanh_history", "lstm.layer0.input_gate_history", "lstm.layer0.last_state_history"], "dtype": "f16", "dimensions": [128, 256], "tensor_count": 3, "logical_bytes_each": 65536, "leaves_each": 16},
+        {"names": ["lstm.layer0.input_history"], "dtype": "f16", "dimensions": [128, 528], "logical_bytes_each": 135168, "leaves_each": 33},
+        {"names": ["lstm.layer0.scratch"], "dtype": "f32", "dimensions": [8, 256], "logical_bytes_each": 8192, "leaves_each": 2},
+        {"name_pattern": "lstm.layer0.{gate}.ivar", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [128], "tensor_count": 3, "logical_bytes_each": 512, "leaves_each": 1},
+        {"name_pattern": "lstm.layer0.{gate}.symbol_gradient", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [256, 256], "tensor_count": 3, "logical_bytes_each": 262144, "leaves_each": 64},
+        {"name_pattern": "lstm.layer0.{gate}.dense_gradient", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [256, 528], "tensor_count": 3, "logical_bytes_each": 540672, "leaves_each": 132},
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["gamma_gradient", "beta_gradient"], "dtype": "f32", "dimensions_each": [256], "tensor_count": 6, "logical_bytes_each": 1024, "leaves_each": 1},
+        {"name_pattern": "lstm.layer0.{gate}.error_history", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [128, 256], "tensor_count": 3, "logical_bytes_each": 131072, "leaves_each": 32},
+        {"name_pattern": "lstm.layer0.{gate}.{field}", "gate_order": ["forget", "input_node", "output"], "field_order": ["state_history", "norm_history"], "dtype": "f16", "dimensions_each": [128, 256], "tensor_count": 6, "logical_bytes_each": 65536, "leaves_each": 16},
+        {"name_pattern": "lstm.layer0.{gate}.transpose", "gate_order": ["forget", "input_node", "output"], "dtype": "f32", "dimensions_each": [257, 256], "tensor_count": 3, "logical_bytes_each": 263168, "leaves_each": 65}
+      ],
+      "midpoint": [
+        {"names": ["midpoint.arm", "midpoint.segment_active", "midpoint.preserve_pending_feature"], "dtype": "u8", "dimensions": [1], "tensor_count": 3, "logical_bytes_each": 1, "leaves_each": 1},
+        {"names": ["midpoint.segment_start", "midpoint.captured_rows"], "dtype": "u32", "dimensions": [1], "tensor_count": 2, "logical_bytes_each": 4, "leaves_each": 1},
+        {"names": ["midpoint.modeled_events", "midpoint.detached_sink", "midpoint.layer0.detached_sink"], "dtype": "u64", "dimensions": [1], "tensor_count": 3, "logical_bytes_each": 8, "leaves_each": 1},
+        {"names": ["midpoint.symbols", "midpoint.targets"], "dtype": "u32", "dimensions": [32], "tensor_count": 2, "logical_bytes_each": 128, "leaves_each": 1},
+        {"names": ["midpoint.start_hidden", "midpoint.closure_hidden", "midpoint.output_detached"], "dtype": "f32", "dimensions": [272], "tensor_count": 3, "logical_bytes_each": 1088, "leaves_each": 1},
+        {"names": ["midpoint.auxiliary"], "dtype": "f32", "dimensions": [32, 256], "logical_bytes_each": 32768, "leaves_each": 8},
+        {"names": ["midpoint.probability", "midpoint.error"], "dtype": "f32", "dimensions": [32, 256], "tensor_count": 2, "logical_bytes_each": 32768, "leaves_each": 8},
+        {"names": ["midpoint.feature", "midpoint.adjoint"], "dtype": "f32", "dimensions": [32, 272], "tensor_count": 2, "logical_bytes_each": 34816, "leaves_each": 9},
+        {"names": ["midpoint.pending"], "dtype": "f32", "dimensions": [128, 256], "logical_bytes_each": 131072, "leaves_each": 32},
+        {"names": ["midpoint.replay_input"], "dtype": "f32", "dimensions": [1, 528], "logical_bytes_each": 2112, "leaves_each": 1},
+        {"names": ["midpoint.output_gradient"], "dtype": "f32", "dimensions": [256, 272], "logical_bytes_each": 278528, "leaves_each": 68},
+        {"names": ["midpoint.output_detached_shadow"], "dtype": "f16", "dimensions": [272], "logical_bytes_each": 544, "leaves_each": 1},
+        {"names": ["midpoint.layer0.start_state", "midpoint.layer0.closure_state"], "dtype": "f32", "dimensions": [256], "tensor_count": 2, "logical_bytes_each": 1024, "leaves_each": 1},
+        {"names": ["midpoint.layer0.tanh_history", "midpoint.layer0.input_gate_history", "midpoint.layer0.last_state_history"], "dtype": "f16", "dimensions": [32, 256], "tensor_count": 3, "logical_bytes_each": 16384, "leaves_each": 4},
+        {"names": ["midpoint.layer0.input_history"], "dtype": "f16", "dimensions": [32, 528], "logical_bytes_each": 33792, "leaves_each": 9},
+        {"names": ["midpoint.layer0.gate_state", "midpoint.layer0.gate_norm"], "dtype": "f16", "dimensions": [3, 32, 256], "tensor_count": 2, "logical_bytes_each": 49152, "leaves_each": 12},
+        {"names": ["midpoint.layer0.ivar"], "dtype": "f32", "dimensions": [3, 32], "logical_bytes_each": 384, "leaves_each": 1},
+        {"names": ["midpoint.layer0.gate_error"], "dtype": "f32", "dimensions": [3, 32, 256], "logical_bytes_each": 98304, "leaves_each": 24},
+        {"names": ["midpoint.layer0.symbol_gradient"], "dtype": "f32", "dimensions": [3, 256, 256], "logical_bytes_each": 786432, "leaves_each": 192},
+        {"names": ["midpoint.layer0.dense_gradient"], "dtype": "f32", "dimensions": [3, 256, 528], "logical_bytes_each": 1622016, "leaves_each": 396},
+        {"names": ["midpoint.layer0.gamma_gradient", "midpoint.layer0.beta_gradient"], "dtype": "f32", "dimensions": [3, 256], "tensor_count": 2, "logical_bytes_each": 3072, "leaves_each": 1},
+        {"names": ["midpoint.layer0.temporal"], "dtype": "f32", "dimensions": [2, 256], "logical_bytes_each": 2048, "leaves_each": 1},
+        {"names": ["midpoint.layer0.transpose"], "dtype": "f32", "dimensions": [3, 257, 256], "logical_bytes_each": 789504, "leaves_each": 193},
+        {"names": ["midpoint.layer0.scratch"], "dtype": "f32", "dimensions": [8, 528], "logical_bytes_each": 16896, "leaves_each": 5},
+        {"names": ["midpoint.layer0.detached"], "dtype": "f32", "dimensions": [3, 528], "logical_bytes_each": 6336, "leaves_each": 2},
+        {"names": ["midpoint.layer0.detached_shadow"], "dtype": "f16", "dimensions": [528], "logical_bytes_each": 1056, "leaves_each": 1}
+      ]
+    },
+    "derived_totals": {
+      "dynamic": {"tensors": 2, "logical_bytes": 2112, "leaves": 2, "maximum_tree_nodes": 2, "maximum_digest_storage_bytes": 64},
+      "parameters": {"tensors": 15, "logical_bytes": 3643392, "leaves": 894, "maximum_tree_nodes": 1773, "maximum_digest_storage_bytes": 56736},
+      "optimizer": {"tensors": 25, "logical_bytes": 4829192, "leaves": 1189, "maximum_tree_nodes": 2353, "maximum_digest_storage_bytes": 75296},
+      "ordinary_tape": {"tensors": 47, "logical_bytes": 5231244, "leaves": 1295, "maximum_tree_nodes": 2543, "maximum_digest_storage_bytes": 81376},
+      "midpoint": {"tensors": 41, "logical_bytes": 4096163, "leaves": 1021, "maximum_tree_nodes": 2001, "maximum_digest_storage_bytes": 64032},
+      "five_partition_total": {"tensors": 130, "logical_bytes": 17802103, "leaves": 4401, "maximum_tree_nodes": 8672, "maximum_digest_storage_bytes": 277504},
+      "bound_rule": "maximum_tree_nodes is the sum over tensors of 2*leaves-1; actual pair-or-lone trees may use fewer nodes."
+    },
+    "source_write_map": [
+      {"source_methods": ["Lstm::Lstm", "LstmLayer::LstmLayer", "NeuronLayer::NeuronLayer", "Lstm::InitMidpointOracle", "LstmLayer::InitMidpointOracle"], "writes": ["dynamic", "parameters", "optimizer", "ordinary_tape", "midpoint allocation initialization"], "hook": "initial full visitor build before clear_refs"},
+      {"source_methods": ["Lstm::SetInput", "Lstm::Perceive", "Lstm::Predict", "Lstm::ComputeOutputBptt", "Lstm::ApplyOutputUpdates"], "writes": ["dynamic", "parameters", "ordinary_tape"], "hook": "soft-dirty physical-page scheduler plus typed visitor"},
+      {"source_methods": ["LstmLayer::LayerNorm", "LstmLayer::ForwardPass", "LstmLayer::BackwardPass outer", "LstmLayer::BackwardPass gate"], "writes": ["dynamic", "parameters", "optimizer", "ordinary_tape"], "hook": "soft-dirty physical-page scheduler plus typed visitor"},
+      {"source_methods": ["Lstm::MidpointBeginSegment", "Lstm::MidpointBeginCapture", "Lstm::MidpointFinishCapture", "Lstm::MidpointBuildOutputAdjoints", "Lstm::MidpointApplyOutputUpdate", "Lstm::MidpointReplayWindow", "Lstm::MidpointApplyClosure", "Lstm::MidpointClearScratch"], "writes": ["dynamic", "parameters in F/S", "ordinary_tape hidden_error only", "midpoint"], "hook": "inline update aggregates before clear plus soft-dirty physical-page scheduler"},
+      {"source_methods": ["LstmLayer::MidpointCaptureStart", "LstmLayer::MidpointCaptureClosure", "LstmLayer::MidpointCaptureRow", "LstmLayer::MidpointRestoreStart", "LstmLayer::MidpointBackward", "LstmLayer::MidpointReplayStateOnly", "LstmLayer::MidpointClearScratch"], "writes": ["dynamic", "parameters and optimizer in F/S", "midpoint"], "hook": "inline update aggregates before reused detached rows and clear plus soft-dirty physical-page scheduler"}
+    ],
+    "dirty_tracking_design": {
+      "role": "rehash_scheduler_only",
+      "kernel_interface": ["write ASCII 4 to /proc/self/clear_refs", "read uint64 pagemap entries from /proc/self/pagemap", "interpret bit 55 as soft-dirty"],
+      "algorithm": [
+        "After all observer-visible allocations and the initial full root build, clear soft-dirty for the single-threaded process.",
+        "At a checkpoint, read pagemap only for registered virtual pages and conservatively mark every canonical leaf with any physical segment overlapping a soft-dirty page.",
+        "Recompute those leaves from typed visitors; soft-dirty bytes, page frame numbers, presence, residency, addresses, and mapping metadata never enter a digest.",
+        "Write 4 to clear_refs only after the checkpoint records and roots are complete, then continue prediction.",
+        "Independently rebuild every typed forest from zero at terminal and require equality with the incremental roots."
+      ],
+      "soundness_boundary": [
+        "Write-then-restore remains soft-dirty, so a leaf is conservatively rehashed even when its digest returns to the previous value.",
+        "A physical page shared by strided tensors may dirty multiple logical leaves; overmarking is allowed and undermarking rejects calibration.",
+        "The process is single-threaded at each clear/read boundary; any additional writer thread rejects the observer build.",
+        "Soft-dirty does not prove source coverage. Every physical segment still requires a unique typed-tensor mapping, and the terminal full rebuild remains mandatory."
+      ],
+      "required_calibration_cases": [
+        "aligned heap allocation",
+        "valarray and vector payload",
+        "64-byte aligned allocation",
+        "anonymous mapping",
+        "q1 MAP_SHARED file-backed mapping",
+        "MADV_HUGEPAGE advised mapping",
+        "cross-4KiB write",
+        "write then restore",
+        "pageout then write",
+        "unmap or remap rejection",
+        "unregistered dirty page negative",
+        "pagemap or clear_refs permission failure"
+      ],
+      "execution_status": "not_calibrated_not_implemented"
+    },
+    "external_predictor_partition": {
+      "status": "open_fail_closed",
+      "existing_reusable_scope": "The q1 observer has a valid source-specific map for exactly 26 fxcmv1 alloc/alloc1 semantic ranges at least 67,108,864 bytes. It is not a complete map of mixers, SSE, contexts, small FXCM allocations, ByteMixer wrapper state, bit head, frontend, or reversible transform.",
+      "remaining_exact_work": [
+        "Enumerate every future-affecting external tensor and scalar with canonical type, dimensions, semantic bytes, physical segments, owner, and source write methods.",
+        "Bind all 26 q1 large semantic ranges without addresses, filenames, mapping slack, allocation rounding, or residency state.",
+        "Prove that every registered physical segment maps to at least one canonical leaf and every canonical leaf has at least one registered physical segment.",
+        "Prove that overlaps are either the declared NeuronLayer striding aliases or fail closed.",
+        "Derive the complete six-partition Merkle allocation before any v5 build or execution."
+      ],
+      "forbidden_inference": "The five completed partitions do not satisfy the v1 ABI six-partition write-completeness predicate."
+    },
+    "implementation_decision": {
+      "selected": "typed visitors plus soft-dirty scheduling",
+      "rejected": [
+        "reread all 26 large q1 mappings every 64 events",
+        "hash raw C++ objects including pointers or padding",
+        "trust soft-dirty as canonical evidence",
+        "instrument only midpoint writes and infer complete state coverage",
+        "weaken the ABI in place"
+      ],
+      "reason": "The selected shape preserves the frozen canonical Merkle ABI, catches arbitrary writes without thousands of per-assignment hooks, and bounds periodic reads to pages that may have changed. It still fails closed until the external typed map and calibration exist."
+    },
+    "current_state": {
+      "q1_v3_qualification_exists": false,
+      "v4_materialized_source_exists": false,
+      "v5_source_exists": false,
+      "five_partition_layout_frozen": true,
+      "external_predictor_layout_frozen": false,
+      "soft_dirty_calibration_exists": false,
+      "six_partition_source_completeness_pass": false,
+      "execution_authority": false,
+      "archive_authority": false,
+      "gamma_compression_credit_bytes": 0,
+      "gamma_score_credit_bytes": 0
+    }
+  },
+  "activation_requirements": [
+    "The active qm8 gate must terminalize and release its lease without any source, result, scratch, process, or cgroup mutation by this design work.",
+    "The exact q1-v3 qualification and v4 source materialization dependencies must pass before v5 source is derived.",
+    "An independent source auditor must expand all 130 frozen tensor ordinals and reproduce every partition total from the exact source bindings.",
+    "The external-predictor partition must become an equally exact typed layout and source-write map; phase 1 cannot activate with an open partition.",
+    "Soft-dirty calibration must pass every declared positive and negative case on the bound kernel before it can schedule an observer rehash.",
+    "No C++ build, fixture, mutation control, codec arm, or corpus execution is authorized by this artifact."
+  ],
+  "claim_boundary": [
+    "This artifact freezes the exact Byte-LSTM and midpoint tensor geometry and chooses a bounded dirty-tracking implementation strategy.",
+    "It is not the complete six-partition source map required by the observability ABI and intentionally records the external-predictor partition as open.",
+    "It proves no compilation, observer neutrality, synchronization, compression gain, inverse, memory, runtime, package, q1 qualification, or Hutter score.",
+    "All algorithms and observability work retain zero Gamma compression and objective credit."
+  ]
+}

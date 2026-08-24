@@ -1,5 +1,82 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint observability pivots to a compositional boundary proof
+
+The every-64 six-partition Merkle design is superseded before implementation.
+The exact phase-1 map shows why: its five Byte-LSTM/midpoint partitions alone
+contain `17,802,103` logical bytes. Full scans at the v5 checkpoint cadence
+project to `69,588,420,627` bytes at 250KB, `278,211,265,684` at 1M, and
+`2,781,632,000,059` at 10M. More decisively, v4 explicitly clears
+`4,096,154` logical midpoint bytes at every closure. Soft-dirty records those
+writes even when they restore zero, forcing at least `640,024,062,500` bytes
+of canonical rehash input at 10M before dynamic or external CMIX state. This
+is a proof-harness failure, not evidence against midpoint learning.
+
+The reserved v6 design keeps v4's P/K/F/S arithmetic unchanged and uses the
+actual source boundary. The component is ByteMixer, its ByteModel base, its
+owned LSTM, and midpoint state. The rest of Predictor can observe it only
+through `ByteMixer::Predict()[0]`; `lstmpr` and `lstmex` are assigned but not
+read in the bound tree. Conversely, the component receives only the declared
+Perceive, SetInput, SetOutputBias, ByteUpdate, and Predict calls. The midpoint
+overlay has no pointer or reference capable of bypassing that interface.
+
+For P versus K, equal initial environment state plus the complete rolling
+component-output transcript gives an inductive certificate: equal output and
+the same decoded bit drive the deterministic environment to equal next state
+and therefore equal next component input. K additionally retains its inline
+bitwise hidden/cell restoration check and is forbidden from committing live
+parameter or optimizer writes. Every final coder probability, payload, and
+inverse must still match P exactly.
+
+V6 therefore keeps online probability and component-boundary digests, bounded
+per-closure update records, sparse typed component roots at no more than six
+coordinates, native payloads, exact inverses, repeats, resources, and package
+accounting. It drops repeated full gradients, optimizer tensors, and external
+state roots because exact longitudinal outputs and the source write-set prove
+the relevant behavior more directly. The 130-tensor phase-1 map remains useful
+for sparse localization; its soft-dirty path is parked.
+
+No ABI-v2 schema, source, build, parser, fixture, or archive exists yet. V6 is
+design-only, q1 remains unqualified while qm8 runs, and all compression and
+score credits remain zero. Evidence:
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_q0_v1.json`.
+
+## 2026-08-24 - midpoint v5 freezes 130 typed tensors and bounded dirty scheduling
+
+The first source-bound layout pass now closes the Byte-LSTM dynamic,
+parameter, optimizer, ordinary-tape, and midpoint partitions against the
+exact sealed q1 source and dormant v4 overlay. The bound release geometry is
+one 256-cell layer, a 256-symbol vocabulary, a 128-event native horizon,
+`sli=528`, `soh=272`, `scell=256`, and `sdense=528`.
+
+The canonical expansion contains 130 tensors totaling `17,802,103` logical
+bytes and 4,401 4KiB leaves. Its pair-or-lone Merkle storage is bounded by
+8,672 digest nodes, or `277,504` bytes. The map separates the interleaved
+NeuronLayer w/u/m/v slabs into source-order logical tensors and includes
+padded lanes only when the bound SIMD kernels consume them. It excludes
+pointers, allocator rounding, object padding, capacity, addresses, and the
+inactive F16 `input_ptrs_` payload.
+
+A hybrid dirty strategy is selected for the future observer. Typed visitors
+remain the only source of canonical hash bytes. Linux soft-dirty bit 55 is
+used only to conservatively schedule which registered leaves must be
+rehashed after `/proc/self/clear_refs` receives `4`. This catches
+write-then-restore and can overmark strided aliases without changing a root.
+It does not establish source coverage, enter a digest, or replace the
+mandatory terminal rebuild from zero. Heap, valarray/vector, aligned,
+anonymous, file-backed, huge-page-advised, cross-page, write-restore,
+pageout, remap, and permission cases remain mandatory calibration gates.
+
+This is deliberately not described as complete observability. The external
+predictor partition is still open. The existing q1 observer maps only the 26
+large FXCM allocation ranges affected by q1; it does not enumerate mixers,
+SSE, small contexts, ByteMixer wrapper state, the bit head, frontend, or
+reversible transform. Until those objects have the same typed leaf and source
+write coverage, the six-partition ABI remains fail-closed and no v5 build or
+run is authorized. Evidence:
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v5_source_layout_phase1_q0_v1.json`
+and its adjacent static review.
+
 ## 2026-08-24 - midpoint v5 receives a canonical observability ABI
 
 The observability-only successor reserved by the v4 audit now has a frozen
