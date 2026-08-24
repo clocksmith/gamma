@@ -1,5 +1,49 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - verification v2 prevents a schema pass from impersonating native causality
+
+Generalizing causal closure exposed an authority bug in the historical
+verification receipt. V1 has one `verified` boolean and a mandatory
+`join_closure_pass`; it cannot say whether only the representation is valid,
+whether a shadow scorer is truth-independent despite physically seeing truth,
+or whether a native arithmetic decoder commits probability before revealing
+truth. Collapsing those statements would turn compiler hygiene into a false
+causal algorithm claim.
+
+The design-only verification-v2 schema separates three results.
+`representation_verified` requires nineteen structural checks: reopened hashes,
+mechanism identity, unique IDs, exact IR arm/role/source equality, event/source
+order, state authority, pretruth exclusion, matched opportunities, control
+outcome isolation, reset and mixture closure, safe paths, deterministic
+reverification, and either a real join proof or an explicit no-join proof. A
+pass has no errors and authorizes only compiler input; a failure has at least
+one error and false check and has no compilation authority.
+
+For `shadow_score_only_argument`, physical truth visibility must be disclosed
+and a content-addressed independent AST/use-def proof is required for a
+representation pass. That still leaves native causality false while the native
+boundary is unverified. For `native_predecode`, truth must be physically absent
+during construction and a bound native-boundary proof is required. Overall
+`native_causality_proved` can be true only when representation and native
+predecode both pass. Execution, compression, promotion, and claim authority are
+always false.
+
+Three positive receipt shapes validate: shadow representation pass with native
+unverified, native representation/native-causality pass, and a fail-closed
+shadow failure. Thirty-three contradictions are rejected, including pass/fail
+authority mismatches, shadow/native truth lies, invalid proof-stage states,
+missing proof evidence, native-causality derivation errors, non-independent
+verification, unsafe artifact identities, and every execution or score
+authority leak.
+
+No actual verification receipt or verifier source was created. The schema says
+what future independent evidence must prove; it does not prove the WIKI-PDA
+source, execute a mechanism, or change the archive frontier. Qm8 remains live
+and untouched. Evidence:
+`contracts/research/v1/gamma-mechanism-causal-closure-verification-v2.schema.json`,
+`operations/planning/gamma_mechanism_ir_v4_verification_authority_q0_v1.json`,
+and its adjacent static review.
+
 ## 2026-08-24 - causal closure v2 represents WIKI-PDA without a fake fork or fake truth boundary
 
 The generalized Mechanism IR exposed a second compiler-format defect. Historical

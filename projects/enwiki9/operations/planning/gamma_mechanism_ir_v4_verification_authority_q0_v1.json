@@ -1,0 +1,106 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v4_verification_authority_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "historical causal-closure verification v1",
+      "required_evidence": "Immutable schema SHA-256 781b4acd99a0fa7f862580660b284a4ae445c9ad687949972acaff5cb3317359 has one verified boolean and a mandatory join_closure_pass but no distinction among format validity, shadow truth data flow, and native predecode causality."
+    },
+    {
+      "artifact": "generalized causal-closure v2",
+      "required_evidence": "Schema SHA-256 b8286d3bb3a7cb004f23d7048e0dbbd079d59cfdfc85e7ec2631e5ff0b4e4620 and WIKI-PDA instance SHA-256 0c9bdcdbba121a92297a60dc7ceac067416c7175142e6e66007ed5b896b5a6d3 expose dynamic arms, nullable join, and explicit shadow/native truth evidence."
+    },
+    {
+      "artifact": "causal-closure v2 correction design",
+      "required_evidence": "Static correction SHA-256 7c1691e1a9993eb2dafe56eac0cbae4a01b8b18c0843f9bc23b2830d266721b4 requires a separate verification schema and independent source data-flow verifier."
+    },
+    {
+      "artifact": "generalized causal-closure verification v2 schema",
+      "required_evidence": "New design-only Draft 2020-12 schema SHA-256 199f7e05878edcd73b61fc307d0397fa7bb21915d413025d7cec26af097069cc separates representation, shadow source, and native boundary authority and grants no execution/compression/promotion authority."
+    },
+    {
+      "artifact": "Mechanism IR v4 control-alphabet correction",
+      "required_evidence": "Static source contract SHA-256 2c4b4a8312aea5ddaee5e6dd9a4e48311be9c63c93e85caaf8303608d3181216 still forbids compiler/verifier source and execution while qm8 owns the managed lane."
+    }
+  ],
+  "contract": {
+    "role": "fail-closed verification authority model for generalized Mechanism IR causal closures",
+    "false_proof_risk": {
+      "single_boolean": "A single verified flag can collapse JSON representation validity, source truth-independence, native coder ordering, and scientific execution into one misleading pass.",
+      "shadow_native_confusion": "WIKI-PDA's shadow scorer physically receives truth before all target expressions execute. Even a valid AST/use-def proof would establish source independence only, not a native probability commit before decoder truth.",
+      "join_bias": "The historical join_closure_pass cannot express a legitimate persistent no-join mechanism and encourages a fabricated fork/rejoin.",
+      "authority_leak": "A structurally valid compile input must not imply that a mechanism predicted, compressed, inverted, or qualified."
+    },
+    "three_separate_results": {
+      "representation_verified": "All schemas, hashes, identities, arm/role/source sets, event order, source availability, state authority, matched controls, outcome isolation, resets, mixture lifecycle, and real-join or explicit-no-join rules pass under an independent verifier. This alone authorizes only use as compiler input.",
+      "shadow_source_data_flow_pass": "For shadow_score_only_argument mode, an independently bound AST/use-def artifact proves that the physically visible truth argument cannot reach activation, targets, selectors, or future prediction state. It remains non-native evidence.",
+      "native_causality_proved": "True only when representation_verified is true and a separately bound native-predecode verifier proves probability construction and coder commit before truth becomes available."
+    },
+    "receipt_shape": {
+      "bound_inputs": [
+        "Mechanism IR schema",
+        "Mechanism IR",
+        "causal-closure schema",
+        "causal closure",
+        "implementation source",
+        "independent verifier"
+      ],
+      "independence": "Verifier differs from compiler, reopens inputs from disk, rederives every hash, and consumes no compiler-derived verdict state.",
+      "structural_check_count": 19,
+      "pass_rule": "representation_verified=true requires verdict=pass, zero errors, all nineteen checks true, and compilation_input_authority=true.",
+      "failure_rule": "representation_verified=false requires verdict=fail, at least one unique error, at least one false structural check, and compilation_input_authority=false.",
+      "proof_stage_rule": "A required proof stage must be unverified, pass, or fail; a non-required stage must be not_applicable. Pass/fail requires a method and content-addressed evidence, while unverified/not_applicable forbids fabricated evidence.",
+      "authority_rule": "Execution, compression, and promotion authority are always false and claim_authority is always none."
+    },
+    "mode_rules": {
+      "shadow_score_only_argument": "Physical truth visibility must be true; source data flow and native predecode are both required. A representation pass requires source-data-flow pass, but native status may remain unverified and native_causality_proved remains false.",
+      "native_predecode": "Physical truth visibility must be false; source-data-flow proof is not_applicable; native predecode is required and must pass for a representation pass.",
+      "native_derivation": "Native causality is true if and only if both representation verification and native-predecode proof pass, including when a shadow mechanism later receives a separately verified native integration."
+    },
+    "static_controls": {
+      "positive_shapes": 3,
+      "positive_cases": [
+        "shadow representation pass with source-data-flow evidence, native unverified, and native causality false",
+        "native representation pass with native-predecode evidence and native causality true",
+        "shadow representation failure with an error, one false structural check, and no compilation authority"
+      ],
+      "negative_shapes": 33,
+      "negative_families": [
+        "pass/fail verdict, error, check, and compilation-authority contradictions",
+        "shadow/native physical truth misrepresentation",
+        "required/not-applicable proof-stage contradiction",
+        "missing pass/fail method or evidence",
+        "native-causality derivation contradiction",
+        "execution/compression/promotion/claim authority leakage",
+        "non-independent verification",
+        "unsafe artifact path, invalid byte count, invalid hash, undeclared field, or duplicate errors"
+      ]
+    },
+    "single_authorized_successor": {
+      "id": "gamma_mechanism_ir_v4",
+      "remaining_work": "Implement the independent closure/source verifier, compiler, receipt bindings, adversarial fixtures, two-empty-root determinism gate, and managed program lock only after the lane blockers clear.",
+      "activation": "No verifier/compiler source, verification receipt, compilation, scanner execution, or manager mutation while qm8 is live or before owned-cleanup lease migration."
+    }
+  },
+  "activation_requirements": [
+    "Qm8 terminalizes with independently classified receipt and leaves no process, cgroup, scratch owner, lease, or lock.",
+    "Owned-cleanup managed-lease correction is canonical and independently passing.",
+    "Verifier source is content-addressed before first use and differs from compiler source.",
+    "AST/use-def and native-boundary evidence formats are separately schema-bound and adversarially tested.",
+    "No representation receipt may be interpreted as algorithm execution, archive evidence, or objective credit."
+  ],
+  "claim_boundary": [
+    "This schema and design define what a future receipt must prove; they are not a receipt or verifier.",
+    "No shadow source-data-flow proof or native causal proof has run.",
+    "No compiler, scanner, probability, coder, archive, inverse, package, resource result, savings, or score exists.",
+    "The live qm8 lane remains untouched."
+  ]
+}

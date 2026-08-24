@@ -1,0 +1,78 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v4_verification_authority_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "gamma_mechanism_ir_v4_verification_authority_q0_v1",
+      "required_evidence": "Verification-authority design SHA-256 e332f65999e949c8907e7cedfeb2bad8906e4631c8408563f8986322acce6651."
+    },
+    {
+      "artifact": "gamma-mechanism-causal-closure-verification-v2.schema.json",
+      "required_evidence": "Design-only schema SHA-256 199f7e05878edcd73b61fc307d0397fa7bb21915d413025d7cec26af097069cc."
+    },
+    {
+      "artifact": "causal-closure v2 source contract",
+      "required_evidence": "Closure schema SHA-256 b8286d3bb3a7cb004f23d7048e0dbbd079d59cfdfc85e7ec2631e5ff0b4e4620 and WIKI-PDA closure SHA-256 0c9bdcdbba121a92297a60dc7ceac067416c7175142e6e66007ed5b896b5a6d3."
+    }
+  ],
+  "contract": {
+    "role": "adjacent static verification-authority schema review",
+    "positive_controls": [
+      "schema is valid Draft 2020-12",
+      "shadow representation pass validates with source-data-flow pass, native unverified, and native causality false",
+      "native representation pass validates with source-data-flow not applicable, native predecode pass, and native causality true",
+      "shadow representation failure validates only with nonempty errors, a false check, and no compilation authority"
+    ],
+    "negative_control_categories": {
+      "representation_verdict": 8,
+      "truth_and_proof_stage": 14,
+      "authority_and_independence": 5,
+      "artifact_and_shape": 6,
+      "total": 33
+    },
+    "static_result": {
+      "schema_meta_validation_pass": true,
+      "positive_shapes_passed": 3,
+      "negative_shapes_rejected": 33,
+      "pass_requires_all_nineteen_checks": true,
+      "failure_requires_at_least_one_false_check": true,
+      "native_causality_requires_representation_and_native_pass": true,
+      "all_execution_and_score_authorities_constant_false": true,
+      "diff_check_pass": true
+    },
+    "epistemic_review": {
+      "representation": "A future schema-valid representation pass authorizes only compiler input.",
+      "shadow": "A future source-data-flow pass proves only absence of a path from physically visible truth to forbidden targets/state in the bound shadow source.",
+      "native": "A separate native predecode pass is necessary for native_causality_proved.",
+      "compression": "Neither representation nor causality proves prediction advantage, integer archive savings, inversion, package closure, memory, runtime, or Hutter qualification."
+    },
+    "remaining_open_work": [
+      "independent verifier source and source-data-flow evidence schema",
+      "native-predecode evidence schema",
+      "compiler v4 source and compilation receipt schema",
+      "adversarial fixture files and independent two-root replay",
+      "managed program lock and owned-cleanup lease migration",
+      "actual WIKI-PDA opportunity scan after qualified q1"
+    ]
+  },
+  "activation_requirements": [
+    "Reopen and rederive the final design SHA-256 before any successor consumes it.",
+    "Do not create a passing verification receipt without the independent verifier and bound proof evidence.",
+    "Do not create verifier/compiler source or execute a mechanism while qm8 owns the lane.",
+    "Preserve all zero-authority constants in successor schemas."
+  ],
+  "claim_boundary": [
+    "Static schema validation is not independent mechanism verification.",
+    "No causal or compression experiment ran.",
+    "No objective credit changes.",
+    "Qm8 remains untouched."
+  ]
+}
