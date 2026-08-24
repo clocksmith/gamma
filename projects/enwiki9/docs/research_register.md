@@ -504,6 +504,61 @@ off-by-one, and distance buckets are frozen in the interface and sealed source.
 This reconciliation adds no run evidence. It confirms only that v3 tests the
 intended causal mechanism under the corrected proof surface.
 
+## 2026-08-24 - WIKI-PDA v1 is causally rejected and v2 closes the proof surface
+
+The dormant `wiki_pda_structural_replay_q0_v1` scanner was rejected by static
+inspection before any transformed-population run. Its transition-table lookup
+is selected only after the current opening `L` truth has entered parser state,
+but its offline scoring loop then credits transition target offset zero. That
+position predicts the already observed `L`, so v1 can receive one free correct
+byte per predicted event. The source also initializes its declared FNV-1a
+digest with `1469598103934665603` rather than the standard 64-bit FNV-1a offset
+`14695981039346656037`. Its ad hoc runner does not source-bind the compiler,
+candidate, q1 authority, resource guard, managed lease, result file set, or an
+independent decision verifier. These are proof defects, not measured negative
+compression evidence. v1 remains unexecuted and has zero credit.
+
+Correction-only `wiki_pda_structural_replay_ceiling_q0_v2` changes causal
+scoring and proof closure while retaining the scientific mechanism and frozen
+scale: 16-byte names, depth 16, 1,024 direct-mapped unanimous transition
+records, poisoned conflicts, exact closing-name replay, and the `4,079,243`
+correct-byte threshold. The scanner consumes `L` before lookup but forbids T
+credit until relative offset one. C cannot activate until decoded `L/slash`
+and relative offset two. For each current byte, D/R/S/N are selected and
+scored from state through the previous byte before truth changes parser,
+table, stack, or digests. R, cyclically rotated S, and negated N use every and
+only D's active positions; T has deterministic overlap priority over C.
+
+The scanner emits C/T attribution, D/R/S/N counts in three exact transformed
+coordinate thirds, dedicated forbidden-early counters, standard FNV-1a input,
+opportunity, table, stack, and terminal-state digests, and duplicate K/D
+transition digests. The prospective gate requires two byte-identical complete
+receipts, D correct bytes at least `4,079,243`, D strictly above max(R,S,N) in
+every third, zero early-credit counters, causal identity, and both resource
+guards passing at `65,536 KiB` process-tree and VmHWM, `256,000,000` cgroup
+bytes including cache, `100,000,000` scratch bytes, one CPU, and zero
+max/OOM/OOM-kill events.
+
+The native candidate is sealed at tree
+`8f674767ceb8f452f24f2167460f89519957652624340ef3ecdcd1dfa2302419`.
+Its five counted candidate files total `30,596` bytes, below the prospective
+`65,536`-byte ceiling. The execution plan binds that revision, scanner,
+interface, local receipt schema, runner, independent verifier, shared
+content-addressed proof helper, five result schemas, q1 policy-v4 verifier,
+managed lease, v3 resource guard, resolved Clang toolchain and loader, taskset,
+and exact `587,138,826`-byte transformed population. Static schema, AST,
+candidate-revision, plan-binding, and C++ syntax checks pass.
+
+No corpus hash, scanner process, executable link, result root, or receipt was
+created. qm8 still owns the exclusive full-1G lane and q1 has not produced the
+required positive v2 qualification. This candidate is therefore a frozen
+zero-credit causal ceiling only. A future pass authorizes retained-parent
+donor-surprise tracing; it cannot authorize a WIKI-PDA archive, package,
+inverse, prize score, or Gamma score credit without a fresh native replay. See
+the [`design`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2.json),
+[`experiment`](../operations/adaptive/experiments/wiki_pda_structural_replay_ceiling_q0_v2.json),
+and [`execution plan`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2_execution.json).
+
 ## 2026-08-24 - WIKI-LOOM freezes semantic virtual time as a dormant new source
 
 An exclusion audit rejected three superficially creative routes before any new

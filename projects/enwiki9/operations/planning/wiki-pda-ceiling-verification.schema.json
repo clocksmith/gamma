@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-verification.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "decision_sha256", "manifest_sha256", "checks", "errors", "scientific_verdict", "promotion_authorized", "archive_authority", "gamma_compression_credit_bytes", "gamma_score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-verification.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "verified": {"type": "boolean"},
+    "decision_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "checks": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "boolean"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "scientific_verdict": {"type": "string", "minLength": 1},
+    "promotion_authorized": {"type": "boolean"},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  }
+}
