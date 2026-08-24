@@ -170,6 +170,22 @@ full-1G lease. See the
 and
 [`interface`](../programs/wiki_schema_vm_ceiling_q0_v1/interface-contract.json).
 
+A later read-only proof audit confirmed the byte-order causality: each active
+prediction is scored before the current byte mutates parser or table state,
+programs are close-committed from earlier invocations, and a mismatch terminates
+the opportunity before any successor byte is counted. It also found that the
+first runner merely observed a free `exclusive_full1g` lease and therefore had
+a check-to-launch race. Planning revision 2 corrects only that execution
+boundary: the unchanged candidate tree now runs under an atomically acquired
+managed lease whose evidence and transition chain are required outputs. The
+output manifest additionally compares the complete pre-manifest directory to
+the frozen filename set, so unlisted files prevent closure. The same audit
+found that the plan's former generic `$schema` label did not validate its actual
+shape. Revision 2 replaces it with a dedicated strict schema, and the runner
+now validates that plan plus every transitive source, schema, compiler, lease,
+population, command, and output binding before acquisition. This is static
+harness evidence only; the scanner remains unexecuted and receives zero credit.
+
 ## 2026-08-23 - cmix-obias Arm B terminalizes as an OOM/resource failure
 
 The source-built full-1G Arm A remains an exact host-bound external baseline.
