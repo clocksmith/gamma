@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-resource-summary.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "candidate_id", "arms", "maximum_tree_rss_kib", "maximum_process_vmhwm_kib", "maximum_cgroup_memory_bytes", "maximum_sampled_cgroup_file_bytes", "maximum_scratch_logical_bytes", "maximum_scratch_allocated_bytes", "cgroup_max_events", "cgroup_oom_events", "cgroup_oom_kill_events", "all_resource_predicates_pass"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-resource-summary.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "arms": {"type": "object", "additionalProperties": false, "required": ["a", "b"], "properties": {"a": {"$ref": "#/$defs/artifact"}, "b": {"$ref": "#/$defs/artifact"}}},
+    "maximum_tree_rss_kib": {"type": "integer", "minimum": 0},
+    "maximum_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+    "maximum_cgroup_memory_bytes": {"type": "integer", "minimum": 0},
+    "maximum_sampled_cgroup_file_bytes": {"type": "integer", "minimum": 0},
+    "maximum_scratch_logical_bytes": {"type": "integer", "minimum": 0},
+    "maximum_scratch_allocated_bytes": {"type": "integer", "minimum": 0},
+    "cgroup_max_events": {"type": "integer", "minimum": 0},
+    "cgroup_oom_events": {"type": "integer", "minimum": 0},
+    "cgroup_oom_kill_events": {"type": "integer", "minimum": 0},
+    "all_resource_predicates_pass": {"type": "boolean"}
+  },
+  "$defs": {"artifact": {"type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256"], "properties": {"path": {"type": "string"}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "wiki-pda-ceiling-execution-plan.schema.json",
+  "artifact_id": "wiki_pda_structural_replay_ceiling_q0_v2_execution",
+  "revision": 1,
+  "candidate_id": "wiki_pda_structural_replay_ceiling_q0_v2",
+  "operational_status": "frozen_waiting_for_qualified_q1_parent_and_released_full1g_lease",
+  "execution_authorized": false,
+  "claim_boundary": "Two guarded scans measure only a causal optimistic correct-byte ceiling and matched-control association. They prove no probability gain, arithmetic archive gain, inverse, package score, or prize qualification.",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/wiki_pda_structural_replay_ceiling_q0_v2/20260824T074003807866Z_8f674767ceb8.json",
+    "sha256": "9e7bec2faee72b154e961641777367f31a879e88353af230b03b679867252d2b",
+    "candidate_tree_sha256": "8f674767ceb8f452f24f2167460f89519957652624340ef3ecdcd1dfa2302419"
+  },
+  "experiment": {
+    "path": "operations/adaptive/experiments/wiki_pda_structural_replay_ceiling_q0_v2.json",
+    "sha256": "322d4aa3228f918c520afa9204e76561ede8f90828410972e8a6a66bb4117296"
+  },
+  "proposal": {
+    "path": "operations/adaptive/proposals/developed/000_wiki_pda_structural_replay_ceiling_q0_v2.json",
+    "sha256": "dabead1befe1316c8ff0b88ca10f4754d11110c25d9db7fefa9be90ff0003069"
+  },
+  "implementation": {
+    "source": "programs/wiki_pda_structural_replay_ceiling_q0_v2/wiki-pda-ceiling-scan.cpp",
+    "source_sha256": "3e9aebfa0b32aa57fc23eb41b91bfc6dde737ff0428fbe28a7fa1ac52af4b82f",
+    "interface": "programs/wiki_pda_structural_replay_ceiling_q0_v2/interface-contract.json",
+    "interface_sha256": "d9ae6e03ff777a0fe875ec17a771f9285f80f6bf9fc1e00f63479bb7222606b9",
+    "scan_schema": "programs/wiki_pda_structural_replay_ceiling_q0_v2/scan-receipt.schema.json",
+    "scan_schema_sha256": "fb863fa4b119599264ad78aee5251e73b224178545788a079adc02784d8d79d8",
+    "runner": "tools/wiki_pda_structural_replay_ceiling_q0_v2.py",
+    "runner_sha256": "8e12ecfdad4dd227b1291ec5d331d48a871d7bff5956d9055c5135590546126c",
+    "verifier": "tools/wiki_pda_structural_replay_ceiling_q0_v2_verify.py",
+    "verifier_sha256": "f4332239da838147c04a14b99ca8b389c427beaca2e7e985afe4f1728789005f",
+    "shared_helper": "tools/fxcm_fossil_match_q0_v3.py",
+    "shared_helper_sha256": "0cbdad48f2f42e089b09e5b2b35fc8cad0f35836cc5f529f8e1133e77ac95943"
+  },
+  "schemas": {
+    "plan": {"path": "operations/planning/wiki-pda-ceiling-execution-plan.schema.json", "sha256": "54f28cc67f7fd99c28d34a9f5dadf5ee65239549e698c0393e8ab1b5c64d33fe"},
+    "decision": {"path": "operations/planning/wiki-pda-ceiling-decision.schema.json", "sha256": "8ed887a99266ea8818df1ef2a450eabe7265e8189cb5053f0768207363e95641"},
+    "resource_summary": {"path": "operations/planning/wiki-pda-ceiling-resource-summary.schema.json", "sha256": "66eb88855829db381e098dcde2c5a8cefaabe4d5b6eb2b5e9bab89969352afd6"},
+    "output_manifest": {"path": "operations/planning/wiki-pda-ceiling-output-manifest.schema.json", "sha256": "75adbd5f6f77f175e73062750822a570a6afad6b5acd31fbb84ca60a47a5d787"},
+    "verification": {"path": "operations/planning/wiki-pda-ceiling-verification.schema.json", "sha256": "da24ba9ef325ea6960012da3608371870c9f3dfbedc461e47742e77f740b016b"}
+  },
+  "parent_qualification": {
+    "policy": {"path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4.json", "sha256": "c7554afad7b5dfc691293cf30138c037bbf550f0431391341adcc56cf4f877a3"},
+    "receipt_schema": {"path": "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt-v2.schema.json", "sha256": "1863e57073cf937e036b29d69b59467c8dbd167adedb36f61246a0bc02465494"},
+    "verification_schema": {"path": "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v2.schema.json", "sha256": "3bcf47489de593d541504b06a9735979701d1da08bf8cc70253339f05538a74d"},
+    "verifier": {"path": "tools/cmix_memory_safe_parent_qualification_verify_v2.py", "sha256": "c2b5b2989b428870d70598c1726b12df2b7abeb992c3e715f2468ebf79d5139b"}
+  },
+  "exclusive_lane": {
+    "implementation": {"path": "tools/managed_exclusive_lease.py", "sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1"},
+    "schema": {"path": "operations/runtime/exclusive_full1g.schema.json", "sha256": "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96"},
+    "verifier": {"path": "tools/managed_exclusive_lease_verify.py", "sha256": "68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"},
+    "lease": "operations/runtime/exclusive_full1g.json",
+    "lock": "operations/runtime/exclusive_full1g.json.lock",
+    "policy": "Acquire atomically before population hashing, compilation, or either scan; retain no signal authority; heartbeat while child guards run; release only after both child processes stop; retain canonical lease evidence and transition chain."
+  },
+  "resource_guard": {
+    "implementation": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"},
+    "receipt_schema": {"path": "contracts/research/v1/resource-guard-receipt.v3.schema.json", "sha256": "f51442e839bdfc11db5eb40f74faead81ef00e930a54b5ac98b6d0c681477cce"},
+    "limit_kib": 65536,
+    "cgroup_memory_max_bytes": 256000000,
+    "scratch_limit_bytes": 100000000,
+    "max_logical_cpus": 1,
+    "cpu": 0,
+    "cgroup_a": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-wiki-pda-ceiling-v2-a",
+    "cgroup_b": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-wiki-pda-ceiling-v2-b",
+    "events_policy": "max, oom, and oom_kill deltas must all equal zero for both scans"
+  },
+  "toolchain": {
+    "compiler": "/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/lib/llvm-17/bin/clang",
+    "compiler_sha256": "011362d67c1a55636e9e1fa8fb87705980ebe94037213686897e1dadba007e43",
+    "loader_library": "/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/lib/x86_64-linux-gnu/libLLVM-17.so.1",
+    "loader_library_sha256": "1882e545e086053923d4dabbe4523d13b2d1f78803b2420a27e09ce462c7fad0",
+    "ld_library_path": "/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/lib/x86_64-linux-gnu",
+    "taskset": "/usr/bin/taskset",
+    "taskset_sha256": "3ac0b42cbe242b78c63b3ecef3023f3bcc17432b9d4731ac874848df6a87c914",
+    "compile_flags": ["--driver-mode=g++", "-std=c++17", "-O2", "-Wall", "-Wextra", "-Werror", "-pedantic", "-fno-fast-math", "-ffp-contract=off", "-march=x86-64", "-mtune=generic", "-Wl,--build-id=none"]
+  },
+  "population": {
+    "path": "/home/x/enwiki9-nonproof/cmix_lex_payload_gate/cmix_lex_payload_transfer_v1_retry2/transformed_ready.bin",
+    "bytes": 587138826,
+    "sha256": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"
+  },
+  "command_template": ["python3", "tools/wiki_pda_structural_replay_ceiling_q0_v2.py", "--parent-qualification-receipt", "<schema-valid-policy-v4-q1-qualification-receipt>", "--parent-qualification-verification", "<schema-valid-independent-policy-v4-q1-verification>"],
+  "outputs": [
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/lease-evidence.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/lease-transitions.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/scan-a.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/scan-b.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/resource-guard.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/decision.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/output-manifest.json"
+  ],
+  "promotion_condition": "Both schema-valid scans are byte-identical; all 587,138,826 bytes are consumed; D correctly predicts at least 4,079,243 bytes; D beats max(R,S,N) in every chronological third; all causal, identity, and resource predicates pass. A pass authorizes only retained-parent donor-surprise tracing.",
+  "kill_condition": "Any subscale correct-byte ceiling, chronological control miss, repeat mismatch, causal mismatch, or resource failure retires the exact 16-byte-name, depth-16, 1,024-entry poisoned-table structural source. Any binding, build, schema, lease, or observer failure authorizes at most one correction-only runner successor.",
+  "archive_authority": false,
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
+}

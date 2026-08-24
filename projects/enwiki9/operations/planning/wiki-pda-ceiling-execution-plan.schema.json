@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-execution-plan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "artifact_id", "revision", "candidate_id", "operational_status",
+    "execution_authorized", "claim_boundary", "candidate_revision", "experiment",
+    "proposal", "implementation", "schemas", "parent_qualification",
+    "exclusive_lane", "resource_guard", "toolchain", "population",
+    "command_template", "outputs", "promotion_condition", "kill_condition",
+    "archive_authority", "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "wiki-pda-ceiling-execution-plan.schema.json"},
+    "artifact_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2_execution"},
+    "revision": {"const": 1},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "operational_status": {"const": "frozen_waiting_for_qualified_q1_parent_and_released_full1g_lease"},
+    "execution_authorized": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "candidate_revision": {"$ref": "#/$defs/revision"},
+    "experiment": {"$ref": "#/$defs/reference"},
+    "proposal": {"$ref": "#/$defs/reference"},
+    "implementation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "source_sha256", "interface", "interface_sha256", "scan_schema", "scan_schema_sha256", "runner", "runner_sha256", "verifier", "verifier_sha256", "shared_helper", "shared_helper_sha256"],
+      "properties": {
+        "source": {"type": "string"}, "source_sha256": {"$ref": "#/$defs/sha"},
+        "interface": {"type": "string"}, "interface_sha256": {"$ref": "#/$defs/sha"},
+        "scan_schema": {"type": "string"}, "scan_schema_sha256": {"$ref": "#/$defs/sha"},
+        "runner": {"type": "string"}, "runner_sha256": {"$ref": "#/$defs/sha"},
+        "verifier": {"type": "string"}, "verifier_sha256": {"$ref": "#/$defs/sha"},
+        "shared_helper": {"type": "string"}, "shared_helper_sha256": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "schemas": {"type": "object", "minProperties": 5, "additionalProperties": {"$ref": "#/$defs/reference"}},
+    "parent_qualification": {"type": "object", "minProperties": 4, "additionalProperties": {"$ref": "#/$defs/reference"}},
+    "exclusive_lane": {"type": "object", "minProperties": 6},
+    "resource_guard": {"type": "object", "minProperties": 10},
+    "toolchain": {"type": "object", "minProperties": 8},
+    "population": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string"}, "bytes": {"const": 587138826},
+        "sha256": {"const": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"}
+      }
+    },
+    "command_template": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "outputs": {"type": "array", "minItems": 7, "items": {"type": "string"}, "uniqueItems": true},
+    "promotion_condition": {"type": "string", "minLength": 1},
+    "kill_condition": {"type": "string", "minLength": 1},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reference": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "revision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "candidate_tree_sha256"],
+      "properties": {"path": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha"}, "candidate_tree_sha256": {"$ref": "#/$defs/sha"}}
+    }
+  }
+}

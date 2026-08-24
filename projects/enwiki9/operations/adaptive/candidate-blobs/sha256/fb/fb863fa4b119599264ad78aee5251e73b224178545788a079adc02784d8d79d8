@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-scan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "claim_authority", "population_bytes",
+    "required_correct_bytes", "events_started", "events_completed",
+    "valid_events", "malformed_events", "unterminated_event",
+    "close_mismatches", "stack_pushes", "stack_pops",
+    "suppression_pushes", "suppression_pops", "table_lookups",
+    "table_installs", "table_reinforcements", "table_poisons",
+    "table_poisoned_observations", "transition_offset_zero_predictions",
+    "closing_before_offset_two_predictions", "arms",
+    "minimum_third_treatment_minus_max_control_correct_bytes",
+    "input_fnv1a64", "opportunity_fnv1a64", "table_fnv1a64",
+    "stack_fnv1a64", "k_transition_fnv1a64", "d_transition_fnv1a64",
+    "treatment_k_state_identity_pass", "control_outcomes_feed_state",
+    "causal_and_verification_pass", "target_scale_correct_ceiling_pass",
+    "all_thirds_beat_controls_pass", "absolute_ceiling_pass",
+    "promotion_authorized", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-scan.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "claim_authority": {"const": "causal_shadow_opportunity_screen_only"},
+    "population_bytes": {"const": 587138826},
+    "required_correct_bytes": {"const": 4079243},
+    "events_started": {"$ref": "#/$defs/count"},
+    "events_completed": {"$ref": "#/$defs/count"},
+    "valid_events": {"$ref": "#/$defs/count"},
+    "malformed_events": {"$ref": "#/$defs/count"},
+    "unterminated_event": {"type": "boolean"},
+    "close_mismatches": {"$ref": "#/$defs/count"},
+    "stack_pushes": {"$ref": "#/$defs/count"},
+    "stack_pops": {"$ref": "#/$defs/count"},
+    "suppression_pushes": {"$ref": "#/$defs/count"},
+    "suppression_pops": {"$ref": "#/$defs/count"},
+    "table_lookups": {"$ref": "#/$defs/count"},
+    "table_installs": {"$ref": "#/$defs/count"},
+    "table_reinforcements": {"$ref": "#/$defs/count"},
+    "table_poisons": {"$ref": "#/$defs/count"},
+    "table_poisoned_observations": {"$ref": "#/$defs/count"},
+    "transition_offset_zero_predictions": {"const": 0},
+    "closing_before_offset_two_predictions": {"const": 0},
+    "arms": {
+      "type": "object", "additionalProperties": false,
+      "required": ["C", "T", "D", "R", "S", "N"],
+      "properties": {
+        "C": {"$ref": "#/$defs/arm"}, "T": {"$ref": "#/$defs/arm"},
+        "D": {"$ref": "#/$defs/arm"}, "R": {"$ref": "#/$defs/arm"},
+        "S": {"$ref": "#/$defs/arm"}, "N": {"$ref": "#/$defs/arm"}
+      }
+    },
+    "minimum_third_treatment_minus_max_control_correct_bytes": {"type": "integer"},
+    "input_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "opportunity_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "table_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "stack_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "k_transition_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "d_transition_fnv1a64": {"$ref": "#/$defs/fnv"},
+    "treatment_k_state_identity_pass": {"const": true},
+    "control_outcomes_feed_state": {"const": false},
+    "causal_and_verification_pass": {"type": "boolean"},
+    "target_scale_correct_ceiling_pass": {"type": "boolean"},
+    "all_thirds_beat_controls_pass": {"type": "boolean"},
+    "absolute_ceiling_pass": {"type": "boolean"},
+    "promotion_authorized": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "fnv": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["active", "correct"],
+      "properties": {
+        "active": {"$ref": "#/$defs/count"},
+        "correct": {"$ref": "#/$defs/count"}
+      }
+    },
+    "arm": {
+      "type": "object", "additionalProperties": false,
+      "required": ["active", "correct", "thirds"],
+      "properties": {
+        "active": {"$ref": "#/$defs/count"},
+        "correct": {"$ref": "#/$defs/count"},
+        "thirds": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "items": {"$ref": "#/$defs/counts"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "wiki_pda_structural_replay_ceiling_q0_v2",
+  "proposalId": "wiki_pda_structural_replay_ceiling_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "After eliminating v1's already-seen tag-opener credit, the unchanged bounded structural pushdown source still supplies at least 4,079,243 correctly predicted transformed bytes, and D beats matched random, cyclically misaligned, and negated controls in every chronological third.",
+    "falsification": "Retire this exact information source without parser, table, stack, or threshold tuning if two complete scans differ, D has fewer than 4,079,243 correct bytes, any third has D_correct no greater than max(R,S,N)_correct, any causal invariant fails, or a frozen resource predicate fails."
+  },
+  "changedMechanism": "Correction-only proof successor before any v1 execution: forbid transition credit at already-decoded relative offset zero, construct every control on exactly D's active positions, and add source-bound execution and independent verification. The D parser, depth, name limit, state key, table, poisoning, and correct-byte threshold do not change.",
+  "invariants": [
+    "Consume exactly 587,138,826 transformed bytes with SHA-256 7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce.",
+    "Transformed L is decoded before event lookup; transition predictions at relative offset zero are forbidden and must total zero.",
+    "Closing replay begins only after decoded L/slash and therefore only at relative offset two or later.",
+    "D/R/S/N are constructed and scored before the current truth mutates parser, table, stack, or any later prediction state.",
+    "T takes overlap priority over C; C and T retain separate counters while D records their union.",
+    "R, S, and N predict on every and only D-active position. S rotates the selected complete D target left by one byte; N is D xor 0xff.",
+    "K and D transition digests are duplicate control-independent computations and must match.",
+    "No control outcome can change D activation, parser state, table state, stack state, or a future D prediction.",
+    "Correct-byte ceiling evidence has zero parent-probability, finite-coder, inverse, package, or objective authority.",
+    "Execution accepts only a positive q1 v2 qualification independently reproduced under policy v4."
+  ],
+  "controls": [
+    {"id": "K", "role": "comparator", "definition": "Identical parser, lookup, opportunity, table, stack, and digest transitions with prediction disabled."},
+    {"id": "C", "role": "comparator", "definition": "Attribution-only exact top-of-stack closing-name replay after decoded L/slash."},
+    {"id": "T", "role": "comparator", "definition": "Attribution-only unanimous next-tag signature replay beginning after decoded L."},
+    {"id": "D", "role": "treatment", "definition": "T-priority union of causal T and C predictions."},
+    {"id": "R", "role": "negative", "definition": "Frozen SplitMix64 byte on every D-active position."},
+    {"id": "S", "role": "shifted", "definition": "One-byte cyclic rotation of the selected D target on the identical active positions."},
+    {"id": "N", "role": "negative", "definition": "D xor 0xff on the identical active positions."},
+    {"id": "D-repeat", "role": "replay", "definition": "Fresh process reproduces the complete normalized receipt byte-for-byte."}
+  ],
+  "population": {
+    "unit": "post-WRT transformed byte",
+    "scopeBytes": 587138826,
+    "scopeSymbols": 587138826,
+    "selection": "Complete retained transformed-ready stream from canonical enwik9 through the frozen external frontend.",
+    "coordinate": "Zero-based transformed offset before arithmetic coding."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "transformed bytes at offsets strictly smaller than i",
+      "bounded parser and quote state through i-1",
+      "retained element-name stack through i-1",
+      "unanimous transition table through i-1",
+      "current event key selected only after its opening L was decoded"
+    ],
+    "forbiddenInformation": [
+      "the current or any future transformed byte before scoring",
+      "credit for the already consumed opening L",
+      "event completion, actual target length, or closing delimiter before decoded",
+      "parent probabilities, archive outcomes, raw bytes outside the transformed prefix, or control outcomes",
+      "file identity, cache residency, faults, or timing in prediction state"
+    ]
+  },
+  "inputs": [
+    {"id": "corrected-design", "path": "operations/planning/wiki_pda_structural_replay_ceiling_q0_v2.json", "sha256": "sha256:4a976c8cdb7089c01e35dbe9b102360881eb6b244855f63b4b636538079e6953"},
+    {"id": "v1-design", "path": "operations/planning/wiki_pda_structural_replay_q0_v1.json", "sha256": "sha256:00a1d49d3a7b96bc517b075f08add0e6d4658e0f632b6e52ddbb53b8c676221c"},
+    {"id": "v1-unexecuted-proposal", "path": "operations/adaptive/proposals/proposed/000_wiki_pda_structural_replay_q0_v1.json", "sha256": "sha256:7453c6ae68fc75460050f6a3f1432e4307827a75b15e77f7e977f8fd35d466f2"},
+    {"id": "v1-scanner", "path": "tools/wiki_pda_structural_replay_q0_v1.cpp", "sha256": "sha256:210634efd1e787754d89e72027f24f911ec85adb0d76beafcf5104687da2c8f0"},
+    {"id": "v1-runner", "path": "tools/run_wiki_pda_structural_replay_q0_v1.py", "sha256": "sha256:88d233d5d28e4f21f708acaae2b62302bf2bd9dc458f862f0b771ef5fb7ec28c"},
+    {"id": "q1-policy-v4", "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4.json", "sha256": "sha256:c7554afad7b5dfc691293cf30138c037bbf550f0431391341adcc56cf4f877a3"},
+    {"id": "external-full-baseline", "path": "results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/decision.json", "sha256": "sha256:1e7b785606d3319b25f72a99ce77083f1fd47c802bdd1261432596fe3ec6b50c"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 0.8,
+    "expectedRuntimeRatio": 1.02,
+    "expectedMemoryRatio": 1.01,
+    "uncertaintyRisk": 0.72,
+    "interactionRisk": 0.35
+  },
+  "measurements": [
+    {"id": "scannedBytes", "definition": "Exact transformed bytes consumed.", "unit": "bytes"},
+    {"id": "treatmentActiveBytes", "definition": "Causal D-active transformed positions.", "unit": "bytes"},
+    {"id": "treatmentCorrectBytes", "definition": "D-active positions equal to truth.", "unit": "bytes"},
+    {"id": "transitionOffsetZeroPredictions", "definition": "Forbidden transition credits at already-decoded event-relative offset zero.", "unit": "bytes"},
+    {"id": "closingBeforeOffsetTwoPredictions", "definition": "Forbidden closing-name credits before decoded L/slash.", "unit": "bytes"},
+    {"id": "minimumThirdTreatmentMinusMaxControlCorrectBytes", "definition": "Minimum thirdwise D_correct minus max(R,S,N)_correct.", "unit": "bytes"},
+    {"id": "repeatIdentityPass", "definition": "Complete normalized scan receipts are byte-identical.", "unit": "boolean"},
+    {"id": "causalAndVerificationPass", "definition": "All score-before-truth, partition, stack, table, and duplicate-transition checks pass.", "unit": "boolean"},
+    {"id": "maximumTreeRssKiB", "definition": "Maximum guarded scanner process-tree RSS.", "unit": "KiB"},
+    {"id": "maximumCgroupMemoryBytes", "definition": "Maximum guarded scanner cgroup-v2 peak including file cache.", "unit": "bytes"},
+    {"id": "cgroupMaxOomEvents", "definition": "Sum of max, OOM, and OOM-kill event deltas.", "unit": "events"},
+    {"id": "scratchLogicalBytes", "definition": "Maximum scanner scratch logical bytes.", "unit": "bytes"}
+  ],
+  "promotionPredicates": [
+    {"id": "full-population", "measurement": "scannedBytes", "operator": "eq", "threshold": 587138826},
+    {"id": "target-scale-correct-ceiling", "measurement": "treatmentCorrectBytes", "operator": "gte", "threshold": 4079243},
+    {"id": "no-seen-opener-credit", "measurement": "transitionOffsetZeroPredictions", "operator": "eq", "threshold": 0},
+    {"id": "no-early-closing-credit", "measurement": "closingBeforeOffsetTwoPredictions", "operator": "eq", "threshold": 0},
+    {"id": "all-thirds-beat-controls", "measurement": "minimumThirdTreatmentMinusMaxControlCorrectBytes", "operator": "gt", "threshold": 0},
+    {"id": "repeat-identity", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "causal-verification", "measurement": "causalAndVerificationPass", "operator": "eq", "threshold": true},
+    {"id": "process-tree-bound", "measurement": "maximumTreeRssKiB", "operator": "lte", "threshold": 65536},
+    {"id": "cgroup-bound", "measurement": "maximumCgroupMemoryBytes", "operator": "lte", "threshold": 256000000},
+    {"id": "cgroup-events-clean", "measurement": "cgroupMaxOomEvents", "operator": "eq", "threshold": 0},
+    {"id": "scratch-bound", "measurement": "scratchLogicalBytes", "operator": "lte", "threshold": 100000000}
+  ],
+  "killPredicates": [
+    {"id": "subscale-correct-ceiling", "measurement": "treatmentCorrectBytes", "operator": "lt", "threshold": 4079243},
+    {"id": "chronological-control-failure", "measurement": "minimumThirdTreatmentMinusMaxControlCorrectBytes", "operator": "lte", "threshold": 0},
+    {"id": "seen-opener-credit", "measurement": "transitionOffsetZeroPredictions", "operator": "gt", "threshold": 0},
+    {"id": "early-closing-credit", "measurement": "closingBeforeOffsetTwoPredictions", "operator": "gt", "threshold": 0},
+    {"id": "repeat-failure", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "causal-failure", "measurement": "causalAndVerificationPass", "operator": "eq", "threshold": false},
+    {"id": "resource-failure", "measurement": "cgroupMaxOomEvents", "operator": "gt", "threshold": 0}
+  ],
+  "outputs": [
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/lease-evidence.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/lease-transitions.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/scan-a.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/scan-b.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/resource-guard.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/decision.json",
+    "results/wiki_pda_structural_replay_ceiling_q0_v2/output-manifest.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-24T07:45:00Z"
+}

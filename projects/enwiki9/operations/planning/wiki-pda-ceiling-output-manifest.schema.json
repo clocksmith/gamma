@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-ceiling-output-manifest.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "candidate_id", "result_root", "pre_manifest_exact_file_set_pass", "unexpected_pre_manifest_entries", "complete_result_artifacts_pass", "artifacts"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-ceiling-output-manifest.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_ceiling_q0_v2"},
+    "result_root": {"const": "results/wiki_pda_structural_replay_ceiling_q0_v2"},
+    "pre_manifest_exact_file_set_pass": {"type": "boolean"},
+    "unexpected_pre_manifest_entries": {"type": "array", "items": {"type": "string"}},
+    "complete_result_artifacts_pass": {"type": "boolean"},
+    "artifacts": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["role", "path", "bytes", "sha256"], "properties": {"role": {"type": "string", "minLength": 1}, "path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+  }
+}

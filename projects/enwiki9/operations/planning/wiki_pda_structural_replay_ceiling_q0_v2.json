@@ -1,0 +1,124 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "wiki_pda_structural_replay_ceiling_q0_v2",
+  "revision": 2,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000,
+    "required_correct_byte_ceiling": 4079243,
+    "maximum_added_package_bytes": 65536
+  },
+  "antecedent": {
+    "design": "operations/planning/wiki_pda_structural_replay_q0_v1.json",
+    "proposal": "operations/adaptive/proposals/proposed/000_wiki_pda_structural_replay_q0_v1.json",
+    "scanner": "tools/wiki_pda_structural_replay_q0_v1.cpp",
+    "runner": "tools/run_wiki_pda_structural_replay_q0_v1.py",
+    "status": "unexecuted_static_rejection",
+    "defect": "The transition lookup occurs only after transformed L is consumed, but v1 later credits signature offset zero and therefore counts a prediction for the already observed L byte. The v1 runner also lacks a source-bound compiler closure, atomic managed lease, resource guard, exact output manifest, and independent decision verifier."
+  },
+  "dependencies": [
+    {
+      "artifact": "memory-safe authoritative q1 parent",
+      "required_evidence": "A positive v2-format qualification and independent verification under policy v4, including full A/B inverse, probability/state identity, runtime, package, dependency, license, and process-tree peak at most 9,000,000 KiB."
+    },
+    {
+      "artifact": "exclusive full-1G lane",
+      "required_evidence": "The managed lease and acquisition lock are absent before execution and are acquired atomically by this runner."
+    },
+    {
+      "artifact": "transformed-ready population",
+      "required_evidence": "Exactly 587,138,826 bytes with SHA-256 7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce."
+    }
+  ],
+  "contract": {
+    "role": "proof-corrected causal impossibility ceiling for a bounded structural pushdown specialist",
+    "semantic_axis_changed": "causal scoring and matched-control proof surface only; the D parser, stack, transition key, table geometry, and target-scale threshold remain the v1 mechanism",
+    "population": {
+      "path": "/home/x/enwiki9-nonproof/cmix_lex_payload_gate/cmix_lex_payload_transfer_v1_retry2/transformed_ready.bin",
+      "bytes": 587138826,
+      "sha256": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce",
+      "unit": "post-WRT transformed byte",
+      "relationship": "complete transformed-ready stream from canonical enwik9 through the retained external frontend"
+    },
+    "parser": {
+      "tag_start": "transformed byte L",
+      "tag_end": "first transformed N outside single or double quotes",
+      "closing_prefix": "L followed by slash",
+      "non_element_prefixes": ["L!", "L?"],
+      "name_terminators": ["space", "tab", "carriage-return", "line-feed", "slash", "N"],
+      "maximum_name_bytes": 16,
+      "maximum_stack_depth": 16,
+      "maximum_event_bytes": 4096,
+      "overflow_behavior": "abandon the overlong event and suppress retained-stack predictions until ordinary bounded parsing resumes",
+      "mismatch_behavior": "do not pop on a closing-name mismatch",
+      "hash": "FNV-1a 64-bit exact name hash followed by frozen SplitMix64 state composition"
+    },
+    "transition_table": {
+      "entries": 1024,
+      "mapping": "direct mapped by the low ten bits of the composed key",
+      "state_key": "top parent-name hash, previous completed event hash at current depth, and exact retained depth",
+      "target": "L, optional slash, transformed element name up to sixteen bytes, and N only when contiguous",
+      "learning": "the first observation installs; a different target or key collision poisons the slot permanently"
+    },
+    "causal_order": [
+      "Outside an event, transformed L is first consumed as truth; only then may the event key and transition-table record be selected.",
+      "A transition target may score only relative offsets one and later. Relative offset zero is structurally forbidden and counted in a dedicated zero-required counter.",
+      "Closing-name replay becomes eligible only after both L and slash have been decoded and may score only relative offsets two and later.",
+      "For every byte, construct D/R/S/N from state through the previous byte, score against the current truth, then append truth, change quotes, parse completion, table state, stack state, and digests.",
+      "No parser completion, actual event length, closing delimiter, later byte, parent probability, archive loss, or control outcome may affect a prediction for the current byte."
+    ],
+    "arms": {
+      "K": "Execute the exact D parser, lookup, scoring-opportunity construction, table learning, stack mutation, and state digests with prediction disabled.",
+      "C": "At a decoded L/slash prefix, replay the exact top-of-stack closing name and terminal N.",
+      "T": "After decoded L, replay the unanimously learned tag signature beginning at relative offset one.",
+      "D": "Union T and C on exactly causal positions, with T taking overlap priority.",
+      "R": "On every D-active position, predict the high byte of frozen SplitMix64 over event key, absolute position, and source selector.",
+      "S": "On every D-active position, cyclically rotate the complete selected D target left by one byte, preserving opportunity set, target length, and byte multiset.",
+      "N": "On every D-active position, predict D xor 0xff.",
+      "repeat": "A fresh process must reproduce the complete normalized scan receipt byte-for-byte."
+    },
+    "measurements": {
+      "primary": "D correctly predicted bytes, an optimistic one-byte-per-correct-byte ceiling with no probability or archive authority",
+      "chronology": "D/R/S/N active and correct counts in three fixed equal transformed-coordinate thirds",
+      "source_attribution": "separate C and T active/correct counts plus union-priority counts",
+      "causality": "transition offset-zero predictions, closing predictions before relative offset two, score-before-truth transitions, table/stack partitions, and duplicate K/D transition digests",
+      "determinism": "input, opportunity, transition, table, stack, and terminal state digests"
+    },
+    "promotion": {
+      "required_correct_bytes": 4079243,
+      "minimum_third_margin": "D_correct strictly greater than max(R,S,N)_correct in every third",
+      "repeat": "byte-identical complete receipts",
+      "causal": "all causal and transition invariants pass with zero forbidden early predictions",
+      "resources": "both scans pass the frozen process-tree, cgroup, CPU, event, and scratch predicates",
+      "authority": "authorize retained-parent donor-surprise tracing only"
+    },
+    "retirement": "Retire the exact 16-byte-name, depth-16, 1,024-entry poisoned-table, exact-closing replay and unanimous-transition mechanism without tuning if correct-byte scale, any chronological control margin, causal verification, or repeat fails. Infrastructure/binding failure authorizes one runner-only correction."
+  },
+  "resource_bounds": {
+    "maximum_process_tree_rss_kib": 65536,
+    "maximum_process_vmhwm_kib": 65536,
+    "maximum_cgroup_memory_bytes": 256000000,
+    "maximum_temporary_disk_bytes": 100000000,
+    "maximum_logical_cpus": 1,
+    "memory_events_max": 0,
+    "memory_events_oom": 0,
+    "memory_events_oom_kill": 0,
+    "input_cache_rule": "read sequentially with POSIX_FADV_DONTNEED only after bytes have been scored"
+  },
+  "activation_requirements": [
+    "The candidate, experiment, execution plan, compiler, runner, verifier, schemas, and q1 policy-v4 closure are content-addressed.",
+    "The source-bound q1 v2 verifier is rerun and equals the supplied positive verification before lease acquisition.",
+    "The transformed population is fully rehashed before compilation.",
+    "Two fresh guarded scanner processes run sequentially under distinct empty cgroup-v2 paths.",
+    "No native WIKI-PDA probability or archive integration begins unless this corrected ceiling passes."
+  ],
+  "claim_boundary": [
+    "This is a zero-credit causal shadow and never an archive measurement.",
+    "Correct bytes are only an impossible eight-bit ceiling; parent surprisal and finite coding can reduce the realizable value arbitrarily.",
+    "The external parent and frontend receive zero Gamma authorship and score credit.",
+    "No execution is authorized while qm8 or any other full-1G lease owner is live."
+  ]
+}
