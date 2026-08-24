@@ -1,0 +1,57 @@
+{
+  "schema": "gamma.enwiki9.contract-supersession.v1",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "frozen_artifacts": [
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+      "sha256": "1afcc1c85735a63cd8155164323c4046a8e562feb3b9cdc3b304ed5d2588414b"
+    },
+    {
+      "path": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+      "sha256": "7d8e592c9e5cc06309fb9b2a3be4af273cc8fcbde167cdd97ed65025c53cab80"
+    },
+    {
+      "path": "operations/adaptive/proposals/proposed/000_cmix_obias_shadow_midpoint_oracle64_q0_v2.json",
+      "sha256": "826c34679b341b05e7b73f44dc65e697981a9e0091d4d83ee09f99bcf7b72ef0"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_decision_policy.json",
+      "sha256": "71e26beb13b99e88f1ad5f47c92fb848ba7993d5b058c73146fc9d8601b9074a"
+    }
+  ],
+  "source_audit": {
+    "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_source_audit_q0_v1.json",
+    "sha256": "87c679f18a297d2ff9e97db2267e7627139863743ac92e3d8ab84d1625f416b8"
+  },
+  "operational_status": "superseded_before_execution",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "archive_observed": false,
+  "reason": {
+    "code": "causal_closure_and_native_tape_write_set_underdetermined",
+    "source_findings": [
+      "The 32nd forward row predicts byte 32, whose truth is unavailable until that byte has already been coded; v2 incorrectly activates before the loss window is causally closed.",
+      "Native BackwardPass cannot be shortened by changing one loop bound because its reset, full-horizon gradient materialization, Adam step, and shadow refresh semantics are tied to epochs 127 and 0.",
+      "v2 replay writes recurrent forward-cache slots that the ordinary 128-event update later consumes, so it silently changes the parent tape while claiming ordinary updates remain unchanged.",
+      "v2 does not preserve the pre-replay hidden feature that actually predicted the already coded closure byte before rebuilding dynamic state.",
+      "v2 does not define the later ordinary BPTT interpretation after a live weight update creates a mixed-parameter-version native tape.",
+      "v2 names a generic parent and obsolete adaptive experiment schema rather than q1 policy-v4 authority and the current workflow."
+    ]
+  },
+  "forbidden_interpretations": [
+    "No compression rejection or positive midpoint result is recorded.",
+    "No v2 source candidate, program revision, build, arm archive, inverse, or receipt exists.",
+    "The defect cannot be repaired by silently delaying activation, overwriting native tape, or selecting an arbitrary 31-event gradient under the v2 identity.",
+    "The running qm8 q1 gate is not parent qualification authority."
+  ],
+  "successor": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+    "planning_path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+    "planning_sha256": "2f91139df7f3de8fcf05692078073b369c215a627156d74652841be5193514f0",
+    "experiment_path": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+    "experiment_sha256": "d7b7c3d90688eb67a7a340321419337af92892ea53f10abcbe96496c1c819001",
+    "mechanism_ir_path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.mechanism-ir.json",
+    "mechanism_ir_sha256": "f53c22d83ed03c28ad5c7c0f41526879ee189e746224f214445b3338d4070de0",
+    "relationship": "correction_only_source_completion"
+  }
+}

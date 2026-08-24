@@ -1,0 +1,286 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "proposalId": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "A causally closed, tape-isolated local-32 Byte-LSTM update can preserve exact P/K identity and produce target-scale finite-archive gain over both the qualified q1 parent and a frozen 16-event target-rotation control.",
+    "falsification": "Any valid 1MB F archive gain below 4,080 bytes, any valid 10MB F archive gain below 40,793 bytes, or any valid scope where F does not strictly beat S falsifies target-scale causal value; implementation, dependency, inverse, repeat, package, or resource failures produce no scientific verdict."
+  },
+  "changedMechanism": "Add exactly one persistent all-Byte-LSTM local-32 update at causal closure phases 32/96, after the closure byte is parent-coded, then rebuild only recurrent dynamic state through a native-tape-isolated replay. No predictor family, parameter subset, optimizer constant, horizon, population, or mixture is varied.",
+  "invariants": [
+    "P/K/F/S use one future content-addressed source tree, binary, frontend, coder, population, compile profile, and ordinary parent update cadence.",
+    "The source-defined forward window is x_s..x_(s+31), its exact causal targets are x_(s+1)..x_(s+32), and the first adapted prediction is for x_(s+33).",
+    "Byte x_(s+32) is always coded by the parent distribution produced before the midpoint update and is never recoded or reinterpreted as adapted evidence.",
+    "The midpoint backward path uses detached local-32 errors, adjoints, and gradients and cannot overwrite ordinary 128-event training tape rows.",
+    "F/S preserve the actual pre-replay hidden feature for the ordinary pending output update associated with x_(s+32).",
+    "K performs the full detached update arithmetic and unchanged-parameter state-only replay but leaves every future-affecting live value exactly equal to P.",
+    "F/S commit one recurrent Adam step and one output SGD step in donor order and refresh the same fp16 shadows as the source parent.",
+    "The later ordinary 128-event update retains its source call site and executes the frozen current-boundary approximation over mixed-version history; no hidden correction is introduced.",
+    "S rotates exactly the 32 closure targets by 16 positions and changes no other semantic or computational axis.",
+    "All oracle evidence receives zero objective credit and cannot be added to another candidate's gain."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Exact qualified q1 parent with midpoint mode disabled."
+    },
+    {
+      "id": "K",
+      "role": "replay",
+      "definition": "Full detached local-32 update computation plus unchanged-parameter state-only replay and canonical scratch clear; exact P identity required."
+    },
+    {
+      "id": "F",
+      "role": "treatment",
+      "definition": "Aligned closure targets, one persistent donor-order midpoint update, tape-isolated replay, and normal persistent continuation."
+    },
+    {
+      "id": "S",
+      "role": "shifted",
+      "definition": "Identical F machinery with the 32 closure target associations rotated by 16 positions."
+    }
+  ],
+  "population": {
+    "unit": "raw enwik9 bytes encoded through the complete reversible q1 pipeline; midpoint coordinates count modeled ByteMixer events",
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "selection": "Frozen opening 250KB implementation/exactness screen. A complete pass authorizes only a separately hash-bound opening 1MB calibration; only a target-scale causal 1MB pass authorizes the separately bound opening 10MB gate.",
+    "coordinate": "Nonoverlapping modeled-event segments s..s+63; snapshot at phase 0/64, close at decoded x_(s+32) on phase 32/96, and first alter the probability for x_(s+33)."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Decoded modeled bytes through x_(s+32), including the complete aligned target vector x_(s+1)..x_(s+32).",
+      "Exact parent auxiliary inputs, native forward histories, normalized output rows, output features, pending rank-one factors, parameters, moments, and phase counters available before the closure update.",
+      "The segment-start Byte-LSTM dynamic snapshot captured after any native phase-zero update and before Predict(x_s)."
+    ],
+    "forbiddenInformation": [
+      "x_(s+33) or any later truth before its arithmetic decision.",
+      "Treating x_(s+32) as though it had been predicted after adaptation.",
+      "Encoder-only state, teacher probabilities, fitted archive outcomes, future preprocessing state, or closed runtime artifacts.",
+      "Replay writes to already populated ordinary tape rows, coder rewind, first-half recoding, or context/mixer/SSE replay.",
+      "Any threshold, rotation, scale, parameter subset, optimizer, history precision, or population change after observing an archive."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "planning-contract-v3",
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+      "sha256": "sha256:2f91139df7f3de8fcf05692078073b369c215a627156d74652841be5193514f0"
+    },
+    {
+      "id": "mechanism-ir-v3",
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.mechanism-ir.json",
+      "sha256": "sha256:f53c22d83ed03c28ad5c7c0f41526879ee189e746224f214445b3338d4070de0"
+    },
+    {
+      "id": "v2-source-audit",
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_source_audit_q0_v1.json",
+      "sha256": "sha256:87c679f18a297d2ff9e97db2267e7627139863743ac92e3d8ab84d1625f416b8"
+    },
+    {
+      "id": "q1-qualification-policy-v4",
+      "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4.json",
+      "sha256": "sha256:c7554afad7b5dfc691293cf30138c037bbf550f0431391341adcc56cf4f877a3"
+    },
+    {
+      "id": "sealed-q1-source-lock",
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json",
+      "sha256": "sha256:fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 1.75,
+    "expectedMemoryRatio": 1.03,
+    "uncertaintyRisk": 0.9,
+    "interactionRisk": 0.85
+  },
+  "measurements": [
+    {
+      "id": "prerequisiteAuthorityPass",
+      "definition": "q1 policy-v4 qualification, independent verification, source/build closure, corrected managed-lane ownership, and absent exclusive lease all pass before execution.",
+      "unit": "boolean"
+    },
+    {
+      "id": "implementationClosurePass",
+      "definition": "Phase alignment, closure-byte parent coding, detached local-32 backward, event-time output adjoints, native-tape immutability, pending-feature preservation, state-only replay, shadow refresh, S rotation, and live negative mutation controls all pass.",
+      "unit": "boolean"
+    },
+    {
+      "id": "PKIdentityPass",
+      "definition": "P and K integer probabilities, coder states, payloads, archives, exact inverses, dynamic state, parameters, moments, counters, and ordinary training tape are byte-identical over the complete population.",
+      "unit": "boolean"
+    },
+    {
+      "id": "allArmExactnessPass",
+      "definition": "Every required P/K/F/S encode, decode, modeled-stream reconstruction, raw inverse, dependency, and complete-population predicate passes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "allArmRepeatPass",
+      "definition": "F and S repeat with byte-identical archives, update manifests, probability streams, and terminal state hashes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "FGainBytes",
+      "definition": "Exact arithmetic archive bytes of P minus exact arithmetic archive bytes of F on the identical scope.",
+      "unit": "bytes"
+    },
+    {
+      "id": "FBeatsPPass",
+      "definition": "F arithmetic archive is strictly smaller than P arithmetic archive.",
+      "unit": "boolean"
+    },
+    {
+      "id": "FBeatsSPass",
+      "definition": "F arithmetic archive is strictly smaller than S arithmetic archive.",
+      "unit": "boolean"
+    },
+    {
+      "id": "resourcesWithinLimits",
+      "definition": "Every arm passes the 9,765,625 KiB process-tree limit, the 10,000,000,000-byte hard cgroup cap, the 268,435,456-byte incremental-live ceiling, one-CPU enforcement, and scratch logical/allocated accounting.",
+      "unit": "boolean"
+    },
+    {
+      "id": "packageWithinCeiling",
+      "definition": "The complete incremental compressed oracle source/build/runtime package is no larger than 65,536 bytes.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "p-prerequisites",
+      "measurement": "prerequisiteAuthorityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-implementation",
+      "measurement": "implementationClosurePass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-pk",
+      "measurement": "PKIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-exact",
+      "measurement": "allArmExactnessPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "allArmRepeatPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-positive",
+      "measurement": "FBeatsPPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-causal",
+      "measurement": "FBeatsSPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-resources",
+      "measurement": "resourcesWithinLimits",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "p-package",
+      "measurement": "packageWithinCeiling",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "k-prerequisites",
+      "measurement": "prerequisiteAuthorityPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-implementation",
+      "measurement": "implementationClosurePass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-pk",
+      "measurement": "PKIdentityPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-exact",
+      "measurement": "allArmExactnessPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-repeat",
+      "measurement": "allArmRepeatPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-positive",
+      "measurement": "FBeatsPPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-causal",
+      "measurement": "FBeatsSPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-resources",
+      "measurement": "resourcesWithinLimits",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "k-package",
+      "measurement": "packageWithinCeiling",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/cmix_obias_shadow_midpoint_oracle64_q0_v3_250k/decision.json"
+  ],
+  "generatedUtc": "2026-08-24T11:30:39Z"
+}

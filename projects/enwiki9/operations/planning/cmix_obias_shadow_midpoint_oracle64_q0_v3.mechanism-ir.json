@@ -1,0 +1,152 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-ir.v1",
+  "mechanism_id": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "parent_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "semantic_axis_changed": "solver_or_preconditioner",
+  "information_sources": [
+    {
+      "id": "closed_window_truths",
+      "value_type": "32 ordered decoded modeled bytes x_(s+1)..x_(s+32)",
+      "decoder_visible_at": "entry to Perceive(x_(s+32)) after x_(s+32) was coded by the parent and before Predict(x_(s+32))",
+      "source_identity": "qualified q1 ByteMixer decoded-byte stream and input_history association"
+    },
+    {
+      "id": "window_forward_tape",
+      "value_type": "32 source-precision recurrent forward rows, normalized output rows, output features, and absolute native phases",
+      "decoder_visible_at": "the closure hook before any midpoint write",
+      "source_identity": "qualified q1 native deferred 128-event tape copied read-only into detached midpoint storage"
+    },
+    {
+      "id": "native_pending_output_factors",
+      "value_type": "burst-base output matrix plus ordered ordinary error/hidden rank-one factors through each absolute window phase",
+      "decoder_visible_at": "the closure hook",
+      "source_identity": "qualified q1 output_layer_, err0_, output_, input_history_, and h_hist_"
+    },
+    {
+      "id": "segment_start_dynamic_snapshot",
+      "value_type": "Byte-LSTM hidden vector, per-layer running cell state, and phase assertions",
+      "decoder_visible_at": "after any ordinary phase-zero update and before Predict(x_s)",
+      "source_identity": "qualified q1 Lstm and LstmLayer dynamic state only"
+    }
+  ],
+  "state_reads": [
+    {
+      "id": "byte_lstm_parameters_and_moments",
+      "lifetime": "persistent",
+      "source_location": "sealed-q1:src/mixer/lstm.h and lstm-layer.h complete trainable state",
+      "audit_hash": "byte_lstm_parameter_optimizer_manifest"
+    },
+    {
+      "id": "ordinary_training_tape",
+      "lifetime": "persistent",
+      "source_location": "sealed-q1:128-event Lstm and LstmLayer history rows",
+      "audit_hash": "ordinary_training_tape"
+    },
+    {
+      "id": "segment_start_dynamic_snapshot",
+      "lifetime": "segment",
+      "source_location": "v3:post-native-update pre-Predict segment hook",
+      "audit_hash": "segment_start_dynamic_state"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "qualified-q1:integer probability to coder boundary",
+      "audit_hash": "arithmetic_coder_state"
+    }
+  ],
+  "state_writes": [
+    {
+      "id": "byte_lstm_parameters_and_moments",
+      "lifetime": "persistent",
+      "source_location": "v3:one donor-order local-32 recurrent Adam step plus output SGD step",
+      "audit_hash": "byte_lstm_parameter_optimizer_manifest"
+    },
+    {
+      "id": "byte_lstm_dynamic_state",
+      "lifetime": "persistent",
+      "source_location": "v3:state-only replay then ordinary Predict(x_(s+32))",
+      "audit_hash": "byte_lstm_dynamic_state"
+    },
+    {
+      "id": "closure_pending_output_feature",
+      "lifetime": "persistent",
+      "source_location": "v3:HHistRow(closure_phase) ordinary write using saved pre-replay feature",
+      "audit_hash": "ordinary_training_tape"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "qualified-q1:unchanged coder consuming v3 probabilities beginning at x_(s+33)",
+      "audit_hash": "arithmetic_coder_state"
+    }
+  ],
+  "prediction_boundary": {
+    "variable": "qualified q1 integer probability for the next modeled byte's bit path",
+    "source_location": "ByteMixer::ByteUpdate after Lstm::Perceive returns and before ByteModel::ByteUpdate installs the next-byte distribution",
+    "before": "x_(s+32) was coded by parent OutputRow(s+31); the aligned local-32 update and state-only replay are complete",
+    "after": "Predict(x_(s+32)) returns the first adapted distribution for x_(s+33), which the unchanged ByteModel/coder consumes"
+  },
+  "update": {
+    "equation": "At each modeled segment start phase 0 or 64, after any ordinary phase-0 update and before Predict(x_s), snapshot dynamic hidden/cell state. At Perceive(x_(s+32)), after x_(s+32) is decoded and input_history is closed but before HHist/Predict, form losses OutputRow(e)-onehot(x_(e+1)) for e=s..s+31, reconstruct each event-time effective output matrix from the frozen live base plus native pending rank-one factors, run a detached local-32 reverse recurrent pass with zero temporal adjoints outside the window, commit one donor-order recurrent Adam step and one output SGD step, restore the segment-start dynamic state, replay x_s..x_(s+31) through a state-only forward that writes no native tape, preserve the pre-replay hidden as the ordinary pending feature for x_(s+32), and then run the normal Predict(x_(s+32)).",
+    "equation_sha256": "9b4cc888507a9b809ee189e5c746990721e6089151f8efa3bc89b126909f6c7e",
+    "ordinary_parent_update_cadence_unchanged": true
+  },
+  "lifecycle": {
+    "activate": "closure phases 32 or 96 after the closure byte is decoded and before its recurrent Predict transition",
+    "reset": "clear detached midpoint scratch after each closure; do not reset committed F/S parameters, moments, or rebuilt dynamic state",
+    "join": null,
+    "persistent_write_policy": "declared_and_hashed"
+  },
+  "numeric_contract": {
+    "format": "sealed q1 fp32 masters, moments, gradients, and output histories with compile-selected fp16 recurrent histories and forward shadows",
+    "rounding": "inherit the sealed q1 compiler/process profile and exact source conversion points",
+    "overflow": "abort before a new probability reaches the coder on non-finite or invalid state",
+    "accumulation_order": "absolute phase/source order for event-time output reconstruction and output SGD; local event descending, layer descending, donor gate/parameter order for recurrent backward and Adam",
+    "thread_count": 1
+  },
+  "mixture": null,
+  "controls": {
+    "P": "qualified q1 parent with midpoint mode disabled",
+    "K": "detached update plus unchanged-parameter state-only replay; exact parent identity required",
+    "R": null,
+    "S": "same update and replay with the 32 closure targets rotated by exactly 16 positions"
+  },
+  "hashes": [
+    "integer_probability_stream",
+    "arithmetic_coder_state",
+    "payload_prefix",
+    "byte_lstm_parameter_optimizer_manifest",
+    "byte_lstm_dynamic_state",
+    "ordinary_training_tape",
+    "segment_start_dynamic_state",
+    "detached_midpoint_tape",
+    "midpoint_update_manifest",
+    "exact_raw_inverse"
+  ],
+  "ceilings": {
+    "maximum_added_package_bytes": 65536,
+    "process_tree_memory_bytes": 10000000000,
+    "temporary_disk_bytes": 100000000000,
+    "reject_only_futility_rule": "At a sealed scope, stop only after the treatment archive cannot meet the frozen gross-gain threshold even with zero additional emitted bytes; a partial stop receives no compression verdict."
+  },
+  "generated_outputs": [
+    "P_control",
+    "K_control",
+    "D_treatment",
+    "D_raw_treatment",
+    "M_mixed_treatment",
+    "R_control",
+    "S_control",
+    "rolling_hash_spec",
+    "futility_contract",
+    "receipt_schema",
+    "package_manifest_template",
+    "reflection_skeleton",
+    "arm_difference_manifest",
+    "state_access_manifest",
+    "native_control_header"
+  ]
+}

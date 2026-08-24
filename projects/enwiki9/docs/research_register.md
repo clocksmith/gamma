@@ -177,6 +177,68 @@ sealed SAFE-MIX v2 wrapper, and one-successor ladder. SAFE-FORK v1 is
 explicitly superseded before execution; only a positive 10MB attribution-v2
 receipt may authorize materializing one new SAFE-FORK v2 source candidate.
 
+### Source-level closure supersedes midpoint oracle v2 and its attribution dependency
+
+A direct audit of the sealed q1 C++ source found that shadow midpoint oracle
+v2 was still not implementable as written. `Predict(x_t)` writes the
+distribution for `x_(t+1)`, and the corresponding target is installed only by
+the later `Perceive(x_(t+1))`. Therefore the recurrent forward rows for a
+nominal first half `x_s..x_(s+31)` do not have 32 decoder-visible losses until
+`x_(s+32)` has already been coded. The old contract incorrectly treated byte
+32 as both unavailable future truth and an adapted prediction.
+
+The source exposes four additional blocking ownership facts. Native recurrent
+`BackwardPass` keys its accumulator reset, complete dense-gradient sweep, Adam
+step, and shadow refresh to epochs 127 and 0, so it cannot become a local-32
+pass by changing one loop bound. Native `ForwardPass` writes the 128-event
+history tape later consumed by the ordinary update, so rebuilding through that
+entry point would silently replace already coded evidence. `HHistRow(epoch_)`
+must retain the pre-replay hidden feature that actually predicted the closure
+byte; recording rebuilt hidden state there would pair the ordinary pending
+error with the wrong feature. Finally, a live mid-burst parameter update means
+the later ordinary boundary sees histories from multiple parameter versions,
+which v2 never interpreted.
+
+The complete read-only finding is bound to q1 source closure
+`e2aaf037...f628f`, program lock `edd1252e...f5787`, and release binary
+`610edd6a...8808`. No v2 program, build, arm, archive, inverse, or scientific
+result exists. Oracle v2 is now superseded before execution rather than
+silently completed. Because persistence-attribution v2 defined F/J/S by exact
+identity to that obsolete trajectory, it is also superseded before execution;
+its exact `5*J_gain >= 4*F_gain` scientific question remains unmeasured.
+
+Correction-only `cmix_obias_shadow_midpoint_oracle64_q0_v3` freezes the first
+source-complete realization. Sixty-four-event segments align with native
+128-event phases: snapshots occur at phases 0 or 64 after any ordinary
+phase-zero update, and closure hooks occur at phases 32 or 96. At entry to
+`Perceive(x_(s+32))`, byte 32 remains parent-coded, the exact 32-loss target
+vector is `x_(s+1)..x_(s+32)`, and the first adapted probability is emitted by
+the subsequent normal `Predict(x_(s+32))` for byte 33. This honestly leaves 31
+affected bytes per complete segment.
+
+The v3 gradient copies the native window into detached storage, reconstructs
+each event-time output matrix from the burst base and all absolute-phase
+pending rank-one factors, and runs a new local-32 backward path with temporal
+adjoints zero outside the window. F/S commit one donor-order recurrent Adam
+step followed by one output SGD step and refresh the exact fp16 shadows; K
+performs the same update arithmetic on detached copies. Replay restores only
+the segment-start hidden/cell state and uses a new state-only forward primitive
+that cannot write native tape, epochs, loss, optimizer, mixer, SSE, context, or
+coder state. The ordinary pending output feature for the already coded closure
+byte is explicitly preserved from before replay.
+
+The later native 128-event update keeps its source call site and cadence. v3
+defines it transparently as the existing current-boundary approximation over
+mixed-version history; it does not claim an unchanged or exact
+historical-weight graph. The P/K/F/S Mechanism IR and current structured
+experiment are frozen, and the adaptive proposal is `dormant_dependency` on a
+positive independently verified q1 policy-v4 qualification. The first gate is
+250KB exactness and strict F-over-P/F-over-S ordering; 1MB requires `4,080`
+bytes, and 10MB requires `40,793` bytes plus positive original-coordinate
+thirds. No source candidate, compile, execution, archive gain, compression
+credit, or score credit exists. Router v3 permits a corrected persistence
+attribution identity only after a valid positive 10MB v3 oracle.
+
 ### Live qm8 residency attribution and corrected bounded-to-full routing
 
 A read-only live snapshot at `2026-08-24T03:14:27Z`, with the encode progress

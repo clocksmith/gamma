@@ -1,0 +1,178 @@
+{
+  "schema": "gamma.enwiki9.cmix-shadow-midpoint-source-audit.v1",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2_source_audit_q0_v1",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+  "operational_status": "terminal_static_rejection",
+  "scientific_verdict": null,
+  "score_credit_bytes": 0,
+  "archive_observed": false,
+  "audited_parent": {
+    "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+    "qualification_policy": {
+      "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4.json",
+      "sha256": "c7554afad7b5dfc691293cf30138c037bbf550f0431391341adcc56cf4f877a3"
+    },
+    "program_lock_verification": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json",
+      "sha256": "fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149",
+      "verified": true,
+      "program_lock_sha256": "edd1252e090a1cc82eba195ddf69fa0f0a8ce317765e989b8e6fa8b7d8cf5787"
+    },
+    "build_receipt": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-receipt.json",
+      "sha256": "7aa4f2b2ce0bec5b010ef2b38cc72a72eba61a7964bd57b38b9951e80c2b46f4",
+      "source_closure_sha256": "e2aaf0378ce3eaf24777da12c484b95ea74c9490e007264babfed143777f628f",
+      "binary_sha256": "610edd6aa20fe44c8231593b6151f499e484ebba97535044a1c02f554b648808"
+    }
+  },
+  "source_files": [
+    {
+      "path": "src/mixer/byte-mixer.cpp",
+      "sha256": "8e475594d488cf9bf47ff875b2064685bdae65b322e954a48493bafe6bb8b229",
+      "relevant_lines": [
+        22,
+        26
+      ]
+    },
+    {
+      "path": "src/mixer/byte-mixer.h",
+      "sha256": "4fd473cfbb8d88ddd7a8c466622fdaa0bee75338cc54735960c9446ee99aeb94",
+      "relevant_lines": [
+        10,
+        30
+      ]
+    },
+    {
+      "path": "src/mixer/lstm.h",
+      "sha256": "fb7be096545d2b6c8d0a7748c47b95e0b6fdf25a158d4bbbabe0f47de7e87b61",
+      "relevant_lines": [
+        14,
+        92
+      ]
+    },
+    {
+      "path": "src/mixer/lstm.hpp",
+      "sha256": "c1c3d6217662253eb8832a2bdd9d242a7873169bd43ad172e9b1d8a0bf4bb019",
+      "relevant_lines": [
+        61,
+        272
+      ]
+    },
+    {
+      "path": "src/mixer/lstm-layer.h",
+      "sha256": "20b556fadd6d51673085288736837710b184f24936223138b0a9dae53700153f",
+      "relevant_lines": [
+        62,
+        168
+      ]
+    },
+    {
+      "path": "src/mixer/lstm-layer.hpp",
+      "sha256": "d2995fd0ddb3c36c20fdbe7bb67638e2bfe64fa882d61edd3ebab5a8c70c658c",
+      "relevant_lines": [
+        16,
+        524
+      ]
+    },
+    {
+      "path": "src/mixer/simd-activations.h",
+      "sha256": "18246880244e448f3abb6fbb28dca0c773b0810c14c7f465a3df5d879889136d",
+      "relevant_lines": [
+        248,
+        267
+      ]
+    },
+    {
+      "path": "src/predictor.cpp",
+      "sha256": "05b72fed2697d9db1bd92ecd0d69a49220513cf2af5d639b772ea8af551a20f6",
+      "relevant_lines": [
+        158,
+        184,
+        408,
+        461
+      ]
+    }
+  ],
+  "proved_source_facts": [
+    {
+      "id": "byte_event_order",
+      "fact": "ByteMixer::ByteUpdate scales the already assembled auxiliary input, calls Lstm::SetInput, then calls Lstm::Perceive with the just-decoded byte; the returned distribution becomes the next-byte ByteModel distribution."
+    },
+    {
+      "id": "prediction_target_offset",
+      "fact": "Predict(x_t) writes OutputRow(epoch_t), which predicts x_(t+1). Its target becomes available only when the later Perceive(x_(t+1)) overwrites input_history_[epoch_t]. A 32-forward-event recurrent loss over x_s through x_(s+31) is therefore not causally closed until x_(s+32) is decoded."
+    },
+    {
+      "id": "native_horizon_lifecycle",
+      "fact": "The parent horizon is 128. ComputeOutputBptt, reverse recurrent BackwardPass, ApplyOutputUpdates, accumulator initialization, Adam step advancement, dense-gradient materialization, and fp16 shadow refresh all use hard-coded epoch-zero, epoch-127, or full-horizon behavior."
+    },
+    {
+      "id": "virtual_output_snapshots",
+      "fact": "The live output matrix is frozen during an ordinary 128-event burst. Per-byte output SGD steps exist as pending error/hidden rank-one factors; Predict and ComputeOutputBptt reconstruct effective historical output matrices from those factors."
+    },
+    {
+      "id": "native_tape_ownership",
+      "fact": "ForwardPass writes the native layer input, fp16 input, gate, layer-normalization, cell-state, and activation histories that the later ordinary 128-event BackwardPass consumes. Replaying through ForwardPass would overwrite evidence for already coded events."
+    },
+    {
+      "id": "pending_feature_alias",
+      "fact": "HHistRow(epoch_) records the feature vector used by the pending output-layer update before Predict advances the recurrent state. If a midpoint replay changes hidden_ before that copy, the ordinary error row for the already coded closure byte is paired with the wrong feature vector."
+    },
+    {
+      "id": "aligned_phases",
+      "fact": "Because 64 divides the 128-event horizon, 64-event segments begin only at native phases 0 or 64 and a one-byte closure update occurs only at phases 32 or 96. Neither closure phase is a native ordinary-update boundary."
+    },
+    {
+      "id": "actual_numeric_storage",
+      "fact": "The sealed native build uses fp32 parameter and optimizer masters plus compile-selected fp16 forward shadows and fp16-only deferred recurrent histories on this F16-capable build profile. A midpoint realization must preserve those conversion points and refresh shadows after committed master updates."
+    }
+  ],
+  "v2_contract_defects": [
+    {
+      "id": "causal_off_by_one",
+      "severity": "blocking",
+      "detail": "v2 claims 32 native recurrent losses are available after decoded bytes 0 through 31 and before byte 32 is predicted. The source maps those forward rows to targets 1 through 32, so the last target is not available until byte 32 has already been coded."
+    },
+    {
+      "id": "native_backward_not_parameterized",
+      "severity": "blocking",
+      "detail": "Changing only the event loop bound cannot reuse BackwardPass: accumulator reset, update-step advancement, gradient materialization, and Adam application still key on native epochs 127 and 0 and sweep all 128 histories."
+    },
+    {
+      "id": "replay_tape_corruption",
+      "severity": "blocking",
+      "detail": "v2 commits rebuilt recurrent forward-cache slots. Those slots are the ordinary parent's deferred 128-event training tape, so overwriting them changes a second mechanism while claiming native ordinary updates remain unchanged."
+    },
+    {
+      "id": "pending_output_feature_corruption",
+      "severity": "blocking",
+      "detail": "v2 does not preserve the pre-replay hidden feature that actually predicted the already coded closure byte before the live recurrent state is rebuilt."
+    },
+    {
+      "id": "mid_burst_weight_version_undefined",
+      "severity": "blocking",
+      "detail": "v2 changes live recurrent and output weights inside a parent burst but does not define how the later ordinary 128-event BPTT interprets a tape containing trajectories from multiple parameter versions."
+    },
+    {
+      "id": "obsolete_parent_authority",
+      "severity": "blocking",
+      "detail": "v2 names generic cmix_obias_memory_safe_parent_q0_v1 rather than the exact q1 policy-v4 qualification decision and sealed source closure."
+    },
+    {
+      "id": "obsolete_adaptive_schema",
+      "severity": "blocking",
+      "detail": "The v2 adaptive experiment uses gamma.enwiki9.adaptive-experiment.v2 and has no candidate tree, revision, program, or current workflow activation interface."
+    }
+  ],
+  "verdict": {
+    "classification": "supersede_before_execution",
+    "reason": "The v2 scientific question remains open, but its causal boundary and state-write semantics cannot be implemented without silently choosing new mathematics and corrupting the parent training tape.",
+    "authorized_mutation": "One correction-only v3 contract may shift activation to the first causally closed Perceive call, isolate midpoint gradients and replay from the native tape, preserve the actual pending output feature, and freeze the later ordinary update as an explicit current-boundary approximation. No optimizer, rank, scale, parameter subset, or population sweep is authorized."
+  },
+  "claim_boundary": [
+    "This audit is read-only source evidence and grants no compression or score credit.",
+    "No P, K, F, or S arm has executed under v2.",
+    "The audit rejects only the v2 realization contract, not decoder-synchronized midpoint learning as a family.",
+    "The running qm8 q1 full-corpus gate was not modified, signaled, or used as positive qualification authority."
+  ]
+}
