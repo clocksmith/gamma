@@ -1292,6 +1292,34 @@ the [`design`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2.j
 [`experiment`](../operations/adaptive/experiments/wiki_pda_structural_replay_ceiling_q0_v2.json),
 and [`execution plan`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2_execution.json).
 
+### 2026-08-24 - WIKI-PDA v2 receives a correction-only q1-v3 authority successor
+
+The frozen WIKI-PDA v2 scanner did not change, but its first execution plan
+became stale when q1 policy v6 revoked all policy-v4/v2-verifier successor
+paths. `wiki_pda_structural_replay_ceiling_q0_v2_execution_v2` corrects only
+that parent-authority axis. It retains candidate tree
+`8f674767ceb8f452f24f2167460f89519957652624340ef3ecdcd1dfa2302419`,
+scanner
+`3e9aebfa0b32aa57fc23eb41b91bfc6dde737ff0428fbe28a7fa1ac52af4b82f`,
+the exact `587,138,826`-byte population, all D/R/S/N definitions, the
+`4,079,243`-correct-byte threshold, chronological-third predicates, and every
+resource ceiling.
+
+The successor requires a future active q1 policy revision at least 7, a
+schema-valid q1-v3 authority router, an exact stored v3 verification, a fresh
+independent v3 re-verification, and an absent full-1G lease and lock. Its
+decision and independent verifier bind both the active policy and the v6
+design policy. The old policy-v4 execution plan remains stale and has no
+execution authority.
+
+AST, Draft 2020-12 schema, exact 32-artifact plan-binding, candidate-tree,
+scanner-hash, and diff checks pass. No population scan, compilation, result
+root, or receipt was created because qm8 owns the live full-1G namespace and
+q1-v3 authority does not yet exist. This remains the same zero-credit causal
+ceiling, not a new algorithm and not Hutter evidence. See the
+[`authority review`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2_authority_v3_review.md)
+and [`execution successor`](../operations/planning/wiki_pda_structural_replay_ceiling_q0_v2_execution_v2.json).
+
 ## 2026-08-24 - WIKI-LOOM freezes semantic virtual time as a dormant new source
 
 An exclusion audit rejected three superficially creative routes before any new
