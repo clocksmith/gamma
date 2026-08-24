@@ -147,6 +147,7 @@ def validate_plan(receipt_path: Path) -> None:
     jsonschema.Draft202012Validator(schema).validate(plan)
     contract = plan.get("contract", {})
     activation = contract.get("activation", {})
+    source = json.loads(receipt_path.read_text(encoding="utf-8"))
     if (
         plan.get("artifact_id")
         != "cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1"
@@ -159,6 +160,12 @@ def validate_plan(receipt_path: Path) -> None:
         or activation.get("status") != "activated_after_terminal_failed_qm8"
         or activation.get("execution_authorized") is not True
         or activation.get("terminal_receipt_sha256") != sha256(receipt_path)
+        or source.get("schema") != SOURCE_SCHEMA
+        or source.get("candidate_id")
+        != "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+        or source.get("arm") != "a"
+        or source.get("terminal_pass") is not False
+        or live_qm8_processes()
         or contract.get("promotion_authority") is not False
         or contract.get("memory_safe_parent_qualification_authority") is not False
         or contract.get("archive_authority") is not False
