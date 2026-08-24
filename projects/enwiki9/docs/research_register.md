@@ -20,17 +20,20 @@ stranded private capacity. Every overflowed bucket receives all four remaining
 slots with no capacity ceiling. Absent overflow is exactly four zero slots;
 present overflow preserves the parent's indexes, lowest-index checksum match,
 protected recent entries, strict victim tie order, keep bits, run state, and
-updates. A stable 4,096-record chunk arena allows `cp` and `runp` to point into
-overflow without movable storage. Allocation identities and addresses never
-enter prediction state, so a correct implementation should reproduce every
-parent probability and archive byte by induction.
+updates. Each instance reserves one contiguous `MAP_NORESERVE` arena and packs
+activated records into its sequentially committed prefix. This needs only 41
+additional VMAs, no chunk directory, and gives stable `cp` and `runp` pointers.
+Virtual reservation is recorded separately from RSS; allocation identities and
+addresses never enter prediction state, so a correct implementation should
+reproduce every parent probability and archive byte by induction.
 
 Before overflow, the representation releases exactly `1,333,436,416` bytes.
 With `O` activated buckets, a conservative saving is
-`1,333,436,416 - 81,392 - 36*O - 6,044,220`. Even charging the maximum tail
-waste across all 41 arenas, at most `29,413,204` overflowed buckets
-(`70.5951%`) preserves a `262,144 KiB` static reduction. The actual overflow
-demand is unknown and receives no inferred credit.
+`1,333,436,416 - 36*O - 167,895`. Even charging maximum page-rounding waste
+across all 41 arenas, at most `29,578,696` overflowed buckets (`70.9923%`)
+preserves a `262,144 KiB` user-page reduction. Page tables and other kernel
+costs still require cgroup measurement. The actual overflow demand is unknown
+and receives no inferred credit.
 
 `cmix_obias_sparse_exact_assoc14_q0_v1` is therefore frozen as a dormant,
 one-mechanism semantic contingency. It may activate only after qm8
