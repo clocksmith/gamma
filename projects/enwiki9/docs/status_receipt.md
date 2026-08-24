@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-23T21:39:11+00:00`
+- Generated at UTC: `2026-08-24T03:42:06+00:00`
 
 ## Target State
 
@@ -15,15 +15,15 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `None`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
-- Gate verdict: `None`
-- Gate next action: `None`
+- Candidate: `cmix_filebacked_fxcm_full_a_qm8_v1`
+- Scope bytes: `1,000,000,000`
+- Scope symbols: `8,000,000,000`
+- Scope unit: `canonical raw enwik9 byte`
+- Gate verdict: `running`
+- Gate next action: `wait_for_gate_completion`
 - Active scorer observed: `false`
 - Active cmix mode: `n/a`
-- Driver result present: `unknown`
+- Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
@@ -34,11 +34,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch candidate gate: `true`
+- Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `47`
+- Pending adaptive jobs: `48`
 - Held pending adaptive jobs: `30`
-- Claimable pending adaptive jobs: `17`
+- Claimable pending adaptive jobs: `18`
 - Canonical release bundles: `0`
 - Validated release run receipts: `0`
 - Validated failed release attempts: `0`
@@ -49,20 +49,20 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `unknown`
-- Next action: `unknown`
-- Candidate: `unknown`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
-- Driver result JSON: `not present`
-- Driver result present: `unknown`
+- Gate verdict: `running`
+- Next action: `wait_for_gate_completion`
+- Candidate: `cmix_filebacked_fxcm_full_a_qm8_v1`
+- Scope bytes: `1,000,000,000`
+- Scope symbols: `8,000,000,000`
+- Scope unit: `canonical raw enwik9 byte`
+- Driver result JSON: `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/decision.json`
+- Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
 - Active scorer observed: `false`
-- Live gate: `false`
-- Liveness classification: `not_persisted_running`
-- Matching adaptive jobs: `0`
+- Live gate: `true`
+- Liveness classification: `live_observed_owner`
+- Matching adaptive jobs: `1`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
@@ -78,8 +78,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `None`
-- Expected scope bytes: `n/a`
+- Expected candidate: `cmix_filebacked_fxcm_full_a_qm8_v1`
+- Expected scope bytes: `1,000,000,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -90,8 +90,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `None`
-- Expected active scope bytes: `n/a`
+- Expected active candidate: `cmix_filebacked_fxcm_full_a_qm8_v1`
+- Expected active scope bytes: `1,000,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -101,9 +101,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Action
 
-- Safe to launch candidate gate: `true`
-- Action: `inspect_queue_before_launch`
-- Reason: `no terminal receipt blocks the next candidate queue decision`
+- Safe to launch candidate gate: `false`
+- Action: `wait_for_gate_receipts`
+- Reason: `the gate state is incomplete and cannot drive a mutation yet`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -111,7 +111,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `inspect_queue_before_launch`
+- Recommended action: `wait_for_gate_receipts`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
@@ -124,11 +124,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `899`
-- Registered programs: `441`
-- Untracked nonignored entries: `123`
-- Modified tracked entries: `25`
-- Candidate statuses: `active=18, blocked_dependency=33, candidate=185, measured_negative=100, retired=558, track_source_before_evolution=5`
+- Program directories: `902`
+- Registered programs: `443`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `3`
+- Candidate statuses: `active=18, blocked_dependency=33, candidate=189, measured_negative=100, retired=562`
 
 ## Active Runner Process Table
 
@@ -140,7 +140,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/lease-transitions.json` | 1,564 | `2026-08-23T21:52:03+00:00` |
+
+## Contingencies
+
+- If current gate passes: `record pass and apply candidate target-gate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 
