@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fxcm-fossil-match-execution-plan.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "artifact_id", "revision", "candidate_id", "operational_status",
+    "execution_authorized", "claim_boundary", "candidate_revision", "experiment",
+    "proposal", "implementation", "schemas", "parent_qualification", "exclusive_lane",
+    "resource_guard", "toolchain", "population", "command_template", "outputs",
+    "promotion_condition", "kill_condition", "archive_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "fxcm-fossil-match-execution-plan.schema.json"},
+    "artifact_id": {"const": "fxcm_fossil_match_q0_v3_execution"},
+    "revision": {"type": "integer", "minimum": 1},
+    "candidate_id": {"const": "fxcm_fossil_match_q0_v3"},
+    "operational_status": {"const": "frozen_waiting_for_qualified_q1_parent_and_released_full1g_lease"},
+    "execution_authorized": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "candidate_revision": {"$ref": "#/$defs/revision"},
+    "experiment": {"$ref": "#/$defs/file"},
+    "proposal": {"$ref": "#/$defs/file"},
+    "implementation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "source_sha256", "interface", "interface_sha256", "scan_schema", "scan_schema_sha256", "runner", "runner_sha256", "verifier", "verifier_sha256"],
+      "properties": {
+        "source": {"$ref": "#/$defs/path"}, "source_sha256": {"$ref": "#/$defs/sha"},
+        "interface": {"$ref": "#/$defs/path"}, "interface_sha256": {"$ref": "#/$defs/sha"},
+        "scan_schema": {"$ref": "#/$defs/path"}, "scan_schema_sha256": {"$ref": "#/$defs/sha"},
+        "runner": {"$ref": "#/$defs/path"}, "runner_sha256": {"$ref": "#/$defs/sha"},
+        "verifier": {"$ref": "#/$defs/path"}, "verifier_sha256": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "schemas": {
+      "type": "object", "minProperties": 5,
+      "additionalProperties": {"$ref": "#/$defs/file"}
+    },
+    "parent_qualification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy", "receipt_schema", "verification_schema", "verifier"],
+      "properties": {
+        "policy": {"$ref": "#/$defs/file"},
+        "receipt_schema": {"$ref": "#/$defs/file"},
+        "verification_schema": {"$ref": "#/$defs/file"},
+        "verifier": {"$ref": "#/$defs/file"}
+      }
+    },
+    "exclusive_lane": {
+      "type": "object", "additionalProperties": false,
+      "required": ["implementation", "schema", "verifier", "lease", "lock", "policy"],
+      "properties": {
+        "implementation": {"$ref": "#/$defs/file"}, "schema": {"$ref": "#/$defs/file"}, "verifier": {"$ref": "#/$defs/file"},
+        "lease": {"$ref": "#/$defs/path"}, "lock": {"$ref": "#/$defs/path"},
+        "policy": {"type": "string", "minLength": 1}
+      }
+    },
+    "resource_guard": {
+      "type": "object", "additionalProperties": false,
+      "required": ["implementation", "receipt_schema", "limit_kib", "cgroup_memory_max_bytes", "scratch_limit_bytes", "max_logical_cpus", "cpu", "cgroup_a", "cgroup_b"],
+      "properties": {
+        "implementation": {"$ref": "#/$defs/file"}, "receipt_schema": {"$ref": "#/$defs/file"},
+        "limit_kib": {"const": 196608}, "cgroup_memory_max_bytes": {"const": 760000000},
+        "scratch_limit_bytes": {"const": 100000000}, "max_logical_cpus": {"const": 1},
+        "cpu": {"const": 0}, "cgroup_a": {"type": "string", "pattern": "^/sys/fs/cgroup/.+"},
+        "cgroup_b": {"type": "string", "pattern": "^/sys/fs/cgroup/.+"}
+      }
+    },
+    "toolchain": {
+      "type": "object", "additionalProperties": false,
+      "required": ["compiler", "compiler_sha256", "loader_library", "loader_library_sha256", "ld_library_path", "taskset", "taskset_sha256", "compile_flags"],
+      "properties": {
+        "compiler": {"type": "string", "pattern": "^/"}, "compiler_sha256": {"$ref": "#/$defs/sha"},
+        "loader_library": {"type": "string", "pattern": "^/"}, "loader_library_sha256": {"$ref": "#/$defs/sha"},
+        "ld_library_path": {"type": "string", "pattern": "^/"},
+        "taskset": {"type": "string", "pattern": "^/"}, "taskset_sha256": {"$ref": "#/$defs/sha"},
+        "compile_flags": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "population": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"type": "string", "pattern": "^/"}, "bytes": {"const": 587138826}, "sha256": {"const": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"}}
+    },
+    "command_template": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+    "outputs": {"type": "array", "minItems": 7, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "promotion_condition": {"type": "string", "minLength": 1},
+    "kill_condition": {"type": "string", "minLength": 1},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "minLength": 1},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "revision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "candidate_tree_sha256"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha"}, "candidate_tree_sha256": {"$ref": "#/$defs/sha"}}
+    }
+  }
+}
