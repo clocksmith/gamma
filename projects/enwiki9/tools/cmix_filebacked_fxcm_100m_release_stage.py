@@ -12,6 +12,7 @@ import re
 import shutil
 import stat
 import subprocess
+import sys
 import time
 from typing import Any, Callable
 
@@ -41,6 +42,10 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: stream.read(8 << 20), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def command_sha256(argv: list[str]) -> str:
+    return hashlib.sha256(b"\0".join(os.fsencode(value) for value in argv)).hexdigest()
 
 
 def artifact(path: Path) -> dict[str, Any]:
@@ -137,7 +142,11 @@ def scratch_usage(roots: tuple[Path, ...]) -> tuple[int, int]:
         directory = pending.pop()
         with os.scandir(directory) as entries:
             for entry in entries:
-                metadata = entry.stat(follow_symlinks=False)
+                try:
+                    metadata = entry.stat(follow_symlinks=False)
+                except FileNotFoundError:
+                    # The outer guard atomically replaces its live JSON receipt.
+                    continue
                 if stat.S_ISLNK(metadata.st_mode):
                     raise RuntimeError(f"scratch symlink forbidden: {entry.path}")
                 if stat.S_ISDIR(metadata.st_mode):
@@ -262,7 +271,24 @@ def run_monitored(
     sampler: PhaseSampler,
     event_handler: Callable[[bytes, float, PhaseSampler], None],
 ) -> int:
-    seen_events = 0
+    stderr_offset = 0
+    pending = b""
+
+    def consume(final: bool = False) -> None:
+        nonlocal stderr_offset, pending
+        with stderr_path.open("rb") as source:
+            source.seek(stderr_offset)
+            chunk = source.read()
+            stderr_offset += len(chunk)
+        pieces = re.split(rb"[\r\n]", pending + chunk)
+        pending = b"" if final else pieces.pop()
+        if final and pieces and pieces[-1] == b"":
+            pieces.pop()
+        for line in pieces:
+            match = PROGRESS.search(line)
+            if match is not None:
+                event_handler(match.group(1), float(match.group(2)), sampler)
+
     with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
         process = subprocess.Popen(
             argv,
@@ -271,20 +297,23 @@ def run_monitored(
             stdout=stdout,
             stderr=stderr,
         )
-        while process.poll() is None:
-            sampler.observe()
-            content = stderr_path.read_bytes()
-            events = PROGRESS.findall(content)
-            for kind, raw_value in events[seen_events:]:
-                event_handler(kind, float(raw_value), sampler)
-            seen_events = len(events)
-            time.sleep(0.25)
-        return_code = process.wait()
+        try:
+            while process.poll() is None:
+                sampler.observe()
+                consume()
+                time.sleep(0.25)
+            return_code = process.wait()
+        except BaseException:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+            raise
     sampler.observe()
-    content = stderr_path.read_bytes()
-    events = PROGRESS.findall(content)
-    for kind, raw_value in events[seen_events:]:
-        event_handler(kind, float(raw_value), sampler)
+    consume(final=True)
     return return_code
 
 
@@ -513,6 +542,9 @@ def main() -> int:
     receipt = {
         "schema": SCHEMA,
         "candidate_id": CANDIDATE_ID,
+        "runner": artifact(Path(__file__).resolve(strict=True)),
+        "receipt_schema": artifact(receipt_schema_path),
+        "command_sha256": command_sha256([sys.executable, *sys.argv]),
         "population": artifact(population),
         "inputs": inputs,
         "outputs": outputs,
