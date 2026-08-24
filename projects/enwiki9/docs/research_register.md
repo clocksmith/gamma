@@ -721,6 +721,33 @@ or proof experiment ran. Qm8 remains live and untouched; q1 full-1G payload,
 inverse, cleanup, runtime, and qualification remain unknown. This change has
 zero Gamma compression, authorship, archive, or score credit.
 
+The v3 schemas are intentionally direct-validator contracts rather than new
+entries in the global `research_contracts.py` registry. A trial registration
+changed that shared source digest and made unrelated sealed NNCP experiments
+appear invalid. The registration was removed before any run; the global
+registry is restored byte-for-byte to SHA-256 `744d3cc2...fa5b`, while the v3
+verifier and its 154-member closure still bind and validate both v3 schemas
+directly. This preserves unrelated historical evidence instead of forcing a
+campaign-wide migration for a dormant authority format.
+
+The same audit reached the adaptive scheduler. Before correction,
+`next-experiment` labeled the already-retried qm7 proposal, the dormant owned
+lease manager, the statically rejected Mechanism-IR wrapper, WIKI-PDA v2,
+WIKI-SCHEMA-VM v1, and FOSSIL-MATCH v3 as eligible at ranks `2`, `4`, `5`,
+`6`, `7`, and `8`. Their executable entry points would still have failed, but
+the scheduler could select them and waste the serialized lane. Their canonical
+proposal records now encode the evidence already established: qm7 is
+superseded by live qm8; the wrapper is superseded by its static rejection; the
+owned-cleanup manager is dormant until qm8 terminalizes and releases the
+namespace; and all three q1 mechanisms are superseded pending new candidate
+identities bound to a positive v3 qualification.
+
+A fresh rank derivation marks all six rows `eligible=false` at ranks `8`, `9`,
+`10`, `13`, `14`, and `15`; the selected unrelated proposal remains
+`delta_midas_named_midpoint_gradient_65536_q0_v1`. This is scheduling
+quarantine, not scientific retirement of the WIKI-PDA, schema-VM, or FOSSIL
+mechanisms. No candidate, control, archive, or proof run occurred.
+
 ### SAFE-MIX static closure audit
 
 `gamma_safe_mix_v1` remains unexecuted and zero-credit. Its Q63 native
