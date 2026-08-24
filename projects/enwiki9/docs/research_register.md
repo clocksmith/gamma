@@ -496,8 +496,20 @@ Planning revision 2 closes those static gaps with the dedicated
 dependencies, and `execution_authorized=false`. The pending lock now includes
 the plan, its schema, the arbitrary-precision receipt schema, and the final
 receipt schema. The interface requires dedicated-plan validation before any
-execution. No program lock was materialized, no compiler or oracle was run,
-and no mixture archive exists.
+execution.
+
+The non-circular program lock is now materialized. It binds all `31` declared
+source, contract, build, control, plan, and receipt-schema files. The lock
+SHA-256 is `0234709a...6f41c`; an independently executed verifier rehashed the
+same ordered manifest to `88fcb5e6...a9895`, bound the exact Python executable,
+and emitted terminal-pass verification `8ff09542...3ad65`. Direct schema
+validation and a second manifest/hash reconstruction also pass. See the
+[`program lock`](../programs/gamma_safe_mix_v1/program-lock.json) and
+[`verification`](../results/gamma_safe_mix_v1/01_program_lock/program-lock-verification.json).
+The locked plan deliberately remains `execution_authorized=false`, so this
+proves source closure only. No compiler build, transactional control, integer
+oracle population, finite coder, or mixture archive was run, and all
+compression and score credit remain zero.
 
 The proof boundary is unchanged but now explicit. The ideal two-expert
 Bayesian inequality supplies at most a one-bit ideal log-loss penalty. It does
