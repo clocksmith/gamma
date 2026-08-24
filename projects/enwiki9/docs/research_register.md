@@ -206,6 +206,41 @@ versus arbitrary-precision identity can prove only that the frozen integer law
 was implemented; fresh P/K/D/M arithmetic archives remain the sole compression
 authority.
 
+## 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring
+
+`fxcm_fossil_match_q0_v1` is a new zero-credit information-source design, not
+a checkpoint or optimizer variant. The frozen FXCM match model stores absolute
+32-bit candidate positions, but `bufr(position)` always resolves through
+`buffer[position & 0x00ffffff]`. Once a position is more than `16,777,216`
+transformed bytes old, the model reads the current ring alias rather than the
+original decoded byte. This proves an information gap in the implementation;
+it does not prove that enwik9 contains useful far repetitions.
+
+FOSSIL-MATCH keeps the exact already-decoded transformed prefix in an
+append-only file-backed history and a fixed `2^24` table of 8-byte records.
+Before byte `i`, it hashes and exactly verifies the preceding 16 decoded bytes,
+requires a continuation distance above 16 MiB, and predicts only the byte at a
+strictly earlier verified continuation. It scores before inserting the current
+truth. Encoder and decoder therefore have identical information and update
+order without transmitting offsets or commands.
+
+The first eventual scan freezes K/D/R/S/N. K performs all bookkeeping with
+prediction disabled. D reads exact far history. S reads D's identical absolute
+position through the parent's 16 MiB alias, isolating exact addressability.
+R supplies deterministic random bytes and N negates D. The full transformed
+population must repeat exactly, every chronological third and multiple distance
+buckets must be positive, D must beat every matched control, and incremental
+process-tree memory is capped at `262,144 KiB`. The target-scale impossibility
+screen requires at least `254,953` active bytes because one active byte has at
+most 16 bytes of optimistic leverage under the parent's count floor.
+
+Passing would authorize only exact retained-parent surprisal tracing at the
+sealed opportunities. A native P/K/D finite archive, exact inverse, package,
+memory, runtime, and distant transfer remain mandatory. No scanner, source,
+candidate revision, or receipt exists yet, so the design has zero compression
+and score credit. See the
+[`design contract`](../operations/planning/fxcm_fossil_match_q0_v1.json).
+
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
 
 SAFE-FORK is classified as checkpoint/fork/rejoin infrastructure, not a novel
