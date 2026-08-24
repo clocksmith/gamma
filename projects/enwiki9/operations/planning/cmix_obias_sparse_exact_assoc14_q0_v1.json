@@ -1,7 +1,7 @@
 {
   "$schema": "gamma.enwiki9.sparse-exact-associativity-design.v1",
   "artifact_id": "cmix_obias_sparse_exact_assoc14_q0_v1",
-  "revision": 2,
+  "revision": 3,
   "operational_status": "dormant_dependency",
   "claim_authority": "none",
   "title": "Sparse exact fourteen-way ContextMap3 associativity",
@@ -87,20 +87,24 @@
       "bit_history_slots_10_through_13": "[8,36)"
     },
     "overflow_allocation": {
-      "records_per_chunk": 4096,
-      "chunk_bytes": 147456,
-      "chunk_pages_at_4096_bytes": 36,
-      "handle_rule": "overflow_index_plus_one == 0 means no record; otherwise subtract one, use high bits as the stable chunk index and low 12 bits as the record index",
-      "maximum_fixed_chunk_directory_bytes": 81392,
-      "maximum_cross_instance_tail_waste_bytes": 6044220,
-      "pointer_stability": "Chunks never move or free while coding; cp and runp may point into either the base record or an overflow chunk."
+      "arena_count": 41,
+      "arena_rule": "Each ContextMap3 reserves one contiguous MAP_PRIVATE|MAP_ANONYMOUS|MAP_NORESERVE virtual arena large enough for one 36-byte overflow record per semantic bucket. A deterministic per-instance bump index packs only activated records into the arena prefix.",
+      "maximum_virtual_reservation_bytes": 1499927040,
+      "maximum_records_in_one_instance": 4194304,
+      "handle_rule": "overflow_index_plus_one == 0 means no record; otherwise subtract one and index the owning instance's contiguous overflow arena",
+      "u32_handle_capacity_pass": true,
+      "maximum_cross_instance_page_rounding_bytes": 167895,
+      "reset_rule": "After all cp and runp pointers are redirected to base state, MADV_DONTNEED the previously touched overflow prefix and reset the deterministic bump index to zero.",
+      "pointer_stability": "An arena never moves while coding; cp and runp may point into either the base record or its owning instance's overflow arena.",
+      "vma_count_increment": 41,
+      "resource_boundary": "Virtual reservation is recorded separately and is not claimed as resident-memory saving. RSS, cgroup memory including page tables, faults, I/O, and any virtual-address limit require native measurement."
     },
-    "exact_allocated_bytes_equation": "4000309248 + 81392 + sum_i(ceil(O_i/4096) * 147456)",
-    "conservative_saving_equation": "1333436416 - 81392 - 36*O - 6044220, where O=sum_i O_i",
+    "resident_user_page_upper_bound_equation": "4000309248 + sum_i(ceil(36*O_i/4096) * 4096), excluding measured page tables, allocator metadata, and non-ContextMap3 state",
+    "conservative_saving_equation": "1333436416 - 36*O - 167895, where O=sum_i O_i; native RSS and cgroup gates remain authoritative",
     "engineering_reduction_gate": {
       "minimum_peak_tree_rss_reduction_kib": 262144,
-      "conservative_maximum_overflowed_buckets": 29413204,
-      "conservative_maximum_overflow_fraction": 0.7059512334679959
+      "conservative_maximum_overflowed_buckets": 29578696,
+      "conservative_maximum_overflow_fraction": 0.7099232346661342
     }
   },
   "logical_equivalence_contract": [
@@ -108,7 +112,7 @@
     "An absent overflow record represents four exactly zero parent slots.",
     "The overflow record is allocated and zeroed exactly when the parent transition first selects a slot from 10 through 13.",
     "The recent0 fast path, complete lowest-index checksum match, recent0/recent1 protection, strict-lowest-priority victim scan, keep bits, state update, run model, and tie order are identical to the parent over the logical fourteen slots.",
-    "Allocation handles, virtual addresses, chunk boundaries, filenames, page residency, and fault order are excluded from predictor state.",
+    "Allocation handles, virtual addresses, arena page boundaries, filenames, page residency, and fault order are excluded from predictor state.",
     "Encoder and decoder observe the same prior bytes and therefore allocate the same logical overflow record before the same write. Induction then requires identical logical table state, integer probabilities, coder intervals, payload, and inverse."
   ],
   "matched_arms": {
@@ -126,7 +130,7 @@
     "suppression_rule": "If q1 passes exact A/B memory and exact-package runtime with sufficient adaptation headroom, retain q1 and do not build this correction merely because its static bound is attractive."
   },
   "future_gate_ladder": [
-    "source-level exhaustive get/update equivalence over empty, hit, checksum-collision, every victim index, both protected indexes, overflow allocation, reset, and chunk-boundary cases",
+    "source-level exhaustive get/update equivalence over empty, hit, checksum-collision, every victim index, both protected indexes, overflow allocation, reset/decommit, and arena-page-boundary cases",
     "250KB P/K/D exact post-head integer-probability, coder-checkpoint, payload, inverse, and repeat identity",
     "opening and distant cold-reset 10M P/K/D identity plus overflow counts, process-tree RSS, VmHWM, cgroup, I/O, scratch, and runtime",
     "100M cumulative identity and resource gate",
@@ -136,7 +140,7 @@
     "Any logical state, probability, coder checkpoint, payload, inverse, or repeat mismatch retires D as an implementation failure; it cannot be relabeled a compression candidate.",
     "A monotonic overflow count above the conservative bound before full scope proves the 262,144 KiB static reduction gate unreachable and retires this representation.",
     "A full resource gate reducing peak tree RSS by less than 262,144 KiB or failing to reach at most 8,750,000 KiB retires this realization.",
-    "A runtime or package failure retires the exact sparse representation without changing base ways, overflow ways, record size, chunk size, or replacement semantics in a rescue."
+    "A runtime, virtual-address, or package failure retires the exact sparse representation without changing base ways, overflow ways, record size, arena policy, or replacement semantics in a rescue."
   ],
   "proof_boundary": {
     "source_candidate_created": false,
