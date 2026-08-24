@@ -66,17 +66,24 @@ diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
  }
  
  #ifdef KH_TRACE
-@@ -223,6 +230,9 @@ void Encoder::Encode(int bit) {
+@@ -202,3 +209,6 @@ void Encoder::Encode(int bit) {
+   unsigned int p = Discretize(p_->Predict());
++#if defined(GAMMA_FULL_IDENTITY_OBSERVER) && defined(GAMMA_FULL_IDENTITY_PRE_HEAD)
++  ::gamma_full_identity::ObserveProbability(p);
++#endif
+ #ifdef KH_TRACE
+   if (kh_on_) {
+@@ -223,6 +233,9 @@ void Encoder::Encode(int bit) {
                           p_->kh_m1raw_, p_->kh_override_);
    }
  #endif
-+#ifdef GAMMA_FULL_IDENTITY_OBSERVER
++#if defined(GAMMA_FULL_IDENTITY_OBSERVER) && !defined(GAMMA_FULL_IDENTITY_PRE_HEAD)
 +  ::gamma_full_identity::ObserveProbability(p);
 +#endif
    const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
        (((x2_ - x1_) & 0xffff) * p >> 16);
    if (bit) {
-@@ -297,6 +307,9 @@ void Encoder::EndTraceByte() {
+@@ -297,6 +310,9 @@ void Encoder::EndTraceByte() {
      }
    }
  #endif
@@ -86,7 +93,7 @@ diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
  }
  
  void Encoder::Flush() {
-@@ -309,6 +322,9 @@ void Encoder::Flush() {
+@@ -309,6 +325,9 @@ void Encoder::Flush() {
  
    auto* data = reinterpret_cast<const char*>(out_.data());
    os_->write(data, out_.size());
