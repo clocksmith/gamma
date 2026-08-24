@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build two matched replicates of each sealed q1 100M observer arm."""
+"""Build matched q1 100M observer arms plus the pre-head negative control."""
 
 from __future__ import annotations
 
@@ -24,15 +24,17 @@ CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PLAN_ARTIFACT_ID = "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"
 OBSERVER_PROGRAM_SHA256 = "5a5264aa4fed2e255ab014fcdc87bc2069148fa07a85a1bc2686a324d01ed9d9"
 OBSERVER_HEADER_SHA256 = "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515"
-OBSERVER_PATCH_SHA256 = "b86fa8b3a20d1628ad4d257318c3a27e42489189ff52510ba5ca46a9c4fc8431"
-RECEIPT_SCHEMA_SHA256 = "1b785761b11f03328fecc3db86e28498a27d66f2842805a6bdb60640df53c2ea"
+OBSERVER_PATCH_SHA256 = "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b"
+RECEIPT_SCHEMA_SHA256 = "9798978a3020a6d530bfabb3321653ebb8d5ad058d17908d40eac2d3dd00d39d"
 OBSERVER_DEFINITION = "GAMMA_FULL_IDENTITY_OBSERVER=1"
+PRE_HEAD_DEFINITION = "GAMMA_FULL_IDENTITY_PRE_HEAD=1"
 PARENT_DEFINITIONS = tuple(
     definition
     for definition in stage.COMMON_DEFINITIONS
     if definition != "GAMMA_FILEBACKED_FXCM=1"
 ) + (OBSERVER_DEFINITION,)
 Q1_DEFINITIONS = (*stage.COMMON_DEFINITIONS, OBSERVER_DEFINITION)
+PRE_HEAD_DEFINITIONS = (*PARENT_DEFINITIONS, PRE_HEAD_DEFINITION)
 
 
 def canonical(value: Any) -> bytes:
@@ -234,13 +236,19 @@ def main() -> int:
         ):
             raise RuntimeError(f"planning contract {name} binding mismatch")
     observer_build_contract = plan.get("observer_build", {})
+    runner_path = Path(__file__).resolve()
     if (
-        observer_build_contract.get("receipt_schema")
+        observer_build_contract.get("runner")
+        != str(runner_path.relative_to(capture.PROJECT))
+        or observer_build_contract.get("runner_sha256") != sha256_file(runner_path)
+        or observer_build_contract.get("receipt_schema")
         != str(receipt_schema_path.relative_to(capture.PROJECT))
         or observer_build_contract.get("receipt_schema_sha256")
         != RECEIPT_SCHEMA_SHA256
+        or observer_build_contract.get("replicate_counts")
+        != {"I-P": 2, "I-Q": 2, "N-P": 1}
     ):
-        raise RuntimeError("planning contract observer-build schema binding mismatch")
+        raise RuntimeError("planning contract observer-build binding mismatch")
     receipt_schema = json.loads(receipt_schema_path.read_text(encoding="utf-8"))
     jsonschema.Draft202012Validator.check_schema(receipt_schema)
 
@@ -309,6 +317,18 @@ def main() -> int:
                 linker=linker,
             )
         )
+    builds.append(
+        build_one(
+            arm="N-P",
+            replicate="A",
+            definitions=PRE_HEAD_DEFINITIONS,
+            source_root=source_root,
+            output_root=output_root,
+            proxy=proxy,
+            compiler=compiler,
+            linker=linker,
+        )
+    )
     by_key = {(record["arm"], record["replicate"]): record for record in builds}
     build_identity = all(
         by_key[(arm, "A")]["binary"]["sha256"]
@@ -333,9 +353,16 @@ def main() -> int:
             head_blob,
             output_root,
         ),
+        scope_build.package_one(
+            "negative",
+            Path(by_key[("N-P", "A")]["binary"]["path"]),
+            source_root,
+            head_blob,
+            output_root,
+        ),
     ]
     package_assets_identity = all(
-        packages[0][field]["sha256"] == packages[1][field]["sha256"]
+        len({package[field]["sha256"] for package in packages}) == 1
         for field in ("dictionary_payload", "article_order_payload", "header")
     )
     if not package_assets_identity:
@@ -362,8 +389,13 @@ def main() -> int:
         "packages": packages,
         "decisions": {
             "two_build_identity_pass": build_identity,
+            "negative_control_build_present": ("N-P", "A") in by_key,
             "package_asset_identity_pass": package_assets_identity,
-            "observer_build_pass": build_identity and package_assets_identity,
+            "observer_build_pass": (
+                build_identity
+                and ("N-P", "A") in by_key
+                and package_assets_identity
+            ),
         },
         "claim_authority": "diagnostic_observer_build_identity_only",
         "execution_authority": False,

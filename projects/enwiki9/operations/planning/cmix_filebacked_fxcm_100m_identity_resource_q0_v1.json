@@ -55,7 +55,7 @@
     "header": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/gamma-full-identity-observer.h",
     "header_sha256": "e3d6228c26b796d18c48aeaab927f3bee63b3695f41f327abbc417a9420c5515",
     "patch": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/full-identity-observer.patch",
-    "patch_sha256": "b86fa8b3a20d1628ad4d257318c3a27e42489189ff52510ba5ca46a9c4fc8431",
+    "patch_sha256": "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b",
     "compile_definition": "GAMMA_FULL_IDENTITY_OBSERVER=1",
     "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; no observer build or execution receipt exists.",
     "runtime_activation": "GAMMA_FULL_IDENTITY_DIR must name an existing absolute output directory; absent activation leaves packaging/helper encoder runs observationally disabled.",
@@ -63,16 +63,22 @@
   },
   "observer_build": {
     "runner": "tools/cmix_filebacked_fxcm_100m_observer_build.py",
-    "runner_sha256": "a4a73e549d619608a88cf9db4cc483bf685fae81cda5e032389e0eeb0a12e74c",
+    "runner_sha256": "66272f651b5befc72874714d23102dd82d5ec0163f2154d3dd2ab7a165fceff6",
     "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-build.schema.json",
-    "receipt_schema_sha256": "1b785761b11f03328fecc3db86e28498a27d66f2842805a6bdb60640df53c2ea",
-    "replicates_per_arm": 2,
+    "receipt_schema_sha256": "9798978a3020a6d530bfabb3321653ebb8d5ad058d17908d40eac2d3dd00d39d",
+    "replicate_counts": {
+      "I-P": 2,
+      "I-Q": 2,
+      "N-P": 1
+    },
     "required_binary_identity": "A and B are byte-identical within I-P and independently byte-identical within I-Q.",
-    "package_rule": "Package only replicate A after within-arm build identity passes; dictionary, article-order, and header payloads must match across I-P/I-Q.",
+    "negative_control": "N-P is the parent observer compiled with GAMMA_FULL_IDENTITY_PRE_HEAD=1; its payload must remain identical to I-P while its probability digest must differ.",
+    "package_rule": "Package replicate A for I-P, I-Q, and N-P after within-arm identity passes; dictionary, article-order, and header payloads must match across all three.",
     "execution_status": "sealed_not_run"
   },
   "identity_observer": {
     "post_head_probability": "Online SHA-256 of each exact uint16 probability after KhBitLstm32Head::Adjust and immediately before arithmetic range split; calibrate unchanged instrumentation against both retained 10M digests.",
+    "pre_head_negative_control": "N-P hashes the uint16 probability immediately before KhBitLstm32Head::Adjust; its payload must equal I-P, while its digest must differ from the post-head I-P digest.",
     "coder_checkpoints": "Hash low/high range state, pending output state, coded-byte count, modeled-byte index, and decoded history at frozen checkpoints.",
     "persistent_state": "At each checkpoint, hash source-ordered requested semantic bytes for all 26 large FXCM allocations affected by q1; exclude virtual addresses, filenames, inode numbers, alignment padding, mapping slack, page residency, and fault history.",
     "modeled_byte_checkpoints": [0, 16777216, 33554432, 50331648, "terminal"],

@@ -52,14 +52,14 @@
     "linker_sha256": {"$ref": "#/$defs/sha256"},
     "builds": {
       "type": "array",
-      "minItems": 4,
-      "maxItems": 4,
+      "minItems": 5,
+      "maxItems": 5,
       "items": {"$ref": "#/$defs/build"}
     },
     "packages": {
       "type": "array",
-      "minItems": 2,
-      "maxItems": 2,
+      "minItems": 3,
+      "maxItems": 3,
       "items": {"$ref": "#/$defs/package"}
     },
     "decisions": {
@@ -67,11 +67,13 @@
       "additionalProperties": false,
       "required": [
         "two_build_identity_pass",
+        "negative_control_build_present",
         "package_asset_identity_pass",
         "observer_build_pass"
       ],
       "properties": {
         "two_build_identity_pass": {"const": true},
+        "negative_control_build_present": {"const": true},
         "package_asset_identity_pass": {"const": true},
         "observer_build_pass": {"const": true}
       }
@@ -110,7 +112,7 @@
         "compiler_trace_manifest_sha256"
       ],
       "properties": {
-        "arm": {"enum": ["I-P", "I-Q"]},
+        "arm": {"enum": ["I-P", "I-Q", "N-P"]},
         "replicate": {"enum": ["A", "B"]},
         "definitions": {
           "type": "array",
@@ -156,7 +158,7 @@
         "backing_cleanup_pass"
       ],
       "properties": {
-        "arm": {"enum": ["parent", "candidate"]},
+        "arm": {"enum": ["parent", "candidate", "negative"]},
         "commands": {
           "type": "array",
           "minItems": 3,
