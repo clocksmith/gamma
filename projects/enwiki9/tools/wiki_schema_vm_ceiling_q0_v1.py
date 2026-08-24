@@ -43,11 +43,11 @@ MANIFEST_SCHEMA = (
 )
 PARENT_QUALIFICATION_SCHEMA = (
     PROJECT
-    / "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt.schema.json"
+    / "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt-v2.schema.json"
 )
 PARENT_VERIFICATION_SCHEMA = (
     PROJECT
-    / "contracts/research/v1/cmix-memory-safe-parent-qualification-verification.schema.json"
+    / "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v2.schema.json"
 )
 MANAGED_LEASE_IMPLEMENTATION = PROJECT / "tools/managed_exclusive_lease.py"
 EXCLUSIVE_LEASE_SCHEMA = PROJECT / "operations/runtime/exclusive_full1g.schema.json"
@@ -79,8 +79,8 @@ EXPECTED_SHA256 = {
     SCAN_SCHEMA: "f2519e7c88436e1d95995558dfc36d886bba2dca69d08d4f07db01ce3e1e9ae2",
     DECISION_SCHEMA: "6356dda2a97acc78b561eb3e96dfaf87d7c17417b39b53dbac3eb06818f62eca",
     MANIFEST_SCHEMA: "b054e1e6c06f514681aef13d7890ef1b87c1f314d61e8583389e183cd8f842eb",
-    PARENT_QUALIFICATION_SCHEMA: "31eb692bf80eaa9472b8feb74bb0cdfe498446a052c4165c345bed847ab48177",
-    PARENT_VERIFICATION_SCHEMA: "afec74a401e1351ace4b03b22c96c9699de32c95fa273d7b61bad4c7e4798ca1",
+    PARENT_QUALIFICATION_SCHEMA: "1863e57073cf937e036b29d69b59467c8dbd167adedb36f61246a0bc02465494",
+    PARENT_VERIFICATION_SCHEMA: "3bcf47489de593d541504b06a9735979701d1da08bf8cc70253339f05538a74d",
     MANAGED_LEASE_IMPLEMENTATION: "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1",
     EXCLUSIVE_LEASE_SCHEMA: "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96",
     COMPILER: "011362d67c1a55636e9e1fa8fb87705980ebe94037213686897e1dadba007e43",
@@ -370,45 +370,31 @@ def validate_parent_qualification(
     validate_with_schema(verification, PARENT_VERIFICATION_SCHEMA)
 
     receipt_sha256 = sha256(receipt_path)
-    required_decisions = (
-        "build_identity_pass",
-        "probability_identity_pass",
-        "payload_identity_pass",
-        "archive_identity_pass",
-        "two_run_determinism_pass",
-        "exact_inverse_pass",
-        "memory_pass",
-        "temporary_disk_pass",
-        "package_accounting_complete",
-        "memory_safe_parent_qualified",
-    )
-    receipt_decisions = receipt["decisions"]
-    resources = receipt["resources"]
-    package = receipt["package"]
-    verification_decisions = verification["derived_decisions"]
-    if not all(receipt_decisions[name] is True for name in required_decisions):
-        raise RuntimeError("q1 qualification receipt lacks a required positive decision")
     if (
-        resources["process_tree_peak_rss_kib"] > 9_000_000
-        or resources["cgroup_memory_peak_bytes"] > 10_000_000_000
-        or resources["memory_events_oom"] != 0
-        or resources["memory_events_oom_kill"] != 0
-        or resources["runtime_measured"] is not True
-        or resources["runtime_eligible"] is not True
-        or package["dependency_closure_pass"] is not True
-        or package["license_closure_pass"] is not True
+        receipt["schema"] != "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2"
+        or receipt["candidate_id"] != "cmix_obias_memory_safe_parent_filebacked_q1_v1"
     ):
-        raise RuntimeError("q1 qualification lacks engineering headroom, runtime, or closure")
+        raise RuntimeError("q1 v2 qualification router identity mismatch")
     if (
-        verification["verified"] is not True
+        verification["schema"] != "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2"
+        or verification["verified"] is not True
         or verification["qualified"] is not True
         or verification["errors"] != []
         or verification["qualification_failures"] != []
         or verification["receipt_sha256"] != receipt_sha256
         or not all(verification["checks"].values())
-        or not all(verification_decisions.values())
+        or verification["claim_authority"] != "memory_safe_external_parent_only"
+        or verification["promotion_authority"] is not True
     ):
         raise RuntimeError("independent q1 qualification verification is not fully positive")
+    derived = verification["derived"]
+    if (
+        derived["maximum_tree_rss_kib"] > 9_000_000
+        or derived["maximum_cgroup_memory_bytes"] >= 10_000_000_000
+        or derived["geekbench5_single_core_score"] is None
+        or derived["runtime_limit_seconds"] is None
+    ):
+        raise RuntimeError("q1 qualification lacks engineering headroom, runtime, or closure")
     return artifact(receipt_path, receipt_sha256), artifact(verification_path)
 
 

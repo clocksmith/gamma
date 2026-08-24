@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1",
+  "title": "CMIX file-backed FXCM full-stream probability and state identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "authoritative_parent_id", "population",
+    "calibration", "arms", "controls", "evidence", "claim_boundary",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "calibration": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["population", "expected_probability_sha256", "observed_probability_sha256", "expected_coded_bits", "observed_coded_bits"],
+        "properties": {
+          "population": {"enum": ["opening_10m", "distant_10m"]},
+          "expected_probability_sha256": {"$ref": "#/$defs/sha256"},
+          "observed_probability_sha256": {"$ref": "#/$defs/sha256"},
+          "expected_coded_bits": {"type": "integer", "minimum": 1},
+          "observed_coded_bits": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent", "q1"],
+      "properties": {
+        "parent": {"$ref": "#/$defs/arm"},
+        "q1": {"$ref": "#/$defs/arm"}
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observer_off_payload_sha256", "observer_on_payload_sha256",
+        "post_head_probability_sha256", "pre_head_probability_sha256",
+        "unmutated_state_sha256", "single_byte_mutated_state_sha256",
+        "checkpoint_negative_controls_rejected"
+      ],
+      "properties": {
+        "observer_off_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "observer_on_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "post_head_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "pre_head_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "unmutated_state_sha256": {"$ref": "#/$defs/sha256"},
+        "single_byte_mutated_state_sha256": {"$ref": "#/$defs/sha256"},
+        "checkpoint_negative_controls_rejected": {"type": "boolean"}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/file"}
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coded_bytes", "sha256"],
+      "properties": {
+        "coded_bytes": {"enum": [0, 100000000, 500000000, 1000000000]},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observer_receipt", "binary", "return_code", "coded_bits",
+        "probability_sha256", "coder_checkpoints", "state_checkpoints", "payload"
+      ],
+      "properties": {
+        "observer_receipt": {"$ref": "#/$defs/file"},
+        "binary": {"$ref": "#/$defs/file"},
+        "return_code": {"type": "integer"},
+        "coded_bits": {"type": "integer", "minimum": 1},
+        "probability_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_checkpoints": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"$ref": "#/$defs/checkpoint"}
+        },
+        "state_checkpoints": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"$ref": "#/$defs/checkpoint"}
+        },
+        "payload": {"$ref": "#/$defs/file"}
+      }
+    }
+  }
+}

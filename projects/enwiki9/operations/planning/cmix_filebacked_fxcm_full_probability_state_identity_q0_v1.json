@@ -1,13 +1,31 @@
 {
   "$schema": "campaign-static-contract.schema.json",
   "artifact_id": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1",
-  "revision": 1,
-  "operational_status": "draft_unbound_pending_full_roundtrip_a_b",
+  "revision": 2,
+  "operational_status": "schema_bound_pending_observer_implementation_and_full_roundtrip_a_b",
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
   "purpose": "Close qualification phase 11 with an online digest of the exact post-head integer probabilities consumed by the arithmetic coder and mutation-scoped persistent-state checkpoints without retaining a multi-terabyte KH_TRACE stream.",
   "execution_authorized": false,
   "freeze_authorized": false,
+  "proof_artifacts": {
+    "arm_receipt_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-arm.schema.json",
+      "sha256": "5f107dd3efc706dee07bca891bf03d5f82316730e3c38e851f15daf56865726a"
+    },
+    "joint_receipt_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-full-identity.schema.json",
+      "sha256": "87c8418298f73c5f863c0c35076124828713e3b513b9e2a5dd32acaafaa0cc1b"
+    },
+    "verification_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-verification.schema.json",
+      "sha256": "22978581a8441d92b361770423ab261ec4a2aaa36a0ba5198a675d9bd73191ea"
+    },
+    "verifier": {
+      "path": "tools/cmix_filebacked_fxcm_full_identity_verify.py",
+      "sha256": "bcaf44513e3d0e0083522d733421328d20b46f1ff488dbfb5cf8a9bcbea63736"
+    }
+  },
   "activation_dependencies": [
     "cmix_filebacked_fxcm_full_a_qm8_v1 is terminal, exact, independently verified, and resource-clean",
     "one independent full roundtrip B is terminal, exact, independently verified, and byte-identical to A",
@@ -58,7 +76,7 @@
     ],
     "q1_residency_rule": "Hash q1 mappings in bounded aligned chunks and issue only content-preserving pageout/drop advice for already hashed chunks. This phase is diagnostic and confers no resource or runtime qualification.",
     "parent_residency_rule": "Hash parent semantic ranges read-only. Parent phase-11 memory is diagnostic and is not judged against q1's resource ceiling.",
-    "identity_rule": "Parent and q1 must have identical allocation geometry, checkpoint indices, per-range digests, aggregate manifest digests, coder checkpoints, final probability digests, payloads, and return codes."
+    "identity_rule": "Parent and q1 must have identical allocation geometry, checkpoint indices, per-range digests, aggregate manifest digests, coder checkpoints, final probability digests, payloads, and return codes. This proves mutation-scoped state identity only at the four frozen checkpoints; it is not continuous state-trajectory evidence."
   },
   "calibration_population": {
     "opening_10m_post_head_probability_sha256": "d651255043d85fa2f9bb6076a145710edd1366cf3e634033d2b2dadcff54e97a",

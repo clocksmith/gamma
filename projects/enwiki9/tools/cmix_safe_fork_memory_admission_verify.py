@@ -90,16 +90,21 @@ def main() -> int:
     errors: list[str] = []
     failures: list[str] = []
     if (
-        parent_verification.get("schema") != "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v1"
+        parent_receipt.get("schema") != "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2"
+        or parent_receipt.get("candidate_id") != PARENT_CANDIDATE_ID
+        or parent_verification.get("schema") != "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2"
         or parent_verification.get("candidate_id") != PARENT_CANDIDATE_ID
         or parent_verification.get("verified") is not True
         or parent_verification.get("qualified") is not True
         or parent_verification.get("errors") != []
+        or parent_verification.get("qualification_failures") != []
+        or parent_verification.get("claim_authority") != "memory_safe_external_parent_only"
+        or parent_verification.get("promotion_authority") is not True
         or parent_verification.get("receipt_sha256") != sha256_bytes(parent_raw)
     ):
         errors.append("parent verification is not a positive decision bound to the supplied q1 receipt")
-    parent_resources = parent_receipt.get("resources") if isinstance(parent_receipt.get("resources"), dict) else {}
-    parent_peak_kib = parent_resources.get("process_tree_peak_rss_kib")
+    parent_derived = parent_verification.get("derived") if isinstance(parent_verification.get("derived"), dict) else {}
+    parent_peak_kib = parent_derived.get("maximum_tree_rss_kib")
     parent_peak_bytes = parent_peak_kib * 1024 if nonnegative_integer(parent_peak_kib) else -1
     parent = admission.get("parent") if isinstance(admission.get("parent"), dict) else {}
     if (

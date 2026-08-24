@@ -178,6 +178,56 @@ residency successor; infrastructure-incomplete qm8 permits only a retry after
 the exact infrastructure cause is corrected. Bounded evidence may not erase
 contrary full-corpus evidence.
 
+### q1 qualification authority is artifact-derived, not self-reported
+
+An independent adversarial audit found a fatal consolidation weakness before
+any q1 qualification receipt existed. The v1 verifier compared hashes and
+booleans supplied inside one summary receipt, but did not reopen the full A/B,
+phase-11, runtime, and dependency artifacts that those values purported to
+summarize. In particular, `persistent_state_identity_pass` and runtime
+eligibility could be asserted without a mechanically bound phase-11 or
+Geekbench receipt. Downstream dormant tools treated `verified=true` plus
+`qualified=true` as sufficient even though v1 declared no promotion authority.
+
+The v1 consolidator and both v1 receipt schemas are now fail-closed: they can
+only represent `qualified=false`, and the planning policy is superseded. The
+replacement v2 input is only a router
+to nine immutable artifacts: A receipt/verification, B receipt/verification,
+full identity receipt/verification, runtime receipt/verification, and complete
+dependency closure. It contains no qualification decision fields. The v2
+verifier reopens those files, checks each router reference's declared byte
+count and SHA-256 without symlink or hard-link aliases, validates schemas, and
+rederives A/B package, payload, archive, inverse, resource, package-accounting,
+and license conclusions. It reruns the A/B, phase-11, and runtime verifiers and
+requires their recomputed outputs to equal the supplied verification receipts
+exactly. It requires at most `9,000,000 KiB` A/B process-tree
+RSS, strictly less than `10,000,000,000` cgroup bytes, and exact package
+identity across the diagnostic, runtime, and counted dependency artifacts.
+
+Runtime now has a separate proof shape. Its verifier parses exactly one
+single-core score from retained raw output identifying Geekbench 5, requires
+the compression and decompression guard commands to name the exact packaged
+compressor/head/archive, recomputes each wall limit as `252000000 / score`, and
+requires complete guard-v3 memory, disk, affinity, cgroup, phase, and elapsed
+measurements. Diagnostic qm8 timing cannot satisfy this contract.
+
+Phase 11 now states its narrower legitimate claim. It can prove continuous
+byte-zero post-head integer-probability identity and exact coder checkpoints.
+For q1-mutated persistent storage it freezes state digests only after
+initialization and at coded-byte indices `100,000,000`, `500,000,000`, and
+`1,000,000,000`; these are checkpoint identity, not continuously observed
+state-trajectory identity. The independent verifier also requires retained
+opening/distant 10M calibration equality, observer-off/on payload identity,
+a differing pre-head negative control, a detected single-byte state mutation,
+and rejected checkpoint omission/reordering controls.
+
+SAFE-FORK memory admission and the frozen WIKI-SCHEMA-VM runner now accept only
+a positive v2 verification with
+`claim_authority=memory_safe_external_parent_only` and
+`promotion_authority=true`. No v2 router, phase-11 arm, runtime receipt, or
+qualification verification has been executed. This closure changes no archive
+measurement and grants zero Gamma compression or score credit.
+
 ### SAFE-MIX static closure audit
 
 `gamma_safe_mix_v1` remains unexecuted and zero-credit. Its Q63 native

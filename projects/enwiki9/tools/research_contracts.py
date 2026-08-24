@@ -137,6 +137,32 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1": (
         CONTRACT_ROOT / "cmix-filebacked-fxcm-full-soft-high-verification.schema.json"
     ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity-arm.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-runtime-qualification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-runtime-qualification-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-runtime-host-fingerprint.v1": (
+        CONTRACT_ROOT / "cmix-runtime-host-fingerprint.schema.json"
+    ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2": (
+        CONTRACT_ROOT / "cmix-memory-safe-parent-qualification-receipt-v2.schema.json"
+    ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2": (
+        CONTRACT_ROOT
+        / "cmix-memory-safe-parent-qualification-verification-v2.schema.json"
+    ),
     "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1": (
         CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-identity-resource.schema.json"
     ),
@@ -3121,6 +3147,56 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
             "candidateId": value["candidate_id"],
             "arm": value["arm"],
             "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "role": value["role"],
+            "codedBits": value["coded_bits"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "calibrationPopulations": len(value["calibration"]),
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "geekbench5SingleCoreScore": value["benchmark"]["single_core_score"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "runtimeEligible": value["derived"]["runtime_eligible"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-runtime-host-fingerprint.v1":
+        result = {
+            "unameMachine": value["uname_machine"],
+            "cpuModelNames": len(value["cpu_model_names"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "artifactCount": len(value["artifacts"]),
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "qualified": value["qualified"],
+            "promotionAuthority": value["promotion_authority"],
             "scoreCreditBytes": value["gamma_score_credit_bytes"],
         }
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":

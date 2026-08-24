@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2",
+  "title": "CMIX memory-safe parent independent qualification v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "verified", "qualified", "errors",
+    "qualification_failures", "receipt_sha256", "artifact_sha256",
+    "checks", "derived", "claim_authority", "promotion_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "qualified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "qualification_failures": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "arm_a_receipt", "arm_a_verification", "arm_b_receipt",
+        "arm_b_verification", "full_identity_receipt",
+        "full_identity_verification", "runtime_receipt",
+        "runtime_verification", "dependency_closure"
+      ],
+      "properties": {
+        "arm_a_receipt": {"$ref": "#/$defs/sha256"},
+        "arm_a_verification": {"$ref": "#/$defs/sha256"},
+        "arm_b_receipt": {"$ref": "#/$defs/sha256"},
+        "arm_b_verification": {"$ref": "#/$defs/sha256"},
+        "full_identity_receipt": {"$ref": "#/$defs/sha256"},
+        "full_identity_verification": {"$ref": "#/$defs/sha256"},
+        "runtime_receipt": {"$ref": "#/$defs/sha256"},
+        "runtime_verification": {"$ref": "#/$defs/sha256"},
+        "dependency_closure": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checks": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "router_schema_pass", "objective_binding_pass",
+        "artifact_closure_pass", "arm_a_independent_pass",
+        "arm_b_independent_pass", "two_arm_identity_pass",
+        "full_probability_state_identity_pass", "runtime_pass",
+        "resource_headroom_pass", "dependency_closure_pass",
+        "license_closure_pass", "package_binding_pass"
+      ],
+      "properties": {
+        "router_schema_pass": {"type": "boolean"},
+        "objective_binding_pass": {"type": "boolean"},
+        "artifact_closure_pass": {"type": "boolean"},
+        "arm_a_independent_pass": {"type": "boolean"},
+        "arm_b_independent_pass": {"type": "boolean"},
+        "two_arm_identity_pass": {"type": "boolean"},
+        "full_probability_state_identity_pass": {"type": "boolean"},
+        "runtime_pass": {"type": "boolean"},
+        "resource_headroom_pass": {"type": "boolean"},
+        "dependency_closure_pass": {"type": "boolean"},
+        "license_closure_pass": {"type": "boolean"},
+        "package_binding_pass": {"type": "boolean"}
+      }
+    },
+    "derived": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "payload_bytes", "archive_bytes", "program_bytes",
+        "required_option_bytes", "complete_counted_bytes",
+        "target_distance_bytes", "maximum_tree_rss_kib",
+        "maximum_cgroup_memory_bytes", "geekbench5_single_core_score",
+        "runtime_limit_seconds"
+      ],
+      "properties": {
+        "payload_bytes": {"type": ["integer", "null"], "minimum": 1},
+        "archive_bytes": {"type": ["integer", "null"], "minimum": 1},
+        "program_bytes": {"type": ["integer", "null"], "minimum": 1},
+        "required_option_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "complete_counted_bytes": {"type": ["integer", "null"], "minimum": 1},
+        "target_distance_bytes": {"type": ["integer", "null"]},
+        "maximum_tree_rss_kib": {"type": ["integer", "null"], "minimum": 0},
+        "maximum_cgroup_memory_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "geekbench5_single_core_score": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "runtime_limit_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0}
+      }
+    },
+    "claim_authority": {"enum": ["none", "memory_safe_external_parent_only"]},
+    "promotion_authority": {"type": "boolean"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"qualified": {"const": true}}},
+    "then": {"properties": {
+      "verified": {"const": true},
+      "errors": {"maxItems": 0},
+      "qualification_failures": {"maxItems": 0},
+      "checks": {"additionalProperties": {"const": true}},
+      "claim_authority": {"const": "memory_safe_external_parent_only"},
+      "promotion_authority": {"const": true}
+    }}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
