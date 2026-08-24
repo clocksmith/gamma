@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1",
+  "title": "CMIX q1 opening-100M matched observer-build receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "planning_contract",
+    "source_closure_receipt",
+    "source_closure_sha256",
+    "observer_program",
+    "observer_header",
+    "observer_patch",
+    "copied_observer_header",
+    "head_blob",
+    "patch_return_code",
+    "patch_stdout_sha256",
+    "patch_stderr_sha256",
+    "compiler_sha256",
+    "compiler_proxy_sha256",
+    "linker_sha256",
+    "builds",
+    "packages",
+    "decisions",
+    "claim_authority",
+    "execution_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+    },
+    "planning_contract": {"$ref": "#/$defs/artifact"},
+    "source_closure_receipt": {"$ref": "#/$defs/artifact"},
+    "source_closure_sha256": {"$ref": "#/$defs/sha256"},
+    "observer_program": {"$ref": "#/$defs/artifact"},
+    "observer_header": {"$ref": "#/$defs/artifact"},
+    "observer_patch": {"$ref": "#/$defs/artifact"},
+    "copied_observer_header": {"$ref": "#/$defs/artifact"},
+    "head_blob": {"$ref": "#/$defs/artifact"},
+    "patch_return_code": {"const": 0},
+    "patch_stdout_sha256": {"$ref": "#/$defs/sha256"},
+    "patch_stderr_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_proxy_sha256": {"$ref": "#/$defs/sha256"},
+    "linker_sha256": {"$ref": "#/$defs/sha256"},
+    "builds": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/build"}
+    },
+    "packages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/package"}
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "two_build_identity_pass",
+        "package_asset_identity_pass",
+        "observer_build_pass"
+      ],
+      "properties": {
+        "two_build_identity_pass": {"const": true},
+        "package_asset_identity_pass": {"const": true},
+        "observer_build_pass": {"const": true}
+      }
+    },
+    "claim_authority": {
+      "const": "diagnostic_observer_build_identity_only"
+    },
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "replicate",
+        "definitions",
+        "binary",
+        "compiler_invocations",
+        "compiler_trace_manifest_sha256"
+      ],
+      "properties": {
+        "arm": {"enum": ["I-P", "I-Q"]},
+        "replicate": {"enum": ["A", "B"]},
+        "definitions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "binary": {"$ref": "#/$defs/artifact"},
+        "compiler_invocations": {"const": 6},
+        "compiler_trace_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "argv",
+        "return_code",
+        "stdout_sha256",
+        "stderr_sha256"
+      ],
+      "properties": {
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "return_code": {"const": 0},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "commands",
+        "packaged_binary",
+        "dictionary_payload",
+        "article_order_payload",
+        "header",
+        "backing_cleanup_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["parent", "candidate"]},
+        "commands": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"$ref": "#/$defs/command"}
+        },
+        "packaged_binary": {"$ref": "#/$defs/artifact"},
+        "dictionary_payload": {"$ref": "#/$defs/artifact"},
+        "article_order_payload": {"$ref": "#/$defs/artifact"},
+        "header": {"$ref": "#/$defs/artifact"},
+        "backing_cleanup_pass": {"const": true}
+      }
+    }
+  }
+}

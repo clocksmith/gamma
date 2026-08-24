@@ -144,6 +144,10 @@ SCHEMA_PATHS = {
         CONTRACT_ROOT
         / "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
     ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-build.schema.json"
+    ),
     "gamma.enwiki9.resource-guard-receipt.v2": (
         CONTRACT_ROOT / "resource-guard-receipt.schema.json"
     ),
