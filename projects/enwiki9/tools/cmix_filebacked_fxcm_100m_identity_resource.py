@@ -32,11 +32,6 @@ ENGINEERING_LIMIT_KIB = 9_000_000
 MEMORY_HIGH_BYTES = 9_000_000_000
 DISK_LIMIT_BYTES = 100_000_000_000
 PHASES = proof.PHASES
-PLAN_SCHEMA = (
-    proof.PROJECT
-    / "operations/planning/"
-    "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json"
-)
 PLAN_SCHEMA_SHA256 = "eb8970b91fbf809c93f8a876c316883bb39d03aac1b96d6b0f1a1dcec0e656bc"
 
 
@@ -433,11 +428,7 @@ def main() -> int:
 
     proof.require_released_lease(args.exclusive_lease)
     plan_path, plan = scope.load_json(args.plan, "100M planning contract")
-    if scope.sha256_file(PLAN_SCHEMA) != PLAN_SCHEMA_SHA256:
-        raise RuntimeError("100M planning schema hash drift")
-    plan_schema = json.loads(PLAN_SCHEMA.read_text(encoding="utf-8"))
-    jsonschema.Draft202012Validator.check_schema(plan_schema)
-    jsonschema.validate(plan, plan_schema)
+    proof.validate_planning_contract(plan)
     if (
         plan.get("artifact_id") != PLAN_ID
         or plan.get("candidate_id") != CANDIDATE_ID

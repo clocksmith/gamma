@@ -181,6 +181,7 @@ def derive(receipt: dict[str, Any]) -> tuple[dict[str, Any], dict[str, bool], li
     _, plan = load_json_artifact(
         receipt["antecedents"]["planning_contract"], "planning contract"
     )
+    proof.validate_planning_contract(plan)
     calibration_contract = plan.get("observer_calibration", {})
     joint_verification_contract = plan.get("independent_verification", {})
     verifier_path = Path(__file__).resolve()

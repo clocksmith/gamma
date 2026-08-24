@@ -86,6 +86,9 @@ The same audit found that this detailed plan still named the generic dormant
 campaign schema despite not conforming to it. The plan now validates against a
 dedicated strict schema whose digest is pinned independently by both the
 coordinator and verifier; the plan also carries that digest explicitly.
+Observer build, observer calibration, calibration verification, joint
+coordination, and joint verification now all invoke the same schema-pinned
+plan validator before accepting or producing evidence.
 
 The build runner requires two byte-identical builds within each I-P/I-Q arm
 before packaging replicate A. The observer registers the

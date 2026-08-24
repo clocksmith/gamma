@@ -14,6 +14,7 @@ from typing import Any
 import jsonschema
 
 import cmix_filebacked_fxcm_build_capture as capture
+import cmix_filebacked_fxcm_100m_identity_resource_verify as proof
 import cmix_filebacked_fxcm_scope_identity as scope
 
 
@@ -472,6 +473,7 @@ def main() -> int:
         raise RuntimeError(f"exclusive full-1G lease lock exists: {lease_lock}")
     capture.require_lease_released()
     plan_path, plan = scope.load_json(args.plan, "100M planning contract")
+    proof.validate_planning_contract(plan)
     build_path, build = scope.load_json(
         args.observer_build_receipt, "observer build receipt"
     )
