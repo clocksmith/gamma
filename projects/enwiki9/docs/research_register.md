@@ -1,5 +1,53 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint oracle v4 has an observability-only pre-archive gap
+
+A source-level audit separated the midpoint algorithm from the proof harness
+that would be required to interpret it. The frozen v4 overlay implements the
+P/K/F/S arm selection, local-32 capture and backward path, detached K update,
+F/S parameter commits, state-only replay, and canonical scratch clear. It does
+not emit any successful-path trace, state digest, update count, or update
+manifest. Its only output calls are fatal diagnostics, and each closure clears
+the detached witnesses that the evidence contract requires the future archive
+receipt to preserve.
+
+The existing q1 full-identity observer is reusable but insufficient by itself.
+It hashes every post-head integer probability, coder checkpoints, and the 26
+large FXCM semantic allocations affected by q1. That is a valid, deliberately
+allocation-specific completeness argument; it does not register the complete
+Byte-LSTM dynamic, parameter, optimizer, ordinary-tape, external-predictor,
+and midpoint partitions required at every 64-event checkpoint by the v4
+evidence contract. Retained `KH_TRACE` likewise covers arithmetic probability
+and residual evidence, not those partitions.
+
+The contract also names hashes without freezing their canonical preimages.
+It does not define field tags, traversal order, integer byte order,
+floating-point object encoding, tensor geometry rows, checkpoint hook order,
+or payload-prefix digest semantics. Consequently, adding ad hoc print calls
+would still not yield independently comparable evidence.
+
+The exact v4 overlay is therefore classified
+`dormant_prearchive_observability_incomplete`, not scientifically rejected.
+No build or run exists, and no compression conclusion follows. One
+observability-only derived successor is reserved as
+`cmix_obias_shadow_midpoint_oracle64_q0_v5`: it must preserve all P/K/F/S
+arithmetic, populations, controls, thresholds, reset/join behavior, and
+resource ceilings while adding fail-closed partition hashes, complete update
+manifests, and receipt plumbing under a versioned binary observability ABI.
+Because its source changes, it receives a new candidate identity rather than
+editing v4 in place.
+
+The correction must compose the calibrated q1 observer for every-bit
+probability, coder, and large-FXCM evidence, extend it for the missing LSTM and
+midpoint partitions, pass a one-byte mutation control for every new partition,
+freeze an independently parsed canonical serialization, and prove
+instrumented/uninstrumented probability and payload neutrality
+before F/S results are interpretable. This audit is dormant while qm8 owns the
+full-1G lane and while q1-v3 qualification receipts are absent. It grants no
+source execution, archive, compression, package-score, or objective credit.
+Evidence:
+`operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_observability_audit_q0_v1.json`.
+
 ## 2026-08-24 - midpoint oracle v4 receives a dormant source overlay
 
 The authority-only v4 midpoint proposal now has concrete, reviewable
