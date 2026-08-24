@@ -231,6 +231,57 @@ a positive v2 verification with
 qualification verification has been executed. This closure changes no archive
 measurement and grants zero Gamma compression or score credit.
 
+### Source-bound runtime producer and corpus-independent decode closure
+
+A further pre-execution audit found that the dormant runtime design still did
+not implement the proof it described. It had receipt schemas and an independent
+verifier, but no producer, no exact executable plan, no managed-lease binding,
+and no transitive source closure. More importantly, the generic full-stage
+wrapper accepted the canonical enwik9 path in both modes. Its decode subprocess
+ran only the self-extracting archive, but the timed wrapper itself first read
+and hashed the original corpus. That is conservative for elapsed time but is
+not a clean proof that decompression receives only the archive.
+
+Runtime contract revision 2 closes those gaps before any execution. The
+dedicated coordinator requires two independently verified, byte-identical q1
+full roundtrips; an exact Arm-A package; one retained raw Geekbench 5 report;
+the current host fingerprint; absent result, scratch, cgroup, and lease paths;
+and the plan-bound working directory and command vector. It acquires the
+managed exclusive full-1G lease, runs compression and decompression under the
+v3 process-tree/cgroup/disk/affinity guard, and derives each phase limit as
+`252000000 / single_core_score`. Compression must reproduce the A/B payload
+and self-extracting archive before decode can begin.
+
+The new runtime stage has an asymmetric information contract. Encode receives
+the canonical corpus, packaged compressor, and head. Decode receives only the
+newly generated archive and runs exactly `./archive9`; no original-corpus path
+appears in its stage argv or codec argv. The restored output is then checked
+against the fixed `1,000,000,000`-byte identity and canonical SHA-256. Hashing,
+copying, wrapper startup, codec execution, output validation, and receipt
+creation all remain inside the guarded elapsed interval, making the runtime
+measurement conservative without giving the decoder forbidden information.
+
+The independent verifier now reconstructs every stage and guard argv, the
+coordinator argv, and their NUL-delimited hashes from the sealed plan. It
+reopens both full arms and their verifications, rederives A/B/package/output
+identity, reparses the Geekbench report, re-fingerprints the host, validates
+the managed-lease transition hash chain and cleanup, and rejects any corpus
+path in the decode command. The producer records pre-run source bindings and
+terminally rejects source, plan, antecedent, package, population, or report
+drift. Success removes scratch and releases the lease; failure preserves
+scratch and emits a false receipt when execution has begun.
+
+The exact runtime execution surface is a 145-member Python/research-schema
+closure rooted at the coordinator, independent verifier, corpus-independent
+stage, and v3 resource guard. The opening-100M and phase-11 closures, now 150
+and 148 members respectively, were mechanically resealed because the shared
+contract registry reaches the revised runtime schemas. Qualification policy v4
+supersedes v3 for future authority and binds this producer, stage, plan,
+schemas, verifier, lease semantics, and source closure. No Geekbench run,
+runtime stage, full q1 arm, qualification receipt,
+compression improvement, authorship credit, or score credit is created by this
+static closure.
+
 ### Phase-11 modeled-coordinate repair and executable observer closure
 
 A pre-execution audit found that the old full-identity schemas could never
@@ -251,7 +302,7 @@ records: start, five fixed points, and a terminal point required to equal the
 bound transformed-stream artifact. This is the same calibrated binary, so no
 second observer build or compiler-equivalence assumption is needed.
 
-The opening-100M harness now has its own exact 149-member transitive Python
+The opening-100M harness now has its own exact 150-member transitive Python
 and research-schema closure rooted at its coordinator, identity arm,
 independent verifier, release stage, observer build, calibration runner, and
 calibration verifier. This is deliberately separate from the retained q1
@@ -281,7 +332,7 @@ remains disabled until qm8 A, an independent B, observer calibration, and the
 opening-100M gate all terminalize as passes.
 
 The prospective phase-11 Python execution surface is also frozen as an exact
-147-member transitive closure rooted at the coordinator, arm runner, and
+148-member transitive closure rooted at the coordinator, arm runner, and
 independent verifier. It includes every recursively imported project-local
 Python helper and, because the contract registry is reachable, every research
 contract schema the registry can resolve. Both execution and independent

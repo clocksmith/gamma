@@ -1,7 +1,7 @@
 {
-  "$schema": "campaign-static-contract.schema.json",
+  "$schema": "gamma.enwiki9.cmix-filebacked-fxcm-runtime-plan.v1",
   "artifact_id": "cmix_filebacked_fxcm_runtime_qualification_q0_v1",
-  "revision": 1,
+  "revision": 2,
   "operational_status": "dormant_dependency",
   "claim_authority": "none",
   "objective": {
@@ -11,62 +11,113 @@
   },
   "dependencies": [
     {
-      "artifact": "q1_full_roundtrip_a_b",
-      "required_evidence": "Both diagnostic full-corpus q1 arms are terminal, exact, independently verified, and package-identical."
+      "artifact": "q1 independent full roundtrips A and B",
+      "required_evidence": "Both source receipts and their independent soft-pressure verifications are terminal passes with byte-identical package, payload, archive, and inverse."
     },
     {
-      "artifact": "geekbench5_raw_report",
-      "required_evidence": "A retained raw report produced on the execution host identifies Geekbench 5 and contains exactly one positive single-core score."
+      "artifact": "raw Geekbench 5 report",
+      "required_evidence": "One retained single-link report produced on the execution host identifies Geekbench 5 and contains exactly one positive single-core score."
     },
     {
-      "artifact": "exact_q1_package",
-      "required_evidence": "The packaged compressor, head, and archive match the A/B artifacts by bytes and SHA-256."
+      "artifact": "exact q1 package",
+      "required_evidence": "Runtime compression uses the Arm A packaged compressor and head by exact path, byte count, and SHA-256; its new payload and archive must reproduce A/B."
     }
   ],
-  "contract": {
-    "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "implementation": {
+    "coordinator": {
+      "path": "tools/cmix_filebacked_fxcm_runtime_qualification.py",
+      "sha256": "c93b513339dd9f582114b670e028fc37d8493577bea44887bb6bf9b71b985b6b"
+    },
+    "independent_verifier": {
+      "path": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
+      "sha256": "ed8780f3680c3ff46ca4e16eff933b10829f1cf450b1a7775b72b0a6c58ac569"
+    },
+    "stage_runner": {
+      "path": "tools/cmix_filebacked_fxcm_runtime_stage.py",
+      "sha256": "d59fce0747b9fc731ef367572100fd907097499604528eeb59efc48c80de607e"
+    },
+    "stage_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-stage.schema.json",
+      "sha256": "f6f46c078742cee8d8d876e54a22713ee1ef736b1372ab2ae06740db1d1b4a51"
+    },
+    "resource_guard": {
+      "path": "tools/run_with_resource_guard_v3.py",
+      "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    },
+    "managed_lease": {
+      "path": "tools/managed_exclusive_lease.py",
+      "sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1"
+    },
     "receipt_schema": {
       "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification.schema.json",
-      "sha256": "d8d709538db7edeb2d8497be1500de88e609b92e6d3d8e8ea752357aeb721f13"
+      "sha256": "8227c2f054d81315184d4e3c41b4336fbba0fbf1eaf1ccc03f90b6f31ecdb0d5"
     },
     "verification_schema": {
       "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification-verification.schema.json",
-      "sha256": "02b54c2dd7b5b7105700ff5a153ffd2663906ffae2c4d3e936f9311898aa79be"
+      "sha256": "49c92bb04acfda0cc0f129b37fec42d70f95d6006be1359c6e46dca742f420ea"
     },
     "host_fingerprint_schema": {
       "path": "contracts/research/v1/cmix-runtime-host-fingerprint.schema.json",
       "sha256": "2bd1c4c72edb0ee02e719f21e2bc134a32e97b3299bdd0849b90024d176979a1"
     },
-    "verifier": {
-      "path": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
-      "sha256": "f27db7107b8050cf428873a84619488120c01ee31a99ac68ba600ac93635e901"
+    "plan_schema": {
+      "path": "operations/planning/cmix-filebacked-fxcm-runtime-plan.schema.json",
+      "sha256": "bc9783604046db45b5823235e319e1695d6faf4ce49b637e60d52cf29e58b91f"
     },
-    "guard": "tools/run_with_resource_guard_v3.py",
-    "compression_phase": "compression",
-    "decompression_phase": "decompression",
+    "python_source_closure": {
+      "path": "operations/planning/cmix_filebacked_fxcm_runtime_python_source_closure_q0_v1.json",
+      "sha256": "8ec3cce1eed8613fb9115bc7312ba664f162ee3ba5ea4badafcaad93651cf38d"
+    }
+  },
+  "source_closure_roots": [
+    "tools/cmix_filebacked_fxcm_runtime_qualification.py",
+    "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
+    "tools/cmix_filebacked_fxcm_runtime_stage.py",
+    "tools/run_with_resource_guard_v3.py"
+  ],
+  "working_directory": "/home/x/deco/gamma/projects/enwiki9",
+  "contract": {
+    "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+    "receipt_schema_revision": 2,
     "wall_time_limit_equation": "252000000 / measured_geekbench5_single_core_score",
-    "maximum_process_tree_rss_kib": 9765625,
+    "maximum_process_tree_rss_kib_exclusive": 9765625,
     "maximum_cgroup_memory_bytes_exclusive": 10000000000,
     "maximum_temporary_disk_bytes_exclusive": 100000000000,
     "maximum_logical_cpus": 1,
-    "required_command_bindings": {
-      "compression": ["exact packaged compressor path", "exact head path", "canonical corpus path"],
-      "decompression": ["exact archive path", "exact restored-output path"]
-    },
-    "pass_rule": "Both exact-package stages return zero, restore canonical enwik9, complete every guard-v3 measurement, remain strictly below their independently computed wall limits and resource limits, and encounter no guard or cgroup max/OOM event.",
-    "diagnostic_timing_excluded": true,
-    "execution_authorized": false
+    "phases": ["compression", "decompression"],
+    "new_archive_rule": "The prize-timed compression phase must regenerate a payload and archive byte-identical to both independently verified q1 full arms before decompression starts.",
+    "decoder_input_rule": "The guarded decompression command receives only the newly generated self-extracting archive. It receives no canonical-corpus path; exactness is determined from the restored file's fixed byte count and SHA-256.",
+    "inverse_rule": "The prize-timed decompression phase must restore all 1,000,000,000 canonical bytes exactly.",
+    "provenance_rule": "The producer and verifier independently recompute the transitive Python/schema closure and exact command vectors; path inclusion alone is insufficient.",
+    "failure_rule": "A terminal failure retains guarded stage evidence and scratch state, releases the managed lease when safe, emits a false terminal receipt, and grants no runtime authority."
   },
   "activation_requirements": [
-    "The live qm8 arm and one clean Arm B are terminal and independently verified.",
-    "The exact A/B-identical package is retained read-only.",
-    "The raw Geekbench 5 report and stable host fingerprint are retained under the candidate result root; independent verification reproduces the machine-id digest, uname architecture, and CPU model set on the current host.",
-    "The runtime coordinator, stage command manifest, scratch roots, cgroups, and lease transitions are frozen and content-addressed.",
-    "The exclusive full-1G lease and lock are absent before execution."
+    "qm8 Arm A and one independently planned Arm B are terminal exact passes with independent verification",
+    "the selected host has a retained raw Geekbench 5 report and stable fingerprint",
+    "the exclusive full-1G lease and its acquisition lock are absent",
+    "all implementation, schema, plan, and transitive source-closure hashes match this revision",
+    "result, scratch, cgroup, and lease-transition paths are new and disjoint"
   ],
-  "claim_boundary": [
-    "A pass establishes runtime eligibility only for the exact package on the measured host.",
-    "It does not establish q1 probability identity, qualification by itself, compression improvement, Gamma authorship, or score credit.",
-    "The existing qm8 diagnostic timings have no authority under this contract."
-  ]
+  "command": [
+    "/usr/bin/python3",
+    "tools/cmix_filebacked_fxcm_runtime_qualification.py",
+    "--plan", "operations/planning/cmix_filebacked_fxcm_runtime_qualification_q0_v1.json",
+    "--arm-a-receipt", "${ARM_A_RECEIPT}",
+    "--arm-a-verification", "${ARM_A_VERIFICATION}",
+    "--arm-b-receipt", "${ARM_B_RECEIPT}",
+    "--arm-b-verification", "${ARM_B_VERIFICATION}",
+    "--geekbench5-report", "${GEEKBENCH5_REPORT}",
+    "--corpus", "/home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9",
+    "--result-root", "${RESULT_ROOT}",
+    "--scratch-root", "${SCRATCH_ROOT}",
+    "--cgroup-path", "${CGROUP_PATH}",
+    "--lease-path", "/home/x/deco/gamma/projects/enwiki9/operations/runtime/exclusive_full1g.json",
+    "--lease-transition", "${LEASE_TRANSITION}",
+    "--cpu", "${CPU}"
+  ],
+  "kill_condition": "Any antecedent, source closure, command, package, host, guard, runtime, inverse, cleanup, or independent-verification mismatch ends this runtime candidate with zero authority.",
+  "execution_authorized": true,
+  "promotion_authority": false,
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
 }
