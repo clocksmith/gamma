@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-v2-execution-plan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "subject_candidate_id",
+    "revision",
+    "operational_status",
+    "execution_authorized",
+    "source_bindings",
+    "activation",
+    "phases",
+    "archive_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-v2-execution-plan.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v2"},
+    "subject_candidate_id": {"const": "gamma_safe_mix_v1"},
+    "revision": {"type": "integer", "minimum": 1},
+    "operational_status": {
+      "enum": ["dormant_dependency", "activated_after_qm8_terminal"]
+    },
+    "execution_authorized": {"type": "boolean"},
+    "source_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activation_gate",
+        "activation_verifier",
+        "plan_schema",
+        "activation_receipt_schema",
+        "activation_verification_schema",
+        "v1_program_lock",
+        "v1_program_lock_verification",
+        "activation_audit",
+        "lease_schema",
+        "owned_cleanup_manager",
+        "resource_guard",
+        "resource_guard_schema",
+        "python_runtime"
+      ],
+      "properties": {
+        "activation_gate": {"$ref": "#/$defs/artifact"},
+        "activation_verifier": {"$ref": "#/$defs/artifact"},
+        "plan_schema": {"$ref": "#/$defs/artifact"},
+        "activation_receipt_schema": {"$ref": "#/$defs/artifact"},
+        "activation_verification_schema": {"$ref": "#/$defs/artifact"},
+        "v1_program_lock": {"$ref": "#/$defs/artifact"},
+        "v1_program_lock_verification": {"$ref": "#/$defs/artifact"},
+        "activation_audit": {"$ref": "#/$defs/artifact"},
+        "lease_schema": {"$ref": "#/$defs/artifact"},
+        "owned_cleanup_manager": {"$ref": "#/$defs/artifact"},
+        "resource_guard": {"$ref": "#/$defs/artifact"},
+        "resource_guard_schema": {"$ref": "#/$defs/artifact"},
+        "python_runtime": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qm8_terminal_receipt",
+        "qm8_terminal_classification",
+        "managed_lease_verification",
+        "canonical_lease_manager",
+        "toolchain"
+      ],
+      "properties": {
+        "qm8_terminal_receipt": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]
+        },
+        "qm8_terminal_classification": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]
+        },
+        "managed_lease_verification": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]
+        },
+        "canonical_lease_manager": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]
+        },
+        "toolchain": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["compiler", "linker"],
+              "properties": {
+                "compiler": {"$ref": "#/$defs/artifact"},
+                "linker": {"$ref": "#/$defs/artifact"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "phases": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "build_negative_controls": {"$ref": "#/$defs/phase"},
+        "build_a": {"$ref": "#/$defs/phase"},
+        "build_b": {"$ref": "#/$defs/phase"},
+        "build_verify": {"$ref": "#/$defs/phase"},
+        "transactional_controls": {"$ref": "#/$defs/phase"},
+        "oracle_suite": {"$ref": "#/$defs/phase"}
+      }
+    },
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0},
+    "claim_boundary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"execution_authorized": {"const": false}},
+        "required": ["execution_authorized"]
+      },
+      "then": {
+        "properties": {
+          "revision": {"const": 1},
+          "operational_status": {"const": "dormant_dependency"},
+          "activation": {
+            "properties": {
+              "qm8_terminal_receipt": {"type": "null"},
+              "qm8_terminal_classification": {"type": "null"},
+              "managed_lease_verification": {"type": "null"},
+              "canonical_lease_manager": {"type": "null"},
+              "toolchain": {"type": "null"}
+            }
+          },
+          "phases": {"maxProperties": 0}
+        }
+      },
+      "else": {
+        "properties": {
+          "revision": {"minimum": 2},
+          "operational_status": {"const": "activated_after_qm8_terminal"},
+          "activation": {
+            "properties": {
+              "qm8_terminal_receipt": {"$ref": "#/$defs/artifact"},
+              "qm8_terminal_classification": {"$ref": "#/$defs/artifact"},
+              "managed_lease_verification": {"$ref": "#/$defs/artifact"},
+              "canonical_lease_manager": {"$ref": "#/$defs/artifact"},
+              "toolchain": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["compiler", "linker"],
+                "properties": {
+                  "compiler": {"$ref": "#/$defs/artifact"},
+                  "linker": {"$ref": "#/$defs/artifact"}
+                }
+              }
+            }
+          },
+          "phases": {
+            "required": [
+              "build_negative_controls",
+              "build_a",
+              "build_b",
+              "build_verify",
+              "transactional_controls",
+              "oracle_suite"
+            ],
+            "minProperties": 6,
+            "maxProperties": 6
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "minLength": 1},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/path"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entrypoint",
+        "child_receipt_schema",
+        "child_receipt",
+        "guard_receipt",
+        "gate_receipt",
+        "phase_result_root",
+        "phase_scratch_root",
+        "argv"
+      ],
+      "properties": {
+        "entrypoint": {"$ref": "#/$defs/artifact"},
+        "child_receipt_schema": {"$ref": "#/$defs/artifact"},
+        "child_receipt": {"$ref": "#/$defs/path"},
+        "guard_receipt": {"$ref": "#/$defs/path"},
+        "gate_receipt": {"$ref": "#/$defs/path"},
+        "phase_result_root": {"$ref": "#/$defs/path"},
+        "phase_scratch_root": {"$ref": "#/$defs/path"},
+        "argv": {
+          "type": "array",
+          "minItems": 5,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

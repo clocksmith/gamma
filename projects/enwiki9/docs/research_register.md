@@ -549,6 +549,26 @@ dependency installation, compiler substitution, proof execution, archive, or
 score claim was authorized. See the
 [`activation audit`](../operations/planning/gamma_safe_mix_v1_activation_audit_q0_v1.json).
 
+`gamma_safe_mix_v2` now materializes that correction as a sealed, still-dormant
+proof envelope. Candidate tree `f316e4a9...afe9d` contains the revisioned
+activation plan, no-follow source and namespace validation, an exact-token
+atomic acquisition lock, synthetic collision/replacement/token/hardlink and
+process controls, guarded dispatch to the immutable v1 phases, receipt
+schemas, and an independent verifier that reopens the terminal, source,
+toolchain, child, guard, and managed-lease migration evidence. The plan binds
+all `13` authority-bearing source artifacts, including the verifier and its
+schema. Static AST, Draft 2020-12 schema, dormant-plan, proposal/experiment,
+source-binding, and candidate-file closure checks pass. Counted candidate
+source is `65,236` bytes under the frozen `65,536`-byte ceiling.
+
+This is source-complete infrastructure, not executed SAFE-MIX evidence. Plan
+revision 1 has `execution_authorized=false`, null activation dependencies, and
+no phases. Activation still requires qm8 to terminalize and receive a matching
+independent classification, the owned-cleanup lease candidate to pass and
+migrate exactly into the canonical manager, and content-addressed `clang++`
+and `ld.lld` executables to exist. No v2 control, build, oracle, finite coder,
+archive, or inverse has run; Gamma compression and score credit remain zero.
+
 ## 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring
 
 `fxcm_fossil_match_q0_v1` is a new zero-credit information-source design, not
