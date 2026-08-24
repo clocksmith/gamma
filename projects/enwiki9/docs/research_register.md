@@ -1,5 +1,54 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - causal closure v2 represents WIKI-PDA without a fake fork or fake truth boundary
+
+The generalized Mechanism IR exposed a second compiler-format defect. Historical
+causal closure v1 enumerates only P/K/D/M/R/S and requires every mechanism to
+declare a non-null join plus a forbidden copy pair. Corrected WIKI-PDA v3 is
+P/K/C/T/D/R/S/N, has no mixture, and is one persistent structural scanner. A
+fabricated M arm or byte-boundary rejoin would silently change the experiment.
+
+The design-only causal-closure v2 schema now uses dynamic arm identities, binds
+its source IR by bytes and SHA-256, orders events as before-truth, truth-reveal,
+or after-truth, and declares every arm's source reads, state reads/writes,
+action, and truth access. Named state subregions separate coordinate targets,
+persistent causal transitions, matched opportunity identity, arm-private score
+evidence, and write-only posttruth evidence. Null join is legal only with an
+explicit no-join reason; a real join still requires retained/discarded state and
+forbidden copy pairs.
+
+The WIKI-PDA closure binds all eight arms, six IR sources, twenty state regions,
+and nine ordered events: prefix ready, C/T construction, T-before-C treatment
+selection, matched R/S/N freeze, logical truth reveal, score, parser advance,
+completed-event commit, and coordinate advance. D/R/S/N share one opportunity
+manifest. Control score outcomes are arm-private and unreadable. K may advance
+only matched shadow state and its own digest; it cannot write parent/coder state
+or emit a prediction.
+
+The truth boundary is deliberately not overstated. The sealed scanner receives
+`truth` as the `ScoreBeforeTruth` argument before all target expressions have
+physically executed. Static inspection finds that argument only in six Score
+comparisons and the write-only opportunity digest, not in target expressions,
+but this is not a transitive data-flow proof. The closure therefore labels the
+source `shadow_score_only_argument`, records that truth is physically visible,
+and requires independent AST/use-def verification plus a native probability
+commit before decoder truth before any causal execution claim.
+
+Two positive shapes pass: the exact WIKI-PDA no-join instance and the schema's
+non-null join branch. Twenty-two adversarial mutations are rejected, including
+arm/source/state mismatch, pretruth truth access, phase inversion, private
+outcome leakage, detached matched controls, artifact mismatch, and false
+shadow/native truth declarations. These are inline static checks, not the
+future independent verifier.
+
+No compiler source, scanner, probability, coder, archive, inverse, package,
+resource result, savings, or objective credit exists. Qm8 remains live and
+untouched. Evidence:
+`contracts/research/v1/gamma-mechanism-causal-closure-v2.schema.json`,
+`operations/planning/wiki_pda_structural_replay_ceiling_q0_v3.causal-closure-v2.json`,
+`operations/planning/gamma_mechanism_ir_v4_causal_closure_q0_v1.json`, and its
+adjacent review.
+
 ## 2026-08-24 - Mechanism IR v4 restores the mandatory control alphabet
 
 Attempting to express corrected WIKI-PDA v3 exposed a compiler-level omission.

@@ -1,0 +1,580 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-causal-closure.v2",
+  "mechanism_id": "wiki_pda_structural_replay_ceiling_q0_v3",
+  "mechanism_ir": {
+    "path": "projects/enwiki9/operations/planning/wiki_pda_structural_replay_ceiling_q0_v3.mechanism-ir-v2.json",
+    "bytes": 12590,
+    "sha256": "e0a22daa811b6d980b32faf8a46da2fdf6fe78c99a2f5e6788979728c736a27d"
+  },
+  "operational_status": "design_only",
+  "events": [
+    {
+      "id": "prefix_ready",
+      "ordinal": 0,
+      "phase": "before_truth",
+      "boundary": "Before transformed coordinate i: scanner, stack, previous-event, table, event key, and decoded prefix contain information only through x_(i-1)."
+    },
+    {
+      "id": "component_construct",
+      "ordinal": 1,
+      "phase": "before_truth",
+      "boundary": "Construct optional C and T targets from the already decoded opener, retained stack top, and prior unanimous record without reading x_i."
+    },
+    {
+      "id": "treatment_select",
+      "ordinal": 2,
+      "phase": "before_truth",
+      "boundary": "Select D as T when T is active, otherwise C, and freeze the selected source and treatment byte."
+    },
+    {
+      "id": "matched_controls_freeze",
+      "ordinal": 3,
+      "phase": "before_truth",
+      "boundary": "On every and only D-active coordinate, derive and freeze R, S, and N plus the common opportunity manifest before x_i is revealed."
+    },
+    {
+      "id": "truth_reveal",
+      "ordinal": 4,
+      "phase": "truth_reveal",
+      "boundary": "Logical data-dependency boundary: transformed truth x_i may affect scoring or transition only after every active target is frozen; the sealed shadow passes truth into ScoreBeforeTruth, so source inspection must prove no target expression reads that argument."
+    },
+    {
+      "id": "score_frozen_predictions",
+      "ordinal": 5,
+      "phase": "after_truth",
+      "boundary": "Compare frozen C/T/D/R/S/N bytes with x_i and update only arm-private evidence and the write-only opportunity digest."
+    },
+    {
+      "id": "parser_advance",
+      "ordinal": 6,
+      "phase": "after_truth",
+      "boundary": "Append x_i, update quote and overflow state, begin a new event after decoded L, and advance matched K/D transition digests."
+    },
+    {
+      "id": "completed_event_commit",
+      "ordinal": 7,
+      "phase": "after_truth",
+      "boundary": "Only after decoded unquoted N completes an event, parse it and commit table, stack, previous-depth, suppression, digest, and event-reset transitions."
+    },
+    {
+      "id": "coordinate_advance",
+      "ordinal": 8,
+      "phase": "after_truth",
+      "boundary": "Advance the absolute transformed coordinate after every score and state transition for x_i."
+    }
+  ],
+  "source_availability": [
+    {
+      "source_id": "decoded_transformed_prefix",
+      "available_at_event": "prefix_ready",
+      "first_use_event": "prefix_ready",
+      "availability_class": "prior_decoded"
+    },
+    {
+      "source_id": "decoded_event_opener",
+      "available_at_event": "prefix_ready",
+      "first_use_event": "component_construct",
+      "availability_class": "prior_decoded"
+    },
+    {
+      "source_id": "retained_stack_top",
+      "available_at_event": "prefix_ready",
+      "first_use_event": "component_construct",
+      "availability_class": "prior_decoded"
+    },
+    {
+      "source_id": "unanimous_transition_record",
+      "available_at_event": "prefix_ready",
+      "first_use_event": "component_construct",
+      "availability_class": "prior_decoded"
+    },
+    {
+      "source_id": "causal_ordinals",
+      "available_at_event": "prefix_ready",
+      "first_use_event": "matched_controls_freeze",
+      "availability_class": "prior_decoded"
+    },
+    {
+      "source_id": "decoded_current_truth",
+      "available_at_event": "truth_reveal",
+      "first_use_event": "score_frozen_predictions",
+      "availability_class": "current_truth_after_decode"
+    }
+  ],
+  "state_regions": [
+    {
+      "id": "parser_core",
+      "ir_state_id": "event_parser_state",
+      "source_location": "Scanner::Observe in_event, quote, event buffer, overflow, position, event key, and transition target state",
+      "authority": "mechanism_persistent",
+      "lifetime": "persistent",
+      "readable_arms": ["K", "C", "T", "D"],
+      "writable_arms": ["K", "D"],
+      "outcome_partition": "shared_next_coordinate_mechanism",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "retained_stack",
+      "ir_state_id": "retained_tag_stack",
+      "source_location": "Scanner retained depth-16 opening-name stack and suppressed-depth counter",
+      "authority": "mechanism_persistent",
+      "lifetime": "persistent",
+      "readable_arms": ["K", "C", "D"],
+      "writable_arms": ["K", "D"],
+      "outcome_partition": "shared_next_coordinate_mechanism",
+      "audit_hash": "stack_fnv1a64"
+    },
+    {
+      "id": "previous_event_records",
+      "ir_state_id": "previous_event_by_depth",
+      "source_location": "Scanner previous completed event hash at each retained depth",
+      "authority": "mechanism_persistent",
+      "lifetime": "persistent",
+      "readable_arms": ["K", "D"],
+      "writable_arms": ["K", "D"],
+      "outcome_partition": "shared_next_coordinate_mechanism",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "transition_table",
+      "ir_state_id": "unanimous_transition_table",
+      "source_location": "Scanner 1,024-entry direct-mapped first-observation and unanimity table",
+      "authority": "mechanism_persistent",
+      "lifetime": "persistent",
+      "readable_arms": ["K", "T", "D"],
+      "writable_arms": ["K", "D"],
+      "outcome_partition": "shared_next_coordinate_mechanism",
+      "audit_hash": "table_fnv1a64"
+    },
+    {
+      "id": "c_target",
+      "ir_state_id": null,
+      "source_location": "ScoreBeforeTruth closure_target and closure optional byte derived before C's Score call and before D/control selection",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["C", "D"],
+      "writable_arms": ["C"],
+      "outcome_partition": "shared_pretruth_mechanism",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "t_target",
+      "ir_state_id": null,
+      "source_location": "ScoreBeforeTruth transition optional byte derived before T's Score call and before D/control selection",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["T", "D"],
+      "writable_arms": ["T"],
+      "outcome_partition": "shared_pretruth_mechanism",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "selected_d_target",
+      "ir_state_id": null,
+      "source_location": "ScoreBeforeTruth SelectedPrediction treatment, shifted source, and source selector",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["D", "R", "S", "N"],
+      "writable_arms": ["D"],
+      "outcome_partition": "shared_pretruth_mechanism",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "opportunity_manifest",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "D-active coordinate, selected source, absolute position, and pretruth target identity",
+      "authority": "causal_evidence",
+      "lifetime": "coordinate",
+      "readable_arms": ["D", "R", "S", "N"],
+      "writable_arms": ["D"],
+      "outcome_partition": "shared_pretruth_mechanism",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "r_target",
+      "ir_state_id": null,
+      "source_location": "SplitMix64 random control byte frozen from causal ordinals and selected source",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["R"],
+      "writable_arms": ["R"],
+      "outcome_partition": "none",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "s_target",
+      "ir_state_id": null,
+      "source_location": "One-byte cyclic rotation of the complete selected D target",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["S"],
+      "writable_arms": ["S"],
+      "outcome_partition": "none",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "n_target",
+      "ir_state_id": null,
+      "source_location": "Byte complement of the selected D treatment target",
+      "authority": "mechanism_ephemeral",
+      "lifetime": "coordinate",
+      "readable_arms": ["N"],
+      "writable_arms": ["N"],
+      "outcome_partition": "none",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "c_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "C global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["C"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "t_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "T global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["T"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "d_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "D global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["D"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "r_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "R global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["R"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "s_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "S global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["S"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "n_score_evidence",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "N global and chronological-third active/correct counters",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["N"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "per_arm_counts"
+    },
+    {
+      "id": "opportunity_digest_posttruth",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "Write-only digest over coordinate, source, all frozen targets, and revealed truth",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["D"],
+      "outcome_partition": "shared_posttruth_mechanism",
+      "audit_hash": "opportunity_fnv1a64"
+    },
+    {
+      "id": "k_transition_digest",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "K counterfactual transition digest advanced at the exact parser transition sites",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["K"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "k_transition_fnv1a64"
+    },
+    {
+      "id": "d_transition_digest",
+      "ir_state_id": "causal_counters_and_digests",
+      "source_location": "D transition digest advanced at the same source-ordered parser transition sites as K",
+      "authority": "causal_evidence",
+      "lifetime": "persistent",
+      "readable_arms": [],
+      "writable_arms": ["D"],
+      "outcome_partition": "arm_private_evidence",
+      "audit_hash": "d_transition_fnv1a64"
+    }
+  ],
+  "arms": [
+    {
+      "arm": "P",
+      "roles": ["parent"],
+      "gate_behavior": "Conceptual qualified-parent comparator only; this opportunity scan neither reads parent probabilities nor writes parent, coder, or structural state.",
+      "event_access": [
+        {
+          "event": "prefix_ready",
+          "source_ids": ["decoded_transformed_prefix"],
+          "read_state_ids": [],
+          "write_state_ids": [],
+          "action": "observe",
+          "truth_access": "forbidden"
+        }
+      ]
+    },
+    {
+      "arm": "K",
+      "roles": ["zero_write_identity"],
+      "gate_behavior": "Advance the matched shadow parser, stack, table, and K transition digest with structural prediction and every coder/parent write disabled.",
+      "event_access": [
+        {
+          "event": "prefix_ready",
+          "source_ids": ["decoded_transformed_prefix"],
+          "read_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table"],
+          "write_state_ids": [],
+          "action": "observe",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "parser_advance",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table"],
+          "write_state_ids": ["parser_core", "k_transition_digest"],
+          "action": "advance",
+          "truth_access": "transition_only"
+        },
+        {
+          "event": "completed_event_commit",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table"],
+          "write_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table", "k_transition_digest"],
+          "action": "commit",
+          "truth_access": "transition_only"
+        }
+      ]
+    },
+    {
+      "arm": "C",
+      "roles": ["treatment_component"],
+      "gate_behavior": "Construct closing-name replay only after decoded L/slash and score it only after truth reveal.",
+      "event_access": [
+        {
+          "event": "component_construct",
+          "source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top"],
+          "read_state_ids": ["parser_core", "retained_stack"],
+          "write_state_ids": ["c_target"],
+          "action": "construct",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["c_target"],
+          "write_state_ids": ["c_score_evidence"],
+          "action": "score",
+          "truth_access": "score_only"
+        }
+      ]
+    },
+    {
+      "arm": "T",
+      "roles": ["treatment_component"],
+      "gate_behavior": "Construct unanimous-transition replay only after decoded L selected a prior record and score it only after truth reveal.",
+      "event_access": [
+        {
+          "event": "component_construct",
+          "source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "unanimous_transition_record"],
+          "read_state_ids": ["parser_core", "transition_table"],
+          "write_state_ids": ["t_target"],
+          "action": "construct",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["t_target"],
+          "write_state_ids": ["t_score_evidence"],
+          "action": "score",
+          "truth_access": "score_only"
+        }
+      ]
+    },
+    {
+      "arm": "D",
+      "roles": ["treatment"],
+      "gate_behavior": "Select T before C, freeze the D-active coordinate and target, score after truth, and advance only its matched shadow mechanism state.",
+      "event_access": [
+        {
+          "event": "treatment_select",
+          "source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+          "read_state_ids": ["parser_core", "retained_stack", "transition_table", "c_target", "t_target"],
+          "write_state_ids": ["selected_d_target", "opportunity_manifest"],
+          "action": "freeze",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["selected_d_target", "opportunity_manifest"],
+          "write_state_ids": ["d_score_evidence", "opportunity_digest_posttruth"],
+          "action": "score",
+          "truth_access": "score_only"
+        },
+        {
+          "event": "parser_advance",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table"],
+          "write_state_ids": ["parser_core", "d_transition_digest"],
+          "action": "advance",
+          "truth_access": "transition_only"
+        },
+        {
+          "event": "completed_event_commit",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table"],
+          "write_state_ids": ["parser_core", "retained_stack", "previous_event_records", "transition_table", "d_transition_digest"],
+          "action": "commit",
+          "truth_access": "transition_only"
+        }
+      ]
+    },
+    {
+      "arm": "R",
+      "roles": ["random_direction"],
+      "gate_behavior": "Freeze a deterministic SplitMix64 byte on the exact D opportunity without reading truth or treatment outcomes.",
+      "event_access": [
+        {
+          "event": "matched_controls_freeze",
+          "source_ids": ["decoded_transformed_prefix", "causal_ordinals"],
+          "read_state_ids": ["selected_d_target", "opportunity_manifest"],
+          "write_state_ids": ["r_target"],
+          "action": "freeze",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["r_target"],
+          "write_state_ids": ["r_score_evidence"],
+          "action": "score",
+          "truth_access": "score_only"
+        }
+      ]
+    },
+    {
+      "arm": "S",
+      "roles": ["shifted_association", "causal_misalignment"],
+      "gate_behavior": "Freeze the one-byte cyclic target rotation on the exact D opportunity without reading truth or any score outcome.",
+      "event_access": [
+        {
+          "event": "matched_controls_freeze",
+          "source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+          "read_state_ids": ["selected_d_target", "opportunity_manifest"],
+          "write_state_ids": ["s_target"],
+          "action": "freeze",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["s_target"],
+          "write_state_ids": ["s_score_evidence"],
+          "action": "score",
+          "truth_access": "score_only"
+        }
+      ]
+    },
+    {
+      "arm": "N",
+      "roles": ["negated_output"],
+      "gate_behavior": "Freeze D xor 0xff on the exact D opportunity without reading truth or any score outcome.",
+      "event_access": [
+        {
+          "event": "matched_controls_freeze",
+          "source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+          "read_state_ids": ["selected_d_target", "opportunity_manifest"],
+          "write_state_ids": ["n_target"],
+          "action": "freeze",
+          "truth_access": "forbidden"
+        },
+        {
+          "event": "score_frozen_predictions",
+          "source_ids": ["decoded_current_truth"],
+          "read_state_ids": ["n_target"],
+          "write_state_ids": ["n_score_evidence"],
+          "action": "score",
+          "truth_access": "score_only"
+        }
+      ]
+    }
+  ],
+  "matched_opportunity_groups": [
+    {
+      "id": "d_r_s_n_matched_coordinate",
+      "treatment_arm": "D",
+      "control_arms": ["R", "S", "N"],
+      "manifest_state_id": "opportunity_manifest",
+      "prediction_freeze_event": "matched_controls_freeze",
+      "truth_reveal_event": "truth_reveal",
+      "score_event": "score_frozen_predictions"
+    }
+  ],
+  "resets": [
+    {
+      "event": "prefix_ready",
+      "state_ids": ["c_target", "t_target", "selected_d_target", "opportunity_manifest", "r_target", "s_target", "n_target"],
+      "reason": "Coordinate-local targets and activation state never survive into the next transformed byte."
+    },
+    {
+      "event": "completed_event_commit",
+      "state_ids": ["parser_core"],
+      "reason": "Reset only current-event buffer, quotes, overflow, and transition-target state after terminal or malformed event handling; retained stack, previous-depth records, and table persist."
+    }
+  ],
+  "join": null,
+  "no_join_reason": "WIKI-PDA is one causal persistent scanner, not a forked predictor trajectory. Coordinate targets reset and completed-event state commits in place; inventing a byte-boundary rejoin would change the mechanism.",
+  "truth_boundary_evidence": {
+    "mode": "shadow_score_only_argument",
+    "source_artifact": {
+      "path": "projects/enwiki9/programs/wiki_pda_structural_replay_ceiling_q0_v2/wiki-pda-ceiling-scan.cpp",
+      "bytes": 22722,
+      "sha256": "3e9aebfa0b32aa57fc23eb41b91bfc6dde737ff0428fbe28a7fa1ac52af4b82f"
+    },
+    "physical_truth_visible_during_target_construction": true,
+    "target_dependency_rule": "The shadow ScoreBeforeTruth truth argument may flow only to Score comparisons and the write-only posttruth opportunity digest; it may not affect activation, C/T/D/R/S/N targets, source selection, or any future prediction state.",
+    "required_verification": "An independent source data-flow verifier must prove the rule for the bound scanner, and native integration must compute and commit every coder probability before the decoder exposes the coded truth.",
+    "native_codec_boundary_required": true
+  },
+  "causal_invariants": {
+    "pretruth_events": ["prefix_ready", "component_construct", "treatment_select", "matched_controls_freeze"],
+    "truth_reveal_event": "truth_reveal",
+    "posttruth_events": ["score_frozen_predictions", "parser_advance", "completed_event_commit", "coordinate_advance"],
+    "current_truth_source_id": "decoded_current_truth",
+    "pretruth_truth_access": "forbidden",
+    "control_outcomes_feed_treatment_state": false,
+    "arm_set_must_equal_ir": true,
+    "source_set_must_equal_ir": true,
+    "event_references_must_close": true,
+    "state_references_must_close": true,
+    "event_ordinals_must_be_strict": true
+  },
+  "claim_authority": "none",
+  "execution_authority": false
+}
