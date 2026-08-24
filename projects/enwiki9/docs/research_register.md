@@ -127,6 +127,56 @@ open NNCP student. New CMIX midpoint, MIDAS, SAFE-FORK, or structural mechanisms
 remain execution-blocked until q1 is an exact memory-safe parent. Their eventual
 archive effects require fresh joint replay and cannot be added algebraically.
 
+### Midpoint persistence attribution v1 is superseded; correction-only v2 is frozen
+
+A pre-execution authority audit found that the original
+`cmix_obias_midpoint_persistence_attribution64_q0_v1` cannot validly execute.
+It names `cmix_obias_full_midpoint_oracle64_q0_v1`, which was already
+superseded before execution because the donor CMIX update horizon is 128
+events and therefore cannot be invoked unchanged at a 32-event midpoint. The
+v1 attribution also allowed its persistent branch to name a compact
+curvature/tangent successor without first binding functional-JVP evidence. No
+v1 proposal, source candidate, archive, or scientific result exists. Its
+immutable supersession receipt records zero score credit.
+
+Correction-only
+`cmix_obias_midpoint_persistence_attribution64_q0_v2` now binds the actual
+source-defined 32-event truncated-BPTT oracle v2 and the exact q1 qualification
+policy v4. Its P/F/J/S comparison preserves the original scientific question
+and the preregistered `0.80` threshold. J must reproduce F's aligned update and
+adapted probability/state trajectory through byte 63 while a simultaneously
+advanced untouched branch reproduces P. At the join, every adapted
+probability-affecting write is discarded, the untouched parent state is
+retained, and the arithmetic coder interval is neither forked nor rewound.
+Truth-only storage may be shared only after a source and writable-alias audit;
+copy-on-write, sparse journals, or recomputation are implementation choices,
+not weaker state semantics.
+
+The execution ladder begins with a 250KB exactness/rejoin gate; a pass
+authorizes only 1MB calibration, and a target-scale causal 1MB pass authorizes
+only the 10MB attribution. The decisive test is exact integer arithmetic on a
+fresh 10MB P/F/J/S joint archive: `F_gain = archive(P)-archive(F)`,
+`J_gain = archive(P)-archive(J)`, and local retention passes exactly when
+`5*J_gain >= 4*F_gain`. F must still save at least `40,793` bytes and beat its
+frozen shifted S control. A retention pass authorizes only SAFE-FORK source
+materialization. A retention miss authorizes only functional-JVP persistence
+attribution; it cannot directly authorize a persistent codec.
+
+The planning contract, current structured experiment, oracle authority
+interface, receipt and verification schemas, and independent arithmetic/hash
+verifier are frozen. Adaptive proposal
+`cmix_obias_midpoint_persistence_attribution64_q0_v2` is explicitly
+`dormant_dependency`: it cannot be claimed until q1 has a positive terminal
+policy-v4 qualification decision and the shadow midpoint oracle v2 has a
+positive terminal 10MB decision. No execution, source candidate, archive gain,
+compression credit, or score credit is claimed.
+
+The historical mutation router and SAFE-FORK v1 contract also named the
+superseded attribution. Router v2 now binds the corrected oracle, attribution,
+sealed SAFE-MIX v2 wrapper, and one-successor ladder. SAFE-FORK v1 is
+explicitly superseded before execution; only a positive 10MB attribution-v2
+receipt may authorize materializing one new SAFE-FORK v2 source candidate.
+
 ### Live qm8 residency attribution and corrected bounded-to-full routing
 
 A read-only live snapshot at `2026-08-24T03:14:27Z`, with the encode progress

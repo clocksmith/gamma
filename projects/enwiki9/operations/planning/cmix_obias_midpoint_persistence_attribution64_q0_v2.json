@@ -1,0 +1,95 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_midpoint_persistence_attribution64_q0_v2",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4",
+      "required_evidence": "A terminal v2 independent qualification with verified=true, qualified=true, promotion_authority=true, claim_authority=memory_safe_external_parent_only, and zero Gamma score credit."
+    },
+    {
+      "artifact": "cmix_obias_shadow_midpoint_oracle64_q0_v2",
+      "required_evidence": "A terminal independent 10MB oracle verification proving exact P/K identity, exact inverse and repeat, F gain of at least 40,793 arithmetic archive bytes, F smaller than S, resource compliance, and zero score credit."
+    }
+  ],
+  "contract": {
+    "correction_only_of": "cmix_obias_midpoint_persistence_attribution64_q0_v1",
+    "correction_reason": "Revision 1 names the superseded native-midpoint oracle v1 and permits a persistent compact candidate without first requiring separate functional-JVP evidence. Revision 2 changes only prerequisite and successor authority; the P/F/J/S scientific question and 0.80 retention threshold are preserved.",
+    "question": "Is target-scale source-defined CMIX midpoint gain primarily local to second-half bytes 32 through 63, or does it require persistent parameter, optimizer, and recurrent trajectory changes?",
+    "population": {
+      "segment_bytes": 64,
+      "first_half_bytes": 32,
+      "second_half_bytes": 32,
+      "diagnostic_scope_bytes": 250000,
+      "calibration_scope_bytes": 1000000,
+      "decisive_scope_bytes": 10000000,
+      "required_F_gain_at_1m_bytes": 4080,
+      "required_F_gain_at_10m_bytes": 40793
+    },
+    "arms": {
+      "P": "Qualified q1 parent with no additional midpoint update or branch.",
+      "F": "The source-defined oracle v2 aligned 32-event truncated-BPTT update, rebuilt midpoint trajectory, ordinary second-half execution, and persistent post-byte-64 state.",
+      "J": "The same aligned update and adapted second-half trajectory as F, while a probability-affecting untouched parent branch consumes the same truths at native cadence; after byte 63 the adapted branch is discarded and byte 64 begins from the untouched parent branch state.",
+      "S": "The oracle v2 persistent shifted arm with its frozen 16-event rotation and otherwise identical update, arithmetic, population, and resource contract."
+    },
+    "J_state_partition": {
+      "semantic_rule": "Fork semantics cover every mutable byte capable of changing either branch's future integer probabilities. An implementation may use copy-on-write files, sparse journals, or recomputation only if the independent state-access manifest proves semantic identity to a complete fork.",
+      "shareable_state": "Truth-only state may be shared only after a source audit proves its transition is arm-invariant and free of writable aliases into branch-dependent state.",
+      "forked_state": "Every parameter, optimizer moment, recurrent value, mixer or SSE value, context value, cache, cursor, schedule value, or other mutable state whose transition depends on a branch probability, loss, or F write is branch-local.",
+      "coder_rule": "The arithmetic coder is never forked or rewound. J codes only the adapted branch probabilities during bytes 32 through 63 and continues its resulting interval across the rejoin.",
+      "join_rule": "At the boundary after byte 63, retain the untouched parent branch state exactly, discard every adapted branch write, retain the continuous coder state, and begin the next prediction from the retained parent branch."
+    },
+    "required_identity_proofs": [
+      "P and J's untouched parent branch consume identical truths and execute ordinary updates at identical native call sites and cadence.",
+      "F and J's adapted branch have identical midpoint inputs, update writes, rebuilt state, second-half integer probabilities, and second-half post-truth transitions through byte 63.",
+      "The retained J parent branch state equals the independently continued P state at every byte-64 join boundary.",
+      "No adapted parameter, optimizer, recurrent, mixer, SSE, context, memory, cache, cursor, schedule, or other probability-affecting write survives J rejoin.",
+      "Encode, repeat encode, decode, and raw inverse agree for every arm."
+    ],
+    "retention_rule": {
+      "F_gain_bytes": "archive_bytes(P) - archive_bytes(F)",
+      "J_gain_bytes": "archive_bytes(P) - archive_bytes(J)",
+      "S_gain_bytes": "archive_bytes(P) - archive_bytes(S)",
+      "defined_only_when": "F_gain_bytes > 0",
+      "exact_threshold": "5 * J_gain_bytes >= 4 * F_gain_bytes",
+      "retention_fraction": "J_gain_bytes / F_gain_bytes",
+      "fork_threshold": 0.8
+    },
+    "terminal_routes": {
+      "invalid_or_dependency_failure": "no scientific verdict and no successor authority",
+      "rejoin_identity_failure": "one correction-only implementation successor; no compression verdict",
+      "F_below_40793_at_10m": "retire CMIX midpoint persistence attribution as subscale",
+      "F_not_smaller_than_S": "retire the causal-alignment claim",
+      "J_retains_at_least_0_8": "authorize only cmix_obias_safe_fork_midas64_q0_v2 source materialization",
+      "J_retains_below_0_8": "authorize only a functional-JVP persistence attribution gate; no compact persistent codec is yet authorized"
+    },
+    "receipt_schema": "contracts/research/v1/cmix-midpoint-persistence-attribution-receipt-v2.schema.json",
+    "independent_verifier": "tools/cmix_midpoint_persistence_attribution_verify.py",
+    "maximum_added_package_bytes": 65536,
+    "process_tree_memory_ceiling_kib": 9765625,
+    "hard_cgroup_memory_ceiling_bytes": 10000000000,
+    "score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "The exclusive full-1G lease and acquisition lock are absent.",
+    "q1 policy v4 has a terminal passing independent qualification verification.",
+    "The shadow midpoint oracle v2 has a terminal passing 10MB authority verification.",
+    "One content-addressed source tree and binary implement P/F/J/S with an independently checked arm-difference manifest.",
+    "A synthetic fixture proves complete state-access closure, F/J adapted-trajectory identity, P/J parent-branch identity, byte-64 rejoin identity, coder continuity, and a live negative mutation control.",
+    "Every execution is admitted by the managed exclusive lease and resource guard."
+  ],
+  "claim_boundary": [
+    "This is a prospective archive-attribution experiment and grants zero compression or score credit.",
+    "The 0.80 rule is immutable before the first attribution archive.",
+    "A SAFE-FORK route is checkpoint/fork/rejoin infrastructure, not by itself a novel predictor or prize claim.",
+    "A below-threshold J result cannot authorize curvature, tangent, or low-rank codec source without a separate positive functional-JVP receipt.",
+    "Only a fresh joint finite-coder replay may credit any downstream combination."
+  ]
+}
