@@ -1,0 +1,100 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v2",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "full_roundtrip_a",
+      "required_evidence": "One terminal q1 full-corpus A receipt and its passing independent soft-pressure verification."
+    },
+    {
+      "artifact": "full_roundtrip_b",
+      "required_evidence": "One clean-build terminal q1 full-corpus B receipt and its passing independent soft-pressure verification."
+    },
+    {
+      "artifact": "full_probability_and_state_identity",
+      "required_evidence": "A byte-zero parent/q1 observer receipt and independent verification of post-head probability, coder-checkpoint, and four-checkpoint mutation-scoped state identity."
+    },
+    {
+      "artifact": "geekbench5_bound_runtime",
+      "required_evidence": "A raw Geekbench 5 report plus exact-package compression/decompression guard-v3 receipts whose wall limits are mechanically derived from that score."
+    },
+    {
+      "artifact": "dependency_and_license_closure",
+      "required_evidence": "A complete dependency-closure manifest whose counted tree exactly contains the A/B-identical package and passes the OSI license audit."
+    }
+  ],
+  "contract": {
+    "supersedes": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v1.json",
+    "objective_raw_sha256": "774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967",
+    "receipt_schema": {
+      "path": "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt-v2.schema.json",
+      "sha256": "1863e57073cf937e036b29d69b59467c8dbd167adedb36f61246a0bc02465494"
+    },
+    "verification_schema": {
+      "path": "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v2.schema.json",
+      "sha256": "3bcf47489de593d541504b06a9735979701d1da08bf8cc70253339f05538a74d"
+    },
+    "verifier": {
+      "path": "tools/cmix_memory_safe_parent_qualification_verify_v2.py",
+      "sha256": "c2b5b2989b428870d70598c1726b12df2b7abeb992c3e715f2468ebf79d5139b"
+    },
+    "full_identity": {
+      "plan": "operations/planning/cmix_filebacked_fxcm_full_probability_state_identity_q0_v1.json",
+      "plan_sha256": "85ebfbab99f8c4925eef24d584d30799aff3dd2a0d6d112618dae8df85465249",
+      "arm_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-arm.schema.json",
+      "arm_schema_sha256": "5f107dd3efc706dee07bca891bf03d5f82316730e3c38e851f15daf56865726a",
+      "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity.schema.json",
+      "receipt_schema_sha256": "87c8418298f73c5f863c0c35076124828713e3b513b9e2a5dd32acaafaa0cc1b",
+      "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-verification.schema.json",
+      "verification_schema_sha256": "22978581a8441d92b361770423ab261ec4a2aaa36a0ba5198a675d9bd73191ea",
+      "verifier": "tools/cmix_filebacked_fxcm_full_identity_verify.py",
+      "verifier_sha256": "bcaf44513e3d0e0083522d733421328d20b46f1ff488dbfb5cf8a9bcbea63736"
+    },
+    "runtime": {
+      "plan": "operations/planning/cmix_filebacked_fxcm_runtime_qualification_q0_v1.json",
+      "plan_sha256": "efa692193a202399d71df312d362b76bb1af277fc7a1d1948406731650611dc2",
+      "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification.schema.json",
+      "receipt_schema_sha256": "d8d709538db7edeb2d8497be1500de88e609b92e6d3d8e8ea752357aeb721f13",
+      "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification-verification.schema.json",
+      "verification_schema_sha256": "02b54c2dd7b5b7105700ff5a153ffd2663906ffae2c4d3e936f9311898aa79be",
+      "host_fingerprint_schema": "contracts/research/v1/cmix-runtime-host-fingerprint.schema.json",
+      "host_fingerprint_schema_sha256": "2bd1c4c72edb0ee02e719f21e2bc134a32e97b3299bdd0849b90024d176979a1",
+      "verifier": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
+      "verifier_sha256": "f27db7107b8050cf428873a84619488120c01ee31a99ac68ba600ac93635e901",
+      "wall_time_limit_equation": "252000000 / measured_geekbench5_single_core_score"
+    },
+    "mechanical_derivation": [
+      "The v2 input is only a nine-artifact router; it contains no qualification decisions.",
+      "The verifier rejects symlinks, multi-link evidence, project-root escapes, byte-count drift, and SHA-256 drift before interpreting evidence.",
+      "A/B terminal status, inverse, package, payload, archive, resource, and independent-verification fields are reopened from their retained receipts.",
+      "The A/B, full-identity, and runtime independent verifiers are rerun during consolidation; their recomputed outputs must be byte-for-byte equal to the supplied verification receipts.",
+      "Package bytes, required-option bytes, counted score, target distance, RSS maximum, cgroup maximum, and runtime limit are rederived rather than copied from the router.",
+      "A pass grants only memory_safe_external_parent_only authority and always grants zero Gamma compression and score credit."
+    ],
+    "engineering_parent_rss_ceiling_kib": 9000000,
+    "hard_cgroup_memory_ceiling_bytes": 10000000000,
+    "exclusive_lease_required_absent": true,
+    "v1_qualification_authority_revoked": true
+  },
+  "activation_requirements": [
+    "The current qm8 diagnostic arm is terminal and independently classified.",
+    "Both full A and B arms are terminal passes with clean scratch, cgroup, and lease cleanup.",
+    "Phase 11 has executable observer source, arm receipts, calibration controls, and a passing independent verification.",
+    "The current host has a retained raw Geekbench 5 result and two exact-package prize-facing runtime guards.",
+    "The dependency closure exactly covers the counted package and passes the license audit.",
+    "The exclusive full-1G lease and acquisition lock are absent when consolidation executes."
+  ],
+  "claim_boundary": [
+    "This policy is frozen design and grants no present qualification authority.",
+    "A future passing v2 verification may authorize q1 only as an external memory-safe experimental parent.",
+    "It does not prove compression improvement, Gamma authorship, official verification, or progress against the 105,000,000-byte target."
+  ]
+}

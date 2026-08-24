@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1",
+  "title": "CMIX file-backed FXCM Geekbench-bound runtime qualification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "population", "benchmark", "package", "guards", "stage_receipts", "outputs", "claim_boundary", "gamma_score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "benchmark": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "single_core_score", "raw_report", "host_fingerprint"],
+      "properties": {
+        "version": {"const": 5},
+        "single_core_score": {"type": "number", "exclusiveMinimum": 0},
+        "raw_report": {"$ref": "#/$defs/file"},
+        "host_fingerprint": {"$ref": "#/$defs/file"}
+      }
+    },
+    "package": {
+      "type": "object", "additionalProperties": false,
+      "required": ["packaged_compressor", "head", "archive"],
+      "properties": {
+        "packaged_compressor": {"$ref": "#/$defs/file"},
+        "head": {"$ref": "#/$defs/file"},
+        "archive": {"$ref": "#/$defs/file"}
+      }
+    },
+    "guards": {
+      "type": "object", "additionalProperties": false,
+      "required": ["compression", "decompression"],
+      "properties": {
+        "compression": {"$ref": "#/$defs/file"},
+        "decompression": {"$ref": "#/$defs/file"}
+      }
+    },
+    "stage_receipts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["compression", "decompression"],
+      "properties": {
+        "compression": {"$ref": "#/$defs/file"},
+        "decompression": {"$ref": "#/$defs/file"}
+      }
+    },
+    "outputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["archive", "restored"],
+      "properties": {
+        "archive": {"$ref": "#/$defs/file"},
+        "restored": {
+          "allOf": [
+            {"$ref": "#/$defs/file"},
+            {"properties": {
+              "bytes": {"const": 1000000000},
+              "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+            }}
+          ]
+        }
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

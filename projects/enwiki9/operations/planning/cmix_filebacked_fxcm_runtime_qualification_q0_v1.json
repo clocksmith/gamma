@@ -1,0 +1,72 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_runtime_qualification_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "q1_full_roundtrip_a_b",
+      "required_evidence": "Both diagnostic full-corpus q1 arms are terminal, exact, independently verified, and package-identical."
+    },
+    {
+      "artifact": "geekbench5_raw_report",
+      "required_evidence": "A retained raw report produced on the execution host identifies Geekbench 5 and contains exactly one positive single-core score."
+    },
+    {
+      "artifact": "exact_q1_package",
+      "required_evidence": "The packaged compressor, head, and archive match the A/B artifacts by bytes and SHA-256."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+    "receipt_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification.schema.json",
+      "sha256": "d8d709538db7edeb2d8497be1500de88e609b92e6d3d8e8ea752357aeb721f13"
+    },
+    "verification_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification-verification.schema.json",
+      "sha256": "02b54c2dd7b5b7105700ff5a153ffd2663906ffae2c4d3e936f9311898aa79be"
+    },
+    "host_fingerprint_schema": {
+      "path": "contracts/research/v1/cmix-runtime-host-fingerprint.schema.json",
+      "sha256": "2bd1c4c72edb0ee02e719f21e2bc134a32e97b3299bdd0849b90024d176979a1"
+    },
+    "verifier": {
+      "path": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
+      "sha256": "f27db7107b8050cf428873a84619488120c01ee31a99ac68ba600ac93635e901"
+    },
+    "guard": "tools/run_with_resource_guard_v3.py",
+    "compression_phase": "compression",
+    "decompression_phase": "decompression",
+    "wall_time_limit_equation": "252000000 / measured_geekbench5_single_core_score",
+    "maximum_process_tree_rss_kib": 9765625,
+    "maximum_cgroup_memory_bytes_exclusive": 10000000000,
+    "maximum_temporary_disk_bytes_exclusive": 100000000000,
+    "maximum_logical_cpus": 1,
+    "required_command_bindings": {
+      "compression": ["exact packaged compressor path", "exact head path", "canonical corpus path"],
+      "decompression": ["exact archive path", "exact restored-output path"]
+    },
+    "pass_rule": "Both exact-package stages return zero, restore canonical enwik9, complete every guard-v3 measurement, remain strictly below their independently computed wall limits and resource limits, and encounter no guard or cgroup max/OOM event.",
+    "diagnostic_timing_excluded": true,
+    "execution_authorized": false
+  },
+  "activation_requirements": [
+    "The live qm8 arm and one clean Arm B are terminal and independently verified.",
+    "The exact A/B-identical package is retained read-only.",
+    "The raw Geekbench 5 report and stable host fingerprint are retained under the candidate result root; independent verification reproduces the machine-id digest, uname architecture, and CPU model set on the current host.",
+    "The runtime coordinator, stage command manifest, scratch roots, cgroups, and lease transitions are frozen and content-addressed.",
+    "The exclusive full-1G lease and lock are absent before execution."
+  ],
+  "claim_boundary": [
+    "A pass establishes runtime eligibility only for the exact package on the measured host.",
+    "It does not establish q1 probability identity, qualification by itself, compression improvement, Gamma authorship, or score credit.",
+    "The existing qm8 diagnostic timings have no authority under this contract."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1",
+  "title": "One byte-zero CMIX full identity observer arm",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "role", "candidate_id", "population", "binary",
+    "return_code", "coded_bits", "probability_sha256", "coder_checkpoints",
+    "state_checkpoints", "payload", "observer_outputs", "claim_boundary",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1"},
+    "role": {"enum": ["parent", "q1"]},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "binary": {"$ref": "#/$defs/file"},
+    "return_code": {"type": "integer"},
+    "coded_bits": {"type": "integer", "minimum": 1},
+    "probability_sha256": {"$ref": "#/$defs/sha256"},
+    "coder_checkpoints": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"$ref": "#/$defs/checkpoint"}
+    },
+    "state_checkpoints": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"$ref": "#/$defs/checkpoint"}
+    },
+    "payload": {"$ref": "#/$defs/file"},
+    "observer_outputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["probability_manifest", "coder_manifest", "state_manifest"],
+      "properties": {
+        "probability_manifest": {"$ref": "#/$defs/file"},
+        "coder_manifest": {"$ref": "#/$defs/file"},
+        "state_manifest": {"$ref": "#/$defs/file"}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checkpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coded_bytes", "sha256"],
+      "properties": {
+        "coded_bytes": {"enum": [0, 100000000, 500000000, 1000000000]},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

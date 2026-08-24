@@ -380,7 +380,7 @@ def main() -> int:
         checks["evidence_closure_pass"] = False
 
     package_complete = package_arithmetic
-    qualified = (
+    legacy_predicates_pass = (
         two_run_identity
         and cleanup_pass
         and memory_pass
@@ -388,6 +388,12 @@ def main() -> int:
         and runtime_eligible
         and package_complete
         and evidence_pass
+    )
+    qualified = False
+    qualification_failures.append(
+        "v1 qualification authority is revoked"
+        + (" despite all legacy summary predicates passing" if legacy_predicates_pass else "")
+        + ": use the artifact-reopening v2 verifier"
     )
     derived = {
         "build_identity_pass": build_identity,
