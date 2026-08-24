@@ -1,5 +1,52 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint oracle v4 receives a dormant source overlay
+
+The authority-only v4 midpoint proposal now has concrete, reviewable
+implementation text without violating its q1 qualification dependency. The
+new artifact is not a candidate tree: it is an inert integration patch plus
+four detached declaration/implementation fragments bound to the exact sealed
+q1 makefile and Byte-LSTM source hashes. A read-only verifier rehashes those
+five parent files, the four authority artifacts, itself, and every overlay
+file; checks that the patch touches only the makefile and four LSTM files; and
+runs only `git apply --check --whitespace=error-all`. All static checks pass. No patch was
+applied, no source tree was materialized, and no build or codec arm ran.
+
+The implementation is not whole-compressor checkpointing. It preallocates
+separate 32-row recurrent histories, output errors and adjoints, gate
+transposes, dense/symbol/gamma/beta gradients, detached control rows, and
+dynamic-state snapshots. At causal closure it reconstructs each historical
+output matrix from the absolute native pending factors, runs local reverse
+BPTT without calling the ordinary 128-row backward path, applies recurrent
+Adam before output SGD, restores only Byte-LSTM hidden/cell state, and replays
+with a history-free numerical clone of the recurrent forward pass. The
+closure byte keeps the feature that actually predicted it. K performs the
+same update arithmetic on detached copies and aborts unless replay reproduces
+the closure dynamic state bit-for-bit; F commits aligned targets; S changes
+only the frozen 16-position target rotation.
+
+The review text totals `44,862` bytes. For the sealed `V<=256`, `C=256`,
+one-layer geometry, the rounded buffer and vector payload formula is
+`4,096,192` bytes and the design records a conservative `5,000,000`-byte
+live-allocation bound, far
+below the frozen `268,435,456`-byte incremental ceiling. Neither number is an
+official package or memory measurement. Compilation, P/q1 identity, K/P
+complete identity, F/S synchronization, resource compliance, inversion, and
+all compression effects remain unproved. The overlay is dormant and receives
+zero archive, compression, package-score, or objective credit.
+
+A separate dormant evidence contract now prevents the future harness from
+weakening that boundary. It freezes the P/K/F/F-repeat/S/S-repeat output tree,
+64-event rolling hashes for coder and six state partitions, the exact
+midpoint-update row contents, the closure-count formula, complete inverses and
+resources, P/q1 and K/P cross-arm equality, F/S repeat equality, package cost,
+and fail-closed decision equations. It grants no execution authority.
+
+During this static work, qm8 remained the sole substantial process. Its Arm A
+encode advanced to `23.80%`; the process tree is live, its guard reports no
+cgroup `max`, `oom`, or `oom_kill` event, and no full-roundtrip receipt exists.
+The process was not signaled, modified, or treated as q1 qualification.
+
 ## 2026-08-24 - midpoint oracle rebound to exact q1 v3 authority
 
 The post-q1 CMIX midpoint route was not executable despite its corrected v3
