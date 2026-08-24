@@ -106,6 +106,16 @@ application and frozen-definition C++ syntax validation pass; no observer build
 has been executed, and no calibration, 100M identity result, or resource result
 is claimed.
 
+Semantic-coverage audit: q1 can enter `AllocateBacked` only through the two
+`fxcmv1.cpp` allocation templates, `alloc` and aligned `alloc1`, and only at
+the same 64 MiB threshold used by the observer. The observer hooks both the
+file-backed and ordinary allocation branches after allocation. `alloc` hashes
+the exact requested object extent; `alloc1` hashes the aligned data pointer and
+exact usable extent while excluding allocator/alignment padding. `Begin` then
+requires all 26 runtime registrations before coding can start. Thus every
+allocation whose storage implementation q1 changes is inside the state
+manifest, while non-semantic mapping slack remains correctly excluded.
+
 `cmix_filebacked_fxcm_full_a_qm8_v1` was already running when this launch-order
 correction was adopted. It remains an unchanged zero-credit diagnostic and is
 not killed or retroactively promoted. No new independent full-1G arm or native
