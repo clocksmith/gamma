@@ -101,6 +101,18 @@ test("Firebase publication copies only graph-owned runtime artifacts", async () 
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
     assert.match(baseline, /Public Capability Covenant/);
+    const game = await readFile(resolve(outputRoot, "web/index.html"), "utf8");
+    assert.match(game, /Sell the intelligence\. Seize the grid\. Authorize the future\./);
+    assert.match(game, /turning cheap intelligence into infrastructure, authority/);
+    await assert.rejects(stat(resolve(outputRoot, "docs/lore-scratchpad.html")), {
+      code: "ENOENT"
+    });
+    const bible = await readFile(
+      resolve(outputRoot, "docs/thematic-content-bible.html"),
+      "utf8"
+    );
+    assert.match(bible, /sole editorial authority/);
+    assert.match(bible, /Whole-game lore atlas/);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }

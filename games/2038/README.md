@@ -55,8 +55,10 @@ This repository is a **prototype**, not a manufactured or published product.
   Documentation reader during `npm run docs:html`. Author its source under
   `content/copy/`, declare the projection in `content/graph.json`, and never
   author directly in `dist/docs/`.
-- The complete first-pass thematic inventory and writing contract live in
-  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md) and
+- The sole lore authority, editorial backlog, research boundary, Era-placement
+  ledger, and writing contract live in
+  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md). The
+  generated surface inventory lives in
   [`dist/runtime/content-manifest.json`](dist/runtime/content-manifest.json).
 - Player personas, CLI-backed decision policies, Monte Carlo execution, and
   replay are documented in
@@ -65,8 +67,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.8.0-rc.8-test`.
-Executable game `0.14.7` implements that candidate under
+`0.8.0-rc.12-test`.
+Executable game `0.14.11` implements that candidate under
 `nineteen-hex-simplified-v1`, including retained Production Power snapshots,
 one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
 Power contracts, Research Protection, four secret Era Dossier choices, and
@@ -102,9 +104,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.14.7` game and export its
+- `http://localhost:8038/` — play the synchronized `0.14.11` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.14.7` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.14.11` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -178,8 +180,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.14.7`
-bundle, its synchronized `0.8.0-rc.8-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.14.11`
+bundle, its synchronized `0.8.0-rc.12-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

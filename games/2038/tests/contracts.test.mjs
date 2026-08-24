@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -197,6 +197,52 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(bible, /Mandate markers \/ AGI Dossier cards \| 6 \/ 24/);
   assert.match(bible, /Starting-grid identities \| 6 Facilities carry this identity/);
   assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
+});
+
+test("one thematic authority governs every lore-bearing surface", async () => {
+  const [bible, prototype, world, tactics, reserve, objectives] = await Promise.all([
+    readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
+    readFile(new URL("web/templates/prototype.html", root), "utf8"),
+    readJson("dist/runtime/world-copy.json"),
+    readJson("dist/runtime/tactics.json"),
+    readJson("dist/runtime/reserve-specialists.json"),
+    readJson("dist/runtime/secret-objectives.json")
+  ]);
+
+  await assert.rejects(stat(new URL("docs/lore-scratchpad.md", root)), { code: "ENOENT" });
+  await assert.rejects(stat(new URL("dist/site/docs/lore-scratchpad.html", root)), {
+    code: "ENOENT"
+  });
+  assert.match(bible, /sole editorial authority/);
+  assert.match(bible, /## Editorial authority and method/);
+  assert.match(bible, /### Research provenance and claim boundary/);
+  assert.match(bible, /### Era-placement ledger/);
+  assert.match(bible, /### Retained editorial backlog/);
+  assert.match(bible, /## Whole-game lore atlas/);
+  assert.match(bible, /Bankruptcy Data Estates/);
+  assert.match(bible, /Cognitive Donor Clinics/);
+  assert.match(bible, /Metropolitan Mind Trust/);
+  assert.match(prototype, /worldCopy\.box\.frontStrapline/);
+  assert.match(prototype, /worldCopy\.box\.shortPitch/);
+
+  assert.equal(tactics.tactics.length, 12);
+  assert.equal(reserve.specialists.length, 12);
+  assert.equal(objectives.objectives.length, 18);
+  const deferredLore = JSON.stringify({ tactics, reserve, objectives });
+  for (const phrase of [
+    "Cheap-Token Rebound",
+    "Failed Institutions",
+    "Cognitive Donation",
+    "The Refinancing Threshold",
+    "Shared Cooling Peace",
+    "Parameters Successfully Expanded"
+  ]) {
+    assert.match(deferredLore, new RegExp(phrase));
+  }
+  assert.doesNotMatch(
+    JSON.stringify({ world, tactics, reserve, objectives }).concat("\n", prototype),
+    /Build\. Deploy\. Regulate\. Plausibly declare|Tracking Pixels|Ask before displaying external images/
+  );
 });
 
 test("selected deck contracts have exact physical counts", async () => {

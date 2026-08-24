@@ -257,6 +257,20 @@ const required = [
 ];
 
 for (const relative of required) await access(resolve(root, relative));
+for (const forbiddenLoreAuthority of [
+  "docs/lore-scratchpad.md",
+  "dist/site/docs/lore-scratchpad.html",
+  "dist/runtime/generated"
+]) {
+  try {
+    await access(resolve(root, forbiddenLoreAuthority));
+    throw new Error(
+      `${forbiddenLoreAuthority} must not survive beside the canonical thematic Bible.`
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+}
 
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });

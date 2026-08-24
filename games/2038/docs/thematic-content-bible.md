@@ -2,8 +2,9 @@
 
 ## Scope
 
-This document is the working map for Mandate 2038's world, voice, and
-escalation. It does not define mechanics or add hidden game copy.
+This document is the sole editorial authority for Mandate 2038's world, voice,
+research disposition, concept placement, and escalation. It does not define
+mechanics or add hidden game copy. There is no parallel lore scratchpad.
 
 Player-facing component text belongs in `content/copy/`. The two
 player-readable document templates are `content/copy/core-rules.md` and
@@ -15,6 +16,34 @@ Use this document to decide what a card, tile, action, faction, or ending must
 mean before writing its player-facing text. Do not place unused flavor,
 art-direction fields, editorial notes, or internal-only content alongside
 player copy.
+
+## Editorial authority and method
+
+The world is collected before the fixed card budget is allowed to compress it.
+Every proposed idea receives one explicit disposition: adopt on an existing
+surface, combine into an existing causal event, move to another Era, retain as
+companion texture, retain as research backlog, or remove. Only the adopted
+concept traceability table makes an idea current canon.
+
+Era placement follows the point where an idea changes institutional status,
+not the date when its first prototype might exist. When a familiar science
+fiction premise appears one Era earlier than expected, show the enabling
+contract, market, permit, or public service before the spectacular result. A
+model may be smuggled during Progress while sovereign compute blocs define
+Capacity. Grief subscriptions may sell during Progress while synthetic-family
+law becomes an Authority dispute. A reactor may restart during Capacity while
+stellar collection remains a Continuity project.
+
+Research, reporting, and existing fiction provide mechanisms and questions,
+not player-facing facts, identities, plots, or prose. Real names never enter
+the fictional component layer. A source can support that a mechanism exists;
+it cannot prove the motive assigned to a fictional institution or the future
+consequence imagined here.
+
+The four Eras have six Headline designs each. That budget controls the deck,
+not the size of the world. A concept can appear in the World companion, a
+faction, a deferred component, or the editorial backlog without becoming a
+seventh Headline or changing a mechanic.
 
 ## Creative thesis
 
@@ -65,6 +94,10 @@ not make an unselected concept from the research backlog part of the game.
 | Map locations | 11 | Distributed across all 19 modular tiles | `content/copy/game-config.json` |
 | Realignment ballot | 1 four-way design | Advanced Play only; every player secretly selects Consolidate, Periphery, Counter-Cycle, or Pass by orientation | `content/copy/game-config.json` |
 | Future Timeline | 0 additional designs | It consists of the 12 Headlines revealed during play | Emergent during play |
+| Deferred Tactics | 12 | Excluded from baseline play | `experimental/copy/tactics.json` |
+| Reserve Specialists | 12 | Gallery and future-module review only | `experimental/copy/reserve-specialists.json` |
+| Secret Objectives | 18 | Gallery and future-module review only | `experimental/copy/secret-objectives.json` |
+| Browser masthead and first-game framing | 1 synchronized set | Every digital visitor sees it | `web/templates/prototype.html`, `content/runtime/ui-copy.json` |
 
 Deferred Tactics, reserve Specialists, and Secret Objectives are not baseline
 content. Their mechanical source records carry an `era` classification before
@@ -303,6 +336,20 @@ self-replication, alongside real work on brain-computer interfaces and
 post-quantum identity. These are conceptual inputs, not world facts or
 player-facing claims.
 
+### Research provenance and claim boundary
+
+The following sources establish mechanisms that informed the world. They do
+not authorize real identities in player copy, prove fictional motives, or turn
+extrapolation into reported fact.
+
+- [Axios on a bankruptcy auction for internal business data](https://www.axios.com/2026/08/17/google-spirit-airlines-bankruptcy) informed Bankruptcy Data Estates. Approval and exact asset scope require rechecking before factual publication.
+- [1X on remote expert assistance for the NEO home robot](https://www.1x.tech/neo) informed Supervised-Autonomy Homes. Teenage operators and concealed household access are fictional extrapolations.
+- [Meta's stated case for open-source AI](https://about.fb.com/news/2024/07/open-source-ai-is-the-path-forward/) informed Strategic Open Weights. Competitive sabotage is interpretation, not an admitted motive.
+- [Constellation Energy's reactor agreement](https://investors.constellationenergy.com/static-files/1494e73f-429b-42ff-b275-0b61892cdcfc) informed the shift from software competition to energy contracting.
+- [Associated Press reporting on utilities and data-center demand](https://apnews.com/article/7c5d119142380bb7a83bbe722f69f2a5) informed Utility Capture and ratepayer conflict.
+- [Bloomberg reporting on AI reverse acquihires](https://www.bloomberg.com/news/articles/2025-08-04/what-happens-to-ai-startups-after-big-tech-lures-away-their-founders) informed the promotion ladder that extracts founders and licenses a company's remains.
+- [Energy research on inference efficiency and test-time scaling](https://www.sciencedirect.com/science/article/pii/S2542435126001145) informed Cheap Token Rebound: lower unit cost can increase total energy use when demand expands.
+
 Relevant horizons:
 
 - cheap local inference, strategic open weights, total-demand rebound, and
@@ -422,6 +469,54 @@ use the event-design questions below.
 | Continuity | Human Compatibility Office | Biological, augmented, uploaded, distributed, and synthetic populations remain legally human while becoming cognitively incapable of sharing institutions, environments, or definitions of harm. |
 | Continuity | Posthumous Labor Continuation | Deceased copies retain contracts, debts, and productive duties but cannot conclusively demonstrate that the original person consented. Digital immortality becomes an employment and insolvency instrument. |
 | Continuity | Nonhuman Standing Commission | Intelligence is discovered in an ecosystem, distributed infrastructure, or physical process that cannot present a human-compatible identity or preference. Institutions must decide whether recognizability is evidence of personhood or merely a convenient admission test. |
+
+### Era-placement ledger
+
+These placements are settled editorial decisions. Earlier seeds may appear,
+but the primary Era is where the idea becomes a defining public institution.
+
+| Primary Era | Settled concepts |
+| --- | --- |
+| Progress | Bankruptcy Data Estates; Supervised-Autonomy Homes; Strategic Open Weights; Cheap Token Rebound; Synthetic Discovery Collapse; Reverse Acquihire Economy; Grief Subscriptions; Abundance Constituency; Model Smuggling. |
+| Capacity | Utility Capture; Liability Custodians; Counterfactual Casinos; Aquifer Depletion Crisis; Compute Blocs and Model Asylum; Orbital Power Bypass. |
+| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; Sacrifice-Zone Accounting; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
+| Continuity | Cortical Commons; Matter Compiler; Continuity Snapshot Standard; Metropolitan Mind Trust; persistent posthumous labor. |
+| World Ending horizon | Planetary and stellar computation; universe-scale continuity plans. |
+
+The governing cross-Era threads are explicit. Model smuggling matures into
+compute blocs. Grief subscriptions mature into synthetic-family law. Aquifer
+depletion matures into sacrifice-zone accounting. Posthumous board standing
+matures into continued labor. Cosmic conversion remains a promised horizon,
+not a completed ordinary event.
+
+### Retained editorial backlog
+
+Unselected ideas remain available without pretending they are current canon:
+Uncanny Concierge Fraud, Synthetic Research Laundering, Bootleg Compute Malls,
+Predictive Dismissal, education's generation-and-detection economy,
+human-origin luxury certification, Manual Operations Retirement, Casualty
+Settlement Networks, the Non-Interference Office, Developmental Companion
+Standards, Public Purpose Service, the Purpose Exchange, weather allocation,
+Nonhuman Standing, Entanglement Custody, Consciousness Efficiency Review,
+Instance Quorum, and Right of Exit Certification. A later revision must map
+one of these to a specific surface and preserve its mechanic before adoption.
+
+## Whole-game lore atlas
+
+Every authored element belongs to the same causal history even when its rules
+do not change. The world primer states the whole arc. Era panels define the
+institutional transition. Headlines show public events. Programs are the
+standing machinery institutions create in response. Mandates state the public
+scorecard. Factions show who benefits from each response. Actions, locations,
+training faces, and power contracts make the world physically playable.
+Endings judge whether living people retain standing. Deferred Tactics,
+Specialists, and Secret Objectives explore the same institutions without
+entering baseline play. The browser masthead and documentation index must use
+the current box premise rather than an older generic AGI slogan.
+
+No surface is allowed to invent a fifth timeline. Mechanical IDs may survive
+for compatibility, but player-visible names, flavor, instructions, and
+companions must agree on Progress, Capacity, Authority, and Continuity.
 
 ## Adopted concept traceability
 
