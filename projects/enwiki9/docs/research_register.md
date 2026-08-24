@@ -127,6 +127,57 @@ open NNCP student. New CMIX midpoint, MIDAS, SAFE-FORK, or structural mechanisms
 remain execution-blocked until q1 is an exact memory-safe parent. Their eventual
 archive effects require fresh joint replay and cannot be added algebraically.
 
+### Live qm8 residency attribution and corrected bounded-to-full routing
+
+A read-only live snapshot at `2026-08-24T03:14:27Z`, with the encode progress
+log at `9.07%`, resolves the main q1 residency ambiguity without modifying the
+running process. The guard still reported no hard-cap, OOM, or OOM-kill event;
+its retained peaks were `8,534,408 KiB` process-tree RSS,
+`8,518,220 KiB` CMIX `VmHWM`, and `9,002,086,400` cgroup bytes. The snapshot
+itself is diagnostic and non-terminal: completion, inverse, cleanup, and the
+soft-high verifier remain required.
+
+The 26 file-backed FXCM mappings can be identified exactly from constructor
+order and allocation geometry. Ordinal 0 is the match-position hash;
+ordinals 1--3 are the three at-least-64-MiB `DirectStateMap::CxtState`
+arrays; ordinals 4--7 are the four at-least-64-MiB mixer weight arrays; and
+ordinals 8--25 are the eighteen at-least-64-MiB `ContextMap3` bucket arrays.
+At the snapshot their aggregate `smaps` values were:
+
+| Semantic group | Mappings | Size KiB | RSS KiB | Referenced KiB | Private-dirty KiB |
+|---|---:|---:|---:|---:|---:|
+| match-position hash | 1 | 65,540 | 65,536 | 65,536 | 36,288 |
+| direct-state arrays | 3 | 589,824 | 589,824 | 589,824 | 107,068 |
+| mixer weights | 4 | 419,856 | 238,436 | 170,604 | 27,148 |
+| context-map buckets | 18 | 4,850,024 | 4,849,664 | 4,847,636 | 942,292 |
+| total | 26 | 5,925,244 | 5,743,460 | 5,673,600 | 1,112,796 |
+
+The separate `14,336,000 KiB` PPM virtual mapping held only `75,956 KiB`
+RSS. CMIX anonymous RSS was about `2,456,736 KiB`. Thus the live pressure is
+not a runaway PPM residency bug: it is predominantly the deliberately broad
+FXCM context-table working set plus persistent anonymous model state. Only
+the mixer group was materially nonresident. Targeting those already-reclaimed
+pages has an observed ceiling of roughly `181,420 KiB`; it cannot by itself
+produce a large memory reduction.
+
+This evidence rejects connecting q1's dead blanket cadence as the default
+successor. `PageOutAll()` would scan every mapping each modeled MiB and evict
+tables whose pages are almost all being referenced, converting the same
+semantic working set into refault and writeback churn. If qm8 terminalizes
+with insufficient headroom, the single correction must instead target the
+actual high-water mechanism: either one source-attributed allocation or an
+exact bounded semantic-page arena that preserves table bytes while controlling
+its resident cache. That is a prospective direction, not an authorized
+candidate and not compression credit.
+
+Planning revision 2 also closes a routing error. An opening-100M pass can no
+longer blindly authorize an unchanged full-1G q1 run. It must be joined to
+qm8's terminal class: exact and engineering-clean qm8 permits one independent
+unchanged repeat; exact but headroom-failing qm8 permits one attributed
+residency successor; infrastructure-incomplete qm8 permits only a retry after
+the exact infrastructure cause is corrected. Bounded evidence may not erase
+contrary full-corpus evidence.
+
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
 
 SAFE-FORK is classified as checkpoint/fork/rejoin infrastructure, not a novel
