@@ -24,7 +24,7 @@ OUTPUT_SCHEMA = (
     / "contracts/research/v1/"
     "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
 )
-INPUT_SCHEMA_SHA256 = "488c1627fe83b84cc6e2456aad7f42c13469c2fc3990a62441e57d219312a1c4"
+INPUT_SCHEMA_SHA256 = "e13e684937287d4dcd4a57582c48354796f647c36bc5061499a15ec6f4c1be1e"
 OUTPUT_SCHEMA_SHA256 = "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 CALIBRATION_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1"

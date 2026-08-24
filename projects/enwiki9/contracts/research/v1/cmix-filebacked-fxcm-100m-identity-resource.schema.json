@@ -52,8 +52,8 @@
         "observer_calibration_verification",
         "source_closure",
         "program_lock_verification",
-        "parent_build",
-        "q1_build",
+        "q1_release_build_a",
+        "q1_release_build_b",
         "build_verification",
         "opening_distant_10m_receipt",
         "opening_distant_10m_verification"
@@ -65,8 +65,8 @@
         "observer_calibration_verification": {"$ref": "#/$defs/artifact"},
         "source_closure": {"$ref": "#/$defs/artifact"},
         "program_lock_verification": {"$ref": "#/$defs/artifact"},
-        "parent_build": {"$ref": "#/$defs/artifact"},
-        "q1_build": {"$ref": "#/$defs/artifact"},
+        "q1_release_build_a": {"$ref": "#/$defs/artifact"},
+        "q1_release_build_b": {"$ref": "#/$defs/artifact"},
         "build_verification": {"$ref": "#/$defs/artifact"},
         "opening_distant_10m_receipt": {"$ref": "#/$defs/artifact"},
         "opening_distant_10m_verification": {"$ref": "#/$defs/artifact"}
@@ -360,6 +360,7 @@
           "errors": {"maxItems": 0},
           "comparisons": {
             "properties": {
+              "observer_calibration_antecedent_pass": {"const": true},
               "post_head_probability_identity_pass": {"const": true},
               "coder_checkpoint_identity_pass": {"const": true},
               "persistent_state_checkpoint_identity_pass": {"const": true},
