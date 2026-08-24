@@ -1,5 +1,73 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - semantic virtual time becomes the first orthogonal source test
+
+The independent strategy audit corrected the score accounting and the source
+portfolio without changing any evidence verdict. `3,022,224` bytes is only the
+gap from the external `108,022,224`-byte archive to `105,000,000`. The preserved
+external package is `491,483` bytes, so the known complete counted baseline is
+`108,513,707` and its actual gap is `3,513,707` bytes. Adding the prospective
+`65,536`-byte child-package ceiling and `500,000`-byte engineering reserve gives
+a provisional gross requirement of `4,079,243` bytes. That number is not q1's
+final debt: after q1 qualifies, its actual archive and complete package must be
+counted again. Evidence:
+`operations/planning/semantic_virtual_time_strategy_q0_v1.json` and
+`docs/semantic_virtual_time_portfolio_20260824.json`.
+
+The source ranking is now explicit. CMIX-native causal midpoint adaptation is
+the best evidenced broad route, but remains entirely unproved on q1. Semantic
+virtual time is the best orthogonal route. The project will test it first with
+`wiki_fiber_cts_q0_v1`, a bounded context-tree specialist whose state advances
+only when the already-decoded template and field route appears. It uses a
+4,096-record route bank and a direct-mapped 10 MiB exact-key context table;
+fingerprint mismatch sleeps instead of merging unrelated fields, and any
+observed descriptor alias invalidates the scientific receipt.
+The parent is never checkpointed, restored, forked, or written. P/K/D/G/S/R/N
+arms isolate semantic routing from generic eligible-byte recurrence, shifted
+routes, random routes, and negation. If this direct model is subscale or fails a
+control, semantic virtual-time contexts retire before WIKI-LOOM. The recurrent
+LOOM route can activate only when Fiber-CTS first proves the source and a frozen
+residual remains target-bearing. Evidence:
+`operations/planning/wiki_fiber_cts_q0_v1.json`.
+
+`wiki_fiber_fossil_q0_v1` is a separate conditional source. It searches the
+last sixteen bytes in a field route's virtual history and predicts the byte
+following the most recent exact route-key occurrence, even when unrelated
+physical text separates the occurrences. It transmits no route, position,
+distance, length, or copy command. Its aligned D arm must beat the unchanged
+physical-time FOSSIL G arm, shifted-route, random-route, and negated controls in
+every chronological third and in preregistered virtual-distance strata. If it
+does not beat physical FOSSIL, the semantic-distance claim retires without a
+key-length or table sweep. Evidence:
+`operations/planning/wiki_fiber_fossil_q0_v1.json`.
+
+Correct opportunity counts still cannot select either algorithm. The dormant
+`q1_causal_surprisal_atlas_q0_v1` contract combines immutable WIKI-SCHEMA,
+WIKI-PDA, and physical FOSSIL manifests by physical coder coordinate, then
+records exact q1 integer truth probabilities in one repeated parent replay.
+Every deterministic donor must first become a normalized causal probability
+model through an isolated, pretruth KT correctness tracker; a guessed correct
+byte is not accepted as probability evidence. The Atlas reports signed ideal
+gain, control margins, chronological thirds, semantic and distance strata,
+resource estimates, and pairwise overlap. Its `4,080`-byte-equivalent 1M and
+`40,793`-byte-equivalent 10M thresholds are provisional target-bearing gates,
+not forecasts. The Atlas is no-fit shadow evidence only; native arithmetic
+archives decide value. Evidence:
+`operations/planning/q1_causal_surprisal_atlas_q0_v1.json`.
+
+Router v5 preserves all unrelated v4 routes while replacing the old
+"everything else failed, then audit LOOM" rule. After q1 qualifies, the order is
+exact package accounting, causal opportunity manifests, one retained-parent
+Atlas pass, independent CMIX midpoint gates, Fiber-CTS, and only then residual
+LOOM or conditional Fiber-FOSSIL. Positive singles advance before one fresh
+pair archive, and at most one evidence-selected triple follows. SAFE-MIX remains
+a risk-control wrapper and Schema-VM remains primarily a router; neither is an
+information source. No source build, scan, parent replay, or substantial gate
+is authorized while the live full-1G lease exists. These designs create no
+probability trace, archive, inverse, compression saving, Gamma credit, or Hutter
+Prize proof. Evidence:
+`operations/planning/evidence_conditioned_mutation_router_v5.json`.
+
 ## 2026-08-24 - sparse exact associativity is the semantic CMIX contingency
 
 The qm8 runtime-pressure audit motivated a source-level alternative to further
