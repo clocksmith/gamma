@@ -1,0 +1,112 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4_observability_audit_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_evidence_contract_q0_v1.json",
+      "required_evidence": "Exact 10,772-byte artifact with SHA-256 3db8410aa7827b9facc165672846c864496f268f3ff717a8faa52579029c19a2."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_source_materialization_q0_v1.json",
+      "required_evidence": "Exact 8,578-byte artifact with SHA-256 2b8474e084e14068e7dcceb1b1ffc2c38b540a7fe8f3ec987656f290d5a3c889."
+    },
+    {
+      "artifact": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_source_overlay_q0_v1.json",
+      "required_evidence": "Exact 9,629-byte artifact with SHA-256 c78e26aff24800bf00cd6cd40eeb46855a45de869155678029bdaa6565de607c."
+    },
+    {
+      "artifact": "operations/planning/cmix_filebacked_fxcm_full_probability_state_identity_q0_v1.json",
+      "required_evidence": "Exact 15,675-byte q1 observer plan with SHA-256 3b38295d2ea4f0b297cab0c94934142f82f84f26cb460312889d79d64519e606."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+    "audit_mode": "read_only_source_observability",
+    "audited_overlay": [
+      {
+        "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/integration.patch",
+        "bytes": 5695,
+        "sha256": "36421ecf395ed324425368bf37db1452217e0e73f8af410970a8d6b7bd5d2fb7"
+      },
+      {
+        "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint-decls.inc",
+        "bytes": 2169,
+        "sha256": "0776f26d9b72e06518ea08c288cf57dbed669d004b35aac3d460b555beee017d"
+      },
+      {
+        "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-layer-midpoint.hpp",
+        "bytes": 21593,
+        "sha256": "47d89d3953ed1ec43081c599f465bbf1c8e5ba8c585350584d837809db699356"
+      },
+      {
+        "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint-decls.inc",
+        "bytes": 2083,
+        "sha256": "a9d4181ee2b2af7e255e47b649c65ef1e994f149c12697a408f4e7d0815c1982"
+      },
+      {
+        "path": "patches/cmix_obias_shadow_midpoint_oracle64_q0_v4/lstm-midpoint.hpp",
+        "bytes": 13322,
+        "sha256": "780a2f2cd2215731968f8f7fb85cd930c63370b56eb1db3e3e1f3637efab3af4"
+      }
+    ],
+    "required_evidence_surface": {
+      "rolling_coordinates": "start, every 64 modeled events, and terminal",
+      "state_partitions": [
+        "dynamic",
+        "parameters",
+        "optimizer",
+        "ordinary_tape",
+        "external_predictor",
+        "midpoint"
+      ],
+      "update_manifest_fields": 12,
+      "cross_arm_identity": "P/q1 and K/P probability, coder, payload-prefix, six-partition state, payload, archive, modeled inverse, and raw inverse identity"
+    },
+    "source_findings": {
+      "successful_path_output": "The five bound overlay inputs contain no file-open, file-write, stream-output, digest, receipt, or manifest path for a successful midpoint closure. Their only fprintf calls are fatal abort diagnostics.",
+      "arm_selection": "KH_MIDPOINT_ARM selects P, K, F, or S, but no environment variable selects an evidence output root or trace sink.",
+      "update_witness_lifetime": "Detached-update sink values and detached buffers are cleared by MidpointClearScratch after each closure; no update counter, target digest, gradient digest, pre-restore state digest, post-replay state digest, detached witness, or scratch-clear digest is retained externally.",
+      "q1_kh_trace_scope": "The retained KH_TRACE surface records arithmetic probability/residual evidence, not the six required midpoint evidence-contract state partitions or its update manifest.",
+      "q1_full_identity_observer_scope": "The reusable full-identity observer hashes every post-head integer probability, coder checkpoints, and the 26 large FXCM semantic allocations changed by q1. Its completeness argument is allocation-mutation-specific; it does not register all Byte-LSTM dynamic, parameter, optimizer, ordinary-tape, or midpoint buffers.",
+      "evidence_serialization_ambiguity": "The v4 evidence contract names partition and update hashes but does not freeze a canonical preimage: field tags, traversal order, integer byte order, floating-point bit encoding, tensor geometry records, checkpoint timing relative to closure/clear/prediction, or payload-prefix digest semantics are unspecified. A future emitter could therefore satisfy the field names while remaining independently incomparable.",
+      "materializer_scope": "The frozen materializer permits exactly the five modified and four added midpoint paths. It creates no observer header or runtime harness and explicitly leaves build and archive authority false."
+    },
+    "decision": {
+      "classification": "dormant_prearchive_observability_incomplete",
+      "algorithm_rejected": false,
+      "implementation_closure_pass": false,
+      "archive_execution_authorized": false,
+      "reason": "The midpoint math is reviewable, but the exact materialized source cannot emit the evidence required to interpret P/K/F/S runs under its own frozen contract.",
+      "authorized_single_axis_successor": "Reserve cmix_obias_shadow_midpoint_oracle64_q0_v5 as an observability-only derived source successor after q1 qualification. Preserve P/K/F/S arithmetic, populations, controls, thresholds, join/reset behavior, and resource ceilings exactly; add only a canonical binary observability ABI, fail-closed partition hashing, update-manifest emission, and receipt plumbing.",
+      "reuse_rule": "Compose the calibrated q1 full-identity observer for every-bit probability, coder, and large-FXCM allocation evidence, but extend rather than relabel it for complete LSTM and midpoint partitions.",
+      "observability_abi_rule": "Before source derivation, freeze versioned domain tags, source-order partition rows, tensor names and dimensions, uint64 little-endian lengths and counters, IEEE-754 object-representation bytes for finite float state, exact checkpoint hook order, clone-finalized rolling digests, and payload-prefix byte-count plus SHA-256 semantics.",
+      "negative_control": "A bound one-byte mutation in each newly registered partition must change that partition digest and the aggregate while preserving the other registered partition digests.",
+      "activation_order": "q1-v3 qualification, v4 source materialization, observability-only v5 source derivation, static partition completeness audit, clean-build identity, P/K synthetic fixture, then the smallest native finite-coder gate."
+    },
+    "execution_authority": false,
+    "archive_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Do not edit the frozen v4 overlay or a materialized v4 tree in place.",
+    "Every v5 source path and observer range must be content-addressed before compilation.",
+    "A versioned observability ABI and independently implemented parser must exist before observer source is derived.",
+    "The observability successor must prove probability and payload neutrality against uninstrumented v4 before any F/S compression result is interpreted.",
+    "No build, fixture, coder, or corpus run is authorized while qm8 owns the full-1G lease or before q1-v3 qualification exists."
+  ],
+  "claim_boundary": [
+    "This is a source observability audit, not a compilation, synchronization, compression, inversion, memory, runtime, package, or Hutter proof.",
+    "It does not reject the midpoint algorithm; it blocks scientific interpretation of the currently frozen source until its proof outputs exist.",
+    "The q1 observer remains valid for its allocation-specific identity claim and receives no broader state-completeness authority by reuse.",
+    "All midpoint and observability artifacts receive zero Gamma compression and objective score credit."
+  ]
+}
