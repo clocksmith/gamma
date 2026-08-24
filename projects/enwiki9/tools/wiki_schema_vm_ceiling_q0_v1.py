@@ -30,7 +30,7 @@ PROPOSAL = (
 CANDIDATE_REVISION = (
     PROJECT
     / "operations/adaptive/candidate-revisions/wiki_schema_vm_ceiling_q0_v1/"
-    "20260824T004226768889Z_3d110ac42c80.json"
+    "20260824T030345533597Z_0e08910e5a25.json"
 )
 PLAN = PROJECT / "operations/planning/wiki_schema_vm_ceiling_q0_v1.json"
 PLAN_SCHEMA = PROJECT / "contracts/research/v1/wiki-schema-vm-ceiling-plan.schema.json"
@@ -64,18 +64,20 @@ COMPILER = Path(
 INPUT_BYTES = 587_138_826
 INPUT_SHA256 = "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"
 REQUIRED_CORRECT_BYTES = 4_079_243
+REQUIRED_OPPORTUNITY_BYTES = 254_953
+MAX_OPTIMISTIC_GAIN_BYTES_PER_OPPORTUNITY = 16
 CANDIDATE_TREE_SHA256 = (
-    "sha256:3d110ac42c80f454802c09cf706f44ce507097b7d977b4539972ab711f3680c5"
+    "sha256:0e08910e5a25a2dd3f57f94a915bbe9a14b2abc750db1fe4bcc58e9473ba958a"
 )
 EXPECTED_SHA256 = {
-    EXPERIMENT: "c298d1525e528984271af602bb9bd84fdc6a2363362a6876e456b66bd8280b3c",
-    PROPOSAL: "732d6db8e42ff07c10695c02ece7964fdfe7f516d3bbb15058c425c0a38a6c88",
-    CANDIDATE_REVISION: "b704edd93d67329fafa1141d881993304552ef759c1a98a4d489e18c4e8e1a52",
-    INTERFACE: "9864e17ab54b73fc5159af1df76b4ca5042e93f3bdc03a02c40507fe0ccaacbb",
+    EXPERIMENT: "457afbd9c70b244ebd7d72b7e155bc3b4caea07de84aff963a90c02b00923ecf",
+    PROPOSAL: "b5fd8a87b958d15d14c34dc94da03f7f99e1f0a52dce31e70a7378e91cd2eea7",
+    CANDIDATE_REVISION: "41f8bfa04a93fe4cd1e82c8b9d79409d60438a1a3aee8e3fb8bbfcf2114f74c7",
+    INTERFACE: "dca250e6df422898fa20b398123e9a9acd5445994331a8aa00e54f3e47612c4b",
     SOURCE: "d54ff0bb169f44ca695f943d6a119c9a780783479b3187ecdbc88322c3732691",
-    PLAN_SCHEMA: "45530cb540f43fcae512bd76460d5f00bff36dd42e09d9e3350e6e8376415de7",
-    SCAN_SCHEMA: "016e33bb94bf9c1fd8bd1dbce7f365fbb680eb5a18e96e6002d8c504c5ce621c",
-    DECISION_SCHEMA: "76436efbe90f8d40be1059dc32735dd43f9f7b923d6efafdce33bd98cb9b55f8",
+    PLAN_SCHEMA: "eba9d1e74f908d40ff58447845a023f7a2ae7ed6ca26291f6d2102158690fa41",
+    SCAN_SCHEMA: "f2519e7c88436e1d95995558dfc36d886bba2dca69d08d4f07db01ce3e1e9ae2",
+    DECISION_SCHEMA: "6356dda2a97acc78b561eb3e96dfaf87d7c17417b39b53dbac3eb06818f62eca",
     MANIFEST_SCHEMA: "b054e1e6c06f514681aef13d7890ef1b87c1f314d61e8583389e183cd8f842eb",
     PARENT_QUALIFICATION_SCHEMA: "31eb692bf80eaa9472b8feb74bb0cdfe498446a052c4165c345bed847ab48177",
     PARENT_VERIFICATION_SCHEMA: "afec74a401e1351ace4b03b22c96c9699de32c95fa273d7b61bad4c7e4798ca1",
@@ -105,7 +107,8 @@ ENVIRONMENT = {
 }
 CLAIM_BOUNDARY = (
     "Two exact passes over the frozen post-WRT transformed population measure only "
-    "a causal correct-byte opportunity ceiling. They prove no arithmetic-code gain, "
+    "causal opportunity volume and association controls. Their 16-byte-per-active-byte "
+    "quantized log-loss envelope is optimistic; they prove no arithmetic-code gain, "
     "inverse, package score, parent compatibility, or prize qualification."
 )
 
@@ -412,7 +415,8 @@ def validate_parent_qualification(
 def empty_gates() -> dict[str, None]:
     return {
         "full_population_pass": None,
-        "target_scale_ceiling_pass": None,
+        "target_scale_quantized_log_loss_envelope_pass": None,
+        "one_byte_per_correct_volume_screen_pass": None,
         "all_thirds_live_pass": None,
         "beats_random_pass": None,
         "beats_shifted_pass": None,
@@ -570,7 +574,7 @@ def main() -> int:
         "candidate_id": CANDIDATE_ID,
         "operational_status": "terminal_infrastructure_failure",
         "claim_boundary": CLAIM_BOUNDARY,
-        "claim_authority": "causal_shadow_ceiling_only",
+        "claim_authority": "causal_shadow_opportunity_screen_only",
         "population": {
             "path": str(INPUT),
             "bytes": INPUT_BYTES,
@@ -652,6 +656,11 @@ def main() -> int:
         repeat_identity = scan_a_path.read_bytes() == scan_b_path.read_bytes()
         measurements = {
             "scanned_bytes": summary_a["population_bytes"],
+            "opportunity_bytes": summary_a["opportunity_bytes"],
+            "quantized_log_loss_upper_bound_bytes": (
+                summary_a["opportunity_bytes"]
+                * MAX_OPTIMISTIC_GAIN_BYTES_PER_OPPORTUNITY
+            ),
             "treatment_correct_bytes": summary_a["treatment_correct_bytes"],
             "random_correct_bytes": summary_a["random_correct_bytes"],
             "shifted_correct_bytes": summary_a["shifted_correct_bytes"],
@@ -672,7 +681,12 @@ def main() -> int:
         }
         gates = {
             "full_population_pass": measurements["scanned_bytes"] == INPUT_BYTES,
-            "target_scale_ceiling_pass": (
+            "target_scale_quantized_log_loss_envelope_pass": (
+                measurements["opportunity_bytes"] >= REQUIRED_OPPORTUNITY_BYTES
+                and measurements["quantized_log_loss_upper_bound_bytes"]
+                >= REQUIRED_CORRECT_BYTES
+            ),
+            "one_byte_per_correct_volume_screen_pass": (
                 measurements["treatment_correct_bytes"] >= REQUIRED_CORRECT_BYTES
             ),
             "all_thirds_live_pass": (
@@ -689,7 +703,13 @@ def main() -> int:
             "all_promotion_predicates_pass": False,
         }
         gates["all_promotion_predicates_pass"] = all(
-            value for key, value in gates.items() if key != "all_promotion_predicates_pass"
+            value
+            for key, value in gates.items()
+            if key
+            not in {
+                "all_promotion_predicates_pass",
+                "one_byte_per_correct_volume_screen_pass",
+            }
         )
         passed = gates["all_promotion_predicates_pass"]
         decision.update(

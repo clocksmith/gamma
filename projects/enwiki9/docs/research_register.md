@@ -157,11 +157,11 @@ the matched prior-key/index coordinate and target length. K is the same
 parse/lookup/learn state machine with prediction disabled. Two fresh processes
 must emit byte-identical receipts.
 
-The sealed candidate tree is `3d110ac4...680c5`; strict C++17 syntax validation
-and all registered JSON schemas pass. The prospective threshold remains
+The initial sealed candidate tree was `3d110ac4...680c5`; strict C++17 syntax
+validation and all registered JSON schemas passed. Its prospective rule was
 `4,079,243` correct D bytes, with every chronological third positive and D
-strictly above R and S. This number is a frozen hypothesis, not a result. No
-scan or decision receipt exists. The runner fails closed unless it receives a
+strictly above R and S. That number was a hypothesis, not a result. No scan or
+decision receipt exists. The runner fails closed unless it receives a
 fully positive, independently verified q1 qualification with runtime and
 package closure, process-tree peak at most `9,000,000 KiB`, and a released
 full-1G lease. See the
@@ -185,6 +185,19 @@ shape. Revision 2 replaces it with a dedicated strict schema, and the runner
 now validates that plan plus every transitive source, schema, compiler, lease,
 population, command, and output binding before acquisition. This is static
 harness evidence only; the scanner remains unexecuted and receives zero credit.
+
+The same audit rejected the initial correct-byte rule as futility authority.
+CMIX discretizes every bit probability to at least `1/65,536`; consequently an
+active byte has up to `8 * 16 = 128` bits, or 16 bytes, of optimistic parent
+log-loss leverage. A byte that misses D can also share a correct leading-bit
+prefix. Therefore `4,079,243` correct bytes are neither a necessary condition
+for target-scale gain nor an arithmetic-code ceiling. The corrected unmeasured
+revision `0e08910e...ba958a` preserves the scanner implementation and instead
+requires at least `ceil(4,079,243 / 16) = 254,953` active opportunity bytes,
+positive correct bytes in every third, and strict wins over R and S. It reports
+the old one-byte-per-correct screen only as a diagnostic. Passing authorizes an
+exact retained-parent donor-surprise trace; only that trace can determine the
+available parent log-loss, and only a native finite archive can establish gain.
 
 ## 2026-08-23 - cmix-obias Arm B terminalizes as an OOM/resource failure
 
