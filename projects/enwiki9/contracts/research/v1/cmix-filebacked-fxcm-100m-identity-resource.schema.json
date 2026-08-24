@@ -1,0 +1,394 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1",
+  "title": "CMIX q1 opening-100M identity and resource-headroom receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "authoritative_parent_id",
+    "population",
+    "antecedents",
+    "arms",
+    "comparisons",
+    "resources",
+    "decisions",
+    "errors",
+    "terminal_pass",
+    "claim_authority",
+    "claim_boundary",
+    "execution_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1"
+    },
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "offset", "bytes", "sha256", "canonical_opening_prefix"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "offset": {"const": 0},
+        "bytes": {"const": 100000000},
+        "sha256": {
+          "const": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8"
+        },
+        "canonical_opening_prefix": {"const": true}
+      }
+    },
+    "antecedents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_contract",
+        "source_closure",
+        "program_lock_verification",
+        "parent_build",
+        "q1_build",
+        "build_verification",
+        "opening_distant_10m_receipt",
+        "opening_distant_10m_verification"
+      ],
+      "properties": {
+        "planning_contract": {"$ref": "#/$defs/artifact"},
+        "source_closure": {"$ref": "#/$defs/artifact"},
+        "program_lock_verification": {"$ref": "#/$defs/artifact"},
+        "parent_build": {"$ref": "#/$defs/artifact"},
+        "q1_build": {"$ref": "#/$defs/artifact"},
+        "build_verification": {"$ref": "#/$defs/artifact"},
+        "opening_distant_10m_receipt": {"$ref": "#/$defs/artifact"},
+        "opening_distant_10m_verification": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["I-P", "I-Q", "R-Q"],
+      "properties": {
+        "I-P": {
+          "allOf": [
+            {"$ref": "#/$defs/arm"},
+            {
+              "properties": {
+                "arm": {"const": "I-P"},
+                "instrumented": {"const": true},
+                "resource_authority": {"const": false}
+              }
+            }
+          ]
+        },
+        "I-Q": {
+          "allOf": [
+            {"$ref": "#/$defs/arm"},
+            {
+              "properties": {
+                "arm": {"const": "I-Q"},
+                "instrumented": {"const": true},
+                "resource_authority": {"const": false}
+              }
+            }
+          ]
+        },
+        "R-Q": {
+          "allOf": [
+            {"$ref": "#/$defs/arm"},
+            {
+              "properties": {
+                "arm": {"const": "R-Q"},
+                "instrumented": {"const": false},
+                "resource_authority": {"const": true},
+                "post_head_probability_sha256": {"type": "null"},
+                "coder_checkpoint_manifest": {"type": "null"},
+                "persistent_state_manifest": {"type": "null"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "post_head_probability_identity_pass",
+        "coder_checkpoint_identity_pass",
+        "persistent_state_checkpoint_identity_pass",
+        "arithmetic_payload_identity_pass",
+        "decoded_transformed_identity_pass",
+        "all_raw_inverses_pass",
+        "parent_q1_self_extracting_archive_identity_expected",
+        "identity_gate_pass"
+      ],
+      "properties": {
+        "post_head_probability_identity_pass": {"type": "boolean"},
+        "coder_checkpoint_identity_pass": {"type": "boolean"},
+        "persistent_state_checkpoint_identity_pass": {"type": "boolean"},
+        "arithmetic_payload_identity_pass": {"type": "boolean"},
+        "decoded_transformed_identity_pass": {"type": "boolean"},
+        "all_raw_inverses_pass": {"type": "boolean"},
+        "parent_q1_self_extracting_archive_identity_expected": {"const": false},
+        "identity_gate_pass": {"type": "boolean"}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authoritative_arm",
+        "process_tree_peak_rss_kib",
+        "largest_process_vmhwm_kib",
+        "cgroup_memory_peak_bytes",
+        "memory_events_high",
+        "memory_events_max",
+        "memory_events_oom",
+        "memory_events_oom_kill",
+        "maximum_logical_cpus",
+        "scratch_logical_peak_bytes",
+        "scratch_allocated_peak_bytes",
+        "scratch_after_cleanup_bytes",
+        "phase_measurements",
+        "engineering_headroom_pass",
+        "official_memory_pass",
+        "temporary_disk_pass",
+        "cpu_pass",
+        "phase_measurement_pass",
+        "cleanup_pass",
+        "resource_gate_pass"
+      ],
+      "properties": {
+        "authoritative_arm": {"const": "R-Q"},
+        "process_tree_peak_rss_kib": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "memory_events_high": {"type": "integer", "minimum": 0},
+        "memory_events_max": {"type": "integer", "minimum": 0},
+        "memory_events_oom": {"type": "integer", "minimum": 0},
+        "memory_events_oom_kill": {"type": "integer", "minimum": 0},
+        "maximum_logical_cpus": {"type": "integer", "minimum": 1},
+        "scratch_logical_peak_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_peak_bytes": {"type": "integer", "minimum": 0},
+        "scratch_after_cleanup_bytes": {"type": "integer", "minimum": 0},
+        "phase_measurements": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/phase"}
+        },
+        "engineering_headroom_pass": {"type": "boolean"},
+        "official_memory_pass": {"type": "boolean"},
+        "temporary_disk_pass": {"type": "boolean"},
+        "cpu_pass": {"type": "boolean"},
+        "phase_measurement_pass": {"type": "boolean"},
+        "cleanup_pass": {"type": "boolean"},
+        "resource_gate_pass": {"type": "boolean"}
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_identity_pass",
+        "identity_gate_pass",
+        "resource_gate_pass",
+        "opening_100m_gate_pass",
+        "authorize_unchanged_full1g_q1",
+        "memory_safe_parent_qualified",
+        "gamma_compression_credit_bytes",
+        "gamma_score_credit_bytes"
+      ],
+      "properties": {
+        "population_identity_pass": {"type": "boolean"},
+        "identity_gate_pass": {"type": "boolean"},
+        "resource_gate_pass": {"type": "boolean"},
+        "opening_100m_gate_pass": {"type": "boolean"},
+        "authorize_unchanged_full1g_q1": {"type": "boolean"},
+        "memory_safe_parent_qualified": {"const": false},
+        "gamma_compression_credit_bytes": {"const": 0},
+        "gamma_score_credit_bytes": {"const": 0}
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "terminal_pass": {"type": "boolean"},
+    "claim_authority": {"const": "opening_100m_parent_preservation_and_headroom_only"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/artifact"}
+      ]
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "instrumented",
+        "resource_authority",
+        "binary",
+        "command_sha256",
+        "return_codes",
+        "post_head_probability_sha256",
+        "coder_checkpoint_manifest",
+        "persistent_state_manifest",
+        "arithmetic_payload",
+        "self_extracting_archive",
+        "decoded_transformed",
+        "raw_inverse",
+        "raw_inverse_pass",
+        "guard_receipt",
+        "backing_cleanup_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["I-P", "I-Q", "R-Q"]},
+        "instrumented": {"type": "boolean"},
+        "resource_authority": {"type": "boolean"},
+        "binary": {"$ref": "#/$defs/artifact"},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "return_codes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["encode", "decode", "raw_inverse"],
+          "properties": {
+            "encode": {"type": ["integer", "null"]},
+            "decode": {"type": ["integer", "null"]},
+            "raw_inverse": {"type": ["integer", "null"]}
+          }
+        },
+        "post_head_probability_sha256": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/sha256"}
+          ]
+        },
+        "coder_checkpoint_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "persistent_state_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "arithmetic_payload": {"$ref": "#/$defs/nullableArtifact"},
+        "self_extracting_archive": {"$ref": "#/$defs/nullableArtifact"},
+        "decoded_transformed": {"$ref": "#/$defs/nullableArtifact"},
+        "raw_inverse": {"$ref": "#/$defs/nullableArtifact"},
+        "raw_inverse_pass": {"type": ["boolean", "null"]},
+        "guard_receipt": {"$ref": "#/$defs/artifact"},
+        "backing_cleanup_pass": {"type": "boolean"}
+      }
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "observed",
+        "tree_rss_peak_kib",
+        "largest_process_vmhwm_kib",
+        "cgroup_peak_bytes",
+        "anonymous_bytes",
+        "file_backed_bytes",
+        "shmem_bytes",
+        "kernel_bytes",
+        "page_table_bytes",
+        "scratch_logical_bytes",
+        "scratch_allocated_bytes"
+      ],
+      "properties": {
+        "phase": {
+          "enum": [
+            "package_helper_construction",
+            "frontend_preprocessing",
+            "model_pretraining",
+            "arithmetic_payload_encode",
+            "archive_assembly",
+            "archive_decode",
+            "frontend_inverse",
+            "cleanup"
+          ]
+        },
+        "observed": {"type": "boolean"},
+        "tree_rss_peak_kib": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "cgroup_peak_bytes": {"type": "integer", "minimum": 0},
+        "anonymous_bytes": {"type": "integer", "minimum": 0},
+        "file_backed_bytes": {"type": "integer", "minimum": 0},
+        "shmem_bytes": {"type": "integer", "minimum": 0},
+        "kernel_bytes": {"type": "integer", "minimum": 0},
+        "page_table_bytes": {"type": "integer", "minimum": 0},
+        "scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"terminal_pass": {"const": true}},
+        "required": ["terminal_pass"]
+      },
+      "then": {
+        "properties": {
+          "errors": {"maxItems": 0},
+          "comparisons": {
+            "properties": {
+              "post_head_probability_identity_pass": {"const": true},
+              "coder_checkpoint_identity_pass": {"const": true},
+              "persistent_state_checkpoint_identity_pass": {"const": true},
+              "arithmetic_payload_identity_pass": {"const": true},
+              "decoded_transformed_identity_pass": {"const": true},
+              "all_raw_inverses_pass": {"const": true},
+              "identity_gate_pass": {"const": true}
+            }
+          },
+          "resources": {
+            "properties": {
+              "process_tree_peak_rss_kib": {"maximum": 9000000},
+              "largest_process_vmhwm_kib": {"maximum": 9000000},
+              "cgroup_memory_peak_bytes": {"maximum": 10000000000},
+              "memory_events_max": {"const": 0},
+              "memory_events_oom": {"const": 0},
+              "memory_events_oom_kill": {"const": 0},
+              "maximum_logical_cpus": {"const": 1},
+              "engineering_headroom_pass": {"const": true},
+              "official_memory_pass": {"const": true},
+              "temporary_disk_pass": {"const": true},
+              "cpu_pass": {"const": true},
+              "phase_measurement_pass": {"const": true},
+              "cleanup_pass": {"const": true},
+              "resource_gate_pass": {"const": true}
+            }
+          },
+          "decisions": {
+            "properties": {
+              "population_identity_pass": {"const": true},
+              "identity_gate_pass": {"const": true},
+              "resource_gate_pass": {"const": true},
+              "opening_100m_gate_pass": {"const": true},
+              "authorize_unchanged_full1g_q1": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

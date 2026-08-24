@@ -48,6 +48,12 @@ engineering gate is at most `9,000,000 KiB`, not merely below the official
 `9,765,625 KiB` ceiling. The prospective, execution-disabled arm separation
 and terminal branches are frozen in the
 [`100M gate`](../operations/planning/cmix_filebacked_fxcm_100m_identity_resource_q0_v1.json).
+At that gate, “archive identity” is split precisely: the parent and q1
+arithmetic payloads must be byte-identical, while each self-extracting archive
+must be exact, invertible, and separately package-accounted. The complete
+self-extracting files are not expected to be byte-identical because q1
+necessarily contains different allocator code; requiring that equality would
+confuse predictor preservation with package identity.
 
 `cmix_filebacked_fxcm_full_a_qm8_v1` was already running when this launch-order
 correction was adopted. It remains an unchanged zero-credit diagnostic and is
