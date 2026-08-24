@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir.v2",
+  "title": "Gamma Mechanism IR v2 generalized causal arm contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "revision",
+    "operational_status",
+    "parent_id",
+    "semantic_axis_changed",
+    "information_sources",
+    "state_reads",
+    "state_writes",
+    "prediction_boundary",
+    "update",
+    "lifecycle",
+    "numeric_contract",
+    "mixture",
+    "arms",
+    "control_coverage",
+    "hashes",
+    "ceilings",
+    "generated_outputs"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir.v2"},
+    "mechanism_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "revision": {"type": "integer", "minimum": 1},
+    "operational_status": {
+      "enum": ["design_only", "dormant_dependency", "superseded_before_execution"]
+    },
+    "parent_id": {"type": "string", "minLength": 1},
+    "semantic_axis_changed": {
+      "enum": [
+        "information_source",
+        "state_target",
+        "solver_or_preconditioner",
+        "persistence_reset_or_join",
+        "mixture_or_switch_rule"
+      ]
+    },
+    "information_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "value_type", "decoder_visible_at", "source_identity"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+          "value_type": {"type": "string", "minLength": 1},
+          "decoder_visible_at": {"type": "string", "minLength": 1},
+          "source_identity": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "state_reads": {"$ref": "#/$defs/stateSet"},
+    "state_writes": {"$ref": "#/$defs/stateSet"},
+    "prediction_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["variable", "source_location", "before", "after"],
+      "properties": {
+        "variable": {"type": "string", "minLength": 1},
+        "source_location": {"type": "string", "minLength": 1},
+        "before": {"type": "string", "minLength": 1},
+        "after": {"type": "string", "minLength": 1}
+      }
+    },
+    "update": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["equation", "equation_sha256", "ordinary_parent_update_cadence_unchanged"],
+      "properties": {
+        "equation": {"type": "string", "minLength": 1},
+        "equation_sha256": {"$ref": "#/$defs/sha256"},
+        "ordinary_parent_update_cadence_unchanged": {"const": true}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["activate", "reset", "join", "persistent_write_policy"],
+      "properties": {
+        "activate": {"type": "string", "minLength": 1},
+        "reset": {"type": ["string", "null"]},
+        "join": {"type": ["string", "null"]},
+        "persistent_write_policy": {"enum": ["none", "declared_and_hashed"]}
+      }
+    },
+    "numeric_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "rounding",
+        "overflow",
+        "accumulation_order",
+        "thread_count",
+        "fast_math",
+        "fma_contraction"
+      ],
+      "properties": {
+        "format": {"type": "string", "minLength": 1},
+        "rounding": {"type": "string", "minLength": 1},
+        "overflow": {"type": "string", "minLength": 1},
+        "accumulation_order": {"type": "string", "minLength": 1},
+        "thread_count": {"const": 1},
+        "fast_math": {"const": false},
+        "fma_contraction": {"const": false},
+        "ftz": {"type": "boolean"},
+        "daz": {"type": "boolean"}
+      }
+    },
+    "mixture": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["rule", "posterior_scope", "sleeping_behavior"],
+      "properties": {
+        "rule": {"type": "string", "minLength": 1},
+        "posterior_scope": {"type": "string", "minLength": 1},
+        "sleeping_behavior": {"type": "string", "minLength": 1}
+      }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"$ref": "#/$defs/arm"},
+      "allOf": [
+        {"contains": {"properties": {"roles": {"contains": {"const": "parent"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "zero_write_identity"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "treatment"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "random_direction"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "shifted_association"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "negated_output"}}}}},
+        {"contains": {"properties": {"roles": {"contains": {"const": "causal_misalignment"}}}}}
+      ]
+    },
+    "control_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent",
+        "zero_write_identity",
+        "random_direction",
+        "shifted_association",
+        "negated_output",
+        "causal_misalignment"
+      ],
+      "properties": {
+        "parent": {"const": true},
+        "zero_write_identity": {"const": true},
+        "random_direction": {"const": true},
+        "shifted_association": {"const": true},
+        "negated_output": {"const": true},
+        "causal_misalignment": {"const": true}
+      }
+    },
+    "hashes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "ceilings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_added_package_bytes",
+        "process_tree_memory_bytes",
+        "cgroup_memory_bytes",
+        "temporary_disk_bytes",
+        "maximum_logical_cpus",
+        "cgroup_max_events",
+        "cgroup_oom_events",
+        "cgroup_oom_kill_events",
+        "reject_only_futility_rule"
+      ],
+      "properties": {
+        "maximum_added_package_bytes": {"type": "integer", "minimum": 0},
+        "process_tree_memory_bytes": {"type": "integer", "minimum": 1, "maximum": 10000000000},
+        "cgroup_memory_bytes": {"type": "integer", "minimum": 1, "maximum": 10000000000},
+        "temporary_disk_bytes": {"type": "integer", "minimum": 0},
+        "maximum_logical_cpus": {"type": "integer", "minimum": 1},
+        "cgroup_max_events": {"const": 0},
+        "cgroup_oom_events": {"const": 0},
+        "cgroup_oom_kill_events": {"const": 0},
+        "reject_only_futility_rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "generated_outputs": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "arm_contracts",
+          "control_coverage_manifest",
+          "rolling_hash_spec",
+          "futility_contract",
+          "receipt_schema",
+          "package_manifest_template",
+          "reflection_skeleton",
+          "arm_difference_manifest",
+          "state_access_manifest",
+          "native_control_header",
+          "causal_closure_template",
+          "verification_template"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/id"}
+    },
+    "stateSet": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "lifetime", "source_location", "audit_hash"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "lifetime": {"enum": ["event", "segment", "persistent", "coder"]},
+          "source_location": {"type": "string", "minLength": 1},
+          "audit_hash": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "role": {
+      "enum": [
+        "parent",
+        "zero_write_identity",
+        "treatment",
+        "treatment_component",
+        "mixed_treatment",
+        "random_direction",
+        "shifted_association",
+        "negated_output",
+        "causal_misalignment",
+        "ablation"
+      ]
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "roles",
+        "definition",
+        "information_source_ids",
+        "prediction_output",
+        "matched_opportunity_to",
+        "state_access_group",
+        "required_at_gate"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]*$"},
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/role"}
+        },
+        "definition": {"type": "string", "minLength": 1},
+        "information_source_ids": {"$ref": "#/$defs/ids"},
+        "prediction_output": {
+          "enum": ["none", "parent", "treatment", "mixed", "control"]
+        },
+        "matched_opportunity_to": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z][A-Z0-9_-]*$"
+        },
+        "state_access_group": {"type": "string", "minLength": 1},
+        "required_at_gate": {"type": "boolean"}
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v4_control_alphabet_review_q0_v1",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "gamma_mechanism_ir_v4_control_alphabet_q0_v1",
+      "required_evidence": "Correction design at SHA-256 2c4b4a8312aea5ddaee5e6dd9a4e48311be9c63c93e85caaf8303608d3181216."
+    },
+    {
+      "artifact": "gamma-mechanism-ir-v2.schema.json",
+      "required_evidence": "Generalized source IR schema at SHA-256 53ccf94681935edd8265946683412f7d367dfbd8d1e3daf064894d0950a90e9f."
+    },
+    {
+      "artifact": "wiki_pda_structural_replay_ceiling_q0_v3.mechanism-ir-v2.json",
+      "required_evidence": "First generalized non-P/K/D/M/R/S instance at SHA-256 e0a22daa811b6d980b32faf8a46da2fdf6fe78c99a2f5e6788979728c736a27d."
+    },
+    {
+      "artifact": "historical compiler v3 closure",
+      "required_evidence": "IR v1 schema SHA-256 24df8b0a1d12ab471edfc9b4c5c95dbb6adfd61f6b529d1e54f333dbe3a3d2d1, causal-closure schema SHA-256 9a3a5027e29d8039f38a8850676f2bb783bbf58df7abfc6b2496d94aaec269f3, and compiler SHA-256 1bad45fdad50e9b212220ebeaaaab291d5653e5dd6ec58629a0e1c4cdb2c7069 remain immutable."
+    }
+  ],
+  "contract": {
+    "role": "static representation and control-coverage review",
+    "historical_counterexample": {
+      "mechanism": "WIKI-PDA v3 requires P/K/C/T/D/R/S/N and has no mixture at its opportunity gate.",
+      "v1_schema_result": "C, T, and N are unrepresentable in controls and generated outputs.",
+      "v1_closure_result": "C, T, and N are outside the permitted arm enumeration.",
+      "v3_compiler_result": "The compiler rejects every closure whose arm set is not exactly P/K/D/M/R/S and requires M posterior writes even though WIKI-PDA mixture is null.",
+      "conclusion": "Creating a v1 WIKI-PDA IR would necessarily omit preregistered arms or lie about the mechanism; v4 is a required compiler correction, not an optional refactor."
+    },
+    "schema_v2_positive_controls": [
+      "the generalized schema is valid Draft 2020-12",
+      "the WIKI-PDA v3 P/K/C/T/D/R/S/N instance validates",
+      "the v4 correction design validates under the campaign static schema",
+      "the WIKI-PDA update-equation SHA-256 equals its exact UTF-8 equation bytes"
+    ],
+    "schema_v2_negative_controls": [
+      "missing parent role",
+      "missing zero-write identity role",
+      "missing treatment role",
+      "missing random role",
+      "missing negated role",
+      "missing causal-misalignment role",
+      "missing shifted role",
+      "false negated control-coverage declaration",
+      "missing required generated output",
+      "thread count above one",
+      "nonzero OOM-kill budget"
+    ],
+    "static_result": {
+      "positive_controls_passed": 2,
+      "negative_controls_rejected": 11,
+      "equation_hash_pass": true,
+      "schema_meta_validation_pass": true,
+      "diff_check_pass": true
+    },
+    "verifier_only_invariants": [
+      "arm identifiers are unique",
+      "every information-source and state identifier is declared",
+      "matched controls share the treatment opportunity manifest and allowed access group",
+      "control outcomes cannot feed treatment state",
+      "null mixture has no mixed arm or posterior state",
+      "non-null mixture has a mixed arm and exact posterior isolation",
+      "arm-derived paths are sanitized, unique, and contained under the output root",
+      "closure and source IR arm sets are identical"
+    ],
+    "open_work": [
+      "generalized causal-closure v2 schema",
+      "compiler v4 source",
+      "independent compiler v4 verifier and negative fixtures",
+      "compilation receipt and verification schemas",
+      "program lock, gate, command, and output closure",
+      "owned-cleanup managed-lease migration after qm8 terminalizes"
+    ]
+  },
+  "activation_requirements": [
+    "Every verifier-only invariant is implemented and adversarially exercised before a v4 compilation receipt can pass.",
+    "Qm8 and the managed-lease namespace are terminally absent before source materialization or compiler execution.",
+    "The owned-cleanup lease correction is independently passing and canonical before v4 acquires a lane.",
+    "Historical v1/v3 artifacts remain immutable and receive no inferred compatibility."
+  ],
+  "claim_boundary": [
+    "This is static schema and source inspection only.",
+    "No compiler, mechanism, scanner, parent, corpus, archive, inverse, or resource gate ran.",
+    "No Gamma compression, authorship, package, score, or Hutter objective credit follows.",
+    "The live qm8 process and all owned paths remain untouched."
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-ir.v2",
+  "mechanism_id": "wiki_pda_structural_replay_ceiling_q0_v3",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "parent_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "semantic_axis_changed": "information_source",
+  "information_sources": [
+    {
+      "id": "decoded_transformed_prefix",
+      "value_type": "ordered post-WRT bytes x_0 through x_(i-1)",
+      "decoder_visible_at": "before the optional structural prediction for transformed position i",
+      "source_identity": "qualified q1 transformed-byte stream reconstructed identically by encoder and decoder"
+    },
+    {
+      "id": "decoded_event_opener",
+      "value_type": "decoded L byte and optional decoded slash for the current event",
+      "decoder_visible_at": "L is available only from relative offset one; L/slash is available only from relative offset two",
+      "source_identity": "sealed v2 scanner event parser"
+    },
+    {
+      "id": "retained_stack_top",
+      "value_type": "bounded top-of-stack element name from a prior completed opening event",
+      "decoder_visible_at": "before a closing-name prediction after the current L/slash prefix",
+      "source_identity": "sealed depth-16 retained stack with mismatch-no-pop semantics"
+    },
+    {
+      "id": "unanimous_transition_record",
+      "value_type": "prior completed event signature selected by parent-name, previous-event-at-depth, and depth",
+      "decoder_visible_at": "after current L is decoded and before relative offset one is predicted",
+      "source_identity": "sealed 1,024-entry direct-mapped first-observation/unanimity table"
+    },
+    {
+      "id": "causal_ordinals",
+      "value_type": "absolute transformed position, event key, and source selector through position i-1",
+      "decoder_visible_at": "before the random matched control for position i",
+      "source_identity": "sealed SplitMix64 control inputs independent of current truth"
+    },
+    {
+      "id": "decoded_current_truth",
+      "value_type": "one post-WRT byte x_i",
+      "decoder_visible_at": "only after every arm's optional prediction at position i has been frozen and scored",
+      "source_identity": "authoritative transformed truth boundary"
+    }
+  ],
+  "state_reads": [
+    {
+      "id": "event_parser_state",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:in-event, quote, overflow, and buffered-event state through x_(i-1)",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "retained_tag_stack",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:bounded retained opening-name stack through x_(i-1)",
+      "audit_hash": "stack_fnv1a64"
+    },
+    {
+      "id": "previous_event_by_depth",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:previous completed event hash at each retained depth",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "unanimous_transition_table",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:1,024 keyed transition records through x_(i-1)",
+      "audit_hash": "table_fnv1a64"
+    },
+    {
+      "id": "causal_counters_and_digests",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:opportunity, transition, and arm counters through x_(i-1)",
+      "audit_hash": "opportunity_fnv1a64"
+    }
+  ],
+  "state_writes": [
+    {
+      "id": "event_parser_state",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:post-score parser transition with decoded x_i",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "retained_tag_stack",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:post-completed-event push/pop transition only",
+      "audit_hash": "stack_fnv1a64"
+    },
+    {
+      "id": "previous_event_by_depth",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:post-completed-event depth record only",
+      "audit_hash": "parser_state_fnv1a64"
+    },
+    {
+      "id": "unanimous_transition_table",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:post-completed-event install, reinforce, or poison transition only",
+      "audit_hash": "table_fnv1a64"
+    },
+    {
+      "id": "causal_counters_and_digests",
+      "lifetime": "persistent",
+      "source_location": "wiki-pda-v2:score-time opportunity/control counters followed by post-truth transition digest",
+      "audit_hash": "opportunity_fnv1a64"
+    }
+  ],
+  "prediction_boundary": {
+    "variable": "optional predicted transformed byte for arm A at original transformed coordinate i",
+    "source_location": "sealed Scanner::Observe before x_i is appended to event state or used for table/stack mutation",
+    "before": "only decoded prefix state, an already decoded L or L/slash opener, prior retained stack/table records, and causal ordinals are available",
+    "after": "D/R/S/N predictions are scored on identical D-active positions, then x_i may update parser, stack, table, counters, and digests"
+  },
+  "update": {
+    "equation": "Before transformed truth x_i mutates state, derive optional closing replay C from an already decoded L/slash prefix and retained stack top, derive optional transition replay T from an already decoded L and a unanimously learned prior completed-event record, and select D as T with overlap priority otherwise C. On every and only D-active position construct R from frozen SplitMix64 causal ordinals, S by a one-byte cyclic rotation of the complete selected D target, and N as D xor 0xff; freeze and score all outputs against x_i. Only afterward append x_i, update quotes and event completion, apply table and stack transitions, and advance counters and digests. K executes the identical parser, lookup, opportunity, table, stack, and digest transitions with structural prediction disabled; P has no structural state.",
+    "equation_sha256": "3dd5a97fab92d9706f8408e390b8fa209a057201c535c6d15e46fddc353bec7c",
+    "ordinary_parent_update_cadence_unchanged": true
+  },
+  "lifecycle": {
+    "activate": "T can activate only after L is decoded; C only after L/slash is decoded; D/R/S/N share the resulting D-active coordinate",
+    "reset": "clear only the bounded current-event buffer and quote/overflow flags at event termination; retained stack, previous-event records, transition table, and digests persist",
+    "join": null,
+    "persistent_write_policy": "declared_and_hashed"
+  },
+  "numeric_contract": {
+    "format": "unsigned modulo-2^64 FNV-1a and SplitMix64, fixed-width integer counters, byte-exact targets, and no floating-point arithmetic",
+    "rounding": "not applicable; integer overflow follows the sealed unsigned modulo semantics",
+    "overflow": "name, event, or stack overflow suppresses predictions according to the sealed parser and cannot expose truncated state",
+    "accumulation_order": "absolute transformed coordinate, T-before-C overlap priority, arm order C/T/D/R/S/N, then post-truth parser/table/stack source order",
+    "thread_count": 1,
+    "fast_math": false,
+    "fma_contraction": false,
+    "ftz": false,
+    "daz": false
+  },
+  "mixture": null,
+  "arms": [
+    {
+      "id": "P",
+      "roles": ["parent"],
+      "definition": "Qualified q1 parent with no WIKI-PDA structural state or shadow prediction; conceptual comparator only at this opportunity gate.",
+      "information_source_ids": ["decoded_transformed_prefix"],
+      "prediction_output": "parent",
+      "matched_opportunity_to": null,
+      "state_access_group": "parent_only",
+      "required_at_gate": true
+    },
+    {
+      "id": "K",
+      "roles": ["zero_write_identity"],
+      "definition": "Execute the exact D parser, lookup, opportunity construction, table learning, stack mutation, counters, and digests with structural prediction disabled.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record", "causal_ordinals", "decoded_current_truth"],
+      "prediction_output": "none",
+      "matched_opportunity_to": "D",
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "C",
+      "roles": ["treatment_component"],
+      "definition": "After decoded L/slash, replay the retained top-of-stack closing name and terminal N from relative offset two onward.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top"],
+      "prediction_output": "treatment",
+      "matched_opportunity_to": null,
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "T",
+      "roles": ["treatment_component"],
+      "definition": "After decoded L, replay the unanimously learned prior completed-event signature from relative offset one onward.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "unanimous_transition_record"],
+      "prediction_output": "treatment",
+      "matched_opportunity_to": null,
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "D",
+      "roles": ["treatment"],
+      "definition": "Aligned union of T and C on causal positions with T taking overlap priority.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+      "prediction_output": "treatment",
+      "matched_opportunity_to": null,
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "R",
+      "roles": ["random_direction"],
+      "definition": "Frozen SplitMix64 byte from event key, absolute position, and source selector on every and only D-active coordinate.",
+      "information_source_ids": ["decoded_transformed_prefix", "causal_ordinals"],
+      "prediction_output": "control",
+      "matched_opportunity_to": "D",
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "S",
+      "roles": ["shifted_association", "causal_misalignment"],
+      "definition": "One-byte cyclic rotation of the complete already available selected D target on the identical D-active coordinate.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+      "prediction_output": "control",
+      "matched_opportunity_to": "D",
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    },
+    {
+      "id": "N",
+      "roles": ["negated_output"],
+      "definition": "Bitwise byte complement D xor 0xff on every and only D-active coordinate.",
+      "information_source_ids": ["decoded_transformed_prefix", "decoded_event_opener", "retained_stack_top", "unanimous_transition_record"],
+      "prediction_output": "control",
+      "matched_opportunity_to": "D",
+      "state_access_group": "structural_transition",
+      "required_at_gate": true
+    }
+  ],
+  "control_coverage": {
+    "parent": true,
+    "zero_write_identity": true,
+    "random_direction": true,
+    "shifted_association": true,
+    "negated_output": true,
+    "causal_misalignment": true
+  },
+  "hashes": [
+    "transformed_input_stream",
+    "event_parser_state",
+    "opportunity_manifest",
+    "unanimous_transition_table",
+    "retained_tag_stack",
+    "k_transition_state",
+    "d_transition_state",
+    "per_arm_global_counts",
+    "per_arm_chronological_third_counts",
+    "terminal_scanner_state"
+  ],
+  "ceilings": {
+    "maximum_added_package_bytes": 65536,
+    "process_tree_memory_bytes": 67108864,
+    "cgroup_memory_bytes": 256000000,
+    "temporary_disk_bytes": 100000000,
+    "maximum_logical_cpus": 1,
+    "cgroup_max_events": 0,
+    "cgroup_oom_events": 0,
+    "cgroup_oom_kill_events": 0,
+    "reject_only_futility_rule": "Retire the exact structural information source only after two complete valid scans prove D.active below 254,953 or a frozen chronological control, causality, repeat, or measured resource predicate fails; complete-byte correctness is diagnostic only and passing earns no archive authority."
+  },
+  "generated_outputs": [
+    "arm_contracts",
+    "control_coverage_manifest",
+    "rolling_hash_spec",
+    "futility_contract",
+    "receipt_schema",
+    "package_manifest_template",
+    "reflection_skeleton",
+    "arm_difference_manifest",
+    "state_access_manifest",
+    "native_control_header",
+    "causal_closure_template",
+    "verification_template"
+  ]
+}
