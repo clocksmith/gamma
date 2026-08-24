@@ -23,7 +23,9 @@
     "maximum_stack_depth": 32,
     "maximum_template_name_bytes": 48,
     "maximum_field_key_bytes": 48,
-    "overflow": "suppress the over-depth subtree or overlength atom without prediction or learning until its causal delimiter closes"
+    "maximum_staged_programs_per_template": 64,
+    "overflow": "suppress the over-depth subtree or overlength atom without prediction or learning until its causal delimiter closes; a nested template inside a template name invalidates that complete outer name",
+    "staging_overflow": "discard every staged learning update from that invocation; predictions remain based only on earlier completed invocations"
   },
   "program_table": {
     "sets": 32768,
@@ -31,7 +33,7 @@
     "candidates_per_state": 2,
     "state": "exact current template-name hash, previous completed field-key hash or positional marker, and zero-based field index",
     "target": "next named field-key bytes followed by transformed equals M",
-    "update": "deterministic two-candidate Space-Saving heavy hitters after the target key has been fully decoded",
+    "update": "stage at most 64 state/target observations inside one invocation, discard the complete staged set on staging overflow, and update deterministic two-candidate Space-Saving heavy hitters in source order only after that template invocation closes",
     "selection": "candidate lower-bound support at least two and strict majority of the state's completed observations",
     "set_replacement": "lowest observation count, then lowest source-ordered way",
     "dynamic_allocation_after_construction": false
@@ -40,7 +42,7 @@
   "controls": {
     "K": "identical parsing, lookup, state writes, counters, collisions, and hashes with prediction disabled",
     "R": "splitmix64 bytes at the exact D opportunity positions",
-    "S": "program selected from the immediately preceding completed template name with the same prior-key and field-index coordinates; if absent, rotate D's target by one byte so activation and length remain matched"
+    "S": "program selected from the immediately preceding completed template name with the same prior-key and field-index coordinates, truncated or cyclically repeated to D's target length; if absent, rotate D's target by one byte so activation and length remain matched"
   },
   "gates": {
     "minimum_correct_treatment_bytes": 4079243,

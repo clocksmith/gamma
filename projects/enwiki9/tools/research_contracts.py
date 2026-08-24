@@ -146,6 +146,15 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.resource-guard-soft-high.v1": (
         CONTRACT_ROOT / "resource-guard-soft-high.schema.json"
     ),
+    "gamma.enwiki9.wiki-schema-vm-scan.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-scan.schema.json"
+    ),
+    "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-ceiling-decision.schema.json"
+    ),
+    "gamma.enwiki9.wiki-schema-vm-output-manifest.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-output-manifest.schema.json"
+    ),
     "gamma.enwiki9.reflection-receipt.v1": (
         CONTRACT_ROOT / "reflection-receipt.schema.json"
     ),

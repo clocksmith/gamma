@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-schema-vm-output-manifest.v1",
+  "title": "WIKI-SCHEMA-VM closed output manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "result_root",
+    "complete_result_artifacts_pass",
+    "artifacts"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-schema-vm-output-manifest.v1"},
+    "candidate_id": {"const": "wiki_schema_vm_ceiling_q0_v1"},
+    "result_root": {"const": "results/wiki_schema_vm_ceiling_q0_v1"},
+    "complete_result_artifacts_pass": {"type": "boolean"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path", "bytes", "sha256"],
+        "properties": {
+          "role": {
+            "enum": [
+              "compile_stdout",
+              "compile_stderr",
+              "scanner_binary",
+              "scan_a_receipt",
+              "scan_a_stdout",
+              "scan_a_stderr",
+              "scan_b_receipt",
+              "scan_b_stdout",
+              "scan_b_stderr",
+              "decision"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+          },
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  }
+}

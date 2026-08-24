@@ -2,6 +2,7 @@
 #include <array>
 #include <cerrno>
 #include <cinttypes>
+#include <cstdlib>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -20,6 +21,7 @@ constexpr uint8_t kCloseByte = static_cast<uint8_t>('R');
 constexpr size_t kMaximumDepth = 32;
 constexpr size_t kMaximumAtomBytes = 48;
 constexpr size_t kMaximumTargetBytes = kMaximumAtomBytes + 1;
+constexpr size_t kMaximumStagedProgramsPerTemplate = 64;
 constexpr size_t kTableSets = 32768;
 constexpr size_t kTableWays = 4;
 constexpr uint64_t kFnvOffset = 1469598103934665603ULL;
@@ -251,6 +253,12 @@ class ProgramTable {
 
 enum class Phase : uint8_t { name, field_key, field_value };
 
+struct StagedProgram {
+  uint64_t state_key = 0;
+  std::array<uint8_t, kMaximumTargetBytes> target{};
+  uint8_t target_size = 0;
+};
+
 struct Frame {
   Phase phase = Phase::name;
   Atom name{};
@@ -260,6 +268,9 @@ struct Frame {
   uint64_t pending_state_key = 0;
   uint32_t field_index = 0;
   bool usable = true;
+  bool staging_valid = true;
+  uint8_t staged_programs = 0;
+  std::array<StagedProgram, kMaximumStagedProgramsPerTemplate> staged{};
 };
 
 struct ActivePrediction {
@@ -284,7 +295,9 @@ struct Measurements {
   uint64_t templates_completed = 0;
   uint64_t depth_overflows = 0;
   uint64_t atom_overflows = 0;
+  uint64_t staging_overflows = 0;
   uint64_t named_keys_completed = 0;
+  uint64_t completed_template_updates = 0;
   uint64_t programs_activated = 0;
   uint64_t opportunity_bytes = 0;
   uint64_t treatment_correct_bytes = 0;
@@ -375,8 +388,14 @@ class SchemaVm {
       ++measurements_.depth_overflows;
       return;
     }
-    if (depth_ > 0 && frames_[depth_ - 1].phase == Phase::field_key) {
-      frames_[depth_ - 1].token.valid = false;
+    if (depth_ > 0) {
+      Frame& parent = frames_[depth_ - 1];
+      if (parent.phase == Phase::name) {
+        parent.name.valid = false;
+        parent.usable = false;
+      } else if (parent.phase == Phase::field_key) {
+        parent.token.valid = false;
+      }
     }
     frames_[depth_] = Frame{};
     ++depth_;
@@ -390,6 +409,13 @@ class SchemaVm {
     }
     if (depth_ == 0) return;
     Frame& frame = frames_[depth_ - 1];
+    if (frame.usable && frame.staging_valid) {
+      for (size_t index = 0; index < frame.staged_programs; ++index) {
+        const StagedProgram& staged = frame.staged[index];
+        table_.Update(staged.state_key, staged.target.data(), staged.target_size);
+        ++measurements_.completed_template_updates;
+      }
+    }
     if (frame.name_hash != 0) last_completed_name_hash_ = frame.name_hash;
     HashFrame(frame);
     --depth_;
@@ -426,7 +452,7 @@ class SchemaVm {
           std::array<uint8_t, kMaximumTargetBytes> target{};
           std::memcpy(target.data(), frame.token.bytes.data(), frame.token.size);
           target[frame.token.size] = kEqualByte;
-          table_.Update(frame.pending_state_key, target.data(), frame.token.size + 1);
+          StageProgram(frame, target.data(), frame.token.size + 1);
           frame.previous_key_hash =
               HashAtom(frame.token.bytes.data(), frame.token.size);
           ++measurements_.named_keys_completed;
@@ -457,6 +483,19 @@ class SchemaVm {
           StateKey(frame.name_hash, frame.previous_key_hash, frame.field_index);
       Schedule(frame);
     }
+  }
+
+  void StageProgram(Frame& frame, const uint8_t* target, size_t target_size) {
+    if (!frame.staging_valid) return;
+    if (frame.staged_programs >= frame.staged.size()) {
+      frame.staging_valid = false;
+      ++measurements_.staging_overflows;
+      return;
+    }
+    StagedProgram& staged = frame.staged[frame.staged_programs++];
+    staged.state_key = frame.pending_state_key;
+    std::copy(target, target + target_size, staged.target.begin());
+    staged.target_size = static_cast<uint8_t>(target_size);
   }
 
   void Schedule(const Frame& frame) {
@@ -502,6 +541,10 @@ class SchemaVm {
     measurements_.parser_hash =
         FnvByte(measurements_.parser_hash, static_cast<uint8_t>(frame.phase));
     measurements_.parser_hash = FnvByte(measurements_.parser_hash, frame.usable);
+    measurements_.parser_hash =
+        FnvByte(measurements_.parser_hash, frame.staging_valid);
+    measurements_.parser_hash =
+        FnvByte(measurements_.parser_hash, frame.staged_programs);
   }
 
   void HashParserState() {
@@ -554,7 +597,9 @@ void WriteReceipt(const char* path, const SchemaVm& vm) {
       "  \"templates_completed\": %" PRIu64 ",\n"
       "  \"depth_overflows\": %" PRIu64 ",\n"
       "  \"atom_overflows\": %" PRIu64 ",\n"
+      "  \"staging_overflows\": %" PRIu64 ",\n"
       "  \"named_keys_completed\": %" PRIu64 ",\n"
+      "  \"completed_template_updates\": %" PRIu64 ",\n"
       "  \"programs_activated\": %" PRIu64 ",\n"
       "  \"opportunity_bytes\": %" PRIu64 ",\n"
       "  \"treatment_correct_bytes\": %" PRIu64 ",\n"
@@ -578,7 +623,8 @@ void WriteReceipt(const char* path, const SchemaVm& vm) {
       "  \"score_credit_bytes\": 0\n"
       "}\n",
       m.input_bytes, m.templates_opened, m.templates_completed,
-      m.depth_overflows, m.atom_overflows, m.named_keys_completed,
+      m.depth_overflows, m.atom_overflows, m.staging_overflows,
+      m.named_keys_completed, m.completed_template_updates,
       m.programs_activated, m.opportunity_bytes, m.treatment_correct_bytes,
       m.random_correct_bytes, m.shifted_correct_bytes,
       static_cast<int64_t>(m.treatment_correct_bytes) -
@@ -617,8 +663,11 @@ int main(int argc, char** argv) {
   }
   const int input = open(argv[1], O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
   if (input < 0) Fail("open input");
-  SchemaVm vm;
-  std::array<uint8_t, 8 * 1024 * 1024> buffer{};
+  // These objects deliberately have static storage. ProgramTable is roughly
+  // 20 MiB and the read buffer is 8 MiB; placing either on the process stack
+  // would make the bounded-state scanner depend on the host stack limit.
+  static SchemaVm vm;
+  static std::array<uint8_t, 8 * 1024 * 1024> buffer{};
   uint64_t offset = 0;
   for (;;) {
     const ssize_t count = read(input, buffer.data(), buffer.size());
