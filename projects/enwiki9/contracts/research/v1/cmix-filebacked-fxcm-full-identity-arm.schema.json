@@ -11,7 +11,7 @@
     "selected_logical_cpu", "scratch_root", "resource_guard",
     "diagnostic_rss_limit_kib", "modeled_stream",
     "coded_bits", "probability_sha256", "coder_checkpoints",
-    "state_checkpoints", "payload", "self_extracting_archive",
+    "state_checkpoints", "exclusive_lease_witness", "payload", "self_extracting_archive",
     "observer_outputs", "backing_cleanup_pass", "arm_pass",
     "claim_boundary", "gamma_score_credit_bytes"
   ],
@@ -51,6 +51,7 @@
       "type": "array", "minItems": 7, "maxItems": 7,
       "items": {"$ref": "#/$defs/stateCheckpoint"}
     },
+    "exclusive_lease_witness": {"$ref": "#/$defs/leaseWitness"},
     "payload": {"$ref": "#/$defs/nonemptyFile"},
     "self_extracting_archive": {"$ref": "#/$defs/nonemptyFile"},
     "observer_outputs": {
@@ -111,6 +112,22 @@
         "kind": {"enum": ["start", "fixed", "terminal"]},
         "allocation_count": {"const": 26},
         "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "leaseWitness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "candidate_id", "lease_id", "owner_pid", "owner_start_ticks",
+        "result_path", "scratch_path", "signal_authority"
+      ],
+      "properties": {
+        "candidate_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "owner_pid": {"type": "integer", "minimum": 1},
+        "owner_start_ticks": {"type": "integer", "minimum": 1},
+        "result_path": {"type": "string", "pattern": "^/"},
+        "scratch_path": {"type": "string", "pattern": "^/"},
+        "signal_authority": {"const": false}
       }
     }
   }

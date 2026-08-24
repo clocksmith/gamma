@@ -18,6 +18,7 @@ import cmix_filebacked_fxcm_100m_identity_resource_verify as proof100
 import cmix_filebacked_fxcm_100m_observer_calibration_verify as calibration_verify
 import cmix_filebacked_fxcm_full_soft_high_verify as full_arm_verify
 import enwiki9_python_source_closure as python_source
+import managed_exclusive_lease_verify as lease_verify
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -38,6 +39,11 @@ SOURCE_SCHEMA_ID = "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1"
 ARM_SCHEMA_ID = "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1"
 OUTPUT_SCHEMA_ID = "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+PLAN_ID = "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"
+LEASE_CANDIDATE_ID = "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"
+LEASE_ACTIVATION_SCHEMA_ID = (
+    "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-verification.v1"
+)
 CANONICAL_BYTES = 1_000_000_000
 CANONICAL_SHA256 = "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
 PAYLOAD_BYTES = 107_730_531
@@ -118,6 +124,88 @@ def same_file_value(left: Any, right: Any) -> bool:
         and isinstance(right, dict)
         and left.get("bytes") == right.get("bytes")
         and left.get("sha256") == right.get("sha256")
+    )
+
+
+def managed_lease_activation_pass(value: dict[str, Any]) -> bool:
+    checks = value.get("checks")
+    return bool(
+        value.get("schema") == LEASE_ACTIVATION_SCHEMA_ID
+        and value.get("candidate_id") == LEASE_CANDIDATE_ID
+        and value.get("verified") is True
+        and isinstance(checks, dict)
+        and checks
+        and all(item is True for item in checks.values())
+        and value.get("errors") == []
+        and value.get("verdict") == "authorize_canonical_owned_cleanup_migration"
+        and value.get("canonical_migration_authorized") is True
+        and value.get("claim_authority") == "infrastructure_only"
+        and value.get("archive_authority") is False
+        and value.get("gamma_compression_credit_bytes") == 0
+        and value.get("gamma_score_credit_bytes") == 0
+    )
+
+
+def exclusive_lane_evidence(
+    receipt_path: Path,
+    source: dict[str, Any],
+    raw_arms: dict[str, dict[str, Any]],
+) -> bool:
+    lease = source["exclusive_lease"]
+    evidence_path = artifact_path(lease["evidence"], "terminal lease evidence")
+    transitions_path = artifact_path(lease["transitions"], "lease transitions")
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    verification, passed = lease_verify.verify(
+        argparse.Namespace(
+            transition_log=transitions_path,
+            terminal_lease=evidence_path,
+        )
+    )
+    witnesses = [
+        raw_arms[role]["exclusive_lease_witness"] for role in ("parent", "q1")
+    ]
+    result_root = receipt_path.parent.resolve(strict=True)
+    scratch_roots = [Path(raw_arms[role]["scratch_root"]) for role in ("parent", "q1")]
+    scratch_parent = scratch_roots[0].parent
+    canonical_lease = PROJECT / "operations/runtime/exclusive_full1g.json"
+    canonical_lock = canonical_lease.with_name(f"{canonical_lease.name}.lock")
+    expected_witness = {
+        "candidate_id": PLAN_ID,
+        "lease_id": evidence.get("lease_id"),
+        "owner_pid": evidence.get("pid"),
+        "owner_start_ticks": evidence.get("proc_start_ticks"),
+        "result_path": evidence.get("result_path"),
+        "scratch_path": evidence.get("scratch_path"),
+        "signal_authority": False,
+    }
+    return bool(
+        passed
+        and verification.get("verified") is True
+        and verification.get("errors") == []
+        and verification.get("candidate_id") == PLAN_ID
+        and verification.get("lease_id") == lease.get("lease_id")
+        and lease.get("candidate_id") == PLAN_ID
+        and lease.get("release_pass") is True
+        and evidence.get("schema") == "gamma.enwiki9.exclusive-full1g-lease.v1"
+        and evidence.get("candidate_id") == PLAN_ID
+        and evidence.get("lease_id") == lease.get("lease_id")
+        and evidence.get("runner_sha256") == source["coordinator"]["sha256"]
+        and valid_sha256(evidence.get("command_sha256"))
+        and evidence.get("guard_path") == str(result_root)
+        and evidence.get("result_path") == str(result_root)
+        and evidence.get("scratch_path") == str(scratch_parent)
+        and evidence.get("signal_authority") is False
+        and witnesses[0] == witnesses[1] == expected_witness
+        and evidence_path.parent == result_root
+        and transitions_path.parent == result_root
+        and all(root.parent == scratch_parent for root in scratch_roots)
+        and tuple(root.name for root in scratch_roots) == ("parent", "q1")
+        and not scratch_parent.exists()
+        and not scratch_parent.is_symlink()
+        and not canonical_lease.exists()
+        and not canonical_lease.is_symlink()
+        and not canonical_lock.exists()
+        and not canonical_lock.is_symlink()
     )
 
 
@@ -476,6 +564,8 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         ("arm runner", source["arm_runner"]),
         ("arm schema", source["arm_schema"]),
         ("Python source closure", source["python_source_closure"]),
+        ("terminal lease evidence", source["exclusive_lease"]["evidence"]),
+        ("lease transitions", source["exclusive_lease"]["transitions"]),
     ]
     artifact_records.extend((f"activation {name}", value) for name, value in source["activation"].items())
     artifact_records.extend(
@@ -520,10 +610,24 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         "verifier": artifact(Path(__file__).resolve()),
         "verification_schema": artifact(OUTPUT_SCHEMA),
         "python_source_closure": source["python_source_closure"],
+        "owned_lease_manager": artifact(
+            PROJECT
+            / "programs/gamma_managed_exclusive_lease_owned_cleanup_q0_v1/managed_exclusive_lease.py"
+        ),
+        "managed_lease_verifier": artifact(
+            PROJECT / "tools/managed_exclusive_lease_verify.py"
+        ),
+        "owned_lease_verification_schema": artifact(
+            PROJECT
+            / "operations/planning/gamma-managed-exclusive-lease-owned-cleanup-verification.schema.json"
+        ),
     }
     checks["plan_implementation_binding"] = bool(
-        plan.get("artifact_id") == "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"
+        plan.get("artifact_id") == PLAN_ID
         and plan.get("candidate_id") == CANDIDATE_ID
+        and plan.get("revision", 0) >= 7
+        and plan.get("operational_status") == "activated_owned_lane_after_all_dependencies"
+        and plan.get("execution_authorized") is True
         and all(
             implementation.get(name, {}).get("path")
             == str(Path(record["path"]).relative_to(PROJECT))
@@ -565,6 +669,29 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
     )
     checks["python_source_closure_exact"] = source_closure == expected_source_closure
 
+    lease_activation_record = source["activation"]["managed_lease_verification"]
+    lease_activation_path, lease_activation = load_json_artifact(
+        lease_activation_record, "owned managed-lease activation verification"
+    )
+    del lease_activation_path
+    checks["managed_lease_activation_exact"] = bool(
+        managed_lease_activation_pass(lease_activation)
+        and plan.get("activation_evidence", {}).get("managed_lease_verification")
+        == {
+            "path": str(Path(lease_activation_record["path"]).relative_to(PROJECT)),
+            "sha256": lease_activation_record["sha256"],
+        }
+    )
+    lease_activation_schema_path = regular_file(
+        PROJECT / implementation["owned_lease_verification_schema"]["path"],
+        "owned managed-lease activation verification schema",
+    )
+    lease_activation_schema = json.loads(
+        lease_activation_schema_path.read_text(encoding="utf-8")
+    )
+    jsonschema.Draft202012Validator.check_schema(lease_activation_schema)
+    jsonschema.validate(lease_activation, lease_activation_schema)
+
     activation_values: dict[str, dict[str, Any]] = {}
     activation_paths: dict[str, Path] = {}
     for name, record in source["activation"].items():
@@ -593,7 +720,11 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         activation_values["opening_100m_verification"].get("receipt_sha256")
         == source["activation"]["opening_100m_receipt"]["sha256"]
     )
-    activation_pass = full_arms_pass and opening_pass
+    activation_pass = bool(
+        full_arms_pass
+        and opening_pass
+        and managed_lease_activation_pass(activation_values["managed_lease_verification"])
+    )
     checks["activation_evidence_rederived"] = activation_pass
 
     _, calibration_receipt = load_json_artifact(
@@ -644,6 +775,7 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
             "probability_sha256": arm["probability_sha256"],
             "coder_checkpoints": arm["coder_checkpoints"],
             "state_checkpoints": arm["state_checkpoints"],
+            "exclusive_lease_witness": arm["exclusive_lease_witness"],
             "payload": arm["payload"],
             "self_extracting_archive": arm["self_extracting_archive"],
         }
@@ -672,6 +804,8 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
             and arm["return_code"] == 0
             and arm["arm_pass"] is True
             and arm["backing_cleanup_pass"] is True
+            and arm["exclusive_lease_witness"]["candidate_id"] == PLAN_ID
+            and arm["exclusive_lease_witness"]["signal_authority"] is False
         )
         for name, record in (
             ("binary", arm["binary"]),
@@ -687,6 +821,8 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         guard_pass &= diagnostic_guard_pass(guard, role, arm)
     checks["arm_receipts_and_observer_outputs_rederived"] = arm_pass
     checks["diagnostic_guards_rederived"] = guard_pass
+    exclusive_lane_pass = exclusive_lane_evidence(receipt_path, source, raw_arms)
+    checks["exclusive_lane_rederived"] = exclusive_lane_pass
 
     parent = raw_arms["parent"]
     q1 = raw_arms["q1"]
@@ -729,6 +865,7 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
     derived = {
         "activation_pass": activation_pass,
         "calibration_pass": calibration_pass and source["calibration"] == calibration_rows,
+        "exclusive_lane_pass": exclusive_lane_pass,
         "probability_identity_pass": probability_identity,
         "coder_checkpoint_identity_pass": coder_identity,
         "state_checkpoint_identity_pass": state_identity,

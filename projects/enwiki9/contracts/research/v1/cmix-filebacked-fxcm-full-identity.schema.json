@@ -7,7 +7,7 @@
   "required": [
     "schema", "candidate_id", "authoritative_parent_id", "planning_contract",
     "coordinator", "arm_runner", "arm_schema", "python_source_closure",
-    "population", "activation",
+    "population", "activation", "exclusive_lease",
     "observer_antecedents", "calibration", "arms", "controls", "decisions",
     "errors", "terminal_pass", "claim_boundary",
     "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
@@ -35,7 +35,8 @@
       "required": [
         "full_roundtrip_a", "full_roundtrip_a_verification",
         "full_roundtrip_b", "full_roundtrip_b_verification",
-        "opening_100m_receipt", "opening_100m_verification"
+        "opening_100m_receipt", "opening_100m_verification",
+        "managed_lease_verification"
       ],
       "properties": {
         "full_roundtrip_a": {"$ref": "#/$defs/nonemptyFile"},
@@ -43,7 +44,19 @@
         "full_roundtrip_b": {"$ref": "#/$defs/nonemptyFile"},
         "full_roundtrip_b_verification": {"$ref": "#/$defs/nonemptyFile"},
         "opening_100m_receipt": {"$ref": "#/$defs/nonemptyFile"},
-        "opening_100m_verification": {"$ref": "#/$defs/nonemptyFile"}
+        "opening_100m_verification": {"$ref": "#/$defs/nonemptyFile"},
+        "managed_lease_verification": {"$ref": "#/$defs/nonemptyFile"}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "lease_id", "release_pass", "evidence", "transitions"],
+      "properties": {
+        "candidate_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "release_pass": {"type": "boolean"},
+        "evidence": {"$ref": "#/$defs/nonemptyFile"},
+        "transitions": {"$ref": "#/$defs/nonemptyFile"}
       }
     },
     "observer_antecedents": {
@@ -106,7 +119,7 @@
     "decisions": {
       "type": "object", "additionalProperties": false,
       "required": [
-        "activation_pass", "calibration_pass", "probability_identity_pass",
+        "activation_pass", "calibration_pass", "exclusive_lane_pass", "probability_identity_pass",
         "coder_checkpoint_identity_pass", "state_checkpoint_identity_pass",
         "modeled_stream_identity_pass", "payload_identity_pass",
         "controls_pass", "full_identity_pass"
@@ -114,6 +127,7 @@
       "properties": {
         "activation_pass": {"type": "boolean"},
         "calibration_pass": {"type": "boolean"},
+        "exclusive_lane_pass": {"type": "boolean"},
         "probability_identity_pass": {"type": "boolean"},
         "coder_checkpoint_identity_pass": {"type": "boolean"},
         "state_checkpoint_identity_pass": {"type": "boolean"},
@@ -182,12 +196,28 @@
         "manifest_sha256": {"$ref": "#/$defs/sha256"}
       }
     },
+    "leaseWitness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "candidate_id", "lease_id", "owner_pid", "owner_start_ticks",
+        "result_path", "scratch_path", "signal_authority"
+      ],
+      "properties": {
+        "candidate_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "owner_pid": {"type": "integer", "minimum": 1},
+        "owner_start_ticks": {"type": "integer", "minimum": 1},
+        "result_path": {"type": "string", "pattern": "^/"},
+        "scratch_path": {"type": "string", "pattern": "^/"},
+        "signal_authority": {"const": false}
+      }
+    },
     "arm": {
       "type": "object", "additionalProperties": false,
       "required": [
         "observer_receipt", "binary", "return_code", "modeled_stream",
         "coded_bits", "probability_sha256", "coder_checkpoints",
-        "state_checkpoints", "payload", "self_extracting_archive"
+        "state_checkpoints", "exclusive_lease_witness", "payload", "self_extracting_archive"
       ],
       "properties": {
         "observer_receipt": {"$ref": "#/$defs/nonemptyFile"},
@@ -204,6 +234,7 @@
           "type": "array", "minItems": 7, "maxItems": 7,
           "items": {"$ref": "#/$defs/stateCheckpoint"}
         },
+        "exclusive_lease_witness": {"$ref": "#/$defs/leaseWitness"},
         "payload": {"$ref": "#/$defs/nonemptyFile"},
         "self_extracting_archive": {"$ref": "#/$defs/nonemptyFile"}
       }
