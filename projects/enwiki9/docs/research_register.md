@@ -314,6 +314,55 @@ archive, inverse, runtime, and package replay. The v2
 [`experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v2.json),
 and dependency-gated proposal are unexecuted and receive zero credit.
 
+## 2026-08-24 - WIKI-LOOM freezes semantic virtual time as a dormant new source
+
+An exclusion audit rejected three superficially creative routes before any new
+source was written. Whole-page semantic permutation repeats exact negative
+article-order, geometry, revision-order, and GEPA evidence. Entity/template
+retrieval repeats terminal WIKIBACK, WIKIFORWARD, WIKIGRAPH, TESSERA, SRSTC,
+typed Skip-CTS, and FRACTAL slot-trie neighborhoods. Explicit far-history
+macros repeat paid copy/ledger failures. Those mechanisms remain retired at
+their measured boundaries.
+
+`wiki_loom_shared_state_lstm_q0_v1` instead changes the time coordinate of an
+auxiliary recurrent expert. The raw byte stream and authoritative q1 parent
+remain untouched. Once the opaque post-WRT parser has completely decoded a
+template name and explicit field key or positional index, it selects one of
+`4,096` direct-mapped hidden/cell slots. The selected state advances only on
+bytes in that template-field value. When the same descriptor returns later,
+the expert therefore resumes a virtual field-local trajectory even though
+unrelated bytes and pages were interleaved in the real stream.
+
+The auxiliary transition reads the current parent ByteMixer recurrent
+parameters but is no-train: it cannot write parent weights, optimizer,
+deferred updates, recurrent state, mixers, contexts, SSE, preprocessing, or
+coder state. It is not a full-CMIX checkpoint, fork, rejoin, page permutation,
+copy command, or new model asset. Its new information is the decoder-derived
+projection of history onto a structural subsequence. A fingerprint miss sleeps
+for the entire field, then initializes the slot; a hit must have `128` prior
+bytes at field entry. One global SAFE-MIX posterior combines the awake expert
+with P and neither updates nor resets while sleeping.
+
+The prospective native arms are P/K/D/M/G/S/R/N. K must be byte-identical to
+P while exercising all mechanism bookkeeping. G uses one unpartitioned
+auxiliary state; S uses the previous completed field descriptor; R uses causal
+ordinal-random routing; N complements the aligned byte distribution. The
+opening-10M gate requires exact finite archives and inverses, deterministic M
+repeat, positive M gain in every third, at least `50,000` net bytes after
+incremental source/framing, and at least `10,000` byte-equivalent raw-D margin
+over every matched control. One miss retires the frozen slot, warmth, route,
+state, and mixture realization without a sweep.
+
+The [`design`](../operations/planning/wiki_loom_shared_state_lstm_q0_v1.json),
+[`Mechanism IR`](../operations/planning/wiki_loom_shared_state_lstm_q0_v1.mechanism-ir.json),
+[`experiment`](../operations/adaptive/experiments/wiki_loom_shared_state_lstm_q0_v1.json),
+and dependency-dormant proposal are schema-valid and hash-bound. No source,
+compiled causal closure, run, probability, archive, inverse, saving, or score
+exists. Router revision 4 authorizes a source audit only if the three current
+scientific families all terminalize subscale and q1 first qualifies. WIKI-LOOM
+therefore has zero credit and does not delay the current q1, WIKI-PDA,
+WIKI-SCHEMA, FOSSIL-MATCH, or MIDAS order.
+
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
 
 SAFE-FORK is classified as checkpoint/fork/rejoin infrastructure, not a novel

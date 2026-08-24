@@ -1,0 +1,133 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "wiki_loom_shared_state_lstm_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "memory-safe authoritative q1 parent",
+      "required_evidence": "artifact-derived q1 v2 qualification passes exact A/B roundtrips, full probability/coder/checkpoint-state identity, runtime, package, dependency, license, memory, and repeat gates with process-tree peak at most 9,000,000 KiB"
+    },
+    {
+      "artifact": "gamma_safe_mix_v1",
+      "required_evidence": "frozen integer mixture law remains static-closed; its theorem is used only as an ideal-log-loss safety statement and not as archive credit"
+    },
+    {
+      "artifact": "wiki_schema_vm_ceiling_q0_v1 parser surface",
+      "required_evidence": "the exact opaque post-WRT template-name, explicit-key, positional-index, value-boundary, nesting, overflow, and mismatch transition is independently source-audited before reuse"
+    },
+    {
+      "artifact": "exclusive_full1g lane",
+      "required_evidence": "no live lease or acquisition lock before any source build or substantial execution"
+    }
+  ],
+  "contract": {
+    "role": "new decoder-visible virtual-time recurrent specialist over template-field fibers",
+    "name": "WIKI-LOOM",
+    "scientific_question": "Can one shared recurrent transition retain useful long memory when its hidden and cell state advance along decoder-visible template-field subsequences instead of the interleaved byte stream?",
+    "not_checkpointing": [
+      "The authoritative parent is never snapshotted, restored, forked, rejoined, or overwritten.",
+      "No full CMIX state, context table, optimizer, arithmetic coder, or parent mixer is duplicated.",
+      "Only an auxiliary expert's recurrent hidden and cell coordinates are multiplexed; the source bytes remain in original order."
+    ],
+    "distinct_from_retired_work": [
+      "Article ordering and GEPA permuted pages before the backend; WIKI-LOOM does not reorder or transmit a permutation.",
+      "FRACTAL and page-trie candidates paid copy selectors and lengths; WIKI-LOOM emits no copy command, source, length, rank, or side stream.",
+      "Typed Skip-CTS and slot tries counted short event prefixes; WIKI-LOOM advances a recurrent trajectory over the complete byte subsequence of each retained field.",
+      "The earlier parity LSTM factorization used two fixed position lanes and separately trained recurrent endpoints; WIKI-LOOM uses semantic routes, one shared parent-weight view, and a bank of hidden/cell states.",
+      "WIKI-SCHEMA-VM predicts later field keys from completed invocations; WIKI-LOOM predicts value bytes from a persistent virtual timeline keyed by the already decoded template and field identity."
+    ],
+    "causal_route": {
+      "unit": "one complete post-WRT byte",
+      "eligible_region": "bytes strictly inside a template field value after its template name and either explicit key plus equals or positional index are fully decoder-visible",
+      "explicit_descriptor": "length-delimited tuple(template_name_bytes, 0x01, field_key_bytes)",
+      "positional_descriptor": "length-delimited tuple(template_name_bytes, 0x02, unsigned positional_index)",
+      "maximum_template_name_bytes": 96,
+      "maximum_field_key_bytes": 96,
+      "maximum_template_depth": 16,
+      "parser_overflow": "sleep until the parser returns to a valid bounded state; do not update a route from an overflowed descriptor",
+      "prediction_order": "resolve the descriptor and route from state through byte i-1, predict byte i, code or decode all eight bits, then advance exactly the selected auxiliary state with byte i",
+      "same_invocation_rule": "state advancement within an open field is causal, but a route that missed at field entry sleeps for that entire field; it may first predict only on a later field-entry fingerprint hit",
+      "future_information_forbidden": "field length, closing delimiter, later key, completed value, page summary, corpus counts, archive loss, and encoder-only selection"
+    },
+    "state_bank": {
+      "slots": 4096,
+      "index": "low 12 bits of the frozen unsigned-64 descriptor hash",
+      "record": "64-bit nonzero fingerprint, recurrent hidden vector, recurrent cell vector, saturated prior-field byte support, and rolling state digest",
+      "collision": "a fingerprint mismatch makes the current field sleep, then installs the new fingerprint with zero hidden/cell state after the field-entry decision; no old state is blended or consulted",
+      "hit": "exact 64-bit fingerprint equality; the implementation must also retain and compare the bounded descriptor bytes during the first gate so hash collision is a fatal malformed-evidence event",
+      "warmth": "a fingerprint hit is awake only if at least 128 bytes were accumulated before the current field entry",
+      "weights": "the auxiliary transition reads the current authoritative ByteMixer LSTM parameter matrices but never writes weights, optimizer, gradients, deferred-update buffers, or the ordinary recurrent trajectory",
+      "advance": "exactly one no-train recurrent transition after each decoded eligible byte, applied only to the selected slot",
+      "inactive": "no auxiliary recurrent transition outside a bounded eligible field"
+    },
+    "probability_endpoint": {
+      "raw_D": "when awake, condition the selected auxiliary 256-way byte distribution on the already decoded prefix bits of the current byte; when asleep, emit the authoritative parent count exactly",
+      "mixed_M": "combine authoritative parent P and raw D through gamma_safe_mix_v1 with one global posterior over awake bits only",
+      "posterior": "one persistent global posterior, no per-field or per-slot reset, and no update while D sleeps",
+      "parent": "ordinary parent prediction, state, learning cadence, coder count, and coder transition remain authoritative and byte-identical in P and K"
+    },
+    "arms": {
+      "P": "qualified q1 parent with no parser, state bank, auxiliary recurrent transition, or mixture",
+      "K": "execute the exact parser, routing, state-bank, auxiliary transition, sleeping logic, and hashes but send P to the coder and forbid every mechanism-to-parent write; K must equal P",
+      "D": "aligned template-field state bank as the raw sleeping expert",
+      "M": "D wrapped by the frozen global integer SAFE-MIX against P",
+      "G": "one global auxiliary recurrent state with the same weights, eligible bytes, support rule, and endpoint, isolating extra recurrence from virtual semantic time",
+      "S": "route each field through the immediately preceding completed field descriptor while preserving the current field's eligibility, byte count, update cadence, state geometry, and endpoint",
+      "R": "route each field by SplitMix64(page_ordinal, invocation_ordinal, field_ordinal) into the same 4,096 slots while preserving all other transitions",
+      "N": "use the aligned state and replace its conditional byte distribution by the frozen byte-complement distribution before the identical endpoint",
+      "repeat": "a fresh process reproduces every probability, coder, route, state, posterior, payload, inverse, and resource digest"
+    },
+    "smallest_decisive_gate": {
+      "population": "canonical opening 10,000,000 raw bytes through an exact q1-parent source build after every dependency passes",
+      "required_evidence": [
+        "P and K probability, coder-state, payload, inverse, and persistent-parent-state identity",
+        "exact finite P/K/D/M/G/S/R/N archives and raw inverses",
+        "M deterministic repeat archive identity",
+        "all route descriptors decided before the first predicted field-value byte",
+        "D and M positive in each chronological third",
+        "M net gain after compressed incremental source and framing at least 50,000 bytes",
+        "D ideal finite loss beats G, S, R, and N by at least 10,000 byte-equivalent each",
+        "process-tree, cgroup, scratch, runtime, and dependency closure"
+      ],
+      "promotion": "one distant 10M transfer using the unchanged source and constants; only a positive distant result may authorize cumulative 100M",
+      "retirement": "retire this exact parser route, 4,096-slot geometry, 128-byte warmth, shared-weight no-train transition, and global mixture if any exactness gate fails, M net is below 50,000 bytes, a third is nonpositive, or any control margin misses; do not sweep slots, warmth, route keys, state width, or mixture scope"
+    },
+    "promotion_ladder": [
+      "opening 10M exact native finite-coder gate",
+      "distant 10M unchanged transfer",
+      "cumulative 100M exact archive and resource gate",
+      "full 1G A/B encode, exact inverse, deterministic repeat, package, runtime, memory, dependency, and counted-score proof"
+    ],
+    "resource_bounds": {
+      "maximum_added_package_bytes": 65536,
+      "maximum_incremental_anonymous_bytes": 33554432,
+      "maximum_composite_cgroup_bytes": 10000000000,
+      "maximum_temporary_disk_bytes": 100000000000,
+      "memory_events_max": 0,
+      "memory_events_oom": 0,
+      "memory_events_oom_kill": 0,
+      "rule": "A standalone state-bank estimate cannot grant memory authority; every promoted scope measures the full parent plus mechanism process tree and cgroup."
+    }
+  },
+  "activation_requirements": [
+    "The plan and Mechanism IR validate against their registered schemas.",
+    "The q1 v2 artifact-derived router grants promotion authority at the 9,000,000 KiB engineering headroom target.",
+    "The live exclusive_full1g lease and its acquisition lock are absent.",
+    "A source audit freezes the exact parent LSTM read set, no-train forward transition, hidden/cell serialization, byte conditionalization, parser transition, hash, collision, and parent-write exclusion.",
+    "Gamma Mechanism IR v3 compiles a verified P/K/D/M/R/S causal closure after the lease clears; G and N receive separately matched native manifests.",
+    "All source, build, package, population, command, guard, schema, and output identities are content-addressed before execution."
+  ],
+  "claim_boundary": [
+    "WIKI-LOOM is a zero-credit design; no source, compiled closure, probability trace, archive, inverse, resource receipt, or measured saving exists.",
+    "The 50,000-byte opening gate is a preregistered target-bearing threshold, not a forecast.",
+    "SAFE-MIX can state an ideal-log-loss envelope only; exact integer archives decide compression.",
+    "This proposal does not change the 108,513,707-byte external baseline, the 3,513,707-byte debt, Gamma authorship credit, or Gamma score credit."
+  ]
+}

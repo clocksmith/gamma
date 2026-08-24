@@ -1,0 +1,170 @@
+{
+  "schema": "gamma.enwiki9.gamma-mechanism-ir.v1",
+  "mechanism_id": "wiki_loom_shared_state_lstm_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "parent_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "semantic_axis_changed": "state_target",
+  "information_sources": [
+    {
+      "id": "completed_template_field_descriptor",
+      "value_type": "bounded length-delimited template-name plus explicit-key or positional-index tuple",
+      "decoder_visible_at": "after the field descriptor and value opener are decoded and before the first value byte is predicted",
+      "source_identity": "source-audited wiki_schema_vm_ceiling_q0_v1 opaque post-WRT parser transition"
+    },
+    {
+      "id": "parent_byte_model_input",
+      "value_type": "authoritative 256-way ByteMixer input distribution in frozen source order",
+      "decoder_visible_at": "at the ordinary parent byte-update boundary",
+      "source_identity": "qualified q1 parent ByteMixer::SetInput to ByteMixer::ByteUpdate surface"
+    },
+    {
+      "id": "parent_current_recurrent_parameters",
+      "value_type": "read-only current ByteMixer LSTM matrices and biases",
+      "decoder_visible_at": "before the auxiliary no-train recurrent transition",
+      "source_identity": "qualified q1 parent current Lstm parameter closure"
+    },
+    {
+      "id": "decoded_field_value_truth",
+      "value_type": "one post-WRT byte",
+      "decoder_visible_at": "only after all eight current bits have been decoded",
+      "source_identity": "authoritative coder truth boundary"
+    }
+  ],
+  "state_reads": [
+    {
+      "id": "authoritative_parent_state",
+      "lifetime": "persistent",
+      "source_location": "qualified-q1-parent:complete_probability-affecting-state",
+      "audit_hash": "authoritative_parent_state"
+    },
+    {
+      "id": "template_parser_state",
+      "lifetime": "persistent",
+      "source_location": "wiki-loom:bounded-post-WRT-template-parser",
+      "audit_hash": "template_parser_state"
+    },
+    {
+      "id": "fiber_recurrent_state_bank",
+      "lifetime": "persistent",
+      "source_location": "wiki-loom:4096-direct-mapped-hidden-cell-slots",
+      "audit_hash": "fiber_recurrent_state_bank"
+    },
+    {
+      "id": "safe_mix_global_posterior",
+      "lifetime": "persistent",
+      "source_location": "gamma_safe_mix_v1:two-expert-integer-posterior",
+      "audit_hash": "safe_mix_global_posterior"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "qualified-q1-parent:integer-probability-to-coder-boundary",
+      "audit_hash": "arithmetic_coder_state"
+    }
+  ],
+  "state_writes": [
+    {
+      "id": "authoritative_parent_ordinary_transition",
+      "lifetime": "persistent",
+      "source_location": "qualified-q1-parent:original-update-call-sites-only",
+      "audit_hash": "authoritative_parent_state"
+    },
+    {
+      "id": "template_parser_state",
+      "lifetime": "persistent",
+      "source_location": "wiki-loom:post-truth-bounded-parser-transition",
+      "audit_hash": "template_parser_state"
+    },
+    {
+      "id": "fiber_recurrent_state_bank",
+      "lifetime": "persistent",
+      "source_location": "wiki-loom:post-byte-selected-slot-no-train-transition",
+      "audit_hash": "fiber_recurrent_state_bank"
+    },
+    {
+      "id": "safe_mix_global_posterior",
+      "lifetime": "persistent",
+      "source_location": "gamma_safe_mix_v1:post-truth-awake-bit-update",
+      "audit_hash": "safe_mix_global_posterior"
+    },
+    {
+      "id": "arithmetic_coder_state",
+      "lifetime": "coder",
+      "source_location": "wiki-loom:mixed-integer-count-to-coder",
+      "audit_hash": "arithmetic_coder_state"
+    }
+  ],
+  "prediction_boundary": {
+    "variable": "q_u integer coder count for current bit u",
+    "source_location": "wiki-loom:after route lookup, auxiliary byte-distribution conditionalization, and SAFE-MIX",
+    "before": "only state through the preceding decoded bit, the field-entry awake decision, parent count, auxiliary conditional count, and pre-truth posterior are available",
+    "after": "q_u is clipped and quantized exactly once and supplied unchanged to the authoritative arithmetic coder"
+  },
+  "update": {
+    "equation": "At each bounded field entry, derive descriptor r from already decoded template and field bytes, look up slot j=H(r)&4095, and freeze awake iff the exact fingerprint hits with prior support at least 128 bytes. For each current byte x, compute authoritative parent counts p_u normally. If awake, read current parent recurrent parameters without writing them, evaluate the auxiliary byte distribution from slot state (h_j,c_j), condition it on decoded current-byte prefix bits to obtain d_u, and code q_u=SAFE_MIX_V1(p_u,d_u,w_u); otherwise q_u=p_u and w is unchanged. After each truth bit, advance the parent and coder only through ordinary transitions and update w only for awake bits. After all eight bits, advance only (h_j,c_j) through one no-train recurrent transition using x and the frozen parent ByteMixer input ordering, then update the bounded parser. No auxiliary value is copied into parent state.",
+    "equation_sha256": "cf968e4ff4881c60ee3c9c1c85867a73ee90e8c1e05d06c3c0e5e7e82b86c987",
+    "ordinary_parent_update_cadence_unchanged": true
+  },
+  "lifecycle": {
+    "activate": "only inside a bounded template field value whose descriptor was complete before the first value byte and whose state-bank fingerprint hit with at least 128 prior bytes at field entry",
+    "reset": "on a descriptor fingerprint miss, the selected auxiliary hidden/cell slot is reset only after the current field is declared sleeping; parent and global mixture state never reset",
+    "join": null,
+    "persistent_write_policy": "declared_and_hashed"
+  },
+  "numeric_contract": {
+    "format": "source-bound qualified-parent IEEE-754 recurrent arithmetic plus gamma_safe_mix_v1 fixed integer probability arithmetic",
+    "rounding": "inherit the content-addressed parent compile and SAFE-MIX rules exactly; no additional float contraction or probability conversion is permitted",
+    "overflow": "descriptor, parser, state, or numeric overflow makes the specialist sleep or fails closed before coder output according to the frozen source contract",
+    "accumulation_order": "ordinary parent source order, auxiliary no-train recurrent source order, byte-prefix conditionalization in ascending byte value, then SAFE-MIX integer source order",
+    "thread_count": 1,
+    "fast_math": false,
+    "fma_contraction": false,
+    "ftz": false,
+    "daz": false
+  },
+  "mixture": {
+    "rule": "gamma_safe_mix_v1 two-expert integer law over authoritative parent and awake WIKI-LOOM auxiliary recurrence",
+    "posterior_scope": "one global causal posterior retained across every field, invocation, page, and route",
+    "sleeping_behavior": "outside an awake field the coder receives P exactly and the posterior is neither updated nor reset"
+  },
+  "controls": {
+    "P": "qualified q1 authoritative parent",
+    "K": "identical parser, routing, state-bank, auxiliary transition, sleeping, mixture-bookkeeping, and hashes while supplying P to the coder and forbidding mechanism writes into parent state",
+    "R": "the same 4,096-slot recurrent bank routed by frozen SplitMix of causal page, invocation, and field ordinals instead of the semantic descriptor",
+    "S": "the same recurrent bank routed by the immediately preceding completed field descriptor at the current field's matched eligible bytes"
+  },
+  "hashes": [
+    "integer_probability_stream",
+    "arithmetic_coder_state",
+    "payload_prefix",
+    "authoritative_parent_state",
+    "template_parser_state",
+    "field_entry_route_manifest",
+    "fiber_recurrent_state_bank",
+    "safe_mix_global_posterior",
+    "exact_raw_inverse"
+  ],
+  "ceilings": {
+    "maximum_added_package_bytes": 65536,
+    "process_tree_memory_bytes": 10000000000,
+    "temporary_disk_bytes": 100000000000,
+    "reject_only_futility_rule": "At the sealed opening-10M gate, reject only after M's final exact net gain is below 50,000 bytes or an exactness, control, chronological, resource, or dependency predicate fails; partial ideal loss is not archive authority."
+  },
+  "generated_outputs": [
+    "P_control",
+    "K_control",
+    "D_raw_treatment",
+    "M_mixed_treatment",
+    "R_control",
+    "S_control",
+    "rolling_hash_spec",
+    "futility_contract",
+    "receipt_schema",
+    "package_manifest_template",
+    "reflection_skeleton",
+    "arm_difference_manifest",
+    "state_access_manifest",
+    "native_control_header"
+  ]
+}
