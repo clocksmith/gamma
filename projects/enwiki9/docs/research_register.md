@@ -1,5 +1,49 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - Mechanism IR v4 restores the mandatory control alphabet
+
+Attempting to express corrected WIKI-PDA v3 exposed a compiler-level omission.
+The current `gamma-mechanism-ir.v1` schema represents only P/K/R/S controls,
+the causal-closure schema enumerates only P/K/D/M/R/S, and compiler v3 rejects
+any arm set other than exactly P/K/D/M/R/S. It also requires M to write
+persistent mixture state even when a mechanism has no mixture. Therefore it
+cannot honestly encode WIKI-PDA's C/T components or mandatory negated N arm.
+Dropping those arms would violate the preregistered experiment and the campaign
+requirement that random, shifted, negated, and causal-misalignment controls are
+generated rather than described only in prose.
+
+The correction-only `gamma-mechanism-ir.v2` source schema uses dynamic arm
+identities and explicit multi-role declarations. Every IR must cover parent,
+zero-write identity, treatment, random direction, shifted association, negated
+output, and causal misalignment. Each arm declares its information sources,
+output class, matched-opportunity treatment, state-access group, and whether it
+is mandatory at the gate. A null mixture no longer implies a synthetic M arm;
+a future compiler must instead enforce mixture/posterior obligations only when
+the IR declares a mixture.
+
+WIKI-PDA v3 is the first generalized instance. It encodes P/K/C/T/D/R/S/N,
+with S explicitly serving both shifted-association and causal-misalignment
+roles and N retaining the byte-complement control. Its update equation freezes
+score-before-truth ordering, T-over-C priority, matched D/R/S/N coordinates,
+and post-score parser/table/stack mutation. The exact equation hash is
+`3dd5a97f...3bec7c`. This is a static IR for the already sealed scanner, not a
+new scientific mechanism or execution.
+
+Two positive schema shapes pass and eleven missing-role/resource controls are
+rejected. JSON Schema cannot enforce unique arm IDs, cross-reference source and
+state IDs, matched access sets, mixture-state isolation, safe output paths, or
+closure equality. Those are frozen as mandatory future verifier checks rather
+than asserted as completed. `gamma_mechanism_ir_v4` is the sole authorized
+source successor, and it remains blocked on qm8 terminalization plus migration
+of the separately identified managed-lease owned-cleanup correction.
+
+No compiler source, compilation, scanner, probability, archive, inverse,
+resource result, package, or objective credit exists. Evidence:
+`contracts/research/v1/gamma-mechanism-ir-v2.schema.json`,
+`operations/planning/wiki_pda_structural_replay_ceiling_q0_v3.mechanism-ir-v2.json`,
+`operations/planning/gamma_mechanism_ir_v4_control_alphabet_q0_v1.json`, and
+its adjacent static review.
+
 ## 2026-08-24 - WIKI-PDA v3 separates opportunity, resource, and infrastructure verdicts
 
 The single correction authorized by router v4 now has a dormant decision

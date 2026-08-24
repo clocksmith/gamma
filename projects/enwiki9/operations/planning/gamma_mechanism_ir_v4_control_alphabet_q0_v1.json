@@ -1,0 +1,115 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v4_control_alphabet_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "Gamma Mechanism IR v1 schema",
+      "required_evidence": "Historical schema SHA-256 24df8b0a1d12ab471edfc9b4c5c95dbb6adfd61f6b529d1e54f333dbe3a3d2d1 fixes controls to P/K/R/S and its generated-output alphabet omits negated and explicit causal-misalignment controls."
+    },
+    {
+      "artifact": "Gamma Mechanism IR v3 compiler closure",
+      "required_evidence": "Compiler SHA-256 1bad45fdad50e9b212220ebeaaaab291d5653e5dd6ec58629a0e1c4cdb2c7069, causal-closure schema SHA-256 9a3a5027e29d8039f38a8850676f2bb783bbf58df7abfc6b2496d94aaec269f3, and receipt schema SHA-256 19dab56f7e8bb285f4b2350621af5f46e903e9f7bf268c51b54d65cf7cfbb94e all require exactly P/K/D/M/R/S."
+    },
+    {
+      "artifact": "gamma_mechanism_ir_v3_managed_lane_q0_v1_static_rejection",
+      "required_evidence": "Static rejection SHA-256 177c64465b98d08deed98be8388eb899cf2393bf22c162fb549e76639705da2f preserves the separate managed-lease ownership blocker and forbids canonical manager mutation while qm8 is live."
+    },
+    {
+      "artifact": "Gamma Mechanism IR v2 generalized schema",
+      "required_evidence": "New unregistered Draft 2020-12 schema SHA-256 53ccf94681935edd8265946683412f7d367dfbd8d1e3daf064894d0950a90e9f represents dynamic arms and requires parent, zero-write identity, treatment, random, shifted, negated, and causal-misalignment coverage."
+    },
+    {
+      "artifact": "WIKI-PDA v3 Mechanism IR v2 instance",
+      "required_evidence": "Dormant instance SHA-256 e0a22daa811b6d980b32faf8a46da2fdf6fe78c99a2f5e6788979728c736a27d encodes P/K/C/T/D/R/S/N without dropping controls."
+    }
+  ],
+  "contract": {
+    "role": "control-alphabet correction and source contract for a future generalized algorithm compiler",
+    "finding": {
+      "schema_gap": "gamma-mechanism-ir.v1 allows only P, K, R, and S in the controls object and has no N_control or causal_misalignment_control generated output.",
+      "closure_gap": "gamma-mechanism-causal-closure.v1 restricts every arm identifier and state readable/writable arm list to P/K/D/M/R/S.",
+      "compiler_gap": "gamma_mechanism_ir_compile_v2.py hard-codes ARM_FILES to P/K/D/M/R/S, rejects any other arm set, compares only K/M/R/S access groups, and requires M to write persistent mixture state even for a mechanism whose mixture is null.",
+      "representation_consequence": "WIKI-PDA's C/T components and mandatory N control cannot be compiled, while omitting them would falsely claim complete generated controls and destroy the preregistered scientific attribution.",
+      "scope": "This is a compiler representation failure, not evidence for or against WIKI-PDA, SAFE-MIX, CMIX-MIDAS, or any archive result."
+    },
+    "supersession": {
+      "historical_v3_status": "Retain v3 and every hash-bound artifact as unexecuted historical infrastructure. It remains valid only for its exact P/K/D/M/R/S closure and receives no activation authority for generalized mechanisms.",
+      "future_identity": "gamma_mechanism_ir_v4",
+      "semantic_axis_changed": "compiler arm/control representation only",
+      "must_not_change": "mechanism-specific information, update equations, state transitions, probabilities, populations, futility thresholds, resources, or package ceilings"
+    },
+    "source_ir_v2": {
+      "schema": "contracts/research/v1/gamma-mechanism-ir-v2.schema.json",
+      "dynamic_arm_model": "Each arm has a unique uppercase identifier, one or more explicit semantic roles, declared information sources, prediction-output class, matched-opportunity parent, state-access group, and gate obligation.",
+      "mandatory_coverage": [
+        "parent",
+        "zero_write_identity",
+        "treatment",
+        "random_direction",
+        "shifted_association",
+        "negated_output",
+        "causal_misalignment"
+      ],
+      "mixture_rule": "A null mixture forbids an implicit M arm. A non-null mixture requires at least one mixed_treatment arm and compiler-verified posterior read/write semantics.",
+      "output_rule": "Generate one sanitized content-addressed arm contract per declared arm plus the exact twelve role-independent manifests named by the schema."
+    },
+    "future_compiler_requirements": [
+      "Accept only gamma.enwiki9.gamma-mechanism-ir.v2 and a separately versioned generalized causal-closure schema.",
+      "Reject duplicate arm identifiers, undeclared information/state references, unknown roles, unsafe filenames, and any closure arm absent from the IR or vice versa.",
+      "Derive arm files from declared identifiers; do not carry a hard-coded arm alphabet or silently synthesize M.",
+      "Prove at least one arm covers every mandatory role and emit the complete role-to-arm control coverage manifest.",
+      "Require every arm with matched_opportunity_to=A to use A's activation coordinates, population, truth ordering, and declared access group unless an explicit control contract freezes the sole difference.",
+      "Require zero-write identity arms to write no parent or coder state and to emit the parent count unchanged. They may advance matched shadow mechanism state only when its transition is identical to treatment, cannot feed coder output, and is fully declared and hashed.",
+      "Require random, shifted, negated, and causal-misalignment controls to be decoder-visible, source-complete, and unable to feed treatment state.",
+      "When mixture is null, reject any mixed_treatment role and any mixture-posterior state. When mixture is present, isolate raw treatment from persistent posterior writes and require every mixed arm to perform them.",
+      "Generate arm-difference and state-access manifests over every declared arm, not a fixed K/M/R/S subset.",
+      "Compile twice in independent empty roots, compare canonical artifacts, and reject every negative control without final output.",
+      "Bind source IR, generalized closure, schemas, compiler, independent verifier, managed lease, output tree, package ceiling, and claim boundary in the receipt.",
+      "Emit no execution or promotion authority; native algorithm evidence remains a separate guarded gate."
+    ],
+    "required_negative_controls": [
+      "missing parent role",
+      "missing zero-write identity role",
+      "missing random role",
+      "missing shifted role",
+      "missing negated role",
+      "missing causal-misalignment role",
+      "duplicate arm identifier",
+      "undeclared information source",
+      "undeclared state access",
+      "matched control opportunity mismatch",
+      "control outcome feeding treatment state",
+      "raw treatment posterior write",
+      "mixed arm absent with non-null mixture",
+      "mixed arm present with null mixture",
+      "unsafe arm-derived output path",
+      "active or ownership-corrupted managed lease"
+    ],
+    "single_authorized_successor": {
+      "id": "gamma_mechanism_ir_v4",
+      "work": "Materialize a separately named generalized causal-closure schema, compiler, verifier, receipt schemas, program lock, and gate against source IR v2 only after the managed-lane ownership correction has migrated and qm8 is terminal.",
+      "activation": "No v4 compiler source, compile, fixture run, program-lock migration, or canonical tool replacement while qm8 owns the lane."
+    }
+  },
+  "activation_requirements": [
+    "Qm8 has a terminal independently classified receipt and no process, cgroup, scratch owner, lease, or lock remains.",
+    "The managed-exclusive-lease owned-cleanup successor passes and is migrated into a newly content-addressed canonical manager closure.",
+    "The generalized v2 schema and at least one non-P/K/D/M/R/S mechanism IR pass static positive and missing-role negative validation.",
+    "Every future v4 source, schema, command, toolchain, output, and negative control is content-addressed before compiler execution.",
+    "No existing v1/v3 source or receipt is rewritten or promoted by compatibility inference."
+  ],
+  "claim_boundary": [
+    "This audit and schema add representation capability only; they do not compile or execute WIKI-PDA.",
+    "A complete control alphabet is not evidence that any treatment predicts or compresses.",
+    "No probability, archive, inverse, resource result, package, Gamma authorship credit, Gamma score credit, or Hutter objective credit exists.",
+    "The live qm8 process and every owned path remain untouched."
+  ]
+}
