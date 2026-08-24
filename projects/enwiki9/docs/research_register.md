@@ -1,5 +1,66 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - Named-gradient lineage removed from the actionable scheduler
+
+A read-only audit of the proposal selected after the q1 scheduler quarantine
+found that `delta_midas_named_midpoint_gradient_65536_q0_v1` was not pending
+science. Q0 and q1 ended in invalid implementation failures, q2 completed only
+as a non-authoritative numeric diagnostic, and q3 then completed the exact
+direct-F32 experiment with a valid terminal reflection. That reflection
+refuted the prospectively frozen single-stable-deep-group hypothesis and
+retired squared-gradient-energy localization on the production F population.
+
+The proposal router had not projected that descendant result back onto the
+four developed proposal records. Because absent `operational_status` defaults
+to `actionable`, the ranker could select q0 even though its exact successor
+lineage was already terminal. The records now encode the actual lifecycle:
+q0 is superseded by q1, q1 by q2, q2 by q3, and q3 is retired with the exact
+terminal-reflection digest. This is scheduling repair only. It changes no
+candidate, source, experiment, receipt, archive, scientific conclusion, or
+objective credit, and it authorizes no proof execution while qm8 is live.
+
+The corrected rank then exposed the same metadata mismatch in
+`gamma_safe_mix_v2`. Its interface, source contract, and revision-1 execution
+plan all say `dormant_dependency`, `execution_authorized=false`, and require a
+future activation revision binding qm8 terminal evidence, owned-lease
+migration, process and namespace closure, and an exact toolchain. The developed
+proposal omitted that operational state, so the ranker selected it as
+actionable. The proposal now carries the exact dormant plan digest and blocker.
+SAFE-MIX remains source-complete proof infrastructure with zero execution,
+archive, inverse, compression, package-score, or objective authority.
+
+The next rank exposed a different successor-routing defect. The unexecuted
+bit-head DELTA-MIDAS v2 leaves CMIX's original memory policy intact, while the
+already frozen v3 composes the identical `P/K/O/R/D/S` science with the sealed
+PPM0 residency policy. V2 is now explicitly superseded by v3; v3 is dormant
+until qm8 terminalizes and releases the proof lane. Neither has measured gain,
+and the `4,013,707`-byte net figure is a forecast only.
+
+The ranker previously propagated every non-actionable parent state into all
+descendants, which also suppressed the exact child named by a parent's
+`superseded_by` field. It now exempts only that explicitly designated direct
+successor. Retired, dormant, or otherwise non-actionable successors remain
+non-actionable themselves, and all other descendants still inherit the block.
+This preserves lineage while allowing a future activated v3 to become
+selectable without resurrecting v2. No proof process or candidate source was
+changed.
+
+The original `cmix_obias_ppm_always_purge_q0_v1` proposal is also not the
+runnable resource gate. It binds the pre-disk experiment and declares a joint
+output for which no matching adaptive job or result exists. The later frozen
+`cmix_obias_ppm_disk_joint_q0_v3` contract instead binds separate clean and
+PPM0 disk-backed runners, direct durable payload comparison, allocated-scratch
+accounting, and a fail-closed joint evaluator. It has no proposal/candidate
+materialization and no result. The original proposal is therefore superseded
+by that correction identity rather than selected for execution. A future
+materialization must remain dormant until qm8 releases the lane and must not
+inherit any compression credit from this zero-savings infrastructure policy.
+
+After these corrections, a fresh full proposal/reference derivation returns
+`selected: null`. That is the intended fail-closed scheduler state while qm8
+is the only live gate: no stale ancestor, retired oracle, dormant proof
+envelope, or unmaterialized correction can be launched by ranking alone.
+
 ## 2026-08-23 - canonical CMIX/q1 interpretation and corrected launch ladder
 
 This section supersedes any wording that implied CMIX had already been

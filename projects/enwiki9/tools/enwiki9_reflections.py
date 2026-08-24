@@ -391,6 +391,9 @@ def _collect_inherited_non_actionable_proposals(
             if not isinstance(parent, str):
                 parent = proposal.get("parent")
             if isinstance(parent, str) and parent in non_actionable:
+                parent_proposal = by_id.get(parent, {})
+                if parent_proposal.get("superseded_by") == proposal_id:
+                    continue
                 non_actionable.add(proposal_id)
                 changed = True
     return non_actionable
