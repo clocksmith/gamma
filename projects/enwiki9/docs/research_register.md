@@ -431,7 +431,57 @@ still requires a fresh joint parent-plus-specialist cgroup, process-tree,
 archive, inverse, runtime, and package replay. The v2
 [`design`](../operations/planning/fxcm_fossil_match_q0_v2.json),
 [`experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v2.json),
-and dependency-gated proposal are unexecuted and receive zero credit.
+and dependency-gated proposal receive zero credit. Candidate development found
+a real provenance defect before source materialization: the proposal's frozen
+superseded-v1 qualification-policy digest does not match the retained v1 file.
+Claim/develop therefore failed closed. The rejection transition then exposed a
+workflow atomicity defect: it wrote `state=rejected` before recursive evidence
+validation failed, leaving the quarantined exact bytes under the `proposed/`
+path. v2 remains unclaimable and unexecuted; its path is retained because v3
+hash-binds the failure artifact. The shared adaptive controller is active for
+qm8, so its transition implementation is not edited under that process.
+
+Correction-only `fxcm_fossil_match_q0_v3` changes no scientific transition,
+control, bucket, threshold, or resource ceiling. It replaces only the stale
+activation binding with source-bound q1 qualification policy v4 and adds the
+missing executable proof closure. The native candidate now contains an exact
+C++ scanner, zero-credit interface, and strict local scan schema. Its semantic
+state is exactly `150,994,944` bytes: `2^24` eight-byte table records plus the
+parent-equivalent `2^24`-byte ring. Every random historical read goes through
+one `PastBytes(begin,size,current)` guard, whose requested terminal offset must
+not exceed `current`; prediction and all D/S/R/N scoring precede table, ring,
+and rolling-hash mutation.
+
+The scanner emits chronological-third and six-distance-bucket control tables,
+terminal table/ring hashes, an exact opportunity digest, a terminal rolling-
+hash recomputation, and duplicate treatment/K transition digests constructed
+without any control outcome. The sealed native candidate tree is
+`bff0b35e7ce18439839bf7291d096f602908d455018bd6643122d7bbc899ed39`.
+Clang syntax validation initially exposed a toolchain environment failure:
+the sealed driver could not find `libLLVM-17.so.1`. The execution plan now
+binds the regular resolved Clang binary, canonical `--driver-mode=g++`, the
+exact loader library and `LD_LIBRARY_PATH`, rather than treating that failure
+as an algorithm result.
+
+The source-bound runner and independent verifier re-open a positive v2-format
+q1 receipt under exact policy v4, rerun the policy-bound parent verifier before
+lease acquisition, hash the complete transformed population, compile from the
+sealed candidate, and launch two fresh scanner processes. Each process is
+single-CPU and bounded at `196,608 KiB` process-tree RSS, `760,000,000` bytes
+cgroup memory including file cache, and `100,000,000` scratch bytes. The runner
+samples cgroup file residency independently, requires zero max/OOM/OOM-kill
+events and cleanup, and emits an exact output manifest. The verifier
+reconstructs compiler, guard, taskset, cgroup, scan, lease, measurements,
+gates, and verdict from retained artifacts.
+
+Only static JSON-schema validation, Python AST parsing, policy/hash closure,
+candidate-revision sealing, and C++ syntax compilation have run. No transformed
+population scan or finite archive has run because qm8 still owns the exclusive
+full-1G lease and q1 is not qualified. v3 therefore has zero compression,
+authorship-score, and objective credit. See the
+[`scientific design`](../operations/planning/fxcm_fossil_match_q0_v3.json),
+[`execution plan`](../operations/planning/fxcm_fossil_match_q0_v3_execution.json),
+and [`experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v3.json).
 
 ## 2026-08-24 - WIKI-LOOM freezes semantic virtual time as a dormant new source
 
