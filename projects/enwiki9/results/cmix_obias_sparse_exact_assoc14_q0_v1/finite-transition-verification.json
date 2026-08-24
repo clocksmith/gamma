@@ -1,0 +1,105 @@
+{
+  "schema": "gamma.enwiki9.cmix-sparse-exact-assoc-transition-proof.v1",
+  "artifact_id": "cmix_obias_sparse_exact_assoc14_q0_v1",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "objective_digest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "target_score_bytes": 105000000
+  },
+  "verifier": {
+    "source_path": "tools/cmix_obias_sparse_exact_assoc14_transition_verify.cpp",
+    "source_sha256": "f321b2f541466b5b17ddd2c1646f14eb2f0330e2a9eb8925f822681ebe22e06f",
+    "receipt_schema_path": "contracts/research/v1/cmix-sparse-exact-assoc-transition-verification.schema.json",
+    "receipt_schema_sha256": "0279505231fddfb8b54ad4daff97a12237f5409c2e438c7a941cb6637eb41f4c",
+    "compile_command": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "tools/cmix_obias_sparse_exact_assoc14_transition_verify.cpp",
+      "-o",
+      "/tmp/gamma-sparse-a14-proof-v2.b51khZ/verify"
+    ],
+    "compiler_version": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "resolved_compiler_path": "/usr/bin/x86_64-linux-gnu-g++-15",
+    "resolved_compiler_sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d",
+    "binary_bytes": 31648,
+    "binary_sha256": "7ec2b3b9e8dfd78ad0c33c328b9496c46dd101f9741ffe5570067102c2c2dbb9",
+    "resource_guard_path": "tools/run_with_rss_guard.py",
+    "resource_guard_sha256": "005d55cdec6f3fabd5caa4acb78e75e0d6a07340e45e0e9577c5c7d8ea13d00e"
+  },
+  "repeats": [
+    {
+      "semantic_receipt_path": "results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-repeat-a.json",
+      "semantic_receipt_bytes": 889,
+      "semantic_receipt_sha256": "ed61546e48cb79347aa881940aa29d52805b545b4e5ea200496b1686c882a097",
+      "resource_guard_path": "results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-repeat-a.guard.json",
+      "resource_guard_bytes": 2653,
+      "resource_guard_sha256": "a535548bc9435a1662b5fecfe161c6e26fdf8ecd244a0c9d262c4b337774a527",
+      "schema_valid": true,
+      "returncode": 0,
+      "peak_tree_rss_kib": 3776,
+      "max_sampled_allowed_cpu_count": 1
+    },
+    {
+      "semantic_receipt_path": "results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-repeat-b.json",
+      "semantic_receipt_bytes": 889,
+      "semantic_receipt_sha256": "ed61546e48cb79347aa881940aa29d52805b545b4e5ea200496b1686c882a097",
+      "resource_guard_path": "results/cmix_obias_sparse_exact_assoc14_q0_v1/finite-transition-repeat-b.guard.json",
+      "resource_guard_bytes": 2653,
+      "resource_guard_sha256": "42dd616a2e203ad3820e20d88a3d53b018380d3e040ab7373f124e2aedc8b6cb",
+      "schema_valid": true,
+      "returncode": 0,
+      "peak_tree_rss_kib": 3720,
+      "max_sampled_allowed_cpu_count": 1
+    }
+  ],
+  "coverage": {
+    "buckets": 257,
+    "operations": 500065,
+    "all_fourteen_returned_slots_observed": true,
+    "all_fourteen_miss_victims_observed": true,
+    "recent_hits_observed": true,
+    "scan_hits_observed": true,
+    "misses_observed": true,
+    "delayed_pointer_writes_observed": true,
+    "synthetic_absent_overflow_zero_checksum_selection_observed": true,
+    "overflow_record_crossing_page_boundary_observed": true,
+    "reset_and_decommit_observed": true,
+    "normalized_state_compared_after_every_operation": true
+  },
+  "repeat_identity": {
+    "semantic_receipts_byte_identical": true,
+    "semantic_receipt_sha256": "ed61546e48cb79347aa881940aa29d52805b545b4e5ea200496b1686c882a097",
+    "schema_validations_passed": 2,
+    "schema_validations_required": 2
+  },
+  "excluded_preliminary_attempt": {
+    "included_in_evidence": false,
+    "reason": "The first harness invocation wrote semantic JSON to stdout, where the resource guard appended its own receipt. Combined files differed in guard labels, process IDs, RSS, and elapsed time. The verifier was corrected to require an explicit --output path before the two bound repeats; this was output-channel contamination, not a transition divergence."
+  },
+  "claim_boundary": {
+    "proved": "For the verifier's bounded targeted and deterministic generated transition sequence, the 96-byte base plus owned 36-byte overflow model made the same fourteen-way get decision and normalized logical state transition as the modeled 128-byte parent after every operation, including saved-pointer writes and reset.",
+    "not_proved": [
+      "exhaustive equivalence over every possible parent state and input",
+      "native integration into sealed q1 CMIX source",
+      "post-head integer-probability identity",
+      "coder-checkpoint or payload identity",
+      "exact inverse",
+      "resident-memory reduction",
+      "runtime eligibility",
+      "package closure or deterministic build",
+      "archive-byte compression gain",
+      "Hutter Prize objective"
+    ],
+    "source_candidate_created": false,
+    "execution_authorized": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "verdict": "bounded_transition_semantics_pass",
+  "next_gate": "After qm8 terminalizes and the activation predicate passes, materialize a new immutable sparse-associativity source candidate and run native 250KB P/K/D probability, coder, payload, inverse, and repeat identity.",
+  "terminal": true
+}
