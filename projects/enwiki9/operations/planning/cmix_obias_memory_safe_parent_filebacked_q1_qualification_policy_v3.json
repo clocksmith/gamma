@@ -1,0 +1,116 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v3",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "full_roundtrip_a",
+      "required_evidence": "One terminal q1 full-corpus A receipt and its passing independent soft-pressure verification."
+    },
+    {
+      "artifact": "full_roundtrip_b",
+      "required_evidence": "One clean-build terminal q1 full-corpus B receipt and its passing independent soft-pressure verification."
+    },
+    {
+      "artifact": "opening_100m_identity_and_resource",
+      "required_evidence": "The sealed opening-100M identity/resource receipt and its independently rederived terminal pass."
+    },
+    {
+      "artifact": "full_probability_and_state_identity",
+      "required_evidence": "A byte-zero parent/q1 observer receipt and independent verification of every post-head probability plus seven coder and mutation-scoped state checkpoints in modeled-stream coordinates."
+    },
+    {
+      "artifact": "geekbench5_bound_runtime",
+      "required_evidence": "A raw Geekbench 5 report plus exact-package compression/decompression guard-v3 receipts whose wall limits are mechanically derived from that score."
+    },
+    {
+      "artifact": "dependency_and_license_closure",
+      "required_evidence": "A complete dependency-closure manifest whose counted tree exactly contains the A/B-identical package and passes the OSI license audit."
+    }
+  ],
+  "contract": {
+    "supersedes": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v2.json",
+    "superseded_policy_sha256": "ec013331eb61b9594a605b76ff4b07c20f2a53b849e2a92cee6e20af5c0dc863",
+    "supersession_reason": "Policy v2 bound a phase-11 schema that confused raw corpus bytes with post-preprocessing modeled bytes and had no executable full observer arm or coordinator. V3 preserves v2 for already frozen proposal provenance and replaces future qualification authority with the corrected seven-checkpoint implementation.",
+    "objective_raw_sha256": "774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967",
+    "receipt_schema": {
+      "path": "contracts/research/v1/cmix-memory-safe-parent-qualification-receipt-v2.schema.json",
+      "sha256": "1863e57073cf937e036b29d69b59467c8dbd167adedb36f61246a0bc02465494"
+    },
+    "verification_schema": {
+      "path": "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v2.schema.json",
+      "sha256": "3bcf47489de593d541504b06a9735979701d1da08bf8cc70253339f05538a74d"
+    },
+    "verifier": {
+      "path": "tools/cmix_memory_safe_parent_qualification_verify_v2.py",
+      "sha256": "c2b5b2989b428870d70598c1726b12df2b7abeb992c3e715f2468ebf79d5139b"
+    },
+    "full_identity": {
+      "plan": "operations/planning/cmix_filebacked_fxcm_full_probability_state_identity_q0_v1.json",
+      "plan_sha256": "19a4e1a230cf8b0e3a4c82640543daa6c8e6fe158afc0b0fde57158b3d502929",
+      "plan_schema": "operations/planning/cmix-filebacked-fxcm-full-probability-state-plan.schema.json",
+      "plan_schema_sha256": "7ff9fb8bb536f127a39079e300077de6d1105a01a95a24eb9b2bff638258338f",
+      "coordinator": "tools/cmix_filebacked_fxcm_full_identity.py",
+      "coordinator_sha256": "e0588e525dbcc3d0515e2f5f4c13004c2bdfa66ac04a88e427e08bcdfe696544",
+      "arm_runner": "tools/cmix_filebacked_fxcm_full_identity_arm.py",
+      "arm_runner_sha256": "246556683b56702bd6d8dd262af4f590801a226284a08f3c0aff1c3f59a194e1",
+      "arm_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-arm.schema.json",
+      "arm_schema_sha256": "01675082070362093ce2fb1ae2bbd3f83c72fc711eb4fbfae7265cc2a51af279",
+      "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity.schema.json",
+      "receipt_schema_sha256": "248041988ebeefbf0885368e4b6699e1280d892b512038bb08d10ebc216db0b5",
+      "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-identity-verification.schema.json",
+      "verification_schema_sha256": "91e302194a91c008b3077372e75560bc00932076b7b5ea4d6cded81eb90f3861",
+      "verifier": "tools/cmix_filebacked_fxcm_full_identity_verify.py",
+      "verifier_sha256": "5d3dabd746c2372ca2bd7550f03330e602c3f157ad2ec160f8d65321484c2860",
+      "python_source_closure": "operations/planning/cmix_filebacked_fxcm_full_identity_python_source_closure_q0_v1.json",
+      "python_source_closure_sha256": "bcca68fc93a3039d5c5deb9f9e09a9be8d615f9b7673596a177c7b1f9c404a16"
+    },
+    "runtime": {
+      "plan": "operations/planning/cmix_filebacked_fxcm_runtime_qualification_q0_v1.json",
+      "plan_sha256": "efa692193a202399d71df312d362b76bb1af277fc7a1d1948406731650611dc2",
+      "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification.schema.json",
+      "receipt_schema_sha256": "d8d709538db7edeb2d8497be1500de88e609b92e6d3d8e8ea752357aeb721f13",
+      "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification-verification.schema.json",
+      "verification_schema_sha256": "02b54c2dd7b5b7105700ff5a153ffd2663906ffae2c4d3e936f9311898aa79be",
+      "host_fingerprint_schema": "contracts/research/v1/cmix-runtime-host-fingerprint.schema.json",
+      "host_fingerprint_schema_sha256": "2bd1c4c72edb0ee02e719f21e2bc134a32e97b3299bdd0849b90024d176979a1",
+      "verifier": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py",
+      "verifier_sha256": "f27db7107b8050cf428873a84619488120c01ee31a99ac68ba600ac93635e901",
+      "wall_time_limit_equation": "252000000 / measured_geekbench5_single_core_score"
+    },
+    "mechanical_derivation": [
+      "The v2 qualification receipt format remains a nine-artifact router and contains no qualification decisions.",
+      "The verifier rejects symlinks, multi-link evidence, project-root escapes, byte-count drift, and SHA-256 drift before interpreting evidence.",
+      "A/B terminal status, inverse, package, payload, archive, resource, and independent-verification fields are reopened from retained receipts.",
+      "The A/B, seven-checkpoint full-identity, and runtime independent verifiers are rerun during consolidation; recomputed outputs must equal supplied verification receipts.",
+      "Package bytes, required-option bytes, counted score, target distance, RSS maximum, cgroup maximum, and runtime limit are rederived rather than copied.",
+      "A pass grants only memory_safe_external_parent_only authority and always grants zero Gamma compression and score credit."
+    ],
+    "engineering_parent_rss_ceiling_kib": 9000000,
+    "hard_cgroup_memory_ceiling_bytes": 10000000000,
+    "exclusive_lease_required_absent": true,
+    "v1_qualification_authority_revoked": true,
+    "v2_future_qualification_authority_revoked": true
+  },
+  "activation_requirements": [
+    "The current qm8 diagnostic arm is terminal and independently classified.",
+    "Both full A and B arms are terminal passes with clean scratch, cgroup, and lease cleanup.",
+    "The opening-100M identity/resource gate and its observer calibration are independently verified terminal passes.",
+    "Phase 11's parent and q1 full observer arms and joint independent verification are terminal passes.",
+    "The current host has a retained raw Geekbench 5 result and two exact-package prize-facing runtime guards.",
+    "The dependency closure exactly covers the counted package and passes the license audit.",
+    "The exclusive full-1G lease and acquisition lock are absent when consolidation executes."
+  ],
+  "claim_boundary": [
+    "This policy is frozen design and grants no present qualification authority.",
+    "A future passing v2-format verification under this v3 policy may authorize q1 only as an external memory-safe experimental parent.",
+    "It does not prove compression improvement, Gamma authorship, official verification, or progress against the 105,000,000-byte target."
+  ]
+}

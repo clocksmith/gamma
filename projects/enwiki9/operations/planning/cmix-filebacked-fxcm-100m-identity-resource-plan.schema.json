@@ -21,7 +21,7 @@
     },
     "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
     "artifact_id": {"const": "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"},
-    "revision": {"const": 2},
+    "revision": {"const": 3},
     "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
     "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
     "operational_status": {
@@ -153,6 +153,7 @@
       "required": [
         "post_head_probability", "pre_head_negative_control",
         "coder_checkpoints", "persistent_state", "modeled_byte_checkpoints",
+        "shared_binary_checkpoint_rule",
         "diagnostic_separation_rule", "required_equalities"
       ],
       "properties": {
@@ -168,6 +169,7 @@
           ],
           "items": false
         },
+        "shared_binary_checkpoint_rule": {"$ref": "#/$defs/text"},
         "diagnostic_separation_rule": {"$ref": "#/$defs/text"},
         "required_equalities": {"$ref": "#/$defs/textArray"}
       }

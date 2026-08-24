@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmix-filebacked-fxcm-full-probability-state-plan.schema.json",
+  "title": "Prospective CMIX q1 full probability/state identity plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "planning_schema_sha256", "artifact_id", "revision",
+    "operational_status", "candidate_id", "authoritative_parent", "purpose",
+    "execution_authorized", "freeze_authorized", "proof_artifacts",
+    "implementation", "activation_dependencies", "audit_findings",
+    "observer_contract", "persistent_state_contract", "calibration_population",
+    "controls", "resource_boundary", "execution_order", "terminal_pass",
+    "terminal_identity_failure", "terminal_observer_failure", "claim_boundary",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "cmix-filebacked-fxcm-full-probability-state-plan.schema.json"},
+    "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+    "revision": {"type": "integer", "minimum": 3},
+    "operational_status": {"const": "observer_source_arm_coordinator_and_independent_verifier_sealed_waiting_for_qm8_b_and_opening_100m_terminalization"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "purpose": {"type": "string", "minLength": 1},
+    "execution_authorized": {"const": false},
+    "freeze_authorized": {"const": true},
+    "proof_artifacts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["arm_receipt_schema", "joint_receipt_schema", "verification_schema", "verifier"],
+      "properties": {
+        "arm_receipt_schema": {"$ref": "#/$defs/artifact"},
+        "joint_receipt_schema": {"$ref": "#/$defs/artifact"},
+        "verification_schema": {"$ref": "#/$defs/artifact"},
+        "verifier": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "implementation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "coordinator", "arm_runner", "arm_schema", "joint_schema", "verifier",
+        "verification_schema", "resource_guard", "shared_observer_header",
+        "python_source_closure",
+        "opening_100m_plan", "observer_build_runner",
+        "observer_calibration_runner", "observer_calibration_verifier"
+      ],
+      "properties": {
+        "coordinator": {"$ref": "#/$defs/artifact"},
+        "arm_runner": {"$ref": "#/$defs/artifact"},
+        "arm_schema": {"$ref": "#/$defs/artifact"},
+        "joint_schema": {"$ref": "#/$defs/artifact"},
+        "verifier": {"$ref": "#/$defs/artifact"},
+        "verification_schema": {"$ref": "#/$defs/artifact"},
+        "resource_guard": {"$ref": "#/$defs/artifact"},
+        "shared_observer_header": {"$ref": "#/$defs/artifact"},
+        "python_source_closure": {"$ref": "#/$defs/artifact"},
+        "opening_100m_plan": {"$ref": "#/$defs/artifact"},
+        "observer_build_runner": {"$ref": "#/$defs/artifact"},
+        "observer_calibration_runner": {"$ref": "#/$defs/artifact"},
+        "observer_calibration_verifier": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "activation_dependencies": {"$ref": "#/$defs/stringArray"},
+    "audit_findings": {"type": "object", "minProperties": 1},
+    "observer_contract": {"type": "object", "minProperties": 1},
+    "persistent_state_contract": {
+      "type": "object", "minProperties": 1,
+      "required": ["modeled_stream_checkpoint_population", "identity_rule"],
+      "properties": {
+        "modeled_stream_checkpoint_population": {
+          "const": [0, 16777216, 33554432, 50331648, 100000000, 500000000, "terminal_equals_bound_modeled_stream_bytes"]
+        },
+        "identity_rule": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "calibration_population": {"type": "object", "minProperties": 1},
+    "controls": {"$ref": "#/$defs/stringArray"},
+    "resource_boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "diagnostic_process_tree_rss_limit_kib", "temporary_disk_limit_bytes",
+        "maximum_logical_cpus", "resource_authority", "reason"
+      ],
+      "properties": {
+        "diagnostic_process_tree_rss_limit_kib": {"const": 11500000},
+        "temporary_disk_limit_bytes": {"const": 100000000000},
+        "maximum_logical_cpus": {"const": 1},
+        "resource_authority": {"const": false},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "execution_order": {"$ref": "#/$defs/stringArray"},
+    "terminal_pass": {"type": "string", "minLength": 1},
+    "terminal_identity_failure": {"type": "string", "minLength": 1},
+    "terminal_observer_failure": {"type": "string", "minLength": 1},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stringArray": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}
