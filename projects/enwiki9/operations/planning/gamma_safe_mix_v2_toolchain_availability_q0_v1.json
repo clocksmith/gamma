@@ -1,0 +1,105 @@
+{
+  "schema": "gamma.enwiki9.safe-mix-v2-toolchain-availability-audit.v1",
+  "artifact_id": "gamma_safe_mix_v2_toolchain_availability_q0_v1",
+  "revision": 1,
+  "generated_utc": "2026-08-24T10:42:41Z",
+  "operational_status": "static_availability_only",
+  "candidate_id": "gamma_safe_mix_v2",
+  "subject_candidate_id": "gamma_safe_mix_v1",
+  "antecedent": {
+    "path": "operations/planning/gamma_safe_mix_v1_activation_audit_q0_v1.json",
+    "sha256": "62fecc8f21703d410f5cc90f5fc55205a8afd55ee91a84e9885d0731d788dafb",
+    "superseded_observation": "clang++ and ld.lld were absent from the selected host PATH and initially searched system locations"
+  },
+  "bound_contracts": {
+    "activation_gate": {
+      "path": "programs/gamma_safe_mix_v2/activation_gate.py",
+      "bytes": 30067,
+      "sha256": "6872e48638ddb4a608596fa097ff7c7976f8a912afc83546335434ce740066a7"
+    },
+    "dormant_activation_plan": {
+      "path": "operations/planning/gamma_safe_mix_v2_execution.json",
+      "bytes": 3998,
+      "sha256": "55f159d549df6098cec19e00d1442ae30b5f86224ac7fef6eda1e9fcb30f1835",
+      "revision": 1,
+      "execution_authorized": false
+    },
+    "inherited_build_contract": {
+      "path": "programs/gamma_safe_mix_v1/safe-mix-build-contract.json",
+      "bytes": 3075,
+      "sha256": "973f4f39627ce94e651d52438a05dc27742301dc053597b91dc965645ed69851",
+      "compiler_family": "clang++",
+      "link_argument": "--ld-path={LINKER}"
+    }
+  },
+  "probe_environment": {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONHASHSEED": "0",
+    "TZ": "UTC"
+  },
+  "toolchain": {
+    "compiler": {
+      "path": "/home/x/enwiki9-nonproof/cmix-obias-donor/cmix-obias/tools/llvm17-local/bin/clang-17",
+      "bytes": 188753776,
+      "sha256": "d8e993285cc7a68bb6c6e4010206213964e4fa7e6b70197f04c8bffa5ed8a414",
+      "mode_octal": "0755",
+      "link_count": 1,
+      "regular_file_pass": true,
+      "symlink_absent_pass": true,
+      "executable_pass": true,
+      "probe_command": [
+        "/home/x/enwiki9-nonproof/cmix-obias-donor/cmix-obias/tools/llvm17-local/bin/clang-17",
+        "--version"
+      ],
+      "probe_return_code": 0,
+      "probe_stdout_bytes": 244,
+      "probe_stdout_sha256": "961baa4ff9b53cbd763682066aa1c163b9ca6dec51e6a11a29209f883ce1e9d3",
+      "probe_stderr_bytes": 0,
+      "probe_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "family_marker": "clang",
+      "family_marker_pass": true
+    },
+    "linker": {
+      "path": "/home/x/enwiki9-nonproof/external/rocm-pytorch-venv/lib/python3.14/site-packages/_rocm_sdk_core/lib/llvm/bin/ld.lld",
+      "bytes": 26168,
+      "sha256": "da235ec596963d32194e112cec1f3b164dbcce0704552586b81edf43756f74b2",
+      "mode_octal": "0775",
+      "link_count": 1,
+      "regular_file_pass": true,
+      "symlink_absent_pass": true,
+      "executable_pass": true,
+      "probe_command": [
+        "/home/x/enwiki9-nonproof/external/rocm-pytorch-venv/lib/python3.14/site-packages/_rocm_sdk_core/lib/llvm/bin/ld.lld",
+        "--version"
+      ],
+      "probe_return_code": 0,
+      "probe_stdout_bytes": 178,
+      "probe_stdout_sha256": "fe740b92270d56999868d7625da77d8805c0a17bdeb6708f4aa94b65f42a7f7b",
+      "probe_stderr_bytes": 0,
+      "probe_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "family_marker": "lld",
+      "family_marker_pass": true
+    }
+  },
+  "conclusion": {
+    "path_lookup_observation_retained": true,
+    "deeper_filesystem_search_found_exact_probe_eligible_pair": true,
+    "v2_direct_tool_availability_predicate_pass": true,
+    "build_contract_acceptance_unproven": true,
+    "independent_build_identity_unproven": true,
+    "proof_phase_execution_unproven": true,
+    "decision": "Retain gamma_safe_mix_v2. When qm8 and managed-lease dependencies pass, bind this exact pair in activation revision 2 and let the guarded build chain determine viability. Do not create a GNU-toolchain mutation from the earlier shallow absence observation."
+  },
+  "claim_boundary": [
+    "This audit executed only two --version identity probes in the exact scrubbed environment used by the dormant v2 gate.",
+    "No compiler build, linker invocation, SAFE-MIX control, oracle, finite coder, archive, inverse, or corpus phase ran.",
+    "The binaries are external environment dependencies and receive no Gamma authorship, compression, package-score, or objective credit.",
+    "The activation plan remains revision 1 with execution_authorized=false while qm8 is live."
+  ],
+  "execution_authority": false,
+  "archive_authority": false,
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
+}
