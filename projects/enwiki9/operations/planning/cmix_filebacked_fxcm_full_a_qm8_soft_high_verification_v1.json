@@ -2,50 +2,149 @@
   "$schema": "campaign-static-contract.schema.json",
   "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1",
   "revision": 1,
-  "operational_status": "awaiting_terminal_source_arm",
-  "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
-  "source_receipt": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
-  "source_receipt_precondition": "The source receipt must exist, validate as gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1, and report terminal_pass=true for Arm A before this verifier executes.",
-  "output": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json",
-  "output_precondition": "The output path must be absent and must remain a direct child of the immutable source result root.",
-  "verifier": "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
-  "verifier_sha256": "ccd5daf72166de03f5a720b554a2470e3e2edcb2f0fccfa80aa8d1fab109695a",
-  "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-full-soft-high-verification.schema.json",
-  "verification_schema_sha256": "042b461527352c78fc259d3fb9b210e81c809caa23707ae41f5f926839777141",
-  "bound_source_tools": {
-    "roundtrip_runner_sha256": "b196cddcef51e890794fa3877e5763b13c695ddd3ad1e1065eb9a584fce2f20b",
-    "stage_runner_sha256": "e8aed4cbe68ba162a1d30a66bdf3243c70226268a9f23dbdb4bc4bef31354741",
-    "soft_high_wrapper_sha256": "d2838c816bf17c5108fd0cf7170180ea8d47decbd3009f26ddf6bb7a02d05bae",
-    "underlying_guard_sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
   },
-  "required_independent_checks": [
-    "canonical 1,000,000,000-byte corpus artifact identity",
-    "all frozen build, source-lock, scope, and transfer antecedent artifact and contract identities",
-    "exact roundtrip, stage, soft-pressure wrapper, and underlying guard implementations",
-    "complete encode and decode guard measurements with every guard flag false",
-    "9,999,998,976-byte effective hard cap with zero max, oom, oom_kill, and oom_group_kill events",
-    "8,999,997,440-byte memory.high setup and restoration with encode pressure observed",
-    "single logical CPU, process-tree RSS, largest-process VmHWM, and temporary-disk compliance",
-    "mechanical package concatenation and program_bytes rederived as packaged compressor plus head",
-    "107,730,531-byte authoritative-parent payload identity",
-    "exact archive binding and canonical restored-byte inverse",
-    "counted archive-plus-program arithmetic",
-    "scratch, cgroup, and managed-lease cleanup",
-    "explicit zero Gamma compression and score credit boundary"
+  "dependencies": [
+    {
+      "artifact": "cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+      "required_evidence": "A future schema-valid terminal Arm-A receipt with terminal_pass=true, explicit zero credit, and no remaining qm8 process."
+    },
+    {
+      "artifact": "qm8 exact source and receipt-schema closure",
+      "required_evidence": "Every bound source, schema, antecedent, stage, guard, package, output, cleanup, and lease artifact retains its frozen identity."
+    },
+    {
+      "artifact": "revision-2 activation",
+      "required_evidence": "A future revision at least 2 sets execution_authorized=true only after binding the actual passing terminal receipt SHA-256."
+    }
   ],
-  "command": [
-    "/usr/bin/python3",
-    "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
-    "--receipt",
-    "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
-    "--output",
-    "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json"
+  "contract": {
+    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+    "evidence_class": "diagnostic_full_corpus_arm_a_success_verification",
+    "source_receipt": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+    "output": "/home/x/deco/gamma/projects/enwiki9/results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json",
+    "bindings": {
+      "verifier": {
+        "path": "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
+        "bytes": 33739,
+        "sha256": "bab93845fd85f0e4615d6ac970199c636276fae202e2d1dc745098dae5805ba2"
+      },
+      "verification_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-soft-high-verification.schema.json",
+        "bytes": 4393,
+        "sha256": "042b461527352c78fc259d3fb9b210e81c809caa23707ae41f5f926839777141"
+      },
+      "research_contracts": {
+        "path": "tools/research_contracts.py",
+        "bytes": 128519,
+        "sha256": "744d3cc2cf5433c86251194ec1421256f1d6b745fdc012ec2ec6fb982df1fa5b"
+      },
+      "lease_verifier": {
+        "path": "tools/managed_exclusive_lease_verify.py",
+        "bytes": 9081,
+        "sha256": "68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"
+      },
+      "plan_schema": {
+        "path": "operations/planning/campaign-static-contract.schema.json",
+        "bytes": 1887,
+        "sha256": "6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64"
+      },
+      "python_runtime": {
+        "path": "/usr/bin/python3.14",
+        "bytes": 7481192,
+        "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+      },
+      "full_roundtrip_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+        "bytes": 16848,
+        "sha256": "8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"
+      },
+      "stage_schema": {
+        "path": "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json",
+        "bytes": 4201,
+        "sha256": "31d513dc92344dd27d7848d1ba06c54a1c38f44dc1d740019c8ab7f141d05c2d"
+      },
+      "guard_schema": {
+        "path": "contracts/research/v1/resource-guard-receipt.v3.schema.json",
+        "bytes": 12756,
+        "sha256": "f51442e839bdfc11db5eb40f74faead81ef00e930a54b5ac98b6d0c681477cce"
+      },
+      "soft_high_schema": {
+        "path": "contracts/research/v1/resource-guard-soft-high.schema.json",
+        "bytes": 2694,
+        "sha256": "06f65a47321f2b94cb0d2a85108b148ad28696f3ec5babc57d61524bd43fa2b4"
+      },
+      "roundtrip_runner": {
+        "path": "tools/cmix_filebacked_fxcm_full_roundtrip.py",
+        "bytes": 33758,
+        "sha256": "b196cddcef51e890794fa3877e5763b13c695ddd3ad1e1065eb9a584fce2f20b"
+      },
+      "stage_runner": {
+        "path": "tools/cmix_filebacked_fxcm_full_stage.py",
+        "bytes": 9927,
+        "sha256": "e8aed4cbe68ba162a1d30a66bdf3243c70226268a9f23dbdb4bc4bef31354741"
+      },
+      "soft_high_wrapper": {
+        "path": "tools/run_with_resource_guard_v3_soft_high.py",
+        "bytes": 6061,
+        "sha256": "d2838c816bf17c5108fd0cf7170180ea8d47decbd3009f26ddf6bb7a02d05bae"
+      },
+      "resource_guard": {
+        "path": "tools/run_with_resource_guard_v3.py",
+        "bytes": 31807,
+        "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+      }
+    },
+    "required_independent_checks": [
+      "canonical 1,000,000,000-byte corpus artifact identity",
+      "all frozen build, source-lock, scope, and transfer antecedent artifact and contract identities",
+      "exact roundtrip, stage, soft-pressure wrapper, and underlying guard implementations",
+      "complete encode and decode guard measurements with every guard flag false",
+      "9,999,998,976-byte effective hard cap with zero max, oom, oom_kill, and oom_group_kill events",
+      "8,999,997,440-byte memory.high setup and restoration with encode pressure observed",
+      "single logical CPU, process-tree RSS, largest-process VmHWM, and temporary-disk compliance",
+      "mechanical package concatenation and program_bytes rederived as packaged compressor plus head",
+      "107,730,531-byte authoritative-parent payload identity",
+      "exact archive binding and canonical restored-byte inverse",
+      "counted archive-plus-program arithmetic",
+      "scratch, cgroup, and managed-lease cleanup",
+      "explicit zero Gamma compression and score credit boundary"
+    ],
+    "activation": {
+      "status": "waiting_for_terminal_passing_qm8",
+      "execution_authorized": false,
+      "minimum_activation_revision": 2,
+      "terminal_receipt_sha256": null
+    },
+    "command": [
+      "/usr/bin/python3.14",
+      "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
+      "--receipt",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+      "--output",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json"
+    ],
+    "promotion_condition": "A schema-valid verification_pass=true receipt may authorize freezing an independent Arm B plan that binds both the Arm-A source receipt and this verification. It does not qualify q1.",
+    "kill_condition": "Any source failure, artifact drift, plan activation mismatch, live qm8 process, counter inconsistency, cleanup gap, accounting mismatch, or verifier/schema hash drift stops the A-to-B transition.",
+    "promotion_authority": false,
+    "memory_safe_parent_qualification_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Do not execute revision 1. The verifier rejects any plan revision below 2 or execution_authorized=false before opening the output path.",
+    "Wait for the exact qm8 Arm-A terminal receipt and require terminal_pass=true with no live qm8 process.",
+    "Create revision 2 by changing only activation status, execution authority, revision, and the terminal receipt SHA-256 unless a bound implementation file has actually drifted.",
+    "Execute the frozen command only while the canonical output is absent."
   ],
-  "promotion_condition": "A schema-valid verification_pass=true receipt may authorize freezing an independent Arm B plan that binds both the Arm A source receipt and this verification. It does not qualify q1.",
-  "kill_condition": "Any source failure, artifact drift, counter inconsistency, missing cleanup, rederived accounting mismatch, or verifier/schema hash drift stops the A-to-B transition.",
-  "execution_authority": true,
-  "promotion_authority": false,
-  "gamma_compression_credit_bytes": 0,
-  "gamma_score_credit_bytes": 0,
-  "claim_boundary": "Independent verification of one soft-pressure diagnostic full-corpus Arm A only. It does not establish Arm B determinism, full online probability or persistent-state identity, runtime eligibility, memory-safe-parent qualification, Gamma authorship, or objective credit."
+  "claim_boundary": [
+    "Revision 1 is dormant and has no execution authority.",
+    "A future passing verification proves one diagnostic full-corpus Arm A only and can authorize an independent unchanged Arm B plan.",
+    "It cannot establish Arm-B determinism, continuous probability/state identity, runtime eligibility, parent qualification, Gamma authorship, or Hutter score credit."
+  ]
 }

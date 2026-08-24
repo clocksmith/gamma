@@ -296,6 +296,20 @@ receipt exists. At the sealing snapshot encode progress was `18.02%`, cgroup
 current use was `8,999,391,232` bytes, peak was `9,002,086,400` bytes, and
 `memory.events.high` was `192,968`; hard-cap and OOM counters remained zero.
 
+A symmetric audit then found the same dormant-output hazard in the older
+passing-arm verifier. Its planning file named the campaign static-contract
+schema without conforming to it and declared immediate execution authority;
+its caught missing-source path could write `full-soft-high-verification.json`
+before qm8 terminalized. That route is now fail-closed as well. The corrected
+revision 1 is dormant and schema-valid, and preflight requires a future
+revision at least 2 with the exact passing terminal-receipt hash, explicit
+activation, Arm A `terminal_pass=true`, and process closure before the output
+path can be opened. The verifier also reconstructs both guarded stage commands,
+binds exact result and scratch ownership, rederives aggregate resource and
+accounting fields, verifies managed-lease transition semantics, and validates
+its output against the registered schema. No success-verification output or
+Arm B authority exists while qm8 is live.
+
 ### q1 qualification authority is artifact-derived, not self-reported
 
 An independent adversarial audit found a fatal consolidation weakness before

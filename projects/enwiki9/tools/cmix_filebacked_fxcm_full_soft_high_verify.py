@@ -5,18 +5,37 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
+import stat
 import sys
+from types import ModuleType
 from typing import Any
 
+import jsonschema
 import research_contracts
 
 
 SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1"
 PROJECT = Path(__file__).resolve().parents[1]
+RESULT = PROJECT / "results/cmix_filebacked_fxcm_full_a_qm8_v1"
+SCRATCH = PROJECT / "scratch/cmix_filebacked_fxcm_full_a_qm8_v1"
+CGROUP = Path(
+    "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/"
+    "app.slice/gamma-q1-full-a-qm8-v1"
+)
+LEASE = PROJECT / "operations/runtime/exclusive_full1g.json"
+LOCK = PROJECT / "operations/runtime/exclusive_full1g.json.lock"
+LEASE_VERIFIER = PROJECT / "tools/managed_exclusive_lease_verify.py"
 SCHEMA_PATH = PROJECT / "contracts/research/v1/cmix-filebacked-fxcm-full-soft-high-verification.schema.json"
+PLAN = (
+    PROJECT
+    / "operations/planning/"
+    "cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json"
+)
+PLAN_SCHEMA = PROJECT / "operations/planning/campaign-static-contract.schema.json"
 SOURCE_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"
 STAGE_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-stage.v1"
 GUARD_SCHEMA = "gamma.enwiki9.resource-guard-receipt.v3"
@@ -28,6 +47,7 @@ PARENT_PAYLOAD_SHA256 = "889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899f
 HARD_MEMORY_MAX_BYTES = 9_999_998_976
 SOFT_MEMORY_HIGH_BYTES = 8_999_997_440
 MEMORY_LIMIT_KIB = 9_765_625
+PYTHON = "/usr/bin/python3"
 EXPECTED_WRAPPER_SHA256 = "d2838c816bf17c5108fd0cf7170180ea8d47decbd3009f26ddf6bb7a02d05bae"
 EXPECTED_GUARD_SHA256 = "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
 EXPECTED_ROUNDTRIP_SHA256 = "b196cddcef51e890794fa3877e5763b13c695ddd3ad1e1065eb9a584fce2f20b"
@@ -50,7 +70,22 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def regular(path: Path, label: str) -> Path:
+    absolute = path.absolute()
+    current = Path(absolute.anchor)
+    for component in absolute.parts[1:]:
+        current /= component
+        metadata = current.lstat()
+        if stat.S_ISLNK(metadata.st_mode):
+            raise RuntimeError(f"{label} has a symlink component: {current}")
+    metadata = path.stat()
+    if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1:
+        raise RuntimeError(f"{label} is not a single-link regular file: {path}")
+    return path.resolve(strict=True)
+
+
 def artifact(path: Path) -> dict[str, Any]:
+    path = regular(path, "artifact")
     return {"path": str(path), "bytes": path.stat().st_size, "sha256": sha256_file(path)}
 
 
@@ -58,11 +93,216 @@ def artifact_matches(record: dict[str, Any] | None) -> bool:
     if not isinstance(record, dict):
         return False
     path = Path(record.get("path", ""))
+    try:
+        path = regular(path, "artifact record")
+    except (OSError, RuntimeError):
+        return False
     return bool(
-        path.is_file()
-        and path.stat().st_size == record.get("bytes")
+        path.stat().st_size == record.get("bytes")
         and sha256_file(path) == record.get("sha256")
     )
+
+
+def artifact_at(record: dict[str, Any] | None, expected: Path) -> bool:
+    if not artifact_matches(record):
+        return False
+    try:
+        return Path(record["path"]).resolve(strict=True) == expected.resolve(strict=True)
+    except OSError:
+        return False
+
+
+def command_sha256(argv: list[str]) -> str:
+    return hashlib.sha256(b"\0".join(os.fsencode(item) for item in argv)).hexdigest()
+
+
+def expected_stage_command(phase: str, source: dict[str, Any]) -> list[str]:
+    command = [
+        PYTHON,
+        str(PROJECT / "tools/cmix_filebacked_fxcm_full_stage.py"),
+        "--mode",
+        phase,
+        "--corpus",
+        source["population"]["path"],
+        "--work-root",
+        str(SCRATCH / phase),
+        "--result-root",
+        str(RESULT / phase),
+        "--receipt",
+        str(RESULT / phase / "stage-receipt.json"),
+    ]
+    if phase == "encode":
+        command.extend(
+            [
+                "--package",
+                source["package"]["packaged_compressor"]["path"],
+                "--head",
+                source["package"]["head"]["path"],
+            ]
+        )
+    else:
+        command.extend(["--archive", source["outputs"]["archive"]["path"]])
+    return command
+
+
+def expected_guard_command(
+    phase: str, source: dict[str, Any], stage_command: list[str]
+) -> list[str]:
+    return [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        str(source["selected_logical_cpu"]),
+        PYTHON,
+        str(PROJECT / "tools/run_with_resource_guard_v3_soft_high.py"),
+        "--limit-kib",
+        "9765625",
+        "--limit-mode",
+        "tree",
+        "--official-decimal-limit-kib",
+        "9765625",
+        "--cgroup-path",
+        str(CGROUP),
+        "--cgroup-memory-max-bytes",
+        "10000000000",
+        "--scratch-path",
+        str(SCRATCH),
+        "--scratch-path",
+        str(RESULT),
+        "--temporary-disk-limit-bytes",
+        "100000000000",
+        "--phase-marker-path",
+        str(RESULT / phase / "phase-markers.jsonl"),
+        "--max-logical-cpus",
+        "1",
+        "--guard-json",
+        str(RESULT / phase / "guard.json"),
+        "--label",
+        f"q1-full-{phase}",
+        "--phase",
+        "diagnostic",
+        "--",
+        *stage_command,
+    ]
+
+
+def load_module(path: Path, name: str) -> ModuleType:
+    path = regular(path, name)
+    specification = importlib.util.spec_from_file_location(name, path)
+    if specification is None or specification.loader is None:
+        raise RuntimeError(f"cannot load {name}")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    if Path(str(module.__file__)).resolve(strict=True) != path:
+        raise RuntimeError(f"loaded {name} from wrong source")
+    return module
+
+
+def plan_binding(record: Any, expected: Path, label: str) -> None:
+    if not isinstance(record, dict) or set(record) != {"path", "bytes", "sha256"}:
+        raise RuntimeError(f"{label} plan binding malformed")
+    declared = Path(record["path"])
+    path = declared if declared.is_absolute() else PROJECT / declared
+    path = regular(path, label)
+    if path != expected.resolve(strict=True):
+        raise RuntimeError(f"{label} plan path mismatch")
+    if path.stat().st_size != record["bytes"] or sha256_file(path) != record["sha256"]:
+        raise RuntimeError(f"{label} plan identity mismatch")
+
+
+def live_qm8_processes() -> list[int]:
+    ancestors: set[int] = set()
+    cursor = os.getpid()
+    while cursor > 1 and cursor not in ancestors:
+        ancestors.add(cursor)
+        try:
+            suffix = (Path("/proc") / str(cursor) / "stat").read_text(
+                encoding="ascii"
+            ).rsplit(")", 1)[1]
+            cursor = int(suffix.split()[1])
+        except (OSError, IndexError, ValueError):
+            break
+    found: list[int] = []
+    for path in Path("/proc").iterdir():
+        if not path.name.isdigit() or int(path.name) in ancestors:
+            continue
+        try:
+            command = (path / "cmdline").read_bytes().replace(b"\0", b" ")
+        except OSError:
+            continue
+        if b"cmix_filebacked_fxcm_full_a_qm8_v1" in command:
+            found.append(int(path.name))
+    return sorted(found)
+
+
+def validate_activation(receipt_path: Path) -> None:
+    plan_path = regular(PLAN, "qm8 success-verification plan")
+    plan_schema_path = regular(PLAN_SCHEMA, "campaign static-contract schema")
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan_schema = json.loads(plan_schema_path.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(plan_schema)
+    jsonschema.Draft202012Validator(plan_schema).validate(plan)
+    contract = plan.get("contract", {})
+    activation = contract.get("activation", {})
+    source = json.loads(receipt_path.read_text(encoding="utf-8"))
+    if (
+        plan.get("artifact_id")
+        != "cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1"
+        or plan.get("revision", 0) < 2
+        or plan.get("claim_authority") != "none"
+        or contract.get("candidate_id") != "cmix_filebacked_fxcm_full_a_qm8_v1"
+        or contract.get("source_receipt") != str(receipt_path)
+        or contract.get("output") != str(RESULT / "full-soft-high-verification.json")
+        or activation.get("status") != "activated_after_terminal_passing_qm8"
+        or activation.get("execution_authorized") is not True
+        or activation.get("terminal_receipt_sha256") != sha256_file(receipt_path)
+        or source.get("schema") != SOURCE_SCHEMA
+        or source.get("candidate_id")
+        != "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+        or source.get("arm") != "a"
+        or source.get("terminal_pass") is not True
+        or live_qm8_processes()
+        or contract.get("promotion_authority") is not False
+        or contract.get("memory_safe_parent_qualification_authority") is not False
+        or contract.get("gamma_compression_credit_bytes") != 0
+        or contract.get("gamma_score_credit_bytes") != 0
+    ):
+        raise RuntimeError("qm8 success-verification plan is not receipt-bound revision 2")
+    expected_bindings = {
+        "verifier": PROJECT / "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
+        "verification_schema": SCHEMA_PATH,
+        "research_contracts": PROJECT / "tools/research_contracts.py",
+        "lease_verifier": LEASE_VERIFIER,
+        "plan_schema": PLAN_SCHEMA,
+        "python_runtime": Path("/usr/bin/python3.14"),
+        "full_roundtrip_schema": PROJECT / "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+        "stage_schema": PROJECT / "contracts/research/v1/cmix-filebacked-fxcm-full-stage.schema.json",
+        "guard_schema": PROJECT / "contracts/research/v1/resource-guard-receipt.v3.schema.json",
+        "soft_high_schema": PROJECT / "contracts/research/v1/resource-guard-soft-high.schema.json",
+        "roundtrip_runner": PROJECT / "tools/cmix_filebacked_fxcm_full_roundtrip.py",
+        "stage_runner": PROJECT / "tools/cmix_filebacked_fxcm_full_stage.py",
+        "soft_high_wrapper": PROJECT / "tools/run_with_resource_guard_v3_soft_high.py",
+        "resource_guard": PROJECT / "tools/run_with_resource_guard_v3.py",
+    }
+    bindings = contract.get("bindings", {})
+    for name, expected in expected_bindings.items():
+        plan_binding(bindings.get(name), expected, name)
+    expected_command = [
+        "/usr/bin/python3.14",
+        "tools/cmix_filebacked_fxcm_full_soft_high_verify.py",
+        "--receipt",
+        "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+        "--output",
+        "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-soft-high-verification.json",
+    ]
+    if contract.get("command") != expected_command:
+        raise RuntimeError("qm8 success-verification command mismatch")
+
+
+def validate_output(value: dict[str, Any]) -> None:
+    schema_path = regular(SCHEMA_PATH, "qm8 success-verification schema")
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(schema)
+    jsonschema.Draft202012Validator(schema).validate(value)
 
 
 def write_new(path: Path, value: dict[str, Any]) -> None:
@@ -105,10 +345,34 @@ def stage_checks(
     stage = validate_contract(stage_path, STAGE_SCHEMA)
     soft = validate_contract(soft_path, SOFT_HIGH_SCHEMA)
     events = guard["cgroup_events"]["delta"]
-    checks[f"{phase}_summary_artifacts_match"] = artifact_matches(summary["guard_receipt"]) and artifact_matches(summary["stage_receipt"])
+    stage_command = expected_stage_command(phase, source)
+    checks[f"{phase}_summary_artifacts_match"] = (
+        artifact_at(summary["guard_receipt"], result_root / phase / "guard.json")
+        and artifact_at(
+            summary["stage_receipt"], result_root / phase / "stage-receipt.json"
+        )
+        and artifact_at(
+            summary["guard_stdout"], result_root / phase / "guard.stdout"
+        )
+        and artifact_at(
+            summary["guard_stderr"], result_root / phase / "guard.stderr"
+        )
+        and soft_path.resolve(strict=True)
+        == (result_root / phase / "soft-high-receipt.json").resolve(strict=True)
+    )
+    checks[f"{phase}_command_binding"] = (
+        guard["command"] == stage_command
+        and guard["command_sha256"] == command_sha256(stage_command)
+        and summary["stage_command_sha256"] == guard["command_sha256"]
+        and summary["guard_command_sha256"]
+        == command_sha256(expected_guard_command(phase, source, stage_command))
+    )
     checks[f"{phase}_guard_complete"] = (
         guard["status"] == "complete"
         and guard["returncode"] == 0
+        and summary["outer_return_code"] == 0
+        and summary["guard_status"] == guard["status"]
+        and summary["guard_return_code"] == guard["returncode"]
         and not any(guard["guards"].values())
         and all(guard["measurements"].values())
     )
@@ -120,6 +384,21 @@ def stage_checks(
         and events.get("oom_kill", 0) == 0
         and events.get("oom_group_kill", 0) == 0
     )
+    checks[f"{phase}_guard_contract"] = (
+        guard["phase"] == "diagnostic"
+        and guard["label"] == f"q1-full-{phase}"
+        and guard["limit_mode"] == "tree"
+        and guard["limit_kib"] == MEMORY_LIMIT_KIB
+        and guard["official_decimal_limit_kib"] == MEMORY_LIMIT_KIB
+        and guard["temporary_disk_limit_bytes"] == 100_000_000_000
+        and guard["max_logical_cpus"] == 1
+        and guard["scratch_paths"] == [str(SCRATCH), str(RESULT)]
+        and guard["phase_marker_path"]
+        == str(result_root / phase / "phase-markers.jsonl")
+        and guard["cgroup"]["path"] == str(CGROUP)
+        and guard["cgroup"]["requested_memory_max_bytes"] == 10_000_000_000
+        and guard["cgroup"]["memory_max_bytes"] == HARD_MEMORY_MAX_BYTES
+    )
     checks[f"{phase}_rss_cpu_disk_clean"] = (
         guard["peaks"]["max_sampled_tree_rss_kib"] < MEMORY_LIMIT_KIB
         and guard["peaks"]["max_observed_process_vmhwm_kib"] < MEMORY_LIMIT_KIB
@@ -129,11 +408,76 @@ def stage_checks(
             guard["peaks"]["max_sampled_scratch_allocated_bytes"],
         ) < guard["temporary_disk_limit_bytes"]
     )
+    checks[f"{phase}_summary_measurements"] = (
+        summary["maximum_tree_rss_kib"]
+        == guard["peaks"]["max_sampled_tree_rss_kib"]
+        and summary["cgroup_memory_peak_bytes"]
+        == guard["peaks"]["cgroup_memory_peak_bytes"]
+        and summary["maximum_temporary_disk_bytes"]
+        == max(
+            guard["peaks"]["max_sampled_scratch_logical_bytes"],
+            guard["peaks"]["max_sampled_scratch_allocated_bytes"],
+        )
+        and summary["maximum_allowed_cpu_count"]
+        == guard["peaks"]["max_sampled_allowed_cpu_count"]
+        and summary["stage_return_code"] == stage["return_code"]
+        and summary["backing_cleanup_pass"] == stage["backing_cleanup_pass"]
+        and summary["exact_raw_inverse_pass"] == stage["exact_raw_inverse_pass"]
+        and summary["cgroup_cleanup_pass"] is True
+        and summary["errors"] == []
+        and summary["stage_and_guard_pass"] is True
+    )
     checks[f"{phase}_stage_complete"] = (
         stage["mode"] == phase
         and stage["return_code"] == 0
         and stage["stage_pass"] is True
         and stage["backing_cleanup_pass"] is True
+    )
+    checks[f"{phase}_stage_provenance"] = (
+        artifact_at(stage["corpus"], Path(source["population"]["path"]))
+        and stage["corpus"] == source["population"]
+        and artifact_at(
+            stage["stage_runner"],
+            PROJECT / "tools/cmix_filebacked_fxcm_full_stage.py",
+        )
+        and stage["stage_runner"]["sha256"] == EXPECTED_STAGE_SHA256
+        and artifact_at(
+            stage["phase_marker"], result_root / phase / "phase-markers.jsonl"
+        )
+        and stage["work_root"] == str(SCRATCH / phase)
+        and stage["result_root"] == str(result_root / phase)
+        and stage["command"]
+        == (
+            ["./cmix", "-e", source["population"]["path"], "out.cmix"]
+            if phase == "encode"
+            else ["./archive9"]
+        )
+        and all(
+            artifact_matches(record)
+            for group in (stage["inputs"], stage["outputs"])
+            for record in group.values()
+        )
+        and stage["inputs"]
+        == (
+            {
+                "package": source["package"]["packaged_compressor"],
+                "head": source["package"]["head"],
+            }
+            if phase == "encode"
+            else {"archive": source["outputs"]["archive"]}
+        )
+        and stage["outputs"]
+        == (
+            {
+                "payload": source["outputs"]["payload"],
+                "archive": source["outputs"]["archive"],
+            }
+            if phase == "encode"
+            else {"restored": source["outputs"]["restored"]}
+        )
+        and stage["execution_authority"] is False
+        and stage["gamma_compression_credit_bytes"] == 0
+        and stage["gamma_score_credit_bytes"] == 0
     )
     checks[f"{phase}_soft_pressure_bound"] = (
         soft["wrapper_pass"] is True
@@ -143,12 +487,19 @@ def stage_checks(
         and soft["guard_status"] == "complete"
         and artifact_matches(soft["underlying_guard"])
         and soft["underlying_guard"]["sha256"] == EXPECTED_GUARD_SHA256
+        and Path(soft["underlying_guard"]["path"]).resolve(strict=True)
+        == (PROJECT / "tools/run_with_resource_guard_v3.py").resolve(strict=True)
         and artifact_matches(soft["guard_receipt"])
         and Path(soft["guard_receipt"]["path"]).resolve() == guard_path.resolve()
         and not Path(soft["cgroup_path"]).exists()
+        and soft["cgroup_path"] == str(CGROUP)
+        and soft["high_event_count"] == events["high"]
     )
     checks[f"{phase}_soft_pressure_observed"] = isinstance(soft["high_event_count"], int) and soft["high_event_count"] >= 0
-    checks[f"{phase}_result_ownership"] = guard_path.parent == result_root / phase and stage_path.parent == result_root / phase
+    checks[f"{phase}_result_ownership"] = (
+        guard_path.parent == result_root / phase
+        and stage_path.parent == result_root / phase
+    )
     return guard, stage, soft
 
 
@@ -167,11 +518,18 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         "population_exact": source["population"]["bytes"] == CANONICAL_BYTES
         and source["population"]["sha256"] == CANONICAL_SHA256
         and artifact_matches(source["population"]),
-        "resource_wrapper_exact": artifact_matches(source["resource_guard"])
+        "resource_wrapper_exact": artifact_at(
+            source["resource_guard"],
+            PROJECT / "tools/run_with_resource_guard_v3_soft_high.py",
+        )
         and source["resource_guard"]["sha256"] == EXPECTED_WRAPPER_SHA256,
-        "roundtrip_runner_exact": artifact_matches(source["runner"])
+        "roundtrip_runner_exact": artifact_at(
+            source["runner"], PROJECT / "tools/cmix_filebacked_fxcm_full_roundtrip.py"
+        )
         and source["runner"]["sha256"] == EXPECTED_ROUNDTRIP_SHA256,
-        "stage_runner_exact": artifact_matches(source["stage_runner"])
+        "stage_runner_exact": artifact_at(
+            source["stage_runner"], PROJECT / "tools/cmix_filebacked_fxcm_full_stage.py"
+        )
         and source["stage_runner"]["sha256"] == EXPECTED_STAGE_SHA256,
         "antecedent_artifacts_match": all(
             artifact_matches(record)
@@ -213,6 +571,13 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
             "build_verification",
         )
     )
+    checks["package_result_ownership"] = (
+        Path(package["packaged_compressor"]["path"]).resolve(strict=True)
+        == (result_root / "package/cmix").resolve(strict=True)
+        and Path(package["head"]["path"]).resolve(strict=True)
+        == (result_root / "package/head.blob").resolve(strict=True)
+        and package["arm"] == "a"
+    )
     checks["package_mechanical_concatenation"] = (
         concatenated_bytes == packaged_path.stat().st_size
         and digest.hexdigest() == sha256_file(packaged_path)
@@ -225,14 +590,17 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
     )
     outputs = source["outputs"]
     checks["payload_exact_parent"] = (
-        artifact_matches(outputs["payload"])
+        artifact_at(outputs["payload"], result_root / "encode/out.cmix")
         and outputs["payload"]["bytes"] == PARENT_PAYLOAD_BYTES
         and outputs["payload"]["sha256"] == PARENT_PAYLOAD_SHA256
         and encode_stage["outputs"]["payload"] == outputs["payload"]
     )
-    checks["archive_exactly_bound"] = artifact_matches(outputs["archive"]) and encode_stage["outputs"]["archive"] == outputs["archive"]
+    checks["archive_exactly_bound"] = (
+        artifact_at(outputs["archive"], result_root / "encode/archive9")
+        and encode_stage["outputs"]["archive"] == outputs["archive"]
+    )
     checks["restored_exact_canonical"] = (
-        artifact_matches(outputs["restored"])
+        artifact_at(outputs["restored"], result_root / "decode/enwik9-restored")
         and outputs["restored"]["bytes"] == CANONICAL_BYTES
         and outputs["restored"]["sha256"] == CANONICAL_SHA256
         and decode_stage["outputs"]["restored"] == outputs["restored"]
@@ -244,7 +612,35 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         source["accounting"]["archive_bytes"] == outputs["archive"]["bytes"]
         and source["accounting"]["program_bytes"] == package["program_bytes"]
         and source["accounting"]["counted_score_bytes"] == counted_score
+        and source["accounting"]["target_bytes"] == 105_000_000
+        and source["accounting"]["target_pass"]
+        is (counted_score <= 105_000_000)
         and source["accounting"]["score_credit_bytes"] == 0
+    )
+    checks["resources_rederived"] = (
+        source["resources"]["guard_count"] == 2
+        and source["resources"]["maximum_tree_rss_kib"]
+        == max(
+            encode_guard["peaks"]["max_sampled_tree_rss_kib"],
+            decode_guard["peaks"]["max_sampled_tree_rss_kib"],
+        )
+        and source["resources"]["maximum_cgroup_memory_peak_bytes"]
+        == max(
+            encode_guard["peaks"]["cgroup_memory_peak_bytes"],
+            decode_guard["peaks"]["cgroup_memory_peak_bytes"],
+        )
+        and source["resources"]["maximum_temporary_disk_bytes"]
+        == max(
+            encode_guard["peaks"]["max_sampled_scratch_logical_bytes"],
+            encode_guard["peaks"]["max_sampled_scratch_allocated_bytes"],
+            decode_guard["peaks"]["max_sampled_scratch_logical_bytes"],
+            decode_guard["peaks"]["max_sampled_scratch_allocated_bytes"],
+        )
+        and source["resources"]["maximum_allowed_cpu_count"] == 1
+        and source["resources"]["all_guards_pass"] is True
+        and source["resources"]["diagnostic_timing_only"] is True
+        and source["resources"]["geekbench5_single_core_score"] is None
+        and source["resources"]["runtime_eligibility_established"] is False
     )
     checks["cleanup_complete"] = (
         source["cleanup"]["scratch_removed_on_success_pass"] is True
@@ -252,10 +648,31 @@ def verify(receipt_path: Path) -> tuple[dict[str, Any], bool]:
         and source["cleanup"]["cgroup_removed_pass"] is True
         and source["cleanup"]["lease_removed_pass"] is True
         and source["cleanup"]["lease_release_pass"] is True
-        and not Path(source["cleanup"]["scratch_root"]).exists()
-        and not (result_root.parents[1] / "operations/runtime/exclusive_full1g.json").exists()
+        and source["cleanup"]["scratch_root"] == str(SCRATCH)
+        and not SCRATCH.exists()
+        and not LEASE.exists()
+        and not LOCK.exists()
+        and not CGROUP.exists()
     )
-    checks["lease_artifacts_match"] = artifact_matches(source["lease"]["evidence"]) and artifact_matches(source["lease"]["transitions"])
+    checks["lease_artifacts_match"] = artifact_matches(
+        source["lease"]["evidence"]
+    ) and artifact_matches(source["lease"]["transitions"])
+    if checks["lease_artifacts_match"]:
+        lease_module = load_module(LEASE_VERIFIER, "qm8_success_lease_verifier")
+        lease_result, lease_verified = lease_module.verify(
+            argparse.Namespace(
+                transition_log=Path(source["lease"]["transitions"]["path"]),
+                terminal_lease=Path(source["lease"]["evidence"]["path"]),
+            )
+        )
+        checks["lease_transition_semantics"] = bool(
+            lease_verified
+            and lease_result.get("verified") is True
+            and lease_result.get("candidate_id")
+            == "cmix_obias_memory_safe_parent_filebacked_q1_v1-full-a"
+        )
+    else:
+        checks["lease_transition_semantics"] = False
     checks["arm_a_reference_consistent"] = (
         arm == "a"
         and antecedents["arm_a_reference"] is None
@@ -322,9 +739,20 @@ def main() -> int:
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if (
+        args.output.absolute() != RESULT / "full-soft-high-verification.json"
+        or args.output.parent.resolve(strict=True) != RESULT
+        or args.output.exists()
+        or args.output.is_symlink()
+    ):
+        raise SystemExit("output must be the new canonical qm8 success verification")
+    receipt_path = regular(args.receipt, "qm8 terminal receipt")
+    if receipt_path != RESULT / "full-roundtrip-receipt.json":
+        raise SystemExit("qm8 terminal receipt path mismatch")
+    validate_activation(receipt_path)
     try:
-        output, passed = verify(args.receipt.resolve(strict=True))
-    except (OSError, KeyError, TypeError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
+        output, passed = verify(receipt_path)
+    except Exception as exc:
         output = {
             "schema": SCHEMA,
             "candidate_id": args.receipt.parent.name,
@@ -339,6 +767,7 @@ def main() -> int:
             "gamma_score_credit_bytes": 0,
         }
         passed = False
+    validate_output(output)
     write_new(args.output, output)
     sys.stdout.write(json.dumps(output, sort_keys=True, indent=2) + "\n")
     return 0 if passed else 1
