@@ -1,0 +1,133 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "evidence_conditioned_mutation_router_v3",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "evidence_conditioned_mutation_router_v2",
+      "required_evidence": "Preserved historical router at SHA-256 6874431e440fba6a8ffbbf8782aac85aaae162055cc80112ecc997987599fff7 whose CMIX midpoint and persistence routes are superseded only by this source-level correction."
+    },
+    {
+      "artifact": "cmix_obias_shadow_midpoint_oracle64_q0_v2_supersession",
+      "required_evidence": "Supersession SHA-256 ae147c0e1e1820d825cf9a9a94879aedc580688be34aff8f40e8e506a957d194 proves v2 is superseded before execution and v3 is the only authorized corrected oracle."
+    },
+    {
+      "artifact": "cmix_obias_midpoint_persistence_attribution64_q0_v2_supersession",
+      "required_evidence": "Supersession SHA-256 b64d8b44177cef48a556562a7bd843998ede5ec483c7728a47953c84f52d5c70 proves the old attribution cannot execute and no corrected attribution identity exists before a positive v3 oracle."
+    }
+  ],
+  "contract": {
+    "supersedes": "operations/planning/evidence_conditioned_mutation_router_v2.json",
+    "correction_boundary": "Rebind only the CMIX midpoint and persistence-attribution routes to the causally closed v3 oracle. Preserve SAFE-MIX v2, the future SAFE-FORK v2 direction, all NNCP, WIKI-PDA, combination, and one-successor routes.",
+    "rule": "Each terminal independently verified observation authorizes at most one materially different successor, never a parameter cloud.",
+    "routes": [
+      {
+        "observation": "causally closed CMIX shadow midpoint oracle v3 is subscale at a valid 1MB or 10MB gate",
+        "successor": "retire CMIX-MIDAS on the qualified q1 parent"
+      },
+      {
+        "observation": "causally closed CMIX shadow midpoint oracle v3 is target-scale, causal, exact, repeatable, package-clean, and resource-clean at 10MB",
+        "successor": "materialize exactly one corrected midpoint persistence-attribution successor preserving 5*J_gain >= 4*F_gain; do not activate superseded attribution v2"
+      },
+      {
+        "observation": "corrected 10MB persistence attribution is exact and J retains at least 0.80 of positive v3 F archive gain",
+        "successor": "materialize one cmix_obias_safe_fork_midas64_q0_v2 candidate under gamma_safe_mix_v2 with byte-32 closure and byte-33 first effect"
+      },
+      {
+        "observation": "corrected 10MB persistence attribution is exact and J retention is below 0.80",
+        "successor": "run one functional-JVP persistence attribution; no compact persistent codec is authorized yet"
+      },
+      {
+        "observation": "functional JVP has preregistered rank-eight recovery at or above 0.90 with all chronological thirds positive",
+        "successor": "one deterministic FD-JVP rank-eight compactization"
+      },
+      {
+        "observation": "tied-gradient D beats R and S but is unstable under the frozen surprise criterion",
+        "successor": "one Curvature-MIDAS solver with no rank or damping sweep"
+      },
+      {
+        "observation": "D beats P but not R",
+        "successor": "retire gradient-alignment claim"
+      },
+      {
+        "observation": "D beats P and R but not S",
+        "successor": "retire causal-association claim"
+      },
+      {
+        "observation": "compression passes but memory fails",
+        "successor": "one memory-compilation candidate with no promotion"
+      },
+      {
+        "observation": "memory-safe CMIX parent cannot create useful headroom",
+        "successor": "shift the primary prize lane to the compact open NNCP student"
+      },
+      {
+        "observation": "NNCP primitives pass but integrated replay is absent",
+        "successor": "pause primitives and build the compact open student"
+      },
+      {
+        "observation": "open parent works but MIDAS does not transfer",
+        "successor": "retire that parent-adapter interface"
+      },
+      {
+        "observation": "WIKI-PDA absolute eight-bit ceiling is below 4,079,243 bytes or controls fail",
+        "successor": "retire WIKI-PDA before donor tracing and authorize at most one materially different orthogonal family"
+      },
+      {
+        "observation": "WIKI-PDA ceiling passes but donor-surprise value is subscale",
+        "successor": "retire the structural expert without native CMIX integration"
+      },
+      {
+        "observation": "WIKI-PDA donor-surprise value is target-bearing",
+        "successor": "authorize one native P/K/C/T/R/D/S implementation on the qualified q1 parent"
+      },
+      {
+        "observation": "WIKI-PDA native direct table is target-bearing but collision poisoning is the dominant measured loss",
+        "successor": "one PDA specialist context-tree-switching backoff candidate"
+      },
+      {
+        "observation": "raw causal specialist improves aggregate archive but harms a preregistered structural regime",
+        "successor": "one global or specialist SAFE-MIX v2 wrapper selected before replay"
+      },
+      {
+        "observation": "WIKI-PDA and one MIDAS realization independently pass distant finite-coder gates",
+        "successor": "one fresh joint PDA-conditioned SAFE-MIDAS replay; separate gains may not be added"
+      },
+      {
+        "observation": "SAFE-MIX beats the parent while neither treatment expert independently beats the parent",
+        "successor": "retain only after deterministic repeat and authorize one complementarity attribution"
+      },
+      {
+        "observation": "SAFE-MIX follows the parent without positive net archive value",
+        "successor": "retire the specialist package"
+      },
+      {
+        "observation": "CMIX adaptation, open NNCP/MIDAS, and WIKI-PDA are all terminal subscale",
+        "successor": "activate exactly one genuinely new decoder-visible information-source family, not another optimizer variant"
+      }
+    ],
+    "optimization_target": "functional truth-path and finite archive effect on the bytes actually affected after causal closure, not raw gradient magnitude or a falsely attributed byte-32 prediction",
+    "reusable_wrapper": "gamma_safe_mix_v2 is sealed campaign infrastructure and has zero compression authority before a fresh finite-coder archive",
+    "mechanism_ir": "Gamma Mechanism IR v3 may compile the new oracle IR only after corrected managed-lane ownership passes and the lease is absent; generated controls cannot authorize execution or promotion"
+  },
+  "activation_requirements": [
+    "Every route consumes terminal independently verified evidence.",
+    "Successor generation preserves population, package, and accounting boundaries unless explicitly versioned.",
+    "Changed probability trajectories require a fresh joint replay.",
+    "The exclusive full-1G lease and acquisition lock are absent before any substantial execution.",
+    "The v3 oracle remains dormant until q1 policy-v4 qualification is terminal positive."
+  ],
+  "claim_boundary": [
+    "Mutation authorization is not candidate promotion.",
+    "Separate savings are never added without a joint finite-coder replay.",
+    "SAFE-FORK is infrastructure and earns no novelty or score credit by checkpointing.",
+    "Correcting the causal boundary creates no archive evidence by itself."
+  ]
+}

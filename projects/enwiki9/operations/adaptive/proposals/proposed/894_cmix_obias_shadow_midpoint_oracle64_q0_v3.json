@@ -1,0 +1,70 @@
+{
+  "created_at": "2026-08-24T11:36:30+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_source_audit_q0_v1.json",
+      "sha256": "sha256:87c679f18a297d2ff9e97db2267e7627139863743ac92e3d8ab84d1625f416b8"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_supersession.json",
+      "sha256": "sha256:ae147c0e1e1820d825cf9a9a94879aedc580688be34aff8f40e8e506a957d194"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+      "sha256": "sha256:2f91139df7f3de8fcf05692078073b369c215a627156d74652841be5193514f0"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.mechanism-ir.json",
+      "sha256": "sha256:f53c22d83ed03c28ad5c7c0f41526879ee189e746224f214445b3338d4070de0"
+    },
+    {
+      "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v4.json",
+      "sha256": "sha256:c7554afad7b5dfc691293cf30138c037bbf550f0431391341adcc56cf4f877a3"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+    "sha256": "sha256:d7b7c3d90688eb67a7a340321419337af92892ea53f10abcbe96496c1c819001"
+  },
+  "hypothesis": "A causally closed, tape-isolated local-32 Byte-LSTM update can preserve exact P/K identity and produce target-scale finite-archive gain over both the qualified q1 parent and a frozen 16-event target-rotation control.",
+  "interfaces_exposed": [
+    "P/K/F/S finite-archive oracle with byte-32 causal closure, byte-33 first effect, native-tape isolation, and exact replay witnesses"
+  ],
+  "kill_condition": "Implementation, dependency, inverse, repeat, package, or resource failure yields no scientific verdict and at most one correction-only successor. Retire CMIX midpoint adaptation if a valid 1MB F gain is below 4,080 bytes, a valid 10MB F gain is below 40,793 bytes, or F does not strictly beat S.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "operational_status": "dormant_dependency",
+  "activation_requirements": [
+    {
+      "kind": "terminal_scientific_decision",
+      "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+      "decision_path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/12_qualification/decision.json",
+      "allowed_verdicts": [
+        "qualified"
+      ]
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 90,
+  "promotion_condition": "At 250KB, exact P/K identity, complete P/K/F/S roundtrips, deterministic repeats, strict F-over-P and F-over-S archive ordering, package closure, and resource compliance authorize only a separately bound 1MB calibration; a valid 1MB gain of at least 4,080 bytes authorizes only 10MB.",
+  "proposal_id": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "retired_neighborhoods": [
+    "Supersedes only the unexecuted underdetermined v2 realization; no optimizer, rank, scale, parameter subset, horizon, or predictor-family retry."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 105,
+  "state": "proposed",
+  "title": "Causally closed CMIX midpoint ceiling oracle"
+}
