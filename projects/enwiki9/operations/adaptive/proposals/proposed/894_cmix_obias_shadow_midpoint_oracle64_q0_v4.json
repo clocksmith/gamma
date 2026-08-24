@@ -1,0 +1,93 @@
+{
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "proposal_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+  "title": "Policy-bound causally closed CMIX midpoint ceiling oracle",
+  "hypothesis": "A causally closed, tape-isolated local-32 Byte-LSTM update can preserve exact P/K identity and produce target-scale finite-archive gain over both the qualified q1 parent and a frozen 16-event target-rotation control.",
+  "mechanism_class": "endpoint",
+  "parent": null,
+  "expected_savings_bytes": 0,
+  "max_program_bytes": 65536,
+  "promotion_condition": "At 250KB, a fresh-replayed v3 parent qualification, complete source and control closure, exact P/K identity, complete P/K/F/S roundtrips, deterministic repeats, strict F-over-P and F-over-S archive ordering, package closure, and resource compliance authorize only a separately bound 1MB calibration; a valid 1MB gain of at least 4,080 bytes authorizes only 10MB.",
+  "kill_condition": "Authority, implementation, dependency, inverse, repeat, package, or resource failure yields no scientific verdict and at most one correction-only successor. Retire CMIX midpoint adaptation if a valid 1MB F gain is below 4,080 bytes, a valid 10MB F gain is below 40,793 bytes, or F does not strictly beat S.",
+  "evidence": [
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_activation.json",
+      "sha256": "sha256:7c422c81f32686cdb04ceb254898b96f55bd2e7d5a8915418b27a91badaf1e8a"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.json",
+      "sha256": "sha256:2f91139df7f3de8fcf05692078073b369c215a627156d74652841be5193514f0"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v3.mechanism-ir.json",
+      "sha256": "sha256:f53c22d83ed03c28ad5c7c0f41526879ee189e746224f214445b3338d4070de0"
+    },
+    {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v2_source_audit_q0_v1.json",
+      "sha256": "sha256:87c679f18a297d2ff9e97db2267e7627139863743ac92e3d8ab84d1625f416b8"
+    },
+    {
+      "path": "operations/planning/cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v6.json",
+      "sha256": "sha256:133f22c6715a1e7037682c8848c86eb894117ef6c0c886720c87e6f4cf5e8d0e"
+    },
+    {
+      "path": "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v3.schema.json",
+      "sha256": "sha256:959dfd92662e6f78294c07a94fe270c31dcd5a345874890e8702b76064e876cd"
+    },
+    {
+      "path": "tools/cmix_memory_safe_parent_qualification_verify_v3.py",
+      "sha256": "sha256:917039ae33b6b59c5221468f83a46864f68f4e8d24b04d68719846c930db969f"
+    },
+    {
+      "path": "operations/planning/cmix_memory_safe_parent_qualification_v3_python_source_closure_q0_v1.json",
+      "sha256": "sha256:7a2851c2ee0786397d3e4c88df4da1ca16f49734ab4c2cf7fe12b86e2e128b48"
+    },
+    {
+      "path": "tools/enwiki9_lab.py",
+      "sha256": "sha256:4a09183cf6a5655a7de27f871874a716771b6f539238617fb0c6e1f51dda7e74"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v4.json",
+    "sha256": "sha256:03196a210101a5e6527a8d92d53a3d162a4ac2df7242a8aaf14872fea6f68943"
+  },
+  "priority": 90,
+  "state": "proposed",
+  "created_at": "2026-08-24T13:48:17+00:00",
+  "operational_status": "dormant_dependency",
+  "activation_requirements": [
+    {
+      "kind": "terminal_parent_qualification_v3",
+      "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+      "qualification_receipt_path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_v3/qualification-receipt.json",
+      "verification_path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_v3/verification.json",
+      "verification_schema_path": "contracts/research/v1/cmix-memory-safe-parent-qualification-verification-v3.schema.json",
+      "verification_schema_sha256": "959dfd92662e6f78294c07a94fe270c31dcd5a345874890e8702b76064e876cd",
+      "verifier_path": "tools/cmix_memory_safe_parent_qualification_verify_v3.py",
+      "verifier_sha256": "917039ae33b6b59c5221468f83a46864f68f4e8d24b04d68719846c930db969f",
+      "minimum_policy_revision": 7,
+      "expected_claim_authority": "memory_safe_external_parent_only"
+    }
+  ],
+  "activation_effect": "A passing activation authorizes only a new content-addressed source materialization and static closure gate from the sealed q1 parent; it grants no archive execution or scientific result by itself.",
+  "parent_proposal_id": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "supersedes": "cmix_obias_shadow_midpoint_oracle64_q0_v3",
+  "supersession_scope": "Qualification authority only; every v3 scientific and numeric semantic remains frozen.",
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "interfaces_exposed": [
+    "P/K/F/S finite-archive oracle with byte-32 causal closure, byte-33 first effect, native-tape isolation, exact replay witnesses, and policy-bound q1 parent authority"
+  ],
+  "retired_neighborhoods": [
+    "Supersedes only the unexecuted policy-v4-bound v3 authority route; no optimizer, rank, scale, parameter subset, horizon, predictor family, population, or threshold retry."
+  ],
+  "search_priority": 90
+}

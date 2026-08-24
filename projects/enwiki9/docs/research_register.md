@@ -1,5 +1,55 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - midpoint oracle rebound to exact q1 v3 authority
+
+The post-q1 CMIX midpoint route was not executable despite its corrected v3
+causal semantics. `cmix_obias_shadow_midpoint_oracle64_q0_v3` still required
+the policy-v4 q1 decision and v2 verification surface that policy v6 has
+mechanically revoked. The dormant persistence-attribution v2 compounded that
+defect by depending on both the revoked q1 route and the superseded midpoint
+oracle v2. Neither proposal had candidate source or archive evidence, so this
+is a prospective authority correction, not a reinterpretation of a run.
+
+The new
+`cmix_obias_shadow_midpoint_oracle64_q0_v4` proposal preserves the exact v3
+scientific mechanism: `P/K/F/S`, 64-event segmentation, closure only after
+decoded `x_(s+32)`, first adapted prediction `x_(s+33)`, detached local-32
+backward arithmetic, native-tape-isolated state replay, persistent donor-order
+updates in `F/S`, the 16-event target-rotation control, and the frozen 250KB,
+1MB, and 10MB gates. It changes only qualification authority. V3 is now
+superseded; persistence-attribution v2 is also superseded, with v3 reserved
+only after a valid target-scale causal oracle-v4 pass.
+
+The adaptive proposal activator now recognizes one new fail-closed dependency
+kind, `terminal_parent_qualification_v3`. Activation requires both canonical
+q1 v3 artifacts, the exact bound verification schema and verifier digests, a
+revision-7-or-later active policy, all positive verification and evidence
+checks, zero Gamma credit, and `memory_safe_external_parent_only` authority.
+It rehashes the authority policy and activated full-identity plan, then calls
+the exact v3 verifier again against the qualification router and absent
+canonical lease namespace. The stored verification must equal that fresh
+replay byte-for-byte as a JSON value; a narrative verdict cannot activate the
+proposal.
+
+Even after that dependency passes, activation authorizes only a new
+content-addressed source materialization from the sealed q1 tree. The midpoint
+implementation, Mechanism IR compilation, arm-difference manifest, synthetic
+phase and negative controls, two clean builds, package closure, and guarded
+finite-coder arms remain unproved and must be produced before scientific
+execution. The v4 contract is dormant, unexecuted, and worth zero archive,
+compression, package-score, or objective credit. Static schema, reference,
+source-closure, and rank derivations pass; the ranker returns `selected: null`.
+V4 names v3 as its direct proposal parent and is the exact successor in v3's
+`superseded_by` field, so a future receipt-backed activation can escape the
+inherited v3 block without reviving any other descendant.
+
+At this correction point, qm8 remains the sole substantial lane. Its Arm A
+encode is live at `23.02%` with a `30,375,959`-byte progress payload, the
+recorded maxima remain `8,978,032 KiB` single-process RSS and `8,998,152 KiB`
+process-tree RSS, and cgroup `max`, `oom`, and `oom_kill` events remain zero.
+No q1 full-corpus payload identity, inverse, terminal memory result, or parent
+qualification exists yet, and no new proof experiment was launched.
+
 ## 2026-08-24 - Named-gradient lineage removed from the actionable scheduler
 
 A read-only audit of the proposal selected after the q1 scheduler quarantine
