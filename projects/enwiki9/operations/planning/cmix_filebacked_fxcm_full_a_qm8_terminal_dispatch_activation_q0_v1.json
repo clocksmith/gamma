@@ -1,0 +1,122 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_activation_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json",
+      "required_evidence": "The canonical receipt exists, validates as the registered full-roundtrip schema, identifies q1 Arm A, contains a boolean terminal_pass, and retains every zero-credit authority field."
+    },
+    {
+      "artifact": "qm8 terminal closure",
+      "required_evidence": "Every available receipt-bound PID/start identity is dead; the native codec is additionally covered by the all-process command, scratch-cwd, and cgroup scan; the cgroup has no occupants; and the canonical full-1G acquisition lock is held through activation-receipt publication."
+    },
+    {
+      "artifact": "success and failure dormant plan templates",
+      "required_evidence": "Both plans retain their exact reviewed revision-1 SHA-256 values and validate against the frozen campaign static-contract schema."
+    }
+  ],
+  "contract": {
+    "candidate_id": "cmix_filebacked_fxcm_full_a_qm8_v1",
+    "evidence_class": "terminal_verification_branch_activation_infrastructure",
+    "dispatcher": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_activate.py",
+      "bytes": 22597,
+      "sha256": "59ed7c470148168de84470a4a2cb9b28771fdde3e78e57e18ea84b538e79169f"
+    },
+    "closure_helper": {
+      "path": "tools/cmix_filebacked_fxcm_qm8_terminal_closure.py",
+      "bytes": 37695,
+      "sha256": "0768f56d8574c709e63d45f23f190ee694e149183d4ac71dde84f0bd80744154"
+    },
+    "plan_schema": {
+      "path": "operations/planning/campaign-static-contract.schema.json",
+      "bytes": 1887,
+      "sha256": "6b6600c4e53c214133c80628ff41fef6fa6861b9f86958ac6f87369a56256f64"
+    },
+    "roundtrip_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-full-roundtrip.schema.json",
+      "bytes": 16848,
+      "sha256": "8d08362011f8c83a3891d4e2937f16869f645a69a37bf4260ef962c05c7701de"
+    },
+    "intent_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-intent.schema.json",
+      "bytes": 5509,
+      "sha256": "fd9e30010cf993db65318133499899b04000df627512a336dab893a8662713a6"
+    },
+    "activation_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-activation.schema.json",
+      "bytes": 5072,
+      "sha256": "75bbe30f13a07191894357da9262da8854974e4661bf0668e0aac94422c38528"
+    },
+    "research_contracts": {
+      "path": "tools/research_contracts.py",
+      "bytes": 128519,
+      "sha256": "744d3cc2cf5433c86251194ec1421256f1d6b745fdc012ec2ec6fb982df1fa5b"
+    },
+    "python_runtime": {
+      "path": "/usr/bin/python3.14",
+      "bytes": 7481192,
+      "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+    },
+    "dormant_plans": {
+      "success": {
+        "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_soft_high_verification_v1.json",
+        "bytes": 8777,
+        "sha256": "dfd11217037b8f5df421a6ef776dee90b39ddb5f2e543c279418846da45ba5f8"
+      },
+      "failure": {
+        "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_failure_verification_v1.json",
+        "bytes": 8422,
+        "sha256": "2a4cb99a02962b73e215b762ca3d3cea109911c08cd569888b8382431808d5d8"
+      }
+    },
+    "branch_rule": {
+      "terminal_pass_true": "Activate only the success plan.",
+      "terminal_pass_false": "Activate only the failure plan.",
+      "non_boolean_or_missing": "Reject without changing either plan."
+    },
+    "only_allowed_semantic_changes": [
+      "revision: 1 -> 2",
+      "contract.activation.status: waiting branch -> activated branch",
+      "contract.activation.execution_authorized: false -> true",
+      "contract.activation.terminal_receipt_sha256: null -> exact receipt SHA-256"
+    ],
+    "publication_rule": "Retain one descriptor-bound terminal receipt; acquire exact-owned planning and canonical full-1G no-follow locks; prove receipt-bound PID/start, command, cwd, cgroup, lease, and occupant closure; recheck both verifier outputs; durably publish the activation intent; exchange the selected plan with renameat2(RENAME_EXCHANGE); retain and bind the displaced dormant inode; reconstruct the dormant JSON from the activated plan to prove exactly four changed fields; recheck outputs; publish the activation receipt; then remove both locks only under exact inode and payload ownership.",
+    "recovery_rule": "Any failure after the intent is durable preserves both locks and the intent. If exchange occurred, the exact displaced dormant inode remains at the deterministic recovery path rather than being deleted. This blocks another full-1G owner and supplies reconstructive evidence for an explicit recovery transaction; no success event is printed.",
+    "non_selected_branch_rule": "The non-selected plan remains byte-identical at revision 1. The intent, activation receipt, displaced-dormant recovery path, and both canonical verifier outputs must all be absent before first activation and outputs are checked again under both locks.",
+    "command": [
+      "/usr/bin/python3.14",
+      "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_activate.py",
+      "--receipt",
+      "results/cmix_filebacked_fxcm_full_a_qm8_v1/full-roundtrip-receipt.json"
+    ],
+    "promotion_condition": "Activation authorizes only execution of the selected independent terminal verifier under that verifier's own preflight. A passing success verification is still required before an independent Arm B plan may be frozen.",
+    "kill_condition": "Any receipt descriptor/path/hash drift, live recorded identity, matching process, cgroup occupant, live or foreign lease, occupied output or lock, source-binding drift, undeclared semantic difference, exchange-witness mismatch, schema failure, or publication race rejects or preserves the recovery locks without verifier or Arm-B authority.",
+    "execution_authority": false,
+    "verifier_execution_authority": false,
+    "arm_b_authority": false,
+    "memory_safe_parent_qualification_authority": false,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Do not run while qm8 is live; the canonical terminal receipt does not yet exist.",
+    "Run only the exact frozen command after the adaptive owner, coordinator, both guards, stage runner, and native codec have exited and the canonical full-1G lock path is absent.",
+    "If an activation intent or owned lock remains without a terminal activation receipt, stop and execute an explicit receipt-bound recovery audit; never delete or overwrite it ad hoc.",
+    "Inspect and commit the activated revision-2 plan before invoking its frozen verifier command.",
+    "Do not freeze or launch Arm B unless the success branch was selected and its independent verification receipt has verification_pass=true."
+  ],
+  "claim_boundary": [
+    "This artifact closes a manual authorization gap; it is not a qm8 measurement.",
+    "The dispatcher has not been executed and no plan is activated while qm8 remains live.",
+    "A future activation does not itself verify payload identity, inverse correctness, resource compliance, cleanup, determinism, runtime, q1 qualification, compression gain, or Hutter score."
+  ]
+}

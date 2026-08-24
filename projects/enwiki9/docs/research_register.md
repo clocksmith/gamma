@@ -637,36 +637,58 @@ and disk-wait states under a one-CPU guard. This is continued pressure evidence
 only: payload identity, inverse, cleanup, runtime, and q1 qualification remain
 unknown until the terminal receipt and the matching independent verifier exist.
 
-### qm8 terminal dispatch is fail-closed on both receipt classes
+### qm8 terminal dispatch now has an independently closed authority boundary
 
-A static success/failure dispatch comparison found that the dormant failure
-verifier did not enforce its terminal class at the preflight boundary. The
-success verifier already loaded the receipt and rejected a non-q1 candidate,
-non-A arm, `terminal_pass` other than true, or any remaining qm8 process before
-entering its caught verification body. The failure verifier checked its plan
-and receipt hash in preflight, but left `terminal_pass=false` and qm8 process
-closure as ordinary booleans inside `verify()`.
+The first receipt-to-verifier dispatcher draft was rejected before execution.
+Its process scan excluded ancestors and could miss an orphan native `./cmix`;
+branch and digest evidence came from separate receipt reads; its planning lock
+did not reserve the canonical full-1G namespace; and it supplied neither a
+durable intent nor a reconstructive predecessor after plan publication. A
+second audit also found that the verifiers trusted too little of the dispatch
+chain and wrote their canonical outputs before releasing the full-1G lock.
 
-That difference was operationally significant. `main()` catches verification
-exceptions and also accepts false evidence as a nonpassing verification
-object, then creates the one canonical failure-verification output with
-`O_EXCL`. A wrong-branch activation or invocation during the coordinator's
-terminal-cleanup interval could therefore consume the canonical output path
-without producing a valid failure classification.
+The corrected shared closure keeps one no-follow terminal-receipt descriptor
+from schema validation through branch selection and verifier output. Verifiers
+consume that parsed value rather than rereading the receipt pathname. It checks
+every available recorded PID/start identity and scans all processes for the
+candidate, result, scratch, and cgroup tokens, scratch cwd, and cgroup
+membership. Only a shell-launcher ancestor whose sole match is its embedded
+command is ignored. Native codec closure therefore does not depend on the
+terminal lease recording an optional codec PID.
 
-The correction changes only terminal-dispatch preflight. The failure verifier
-now requires the exact full-roundtrip schema, q1 candidate, Arm A,
-`terminal_pass=false`, and no remaining qm8 process before any caught body or
-output write is reachable. Its corrected source is
-`78c1c967...f02f`; the dormant plan binds that exact source at
-`dc18deed...7be1`. Classification order, single-successor routing, schemas,
-zero-credit authority, and the future receipt-hash-bound revision-2 activation
-remain unchanged. The static audit is preserved in
-`operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_audit_q0_v1.json`.
+The dispatcher now holds both an exact planning lock and the canonical
+full-1G acquisition lock. It checks both verifier outputs before locking,
+after both locks, and before activation-receipt publication. One durable intent
+binds the descriptor-witnessed receipt, both branch templates, both locks, and
+the pre-publication closure. `RENAME_EXCHANGE` changes only the selected plan
+and retains the exact displaced dormant inode at a deterministic recovery
+path. Independent verification reverses `revision`, activation status,
+execution authority, and terminal-receipt SHA-256 from the activated JSON and
+requires the exact frozen dormant bytes and digest. The non-selected plan must
+remain identical.
 
-No verifier, Arm B, codec, or new proof workload ran. Arm B remains causally
-blocked until qm8 produces a terminal passing receipt and the independently
-activated success verifier passes.
+Canonical verifier authority is also ordered correctly. Each verifier prepares
+and fsyncs its complete schema-valid receipt while holding the full-1G lock,
+releases that lock, and only then publishes the canonical pathname with
+`RENAME_NOREPLACE`. A release failure cannot leave a passing receipt that could
+authorize Arm B. Both verifier paths require the exact frozen Python runtime
+and argv. The dispatcher itself imports no subprocess or signal facility and
+cannot execute a verifier or Arm B.
+
+Static AST, schema-meta, plan-schema, serialization, recursive binding, branch
+hash, and diff checks pass. The independent audit found no remaining route to
+premature verification or Arm-B authority. Two non-authority gaps remain:
+post-intent recovery is reconstructive and fail-closed but not yet automated,
+and three directly validated receipt schemas are not yet in the shared
+`research_contracts.py` registry because that module is part of the live qm8
+closure.
+
+No dispatcher, verifier, recovery path, test, Arm B, or new proof workload ran.
+At the frozen review snapshot qm8 Arm A was still encoding at `25.64%`; peak
+process-tree RSS was `8,998,152 KiB`, cgroup peak was `9,002,086,400` bytes,
+and max, OOM, and OOM-kill events remained zero. No live process, candidate,
+lease, cgroup, result tree, or scratch tree was modified or signaled. The
+corrected audit and review remain zero-credit infrastructure evidence.
 
 ### q1 qualification authority is artifact-derived, not self-reported
 
