@@ -1,0 +1,156 @@
+{
+  "schema": "gamma.enwiki9.cmix-obias-midpoint-source-materialization-contract.v1",
+  "artifact_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4_source_materialization_q0_v1",
+  "generated_utc": "2026-08-24T15:36:00Z",
+  "candidate_id": "cmix_obias_shadow_midpoint_oracle64_q0_v4",
+  "parent_candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "operational_status": "dormant_activation_gated_source_only",
+  "proposal_pre_activation_semantic_sha256": "e1d4c756ff39cbb81b30100b0c0e108a5b4e99fae9a57d960f87ace9b0d7aa7e",
+  "output": {
+    "root": "results/cmix_obias_shadow_midpoint_oracle64_q0_v4_source_materialization_q0_v1",
+    "candidate_source": "source/candidate-tree",
+    "difference_manifest": "source/source-difference-manifest.json",
+    "materialization_receipt": "source/materialization-receipt.json",
+    "existing_output_policy": "fail_before_write",
+    "publish_method": "renameat2_noreplace_under_exclusive_sibling_lock"
+  },
+  "bindings": {
+    "materializer": {
+      "path": "tools/cmix_obias_shadow_midpoint_oracle64_q0_v4_materialize.py",
+      "bytes": 41924,
+      "sha256": "cde37e69fe16c824304561ba48c247fbbe990c06333d212f6970f40bbc99c447"
+    },
+    "activation_route": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_activation.json",
+      "bytes": 6441,
+      "sha256": "7c422c81f32686cdb04ceb254898b96f55bd2e7d5a8915418b27a91badaf1e8a"
+    },
+    "review_overlay": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_source_overlay_q0_v1.json",
+      "bytes": 9629,
+      "sha256": "c78e26aff24800bf00cd6cd40eeb46855a45de869155678029bdaa6565de607c"
+    },
+    "review_overlay_verification": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_source_overlay_verification_q0_v1.json",
+      "bytes": 3133,
+      "sha256": "38a17a757c2cf48f7574c5162cf0ebaec0cb2c3b6ffb7dc3afc019ac0229757f"
+    },
+    "review_overlay_verifier": {
+      "path": "tools/cmix_obias_shadow_midpoint_oracle64_q0_v4_overlay_verify.py",
+      "bytes": 11484,
+      "sha256": "93a6a5968c65880804f9e38cbf04ff43ff4fe9e8e1361159d6fc9a9aded46063"
+    },
+    "evidence_contract": {
+      "path": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v4_evidence_contract_q0_v1.json",
+      "bytes": 10772,
+      "sha256": "3db8410aa7827b9facc165672846c864496f268f3ff717a8faa52579029c19a2"
+    },
+    "parent_source_closure": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source-closure.json",
+      "bytes": 22333,
+      "sha256": "f6672565e9bce60484a74477fdf69b85f74c4e07b02edb9bdaf5ed758551a8fc"
+    },
+    "parent_source_materialization": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source-materialization.json",
+      "bytes": 25567,
+      "sha256": "97f35b6ef80d5f91900c461ebba85471103d8dc2e75dd2e69bfc212c2db837f6"
+    },
+    "parent_program_lock_verification": {
+      "path": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json",
+      "bytes": 535,
+      "sha256": "fe30381b9c6cd4465dfafc31d7917caecd2996f6dc7b6ee362817922dc6fa149"
+    },
+    "parent_source_closure_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-source-closure.schema.json",
+      "bytes": 1211,
+      "sha256": "d1248d56f7215b6076417e6310ab4e3fdca4a784f663876c28a1b486baf2bbb4"
+    },
+    "parent_source_materialization_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-source-materialization.schema.json",
+      "bytes": 3048,
+      "sha256": "516aa19af5af92a5b3cad601d4be3895a740ebe05a4dd2c437a8c13de3334160"
+    },
+    "parent_program_lock_verification_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-program-lock-verification.schema.json",
+      "bytes": 1456,
+      "sha256": "9cccd0c60f525ce9090eeef886789c5191d10bb2cb98859e3482a22169abf9b1"
+    },
+    "difference_schema": {
+      "path": "contracts/research/v1/cmix-obias-midpoint-source-difference-v1.schema.json",
+      "bytes": 4345,
+      "sha256": "df51fbfec3f4b5a958b9d6efc5074ccc2ca7394e9ae1253653aeceaea5d12f2d"
+    },
+    "receipt_schema": {
+      "path": "contracts/research/v1/cmix-obias-midpoint-source-materialization-receipt-v1.schema.json",
+      "bytes": 5079,
+      "sha256": "cf3521a289bb2fe543f5f15b2ee21bcb3d80e8e80f4141413f4c34b3d710ee7e"
+    }
+  },
+  "activation_gate": {
+    "all_required_before_any_output": true,
+    "requirements": [
+      "The unique v4 proposal remains semantically equal to its dormant contract except for exact activator-owned fields and, if subsequently claimed, owner/state/claimed_at fields; it has operational_status=actionable.",
+      "activation_evidence is exactly the canonical q1-v3 qualification receipt and verification pair.",
+      "verified_activation_requirements equals a new exact v3 verifier replay against the active revision-7-or-later policy.",
+      "The stored q1 verification is schema-valid, qualified, all-positive, zero-credit, and grants only memory_safe_external_parent_only authority.",
+      "The canonical full-1G lease and its lock are absent."
+    ],
+    "current_state": "unsatisfied_while_qm8_is_live_and_q1_v3_receipts_do_not_exist"
+  },
+  "parent_gate": {
+    "source_root": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source",
+    "declared_files": 119,
+    "requirements": [
+      "The source-closure entries exactly equal the original materialization files.",
+      "Every declared file is a single-link regular file with exact bytes, digest, and role; no extra file or symlink exists.",
+      "The source-root device/inode/path identity still equals both sealed receipts.",
+      "The program-lock verification retains its exact digest, every positive check, source_implementation_only authority, and execution_authority=false."
+    ]
+  },
+  "write_allowlist": {
+    "modified": [
+      "makefile",
+      "src/mixer/lstm-layer.h",
+      "src/mixer/lstm-layer.hpp",
+      "src/mixer/lstm.h",
+      "src/mixer/lstm.hpp"
+    ],
+    "added": [
+      "src/mixer/lstm-layer-midpoint-decls.inc",
+      "src/mixer/lstm-layer-midpoint.hpp",
+      "src/mixer/lstm-midpoint-decls.inc",
+      "src/mixer/lstm-midpoint.hpp"
+    ],
+    "removed": []
+  },
+  "materialization_algorithm": [
+    "Validate every authority, source, overlay, schema, output, lock, and lease input before creating output.",
+    "After the successful replay, acquire the canonical lease namespace lock, recheck that no lease appeared, acquire a new exclusive output sibling lock, create one owned temporary sibling directory, and copy all 119 parent files with no-follow exclusive file descriptors.",
+    "Copy the four exact overlay files and prove the complete 123-file pre-patch closure before applying the integration patch.",
+    "Apply the patch with /usr/bin/git apply --whitespace=error-all and compute a complete post-patch closure.",
+    "Require exactly five modified paths, four added paths, zero removed paths, and 114 byte-identical parent paths.",
+    "Schema-validate the complete source-difference manifest and source-only receipt, fsync the owned tree, and publish with renameat2(RENAME_NOREPLACE).",
+    "Remove only the exact owned temporary tree and exact inode-bound sibling lock on failure or completion."
+  ],
+  "post_materialization_state": {
+    "candidate_files": 123,
+    "build_exists": false,
+    "archive_observed": false,
+    "execution_authority": false,
+    "archive_authority": false,
+    "scientific_verdict": null,
+    "gamma_compression_credit_bytes": 0,
+    "gamma_score_credit_bytes": 0,
+    "next_gate": "separately_authorized_static source closure, Mechanism IR compilation, and C++ build evidence"
+  },
+  "claim_boundary": [
+    "This contract and its materializer source do not activate the proposal and are not executed while qm8 owns the lane.",
+    "No candidate source tree exists until all future activation predicates pass in one invocation.",
+    "A materialization receipt would prove source identity and a bounded delta only; it would not prove compilation, synchronization, compression gain, inversion, runtime, memory, or package eligibility.",
+    "The materializer, receipt schemas, and planning records are future package inputs whose compressed counted cost remains unmeasured."
+  ],
+  "execution_authority": false,
+  "archive_authority": false,
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
+}
