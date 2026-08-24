@@ -90,12 +90,60 @@ V4 names v3 as its direct proposal parent and is the exact successor in v3's
 `superseded_by` field, so a future receipt-backed activation can escape the
 inherited v3 block without reviving any other descendant.
 
-At this correction point, qm8 remains the sole substantial lane. Its Arm A
-encode is live at `23.02%` with a `30,375,959`-byte progress payload, the
-recorded maxima remain `8,978,032 KiB` single-process RSS and `8,998,152 KiB`
-process-tree RSS, and cgroup `max`, `oom`, and `oom_kill` events remain zero.
+The next source-only boundary is now frozen without crossing that activation
+gate. `cmix_obias_shadow_midpoint_oracle64_q0_v4_materialize.py` names one
+canonical output and accepts no caller-selected source or destination. Before
+creating a lock or temporary tree it must reopen the actionable proposal,
+require exactly the two canonical q1-v3 activation artifacts, reproduce the
+activator's single verified requirement through the bound v3 verifier, require
+the full-1G lease namespace absent, reserve its lock against a new run, and
+revalidate the sealed 119-file q1 source and program lock. It then copies every
+parent file, adds the four
+reviewed midpoint files, proves the complete 123-file pre-patch closure,
+applies the bound patch, and permits only five modified files, four additions,
+zero removals, and 114 byte-identical parent files. The complete difference
+and materialization receipts are bound to two new Draft 2020-12 schemas and
+publish only through `renameat2(RENAME_NOREPLACE)` under an inode-owned sibling
+lock.
+
+The proposal may remain in `proposed` after activation or undergo the normal
+single `claim` transition. The materializer normalizes only the exact
+owner/state/claimed-at fields added by that transition before comparing the
+original semantic digest; any other proposal mutation fails closed.
+
+This materializer has not been invoked. Its AST, two schemas, and fourteen
+planning bindings pass read-only checks, but the proposal is still dormant,
+the q1-v3 qualification artifacts do not exist, the qm8 lease exists, and the
+canonical output is absent. Therefore these artifacts prove only that a
+fail-closed post-qualification source route is reviewable. No candidate tree,
+build, fixture, codec arm, archive, scientific verdict, or Gamma byte credit
+exists.
+
+An independent adversarial audit correctly found that the legacy
+`cmix_memory_safe_parent_qualification_verify.py` v1 surface trusts supplied
+full-stream hashes and a supplied persistent-state boolean. That surface is
+already revoked and is not the v4 dependency. The current v3 route reopens the
+zero-authority v2 evidence verifier; v2 reruns the full-identity verifier over
+the raw probability, coder, and state manifests and separately reruns the
+Geekbench-bound runtime verifier. V3 then requires the exact activated
+phase-11 plan and active policy. No authority rewrite is therefore warranted.
+The remaining proof boundary stays explicit: probability identity covers every
+modeled bit, persistent-state identity covers seven frozen checkpoints, and
+runtime remains an unmet independent qualification artifact until measured.
+
+At the authority-correction point, qm8 remained the sole substantial lane. Its
+Arm A encode was live at `23.02%` with a `30,375,959`-byte progress payload;
+the recorded maxima were `8,978,032 KiB` single-process RSS and
+`8,998,152 KiB` process-tree RSS, and cgroup `max`, `oom`, and `oom_kill`
+events remained zero.
 No q1 full-corpus payload identity, inverse, terminal memory result, or parent
 qualification exists yet, and no new proof experiment was launched.
+
+During the later source-materializer review, the same untouched qm8 Arm A
+encode advanced to `24.39%`. Its guard remained `running`; peak sampled tree
+RSS was still `8,998,152 KiB`, peak cgroup memory was `9,002,086,400` bytes,
+and cgroup `max`, `oom`, and `oom_kill` deltas were still zero. No encode-stage
+or full-roundtrip receipt existed, so this observation changes no q1 authority.
 
 ## 2026-08-24 - Named-gradient lineage removed from the actionable scheduler
 
