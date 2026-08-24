@@ -8,7 +8,7 @@
     "$schema", "planning_schema_sha256", "artifact_id", "revision",
     "operational_status", "candidate_id", "authoritative_parent", "purpose",
     "execution_authorized", "freeze_authorized", "proof_artifacts",
-    "implementation", "activation_dependencies", "audit_findings",
+    "activation_evidence", "implementation", "activation_dependencies", "audit_findings",
     "observer_contract", "persistent_state_contract", "calibration_population",
     "controls", "resource_boundary", "execution_order", "terminal_pass",
     "terminal_identity_failure", "terminal_observer_failure", "claim_boundary",
@@ -18,12 +18,17 @@
     "$schema": {"const": "cmix-filebacked-fxcm-full-probability-state-plan.schema.json"},
     "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
     "artifact_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
-    "revision": {"type": "integer", "minimum": 3},
-    "operational_status": {"const": "observer_source_arm_coordinator_and_independent_verifier_sealed_waiting_for_qm8_b_and_opening_100m_terminalization"},
+    "revision": {"type": "integer", "minimum": 6},
+    "operational_status": {
+      "enum": [
+        "dormant_owned_lane_closure_waiting_for_qm8_b_opening_100m_and_manager_verification",
+        "activated_owned_lane_after_all_dependencies"
+      ]
+    },
     "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
     "authoritative_parent": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
     "purpose": {"type": "string", "minLength": 1},
-    "execution_authorized": {"const": false},
+    "execution_authorized": {"type": "boolean"},
     "freeze_authorized": {"const": true},
     "proof_artifacts": {
       "type": "object", "additionalProperties": false,
@@ -35,6 +40,15 @@
         "verifier": {"$ref": "#/$defs/artifact"}
       }
     },
+    "activation_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["managed_lease_verification"],
+      "properties": {
+        "managed_lease_verification": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]
+        }
+      }
+    },
     "implementation": {
       "type": "object", "additionalProperties": false,
       "required": [
@@ -42,7 +56,9 @@
         "verification_schema", "resource_guard", "shared_observer_header",
         "python_source_closure",
         "opening_100m_plan", "observer_build_runner",
-        "observer_calibration_runner", "observer_calibration_verifier"
+        "observer_calibration_runner", "observer_calibration_verifier",
+        "owned_lease_manager", "managed_lease_verifier",
+        "owned_lease_verification_schema"
       ],
       "properties": {
         "coordinator": {"$ref": "#/$defs/artifact"},
@@ -57,7 +73,10 @@
         "opening_100m_plan": {"$ref": "#/$defs/artifact"},
         "observer_build_runner": {"$ref": "#/$defs/artifact"},
         "observer_calibration_runner": {"$ref": "#/$defs/artifact"},
-        "observer_calibration_verifier": {"$ref": "#/$defs/artifact"}
+        "observer_calibration_verifier": {"$ref": "#/$defs/artifact"},
+        "owned_lease_manager": {"$ref": "#/$defs/artifact"},
+        "managed_lease_verifier": {"$ref": "#/$defs/artifact"},
+        "owned_lease_verification_schema": {"$ref": "#/$defs/artifact"}
       }
     },
     "activation_dependencies": {"$ref": "#/$defs/stringArray"},
@@ -98,6 +117,30 @@
     "gamma_compression_credit_bytes": {"const": 0},
     "gamma_score_credit_bytes": {"const": 0}
   },
+  "allOf": [
+    {
+      "if": {"properties": {"execution_authorized": {"const": true}}},
+      "then": {
+        "properties": {
+          "revision": {"minimum": 7},
+          "operational_status": {"const": "activated_owned_lane_after_all_dependencies"},
+          "activation_evidence": {
+            "properties": {
+              "managed_lease_verification": {"$ref": "#/$defs/artifact"}
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "operational_status": {"const": "dormant_owned_lane_closure_waiting_for_qm8_b_opening_100m_and_manager_verification"},
+          "activation_evidence": {
+            "properties": {"managed_lease_verification": {"type": "null"}}
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "artifact": {

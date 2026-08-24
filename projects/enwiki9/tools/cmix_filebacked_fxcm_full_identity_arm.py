@@ -16,7 +16,6 @@ from typing import Any
 
 import jsonschema
 
-import cmix_filebacked_fxcm_100m_identity_resource_verify as proof
 import cmix_filebacked_fxcm_100m_observer_calibrate as calibration
 import cmix_filebacked_fxcm_scope_identity as scope
 
@@ -24,6 +23,7 @@ import cmix_filebacked_fxcm_scope_identity as scope
 SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1"
 BUILD_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+LEASE_CANDIDATE_ID = "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"
 CANONICAL_BYTES = 1_000_000_000
 CANONICAL_SHA256 = "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
 FIXED_MODELED_CHECKPOINTS = (
@@ -68,6 +68,68 @@ def valid_sha256(value: Any) -> bool:
     except ValueError:
         return False
     return True
+
+
+def proc_identity(pid: int) -> tuple[int, int]:
+    raw = Path(f"/proc/{pid}/stat").read_text(encoding="ascii")
+    close = raw.rfind(")")
+    if close < 0:
+        raise RuntimeError(f"malformed /proc/{pid}/stat")
+    fields = raw[close + 2 :].split()
+    if len(fields) <= 19:
+        raise RuntimeError(f"short /proc/{pid}/stat")
+    return int(fields[1]), int(fields[19])
+
+
+def is_descendant(pid: int, ancestor_pid: int) -> bool:
+    seen: set[int] = set()
+    cursor = pid
+    while cursor > 1 and cursor not in seen:
+        if cursor == ancestor_pid:
+            return True
+        seen.add(cursor)
+        cursor, _ = proc_identity(cursor)
+    return cursor == ancestor_pid
+
+
+def require_owned_lease(
+    *,
+    path: Path,
+    lease_id: str,
+    owner_pid: int,
+    owner_start_ticks: int,
+    result_root: Path,
+    scratch_root: Path,
+) -> dict[str, Any]:
+    lease_path, lease = scope.load_json(path, "coordinator-owned full identity lease")
+    lock_path = lease_path.with_name(f"{lease_path.name}.lock")
+    lock_stat = lock_path.lstat()
+    _, observed_start = proc_identity(owner_pid)
+    if (
+        lease.get("schema") != "gamma.enwiki9.exclusive-full1g-lease.v1"
+        or lease.get("candidate_id") != LEASE_CANDIDATE_ID
+        or lease.get("lease_id") != lease_id
+        or lease.get("pid") != owner_pid
+        or lease.get("proc_start_ticks") != owner_start_ticks
+        or observed_start != owner_start_ticks
+        or lease.get("result_path") != str(result_root)
+        or lease.get("scratch_path") != str(scratch_root)
+        or lease.get("signal_authority") is not False
+        or lock_path.is_symlink()
+        or not lock_path.is_file()
+        or lock_stat.st_nlink != 1
+        or not is_descendant(os.getpid(), owner_pid)
+    ):
+        raise RuntimeError("full identity arm does not descend from the exact lease owner")
+    return {
+        "candidate_id": lease["candidate_id"],
+        "lease_id": lease["lease_id"],
+        "owner_pid": lease["pid"],
+        "owner_start_ticks": lease["proc_start_ticks"],
+        "result_path": lease["result_path"],
+        "scratch_path": lease["scratch_path"],
+        "signal_authority": lease["signal_authority"],
+    }
 
 
 def parse_observer_outputs(observer_root: Path) -> dict[str, Any]:
@@ -278,13 +340,27 @@ def main() -> int:
     parser.add_argument("--observer-build-schema", type=Path, required=True)
     parser.add_argument("--resource-guard", type=Path, required=True)
     parser.add_argument("--exclusive-lease", type=Path, required=True)
+    parser.add_argument("--lease-id", required=True)
+    parser.add_argument("--lease-owner-pid", type=int, required=True)
+    parser.add_argument("--lease-owner-start-ticks", type=int, required=True)
+    parser.add_argument("--lease-result-root", type=Path, required=True)
+    parser.add_argument("--lease-scratch-root", type=Path, required=True)
     parser.add_argument("--receipt-schema", type=Path, required=True)
     parser.add_argument("--result-root", type=Path, required=True)
     parser.add_argument("--scratch-root", type=Path, required=True)
     parser.add_argument("--cpu", type=int, required=True)
     args = parser.parse_args()
 
-    proof.require_released_lease(args.exclusive_lease)
+    lease_result_root = args.lease_result_root.resolve(strict=True)
+    lease_scratch_root = args.lease_scratch_root.resolve(strict=True)
+    lease_witness = require_owned_lease(
+        path=args.exclusive_lease,
+        lease_id=args.lease_id,
+        owner_pid=args.lease_owner_pid,
+        owner_start_ticks=args.lease_owner_start_ticks,
+        result_root=lease_result_root,
+        scratch_root=lease_scratch_root,
+    )
     corpus = scope.existing_regular(args.corpus, "canonical full corpus")
     if corpus.stat().st_size != CANONICAL_BYTES or scope.sha256_file(corpus) != CANONICAL_SHA256:
         raise RuntimeError("canonical full corpus identity mismatch")
@@ -307,6 +383,13 @@ def main() -> int:
         raise RuntimeError("selected CPU is outside full-arm affinity")
     result_root, _ = scope.absent_root(args.result_root, "full-arm result root")
     scratch_root, _ = scope.absent_root(args.scratch_root, "full-arm scratch root")
+    if (
+        result_root.parent != lease_result_root
+        or scratch_root.parent != lease_scratch_root
+        or result_root.name != args.role
+        or scratch_root.name != args.role
+    ):
+        raise RuntimeError("full-arm roots are outside the coordinator-owned lease roots")
     if (
         result_root == scratch_root
         or result_root in scratch_root.parents
@@ -402,6 +485,7 @@ def main() -> int:
         "probability_sha256": observed["probability_sha256"],
         "coder_checkpoints": observed["coder_checkpoints"],
         "state_checkpoints": observed["state_checkpoints"],
+        "exclusive_lease_witness": lease_witness,
         "payload": artifact(payload),
         "self_extracting_archive": artifact(archive),
         "observer_outputs": {

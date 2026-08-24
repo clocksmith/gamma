@@ -19,7 +19,7 @@
     "derived": {
       "type": "object", "additionalProperties": false,
       "required": [
-        "activation_pass", "calibration_pass", "probability_identity_pass",
+        "activation_pass", "calibration_pass", "exclusive_lane_pass", "probability_identity_pass",
         "coder_checkpoint_identity_pass", "state_checkpoint_identity_pass",
         "modeled_stream_identity_pass", "payload_identity_pass",
         "controls_pass", "full_identity_pass"
@@ -27,6 +27,7 @@
       "properties": {
         "activation_pass": {"type": "boolean"},
         "calibration_pass": {"type": "boolean"},
+        "exclusive_lane_pass": {"type": "boolean"},
         "probability_identity_pass": {"type": "boolean"},
         "coder_checkpoint_identity_pass": {"type": "boolean"},
         "state_checkpoint_identity_pass": {"type": "boolean"},
@@ -48,6 +49,7 @@
       "derived": {"properties": {
         "activation_pass": {"const": true},
         "calibration_pass": {"const": true},
+        "exclusive_lane_pass": {"const": true},
         "probability_identity_pass": {"const": true},
         "coder_checkpoint_identity_pass": {"const": true},
         "state_checkpoint_identity_pass": {"const": true},

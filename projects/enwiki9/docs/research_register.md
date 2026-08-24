@@ -586,7 +586,7 @@ records: start, five fixed points, and a terminal point required to equal the
 bound transformed-stream artifact. This is the same calibrated binary, so no
 second observer build or compiler-equivalence assumption is needed.
 
-The opening-100M harness now has its own exact 150-member transitive Python
+The opening-100M harness now has its own exact transitive Python
 and research-schema closure rooted at its coordinator, identity arm,
 independent verifier, release stage, observer build, calibration runner, and
 calibration verifier. This is deliberately separate from the retained q1
@@ -601,8 +601,9 @@ same ordered closure.
 The full arm runner, sequential parent/q1 coordinator, strict plan schema, arm
 and joint schemas, and independent verifier are now source-complete and
 content-addressed. Each arm is single-CPU, owns disjoint result, scratch, and
-backing roots, refuses an active full-1G lease, retains its transformed stream
-and raw observer manifests, and is bounded by an `11,500,000 KiB` diagnostic
+backing roots, requires descent from the coordinator's exact owned full-1G
+lease, retains its transformed stream and raw observer manifests, and is
+bounded by an `11,500,000 KiB` diagnostic
 guard. That higher guard is deliberately non-authoritative: the external parent
 is already known to violate prize memory, and hashing semantic ranges faults
 pages. qm8 A/B remain the only resource authority.
@@ -616,7 +617,7 @@ remains disabled until qm8 A, an independent B, observer calibration, and the
 opening-100M gate all terminalize as passes.
 
 The prospective phase-11 Python execution surface is also frozen as an exact
-148-member transitive closure rooted at the coordinator, arm runner, and
+transitive closure rooted at the coordinator, arm runner, and
 independent verifier. It includes every recursively imported project-local
 Python helper and, because the contract registry is reachable, every research
 contract schema the registry can resolve. Both execution and independent
@@ -630,6 +631,44 @@ WIKI-LOOM proposal already hash-binds it. New policy v3 supersedes v2 only for
 future qualification authority and binds the corrected seven-checkpoint plan
 and implementation. None of these static repairs is a run, archive saving,
 Gamma authorship credit, or score credit.
+
+### Phase-11 full identity now owns its serialized lane
+
+A harder audit rejected phase-11 revision 5 before execution. The coordinator
+and each full arm called only `require_released_lease()`: all three observed an
+absent path, but none acquired it. A competing full-1G workload could claim the
+lane after any check, so sequential parent/q1 probability and state equality
+would not have been produced under an exclusive execution contract. The plan
+also required `execution_authorized=false`, making dormancy an execution
+precondition instead of a barrier. This was an algorithm-harness ownership
+error, not a host environment failure and not compression evidence.
+
+Revision 6 replaces that path with a source-bound owned transaction. It is
+still dormant and the coordinator refuses it: only a future revision at least
+7 with `execution_authorized=true`, the activated status, and an exact passing
+verification for `gamma_managed_exclusive_lease_owned_cleanup_q0_v1` can
+execute. The activated coordinator atomically acquires the canonical full-1G
+namespace once, retains the lease across both arms, heartbeats while each child
+runs, and releases only after both terminate. Each arm now requires the exact
+lease ID, owner PID/start tick, coordinator result/scratch roots, a live owner,
+an owned lock path, and its own process descent from that owner. Both arm
+receipts freeze the same witness.
+
+Terminal authority is independently rederived. The joint receipt binds the
+managed-lease activation verification, terminal lease evidence, and transition
+chain. The independent verifier reruns the generic transition verifier, checks
+the coordinator source and command bindings, compares both child witnesses,
+requires the evidence and transition files inside the result root, and rejects
+residual canonical lease, lock, or scratch paths. `exclusive_lane_pass` is now
+a required conjunct of full identity.
+
+The contract changes rebound the opening-100M, full-identity, and runtime
+Python/schema closures to `154`, `153`, and `149` members. Qualification policy
+v5 supersedes v4, explicitly revokes v4 future authority, and marks every
+downstream candidate still binding v4 as stale until it receives a separately
+identified activation successor. No manager control, parent arm, q1 arm,
+verifier, codec, or proof experiment ran; qm8 still owns the host lane. All
+Gamma compression and score credit remain zero.
 
 ### SAFE-MIX static closure audit
 

@@ -5,11 +5,15 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
+import signal
 import subprocess
 import sys
+import time
+from types import ModuleType
 from typing import Any, Callable
 
 import jsonschema
@@ -27,6 +31,10 @@ ARM_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 PARENT_ID = "cmix_obias_source_full1g_roundtrip_a_qm0_v1"
 PLAN_ID = "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"
+LEASE_CANDIDATE_ID = "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"
+LEASE_VERIFICATION_SCHEMA = (
+    "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-verification.v1"
+)
 PARENT_PAYLOAD_BYTES = 107_730_531
 PARENT_PAYLOAD_SHA256 = "889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490"
 CALIBRATION = {
@@ -67,6 +75,54 @@ def same_file_value(left: Any, right: Any) -> bool:
         and left.get("bytes") == right.get("bytes")
         and left.get("sha256") == right.get("sha256")
     )
+
+
+def command_sha256(argv: list[str]) -> str:
+    return hashlib.sha256(b"\0".join(os.fsencode(value) for value in argv)).hexdigest()
+
+
+def load_module(path: Path, name: str) -> ModuleType:
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load module {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def managed_lease_activation_pass(value: dict[str, Any]) -> bool:
+    checks = value.get("checks")
+    return bool(
+        value.get("schema") == LEASE_VERIFICATION_SCHEMA
+        and value.get("candidate_id") == LEASE_CANDIDATE_ID
+        and value.get("verified") is True
+        and isinstance(checks, dict)
+        and checks
+        and all(item is True for item in checks.values())
+        and value.get("errors") == []
+        and value.get("verdict") == "authorize_canonical_owned_cleanup_migration"
+        and value.get("canonical_migration_authorized") is True
+        and value.get("claim_authority") == "infrastructure_only"
+        and value.get("archive_authority") is False
+        and value.get("gamma_compression_credit_bytes") == 0
+        and value.get("gamma_score_credit_bytes") == 0
+    )
+
+
+def terminate_group(process: subprocess.Popen[Any]) -> None:
+    if process.poll() is not None:
+        return
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    try:
+        process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
 
 def opening_100m_verification_matches(
@@ -197,6 +253,7 @@ def run_arm(
     build_schema: Path,
     resource_guard: Path,
     exclusive_lease: Path,
+    lease: Any,
     arm_schema: Path,
     result_root: Path,
     scratch_root: Path,
@@ -217,6 +274,16 @@ def run_arm(
         str(resource_guard),
         "--exclusive-lease",
         str(exclusive_lease),
+        "--lease-id",
+        lease.record["lease_id"],
+        "--lease-owner-pid",
+        str(lease.record["pid"]),
+        "--lease-owner-start-ticks",
+        str(lease.record["proc_start_ticks"]),
+        "--lease-result-root",
+        lease.record["result_path"],
+        "--lease-scratch-root",
+        lease.record["scratch_path"],
         "--receipt-schema",
         str(arm_schema),
         "--result-root",
@@ -229,9 +296,22 @@ def run_arm(
     with (result_root / f"{role}.runner.stdout").open("xb") as stdout, (
         result_root / f"{role}.runner.stderr"
     ).open("xb") as stderr:
-        completed = subprocess.run(command, stdout=stdout, stderr=stderr, check=False)
-    if completed.returncode != 0:
-        raise RuntimeError(f"full identity {role} arm failed with {completed.returncode}")
+        process = subprocess.Popen(
+            command,
+            stdout=stdout,
+            stderr=stderr,
+            start_new_session=True,
+        )
+        return_code: int | None = None
+        try:
+            while (return_code := process.poll()) is None:
+                lease.heartbeat()
+                time.sleep(5)
+        finally:
+            terminate_group(process)
+            return_code = process.wait()
+    if return_code != 0:
+        raise RuntimeError(f"full identity {role} arm failed with {return_code}")
     receipt_path, receipt = load_json(
         result_root / role / "full-identity-arm-receipt.json",
         f"full identity {role} arm receipt",
@@ -249,6 +329,7 @@ def arm_summary(receipt_path: Path, receipt: dict[str, Any]) -> dict[str, Any]:
         "probability_sha256": receipt["probability_sha256"],
         "coder_checkpoints": receipt["coder_checkpoints"],
         "state_checkpoints": receipt["state_checkpoints"],
+        "exclusive_lease_witness": receipt["exclusive_lease_witness"],
         "payload": receipt["payload"],
         "self_extracting_archive": receipt["self_extracting_archive"],
     }
@@ -278,14 +359,18 @@ def main() -> int:
     parser.add_argument("--cpu", type=int, required=True)
     args = parser.parse_args()
 
-    proof.require_released_lease(args.exclusive_lease)
+    canonical_lease = proof.PROJECT / "operations/runtime/exclusive_full1g.json"
+    if not args.exclusive_lease.is_absolute() or args.exclusive_lease != canonical_lease:
+        raise RuntimeError("full identity must own the canonical exclusive full-1G lease")
     plan_path, plan = load_json(args.plan, "full identity plan")
     if (
         plan.get("artifact_id") != PLAN_ID
         or plan.get("candidate_id") != CANDIDATE_ID
-        or plan.get("execution_authorized") is not False
+        or plan.get("revision", 0) < 7
+        or plan.get("operational_status") != "activated_owned_lane_after_all_dependencies"
+        or plan.get("execution_authorized") is not True
     ):
-        raise RuntimeError("full identity planning contract mismatch")
+        raise RuntimeError("full identity planning contract is dormant or malformed")
     plan_schema_path, plan_schema = load_json(
         proof.PROJECT / "operations" / "planning" / plan.get("$schema", ""),
         "full identity planning schema",
@@ -317,6 +402,23 @@ def main() -> int:
         proof.PROJECT / source_closure_record.get("path", ""),
         "full identity Python source closure",
     )
+    owned_manager_record = implementation.get("owned_lease_manager", {})
+    owned_manager_path = scope.existing_regular(
+        proof.PROJECT / owned_manager_record.get("path", ""),
+        "owned managed-lease implementation",
+    )
+    lease_verifier_record = implementation.get("managed_lease_verifier", {})
+    lease_verifier_path = scope.existing_regular(
+        proof.PROJECT / lease_verifier_record.get("path", ""),
+        "managed-lease transition verifier",
+    )
+    lease_activation_schema_record = implementation.get(
+        "owned_lease_verification_schema", {}
+    )
+    lease_activation_schema_path, lease_activation_schema = load_json(
+        proof.PROJECT / lease_activation_schema_record.get("path", ""),
+        "owned managed-lease verification schema",
+    )
     for name, path in (
         ("coordinator", coordinator_path),
         ("arm_runner", arm_runner),
@@ -325,6 +427,9 @@ def main() -> int:
         ("verifier", verifier_path),
         ("resource_guard", resource_guard),
         ("python_source_closure", source_closure_path),
+        ("owned_lease_manager", owned_manager_path),
+        ("managed_lease_verifier", lease_verifier_path),
+        ("owned_lease_verification_schema", lease_activation_schema_path),
     ):
         record = implementation.get(name, {})
         if (
@@ -338,6 +443,26 @@ def main() -> int:
     )
     if source_closure != expected_source_closure:
         raise RuntimeError("full identity Python source closure mismatch")
+
+    activation_evidence = plan.get("activation_evidence", {})
+    lease_activation_record = activation_evidence.get("managed_lease_verification")
+    if not isinstance(lease_activation_record, dict):
+        raise RuntimeError("full identity managed-lease activation is absent")
+    lease_activation_path, lease_activation = load_json(
+        proof.PROJECT / lease_activation_record.get("path", ""),
+        "owned managed-lease activation verification",
+    )
+    if (
+        lease_activation_record.get("sha256") != scope.sha256_file(lease_activation_path)
+        or lease_activation_schema_record.get("sha256")
+        != scope.sha256_file(lease_activation_schema_path)
+    ):
+        raise RuntimeError("owned managed-lease activation binding mismatch")
+    jsonschema.Draft202012Validator.check_schema(lease_activation_schema)
+    jsonschema.validate(lease_activation, lease_activation_schema)
+    if not managed_lease_activation_pass(lease_activation):
+        raise RuntimeError("owned managed-lease implementation is not independently proven")
+    lease_module = load_module(owned_manager_path, "phase11_owned_managed_lease")
 
     activation_paths: dict[str, Path] = {}
     activation_values: dict[str, dict[str, Any]] = {}
@@ -374,7 +499,11 @@ def main() -> int:
         and activation_values["opening_100m_verification"].get("receipt_sha256")
         == scope.sha256_file(activation_paths["opening_100m_receipt"])
     )
-    activation_pass = full_roundtrip_pass and opening_100m_pass
+    activation_pass = bool(
+        full_roundtrip_pass
+        and opening_100m_pass
+        and managed_lease_activation_pass(lease_activation)
+    )
     if not activation_pass:
         raise RuntimeError("full identity activation evidence did not pass")
 
@@ -407,21 +536,66 @@ def main() -> int:
     result_root.mkdir(mode=0o700)
     scratch_root.mkdir(mode=0o700)
     arm_receipts: dict[str, tuple[Path, dict[str, Any]]] = {}
-    for role in ("parent", "q1"):
-        arm_receipts[role] = run_arm(
-            role=role,
-            arm_runner=arm_runner,
-            corpus=corpus,
-            build_receipt=build_path,
-            build_schema=build_schema_path,
-            resource_guard=resource_guard,
-            exclusive_lease=args.exclusive_lease,
-            arm_schema=arm_schema_path,
-            result_root=result_root,
-            scratch_root=scratch_root,
-            cpu=args.cpu,
+    lease = None
+    lease_id: str | None = None
+    lease_release_pass = False
+    execution_error: Exception | None = None
+    try:
+        lease = lease_module.ManagedExclusiveLease.acquire(
+            lease_path=args.exclusive_lease,
+            transition_path=result_root / "lease-transitions.json",
+            candidate_id=PLAN_ID,
+            command_sha256=command_sha256([sys.executable, *sys.argv]),
+            runner_sha256=scope.sha256_file(coordinator_path),
+            guard_path=str(result_root),
+            result_path=str(result_root),
+            scratch_path=str(scratch_root),
+            claim_boundary=(
+                "one coordinator-owned diagnostic full-1G lane spanning the "
+                "parent and q1 phase-11 observer arms; no signal authority"
+            ),
         )
-        jsonschema.validate(arm_receipts[role][1], arm_schema)
+        lease_id = lease.record["lease_id"]
+        for role in ("parent", "q1"):
+            arm_receipts[role] = run_arm(
+                role=role,
+                arm_runner=arm_runner,
+                corpus=corpus,
+                build_receipt=build_path,
+                build_schema=build_schema_path,
+                resource_guard=resource_guard,
+                exclusive_lease=args.exclusive_lease,
+                lease=lease,
+                arm_schema=arm_schema_path,
+                result_root=result_root,
+                scratch_root=scratch_root,
+                cpu=args.cpu,
+            )
+            jsonschema.validate(arm_receipts[role][1], arm_schema)
+    except Exception as exc:
+        execution_error = exc
+    finally:
+        if lease is not None:
+            try:
+                lease.heartbeat()
+                lease.release(evidence_path=result_root / "lease-evidence.json")
+                lease_release_pass = bool(
+                    not args.exclusive_lease.exists()
+                    and not args.exclusive_lease.is_symlink()
+                    and not args.exclusive_lease.with_name(
+                        f"{args.exclusive_lease.name}.lock"
+                    ).exists()
+                    and not args.exclusive_lease.with_name(
+                        f"{args.exclusive_lease.name}.lock"
+                    ).is_symlink()
+                )
+            except Exception as exc:
+                if execution_error is None:
+                    execution_error = exc
+    if execution_error is not None:
+        raise RuntimeError(f"full identity owned-lane execution failed: {execution_error}")
+    if not lease_release_pass or lease_id is None:
+        raise RuntimeError("full identity owned lease did not release cleanly")
     if next(scratch_root.iterdir(), None) is not None:
         raise RuntimeError("full identity coordinator scratch residue survived")
     scratch_root.rmdir()
@@ -460,9 +634,19 @@ def main() -> int:
         and controls["unmutated_state_sha256"] != controls["single_byte_mutated_state_sha256"]
         and controls["checkpoint_negative_controls_rejected"] is True
     )
+    lease_witnesses = [
+        arm_receipts[role][1]["exclusive_lease_witness"]
+        for role in ("parent", "q1")
+    ]
+    exclusive_lane_pass = bool(
+        lease_release_pass
+        and all(witness.get("lease_id") == lease_id for witness in lease_witnesses)
+        and all(witness == lease_witnesses[0] for witness in lease_witnesses[1:])
+    )
     decisions = {
         "activation_pass": activation_pass,
         "calibration_pass": calibration_pass,
+        "exclusive_lane_pass": exclusive_lane_pass,
         "probability_identity_pass": probability_identity,
         "coder_checkpoint_identity_pass": coder_identity,
         "state_checkpoint_identity_pass": state_identity,
@@ -485,7 +669,17 @@ def main() -> int:
         "arm_schema": artifact(arm_schema_path),
         "python_source_closure": artifact(source_closure_path),
         "population": artifact(corpus),
-        "activation": {name: artifact(path) for name, path in activation_paths.items()},
+        "activation": {
+            **{name: artifact(path) for name, path in activation_paths.items()},
+            "managed_lease_verification": artifact(lease_activation_path),
+        },
+        "exclusive_lease": {
+            "candidate_id": PLAN_ID,
+            "lease_id": lease_id,
+            "release_pass": lease_release_pass,
+            "evidence": artifact(result_root / "lease-evidence.json"),
+            "transitions": artifact(result_root / "lease-transitions.json"),
+        },
         "observer_antecedents": {
             "build_receipt": artifact(build_path),
             "build_schema": artifact(build_schema_path),
