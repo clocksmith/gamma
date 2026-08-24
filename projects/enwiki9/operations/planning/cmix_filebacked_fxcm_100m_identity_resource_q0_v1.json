@@ -1,0 +1,117 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "cmix_filebacked_fxcm_100m_identity_resource_q0_v1",
+  "revision": 1,
+  "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
+  "authoritative_parent_id": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
+  "operational_status": "prospective_unimplemented_waiting_for_qm8_terminalization",
+  "execution_authorized": false,
+  "purpose": "Qualify q1 for a later full-corpus parent run by combining exact 100M parent preservation with phase-resolved resource headroom evidence, without claiming compression improvement.",
+  "population": {
+    "selection": "canonical enwik9 opening prefix from byte zero",
+    "offset": 0,
+    "bytes": 100000000,
+    "expected_sha256": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8",
+    "identity_rule": "The runner must independently hash exactly 100,000,000 bytes from the canonical 1G corpus before creating its result root; historical prefix metadata has no execution authority."
+  },
+  "frozen_parent_and_candidate": {
+    "q1_source_closure": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/source-closure.json",
+    "q1_program_lock": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/01_source_closure/program-lock-verification.json",
+    "parent_build": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/02_build_a/release/build-receipt.json",
+    "q1_build": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/03_build_b/release/build-receipt.json",
+    "build_verification": "results/cmix_obias_memory_safe_parent_filebacked_q1_qualification_qm7_v1/04_build_verification/release.json",
+    "unchanged_mechanism_rule": "No predictor, probability, coder, preprocessing, allocator geometry, pageout policy, compiler, head, dictionary, package, or numeric parameter may change from sealed q1."
+  },
+  "arms": [
+    {
+      "id": "I-P",
+      "role": "instrumented authoritative parent identity arm",
+      "resource_authority": false
+    },
+    {
+      "id": "I-Q",
+      "role": "instrumented q1 identity arm",
+      "resource_authority": false
+    },
+    {
+      "id": "R-Q",
+      "role": "uninstrumented q1 release resource and inverse arm",
+      "resource_authority": true
+    }
+  ],
+  "identity_observer": {
+    "post_head_probability": "Online SHA-256 of each exact uint16 probability after KhBitLstm32Head::Adjust and immediately before arithmetic range split; calibrate unchanged instrumentation against both retained 10M digests.",
+    "coder_checkpoints": "Hash low/high range state, pending output state, coded-byte count, modeled-byte index, and decoded history at frozen checkpoints.",
+    "persistent_state": "At each checkpoint, hash source-ordered requested semantic bytes for all 26 large FXCM allocations affected by q1; exclude virtual addresses, filenames, inode numbers, alignment padding, mapping slack, page residency, and fault history.",
+    "modeled_byte_checkpoints": [0, 16777216, 33554432, 50331648, "terminal"],
+    "diagnostic_separation_rule": "Full state hashing can fault file-backed pages into residency, so I-P/I-Q memory observations are diagnostic only and cannot establish R-Q headroom. R-Q must use the sealed release build without the identity observer.",
+    "required_equalities": [
+      "I-P and I-Q post-head probability digests",
+      "I-P and I-Q coder checkpoint manifests",
+      "I-P and I-Q per-allocation persistent-state checkpoint manifests",
+      "I-P and I-Q payload bytes and SHA-256",
+      "I-P and I-Q decoded transformed output",
+      "I-P, I-Q, and R-Q exact 100M raw inverse"
+    ]
+  },
+  "resource_observer": {
+    "authoritative_arm": "R-Q",
+    "phases": [
+      "package helper construction",
+      "frontend preprocessing",
+      "model pretraining",
+      "arithmetic payload encode",
+      "archive assembly",
+      "archive decode",
+      "frontend inverse",
+      "cleanup"
+    ],
+    "required_measurements": [
+      "process-tree RSS peak and complete sample stream",
+      "largest per-process VmHWM and terminal process status",
+      "cgroup memory.current, memory.peak, memory.events, and memory.stat deltas",
+      "phase-specific smaps_rollup and named mapping totals",
+      "anonymous, file-backed, shmem, page-table, kernel, and cache attribution",
+      "scratch logical bytes, allocated bytes, filesystem type, and cleanup residue",
+      "logical CPU count, runnable threads, return codes, and phase markers"
+    ],
+    "engineering_process_tree_peak_kib_max": 9000000,
+    "engineering_process_tree_peak_bytes_max": 9216000000,
+    "official_process_tree_peak_kib_max": 9765625,
+    "cgroup_memory_peak_bytes_max": 10000000000,
+    "memory_events_max": 0,
+    "memory_events_oom": 0,
+    "memory_events_oom_kill": 0,
+    "maximum_logical_cpus": 1,
+    "temporary_disk_bytes_max": 100000000000,
+    "memory_high_is_not_a_pass": "Reclaim pressure is permitted, but memory.high throttling cannot substitute for the measured process-tree, VmHWM, cgroup-peak, and event gates."
+  },
+  "promotion_predicates": [
+    "canonical opening 100M identity is independently verified",
+    "I-P and I-Q exact post-head probability streams match",
+    "all rolling coder and complete persistent-state checkpoint manifests match",
+    "parent/q1 payloads and decoded transformed streams match",
+    "all required raw inverses are exact",
+    "R-Q process-tree peak is at most 9,000,000 KiB",
+    "R-Q cgroup peak is at most 10,000,000,000 bytes with zero max, OOM, and OOM-kill events",
+    "all phase, CPU, temporary-disk, return-code, and cleanup gates pass",
+    "every receipt and output manifest is independently rehashed and schema-valid"
+  ],
+  "terminal_branches": {
+    "pass": "Authorize one unchanged full-1G q1 qualification run; award no compression or score credit.",
+    "identity_failure": "Locate the first rolling probability, coder, or persistent-state divergence and authorize one correction-only identity successor.",
+    "identity_pass_resource_failure": "Authorize one successor that changes only the exactly attributed high-water allocation or phase.",
+    "headroom_failure_after_one_correction": "Stop treating CMIX as the prize-facing substrate and move the primary lane to the compact open NNCP student."
+  },
+  "forbidden": [
+    "Launching while any exclusive full-1G lease is active",
+    "Using the already-running qm8 full-1G diagnostic as retroactive 100M promotion authority",
+    "Changing multiple semantic or residency axes in a rescue",
+    "Treating payload equality as probability or persistent-state identity",
+    "Treating instrumented-arm memory as release-arm resource authority",
+    "Awarding Gamma compression, authorship, or score credit"
+  ],
+  "claim_boundary": "A pass proves exact q1 parent preservation and engineering headroom on one frozen opening 100M population. It does not qualify full-1G behavior, two-run determinism, complete package score, official runtime, Gamma authorship, or compression improvement.",
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
+}

@@ -1,5 +1,108 @@
 # enwiki9 Research Register
 
+## 2026-08-23 - canonical CMIX/q1 interpretation and corrected launch ladder
+
+This section supersedes any wording that implied CMIX had already been
+repaired, qualified, or improved. The frozen evidence state is:
+
+```text
+External archive size reproduced:          true
+External payload reproduced:               true
+Arm A exact canonical inverse:              true
+Arm B independent encode identity:          true
+Arm B independent full roundtrip:           false
+Arm B decode completion:                    false, terminated at 39.07%
+External implementation memory eligible:    false
+File-backed q1 probability identity:         proven on bounded scopes
+File-backed q1 compression improvement:      none
+File-backed q1 full-1G qualification:        unproven
+Gamma authorship credit:                     0
+Gamma score credit:                          0
+```
+
+Arm B reproduced the `107,730,531`-byte payload and `108,022,224`-byte
+self-extracting archive exactly. That proves two-run encode identity under the
+bound external package. It does not prove a second roundtrip: decode stopped at
+`39.07%`. The shared-scope OOM was the immediate infrastructure termination,
+and `/dev/shm` scratch aggravated the pressure, but the CMIX process was also
+independently ineligible at `VmHWM=10,425,744 KiB`, `660,119 KiB` above the
+strict `9,765,625 KiB` ceiling. The correct classification is therefore
+infrastructure-terminated plus implementation resource failure, not a
+compression-math failure and not an environment-only excuse.
+
+q1 is an identity-preserving eligibility correction. It has matched exact
+post-head integer probabilities, traces, payloads, and decoded output on three
+cold 250KB scopes, one cumulative opening 1M scope, and opening plus distant
+cold-reset 10M scopes. It has not proved full-stream probability or state
+identity, full-1G archive identity and inverse, runtime eligibility, package
+closure, or any archive-byte improvement. The interior reset populations prove
+parent/q1 decoded-output identity, not standalone raw inversion.
+
+The corrected next-launch ladder reserves headroom for a Gamma mechanism. The
+next newly launched expensive q1 gate, if terminal evidence still requires one,
+is a 100M identity and phase-resolved resource run. It must bind parent/q1
+integer probabilities, payload/archive identity, exact raw inverse, rolling
+persistent-state identity, process-tree RSS, per-process VmHWM, cgroup peak,
+phase-specific mappings and buffers, and scratch logical/allocated bytes. Its
+engineering gate is at most `9,000,000 KiB`, not merely below the official
+`9,765,625 KiB` ceiling. The prospective, execution-disabled arm separation
+and terminal branches are frozen in the
+[`100M gate`](../operations/planning/cmix_filebacked_fxcm_100m_identity_resource_q0_v1.json).
+
+`cmix_filebacked_fxcm_full_a_qm8_v1` was already running when this launch-order
+correction was adopted. It remains an unchanged zero-credit diagnostic and is
+not killed or retroactively promoted. No new independent full-1G arm or native
+compression mechanism is launched from bounded identity evidence alone. An
+identity failure authorizes only first-divergence localization; identity with
+insufficient headroom authorizes one phase-specific memory successor; failure
+to create useful headroom moves the prize-facing primary lane to the compact
+open NNCP student. New CMIX midpoint, MIDAS, SAFE-FORK, or structural mechanisms
+remain execution-blocked until q1 is an exact memory-safe parent. Their eventual
+archive effects require fresh joint replay and cannot be added algebraically.
+
+## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
+
+SAFE-FORK is classified as checkpoint/fork/rejoin infrastructure, not a novel
+compression algorithm. It may later contain an independently valuable causal
+expert, but checkpointing CMIX does not itself address the `3,513,707`-byte
+counted-score debt and receives no scientific priority on that basis.
+
+The new zero-credit proposal is `wiki_schema_vm_ceiling_q0_v1`: a bounded
+online virtual machine over opaque post-WRT bytes. It parses `PP`/`RR` template
+invocations, conditions on the decoded template name, prior field key, and
+field index, and learns deterministic next-key-plus-equals programs from
+completed prior invocations. No rule identifier, value, dictionary decoding,
+raw-corpus oracle, or future delimiter is transmitted or consulted.
+
+A pre-measurement audit found that the first source draft updated its program
+table at key completion, which would allow later fields to learn from the same
+still-open invocation. The sealed implementation instead stages at most 64
+state/target programs per template and commits them in source order only when
+that invocation closes. Staging overflow discards that invocation's complete
+staged learning set. Its `32,768 x 4` fixed table retains two deterministic
+Space-Saving candidates per state; parser depth, atom lengths, collision
+policy, replacement order, storage, and controls are all frozen.
+
+Treatment D predicts only at causally selected field boundaries and stops at
+its first mismatch. R substitutes deterministic SplitMix bytes at the exact D
+positions. S uses the immediately preceding completed template-name state at
+the matched prior-key/index coordinate and target length. K is the same
+parse/lookup/learn state machine with prediction disabled. Two fresh processes
+must emit byte-identical receipts.
+
+The sealed candidate tree is `3d110ac4...680c5`; strict C++17 syntax validation
+and all registered JSON schemas pass. The prospective threshold remains
+`4,079,243` correct D bytes, with every chronological third positive and D
+strictly above R and S. This number is a frozen hypothesis, not a result. No
+scan or decision receipt exists. The runner fails closed unless it receives a
+fully positive, independently verified q1 qualification with runtime and
+package closure, process-tree peak at most `9,000,000 KiB`, and a released
+full-1G lease. See the
+[`execution contract`](../operations/planning/wiki_schema_vm_ceiling_q0_v1.json),
+[`experiment`](../operations/adaptive/experiments/wiki_schema_vm_ceiling_q0_v1.json),
+and
+[`interface`](../programs/wiki_schema_vm_ceiling_q0_v1/interface-contract.json).
+
 ## 2026-08-23 - cmix-obias Arm B terminalizes as an OOM/resource failure
 
 The source-built full-1G Arm A remains an exact host-bound external baseline.

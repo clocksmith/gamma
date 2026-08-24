@@ -388,14 +388,8 @@ class SchemaVm {
       ++measurements_.depth_overflows;
       return;
     }
-    if (depth_ > 0) {
-      Frame& parent = frames_[depth_ - 1];
-      if (parent.phase == Phase::name) {
-        parent.name.valid = false;
-        parent.usable = false;
-      } else if (parent.phase == Phase::field_key) {
-        parent.token.valid = false;
-      }
+    if (depth_ > 0 && frames_[depth_ - 1].phase == Phase::field_key) {
+      frames_[depth_ - 1].token.valid = false;
     }
     frames_[depth_] = Frame{};
     ++depth_;
