@@ -4,18 +4,18 @@
   "revision": 1,
   "candidate_id": "cmix_obias_memory_safe_parent_filebacked_q1_v1",
   "authoritative_parent_id": "cmix_obias_source_full1g_roundtrip_a_qm0_v1",
-  "operational_status": "prospective_observer_build_runner_sealed_coordinator_unimplemented_waiting_for_qm8_terminalization",
+  "operational_status": "prospective_observer_build_and_calibration_runners_sealed_coordinator_unimplemented_waiting_for_qm8_terminalization",
   "execution_authorized": false,
   "purpose": "Qualify q1 for a later full-corpus parent run by combining exact 100M parent preservation with phase-resolved resource headroom evidence, without claiming compression improvement.",
   "receipt_schema": {
     "path": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource.schema.json",
-    "sha256": "0bf3d6bc4716b369ff7d8d7b6dd9cf89545a07c8a35918f7d5e004c018eef321"
+    "sha256": "488c1627fe83b84cc6e2456aad7f42c13469c2fc3990a62441e57d219312a1c4"
   },
   "independent_verification": {
     "schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json",
-    "schema_sha256": "43991c9ec64fdf787e0ba15e5e2491ccbc7e9542df066c5d12e9bb933f263c3f",
+    "schema_sha256": "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802",
     "verifier": "tools/cmix_filebacked_fxcm_100m_identity_resource_verify.py",
-    "verifier_sha256": "ac0f12ac134b94d55a9d5f2810c9cba3a841a69bdb9ad6f037b6139ae04fcec9"
+    "verifier_sha256": "c5f2e10ef668abc798dfd7f4620ff23757f1dcd8e39c937bec0fa26b14935229"
   },
   "population": {
     "selection": "canonical enwik9 opening prefix from byte zero",
@@ -59,7 +59,7 @@
     "state_mutation_control": "programs/cmix_filebacked_fxcm_100m_identity_resource_q0_v1/observer-state-mutation-control.cpp",
     "state_mutation_control_sha256": "7d0c4762980973fede8ac908746cbca8117aa39ad013ec08bbe32899d070584f",
     "compile_definition": "GAMMA_FULL_IDENTITY_OBSERVER=1",
-    "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; no observer build or execution receipt exists.",
+    "sealed_source_application": "Exact --fuzz=0 patch application and frozen-definition syntax validation pass against the q1 source closure; the bound state-mutation harness also passes syntax validation; no observer build or execution receipt exists.",
     "runtime_activation": "GAMMA_FULL_IDENTITY_DIR must name an existing absolute output directory; absent activation leaves packaging/helper encoder runs observationally disabled.",
     "release_authority_excluded": true
   },
@@ -77,6 +77,26 @@
     "negative_control": "N-P is the parent observer compiled with GAMMA_FULL_IDENTITY_PRE_HEAD=1; its payload must remain identical to I-P while its probability digest must differ.",
     "state_mutation_control": "Compile the bound harness against the copied observer header with one 4,096-byte semantic range; a one-byte XOR must change its range and aggregate digests, and the following unchanged terminal snapshot must match the mutation snapshot.",
     "package_rule": "Package replicate A for I-P, I-Q, and N-P after within-arm identity passes; dictionary, article-order, and header payloads must match across all three.",
+    "execution_status": "sealed_not_run"
+  },
+  "observer_calibration": {
+    "runner": "tools/cmix_filebacked_fxcm_100m_observer_calibrate.py",
+    "runner_sha256": "04f3d3d31c3d90699e1e68cd54829b5d10e5d865959f01ae57df5f78d17d6845",
+    "receipt_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-calibration.schema.json",
+    "receipt_schema_sha256": "009de365b89e83bc395d2f55332bc5b4f39de4ff0f0ddcb2727d6f1bba45c18a",
+    "independent_verifier": "tools/cmix_filebacked_fxcm_100m_observer_calibration_verify.py",
+    "independent_verifier_sha256": "2a278ab08445fc8e7fe7a558652b64ccc4425e45d95832d62130dd1156724491",
+    "verification_schema": "contracts/research/v1/cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json",
+    "verification_schema_sha256": "3e20b4b00680db793fcd28c5f469cbb4eec88d6ac401093df1bdb31d22679e15",
+    "fixed_runs": [
+      "opening-10M I-P post-head with exact inverse",
+      "opening-10M I-Q post-head with exact inverse",
+      "opening-10M N-P pre-head with exact inverse",
+      "distant-cold-reset-10M I-P post-head encode",
+      "distant-cold-reset-10M I-Q post-head encode"
+    ],
+    "reference_rule": "Post-head digests and arithmetic payloads must reproduce the independently verified retained opening/distant 10M receipt. N-P must preserve the opening payload, state, transformed inverse, and raw inverse while producing a different probability digest.",
+    "resource_rule": "All five encodes and three opening decodes are sequential, single-CPU, guarded, and forbidden while an exclusive full-1G lease is active. Their memory is diagnostic only.",
     "execution_status": "sealed_not_run"
   },
   "identity_observer": {
@@ -128,6 +148,7 @@
     "memory_high_is_not_a_pass": "Reclaim pressure is permitted, but memory.high throttling cannot substitute for the measured process-tree, VmHWM, cgroup-peak, and event gates."
   },
   "promotion_predicates": [
+    "the observer calibration receipt and its independent verification both pass",
     "canonical opening 100M identity is independently verified",
     "I-P and I-Q exact post-head probability streams match",
     "all rolling coder and complete persistent-state checkpoint manifests match",

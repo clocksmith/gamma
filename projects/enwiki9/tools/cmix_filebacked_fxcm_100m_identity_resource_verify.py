@@ -24,9 +24,13 @@ OUTPUT_SCHEMA = (
     / "contracts/research/v1/"
     "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
 )
-INPUT_SCHEMA_SHA256 = "0bf3d6bc4716b369ff7d8d7b6dd9cf89545a07c8a35918f7d5e004c018eef321"
-OUTPUT_SCHEMA_SHA256 = "43991c9ec64fdf787e0ba15e5e2491ccbc7e9542df066c5d12e9bb933f263c3f"
+INPUT_SCHEMA_SHA256 = "488c1627fe83b84cc6e2456aad7f42c13469c2fc3990a62441e57d219312a1c4"
+OUTPUT_SCHEMA_SHA256 = "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+CALIBRATION_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1"
+CALIBRATION_VERIFICATION_SCHEMA = (
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration-verification.v1"
+)
 PREFIX_BYTES = 100_000_000
 PREFIX_SHA256 = "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8"
 PHASES = {
@@ -136,6 +140,7 @@ def nullable_artifact_hash(record: dict[str, Any] | None) -> str | None:
 
 def false_comparisons() -> dict[str, bool]:
     return {
+        "observer_calibration_antecedent_pass": False,
         "post_head_probability_identity_pass": False,
         "coder_checkpoint_identity_pass": False,
         "persistent_state_checkpoint_identity_pass": False,
@@ -218,6 +223,37 @@ def derive(receipt: dict[str, Any]) -> tuple[
             errors.append(str(error))
     all_artifacts = verified_artifacts == required_artifacts
 
+    calibration_pass = False
+    try:
+        calibration_path = resolve_artifact(
+            receipt["antecedents"]["observer_calibration"],
+            "observer calibration antecedent",
+        )
+        calibration_verification_path = resolve_artifact(
+            receipt["antecedents"]["observer_calibration_verification"],
+            "observer calibration verification antecedent",
+        )
+        calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
+        calibration_verification = json.loads(
+            calibration_verification_path.read_text(encoding="utf-8")
+        )
+        calibration_pass = (
+            calibration.get("schema") == CALIBRATION_SCHEMA
+            and calibration.get("candidate_id") == CANDIDATE_ID
+            and calibration.get("terminal_pass") is True
+            and calibration.get("comparisons", {}).get("observer_calibration_pass")
+            is True
+            and calibration_verification.get("schema")
+            == CALIBRATION_VERIFICATION_SCHEMA
+            and calibration_verification.get("candidate_id") == CANDIDATE_ID
+            and calibration_verification.get("verified") is True
+            and calibration_verification.get("passed") is True
+            and calibration_verification.get("receipt_sha256")
+            == receipt["antecedents"]["observer_calibration"]["sha256"]
+        )
+    except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as error:
+        errors.append(f"observer calibration antecedent: {error}")
+
     arms = receipt["arms"]
     parent = arms["I-P"]
     q1_identity = arms["I-Q"]
@@ -270,6 +306,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
         for arm, record in zip(arms.values(), raw_records)
     )
     comparison = {
+        "observer_calibration_antecedent_pass": calibration_pass,
         "post_head_probability_identity_pass": probability_identity,
         "coder_checkpoint_identity_pass": coder_identity,
         "persistent_state_checkpoint_identity_pass": state_identity,
@@ -280,6 +317,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
         "identity_gate_pass": all(
             (
                 instrument_contract,
+                calibration_pass,
                 all_artifacts,
                 probability_identity,
                 coder_identity,

@@ -48,6 +48,8 @@
       "required": [
         "planning_contract",
         "observer_build",
+        "observer_calibration",
+        "observer_calibration_verification",
         "source_closure",
         "program_lock_verification",
         "parent_build",
@@ -59,6 +61,8 @@
       "properties": {
         "planning_contract": {"$ref": "#/$defs/artifact"},
         "observer_build": {"$ref": "#/$defs/artifact"},
+        "observer_calibration": {"$ref": "#/$defs/artifact"},
+        "observer_calibration_verification": {"$ref": "#/$defs/artifact"},
         "source_closure": {"$ref": "#/$defs/artifact"},
         "program_lock_verification": {"$ref": "#/$defs/artifact"},
         "parent_build": {"$ref": "#/$defs/artifact"},
@@ -119,6 +123,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "observer_calibration_antecedent_pass",
         "post_head_probability_identity_pass",
         "coder_checkpoint_identity_pass",
         "persistent_state_checkpoint_identity_pass",
@@ -129,6 +134,7 @@
         "identity_gate_pass"
       ],
       "properties": {
+        "observer_calibration_antecedent_pass": {"type": "boolean"},
         "post_head_probability_identity_pass": {"type": "boolean"},
         "coder_checkpoint_identity_pass": {"type": "boolean"},
         "persistent_state_checkpoint_identity_pass": {"type": "boolean"},
