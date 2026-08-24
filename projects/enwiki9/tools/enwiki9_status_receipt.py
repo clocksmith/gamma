@@ -155,7 +155,7 @@ def active_candidate_recent_artifacts(candidate: str | None, limit: int = 12) ->
         return []
     result_dir = ROOT / "results" / candidate
     try:
-        paths = [path for path in result_dir.iterdir() if path.is_file()]
+        paths = [path for path in result_dir.rglob("*") if path.is_file()]
     except OSError:
         return []
     rows_with_stat: list[tuple[pathlib.Path, Any]] = []
@@ -300,6 +300,8 @@ def is_cmix_codec_row(row: dict[str, Any]) -> bool:
 def cmix_native_mode(parts: list[str]) -> str:
     if "-d" in parts:
         return "decode"
+    if "-e" in parts:
+        return "encode"
     if "-t" in parts:
         return "text_compress"
     if "-c" in parts:
@@ -313,7 +315,9 @@ def cmix_native_mode(parts: list[str]) -> str:
 
 def active_process_state() -> dict[str, Any]:
     guard_seed_rows = ps_rss_for_pattern(
-        "run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21-mmap-bin|"
+        "run_with_rss_guard|run_with_resource_guard_v3|"
+        "cmix_filebacked_fxcm_full_(roundtrip|stage).py|"
+        "projects/enwiki9/lib/driver.py|cmix21-mmap-bin|"
         "fx2_public_repro_queue.py|fx2-public-package-.*/cmix_orig"
     )
     guard_rows = expand_process_groups(guard_seed_rows)
@@ -373,11 +377,21 @@ def active_process_state() -> dict[str, Any]:
             parts = shlex.split(str(max_cmix["args"]))
         except ValueError:
             parts = []
+        process_cwd: pathlib.Path | None = None
+        try:
+            process_cwd = pathlib.Path(f"/proc/{max_cmix['pid']}/cwd").resolve()
+        except OSError:
+            process_cwd = None
         if parts:
             state["active_cmix_mode"] = cmix_native_mode(parts)
         if len(parts) >= 2:
             input_path = pathlib.Path(parts[-2])
             output_path = pathlib.Path(parts[-1])
+            if process_cwd is not None:
+                if not input_path.is_absolute():
+                    input_path = process_cwd / input_path
+                if not output_path.is_absolute():
+                    output_path = process_cwd / output_path
             output_temp_path = pathlib.Path(str(output_path) + ".cmix.temp")
             temp: dict[str, Any] = {
                 "input_path": str(input_path),
@@ -400,6 +414,267 @@ def active_process_state() -> dict[str, Any]:
     return state
 
 
+def argv_option(parts: list[str], option: str) -> str | None:
+    try:
+        index = parts.index(option)
+    except ValueError:
+        return None
+    if index + 1 >= len(parts):
+        return None
+    return parts[index + 1]
+
+
+def has_script(parts: list[str], name: str) -> bool:
+    return any(pathlib.Path(part).name == name for part in parts)
+
+
+def process_cwd(row: dict[str, Any]) -> pathlib.Path | None:
+    pid = row.get("pid")
+    if not isinstance(pid, int) or isinstance(pid, bool):
+        return None
+    try:
+        return pathlib.Path(f"/proc/{pid}/cwd").resolve()
+    except OSError:
+        return None
+
+
+def resolved_process_path(row: dict[str, Any], text: str) -> pathlib.Path:
+    path = pathlib.Path(text)
+    if path.is_absolute():
+        return path
+    return (process_cwd(row) or REPO_ROOT) / path
+
+
+def descendant_of(
+    row: dict[str, Any], ancestor_pid: int, parent_by_pid: dict[int, int]
+) -> bool:
+    current = row.get("pid")
+    visited: set[int] = set()
+    while isinstance(current, int) and current > 0 and current not in visited:
+        if current == ancestor_pid:
+            return True
+        visited.add(current)
+        current = parent_by_pid.get(current)
+    return False
+
+
+def resource_guard_metrics(guard: dict[str, Any]) -> dict[str, Any]:
+    peaks = guard.get("peaks") if isinstance(guard.get("peaks"), dict) else {}
+    latest = (
+        guard.get("latest_sample")
+        if isinstance(guard.get("latest_sample"), dict)
+        else {}
+    )
+    max_single = peaks.get(
+        "max_sampled_single_rss_kib", guard.get("max_sampled_single_rss_kib")
+    )
+    max_tree = peaks.get(
+        "max_sampled_tree_rss_kib", guard.get("max_sampled_tree_rss_kib")
+    )
+    latest_single = latest.get("max_single_rss_kib")
+    latest_tree = latest.get("tree_rss_kib")
+    out: dict[str, Any] = {
+        "rss_guard_status": guard.get("status"),
+        "sample_count": guard.get("sample_count"),
+        "returncode": guard.get("returncode"),
+        "max_sampled_single_rss_kib": max_single,
+        "max_sampled_tree_rss_kib": max_tree,
+        "latest_sample_max_single_rss_kib": latest_single,
+        "latest_sample_tree_rss_kib": latest_tree,
+        "cgroup_memory_peak_bytes": peaks.get("cgroup_memory_peak_bytes"),
+        "latest_cgroup_current_bytes": latest.get("cgroup_current_bytes"),
+        "cgroup_events_delta": (
+            guard.get("cgroup_events", {}).get("delta")
+            if isinstance(guard.get("cgroup_events"), dict)
+            else None
+        ),
+    }
+    if isinstance(max_single, int):
+        out["single_rss_margin_kib"] = LOCAL_RSS_GUARD_KIB - max_single
+    if isinstance(max_tree, int):
+        out["tree_rss_margin_kib"] = LOCAL_RSS_GUARD_KIB - max_tree
+    if isinstance(latest_single, int):
+        out["latest_sample_single_rss_margin_kib"] = (
+            LOCAL_RSS_GUARD_KIB - latest_single
+        )
+    if isinstance(latest_tree, int):
+        out["latest_sample_tree_rss_margin_kib"] = (
+            LOCAL_RSS_GUARD_KIB - latest_tree
+        )
+    return out
+
+
+def progress_log_state(path: pathlib.Path) -> dict[str, Any] | None:
+    try:
+        lines = path.read_text(encoding="ascii").splitlines()
+    except (OSError, UnicodeDecodeError):
+        return None
+    for line in reversed(lines):
+        fields = line.split()
+        if len(fields) != 2:
+            continue
+        try:
+            percent = float(fields[0])
+            payload_bytes = int(fields[1])
+        except ValueError:
+            continue
+        if not 0.0 <= percent <= 100.0 or payload_bytes < 0:
+            continue
+        try:
+            stat = path.stat()
+        except OSError:
+            return None
+        return {
+            "path": logical_rel(path),
+            "bytes": stat.st_size,
+            "mtime_utc": mtime_utc(path),
+            "reported_scope_percent": percent,
+            "reported_payload_bytes": payload_bytes,
+        }
+    return None
+
+
+def live_q1_full_gate_from_process(
+    process_state: dict[str, Any], adaptive_state: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Bind a live q1 full-roundtrip coordinator to its current guarded stage."""
+
+    rows = process_state.get("active_rows")
+    if not isinstance(rows, list):
+        return None
+    process_rows = [row for row in rows if isinstance(row, dict)]
+    parent_by_pid = {
+        row["pid"]: row["ppid"]
+        for row in process_rows
+        if isinstance(row.get("pid"), int) and isinstance(row.get("ppid"), int)
+    }
+    for coordinator in process_rows:
+        try:
+            parts = shlex.split(str(coordinator.get("args", "")))
+        except ValueError:
+            continue
+        if not has_script(parts, "cmix_filebacked_fxcm_full_roundtrip.py"):
+            continue
+        result_root_text = argv_option(parts, "--result-root")
+        corpus_text = argv_option(parts, "--corpus")
+        arm = argv_option(parts, "--arm")
+        if result_root_text is None or corpus_text is None or arm not in {"a", "b"}:
+            continue
+        result_root = resolved_process_path(coordinator, result_root_text).resolve()
+        corpus = resolved_process_path(coordinator, corpus_text).resolve()
+        try:
+            scope = corpus.stat().st_size
+        except OSError:
+            scope = None
+        coordinator_pid = coordinator.get("pid")
+        if not isinstance(coordinator_pid, int):
+            continue
+
+        guard_row: dict[str, Any] | None = None
+        guard_parts: list[str] = []
+        guard_path: pathlib.Path | None = None
+        for row in process_rows:
+            if not descendant_of(row, coordinator_pid, parent_by_pid):
+                continue
+            try:
+                candidate_parts = shlex.split(str(row.get("args", "")))
+            except ValueError:
+                continue
+            if not has_script(candidate_parts, "run_with_resource_guard_v3.py"):
+                continue
+            guard_text = argv_option(candidate_parts, "--guard-json")
+            if guard_text is None:
+                continue
+            candidate_path = resolved_process_path(row, guard_text).resolve()
+            if candidate_path.parent.parent != result_root:
+                continue
+            guard_row = row
+            guard_parts = candidate_parts
+            guard_path = candidate_path
+            break
+        if guard_row is None or guard_path is None:
+            continue
+
+        phase = guard_path.parent.name
+        stage_command = (
+            guard_parts[guard_parts.index("--") + 1 :]
+            if "--" in guard_parts
+            else []
+        )
+        work_root_text = argv_option(stage_command, "--work-root")
+        progress: dict[str, Any] | None = None
+        if work_root_text is not None:
+            work_root = resolved_process_path(guard_row, work_root_text).resolve()
+            progress = progress_log_state(work_root / "progress.log")
+
+        guard = load_json(guard_path)
+        receipt_path = result_root / "full-roundtrip-receipt.json"
+        status = guard.get("status")
+        full_receipt = load_json(receipt_path)
+        if (
+            receipt_path.is_file()
+            and full_receipt.get("schema")
+            == "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"
+            and isinstance(full_receipt.get("terminal_pass"), bool)
+        ):
+            verdict = (
+                "pass" if full_receipt["terminal_pass"] is True else "roundtrip_fail"
+            )
+            next_action = "record_q1_full_roundtrip_terminal"
+        elif status == "running":
+            verdict = "running"
+            next_action = "wait_for_gate_completion"
+        else:
+            verdict = "receipt_incomplete"
+            next_action = "wait_for_gate_receipts"
+        gate: dict[str, Any] = {
+            "candidate": result_root.name,
+            "guard_pid": guard_row.get("pid"),
+            "coordinator_pid": coordinator_pid,
+            "scope_bytes": scope,
+            "verdict": verdict,
+            "next_action": next_action,
+            "source": "live_q1_full_roundtrip_guard",
+            "active_stage": phase,
+            "roundtrip_arm": arm,
+            "driver_result_json": logical_rel(receipt_path),
+            "driver_result_json_present": receipt_path.is_file(),
+            "rss_guard_json": logical_rel(guard_path),
+            "rss_guard_json_present": guard_path.is_file(),
+            "command": parts,
+            "promotion_authorized": False,
+            "claim_rule": (
+                "The live q1 guard proves only current resource-bounded execution; "
+                "full-roundtrip, parent identity, determinism, and score credit remain "
+                "false until their terminal receipts exist."
+            ),
+        }
+        gate.update(resource_guard_metrics(guard))
+        if progress is not None:
+            gate["codec_progress"] = progress
+        try:
+            guard_stat = guard_path.stat()
+        except OSError:
+            pass
+        else:
+            gate["rss_guard_json_bytes"] = guard_stat.st_size
+            gate["rss_guard_json_mtime_utc"] = mtime_utc(guard_path)
+            gate["rss_guard_json_sha256"] = sha256(guard_path)
+
+        owner = adaptive_job_owning_guard(gate, process_state, adaptive_state)
+        if owner is not None:
+            gate = bind_guard_to_adaptive_job(gate, owner)
+            gate["source"] = "live_q1_full_roundtrip_guard"
+            gate["driver_result_json"] = logical_rel(receipt_path)
+            gate["driver_result_json_present"] = receipt_path.is_file()
+            gate["claim_rule"] = (
+                "The q1 coordinator, nested guard, and adaptive owner agree on "
+                "candidate identity; this is live monitor evidence only."
+            )
+        return gate
+    return None
+
+
 def observed_gate_command_state(
     candidate: str | None,
     scope: int | None,
@@ -409,8 +684,10 @@ def observed_gate_command_state(
     if not isinstance(rows, list):
         rows = []
     driver_rows = [
-        row for row in rows
-        if isinstance(row, dict) and process_role(row.get("args")) == "driver"
+        row
+        for row in rows
+        if isinstance(row, dict)
+        and process_role(row.get("args")) in {"driver", "q1_full_roundtrip"}
     ]
     observed: list[dict[str, Any]] = []
     for row in driver_rows:
@@ -419,27 +696,80 @@ def observed_gate_command_state(
             parts = shlex.split(args)
         except ValueError:
             parts = args.split()
+        role = process_role(args)
+        observed_candidate: str | None = None
         observed_scope: int | None = None
-        if "--limit" in parts:
-            index = parts.index("--limit")
-            if index + 1 < len(parts):
+        check_determinism = False
+        proof_schedule = "unknown"
+        command_contract_matches = False
+        if role == "driver":
+            driver_marker = "projects/enwiki9/lib/driver.py"
+            if driver_marker in parts:
+                driver_index = parts.index(driver_marker)
+                if driver_index + 1 < len(parts):
+                    observed_candidate = parts[driver_index + 1]
+            limit = argv_option(parts, "--limit")
+            if limit is not None:
                 try:
-                    observed_scope = int(parts[index + 1])
+                    observed_scope = int(limit)
                 except ValueError:
                     observed_scope = None
+            check_determinism = "--check-determinism" in parts
+            proof_schedule = "generic_driver_with_determinism"
+            command_contract_matches = check_determinism
+        else:
+            result_root_text = argv_option(parts, "--result-root")
+            corpus_text = argv_option(parts, "--corpus")
+            arm = argv_option(parts, "--arm")
+            if result_root_text is not None:
+                result_root = resolved_process_path(row, result_root_text).resolve()
+                observed_candidate = result_root.name
+            if corpus_text is not None:
+                corpus = resolved_process_path(row, corpus_text).resolve()
+                try:
+                    observed_scope = corpus.stat().st_size
+                except OSError:
+                    observed_scope = None
+            required = {
+                "--build-receipt",
+                "--build-verification",
+                "--raw-binary",
+                "--scope-build-receipt",
+                "--program-lock-verification",
+                "--transfer-receipt",
+                "--transfer-verification",
+                "--authoritative-parent-payload",
+                "--resource-guard",
+                "--stage-runner",
+                "--scratch-root",
+                "--cgroup-path",
+                "--lease-path",
+            }
+            command_contract_matches = arm in {"a", "b"} and required.issubset(
+                parts
+            )
+            proof_schedule = (
+                f"q1_arm_{arm}_full_roundtrip"
+                if arm in {"a", "b"}
+                else "q1_invalid_arm"
+            )
         observed.append(
             {
                 "pid": row.get("pid"),
-                "candidate_matches": bool(candidate and candidate in parts),
+                "role": role,
+                "candidate": observed_candidate,
+                "candidate_matches": bool(candidate and observed_candidate == candidate),
                 "scope_bytes": observed_scope,
                 "scope_matches": observed_scope == scope,
-                "check_determinism": "--check-determinism" in parts,
+                "check_determinism": check_determinism,
+                "proof_schedule": proof_schedule,
+                "command_contract_matches": command_contract_matches,
             }
         )
     active_gate_observed = any(
         row.get("candidate_matches") is True
         and row.get("scope_matches") is True
-        and row.get("check_determinism") is True
+        and row.get("command_contract_matches") is True
         for row in observed
     )
     mismatch_count = sum(
@@ -448,7 +778,7 @@ def observed_gate_command_state(
         if not (
             row.get("candidate_matches") is True
             and row.get("scope_matches") is True
-            and row.get("check_determinism") is True
+            and row.get("command_contract_matches") is True
         )
     )
     return {
@@ -559,6 +889,27 @@ def active_candidate_from_process(process_state: dict[str, Any]) -> tuple[str | 
                     scope = None
         if isinstance(candidate, str) and candidate:
             return candidate, scope
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        try:
+            parts = shlex.split(str(row.get("args", "")))
+        except ValueError:
+            continue
+        if not has_script(parts, "cmix_filebacked_fxcm_full_roundtrip.py"):
+            continue
+        result_root_text = argv_option(parts, "--result-root")
+        corpus_text = argv_option(parts, "--corpus")
+        if result_root_text is None:
+            continue
+        candidate = resolved_process_path(row, result_root_text).resolve().name
+        scope: int | None = None
+        if corpus_text is not None:
+            try:
+                scope = resolved_process_path(row, corpus_text).resolve().stat().st_size
+            except OSError:
+                scope = None
+        return candidate, scope
     return None, None
 
 
@@ -695,6 +1046,7 @@ def live_speedlab_gate_from_process(
             "promotion_authorized": False,
             "claim_rule": "A speedlab prefix is not a constructive 1G score.",
         }
+        gate.update(resource_guard_metrics(guard))
         if input_path is not None:
             gate["input_path"] = str(input_path)
         if output_path is not None:
@@ -1107,6 +1459,13 @@ def active_gate_status_state(
         "rss_guard_json_sha256",
         "gate_size",
         "scope_status",
+        "active_stage",
+        "roundtrip_arm",
+        "coordinator_pid",
+        "codec_progress",
+        "cgroup_memory_peak_bytes",
+        "latest_cgroup_current_bytes",
+        "cgroup_events_delta",
     ):
         if key in gate:
             row[key] = gate.get(key)
@@ -1534,6 +1893,9 @@ def operator_summary_state(
         "gate_size": gate.get("gate_size"),
         "gate_verdict": gate.get("verdict"),
         "gate_next_action": gate.get("next_action"),
+        "active_stage": gate.get("active_stage"),
+        "roundtrip_arm": gate.get("roundtrip_arm"),
+        "codec_progress": gate.get("codec_progress"),
         "active_scorer_observed": process_state.get("active_scorer_observed"),
         "active_cmix_mode": process_state.get("active_cmix_mode"),
         "driver_result_present": gate.get("driver_result_json_present"),
@@ -1609,8 +1971,17 @@ def receipt() -> dict[str, Any]:
     process_state = active_process_state()
     adaptive_state = adaptive_running_jobs_state()
     candidate, scope = active_candidate_from_cert(cert)
-    live_speedlab_gate = live_speedlab_gate_from_process(process_state)
-    if live_speedlab_gate is not None:
+    live_q1_gate = live_q1_full_gate_from_process(process_state, adaptive_state)
+    live_speedlab_gate = (
+        None if live_q1_gate is not None else live_speedlab_gate_from_process(process_state)
+    )
+    if live_q1_gate is not None:
+        candidate = live_q1_gate.get("candidate")
+        scope = live_q1_gate.get("gate_size")
+        if not isinstance(scope, int):
+            scope = live_q1_gate.get("scope_bytes")
+        gate = live_q1_gate
+    elif live_speedlab_gate is not None:
         owning_job = adaptive_job_owning_guard(
             live_speedlab_gate,
             process_state,
@@ -1801,6 +2172,14 @@ def process_role(args: Any) -> str:
     text = str(args)
     if "cmix21_gate_decider.py" in text:
         return "gate_decider"
+    if "cmix_filebacked_fxcm_full_roundtrip.py" in text:
+        return "q1_full_roundtrip"
+    if "run_with_resource_guard_v3_soft_high.py" in text:
+        return "resource_guard_soft_high"
+    if "run_with_resource_guard_v3.py" in text:
+        return "resource_guard"
+    if "cmix_filebacked_fxcm_full_stage.py" in text:
+        return "q1_full_stage"
     if "run_with_rss_guard.py" in text:
         return "rss_guard"
     if "projects/enwiki9/lib/driver.py" in text:
@@ -1811,6 +2190,14 @@ def process_role(args: Any) -> str:
         return "fx2_package"
     if "fx2-public-package-" in text and "cmix_orig" in text:
         return "native_fx2"
+    try:
+        parts = shlex.split(text)
+    except ValueError:
+        parts = []
+    if parts:
+        executable = pathlib.Path(parts[0]).name
+        if executable in {"cmix", "cmix.bin", "cmix_orig"}:
+            return "native_cmix"
     if "streaming_retrieval_shadow.py" in text:
         return "target_trace_shadow"
     if "streaming_retrieval_raw_shadow.py" in text:
@@ -1852,6 +2239,8 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Scope unit: `{summary.get('scope_unit') or 'n/a'}`",
         f"- Gate verdict: `{summary.get('gate_verdict', 'unknown')}`",
         f"- Gate next action: `{summary.get('gate_next_action', 'unknown')}`",
+        f"- Active stage: `{summary.get('active_stage') or 'n/a'}`",
+        f"- Roundtrip arm: `{summary.get('roundtrip_arm') or 'n/a'}`",
         f"- Active scorer observed: `{fmt_bool(summary.get('active_scorer_observed'))}`",
         f"- Active cmix mode: `{summary.get('active_cmix_mode') or 'n/a'}`",
         f"- Driver result present: `{fmt_bool(summary.get('driver_result_present'))}`",
@@ -1890,12 +2279,29 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Scope bytes: `{fmt_int(gate.get('scope_bytes'))}`",
         f"- Scope symbols: `{fmt_int(gate.get('scope_symbols'))}`",
         f"- Scope unit: `{gate.get('scope_unit') or 'n/a'}`",
+        f"- Active stage: `{gate.get('active_stage') or 'n/a'}`",
+        f"- Roundtrip arm: `{gate.get('roundtrip_arm') or 'n/a'}`",
+        f"- Coordinator PID: `{fmt_int(gate.get('coordinator_pid'))}`",
         f"- Driver result JSON: `{gate.get('driver_result_json') or 'not present'}`",
         f"- Driver result present: `{fmt_bool(gate.get('driver_result_json_present'))}`",
         f"- RSS guard JSON: `{gate.get('rss_guard_json') or 'not present'}`",
         f"- RSS guard present: `{fmt_bool(gate.get('rss_guard_json_present'))}`",
         f"- Active scorer observed: `{fmt_bool(proc_state.get('active_scorer_observed'))}`",
     ]
+    codec_progress = (
+        gate.get("codec_progress")
+        if isinstance(gate.get("codec_progress"), dict)
+        else {}
+    )
+    if codec_progress:
+        lines.extend(
+            [
+                f"- Codec progress: `{fmt_float(codec_progress.get('reported_scope_percent'), 2)}%`",
+                f"- Reported payload bytes: `{fmt_int(codec_progress.get('reported_payload_bytes'))}`",
+                f"- Progress log: `{codec_progress.get('path') or 'n/a'}`",
+                f"- Progress log modified UTC: `{codec_progress.get('mtime_utc') or 'n/a'}`",
+            ]
+        )
     liveness = data.get("gate_liveness") if isinstance(data.get("gate_liveness"), dict) else {}
     if liveness:
         lines.extend(
@@ -1928,6 +2334,9 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Latest sampled single-process decimal `10GB` margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
                 f"- Latest sampled tree margin KiB: `{fmt_int(gate.get('latest_sample_tree_rss_margin_kib'))}`",
                 f"- Latest sampled tree decimal `10GB` margin KiB: `{fmt_int(summary.get('latest_sample_tree_decimal_10gb_margin_kib'))}`",
+                f"- Cgroup memory peak bytes: `{fmt_int(gate.get('cgroup_memory_peak_bytes'))}`",
+                f"- Latest cgroup current bytes: `{fmt_int(gate.get('latest_cgroup_current_bytes'))}`",
+                f"- Cgroup event deltas: `{gate.get('cgroup_events_delta') or 'n/a'}`",
             ]
         )
     if (
@@ -1992,8 +2401,8 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Active gate command observed: `{fmt_bool(observed_gate.get('active_gate_command_observed'))}`",
                 f"- Driver command mismatch count: `{fmt_int(observed_gate.get('mismatch_count'))}`",
                 "",
-                "| PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |",
-                "|---:|---|---:|---|---|",
+                "| Role | PID | Candidate Match | Scope Bytes | Scope Match | Command Contract | Determinism Flag | Proof Schedule |",
+                "|---|---:|---|---:|---|---|---|---|",
             ]
         )
         driver_processes = observed_gate.get("driver_processes")
@@ -2002,14 +2411,17 @@ def render_md(data: dict[str, Any]) -> str:
                 if not isinstance(row, dict):
                     continue
                 lines.append(
-                    f"| {fmt_int(row.get('pid'))} | "
+                    f"| `{row.get('role') or 'unknown'}` | "
+                    f"{fmt_int(row.get('pid'))} | "
                     f"`{fmt_bool(row.get('candidate_matches'))}` | "
                     f"{fmt_int(row.get('scope_bytes'))} | "
                     f"`{fmt_bool(row.get('scope_matches'))}` | "
-                    f"`{fmt_bool(row.get('check_determinism'))}` |"
+                    f"`{fmt_bool(row.get('command_contract_matches'))}` | "
+                    f"`{fmt_bool(row.get('check_determinism'))}` | "
+                    f"`{row.get('proof_schedule') or 'unknown'}` |"
                 )
         else:
-            lines.append("| n/a | n/a | n/a | n/a | n/a |")
+            lines.append("| n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |")
     observed_controller = (
         data.get("observed_controller_command")
         if isinstance(data.get("observed_controller_command"), dict)
