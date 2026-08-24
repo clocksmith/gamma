@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import {
+  buildFirebaseSite,
   buildIndexHtml,
   protectHtml,
   rewritePrototypeHtml,
@@ -78,4 +80,28 @@ test("Firebase deployment uses the Mandate project's root-hosting contract", asy
   );
   assert.equal(firebase.hosting.public, "dist/firebase");
   assert.equal(firebase.hosting.cleanUrls, undefined);
+});
+
+test("Firebase publication copies only graph-owned runtime artifacts", async () => {
+  const outputRoot = await mkdtemp(join(tmpdir(), "mandate-2038-firebase-"));
+  try {
+    const { manifest } = await buildFirebaseSite({ outputRoot });
+    assert.ok(manifest.runtimeArtifacts.length > 0);
+    assert.ok(
+      manifest.runtimeArtifacts.every((target) => /^dist\/runtime\/[^/]+\.json$/.test(target))
+    );
+    await assert.rejects(
+      stat(resolve(outputRoot, "dist/runtime/generated/reference-cards.json")),
+      { code: "ENOENT" }
+    );
+    const authority = JSON.parse(
+      await readFile(resolve(outputRoot, "dist/runtime/reference-cards.json"), "utf8")
+    ).eraCards.find((era) => era.id === "era_narrative");
+    assert.match(authority.unlockText, /Public Capability Covenant/);
+    assert.doesNotMatch(authority.unlockText, /Open Weights/i);
+    const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
+    assert.match(baseline, /Public Capability Covenant/);
+  } finally {
+    await rm(outputRoot, { recursive: true, force: true });
+  }
 });

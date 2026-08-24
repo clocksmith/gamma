@@ -787,6 +787,78 @@ test("every player-facing content surface has complete copy", async () => {
   }
 });
 
+test("the selected lore inventory is complete and preserves era placement", async () => {
+  const [
+    { headlines },
+    { mandates },
+    { escalations },
+    { eraCards },
+    { factions },
+    world,
+    rules,
+    companion
+  ] = await Promise.all([
+    readJson("dist/runtime/headlines.json"),
+    readJson("dist/runtime/mandates.json"),
+    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/reference-cards.json"),
+    readJson("dist/runtime/factions.json"),
+    readJson("dist/runtime/world-copy.json"),
+    readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
+    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8")
+  ]);
+
+  assert.equal(headlines.length, 24);
+  for (const era of [1, 2, 3, 4]) {
+    assert.equal(
+      headlines.filter((headline) => headline.round === era).length,
+      6,
+      `Era ${era} has six selected Headlines`
+    );
+    assert.equal(
+      mandates.filter((mandate) => mandate.era === era).length,
+      3,
+      `Era ${era} has three Mandates`
+    );
+  }
+  for (const headline of headlines) {
+    assert.equal(headline.strapline, headline.strapline.toUpperCase());
+    assert.ok(headline.newswire.endsWith("."), `${headline.id} has complete newswire copy`);
+    assert.ok(headline.quote.endsWith("."), `${headline.id} has complete quote copy`);
+  }
+
+  const progressOpenWeights = headlines.find(
+    (headline) => headline.id === "open_weights_drop"
+  );
+  assert.equal(progressOpenWeights.round, 1);
+  assert.match(progressOpenWeights.name, /Open Weights/);
+
+  const authorityEra = eraCards.find((era) => era.id === "era_narrative");
+  const authorityProgram = escalations.find(
+    (escalation) => escalation.id === "open_weights"
+  );
+  assert.match(authorityEra.unlockText, /Public Capability Covenant/);
+  assert.doesNotMatch(authorityEra.unlockText, /Open Weights/i);
+  assert.equal(authorityProgram.name, "Public Capability Covenant");
+  assert.equal(authorityProgram.displayName, "Supported Access Standard");
+  assert.doesNotMatch(authorityProgram.name, /Open Weights/i);
+  assert.doesNotMatch(rules, /#### Open Weights|Open Weights is global after movement/i);
+
+  assert.equal(world.worldPrimer.length, 3);
+  assert.equal(world.endings.length, 4);
+  assert.equal(world.tokenCopy.length, 10);
+  assert.equal(eraCards.length, 4);
+  assert.equal(factions.length, 6);
+  assert.match(world.worldPrimer[0], /Open weights ran locally/);
+  assert.match(world.worldPrimer[1], /substations, water rights, reactors/);
+  assert.match(world.worldPrimer[2], /cognitive donors sold neural access/);
+  assert.match(companion, /The Future Timeline is one compounding public record/);
+
+  const allSelectedLore = JSON.stringify({ headlines, mandates, escalations, eraCards, factions, world })
+    .concat("\n", companion);
+  assert.doesNotMatch(allSelectedLore, /Tracking Pixels|Ask before displaying external images|Trust Center/);
+});
+
 test("new thematic decks and reference surfaces have complete draft inventories", async () => {
   const mandates = await readJson("dist/runtime/mandates.json");
   const objectives = await readJson("dist/runtime/secret-objectives.json");

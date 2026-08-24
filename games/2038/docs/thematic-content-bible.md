@@ -470,6 +470,16 @@ They cover original-person claims, post-work purpose, lost operational
 competence, intervention, and unfamiliar minds without pretending that an
 existing card already expresses them.
 
+### Legacy mechanical identifiers
+
+Stable mechanical identifiers do not determine player-facing era placement.
+The Era III Program whose retained internal ID is `open_weights` is presented
+as **Public Capability Covenant**, an Authority-era supported-access standard.
+Strategic open weights appear only in Era I through
+`headline:open_weights_drop`. Runtime strategy tables and experimental tags may
+retain the internal ID, but no Era III player surface may call that Program
+Open Weights.
+
 For every candidate card or revision, answer these questions before drafting
 copy:
 

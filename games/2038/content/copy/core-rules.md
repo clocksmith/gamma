@@ -169,7 +169,7 @@ Action resolves without a destination restriction.
 | --- | ---: | --- |
 | I — ${terms.eras.demo} | 0 | None |
 | II — ${terms.eras.scale} | 1 | ${terms.technology.megaCluster}, Reorganization |
-| III — ${terms.eras.narrative} | 1 | Open Weights, Narrative Capture |
+| III — ${terms.eras.narrative} | 1 | Public Capability Covenant, Narrative Capture |
 | IV — ${terms.eras.claim} | 2 | ${terms.technology.agentSwarm}, ${terms.technology.advancedGeneration} |
 
 ${terms.technology.agentSwarm} is the selected Program; it resolves and exhausts two
@@ -390,9 +390,9 @@ Each player receives one Program marker. Previous Programs remain
 unlocked. Joint Ventures now enter play. Production Power purchases are an
 Advanced Play rule.
 
-#### Open Weights
+#### Public Capability Covenant
 
-Open Weights is global after movement.
+Public Capability Covenant is global after movement.
 
 Every player gains one ${terms.playerTracks.capability}. You also gain:
 

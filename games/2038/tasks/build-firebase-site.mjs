@@ -211,6 +211,24 @@ async function htmlFiles(directory) {
     .sort();
 }
 
+async function copyCanonicalRuntimeArtifacts(outputRoot) {
+  const graph = JSON.parse(
+    await readFile(resolve(projectRoot, "content/graph.json"), "utf8")
+  );
+  const runtimeTargets = graph.artifacts
+    .map((artifact) => artifact.target)
+    .filter((target) => /^dist\/runtime\/[^/]+\.json$/.test(target));
+  if (runtimeTargets.length === 0) {
+    throw new Error("Content graph declares no publishable runtime artifacts.");
+  }
+  for (const relative of runtimeTargets) {
+    const target = resolve(outputRoot, relative);
+    await mkdir(dirname(target), { recursive: true });
+    await cp(resolve(projectRoot, relative), target);
+  }
+  return runtimeTargets;
+}
+
 function parseArguments(values) {
   const index = values.indexOf("--output-root");
   if (index === -1) return { outputRoot: defaultOutputRoot };
@@ -361,9 +379,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
       rewritePrototypeModule(source)
     );
   }
-  await cp(resolve(projectRoot, "dist/runtime"), resolve(outputRoot, "dist/runtime"), {
-    recursive: true
-  });
+  const runtimeArtifacts = await copyCanonicalRuntimeArtifacts(outputRoot);
   const publishedSimulationModules = [
     "cancellation.js",
     "content/simulation-copy.js",
@@ -432,7 +448,8 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
       xRobotsTag: "noindex, nofollow, noarchive, nosnippet, noimageindex",
       limitation: "Crawler directives are voluntary and do not prevent hostile scraping."
     },
-    pages
+    pages,
+    runtimeArtifacts
   };
   await writeFile(
     resolve(outputRoot, "site-manifest.json"),

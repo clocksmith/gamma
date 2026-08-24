@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.10-test`
+**Rules reference:** `0.8.0-rc.11-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.10-test` test:
+controlled `0.8.0-rc.11-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.9` implements `0.8.0-rc.10-test` under engine coverage
+Executable game `0.14.10` implements `0.8.0-rc.11-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -244,15 +244,17 @@ Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract.
 
-Candidate `0.8.0-rc.10-test` changes no physical mechanic from rc.9.
-Executable `0.14.9` preserves every stable Headline ID, rules instruction,
-profile boundary, Era rule, and unlock instruction while replacing the four-Era
-world narrative and all twenty-four Headline presentations. The selected arc
-now moves from cheap intelligence and harvested institutional memory through
-utility capture and modeled human authority to reproducible minds, matter, and
-stellar infrastructure. Existing balance evidence remains evidence for the
-unchanged mechanics; it does not validate the new prose, tone, or commercial
-presentation.
+Candidate `0.8.0-rc.11-test` changes no physical mechanic from rc.10.
+Executable `0.14.10` preserves every stable Headline and Program ID, rules
+effect, profile boundary, Era count, card count, and unlock timing while
+completing the selected four-Era narrative across the world primer, endings,
+Programs, Mandates, faction surfaces, companions, and published galleries. The
+retained internal Program ID `open_weights` now presents as Public Capability
+Covenant in Authority; strategic Open Weights remains a Progress Headline.
+Firebase publication copies only graph-declared runtime artifacts, preventing
+ignored legacy projections from remaining publicly addressable. Existing
+balance evidence remains evidence for the unchanged mechanics; it does not
+validate the new prose, tone, or commercial presentation.
 
 Mechanics projection contract v2 also removes Headline newswire, quotation,
 labels, and other presentation-only fields from the mechanics fingerprint. The
@@ -260,6 +262,12 @@ historical v1 fingerprint included those fields, so its digest cannot be
 compared directly with v2. Reprojecting the `0.14.8` and `0.14.9` rulesets
 through v2 produces the same mechanics digest. Ruleset, playtest-kit, content,
 and engine identities still change and remain separately attributable.
+
+Historical candidate `0.8.0-rc.10-test` and executable `0.14.9` preserved every
+stable Headline ID and mechanic while replacing the four Era panels and all
+twenty-four Headline presentations. That release established the selected arc
+but left the Era III Program name and several published narrative surfaces
+inconsistent with it.
 
 Historical candidate `0.8.0-rc.9-test` and executable `0.14.8` aligned the
 release declaration and version-independent contract tests without changing a
@@ -480,7 +488,7 @@ Measure before changing numbers:
 - Do all three Grid Generator slots fill before Era IV?
 - Is Influence selected for genuine political choices rather than efficient
   Trust scoring?
-- Are Reorganization and Open Weights credible alternatives to their competing
+- Are Reorganization and Public Capability Covenant credible alternatives to their competing
   Escalations?
 - Does the Future Timeline produce a memorable history?
 
