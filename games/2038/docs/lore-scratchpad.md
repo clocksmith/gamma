@@ -887,3 +887,16 @@ the idea becomes a defining public event; earlier seeds may remain visible.
 4. Select six alternate manifestations of that paragraph.
 5. Map those manifestations onto existing mechanics or identify an explicit rules-change proposal.
 6. Rewrite player-facing copy only after the narrative and mechanic mapping are approved.
+
+## Canonicalization result
+
+The review sequence above is complete for the selected twenty-four-card deck.
+The four Era panels, twenty-four Headlines, world primer, World Endings,
+Programs, Mandates, faction surfaces, and World companion now project the same
+causal history. Strategic Open Weights remains an Era I event. The stable Era
+III Program ID `open_weights` is intentionally retained for mechanical
+compatibility, but its player-facing institution is Public Capability Covenant.
+
+Unselected ideas remain research inventory. They may replace, combine with, or
+explain an existing card in a later editorial decision, but they do not expand
+the deck and are not current player-facing canon.
