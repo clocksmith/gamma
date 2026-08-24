@@ -15,6 +15,7 @@ from typing import Any
 import jsonschema
 
 import cmix_filebacked_fxcm_scope_identity as scope
+import enwiki9_python_source_closure as python_source
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -32,9 +33,9 @@ PLAN_SCHEMA = (
     / "operations/planning/"
     "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json"
 )
-INPUT_SCHEMA_SHA256 = "e7b9d8a9f37f8479e8ea057871e1510df5e4fdbf62a7d36bc31a5efa617389a8"
+INPUT_SCHEMA_SHA256 = "b40cbd44c40c5b25e59397c2844d8aead27d3c5d5807b45fdda624a8394b3bc8"
 OUTPUT_SCHEMA_SHA256 = "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802"
-PLAN_SCHEMA_SHA256 = "214e083eb8dee2b54d30fcd0e1454b041cda0e6f1bda6140670627b28cb5df40"
+PLAN_SCHEMA_SHA256 = "4e975fda5d3ebdf69c3b973597d26a629c9e3928db5c610c3dbc4c3ae1a6aeb1"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 CALIBRATION_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1"
 CALIBRATION_VERIFICATION_SCHEMA = (
@@ -74,6 +75,45 @@ def digest_file(path: Path) -> str:
         for block in iter(lambda: stream.read(8 << 20), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def python_source_closure_rows(entries: tuple[Path, ...]) -> list[dict[str, str]]:
+    return [
+        {
+            "path": path.relative_to(PROJECT).as_posix(),
+            "sha256": f"sha256:{digest_file(path)}",
+        }
+        for path in python_source.local_source_closure(entries)
+    ]
+
+
+def validate_python_source_closure(plan: dict[str, Any]) -> Path:
+    record = plan.get("python_source_closure", {})
+    path = regular_file(
+        Path(record.get("path", "")),
+        "100M Python harness source closure",
+        project_only=True,
+    )
+    if record.get("sha256") != digest_file(path):
+        raise RuntimeError("100M Python harness source closure binding mismatch")
+    roots = tuple(
+        regular_file(PROJECT / raw, f"100M Python harness root {index}", True)
+        for index, raw in enumerate(
+            (
+                plan["coordinator"]["runner"],
+                plan["coordinator"]["identity_arm_runner"],
+                plan["independent_verification"]["verifier"],
+                plan["coordinator"]["release_stage_runner"],
+                plan["observer_build"]["runner"],
+                plan["observer_calibration"]["runner"],
+                plan["observer_calibration"]["independent_verifier"],
+            )
+        )
+    )
+    observed = json.loads(path.read_text(encoding="ascii"))
+    if observed != python_source_closure_rows(roots):
+        raise RuntimeError("100M Python harness source closure mismatch")
+    return path
 
 
 def digest_prefix(path: Path, byte_count: int) -> str:
@@ -456,6 +496,21 @@ def derive(receipt: dict[str, Any]) -> tuple[
         coordinator = plan.get("coordinator", {})
         calibration_contract = plan.get("observer_calibration", {})
         frozen = plan.get("frozen_parent_and_candidate", {})
+        harness_closure_record = plan.get("python_source_closure", {})
+        harness_closure_path = validate_python_source_closure(plan)
+        harness_closure_binding_pass = bool(
+            resolve_artifact(
+                receipt["antecedents"]["python_source_closure"],
+                "Python harness source closure antecedent",
+            )
+            == harness_closure_path
+            and harness_closure_record.get("path")
+            == project_relative_artifact_path(
+                receipt["antecedents"]["python_source_closure"]
+            )
+            and harness_closure_record.get("sha256")
+            == receipt["antecedents"]["python_source_closure"]["sha256"]
+        )
         frozen_path_pass = all(
             frozen.get(plan_name) == project_relative_artifact_path(record)
             for plan_name, record in (
@@ -478,6 +533,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
             and plan.get("planning_schema_sha256") == PLAN_SCHEMA_SHA256
             and plan.get("candidate_id") == CANDIDATE_ID
             and frozen_path_pass
+            and harness_closure_binding_pass
             and plan.get("receipt_schema", {}).get("sha256") == INPUT_SCHEMA_SHA256
             and plan.get("independent_verification", {}).get("verifier")
             == str(Path(__file__).resolve().relative_to(PROJECT))
@@ -604,6 +660,8 @@ def derive(receipt: dict[str, Any]) -> tuple[
             == receipt["antecedents"]["planning_contract"]
             and calibration.get("antecedents", {}).get("planning_contract")
             == receipt["antecedents"]["planning_contract"]
+            and calibration.get("antecedents", {}).get("python_source_closure")
+            == receipt["antecedents"]["python_source_closure"]
             and calibration.get("antecedents", {}).get("observer_build")
             == receipt["antecedents"]["observer_build"]
         )
@@ -642,6 +700,8 @@ def derive(receipt: dict[str, Any]) -> tuple[
         observer_build_binding_pass = (
             observer_build.get("candidate_id") == CANDIDATE_ID
             and observer_build.get("decisions", {}).get("observer_build_pass") is True
+            and observer_build.get("python_source_closure")
+            == receipt["antecedents"]["python_source_closure"]
             and set(observer_packages) == {"parent", "candidate", "negative"}
             and observer_packages["parent"] == parent["binary"]
             and observer_packages["candidate"] == q1_identity["binary"]

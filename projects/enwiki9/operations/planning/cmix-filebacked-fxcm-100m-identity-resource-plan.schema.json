@@ -8,6 +8,7 @@
     "$schema", "planning_schema_sha256", "artifact_id", "revision",
     "candidate_id", "authoritative_parent_id", "operational_status",
     "execution_authorized", "purpose", "receipt_schema",
+    "python_source_closure",
     "independent_verification", "coordinator", "population",
     "frozen_parent_and_candidate", "arms", "identity_observer_source",
     "observer_build", "observer_calibration", "identity_observer",
@@ -21,7 +22,7 @@
     },
     "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
     "artifact_id": {"const": "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"},
-    "revision": {"const": 3},
+    "revision": {"const": 4},
     "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
     "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
     "operational_status": {
@@ -38,6 +39,7 @@
         "sha256": {"$ref": "#/$defs/sha256"}
       }
     },
+    "python_source_closure": {"$ref": "#/$defs/artifact"},
     "independent_verification": {
       "type": "object",
       "additionalProperties": false,
@@ -198,6 +200,14 @@
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "text": {"type": "string", "minLength": 1},
     "path": {"type": "string", "minLength": 1},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/path"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "textArray": {
       "type": "array",
       "items": {"$ref": "#/$defs/text"}

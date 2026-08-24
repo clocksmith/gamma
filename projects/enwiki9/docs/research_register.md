@@ -251,6 +251,18 @@ records: start, five fixed points, and a terminal point required to equal the
 bound transformed-stream artifact. This is the same calibrated binary, so no
 second observer build or compiler-equivalence assumption is needed.
 
+The opening-100M harness now has its own exact 149-member transitive Python
+and research-schema closure rooted at its coordinator, identity arm,
+independent verifier, release stage, observer build, calibration runner, and
+calibration verifier. This is deliberately separate from the retained q1
+`source_closure`, which binds the candidate implementation rather than the
+orchestration code. The observer build and calibration each validate and record
+the closure before creating their output roots; calibration requires the build
+to carry the same closure. The coordinator rejects a path/hash, stale-stage, or
+closure mismatch before creating its result root, the joint receipt records the
+harness closure as an antecedent, and both independent verifiers rederive the
+same ordered closure.
+
 The full arm runner, sequential parent/q1 coordinator, strict plan schema, arm
 and joint schemas, and independent verifier are now source-complete and
 content-addressed. Each arm is single-CPU, owns disjoint result, scratch, and

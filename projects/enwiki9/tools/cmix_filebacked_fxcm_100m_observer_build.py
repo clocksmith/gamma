@@ -27,7 +27,7 @@ OBSERVER_PROGRAM_SHA256 = "51eeb770be049e0cfab1554d18e34e96d8835e0e8d9c2733757a7
 OBSERVER_HEADER_SHA256 = "f0a1b5d64645c1a7af0f3f7e75daec51864b26b3de7f627bd1b7ebe863a75ebb"
 OBSERVER_PATCH_SHA256 = "1856077375fee29decf3f8c9c8e1fb9202371471a6e78ec7f8c85c47710ef73b"
 OBSERVER_MUTATION_CONTROL_SHA256 = "7d0c4762980973fede8ac908746cbca8117aa39ad013ec08bbe32899d070584f"
-RECEIPT_SCHEMA_SHA256 = "46ef10067a3ce03e5b3e729d37e02a65b8f40f35c36bcb0f1830f29cdd941eec"
+RECEIPT_SCHEMA_SHA256 = "8ff0642c0459aa1400293e688900b7fffa50001e8e87047be7776d5ea0cde9bb"
 OBSERVER_DEFINITION = "GAMMA_FULL_IDENTITY_OBSERVER=1"
 PRE_HEAD_DEFINITION = "GAMMA_FULL_IDENTITY_PRE_HEAD=1"
 PARENT_DEFINITIONS = tuple(
@@ -378,6 +378,7 @@ def main() -> int:
         or plan.get("execution_authorized") is not False
     ):
         raise RuntimeError("100M planning contract identity mismatch")
+    harness_closure_path = proof.validate_python_source_closure(plan)
     original_source = capture.existing_directory(args.source_root, "source root")
     closure_path, closure = capture.load_json(args.source_closure, "source closure")
     shared_header = capture.existing_regular(args.shared_header, "shared allocator header")
@@ -568,6 +569,7 @@ def main() -> int:
         "schema": SCHEMA,
         "candidate_id": CANDIDATE_ID,
         "planning_contract": artifact(plan_path),
+        "python_source_closure": artifact(harness_closure_path),
         "source_closure_receipt": artifact(closure_path),
         "source_closure_sha256": hashlib.sha256(canonical(entries)).hexdigest(),
         "observer_program": artifact(observer_program),
