@@ -239,10 +239,30 @@ sealed opportunities. A native P/K/D finite archive, exact inverse, package,
 memory, runtime, and distant transfer remain mandatory. A prospectively frozen
 [`adaptive experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v1.json)
 and dependency-gated proposal now bind the design to Gamma's workflow. The
-proposal remains unclaimed while q1 and the exclusive full-1G lease are live;
-no scanner, source, candidate revision, scan, or receipt exists, so the design
-has zero compression and score credit. See the
+proposal was rejected before implementation after an independent static audit
+found that its resource and transition proof surface was underfrozen. No
+scanner, source, candidate revision, scan, or receipt exists, so v1 has zero
+compression and score credit. See the
 [`design contract`](../operations/planning/fxcm_fossil_match_q0_v1.json).
+
+Correction-only `fxcm_fossil_match_q0_v2` retains the same information source
+but closes those static defects before source exists. It freezes a modulo-
+`2^64` 16-byte polynomial hash, the exact `2^24` record layout and sentinel,
+unconditional post-score replacement, no continuation state, the parent's
+pre-insertion ring-alias control, SplitMix and negated controls, and six
+inclusive distance buckets. The scanner must route every nonsequential byte
+read through an `index < current_position` accessor.
+
+v2 also replaces a weak global transfer check. D must now beat the maximum of
+S/R/N separately in every chronological third and in at least two distance
+buckets. Its resource gate includes process-tree RSS, fresh cgroup-v2 peak,
+sampled file-cache residency, max/OOM/OOM-kill events, and scratch; even a
+standalone pass can authorize only donor-surprise tracing. Native integration
+still requires a fresh joint parent-plus-specialist cgroup, process-tree,
+archive, inverse, runtime, and package replay. The v2
+[`design`](../operations/planning/fxcm_fossil_match_q0_v2.json),
+[`experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v2.json),
+and dependency-gated proposal are unexecuted and receive zero credit.
 
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
 
