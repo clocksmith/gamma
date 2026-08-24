@@ -27,8 +27,14 @@ OUTPUT_SCHEMA = (
     / "contracts/research/v1/"
     "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
 )
+PLAN_SCHEMA = (
+    PROJECT
+    / "operations/planning/"
+    "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json"
+)
 INPUT_SCHEMA_SHA256 = "e7b9d8a9f37f8479e8ea057871e1510df5e4fdbf62a7d36bc31a5efa617389a8"
 OUTPUT_SCHEMA_SHA256 = "f6ed6d489141687b7599497a53c5d5162c0c352f54d2db07b26ca99c4cfc6802"
+PLAN_SCHEMA_SHA256 = "eb8970b91fbf809c93f8a876c316883bb39d03aac1b96d6b0f1a1dcec0e656bc"
 CANDIDATE_ID = "cmix_obias_memory_safe_parent_filebacked_q1_v1"
 CALIBRATION_SCHEMA = "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1"
 CALIBRATION_VERIFICATION_SCHEMA = (
@@ -56,6 +62,10 @@ EXPECTED_OBSERVER_RANGES = 26
 
 def digest_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
+
+
+def command_sha256(argv: list[str]) -> str:
+    return digest_bytes(b"\0".join(os.fsencode(value) for value in argv))
 
 
 def digest_file(path: Path) -> str:
@@ -185,6 +195,42 @@ def json_lines(path: Path, label: str) -> list[dict[str, Any]]:
             raise RuntimeError(f"{label} line {line_number} is not an object")
         records.append(value)
     return records
+
+
+def phase_marker_binding(guard: dict[str, Any]) -> bool:
+    try:
+        marker_path = regular_file(
+            Path(guard["phase_marker_path"]),
+            "R-Q phase marker stream",
+            project_only=True,
+        )
+        source = json_lines(marker_path, "R-Q phase marker stream")
+    except (OSError, RuntimeError, TypeError, ValueError, KeyError):
+        return False
+    expected = [
+        (phase, event)
+        for phase in PHASES
+        for event in ("start", "end")
+    ]
+    if (
+        len(source) != len(expected)
+        or any(set(record) != {"event", "phase"} for record in source)
+        or [(record.get("phase"), record.get("event")) for record in source]
+        != expected
+    ):
+        return False
+    observed = guard.get("phase_markers")
+    if not isinstance(observed, list) or len(observed) != len(expected):
+        return False
+    return all(
+        record.get("source_line") == index
+        and record.get("phase") == phase
+        and record.get("event") == event
+        and record.get("detail") is None
+        for index, (record, (phase, event)) in enumerate(
+            zip(observed, expected), 1
+        )
+    )
 
 
 def identity_observer_geometry(execution: dict[str, Any]) -> bool:
@@ -395,6 +441,11 @@ def derive(receipt: dict[str, Any]) -> tuple[
             receipt["antecedents"]["planning_contract"], "planning contract antecedent"
         )
         plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        if digest_file(PLAN_SCHEMA) != PLAN_SCHEMA_SHA256:
+            raise RuntimeError("planning contract schema hash drift")
+        plan_schema = json.loads(PLAN_SCHEMA.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator.check_schema(plan_schema)
+        jsonschema.validate(plan, plan_schema)
         coordinator = plan.get("coordinator", {})
         calibration_contract = plan.get("observer_calibration", {})
         frozen = plan.get("frozen_parent_and_candidate", {})
@@ -417,6 +468,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
         plan_binding_pass = (
             plan.get("artifact_id")
             == "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"
+            and plan.get("planning_schema_sha256") == PLAN_SCHEMA_SHA256
             and plan.get("candidate_id") == CANDIDATE_ID
             and frozen_path_pass
             and plan.get("receipt_schema", {}).get("sha256") == INPUT_SCHEMA_SHA256
@@ -460,6 +512,8 @@ def derive(receipt: dict[str, Any]) -> tuple[
             "cmix-filebacked-fxcm-100m-release-stage.schema.json"
             and coordinator.get("identity_resource_guard")
             == "tools/run_with_rss_guard.py"
+            and coordinator.get("identity_resource_guard_schema")
+            == "contracts/research/v1/resource-guard-receipt.schema.json"
             and coordinator.get("release_soft_high_guard")
             == "tools/run_with_resource_guard_v3_soft_high.py"
             and coordinator.get("release_resource_guard")
@@ -473,6 +527,10 @@ def derive(receipt: dict[str, Any]) -> tuple[
                     (coordinator["release_stage_runner"], "release_stage_runner_sha256"),
                     (coordinator["release_stage_schema"], "release_stage_schema_sha256"),
                     (coordinator["identity_resource_guard"], "identity_resource_guard_sha256"),
+                    (
+                        coordinator["identity_resource_guard_schema"],
+                        "identity_resource_guard_schema_sha256",
+                    ),
                     (coordinator["release_soft_high_guard"], "release_soft_high_guard_sha256"),
                     (coordinator["release_resource_guard"], "release_resource_guard_sha256"),
                 )
@@ -596,6 +654,12 @@ def derive(receipt: dict[str, Any]) -> tuple[
         errors.append(f"observer build antecedent: {error}")
 
     identity_execution_pass = plan_binding_pass and observer_build_binding_pass
+    identity_guard_schema = json.loads(
+        (
+            PROJECT / "contracts/research/v1/resource-guard-receipt.schema.json"
+        ).read_text(encoding="utf-8")
+    )
+    jsonschema.Draft202012Validator.check_schema(identity_guard_schema)
     for arm_name, arm in (("I-P", parent), ("I-Q", q1_identity)):
         try:
             execution_path = resolve_artifact(
@@ -634,6 +698,37 @@ def derive(receipt: dict[str, Any]) -> tuple[
             )
             encode_guard = json.loads(encode_guard_path.read_text(encoding="utf-8"))
             decode_guard = json.loads(decode_guard_path.read_text(encoding="utf-8"))
+            jsonschema.validate(encode_guard, identity_guard_schema)
+            jsonschema.validate(decode_guard, identity_guard_schema)
+            guard_common = all(
+                value.get("phase") == "diagnostic"
+                and value.get("sample_interval_seconds") == 0.25
+                and value.get("geekbench5_single_core_score") is None
+                and value.get("wall_time_limit_seconds") is None
+                and value.get("wall_time_measurement_complete") is False
+                and value.get("wall_time_exceeded") is False
+                and value.get("limit_kib") == 9_765_625
+                and value.get("limit_mode") == "tree"
+                and value.get("official_decimal_limit_kib") == 9_765_625
+                and value.get("official_decimal_over_limit_kib") == 0
+                and value.get("temporary_disk_limit_bytes") == 100_000_000_000
+                and value.get("temporary_disk_measurement_complete") is True
+                and value.get("max_logical_cpus") == 1
+                and value.get("affinity_measurement_complete") is True
+                and value.get("max_sampled_allowed_cpu_count") == 1
+                and value.get("sample_count", 0) > 0
+                for value in (encode_guard, decode_guard)
+            )
+            guard_binding_pass = (
+                guard_common
+                and encode_guard.get("command")
+                == ["./cmix", "-e", "enwik9", "out.cmix"]
+                and decode_guard.get("command") == ["./archive9"]
+                and encode_guard.get("label")
+                == f"{CANDIDATE_ID}-100m-{arm_name.lower()}-encode"
+                and decode_guard.get("label")
+                == f"{CANDIDATE_ID}-100m-{arm_name.lower()}-decode"
+            )
             execution_pass = (
                 execution.get("schema") == IDENTITY_ARM_SCHEMA
                 and execution.get("candidate_id") == CANDIDATE_ID
@@ -682,6 +777,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
                 == arm["backing_cleanup_pass"]
                 and scope.guard_pass(encode_guard)
                 and scope.guard_pass(decode_guard)
+                and guard_binding_pass
             )
             identity_execution_pass &= execution_pass
             if not execution_pass:
@@ -808,6 +904,11 @@ def derive(receipt: dict[str, Any]) -> tuple[
         jsonschema.validate(guard, guard_schema)
         jsonschema.validate(soft_high, soft_schema)
         jsonschema.validate(release_stage, release_schema)
+        required_artifacts += 1
+        soft_underlying_path = resolve_artifact(
+            soft_high["underlying_guard"], "memory.high underlying guard"
+        )
+        verified_artifacts += 1
         stage_outputs = release_stage.get("outputs", {})
         release_nested_artifacts_pass = True
         for field, record in (
@@ -857,6 +958,25 @@ def derive(receipt: dict[str, Any]) -> tuple[
         ]
         package_bytes, package_sha256 = digest_concatenation(input_paths)
         packaged_record = stage_outputs.get("packaged_compressor", {})
+        guard_command = guard.get("command")
+        guard_command_binding_pass = (
+            isinstance(guard_command, list)
+            and all(isinstance(value, str) for value in guard_command)
+            and guard.get("command_sha256") == command_sha256(guard_command)
+            and guard.get("command_sha256") == release_stage.get("command_sha256")
+            and guard.get("command_sha256") == q1_release["command_sha256"]
+        )
+        phase_marker_binding_pass = phase_marker_binding(guard)
+        soft_high_binding_pass = (
+            soft_underlying_path
+            == (PROJECT / "tools/run_with_resource_guard_v3.py").resolve(strict=True)
+            and soft_high.get("underlying_guard", {}).get("sha256")
+            == coordinator.get("release_resource_guard_sha256")
+            and soft_high.get("cgroup_path") == guard.get("cgroup", {}).get("path")
+            and soft_high.get("cgroup_inode") == guard.get("cgroup", {}).get("inode")
+            and soft_high.get("high_event_count")
+            == guard.get("cgroup_events", {}).get("delta", {}).get("high")
+        )
         release_build_binding_pass = (
             build_verification.get("candidate_id") == CANDIDATE_ID
             and build_verification.get("build_role") == "release"
@@ -883,7 +1003,15 @@ def derive(receipt: dict[str, Any]) -> tuple[
             release_nested_artifacts_pass
             and release_build_binding_pass
             and plan_binding_pass
+            and guard_command_binding_pass
+            and phase_marker_binding_pass
+            and soft_high_binding_pass
             and guard.get("schema") == GUARD_SCHEMA
+            and guard.get("label") == "q1-opening-100m-release"
+            and guard.get("phase") == "diagnostic"
+            and guard.get("sample_interval_seconds") == 0.5
+            and guard.get("temporary_disk_limit_bytes") == 100_000_000_000
+            and guard.get("max_logical_cpus") == 1
             and guard.get("status") == "complete"
             and guard.get("returncode") == 0
             and guard.get("limit_mode") == "tree"

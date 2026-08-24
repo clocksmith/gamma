@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json",
+  "title": "Sealed CMIX q1 opening-100M identity/resource execution plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "planning_schema_sha256", "artifact_id", "revision",
+    "candidate_id", "authoritative_parent_id", "operational_status",
+    "execution_authorized", "purpose", "receipt_schema",
+    "independent_verification", "coordinator", "population",
+    "frozen_parent_and_candidate", "arms", "identity_observer_source",
+    "observer_build", "observer_calibration", "identity_observer",
+    "resource_observer", "promotion_predicates", "terminal_branches",
+    "forbidden", "claim_boundary", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "cmix-filebacked-fxcm-100m-identity-resource-plan.schema.json"
+    },
+    "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_id": {"const": "cmix_filebacked_fxcm_100m_identity_resource_q0_v1"},
+    "revision": {"const": 1},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "operational_status": {
+      "const": "prospective_build_calibration_and_100m_coordinator_sealed_waiting_for_qm8_terminalization"
+    },
+    "execution_authorized": {"const": false},
+    "purpose": {"$ref": "#/$defs/text"},
+    "receipt_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"const": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource.schema.json"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "independent_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "schema_sha256", "verifier", "verifier_sha256"],
+      "properties": {
+        "schema": {"const": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "verifier": {"const": "tools/cmix_filebacked_fxcm_100m_identity_resource_verify.py"},
+        "verifier_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "coordinator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runner", "runner_sha256", "identity_arm_runner",
+        "identity_arm_runner_sha256", "identity_arm_schema",
+        "identity_arm_schema_sha256", "release_stage_runner",
+        "release_stage_runner_sha256", "release_stage_schema",
+        "release_stage_schema_sha256", "identity_resource_guard",
+        "identity_resource_guard_sha256", "identity_resource_guard_schema",
+        "identity_resource_guard_schema_sha256", "release_soft_high_guard",
+        "release_soft_high_guard_sha256", "release_resource_guard",
+        "release_resource_guard_sha256", "execution_order",
+        "failure_evidence_rule", "execution_status"
+      ],
+      "properties": {
+        "runner": {"const": "tools/cmix_filebacked_fxcm_100m_identity_resource.py"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_arm_runner": {"const": "tools/cmix_filebacked_fxcm_100m_identity_arm.py"},
+        "identity_arm_runner_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_arm_schema": {"const": "contracts/research/v1/cmix-filebacked-fxcm-100m-identity-arm.schema.json"},
+        "identity_arm_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "release_stage_runner": {"const": "tools/cmix_filebacked_fxcm_100m_release_stage.py"},
+        "release_stage_runner_sha256": {"$ref": "#/$defs/sha256"},
+        "release_stage_schema": {"const": "contracts/research/v1/cmix-filebacked-fxcm-100m-release-stage.schema.json"},
+        "release_stage_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_resource_guard": {"const": "tools/run_with_rss_guard.py"},
+        "identity_resource_guard_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_resource_guard_schema": {"const": "contracts/research/v1/resource-guard-receipt.schema.json"},
+        "identity_resource_guard_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "release_soft_high_guard": {"const": "tools/run_with_resource_guard_v3_soft_high.py"},
+        "release_soft_high_guard_sha256": {"$ref": "#/$defs/sha256"},
+        "release_resource_guard": {"const": "tools/run_with_resource_guard_v3.py"},
+        "release_resource_guard_sha256": {"$ref": "#/$defs/sha256"},
+        "execution_order": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "I-P instrumented parent roundtrip"},
+            {"const": "I-Q instrumented q1 roundtrip"},
+            {"const": "R-Q observer-free q1 release roundtrip under cgroup v2 and memory.high"}
+          ],
+          "items": false
+        },
+        "failure_evidence_rule": {"$ref": "#/$defs/text"},
+        "execution_status": {"const": "sealed_not_run"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection", "offset", "bytes", "expected_sha256", "identity_rule"],
+      "properties": {
+        "selection": {"$ref": "#/$defs/text"},
+        "offset": {"const": 0},
+        "bytes": {"const": 100000000},
+        "expected_sha256": {"const": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8"},
+        "identity_rule": {"$ref": "#/$defs/text"}
+      }
+    },
+    "frozen_parent_and_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "q1_source_closure", "q1_program_lock", "q1_release_build_a",
+        "q1_release_build_b", "build_verification", "q1_scope_build",
+        "opening_distant_10m_receipt", "opening_distant_10m_verification",
+        "unchanged_mechanism_rule"
+      ],
+      "properties": {
+        "q1_source_closure": {"$ref": "#/$defs/path"},
+        "q1_program_lock": {"$ref": "#/$defs/path"},
+        "q1_release_build_a": {"$ref": "#/$defs/path"},
+        "q1_release_build_b": {"$ref": "#/$defs/path"},
+        "build_verification": {"$ref": "#/$defs/path"},
+        "q1_scope_build": {"$ref": "#/$defs/path"},
+        "opening_distant_10m_receipt": {"$ref": "#/$defs/path"},
+        "opening_distant_10m_verification": {"$ref": "#/$defs/path"},
+        "unchanged_mechanism_rule": {"$ref": "#/$defs/text"}
+      }
+    },
+    "arms": {
+      "type": "array",
+      "prefixItems": [
+        {"$ref": "#/$defs/parentArm"},
+        {"$ref": "#/$defs/candidateArm"},
+        {"$ref": "#/$defs/releaseArm"}
+      ],
+      "items": false
+    },
+    "identity_observer_source": {
+      "$ref": "#/$defs/observerSource"
+    },
+    "observer_build": {
+      "$ref": "#/$defs/observerBuild"
+    },
+    "observer_calibration": {
+      "$ref": "#/$defs/observerCalibration"
+    },
+    "identity_observer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "post_head_probability", "pre_head_negative_control",
+        "coder_checkpoints", "persistent_state", "modeled_byte_checkpoints",
+        "diagnostic_separation_rule", "required_equalities"
+      ],
+      "properties": {
+        "post_head_probability": {"$ref": "#/$defs/text"},
+        "pre_head_negative_control": {"$ref": "#/$defs/text"},
+        "coder_checkpoints": {"$ref": "#/$defs/text"},
+        "persistent_state": {"$ref": "#/$defs/text"},
+        "modeled_byte_checkpoints": {
+          "type": "array",
+          "prefixItems": [
+            {"const": 0}, {"const": 16777216}, {"const": 33554432},
+            {"const": 50331648}, {"const": "terminal"}
+          ],
+          "items": false
+        },
+        "diagnostic_separation_rule": {"$ref": "#/$defs/text"},
+        "required_equalities": {"$ref": "#/$defs/textArray"}
+      }
+    },
+    "resource_observer": {
+      "$ref": "#/$defs/resourceObserver"
+    },
+    "promotion_predicates": {"$ref": "#/$defs/nonemptyTextArray"},
+    "terminal_branches": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass", "identity_failure", "identity_pass_resource_failure", "headroom_failure_after_one_correction"],
+      "properties": {
+        "pass": {"$ref": "#/$defs/text"},
+        "identity_failure": {"$ref": "#/$defs/text"},
+        "identity_pass_resource_failure": {"$ref": "#/$defs/text"},
+        "headroom_failure_after_one_correction": {"$ref": "#/$defs/text"}
+      }
+    },
+    "forbidden": {"$ref": "#/$defs/nonemptyTextArray"},
+    "claim_boundary": {"$ref": "#/$defs/text"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1},
+    "path": {"type": "string", "minLength": 1},
+    "textArray": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "nonemptyTextArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "armBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "resource_authority"],
+      "properties": {
+        "id": {"type": "string"},
+        "role": {"$ref": "#/$defs/text"},
+        "resource_authority": {"type": "boolean"}
+      }
+    },
+    "parentArm": {
+      "allOf": [
+        {"$ref": "#/$defs/armBase"},
+        {"properties": {"id": {"const": "I-P"}, "resource_authority": {"const": false}}}
+      ]
+    },
+    "candidateArm": {
+      "allOf": [
+        {"$ref": "#/$defs/armBase"},
+        {"properties": {"id": {"const": "I-Q"}, "resource_authority": {"const": false}}}
+      ]
+    },
+    "releaseArm": {
+      "allOf": [
+        {"$ref": "#/$defs/armBase"},
+        {"properties": {"id": {"const": "R-Q"}, "resource_authority": {"const": true}}}
+      ]
+    },
+    "observerSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "program", "program_sha256", "header", "header_sha256", "patch",
+        "patch_sha256", "state_mutation_control",
+        "state_mutation_control_sha256", "compile_definition",
+        "sealed_source_application", "runtime_activation",
+        "release_authority_excluded"
+      ],
+      "properties": {
+        "program": {"$ref": "#/$defs/path"},
+        "program_sha256": {"$ref": "#/$defs/sha256"},
+        "header": {"$ref": "#/$defs/path"},
+        "header_sha256": {"$ref": "#/$defs/sha256"},
+        "patch": {"$ref": "#/$defs/path"},
+        "patch_sha256": {"$ref": "#/$defs/sha256"},
+        "state_mutation_control": {"$ref": "#/$defs/path"},
+        "state_mutation_control_sha256": {"$ref": "#/$defs/sha256"},
+        "compile_definition": {"const": "GAMMA_FULL_IDENTITY_OBSERVER=1"},
+        "sealed_source_application": {"$ref": "#/$defs/text"},
+        "runtime_activation": {"$ref": "#/$defs/text"},
+        "release_authority_excluded": {"const": true}
+      }
+    },
+    "observerBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runner", "runner_sha256", "receipt_schema",
+        "receipt_schema_sha256", "replicate_counts",
+        "required_binary_identity", "negative_control",
+        "state_mutation_control", "package_rule", "execution_status"
+      ],
+      "properties": {
+        "runner": {"$ref": "#/$defs/path"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema": {"$ref": "#/$defs/path"},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "replicate_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["I-P", "I-Q", "N-P"],
+          "properties": {"I-P": {"const": 2}, "I-Q": {"const": 2}, "N-P": {"const": 1}}
+        },
+        "required_binary_identity": {"$ref": "#/$defs/text"},
+        "negative_control": {"$ref": "#/$defs/text"},
+        "state_mutation_control": {"$ref": "#/$defs/text"},
+        "package_rule": {"$ref": "#/$defs/text"},
+        "execution_status": {"const": "sealed_not_run"}
+      }
+    },
+    "observerCalibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runner", "runner_sha256", "receipt_schema", "receipt_schema_sha256",
+        "independent_verifier", "independent_verifier_sha256",
+        "verification_schema", "verification_schema_sha256", "fixed_runs",
+        "reference_rule", "resource_rule", "execution_status"
+      ],
+      "properties": {
+        "runner": {"$ref": "#/$defs/path"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema": {"$ref": "#/$defs/path"},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "independent_verifier": {"$ref": "#/$defs/path"},
+        "independent_verifier_sha256": {"$ref": "#/$defs/sha256"},
+        "verification_schema": {"$ref": "#/$defs/path"},
+        "verification_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "fixed_runs": {"$ref": "#/$defs/nonemptyTextArray"},
+        "reference_rule": {"$ref": "#/$defs/text"},
+        "resource_rule": {"$ref": "#/$defs/text"},
+        "execution_status": {"const": "sealed_not_run"}
+      }
+    },
+    "resourceObserver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authoritative_arm", "phases", "required_measurements",
+        "engineering_process_tree_peak_kib_max",
+        "engineering_process_tree_peak_bytes_max",
+        "official_process_tree_peak_kib_max", "cgroup_memory_peak_bytes_max",
+        "memory_events_max", "memory_events_oom", "memory_events_oom_kill",
+        "maximum_logical_cpus", "temporary_disk_bytes_max",
+        "memory_high_is_not_a_pass"
+      ],
+      "properties": {
+        "authoritative_arm": {"const": "R-Q"},
+        "phases": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "package helper construction"},
+            {"const": "frontend preprocessing"},
+            {"const": "model pretraining"},
+            {"const": "arithmetic payload encode"},
+            {"const": "archive assembly"},
+            {"const": "archive decode"},
+            {"const": "frontend inverse"},
+            {"const": "cleanup"}
+          ],
+          "items": false
+        },
+        "required_measurements": {"$ref": "#/$defs/nonemptyTextArray"},
+        "engineering_process_tree_peak_kib_max": {"const": 9000000},
+        "engineering_process_tree_peak_bytes_max": {"const": 9216000000},
+        "official_process_tree_peak_kib_max": {"const": 9765625},
+        "cgroup_memory_peak_bytes_max": {"const": 10000000000},
+        "memory_events_max": {"const": 0},
+        "memory_events_oom": {"const": 0},
+        "memory_events_oom_kill": {"const": 0},
+        "maximum_logical_cpus": {"const": 1},
+        "temporary_disk_bytes_max": {"const": 100000000000},
+        "memory_high_is_not_a_pass": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}

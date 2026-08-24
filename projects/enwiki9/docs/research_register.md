@@ -70,6 +70,19 @@ that the release executable is the literal concatenation of the independently
 built q1 binary plus the sealed dictionary, article-order, and header assets.
 No syntax, schema, or hash-closure check is an execution result.
 
+A subsequent adversarial proof audit found and closed one pre-execution gap:
+the verifier had validated the release-stage receipt and the resource-guard
+receipt independently without proving that they described the same child
+command. The verifier now recomputes the guard's NUL-delimited argv digest and
+requires it to equal both the release-stage command digest and the `R-Q` arm
+binding. It also rehashes the soft-high wrapper's underlying v3 guard, binds
+the wrapper and guard to the same cgroup path/inode and `memory.events.high`
+count, and independently matches the raw 16-event phase-marker stream to the
+eight ordered phase records. Both instrumented arms now schema-validate their
+v2 guard receipts and bind the exact encode/decode argv, diagnostic labels,
+limits, sampling, disk, and affinity observations. These are prospective proof
+hardening changes only; they add no execution evidence or compression credit.
+
 The build runner requires two byte-identical builds within each I-P/I-Q arm
 before packaging replicate A. The observer registers the
 same source-ordered semantic ranges in both arms and requires exactly `26`
