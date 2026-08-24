@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmix-memory-safe-parent-qualification-authority-policy.schema.json",
+  "title": "CMIX q1 active qualification authority policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "artifact_id", "revision", "operational_status",
+    "candidate_id", "authoritative_parent_id", "claim_authority",
+    "objective", "bindings", "revoked_authorities", "exclusive_namespace",
+    "claim_boundary", "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "cmix-memory-safe-parent-qualification-authority-policy.schema.json"},
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v(?:[7-9]|[1-9][0-9]+)$"
+    },
+    "revision": {"type": "integer", "minimum": 7},
+    "operational_status": {"const": "active_qualification_authority"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "claim_authority": {"const": "memory_safe_external_parent_only"},
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256", "corpus_bytes", "corpus_sha256", "target_score_bytes"],
+      "properties": {
+        "id": {"const": "gamma-enwiki9-hutter-105m-v1"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "corpus_bytes": {"const": 1000000000},
+        "corpus_sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"},
+        "target_score_bytes": {"const": 105000000}
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_router", "evidence_router_schema", "authority_router_schema",
+        "evidence_verifier", "authority_verification_schema", "authority_verifier",
+        "authority_python_source_closure",
+        "activated_full_identity_plan"
+      ],
+      "properties": {
+        "evidence_router": {"$ref": "#/$defs/file"},
+        "evidence_router_schema": {"$ref": "#/$defs/file"},
+        "evidence_verifier": {"$ref": "#/$defs/file"},
+        "authority_router_schema": {"$ref": "#/$defs/file"},
+        "authority_verification_schema": {"$ref": "#/$defs/file"},
+        "authority_verifier": {"$ref": "#/$defs/file"},
+        "authority_python_source_closure": {"$ref": "#/$defs/file"},
+        "activated_full_identity_plan": {"$ref": "#/$defs/file"}
+      }
+    },
+    "revoked_authorities": {
+      "type": "array",
+      "uniqueItems": true,
+      "contains": {"const": "qualification_v2_unbound_policy"},
+      "minContains": 1,
+      "items": {
+        "enum": [
+          "qualification_v1", "qualification_v2_unbound_policy",
+          "qualification_policy_v1", "qualification_policy_v2",
+          "qualification_policy_v3", "qualification_policy_v4",
+          "qualification_policy_v5", "qualification_policy_v6_design_only"
+        ]
+      }
+    },
+    "exclusive_namespace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lease", "lock", "required_absent"],
+      "properties": {
+        "lease": {"const": "operations/runtime/exclusive_full1g.json"},
+        "lock": {"const": "operations/runtime/exclusive_full1g.json.lock"},
+        "required_absent": {"const": true}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

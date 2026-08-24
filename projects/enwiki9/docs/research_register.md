@@ -670,6 +670,49 @@ identified activation successor. No manager control, parent arm, q1 arm,
 verifier, codec, or proof experiment ran; qm8 still owns the host lane. All
 Gamma compression and score credit remain zero.
 
+### q1 qualification revocation is now enforced by the verifier
+
+A follow-on call-graph audit found that policy v5's revocation was descriptive
+but not executable. `cmix_memory_safe_parent_qualification_verify_v2.py`
+accepted only the evidence router, lease namespace, and output path. It neither
+accepted nor emitted a policy binding. The dormant FOSSIL-MATCH and WIKI-PDA
+v2 runners invoked that exact verifier independently while separately
+requiring policy v4. Consequently, a future complete evidence router could
+have produced `qualified=true` through the v2 executable and then satisfied a
+v4-bound successor even though v5 declared that route stale. No such router or
+positive qualification receipt exists; this was a prospective authority bug,
+not fabricated evidence and not a codec failure.
+
+The v2 verifier now remains a complete artifact reopener but always appends
+the exact failure `qualification authority revoked: v2 does not bind the
+superseding qualification policy or its exact activated phase-11 plan`. It can
+emit only `qualified=false`, `claim_authority=none`, and
+`promotion_authority=false`. Its source SHA-256 is
+`63d98e7b...d2fa8`; every known v4-bound runner freezes the prior
+`c2b5b298...5139b` digest and therefore fails its own source-binding check
+before execution.
+
+Policy v6 freezes the replacement authority shape without activating it. A v3
+router binds exactly one v2 evidence router and one future active policy. The
+v3 verifier reopens every v2 evidence predicate, requires the sole remaining
+v2 failure to be the explicit revocation above, and then separately requires
+that an active policy v7 or later bind the exact evidence router, the activated
+revision-at-least-7 phase-11 plan embedded in the full-identity receipt, both
+v3 schemas, both verifier generations, the canonical absent lease namespace,
+and a recomputed transitive Python/schema closure. The future active-policy
+schema also requires explicit revocation of every v1-v6 authority path.
+The v3 CLI rejects an occupied lease namespace before verification and creates
+the canonical output only for a fully qualified result, so an early or false
+invocation cannot consume the authority receipt path.
+
+The rebound closures contain `156` members for opening-100M, `155` for
+phase 11, `151` for runtime, and `154` for the v3 qualification authority.
+Static AST, JSON Schema, plan-schema, ordered closure, objective-hash, policy
+hash-graph, and stale-runner hash checks pass. No test suite, verifier, codec,
+or proof experiment ran. Qm8 remains live and untouched; q1 full-1G payload,
+inverse, cleanup, runtime, and qualification remain unknown. This change has
+zero Gamma compression, authorship, archive, or score credit.
+
 ### SAFE-MIX static closure audit
 
 `gamma_safe_mix_v1` remains unexecuted and zero-credit. Its Q63 native

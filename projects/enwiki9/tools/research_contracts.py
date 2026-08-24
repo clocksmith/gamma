@@ -163,6 +163,13 @@ SCHEMA_PATHS = {
         CONTRACT_ROOT
         / "cmix-memory-safe-parent-qualification-verification-v2.schema.json"
     ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v3": (
+        CONTRACT_ROOT / "cmix-memory-safe-parent-qualification-receipt-v3.schema.json"
+    ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v3": (
+        CONTRACT_ROOT
+        / "cmix-memory-safe-parent-qualification-verification-v3.schema.json"
+    ),
     "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1": (
         CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-identity-resource.schema.json"
     ),
@@ -3197,6 +3204,20 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
             "candidateId": value["candidate_id"],
             "qualified": value["qualified"],
             "promotionAuthority": value["promotion_authority"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v3":
+        result = {
+            "candidateId": value["candidate_id"],
+            "authorityPolicySha256": value["authority_policy"]["sha256"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v3":
+        result = {
+            "candidateId": value["candidate_id"],
+            "qualified": value["qualified"],
+            "promotionAuthority": value["promotion_authority"],
+            "policyArtifactId": value["authority"]["policy_artifact_id"],
             "scoreCreditBytes": value["gamma_score_credit_bytes"],
         }
     elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
