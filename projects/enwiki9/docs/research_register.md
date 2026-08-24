@@ -82,6 +82,10 @@ eight ordered phase records. Both instrumented arms now schema-validate their
 v2 guard receipts and bind the exact encode/decode argv, diagnostic labels,
 limits, sampling, disk, and affinity observations. These are prospective proof
 hardening changes only; they add no execution evidence or compression credit.
+The same audit found that this detailed plan still named the generic dormant
+campaign schema despite not conforming to it. The plan now validates against a
+dedicated strict schema whose digest is pinned independently by both the
+coordinator and verifier; the plan also carries that digest explicitly.
 
 The build runner requires two byte-identical builds within each I-P/I-Q arm
 before packaging replicate A. The observer registers the
