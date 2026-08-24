@@ -1,0 +1,51 @@
+{
+  "candidate_id": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1",
+  "claimed_at": "2026-08-24T08:29:13+00:00",
+  "created_at": "2026-08-24T08:29:07+00:00",
+  "developed_at": "2026-08-24T08:29:13+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.static-rejection.json",
+      "sha256": "sha256:177c64465b98d08deed98be8388eb899cf2393bf22c162fb549e76639705da2f"
+    },
+    {
+      "path": "operations/planning/gamma_managed_exclusive_lease_owned_cleanup_q0_v1.json",
+      "sha256": "sha256:fa13c2f3b36a77c44f4aa1397330fee5d3cac7b3668e24c632c47585e79acc5d"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/gamma_managed_exclusive_lease_owned_cleanup_q0_v1.json",
+    "sha256": "sha256:b00b1e5f937f02af162ab8c4b8b41d264b136dce6ae2789eecd0fc0bc3714746"
+  },
+  "hypothesis": "An exact-ownership managed lease transaction can preserve the existing lease and transition contracts while making every acquisition collision and release cleanup non-destructive to foreign namespace entries.",
+  "interfaces_exposed": [
+    "exact-ownership managed full-1G lease acquisition and release"
+  ],
+  "kill_condition": "Retire this exact transaction on any foreign unlink, unowned cleanup, false-free partial state, lifecycle/schema drift, replay difference, source-binding failure, or resource violation.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1289,
+  "promotion_condition": "Authorize canonical lease-manager migration only if normal lifecycle, foreign/manager collision preservation, substitution rejection, partial-failure occupancy, schema/transition identity, normalized replay, resource, source-lock, and independent verification predicates all pass.",
+  "proposal_id": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1",
+  "retired_neighborhoods": [
+    "wrapper-only mutual exclusion against c3cedd46 managed lease cleanup"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1307,
+  "state": "developed",
+  "title": "Owned-cleanup canonical managed lease"
+}

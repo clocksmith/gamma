@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-24",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [],
+  "description": "Mechanism IR v3 canonical managed-lane transaction",
+  "decision": {
+    "classification": "unexecuted_static_rejection",
+    "evidence": "operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.static-rejection.json",
+    "reason": "The bound managed lease manager unconditionally deletes a foreign acquisition lock after O_EXCL collision.",
+    "successor": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"
+  },
+  "family": "unclassified",
+  "hypothesis": "A correction-only atomic namespace wrapper can make the unchanged Mechanism IR v3 toolchain mutually exclusive with the canonical managed full-1G lane, execute after canonical lease removal, preserve byte-identical v3 compilation artifacts, and reject every occupied, raced, or ownership-corrupted namespace without positive final output.",
+  "id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/gamma_mechanism_ir_v3_managed_lane_q0_v1.json",
+      "sha256": "sha256:49d4e1cc8e9cd64cf82c11bf5ce469bb97d4c31b877a6e793cad7196e7a8c7cf"
+    },
+    "interfaces_exposed": [
+      "canonical managed full-1G lease namespace to unchanged Mechanism IR v3 operations"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": null,
+    "proposal_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+    "retired_neighborhoods": [
+      "v3 active=false sentinel convention incompatible with managed lease release"
+    ]
+  },
+  "status": "retired",
+  "verdict": "refuted_before_execution"
+}

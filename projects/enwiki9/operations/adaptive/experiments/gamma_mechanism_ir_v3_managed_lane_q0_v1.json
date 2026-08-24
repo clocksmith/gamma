@@ -1,0 +1,125 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "proposalId": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "A correction-only atomic namespace wrapper can make the unchanged Mechanism IR v3 toolchain mutually exclusive with the canonical managed full-1G lane, execute after canonical lease removal, preserve byte-identical v3 compilation artifacts, and reject every occupied, raced, or ownership-corrupted namespace without positive final output.",
+    "falsification": "Retire this exact wrapper if any normal operation cannot run from the canonical both-paths-absent release state, any occupied/race/ownership control reaches positive final output, any wrapper replay differs, any inherited v3 compiler artifact differs, or any source, cleanup, resource, or independent-verification predicate fails."
+  },
+  "changedMechanism": "Correct only the v3 orchestration boundary: replace the nonexistent active=false sentinel convention with atomic ownership of the canonical managed acquisition-lock path while retaining every Mechanism IR and compiler semantic byte-for-byte.",
+  "invariants": [
+    "A free managed lane is represented only by absence of both operations/runtime/exclusive_full1g.json and its .lock path.",
+    "Either namespace path existing or being a symlink rejects before wrapped output creation.",
+    "Every mutating wrapped operation holds an O_EXCL-owned canonical lock from before its first output until every child stops and output fsync completes.",
+    "The wrapper never creates, parses, replaces, signals through, or deletes the managed lease JSON.",
+    "Release unlinks only a single-link regular lock whose device, inode, and complete token payload equal the acquisition witness.",
+    "The v3 IR, causal closure, compiler transformation, P/K/D/M/R/S arm access, join rule, schemas, and semantic controls do not change.",
+    "Every wrapper, dependency, command, output role, and verification schema is content-addressed before execution.",
+    "Infrastructure evidence has zero archive, inverse, package-score, compression, or objective authority."
+  ],
+  "controls": [
+    {"id": "M", "role": "treatment", "definition": "Atomic managed-lane wrapper over the unchanged v3 materialize, verify, compile, compilation-verify, and gate operations."},
+    {"id": "V", "role": "comparator", "definition": "Preserved unexecuted v3 active=false-file entry points, expected to remain statically incompatible with canonical managed release."},
+    {"id": "L", "role": "negative", "definition": "Canonical managed lease already exists; reject before output."},
+    {"id": "K", "role": "negative", "definition": "Canonical acquisition lock already exists without a lease; reject before output."},
+    {"id": "Y", "role": "negative", "definition": "Lease or lock path is a symlink; reject without following or unlinking it."},
+    {"id": "A", "role": "negative", "definition": "Lease appears after atomic lock acquisition; reject and remove only the owned lock."},
+    {"id": "I", "role": "negative", "definition": "Owned lock inode or token changes before release; reject and do not unlink the replacement."},
+    {"id": "R", "role": "replay", "definition": "Fresh wrapper and unchanged v3 compiler processes reproduce normalized receipts and complete artifact trees byte-for-byte."}
+  ],
+  "population": {
+    "unit": "content-addressed Mechanism IR compiler transaction",
+    "scopeBytes": null,
+    "scopeSymbols": 5,
+    "selection": "Complete unchanged v3 source-lock, causal-closure compilation, inherited semantic controls, and final static-gate transaction.",
+    "coordinate": "Ordered wrapper entry, namespace acquisition, v3 operation, output fsync, independent verification, and owned-lock release events."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "filesystem metadata for the canonical lease and lock paths at acquisition and release",
+      "the wrapper's private random ownership token, PID, open descriptor, device, and inode",
+      "content-addressed v3 inputs and already completed child outputs"
+    ],
+    "forbiddenInformation": [
+      "future full-1G process state",
+      "signals or writes to a live lease owner",
+      "replacement lock contents after ownership is lost",
+      "corpus bytes, parent probabilities, archive outcomes, or scientific-arm results"
+    ]
+  },
+  "inputs": [
+    {"id": "managed-lane-design", "path": "operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.json", "sha256": "sha256:843c31bdd0c04e7edc97659b4648f5e42770890739c9ff6d5dfdd35e0760b802"},
+    {"id": "v3-plan", "path": "operations/planning/gamma_mechanism_ir_v3.json", "sha256": "sha256:4509964b0d9a367829baf2f8ef97527451d80baff87215aee0c5e4fe5e56e0f1"},
+    {"id": "v3-commands", "path": "operations/planning/gamma_mechanism_ir_v3_commands.json", "sha256": "sha256:59e3097ce71f86aa5ab060202b07b3ef477a9b96041e5c468dcce0f037eefa19"},
+    {"id": "v3-compiler", "path": "tools/gamma_mechanism_ir_compile_v2.py", "sha256": "sha256:1bad45fdad50e9b212220ebeaaaab291d5653e5dd6ec58629a0e1c4cdb2c7069"},
+    {"id": "managed-lease-implementation", "path": "tools/managed_exclusive_lease.py", "sha256": "sha256:c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1"},
+    {"id": "managed-lease-schema", "path": "operations/runtime/exclusive_full1g.schema.json", "sha256": "sha256:96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.15,
+    "interactionRisk": 0.05
+  },
+  "measurements": [
+    {"id": "releasedStatePass", "definition": "Every normal wrapper operation accepts the canonical both-paths-absent release state.", "unit": "boolean"},
+    {"id": "atomicOwnershipPass", "definition": "Acquisition and release prove exact lock device, inode, and token ownership.", "unit": "boolean"},
+    {"id": "occupiedControlsRejected", "definition": "Live lease, orphan lock, symlink, race, inode, and token controls all reject without positive final output.", "unit": "boolean"},
+    {"id": "v3ArtifactIdentityPass", "definition": "Wrapped outputs equal unchanged v3 compilation outputs byte-for-byte.", "unit": "boolean"},
+    {"id": "v3SemanticControlsPass", "definition": "All inherited causal/state/join negative controls reject without final output.", "unit": "boolean"},
+    {"id": "repeatIdentityPass", "definition": "Independent wrapper receipts and artifact trees are byte-identical.", "unit": "boolean"},
+    {"id": "namespaceCleanupPass", "definition": "The canonical lease and lock remain absent after every normal transaction.", "unit": "boolean"},
+    {"id": "maximumTreeRssKiB", "definition": "Maximum guarded process-tree RSS over the complete wrapper gate.", "unit": "KiB"},
+    {"id": "maximumCgroupMemoryBytes", "definition": "Maximum guarded cgroup-v2 memory including file cache.", "unit": "bytes"}
+  ],
+  "promotionPredicates": [
+    {"id": "released-state", "measurement": "releasedStatePass", "operator": "eq", "threshold": true},
+    {"id": "atomic-ownership", "measurement": "atomicOwnershipPass", "operator": "eq", "threshold": true},
+    {"id": "occupied-controls", "measurement": "occupiedControlsRejected", "operator": "eq", "threshold": true},
+    {"id": "v3-artifact-identity", "measurement": "v3ArtifactIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "v3-semantic-controls", "measurement": "v3SemanticControlsPass", "operator": "eq", "threshold": true},
+    {"id": "repeat-identity", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "namespace-cleanup", "measurement": "namespaceCleanupPass", "operator": "eq", "threshold": true},
+    {"id": "tree-memory", "measurement": "maximumTreeRssKiB", "operator": "lte", "threshold": 262144},
+    {"id": "cgroup-memory", "measurement": "maximumCgroupMemoryBytes", "operator": "lte", "threshold": 760000000}
+  ],
+  "killPredicates": [
+    {"id": "released-state-failure", "measurement": "releasedStatePass", "operator": "eq", "threshold": false},
+    {"id": "ownership-failure", "measurement": "atomicOwnershipPass", "operator": "eq", "threshold": false},
+    {"id": "occupied-control-failure", "measurement": "occupiedControlsRejected", "operator": "eq", "threshold": false},
+    {"id": "artifact-drift", "measurement": "v3ArtifactIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "semantic-control-failure", "measurement": "v3SemanticControlsPass", "operator": "eq", "threshold": false},
+    {"id": "repeat-failure", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "cleanup-failure", "measurement": "namespaceCleanupPass", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/program-lock.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/program-lock-verification.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/compilation-verification.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/managed-lane-controls.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/program-gate.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/decision.json",
+    "results/gamma_mechanism_ir_v3_managed_lane_q0_v1/output-manifest.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-24T08:05:00Z"
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_mechanism_ir_v3_managed_lane_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "antecedent": {
+    "program": "gamma_mechanism_ir_v3",
+    "plan": "operations/planning/gamma_mechanism_ir_v3.json",
+    "command_contract": "operations/planning/gamma_mechanism_ir_v3_commands.json",
+    "status": "unexecuted_static_rejection",
+    "defect": "All five v3 entry points require the exclusive_full1g path to be a regular JSON file containing active=false. The canonical managed lease schema has no active field, and ManagedExclusiveLease.release removes both the lease and acquisition lock. Therefore v3 rejects a live managed lease but also cannot execute after a clean managed release."
+  },
+  "semantic_axis_changed": "exclusive-lane transaction semantics only",
+  "scientific_semantics_preserved": [
+    "The v3 Mechanism IR, causal closure, generated arm set P/K/D/M/R/S, per-arm state access, byte-64 join, SAFE-MIX posterior isolation, and compiler transformations are byte-for-byte unchanged.",
+    "The retained v3 compiler, causal-closure verifier, lock formats, compilation formats, schemas, and negative semantic controls remain authoritative dependencies.",
+    "No new predictor, probability, coder, archive, package, memory, or score claim is introduced."
+  ],
+  "managed_lane_contract": {
+    "lease_path": "operations/runtime/exclusive_full1g.json",
+    "lock_path": "operations/runtime/exclusive_full1g.json.lock",
+    "released_state": "both paths absent",
+    "occupied_state": "either path exists or is a symlink, regardless of JSON content",
+    "acquisition": [
+      "Validate every existing parent component without following symlinks.",
+      "Require both namespace paths absent.",
+      "Create the exact acquisition lock with O_CREAT|O_EXCL|O_NOFOLLOW and mode 0600.",
+      "Write and fsync a random 256-bit ownership token plus the current PID.",
+      "Recheck that the lease path is absent after lock acquisition; otherwise remove only the owned lock and fail closed.",
+      "Retain the descriptor, device, inode, and token until the wrapped operation has stopped."
+    ],
+    "release": [
+      "Fsync wrapped outputs before release.",
+      "Require the lock path to remain a single-link regular file with the acquired device and inode.",
+      "Require its complete bytes to equal the ownership payload.",
+      "Unlink only that exact owned lock and fsync the namespace directory.",
+      "Never create, replace, parse, signal through, or delete the lease JSON."
+    ],
+    "failure_policy": "Any missing parent, symlink, preexisting lease, preexisting lock, post-acquire lease appearance, lock identity drift, token drift, write/fsync failure, wrapped nonzero exit, or cleanup failure rejects without a positive final receipt.",
+    "signal_authority": false
+  },
+  "wrappers": {
+    "compile": "Hold the canonical namespace lock around the unchanged v3 closure-aware compiler and patch only its obsolete inactive-file predicate.",
+    "program_lock_materialize": "Hold the namespace lock while the unchanged source-lock materializer hashes the frozen source contract.",
+    "program_lock_verify": "Hold the namespace lock while the unchanged independent lock verifier reopens every source.",
+    "compile_verify": "Require a clear canonical namespace at entry and exit; every normal and semantic-negative child compiler invocation acquires the canonical lock. Local fake active-lease and orphan-lock controls must reject without final output.",
+    "program_gate": "Hold the namespace lock while binding positive program-lock and compilation verifications to the unchanged v3 static gate."
+  },
+  "negative_controls": [
+    "canonical live managed lease",
+    "canonical orphan acquisition lock",
+    "lease-path symlink",
+    "lock-path symlink",
+    "lease appearance after lock acquisition",
+    "lock inode substitution before release",
+    "lock token substitution before release",
+    "wrapped operation nonzero exit",
+    "v3 causal-order, missing-state-role, raw-D-posterior-write, mismatched-K-write-set, incomplete-join-discard, incomplete-forbidden-copy, and unknown-arm-state controls"
+  ],
+  "activation_dependencies": [
+    "qm8 and every other full-1G owner have terminalized and released both canonical namespace paths",
+    "candidate revision and complete wrapper/dependency source closure are content-addressed",
+    "managed-lane controls and deterministic wrapper replay pass",
+    "unchanged v3 compiler A/B artifacts and receipts are byte-identical",
+    "unchanged v3 semantic negative controls all reject without final output",
+    "independent program-lock verification and final static-gate verification pass"
+  ],
+  "promotion": "A complete positive wrapper receipt authorizes use of the unchanged v3 Mechanism IR compiler for later candidate generation only.",
+  "retirement": "Any managed-namespace, ownership, cleanup, replay, source-binding, or inherited v3 semantic-control failure retires this exact wrapper. A scientific arm failure remains outside this infrastructure candidate.",
+  "resource_bounds": {
+    "maximum_process_tree_rss_kib": 262144,
+    "maximum_cgroup_memory_bytes": 760000000,
+    "maximum_temporary_disk_bytes": 100000000,
+    "maximum_logical_cpus": 1,
+    "maximum_candidate_program_bytes": 65536
+  },
+  "claim_boundary": [
+    "This correction proves only that compiler infrastructure is mutually exclusive with the managed full-1G lane and can execute after canonical release.",
+    "It grants no compression, inverse, package, parent, SAFE-MIX, MIDAS, or Hutter score authority.",
+    "No wrapper or control may execute while the current managed lease or lock exists."
+  ],
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

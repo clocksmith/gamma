@@ -1,0 +1,75 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_live_source",
+  "claim_authority": "none",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "antecedent": {
+    "path": "operations/planning/gamma_mechanism_ir_v3_managed_lane_q0_v1.static-rejection.json",
+    "sha256": "177c64465b98d08deed98be8388eb899cf2393bf22c162fb549e76639705da2f",
+    "conclusion": "The current manager unlinks a foreign acquisition lock after O_EXCL collision, so a wrapper-only correction cannot prove mutual exclusion."
+  },
+  "semantic_axis_changed": "managed exclusive-lease acquisition and release ownership only",
+  "preserved_semantics": [
+    "The exclusive-full1g lease JSON schema, lease record fields, transition-chain schema, owner PID/start-tick checks, codec-descendant binding, signal deauthorization, terminal evidence, and file_sha256 API remain unchanged.",
+    "No predictor, codec, archive, corpus, package, resource ceiling, or score calculation changes.",
+    "The successor is a separately identified module until the live qm8 process terminalizes; it cannot retroactively alter qm8 source provenance."
+  ],
+  "owned_transaction": {
+    "free_state": "Both lease and .lock paths are absent, including broken symlinks.",
+    "acquire": [
+      "Validate the existing namespace path without following symlinks and retain its directory descriptor and identity.",
+      "Create the exact .lock name with O_CREAT|O_EXCL|O_NOFOLLOW, mode 0600, a random 256-bit token, and PID.",
+      "Fsync the lock and directory; retain the lock descriptor, device, inode, link count, and payload.",
+      "If O_EXCL reports collision, close only local descriptors and never unlink the foreign path.",
+      "Publish the lease only while exact lock ownership still holds.",
+      "If failure occurs before lease publication, unlink only the still-exact owned lock; after publication, leave the occupied namespace for terminal audit."
+    ],
+    "release": [
+      "Freeze terminal lease evidence and transition evidence first.",
+      "Require exact owned lock path, descriptor, device, inode, single link, and token before destructive cleanup.",
+      "Unlink the owned lease record while the owned lock still excludes competitors.",
+      "Reprove exact lock ownership, unlink only that lock, and fsync the namespace directory.",
+      "Any substitution or cleanup ambiguity leaves the namespace occupied and fails closed."
+    ]
+  },
+  "controls": [
+    "normal acquire, heartbeat, signal-disabled release, and reacquire",
+    "foreign wrapper lock collision remains byte- and inode-identical",
+    "second manager collision leaves first manager lock and lease identical",
+    "preexisting lease, orphan lock, lease symlink, and lock symlink reject",
+    "post-acquire lease appearance rejects without foreign deletion",
+    "lock inode, hardlink-count, and token substitution reject without unlinking replacement",
+    "transition or terminal-evidence failure leaves an occupied auditable namespace",
+    "fresh normalized A/B control receipts and filesystem manifests agree"
+  ],
+  "activation_dependencies": [
+    "cmix_filebacked_fxcm_full_a_qm8_v1 has a terminal receipt and no live descendant",
+    "the current canonical lease and lock paths are both absent",
+    "the separately sealed successor passes local namespace controls and independent verification",
+    "only then may a new revision replace tools/managed_exclusive_lease.py and update future source locks"
+  ],
+  "promotion": "Authorize canonical lease-manager migration only if every ownership, collision, substitution, cleanup, schema, transition, and normalized replay predicate passes.",
+  "retirement": "Any foreign unlink, unowned cleanup, positive release after substitution, schema drift, transition drift, or unverifiable partial state retires this exact successor.",
+  "resource_bounds": {
+    "maximum_process_tree_rss_kib": 131072,
+    "maximum_cgroup_memory_bytes": 380000000,
+    "maximum_temporary_disk_bytes": 50000000,
+    "maximum_logical_cpus": 1,
+    "maximum_candidate_program_bytes": 65536
+  },
+  "claim_boundary": [
+    "This is infrastructure correctness with zero compression and objective credit.",
+    "No successor source or canonical manager file may execute or change while qm8 owns the live lane.",
+    "Passing local controls does not qualify q1, Mechanism IR, SAFE-MIX, MIDAS, WIKI-PDA, or any archive."
+  ],
+  "compression_credit_bytes": 0,
+  "score_credit_bytes": 0
+}

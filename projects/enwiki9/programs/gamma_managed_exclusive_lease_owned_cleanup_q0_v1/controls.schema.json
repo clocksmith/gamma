@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-controls.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "controls", "normal_a", "normal_b",
+    "all_controls_pass", "claim_authority", "execution_authority",
+    "promotion_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-controls.v1"},
+    "candidate_id": {"const": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1"},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normal_lifecycle_pass", "reacquire_pass", "normalized_repeat_pass",
+        "schema_transition_identity_pass",
+        "foreign_lock_collision_preserved", "manager_collision_preserved",
+        "lease_symlink_rejected", "lock_symlink_rejected",
+        "post_acquire_lease_preserved", "inode_substitution_rejected",
+        "hardlink_substitution_rejected", "token_substitution_rejected",
+        "partial_failure_remains_occupied"
+      ],
+      "properties": {
+        "normal_lifecycle_pass": {"type": "boolean"},
+        "reacquire_pass": {"type": "boolean"},
+        "normalized_repeat_pass": {"type": "boolean"},
+        "schema_transition_identity_pass": {"type": "boolean"},
+        "foreign_lock_collision_preserved": {"type": "boolean"},
+        "manager_collision_preserved": {"type": "boolean"},
+        "lease_symlink_rejected": {"type": "boolean"},
+        "lock_symlink_rejected": {"type": "boolean"},
+        "post_acquire_lease_preserved": {"type": "boolean"},
+        "inode_substitution_rejected": {"type": "boolean"},
+        "hardlink_substitution_rejected": {"type": "boolean"},
+        "token_substitution_rejected": {"type": "boolean"},
+        "partial_failure_remains_occupied": {"type": "boolean"}
+      }
+    },
+    "normal_a": {"$ref": "#/$defs/normalized"},
+    "normal_b": {"$ref": "#/$defs/normalized"},
+    "all_controls_pass": {"type": "boolean"},
+    "claim_authority": {"const": "infrastructure_only"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "normalized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["released", "verified", "events", "terminal_keys", "transition_schema", "verification_shape"],
+      "properties": {
+        "released": {"type": "boolean"},
+        "verified": {"type": "boolean"},
+        "events": {"type": "array", "items": {"type": "string"}},
+        "terminal_keys": {"type": "array", "items": {"type": "string"}},
+        "transition_schema": {"type": "string"},
+        "verification_shape": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema_version", "verified", "errors", "entries", "activations", "deauthorizations", "terminal_events", "terminal_signal_authority"],
+          "properties": {
+            "schema_version": {"type": "string"},
+            "verified": {"type": "boolean"},
+            "errors": {"type": "array", "items": {"type": "string"}},
+            "entries": {"type": "integer", "minimum": 1},
+            "activations": {"type": "integer", "minimum": 0},
+            "deauthorizations": {"type": "integer", "minimum": 0},
+            "terminal_events": {"type": "integer", "minimum": 0},
+            "terminal_signal_authority": {"type": "boolean"}
+          }
+        }
+      }
+    }
+  }
+}

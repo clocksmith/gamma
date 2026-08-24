@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.mechanism-ir-managed-lane-gate.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "verified", "errors",
+    "actual_compilation_verification", "compatibility_projection",
+    "upstream_v3_gate", "wrapper_compiler", "upstream_compiler", "checks",
+    "claim_authority", "execution_authority", "promotion_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.mechanism-ir-managed-lane-gate.v1"},
+    "candidate_id": {"const": "gamma_mechanism_ir_v3_managed_lane_q0_v1"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "actual_compilation_verification": {"$ref": "#/$defs/artifact"},
+    "compatibility_projection": {"$ref": "#/$defs/artifact"},
+    "upstream_v3_gate": {"$ref": "#/$defs/artifact"},
+    "wrapper_compiler": {"$ref": "#/$defs/artifact"},
+    "upstream_compiler": {"$ref": "#/$defs/artifact"},
+    "checks": {
+      "type": "object", "additionalProperties": false,
+      "required": ["actual_wrapper_verification_pass", "wrapper_compiler_identity_pass", "compatibility_projection_exact_pass", "upstream_compiler_identity_pass", "unchanged_v3_gate_pass"],
+      "properties": {
+        "actual_wrapper_verification_pass": {"type": "boolean"},
+        "wrapper_compiler_identity_pass": {"type": "boolean"},
+        "compatibility_projection_exact_pass": {"type": "boolean"},
+        "upstream_compiler_identity_pass": {"type": "boolean"},
+        "unchanged_v3_gate_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "infrastructure_only"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

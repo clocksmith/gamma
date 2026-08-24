@@ -1,0 +1,27 @@
+{
+  "schema": "gamma.enwiki9.managed-exclusive-lease-owned-cleanup-interface.v1",
+  "candidate_id": "gamma_managed_exclusive_lease_owned_cleanup_q0_v1",
+  "public_api": [
+    "ManagedExclusiveLease.acquire",
+    "ManagedExclusiveLease.heartbeat",
+    "ManagedExclusiveLease.activate_codec",
+    "ManagedExclusiveLease.deauthorize_signals",
+    "ManagedExclusiveLease.release",
+    "file_sha256"
+  ],
+  "preserved_contracts": [
+    "gamma.enwiki9.exclusive-full1g-lease.v1",
+    "managed-exclusive-lease-transition-log.v1",
+    "managed-exclusive-lease-verification.v1"
+  ],
+  "changed_boundary": "Only lock acquisition, retained ownership witness, initial lease publication, and terminal cleanup ordering change.",
+  "collision_rule": "An O_EXCL collision closes local descriptors and returns failure; it never unlinks, truncates, parses, or replaces the existing path.",
+  "cleanup_rule": "Lease cleanup requires the exact owner record while the random-token lock remains owned; lock cleanup requires the retained descriptor, directory, device, inode, single link, and complete payload.",
+  "partial_failure_rule": "Any ambiguous failure after initial lease publication remains occupied for terminal audit.",
+  "migration_rule": "This separate module cannot replace tools/managed_exclusive_lease.py or any future source lock until the live qm8 process terminalizes and local controls plus independent proof pass.",
+  "claim_authority": "infrastructure_only",
+  "execution_authority": false,
+  "promotion_authority": false,
+  "gamma_compression_credit_bytes": 0,
+  "gamma_score_credit_bytes": 0
+}
