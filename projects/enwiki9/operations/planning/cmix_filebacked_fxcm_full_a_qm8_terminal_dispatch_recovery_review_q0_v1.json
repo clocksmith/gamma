@@ -1,0 +1,86 @@
+{
+  "schema": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-review.v1",
+  "artifact_id": "cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_review_q0_v1",
+  "operational_status": "frozen_static_review",
+  "scientific_verdict": null,
+  "archive_observed": false,
+  "score_credit_bytes": 0,
+  "reviewed_artifacts": {
+    "recovery_tool": {
+      "path": "tools/cmix_filebacked_fxcm_full_qm8_terminal_dispatch_recover.py",
+      "bytes": 46800,
+      "sha256": "912ad16351f85c399ba62de3dbc5704f79187f906947fa917067b6ba646304f4"
+    },
+    "recovery_contract": {
+      "path": "operations/planning/cmix_filebacked_fxcm_full_a_qm8_terminal_dispatch_recovery_q0_v1.json",
+      "bytes": 8219,
+      "sha256": "b9c2c6c3372e1a7e630def3c4ca26432cc2d68ba8f815af033ef79f629da66c0"
+    },
+    "preparation_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-preparation.schema.json",
+      "bytes": 6808,
+      "sha256": "808f03eed779a8be58473d922a419bbde94ca68b3f95b6ffd6157d9bb68c71ab"
+    },
+    "completion_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-completion.schema.json",
+      "bytes": 7208,
+      "sha256": "7edbd3b9ca3383876049f17a81f54a45a992db865533ea3779d8f4e1370f0972"
+    },
+    "finalization_schema": {
+      "path": "contracts/research/v1/cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-finalization.schema.json",
+      "bytes": 3265,
+      "sha256": "59c4f15ae434ad7e90056b525b3537ce8aa79bb5e68a1aaf476ee76e133f40d7"
+    }
+  },
+  "review_findings": [
+    "The transaction ID is the SHA-256 of the exact immutable dispatch-intent bytes, so repeated activation attempts cannot overwrite an earlier recovery history.",
+    "Every resume independently revalidates the terminal receipt, dispatch intent, dispatch contract, selected and non-selected plan derivation, recovery contract, schemas, exact Python runtime, and frozen command.",
+    "Recovery action is rederived from the presence and complete validation of the activation receipt on every resume. A preparation cannot relabel a committed activation as rollback.",
+    "Uncommitted rollback accepts only dormant/absent, activated/dormant, or dormant/activated selected/displaced states. It reverses only the exact exchange, archives an aborted activated inode, archives the dispatch intent, and restores both exact dormant plans.",
+    "Committed recovery leaves the activation receipt, selected activated plan, displaced dormant inode, and canonical dispatch intent unchanged after the shared helper independently validates their full chain.",
+    "Rollback requires both exact intent-bound locks. Committed recovery also recognizes only the dispatcher-ordered partial-release state where planning is absent and the exact full-1G lock survives.",
+    "The original dispatcher owner PID must be absent. Process, argv, cwd, cgroup membership, cgroup occupants, lease ownership, and recorded PID/start closure are rescanned under the full-1G lock before preparation and immediately before completion.",
+    "A completion is published while descriptors for every surviving exact lock remain valid. Afterwards each lock is removed only under matching path, device, inode, link count, and payload hash; a different occupant fails closed.",
+    "Recovery is restartable after its own rollback exchange, artifact archival, completion publication, or one-lock release. A finalization is published only after both lock paths are observed absent.",
+    "The source imports no subprocess or signal facility and contains no path that invokes a verifier, creates Arm B, mutates candidate source, or grants compression, qualification, or score authority."
+  ],
+  "remaining_non_authority_limits": [
+    "The three dispatch and three recovery receipt schemas are validated directly by their bound tools but are not registered in tools/research_contracts.py because that module remains part of the live qm8 source closure.",
+    "No dynamic crash-injection replay was run. The evidence is static AST, schema, serialization, hash-binding, state-transition, and diff review only.",
+    "Recovery finalization is provenance and liveness evidence; it cannot repair a corrupt intent, foreign lock inode, altered plan, invalid activation receipt, or live/reused dispatcher PID. Those states remain deliberately blocked."
+  ],
+  "static_checks": {
+    "python_ast_parse_pass": true,
+    "no_subprocess_or_signal_import_pass": true,
+    "json_schema_meta_validation_pass": true,
+    "rollback_schema_instance_pass": true,
+    "committed_both_lock_schema_instance_pass": true,
+    "committed_partial_lock_schema_instance_pass": true,
+    "campaign_plan_schema_validation_pass": true,
+    "all_declared_file_bindings_pass": true,
+    "git_diff_check_pass": true,
+    "tests_run": false,
+    "recovery_executed": false
+  },
+  "live_lane_observation": {
+    "qm8_terminal_receipt_present": false,
+    "qm8_process_tree_present": true,
+    "observed_stage": "encode",
+    "observed_progress_percent": 26.17,
+    "peak_process_tree_rss_kib": 8998152,
+    "peak_cgroup_bytes": 9002086400,
+    "cgroup_high_events": 388713,
+    "cgroup_max_events": 0,
+    "cgroup_oom_events": 0,
+    "cgroup_oom_kill_events": 0,
+    "recovery_attempted": false,
+    "activation_attempted": false,
+    "verifier_executed": false,
+    "arm_b_authorized": false
+  },
+  "claim_boundary": [
+    "This closes a dispatcher crash-recovery implementation gap; it is not a compression algorithm or qm8 result.",
+    "The live qm8 process, candidate, lease, cgroup, result tree, and scratch tree were observed read-only and were not modified or signaled.",
+    "No terminal receipt, q1 qualification, Arm-B authority, archive gain, Gamma score, or Hutter score follows from this review."
+  ]
+}
