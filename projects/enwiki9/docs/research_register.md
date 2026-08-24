@@ -236,9 +236,12 @@ most 16 bytes of optimistic leverage under the parent's count floor.
 
 Passing would authorize only exact retained-parent surprisal tracing at the
 sealed opportunities. A native P/K/D finite archive, exact inverse, package,
-memory, runtime, and distant transfer remain mandatory. No scanner, source,
-candidate revision, or receipt exists yet, so the design has zero compression
-and score credit. See the
+memory, runtime, and distant transfer remain mandatory. A prospectively frozen
+[`adaptive experiment`](../operations/adaptive/experiments/fxcm_fossil_match_q0_v1.json)
+and dependency-gated proposal now bind the design to Gamma's workflow. The
+proposal remains unclaimed while q1 and the exclusive full-1G lease are live;
+no scanner, source, candidate revision, scan, or receipt exists, so the design
+has zero compression and score credit. See the
 [`design contract`](../operations/planning/fxcm_fossil_match_q0_v1.json).
 
 ## 2026-08-23 - WIKI-SCHEMA-VM replaces checkpointing as the primary new information-source proposal
