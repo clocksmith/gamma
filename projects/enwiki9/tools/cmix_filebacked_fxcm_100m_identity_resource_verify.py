@@ -396,6 +396,7 @@ def derive(receipt: dict[str, Any]) -> tuple[
         )
         plan = json.loads(plan_path.read_text(encoding="utf-8"))
         coordinator = plan.get("coordinator", {})
+        calibration_contract = plan.get("observer_calibration", {})
         frozen = plan.get("frozen_parent_and_candidate", {})
         frozen_path_pass = all(
             frozen.get(plan_name) == project_relative_artifact_path(record)
@@ -423,6 +424,28 @@ def derive(receipt: dict[str, Any]) -> tuple[
             == str(Path(__file__).resolve().relative_to(PROJECT))
             and plan.get("independent_verification", {}).get("verifier_sha256")
             == digest_file(Path(__file__).resolve())
+            and calibration_contract.get("independent_verifier")
+            == "tools/cmix_filebacked_fxcm_100m_observer_calibration_verify.py"
+            and calibration_contract.get("receipt_schema")
+            == "contracts/research/v1/"
+            "cmix-filebacked-fxcm-100m-observer-calibration.schema.json"
+            and calibration_contract.get("verification_schema")
+            == "contracts/research/v1/"
+            "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
+            and all(
+                calibration_contract.get(hash_field) == digest_file(PROJECT / path_field)
+                for path_field, hash_field in (
+                    (
+                        calibration_contract["independent_verifier"],
+                        "independent_verifier_sha256",
+                    ),
+                    (calibration_contract["receipt_schema"], "receipt_schema_sha256"),
+                    (
+                        calibration_contract["verification_schema"],
+                        "verification_schema_sha256",
+                    ),
+                )
+            )
             and coordinator.get("runner")
             == "tools/cmix_filebacked_fxcm_100m_identity_resource.py"
             and coordinator.get("identity_arm_runner")
@@ -469,8 +492,30 @@ def derive(receipt: dict[str, Any]) -> tuple[
         calibration_verification = json.loads(
             calibration_verification_path.read_text(encoding="utf-8")
         )
+        calibration_verification_schema = json.loads(
+            (
+                PROJECT
+                / "contracts/research/v1/"
+                "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
+            ).read_text(encoding="utf-8")
+        )
+        jsonschema.validate(calibration_verification, calibration_verification_schema)
+        calibration_nested_artifacts_pass = True
+        for field in ("verifier", "input_schema", "output_schema", "planning_contract"):
+            required_artifacts += 1
+            try:
+                resolve_artifact(
+                    calibration_verification[field],
+                    f"calibration verification {field}",
+                )
+                verified_artifacts += 1
+            except (OSError, RuntimeError, TypeError, ValueError) as error:
+                calibration_nested_artifacts_pass = False
+                errors.append(str(error))
+        calibration_contract = plan.get("observer_calibration", {})
         calibration_pass = (
-            calibration.get("schema") == CALIBRATION_SCHEMA
+            calibration_nested_artifacts_pass
+            and calibration.get("schema") == CALIBRATION_SCHEMA
             and calibration.get("candidate_id") == CANDIDATE_ID
             and calibration.get("terminal_pass") is True
             and calibration.get("comparisons", {}).get("observer_calibration_pass")
@@ -482,12 +527,30 @@ def derive(receipt: dict[str, Any]) -> tuple[
             and calibration_verification.get("passed") is True
             and calibration_verification.get("receipt_sha256")
             == receipt["antecedents"]["observer_calibration"]["sha256"]
+            and calibration_verification.get("verifier", {}).get("path")
+            == str(PROJECT / calibration_contract.get("independent_verifier", ""))
+            and calibration_verification.get("verifier", {}).get("sha256")
+            == calibration_contract.get("independent_verifier_sha256")
+            and calibration_verification.get("input_schema", {}).get("sha256")
+            == calibration_contract.get("receipt_schema_sha256")
+            and calibration_verification.get("output_schema", {}).get("sha256")
+            == calibration_contract.get("verification_schema_sha256")
+            and calibration_verification.get("planning_contract")
+            == receipt["antecedents"]["planning_contract"]
             and calibration.get("antecedents", {}).get("planning_contract")
             == receipt["antecedents"]["planning_contract"]
             and calibration.get("antecedents", {}).get("observer_build")
             == receipt["antecedents"]["observer_build"]
         )
-    except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as error:
+    except (
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+        KeyError,
+        json.JSONDecodeError,
+        jsonschema.ValidationError,
+    ) as error:
         errors.append(f"observer calibration antecedent: {error}")
 
     arms = receipt["arms"]
