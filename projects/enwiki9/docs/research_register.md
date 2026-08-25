@@ -1,5 +1,84 @@
 # enwiki9 Research Register
 
+## 2026-08-24 - activation corrections close economics, coordinates, and Fiber authority
+
+Commit `aa65ae9ad309f139c26abc2f366b2c64edcdf0b4` is now the canonical
+zero-credit portfolio freeze. No new information-source family is authorized.
+The remaining work is to qualify the parent, falsify the frozen broad and
+orthogonal routes, select exact winners, and scale singles before combinations.
+
+The first correction removes provisional target constants from activation.
+`q1_target_economics_activation_v1` can be generated only after independent q1
+Arm A/B qualification and complete-package closure. Its receipt freezes q1's
+archive, every counted package component, complete score, signed target
+distance, nonnegative debt, a pre-result child-package ceiling and engineering
+reserve, full raw/transformed/coder denominators, and four raw-scope gross
+gates. Every gate is recomputed as
+`ceil(gross_required * canonical_raw_scope_bytes / 1,000,000,000)`. Earlier
+`4,080`, `40,793`, `407,925`, and `4,079,243` values remain historical
+provisional gates and receive no activation authority. Evidence:
+`operations/planning/q1_target_economics_activation_v1.json` and
+`contracts/research/v1/q1-target-economics-activation-v1.schema.json`.
+
+`canonical_raw_transformed_coder_scope_q0_v1` makes raw enwik9 coordinates the
+economic authority. Every population begins as a half-open canonical raw
+interval and binds the exact transformed interval, binary coder-decision
+interval, frontend/parent/coder entry state, raw-to-transformed trace, repeat
+trace, and activated scope threshold. Distant populations causally replay from
+raw byte zero unless a separately proven exact checkpoint exists. Frontend
+token boundaries may not round or resize the raw denominator. Evidence:
+`operations/planning/canonical_raw_transformed_coder_scope_q0_v1.json` and
+`contracts/research/v1/canonical-raw-transformed-coder-scope-v1.schema.json`.
+
+The structural families now share one scientific parser population.
+`semantic_route_tape_q0_v1` freezes a 64-byte little-endian record containing
+the physical coder-decision coordinate, raw and transformed coordinates,
+128-bit route fingerprint, 128-bit descriptor witness digest, event, flags,
+template depth, explicit/positional identity, and field ordinal. Fresh Build A
+and B tapes, descriptor sidecars, and summaries must be byte-identical with no
+observed descriptor aliases. The sidecar is audit-only and cannot be queried by
+a predictor; records become visible only at their causal coordinates. The tape
+is forbidden from the final package, and native codecs must parse independently.
+Evidence: `operations/planning/semantic_route_tape_q0_v1.json` and
+`contracts/research/v1/semantic-route-tape-receipt-v1.schema.json`.
+
+The Fiber-CTS dependency is now explicit rather than circular.
+`wiki_fiber_cts_shadow_q0_v1` is the future source-bound D/G/S/R/N direct
+probability generator. It commits uint16 probabilities and state digests before
+truth and emits no arithmetic archive. The separate
+`q1_causal_surprisal_atlas_fiber_cts_q0_v2` addendum repeats q1 only at the
+shadow's exact coordinates, joins through raw/transformed/coder/tape identities,
+and compares D against the parent and G/S/R/N using the activated raw-scope
+gate. A pass authorizes one native P/K/D implementation only; a miss retires
+semantic virtual-time contexts before LOOM. Evidence:
+`operations/planning/wiki_fiber_cts_shadow_q0_v1.json` and
+`operations/planning/q1_causal_surprisal_atlas_fiber_cts_q0_v2.json`.
+
+Fiber-FOSSIL v1 remains immutable but cannot activate because it allowed a
+choice between the Atlas KT calibration and a direct endpoint.
+`wiki_fiber_fossil_q0_v2` preserves the route, 16-byte virtual key, tables,
+controls, and resource limits while selecting exactly one endpoint: isolated
+per-arm, per-bit-position uint64 KT correctness counts with no saturation or
+rescale. Atlas and native code must emit identical integer probabilities and
+state digests. A direct distribution may exist only as a separately versioned,
+terminally authorized one-axis successor. Evidence:
+`operations/planning/wiki_fiber_fossil_q0_v2.json`.
+
+Router v6 binds these corrections and the exact memory branch. A terminal q1
+tree peak at most `9,000,000 KiB` may pass the engineering-parent memory
+dimension, subject to every other gate. A peak above `9,000,000 KiB` but below
+`9,765,625 KiB` may pass the official dimension but fails engineering-parent
+admission and authorizes one probability-identical headroom successor. A peak
+at least `9,765,625 KiB`, or a strict cgroup/OOM failure, is a strict memory
+failure. Declared specialist state never substitutes for measured composite
+admission. The execution order is q1 A, independent B, economics, optional
+headroom correction, midpoint 250KB/1M, repeated structural manifests, repeated
+route tape, base Atlas, Fiber shadow, Fiber Atlas addendum, one native single,
+transfer, 100M, one pair, and at most one triple. No live q1 process was changed
+and no new source, scan, tape, shadow, replay, archive, inverse, compression
+credit, or objective proof exists. Evidence:
+`operations/planning/evidence_conditioned_mutation_router_v6.json`.
+
 ## 2026-08-24 - semantic virtual time becomes the first orthogonal source test
 
 The independent strategy audit corrected the score accounting and the source

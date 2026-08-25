@@ -1,0 +1,105 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "semantic_route_tape_q0_v1",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "canonical_raw_transformed_coder_scope_q0_v1",
+      "required_evidence": "A repeated raw-first scope manifest binds canonical raw, transformed byte, coder-decision, entry-state, mapping, and economic identities."
+    },
+    {
+      "artifact": "wiki_schema_vm_ceiling_q0_v1 parser surface",
+      "required_evidence": "Independent source audit freezes post-WRT template names, explicit keys, positional indices, field boundaries, depth, overflow, mismatch, and sleep semantics."
+    },
+    {
+      "artifact": "semantic route tape receipt schema",
+      "required_evidence": "Receipt schema SHA-256 17253ab802089aeb5acf10312df4b2298b17245d792c98c88cdfcbec964ce196."
+    }
+  ],
+  "contract": {
+    "role": "shared zero-credit causal population tape for Schema, PDA, Fiber-CTS, Fiber-FOSSIL, and conditional LOOM analysis",
+    "receipt_schema": "contracts/research/v1/semantic-route-tape-receipt-v1.schema.json",
+    "record_abi": {
+      "bytes": 64,
+      "endianness": "little",
+      "fields": [
+        {"offset": 0, "bytes": 8, "name": "physical_coder_decision_coordinate", "type": "uint64"},
+        {"offset": 8, "bytes": 8, "name": "canonical_raw_coordinate", "type": "uint64"},
+        {"offset": 16, "bytes": 8, "name": "transformed_byte_coordinate", "type": "uint64"},
+        {"offset": 24, "bytes": 16, "name": "route_fingerprint", "type": "uint128_bytes"},
+        {"offset": 40, "bytes": 16, "name": "descriptor_witness_digest", "type": "uint128_bytes"},
+        {"offset": 56, "bytes": 1, "name": "event_type", "type": "uint8"},
+        {"offset": 57, "bytes": 1, "name": "flags", "type": "uint8"},
+        {"offset": 58, "bytes": 1, "name": "template_depth", "type": "uint8"},
+        {"offset": 59, "bytes": 1, "name": "key_identity", "type": "uint8"},
+        {"offset": 60, "bytes": 4, "name": "field_or_positional_ordinal", "type": "uint32"}
+      ],
+      "event_types": [
+        "template_enter",
+        "field_entry",
+        "field_value_byte",
+        "field_exit",
+        "template_exit",
+        "schema_key_byte",
+        "xml_open_name_byte",
+        "xml_open_complete",
+        "xml_close_name_byte",
+        "xml_close_complete",
+        "overflow_enter",
+        "overflow_exit",
+        "page_boundary"
+      ],
+      "event_type_encoding": "uint8 ordinal in the frozen event_types array; any other value is invalid",
+      "flags": [
+        "valid",
+        "overflow",
+        "sleep",
+        "explicit_key",
+        "positional_key",
+        "field_entry",
+        "field_exit",
+        "value_event"
+      ],
+      "key_identity": "0 none, 1 explicit key, 2 positional index; every other value is invalid",
+      "coordinate_rule": "For a byte event, physical_coder_decision_coordinate is the first of its eight binary decisions."
+    },
+    "descriptor_sidecar": {
+      "purpose": "offline alias and parser-drift verification only",
+      "content": "sorted length-delimited canonical descriptors keyed by the 128-bit witness digest",
+      "causal_exclusion": "No shadow or native predictor may query the global sidecar; it would expose descriptors before their first decoded occurrence.",
+      "alias_rule": "Any equal digest with unequal canonical descriptor bytes invalidates the complete tape receipt."
+    },
+    "build_protocol": [
+      "Build A and Build B run in fresh processes from the same source-bound scope and parser.",
+      "Each build replays the reversible frontend from canonical raw byte zero and emits records only when their fields are decoder-visible at that coordinate.",
+      "Tape, descriptor sidecar, summary, record count, coordinate ranges, event counts, flags, route counts, and rolling digests are content-addressed.",
+      "A and B must be byte-identical for tape, sidecar, and summary and must contain zero descriptor aliases.",
+      "The tape is immutable after verification and each consumer binds its exact SHA-256."
+    ],
+    "consumer_rule": "A shadow may reveal each record only at its physical coder coordinate and may read only fields already available to the causal parser. Truth bytes and future entry/exit records remain inaccessible until their coordinates. Final codecs must parse causally themselves and may not package this tape.",
+    "resource_bounds": {
+      "maximum_tree_rss_kib": 1000000,
+      "maximum_temporary_disk_bytes": 100000000000,
+      "memory_events_oom": 0,
+      "memory_events_oom_kill": 0
+    }
+  },
+  "activation_requirements": [
+    "q1 qualifies, q1 economics activates, the raw-first scope is verified, and the exclusive full-1G lease is absent.",
+    "The parser source, record ABI, event enumeration, flags, descriptor hash, sidecar law, commands, outputs, guards, and schemas are frozen before Build A.",
+    "Two independent guarded builds and an independent verifier pass byte identity, coordinate, causality, alias, output-closure, and resource checks.",
+    "Every later Schema/PDA/Fiber/LOOM shadow binds one tape hash and may not reinterpret fields."
+  ],
+  "claim_boundary": [
+    "The tape is zero-credit scientific population infrastructure and is forbidden from the final counted codec package.",
+    "Repeated tape identity proves parser and coordinate consistency, not predictive value.",
+    "No tape, parser count, route count, or event count is an archive saving or Hutter Prize proof."
+  ]
+}
