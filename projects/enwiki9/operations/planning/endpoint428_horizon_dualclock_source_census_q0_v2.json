@@ -1,0 +1,116 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "endpoint428_horizon_dualclock_source_census_q0_v2",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "endpoint428_horizon_match_source_census_q0_v1",
+      "required_evidence": "Preserve the v1 representation, population, key, controls, floor, resource ceiling, and claim boundary; v2 supersedes v1 before execution only to evaluate both predeclared persistence clocks in one pass."
+    },
+    {
+      "artifact": "fxcm_fossil_match_source_census_q0_retry_v1",
+      "required_evidence": "A valid terminal repeated q1-representation census with all frozen gates passing."
+    },
+    {
+      "artifact": "helical_wrt_far_history_discovery_qm3_v1",
+      "required_evidence": "Exact full-Endpoint-WRT evidence of 25,088,821 selected WRT bytes in prior closed spans beyond 100,000,000 WRT bytes, with deterministic repeat and exact event alignment; its explicit ledger was negative and remains retired."
+    }
+  ],
+  "contract": {
+    "supersedes": "operations/planning/endpoint428_horizon_match_source_census_q0_v1.json",
+    "role": "one-pass persistence attribution for addressless recurrence beyond Endpoint428's modeled history",
+    "algorithm_name": "HORIZON-DUALCLOCK",
+    "core_idea": "Each exact decoded context owns two implicit clocks: M tracks the most recent continuation, while A retains the first surviving exact anchor for that table residency. Both addresses are reconstructed from decoder state and transmit zero bits.",
+    "fixed_population": {
+      "stored_path": "/home/x/enwiki9-nonproof/results/helical_far_history_wrt_event_map_qm2_v1/enwik9.store",
+      "stored_bytes": 647798597,
+      "stored_sha256": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9",
+      "storage_header_bytes": 5,
+      "stream_bytes": 647798592,
+      "raw_scope_bytes": 1000000000,
+      "minimum_candidate_age_bytes": 100000001
+    },
+    "shared_state": {
+      "key": "preceding 16 decoded Endpoint428 WRT bytes under the frozen FOSSIL rolling hash",
+      "geometry": "two independent 2^24 direct-mapped exact-tag tables and one 100,000,000-byte live alias ring",
+      "M_update": "after truth, replace the matching slot with the current continuation on every event",
+      "A_update": "after truth, install the current continuation only when the slot is empty or its tag differs; preserve the first exact anchor while that key retains the slot",
+      "verification": "read and compare all 16 historical key bytes before either continuation is eligible",
+      "prediction_order": "derive, verify, and score every arm from state through i-1 before any table, ring, hash, reliability, or counter update"
+    },
+    "arms": [
+      {
+        "id": "M",
+        "role": "treatment",
+        "definition": "Predict the continuation of the most-recent verified context occurrence only when it is beyond the parent floor."
+      },
+      {
+        "id": "A",
+        "role": "treatment",
+        "definition": "Predict the continuation of the oldest surviving verified context anchor only when it is beyond the parent floor."
+      },
+      {
+        "id": "K",
+        "role": "comparator",
+        "definition": "Traverse both table transitions, exact-key reads, ring writes, and hashes while disabling prediction."
+      },
+      {
+        "id": "SM/SA",
+        "role": "shifted",
+        "definition": "For each active treatment coordinate, read the corresponding source coordinate through the live 100,000,000-byte ring alias."
+      },
+      {
+        "id": "RM/RA",
+        "role": "negative",
+        "definition": "Frozen arm-separated SplitMix64 bytes with identical activation geometry."
+      },
+      {
+        "id": "NM/NA",
+        "role": "negative",
+        "definition": "Bitwise complements of the corresponding treatment continuation."
+      },
+      {
+        "id": "repeat",
+        "role": "replay",
+        "definition": "A fresh process must reproduce the complete receipt byte-for-byte."
+      }
+    ],
+    "causal_calibration": {
+      "law": "For each treatment and chronological third, a uint64 KT correct-versus-incorrect tracker begins at one-half counts, commits a probability before truth, assigns the donor byte that correctness probability and each of the other 255 bytes an equal share, then updates after truth.",
+      "measurement": "truth-path ideal bits and gain against an eight-bit uniform byte endpoint",
+      "use": "ranking and futility evidence only; parent residual and arithmetic archives remain mandatory"
+    },
+    "selection_rule": [
+      "An arm is admissible only with at least 313,775 active bytes, D above every matched control in every chronological third, positive margins in at least two distance buckets, positive causal KT gain in every third, repeat identity, causal identity, and process-tree RSS at most 524,288 KiB.",
+      "If exactly one arm is admissible, select it for retained-parent tracing.",
+      "If both are admissible, select the arm with larger full-population causal KT gain only when it also wins that gain in at least two chronological thirds; otherwise retain both as separately sleeping experts in one prospectively frozen parent trace.",
+      "If neither is admissible, retire physical HORIZON on Endpoint428 without changing key length, table size, hash, age floor, route, or calibration."
+    ],
+    "economics": {
+      "provisional_gross_requirement_bytes": 5020395,
+      "source_active_floor_bytes": 313775,
+      "package_ceiling_bytes": 131072,
+      "engineering_reserve_bytes": 500000,
+      "rule": "The active floor is only the inherited optimistic gate. Causal donor-versus-uniform gain and later retained-parent gain are reported explicitly so a high opportunity count cannot masquerade as target-closing information."
+    }
+  },
+  "activation_requirements": [
+    "The q1-representation repeat is terminal and reflected before v2 materialization.",
+    "The v2 scanner, schema, compiler, flags, runner, independent verifier, two resource guards, and complete output manifest are content-addressed before execution.",
+    "Every past read adds the five-byte store wrapper offset and enforces historical index strictly below current WRT coordinate.",
+    "The scanner hashes and validates the complete stored population before either arm executes.",
+    "No Endpoint428 probability, archive result, future byte, paid match ledger, semantic route, or post-result parameter choice enters the scan."
+  ],
+  "claim_boundary": [
+    "HORIZON-DUALCLOCK is a dormant zero-credit source census and does not yet exist as executable evidence.",
+    "The prior 25,088,821-byte helical span population proves exact far recurrence but not that either implicit clock finds or prices it.",
+    "A source pass proves no advantage over Endpoint428, no finite archive, no inverse, no package closure, no resource-eligible composite, and no Hutter result."
+  ]
+}

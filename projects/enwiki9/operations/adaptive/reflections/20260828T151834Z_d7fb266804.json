@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "none",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner bound /usr/bin/g++ instead of its resolved regular executable path."
+  },
+  "candidateId": "fxcm_fossil_match_source_census_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fxcm_fossil_match_source_census_q0_v1",
+    "candidateTreeSha256": "sha256:9a6bfdfbec348b4baa58f533ac4e15006a03237fdf21083bb4feacbe8cea63fb",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fxcm_fossil_match_source_census_q0_v1/20260828T151822207222Z_9a6bfdfbec34.json",
+      "sha256": "sha256:bfdde91d09c5e3b381cb2cc43b6bdcb689f9ee25ff36f11153334e7b6f35ba8a"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create one implementation-only successor that changes only the compiler path and digest while preserving the frozen population, transition, controls, and gates.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/experiments/fxcm_fossil_match_source_census_q0_v1.json",
+      "sha256": "sha256:014b901c10edc4a47a98ad4f7fd385f71b035a74a7a322667c1bfd6c2a10b7d0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fxcm_fossil_match_source_census_q0_v1.json",
+    "sha256": "sha256:014b901c10edc4a47a98ad4f7fd385f71b035a74a7a322667c1bfd6c2a10b7d0"
+  },
+  "generatedUtc": "2026-08-28T15:19:37+00:00",
+  "hypothesis": {
+    "rationale": "No scanner binary was compiled and neither treatment nor control consumed a population byte.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260828T151834Z_d7fb266804.json",
+    "sha256": "sha256:b69b7d8b7d4df50a178a08b4047b0951886159e83e72bbebd2de7dfdf801c67b"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Toolchain bindings must name the resolved regular compiler artifact before the candidate is sealed."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260828t151834z_d7fb266804",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The frozen runner exited before compilation because its exact compiler path was a symlink and its source-bound regular-file check correctly rejected that path."
+    ],
+    "valid": false
+  }
+}
