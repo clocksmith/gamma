@@ -1,5 +1,78 @@
 # enwiki9 Research Register
 
+## 2026-08-28 - score-first HORIZON-FIBER pivot replaces q1 blocking
+
+The campaign no longer treats q1 qualification as the blocking path to a win.
+The q1 Arm A encode reproduced the external `107,730,531`-byte payload, but its
+full decode was stopped incomplete and it receives zero score credit. No q1
+Arm B is authorized unless a terminal runtime adjudication shows that another
+full run can contribute to prize eligibility or a named retained-parent proof.
+
+The primary mechanism is now **HORIZON-FIBER**: addressless far-history
+retrieval. HORIZON indexes exact decoded physical context and predicts a remote
+historical continuation without transmitting a source address, distance, or
+length. FIBER is conditional: after a repeated causal semantic-route tape and
+retained-parent evidence, the same principle operates in template-field virtual
+time. A compact parent remains authoritative and untouched; specialists expose
+pretruth integer probabilities through a sleeping mixture. This is not
+checkpointing CMIX and does not require duplicating its persistent state.
+
+The first frozen gate is
+`fxcm_fossil_match_source_census_q0_retry_v1`. It scans the complete
+`587,138,826`-byte transformed stream twice and must expose at least `313,775`
+active far-history opportunities, beat alias/random/negated controls in every
+chronological third, transfer across at least two distance buckets, reproduce
+exactly, remain causal, and stay within `524,288 KiB`. Its compiler-path retry
+changes no scanner byte or scientific predicate. A pass authorizes one compact
+retained-parent probability trace; it proves no compression.
+
+The independent hedge remains compact causal midpoint learning. The deep NNCP
+oracle saved `4,726` bytes over `322,978` raw bytes and was positive in all
+thirds, while the output-head-only arm lost `569` bytes. Therefore output-bias
+MIDAS is retired as the explanation, and full closed NNCP backpropagation is not
+the prize-facing implementation. Any successor must be a bounded,
+decoder-reconstructible deep update on a compact substrate.
+
+The current best source-bound forecast is still `109,389,323`, which is
+`4,389,323` bytes above the target before a prospective child package and
+reserve. The active provisional gross requirement is `5,020,395` bytes. No
+verified Gamma full-1G score exists, and no Hutter result has been proved.
+Evidence: `docs/score_first_horizon_fiber_strategy_20260828.json`,
+`operations/adaptive/experiments/fxcm_fossil_match_source_census_q0_retry_v1.json`,
+and the terminal q1 reflection
+`operations/adaptive/reflections/20260823T215147Z_7827ad9bc5.json`.
+
+A raw-coordinate crossover check prevents an invalid compact-parent inference.
+Endpoint428's exact opening-10M WRT stream contains `6,251,852` bytes with
+SHA-256 `8f220e06860909f4b2a16d676ce696c5af0c738b7cc35b577618c63cbdff1ed7`.
+The same-length prefix of the q1/CMIX transformed population has SHA-256
+`8e93114628cc24cae6e1819fa1acff610983dae36d76bd3eee410ae71e26b5ca`;
+the bytes differ. Therefore the running FOSSIL census is q1-representation
+source evidence only. Prize-facing HORIZON must receive a new repeated census
+on Endpoint428's exact full WRT stream, using its actual `100,000,000`-modeled-
+byte history floor, before retained-parent pricing. No opportunity count or
+control margin may cross this representation boundary.
+The frozen crossover design is
+`operations/planning/endpoint428_horizon_match_source_census_q0_v1.json`.
+It preserves the 16-byte exact context and direct table, raises the eligibility
+floor to Endpoint428's actual `100,000,000` modeled bytes, uses the exact
+`647,798,592`-byte full WRT stream, and retains P/K/D/S/R/N plus repeat and
+resource gates. If most-recent replacement alone is subscale while distance
+suppression dominates, exactly one oldest-anchor persistence mutation is
+authorized; a control failure retires physical HORIZON without a sweep.
+
+Before v1 execution, the more efficient frozen v2 supersedes it with a single
+two-clock scan: `endpoint428_horizon_dualclock_source_census_q0_v2`. `M` keeps
+the most-recent exact continuation; `A` keeps the oldest surviving exact anchor
+for the table residency. Both require an age greater than `100,000,000`, exact
+16-byte verification, and transmit no address. The motivation is concrete:
+the prior full-WRT helical census found `25,088,821` exact selected WRT bytes in
+closed spans beyond that floor, but an explicit ledger consumed the value.
+DUALCLOCK asks whether decoder state can recover that reservoir implicitly.
+Both arms are scored against matched alias/random/negated controls and a causal
+KT byte endpoint; a frozen rule selects one, both as sleeping experts, or
+neither. High active count alone cannot authorize parent integration.
+
 ## 2026-08-24 - activation corrections close economics, coordinates, and Fiber authority
 
 Commit `aa65ae9ad309f139c26abc2f366b2c64edcdf0b4` is now the canonical
