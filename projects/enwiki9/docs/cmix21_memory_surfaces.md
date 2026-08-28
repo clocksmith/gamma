@@ -12,8 +12,8 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `cmix_filebacked_fxcm_full_a_qm8_v1`
-- Active scope bytes: `1,000,000,000`
+- Active candidate: `n/a`
+- Active scope bytes: `n/a`
 - cmix21 candidates with result or guard evidence: `9`
 
 ## Observed Knob Values
