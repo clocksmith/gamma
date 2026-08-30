@@ -65,10 +65,11 @@ The public is no longer debating isolated products. Courts accept
 machine-parsable arguments, modeled consent, neural telemetry, and authorized
 personal agents as ordinary evidence. An engineered bio-compute organism,
 released to measure water and heat, reproduces beyond one billion instances
-before stopping in stable glyph-shaped colonies. Civic systems read the bloom
-as environmental testimony while refusing to classify it as instrument,
-infestation, language, or claimant. Cognitive donors receive one rate for read
-access and a higher rate for permitted memory writes. Families litigate
+in a single growth cycle before stopping in stable glyph-shaped colonies.
+Civic systems read the bloom as environmental testimony while refusing to
+classify it as instrument, infestation, language, or claimant. Cognitive
+donors receive one rate for read access and a higher rate for permitted memory
+writes. Families litigate
 synthetic children and preserved relatives. Analog districts retain a legal
 right to remain unreadable, then discover that unsupported people reach every
 essential institution with weaker records and slower service.

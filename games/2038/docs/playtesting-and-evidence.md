@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.8.0-rc.12-test`
+**Rules under review:** `0.8.0-rc.13-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.12-test`. Executable
-game `0.14.11` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.13-test`. Executable
+game `0.14.12` implements its Default Game profile under
 `nineteen-hex-simplified-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.8.0-rc.12-test` and executable `0.14.11` retain the synchronized
+Candidate `0.8.0-rc.13-test` and executable `0.14.12` retain the synchronized
 identity for the complete nineteen-hex simplification. They replace private
 Escalation hands with six shared Programs, remove Safety currency, reduce
 Training to forty cards, make Mega-Clusters solo projects, restrict immediate
@@ -132,7 +132,14 @@ Default Game has no Power market; Advanced Play adds binary Networks and one
 Power request without a Network production bonus. A selectable Action must
 already have a legal resolution before the optional trade window. These are
 implementation claims, not human teachability, negotiation-quality, or balance
-evidence; all three supported player counts require fresh evidence.
+evidence; all three supported player counts require fresh evidence. The rc.13
+patch changes presentation and lore only. It adds the Authority-era
+Billion-Instance Bloom, carries its reproduction precedent into Continuity,
+and expands automated completeness checks across every player-facing lore
+surface. No mechanic, balance claim, or physical-play qualification changed.
+
+Historical rc.12 / executable `0.14.11` established the Thematic Content Bible
+as the sole lore authority and synchronized the prior four-Era narrative.
 
 Historical rc.8 changed no playable rule from rc.7. Executable `0.14.7`
 extends exact profile-artifact identity into the unified holdout matrix.
