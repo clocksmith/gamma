@@ -359,7 +359,7 @@ test("retained signature abilities project concrete continuity institutions", as
   assert.match(eraIvAbility("foundry").text, /create 2 temporary Compute/);
   assert.equal(
     eraIvAbility("coalition_lab").flavorText,
-    "Adjacency is a technical limit. Mutual necessity is an operating model."
+    "The governments remain at war. Their jointly owned bridge carries desalinated water and coolant on schedule."
   );
   assert.equal(
     eraIvAbility("imperial_research_lab").flavorText,

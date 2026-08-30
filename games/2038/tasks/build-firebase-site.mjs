@@ -85,7 +85,8 @@ function escapeHtml(value) {
 }
 
 function pageListItem(page) {
-  return `<li>
+  const className = page.kind === "Playable interface" ? ' class="primary-action"' : "";
+  return `<li${className}>
   <a href="${escapeHtml(page.href)}">${escapeHtml(page.title)}</a>
   <span>${escapeHtml(page.kind)} · ${escapeHtml(page.description)}</span>
 </li>`;
@@ -130,14 +131,20 @@ ${entries.map(pageListItem).join("\n")}
 }
 
 export function buildIndexHtml({ identity, pages, library = false, worldCopy = null }) {
-  const title = library ? "Mandate 2038 · Supporting material" : "Mandate 2038 · Default Game Play Kit";
+  const title = library ? "Mandate 2038 · Supporting material" : "Mandate 2038 · Play and review";
   const introduction = library
     ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
     : worldCopy?.box
       ? `${worldCopy.box.frontStrapline} ${worldCopy.box.shortPitch}`
       : "The four documents required to set up and play Default Game.";
   const routeLink = library
-    ? '<p><a href="../">Return to the Default Game Play Kit.</a></p>'
+    ? '<p><a href="../">Return to Mandate 2038.</a></p>'
+    : "";
+  const worldPrimer = !library && Array.isArray(worldCopy?.worldPrimer)
+    ? `<section class="world-primer" aria-labelledby="world-primer-title">
+  <h2 id="world-primer-title">The world of 2038</h2>
+  ${worldCopy.worldPrimer.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n  ")}
+</section>`
     : "";
   return protectHtml(`<!doctype html>
 <html lang="en">
@@ -158,6 +165,10 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
     li a { display:inline-block; color:var(--accent); font:700 1.12rem/1.3 Georgia,serif; }
     li a:hover,li a:focus-visible { color:#fff0bd; }
     li span { display:block; margin-top:.25rem; color:var(--muted); font-size:.8rem; }
+    li.primary-action { margin:.75rem 0; padding:1.2rem; border:1px solid var(--accent); background:rgba(228,181,83,.08); }
+    li.primary-action a { font-size:1.5rem; }
+    .world-primer { margin-top:3rem; padding-top:.5rem; border-top:1px solid var(--line); }
+    .world-primer p { margin:.65rem 0; color:var(--muted); }
     footer { margin-top:2.5rem; color:var(--muted); font-size:.72rem; overflow-wrap:anywhere; }
     footer code { color:var(--ink); }
   </style>
@@ -167,6 +178,7 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
   <h1>Mandate 2038</h1>
   <p>${introduction}</p>
   ${renderPageGroups(pages)}
+  ${worldPrimer}
   ${routeLink}
   <footer>
     Rules <code>${escapeHtml(identity.rulesVersion)}</code> ·
@@ -392,6 +404,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     "environment/selected-rules-match.js",
     "personas/player-profile.js",
     "policies/weighted-policy.js",
+    "rules/local-power-allocation.js",
     "runtime/create-browser-interactive-game.js",
     "runtime/interactive-game-core.js",
     "scenarios/agi-declaration-window.js"
@@ -404,17 +417,17 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   pages.unshift(
     {
       group: "Start here",
-      kind: "Teaching interface",
-      title: "First Game Guide",
-      href: "first-game-guide.html",
-      description: "A fixed first-Era Default Play lesson using the canonical game components."
-    },
-    {
-      group: "Start here",
       kind: "Playable interface",
       title: "Play the game",
       href: "web/index.html",
       description: "Play against browser-native deterministic opponents; the local bridge is optional for Claude or Codex."
+    },
+    {
+      group: "Start here",
+      kind: "Teaching interface",
+      title: "First Game Guide",
+      href: "first-game-guide.html",
+      description: "A fixed first-Era Default Play lesson using the canonical game components."
     },
     {
       group: "Development and evidence",
@@ -425,19 +438,18 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     }
   );
 
-  const playKitPages = pages.filter(
-    (page) => page.group === "Required Default Game Play Kit"
-  );
-  const libraryPages = pages
-    .filter((page) => page.group !== "Required Default Game Play Kit")
-    .map((page) => ({ ...page, href: `../${page.href}` }));
-  await copyProtectedHtml(
-    resolve(docsSource, "index.html"),
-    resolve(outputRoot, "index.html")
-  );
   const publishedWorldCopy = JSON.parse(
     await readFile(resolve(projectRoot, "dist/runtime/world-copy.json"), "utf8")
   );
+  const rootHtml = buildIndexHtml({
+    identity,
+    pages,
+    worldCopy: publishedWorldCopy
+  });
+  await writeFile(resolve(outputRoot, "index.html"), `${rootHtml}\n`);
+  const libraryPages = pages
+    .filter((page) => page.group !== "Required Default Game Play Kit")
+    .map((page) => ({ ...page, href: `../${page.href}` }));
   const libraryHtml = buildIndexHtml({
     identity,
     pages: libraryPages,
