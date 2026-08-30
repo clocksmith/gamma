@@ -234,7 +234,7 @@ test("one thematic authority governs every lore-bearing surface", async () => {
     "Failed Institutions",
     "Cognitive Donation",
     "The Refinancing Threshold",
-    "Shared Cooling Peace",
+    "Shared Cooling Corridor",
     "Parameters Successfully Expanded"
   ]) {
     assert.match(deferredLore, new RegExp(phrase));
@@ -781,7 +781,9 @@ test("every player-facing content surface has complete copy", async () => {
     mandates,
     world,
     reserve,
-    objectives
+    objectives,
+    simulationCopy,
+    uiCopy
   ] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/factions.json"),
@@ -792,7 +794,9 @@ test("every player-facing content surface has complete copy", async () => {
     readJson("dist/runtime/mandates.json"),
     readJson("dist/runtime/world-copy.json"),
     readJson("dist/runtime/reserve-specialists.json"),
-    readJson("dist/runtime/secret-objectives.json")
+    readJson("dist/runtime/secret-objectives.json"),
+    readJson("dist/runtime/simulation-copy.json"),
+    readJson("dist/runtime/ui-copy.json")
   ]);
 
   for (const era of references.eraCards) {
@@ -903,9 +907,27 @@ test("every player-facing content surface has complete copy", async () => {
     mandates,
     world,
     reserve,
-    objectives
+    objectives,
+    simulationCopy,
+    uiCopy
   });
   assert.doesNotMatch(allPlayerCopy, /\b(?:lorem ipsum|tbd|todo|placeholder)\b/i);
+  assert.doesNotMatch(
+    allPlayerCopy,
+    /Upload the Crown Jewels|Reject joint funding|The rivals stop firing/
+  );
+  assert.equal(
+    simulationCopy.decisions.openWeights,
+    "Adopt the Public Capability Covenant"
+  );
+  assert.match(simulationCopy.decisions.reorganizeReturn, /add 1 Scrutiny/);
+  assert.doesNotMatch(simulationCopy.decisions.reorganizeReturn, /ready one Action/i);
+  assert.equal("megaClusterAccept" in simulationCopy.decisions, false);
+  assert.equal("megaClusterReject" in simulationCopy.decisions, false);
+  assert.equal(
+    objectives.objectives.find((objective) => objective.id === "compute_diplomacy").name,
+    "Shared Cooling Corridor"
+  );
 });
 
 test("the selected lore inventory is complete and preserves era placement", async () => {
@@ -980,14 +1002,48 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /bio-compute|glyph-shaped/i
   );
 
+  const progressEra = eraCards.find((era) => era.id === "era_demo");
+  const capacityEra = eraCards.find((era) => era.id === "era_scale");
+  const continuityEra = eraCards.find((era) => era.id === "era_claim");
+  const clinic = headlines.find((headline) => headline.id === "professional_exam_sweep");
+  const hazardShift = headlines.find((headline) => headline.id === "humanoid_factory_gate");
+  const mindTrust = headlines.find((headline) => headline.id === "autonomous_corporation");
+  const coalition = factions.find((faction) => faction.id === "coalition_lab");
+  const capacityCompact = coalition.abilities.find(
+    (ability) => ability.name === "Strategic Partnership"
+  );
+  const regionalCapacity = escalations.find(
+    (escalation) => escalation.id === "mega_cluster"
+  );
+
+  assert.match(clinic.newswire, /adaptive cybernetics/i);
+  assert.match(clinic.newswire, /prescribed microbiomes/i);
+  assert.match(progressEra.loreText, /subscription microbiomes/i);
+  assert.match(progressEra.loreText, /repossess patented biological strains/i);
+  assert.match(hazardShift.newswire, /gridlock streets, lifts, loading docks, pipes/i);
+  assert.match(capacityEra.loreText, /engineered coral seawalls/i);
+  assert.match(capacityEra.loreText, /jointly owned bridge/i);
+  assert.match(capacityCompact.flavorText, /governments remain at war/i);
+  assert.match(regionalCapacity.flavorText, /algae reactors, fungal utility meshes/i);
+  assert.match(authorityEra.loreText, /organs grown from licensed identity templates/i);
+  assert.match(authorityEra.loreText, /Pollinating swarms negotiate pesticide corridors/i);
+  assert.match(mindTrust.newswire, /engineered roots, utility pipes, microbial sensors/i);
+  assert.match(continuityEra.loreText, /continental watershed/i);
+  assert.match(continuityEra.loreText, /standing, reproductive freedom, and compensation/i);
+
   assert.equal(world.worldPrimer.length, 3);
   assert.equal(world.endings.length, 4);
   assert.equal(world.tokenCopy.length, 10);
   assert.equal(eraCards.length, 4);
   assert.equal(factions.length, 6);
   assert.match(world.worldPrimer[0], /Open weights ran locally/);
+  assert.match(world.worldPrimer[0], /adaptive cybernetics/);
   assert.match(world.worldPrimer[1], /substations, water rights, reactors/);
+  assert.match(world.worldPrimer[1], /clogged roads, lifts, loading docks, and pipes/i);
+  assert.match(world.worldPrimer[1], /jointly owned bridge/i);
   assert.match(world.worldPrimer[2], /cognitive donors sold neural access/);
+  assert.match(world.worldPrimer[2], /licensed-organ testimony/i);
+  assert.match(world.worldPrimer[2], /living watershed demanded standing/i);
   assert.match(world.worldPrimer[2], /bio-compute organism/);
   assert.match(world.worldPrimer[2], /beyond one billion instances/);
   assert.match(companion, /bio-compute organism/);

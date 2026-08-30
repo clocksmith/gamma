@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.13-test`
+**Rules reference:** `0.8.0-rc.16-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.13-test` test:
+controlled `0.8.0-rc.16-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.12` implements `0.8.0-rc.13-test` under engine coverage
+Executable game `0.14.15` implements `0.8.0-rc.16-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -242,7 +242,33 @@ six shared Programs, Research Protection, a forty-card Training deck, solo
 Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, binary
 Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
-and Monte Carlo share that contract.
+and Monte Carlo share that contract. The published root now presents the
+playable game as its primary action while keeping the complete generated
+documentation and component galleries available from the same index.
+
+Candidate `0.8.0-rc.16-test` changes no physical mechanic from rc.15.
+Executable `0.14.15` publishes the complete browser-module closure required by
+the selected-rules game. Physical Chrome must populate both setup selectors
+and begin a game without a failed module request before deployment.
+
+Candidate `0.8.0-rc.15-test` changed no physical mechanic from rc.14.
+Executable `0.14.14` corrected the generated decision prose for the Public
+Capability Covenant and Reorganization, removed unreachable joint-funding
+choices from the solo Mega-Cluster contract, and made the deferred cooling
+corridor remain explicitly wartime. Every current player-facing source is
+regenerated from the content graph. No balance or physical-play evidence
+transfers merely because the prose and published navigation changed.
+
+Candidate `0.8.0-rc.14-test` changes no physical mechanic from rc.13.
+Executable `0.14.13` preserves every stable component ID, rule, Era count, and
+Headline count while extending the canonical four-Era history. Progress now
+includes useful cybernetics and subscription biology. Capacity includes
+locally compliant robot congestion, biological utilities, and a jointly owned
+water bridge between states that remain at war. Authority adds licensed-organ
+testimony and machine-readable pollinator corridors. Continuity makes those
+systems a metropolitan nervous system and a living watershed seeking standing.
+The lore contract binds each idea to an existing component or Era panel. No
+balance or physical-play evidence transfers merely because the prose changed.
 
 Candidate `0.8.0-rc.13-test` changes no physical mechanic from rc.12.
 Executable `0.14.12` preserves every stable component ID, rule, Era count, and

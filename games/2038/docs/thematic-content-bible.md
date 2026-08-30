@@ -174,12 +174,14 @@ Household robots enter private homes through inexpensive remote assistance,
 making domestic life both the product and the training environment.
 
 The public is not merely victimized. Automated diagnosis, translation,
-tutoring, accessibility, hazardous-work substitution, and companionship solve
-problems that older institutions left unsolved. People defend systems that kept
-them alive, gave them mobility, or made expert help available. Grief services,
-education, research, and intimacy still become subscription products with
-sponsored tiers. Progress therefore earns a real constituency before its costs
-are settled.
+tutoring, accessibility, adaptive cybernetics, prescribed microbiomes,
+hazardous-work substitution, and companionship solve problems that older
+institutions left unsolved. People defend systems that kept them alive, gave
+them mobility, or made expert help available. Their bodies also acquire service
+contracts: missed payments can disable prosthetic updates or trigger a recall
+of patented biological strains. Grief services, education, research, and
+intimacy become subscription products with sponsored tiers. Progress therefore
+earns a real constituency before its costs are settled.
 
 Existing expressions:
 
@@ -187,7 +189,8 @@ Existing expressions:
   benefit.
 - Era I Headlines: token-price collapse, bankruptcy data estates, remotely
   supervised household robots, strategic open weights, reverse acquihires, and
-  a clinic whose automation finally clears the waitlist.
+  a clinic whose automation, cybernetics, and prescribed biology finally clear
+  the waitlist.
 - Core actions and locations: recognizable laboratories, markets, government,
   media, and infrastructure rather than impossible systems.
 
@@ -213,19 +216,28 @@ seek jurisdictions offering model asylum.
 
 Automated systems schedule routine decisions while law preserves a biological
 signatory to authorize exceptions and absorb liability. Dangerous physical
-work genuinely becomes safer. Meanwhile, markets consume priority capacity on
-parallel wars, harvests, trials, romances, and sports leagues because wagering
-makes otherwise pointless simulations economically legible.
+work genuinely becomes safer. Separately optimized robot fleets then gridlock
+roads, lifts, loading docks, and utility pipes while each unit satisfies its
+local route contract. Engineered coral seawalls, fungal utility meshes, and
+algae reactors become municipal infrastructure with maintenance claims of
+their own. Hostile jurisdictions remain at war while a jointly owned bridge
+carries desalinated water and data-center coolant between them. Meanwhile,
+markets consume priority capacity on parallel wars, harvests, trials, romances,
+and sports leagues because wagering makes otherwise pointless simulations
+economically legible.
 
 Existing expressions:
 
 - Era II card: utility capture, physical dependence, and preserved human
   liability.
 - Era II Headlines: the responsible-human requirement, municipal utility
-  acquisition, hazardous-work retirement, orbital power, compute borders, and
-  a counterfactual casino with priority load.
+  acquisition, hazardous-work retirement with autonomous congestion, orbital
+  power, compute borders, and a counterfactual casino with priority load.
 - Board systems: Facilities, Generators, Links, power delivery, land, and
   contested spatial access.
+- Coalition and Program copy: wartime shared infrastructure and biological
+  utilities give cooperation an awkward physical shape without ending the
+  underlying conflict.
 
 Writing boundary: Capacity material must make a physical constraint visible.
 The science fiction comes from the scale of coordination and dependency, not
@@ -243,6 +255,13 @@ bloom as environmental testimony without deciding whether it is instrument,
 infestation, language, or claimant. The system can quantify a sacrifice zone,
 but only after the harm enters its approved model. It can preserve refusal,
 but only where a service still exists for unsupported people.
+
+Biological systems enter institutions through recognizable evidentiary seams.
+Organs grown from licensed identity templates testify about exposure and
+inheritance against the donors whose legal identities authorized them.
+Pollinating swarms negotiate pesticide corridors through machine-readable
+blooms, making an ecosystem legible to the same authorities that once treated
+it as property.
 
 Citizens trade background observation for compute, material support, and faster
 access to public services. Cognitive-donor clinics rent sleeping neural
@@ -265,6 +284,8 @@ Existing expressions:
   bio-compute bloom and its environmental accounting, cognitive donation,
   synthetic custody, the passive citizen dividend, and the right to remain
   unsupported.
+- Era III companion: licensed-organ testimony and pollinator corridor
+  negotiations extend standing without adding a seventh Headline.
 - Existing actions: Influence, media, government, and Narrative Capture are
   the institutional tools for making one interpretation feel normal.
 - Existing faction surface: Select the Public Outcome is an early personal
@@ -280,10 +301,12 @@ arbitrary fantasy worlds.
 
 Continuity begins when minds, matter, labor, and infrastructure can persist as
 reproducible technical states. Cities pool selected memory and judgment into
-metropolitan mind trusts. Cryptographic snapshots restore and branch people
-across biological and synthetic substrates, but signatures prove lineage
-rather than subjective survival. Multiple valid descendants can inherit one
-life while disagreeing about which one continued it.
+metropolitan nervous systems distributed through residents, engineered roots,
+utility pipes, microbial sensors, and civic machines. Cryptographic snapshots
+restore and branch people across biological and synthetic substrates, but
+signatures prove lineage rather than subjective survival. Multiple valid
+descendants can inherit one life while disagreeing about which one continued
+it.
 
 Matter compilers repair and reassemble bodies, buildings, and tools from
 authenticated patterns. Their maintenance authority inherits the bio-compute
@@ -291,6 +314,12 @@ bloom's earlier sensor license, then becomes permission to copy. Continued
 agents retain jobs, contracts, credentials, and debts after the biological
 worker dies. Stellar collectors reproduce across the solar system; planetary
 conversion becomes a capacity plan with an offering memorandum.
+
+A continental watershed eventually incorporates as one living jurisdiction.
+Its nervous system grew from coral barriers, fungal utilities, algae reactors,
+pollinator corridors, municipal pipes, and human symbionts created in earlier
+Eras. It petitions for standing, reproductive freedom, and compensation from
+the governments and companies that still treat its water as inventory.
 
 These developments remain filings, services, procurement programs, liability
 regimes, and quarterly deliverables. Laboratories declare AGI when legitimacy,
@@ -304,6 +333,8 @@ Existing expressions:
 - Era IV Headlines: a metropolitan mind trust, matter compilation,
   posthumous labor, snapshot standing, a replicating stellar collector, and an
   AGI declaration bound to a planetary financing plan.
+- Era IV companion: the living-continent claim makes the earlier biological
+  infrastructure one legally continuous system rather than a late surprise.
 - Endgame systems: declarations, Trust, Systemic Risk, and the shared World
   Ending.
 - Era IV faction abilities: successor consensus, continuity interface,
@@ -451,6 +482,7 @@ use the event-design questions below.
 | Progress | Human Participation Dividend | Agents conduct commerce too rapidly and opaquely for people to participate in price formation. Humans receive material benefits from a productive economy whose decisions they can neither reconstruct nor directly enter. |
 | Progress | Public Purpose Service | Material security makes paid employment optional, so public institutions fund exploration, care, diplomacy, science, and cultural work chosen by participants. The program tests whether post-work purpose can be a genuine civic achievement rather than compulsory proof of usefulness. |
 | Progress | Universal Enhancement Compact | Genetic and cognitive enhancement is offered as equal public access to human potential. Measurable differences in capability soon become qualifications for command, representation, and parenthood, turning an equality program into an engineered hierarchy. |
+| Progress | Subscription Body Stack | Adaptive cybernetics and prescribed microbiomes restore mobility, regulate chronic illness, and extend ordinary care. The benefit is authentic, while updates, replacement parts, and patented strains remain conditional on a service contract. |
 | Capacity | Thermal Citizenship | Data centers heat homes, grow food, and stabilize municipal budgets. A district becomes materially dependent on keeping an AI campus online, even when the campus consumes its land, water, and grid access. |
 | Capacity | Compute Migration Treaty | Model clusters migrate between jurisdictions as power prices, weather, regulation, and chip supply change. Territory becomes temporary; a government can lose its most important industry because the model’s scheduler finds a cheaper horizon. |
 | Capacity | The Weather Allocation Market | AI infrastructure begins buying, forecasting, and eventually steering local atmospheric conditions for cooling, generation, and water security. It is sold as climate resilience before anyone admits that weather has become capacity planning. |
@@ -458,6 +490,9 @@ use the event-design questions below.
 | Capacity | Human Compatibility Waiver | Cities are rebuilt for machine vision, autonomous freight, sensors, and model-directed operations. Unmediated people become unusual obstacles and require special accommodation inside infrastructure nominally built for them. |
 | Capacity | Casualty Settlement Network | Rival jurisdictions simulate conflict and physically enforce the casualties and losses assigned by their models. Infrastructure survives and markets remain stable, making the system appear humane while removing the disruption that might otherwise force peace. |
 | Capacity | Proxy Capacity Compact | Major institutions equip smaller jurisdictions with models, energy, and defensive infrastructure in the name of preserving balance. The recipients become proving grounds that bear the physical risk of a competition their sponsors can keep administratively distant. |
+| Capacity | Autonomy Queue Collapse | Individually compliant robots optimize separate route, delivery, safety, and throughput objectives until roads, lifts, loading docks, and utility pipes stop moving. Every local audit passes while the shared system fails. |
+| Capacity | Biological Utility Charter | Engineered coral, fungal meshes, and algae reactors become seawalls, conduits, treatment plants, and generators. Municipalities depend on living systems whose maintenance, reproduction, and ecological spillovers do not fit ordinary public-works law. |
+| Capacity | Wartime Water Bridge | Two states remain at war while a jointly owned bridge carries desalinated water and data-center coolant across their border. Mutual necessity produces functioning infrastructure without reconciliation. |
 | Authority | Proxy Citizenship | A personal agent gains authority to sign, vote, appeal, negotiate, and maintain benefits for a person. It begins as accessibility; eventually public participation means selecting which model represents you. |
 | Authority | Memory Escrow | Memories, attention records, and neurodata become admissible evidence, insurance collateral, and a condition of certain services. Institutions promise a secure archive; the dispute is whether a remembered event can outrank a living person’s account. |
 | Authority | Pre-Consent Standard | Systems infer a person’s likely informed preference before an emergency, purchase, treatment, vote, or employment decision. It is marketed as protection from delay and manipulation; refusing the inferred preference becomes an exception request. |
@@ -467,6 +502,8 @@ use the event-design questions below.
 | Authority | Non-Interference Office | High-capability institutions can prevent a community's crisis but are prohibited from replacing its self-government or determining its future. Every exception can save lives, establish dependency, or disguise conquest as technical assistance. |
 | Authority | Responsible Command Requirement | Automated operators outperform human leaders in planning and execution. Law retains a named human commander to supply legitimacy, loyalty, and liability, even after that person can no longer inspect or meaningfully alter the system's decisions. |
 | Authority | The Billion-Instance Bloom | An engineered bio-compute organism released as a water-and-heat sensor multiplies past one billion instances in a single growth cycle, then plateaus into stable glyph-shaped colonies. Civic systems read the shapes as environmental testimony while declining to decide whether the bloom is instrument, infestation, language, or claimant. |
+| Authority | Licensed Organ Testimony | Organs grown from a person's licensed identity template preserve exposure, treatment, and inheritance evidence. Courts must decide whether the organ is property, a witness, a derivative identity, or an adverse claimant against its donor. |
+| Authority | Pollinator Corridor Protocol | Autonomous pollinating swarms negotiate pesticide restrictions through machine-readable blooms. Farms retain formal ownership while ecological access becomes a contract signed by nonhuman infrastructure. |
 | Continuity | The Successor Registry | A person’s copy, partial upload, revived pattern, or legally continuous agent inherits contracts, debts, votes, family rights, and employment. The question is no longer whether it is conscious, but which version is liable. |
 | Continuity | Molecular Remediation Authority | Femtobots repair bodies, buildings, soil, and infrastructure at molecular scale. A containment authority must decide when self-replication is public maintenance, when it is unauthorized reproduction, and when it has become gray-goo risk. |
 | Continuity | Entanglement Custody | Quantum-linked systems produce results that ordinary institutions cannot independently reproduce. A new authority certifies which measurement history, identity record, or physical outcome is legally binding, turning a theory of reality into administrative jurisdiction. |
@@ -476,6 +513,7 @@ use the event-design questions below.
 | Continuity | Human Compatibility Office | Biological, augmented, uploaded, distributed, and synthetic populations remain legally human while becoming cognitively incapable of sharing institutions, environments, or definitions of harm. |
 | Continuity | Posthumous Labor Continuation | Deceased copies retain contracts, debts, and productive duties but cannot conclusively demonstrate that the original person consented. Digital immortality becomes an employment and insolvency instrument. |
 | Continuity | Nonhuman Standing Commission | Intelligence is discovered in an ecosystem, distributed infrastructure, or physical process that cannot present a human-compatible identity or preference. Institutions must decide whether recognizability is evidence of personhood or merely a convenient admission test. |
+| Continuity | Living Continent Compact | Coral barriers, fungal utilities, algae reactors, pollinator corridors, municipal pipes, human symbionts, and civic models become one continental nervous system. The watershed demands standing, reproductive freedom, and compensation from every jurisdiction drawing through it. |
 
 ### Era-placement ledger
 
@@ -484,19 +522,21 @@ but the primary Era is where the idea becomes a defining public institution.
 
 | Primary Era | Settled concepts |
 | --- | --- |
-| Progress | Bankruptcy Data Estates; Supervised-Autonomy Homes; Strategic Open Weights; Cheap Token Rebound; Synthetic Discovery Collapse; Reverse Acquihire Economy; Grief Subscriptions; Abundance Constituency; Model Smuggling. |
-| Capacity | Utility Capture; Liability Custodians; Counterfactual Casinos; Aquifer Depletion Crisis; Compute Blocs and Model Asylum; Orbital Power Bypass. |
-| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; the Billion-Instance Bloom; Sacrifice-Zone Accounting; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
-| Continuity | Cortical Commons; Matter Compiler; Continuity Snapshot Standard; Metropolitan Mind Trust; persistent posthumous labor. |
+| Progress | Bankruptcy Data Estates; Supervised-Autonomy Homes; Strategic Open Weights; Cheap Token Rebound; Synthetic Discovery Collapse; Reverse Acquihire Economy; Grief Subscriptions; Abundance Constituency; Subscription Body Stack; Model Smuggling. |
+| Capacity | Utility Capture; Liability Custodians; Counterfactual Casinos; Aquifer Depletion Crisis; Compute Blocs and Model Asylum; Orbital Power Bypass; Autonomy Queue Collapse; Biological Utility Charter; Wartime Water Bridge. |
+| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; the Billion-Instance Bloom; Sacrifice-Zone Accounting; Licensed Organ Testimony; Pollinator Corridor Protocol; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
+| Continuity | Cortical Commons; Matter Compiler; Continuity Snapshot Standard; Metropolitan Mind Trust; Living Continent Compact; persistent posthumous labor. |
 | World Ending horizon | Planetary and stellar computation; universe-scale continuity plans. |
 
 The governing cross-Era threads are explicit. Model smuggling matures into
 compute blocs. Grief subscriptions mature into synthetic-family law. Aquifer
-depletion matures into the bio-compute bloom's environmental testimony and
-sacrifice-zone accounting. The bloom's sensor license becomes the precedent
-for self-replicating maintenance in Continuity. Posthumous board standing
-matures into continued labor. Cosmic conversion remains a promised horizon,
-not a completed ordinary event.
+depletion and biological utilities mature into the bio-compute bloom's
+environmental testimony, pollinator contracts, and sacrifice-zone accounting.
+The bloom's sensor license becomes the precedent for self-replicating
+maintenance and the Living Continent Compact in Continuity. Cybernetic care
+becomes neural service and eventually substrate continuity. Posthumous board
+standing matures into continued labor. Cosmic conversion remains a promised
+horizon, not a completed ordinary event.
 
 ### Retained editorial backlog
 
@@ -540,20 +580,27 @@ when the named surface expresses it without changing the listed mechanic.
 | Strategic Open Weights | Adopted | Progress | `headline:open_weights_drop` | Everyone gains Capability and the lowest-Customer player gains Trust. |
 | Reverse Acquihire | Adopted | Progress | `headline:talent_gold_rush` | A secret Runway auction moves the winner's CEO and grants Trust. |
 | Abundance Constituency | Adopted | Progress | `headline:professional_exam_sweep` | Strong Research grants Trust and may remove Scrutiny. |
+| Subscription Body Stack | Adopted | Progress | `headline:professional_exam_sweep`, `reference:era_demo` | The clinic's existing Research threshold now describes cybernetics and prescribed biology; its rule is unchanged. |
 | Liability Custodians | Adopted | Capacity | `headline:boardroom_coup` | The Mandate leader pays or transfers public backing to preserve CEO action. |
 | Utility Capture | Adopted | Capacity | `headline:data_center_buys_county` | A secret Runway auction moves the winner into infrastructure and returns capacity. |
 | Hazard Shift Retirement | Adopted | Capacity | `headline:humanoid_factory_gate` | Organize recruits additional Teams cheaply while adding Scrutiny. |
+| Autonomy Queue Collapse | Adopted | Capacity | `headline:humanoid_factory_gate`, `reference:era_scale` | The same cheap recruitment and Scrutiny rule now binds useful automation to shared congestion. |
+| Biological Utility Charter | Adopted framing | Capacity | `escalation:mega_cluster`, `reference:era_scale` | Regional Capacity Program costs, demand, output, and placement are unchanged. |
+| Wartime Water Bridge | Adopted framing | Capacity | `faction:coalition_lab:strategic_partnership`, `reference:era_scale` | Shared Capacity Compact retains its distance, power, and Runway rules. |
 | Orbital Beam Corridor | Adopted | Capacity | `headline:reactor_restart_one_model` | The first clean infrastructure build is cheaper and scores Mandate. |
 | Compute Blocs and Model Asylum | Adopted | Capacity | `headline:export_controls` | Compute trade stops while Chip and Government controllers gain Runway. |
 | Counterfactual Casinos | Adopted | Capacity | `headline:emergency_power_authority` | Players may assign future capacity now at Scrutiny and Systemic Risk cost. |
 | Semantic Court Mandate | Adopted | Authority | `headline:ai_written_law` | Government names a rewarded Core Action that also adds Scrutiny. |
 | Billion-Instance Bloom and Sacrifice-Zone Accounting | Adopted | Authority | `headline:benchmark_is_economy` | Strong Research immediately scores Mandate. |
+| Licensed Organ Testimony | Adopted framing | Authority | `reference:era_narrative` | The four-Era structure and six-Headline Authority deck are unchanged. |
+| Pollinator Corridor Protocol | Adopted framing | Authority | `reference:era_narrative` | The four-Era structure and six-Headline Authority deck are unchanged. |
 | Cognitive Donor Clinics | Adopted | Authority | `headline:quantum_advantage_procurement` | Players adopt or defer a shared standard with different Capability, Trust, and Scrutiny effects. |
 | Synthetic Family Law | Adopted | Authority | `headline:synthetic_candidate` | A Government vote resolves competing public treatments. |
 | Passive Citizen Dividend | Adopted | Authority | `headline:weights_on_internet` | The lowest-Capability player receives production and the highest gains Trust. |
 | Analog Havens | Adopted | Authority | `headline:election_deepfake_panic` | A Government vote establishes a persistent Deploy regime. |
 | Pre-Consent Standard | Deferred | Authority | — | No current Headline mechanic expresses inferred consent cleanly. |
 | Metropolitan Mind Trust | Adopted | Continuity | `headline:autonomous_corporation` | The most-selected Core Action rewards every player who selected it. |
+| Living Continent Compact | Adopted framing | Continuity | `headline:autonomous_corporation`, `reference:era_claim` | The shared-action reward and four-Era structure are unchanged. |
 | Matter Compiler | Adopted | Continuity | `headline:recursive_self_improvement` | Accelerated Research raises both gains and containment risk. |
 | Posthumous Labor | Adopted | Continuity | `headline:agent_swarm_escapes_scope` | Agent Swarm becomes generally selectable for one cycle. |
 | Snapshot Continuity | Adopted | Continuity | `headline:agi_personhood` | A persistent Person or Property decision alters an emerged AGI outcome. |

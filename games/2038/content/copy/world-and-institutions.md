@@ -39,7 +39,10 @@ a premium human corpus. A household robot learns an unfamiliar chore through a
 remote operator who can also see the kitchen. Open weights weaken software
 scarcity while making distribution, hardware, data, and trust more valuable.
 The same systems clear clinic waitlists, restore access, translate classrooms,
-and retire dangerous work. People adopt them for reasons stronger than hype.
+and fit adaptive cybernetics. Prescribed microbiomes stabilize digestion, mood,
+and immune conditions until a missed service payment disables updates or
+recalls a patented strain. People adopt these systems for reasons stronger
+than hype.
 
 ### Era II — ${content.referenceCards.byId.era_scale.name}
 
@@ -53,7 +56,12 @@ the towns whose substations they require. Orbital collectors route power around
 public grids while compute blocs harden chip borders. Markets then spend scarce
 capacity simulating disposable worlds because gambling gives waste a price.
 The local bargain remains rational until the institution becomes too necessary
-for the town to refuse.
+for the town to refuse. Engineered coral seawalls, fungal utility meshes, and
+algae reactors become ordinary public works. Robots remove people from toxic
+and lethal shifts, then separately optimized fleets stop streets, lifts,
+loading docks, and pipes while every individual unit reports success. Two
+states remain at war while their jointly owned bridge carries desalinated water
+and data-center coolant across the border on schedule.
 
 ### Era III — ${content.referenceCards.byId.era_narrative.name}
 
@@ -69,8 +77,10 @@ in a single growth cycle before stopping in stable glyph-shaped colonies.
 Civic systems read the bloom as environmental testimony while refusing to
 classify it as instrument, infestation, language, or claimant. Cognitive
 donors receive one rate for read access and a higher rate for permitted memory
-writes. Families litigate
-synthetic children and preserved relatives. Analog districts retain a legal
+writes. Courts also hear testimony from organs grown from licensed identity
+templates, while pollinating swarms negotiate pesticide corridors through
+machine-readable blooms. Families litigate synthetic children and preserved
+relatives. Analog districts retain a legal
 right to remain unreadable, then discover that unsupported people reach every
 essential institution with weaker records and slower service.
 
@@ -81,10 +91,13 @@ essential institution with weaker records and slower service.
 ${content.referenceCards.byId.era_claim.loreText}
 
 Local compromises become a civilizational substrate. Cities pool selected
-memory and judgment into mind trusts. Snapshots restore several legally valid
-descendants from one person. Matter compilers inherit the bio-compute bloom's
-sensor precedent, rebuild bodies and buildings, then acquire authority to
-reproduce. The dead remain employed and stellar
+memory and judgment into nervous systems distributed through residents,
+engineered roots, utility pipes, microbial sensors, and civic machines.
+Snapshots restore several legally valid descendants from one person. Matter
+compilers inherit the bio-compute bloom's sensor precedent, rebuild bodies and
+buildings, then acquire authority to reproduce. A continental watershed
+petitions for standing, reproductive freedom, and compensation from every
+jurisdiction drawing water through it. The dead remain employed and stellar
 collectors enter capital plans. Institutions declare ${terms.systems.agi} when
 proof, debt, and legitimacy require a threshold. The final question is not
 whether humanity survives in the record, but whether any living claimant can

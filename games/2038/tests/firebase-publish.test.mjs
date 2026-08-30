@@ -47,6 +47,13 @@ test("review index clusters public game material before development surfaces", (
     },
     pages: [
       {
+        group: "Start here",
+        kind: "Playable interface",
+        title: "Play the game",
+        href: "web/index.html",
+        description: "Play."
+      },
+      {
         group: "Learn the game",
         kind: "Document",
         title: "Core rules",
@@ -67,9 +74,11 @@ test("review index clusters public game material before development surfaces", (
   assert.match(html, /commit-test/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
+  assert.match(html, /class="primary-action"/);
+  assert.ok(html.indexOf('href="web/index.html"') < html.indexOf('href="docs/core-rules.html"'));
   assert.match(html, /<h2>Learn the game<\/h2>/);
   assert.match(html, /<h2>Component review<\/h2>/);
-  assert.equal((html.match(/<li>/g) ?? []).length, 2);
+  assert.equal((html.match(/<li(?: class="primary-action")?>/g) ?? []).length, 3);
   assert.doesNotMatch(html, /class="surface"/);
   assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
@@ -101,9 +110,22 @@ test("Firebase publication copies only graph-owned runtime artifacts", async () 
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
     assert.match(baseline, /Public Capability Covenant/);
+    const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
+    assert.match(rootIndex, /href="web\/index\.html">Play the game<\/a>/);
+    assert.match(rootIndex, /class="primary-action"/);
+    assert.match(rootIndex, /adaptive cybernetics/);
+    assert.match(rootIndex, /living watershed/);
+    assert.ok(
+      rootIndex.indexOf('href="web/index.html"') < rootIndex.indexOf('href="docs/core-rules.html"')
+    );
+    assert.doesNotMatch(rootIndex, /Mandate 2038: Overview/);
     const game = await readFile(resolve(outputRoot, "web/index.html"), "utf8");
     assert.match(game, /Sell the intelligence\. Seize the grid\. Authorize the future\./);
     assert.match(game, /turning cheap intelligence into infrastructure, authority/);
+    assert.ok(
+      (await stat(resolve(outputRoot, "lab/rules/local-power-allocation.js"))).isFile(),
+      "the published game includes the selected-rules browser module closure"
+    );
     await assert.rejects(stat(resolve(outputRoot, "docs/lore-scratchpad.html")), {
       code: "ENOENT"
     });
