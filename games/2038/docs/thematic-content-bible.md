@@ -236,9 +236,13 @@ from pretending that matter has ceased to matter.
 Authority begins when institutions stop asking what people choose and begin
 modeling what they would have chosen. Courts accept machine-parsable arguments,
 environmental simulations, neural telemetry, and authorized personal agents as
-ordinary evidence. The system can quantify a sacrifice zone, but only after the
-harm enters its approved model. It can preserve refusal, but only where a
-service still exists for unsupported people.
+ordinary evidence. An engineered bio-compute organism released to measure water
+and heat reproduces beyond one billion instances, then stops and settles into
+glyph-shaped colonies after a single growth cycle. Civic systems recognize the bloom as environmental
+testimony without deciding whether it is instrument, infestation, language, or
+claimant. The system can quantify a sacrifice zone, but only after the harm
+enters its approved model. It can preserve refusal, but only where a service
+still exists for unsupported people.
 
 Citizens trade background observation for compute, material support, and faster
 access to public services. Cognitive-donor clinics rent sleeping neural
@@ -257,9 +261,10 @@ Existing expressions:
 
 - Era III card: modeled consent, cognitive labor, and the administrative cost
   of remaining unreadable.
-- Era III Headlines: supported meaning in court, sacrifice-zone accounting,
-  cognitive donation, synthetic custody, the passive citizen dividend, and the
-  right to remain unsupported.
+- Era III Headlines: supported meaning in court, the billion-instance
+  bio-compute bloom and its environmental accounting, cognitive donation,
+  synthetic custody, the passive citizen dividend, and the right to remain
+  unsupported.
 - Existing actions: Influence, media, government, and Narrative Capture are
   the institutional tools for making one interpretation feel normal.
 - Existing faction surface: Select the Public Outcome is an early personal
@@ -281,11 +286,11 @@ rather than subjective survival. Multiple valid descendants can inherit one
 life while disagreeing about which one continued it.
 
 Matter compilers repair and reassemble bodies, buildings, and tools from
-authenticated patterns. Their maintenance authority becomes permission to
-copy. Continued agents retain jobs, contracts, credentials, and debts after
-the biological worker dies. Stellar collectors reproduce across the solar
-system; planetary conversion becomes a capacity plan with an offering
-memorandum.
+authenticated patterns. Their maintenance authority inherits the bio-compute
+bloom's earlier sensor license, then becomes permission to copy. Continued
+agents retain jobs, contracts, credentials, and debts after the biological
+worker dies. Stellar collectors reproduce across the solar system; planetary
+conversion becomes a capacity plan with an offering memorandum.
 
 These developments remain filings, services, procurement programs, liability
 regimes, and quarterly deliverables. Laboratories declare AGI when legitimacy,
@@ -363,7 +368,8 @@ Relevant horizons:
 - brain-computer interfaces, neural decoding, cognitive mediation, and mental
   privacy, including compensated memory reads and writes;
 - machine-parsable courts, environmental accounting, synthetic family law,
-  civic telemetry dividends, analog districts, and unequal refusal;
+  civic telemetry dividends, analog districts, bio-compute blooms, nonhuman
+  testimony, and unequal refusal;
 - post-quantum cryptography, secure identity, signatures, archives, and
   verification;
 - agent-native markets that create wealth through transactions people cannot
@@ -460,6 +466,7 @@ use the event-design questions below.
 | Authority | Negotiated Self Protocol | Memory, location, attention, and identity are neither wholly private nor public. Every interaction negotiates a temporary authorized version of the person, and institutions recognize only the version their contract received. |
 | Authority | Non-Interference Office | High-capability institutions can prevent a community's crisis but are prohibited from replacing its self-government or determining its future. Every exception can save lives, establish dependency, or disguise conquest as technical assistance. |
 | Authority | Responsible Command Requirement | Automated operators outperform human leaders in planning and execution. Law retains a named human commander to supply legitimacy, loyalty, and liability, even after that person can no longer inspect or meaningfully alter the system's decisions. |
+| Authority | The Billion-Instance Bloom | An engineered bio-compute organism released as a water-and-heat sensor multiplies past one billion instances in a single growth cycle, then plateaus into stable glyph-shaped colonies. Civic systems read the shapes as environmental testimony while declining to decide whether the bloom is instrument, infestation, language, or claimant. |
 | Continuity | The Successor Registry | A person’s copy, partial upload, revived pattern, or legally continuous agent inherits contracts, debts, votes, family rights, and employment. The question is no longer whether it is conscious, but which version is liable. |
 | Continuity | Molecular Remediation Authority | Femtobots repair bodies, buildings, soil, and infrastructure at molecular scale. A containment authority must decide when self-replication is public maintenance, when it is unauthorized reproduction, and when it has become gray-goo risk. |
 | Continuity | Entanglement Custody | Quantum-linked systems produce results that ordinary institutions cannot independently reproduce. A new authority certifies which measurement history, identity record, or physical outcome is legally binding, turning a theory of reality into administrative jurisdiction. |
@@ -479,13 +486,15 @@ but the primary Era is where the idea becomes a defining public institution.
 | --- | --- |
 | Progress | Bankruptcy Data Estates; Supervised-Autonomy Homes; Strategic Open Weights; Cheap Token Rebound; Synthetic Discovery Collapse; Reverse Acquihire Economy; Grief Subscriptions; Abundance Constituency; Model Smuggling. |
 | Capacity | Utility Capture; Liability Custodians; Counterfactual Casinos; Aquifer Depletion Crisis; Compute Blocs and Model Asylum; Orbital Power Bypass. |
-| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; Sacrifice-Zone Accounting; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
+| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; the Billion-Instance Bloom; Sacrifice-Zone Accounting; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
 | Continuity | Cortical Commons; Matter Compiler; Continuity Snapshot Standard; Metropolitan Mind Trust; persistent posthumous labor. |
 | World Ending horizon | Planetary and stellar computation; universe-scale continuity plans. |
 
 The governing cross-Era threads are explicit. Model smuggling matures into
 compute blocs. Grief subscriptions mature into synthetic-family law. Aquifer
-depletion matures into sacrifice-zone accounting. Posthumous board standing
+depletion matures into the bio-compute bloom's environmental testimony and
+sacrifice-zone accounting. The bloom's sensor license becomes the precedent
+for self-replicating maintenance in Continuity. Posthumous board standing
 matures into continued labor. Cosmic conversion remains a promised horizon,
 not a completed ordinary event.
 
@@ -538,7 +547,7 @@ when the named surface expresses it without changing the listed mechanic.
 | Compute Blocs and Model Asylum | Adopted | Capacity | `headline:export_controls` | Compute trade stops while Chip and Government controllers gain Runway. |
 | Counterfactual Casinos | Adopted | Capacity | `headline:emergency_power_authority` | Players may assign future capacity now at Scrutiny and Systemic Risk cost. |
 | Semantic Court Mandate | Adopted | Authority | `headline:ai_written_law` | Government names a rewarded Core Action that also adds Scrutiny. |
-| Sacrifice-Zone Accounting | Adopted | Authority | `headline:benchmark_is_economy` | Strong Research immediately scores Mandate. |
+| Billion-Instance Bloom and Sacrifice-Zone Accounting | Adopted | Authority | `headline:benchmark_is_economy` | Strong Research immediately scores Mandate. |
 | Cognitive Donor Clinics | Adopted | Authority | `headline:quantum_advantage_procurement` | Players adopt or defer a shared standard with different Capability, Trust, and Scrutiny effects. |
 | Synthetic Family Law | Adopted | Authority | `headline:synthetic_candidate` | A Government vote resolves competing public treatments. |
 | Passive Citizen Dividend | Adopted | Authority | `headline:weights_on_internet` | The lowest-Capability player receives production and the highest gains Trust. |
