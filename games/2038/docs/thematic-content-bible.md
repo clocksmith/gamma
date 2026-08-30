@@ -237,12 +237,12 @@ Authority begins when institutions stop asking what people choose and begin
 modeling what they would have chosen. Courts accept machine-parsable arguments,
 environmental simulations, neural telemetry, and authorized personal agents as
 ordinary evidence. An engineered bio-compute organism released to measure water
-and heat reproduces beyond one billion instances, then stops and settles into
-glyph-shaped colonies after a single growth cycle. Civic systems recognize the bloom as environmental
-testimony without deciding whether it is instrument, infestation, language, or
-claimant. The system can quantify a sacrifice zone, but only after the harm
-enters its approved model. It can preserve refusal, but only where a service
-still exists for unsupported people.
+and heat reproduces beyond one billion instances in a single growth cycle,
+then stops and settles into glyph-shaped colonies. Civic systems recognize the
+bloom as environmental testimony without deciding whether it is instrument,
+infestation, language, or claimant. The system can quantify a sacrifice zone,
+but only after the harm enters its approved model. It can preserve refusal,
+but only where a service still exists for unsupported people.
 
 Citizens trade background observation for compute, material support, and faster
 access to public services. Cognitive-donor clinics rent sleeping neural
