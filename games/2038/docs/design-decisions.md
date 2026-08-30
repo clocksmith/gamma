@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.16-test`
+**Rules reference:** `0.8.0-rc.17-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.16-test` test:
+controlled `0.8.0-rc.17-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.15` implements `0.8.0-rc.16-test` under engine coverage
+Executable game `0.14.16` implements `0.8.0-rc.17-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -246,8 +246,12 @@ and Monte Carlo share that contract. The published root now presents the
 playable game as its primary action while keeping the complete generated
 documentation and component galleries available from the same index.
 
-Candidate `0.8.0-rc.16-test` changes no physical mechanic from rc.15.
-Executable `0.14.15` publishes the complete browser-module closure required by
+Candidate `0.8.0-rc.17-test` changes no physical mechanic from rc.16.
+Executable `0.14.16` binds the published root to the canonical browser icon so
+the live navigation and game journey complete without a failed asset request.
+
+Candidate `0.8.0-rc.16-test` changed no physical mechanic from rc.15.
+Executable `0.14.15` published the complete browser-module closure required by
 the selected-rules game. Physical Chrome must populate both setup selectors
 and begin a game without a failed module request before deployment.
 

@@ -72,6 +72,7 @@ test("review index clusters public game material before development surfaces", (
   assert.match(html, /rules-test/);
   assert.match(html, /exec-test/);
   assert.match(html, /commit-test/);
+  assert.match(html, /rel="icon" href="\/web\/favicon\.svg"/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
   assert.match(html, /class="primary-action"/);

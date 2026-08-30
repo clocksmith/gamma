@@ -151,6 +151,7 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
   <title>${title}</title>
   <style>
     :root { color-scheme: dark; --ink:#eeeae0; --muted:#a9afa7; --line:#3b443b; --accent:#e4b553; }
