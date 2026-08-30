@@ -63,8 +63,12 @@ ${content.referenceCards.byId.era_narrative.loreText}
 
 The public is no longer debating isolated products. Courts accept
 machine-parsable arguments, modeled consent, neural telemetry, and authorized
-personal agents as ordinary evidence. Cognitive donors receive one rate for
-read access and a higher rate for permitted memory writes. Families litigate
+personal agents as ordinary evidence. An engineered bio-compute organism,
+released to measure water and heat, reproduces beyond one billion instances
+before stopping in stable glyph-shaped colonies. Civic systems read the bloom
+as environmental testimony while refusing to classify it as instrument,
+infestation, language, or claimant. Cognitive donors receive one rate for read
+access and a higher rate for permitted memory writes. Families litigate
 synthetic children and preserved relatives. Analog districts retain a legal
 right to remain unreadable, then discover that unsupported people reach every
 essential institution with weaker records and slower service.
@@ -77,8 +81,9 @@ ${content.referenceCards.byId.era_claim.loreText}
 
 Local compromises become a civilizational substrate. Cities pool selected
 memory and judgment into mind trusts. Snapshots restore several legally valid
-descendants from one person. Matter compilers rebuild bodies and buildings,
-then acquire authority to reproduce. The dead remain employed and stellar
+descendants from one person. Matter compilers inherit the bio-compute bloom's
+sensor precedent, rebuild bodies and buildings, then acquire authority to
+reproduce. The dead remain employed and stellar
 collectors enter capital plans. Institutions declare ${terms.systems.agi} when
 proof, debt, and legitimacy require a threshold. The final question is not
 whether humanity survives in the record, but whether any living claimant can

@@ -771,13 +771,28 @@ test("the tone constitution keeps darkness institutional rather than voyeuristic
 });
 
 test("every player-facing content surface has complete copy", async () => {
-  const [config, factions, headlines, tactics, escalation, references] = await Promise.all([
+  const [
+    config,
+    factions,
+    headlines,
+    tactics,
+    escalation,
+    references,
+    mandates,
+    world,
+    reserve,
+    objectives
+  ] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/headlines.json"),
     readJson("dist/runtime/tactics.json"),
     readJson("dist/runtime/escalations.json"),
-    readJson("dist/runtime/reference-cards.json")
+    readJson("dist/runtime/reference-cards.json"),
+    readJson("dist/runtime/mandates.json"),
+    readJson("dist/runtime/world-copy.json"),
+    readJson("dist/runtime/reserve-specialists.json"),
+    readJson("dist/runtime/secret-objectives.json")
   ]);
 
   for (const era of references.eraCards) {
@@ -793,6 +808,16 @@ test("every player-facing content surface has complete copy", async () => {
   for (const tile of config.board.tiles) {
     for (const field of ["landmark", "flavorText"]) {
       assert.ok(tile[field], `${tile.id} has ${field}`);
+    }
+  }
+  for (const motion of config.board.realignment.motions) {
+    for (const field of ["name", "ballotText", "flavorText"]) {
+      assert.ok(motion[field], `${motion.id} has ${field}`);
+    }
+  }
+  for (const [resourceId, resource] of Object.entries(config.resources)) {
+    for (const field of ["name", "microcopy"]) {
+      assert.ok(resource[field], `${resourceId} has ${field}`);
     }
   }
   for (const card of config.trainingDeck.cards) {
@@ -821,6 +846,11 @@ test("every player-facing content surface has complete copy", async () => {
     }
     assert.ok(headline.regimeTags.length >= 3, `${headline.id} has meaningful regime tags`);
   }
+  for (const mandate of mandates.mandates) {
+    for (const field of ["name", "rulesText", "flavorText"]) {
+      assert.ok(mandate[field], `${mandate.id} has ${field}`);
+    }
+  }
   for (const tactic of tactics.tactics) {
     for (const field of ["displayName", "flavorText", "technology"]) {
       assert.ok(tactic[field], `${tactic.id} has ${field}`);
@@ -831,6 +861,51 @@ test("every player-facing content surface has complete copy", async () => {
       assert.ok(action[field], `${action.id} has ${field}`);
     }
   }
+  for (const reference of references.playerReferences) {
+    assert.ok(reference.name, `${reference.id} has name`);
+    assert.ok(reference.flavorText, `${reference.id} has flavorText`);
+    assert.ok(reference.frontText.length, `${reference.id} has frontText`);
+    assert.ok(reference.backText.length, `${reference.id} has backText`);
+  }
+  for (const specialist of reserve.specialists) {
+    for (const field of ["name", "title", "flavorText"]) {
+      assert.ok(specialist[field], `${specialist.id} has ${field}`);
+    }
+  }
+  for (const objective of objectives.objectives) {
+    for (const field of ["name", "rulesText", "flavorText"]) {
+      assert.ok(objective[field], `${objective.id} has ${field}`);
+    }
+  }
+  for (const token of world.tokenCopy) {
+    for (const field of ["name", "microcopy"]) {
+      assert.ok(token[field], `${token.id} has ${field}`);
+    }
+  }
+  for (const ending of world.endings) {
+    for (const field of ["name", "condition", "text"]) {
+      assert.ok(ending[field], `${ending.id} has ${field}`);
+    }
+  }
+  for (const field of ["frontStrapline", "backCopy", "shortPitch", "contentWarning"]) {
+    assert.ok(world.box[field], `world box has ${field}`);
+  }
+  assert.equal(world.worldPrimer.length, 3);
+  assert.ok(world.worldPrimer.every((paragraph) => paragraph.length > 0));
+
+  const allPlayerCopy = JSON.stringify({
+    config,
+    factions,
+    headlines,
+    tactics,
+    escalation,
+    references,
+    mandates,
+    world,
+    reserve,
+    objectives
+  });
+  assert.doesNotMatch(allPlayerCopy, /\b(?:lorem ipsum|tbd|todo|placeholder)\b/i);
 });
 
 test("the selected lore inventory is complete and preserves era placement", async () => {
@@ -890,6 +965,21 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.doesNotMatch(authorityProgram.name, /Open Weights/i);
   assert.doesNotMatch(rules, /#### Open Weights|Open Weights is global after movement/i);
 
+  const billionBloom = headlines.find(
+    (headline) => headline.id === "benchmark_is_economy"
+  );
+  assert.equal(billionBloom.round, 3);
+  assert.match(billionBloom.name, /Billionth Instance/);
+  assert.match(billionBloom.newswire, /bio-compute organism/i);
+  assert.match(billionBloom.newswire, /one billion instances/i);
+  assert.match(billionBloom.newswire, /glyph-shaped colonies/i);
+  assert.match(authorityEra.loreText, /bio-compute species/i);
+  assert.match(authorityEra.loreText, /instrument, infestation, language, or claimant/i);
+  assert.doesNotMatch(
+    eraCards.slice(0, 2).map((era) => era.loreText).join("\n"),
+    /bio-compute|glyph-shaped/i
+  );
+
   assert.equal(world.worldPrimer.length, 3);
   assert.equal(world.endings.length, 4);
   assert.equal(world.tokenCopy.length, 10);
@@ -898,6 +988,10 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(world.worldPrimer[0], /Open weights ran locally/);
   assert.match(world.worldPrimer[1], /substations, water rights, reactors/);
   assert.match(world.worldPrimer[2], /cognitive donors sold neural access/);
+  assert.match(world.worldPrimer[2], /bio-compute organism/);
+  assert.match(world.worldPrimer[2], /beyond one billion instances/);
+  assert.match(companion, /bio-compute organism/);
+  assert.match(companion, /glyph-shaped colonies/);
   assert.match(companion, /The Future Timeline is one compounding public record/);
 
   const allSelectedLore = JSON.stringify({ headlines, mandates, escalations, eraCards, factions, world })
