@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.8.0-rc.16-test`
+**Rules under review:** `0.8.0-rc.17-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.16-test`. Executable
-game `0.14.15` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.17-test`. Executable
+game `0.14.16` implements its Default Game profile under
 `nineteen-hex-simplified-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.8.0-rc.16-test` and executable `0.14.15` retain the synchronized
+Candidate `0.8.0-rc.17-test` and executable `0.14.16` retain the synchronized
 identity for the complete nineteen-hex simplification. They replace private
 Escalation hands with six shared Programs, remove Safety currency, reduce
 Training to forty cards, make Mega-Clusters solo projects, restrict immediate
@@ -132,13 +132,18 @@ Default Game has no Power market; Advanced Play adds binary Networks and one
 Power request without a Network production bonus. A selectable Action must
 already have a legal resolution before the optional trade window. These are
 implementation claims, not human teachability, negotiation-quality, or balance
-evidence; all three supported player counts require fresh evidence. The rc.16
+evidence; all three supported player counts require fresh evidence. The rc.17
 patch changes presentation and lore only. It extends cybernetics, biological
 infrastructure, autonomous congestion, wartime water cooperation, nonhuman
 evidence, and living-jurisdiction continuity across existing component
 surfaces; corrects stale decision and deferred-card prose; and makes the
 published root lead to the playable game. No mechanic, balance claim, or
 physical-play qualification changed.
+
+Candidate `0.8.0-rc.16-test` and executable `0.14.15` completed the published
+browser-module closure. Physical Chrome populated the setup controls, started
+a four-player match, rendered nineteen hexes, and exposed legal decisions with
+no failed game-module request. They remain immutable historical identities.
 
 Candidate `0.8.0-rc.15-test` and executable `0.14.14` corrected stale runtime
 and deferred-card prose and replaced the docs-only publication root with a
