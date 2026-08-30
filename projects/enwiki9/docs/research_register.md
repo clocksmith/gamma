@@ -17,14 +17,17 @@ time. A compact parent remains authoritative and untouched; specialists expose
 pretruth integer probabilities through a sleeping mixture. This is not
 checkpointing CMIX and does not require duplicating its persistent state.
 
-The first frozen gate is
-`fxcm_fossil_match_source_census_q0_retry_v1`. It scans the complete
-`587,138,826`-byte transformed stream twice and must expose at least `313,775`
-active far-history opportunities, beat alias/random/negated controls in every
-chronological third, transfer across at least two distance buckets, reproduce
-exactly, remain causal, and stay within `524,288 KiB`. Its compiler-path retry
-changes no scanner byte or scientific predicate. A pass authorizes one compact
-retained-parent probability trace; it proves no compression.
+The first frozen gate,
+`fxcm_fossil_match_source_census_q0_retry_v1`, is terminal. Two complete scans
+of the `587,138,826`-byte transformed stream produced the same
+`4ca4be5e1c9d660b13e61e450e5d33985fd1b9ef6bd1c05998e50fb2aec368f2`
+receipt hash. The census found `1,712,006` active far-history bytes, with
+`1,343,200` correct treatment bytes, a `140,790`-byte minimum treatment margin
+over the strongest control in every chronological third, five positive
+distance buckets, causal/K-state identity, and `159,272 KiB` maximum tree RSS.
+All frozen gates passed. This authorizes only a retained-parent probability
+trace on the same representation and proves no probability gain, arithmetic
+archive, inverse, package score, parent compatibility, or Hutter result.
 
 The independent hedge remains compact causal midpoint learning. The deep NNCP
 oracle saved `4,726` bytes over `322,978` raw bytes and was positive in all
@@ -47,7 +50,7 @@ Endpoint428's exact opening-10M WRT stream contains `6,251,852` bytes with
 SHA-256 `8f220e06860909f4b2a16d676ce696c5af0c738b7cc35b577618c63cbdff1ed7`.
 The same-length prefix of the q1/CMIX transformed population has SHA-256
 `8e93114628cc24cae6e1819fa1acff610983dae36d76bd3eee410ae71e26b5ca`;
-the bytes differ. Therefore the running FOSSIL census is q1-representation
+the bytes differ. Therefore the terminal FOSSIL census is q1-representation
 source evidence only. Prize-facing HORIZON must receive a new repeated census
 on Endpoint428's exact full WRT stream, using its actual `100,000,000`-modeled-
 byte history floor, before retained-parent pricing. No opportunity count or
