@@ -1,0 +1,299 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "endpoint428_horizon_dualclock_source_census_q0_retry_v1",
+  "proposalId": "endpoint428_horizon_dualclock_source_census_q0_retry_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "endpoint428_horizon_dualclock_source_census_q0_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_dualclock_source_census_q0_v2/20260830T004453760277Z_915ae188fc68.json",
+      "sha256": "sha256:8d9af45c5135732579043c55677dde4f2049c4948e56e081b0e9cfa5cd4082a8"
+    }
+  },
+  "hypothesis": {
+    "claim": "On Endpoint428's exact 647,798,592-byte WRT stream, at least one decoder-reconstructible 16-byte-context clock\u2014most recent M or oldest surviving anchor A\u2014exposes at least 313,775 continuations older than 100,000,000 bytes, beats its alias, random, and negated controls in every chronological third and at least two distance buckets, and has positive causal KT gain against an eight-bit uniform endpoint in every third.",
+    "falsification": "Retire physical HORIZON on Endpoint428 if neither M nor A passes the active-volume, matched-control, distance-transfer, causal KT, replay, causality, and 524,288-KiB process-tree predicates on the complete frozen WRT population."
+  },
+  "changedMechanism": "Move only the 8-MiB identity-pass read buffer from automatic stack storage to static storage; rebind candidate identity, runner, schema, and result paths without changing any population, state transition, arm, control, calibration, threshold, or guard.",
+  "invariants": [
+    "The input is the exact 647,798,597-byte Endpoint428 store with SHA-256 fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9; the first five bytes are wrapper and the remaining 647,798,592 bytes are the scored WRT stream.",
+    "Both clocks use the same preceding-16-byte modulo-2^64 rolling hash, independent 2^24 direct-mapped eight-byte record tables, exact historical-key verification, and a strict candidate age greater than 100,000,000 WRT bytes.",
+    "M replaces its indexed record after every truth; A installs after truth only when its indexed record is empty or has a different high-hash tag.",
+    "Every treatment and control prediction is derived from state through coordinate i-1 before truth modifies either table, the live 100,000,000-byte ring, rolling hashes, KT counts, or measurement counters.",
+    "SM and SA read the corresponding candidate coordinate through the live ring alias; RM and RA use arm-separated frozen SplitMix64 streams; NM and NA complement their treatment donor.",
+    "The scanner computes and verifies the complete stored-file SHA-256 and validates the five-byte wrapper before accepting either repeat.",
+    "No parent probability, arithmetic archive, future byte, explicit source address, semantic route, fitted parameter, or result-selected endpoint enters the census.",
+    "A pass authorizes only one exact Endpoint428 retained-parent integer-probability trace and receives zero score credit.",
+    "The parent implementation-failure reflection is the sole retry authority, and the retry differs scientifically by zero bytes or predicates."
+  ],
+  "controls": [
+    {
+      "id": "M",
+      "role": "treatment",
+      "definition": "Predict the continuation of the most-recent exactly verified context occurrence only when its age exceeds 100,000,000 WRT bytes."
+    },
+    {
+      "id": "A",
+      "role": "treatment",
+      "definition": "Predict the continuation of the oldest exactly verified anchor surviving the current direct-mapped slot only when its age exceeds 100,000,000 WRT bytes."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Execute identical table, ring, hash, verification, and KT scheduling with prediction disabled and prove treatment/K transition-digest identity."
+    },
+    {
+      "id": "SM-SA",
+      "role": "shifted",
+      "definition": "At each active coordinate, read the arm's candidate coordinate through the frozen live 100,000,000-byte ring alias."
+    },
+    {
+      "id": "RM-RA",
+      "role": "negative",
+      "definition": "At each active coordinate, emit an arm-separated byte from a frozen SplitMix64 function with identical activation geometry."
+    },
+    {
+      "id": "NM-NA",
+      "role": "negative",
+      "definition": "At each active coordinate, emit the bitwise complement of the corresponding treatment continuation."
+    },
+    {
+      "id": "repeat",
+      "role": "replay",
+      "definition": "A fresh guarded process over the same frozen population must reproduce the complete scan receipt byte-for-byte."
+    },
+    {
+      "id": "stack-parent-failure",
+      "role": "negative",
+      "definition": "The parent guard must show SIGSEGV before any scan receipt and only 1,712 KiB sampled RSS; it contributes no treatment observation."
+    }
+  ],
+  "population": {
+    "unit": "Endpoint428 WRT byte",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 647798592,
+    "selection": "Complete Endpoint428 WRT representation of canonical enwik9 after the five-byte store wrapper; no sampling, fitting, reset, or reordering.",
+    "coordinate": "Zero-based WRT stream byte coordinate, equal to stored-file offset minus five."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "WRT bytes at coordinates strictly smaller than the current coordinate",
+      "the two direct-mapped records, rolling context, and live ring derived solely from the decoded prefix",
+      "historical key and continuation bytes read only at coordinates strictly below the current truth coordinate"
+    ],
+    "forbiddenInformation": [
+      "the current truth byte or any future WRT byte before scoring",
+      "Endpoint428 probabilities, archive outcomes, or mutable parent state",
+      "transmitted source positions, distances, lengths, routes, commands, or ledgers",
+      "post-result choice of hash, key length, table geometry, age floor, persistence rule, or probability endpoint"
+    ]
+  },
+  "inputs": [
+    {
+      "path": "tools/endpoint428_horizon_dualclock_source_census_q0_retry_v1.py",
+      "sha256": "sha256:e84d0fd736c6d37d7132b1f6297d47afc0bafdb3b90f36719663319b576163ff",
+      "id": "runner"
+    },
+    {
+      "path": "tools/endpoint428_horizon_dualclock_source_census_q0_retry_v1_materializer.py",
+      "sha256": "sha256:6062061ef4ece197554addc02c3e4fb0bf5bb1be2ce78ed6ed9a6c64b7eeaf9d",
+      "id": "materializer"
+    },
+    {
+      "id": "dualclock-design",
+      "path": "operations/planning/endpoint428_horizon_dualclock_source_census_q0_v2.json",
+      "sha256": "sha256:07cb811eb6748932b3414dc48d61050458929c02aab6e751991debe03e8c08d9"
+    },
+    {
+      "id": "q1-fossil-terminal",
+      "path": "results/fxcm_fossil_match_source_census_q0_retry_v1/decision.json",
+      "sha256": "sha256:8313e8879ee7870afb4827bc89531f56056f746e80044932febd789cae0c58bc"
+    },
+    {
+      "id": "q1-fossil-reflection",
+      "path": "operations/adaptive/reflections/20260828T152514Z_cae3a955bb.json",
+      "sha256": "sha256:b46e1c8749e7bf38bdac124730630a813d00def3cae0bc77656658099394f884"
+    },
+    {
+      "id": "helical-far-history-terminal",
+      "path": "results/helical_wrt_far_history_discovery_qm3_v1/decision.json",
+      "sha256": "sha256:f86ebfd96844d2843da4c4f4c1aed16b9d3fdbd1a838c62cae56d71c5da2cafb"
+    },
+    {
+      "id": "endpoint-wrt-materialization",
+      "path": "results/helical_far_history_wrt_event_map_qm2_v1/decision.json",
+      "sha256": "sha256:e1e0c9987780960eb027e6ecb8c8eb16b815cfcd6509f3e11d5e4386a969f752"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260830T004500Z_cb0136a01c.json",
+      "sha256": "sha256:6dbfa5e35687981884e229de3c5e8e906a6e4b260c440c6ff77a190c14f30570",
+      "id": "implementation-failure-reflection"
+    },
+    {
+      "path": "tools/endpoint428_horizon_dualclock_source_census_q0_v2.py",
+      "sha256": "sha256:d35d2864401f3ff47e69500c5327c8089419ce2cd4269a47e39ec274e803026f",
+      "id": "runtime-source-endpoint428_horizon_dualclock_source_census_q0_v2-37841fc1d8d0"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 131072,
+    "expectedNetSavingsBytes": -131072
+  },
+  "search": {
+    "expectedTransferRetention": 0.5,
+    "expectedRuntimeRatio": 1.04,
+    "expectedMemoryRatio": 1.05,
+    "uncertaintyRisk": 0.72,
+    "interactionRisk": 0.5
+  },
+  "measurements": [
+    {
+      "id": "scannedWrtBytes",
+      "definition": "Exact WRT bytes consumed by each repeat.",
+      "unit": "bytes"
+    },
+    {
+      "id": "MActiveBytes",
+      "definition": "M-active bytes after exact verification and strict age gating.",
+      "unit": "bytes"
+    },
+    {
+      "id": "AActiveBytes",
+      "definition": "A-active bytes after exact verification and strict age gating.",
+      "unit": "bytes"
+    },
+    {
+      "id": "MMinimumThirdControlMarginBytes",
+      "definition": "Minimum third-wise M-correct margin over max(SM,RM,NM).",
+      "unit": "bytes"
+    },
+    {
+      "id": "AMinimumThirdControlMarginBytes",
+      "definition": "Minimum third-wise A-correct margin over max(SA,RA,NA).",
+      "unit": "bytes"
+    },
+    {
+      "id": "MPositiveDistanceBucketCount",
+      "definition": "Distance buckets with positive M margin over every matched control.",
+      "unit": "buckets"
+    },
+    {
+      "id": "APositiveDistanceBucketCount",
+      "definition": "Distance buckets with positive A margin over every matched control.",
+      "unit": "buckets"
+    },
+    {
+      "id": "MMinimumThirdKtGainBits",
+      "definition": "Minimum chronological-third causal KT truth-path gain against eight-bit uniform coding for M.",
+      "unit": "bits"
+    },
+    {
+      "id": "AMinimumThirdKtGainBits",
+      "definition": "Minimum chronological-third causal KT truth-path gain against eight-bit uniform coding for A.",
+      "unit": "bits"
+    },
+    {
+      "id": "admissibleArmCount",
+      "definition": "Number of arms satisfying every arm-local scientific predicate.",
+      "unit": "arms"
+    },
+    {
+      "id": "repeatIdentityPass",
+      "definition": "Whether both complete scan JSON values are byte-identical.",
+      "unit": "boolean"
+    },
+    {
+      "id": "causalAndVerificationPass",
+      "definition": "Whether file identity, past-read bounds, partition sums, transition identity, and score-before-update checks pass.",
+      "unit": "boolean"
+    },
+    {
+      "id": "maximumTreeRssKiB",
+      "definition": "Maximum guarded process-tree RSS across both scans.",
+      "unit": "KiB"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "full-population",
+      "measurement": "scannedWrtBytes",
+      "operator": "eq",
+      "threshold": 647798592
+    },
+    {
+      "id": "one-admissible-arm",
+      "measurement": "admissibleArmCount",
+      "operator": "gte",
+      "threshold": 1
+    },
+    {
+      "id": "repeat",
+      "measurement": "repeatIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "causal",
+      "measurement": "causalAndVerificationPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "resource",
+      "measurement": "maximumTreeRssKiB",
+      "operator": "lte",
+      "threshold": 524288
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "no-admissible-arm",
+      "measurement": "admissibleArmCount",
+      "operator": "eq",
+      "threshold": 0
+    },
+    {
+      "id": "repeat-failure",
+      "measurement": "repeatIdentityPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "causal-failure",
+      "measurement": "causalAndVerificationPass",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "resource-failure",
+      "measurement": "maximumTreeRssKiB",
+      "operator": "gt",
+      "threshold": 524288
+    }
+  ],
+  "outputs": [
+    "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/scan-a.json",
+    "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/scan-b.json",
+    "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/guard-a.json",
+    "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/guard-b.json",
+    "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-30T00:49:36+00:00",
+  "pythonSourceClosureEntries": [
+    "runner",
+    "materializer"
+  ]
+}

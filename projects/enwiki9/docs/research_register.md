@@ -76,6 +76,42 @@ Both arms are scored against matched alias/random/negated controls and a causal
 KT byte endpoint; a frozen rule selects one, both as sleeping experts, or
 neither. High active count alone cannot authorize parent integration.
 
+The implementation-only retry
+`endpoint428_horizon_dualclock_source_census_q0_retry_v1` is now terminal. The
+parent attempt faulted before scanning because an `8 MiB` identity buffer used
+automatic stack storage; its reflection grants no scientific evidence. The
+retry moved only that buffer to static storage. Two full Endpoint428-WRT scans
+then produced the identical receipt SHA-256
+`df0cf2ce43680a1cd96d22ad0863c41f467ab37680ce5c9bf79ca0f200f1c01f`
+under a `380,016 KiB` maximum process-tree RSS.
+
+The persistence attribution is decisive. Most-recent `M` exposed only `57,469`
+active bytes and failed the frozen `313,775`-byte scale floor. Oldest-anchor
+`A` exposed `2,331,505` active bytes, predicted `1,949,315` correctly, beat its
+matched controls in every chronological third and four distance buckets, and
+earned `14,097,745.513471339` causal KT gain bits against the frozen uniform
+endpoint, with at least `340,336.866358339` gain bits in every third. All
+population, repeat, causality, transition-identity, and resource gates passed.
+This authorizes exactly one read-only Endpoint428 parent-probability trace at
+the unchanged `A` coordinates. It proves no parent-residual gain, arithmetic
+archive saving, inverse, package score, or Hutter result. Evidence:
+`results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/decision.json`
+and
+`operations/adaptive/reflections/20260830T005015Z_dd5329d770.json`.
+
+The authorized successor is now materialized as
+`endpoint428_horizon_retained_parent_trace_q0_v1` and queued under job
+`20260830T224837Z_a120752fb5`. It regenerates the exact `A` manifest twice,
+observes the complete `5,182,388,736`-row Endpoint428 pretruth integer trace,
+and evaluates `D/S/R/N` through the same prefix-conditional KT endpoint and
+global sleeping Q63 parent mixture. Its prospective target-bearing floor is
+`40,163,160` mixture-gain bits, equal to the provisional `5,020,395`-byte
+gross requirement. Falling below that floor, losing any chronological third,
+or failing a matched control retires physical HORIZON on Endpoint428; a pass
+authorizes one native `P/K/D` finite coder only. The stale pending q1 discovery
+receipt `20260823T215202Z_d965c0aa22` was cancelled because q1 is retired as a
+prize-facing parent; all terminal q1 evidence remains preserved.
+
 ## 2026-08-24 - activation corrections close economics, coordinates, and Fiber authority
 
 Commit `aa65ae9ad309f139c26abc2f366b2c64edcdf0b4` is now the canonical

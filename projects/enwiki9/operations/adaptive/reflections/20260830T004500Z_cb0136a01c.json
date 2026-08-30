@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "none",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "VerifyStore allocated its 8-MiB read buffer as an automatic stack object and crossed the process stack boundary before the scientific scan began."
+  },
+  "candidateId": "endpoint428_horizon_dualclock_source_census_q0_v2",
+  "candidateRevision": {
+    "candidateId": "endpoint428_horizon_dualclock_source_census_q0_v2",
+    "candidateTreeSha256": "sha256:915ae188fc68e3570e9d3d6a01066c949c44492dc9daa1e83a2e4ba2ebc30820",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_dualclock_source_census_q0_v2/20260830T004453760277Z_915ae188fc68.json",
+      "sha256": "sha256:8d9af45c5135732579043c55677dde4f2049c4948e56e081b0e9cfa5cd4082a8"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create one implementation-only retry that moves only the identity buffer from automatic to static storage and rebinds candidate, runner, schema, and output paths.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/endpoint428_horizon_dualclock_source_census_q0_v2/guard-a.json",
+      "sha256": "sha256:7c16aa5b18fe4d5fbfaf223df24d92b6e05b4dfd68a7e4c18d3c71d1beb0fce4"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/endpoint428_horizon_dualclock_source_census_q0_v2.json",
+    "sha256": "sha256:f7a2a71f6bd0baa3cdcec5f33cba76990059914d4167e1b0352cf14e03c82195"
+  },
+  "generatedUtc": "2026-08-30T00:47:48+00:00",
+  "hypothesis": {
+    "rationale": "No Endpoint WRT coordinate was accepted into a scan receipt, so no arm, control, or KT predicate was measured.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260830T004500Z_cb0136a01c.json",
+    "sha256": "sha256:f5affda758e7f9fedbaeb40c7b3ebc587022f0cc4c90c3b98f382c7b6d254c2e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Large identity-pass buffers must have static storage just like the scanner tables; this changes allocation only and leaves every scientific byte transition frozen."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260830t004500z_cb0136a01c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The scanner received SIGSEGV before producing scan-a; the guard recorded only 1,712 KiB RSS, localizing failure before table activation."
+    ],
+    "valid": false
+  }
+}

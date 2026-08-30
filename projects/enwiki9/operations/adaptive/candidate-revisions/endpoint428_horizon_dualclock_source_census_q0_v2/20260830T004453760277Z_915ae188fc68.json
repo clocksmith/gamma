@@ -1,0 +1,70 @@
+{
+  "candidateId": "endpoint428_horizon_dualclock_source_census_q0_v2",
+  "candidateTreeSha256": "sha256:915ae188fc68e3570e9d3d6a01066c949c44492dc9daa1e83a2e4ba2ebc30820",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/endpoint428_horizon_dualclock_source_census_q0_v2.json"
+    ],
+    "hypothesis": "On Endpoint428's exact 647,798,592-byte WRT stream, at least one decoder-reconstructible 16-byte-context clock\u2014most recent M or oldest surviving anchor A\u2014exposes at least 313,775 continuations older than 100,000,000 bytes, beats its alias, random, and negated controls in every chronological third and at least two distance buckets, and has positive causal KT gain against an eight-bit uniform endpoint in every third.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Implement one strict, deterministic C++ scan with independent most-recent and oldest-surviving-anchor tables, exact historical-key verification, matched controls, causal KT accounting, complete store SHA-256 verification, repeated guarded execution, and zero archive authority."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/fb/fb93f764ba87c115444af783782a57ae4cebdf3a81e2c66ff6a9324d6d902dbb",
+      "bytes": 24761,
+      "normalization": "verbatim",
+      "path": "horizon-dualclock-scan.cpp",
+      "sha256": "fb93f764ba87c115444af783782a57ae4cebdf3a81e2c66ff6a9324d6d902dbb"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d1/d17db9527c84d6458b9042dc7859dc75cc5eb8ae874e33512ae31d8e274f7ed7",
+      "bytes": 1254,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "d17db9527c84d6458b9042dc7859dc75cc5eb8ae874e33512ae31d8e274f7ed7"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/ae/aed4e21dc425ec38421494e1575a10fbe71ce4403ba693b2252288e2da9caa62",
+      "bytes": 456,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "aed4e21dc425ec38421494e1575a10fbe71ce4403ba693b2252288e2da9caa62"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/4c/4ca8274093bc9f045b0286e98028874521c481ffe800ee765aca156697593c43",
+      "bytes": 6818,
+      "normalization": "verbatim",
+      "path": "scan-receipt.schema.json",
+      "sha256": "4ca8274093bc9f045b0286e98028874521c481ffe800ee765aca156697593c43"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/76/7649313b849ba96aee3affce19aa7cafcde533afe6150929a9c8c09c75950114",
+      "bytes": 1017,
+      "normalization": "verbatim",
+      "path": "source-binding.json",
+      "sha256": "7649313b849ba96aee3affce19aa7cafcde533afe6150929a9c8c09c75950114"
+    }
+  ],
+  "generatedUtc": "2026-08-30T00:44:53+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": null,
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_dualclock_source_census_q0_v2/20260830T003259765239Z_9e58be61ab4f.json",
+    "sha256": "sha256:bdc7f7c723f8e578b907b06b709e3c7aa8daa2db6f1974feef8c0aae6fbcb6c1"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

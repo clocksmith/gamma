@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.endpoint428-horizon-dualclock-scan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "store_bytes", "store_sha256",
+    "storage_header_bytes", "stream_bytes", "positions_scored",
+    "minimum_candidate_age_bytes", "distance_buckets", "arms",
+    "table_lookups_m", "table_lookups_a", "table_replacements_m",
+    "table_installs_a", "table_preserves_a", "ring_writes", "hash_rolls",
+    "past_reads", "past_bytes_read", "past_read_advice_failures",
+    "final_rolling_hash", "terminal_hash_recompute_pass",
+    "recent_table_fnv1a64", "anchor_table_fnv1a64", "ring_fnv1a64",
+    "transition_m_fnv1a64", "transition_km_fnv1a64",
+    "transition_a_fnv1a64", "transition_ka_fnv1a64",
+    "shared_transition_fnv1a64", "shared_transition_k_fnv1a64",
+    "treatment_k_state_identity_pass", "control_outcomes_feed_state",
+    "causal_and_verification_pass", "semantic_state_bytes",
+    "archive_authority", "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.endpoint428-horizon-dualclock-scan.v1"},
+    "candidate_id": {"const": "endpoint428_horizon_dualclock_source_census_q0_retry_v1"},
+    "store_bytes": {"const": 647798597},
+    "store_sha256": {"const": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9"},
+    "storage_header_bytes": {"const": 5},
+    "stream_bytes": {"const": 647798592},
+    "positions_scored": {"const": 647798576},
+    "minimum_candidate_age_bytes": {"const": 100000000},
+    "distance_buckets": {
+      "const": [
+        [100000001, 134217728], [134217729, 201326592],
+        [201326593, 268435456], [268435457, 402653184],
+        [402653185, 536870912], [536870913, 647798591]
+      ]
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["M", "A"],
+      "properties": {
+        "M": {"$ref": "#/$defs/arm"},
+        "A": {"$ref": "#/$defs/arm"}
+      }
+    },
+    "table_lookups_m": {"type": "integer", "minimum": 0},
+    "table_lookups_a": {"type": "integer", "minimum": 0},
+    "table_replacements_m": {"type": "integer", "minimum": 0},
+    "table_installs_a": {"type": "integer", "minimum": 0},
+    "table_preserves_a": {"type": "integer", "minimum": 0},
+    "ring_writes": {"type": "integer", "minimum": 0},
+    "hash_rolls": {"type": "integer", "minimum": 0},
+    "past_reads": {"type": "integer", "minimum": 0},
+    "past_bytes_read": {"type": "integer", "minimum": 0},
+    "past_read_advice_failures": {"type": "integer", "minimum": 0},
+    "final_rolling_hash": {"$ref": "#/$defs/hex64"},
+    "terminal_hash_recompute_pass": {"type": "boolean"},
+    "recent_table_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "anchor_table_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "ring_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "transition_m_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "transition_km_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "transition_a_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "transition_ka_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "shared_transition_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "shared_transition_k_fnv1a64": {"$ref": "#/$defs/hex64"},
+    "treatment_k_state_identity_pass": {"type": "boolean"},
+    "control_outcomes_feed_state": {"const": false},
+    "causal_and_verification_pass": {"type": "boolean"},
+    "semantic_state_bytes": {"const": 368435456},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "hex64": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "bucket_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active", "D", "S", "R", "N"],
+      "properties": {
+        "active": {"type": "integer", "minimum": 0},
+        "D": {"type": "integer", "minimum": 0},
+        "S": {"type": "integer", "minimum": 0},
+        "R": {"type": "integer", "minimum": 0},
+        "N": {"type": "integer", "minimum": 0}
+      }
+    },
+    "third_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "active", "D", "S", "R", "N", "kt_correct", "kt_incorrect",
+        "kt_truth_bits", "kt_gain_bits"
+      ],
+      "properties": {
+        "active": {"type": "integer", "minimum": 0},
+        "D": {"type": "integer", "minimum": 0},
+        "S": {"type": "integer", "minimum": 0},
+        "R": {"type": "integer", "minimum": 0},
+        "N": {"type": "integer", "minimum": 0},
+        "kt_correct": {"type": "integer", "minimum": 0},
+        "kt_incorrect": {"type": "integer", "minimum": 0},
+        "kt_truth_bits": {"type": "number", "minimum": 0},
+        "kt_gain_bits": {"type": "number"}
+      }
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "table_empty", "table_tag_mismatches", "invalid_continuations",
+        "context_verification_failures", "distance_suppressed", "active_bytes",
+        "treatment_correct_bytes", "alias_correct_bytes", "random_correct_bytes",
+        "negated_correct_bytes", "correct_by_third", "correct_by_distance_bucket",
+        "minimum_third_control_margin_bytes", "positive_distance_bucket_count",
+        "causal_kt_truth_bits", "causal_kt_gain_bits",
+        "minimum_third_kt_gain_bits", "partition_pass", "opportunity_fnv1a64"
+      ],
+      "properties": {
+        "table_empty": {"type": "integer", "minimum": 0},
+        "table_tag_mismatches": {"type": "integer", "minimum": 0},
+        "invalid_continuations": {"type": "integer", "minimum": 0},
+        "context_verification_failures": {"type": "integer", "minimum": 0},
+        "distance_suppressed": {"type": "integer", "minimum": 0},
+        "active_bytes": {"type": "integer", "minimum": 0},
+        "treatment_correct_bytes": {"type": "integer", "minimum": 0},
+        "alias_correct_bytes": {"type": "integer", "minimum": 0},
+        "random_correct_bytes": {"type": "integer", "minimum": 0},
+        "negated_correct_bytes": {"type": "integer", "minimum": 0},
+        "correct_by_third": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "items": {"$ref": "#/$defs/third_counts"}
+        },
+        "correct_by_distance_bucket": {
+          "type": "array", "minItems": 6, "maxItems": 6,
+          "items": {"$ref": "#/$defs/bucket_counts"}
+        },
+        "minimum_third_control_margin_bytes": {"type": "integer"},
+        "positive_distance_bucket_count": {"type": "integer", "minimum": 0, "maximum": 6},
+        "causal_kt_truth_bits": {"type": "number", "minimum": 0},
+        "causal_kt_gain_bits": {"type": "number"},
+        "minimum_third_kt_gain_bits": {"type": "number"},
+        "partition_pass": {"type": "boolean"},
+        "opportunity_fnv1a64": {"$ref": "#/$defs/hex64"}
+      }
+    }
+  }
+}
