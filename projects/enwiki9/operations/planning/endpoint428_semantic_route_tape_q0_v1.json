@@ -1,0 +1,125 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "endpoint428_semantic_route_tape_q0_v1",
+  "revision": 1,
+  "operational_status": "source_only_no_full_gate",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "endpoint428_horizon_dualclock_source_census_q0_retry_v1",
+      "required_evidence": "The terminal decision binds the exact 647,798,597-byte Endpoint428 store, five-byte wrapper, 647,798,592-byte WRT stream, and canonical raw corpus."
+    },
+    {
+      "artifact": "wiki_schema_vm_ceiling_q0_v1",
+      "required_evidence": "Reuse only its audited PP/RR, Q, and M byte-order parser semantics; do not inherit its q1 population, opportunity counts, program table, or activation authority."
+    }
+  ],
+  "contract": {
+    "role": "zero-credit Endpoint428 semantic-route population and coordinate tape",
+    "population": {
+      "store_path": "/home/x/enwiki9-nonproof/results/helical_far_history_wrt_event_map_qm2_v1/enwik9.store",
+      "store_bytes": 647798597,
+      "store_sha256": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9",
+      "store_wrapper_bytes": 5,
+      "wrt_stream_bytes": 647798592,
+      "raw_path": "projects/enwiki9/data/enwik9",
+      "raw_bytes": 1000000000,
+      "raw_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "dictionary_path": "/home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/build/english.dic",
+      "dictionary_bytes": 411996,
+      "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    "coordinate_law": {
+      "source_wrt_coordinate": "Zero-based coordinate of the WRT byte represented by the event, excluding the five-byte store wrapper.",
+      "availability_wrt_coordinate": "Earliest WRT coordinate at whose first coder decision the event classification and route are decoder-visible; it is never smaller than source_wrt_coordinate.",
+      "physical_coder_decision_coordinate": "Exactly availability_wrt_coordinate multiplied by eight, with overflow rejected.",
+      "raw_decoded_before_after": "Half-open canonical raw frontier emitted by an independent incremental decode of the source WRT byte. Zero-output control bytes have equal before and after coordinates.",
+      "deferred_literals": "A possible P or R delimiter is never predicted as a value byte. If the next byte proves it literal, an update-only record becomes available at the next WRT coordinate before any current-byte prediction.",
+      "raw_identity": "The incremental WRT decoder must consume the complete stream, reproduce exactly 1,000,000,000 canonical raw bytes, and match every emitted raw byte against the objective-bound corpus."
+    },
+    "parser": {
+      "alphabet": "Stored Endpoint428 WRT bytes P/Q/M/R encode raw {{ / | / = / }} syntax under the frozen involutive remap.",
+      "maximum_depth": 16,
+      "maximum_template_name_bytes": 96,
+      "maximum_field_key_bytes": 96,
+      "explicit_route": "length-delimited tuple(template-name, 0x01, completed-explicit-key), available only after M is decoded",
+      "positional_rule": "A keyless field cannot be distinguished causally from an explicit key before its terminator. Positional descriptors are emitted only at field exit as nonpredictive audit events and produce no field_value_byte record.",
+      "nested_rule": "Nested PP/RR transitions use the WIKI-SCHEMA stack semantics. A nested template invalidates an outer name or key and pauses an outer value; nested bytes never update the outer route.",
+      "overflow_rule": "Depth or atom overflow sleeps until the causally matching delimiter returns the parser to valid state; overflowed descriptors never create predictive records."
+    },
+    "record_abi": {
+      "header_bytes": 192,
+      "record_bytes": 88,
+      "endianness": "little",
+      "record_fields": [
+        "uint64 source_wrt_coordinate",
+        "uint64 availability_wrt_coordinate",
+        "uint64 physical_coder_decision_coordinate",
+        "uint64 raw_decoded_before",
+        "uint64 raw_decoded_after",
+        "uint128 route_fingerprint",
+        "uint128 descriptor_witness_digest",
+        "uint64 route_virtual_ordinal_before_event",
+        "uint32 field_ordinal",
+        "uint8 event_type",
+        "uint8 flags",
+        "uint8 template_depth",
+        "uint8 key_identity"
+      ],
+      "event_types": {
+        "1": "template_enter",
+        "2": "explicit_field_entry",
+        "3": "field_value_byte",
+        "4": "deferred_value_update",
+        "5": "field_exit",
+        "6": "positional_field_exit_audit",
+        "7": "template_exit",
+        "8": "overflow_enter",
+        "9": "overflow_exit"
+      },
+      "flags": {
+        "1": "valid_route",
+        "2": "predictive_event",
+        "4": "update_only",
+        "8": "explicit_key",
+        "16": "positional_audit",
+        "32": "overflow",
+        "64": "deferred"
+      },
+      "key_identity": "0 none, 1 explicit, 2 positional-audit; every other value is invalid",
+      "ordering": "Records are ordered by availability coordinate, then causal action order. Deferred updates precede any predictive event at the same availability coordinate."
+    },
+    "descriptor_sidecar": {
+      "role": "Audit-only length-delimited explicit-route descriptors keyed by both 128-bit digests.",
+      "predictor_access": "forbidden",
+      "alias_rule": "Any equal fingerprint or witness digest attached to unequal descriptor bytes invalidates the build."
+    },
+    "build_and_verify": [
+      "Build A and Build B execute in fresh processes over identical hash-bound store, raw corpus, and dictionary inputs.",
+      "Each build writes a tape, descriptor sidecar, and normalized summary without timestamps, paths chosen by the caller, or nondeterministic iteration.",
+      "The independent verifier reparses both binary ABIs, checks record ordering, bit-coordinate arithmetic, raw frontier bounds, event/flag/key consistency, descriptor aliases, declared hashes and byte counts, then requires byte-identical A/B artifacts.",
+      "Synthetic fixture mode is explicitly marked and can validate source only; it cannot satisfy the full-population gate."
+    ],
+    "resource_bounds": {
+      "maximum_tree_rss_kib": 1048576,
+      "maximum_temporary_disk_bytes": 100000000000,
+      "full_gate_concurrency": "forbidden while the HORIZON retained-parent replay is active"
+    }
+  },
+  "activation_requirements": [
+    "The scanner, verifier, runner, compiler, flags, input identities, ABI, schemas, commands, and output names are sealed before a full build.",
+    "The active HORIZON retained-parent process terminalizes before either complete semantic tape build begins.",
+    "Two guarded complete builds and independent verification pass before Fiber-CTS, Fiber-FOSSIL, FIBER-HORIZON, WIKI-LOOM, or ROUTE-MIDAS may consume the tape."
+  ],
+  "claim_boundary": [
+    "This artifact is population infrastructure with zero archive and score authority.",
+    "The tape and sidecar are forbidden from the final codec package; a native codec must reproduce the parser and coordinates from decoded state.",
+    "Repeated parser identity proves no predictive information, retained-parent gain, arithmetic saving, inverse, package score, or Hutter Prize result.",
+    "No q1 semantic count, route, or parent probability transfers into this Endpoint428 identity."
+  ]
+}

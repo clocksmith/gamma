@@ -1,0 +1,51 @@
+{
+  "candidate_id": "endpoint428_semantic_route_tape_q0_v2",
+  "claimed_at": "2026-08-31T21:01:48+00:00",
+  "created_at": "2026-08-31T21:01:42+00:00",
+  "developed_at": "2026-08-31T21:01:48+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v1/20260831T205429506938Z_af5157930a62.json",
+      "sha256": "sha256:59c1f48268ef20cb4b147fb7885ddcaf8c7a77b50f3d241b28104cc23ba72de8"
+    },
+    {
+      "path": "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/decision.json",
+      "sha256": "sha256:26afdc413eb4200279f9061e28569090bf98053c0fb8ad4d8d4f08ff658dfae4"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/endpoint428_semantic_route_tape_q0_v2.json",
+    "sha256": "sha256:5cb20faa00d87f6bf849ebae9100a8bbfb363272ad597624fde53380d146111a"
+  },
+  "hypothesis": "On Endpoint428's exact 647,798,592-byte WRT stream, a pretruth-state route schedule can produce two byte-identical 88-byte-record semantic tapes, exactly reconstruct all 1,000,000,000 raw bytes through an independent incremental inverse, and expose explicit-field predictions without current-byte, positional-field, delimiter, or nested-route leakage.",
+  "interfaces_exposed": [
+    "Immutable Endpoint428 route tape with explicit pretruth prediction and posttruth update timing."
+  ],
+  "kill_condition": "Any repeat, inverse, truth-dependent eligibility, positional leakage, deferred-order, descriptor alias, ABI, or resource failure rejects this exact tape.",
+  "max_program_bytes": 131072,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "endpoint428_semantic_route_tape_q0_v1",
+  "parent_proposal_id": "endpoint428_semantic_route_tape_q0_v1",
+  "priority": 50,
+  "promotion_condition": "Two complete builds consume 647798592 WRT bytes, reconstruct 1000000000 raw bytes, match tape/sidecar/summary bytes, and pass causal ABI, zero-alias, zero-positional-prediction, zero-pretruth-violation, and 1048576-KiB gates.",
+  "proposal_id": "endpoint428_semantic_route_tape_q0_v2",
+  "retired_neighborhoods": [
+    "Supersedes only v1's truth-dependent possible-delimiter exclusion; does not change representation, route descriptors, table ABI, or zero-credit role."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 65,
+  "state": "developed",
+  "title": "Endpoint428 causal semantic-route coordinate tape v2"
+}

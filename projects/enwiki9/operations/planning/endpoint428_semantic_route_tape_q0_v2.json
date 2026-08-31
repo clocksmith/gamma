@@ -1,0 +1,133 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "endpoint428_semantic_route_tape_q0_v2",
+  "revision": 1,
+  "operational_status": "source_only_no_full_gate",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "endpoint428_semantic_route_tape_q0_v1",
+      "required_evidence": "Preserve v1's Endpoint428 population, incremental inverse, source/availability/raw/bit coordinates, explicit-key rule, positional audit-only rule, 88-byte record ABI, two-build verification, resources, and zero-credit boundary."
+    },
+    {
+      "artifact": "endpoint428_horizon_dualclock_source_census_q0_retry_v1",
+      "required_evidence": "The terminal decision binds the exact 647,798,597-byte Endpoint428 store and 647,798,592-byte WRT representation."
+    },
+    {
+      "artifact": "wiki_schema_vm_ceiling_q0_v1",
+      "required_evidence": "Reuse its source-audited PP/RR/Q/M stack transition order only; do not inherit its q1 population, program table, or opportunity evidence."
+    }
+  ],
+  "contract": {
+    "supersedes": "operations/planning/endpoint428_semantic_route_tape_q0_v1.json",
+    "correction_boundary": "Change only predictive-event timing for possible delimiters. A byte is predictive exactly when the parser is in a valid explicit field-value state before that byte's first coder decision. The decoded byte determines only the posttruth route-history update and parser transition; it never selects whether the current prediction existed.",
+    "population": {
+      "store_bytes": 647798597,
+      "store_sha256": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9",
+      "store_wrapper_bytes": 5,
+      "wrt_stream_bytes": 647798592,
+      "raw_bytes": 1000000000,
+      "raw_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "dictionary_bytes": 411996,
+      "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    "causal_schedule": [
+      "At availability coordinate i, resolve any deferred literal update using truths through i-1.",
+      "From parser state through i-1, emit a field_value_byte record for i if and only if a valid explicit route is awake.",
+      "Decode WRT byte i and extend the independently checked raw frontier.",
+      "If byte i is an ordinary value byte, append it to the route and increment its virtual ordinal.",
+      "If byte i is Q, do not append it; close the explicit field after truth.",
+      "If byte i is P or R, hold its route-history update until byte i+1 distinguishes a literal from PP/RR. The current prediction at i remains recorded either way.",
+      "A proven deferred literal appends at i+1 before any prediction at i+1. PP/RR syntax never appends to the outer route.",
+      "A keyless field remains nonpredictive because positional-versus-explicit identity is unavailable until M or field exit. Its exit may emit audit-only metadata."
+    ],
+    "coordinate_law": {
+      "source_wrt_coordinate": "WRT byte whose prediction or posttruth transition the record describes.",
+      "availability_wrt_coordinate": "First WRT coordinate where the record's action is causally available; equal to source for predictions and later than source for deferred updates.",
+      "physical_coder_decision_coordinate": "availability_wrt_coordinate multiplied by eight.",
+      "raw_decoded_before_after": "Independent WRT inverse frontier around source_wrt_coordinate. raw_decoded_before is pretruth-safe; raw_decoded_after is audit-only until source truth is decoded.",
+      "record_order": "Increasing availability coordinate; at equal availability, deferred updates precede prediction records, which precede posttruth exits."
+    },
+    "record_abi": {
+      "header_bytes": 192,
+      "record_bytes": 88,
+      "endianness": "little",
+      "fields": [
+        "uint64 source_wrt_coordinate",
+        "uint64 availability_wrt_coordinate",
+        "uint64 physical_coder_decision_coordinate",
+        "uint64 raw_decoded_before",
+        "uint64 raw_decoded_after",
+        "uint128 route_fingerprint",
+        "uint128 descriptor_witness_digest",
+        "uint64 route_virtual_ordinal_before_event",
+        "uint32 field_ordinal",
+        "uint8 event_type",
+        "uint8 flags",
+        "uint8 template_depth",
+        "uint8 key_identity"
+      ],
+      "events": {
+        "1": "template_enter_posttruth",
+        "2": "explicit_field_entry_posttruth",
+        "3": "field_value_byte_pretruth",
+        "4": "deferred_value_update_pretruth",
+        "5": "field_exit_posttruth",
+        "6": "positional_field_exit_audit_posttruth",
+        "7": "template_exit_posttruth",
+        "8": "overflow_enter_posttruth",
+        "9": "overflow_exit_posttruth"
+      },
+      "flags": {
+        "1": "valid_route",
+        "2": "predictive_event",
+        "4": "update_only",
+        "8": "explicit_key",
+        "16": "positional_audit",
+        "32": "overflow",
+        "64": "deferred",
+        "128": "posttruth_event"
+      },
+      "key_identity": "0 none, 1 explicit, 2 positional-audit"
+    },
+    "route_identity": {
+      "explicit_descriptor": "length-delimited template name, byte 0x01, and length-delimited explicit key, each bounded to 96 stored-WRT bytes",
+      "route_fingerprint": "two independently seeded unsigned 64-bit FNV/Mix64 lanes serialized little-endian",
+      "descriptor_witness": "two additional independently seeded lanes over the identical descriptor",
+      "sidecar": "fixed 232-byte first-occurrence records retain both digests and the bounded descriptor; predictors may not read it",
+      "alias": "equal route fingerprint or witness attached to unequal descriptor bytes invalidates the complete receipt"
+    },
+    "independent_inverse": {
+      "stream_header": "Validate the five-byte WRT_TEXT raw-length header and WRT-enabled marker within the 647,798,592-byte stream.",
+      "dictionary": "Reconstruct the frozen reverse dictionary and incrementally decode case, escape, one-, two-, and three-byte word codes after undoing the stored-byte remap.",
+      "comparison": "Compare every emitted byte immediately with canonical raw; reject first divergence, trailing raw, incomplete code, or decoded length mismatch."
+    },
+    "verification": [
+      "Two fresh scanner processes produce A/B tapes, sidecars, and normalized summaries.",
+      "An independent Python verifier parses both binary ABIs, checks coordinates, event ordering, pretruth/posttruth flags, zero positional predictions, descriptor aliases, hashes, byte counts, and byte identity.",
+      "Fixture receipts are source validation only and cannot satisfy full-population promotion."
+    ],
+    "resource_bounds": {
+      "maximum_tree_rss_kib": 1048576,
+      "maximum_temporary_disk_bytes": 100000000000,
+      "full_gate_concurrency": "forbidden while HORIZON retained-parent replay is live"
+    }
+  },
+  "activation_requirements": [
+    "Source, verifier, runner, compiler, flags, schemas, input identities, commands, and outputs are sealed before a complete build.",
+    "The active HORIZON retained-parent process terminalizes before full Build A.",
+    "Only small synthetic fixtures may execute while HORIZON is active.",
+    "Fiber-family consumers require a terminal positive full A/B verification and must bind the exact tape SHA-256."
+  ],
+  "claim_boundary": [
+    "This is zero-credit population infrastructure, not a probability model or archive.",
+    "Tape, sidecar, raw corpus, and offline mappings are forbidden submission inputs; native codecs must reconstruct routes causally.",
+    "No route count, repeated identity, or coordinate proof establishes retained-parent gain or Hutter progress.",
+    "No q1 semantic result or parent probability transfers into this Endpoint428 version."
+  ]
+}
