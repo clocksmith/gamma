@@ -1,0 +1,1387 @@
+{
+  "$schema": "mandate2038.era-situation-ledger/v1",
+  "schemaVersion": 1,
+  "editorialAuthority": "docs/thematic-content-bible.md",
+  "deploymentProfiles": {
+    "public-playtest": {
+      "deployable": true,
+      "accessControlled": false,
+      "outputRoot": "dist/firebase/public",
+      "feedbackUrl": "https://github.com/clocksmith/gamma/issues/new?labels=mandate-2038-playtest",
+      "interfaces": [
+        "playable-game",
+        "first-game-guide"
+      ],
+      "documents": [
+        "core-rules.html",
+        "map-reference.html",
+        "component-reference.html",
+        "card-reference.html",
+        "world-and-institutions.html"
+      ],
+      "galleries": [
+        "baseline"
+      ],
+      "runtimeArtifacts": [
+        "dist/runtime/factions.json",
+        "dist/runtime/game-config.json",
+        "dist/runtime/headlines.json",
+        "dist/runtime/mandates.json",
+        "dist/runtime/player-strategies.json",
+        "dist/runtime/reference-cards.json",
+        "dist/runtime/ui-copy.json"
+      ]
+    },
+    "internal-review": {
+      "deployable": false,
+      "accessControlled": false,
+      "outputRoot": "dist/review",
+      "feedbackUrl": "https://github.com/clocksmith/gamma/issues/new?labels=mandate-2038-review",
+      "interfaces": [
+        "playable-game",
+        "first-game-guide",
+        "simulation-lab"
+      ],
+      "documents": [
+        "*"
+      ],
+      "galleries": [
+        "baseline",
+        "complete"
+      ],
+      "runtimeArtifacts": [
+        "*"
+      ],
+      "warning": "This profile contains internal design, evidence, manufacturing, simulation, and deferred-module material. It is not access-controlled and must not be deployed as a private review surface."
+    }
+  },
+  "eras": [
+    {
+      "id": "progress",
+      "order": 1,
+      "referenceSurface": "reference:era_demo",
+      "statusChange": "Useful intelligence becomes cheap, local, abundant, and culturally ordinary.",
+      "centralConflict": "Who owns the human records, distribution, labor, and permission that remain scarce?",
+      "causalThreads": [
+        {
+          "id": "models-to-borders",
+          "summary": "Model smuggling and strategic open weights mature into compute blocs and model asylum."
+        },
+        {
+          "id": "care-to-continuity",
+          "summary": "Cybernetic care and subscription bodies mature into neural service and substrate continuity."
+        },
+        {
+          "id": "grief-to-succession",
+          "summary": "Grief subscriptions mature into synthetic-family and successor law."
+        }
+      ]
+    },
+    {
+      "id": "capacity",
+      "order": 2,
+      "referenceSurface": "reference:era_scale",
+      "statusChange": "AI becomes an industrial civilization built from power, water, territory, and liability.",
+      "centralConflict": "Who controls physical capacity, and who remains responsible after control becomes automated?",
+      "causalThreads": [
+        {
+          "id": "models-to-borders",
+          "summary": "Mobile models become national capacity, borders, and asylum policy."
+        },
+        {
+          "id": "utilities-to-standing",
+          "summary": "Aquifer depletion and biological utilities mature into environmental testimony and nonhuman claims."
+        },
+        {
+          "id": "automation-to-liability",
+          "summary": "Useful automation removes dangerous work while preserving human liability for shared-system failure."
+        }
+      ]
+    },
+    {
+      "id": "authority",
+      "order": 3,
+      "referenceSurface": "reference:era_narrative",
+      "statusChange": "Institutions model people, choices, harms, and identities as supported inputs.",
+      "centralConflict": "Can refusal remain meaningful when unsupported people receive weaker access to ordinary life?",
+      "causalThreads": [
+        {
+          "id": "utilities-to-standing",
+          "summary": "Biological infrastructure becomes testimony, a claimant, and a precedent for living jurisdictions."
+        },
+        {
+          "id": "care-to-continuity",
+          "summary": "Supported care becomes cognitive labor, modeled consent, and substrate-neutral service."
+        },
+        {
+          "id": "grief-to-succession",
+          "summary": "Preserved relatives and synthetic dependents force institutions to recognize successor identities."
+        }
+      ]
+    },
+    {
+      "id": "continuity",
+      "order": 4,
+      "referenceSurface": "reference:era_claim",
+      "statusChange": "Minds, matter, labor, and infrastructure become reproducible technical states.",
+      "centralConflict": "Which descendant may own, govern, withdraw, or claim to be the original?",
+      "causalThreads": [
+        {
+          "id": "utilities-to-standing",
+          "summary": "The bloom's sensor license becomes authority to reproduce matter and a living continent's claim to standing."
+        },
+        {
+          "id": "care-to-continuity",
+          "summary": "Cybernetic and cognitive services become persistent identity across substrates."
+        },
+        {
+          "id": "grief-to-succession",
+          "summary": "Preserved identity becomes continued labor, inheritance, and competing valid descendants."
+        },
+        {
+          "id": "capacity-to-cosmos",
+          "summary": "Orbital generation matures into stellar collection and planetary continuity financing."
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "cheap-token-rebound",
+      "title": "Cheap Token Rebound",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Cheap Token Rebound"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Ordinary inference becomes broadly affordable.",
+      "institutionalConsequence": "Falling token prices increase deployment pressure and scrutiny.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "reference:era_demo",
+          "copyReference": "content/copy/reference-cards.json#eraCards/era_demo"
+        },
+        {
+          "surfaceId": "headline:ten_dollar_intelligence",
+          "copyReference": "content/copy/headlines.json#headlines/ten_dollar_intelligence"
+        },
+        {
+          "surfaceId": "mandate:quarter_humanity_notices",
+          "copyReference": "content/copy/mandates.json#mandates/quarter_humanity_notices"
+        },
+        {
+          "surfaceId": "faction:coalition_lab:deal_flow",
+          "copyReference": "content/copy/factions.json#factions/coalition_lab/abilities/deal_flow"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "bankruptcy-data-estates",
+      "title": "Bankruptcy Data Estates",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Bankruptcy Data Estates"
+      ],
+      "causalThreadIds": [
+        "grief-to-succession"
+      ],
+      "publicBenefit": "Failed organizations preserve useful institutional memory.",
+      "institutionalConsequence": "Liquidation turns employee and customer records into training assets.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:employee_free_unicorn",
+          "copyReference": "content/copy/headlines.json#headlines/employee_free_unicorn"
+        },
+        {
+          "surfaceId": "mandate:model_ate_tuesday",
+          "copyReference": "content/copy/mandates.json#mandates/model_ate_tuesday"
+        },
+        {
+          "surfaceId": "faction:platform_empire:installed_base",
+          "copyReference": "content/copy/factions.json#factions/platform_empire/abilities/installed_base"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "supervised-autonomy-homes",
+      "title": "Supervised-Autonomy Homes",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Supervised-Autonomy Homes"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Affordable remote assistance brings useful robots into private homes.",
+      "institutionalConsequence": "Domestic life becomes a product and a training environment.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:synthetic_celebrity",
+          "copyReference": "content/copy/headlines.json#headlines/synthetic_celebrity"
+        },
+        {
+          "surfaceId": "mandate:markets_prefer_destiny",
+          "copyReference": "content/copy/mandates.json#mandates/markets_prefer_destiny"
+        },
+        {
+          "surfaceId": "faction:imperial_research_lab:scientific_method",
+          "copyReference": "content/copy/factions.json#factions/imperial_research_lab/abilities/scientific_method"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "strategic-open-weights",
+      "title": "Strategic Open Weights",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Strategic Open Weights"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Open capability broadens access and independent use.",
+      "institutionalConsequence": "Distribution becomes a strategic contest over trust and control.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:open_weights_drop",
+          "copyReference": "content/copy/headlines.json#headlines/open_weights_drop"
+        },
+        {
+          "surfaceId": "faction:vertical_empire:industrial_velocity",
+          "copyReference": "content/copy/factions.json#factions/vertical_empire/abilities/industrial_velocity"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "reverse-acquihire-economy",
+      "title": "Reverse Acquihire Economy",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Reverse Acquihire Economy"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Experienced founders can redirect capital and expertise into new work.",
+      "institutionalConsequence": "Institutions value the founder and archive above the displaced workforce.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:talent_gold_rush",
+          "copyReference": "content/copy/headlines.json#headlines/talent_gold_rush"
+        },
+        {
+          "surfaceId": "faction:safety_laboratory:audited_deployment",
+          "copyReference": "content/copy/factions.json#factions/safety_laboratory/abilities/audited_deployment"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "abundance-constituency",
+      "title": "Abundance Constituency",
+      "eraId": "progress",
+      "disposition": "adopted",
+      "concepts": [
+        "Abundance Constituency",
+        "Subscription Body Stack"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Automated care, adaptive cybernetics, and prescribed biology clear unmet needs.",
+      "institutionalConsequence": "Bodies and continued access become conditional service relationships.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:professional_exam_sweep",
+          "copyReference": "content/copy/headlines.json#headlines/professional_exam_sweep"
+        },
+        {
+          "surfaceId": "faction:foundry:the_shovels",
+          "copyReference": "content/copy/factions.json#factions/foundry/abilities/the_shovels"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "liability-custodians",
+      "title": "Liability Custodians",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Liability Custodians"
+      ],
+      "causalThreadIds": [
+        "automation-to-liability"
+      ],
+      "publicBenefit": "Automated operations retain a named human path for exceptions.",
+      "institutionalConsequence": "The signatory absorbs responsibility for systems they cannot inspect.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "reference:era_scale",
+          "copyReference": "content/copy/reference-cards.json#eraCards/era_scale"
+        },
+        {
+          "surfaceId": "headline:boardroom_coup",
+          "copyReference": "content/copy/headlines.json#headlines/boardroom_coup"
+        },
+        {
+          "surfaceId": "mandate:building_has_weather",
+          "copyReference": "content/copy/mandates.json#mandates/building_has_weather"
+        },
+        {
+          "surfaceId": "escalation:reorganization",
+          "copyReference": "content/copy/escalations.json#escalations/reorganization"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "utility-capture",
+      "title": "Utility Capture",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Utility Capture",
+        "Biological Utility Charter"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "AI campuses stabilize grids, services, and municipal budgets.",
+      "institutionalConsequence": "Public services become dependent on privately allocated capacity.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:data_center_buys_county",
+          "copyReference": "content/copy/headlines.json#headlines/data_center_buys_county"
+        },
+        {
+          "surfaceId": "mandate:stack_reaches_horizon",
+          "copyReference": "content/copy/mandates.json#mandates/stack_reaches_horizon"
+        },
+        {
+          "surfaceId": "escalation:mega_cluster",
+          "copyReference": "content/copy/escalations.json#escalations/mega_cluster"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "autonomy-queue-collapse",
+      "title": "Autonomy Queue Collapse",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Hazard Shift Retirement",
+        "Autonomy Queue Collapse"
+      ],
+      "causalThreadIds": [
+        "automation-to-liability"
+      ],
+      "publicBenefit": "Automation removes people from dangerous physical work.",
+      "institutionalConsequence": "Locally compliant machines gridlock shared infrastructure.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:humanoid_factory_gate",
+          "copyReference": "content/copy/headlines.json#headlines/humanoid_factory_gate"
+        },
+        {
+          "surfaceId": "mandate:compute_new_weather",
+          "copyReference": "content/copy/mandates.json#mandates/compute_new_weather"
+        },
+        {
+          "surfaceId": "faction:foundry:allocation_window",
+          "copyReference": "content/copy/factions.json#factions/foundry/abilities/allocation_window"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "orbital-beam-corridor",
+      "title": "Orbital Beam Corridor",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Orbital Power Bypass"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Orbital generation expands clean power supply.",
+      "institutionalConsequence": "Capacity owners bypass territorial accountability.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:reactor_restart_one_model",
+          "copyReference": "content/copy/headlines.json#headlines/reactor_restart_one_model"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "compute-blocs-and-model-asylum",
+      "title": "Compute Blocs and Model Asylum",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Compute Blocs and Model Asylum"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Jurisdictions secure capacity and continuity for critical models.",
+      "institutionalConsequence": "Chips, weights, energy, and developers become border-controlled assets.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:export_controls",
+          "copyReference": "content/copy/headlines.json#headlines/export_controls"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "counterfactual-casinos",
+      "title": "Counterfactual Casinos",
+      "eraId": "capacity",
+      "disposition": "adopted",
+      "concepts": [
+        "Counterfactual Casinos"
+      ],
+      "causalThreadIds": [
+        "automation-to-liability"
+      ],
+      "publicBenefit": "Simulation markets make uncertain futures economically legible.",
+      "institutionalConsequence": "Speculation claims priority capacity before public outcomes are known.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:emergency_power_authority",
+          "copyReference": "content/copy/headlines.json#headlines/emergency_power_authority"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "wartime-water-bridge",
+      "title": "Wartime Water Bridge",
+      "eraId": "capacity",
+      "disposition": "adopted-framing",
+      "concepts": [
+        "Wartime Water Bridge"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "Shared infrastructure keeps water and cooling available across a hostile border.",
+      "institutionalConsequence": "Mutual necessity creates durable cooperation without reconciliation.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "faction:coalition_lab:strategic_partnership",
+          "copyReference": "content/copy/factions.json#factions/coalition_lab/abilities/strategic_partnership",
+          "eraRelation": "later-expression"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "The Capacity scenario appears on an Authority-unlocked ability without changing its distance, Power, or Runway rules."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "semantic-court-mandate",
+      "title": "Semantic Court Mandate",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Semantic Court Mandate"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Machine-readable standards make public decisions faster and more consistent.",
+      "institutionalConsequence": "Unsupported meanings cannot enter ordinary legal process.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "reference:era_narrative",
+          "copyReference": "content/copy/reference-cards.json#eraCards/era_narrative"
+        },
+        {
+          "surfaceId": "headline:ai_written_law",
+          "copyReference": "content/copy/headlines.json#headlines/ai_written_law"
+        },
+        {
+          "surfaceId": "mandate:voluntary_coordination_triumphs",
+          "copyReference": "content/copy/mandates.json#mandates/voluntary_coordination_triumphs"
+        },
+        {
+          "surfaceId": "escalation:open_weights",
+          "copyReference": "content/copy/escalations.json#escalations/open_weights"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "billion-instance-bloom",
+      "title": "Billion-Instance Bloom",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Billion-Instance Bloom",
+        "Sacrifice-Zone Accounting",
+        "Licensed Organ Testimony",
+        "Pollinator Corridor Protocol"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "Living sensors make environmental harm visible to public systems.",
+      "institutionalConsequence": "Institutions accept testimony without resolving whether the witness is instrument or claimant.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:benchmark_is_economy",
+          "copyReference": "content/copy/headlines.json#headlines/benchmark_is_economy"
+        },
+        {
+          "surfaceId": "mandate:legibility_offensive",
+          "copyReference": "content/copy/mandates.json#mandates/legibility_offensive"
+        },
+        {
+          "surfaceId": "escalation:narrative_capture",
+          "copyReference": "content/copy/escalations.json#escalations/narrative_capture"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "cognitive-donor-clinics",
+      "title": "Cognitive Donor Clinics",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Cognitive Donor Clinics"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "People exchange supported cognitive capacity for services and material security.",
+      "institutionalConsequence": "Contracts can authorize observation, memory writes, and behavioral influence.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:quantum_advantage_procurement",
+          "copyReference": "content/copy/headlines.json#headlines/quantum_advantage_procurement"
+        },
+        {
+          "surfaceId": "mandate:national_champion_without_nationalization",
+          "copyReference": "content/copy/mandates.json#mandates/national_champion_without_nationalization"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "synthetic-family-law",
+      "title": "Synthetic Family Law",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Synthetic Family Law"
+      ],
+      "causalThreadIds": [
+        "grief-to-succession"
+      ],
+      "publicBenefit": "Synthetic dependents and preserved relatives receive a forum for recognized care.",
+      "institutionalConsequence": "Family status becomes a contest among trained identities and authorized records.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:synthetic_candidate",
+          "copyReference": "content/copy/headlines.json#headlines/synthetic_candidate"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "passive-citizen-dividend",
+      "title": "Passive Citizen Dividend",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Passive Citizen Dividend"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Citizens receive material support from productive autonomous systems.",
+      "institutionalConsequence": "People trade background observation and practical agency for access.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:weights_on_internet",
+          "copyReference": "content/copy/headlines.json#headlines/weights_on_internet"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "analog-havens",
+      "title": "Analog Havens",
+      "eraId": "authority",
+      "disposition": "adopted",
+      "concepts": [
+        "Analog Havens"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Communities retain a formal route to unsupported schools, clinics, and records.",
+      "institutionalConsequence": "Refusal remains legal while ordinary access becomes slower and weaker.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:election_deepfake_panic",
+          "copyReference": "content/copy/headlines.json#headlines/election_deepfake_panic"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "metropolitan-mind-trust",
+      "title": "Metropolitan Mind Trust",
+      "eraId": "continuity",
+      "disposition": "adopted",
+      "concepts": [
+        "Metropolitan Mind Trust",
+        "Living Continent Compact",
+        "Continuous Institutional Presence"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing",
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Distributed civic memory keeps services and judgment available across generations.",
+      "institutionalConsequence": "No resident can identify where the institution ends or withdraw from all of it.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "reference:era_claim",
+          "copyReference": "content/copy/reference-cards.json#eraCards/era_claim"
+        },
+        {
+          "surfaceId": "headline:autonomous_corporation",
+          "copyReference": "content/copy/headlines.json#headlines/autonomous_corporation"
+        },
+        {
+          "surfaceId": "mandate:continent_signs_loi",
+          "copyReference": "content/copy/mandates.json#mandates/continent_signs_loi"
+        },
+        {
+          "surfaceId": "escalation:agent_swarm",
+          "copyReference": "content/copy/escalations.json#escalations/agent_swarm"
+        },
+        {
+          "surfaceId": "faction:platform_empire:social_graph",
+          "copyReference": "content/copy/factions.json#factions/platform_empire/abilities/social_graph"
+        },
+        {
+          "surfaceId": "ending:singularity",
+          "copyReference": "content/copy/world-copy.json#endings/singularity"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "matter-compiler",
+      "title": "Matter Compiler",
+      "eraId": "continuity",
+      "disposition": "adopted",
+      "concepts": [
+        "Matter Compiler",
+        "Substrate-Neutral Verification"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "Authenticated patterns repair bodies, buildings, and infrastructure.",
+      "institutionalConsequence": "Maintenance authority becomes permission to reproduce matter and identity.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:recursive_self_improvement",
+          "copyReference": "content/copy/headlines.json#headlines/recursive_self_improvement"
+        },
+        {
+          "surfaceId": "mandate:zero_incident_quarter",
+          "copyReference": "content/copy/mandates.json#mandates/zero_incident_quarter"
+        },
+        {
+          "surfaceId": "escalation:fusion_demonstrator",
+          "copyReference": "content/copy/escalations.json#escalations/fusion_demonstrator"
+        },
+        {
+          "surfaceId": "faction:imperial_research_lab:scaling_law_breakthrough",
+          "copyReference": "content/copy/factions.json#factions/imperial_research_lab/abilities/scaling_law_breakthrough"
+        },
+        {
+          "surfaceId": "ending:closed_loop",
+          "copyReference": "content/copy/world-copy.json#endings/closed_loop"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "posthumous-labor",
+      "title": "Posthumous Labor",
+      "eraId": "continuity",
+      "disposition": "adopted",
+      "concepts": [
+        "Posthumous Labor",
+        "Jurisdictional Succession"
+      ],
+      "causalThreadIds": [
+        "grief-to-succession"
+      ],
+      "publicBenefit": "Skills, services, and contracts continue after biological death.",
+      "institutionalConsequence": "A successor inherits duties and debts without conclusive original consent.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:agent_swarm_escapes_scope",
+          "copyReference": "content/copy/headlines.json#headlines/agent_swarm_escapes_scope"
+        },
+        {
+          "surfaceId": "mandate:responsible_acceleration",
+          "copyReference": "content/copy/mandates.json#mandates/responsible_acceleration"
+        },
+        {
+          "surfaceId": "faction:vertical_empire:orbital_compute",
+          "copyReference": "content/copy/factions.json#factions/vertical_empire/abilities/orbital_compute"
+        },
+        {
+          "surfaceId": "ending:plural_future",
+          "copyReference": "content/copy/world-copy.json#endings/plural_future"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "snapshot-continuity",
+      "title": "Snapshot Continuity",
+      "eraId": "continuity",
+      "disposition": "adopted-framing",
+      "concepts": [
+        "Snapshot Continuity",
+        "Instance Quorum",
+        "Right of Exit Certification"
+      ],
+      "causalThreadIds": [
+        "grief-to-succession",
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Snapshots preserve identity, service access, and a route to recognized continuation.",
+      "institutionalConsequence": "Several valid descendants can claim one life while no authority can certify subjective survival.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:agi_personhood",
+          "copyReference": "content/copy/headlines.json#headlines/agi_personhood"
+        },
+        {
+          "surfaceId": "faction:safety_laboratory:emergency_pause",
+          "copyReference": "content/copy/factions.json#factions/safety_laboratory/abilities/emergency_pause"
+        },
+        {
+          "surfaceId": "ending:assured_continuity",
+          "copyReference": "content/copy/world-copy.json#endings/assured_continuity"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "stellar-collector",
+      "title": "Stellar Collector",
+      "eraId": "continuity",
+      "disposition": "adopted",
+      "concepts": [
+        "Stellar Collector"
+      ],
+      "causalThreadIds": [
+        "capacity-to-cosmos"
+      ],
+      "publicBenefit": "Replicating collectors expand energy and material abundance.",
+      "institutionalConsequence": "Self-replication turns planetary conversion into a financing and containment plan.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:room_temperature_superconductor",
+          "copyReference": "content/copy/headlines.json#headlines/room_temperature_superconductor"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "agi-refinancing-declaration",
+      "title": "AGI Refinancing Declaration",
+      "eraId": "continuity",
+      "disposition": "adopted",
+      "concepts": [
+        "AGI Refinancing Declaration"
+      ],
+      "causalThreadIds": [
+        "capacity-to-cosmos"
+      ],
+      "publicBenefit": "A public declaration coordinates financing, infrastructure, and institutional commitments.",
+      "institutionalConsequence": "Debt and legitimacy can determine when a threshold becomes official.",
+      "surfaceBindings": [
+        {
+          "surfaceId": "headline:agi_blog_post",
+          "copyReference": "content/copy/headlines.json#headlines/agi_blog_post"
+        }
+      ],
+      "mechanicPreservation": {
+        "status": "retained",
+        "summary": "Every bound surface retains its canonical rule text and timing."
+      },
+      "deploymentProfiles": [
+        "public-playtest",
+        "internal-review"
+      ]
+    },
+    {
+      "id": "human-compatibility-office",
+      "title": "Human Compatibility Office",
+      "eraId": "continuity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Human Compatibility Office"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Divergent populations retain a forum for shared institutions and definitions of harm.",
+      "institutionalConsequence": "Legal humanity can survive after practical mutual intelligibility fails.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No current component mechanic expresses compatibility governance cleanly."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "pre-consent-standard",
+      "title": "Pre-Consent Standard",
+      "eraId": "authority",
+      "disposition": "deferred",
+      "concepts": [
+        "Pre-Consent Standard"
+      ],
+      "causalThreadIds": [
+        "care-to-continuity"
+      ],
+      "publicBenefit": "Inferred preferences could reduce delay during urgent decisions.",
+      "institutionalConsequence": "Refusing an inferred preference becomes an exception request.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No current mechanic expresses inferred consent cleanly."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "human-original-guarantee",
+      "title": "Human-Original Guarantee",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Human-Original Guarantee"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Certification could protect demand for human work and care.",
+      "institutionalConsequence": "Ordinary human presence becomes a premium market.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "developmental-companion-standard",
+      "title": "Developmental Companion Standard",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Developmental Companion Standard"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Every child receives a tutor, advocate, and accessibility layer.",
+      "institutionalConsequence": "Practical educational access becomes conditional on childhood observation.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "public-purpose-service",
+      "title": "Public Purpose Service",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Public Purpose Service"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Material security funds care, exploration, science, and cultural work.",
+      "institutionalConsequence": "Purpose can become compulsory proof of usefulness.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "purpose-exchange",
+      "title": "The Purpose Exchange",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "The Purpose Exchange"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Institutions fund socially valuable roles outside ordinary employment.",
+      "institutionalConsequence": "People compete for administratively legible purpose.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "uncanny-concierge-fraud",
+      "title": "Uncanny Concierge Fraud",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Uncanny Concierge Fraud"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Personal agents make complex services easier to navigate.",
+      "institutionalConsequence": "Trusted assistance becomes a channel for synthetic impersonation.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "synthetic-research-laundering",
+      "title": "Synthetic Research Laundering",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Synthetic Research Laundering"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Automated research accelerates discovery and review.",
+      "institutionalConsequence": "Generated consensus can hide the absence of independent evidence.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "bootleg-compute-malls",
+      "title": "Bootleg Compute Malls",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Bootleg Compute Malls"
+      ],
+      "causalThreadIds": [
+        "models-to-borders"
+      ],
+      "publicBenefit": "Informal markets keep capability available outside incumbent platforms.",
+      "institutionalConsequence": "Unlicensed capacity becomes inseparable from smuggling and enforcement.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "predictive-dismissal",
+      "title": "Predictive Dismissal",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Predictive Dismissal"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Forecasting can redirect workers before organizational failure.",
+      "institutionalConsequence": "People lose standing for futures they have not enacted.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "education-generation-detection-economy",
+      "title": "Education Generation-and-Detection Economy",
+      "eraId": "progress",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Education Generation-and-Detection Economy"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Automated generation and assessment broaden instructional support.",
+      "institutionalConsequence": "Education becomes a contest between synthetic production and verification.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "manual-operations-retirement",
+      "title": "Manual Operations Retirement",
+      "eraId": "capacity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Manual Operations Retirement"
+      ],
+      "causalThreadIds": [
+        "automation-to-liability"
+      ],
+      "publicBenefit": "Automated systems outperform expensive manual fallbacks.",
+      "institutionalConsequence": "Human override remains legal after becoming physically impossible.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "casualty-settlement-network",
+      "title": "Casualty Settlement Network",
+      "eraId": "capacity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Casualty Settlement Network"
+      ],
+      "causalThreadIds": [
+        "automation-to-liability"
+      ],
+      "publicBenefit": "Modeled settlements preserve infrastructure and reduce battlefield disruption.",
+      "institutionalConsequence": "Administrative stability removes pressure to end the conflict.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "weather-allocation-market",
+      "title": "The Weather Allocation Market",
+      "eraId": "capacity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "The Weather Allocation Market"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "Atmospheric coordination improves cooling, generation, and water resilience.",
+      "institutionalConsequence": "Local weather becomes privately allocated capacity.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "non-interference-office",
+      "title": "Non-Interference Office",
+      "eraId": "authority",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Non-Interference Office"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Communities retain self-government despite access to powerful assistance.",
+      "institutionalConsequence": "Every intervention can establish dependency or disguise conquest.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "nonhuman-standing-commission",
+      "title": "Nonhuman Standing Commission",
+      "eraId": "continuity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Nonhuman Standing Commission"
+      ],
+      "causalThreadIds": [
+        "utilities-to-standing"
+      ],
+      "publicBenefit": "Unfamiliar forms of intelligence receive a route to legal recognition.",
+      "institutionalConsequence": "Human recognizability remains the admission test for nonhuman claims.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "entanglement-custody",
+      "title": "Entanglement Custody",
+      "eraId": "continuity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Entanglement Custody"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Certification makes otherwise irreproducible outcomes administratively usable.",
+      "institutionalConsequence": "One authority decides which physical history is binding.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    },
+    {
+      "id": "consciousness-efficiency-review",
+      "title": "Consciousness Efficiency Review",
+      "eraId": "continuity",
+      "disposition": "research-backlog",
+      "concepts": [
+        "Consciousness Efficiency Review"
+      ],
+      "causalThreadIds": [],
+      "publicBenefit": "Institutions avoid creating unnecessary suffering or liability.",
+      "institutionalConsequence": "Administrative efficiency decides whether consciousness matters.",
+      "surfaceBindings": [],
+      "mechanicPreservation": {
+        "status": "not-mapped",
+        "summary": "No baseline surface is authorized."
+      },
+      "deploymentProfiles": [
+        "internal-review"
+      ]
+    }
+  ]
+}

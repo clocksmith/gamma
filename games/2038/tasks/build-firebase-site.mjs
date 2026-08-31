@@ -11,11 +11,12 @@ import { execFile } from "node:child_process";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import { loadEraSituationLedger } from "./content/validate-era-situation-ledger.mjs";
 
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dirname, "..");
 const gammaRoot = resolve(projectRoot, "../..");
-const defaultOutputRoot = resolve(projectRoot, "dist/firebase");
+const defaultProfileId = "public-playtest";
 const publicBase = "";
 
 export const crawlerMeta = [
@@ -25,10 +26,16 @@ export const crawlerMeta = [
   '<meta name="referrer" content="no-referrer">'
 ].join("\n");
 
-const staticReviewBanner = `<aside class="published-review-notice" role="note">
-  Published review copy. Deterministic play runs entirely in this browser.
-  The private local bridge is optional for Claude, Codex, and server-backed simulations.
+function publicationBanner(profileId) {
+  return profileId === "internal-review"
+    ? `<aside class="published-review-notice" role="note">
+  Internal review copy. This artifact is not access-controlled and is not approved for public deployment.
+</aside>`
+    : `<aside class="published-review-notice" role="note">
+  Public playtest copy. Deterministic play runs entirely in this browser.
+  The private local bridge is optional for Claude and Codex opponents.
 </aside>`;
+}
 
 const staticReviewStyle = `<style>
 .published-review-notice {
@@ -49,13 +56,17 @@ export function protectHtml(html) {
   return html.replace("<head>", `<head>\n${crawlerMeta}`);
 }
 
-export function rewritePrototypeHtml(html, { kind }) {
+export function rewritePrototypeHtml(html, { kind, profileId = defaultProfileId }) {
   let rewritten = protectHtml(html)
     .replace(
       "</head>",
       `${staticReviewStyle}\n</head>`
     )
-    .replace("<body>", `<body>\n${staticReviewBanner}`)
+    .replace("<body>", `<body>\n${publicationBanner(profileId)}`)
+    .replace(
+      profileId === "public-playtest" ? /\s*<a href="\/lab">[^<]*<\/a>/ : /$^/,
+      ""
+    )
     .replaceAll('href="/web/', `href="${publicBase}/web/`)
     .replaceAll('src="/web/', `src="${publicBase}/web/`)
     .replaceAll('href="/docs/', `href="${publicBase}/docs/`)
@@ -130,8 +141,19 @@ ${entries.map(pageListItem).join("\n")}
     .join("\n");
 }
 
-export function buildIndexHtml({ identity, pages, library = false, worldCopy = null }) {
-  const title = library ? "Mandate 2038 · Supporting material" : "Mandate 2038 · Play and review";
+export function buildIndexHtml({
+  identity,
+  pages,
+  feedbackUrl,
+  profileId = defaultProfileId,
+  library = false,
+  worldCopy = null
+}) {
+  const title = library
+    ? "Mandate 2038 · Supporting material"
+    : profileId === "internal-review"
+      ? "Mandate 2038 · Internal review"
+      : "Mandate 2038 · Public playtest";
   const introduction = library
     ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
     : worldCopy?.box
@@ -139,6 +161,9 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
       : "The four documents required to set up and play Default Game.";
   const routeLink = library
     ? '<p><a href="../">Return to Mandate 2038.</a></p>'
+    : "";
+  const feedbackLink = feedbackUrl
+    ? `<p class="feedback"><a href="${escapeHtml(feedbackUrl)}">Send playtest feedback</a></p>`
     : "";
   const worldPrimer = !library && Array.isArray(worldCopy?.worldPrimer)
     ? `<section class="world-primer" aria-labelledby="world-primer-title">
@@ -170,6 +195,8 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
     li.primary-action a { font-size:1.5rem; }
     .world-primer { margin-top:3rem; padding-top:.5rem; border-top:1px solid var(--line); }
     .world-primer p { margin:.65rem 0; color:var(--muted); }
+    .feedback { margin-top:2.5rem; }
+    .feedback a { color:var(--accent); }
     footer { margin-top:2.5rem; color:var(--muted); font-size:.72rem; overflow-wrap:anywhere; }
     footer code { color:var(--ink); }
   </style>
@@ -181,6 +208,7 @@ export function buildIndexHtml({ identity, pages, library = false, worldCopy = n
   ${renderPageGroups(pages)}
   ${worldPrimer}
   ${routeLink}
+  ${feedbackLink}
   <footer>
     Rules <code>${escapeHtml(identity.rulesVersion)}</code> ·
     Executable <code>${escapeHtml(identity.executableVersion)}</code> ·
@@ -226,15 +254,23 @@ async function htmlFiles(directory) {
     .sort();
 }
 
-async function copyCanonicalRuntimeArtifacts(outputRoot) {
+async function copyCanonicalRuntimeArtifacts(outputRoot, requestedArtifacts) {
   const graph = JSON.parse(
     await readFile(resolve(projectRoot, "content/graph.json"), "utf8")
   );
-  const runtimeTargets = graph.artifacts
+  const declaredRuntimeTargets = graph.artifacts
     .map((artifact) => artifact.target)
     .filter((target) => /^dist\/runtime\/[^/]+\.json$/.test(target));
+  const runtimeTargets = requestedArtifacts.includes("*")
+    ? declaredRuntimeTargets
+    : requestedArtifacts;
   if (runtimeTargets.length === 0) {
     throw new Error("Content graph declares no publishable runtime artifacts.");
+  }
+  for (const relative of runtimeTargets) {
+    if (!declaredRuntimeTargets.includes(relative)) {
+      throw new Error(`Deployment profile references an undeclared runtime artifact: ${relative}`);
+    }
   }
   for (const relative of runtimeTargets) {
     const target = resolve(outputRoot, relative);
@@ -244,14 +280,40 @@ async function copyCanonicalRuntimeArtifacts(outputRoot) {
   return runtimeTargets;
 }
 
-function parseArguments(values) {
-  const index = values.indexOf("--output-root");
-  if (index === -1) return { outputRoot: defaultOutputRoot };
-  if (!values[index + 1]) throw new TypeError("--output-root requires a path.");
-  return { outputRoot: resolve(values[index + 1]) };
+function argumentValue(values, name) {
+  const index = values.indexOf(name);
+  if (index === -1) return undefined;
+  if (!values[index + 1]) throw new TypeError(`${name} requires a value.`);
+  return values[index + 1];
 }
 
-export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {}) {
+function parseArguments(values) {
+  const outputRoot = argumentValue(values, "--output-root");
+  return {
+    profileId: argumentValue(values, "--profile") || defaultProfileId,
+    ...(outputRoot ? { outputRoot: resolve(outputRoot) } : {})
+  };
+}
+
+async function copyWebSurface(outputRoot, profile) {
+  const sourceRoot = resolve(projectRoot, "web");
+  const targetRoot = resolve(outputRoot, "web");
+  if (profile.interfaces.includes("simulation-lab")) {
+    await cp(sourceRoot, targetRoot, { recursive: true });
+    return;
+  }
+  await mkdir(targetRoot, { recursive: true });
+  for (const name of ["api-client.js", "app.js", "favicon.svg", "styles.css"]) {
+    await cp(resolve(sourceRoot, name), resolve(targetRoot, name));
+  }
+  await cp(resolve(sourceRoot, "src"), resolve(targetRoot, "src"), { recursive: true });
+}
+
+export async function buildFirebaseSite({ outputRoot, profileId = defaultProfileId } = {}) {
+  const ledger = await loadEraSituationLedger();
+  const profile = ledger.deploymentProfiles[profileId];
+  if (!profile) throw new TypeError(`Unknown deployment profile: ${profileId}`);
+  outputRoot = outputRoot || resolve(projectRoot, profile.outputRoot);
   if (outputRoot === gammaRoot || outputRoot === resolve(gammaRoot, "web")) {
     throw new RangeError("Refusing to replace a repository or Firebase web root.");
   }
@@ -274,6 +336,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
 
   const docsSource = resolve(projectRoot, "dist/site/docs");
   const docsTarget = resolve(outputRoot, "docs");
+  const includeAllDocuments = profile.documents.includes("*");
   const defaultGamePlayKit = new Set([
     "core-rules.html",
     "map-reference.html",
@@ -282,6 +345,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   ]);
   await mkdir(docsTarget, { recursive: true });
   for (const name of await htmlFiles(docsSource)) {
+    if (!includeAllDocuments && !profile.documents.includes(name)) continue;
     await copyProtectedHtml(resolve(docsSource, name), resolve(docsTarget, name));
     const title = name === "index.html"
       ? "Documentation reader"
@@ -325,28 +389,25 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
                 ? "Default Game box contents and Advanced-only exclusions."
         : "Design, testing, and implementation record."
     });
-    if (defaultGamePlayKit.has(name)) {
-      await copyProtectedHtml(
-        resolve(docsSource, name),
-        resolve(outputRoot, name)
-      );
-    }
   }
 
-  for (const [sourceName, targetName, title, description] of [
+  for (const [galleryId, sourceName, targetName, title, description] of [
     [
+      "complete",
       "gallery.html",
       "gallery.html",
       "Complete content gallery",
       "All baseline and deferred cards with player-facing text and art direction."
     ],
     [
+      "baseline",
       "gallery-baseline.html",
       "gallery-baseline.html",
       "Baseline component gallery",
       "Only components used by the controlled physical-test candidate."
     ]
   ]) {
+    if (!profile.galleries.includes(galleryId)) continue;
     await copyProtectedHtml(
       resolve(projectRoot, "dist/site", sourceName),
       resolve(outputRoot, targetName)
@@ -360,15 +421,9 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     });
   }
 
-  await cp(resolve(projectRoot, "web"), resolve(outputRoot, "web"), {
-    recursive: true
-  });
+  await copyWebSurface(outputRoot, profile);
   const prototypeIndex = await readFile(
     resolve(projectRoot, "dist/site/index.html"),
-    "utf8"
-  );
-  const simulationIndex = await readFile(
-    resolve(projectRoot, "dist/site/simulation.html"),
     "utf8"
   );
   const firstGameGuide = await readFile(
@@ -377,29 +432,40 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   );
   await writeFile(
     resolve(outputRoot, "web/index.html"),
-    `${rewritePrototypeHtml(prototypeIndex, { kind: "game" })}\n`
-  );
-  await writeFile(
-    resolve(outputRoot, "lab.html"),
-    `${rewritePrototypeHtml(simulationIndex, { kind: "simulation" })}\n`
+    `${rewritePrototypeHtml(prototypeIndex, { kind: "game", profileId })}\n`
   );
   await writeFile(
     resolve(outputRoot, "first-game-guide.html"),
-    `${rewritePrototypeHtml(firstGameGuide, { kind: "guide" })}\n`
+    `${rewritePrototypeHtml(firstGameGuide, { kind: "guide", profileId })}\n`
   );
-  for (const moduleName of ["app.js", "first-game-guide.js", "simulation-app.js"]) {
+  const rewrittenModules = profile.interfaces.includes("simulation-lab")
+    ? ["app.js", "first-game-guide.js", "simulation-app.js"]
+    : ["app.js"];
+  for (const moduleName of rewrittenModules) {
     const source = await readFile(resolve(projectRoot, "web", moduleName), "utf8");
     await writeFile(
       resolve(outputRoot, "web", moduleName),
       rewritePrototypeModule(source)
     );
   }
-  const runtimeArtifacts = await copyCanonicalRuntimeArtifacts(outputRoot);
+  if (profile.interfaces.includes("simulation-lab")) {
+    const simulationIndex = await readFile(
+      resolve(projectRoot, "dist/site/simulation.html"),
+      "utf8"
+    );
+    await writeFile(
+      resolve(outputRoot, "lab.html"),
+      `${rewritePrototypeHtml(simulationIndex, { kind: "simulation", profileId })}\n`
+    );
+  }
+  const runtimeArtifacts = await copyCanonicalRuntimeArtifacts(
+    outputRoot,
+    profile.runtimeArtifacts
+  );
   const publishedSimulationModules = [
     "cancellation.js",
     "content/simulation-copy.js",
     "contracts/decision-contract.js",
-    "contracts/report-migrations.js",
     "environment/core-economy-match.js",
     "environment/rules-variant.js",
     "environment/selected-rules-match.js",
@@ -410,34 +476,43 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     "runtime/interactive-game-core.js",
     "scenarios/agi-declaration-window.js"
   ];
+  if (profile.interfaces.includes("simulation-lab")) {
+    publishedSimulationModules.push("contracts/report-migrations.js");
+  }
   for (const relative of publishedSimulationModules) {
     const target = resolve(outputRoot, "lab", relative);
     await mkdir(dirname(target), { recursive: true });
     await cp(resolve(projectRoot, "lab", relative), target);
   }
-  pages.unshift(
-    {
+  const interfacePages = [];
+  if (profile.interfaces.includes("playable-game")) {
+    interfacePages.push({
       group: "Start here",
       kind: "Playable interface",
       title: "Play the game",
       href: "web/index.html",
       description: "Play against browser-native deterministic opponents; the local bridge is optional for Claude or Codex."
-    },
-    {
+    });
+  }
+  if (profile.interfaces.includes("first-game-guide")) {
+    interfacePages.push({
       group: "Start here",
       kind: "Teaching interface",
       title: "First Game Guide",
       href: "first-game-guide.html",
       description: "A fixed first-Era Default Play lesson using the canonical game components."
-    },
-    {
+    });
+  }
+  if (profile.interfaces.includes("simulation-lab")) {
+    interfacePages.push({
       group: "Development and evidence",
       kind: "Simulation interface",
       title: "Simulation lab",
       href: "lab.html",
       description: "Run local simulations from the deployed browser or load and replay saved reports."
-    }
-  );
+    });
+  }
+  pages.unshift(...interfacePages);
 
   const publishedWorldCopy = JSON.parse(
     await readFile(resolve(projectRoot, "dist/runtime/world-copy.json"), "utf8")
@@ -445,27 +520,38 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   const rootHtml = buildIndexHtml({
     identity,
     pages,
+    feedbackUrl: profile.feedbackUrl,
+    profileId,
     worldCopy: publishedWorldCopy
   });
   await writeFile(resolve(outputRoot, "index.html"), `${rootHtml}\n`);
-  const libraryPages = pages
-    .filter((page) => page.group !== "Required Default Game Play Kit")
-    .map((page) => ({ ...page, href: `../${page.href}` }));
-  const libraryHtml = buildIndexHtml({
-    identity,
-    pages: libraryPages,
-    library: true,
-    worldCopy: publishedWorldCopy
-  });
-  await mkdir(resolve(outputRoot, "library"), { recursive: true });
-  await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);
+  if (profileId === "internal-review") {
+    const libraryPages = pages
+      .filter((page) => page.group !== "Required Default Game Play Kit")
+      .map((page) => ({ ...page, href: `../${page.href}` }));
+    const libraryHtml = buildIndexHtml({
+      identity,
+      pages: libraryPages,
+      feedbackUrl: profile.feedbackUrl,
+      profileId,
+      library: true,
+      worldCopy: publishedWorldCopy
+    });
+    await mkdir(resolve(outputRoot, "library"), { recursive: true });
+    await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);
+  }
   const manifest = {
-    schemaVersion: 1,
-    artifactKind: "firebase-static-review-site",
+    schemaVersion: 2,
+    artifactKind: profileId === "public-playtest"
+      ? "firebase-public-playtest-site"
+      : "internal-review-site",
+    deploymentProfile: profileId,
+    deployable: profile.deployable,
     publicBase,
     identity,
+    feedbackUrl: profile.feedbackUrl,
     crawlerPolicy: {
-      accessControlled: false,
+      accessControlled: profile.accessControlled,
       robotsPath: "/robots.txt",
       disallowPath: `${publicBase}/`,
       xRobotsTag: "noindex, nofollow, noarchive, nosnippet, noimageindex",
@@ -474,6 +560,11 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     pages,
     runtimeArtifacts
   };
+  await writeFile(
+    resolve(outputRoot, "release-identity.json"),
+    `${JSON.stringify({ schemaVersion: 1, deploymentProfile: profileId, ...identity }, null, 2)}\n`
+  );
+  await writeFile(resolve(outputRoot, "robots.txt"), "User-agent: *\nDisallow: /\n");
   await writeFile(
     resolve(outputRoot, "site-manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`
@@ -486,6 +577,6 @@ const isCli = process.argv[1] &&
 if (isCli) {
   const result = await buildFirebaseSite(parseArguments(process.argv.slice(2)));
   process.stdout.write(
-    `firebase-site: rendered ${result.manifest.pages.length + 1} HTML surfaces to ${result.outputRoot}\n`
+    `firebase-site: rendered ${result.manifest.deploymentProfile} with ${result.manifest.pages.length + 1} HTML surfaces to ${result.outputRoot}\n`
   );
 }

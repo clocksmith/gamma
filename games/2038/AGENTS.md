@@ -49,7 +49,9 @@ systems and incentives, not jokes or allegations about real people.
   not quotes, legal advice, or authorization to manufacture.
 - `docs/thematic-content-bible.md` is the sole authority for lore, editorial
   method, concept placement, research provenance, tone, and writing-layer
-  contracts. Do not create a parallel lore scratchpad or thematic authority.
+  contracts. `content/data/era-situation-ledger.json` is its machine-enforced
+  traceability and deployment projection, not a parallel lore authority. Do
+  not create a parallel lore scratchpad or thematic authority.
 - `docs/simulation-and-player-strategies.md` documents the executable
   simulation surface and must name any gap from the canonical rulebook.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,

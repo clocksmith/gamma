@@ -11,6 +11,9 @@ The content graph composes separately owned mechanics and player copy.
   `copy/world-and-institutions.md` are separate Advanced Play and setting
   companions; `copy/rule-change-register.md` records the profile decisions.
 - The JSON files under `data/` own mechanics and stable identity.
+- `data/era-situation-ledger.json` projects the thematic Bible's settled Era
+  decisions into one enforceable scenario, surface, copy, mechanic, and
+  deployment contract.
 - `runtime/` owns browser UI, simulation, and player-strategy copy.
 - `graph.json` declares every generated artifact.
 - `player-copy-contract.json` binds every player-copy subtree to its actual
@@ -61,6 +64,13 @@ npm run content:lint:provenance
 
 Never hand-edit generated files listed as targets in `graph.json`. The release
 gate rejects drift between the semantic sources and those outputs.
+
+The Era situation validator resolves every deployed Era panel, Headline,
+Mandate, Program, faction ability, and ending against the canonical data and
+copy sources. It rejects adopted scenarios without valid bindings, deferred
+scenarios entering the public baseline, duplicate or missing surfaces, Era
+mismatches, invalid copy references, and unsafe public deployment profiles.
+The generated projection is `dist/contracts/era-situation-ledger.json`.
 
 The fictional institutions and fictional CEO characters are canonical. Stable
 faction IDs remain internal compatibility keys, while player-facing names live
