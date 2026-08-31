@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.17-test`
+**Rules reference:** `0.8.0-rc.18-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.17-test` test:
+controlled `0.8.0-rc.18-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.16` implements `0.8.0-rc.17-test` under engine coverage
+Executable game `0.14.17` implements `0.8.0-rc.18-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -245,6 +245,13 @@ Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract. The published root now presents the
 playable game as its primary action while keeping the complete generated
 documentation and component galleries available from the same index.
+
+Candidate `0.8.0-rc.18-test` changes no physical mechanic from rc.17.
+Executable `0.14.17` makes the Era/situation ledger the machine authority,
+generates the thematic Bible from the content graph, and separates the
+deployable public playtest from the non-deployable internal review. The npm
+package is now `mandate-2038`; stable legacy game and schema identifiers remain
+unchanged.
 
 Candidate `0.8.0-rc.17-test` changes no physical mechanic from rc.16.
 Executable `0.14.16` binds the published root to the canonical browser icon so

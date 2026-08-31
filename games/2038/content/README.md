@@ -12,6 +12,11 @@ The content graph composes separately owned mechanics and player copy.
   companions; `copy/rule-change-register.md` records the profile decisions.
 - The JSON files under `data/` own mechanics and stable identity.
 - `runtime/` owns browser UI, simulation, and player-strategy copy.
+- `data/era-situation-ledger.json` owns lore admission, Era placement, unique
+  game-surface bindings, mechanic-preservation fingerprints, and publication
+  profiles.
+- `editorial/thematic-content-bible.md` owns editorial prose around that
+  structured contract. The graph generates `docs/thematic-content-bible.md`.
 - `graph.json` declares every generated artifact.
 - `player-copy-contract.json` binds every player-copy subtree to its actual
   box, document, component, or browser surface.

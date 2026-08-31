@@ -184,24 +184,30 @@ test("complexity positioning stays broad, unmeasured, and profile-scoped", async
 });
 
 test("the thematic inventory matches the two-source Power contract", async () => {
-  const bible = await readFile(new URL("docs/thematic-content-bible.md", root), "utf8");
-  assert.match(bible, /## Player-copy design inventory/);
-  assert.match(bible, /## Physical quantity interpretation/);
-  assert.match(bible, /Foldout player aids \| 6 copies containing all 4 panels/);
-  assert.match(bible, /Shared Program cards \/ player Program markers \| 6 \/ 12/);
-  assert.match(bible, /Printed Power contracts \| 3 embedded surfaces/);
-  assert.match(bible, /No replacement\n+or overage allowance has been selected yet/);
-  assert.match(bible, /Ordinary Power contracts \| 2 location-defined contracts/);
-  assert.doesNotMatch(bible, /Ordinary Power contracts \| 4/);
-  assert.match(bible, /Scrutiny cubes \/ captive faction-board sliders \| 60 \/ 36/);
-  assert.match(bible, /Mandate markers \/ AGI Dossier cards \| 6 \/ 24/);
-  assert.match(bible, /Starting-grid identities \| 6 Facilities carry this identity/);
-  assert.doesNotMatch(bible, /Scrutiny \/ Customer markers \| 60 \/ 30/);
+  const [bible, inventory, specification] = await Promise.all([
+    readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
+    readFile(new URL("physical/component-inventory.md", root), "utf8"),
+    readFile(new URL("physical/component-spec.md", root), "utf8")
+  ]);
+  assert.doesNotMatch(bible, /## Player-copy design inventory/);
+  assert.doesNotMatch(bible, /## Physical quantity interpretation/);
+  assert.match(bible, /This Bible\s+does not repeat those counts/);
+  assert.match(inventory, /1 four-panel foldout player aid/);
+  assert.match(inventory, /6 shared Program cards/);
+  assert.match(inventory, /2 Program markers/);
+  assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
+  assert.match(inventory, /10 Scrutiny cubes/);
+  assert.match(inventory, /1 Mandate marker/);
+  assert.match(inventory, /4 Era-labelled AGI Dossier cards/);
+  assert.match(inventory, /starting-grid identifier integrated into Facility 1/);
+  assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
 });
 
-test("one thematic authority governs every lore-bearing surface", async () => {
-  const [bible, prototype, world, tactics, reserve, objectives] = await Promise.all([
+test("one generated lore contract governs every admitted surface", async () => {
+  const [bible, bibleTemplate, ledger, prototype, world, tactics, reserve, objectives] = await Promise.all([
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
+    readFile(new URL("content/editorial/thematic-content-bible.md", root), "utf8"),
+    readJson("content/data/era-situation-ledger.json"),
     readFile(new URL("web/templates/prototype.html", root), "utf8"),
     readJson("dist/runtime/world-copy.json"),
     readJson("dist/runtime/tactics.json"),
@@ -213,14 +219,20 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   await assert.rejects(stat(new URL("dist/site/docs/lore-scratchpad.html", root)), {
     code: "ENOENT"
   });
-  assert.match(bible, /sole editorial authority/);
+  assert.match(bibleTemplate, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
+  assert.match(bible, /machine authority for Era placement, adoption status/);
   assert.match(bible, /## Editorial authority and method/);
   assert.match(bible, /### Research provenance and claim boundary/);
-  assert.match(bible, /### Era-placement ledger/);
-  assert.match(bible, /### Retained editorial backlog/);
   assert.match(bible, /## Whole-game lore atlas/);
+  assert.match(bible, /## Canonical Era and situation ledger/);
+  assert.match(bible, /\*\*43 situations\*\*/);
+  assert.match(bible, /\*\*62 game surfaces\*\*/);
+  assert.doesNotMatch(bible, /### Era-placement ledger/);
+  assert.doesNotMatch(bible, /### Retained editorial backlog/);
+  assert.equal(ledger.scenarios.length, 43);
+  assert.equal(ledger.scenarios.flatMap((scenario) => scenario.bindings).length, 62);
   assert.match(bible, /Bankruptcy Data Estates/);
-  assert.match(bible, /Cognitive Donor Clinics/);
+  assert.match(bible, /Cognitive Donation Becomes Compensable/);
   assert.match(bible, /Metropolitan Mind Trust/);
   assert.match(prototype, /worldCopy\.box\.frontStrapline/);
   assert.match(prototype, /worldCopy\.box\.shortPitch/);

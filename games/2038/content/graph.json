@@ -63,12 +63,21 @@
         "content/copy/world-copy.json"
       ]
     },
-    "uiCopy": "content/runtime/ui-copy.json"
+    "uiCopy": "content/runtime/ui-copy.json",
+    "eraSituations": {
+      "path": "content/data/era-situation-ledger.json",
+      "collection": "scenarios"
+    }
   },
   "artifacts": [
     {
       "source": "content/data/content-manifest.json",
       "target": "dist/runtime/content-manifest.json",
+      "format": "json"
+    },
+    {
+      "source": "content/data/era-situation-ledger.json",
+      "target": "dist/runtime/era-situation-ledger.json",
       "format": "json"
     },
     {
@@ -213,6 +222,12 @@
       "source": "experimental/tactics-rules.md",
       "target": "dist/docs/optional-tactics.md",
       "format": "text"
+    },
+    {
+      "source": "content/editorial/thematic-content-bible.md",
+      "ledger": "content/data/era-situation-ledger.json",
+      "target": "docs/thematic-content-bible.md",
+      "format": "era-situation-bible"
     },
     {
       "source": "web/templates/prototype.html",

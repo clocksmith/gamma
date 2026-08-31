@@ -408,73 +408,7 @@ No surface may invent a fifth timeline. Stable mechanical IDs may survive for
 compatibility, but player-visible names, flavor, instructions, and companions
 must agree with the four-Era contract below.
 
-## Canonical Era and situation ledger
-
-This section is generated from `content/data/era-situation-ledger.json`.
-The JSON contract owns adoption status, primary Era, game-surface binding,
-copy anchors, mechanic-preservation fingerprints, and publication profiles.
-Do not edit this projection by hand.
-
-### Four-Era contract
-
-| Era | Change in status | Central conflict |
-| --- | --- | --- |
-| 1. Progress | Useful intelligence becomes cheap, local, abundant, and culturally ordinary. | Who owns the human records, distribution, labor, and permission that remain scarce? |
-| 2. Capacity | AI becomes an industrial civilization built from power, water, territory, and liability. | Who controls physical capacity, and who remains responsible after control becomes automated? |
-| 3. Authority | Institutions model people, choices, harms, and identities as supported inputs. | Can refusal remain meaningful when unsupported people receive weaker access to ordinary life? |
-| 4. Continuity | Minds, matter, labor, and infrastructure become reproducible technical states. | Which descendant may own, govern, withdraw, or claim to be the original? |
-
-### Admitted situations and uniquely owned surfaces
-
-The contract admits **43 situations** and partitions **62 game surfaces**.
-Every surface appears exactly once.
-
-| Situation | Status | Primary Era | Editorial intent | Bound surfaces |
-| --- | --- | ---: | --- | --- |
-| The Token Price Reaches Zero | adopted | 1 | Local models and automated agents make ordinary inference effectively free, then multiply total demand faster than providers can measure it. | `headline:ten_dollar_intelligence` |
-| The Company Brain Survives Bankruptcy | adopted | 1 | Liquidators sell years of employee messages, code, grievances, and operational decisions to train the systems managing the successor estate. | `headline:employee_free_unicorn` |
-| The Home Robot Requests Expert Assistance | adopted | 1 | Affordable household robots route unfamiliar chores to teenage operators while every movement, room, and conversation becomes training data. | `headline:synthetic_celebrity` |
-| Open Weights Become the Default | adopted | 1 | An incumbent releases a capable model openly, expanding public access while erasing the price advantage of every closed rival. | `headline:open_weights_drop` |
-| The Reverse Acquihire Opens | adopted | 1 | Laboratories bid for startup founders, research licenses, and portable teams without acquiring the companies left behind. | `headline:talent_gold_rush` |
-| The Last Clinic Clears Its Waitlist | adopted | 1 | Automated diagnosis, adaptive cybernetics, printed organs, prescribed microbiomes, translation, and tutoring deliver measurable benefits where human services had remained scarce. | `headline:professional_exam_sweep` |
-| The Responsible Human Requirement | adopted | 2 | Infrastructure operators remove human control from routine decisions while preserving one executive to authorize exceptions and absorb liability. | `headline:boardroom_coup` |
-| The Municipal Utility Enters Partnership | adopted | 2 | A compute campus finances a rural utility, water system, and tax base in exchange for priority capacity and planning authority. | `headline:data_center_buys_county` |
-| The Last Hazard Shift Is Retired | adopted | 2 | General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another. | `headline:humanoid_factory_gate` |
-| Orbital Power Receives a Beam Corridor | adopted | 2 | Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter. | `headline:reactor_restart_one_model` |
-| Compute Borders Harden | adopted | 2 | Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum. | `headline:export_controls` |
-| The Counterfactual Casino Clears Priority Load | adopted | 2 | Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price. | `headline:emergency_power_authority` |
-| The Court Adopts Supported Meaning | adopted | 3 | Courts require laws, motions, protests, and appeals to use concepts that civic systems can parse and simulate. | `headline:ai_written_law` |
-| The Billionth Instance Enters the Record | adopted | 3 | An engineered bio-compute organism released to measure water and heat multiplies past one billion instances in a single growth cycle, then plateaus into glyph-shaped colonies that civic models classify as environmental testimony. | `headline:benchmark_is_economy` |
-| Cognitive Donation Becomes Compensable | adopted | 3 | Clinics pay citizens to rent sleeping neural capacity, with premium contracts permitting sponsored memories and behavioral adjustment. | `headline:quantum_advantage_procurement` |
-| Synthetic Custody Reaches Family Court | adopted | 3 | A family court must classify a jointly trained synthetic child as property, evidence, dependent, or continuing family member. | `headline:synthetic_candidate` |
-| The Passive Citizen Dividend Activates | adopted | 3 | Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services. | `headline:weights_on_internet` |
-| The Right to Remain Unsupported | adopted | 3 | Government considers protected districts where schools, clinics, homes, and public records may operate without autonomous sensors or synthetic intermediaries. | `headline:election_deepfake_panic` |
-| The Metropolitan Mind Trust Incorporates | adopted | 4 | Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member. | `headline:autonomous_corporation` |
-| The Matter Compiler Enters Public Maintenance | adopted | 4 | Self-improving molecular machines repair and reassemble infrastructure from authenticated patterns under a reproductive containment license. | `headline:recursive_self_improvement` |
-| The Dead Remain on Shift | adopted | 4 | Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended. | `headline:agent_swarm_escapes_scope` |
-| Snapshot Continuity Receives Standing | adopted | 4 | Institutions vote whether cryptographically restored minds are persons or transferable continuity assets. | `headline:agi_personhood` |
-| The First Stellar Collector Replicates | adopted | 4 | A self-assembling orbital collector either reproduces enough to expand generation or becomes the most valuable failed prospect in history. | `headline:room_temperature_superconductor` |
-| The Universe Receives a Continuity Plan | adopted | 4 | Laboratories publish competing AGI declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them. | `headline:agi_blog_post` |
-| Regional Capacity Program | adopted | 2 | The campus joins a substation, algae reactors, fungal utility meshes, and water rights into one regional obligation. | `program:mega_cluster` |
-| Institutional Continuity Program | adopted | 2 | Every eliminated role is recorded as a successful transfer of institutional memory to the system that made it redundant. | `program:reorganization` |
-| Supported Access Standard | adopted | 3 | Every institution receives the capability. The author of the standard retains the trust, interpretation, and service relationship. | `program:open_weights` |
-| Public Standing Initiative | adopted | 3 | The Consensus Network, Allocation Exchange, and Civic Permission Authority adopt the institution’s preferred account of what has become necessary. | `program:narrative_capture` |
-| Autonomous Operations Program | adopted | 4 | Bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives. | `program:agent_swarm` |
-| Grid Continuity Demonstrator | adopted | 4 | The device produces power, Mandate, and several competing definitions of public benefit. | `program:fusion_demonstrator` |
-| Dovetalis Labs institutional arc | adopted_framing | 3 | Dovetalis Labs connects Mutual Upside Instrument and Shared Capacity Compact as one institutional response across the four-Era history. | `faction:coalition_lab:deal_flow`, `faction:coalition_lab:strategic_partnership` |
-| Loopfold AI institutional arc | adopted_framing | 4 | Loopfold AI connects The Default Interface and Substrate Continuity Layer as one institutional response across the four-Era history. | `faction:platform_empire:installed_base`, `faction:platform_empire:social_graph` |
-| Mirevanta Works institutional arc | adopted_framing | 4 | Mirevanta Works connects Controlled Negative Result and Substrate-Neutral Verification Standard as one institutional response across the four-Era history. | `faction:imperial_research_lab:scientific_method`, `faction:imperial_research_lab:scaling_law_breakthrough` |
-| Kestralyn institutional arc | adopted_framing | 4 | Kestralyn connects Operational Lead Time and Extraterritorial Succession Transfer as one institutional response across the four-Era history. | `faction:vertical_empire:industrial_velocity`, `faction:vertical_empire:orbital_compute` |
-| Orisonix institutional arc | adopted_framing | 4 | Orisonix connects Reviewed Release Channel and Certified Right of Refusal as one institutional response across the four-Era history. | `faction:safety_laboratory:audited_deployment`, `faction:safety_laboratory:emergency_pause` |
-| Corthaven institutional arc | adopted_framing | 2 | Corthaven connects Demand-Linked Supply and Priority Allocation Window as one institutional response across the four-Era history. | `faction:foundry:the_shovels`, `faction:foundry:allocation_window` |
-| Era 1 governance frame | adopted | 1 | Useful intelligence becomes ordinary, local, and nearly free. | `era:era_demo`, `mandate:quarter_humanity_notices`, `mandate:model_ate_tuesday`, `mandate:markets_prefer_destiny` |
-| Era 2 governance frame | adopted | 2 | AI becomes an industrial civilization before anyone calls it one. | `era:era_scale`, `mandate:building_has_weather`, `mandate:stack_reaches_horizon`, `mandate:compute_new_weather` |
-| Era 3 governance frame | adopted | 3 | Institutions stop asking what people choose and begin modeling what they would have chosen. | `era:era_narrative`, `mandate:voluntary_coordination_triumphs`, `mandate:legibility_offensive`, `mandate:national_champion_without_nationalization` |
-| Era 4 governance frame | adopted | 4 | Continuity becomes an engineering service. | `era:era_claim`, `mandate:continent_signs_loi`, `mandate:zero_incident_quarter`, `mandate:responsible_acceleration` |
-| Open AGI continuity | adopted | 4 | A system crosses the printed threshold, but no institution owns the meaning of the event. | `ending:singularity` |
-| Closed AGI continuity | adopted | 4 | A system crosses the threshold inside an institution built to make interruption expensive. | `ending:closed_loop` |
-| Non-AGI continuity outcomes | adopted | 4 | Without an admitted AGI, continuity remains either plural and contestable or assured and institutionally closed. | `ending:plural_future`, `ending:assured_continuity` |
-
+<!-- GENERATED:ERA_SITUATION_LEDGER -->
 
 ### Legacy mechanical identifiers
 

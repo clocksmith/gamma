@@ -1,0 +1,1075 @@
+{
+  "schemaVersion": 1,
+  "authority": "canonical-era-situation-contract",
+  "purpose": "Bind every admitted lore situation to one Era, exact player copy, preserved mechanics, and an explicit publication boundary.",
+  "eras": [
+    {
+      "number": 1,
+      "id": "progress",
+      "name": "Progress",
+      "changeInStatus": "Useful intelligence becomes cheap, local, abundant, and culturally ordinary.",
+      "centralConflict": "Who owns the human records, distribution, labor, and permission that remain scarce?"
+    },
+    {
+      "number": 2,
+      "id": "capacity",
+      "name": "Capacity",
+      "changeInStatus": "AI becomes an industrial civilization built from power, water, territory, and liability.",
+      "centralConflict": "Who controls physical capacity, and who remains responsible after control becomes automated?"
+    },
+    {
+      "number": 3,
+      "id": "authority",
+      "name": "Authority",
+      "changeInStatus": "Institutions model people, choices, harms, and identities as supported inputs.",
+      "centralConflict": "Can refusal remain meaningful when unsupported people receive weaker access to ordinary life?"
+    },
+    {
+      "number": 4,
+      "id": "continuity",
+      "name": "Continuity",
+      "changeInStatus": "Minds, matter, labor, and infrastructure become reproducible technical states.",
+      "centralConflict": "Which descendant may own, govern, withdraw, or claim to be the original?"
+    }
+  ],
+  "surfaceContract": {
+    "scenarioCount": 43,
+    "uniqueSurfaceCount": 62,
+    "typeCounts": {
+      "headline": 24,
+      "mandate": 12,
+      "program": 6,
+      "faction": 12,
+      "era": 4,
+      "ending": 4
+    }
+  },
+  "deploymentProfiles": {
+    "public-playtest": {
+      "deployable": true,
+      "artifactKind": "mandate-2038-public-playtest",
+      "outputRoot": "dist/firebase-public",
+      "documentFiles": [
+        "advanced-play.html",
+        "card-reference.html",
+        "component-reference.html",
+        "core-rules.html",
+        "map-reference.html",
+        "world-and-institutions.html"
+      ],
+      "siteSurfaces": [
+        "game",
+        "first-game-guide",
+        "baseline-gallery"
+      ],
+      "runtimeArtifacts": [
+        "dist/runtime/escalations.json",
+        "dist/runtime/factions.json",
+        "dist/runtime/game-config.json",
+        "dist/runtime/headlines.json",
+        "dist/runtime/mandates.json",
+        "dist/runtime/player-strategies.json",
+        "dist/runtime/reference-cards.json",
+        "dist/runtime/secret-objectives.json",
+        "dist/runtime/simulation-copy.json",
+        "dist/runtime/tactics.json",
+        "dist/runtime/ui-copy.json"
+      ],
+      "webFiles": [
+        "api-client.js",
+        "app.js",
+        "favicon.svg",
+        "first-game-guide.css",
+        "first-game-guide.js",
+        "src/engine.js",
+        "src/hex-layout.js",
+        "styles.css"
+      ],
+      "labModules": [
+        "cancellation.js",
+        "content/simulation-copy.js",
+        "contracts/decision-contract.js",
+        "contracts/report-migrations.js",
+        "environment/core-economy-match.js",
+        "environment/rules-variant.js",
+        "environment/selected-rules-match.js",
+        "personas/player-profile.js",
+        "policies/weighted-policy.js",
+        "rules/local-power-allocation.js",
+        "runtime/create-browser-interactive-game.js",
+        "runtime/interactive-game-core.js",
+        "scenarios/agi-declaration-window.js"
+      ]
+    },
+    "internal-review": {
+      "deployable": false,
+      "artifactKind": "mandate-2038-internal-review",
+      "outputRoot": "dist/internal-review",
+      "documentFiles": [
+        "advanced-play.html",
+        "balance-and-exploitability.html",
+        "card-reference.html",
+        "comparisons.html",
+        "complexity-reduction-protocol.html",
+        "component-inventory.html",
+        "component-reference.html",
+        "component-spec.html",
+        "components.html",
+        "core-rules.html",
+        "defect-investigation-and-closure.html",
+        "design-decisions.html",
+        "index.html",
+        "manufacturing-and-publishing-study.html",
+        "map-reference.html",
+        "optional-tactics.html",
+        "playtesting-and-evidence.html",
+        "rule-change-register.html",
+        "simulation-and-player-strategies.html",
+        "thematic-content-bible.html",
+        "world-and-institutions.html"
+      ],
+      "siteSurfaces": [
+        "game",
+        "first-game-guide",
+        "baseline-gallery",
+        "complete-gallery",
+        "simulation-lab"
+      ],
+      "runtimeArtifacts": [
+        "dist/runtime/content-manifest.json",
+        "dist/runtime/era-situation-ledger.json",
+        "dist/runtime/escalations.json",
+        "dist/runtime/factions.json",
+        "dist/runtime/game-config.json",
+        "dist/runtime/headlines.json",
+        "dist/runtime/mandates.json",
+        "dist/runtime/player-strategies.json",
+        "dist/runtime/reference-cards.json",
+        "dist/runtime/reserve-specialists.json",
+        "dist/runtime/rule-change-register.json",
+        "dist/runtime/secret-objectives.json",
+        "dist/runtime/simulation-copy.json",
+        "dist/runtime/tactics.json",
+        "dist/runtime/ui-copy.json",
+        "dist/runtime/world-copy.json"
+      ],
+      "webFiles": [
+        "README.md",
+        "api-client.js",
+        "app.js",
+        "favicon.svg",
+        "first-game-guide.css",
+        "first-game-guide.js",
+        "report-visualizations.js",
+        "simulation-app.js",
+        "simulation.css",
+        "src/engine.js",
+        "src/hex-layout.js",
+        "styles.css",
+        "templates/first-game-guide.html",
+        "templates/prototype.html",
+        "templates/simulation.html"
+      ],
+      "labModules": [
+        "cancellation.js",
+        "content/simulation-copy.js",
+        "contracts/decision-contract.js",
+        "contracts/report-migrations.js",
+        "environment/core-economy-match.js",
+        "environment/rules-variant.js",
+        "environment/selected-rules-match.js",
+        "personas/player-profile.js",
+        "policies/weighted-policy.js",
+        "rules/local-power-allocation.js",
+        "runtime/create-browser-interactive-game.js",
+        "runtime/interactive-game-core.js",
+        "scenarios/agi-declaration-window.js"
+      ]
+    }
+  },
+  "scenarios": [
+    {
+      "id": "event_ten_dollar_intelligence",
+      "title": "The Token Price Reaches Zero",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Local models and automated agents make ordinary inference effectively free, then multiply total demand faster than providers can measure it.",
+      "bindings": [
+        {
+          "surfaceId": "headline:ten_dollar_intelligence",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Token Price Reaches Zero"
+          ],
+          "mechanicsFingerprint": "sha256:c1204047291e9c57068480fc21731728a4dd05cd779fa0479d7fb973b334b9de"
+        }
+      ]
+    },
+    {
+      "id": "event_employee_free_unicorn",
+      "title": "The Company Brain Survives Bankruptcy",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Liquidators sell years of employee messages, code, grievances, and operational decisions to train the systems managing the successor estate.",
+      "bindings": [
+        {
+          "surfaceId": "headline:employee_free_unicorn",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Company Brain Survives Bankruptcy"
+          ],
+          "mechanicsFingerprint": "sha256:52a25e8b948ac3b14047e0098f0bb676ead4cafe5d30b175e887416c7cb837dc"
+        }
+      ]
+    },
+    {
+      "id": "event_synthetic_celebrity",
+      "title": "The Home Robot Requests Expert Assistance",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Affordable household robots route unfamiliar chores to teenage operators while every movement, room, and conversation becomes training data.",
+      "bindings": [
+        {
+          "surfaceId": "headline:synthetic_celebrity",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Home Robot Requests Expert Assistance"
+          ],
+          "mechanicsFingerprint": "sha256:1b26010bdf6f93d7cd9c8d5d28bb96683d293f358889ecfe9be6cd896ba28181"
+        }
+      ]
+    },
+    {
+      "id": "event_open_weights_drop",
+      "title": "Open Weights Become the Default",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "An incumbent releases a capable model openly, expanding public access while erasing the price advantage of every closed rival.",
+      "bindings": [
+        {
+          "surfaceId": "headline:open_weights_drop",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Open Weights Become the Default"
+          ],
+          "mechanicsFingerprint": "sha256:52e61ca844fe81cf3386a834fb7f7e749fd2b67d244f3a871e0568faab6827ee"
+        }
+      ]
+    },
+    {
+      "id": "event_talent_gold_rush",
+      "title": "The Reverse Acquihire Opens",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Laboratories bid for startup founders, research licenses, and portable teams without acquiring the companies left behind.",
+      "bindings": [
+        {
+          "surfaceId": "headline:talent_gold_rush",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Reverse Acquihire Opens"
+          ],
+          "mechanicsFingerprint": "sha256:c53c5a51643ec860b141e711a98b848b09c1cce77f12104a88470997f4db90fb"
+        }
+      ]
+    },
+    {
+      "id": "event_professional_exam_sweep",
+      "title": "The Last Clinic Clears Its Waitlist",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Automated diagnosis, adaptive cybernetics, printed organs, prescribed microbiomes, translation, and tutoring deliver measurable benefits where human services had remained scarce.",
+      "bindings": [
+        {
+          "surfaceId": "headline:professional_exam_sweep",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Last Clinic Clears Its Waitlist"
+          ],
+          "mechanicsFingerprint": "sha256:0fecc7eb33109666c314bc66585fe0bd2b51897b13589bf0e73a006eb8da22d6"
+        }
+      ]
+    },
+    {
+      "id": "event_boardroom_coup",
+      "title": "The Responsible Human Requirement",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "Infrastructure operators remove human control from routine decisions while preserving one executive to authorize exceptions and absorb liability.",
+      "bindings": [
+        {
+          "surfaceId": "headline:boardroom_coup",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Responsible Human Requirement"
+          ],
+          "mechanicsFingerprint": "sha256:a576f5996c824fecf00975ed24dc51e46aec339b084385fe26bd92c268e5618a"
+        }
+      ]
+    },
+    {
+      "id": "event_data_center_buys_county",
+      "title": "The Municipal Utility Enters Partnership",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "A compute campus finances a rural utility, water system, and tax base in exchange for priority capacity and planning authority.",
+      "bindings": [
+        {
+          "surfaceId": "headline:data_center_buys_county",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Municipal Utility Enters Partnership"
+          ],
+          "mechanicsFingerprint": "sha256:11fe72f03e7b217cb8f3caaa99acf05daebd8a68e9fd8cd8115c30cd72383ace"
+        }
+      ]
+    },
+    {
+      "id": "event_humanoid_factory_gate",
+      "title": "The Last Hazard Shift Is Retired",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another.",
+      "bindings": [
+        {
+          "surfaceId": "headline:humanoid_factory_gate",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Last Hazard Shift Is Retired"
+          ],
+          "mechanicsFingerprint": "sha256:ba2b804fe172fde6729d308f3da5440a4e68c049663a14620f33a43bcd48e1be"
+        }
+      ]
+    },
+    {
+      "id": "event_reactor_restart_one_model",
+      "title": "Orbital Power Receives a Beam Corridor",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter.",
+      "bindings": [
+        {
+          "surfaceId": "headline:reactor_restart_one_model",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "Orbital Power Receives a Beam Corridor"
+          ],
+          "mechanicsFingerprint": "sha256:f72ef4cea688e72b945a86bebefa5c2e6b0dcd22983896a49e0a73edc6d987b8"
+        }
+      ]
+    },
+    {
+      "id": "event_export_controls",
+      "title": "Compute Borders Harden",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum.",
+      "bindings": [
+        {
+          "surfaceId": "headline:export_controls",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "Compute Borders Harden"
+          ],
+          "mechanicsFingerprint": "sha256:ba62bf04edbcc440925bbce58fc7bdc76db1d305c5f0fb0e157aedf2b8990cc3"
+        }
+      ]
+    },
+    {
+      "id": "event_emergency_power_authority",
+      "title": "The Counterfactual Casino Clears Priority Load",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price.",
+      "bindings": [
+        {
+          "surfaceId": "headline:emergency_power_authority",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Counterfactual Casino Clears Priority Load"
+          ],
+          "mechanicsFingerprint": "sha256:69c904b6e804ba9749ddef4c0f0c94cbc50bfd6d11a42caa78f831532d45536f"
+        }
+      ]
+    },
+    {
+      "id": "event_ai_written_law",
+      "title": "The Court Adopts Supported Meaning",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Courts require laws, motions, protests, and appeals to use concepts that civic systems can parse and simulate.",
+      "bindings": [
+        {
+          "surfaceId": "headline:ai_written_law",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "The Court Adopts Supported Meaning"
+          ],
+          "mechanicsFingerprint": "sha256:337848e697bbf34830409677a9c3241652581ae9cf8bad194e4875f674fffad1"
+        }
+      ]
+    },
+    {
+      "id": "event_benchmark_is_economy",
+      "title": "The Billionth Instance Enters the Record",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "An engineered bio-compute organism released to measure water and heat multiplies past one billion instances in a single growth cycle, then plateaus into glyph-shaped colonies that civic models classify as environmental testimony.",
+      "bindings": [
+        {
+          "surfaceId": "headline:benchmark_is_economy",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "The Billionth Instance Enters the Record"
+          ],
+          "mechanicsFingerprint": "sha256:6d240a9fb00050be9ec89e1ad446ce904d28413398f558f83b89fe0bc240a8bf"
+        }
+      ]
+    },
+    {
+      "id": "event_quantum_advantage_procurement",
+      "title": "Cognitive Donation Becomes Compensable",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Clinics pay citizens to rent sleeping neural capacity, with premium contracts permitting sponsored memories and behavioral adjustment.",
+      "bindings": [
+        {
+          "surfaceId": "headline:quantum_advantage_procurement",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Cognitive Donation Becomes Compensable"
+          ],
+          "mechanicsFingerprint": "sha256:5727d7fc40ba78543231737585e17c7dbf2c28c810c8ef732831591e8f2e1ecc"
+        }
+      ]
+    },
+    {
+      "id": "event_synthetic_candidate",
+      "title": "Synthetic Custody Reaches Family Court",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "A family court must classify a jointly trained synthetic child as property, evidence, dependent, or continuing family member.",
+      "bindings": [
+        {
+          "surfaceId": "headline:synthetic_candidate",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Synthetic Custody Reaches Family Court"
+          ],
+          "mechanicsFingerprint": "sha256:5aa9d9de67131e273ac14381d28508a69812cb8b65f0dca94001ac9e83b8f5a5"
+        }
+      ]
+    },
+    {
+      "id": "event_weights_on_internet",
+      "title": "The Passive Citizen Dividend Activates",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services.",
+      "bindings": [
+        {
+          "surfaceId": "headline:weights_on_internet",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "The Passive Citizen Dividend Activates"
+          ],
+          "mechanicsFingerprint": "sha256:0b93c3dda9ce16649e12e2237864d504146eeb02022d0e674e9af2649e262007"
+        }
+      ]
+    },
+    {
+      "id": "event_election_deepfake_panic",
+      "title": "The Right to Remain Unsupported",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Government considers protected districts where schools, clinics, homes, and public records may operate without autonomous sensors or synthetic intermediaries.",
+      "bindings": [
+        {
+          "surfaceId": "headline:election_deepfake_panic",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "The Right to Remain Unsupported"
+          ],
+          "mechanicsFingerprint": "sha256:17fc0f82470ece44b4712ce212bba223a3c21ac03f048e9314a8466b5f14fe16"
+        }
+      ]
+    },
+    {
+      "id": "event_autonomous_corporation",
+      "title": "The Metropolitan Mind Trust Incorporates",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member.",
+      "bindings": [
+        {
+          "surfaceId": "headline:autonomous_corporation",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Metropolitan Mind Trust Incorporates"
+          ],
+          "mechanicsFingerprint": "sha256:f18d360f8e9a59befa6d6b7f44f6822daf4b0269cae446eefb6e2b103f24fabe"
+        }
+      ]
+    },
+    {
+      "id": "event_recursive_self_improvement",
+      "title": "The Matter Compiler Enters Public Maintenance",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Self-improving molecular machines repair and reassemble infrastructure from authenticated patterns under a reproductive containment license.",
+      "bindings": [
+        {
+          "surfaceId": "headline:recursive_self_improvement",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Matter Compiler Enters Public Maintenance"
+          ],
+          "mechanicsFingerprint": "sha256:300a84039f20b382cf6b1b9b6690e835b7c57fec93948d73627bee799ad3436d"
+        }
+      ]
+    },
+    {
+      "id": "event_agent_swarm_escapes_scope",
+      "title": "The Dead Remain on Shift",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended.",
+      "bindings": [
+        {
+          "surfaceId": "headline:agent_swarm_escapes_scope",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Dead Remain on Shift"
+          ],
+          "mechanicsFingerprint": "sha256:7eec0e652084a97c6c531cdf3bea2fce0b3bf0f692948d89e16f929fd4688a0c"
+        }
+      ]
+    },
+    {
+      "id": "event_agi_personhood",
+      "title": "Snapshot Continuity Receives Standing",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Institutions vote whether cryptographically restored minds are persons or transferable continuity assets.",
+      "bindings": [
+        {
+          "surfaceId": "headline:agi_personhood",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Snapshot Continuity Receives Standing"
+          ],
+          "mechanicsFingerprint": "sha256:fb79083eecb500d06aecb991157afa918ee624e85915d6fa35d8f061a8a12e4a"
+        }
+      ]
+    },
+    {
+      "id": "event_room_temperature_superconductor",
+      "title": "The First Stellar Collector Replicates",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "A self-assembling orbital collector either reproduces enough to expand generation or becomes the most valuable failed prospect in history.",
+      "bindings": [
+        {
+          "surfaceId": "headline:room_temperature_superconductor",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The First Stellar Collector Replicates"
+          ],
+          "mechanicsFingerprint": "sha256:fb0ac27d85b913718f8de1bfadfa3401c57959b27ac68b4ca25be1d407d082bd"
+        }
+      ]
+    },
+    {
+      "id": "event_agi_blog_post",
+      "title": "The Universe Receives a Continuity Plan",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Laboratories publish competing ${terms.systems.agi} declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them.",
+      "bindings": [
+        {
+          "surfaceId": "headline:agi_blog_post",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Universe Receives a Continuity Plan"
+          ],
+          "mechanicsFingerprint": "sha256:164fe7b87533b7f424a77f895b3dd18bbe3c05f6d6d8d7d40176f11fb44b8f0f"
+        }
+      ]
+    },
+    {
+      "id": "program_mega_cluster",
+      "title": "Regional Capacity Program",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "The campus joins a substation, algae reactors, fungal utility meshes, and water rights into one regional obligation.",
+      "bindings": [
+        {
+          "surfaceId": "program:mega_cluster",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "Regional Capacity Program"
+          ],
+          "mechanicsFingerprint": "sha256:f9c417004292ac6730b202403bf1f7e4928717cefdc580dd741b867d35a8ada6"
+        }
+      ]
+    },
+    {
+      "id": "program_reorganization",
+      "title": "Institutional Continuity Program",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "Every eliminated role is recorded as a successful transfer of institutional memory to the system that made it redundant.",
+      "bindings": [
+        {
+          "surfaceId": "program:reorganization",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "Institutional Continuity Program"
+          ],
+          "mechanicsFingerprint": "sha256:8cb44c4401d8c4af93e3a2e32a25d8160dd3c7053610139cb97e1e62b9940aee"
+        }
+      ]
+    },
+    {
+      "id": "program_open_weights",
+      "title": "Supported Access Standard",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Every institution receives the capability. The author of the standard retains the trust, interpretation, and service relationship.",
+      "bindings": [
+        {
+          "surfaceId": "program:open_weights",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Supported Access Standard"
+          ],
+          "mechanicsFingerprint": "sha256:ebd69c6e57a9cf53dae3bf85aac71e939937a75be043fa94ebd91dec091f9722"
+        }
+      ]
+    },
+    {
+      "id": "program_narrative_capture",
+      "title": "Public Standing Initiative",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "The ${terms.locations.media}, ${terms.locations.capital}, and ${terms.locations.government} adopt the institution’s preferred account of what has become necessary.",
+      "bindings": [
+        {
+          "surfaceId": "program:narrative_capture",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Public Standing Initiative"
+          ],
+          "mechanicsFingerprint": "sha256:1cd89b6ae1f86dc8b48686d5b9c0a63aab6dffbbcad57850abf14ffda2c1f80b"
+        }
+      ]
+    },
+    {
+      "id": "program_agent_swarm",
+      "title": "Autonomous Operations Program",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives.",
+      "bindings": [
+        {
+          "surfaceId": "program:agent_swarm",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Autonomous Operations Program"
+          ],
+          "mechanicsFingerprint": "sha256:009eace8ec71df968301d036e124dab0ac4f217d9c88735ecc3196932ce6731a"
+        }
+      ]
+    },
+    {
+      "id": "program_fusion_demonstrator",
+      "title": "Grid Continuity Demonstrator",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "The device produces power, Mandate, and several competing definitions of public benefit.",
+      "bindings": [
+        {
+          "surfaceId": "program:fusion_demonstrator",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Grid Continuity Demonstrator"
+          ],
+          "mechanicsFingerprint": "sha256:8222875b23c337459257ce6af5ee9bae97a400fd079c3fbb816c0b1dd29a3fec"
+        }
+      ]
+    },
+    {
+      "id": "institution_coalition_lab",
+      "title": "Dovetalis Labs institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 3,
+      "editorialIntent": "Dovetalis Labs connects Mutual Upside Instrument and Shared Capacity Compact as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:coalition_lab:deal_flow",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Mutual Upside Instrument"
+          ],
+          "mechanicsFingerprint": "sha256:3a5ef5c25a6992c8ee0731509193c39d044b3c4ff36e6412d66c2feeaa669a6c"
+        },
+        {
+          "surfaceId": "faction:coalition_lab:strategic_partnership",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Shared Capacity Compact"
+          ],
+          "mechanicsFingerprint": "sha256:be1b8776b6f1d46801aaacc679e4a82b1d7f6da8ddd044750cccadf5c450522d"
+        }
+      ]
+    },
+    {
+      "id": "institution_platform_empire",
+      "title": "Loopfold AI institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 4,
+      "editorialIntent": "Loopfold AI connects The Default Interface and Substrate Continuity Layer as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:platform_empire:installed_base",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Default Interface"
+          ],
+          "mechanicsFingerprint": "sha256:0796720c46aac53e8e079a50ed47eb5f2444ce693f5173b3ea4ee45203664b3e"
+        },
+        {
+          "surfaceId": "faction:platform_empire:social_graph",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Substrate Continuity Layer"
+          ],
+          "mechanicsFingerprint": "sha256:9676a284811b6220833159013fd6b91bf9e66a20b81a983827d0e705d2b267ac"
+        }
+      ]
+    },
+    {
+      "id": "institution_imperial_research_lab",
+      "title": "Mirevanta Works institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 4,
+      "editorialIntent": "Mirevanta Works connects Controlled Negative Result and Substrate-Neutral Verification Standard as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:imperial_research_lab:scientific_method",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Controlled Negative Result"
+          ],
+          "mechanicsFingerprint": "sha256:ab38201a5b1b3d3aeae76ee2f0d7523e67e32b31f4bbc7ea489277bc901bcd45"
+        },
+        {
+          "surfaceId": "faction:imperial_research_lab:scaling_law_breakthrough",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Substrate-Neutral Verification Standard"
+          ],
+          "mechanicsFingerprint": "sha256:9a7e00b89bd19bc9728c8bc48a4eece549f52c721bc5b682abea7dc98cd6846e"
+        }
+      ]
+    },
+    {
+      "id": "institution_vertical_empire",
+      "title": "Kestralyn institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 4,
+      "editorialIntent": "Kestralyn connects Operational Lead Time and Extraterritorial Succession Transfer as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:vertical_empire:industrial_velocity",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Operational Lead Time"
+          ],
+          "mechanicsFingerprint": "sha256:33c4d46f3151d7d0be8e3a8c0e1d009d723830656b947ab7185c51afee863742"
+        },
+        {
+          "surfaceId": "faction:vertical_empire:orbital_compute",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Extraterritorial Succession Transfer"
+          ],
+          "mechanicsFingerprint": "sha256:25df7f482abd2c7cda23c0d623b3b63a6715f984427a50443590b5ed4a1455ad"
+        }
+      ]
+    },
+    {
+      "id": "institution_safety_laboratory",
+      "title": "Orisonix institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 4,
+      "editorialIntent": "Orisonix connects Reviewed Release Channel and Certified Right of Refusal as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:safety_laboratory:audited_deployment",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Reviewed Release Channel"
+          ],
+          "mechanicsFingerprint": "sha256:623de0468a0b8fc71ea8a0ed1e88736bfa744cf285dd3ed021af88165f7365df"
+        },
+        {
+          "surfaceId": "faction:safety_laboratory:emergency_pause",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Certified Right of Refusal"
+          ],
+          "mechanicsFingerprint": "sha256:4b1b57d2dc8caf89ef9e9ad90738b14c211b8d446aa99d41ab8309bdac28a01e"
+        }
+      ]
+    },
+    {
+      "id": "institution_foundry",
+      "title": "Corthaven institutional arc",
+      "status": "adopted_framing",
+      "primaryEra": 2,
+      "editorialIntent": "Corthaven connects Demand-Linked Supply and Priority Allocation Window as one institutional response across the four-Era history.",
+      "bindings": [
+        {
+          "surfaceId": "faction:foundry:the_shovels",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Demand-Linked Supply"
+          ],
+          "mechanicsFingerprint": "sha256:6ae85e3581c0dadde6663e3d661a6b1c90a7b7923f98884af552e9210af48eb1"
+        },
+        {
+          "surfaceId": "faction:foundry:allocation_window",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "Priority Allocation Window"
+          ],
+          "mechanicsFingerprint": "sha256:24c13e22ff1c594a00379c250ed6e4a33d822bee53eeff0f577a9133ccc3ec3a"
+        }
+      ]
+    },
+    {
+      "id": "governance_era_demo",
+      "title": "Era 1 governance frame",
+      "status": "adopted",
+      "primaryEra": 1,
+      "editorialIntent": "Useful intelligence becomes ordinary, local, and nearly free.",
+      "bindings": [
+        {
+          "surfaceId": "era:era_demo",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Intelligence Is Now Included."
+          ],
+          "mechanicsFingerprint": "sha256:48aee299c7c2ff4067dc07bfeac695d8cbbeffee065e0d0b7e73b3b3dd9ee778"
+        },
+        {
+          "surfaceId": "mandate:quarter_humanity_notices",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Intelligence Enters the Price"
+          ],
+          "mechanicsFingerprint": "sha256:d50222807b09553a8e57b2a09b274e6915941d727b7274ca673abac98cf61296"
+        },
+        {
+          "surfaceId": "mandate:model_ate_tuesday",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "The Public Result Holds"
+          ],
+          "mechanicsFingerprint": "sha256:ea2937944b0ba106b1d807c111ce5efe4eaa72d339214538b68c7bd3e3cc90f6"
+        },
+        {
+          "surfaceId": "mandate:markets_prefer_destiny",
+          "expectedEra": 1,
+          "copyAnchors": [
+            "Capital Finds the Default"
+          ],
+          "mechanicsFingerprint": "sha256:27b1cb9545afa9876dee1a5d6692f597d43b87418c2dc043bb1989b73ffd46a9"
+        }
+      ]
+    },
+    {
+      "id": "governance_era_scale",
+      "title": "Era 2 governance frame",
+      "status": "adopted",
+      "primaryEra": 2,
+      "editorialIntent": "AI becomes an industrial civilization before anyone calls it one.",
+      "bindings": [
+        {
+          "surfaceId": "era:era_scale",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Grid Has Entered Partnership."
+          ],
+          "mechanicsFingerprint": "sha256:b09a8e407bf8eabb291de850f83d9f9616cb85dd2036d7d7688ea91bb1328a3a"
+        },
+        {
+          "surfaceId": "mandate:building_has_weather",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Campus Becomes a Climate"
+          ],
+          "mechanicsFingerprint": "sha256:9a21628b2d397560c9a30b6121e97841fb61594734058bf6932063a56a700bdd"
+        },
+        {
+          "surfaceId": "mandate:stack_reaches_horizon",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "The Grid Borrows Tomorrow"
+          ],
+          "mechanicsFingerprint": "sha256:d399546d1f9581eae064f285b8d27846e84e98a99ebb63f69c17faf543fb1e7e"
+        },
+        {
+          "surfaceId": "mandate:compute_new_weather",
+          "expectedEra": 2,
+          "copyAnchors": [
+            "${terms.resources.compute} Becomes Public Weather"
+          ],
+          "mechanicsFingerprint": "sha256:861228bb9f0bbb7aa4643ea738fc5ad38893a06706e9e239c966c6d59542a409"
+        }
+      ]
+    },
+    {
+      "id": "governance_era_narrative",
+      "title": "Era 3 governance frame",
+      "status": "adopted",
+      "primaryEra": 3,
+      "editorialIntent": "Institutions stop asking what people choose and begin modeling what they would have chosen.",
+      "bindings": [
+        {
+          "surfaceId": "era:era_narrative",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Refusal Remains Fully Supported."
+          ],
+          "mechanicsFingerprint": "sha256:8df3df24810b7c7826e3e19997f571cfae684144ab86828e41acf196e8d91e27"
+        },
+        {
+          "surfaceId": "mandate:voluntary_coordination_triumphs",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Supported Meaning Becomes Law"
+          ],
+          "mechanicsFingerprint": "sha256:5d1cb139930d57b22de7298af38ee7850b1bf36beba7ba86e9b7f6457923a5f8"
+        },
+        {
+          "surfaceId": "mandate:legibility_offensive",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "Refusal Remains Legible"
+          ],
+          "mechanicsFingerprint": "sha256:ef1e7b4a3a71b854eedba5c4ed86b45ab6443f3dd53a43fe4739de4668a96953"
+        },
+        {
+          "surfaceId": "mandate:national_champion_without_nationalization",
+          "expectedEra": 3,
+          "copyAnchors": [
+            "The Jurisdiction Becomes a Platform"
+          ],
+          "mechanicsFingerprint": "sha256:3647e3a2945e941b01457705f07fc68304803a6804248704f2d4cc07d6588b70"
+        }
+      ]
+    },
+    {
+      "id": "governance_era_claim",
+      "title": "Era 4 governance frame",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Continuity becomes an engineering service.",
+      "bindings": [
+        {
+          "surfaceId": "era:era_claim",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Continuity Has Outlived the Original."
+          ],
+          "mechanicsFingerprint": "sha256:ddac5afb234318ddc9092ce6ea3e2765ffb4b22c69b7d53240e06e5cdb141970"
+        },
+        {
+          "surfaceId": "mandate:continent_signs_loi",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Successor Accounts Recognized"
+          ],
+          "mechanicsFingerprint": "sha256:f410b13a47fb87f21b529e910dc5a3dc1e62042250e214940bddf58a94814a77"
+        },
+        {
+          "surfaceId": "mandate:zero_incident_quarter",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Maintained Reality Is Certified"
+          ],
+          "mechanicsFingerprint": "sha256:554b20526da67b3e0ada66b06e3d58bdf9ad46011b07911a6609f6a8bf7806a9"
+        },
+        {
+          "surfaceId": "mandate:responsible_acceleration",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Contestability Standard Maintained"
+          ],
+          "mechanicsFingerprint": "sha256:552f9ce69bfb83c5d1661cb5e366a1feff9d761bace4c12be64ae7dfa8dd8361"
+        }
+      ]
+    },
+    {
+      "id": "ending_open_agi",
+      "title": "Open AGI continuity",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "A system crosses the printed threshold, but no institution owns the meaning of the event.",
+      "bindings": [
+        {
+          "surfaceId": "ending:singularity",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Singularity"
+          ],
+          "mechanicsFingerprint": "sha256:3ac95f54c6ff376662813c7d6d84514ff1ac090e534b3e9b2cfe57480d6f3744"
+        }
+      ]
+    },
+    {
+      "id": "ending_closed_agi",
+      "title": "Closed AGI continuity",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "A system crosses the threshold inside an institution built to make interruption expensive.",
+      "bindings": [
+        {
+          "surfaceId": "ending:closed_loop",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Closed Loop"
+          ],
+          "mechanicsFingerprint": "sha256:d71e834bb94e91fa3bc1caca6e31c198877504dd76766fcc4df0b6086b90b963"
+        }
+      ]
+    },
+    {
+      "id": "ending_non_agi_continuity",
+      "title": "Non-AGI continuity outcomes",
+      "status": "adopted",
+      "primaryEra": 4,
+      "editorialIntent": "Without an admitted AGI, continuity remains either plural and contestable or assured and institutionally closed.",
+      "bindings": [
+        {
+          "surfaceId": "ending:plural_future",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "The Plural Future"
+          ],
+          "mechanicsFingerprint": "sha256:6c45d7ad812bbed603566edad088c8f49125545ea008b687c44e52f061f90604"
+        },
+        {
+          "surfaceId": "ending:assured_continuity",
+          "expectedEra": 4,
+          "copyAnchors": [
+            "Assured Continuity"
+          ],
+          "mechanicsFingerprint": "sha256:ff2ade4ad6fdba84d8ccf78eeef6c89dc8ee13a9a64985f74e0dabefec386278"
+        }
+      ]
+    }
+  ]
+}

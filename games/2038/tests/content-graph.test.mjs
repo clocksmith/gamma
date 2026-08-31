@@ -36,6 +36,9 @@ test("release content identity includes every player-copy source", async () => {
   assert.ok(releaseSources.has(graph.playerCopyContract));
   for (const artifact of graph.artifacts) {
     assert.ok(releaseSources.has(artifact.source), `release binds ${artifact.source}`);
+    if (artifact.ledger) {
+      assert.ok(releaseSources.has(artifact.ledger), `release binds ${artifact.ledger}`);
+    }
     for (const overlay of artifact.overlays || []) {
       assert.ok(releaseSources.has(overlay), `release binds ${overlay}`);
     }
@@ -68,6 +71,7 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/docs/world-and-institutions.md",
     "dist/docs/optional-tactics.md",
     "dist/runtime/game-config.json",
+    "dist/runtime/era-situation-ledger.json",
     "dist/runtime/factions.json",
     "dist/runtime/headlines.json",
     "dist/runtime/escalations.json",
@@ -92,6 +96,29 @@ test("semantic graph owns every player-facing construction surface", async () =>
     ),
     "every generated source and overlay has a declared canonical source root"
   );
+});
+
+test("the thematic Bible is generated from one editorial template and one ledger", async () => {
+  const graph = await readJson("content/graph.json");
+  const artifact = graph.artifacts.find(
+    (candidate) => candidate.target === "docs/thematic-content-bible.md"
+  );
+  assert.deepEqual(artifact, {
+    source: "content/editorial/thematic-content-bible.md",
+    ledger: "content/data/era-situation-ledger.json",
+    target: "docs/thematic-content-bible.md",
+    format: "era-situation-bible"
+  });
+  const [template, generated] = await Promise.all([
+    readFile(new URL(artifact.source, root), "utf8"),
+    readFile(new URL(artifact.target, root), "utf8")
+  ]);
+  assert.match(template, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
+  assert.doesNotMatch(generated, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
+  assert.match(generated, /\*\*43 situations\*\*/);
+  assert.match(generated, /\*\*62 game surfaces\*\*/);
+  assert.doesNotMatch(generated, /### Era-placement ledger/);
+  assert.doesNotMatch(generated, /### Retained editorial backlog/);
 });
 
 test("physical sources are projected from declared ownership roots", async () => {
@@ -323,10 +350,10 @@ test("Era panel data is the single source for the world-companion escalation lor
 });
 
 test("retained signature abilities project concrete continuity institutions", async () => {
-  const [factionsDocument, mandatesDocument, bible] = await Promise.all([
+  const [factionsDocument, mandatesDocument, ledger] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
+    readJson("content/data/era-situation-ledger.json")
   ]);
   const factions = Object.fromEntries(
     factionsDocument.factions.map((faction) => [faction.id, faction])
@@ -379,12 +406,18 @@ test("retained signature abilities project concrete continuity institutions", as
   );
   assert.match(mandates.zero_incident_quarter.rulesText, /fewest Scrutiny/);
   assert.match(mandates.responsible_acceleration.rulesText, /at least 4 Trust/);
-  for (const concept of [
-    "Instance Quorum",
-    "Right of Exit Certification",
-    "Human Compatibility Office"
-  ]) {
-    assert.match(bible, new RegExp(`\\| ${concept} \\| Adopted framing \\| Continuity \\|`));
+  const governedSurfaces = new Set(
+    ledger.scenarios.flatMap((scenario) =>
+      scenario.bindings.map((binding) => binding.surfaceId)
+    )
+  );
+  for (const faction of factionsDocument.factions) {
+    for (const ability of faction.abilities) {
+      assert.ok(
+        governedSurfaces.has(`faction:${faction.id}:${ability.id}`),
+        `${faction.id}/${ability.id} is bound in the lore contract`
+      );
+    }
   }
 });
 
