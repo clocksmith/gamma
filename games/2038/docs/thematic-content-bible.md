@@ -2,12 +2,9 @@
 
 ## Scope
 
-This template owns Mandate 2038's editorial method, research disposition, tone,
-and writing contract. The machine authority for Era placement, adoption status,
-surface binding, and mechanic preservation is
-`content/data/era-situation-ledger.json`. The generated
-`docs/thematic-content-bible.md` combines both authorities. There is no parallel
-lore scratchpad or hand-maintained placement ledger.
+This document is the sole editorial authority for Mandate 2038's world, voice,
+research disposition, concept placement, and escalation. It does not define
+mechanics or add hidden game copy. There is no parallel lore scratchpad.
 
 Player-facing component text belongs in `content/copy/`. The two
 player-readable document templates are `content/copy/core-rules.md` and
@@ -405,9 +402,10 @@ fictional institutions until the resulting event stands independently.
 
 The concepts below are original design territory identified from those inputs.
 Their presence here does not make them cards, approved rules, or player-facing
-copy. The traceability table below is the sole record of adoption. Before any
-unadopted concept enters the game, map it to an existing mechanical surface and
-use the event-design questions below.
+copy. The machine-readable Era situation ledger is the sole traceability record
+for adoption and surface bindings. Before any unadopted concept enters the
+game, map it to an existing mechanical surface and use the event-design
+questions below.
 
 | Era | Concept | Institutional premise |
 | --- | --- | --- |
@@ -493,25 +491,7 @@ No surface may invent a fifth timeline. Stable mechanical IDs may survive for
 compatibility, but player-visible names, flavor, instructions, and companions
 must agree with the four-Era contract below.
 
-## Canonical Era and situation ledger
-
-The Era situation ledger is the sole traceability index. It binds the adopted
-scenario set to all 62 current Era-bearing surfaces exactly once: 4 Governance
-Board Era panels, 24 Headlines, 12 Mandates, 6 shared Programs, 12 faction
-abilities, and 4 endings. Each binding names its player-copy source and records
-that the existing mechanic is retained. The content validator resolves every
-ID against the canonical mechanical source and rejects drift.
-
-The remaining research inventory is not approved component copy. Its strongest
-unexpressed concepts remain Human-Original Guarantee, Developmental Companion
-Standard, Public Purpose Service, Manual Operations Retirement, Casualty
-Settlement Network, Non-Interference Office, Human Compatibility Office, and
-Nonhuman Standing Commission.
-They cover original-person claims, post-work purpose, lost operational
-competence, intervention, and unfamiliar minds without pretending that an
-existing card already expresses them.
-
-### Legacy mechanical identifiers
+## Legacy mechanical identifiers
 
 Stable mechanical identifiers do not determine player-facing era placement.
 The Era III Program whose retained internal ID is `open_weights` is presented

@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.18-test`
+**Rules reference:** `0.8.0-rc.19-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -222,7 +222,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.8.0-rc.18-test` test:
+controlled `0.8.0-rc.19-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -234,7 +234,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.17` implements `0.8.0-rc.18-test` under engine coverage
+Executable game `0.14.18` implements `0.8.0-rc.19-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
@@ -247,19 +247,20 @@ playable game as its primary action. The public deployment now contains only
 the public playtest allowlist; complete documentation, evidence, simulation,
 and deferred content remain in a separately built internal review artifact.
 
+Candidate `0.8.0-rc.19-test` changes no physical mechanic from rc.18.
+Executable `0.14.18` keeps the thematic Bible as the sole editorial authority
+and the Era situation ledger as its machine-enforced traceability projection.
+Deployment profiles now own their exact web and Lab source allowlists; the
+validator derives their import and runtime-data closure before the builder may
+publish. The public browser receives required Programs and match copy while
+deferred Tactics and secret objectives remain excluded.
+
 Candidate `0.8.0-rc.18-test` changes no physical mechanic from rc.17.
 Executable `0.14.17` adds the machine-enforced Era situation ledger, binds all
 62 current Era-bearing surfaces exactly once, rejects deferred material in the
 public baseline, and makes Firebase publish only the public playtest profile.
 The complete internal review profile is explicitly non-deployable because it
 has no access control.
-
-Candidate `0.8.0-rc.18-test` changes no physical mechanic from rc.17.
-Executable `0.14.17` makes the Era/situation ledger the machine authority,
-generates the thematic Bible from the content graph, and separates the
-deployable public playtest from the non-deployable internal review. The npm
-package is now `mandate-2038`; stable legacy game and schema identifiers remain
-unchanged.
 
 Candidate `0.8.0-rc.17-test` changes no physical mechanic from rc.16.
 Executable `0.14.16` binds the published root to the canonical browser icon so

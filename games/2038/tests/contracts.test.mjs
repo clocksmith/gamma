@@ -221,18 +221,18 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   await assert.rejects(stat(new URL("dist/site/docs/lore-scratchpad.html", root)), {
     code: "ENOENT"
   });
-  assert.match(bibleTemplate, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
-  assert.match(bible, /machine authority for Era placement, adoption status/);
+  assert.match(bible, /sole editorial authority/);
   assert.match(bible, /## Editorial authority and method/);
   assert.match(bible, /### Research provenance and claim boundary/);
   assert.match(bible, /## Whole-game lore atlas/);
-  assert.match(bible, /## Canonical Era and situation ledger/);
-  assert.match(bible, /\*\*43 situations\*\*/);
-  assert.match(bible, /\*\*62 game surfaces\*\*/);
-  assert.doesNotMatch(bible, /### Era-placement ledger/);
-  assert.doesNotMatch(bible, /### Retained editorial backlog/);
-  assert.equal(ledger.scenarios.length, 43);
-  assert.equal(ledger.scenarios.flatMap((scenario) => scenario.bindings).length, 62);
+  assert.match(bible, /### Era-placement ledger/);
+  assert.match(bible, /### Retained editorial backlog/);
+  assert.doesNotMatch(bible, /GENERATED:ERA_SITUATION_LEDGER/);
+  assert.equal(eraLedger.scenarios.length, 43);
+  assert.equal(
+    eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
+    62
+  );
   assert.match(bible, /Bankruptcy Data Estates/);
   const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
   assert.ok(tracedConcepts.has("Bankruptcy Data Estates"));

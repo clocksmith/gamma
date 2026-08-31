@@ -15,11 +15,6 @@ The content graph composes separately owned mechanics and player copy.
   decisions into one enforceable scenario, surface, copy, mechanic, and
   deployment contract.
 - `runtime/` owns browser UI, simulation, and player-strategy copy.
-- `data/era-situation-ledger.json` owns lore admission, Era placement, unique
-  game-surface bindings, mechanic-preservation fingerprints, and publication
-  profiles.
-- `editorial/thematic-content-bible.md` owns editorial prose around that
-  structured contract. The graph generates `docs/thematic-content-bible.md`.
 - `graph.json` declares every generated artifact.
 - `player-copy-contract.json` binds every player-copy subtree to its actual
   box, document, component, or browser surface.
@@ -75,6 +70,9 @@ Mandate, Program, faction ability, and ending against the canonical data and
 copy sources. It rejects adopted scenarios without valid bindings, deferred
 scenarios entering the public baseline, duplicate or missing surfaces, Era
 mismatches, invalid copy references, and unsafe public deployment profiles.
+Each deployment profile owns its exact browser-source and runtime-data
+allowlists. Validation resolves module imports and JSON reads from those
+sources, so a profile cannot pass while omitting a required published file.
 The generated projection is `dist/contracts/era-situation-ledger.json`.
 
 The fictional institutions and fictional CEO characters are canonical. Stable

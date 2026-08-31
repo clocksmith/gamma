@@ -1,4 +1,14 @@
-import { resolve } from "node:path";
+import {
+  cp,
+  mkdir,
+  readFile,
+  readdir,
+  rm,
+  stat,
+  writeFile
+} from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { loadEraSituationLedger } from "./content/validate-era-situation-ledger.mjs";
@@ -216,13 +226,12 @@ export function buildIndexHtml({
 </html>`);
 }
 
-export async function buildFirebaseSite(options = {}) {
-  const { buildProfiledFirebaseSite } = await import("./firebase-site-profile.mjs");
-  return buildProfiledFirebaseSite(options, {
-    buildIndexHtml,
-    protectHtml,
-    rewritePrototypeHtml,
-    rewritePrototypeModule
+async function sourceIdentity() {
+  const current = JSON.parse(
+    await readFile(resolve(projectRoot, "versions/current.json"), "utf8")
+  );
+  const { stdout } = await execFileAsync("git", ["rev-parse", "HEAD"], {
+    cwd: projectRoot
   });
   const { stdout: dirtyOutput } = await execFileAsync(
     "git",
@@ -296,15 +305,11 @@ function parseArguments(values) {
 async function copyWebSurface(outputRoot, profile) {
   const sourceRoot = resolve(projectRoot, "web");
   const targetRoot = resolve(outputRoot, "web");
-  if (profile.interfaces.includes("simulation-lab")) {
-    await cp(sourceRoot, targetRoot, { recursive: true });
-    return;
+  for (const relative of profile.webFiles) {
+    const target = resolve(targetRoot, relative);
+    await mkdir(dirname(target), { recursive: true });
+    await cp(resolve(sourceRoot, relative), target);
   }
-  await mkdir(targetRoot, { recursive: true });
-  for (const name of ["api-client.js", "app.js", "favicon.svg", "styles.css"]) {
-    await cp(resolve(sourceRoot, name), resolve(targetRoot, name));
-  }
-  await cp(resolve(sourceRoot, "src"), resolve(targetRoot, "src"), { recursive: true });
 }
 
 export async function buildFirebaseSite({ outputRoot, profileId = defaultProfileId } = {}) {
@@ -436,9 +441,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
     resolve(outputRoot, "first-game-guide.html"),
     `${rewritePrototypeHtml(firstGameGuide, { kind: "guide", profileId })}\n`
   );
-  const rewrittenModules = profile.interfaces.includes("simulation-lab")
-    ? ["app.js", "first-game-guide.js", "simulation-app.js"]
-    : ["app.js"];
+  const rewrittenModules = profile.webFiles.filter((relative) => relative.endsWith(".js"));
   for (const moduleName of rewrittenModules) {
     const source = await readFile(resolve(projectRoot, "web", moduleName), "utf8");
     await writeFile(
@@ -460,24 +463,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
     outputRoot,
     profile.runtimeArtifacts
   );
-  const publishedSimulationModules = [
-    "cancellation.js",
-    "content/simulation-copy.js",
-    "contracts/decision-contract.js",
-    "environment/core-economy-match.js",
-    "environment/rules-variant.js",
-    "environment/selected-rules-match.js",
-    "personas/player-profile.js",
-    "policies/weighted-policy.js",
-    "rules/local-power-allocation.js",
-    "runtime/create-browser-interactive-game.js",
-    "runtime/interactive-game-core.js",
-    "scenarios/agi-declaration-window.js"
-  ];
-  if (profile.interfaces.includes("simulation-lab")) {
-    publishedSimulationModules.push("contracts/report-migrations.js");
-  }
-  for (const relative of publishedSimulationModules) {
+  for (const relative of profile.labModules) {
     const target = resolve(outputRoot, "lab", relative);
     await mkdir(dirname(target), { recursive: true });
     await cp(resolve(projectRoot, "lab", relative), target);
@@ -556,7 +542,9 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
       limitation: "Crawler directives are voluntary and do not prevent hostile scraping."
     },
     pages,
-    runtimeArtifacts
+    runtimeArtifacts,
+    webFiles: [...profile.webFiles],
+    labModules: [...profile.labModules]
   };
   await writeFile(
     resolve(outputRoot, "release-identity.json"),
@@ -573,10 +561,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
 const isCli = process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isCli) {
-  const { parseFirebaseSiteArguments } = await import("./firebase-site-profile.mjs");
-  const result = await buildFirebaseSite(
-    parseFirebaseSiteArguments(process.argv.slice(2))
-  );
+  const result = await buildFirebaseSite(parseArguments(process.argv.slice(2)));
   process.stdout.write(
     `firebase-site: rendered ${result.manifest.deploymentProfile} with ${result.manifest.pages.length + 1} HTML surfaces to ${result.outputRoot}\n`
   );

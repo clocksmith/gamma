@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.8.0-rc.18-test`
+**Rules under review:** `0.8.0-rc.19-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -107,8 +107,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.18-test`. Executable
-game `0.14.17` implements its Default Game profile under
+`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.19-test`. Executable
+game `0.14.18` implements its Default Game profile under
 `nineteen-hex-simplified-v1`. New automated reports must name either
 `default-game` or `advanced-play`; historical `0.8.35` reports describe the
 former full rules and do not qualify Default Game. Implementation proof does
@@ -122,7 +122,7 @@ matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
 
-Candidate `0.8.0-rc.18-test` and executable `0.14.17` retain the synchronized
+Candidate `0.8.0-rc.19-test` and executable `0.14.18` retain the synchronized
 identity for the complete nineteen-hex simplification. They replace private
 Escalation hands with six shared Programs, remove Safety currency, reduce
 Training to forty cards, make Mega-Clusters solo projects, restrict immediate

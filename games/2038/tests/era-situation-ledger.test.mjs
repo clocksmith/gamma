@@ -77,9 +77,35 @@ test("public deployment profile excludes internal and deferred material", async 
   assert.ok(!profile.interfaces.includes("simulation-lab"));
   assert.ok(!profile.documents.includes("*"));
   assert.ok(!profile.runtimeArtifacts.includes("*"));
+  assert.ok(profile.runtimeArtifacts.includes("dist/runtime/escalations.json"));
+  assert.ok(profile.runtimeArtifacts.includes("dist/runtime/simulation-copy.json"));
+  assert.ok(!profile.runtimeArtifacts.includes("dist/runtime/tactics.json"));
+  assert.ok(!profile.runtimeArtifacts.includes("dist/runtime/secret-objectives.json"));
   for (const scenario of ledger.scenarios.filter((entry) =>
     ["deferred", "research-backlog"].includes(entry.disposition)
   )) {
     assert.ok(!scenario.deploymentProfiles.includes("public-playtest"), scenario.id);
   }
+});
+
+test("public deployment profile must close over browser imports and runtime data", async () => {
+  const missingRuntime = clone(await loadEraSituationLedger());
+  missingRuntime.deploymentProfiles["public-playtest"].runtimeArtifacts =
+    missingRuntime.deploymentProfiles["public-playtest"].runtimeArtifacts.filter(
+      (target) => target !== "dist/runtime/simulation-copy.json"
+    );
+  await assert.rejects(
+    validateEraSituationLedger(missingRuntime),
+    /omits runtime dependencies: dist\/runtime\/simulation-copy\.json/
+  );
+
+  const missingModule = clone(await loadEraSituationLedger());
+  missingModule.deploymentProfiles["public-playtest"].labModules =
+    missingModule.deploymentProfiles["public-playtest"].labModules.filter(
+      (target) => target !== "environment/core-economy-match.js"
+    );
+  await assert.rejects(
+    validateEraSituationLedger(missingModule),
+    /omits imported lab module environment\/core-economy-match\.js/
+  );
 });

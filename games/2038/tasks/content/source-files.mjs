@@ -9,7 +9,6 @@ export function contentSourceFiles(graph, {
     provenancePath,
     ...graph.artifacts.flatMap((artifact) => [
       artifact.source,
-      artifact.ledger,
       ...(artifact.overlays || [])
     ])
   ].filter((path, index, paths) => path && paths.indexOf(path) === index);
