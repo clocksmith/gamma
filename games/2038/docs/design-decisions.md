@@ -243,8 +243,16 @@ Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, binary
 Advanced Networks, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract. The published root now presents the
-playable game as its primary action while keeping the complete generated
-documentation and component galleries available from the same index.
+playable game as its primary action. The public deployment now contains only
+the public playtest allowlist; complete documentation, evidence, simulation,
+and deferred content remain in a separately built internal review artifact.
+
+Candidate `0.8.0-rc.18-test` changes no physical mechanic from rc.17.
+Executable `0.14.17` adds the machine-enforced Era situation ledger, binds all
+62 current Era-bearing surfaces exactly once, rejects deferred material in the
+public baseline, and makes Firebase publish only the public playtest profile.
+The complete internal review profile is explicitly non-deployable because it
+has no access control.
 
 Candidate `0.8.0-rc.18-test` changes no physical mechanic from rc.17.
 Executable `0.14.17` makes the Era/situation ledger the machine authority,

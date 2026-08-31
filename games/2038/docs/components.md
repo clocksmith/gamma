@@ -7,6 +7,7 @@ generated output. Edit the source that owns the kind of change you are making.
 | --- | --- | --- |
 | `content/copy/` | Printable component, box, card, and player-aid copy | Numeric mechanics, IDs, or internal notes |
 | `content/data/` | Stable IDs, timing, quantities, mechanics, and machine contracts | Flavor, tone rules, art briefs, or player-facing prose |
+| `content/data/era-situation-ledger.json` | Machine-enforced Era order, scenario disposition, surface bindings, copy references, and deployment profiles | Independent lore or duplicated player copy |
 | `content/runtime/` | Browser labels, instructions, messages, simulation labels, and guide copy | Printed card copy or mechanical rules |
 | `experimental/copy/` and `experimental/data/` | Deferred optional-module copy and mechanics | Baseline-game material |
 | `content/graph.json` | Source-to-output declarations and semantic contexts | Authored game prose |

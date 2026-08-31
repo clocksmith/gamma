@@ -47,13 +47,11 @@ systems and incentives, not jokes or allegations about real people.
   identity, test protocol, comparison classes, and change control.
 - `docs/manufacturing-and-publishing-study.md` contains dated planning research,
   not quotes, legal advice, or authorization to manufacture.
-- `content/data/era-situation-ledger.json` is the machine authority for lore
-  admission, Era placement, surface binding, mechanic-preservation receipts,
-  and publication profiles.
-- `content/editorial/thematic-content-bible.md` owns editorial method, research
-  provenance, tone, and writing-layer contracts. The content graph combines it
-  with the ledger to generate `docs/thematic-content-bible.md`; do not edit that
-  projection or create a parallel lore scratchpad or thematic authority.
+- `docs/thematic-content-bible.md` is the sole authority for lore, editorial
+  method, concept placement, research provenance, tone, and writing-layer
+  contracts. `content/data/era-situation-ledger.json` is its machine-enforced
+  traceability and deployment projection, not a parallel lore authority. Do
+  not create a parallel lore scratchpad or thematic authority.
 - `docs/simulation-and-player-strategies.md` documents the executable
   simulation surface and must name any gap from the canonical rulebook.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,

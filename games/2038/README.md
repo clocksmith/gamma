@@ -55,11 +55,13 @@ This repository is a **prototype**, not a manufactured or published product.
   Documentation reader during `npm run docs:html`. Author its source under
   `content/copy/`, declare the projection in `content/graph.json`, and never
   author directly in `dist/docs/`.
-- The machine-enforced lore authority and publication boundary live in
-  [`content/data/era-situation-ledger.json`](content/data/era-situation-ledger.json).
-  [`content/editorial/thematic-content-bible.md`](content/editorial/thematic-content-bible.md)
-  owns editorial prose; the content graph generates
-  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md) from both.
+- The sole lore authority, editorial backlog, research boundary, Era placement,
+  and writing contract live in
+  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md). Its
+  machine-enforced scenario, surface, copy, mechanic, and deployment projection
+  is [`content/data/era-situation-ledger.json`](content/data/era-situation-ledger.json).
+  The generated surface inventory lives in
+  [`dist/runtime/content-manifest.json`](dist/runtime/content-manifest.json).
 - Player personas, CLI-backed decision policies, Monte Carlo execution, and
   replay are documented in
   [`docs/simulation-and-player-strategies.md`](docs/simulation-and-player-strategies.md).
@@ -116,9 +118,19 @@ the canonical server:
 by the release gate. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
-The deployed review interface at
-`https://canvascontext.com/` plays weighted and greedy opponents
-entirely in the browser with no Node server. The local server is an optional
+The public playtest interface at `https://canvascontext.com/` contains only the
+playable game, First Game Guide, required play references, World and
+Institutions, baseline gallery, release identity, and feedback route. It plays
+weighted and greedy opponents entirely in the browser with no Node server. The
+Simulation Lab, internal design and evidence records, manufacturing research,
+complete gallery, and deferred modules are excluded. Crawler directives do not
+provide access control.
+
+Build the exact Firebase allowlist with `npm run publish:firebase:build`. Build
+the complete, explicitly non-deployable local review artifact with
+`npm run review:site:build`.
+
+The local server is an optional
 bridge for Claude, Codex, hybrid opponents, and server-backed Simulation Lab
 jobs. When needed, paste the private token printed by `npm run dev` and approve
 Chrome’s local-network prompt. The bridge remains bound to loopback, accepts

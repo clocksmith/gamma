@@ -70,6 +70,7 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/docs/advanced-play.md",
     "dist/docs/world-and-institutions.md",
     "dist/docs/optional-tactics.md",
+    "dist/contracts/era-situation-ledger.json",
     "dist/runtime/game-config.json",
     "dist/runtime/era-situation-ledger.json",
     "dist/runtime/factions.json",
@@ -350,7 +351,7 @@ test("Era panel data is the single source for the world-companion escalation lor
 });
 
 test("retained signature abilities project concrete continuity institutions", async () => {
-  const [factionsDocument, mandatesDocument, ledger] = await Promise.all([
+  const [factionsDocument, mandatesDocument, eraLedger] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
     readJson("content/data/era-situation-ledger.json")
@@ -406,19 +407,24 @@ test("retained signature abilities project concrete continuity institutions", as
   );
   assert.match(mandates.zero_incident_quarter.rulesText, /fewest Scrutiny/);
   assert.match(mandates.responsible_acceleration.rulesText, /at least 4 Trust/);
-  const governedSurfaces = new Set(
-    ledger.scenarios.flatMap((scenario) =>
-      scenario.bindings.map((binding) => binding.surfaceId)
-    )
-  );
-  for (const faction of factionsDocument.factions) {
-    for (const ability of faction.abilities) {
-      assert.ok(
-        governedSurfaces.has(`faction:${faction.id}:${ability.id}`),
-        `${faction.id}/${ability.id} is bound in the lore contract`
-      );
-    }
+  for (const concept of [
+    "Instance Quorum",
+    "Right of Exit Certification"
+  ]) {
+    assert.ok(
+      eraLedger.scenarios.some((scenario) =>
+        scenario.eraId === "continuity"
+        && scenario.disposition.startsWith("adopted")
+        && scenario.concepts.includes(concept)
+      ),
+      `${concept} remains adopted Continuity framing`
+    );
   }
+  const humanCompatibility = eraLedger.scenarios.find(
+    (scenario) => scenario.id === "human-compatibility-office"
+  );
+  assert.equal(humanCompatibility.disposition, "research-backlog");
+  assert.deepEqual(humanCompatibility.surfaceBindings, []);
 });
 
 test("Default Rules are compact while every moved authority has one table surface", async () => {
