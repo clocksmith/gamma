@@ -17,12 +17,16 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 ## Contracts
 
-- Input: The authored semantic graph and [balance contract](lab/contracts/balance-contract.json).
+- Input: The authored semantic graph, [Era-situation ledger](content/data/era-situation-ledger.json), and [balance contract](lab/contracts/balance-contract.json).
 - Output: Generated runtime, rules, site, physical-kit artifacts, and versioned evidence.
 
 ## Invariants
 
 - Generated graph targets are never hand-edited.
+- Every admitted lore situation has one structured Era placement, and every
+  governed lore surface is bound exactly once with copy and mechanic receipts.
+- Only the public-playtest publication profile is deployable; internal-review
+  artifacts remain local evidence.
 - Fictional identities remain fictional and simulated sessions remain labeled.
 - Canonical rule changes update every affected authority and evidence surface together.
 
