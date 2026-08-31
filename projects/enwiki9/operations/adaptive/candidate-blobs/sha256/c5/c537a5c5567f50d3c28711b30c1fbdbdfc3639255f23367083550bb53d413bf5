@@ -1,0 +1,73 @@
+{
+  "schema": "gamma.enwiki9.candidate-interface.v1",
+  "candidate_id": "endpoint428_semantic_route_tape_q0_v2",
+  "role": "zero-credit causal population infrastructure",
+  "entrypoints": {
+    "scanner_source": "semantic-route-tape.cpp",
+    "fixture_builder": "build_fixture.py",
+    "independent_verifier": "verify.py"
+  },
+  "scanner_cli": {
+    "arguments": [
+      "STORE",
+      "RAW",
+      "DICTIONARY",
+      "TAPE",
+      "SIDECAR",
+      "SUMMARY",
+      "optional --fixture"
+    ],
+    "input_policy": "All inputs are regular non-symlink files. Production execution additionally requires exact frozen sizes and SHA-256 identities in the guarded runner.",
+    "output_policy": "TAPE, SIDECAR, and SUMMARY are exclusive-create outputs. Existing paths fail closed."
+  },
+  "causal_order": {
+    "contract": "operations/planning/endpoint428_semantic_route_tape_q0_v2_ordering_addendum.json",
+    "prediction_boundary": "RouteParser::PreparePretruth executes before the current STORE byte is read.",
+    "equal_availability": [
+      "deferred literal update from an earlier source",
+      "posttruth structural actions from the prior source",
+      "prediction for the current source"
+    ],
+    "eof": "EOF resolves only a final pending possible P/R literal; it never synthesizes field or template exits."
+  },
+  "binary_abi": {
+    "tape_magic": "GSRT2\\0\\0\\0",
+    "tape_header_bytes": 192,
+    "tape_record_bytes": 88,
+    "sidecar_magic": "GSRD2\\0\\0\\0",
+    "sidecar_header_bytes": 64,
+    "sidecar_record_bytes": 232,
+    "endianness": "little"
+  },
+  "fixture_command": [
+    "python3 build_fixture.py FIXTURE_DIR",
+    "c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic semantic-route-tape.cpp -o semantic-route-tape",
+    "semantic-route-tape FIXTURE_DIR/store.bin FIXTURE_DIR/raw.bin FIXTURE_DIR/dictionary.txt FIXTURE_DIR/tape-a.bin FIXTURE_DIR/descriptors-a.bin FIXTURE_DIR/summary-a.json --fixture",
+    "semantic-route-tape FIXTURE_DIR/store.bin FIXTURE_DIR/raw.bin FIXTURE_DIR/dictionary.txt FIXTURE_DIR/tape-b.bin FIXTURE_DIR/descriptors-b.bin FIXTURE_DIR/summary-b.json --fixture",
+    "python3 verify.py --store FIXTURE_DIR/store.bin --raw FIXTURE_DIR/raw.bin --dictionary FIXTURE_DIR/dictionary.txt --tape-a FIXTURE_DIR/tape-a.bin --tape-b FIXTURE_DIR/tape-b.bin --sidecar-a FIXTURE_DIR/descriptors-a.bin --sidecar-b FIXTURE_DIR/descriptors-b.bin --summary-a FIXTURE_DIR/summary-a.json --summary-b FIXTURE_DIR/summary-b.json --receipt FIXTURE_DIR/verification.json"
+  ],
+  "fixture_acceptance": [
+    "strict C++17 compilation succeeds",
+    "A/B tape, sidecar, and normalized summary bytes match",
+    "the independent verifier accepts the ABI, coordinate order, route and witness hashes, event/flag combinations, raw and WRT digests, and zero positional prediction",
+    "the fixture exercises dictionary codes, case and escape controls, explicit and positional fields, possible delimiters, nested routes, overflow, atom boundaries, and terminal pending resolution",
+    "corrupted route identity and causal order fixtures are rejected"
+  ],
+  "production_activation": [
+    "The live Endpoint428 HORIZON retained-parent gate is terminal.",
+    "The exact sealed candidate revision, guarded runner, compiler identity, input hashes, commands, and exclusive outputs are bound through the adaptive workflow.",
+    "Two complete builds and independent verification remain within 1048576 KiB process-tree RSS and the frozen temporary-disk ceiling."
+  ],
+  "authority": {
+    "fixture": "source validation only",
+    "complete_tape": "zero-credit population infrastructure only",
+    "archive_authority": false,
+    "objective_credit_bytes": 0,
+    "forbidden_submission_inputs": [
+      "tape",
+      "descriptor sidecar",
+      "canonical raw corpus",
+      "offline coordinate maps"
+    ]
+  }
+}

@@ -1,5 +1,97 @@
 # enwiki9 Research Register
 
+## 2026-08-31 - Endpoint428 router supersedes the stale q1 execution order
+
+`evidence_conditioned_mutation_router_v7` now governs prospective execution.
+It preserves router v6 as immutable q1-era provenance but removes q1
+qualification, q1 economics, and q1 coordinates from the active dependency
+chain. The terminal q1 reflection retired q1 as a prize-facing parent, and the
+recorded q1 and Endpoint428 transformed prefixes are nonidentical. Therefore a
+q1-bound semantic tape, probability trace, or threshold cannot activate an
+Endpoint428 result.
+
+The active branch remains the immutable
+`endpoint428_horizon_retained_parent_trace_q0_v1` job. A scientific miss
+retires physical HORIZON without a LOCKSTEP, table, key-length, distance,
+calibration, or contextual-mixture rescue. A pass does not jump directly to
+LOCKSTEP: it first requires one portable exact-integer reanalysis and then one
+native one-byte P/K/D finite coder. Only positive native single-expert evidence
+may authorize a continuation-persistence shadow.
+
+The exact reanalysis closes a concrete arithmetic mismatch found before the
+active result was observed. The active frozen analyzer stores Q63 weights as
+integers but computes posterior division through `long double`, uses total
+`2^63`, and rounds halves upward. The frozen reusable SAFE-MIX law forbids
+floating point, uses total `2^63-1`, and rounds ties to even. Those are
+different algorithms, so SAFE-MIX cannot be silently substituted as the fix.
+`endpoint428_horizon_retained_parent_trace_exact_q0_v2` instead preserves the
+active experiment's intended `2^63`, equal-prior, half-up law and changes only
+posterior division to exact 63-step unsigned-integer long division. The active
+analyzer remains valid for its own prospectively frozen question, but only the
+corrected result may authorize a native codec. The same immutable trace must
+be repriced regardless of which result is better.
+
+Semantic work is no longer allowed to inherit the dormant q1 route tape.
+Source-only work may materialize an Endpoint428-bound parser and tape contract
+while HORIZON runs, but no competing full-stream scan may start. The new tape
+must bind Endpoint428's exact `647,798,592`-byte WRT stream, causal raw-prefix
+coordinate, coder-bit coordinate, WRT inverse state, descriptor identity, and
+two independent identical builds. Fiber-CTS remains the first semantic
+predictor. Fiber-FOSSIL is conditional residual work, and oldest-anchor versus
+most-recent retention and lockstep persistence are separate mutations.
+ROUTE-MIDAS remains parked until Fiber-CTS and an open compact midpoint parent
+independently qualify.
+
+That source-only tape is now implemented and sealed as candidate tree
+`a5e8391fc089f8e11b583d2e9c272b3619958ac55c5502618001e358957df4b8`.
+The implementation freezes route eligibility before reading the current WRT
+truth, incrementally reconstructs and compares raw bytes, emits fixed tape and
+descriptor ABIs, and never synthesizes template or field exits at EOF. The
+ordering addendum corrects the v2 prose without changing its information
+source: deferred state from source `i-2` and structural posttruth state from
+source `i-1` precede prediction at `i`; an ambiguous P/R at `i` cannot update
+history until prediction coordinate `i+2`.
+
+A bounded source-only fixture consumed `617` WRT bytes, reconstructed `604`
+raw bytes, and produced two identical `176`-record tapes and seven-descriptor
+sidecars. It exercised one-, two-, and three-byte dictionary codes, case and
+escape controls, explicit and positional fields, delimiter predictions,
+nested-route pause/resume, depth overflow, 96/97-byte atoms, and a final
+pending delimiter. The independent verifier accepted the causal ABI and
+rejected three corrupted variants: unknown route, witness mutation, and
+prediction-before-state-action order. This is implementation validation only;
+no complete route-tape build ran, no parent probabilities were read, and it
+earns zero score credit. The guarded complete runner now fails closed while
+the HORIZON retained-parent job is active.
+
+The five proposed synthesis names are narrowed as follows. HORIZON-LOCKSTEP is
+conditional on a corrected exact-integer HORIZON pass and then a positive
+native one-byte P/K/D archive; it must show incremental value specifically
+where the ordinary one-byte arm sleeps or changes donors. ANCHOR-MIDAS is
+parked because neither a native HORIZON expert nor an eligible compact deep
+midpoint parent exists. FIBER-HORIZON is merged into the existing conditional
+Fiber-FOSSIL residual question rather than receiving a parallel family name.
+ROUTE-MIDAS/LOOM-FASTWEIGHTS remains parked until Fiber-CTS proves semantic
+virtual time and a frozen compact adapter basis exists. GAMMA-SWITCHBOARD is a
+composition mechanism only and remains forbidden until two independent native
+singles pass their own exact gates.
+
+The adaptive queue was reconciled at the same boundary. Seventeen claimable
+duplicate NNCP diagnostic/retry records and four held records with terminal or
+superseding evidence were moved to `operations/adaptive/cancelled/` through
+the canonical workflow. All source, results, reflections, and lineage evidence
+remain intact. Twenty-six legacy jobs remain held and zero claimable pending
+jobs remain. This is queue hygiene, not algorithmic evidence, and adds zero
+score credit.
+
+Evidence: `operations/planning/evidence_conditioned_mutation_router_v7.json`,
+`operations/planning/endpoint428_horizon_retained_parent_trace_exact_q0_v2.json`,
+`operations/planning/endpoint428_semantic_route_tape_q0_v2_ordering_addendum.json`,
+`operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json`,
+`results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/decision.json`,
+`operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_q0_v1.json`,
+and `operations/adaptive/reflections/20260823T215147Z_7827ad9bc5.json`.
+
 ## 2026-08-28 - score-first HORIZON-FIBER pivot replaces q1 blocking
 
 The campaign no longer treats q1 qualification as the blocking path to a win.

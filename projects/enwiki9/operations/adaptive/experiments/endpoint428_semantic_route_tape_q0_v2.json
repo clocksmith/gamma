@@ -1,0 +1,201 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "endpoint428_semantic_route_tape_q0_v2",
+  "proposalId": "endpoint428_semantic_route_tape_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "endpoint428_semantic_route_tape_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v1/20260831T205429506938Z_af5157930a62.json",
+      "sha256": "sha256:59c1f48268ef20cb4b147fb7885ddcaf8c7a77b50f3d241b28104cc23ba72de8"
+    }
+  },
+  "hypothesis": {
+    "claim": "On Endpoint428's exact 647,798,592-byte WRT stream, a pretruth-state route schedule can produce two byte-identical 88-byte-record semantic tapes, exactly reconstruct all 1,000,000,000 raw bytes through an independent incremental inverse, and expose explicit-field predictions without current-byte, positional-field, delimiter, or nested-route leakage.",
+    "falsification": "Reject this exact parser identity if A/B differ, raw reconstruction diverges, a predictive record is not determined by parser state through the prior byte, positional fields become predictive, deferred updates are misordered, descriptors alias, the ABI fails, or a complete build exceeds its resource bounds."
+  },
+  "changedMechanism": "Correct v1's truth-dependent possible-delimiter exclusion: make current-byte prediction eligibility depend only on pretruth explicit-field state, and defer only the posttruth route-history update for ambiguous P/R bytes.",
+  "invariants": [
+    "The input is the exact 647,798,597-byte Endpoint428 store with SHA-256 fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9; five wrapper bytes precede 647,798,592 WRT bytes.",
+    "The independently decoded raw output is exactly 1,000,000,000 bytes and matches SHA-256 159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc byte-for-byte.",
+    "The reverse dictionary input is exactly 411,996 bytes with SHA-256 4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a.",
+    "At each coordinate, deferred updates from truths through i-1 occur first; prediction eligibility for i is then frozen; only afterward is WRT byte i decoded and allowed to change route history or parser state.",
+    "Every byte reached in a valid explicit field-value state has a predictive record, including a byte that later proves to be Q, P, or R.",
+    "A possible P or R byte changes route history only after the following truth distinguishes literal data from PP/RR syntax.",
+    "Positional fields produce audit-only exit events and zero predictive value events.",
+    "Nested templates pause the outer field route and never append nested bytes to it.",
+    "No parent probability, archive outcome, future byte, q1 semantic population, fitted parameter, or post-result selection enters either build.",
+    "The tape and descriptor sidecar are offline evidence only and forbidden submission inputs."
+  ],
+  "controls": [
+    {
+      "id": "A",
+      "role": "treatment",
+      "definition": "One fresh source-bound process emits the Endpoint428 route tape, descriptor sidecar, and normalized summary."
+    },
+    {
+      "id": "B",
+      "role": "comparator",
+      "definition": "A second fresh process over identical inputs must emit byte-identical artifacts."
+    },
+    {
+      "id": "raw-inverse",
+      "role": "comparator",
+      "definition": "An independent incremental dictionary inverse compares every emitted raw byte with canonical enwik9 and binds before/after frontiers to source WRT coordinates."
+    },
+    {
+      "id": "positional-negative",
+      "role": "negative",
+      "definition": "A keyless field may emit a nonpredictive exit audit but must never expose a positional field_value_byte."
+    },
+    {
+      "id": "delimiter-order-negative",
+      "role": "negative",
+      "definition": "P/R prediction remains pretruth while its history update is delayed; any retroactive deletion of the prediction or pre-resolution history write fails causality."
+    }
+  ],
+  "population": {
+    "unit": "Endpoint428 WRT byte with source, causal availability, first-bit, and raw inverse frontier coordinates",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 647798592,
+    "selection": "Complete Endpoint428 WRT stream after the five-byte store wrapper; no sampling, fitting, reset, or reordering.",
+    "coordinate": "Zero-based source and availability WRT byte coordinates, availability*8 coder decision, and half-open raw decode frontier."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "WRT truths strictly before the current byte",
+      "complete template name and explicit key from prior bytes",
+      "bounded parser stack and route state reconstructed from the decoded prefix",
+      "raw bytes already produced by the independent inverse"
+    ],
+    "forbiddenInformation": [
+      "the current truth bit or byte when selecting the current predictive event",
+      "future delimiter, field length, eventual positional classification, later template validity, or later tape records",
+      "raw_decoded_after for the current source byte before its truth is decoded",
+      "descriptor sidecar reads by a predictor",
+      "parent probabilities, coder state, payload, archive result, or encoder-only state"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "v1-unmeasured-revision",
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v1/20260831T205429506938Z_af5157930a62.json",
+      "sha256": "sha256:59c1f48268ef20cb4b147fb7885ddcaf8c7a77b50f3d241b28104cc23ba72de8"
+    },
+    {
+      "id": "v1-design",
+      "path": "operations/planning/endpoint428_semantic_route_tape_q0_v1.json",
+      "sha256": "sha256:22161f829c142134b74f91cf3cf3f79387041bc71bfd51c33693477653793695"
+    },
+    {
+      "id": "v2-design",
+      "path": "operations/planning/endpoint428_semantic_route_tape_q0_v2.json",
+      "sha256": "sha256:d391b1099b3c934cf8a4ced1814947ef03f3eaead787a08a924a3deee98f20a2"
+    },
+    {
+      "id": "endpoint-horizon-terminal",
+      "path": "results/endpoint428_horizon_dualclock_source_census_q0_retry_v1/decision.json",
+      "sha256": "sha256:26afdc413eb4200279f9061e28569090bf98053c0fb8ad4d8d4f08ff658dfae4"
+    },
+    {
+      "id": "schema-parser-source",
+      "path": "programs/wiki_schema_vm_ceiling_q0_v1/schema-vm-scan.cpp",
+      "sha256": "sha256:d54ff0bb169f44ca695f943d6a119c9a780783479b3187ecdbc88322c3732691"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 131072,
+    "expectedNetSavingsBytes": -131072
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 0.01,
+    "expectedMemoryRatio": 0.01,
+    "uncertaintyRisk": 0.3,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {
+      "id": "scannedWrtBytes",
+      "definition": "WRT stream bytes consumed after the outer store wrapper.",
+      "unit": "bytes"
+    },
+    {
+      "id": "reconstructedRawBytes",
+      "definition": "Raw bytes incrementally reconstructed and matched.",
+      "unit": "bytes"
+    },
+    {
+      "id": "repeatIdentityPass",
+      "definition": "A/B tape, sidecar, and normalized summary bytes match.",
+      "unit": "boolean"
+    },
+    {
+      "id": "causalAbiPass",
+      "definition": "Independent verifier accepts coordinates, ordering, event timing, flags, keys, descriptors, and raw frontiers.",
+      "unit": "boolean"
+    },
+    {
+      "id": "descriptorAliasCount",
+      "definition": "Equal route or witness digest attached to unequal descriptors.",
+      "unit": "aliases"
+    },
+    {
+      "id": "positionalPredictiveEvents",
+      "definition": "Predictive events carrying positional identity.",
+      "unit": "events"
+    },
+    {
+      "id": "pretruthEligibilityViolations",
+      "definition": "Predictive records selected using current truth or posttruth parser state.",
+      "unit": "violations"
+    },
+    {
+      "id": "maximumTreeRssKiB",
+      "definition": "Maximum guarded process-tree RSS across A, B, and verification.",
+      "unit": "KiB"
+    }
+  ],
+  "promotionPredicates": [
+    {"id": "complete-wrt", "measurement": "scannedWrtBytes", "operator": "eq", "threshold": 647798592},
+    {"id": "complete-raw", "measurement": "reconstructedRawBytes", "operator": "eq", "threshold": 1000000000},
+    {"id": "repeat", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "causal-abi", "measurement": "causalAbiPass", "operator": "eq", "threshold": true},
+    {"id": "no-alias", "measurement": "descriptorAliasCount", "operator": "eq", "threshold": 0},
+    {"id": "no-positional-prediction", "measurement": "positionalPredictiveEvents", "operator": "eq", "threshold": 0},
+    {"id": "pretruth-only", "measurement": "pretruthEligibilityViolations", "operator": "eq", "threshold": 0},
+    {"id": "resource", "measurement": "maximumTreeRssKiB", "operator": "lte", "threshold": 1048576}
+  ],
+  "killPredicates": [
+    {"id": "repeat-failure", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "causal-failure", "measurement": "causalAbiPass", "operator": "eq", "threshold": false},
+    {"id": "descriptor-alias", "measurement": "descriptorAliasCount", "operator": "gt", "threshold": 0},
+    {"id": "positional-leak", "measurement": "positionalPredictiveEvents", "operator": "gt", "threshold": 0},
+    {"id": "pretruth-violation", "measurement": "pretruthEligibilityViolations", "operator": "gt", "threshold": 0},
+    {"id": "resource-failure", "measurement": "maximumTreeRssKiB", "operator": "gt", "threshold": 1048576}
+  ],
+  "outputs": [
+    "results/endpoint428_semantic_route_tape_q0_v2/tape-a.bin",
+    "results/endpoint428_semantic_route_tape_q0_v2/tape-b.bin",
+    "results/endpoint428_semantic_route_tape_q0_v2/descriptors-a.bin",
+    "results/endpoint428_semantic_route_tape_q0_v2/descriptors-b.bin",
+    "results/endpoint428_semantic_route_tape_q0_v2/summary-a.json",
+    "results/endpoint428_semantic_route_tape_q0_v2/summary-b.json",
+    "results/endpoint428_semantic_route_tape_q0_v2/verification.json",
+    "results/endpoint428_semantic_route_tape_q0_v2/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-08-31T21:00:00Z"
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "endpoint428_semantic_route_tape_q0_v2_ordering_addendum",
+  "revision": 1,
+  "operational_status": "design_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "endpoint428_semantic_route_tape_q0_v2",
+      "required_evidence": "Preserve the exact Endpoint428 population, route identity, record ABI, explicit-key-only predictive population, incremental inverse, resource limits, and zero-credit boundary."
+    }
+  ],
+  "contract": {
+    "supersedes_only": "operations/planning/endpoint428_semantic_route_tape_q0_v2.json contract.causal_schedule items 1 and 7 and contract.coordinate_law.record_order",
+    "reason": "The frozen prose correctly requires prediction at coordinate i to depend only on truths through i-1, but its same-availability ordering placed posttruth exits after prediction and described an ambiguous P/R update as available at i+1. Both statements conflict with that causal boundary.",
+    "exact_schedule": [
+      "At availability coordinate i, first apply a deferred literal update from source i-2 only when truth i-1 has shown that the possible P/R pair was not PP/RR syntax.",
+      "Next apply all structural posttruth actions caused by source i-1, including route entry, field exit, template entry or exit, and overflow transitions.",
+      "Then freeze prediction eligibility for source i from the resulting parser state. The implementation must do this before reading WRT byte i.",
+      "Only after prediction eligibility is frozen may the scanner read and decode WRT byte i, extend the raw frontier, and perform posttruth actions whose availability is i+1.",
+      "A possible P/R at source i is unresolved until truth i+1 is decoded. If literal, its route-history update first becomes available at i+2. If i is the final source byte, the known end of the frozen stream permits its literal update at the terminal boundary wrt_stream_bytes, where no later prediction exists.",
+      "PP/RR syntax never enters the containing route history. The prediction that existed for either delimiter byte remains in the tape because its eligibility was fixed pretruth."
+    ],
+    "equal_availability_record_order": [
+      "deferred_value_update derived from earlier source bytes",
+      "posttruth structural records derived from the immediately prior decoded byte, preserving parser emission order",
+      "field_value_byte prediction for the current source byte"
+    ],
+    "coordinate_invariants": {
+      "prediction": "event 3 has availability_wrt_coordinate equal to source_wrt_coordinate",
+      "ordinary_posttruth": "events 1, 2, 5, 6, 7, 8, and 9 have availability_wrt_coordinate equal to source_wrt_coordinate plus one",
+      "deferred_literal": "event 4 normally has availability_wrt_coordinate equal to source_wrt_coordinate plus two; only an unresolved final source byte may use the terminal availability source plus one",
+      "eof": "EOF does not synthesize template or field exits. It may resolve only the final pending possible P/R as a literal because the complete frozen population ends there."
+    },
+    "implementation_proof": [
+      "RouteParser::PreparePretruth is called before getc reads the current WRT truth.",
+      "The independent verifier rejects decreasing availability, prediction-before-state-action order at equal availability, illegal event/flag combinations, and illegal source-to-availability deltas.",
+      "A source-only fixture must contain explicit, positional, nested, delimiter, final-pending, overflow, and atom-boundary cases and must produce byte-identical A/B artifacts."
+    ]
+  },
+  "activation_requirements": [
+    "This addendum and the complete candidate source tree are sealed before any fixture receipt or complete route-tape build is used as evidence.",
+    "Only bounded source fixtures may run while the Endpoint428 HORIZON retained-parent gate is active.",
+    "A complete route-tape build remains forbidden until that active gate terminalizes."
+  ],
+  "claim_boundary": [
+    "This correction supplies no archive, probability, score, or Hutter Prize credit.",
+    "It does not authorize Fiber-CTS, Fiber-FOSSIL, FIBER-HORIZON, ROUTE-MIDAS, or any native codec integration.",
+    "It corrects causal ordering only and adds no semantic route or predictive information source."
+  ]
+}
