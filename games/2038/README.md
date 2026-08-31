@@ -69,8 +69,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.8.0-rc.18-test`.
-Executable game `0.14.17` implements that candidate under
+`0.8.0-rc.19-test`.
+Executable game `0.14.18` implements that candidate under
 `nineteen-hex-simplified-v1`, including retained Production Power snapshots,
 one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
 Power contracts, Research Protection, four secret Era Dossier choices, and
@@ -106,9 +106,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.14.17` game and export its
+- `http://localhost:8038/` — play the synchronized `0.14.18` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.14.17` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.14.18` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -192,8 +192,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.14.17`
-bundle, its synchronized `0.8.0-rc.18-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.14.18`
+bundle, its synchronized `0.8.0-rc.19-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

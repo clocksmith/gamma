@@ -36,9 +36,6 @@ test("release content identity includes every player-copy source", async () => {
   assert.ok(releaseSources.has(graph.playerCopyContract));
   for (const artifact of graph.artifacts) {
     assert.ok(releaseSources.has(artifact.source), `release binds ${artifact.source}`);
-    if (artifact.ledger) {
-      assert.ok(releaseSources.has(artifact.ledger), `release binds ${artifact.ledger}`);
-    }
     for (const overlay of artifact.overlays || []) {
       assert.ok(releaseSources.has(overlay), `release binds ${overlay}`);
     }
@@ -72,7 +69,6 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/docs/optional-tactics.md",
     "dist/contracts/era-situation-ledger.json",
     "dist/runtime/game-config.json",
-    "dist/runtime/era-situation-ledger.json",
     "dist/runtime/factions.json",
     "dist/runtime/headlines.json",
     "dist/runtime/escalations.json",
@@ -97,29 +93,6 @@ test("semantic graph owns every player-facing construction surface", async () =>
     ),
     "every generated source and overlay has a declared canonical source root"
   );
-});
-
-test("the thematic Bible is generated from one editorial template and one ledger", async () => {
-  const graph = await readJson("content/graph.json");
-  const artifact = graph.artifacts.find(
-    (candidate) => candidate.target === "docs/thematic-content-bible.md"
-  );
-  assert.deepEqual(artifact, {
-    source: "content/editorial/thematic-content-bible.md",
-    ledger: "content/data/era-situation-ledger.json",
-    target: "docs/thematic-content-bible.md",
-    format: "era-situation-bible"
-  });
-  const [template, generated] = await Promise.all([
-    readFile(new URL(artifact.source, root), "utf8"),
-    readFile(new URL(artifact.target, root), "utf8")
-  ]);
-  assert.match(template, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
-  assert.doesNotMatch(generated, /<!-- GENERATED:ERA_SITUATION_LEDGER -->/);
-  assert.match(generated, /\*\*43 situations\*\*/);
-  assert.match(generated, /\*\*62 game surfaces\*\*/);
-  assert.doesNotMatch(generated, /### Era-placement ledger/);
-  assert.doesNotMatch(generated, /### Retained editorial backlog/);
 });
 
 test("physical sources are projected from declared ownership roots", async () => {

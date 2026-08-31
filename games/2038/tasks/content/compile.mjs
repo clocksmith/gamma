@@ -1,6 +1,5 @@
 import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
-import { renderEraSituationLedgerMarkdown } from "./era-situation-ledger.mjs";
 import { mergeContent } from "./merge.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
 
@@ -165,23 +164,6 @@ for (const artifact of graph.artifacts) {
     }
     const source = await readFile(sourcePath, "utf8");
     output = resolveString(source, variables);
-    assertNoReferences(output, artifact.source);
-  } else if (artifact.format === "era-situation-bible") {
-    if ((artifact.overlays || []).length) {
-      throw new Error(`Era-situation Bible does not support overlays: ${artifact.target}`);
-    }
-    const ledgerPath = resolveSourcePath(
-      artifact.ledger,
-      `${artifact.target} ledger`,
-      sourceRoots
-    );
-    const source = await readFile(sourcePath, "utf8");
-    const marker = "<!-- GENERATED:ERA_SITUATION_LEDGER -->";
-    if (source.split(marker).length !== 2) {
-      throw new Error(`${artifact.source} must contain exactly one ${marker} marker.`);
-    }
-    const rendered = renderEraSituationLedgerMarkdown(await readJson(ledgerPath));
-    output = resolveString(source.replace(marker, rendered), variables);
     assertNoReferences(output, artifact.source);
   } else {
     throw new Error(`Unsupported content format: ${artifact.format}`);

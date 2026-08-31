@@ -37,7 +37,7 @@ test("published executable surfaces are path-safe and make the paired bridge opt
     { kind: "game", profileId: "internal-review" }
   );
   assert.match(internal, /href="\/lab\.html"/);
-  assert.match(internal, /not deployable/i);
+  assert.match(internal, /not approved for public deployment/i);
   const module = rewritePrototypeModule(
     'import x from "/lab/contracts/x.js"; fetch("/dist/runtime/factions.json");'
   );
@@ -118,7 +118,7 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.equal(manifest.deploymentProfile, "public-playtest");
     assert.equal(manifest.artifactKind, "firebase-public-playtest-site");
     assert.equal(manifest.deployable, true);
-    assert.equal(manifest.runtimeArtifacts.length, 7);
+    assert.equal(manifest.runtimeArtifacts.length, 9);
     assert.ok(
       manifest.runtimeArtifacts.every((target) => /^dist\/runtime\/[^/]+\.json$/.test(target))
     );
@@ -181,8 +181,12 @@ test("public playtest publication is an allowlist with release identity and feed
       "docs/card-reference.html",
       "docs/world-and-institutions.html",
       "gallery-baseline.html",
+      "dist/runtime/escalations.json",
+      "dist/runtime/simulation-copy.json",
       "release-identity.json",
-      "robots.txt"
+      "robots.txt",
+      "web/first-game-guide.css",
+      "web/first-game-guide.js"
     ]) {
       assert.ok((await stat(resolve(outputRoot, required))).isFile(), `publishes ${required}`);
     }

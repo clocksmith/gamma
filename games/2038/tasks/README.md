@@ -9,3 +9,6 @@ their paths into new scripts.
 contract. `build-firebase-site.mjs` consumes that contract's deployment
 profiles: `public-playtest` is the only Firebase-deployable allowlist, while
 `internal-review` builds a complete local artifact marked non-deployable.
+The profiles declare their web files, Lab modules, and runtime artifacts once;
+validation derives the dependency closure and the site builder consumes the
+same declarations.

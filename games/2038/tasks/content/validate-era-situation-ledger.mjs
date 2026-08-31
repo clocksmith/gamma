@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
@@ -92,7 +92,108 @@ async function canonicalSurfaceRegistry() {
   return registry;
 }
 
-function validateDeploymentProfiles(ledger) {
+function assertPublicationPath(path, label) {
+  requireString(path, label);
+  if (path.startsWith("/") || path.split("/").includes("..")) {
+    throw new Error(`${label} must be a project-relative path.`);
+  }
+}
+
+function importedModuleSpecifiers(source) {
+  return [...source.matchAll(
+    /\b(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/g
+  )].map((match) => match[1]);
+}
+
+function runtimeReferences(source) {
+  const names = new Set();
+  for (const match of source.matchAll(/dist\/runtime\/([a-z0-9-]+\.json)/g)) {
+    names.add(`dist/runtime/${match[1]}`);
+  }
+  for (const match of source.matchAll(/\breadJson\(["']([a-z0-9-]+\.json)["']\)/g)) {
+    names.add(`dist/runtime/${match[1]}`);
+  }
+  return names;
+}
+
+async function validatePublicationDependencies(ledger) {
+  const graph = await readJson("content/graph.json");
+  const declaredRuntime = new Set(
+    graph.artifacts
+      .map((artifact) => artifact.target)
+      .filter((target) => /^dist\/runtime\/[^/]+\.json$/.test(target))
+  );
+  const webRoot = resolve(projectRoot, "web");
+  const labRoot = resolve(projectRoot, "lab");
+  for (const [profileId, profile] of Object.entries(ledger.deploymentProfiles)) {
+    const publishedWeb = new Set(profile.webFiles);
+    const publishedLab = new Set(profile.labModules);
+    const referencedRuntime = new Set();
+    for (const [root, paths, label] of [
+      [webRoot, profile.webFiles, "web file"],
+      [labRoot, profile.labModules, "lab module"]
+    ]) {
+      for (const path of paths) {
+        assertPublicationPath(path, `Deployment profile ${profileId} ${label}`);
+        const absolute = resolve(root, path);
+        let source;
+        try {
+          source = await readFile(absolute, "utf8");
+        } catch (error) {
+          if (error.code === "ENOENT") {
+            throw new Error(`Deployment profile ${profileId} references missing ${label}: ${path}`);
+          }
+          throw error;
+        }
+        if (!path.endsWith(".js")) continue;
+        for (const target of runtimeReferences(source)) referencedRuntime.add(target);
+        for (const specifier of importedModuleSpecifiers(source)) {
+          let imported;
+          if (specifier.startsWith("/web/")) imported = resolve(webRoot, specifier.slice(5));
+          else if (specifier.startsWith("/lab/")) imported = resolve(labRoot, specifier.slice(5));
+          else if (specifier.startsWith(".")) imported = resolve(dirname(absolute), specifier);
+          else continue;
+          const webRelative = relative(webRoot, imported);
+          const labRelative = relative(labRoot, imported);
+          if (!webRelative.startsWith("..") && !publishedWeb.has(webRelative)) {
+            throw new Error(
+              `Deployment profile ${profileId} omits imported web module ${webRelative} required by ${path}.`
+            );
+          }
+          if (!labRelative.startsWith("..") && !publishedLab.has(labRelative)) {
+            throw new Error(
+              `Deployment profile ${profileId} omits imported lab module ${labRelative} required by ${path}.`
+            );
+          }
+        }
+      }
+    }
+    const runtimeArtifacts = profile.runtimeArtifacts.includes("*")
+      ? declaredRuntime
+      : new Set(profile.runtimeArtifacts);
+    for (const target of runtimeArtifacts) {
+      if (!declaredRuntime.has(target)) {
+        throw new Error(`Deployment profile ${profileId} references undeclared runtime artifact: ${target}`);
+      }
+    }
+    const missing = [...referencedRuntime].filter((target) => !runtimeArtifacts.has(target));
+    if (missing.length) {
+      throw new Error(
+        `Deployment profile ${profileId} omits runtime dependencies: ${missing.sort().join(", ")}`
+      );
+    }
+    if (profileId === "public-playtest") {
+      const unused = [...runtimeArtifacts].filter((target) => !referencedRuntime.has(target));
+      if (unused.length) {
+        throw new Error(
+          `Deployment profile ${profileId} publishes unreferenced runtime artifacts: ${unused.sort().join(", ")}`
+        );
+      }
+    }
+  }
+}
+
+async function validateDeploymentProfiles(ledger) {
   const profiles = ledger.deploymentProfiles;
   if (!profiles || typeof profiles !== "object" || Array.isArray(profiles)) {
     throw new Error("Era ledger must declare deploymentProfiles.");
@@ -111,6 +212,8 @@ function validateDeploymentProfiles(ledger) {
     requireStringArray(profile.documents, `Deployment profile ${id} documents`);
     requireStringArray(profile.galleries, `Deployment profile ${id} galleries`);
     requireStringArray(profile.runtimeArtifacts, `Deployment profile ${id} runtimeArtifacts`);
+    requireStringArray(profile.webFiles, `Deployment profile ${id} webFiles`);
+    requireStringArray(profile.labModules, `Deployment profile ${id} labModules`);
   }
   const publicProfile = profiles["public-playtest"];
   const reviewProfile = profiles["internal-review"];
@@ -143,13 +246,13 @@ function validateDeploymentProfiles(ledger) {
   for (const forbiddenRuntime of [
     "dist/runtime/tactics.json",
     "dist/runtime/reserve-specialists.json",
-    "dist/runtime/secret-objectives.json",
-    "dist/runtime/simulation-copy.json"
+    "dist/runtime/secret-objectives.json"
   ]) {
     if (publicProfile.runtimeArtifacts.includes(forbiddenRuntime) || publicProfile.runtimeArtifacts.includes("*")) {
       throw new Error(`public-playtest must exclude ${forbiddenRuntime}.`);
     }
   }
+  await validatePublicationDependencies(ledger);
 }
 
 async function assertDeferredTermsAbsentFromBaseline(scenarios) {
@@ -190,7 +293,7 @@ export async function validateEraSituationLedger(ledger) {
   if (ledger.editorialAuthority !== "docs/thematic-content-bible.md") {
     throw new Error("Era ledger must point to the sole thematic editorial authority.");
   }
-  validateDeploymentProfiles(ledger);
+  await validateDeploymentProfiles(ledger);
   if (!Array.isArray(ledger.eras) || ledger.eras.length !== expectedEraIds.length) {
     throw new Error("Era ledger must declare exactly four ordered Eras.");
   }
