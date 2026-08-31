@@ -67,6 +67,7 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/docs/advanced-play.md",
     "dist/docs/world-and-institutions.md",
     "dist/docs/optional-tactics.md",
+    "dist/contracts/era-situation-ledger.json",
     "dist/runtime/game-config.json",
     "dist/runtime/factions.json",
     "dist/runtime/headlines.json",
@@ -323,10 +324,10 @@ test("Era panel data is the single source for the world-companion escalation lor
 });
 
 test("retained signature abilities project concrete continuity institutions", async () => {
-  const [factionsDocument, mandatesDocument, bible] = await Promise.all([
+  const [factionsDocument, mandatesDocument, eraLedger] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
+    readJson("content/data/era-situation-ledger.json")
   ]);
   const factions = Object.fromEntries(
     factionsDocument.factions.map((faction) => [faction.id, faction])
@@ -381,11 +382,22 @@ test("retained signature abilities project concrete continuity institutions", as
   assert.match(mandates.responsible_acceleration.rulesText, /at least 4 Trust/);
   for (const concept of [
     "Instance Quorum",
-    "Right of Exit Certification",
-    "Human Compatibility Office"
+    "Right of Exit Certification"
   ]) {
-    assert.match(bible, new RegExp(`\\| ${concept} \\| Adopted framing \\| Continuity \\|`));
+    assert.ok(
+      eraLedger.scenarios.some((scenario) =>
+        scenario.eraId === "continuity"
+        && scenario.disposition.startsWith("adopted")
+        && scenario.concepts.includes(concept)
+      ),
+      `${concept} remains adopted Continuity framing`
+    );
   }
+  const humanCompatibility = eraLedger.scenarios.find(
+    (scenario) => scenario.id === "human-compatibility-office"
+  );
+  assert.equal(humanCompatibility.disposition, "research-backlog");
+  assert.deepEqual(humanCompatibility.surfaceBindings, []);
 });
 
 test("Default Rules are compact while every moved authority has one table surface", async () => {

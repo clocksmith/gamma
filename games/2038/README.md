@@ -55,10 +55,12 @@ This repository is a **prototype**, not a manufactured or published product.
   Documentation reader during `npm run docs:html`. Author its source under
   `content/copy/`, declare the projection in `content/graph.json`, and never
   author directly in `dist/docs/`.
-- The sole lore authority, editorial backlog, research boundary, Era-placement
-  ledger, and writing contract live in
-  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md). The
-  generated surface inventory lives in
+- The sole lore authority, editorial backlog, research boundary, Era placement,
+  and writing contract live in
+  [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md). Its
+  machine-enforced scenario, surface, copy, mechanic, and deployment projection
+  is [`content/data/era-situation-ledger.json`](content/data/era-situation-ledger.json).
+  The generated surface inventory lives in
   [`dist/runtime/content-manifest.json`](dist/runtime/content-manifest.json).
 - Player personas, CLI-backed decision policies, Monte Carlo execution, and
   replay are documented in
@@ -67,8 +69,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.8.0-rc.17-test`.
-Executable game `0.14.16` implements that candidate under
+`0.8.0-rc.18-test`.
+Executable game `0.14.17` implements that candidate under
 `nineteen-hex-simplified-v1`, including retained Production Power snapshots,
 one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
 Power contracts, Research Protection, four secret Era Dossier choices, and
@@ -104,9 +106,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.14.16` game and export its
+- `http://localhost:8038/` — play the synchronized `0.14.17` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.14.16` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.14.17` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -116,9 +118,19 @@ the canonical server:
 by the release gate. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
-The deployed review interface at
-`https://canvascontext.com/` plays weighted and greedy opponents
-entirely in the browser with no Node server. The local server is an optional
+The public playtest interface at `https://canvascontext.com/` contains only the
+playable game, First Game Guide, required play references, World and
+Institutions, baseline gallery, release identity, and feedback route. It plays
+weighted and greedy opponents entirely in the browser with no Node server. The
+Simulation Lab, internal design and evidence records, manufacturing research,
+complete gallery, and deferred modules are excluded. Crawler directives do not
+provide access control.
+
+Build the exact Firebase allowlist with `npm run publish:firebase:build`. Build
+the complete, explicitly non-deployable local review artifact with
+`npm run review:site:build`.
+
+The local server is an optional
 bridge for Claude, Codex, hybrid opponents, and server-backed Simulation Lab
 jobs. When needed, paste the private token printed by `npm run dev` and approve
 Chrome’s local-network prompt. The bridge remains bound to loopback, accepts
@@ -180,8 +192,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.14.16`
-bundle, its synchronized `0.8.0-rc.17-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.14.17`
+bundle, its synchronized `0.8.0-rc.18-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

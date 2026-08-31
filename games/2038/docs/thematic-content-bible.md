@@ -10,7 +10,10 @@ Player-facing component text belongs in `content/copy/`. The two
 player-readable document templates are `content/copy/core-rules.md` and
 `content/copy/world-and-institutions.md`. `dist/runtime/` and `dist/docs/core-rules.md`
 are compiler-owned projections. Browser and simulation labels belong in
-`content/runtime/`.
+`content/runtime/`. The non-narrative enforcement index lives in
+`content/data/era-situation-ledger.json`; it projects these editorial decisions
+into stable IDs, surface bindings, copy references, mechanic-preservation
+status, and deployment profiles. It does not create lore independently.
 
 Use this document to decide what a card, tile, action, faction, or ending must
 mean before writing its player-facing text. Do not place unused flavor,
@@ -23,7 +26,9 @@ The world is collected before the fixed card budget is allowed to compress it.
 Every proposed idea receives one explicit disposition: adopt on an existing
 surface, combine into an existing causal event, move to another Era, retain as
 companion texture, retain as research backlog, or remove. Only the adopted
-concept traceability table makes an idea current canon.
+concepts in this document may become current canon. The Era situation ledger
+must then bind each adopted scenario to an existing surface before the compiler
+will accept or deploy it.
 
 Era placement follows the point where an idea changes institutional status,
 not the date when its first prototype might exist. When a familiar science
@@ -517,38 +522,32 @@ use the event-design questions below.
 
 ### Era-placement ledger
 
-These placements are settled editorial decisions. Earlier seeds may appear,
-but the primary Era is where the idea becomes a defining public institution.
+The four Era sections above own the editorial placement and causal history.
+The machine-readable projection is
+`content/data/era-situation-ledger.json` using
+`mandate2038.era-situation-ledger/v1`. It records each Era's order, status
+change, central conflict, causal threads, scenarios, dispositions, public
+benefits, institutional consequences, surface bindings, copy references,
+mechanic-preservation status, and deployment profiles.
 
-| Primary Era | Settled concepts |
-| --- | --- |
-| Progress | Bankruptcy Data Estates; Supervised-Autonomy Homes; Strategic Open Weights; Cheap Token Rebound; Synthetic Discovery Collapse; Reverse Acquihire Economy; Grief Subscriptions; Abundance Constituency; Subscription Body Stack; Model Smuggling. |
-| Capacity | Utility Capture; Liability Custodians; Counterfactual Casinos; Aquifer Depletion Crisis; Compute Blocs and Model Asylum; Orbital Power Bypass; Autonomy Queue Collapse; Biological Utility Charter; Wartime Water Bridge. |
-| Authority | Cognitive Donor Clinics; Analog Havens; Synthetic Family Law; the Billion-Instance Bloom; Sacrifice-Zone Accounting; Licensed Organ Testimony; Pollinator Corridor Protocol; Passive Citizen Dividend; Semantic Court Mandates; posthumous board standing. |
-| Continuity | Cortical Commons; Matter Compiler; Continuity Snapshot Standard; Metropolitan Mind Trust; Living Continent Compact; persistent posthumous labor. |
-| World Ending horizon | Planetary and stellar computation; universe-scale continuity plans. |
-
-The governing cross-Era threads are explicit. Model smuggling matures into
-compute blocs. Grief subscriptions mature into synthetic-family law. Aquifer
-depletion and biological utilities mature into the bio-compute bloom's
-environmental testimony, pollinator contracts, and sacrifice-zone accounting.
-The bloom's sensor license becomes the precedent for self-replicating
-maintenance and the Living Continent Compact in Continuity. Cybernetic care
-becomes neural service and eventually substrate continuity. Posthumous board
-standing matures into continued labor. Cosmic conversion remains a promised
-horizon, not a completed ordinary event.
+`npm run content:validate` rejects an adopted scenario without a valid game
+surface, an Era mismatch, duplicate bindings, deferred material entering the
+public baseline, invalid copy references, or any deployed Era panel, Headline,
+Mandate, Program, faction ability, or ending absent from the ledger. This
+replaces the former hand-maintained placement and traceability tables.
+An earlier scenario may use a later-unlocked surface only when the binding
+explicitly declares `later-expression`; Wartime Water Bridge is the current
+example.
 
 ### Retained editorial backlog
 
-Unselected ideas remain available without pretending they are current canon:
-Uncanny Concierge Fraud, Synthetic Research Laundering, Bootleg Compute Malls,
-Predictive Dismissal, education's generation-and-detection economy,
-human-origin luxury certification, Manual Operations Retirement, Casualty
-Settlement Networks, the Non-Interference Office, Developmental Companion
-Standards, Public Purpose Service, the Purpose Exchange, weather allocation,
-Nonhuman Standing, Entanglement Custody, Consciousness Efficiency Review,
-Instance Quorum, and Right of Exit Certification. A later revision must map
-one of these to a specific surface and preserve its mechanic before adoption.
+Unselected ideas remain available without pretending they are current canon.
+Their canonical `deferred` or `research-backlog` dispositions live in the Era
+situation ledger and have no surface bindings. A later revision must first
+settle the editorial decision here, then map the scenario to a specific surface
+and preserve its mechanic before changing that disposition. Instance Quorum
+and Right of Exit Certification are no longer backlog entries; they are adopted
+framing within Snapshot Continuity and do not create additional cards or rules.
 
 ## Whole-game lore atlas
 
@@ -569,54 +568,18 @@ companions must agree on Progress, Capacity, Authority, and Continuity.
 
 ## Adopted concept traceability
 
-This is a design record, not player-facing content. A concept is adopted only
-when the named surface expresses it without changing the listed mechanic.
-
-| Concept | Status | Era | Surface ID | Mechanic retained |
-| --- | --- | --- | --- | --- |
-| Cheap Token Rebound | Adopted | Progress | `headline:ten_dollar_intelligence` | Research and Deploy lose Compute cost while adding Scrutiny. |
-| Bankruptcy Data Estates | Adopted | Progress | `headline:employee_free_unicorn` | Organize converts returned Teams into Runway and Scrutiny. |
-| Supervised-Autonomy Homes | Adopted | Progress | `headline:synthetic_celebrity` | The next Consumer or Media Deploy becomes easier and riskier. |
-| Strategic Open Weights | Adopted | Progress | `headline:open_weights_drop` | Everyone gains Capability and the lowest-Customer player gains Trust. |
-| Reverse Acquihire | Adopted | Progress | `headline:talent_gold_rush` | A secret Runway auction moves the winner's CEO and grants Trust. |
-| Abundance Constituency | Adopted | Progress | `headline:professional_exam_sweep` | Strong Research grants Trust and may remove Scrutiny. |
-| Subscription Body Stack | Adopted | Progress | `headline:professional_exam_sweep`, `reference:era_demo` | The clinic's existing Research threshold now describes cybernetics and prescribed biology; its rule is unchanged. |
-| Liability Custodians | Adopted | Capacity | `headline:boardroom_coup` | The Mandate leader pays or transfers public backing to preserve CEO action. |
-| Utility Capture | Adopted | Capacity | `headline:data_center_buys_county` | A secret Runway auction moves the winner into infrastructure and returns capacity. |
-| Hazard Shift Retirement | Adopted | Capacity | `headline:humanoid_factory_gate` | Organize recruits additional Teams cheaply while adding Scrutiny. |
-| Autonomy Queue Collapse | Adopted | Capacity | `headline:humanoid_factory_gate`, `reference:era_scale` | The same cheap recruitment and Scrutiny rule now binds useful automation to shared congestion. |
-| Biological Utility Charter | Adopted framing | Capacity | `escalation:mega_cluster`, `reference:era_scale` | Regional Capacity Program costs, demand, output, and placement are unchanged. |
-| Wartime Water Bridge | Adopted framing | Capacity | `faction:coalition_lab:strategic_partnership`, `reference:era_scale` | Shared Capacity Compact retains its distance, power, and Runway rules. |
-| Orbital Beam Corridor | Adopted | Capacity | `headline:reactor_restart_one_model` | The first clean infrastructure build is cheaper and scores Mandate. |
-| Compute Blocs and Model Asylum | Adopted | Capacity | `headline:export_controls` | Compute trade stops while Chip and Government controllers gain Runway. |
-| Counterfactual Casinos | Adopted | Capacity | `headline:emergency_power_authority` | Players may assign future capacity now at Scrutiny and Systemic Risk cost. |
-| Semantic Court Mandate | Adopted | Authority | `headline:ai_written_law` | Government names a rewarded Core Action that also adds Scrutiny. |
-| Billion-Instance Bloom and Sacrifice-Zone Accounting | Adopted | Authority | `headline:benchmark_is_economy` | Strong Research immediately scores Mandate. |
-| Licensed Organ Testimony | Adopted framing | Authority | `reference:era_narrative` | The four-Era structure and six-Headline Authority deck are unchanged. |
-| Pollinator Corridor Protocol | Adopted framing | Authority | `reference:era_narrative` | The four-Era structure and six-Headline Authority deck are unchanged. |
-| Cognitive Donor Clinics | Adopted | Authority | `headline:quantum_advantage_procurement` | Players adopt or defer a shared standard with different Capability, Trust, and Scrutiny effects. |
-| Synthetic Family Law | Adopted | Authority | `headline:synthetic_candidate` | A Government vote resolves competing public treatments. |
-| Passive Citizen Dividend | Adopted | Authority | `headline:weights_on_internet` | The lowest-Capability player receives production and the highest gains Trust. |
-| Analog Havens | Adopted | Authority | `headline:election_deepfake_panic` | A Government vote establishes a persistent Deploy regime. |
-| Pre-Consent Standard | Deferred | Authority | — | No current Headline mechanic expresses inferred consent cleanly. |
-| Metropolitan Mind Trust | Adopted | Continuity | `headline:autonomous_corporation` | The most-selected Core Action rewards every player who selected it. |
-| Living Continent Compact | Adopted framing | Continuity | `headline:autonomous_corporation`, `reference:era_claim` | The shared-action reward and four-Era structure are unchanged. |
-| Matter Compiler | Adopted | Continuity | `headline:recursive_self_improvement` | Accelerated Research raises both gains and containment risk. |
-| Posthumous Labor | Adopted | Continuity | `headline:agent_swarm_escapes_scope` | Agent Swarm becomes generally selectable for one cycle. |
-| Snapshot Continuity | Adopted | Continuity | `headline:agi_personhood` | A persistent Person or Property decision alters an emerged AGI outcome. |
-| Stellar Collector | Adopted | Continuity | `headline:room_temperature_superconductor` | Volatility resolves as generation expansion or speculative finance. |
-| AGI Refinancing Declaration | Adopted | Continuity | `headline:agi_blog_post` | Publication adds additional final claim strength. |
-| Instance Quorum | Adopted framing | Continuity | `faction:coalition_lab:wildcard_governance` | The printed replacement-Headline choice is unchanged. |
-| Substrate-neutral verification | Adopted framing | Continuity | `faction:imperial_research_lab:scaling_law_breakthrough` | The printed multi-domain Research gain is unchanged. |
-| Right of Exit Certification | Adopted framing | Continuity | `faction:safety_laboratory:emergency_pause`, `mandate:responsible_acceleration` | The printed pause and Capability/Trust qualification are unchanged. |
-| Continuous institutional presence | Adopted framing | Continuity | `faction:platform_empire:the_social_graph` | The printed remote Deploy destination is unchanged. |
-| Jurisdictional succession | Adopted framing | Continuity | `faction:vertical_empire:orbital_compute` | The printed Facility transfer is unchanged. |
-| Human Compatibility Office | Adopted framing | Continuity | `faction:foundry:everybody_gets_a_gpu` | The printed Era IV Compute distribution is unchanged. |
+The Era situation ledger is the sole traceability index. It binds the adopted
+scenario set to all 62 current Era-bearing surfaces exactly once: 4 Governance
+Board Era panels, 24 Headlines, 12 Mandates, 6 shared Programs, 12 faction
+abilities, and 4 endings. Each binding names its player-copy source and records
+that the existing mechanic is retained. The content validator resolves every
+ID against the canonical mechanical source and rejects drift.
 
 The remaining research inventory is not approved component copy. Its strongest
-unexpressed concepts are Human-Original Guarantee, Developmental Companion
+unexpressed concepts remain Human-Original Guarantee, Developmental Companion
 Standard, Public Purpose Service, Manual Operations Retirement, Casualty
-Settlement Network, Non-Interference Office, and Nonhuman Standing Commission.
+Settlement Network, Non-Interference Office, Human Compatibility Office, and
+Nonhuman Standing Commission.
 They cover original-person claims, post-work purpose, lost operational
 competence, intervention, and unfamiliar minds without pretending that an
 existing card already expresses them.
