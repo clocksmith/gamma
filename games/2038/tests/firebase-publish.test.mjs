@@ -26,10 +26,11 @@ test("published executable surfaces are path-safe and make the paired bridge opt
     '<html><head></head><body><a href="/lab">Lab</a><script src="/web/app.js"></script></body></html>',
     { kind: "game", profileId: "public-playtest" }
   );
-  assert.doesNotMatch(html, /href="\/lab(?:\.html)?"/);
+  assert.doesNotMatch(html, /href="\/lab\.html"/);
   assert.match(html, /src="\/web\/app\.js"/);
+  assert.match(html, /Public playtest copy/i);
   assert.match(html, /Deterministic play runs entirely in this browser/i);
-  assert.match(html, /bridge is optional for Claude or Codex/i);
+  assert.match(html, /bridge is optional for Claude and Codex/i);
   assert.doesNotMatch(html, /start-game[^]*disabled = true/i);
   const internal = rewritePrototypeHtml(
     '<html><head></head><body><a href="/lab">Lab</a></body></html>',
@@ -44,6 +45,16 @@ test("published executable surfaces are path-safe and make the paired bridge opt
   assert.match(module, /\/dist\/runtime\/factions\.json/);
 });
 
+test("internal review executable retains the Lab route and carries a deployment warning", () => {
+  const html = rewritePrototypeHtml(
+    '<html><head></head><body><a href="/lab">Simulation lab</a></body></html>',
+    { kind: "game", profileId: "internal-review" }
+  );
+  assert.match(html, /href="\/lab\.html"/);
+  assert.match(html, /Internal review copy/);
+  assert.match(html, /not approved for public deployment/);
+});
+
 test("review index clusters public game material before development surfaces", () => {
   const html = buildIndexHtml({
     identity: {
@@ -51,6 +62,7 @@ test("review index clusters public game material before development surfaces", (
       executableVersion: "exec-test",
       sourceCommit: "commit-test"
     },
+    feedbackUrl: "https://example.test/feedback",
     pages: [
       {
         group: "Start here",
@@ -78,6 +90,7 @@ test("review index clusters public game material before development surfaces", (
   assert.match(html, /rules-test/);
   assert.match(html, /exec-test/);
   assert.match(html, /commit-test/);
+  assert.match(html, /href="https:\/\/example\.test\/feedback"/);
   assert.match(html, /rel="icon" href="\/web\/favicon\.svg"/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
@@ -94,22 +107,18 @@ test("Firebase deployment uses the Mandate project's root-hosting contract", asy
   const firebase = JSON.parse(
     await readFile(resolve(projectRoot, "firebase.json"), "utf8")
   );
-  assert.equal(firebase.hosting.public, "dist/firebase-public");
+  assert.equal(firebase.hosting.public, "dist/firebase/public");
   assert.equal(firebase.hosting.cleanUrls, undefined);
 });
 
-test("public Firebase publication contains only its declared playtest allowlist", async () => {
+test("public playtest publication is an allowlist with release identity and feedback", async () => {
   const outputRoot = await mkdtemp(join(tmpdir(), "mandate-2038-firebase-"));
   try {
-    const { manifest } = await buildFirebaseSite({
-      profileId: "public-playtest",
-      outputRoot
-    });
-    assert.equal(manifest.schemaVersion, 2);
-    assert.equal(manifest.profileId, "public-playtest");
+    const { manifest } = await buildFirebaseSite({ outputRoot });
+    assert.equal(manifest.deploymentProfile, "public-playtest");
+    assert.equal(manifest.artifactKind, "firebase-public-playtest-site");
     assert.equal(manifest.deployable, true);
-    assert.equal(manifest.artifactKind, "mandate-2038-public-playtest");
-    assert.equal(manifest.runtimeArtifacts.length, 11);
+    assert.equal(manifest.runtimeArtifacts.length, 7);
     assert.ok(
       manifest.runtimeArtifacts.every((target) => /^dist\/runtime\/[^/]+\.json$/.test(target))
     );
@@ -129,6 +138,9 @@ test("public Firebase publication contains only its declared playtest allowlist"
     assert.match(rootIndex, /class="primary-action"/);
     assert.match(rootIndex, /adaptive cybernetics/);
     assert.match(rootIndex, /living watershed/);
+    assert.match(rootIndex, /Send playtest feedback/);
+    assert.doesNotMatch(rootIndex, /Simulation lab/i);
+    assert.doesNotMatch(rootIndex, /Complete content gallery/i);
     assert.ok(
       rootIndex.indexOf('href="web/index.html"') < rootIndex.indexOf('href="docs/core-rules.html"')
     );
@@ -137,6 +149,7 @@ test("public Firebase publication contains only its declared playtest allowlist"
     const game = await readFile(resolve(outputRoot, "web/index.html"), "utf8");
     assert.match(game, /Sell the intelligence\. Seize the grid\. Authorize the future\./);
     assert.match(game, /turning cheap intelligence into infrastructure, authority/);
+    assert.doesNotMatch(game, /href="\/lab\.html"/);
     assert.ok(
       (await stat(resolve(outputRoot, "lab/rules/local-power-allocation.js"))).isFile(),
       "the published game includes the selected-rules browser module closure"
@@ -145,54 +158,75 @@ test("public Firebase publication contains only its declared playtest allowlist"
       code: "ENOENT"
     });
     for (const forbidden of [
-      "docs/thematic-content-bible.html",
       "lab.html",
       "gallery.html",
-      "web/simulation-app.js",
-      "dist/runtime/era-situation-ledger.json",
-      "library/index.html"
+      "library/index.html",
+      "docs/thematic-content-bible.html",
+      "docs/manufacturing-and-publishing-study.html",
+      "docs/balance-and-exploitability.html",
+      "docs/design-decisions.html",
+      "docs/defect-investigation-and-closure.html",
+      "docs/optional-tactics.html",
+      "dist/runtime/tactics.json",
+      "dist/runtime/reserve-specialists.json",
+      "dist/runtime/secret-objectives.json",
+      "web/simulation-app.js"
     ]) {
       await assert.rejects(stat(resolve(outputRoot, forbidden)), { code: "ENOENT" });
     }
-    assert.equal(
-      await readFile(resolve(outputRoot, "robots.txt"), "utf8"),
-      "User-agent: *\nDisallow: /\n"
+    for (const required of [
+      "docs/core-rules.html",
+      "docs/map-reference.html",
+      "docs/component-reference.html",
+      "docs/card-reference.html",
+      "docs/world-and-institutions.html",
+      "gallery-baseline.html",
+      "release-identity.json",
+      "robots.txt"
+    ]) {
+      assert.ok((await stat(resolve(outputRoot, required))).isFile(), `publishes ${required}`);
+    }
+    const releaseIdentity = JSON.parse(
+      await readFile(resolve(outputRoot, "release-identity.json"), "utf8")
     );
+    assert.equal(releaseIdentity.deploymentProfile, "public-playtest");
+    assert.match(await readFile(resolve(outputRoot, "robots.txt"), "utf8"), /Disallow: \//);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }
 });
 
-test("internal review retains complete evidence but is non-deployable", async () => {
+test("internal review build remains complete but explicitly non-deployable", async () => {
   const outputRoot = await mkdtemp(join(tmpdir(), "mandate-2038-review-"));
   try {
     const { manifest } = await buildFirebaseSite({
-      profileId: "internal-review",
-      outputRoot
+      outputRoot,
+      profileId: "internal-review"
     });
-    assert.equal(manifest.profileId, "internal-review");
+    assert.equal(manifest.deploymentProfile, "internal-review");
+    assert.equal(manifest.artifactKind, "internal-review-site");
     assert.equal(manifest.deployable, false);
-    assert.equal(manifest.artifactKind, "mandate-2038-internal-review");
-    assert.ok(manifest.siteSurfaces.includes("simulation-lab"));
-    assert.ok(manifest.siteSurfaces.includes("complete-gallery"));
     for (const required of [
       "lab.html",
       "gallery.html",
+      "gallery-baseline.html",
+      "library/index.html",
       "docs/thematic-content-bible.html",
-      "dist/runtime/era-situation-ledger.json",
+      "docs/manufacturing-and-publishing-study.html",
+      "docs/balance-and-exploitability.html",
+      "docs/design-decisions.html",
+      "docs/defect-investigation-and-closure.html",
+      "docs/optional-tactics.html",
+      "dist/runtime/tactics.json",
+      "dist/runtime/reserve-specialists.json",
+      "dist/runtime/secret-objectives.json",
       "web/simulation-app.js"
     ]) {
-      assert.ok((await stat(resolve(outputRoot, required))).isFile(), required);
+      assert.ok((await stat(resolve(outputRoot, required))).isFile(), `reviews ${required}`);
     }
-    const bible = await readFile(
-      resolve(outputRoot, "docs/thematic-content-bible.html"),
-      "utf8"
-    );
-    assert.match(bible, /Canonical Era and situation ledger/);
-    assert.match(bible, /43 situations/);
-    assert.match(bible, /62 game surfaces/);
-    const internalRoot = await readFile(resolve(outputRoot, "index.html"), "utf8");
-    assert.match(internalRoot, /Simulation lab/);
+    const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
+    assert.match(rootIndex, /Simulation lab/i);
+    assert.match(rootIndex, /Complete content gallery/i);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }

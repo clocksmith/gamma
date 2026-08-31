@@ -133,7 +133,11 @@ Power request without a Network production bonus. A selectable Action must
 already have a legal resolution before the optional trade window. These are
 implementation claims, not human teachability, negotiation-quality, or balance
 evidence; all three supported player counts require fresh evidence. The rc.18
-patch changes presentation and lore only. It extends cybernetics, biological
+patch changes traceability and publication boundaries only. It machine-binds
+the settled Era lore to every current card and board surface, prevents deferred
+material from entering the public baseline, and separates the public playtest
+allowlist from the complete internal review artifact. The earlier rc.17 patch
+changed presentation and lore only. It extends cybernetics, biological
 infrastructure, autonomous congestion, wartime water cooperation, nonhuman
 evidence, and living-jurisdiction continuity across existing component
 surfaces; corrects stale decision and deferred-card prose; and makes the

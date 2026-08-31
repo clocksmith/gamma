@@ -11,8 +11,11 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 
 test("current release declaration separates executable game from physical rules candidate", async () => {
   const current = await readJson("versions/current-release.json");
+  const packageDocument = await readJson("package.json");
 
   assert.match(current.gameVersion, /^\d+\.\d+\.\d+$/);
+  assert.equal(packageDocument.name, "mandate-2038");
+  assert.equal(packageDocument.version, current.gameVersion);
   assert.match(current.rulesCandidate.version, /^0\.8\.0-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
@@ -203,10 +206,9 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
 });
 
-test("one generated lore contract governs every admitted surface", async () => {
-  const [bible, bibleTemplate, ledger, prototype, world, tactics, reserve, objectives] = await Promise.all([
+test("one thematic authority governs every lore-bearing surface", async () => {
+  const [bible, eraLedger, prototype, world, tactics, reserve, objectives] = await Promise.all([
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
-    readFile(new URL("content/editorial/thematic-content-bible.md", root), "utf8"),
     readJson("content/data/era-situation-ledger.json"),
     readFile(new URL("web/templates/prototype.html", root), "utf8"),
     readJson("dist/runtime/world-copy.json"),
@@ -232,8 +234,10 @@ test("one generated lore contract governs every admitted surface", async () => {
   assert.equal(ledger.scenarios.length, 43);
   assert.equal(ledger.scenarios.flatMap((scenario) => scenario.bindings).length, 62);
   assert.match(bible, /Bankruptcy Data Estates/);
-  assert.match(bible, /Cognitive Donation Becomes Compensable/);
-  assert.match(bible, /Metropolitan Mind Trust/);
+  const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
+  assert.ok(tracedConcepts.has("Bankruptcy Data Estates"));
+  assert.ok(tracedConcepts.has("Cognitive Donor Clinics"));
+  assert.ok(tracedConcepts.has("Metropolitan Mind Trust"));
   assert.match(prototype, /worldCopy\.box\.frontStrapline/);
   assert.match(prototype, /worldCopy\.box\.shortPitch/);
 
