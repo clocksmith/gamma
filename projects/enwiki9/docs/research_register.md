@@ -1,5 +1,58 @@
 # enwiki9 Research Register
 
+## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
+
+The active `endpoint428_horizon_retained_parent_trace_q0_v1` job remains
+nonterminal and scientifically unread. A new terminal router now binds its
+exact job ID, `647,798,592`-symbol gate, candidate tree, revision, proposal,
+experiment, and runner. While that exact job is pending or running, the router
+returns before opening the result namespace. Unrelated legacy queue records do
+not control this candidate-specific decision.
+
+Static inspection found that the frozen experiment declares seven result
+artifacts while its successful runner necessarily creates sixteen additional
+build, scan, guard, and log artifacts. The live experiment and runner remain
+immutable. At terminal, the router streams hashes over declared opaque outputs,
+parses only the hash-bound decision, independently recomputes every frozen
+predicate, and classifies the known extra-output condition as
+`CORRECTION_RETRY_ONLY`. It cannot promote a positive result directly through
+that bookkeeping defect, retire an algorithm after an identity failure, or
+reinterpret a failed/cancelled run as scientific evidence.
+
+The correction route authorizes only a separate zero-credit output-closure
+successor over the immutable result directory. It does not authorize deleting
+logs, changing probabilities, rerunning CMIX, changing thresholds, starting the
+exact reprice, or launching a native codec. Positive and negative scientific
+outcomes must both survive unchanged through the closure correction.
+
+That dormant successor is now implemented as
+`endpoint428_horizon_retained_parent_trace_output_closure_q0_v2`. It requires
+the exact hash-bound terminal-router correction receipt, replays the pinned
+router, binds the exact 23-file v1 namespace, preserves `decision.json`
+byte-for-byte, recomputes the underlying positive or negative scientific
+branch, and publishes only the preserved decision plus a self-validating
+receipt into a clean successor root. Its receipt schema is registered for
+validation, but the successor remains unregistered as an adaptive candidate
+and unexecuted while v1 is live.
+
+The router uses no-follow directory traversal, bounded semantic JSON reads,
+incremental hashes for the multi-gigabyte trace, stable-file checks, and a
+durable no-clobber terminal receipt. Its receipt schema is registered with the
+canonical research-contract validator, which can independently rehash every
+terminal binding and output. Synthetic coverage exercises nonterminal access,
+all terminal states, identity drift, reflection contradictions, nonfinite
+measurements, missing and extra outputs, symlink rejection, receipt durability,
+and canonical revalidation. This is governance and evidence-preservation work;
+it adds zero archive authority and zero score credit.
+
+Evidence: `tools/endpoint428_horizon_terminal_route_v1.py`,
+`contracts/research/v1/endpoint428-horizon-terminal-route.schema.json`,
+`tests/test_endpoint428_horizon_terminal_route_v1.py`, and
+`tools/research_contracts.py`; plus
+`tools/endpoint428_horizon_retained_parent_trace_output_closure_q0_v2.py`,
+`contracts/research/v1/endpoint428-horizon-output-closure-receipt-v1.schema.json`,
+and `tests/test_endpoint428_horizon_output_closure_q0_v2.py`.
+
 ## 2026-09-01 - Eligibility-first audit selects the original CMIX PPM runtime override
 
 A repository-wide evidence audit changes the execution priority without
