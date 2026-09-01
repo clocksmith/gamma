@@ -1,0 +1,55 @@
+{
+  "candidate_id": "endpoint428_semantic_route_tape_q0_v3",
+  "claimed_at": "2026-09-01T13:19:03+00:00",
+  "created_at": "2026-09-01T13:19:03+00:00",
+  "developed_at": "2026-09-01T13:19:04+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json",
+      "sha256": "sha256:eb40289a9ef7ad6eb79bbbd2772dd1768635103ebab4fd19c5b7a355bbb809bd"
+    },
+    {
+      "path": "operations/planning/endpoint428_semantic_route_tape_q0_v2_ordering_addendum.json",
+      "sha256": "sha256:e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291"
+    },
+    {
+      "path": "operations/planning/endpoint428_semantic_route_tape_q0_v3.json",
+      "sha256": "sha256:cdd2ffb84aad060a1fe7dd0d25d953171a28766c2a3f2821c811ee43607e3f62"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/endpoint428_semantic_route_tape_q0_v3_contract_retry_v1.json",
+    "sha256": "sha256:7b62a907d8e8e0b885f511679f2e06b7cb81b8eeebe96097cb1abf48b618ae2b"
+  },
+  "hypothesis": "The sealed v2 Endpoint428 scanner can be executed from the exact adaptive v3 snapshot and independently verified by native semantic/raw-coordinate replay under a shared exclusive lease.",
+  "interfaces_exposed": [
+    "Snapshot-bound parent scanner, native exact semantic/raw replay, paired corruptions, and managed exclusive lease."
+  ],
+  "kill_condition": "Reject on any input, snapshot, ordering, lease, raw reconstruction, semantic field, A/B, paired-corruption, or resource failure.",
+  "max_program_bytes": 196608,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "endpoint428_semantic_route_tape_q0_v2",
+  "parent_proposal_id": "endpoint428_semantic_route_tape_q0_v2",
+  "priority": 1750,
+  "promotion_condition": "Exact A/B identity, native semantic/raw replay, five paired-corruption rejections, snapshot binding, shared lease evidence, and <=1048576 KiB tree RSS.",
+  "proposal_id": "endpoint428_semantic_route_tape_q0_v3_contract_retry_v1",
+  "retired_neighborhoods": [
+    "Supersedes the unmeasured v3 proposal contract binding only; preserves its scanner and implementation."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1765,
+  "state": "developed",
+  "title": "Endpoint428 snapshot-bound semantic replay contract retry"
+}

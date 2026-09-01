@@ -1,0 +1,50 @@
+{
+  "schema": "gamma.enwiki9.candidate-interface.v1",
+  "candidate_id": "endpoint428_semantic_route_tape_q0_v3",
+  "role": "zero-credit snapshot-bound causal population infrastructure",
+  "parent_scanner": {
+    "source": "semantic-route-tape.cpp",
+    "required_sha256": "b44fffb2b95c540535d293e1d0021f544a5b7e4d8fbb740721752a69b0c7866e",
+    "parent_revision": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json"
+  },
+  "entrypoints": {
+    "scanner_source": "semantic-route-tape.cpp",
+    "native_semantic_replay": "semantic-replay.cpp",
+    "fixture_builder": "build_fixture.py",
+    "fixture_checks": "run_fixture_checks.py",
+    "verification_coordinator": "verify.py"
+  },
+  "production_inputs": {
+    "candidate_root": "GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT is mandatory and must match GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON.",
+    "raw": "Resolve data/enwik9 to its regular target, then bind exact size and SHA-256 before execution.",
+    "ordering": "Bind the v2 ordering addendum at SHA-256 e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291.",
+    "lease": "Acquire operations/runtime/exclusive_full1g.json before production output and retain it through terminal verification."
+  },
+  "binary_abi": {
+    "tape_magic": "GSRT2\\0\\0\\0",
+    "tape_header_bytes": 192,
+    "tape_record_bytes": 88,
+    "sidecar_magic": "GSRD2\\0\\0\\0",
+    "sidecar_header_bytes": 64,
+    "sidecar_record_bytes": 232,
+    "endianness": "little"
+  },
+  "independent_replay": [
+    "semantic-replay.cpp independently decodes WRT to raw and compares every raw byte",
+    "it independently reconstructs parser, descriptor, ordinal, field, depth, event, flag, availability, and raw-frontier state",
+    "verify.py requires native replay and exact A/B artifact identity without bytewise Python FNV loops"
+  ],
+  "fixture_acceptance": [
+    "strict scanner and replay compilation",
+    "positive A/B replay",
+    "paired ordinal, depth, field, raw-coordinate, and equal-availability event-order corruptions are all rejected",
+    "all fixture outputs remain source validation only"
+  ],
+  "authority": {
+    "fixture": "source validation only",
+    "complete_tape": "zero-credit population infrastructure only",
+    "archive_authority": false,
+    "objective_credit_bytes": 0,
+    "forbidden_submission_inputs": ["tape", "descriptor sidecar", "canonical raw corpus", "offline coordinate maps"]
+  }
+}

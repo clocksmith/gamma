@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "active_bytes", "parent_trace_rows", "parent_truth_bits", "parent_truth_bits_by_third", "arms", "minimum_third_mixture_gain_bits", "minimum_control_margin_bits", "legacy_minimum_third_mixture_gain_bits", "legacy_minimum_control_margin_bits", "gross_gate_bits", "coordinate_fnv1a64", "legacy_exact_kt_identity_pass", "first_legacy_divergence", "promotion_pass", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.horizon-retained-parent-exact-analysis.v1"},
+    "active_bytes": {"const": 2331505},
+    "parent_trace_rows": {"const": 5182388736},
+    "parent_truth_bits": {"type": "number"},
+    "parent_truth_bits_by_third": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "arms": {"type": "object", "required": ["D", "S", "R", "N"]},
+    "minimum_third_mixture_gain_bits": {"type": "number"},
+    "minimum_control_margin_bits": {"type": "number"},
+    "legacy_minimum_third_mixture_gain_bits": {"type": "number"},
+    "legacy_minimum_control_margin_bits": {"type": "number"},
+    "gross_gate_bits": {"const": 40163160.0},
+    "coordinate_fnv1a64": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "legacy_exact_kt_identity_pass": {"const": true},
+    "first_legacy_divergence": {"type": ["object", "null"]},
+    "promotion_pass": {"type": "boolean"},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "endpoint428_semantic_route_tape_q0_v3",
+  "proposalId": "endpoint428_semantic_route_tape_q0_v3",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "endpoint428_semantic_route_tape_q0_v2",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json",
+      "sha256": "sha256:eb40289a9ef7ad6eb79bbbd2772dd1768635103ebab4fd19c5b7a355bbb809bd"
+    }
+  },
+  "hypothesis": {
+    "claim": "The sealed v2 Endpoint428 scanner can be executed from an immutable adaptive snapshot and independently verified by a bounded native semantic/raw-coordinate replay, with exact A/B identity and shared exclusive resource ownership.",
+    "falsification": "Reject v3 if snapshot or prospective bindings differ, the raw target is not the frozen resolved regular file, native replay disagrees on any descriptor or tape field, any paired corruption passes, the shared lease is absent, A/B differ, raw reconstruction diverges, or a production build exceeds resource bounds."
+  },
+  "changedMechanism": "Replace v2's mutable-worktree and shallow Python verification envelope with snapshot-bound parent materialization, prospective ordering binding, native exact replay, paired corruption controls, and managed exclusive execution.",
+  "invariants": [
+    "The v2 scanner source is byte-identical to sealed blob b44fffb2b95c540535d293e1d0021f544a5b7e4d8fbb740721752a69b0c7866e.",
+    "The ordering addendum SHA-256 is e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291.",
+    "The production runner requires the adaptive snapshot root and never compiles candidate files from the mutable programs tree.",
+    "The canonical raw symlink is resolved before a regular-file and exact SHA-256 check.",
+    "Native replay independently checks every raw byte and every semantic record field with bounded streaming state.",
+    "Both arms receive identical corruption in negative fixtures so A/B identity cannot mask a shallow verifier.",
+    "A shared managed exclusive lease spans every future production phase.",
+    "All outputs have zero objective credit and are forbidden submission inputs."
+  ],
+  "controls": [
+    {"id": "A", "role": "treatment", "definition": "First fresh scanner process from the sealed v2 parent source."},
+    {"id": "B", "role": "comparator", "definition": "Second fresh scanner process; all artifacts must be byte-identical to A."},
+    {"id": "native-replay", "role": "comparator", "definition": "Independent implementation replays raw coordinates and semantic events from STORE/RAW/DICTIONARY and rejects first divergence."},
+    {"id": "paired-corruptions", "role": "negative", "definition": "Identically corrupt A/B ordinal, field, depth, raw-coordinate, and record-order fields; each must fail native replay."}
+  ],
+  "population": {
+    "unit": "Endpoint428 WRT byte and independently replayed semantic event",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 647798592,
+    "selection": "Complete exact Endpoint428 WRT stream; fixtures are bounded source validation only.",
+    "coordinate": "Zero-based source and availability WRT coordinates, availability*8 first-bit coordinate, and independently decoded raw frontier."
+  },
+  "causalBoundary": {
+    "availableInformation": ["WRT truths strictly before prediction", "bounded decoded parser state", "prospectively bound files and immutable candidate snapshots"],
+    "forbiddenInformation": ["current truth when selecting prediction", "future bytes or field classification", "mutable candidate worktree", "offline tape in a submitted codec", "archive or parent probability outcomes"]
+  },
+  "inputs": [
+    {"id": "v3-design", "path": "operations/planning/endpoint428_semantic_route_tape_q0_v3.json", "sha256": "sha256:cdd2ffb84aad060a1fe7dd0d25d953171a28766c2a3f2821c811ee43607e3f62"},
+    {"id": "v2-revision", "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json", "sha256": "sha256:eb40289a9ef7ad6eb79bbbd2772dd1768635103ebab4fd19c5b7a355bbb809bd"},
+    {"id": "ordering-addendum", "path": "operations/planning/endpoint428_semantic_route_tape_q0_v2_ordering_addendum.json", "sha256": "sha256:e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291"}
+  ],
+  "budget": {"expectedGrossSavingsBytes": 0, "maximumAddedPackageBytes": 196608, "expectedNetSavingsBytes": -196608},
+  "search": {"expectedTransferRetention": 0.0, "expectedRuntimeRatio": 0.01, "expectedMemoryRatio": 0.01, "uncertaintyRisk": 0.1, "interactionRisk": 0.0},
+  "measurements": [
+    {"id": "repeatIdentityPass", "definition": "Exact A/B tape, sidecar, and summary identity.", "unit": "boolean"},
+    {"id": "nativeSemanticReplayPass", "definition": "Native independent replay accepts every record field and raw coordinate.", "unit": "boolean"},
+    {"id": "pairedCorruptionRejectCount", "definition": "Number of required paired corruptions rejected.", "unit": "controls"},
+    {"id": "snapshotBindingPass", "definition": "Execution used the adaptive candidate snapshot and sealed parent revision.", "unit": "boolean"},
+    {"id": "exclusiveLeasePass", "definition": "Shared lease covered all production phases and released with terminal evidence.", "unit": "boolean"},
+    {"id": "maximumTreeRssKiB", "definition": "Maximum guarded process-tree RSS.", "unit": "KiB"}
+  ],
+  "promotionPredicates": [
+    {"id": "repeat", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "native-replay", "measurement": "nativeSemanticReplayPass", "operator": "eq", "threshold": true},
+    {"id": "negative-controls", "measurement": "pairedCorruptionRejectCount", "operator": "eq", "threshold": 5},
+    {"id": "snapshot", "measurement": "snapshotBindingPass", "operator": "eq", "threshold": true},
+    {"id": "lease", "measurement": "exclusiveLeasePass", "operator": "eq", "threshold": true},
+    {"id": "resource", "measurement": "maximumTreeRssKiB", "operator": "lte", "threshold": 1048576}
+  ],
+  "killPredicates": [
+    {"id": "repeat-failure", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "replay-failure", "measurement": "nativeSemanticReplayPass", "operator": "eq", "threshold": false},
+    {"id": "control-escape", "measurement": "pairedCorruptionRejectCount", "operator": "lt", "threshold": 5},
+    {"id": "snapshot-failure", "measurement": "snapshotBindingPass", "operator": "eq", "threshold": false},
+    {"id": "lease-failure", "measurement": "exclusiveLeasePass", "operator": "eq", "threshold": false},
+    {"id": "resource-failure", "measurement": "maximumTreeRssKiB", "operator": "gt", "threshold": 1048576}
+  ],
+  "outputs": [
+    "results/endpoint428_semantic_route_tape_q0_v3/build.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/tape-a.bin",
+    "results/endpoint428_semantic_route_tape_q0_v3/tape-b.bin",
+    "results/endpoint428_semantic_route_tape_q0_v3/descriptors-a.bin",
+    "results/endpoint428_semantic_route_tape_q0_v3/descriptors-b.bin",
+    "results/endpoint428_semantic_route_tape_q0_v3/summary-a.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/summary-b.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/verification.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/decision.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/lease-terminal.json",
+    "results/endpoint428_semantic_route_tape_q0_v3/lease-transitions.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-01T00:00:00Z"
+}

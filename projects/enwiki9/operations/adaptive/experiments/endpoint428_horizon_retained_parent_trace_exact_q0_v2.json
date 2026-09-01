@@ -1,0 +1,103 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "endpoint428_horizon_retained_parent_trace_exact_q0_v2",
+  "proposalId": "endpoint428_horizon_retained_parent_trace_exact_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "causal-shadow",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "endpoint428_horizon_retained_parent_trace_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_q0_v1/20260830T224806838440Z_565130472695.json",
+      "sha256": "sha256:f27573bb08cac47dfe9ed0915617a692c72d8fa5f0c406c0517e3664574013f4"
+    }
+  },
+  "hypothesis": {
+    "claim": "On the immutable terminal v1 trace and manifest, the exact 63-step unsigned-__int128 Q63 posterior retains at least 40,163,160 D mixture-gain bits, remains positive in every third, and beats S/R/N globally and in every third.",
+    "falsification": "Retire physical Endpoint428 HORIZON-A if any frozen predicate fails under exact arithmetic, regardless of the legacy floating result."
+  },
+  "changedMechanism": "Change only posterior division from long-double scaling to exact 63-bit quotient generation with half-up remainder rounding; preserve all v1 inputs, endpoints, controls, schedules, clamps, and thresholds.",
+  "invariants": [
+    "Execution refuses before reading the v1 trace or manifest unless v1 is terminal and has a valid reflection bound to its decision hash.",
+    "The terminal v1 parent.p1, manifest-a.bin, and analysis-a.json paths, byte counts, and SHA-256 values are inherited from the terminal v1 decision.",
+    "Probability scale is 65536, posterior total is 2^63, initial parent weight is 2^62, rounding is nearest with exact halves upward, and clamps are [1,2^63-1].",
+    "Exactly 63 quotient bits are generated in unsigned __int128; no floating-point value participates in the exact posterior state transition.",
+    "D/S/R/N KT states, byte-to-bit endpoint, mixture count, update order, global posterior scope, third boundaries, and 40,163,160-bit threshold are unchanged.",
+    "The exact analyzer also reproduces the complete legacy trajectory and must match the terminal v1 analysis before the exact decision has authority.",
+    "Two full analyzers over identical immutable inputs must emit byte-identical analysis JSON.",
+    "This experiment changes no coded probability and has no archive or score authority."
+  ],
+  "controls": [
+    {"id": "P", "role": "comparator", "definition": "Immutable v1 Endpoint428 pretruth probability trace."},
+    {"id": "D", "role": "treatment", "definition": "Oldest-anchor donor with its frozen causal KT endpoint and exact Q63 mixture."},
+    {"id": "S", "role": "shifted", "definition": "Frozen live-ring alias donor with independent KT and exact Q63 state."},
+    {"id": "R", "role": "negative", "definition": "Frozen random donor with independent KT and exact Q63 state."},
+    {"id": "N", "role": "negative", "definition": "Frozen complemented donor with independent KT and exact Q63 state."},
+    {"id": "legacy-parity", "role": "replay", "definition": "The embedded legacy path must reproduce every terminal v1 aggregate and terminal weight."},
+    {"id": "analysis-repeat", "role": "replay", "definition": "Two independent exact analyzers must be byte-identical."}
+  ],
+  "population": {
+    "unit": "Endpoint428 WRT bit at a frozen A-active byte",
+    "scopeBytes": 1000000000,
+    "scopeSymbols": 647798592,
+    "selection": "Exactly the immutable terminal v1 manifest population of 2,331,505 A-active coordinates.",
+    "coordinate": "Zero-based WRT byte coordinate and big-endian bit position; P1 row is 8*coordinate+bit."
+  },
+  "causalBoundary": {
+    "availableInformation": ["immutable v1 pretruth parent count", "frozen pretruth donor and causal KT state", "prior exact Q63 weight"],
+    "forbiddenInformation": ["current truth before probability emission", "any v1 artifact mutation", "post-result endpoint, threshold, reset, or rounding selection", "any write to Endpoint428"]
+  },
+  "inputs": [
+    {"id": "exact-plan", "path": "operations/planning/endpoint428_horizon_retained_parent_trace_exact_q0_v2.json", "sha256": "sha256:48d37ae1006feedcc78f6bb28975ade7b96343c9874bda9207a6636e24d00f1b"},
+    {"id": "v1-experiment", "path": "operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_q0_v1.json", "sha256": "sha256:1ee83f431531f05654ac0990de302acbbbde36fa4ac42acd3bebbd9dd26f20aa"},
+    {"id": "v1-analyzer", "path": "programs/endpoint428_horizon_retained_parent_trace_q0_v1/horizon-retained-analyze.cpp", "sha256": "sha256:0dbff9c0a989981c4ce982951a5b05cb94c8cce884ebe7f6cf0db0ab23537ed9"},
+    {"id": "router-v7", "path": "operations/planning/evidence_conditioned_mutation_router_v7.json", "sha256": "sha256:c62931f7d26422033939d3a480fad599b290a633f7638edc8649399787681f7f"}
+  ],
+  "budget": {"expectedGrossSavingsBytes": 5020395, "maximumAddedPackageBytes": 131072, "expectedNetSavingsBytes": 4889323},
+  "search": {"expectedTransferRetention": 0.5, "expectedRuntimeRatio": 1.0, "expectedMemoryRatio": 1.0, "uncertaintyRisk": 0.3, "interactionRisk": 0.0},
+  "measurements": [
+    {"id": "activeBytes", "definition": "Immutable manifest active bytes.", "unit": "bytes"},
+    {"id": "parentTraceRows", "definition": "Immutable parent trace rows.", "unit": "bits"},
+    {"id": "treatmentMixtureGainBits", "definition": "Exact parent truth bits minus exact D mixture truth bits.", "unit": "bits"},
+    {"id": "minimumThirdMixtureGainBits", "definition": "Minimum exact D gain across thirds.", "unit": "bits"},
+    {"id": "minimumControlMarginBits", "definition": "Minimum exact D margin above S/R/N globally and by third.", "unit": "bits"},
+    {"id": "legacyParityPass", "definition": "Embedded legacy trajectory equals terminal v1 aggregates.", "unit": "boolean"},
+    {"id": "arbitraryPrecisionFixturePass", "definition": "Native full boundaries and exhaustive reduced states equal Python integers.", "unit": "boolean"},
+    {"id": "analysisRepeatPass", "definition": "Repeated exact analysis identity.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "complete-active-population", "measurement": "activeBytes", "operator": "eq", "threshold": 2331505},
+    {"id": "complete-parent-trace", "measurement": "parentTraceRows", "operator": "eq", "threshold": 5182388736},
+    {"id": "target-bearing-mixture", "measurement": "treatmentMixtureGainBits", "operator": "gte", "threshold": 40163160},
+    {"id": "every-third-positive", "measurement": "minimumThirdMixtureGainBits", "operator": "gt", "threshold": 0},
+    {"id": "controls-separated", "measurement": "minimumControlMarginBits", "operator": "gt", "threshold": 0},
+    {"id": "legacy-parity", "measurement": "legacyParityPass", "operator": "eq", "threshold": true},
+    {"id": "integer-fixture", "measurement": "arbitraryPrecisionFixturePass", "operator": "eq", "threshold": true},
+    {"id": "analysis-repeat", "measurement": "analysisRepeatPass", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "subscale", "measurement": "treatmentMixtureGainBits", "operator": "lt", "threshold": 40163160},
+    {"id": "third-failure", "measurement": "minimumThirdMixtureGainBits", "operator": "lte", "threshold": 0},
+    {"id": "control-failure", "measurement": "minimumControlMarginBits", "operator": "lte", "threshold": 0},
+    {"id": "parity-failure", "measurement": "legacyParityPass", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/arithmetic-vectors.tsv",
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/fixture-verification.json",
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/analysis-a.json",
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/analysis-b.json",
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/decision.json",
+    "results/endpoint428_horizon_retained_parent_trace_exact_q0_v2/output-manifest.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-01T00:00:00Z"
+}
