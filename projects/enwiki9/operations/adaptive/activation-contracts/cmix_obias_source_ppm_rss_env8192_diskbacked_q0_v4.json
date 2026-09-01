@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.cmix-opening1m-runtime-activation-contract.v1",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4",
+  "scope_bytes": 1000000,
+  "activation_receipt_path": "operations/adaptive/activations/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4.json",
+  "future_job_binding": {
+    "required_argument": "--activation-sha256",
+    "path_is_fixed_by_coordinator": true,
+    "digest_must_equal_exact_activation_receipt": true
+  },
+  "required_activation_artifacts": {
+    "geekbench5_report": "Exact raw Geekbench 5 report artifact with one rederived positive Single-Core Score and an explicit Geekbench 5 product marker.",
+    "host_fingerprint": "Exact artifact conforming to gamma.enwiki9.cmix-runtime-host-fingerprint.v1 and equal to the current host fingerprint independently rederived by the authoritative runtime verifier.",
+    "runtime_qualification": "Exact source runtime-qualification receipt whose benchmark section binds the same raw report and host fingerprint.",
+    "runtime_qualification_verification": "Exact independent gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1 terminal verification with all checks true and no errors.",
+    "managed_lease_verification": "Exact authoritative gamma.enwiki9.managed-exclusive-lease-owned-cleanup-verification.v1 receipt with canonical migration authorized and no score credit."
+  },
+  "selected_cpu": {
+    "source": "activation receipt and future adaptive job --cpu argument must agree",
+    "required": true,
+    "coordinator_must_pin_before_preflight": true,
+    "all_descendants_must_inherit_and_prove_singleton_affinity": true
+  },
+  "exclusive_lease": {
+    "path": "operations/runtime/exclusive_full1g.json",
+    "lock_path": "operations/runtime/exclusive_full1g.json.lock",
+    "caller_override_forbidden": true
+  },
+  "status": "awaiting-exact-runtime-authority",
+  "claim_boundary": "This prospective contract defines the only accepted runtime activation receipt. It is not itself benchmark, lease, gate, or score authority."
+}

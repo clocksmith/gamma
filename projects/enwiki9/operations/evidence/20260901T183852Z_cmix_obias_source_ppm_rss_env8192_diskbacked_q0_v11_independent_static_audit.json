@@ -1,0 +1,84 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "created_at_utc": "2026-09-01T18:38:52Z",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11",
+  "scope": "sealed opening-1M identity execution envelope, transitive source closure, and resource-authority semantics",
+  "verdict": "BLOCK",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11/20260901T183403128903Z_0ed60984afe8.json",
+    "sha256": "81ab0cba88b8d4d5139dacc0ca42956052af034482929a0079bf2dc59ba77fdb",
+    "candidate_tree_sha256": "0ed60984afe8e1a03484f331364de5815a61cfd5d706322a8f4698f910308e0e"
+  },
+  "reviewed_artifacts": {
+    "coordinator": {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.py",
+      "sha256": "48ad09d4025dfdb392c2db5ca94acf8f8d4afa7894cac0ad482e755869f8bba6"
+    },
+    "resource_guard": {
+      "path": "tools/run_with_resource_guard_q0_v11.py",
+      "sha256": "5db7e2927437b1613c06bbbbebcd869de75dfa53463aed30ce2e19b37c53f46a"
+    },
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json",
+      "sha256": "2e3f34799ea9df60698bbe2d7b2fd719d79c8017036237565a47921067264777"
+    },
+    "proposal": {
+      "path": "operations/adaptive/proposals/developed/949_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json",
+      "sha256": "604f7f4a34d6c7104b2c8581a8523a5475f4371853d1ff0b6945d8302d364240"
+    },
+    "source_closure": {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json",
+      "sha256": "784a71c407947d244ed8222570ab9b484514443a3020344ba003f0a18373e756"
+    },
+    "python_runtime_closure": {
+      "path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json",
+      "sha256": "6b73060c350a133eaf70334b77cd7a81f698241e61d6789c7b71f07d3d36591c"
+    }
+  },
+  "blocking_findings": [
+    {
+      "id": "transitive-executable-source-not-enforced",
+      "finding": "The v11 guard imports run_with_resource_guard_q0_v10.py, and the directly bound v3 helper imports cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2.py. Both bases appear only inside the nested Python-runtime closure. The executed preflight verifies the runtime-closure JSON artifact but never recursively verifies its project_local_artifacts. Neither executable base is a direct source-closure record, so either can drift while the v11 source closure still passes and the drifted code executes.",
+      "evidence": [
+        "tools/run_with_resource_guard_q0_v11.py:11-24",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3.py:20-27",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:97-123",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:262-269",
+        "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json:8-27",
+        "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json:5-16"
+      ]
+    },
+    {
+      "id": "v10-preflight-schema-leaks-into-v11",
+      "finding": "The v11 preflight wrapper delegates to v10 and adds fields but does not replace its schema. A bounded validation-only execution emitted gamma.enwiki9.cmix-obias-opening1m-preflight.v10 for candidate_id q0_v11. This makes the executed v11 closure semantically ambiguous to schema-based consumers.",
+      "evidence": [
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.py:96-103",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:313-325"
+      ]
+    },
+    {
+      "id": "larger-gate-fail-closed-marker-is-negated",
+      "finding": "The inherited decision correctly sets larger_gate_authorized=false and next_gate_bytes=null, but the v11 decision transformer changes separately_frozen_100m_experiment_required from true to false. That says a separate frozen 100M experiment is not required while the contract says v11 grants no larger-gate authority. Even if it does not directly authorize 100M, the mixed signals are not fail-closed.",
+      "evidence": [
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:483-488",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.py:119-131",
+        "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json:29"
+      ]
+    }
+  ],
+  "positive_findings": [
+    "The guard requires memory.swap.max to exist, writes exact zero, reads exact zero, and returns before the inherited launcher can execute a child if admission fails. memory.max remains the inherited exact 10000000000-byte cgroup cap.",
+    "CPU affinity and temporary-disk checks are explicitly classified as diagnostic abort-after-observation signals; elapsed time is diagnostic only.",
+    "Memory, runtime, CPU, temporary-disk, and PPM-trigger eligibility remain N/A; larger_gate_authorized is false and next_gate_bytes is null.",
+    "The scientific P, E-A, E-B, and E-decode arms retain the exact clean-environment, opening-1M population, payload, archive, and enwik9_uncompressed semantics from v10.",
+    "The exact output-manifest policy, canonical managed lease, fixed result/scratch/cgroup paths, optional paired witnesses, and scratch cleanup behavior are retained.",
+    "Package accounting remains coherent: 468481 + 23002 + 464298 + 69 + 31 = 955881 bytes, and proposal plus experiment each budget 100 added command bytes.",
+    "All 19 direct source-closure records and all 11 nested Python-runtime-closure records matched their recorded byte counts and SHA-256 identities at audit time; the blocker is that nested identities are not enforced by future preflight.",
+    "Validation-only execution produced only the expected missing explicit --cpu blocker and did not access corpus, cgroup, lease, active HORIZON, Geekbench, or launch a job."
+  ],
+  "required_correction": "Create a new sealed version that directly binds and verifies both transitive executable bases or recursively validates every Python-runtime-closure entry, emits a v11-or-successor preflight schema, and leaves separately_frozen_100m_experiment_required true while larger_gate_authorized remains false.",
+  "claim_boundary": "This receipt records an independent static BLOCK. It supplies no runtime, memory, identity, compression, archive, inverse, package-score, or Hutter objective authority and authorizes no execution or larger gate."
+}

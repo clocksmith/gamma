@@ -1,0 +1,68 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "created_at_utc": "2026-09-01T18:50:15Z",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12",
+  "scope": "sealed opening-1M identity execution envelope, pre-import source authority, and resource-authority semantics",
+  "verdict": "BLOCK",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12/20260901T184349771061Z_9d35c87a82e7.json",
+    "sha256": "01d7a595ed43a9c90c40d3b2a4c8fe236be6b670b72f7d02e86b3331e211235e",
+    "candidate_tree_sha256": "9d35c87a82e71e6d2cbdb184e2b86226415fb43e1bcb83a3f3218a91869fadbc"
+  },
+  "reviewed_artifacts": {
+    "coordinator": {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.py",
+      "sha256": "9063d0b2df50a2808b94d7ae2c6df89c7132b94d0355a243a594aeb170c03982"
+    },
+    "resource_guard": {
+      "path": "tools/run_with_resource_guard_q0_v12.py",
+      "sha256": "3994b984eb221c2170446ab98c7762e2ab2b4342976798072315de0ff4f338c8"
+    },
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.json",
+      "sha256": "f949c003ff84bae58d37f465dcde6411fa40ee8834e056236323a8faa9195c9a"
+    },
+    "proposal": {
+      "path": "operations/adaptive/proposals/developed/949_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.json",
+      "sha256": "90a1dbcecace88e1966d453fb1d6ec2cc708f9cdf571078a20ea53cb8764a234"
+    },
+    "source_closure": {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.json",
+      "sha256": "41a777d07c35f5de14b3894cf78cfc84db0ebd4cfe3c1aa4c1d326e83864c5aa"
+    },
+    "python_runtime_closure": {
+      "path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.json",
+      "sha256": "6eb995dd617c6814997eeea767edd6f52cac84ccf0a21ec3ede7dacc79f66ddb"
+    }
+  },
+  "blocking_findings": [
+    {
+      "id": "transitive-code-executes-before-its-verification",
+      "finding": "v12 imports and executes the v11 coordinator at module load before verify_source_closure runs. That import recursively executes v10, v3, and v2. v12 then obtains BASE.artifact from this not-yet-verified chain and uses it as the verifier. A drifted base can therefore execute before rejection and can alter the artifact function that is supposed to detect its drift. Direct records and runtime-index equality are complete, but their enforcement is not an independent pre-import trust boundary.",
+      "evidence": [
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.py:12-27",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.py:71-127",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12.py:178-184",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.py:16-29",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:23-25",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3.py:20-27"
+      ]
+    }
+  ],
+  "positive_findings": [
+    "All three v11 surface defects are corrected: both prior transitive bases now have direct path/bytes/SHA-256 records, validation-only emits the v12 preflight schema, and the decision requires a wholly separate prospectively frozen 100M experiment while authorizing no larger gate.",
+    "The direct runtime artifact set and Python-runtime index contain the same 13 path/bytes/SHA-256 records; all 24 source-closure records and all 13 runtime-index records matched the filesystem during this audit.",
+    "A bounded wrong-source-closure-hash validation produced a source-closure blocker and transitive_executable_closure.verified=false; the exact sealed closure produced verified=true.",
+    "The inherited v11 guard requires memory.swap.max, writes zero, reads exact zero, and completes admission before the child launcher. memory.max remains exactly 10000000000 bytes.",
+    "CPU and temporary-disk thresholds remain explicitly diagnostic abort-after-observation signals, elapsed remains diagnostic, and memory/runtime/CPU/disk/PPM eligibility remains N/A.",
+    "P, E-A, E-B, and E-decode retain exact clean-environment, canonical opening-1M, payload, archive, and enwik9_uncompressed semantics.",
+    "Output-manifest, managed-lease, fixed-path, optional-witness, and cleanup semantics remain coherent.",
+    "Package accounting remains 468481 + 23002 + 464298 + 69 + 31 = 955881 bytes with exactly 100 added command bytes.",
+    "No corpus, cgroup, lease, active HORIZON artifact, Geekbench, codec, adaptive job, result execution, or scratch execution was accessed or launched by this audit."
+  ],
+  "required_correction": "Use a minimal stdlib-only v13 bootstrap that verifies the source-closure file with the caller-bound digest, verifies every direct runtime path/bytes/SHA-256 using its own hashlib/file code, and checks runtime-index equality before importing v11, v10, v3, v2, either stage, either guard, or lease code. Only then may it load and invoke the sealed implementation chain.",
+  "claim_boundary": "This receipt records an independent static BLOCK. It supplies no runtime, memory, identity, compression, archive, inverse, package-score, or Hutter objective authority and authorizes no execution or larger gate."
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+  "claimed_at": "2026-09-01T18:19:43+00:00",
+  "created_at": "2026-09-01T18:19:43+00:00",
+  "developed_at": "2026-09-01T18:19:43+00:00",
+  "evidence": [
+    {
+      "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/decision.json",
+      "sha256": "sha256:c7c70a8349f42169fd07d782a9439cedc512a3b687aae2518bb982496079d312"
+    },
+    {
+      "path": "programs/cmix_obias_memory_safe_parent_q0_v1/manifest.json",
+      "sha256": "sha256:7eaea060a7efe41b1b90611473f3e2f48c8e11a19543beb82d3bfe02647db3de"
+    },
+    {
+      "path": "programs/cmix_obias_memory_safe_parent_q0_v1/program-lock.json",
+      "sha256": "sha256:8cc5875f0cd7ccb7aa546d9d5c7d77c982615718d7c83859478155d16f0ae055"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json",
+    "sha256": "sha256:87013b223aaa96c3bb4349c02b794fee07155ce52babca91c4ca25bce11dd456"
+  },
+  "hypothesis": "On the exact canonical opening 1000000 bytes, the byte-identical original CMIX package with only CMIX_PPM_RSS_MB=8192 added reproduces the frozen payload and archive across P, E-A, and E-B and exactly decodes enwik9_uncompressed under one singleton CPU, one canonical managed lease, fixed disk-backed roots, and a non-prize-facing identity guard.",
+  "interfaces_exposed": [
+    "output-neutral env8192 opening-1M identity"
+  ],
+  "kill_condition": "Any package, payload, archive, decode, guard, lease, affinity, or manifest mismatch rejects.",
+  "max_program_bytes": 100,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-q0-envelope",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact opening-1M identity may support only a separately frozen 100M resource experiment.",
+  "proposal_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+  "retired_neighborhoods": [
+    "Geekbench-gated opening-1M identity envelopes"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "CMIX env8192 opening-1M identity-only correction"
+}

@@ -1,0 +1,57 @@
+{
+  "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11",
+  "candidateTreeSha256": "sha256:0ed60984afe8e1a03484f331364de5815a61cfd5d706322a8f4698f910308e0e",
+  "change": {
+    "evidence": [
+      "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10/20260901T182036268003Z_c06a4899c0b9.json",
+      "operations/adaptive/proposals/developed/949_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11.json"
+    ],
+    "hypothesis": "On the exact canonical opening 1000000 bytes, the byte-identical original CMIX package with only CMIX_PPM_RSS_MB=8192 added reproduces the frozen payload and archive across P, E-A, and E-B and exactly decodes enwik9_uncompressed under one canonical managed lease and fixed disk-backed roots, while the child cgroup binds memory.max=10000000000 and memory.swap.max=0 before exec.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Require and verify exact memory.max=10000000000 and memory.swap.max=0 before child exec; classify CPU affinity, temporary disk, and elapsed observations as diagnostic abort-after-observation evidence only; keep all resource/PPM eligibility N/A and authorize no larger gate."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/78/789cdeedf51fe04eb195f5b0050594d85c6f0a2811bb1b0b60f8c2888a117dc0",
+      "bytes": 1632,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "789cdeedf51fe04eb195f5b0050594d85c6f0a2811bb1b0b60f8c2888a117dc0"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/86/8684e506bd54a7d159ca823f1df75b961e066d1a9e0012fd04b86d5325ccd00b",
+      "bytes": 324,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "8684e506bd54a7d159ca823f1df75b961e066d1a9e0012fd04b86d5325ccd00b"
+    }
+  ],
+  "generatedUtc": "2026-09-01T18:34:03+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+    "candidateTreeSha256": "sha256:c06a4899c0b999bcfc634744e7b4ba4fc37fc4753d8d2401e4e9f324697ec019",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10/20260901T182036268003Z_c06a4899c0b9.json",
+      "sha256": "sha256:8d8221a187619e9893c0b25def9981cb2c50e390afaaddb5aced77396f8f98d8"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11/20260901T183339508609Z_d4770401d4f9.json",
+    "sha256": "sha256:b4432dbe27c7bd9f721b0258bd98f7166419edab0693ec1f17190e9f75e7fb8e"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

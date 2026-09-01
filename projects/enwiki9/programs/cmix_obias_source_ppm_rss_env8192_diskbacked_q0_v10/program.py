@@ -1,0 +1,4 @@
+OPTION = "CMIX_PPM_RSS_MB=8192"
+SCOPE_BYTES = 1_000_000
+EVIDENCE_CLASS = "opening1m_identity_only"
+GUARD_PHASE = "identity"
