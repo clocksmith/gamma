@@ -1,0 +1,77 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "endpoint428_semantic_route_tape_q0_v3",
+  "revision": 1,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "endpoint428_semantic_route_tape_q0_v2",
+      "required_evidence": "Reuse the scanner bytes from sealed candidate tree a5e8391fc089f8e11b583d2e9c272b3619958ac55c5502618001e358957df4b8; v3 changes the independent proof and execution envelope only."
+    },
+    {
+      "artifact": "endpoint428_semantic_route_tape_q0_v2_ordering_addendum",
+      "required_evidence": "Bind SHA-256 e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291 prospectively and enforce deferred, prior-posttruth, prediction order."
+    }
+  ],
+  "contract": {
+    "parent_revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v2/20260831T213947752614Z_a5e8391fc089.json",
+      "sha256": "eb40289a9ef7ad6eb79bbbd2772dd1768635103ebab4fd19c5b7a355bbb809bd",
+      "candidate_tree_sha256": "a5e8391fc089f8e11b583d2e9c272b3619958ac55c5502618001e358957df4b8"
+    },
+    "ordering_addendum": {
+      "path": "operations/planning/endpoint428_semantic_route_tape_q0_v2_ordering_addendum.json",
+      "sha256": "e6868e2b8e0e1985d744796cddda355c13f8c45fa3f80a3b565f9a4d95d4c291"
+    },
+    "population": {
+      "store_path": "/home/x/enwiki9-nonproof/results/helical_far_history_wrt_event_map_qm2_v1/enwik9.store",
+      "store_bytes": 647798597,
+      "store_sha256": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9",
+      "wrt_stream_bytes": 647798592,
+      "raw_resolved_path": "/home/x/enwiki9-quarantine/mattmahoney-20260711/enwik9",
+      "raw_bytes": 1000000000,
+      "raw_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "dictionary_bytes": 411996,
+      "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    "snapshot_rule": "The adaptive worker's GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT is mandatory. Every v3 candidate input is read from that materialized tree. The v2 scanner is materialized from the prospectively bound parent revision, never read from the mutable programs tree.",
+    "independent_replay": [
+      "A separately implemented native verifier decodes every WRT coordinate, compares every reconstructed raw byte, independently replays PP/RR/Q/M parser state, and compares every field of every tape record.",
+      "The replay checks exact source and availability, raw before and after, route and witness, virtual ordinal, field ordinal, event, flags, depth, key identity, descriptor order, and EOF behavior.",
+      "The Python coordinator performs exact A/B SHA-256 identity, input identities, summaries, and requires the native replay receipt; it performs no per-byte Python FNV pass."
+    ],
+    "negative_fixtures": [
+      "Mutate both A and B identically at virtual ordinal offset 72 and require rejection.",
+      "Mutate both at field ordinal offset 80 and require rejection.",
+      "Mutate both at depth offset 86 and require rejection.",
+      "Mutate both at raw-before or raw-after offsets 24 or 32 while preserving range validity and require rejection.",
+      "Swap equal-availability state and prediction records in both arms and require rejection."
+    ],
+    "exclusive_execution": {
+      "lease": "operations/runtime/exclusive_full1g.json",
+      "implementation_sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1",
+      "schema_sha256": "96a97198bb004df485ce8f910f9645e87bfa9287bfda09c57d3f59b3cf5ebb96",
+      "scope": "Acquire before production outputs and hold across compile, A, B, native replay, Python verification, and terminal decision."
+    },
+    "resource_bounds": {
+      "maximum_tree_rss_kib": 1048576,
+      "maximum_temporary_disk_bytes": 100000000000
+    }
+  },
+  "activation_requirements": [
+    "Only bounded fixtures may run before a new sealed v3 candidate revision exists.",
+    "No full stream may be queued or executed in this implementation turn.",
+    "A future full job must bind the v3 candidate revision, v3 experiment, v3 runner digest, parent revision, ordering addendum, lease implementation, and compiler."
+  ],
+  "claim_boundary": [
+    "All fixtures and complete route tapes are zero-credit population infrastructure.",
+    "No probability, arithmetic archive, score saving, Hutter qualification, or Fiber authorization is established by source or fixture validation.",
+    "Tape, sidecar, raw corpus, and offline coordinate maps remain forbidden submission inputs."
+  ]
+}

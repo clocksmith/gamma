@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-08-31T21:44:08+00:00`
+- Generated at UTC: `2026-09-01T13:30:03+00:00`
 
 ## Target State
 
@@ -27,15 +27,15 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `text_compress`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `81,637`
+- RSS samples: `138,247`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `9,098,816`
-- Latest sampled single RSS KiB: `9,098,508`
+- Latest sampled single RSS KiB: `9,098,468`
 - Tightest binary single-process margin KiB: `1,386,944`
 - Tightest decimal single-process margin KiB: `666,809`
-- Latest binary single-process margin KiB: `1,387,252`
-- Latest decimal single-process margin KiB: `667,117`
+- Latest binary single-process margin KiB: `1,387,292`
+- Latest decimal single-process margin KiB: `667,157`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `26`
@@ -72,22 +72,22 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `7,054`
-- RSS guard JSON modified UTC: `2026-08-31T21:44:08+00:00`
-- RSS guard JSON SHA-256: `a5ed563ba7b6310a800273338ef829ad1937d57c2774ca296806961d68d91b23`
-- RSS samples: `81,637`
+- RSS guard JSON bytes: `7,057`
+- RSS guard JSON modified UTC: `2026-09-01T13:30:02+00:00`
+- RSS guard JSON SHA-256: `6517b12bfb2a48e2075ec23144cc086bde9970742e97075a1d05302c7f058cfd`
+- RSS samples: `138,247`
 - Max sampled single RSS KiB: `9,098,816`
 - Max sampled tree RSS KiB: `9,102,532`
 - Single-process RSS margin KiB: `1,386,944`
 - Single-process decimal `10GB` margin KiB: `666,809`
 - Tree RSS margin KiB: `1,383,228`
 - Tree decimal `10GB` margin KiB: `663,093`
-- Latest sampled single RSS KiB: `9,098,508`
-- Latest sampled tree RSS KiB: `9,102,032`
-- Latest sampled single-process margin KiB: `1,387,252`
-- Latest sampled single-process decimal `10GB` margin KiB: `667,117`
-- Latest sampled tree margin KiB: `1,383,728`
-- Latest sampled tree decimal `10GB` margin KiB: `663,593`
+- Latest sampled single RSS KiB: `9,098,468`
+- Latest sampled tree RSS KiB: `9,101,992`
+- Latest sampled single-process margin KiB: `1,387,292`
+- Latest sampled single-process decimal `10GB` margin KiB: `667,157`
+- Latest sampled tree margin KiB: `1,383,768`
+- Latest sampled tree decimal `10GB` margin KiB: `663,633`
 - Cgroup memory peak bytes: `n/a`
 - Latest cgroup current bytes: `n/a`
 - Cgroup event deltas: `n/a`
@@ -149,11 +149,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `914`
-- Registered programs: `455`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
-- Candidate statuses: `active=18, blocked_dependency=34, candidate=199, measured_negative=100, retired=563`
+- Program directories: `916`
+- Registered programs: `457`
+- Untracked nonignored entries: `56`
+- Modified tracked entries: `3`
+- Candidate statuses: `active=18, blocked_dependency=34, candidate=199, measured_negative=100, retired=563, track_source_before_evolution=2`
 
 ## Active Runner Process Table
 
@@ -163,16 +163,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | `process` | 2,878,467 | 2,878,317 | 20,792 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/endpoint428_horizon_retained_parent_trace_q0_v1.py` |
 | `rss_guard` | 2,965,296 | 2,878,467 | 31,560 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
 | `process` | 2,965,314 | 2,965,296 | 3,524 | `/home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/comp9a-decomp9 c /home/x/deco/gam...` |
-| `native_cmix` | 2,965,315 | 2,965,314 | 9,098,508 | `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix -t /home/x/deco/gamma/projects/enwik...` |
+| `native_cmix` | 2,965,315 | 2,965,314 | 9,098,468 | `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix -t /home/x/deco/gamma/projects/enwik...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 1,346,301,952 | `2026-08-31T21:45:25+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,055 | `2026-08-31T21:45:24+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 19,775,488 | `2026-08-31T21:45:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 216,343 | `2026-08-31T21:44:21+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,056 | `2026-09-01T13:31:19+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 2,282,119,168 | `2026-09-01T13:31:19+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 32,391,168 | `2026-09-01T13:30:35+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 231,694 | `2026-09-01T13:30:24+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix` | 1,625,944 | `2026-08-30T23:00:07+00:00` |
@@ -186,25 +186,25 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Max cmix PID: `2965315`
 - Active cmix mode: `text_compress`
-- Max cmix RSS KiB: `9,098,508`
-- Active process tree RSS KiB: `9,192,304`
+- Max cmix RSS KiB: `9,098,468`
+- Active process tree RSS KiB: `9,192,264`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,387,252`
-- Single-process decimal margin KiB: `667,117`
-- Active process tree margin KiB (binary): `1,293,456`
-- Active process tree decimal margin KiB: `573,321`
+- Single-process binary margin KiB: `1,387,292`
+- Single-process decimal margin KiB: `667,157`
+- Active process tree margin KiB (binary): `1,293,496`
+- Active process tree decimal margin KiB: `573,361`
 - Temp input path: `/home/x/deco/gamma/projects/enwiki9/data/enwik9`
 - Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive`
 - Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp`
 - Temp input bytes: `1,000,000,000`
-- Temp output bytes: `19,759,104`
+- Temp output bytes: `32,382,976`
 - Temp output staging bytes: `647,798,592`
 - Temp input modified UTC: `2011-06-01T15:29:40+00:00`
-- Temp output modified UTC: `2026-08-31T21:43:52+00:00`
+- Temp output modified UTC: `2026-09-01T13:27:48+00:00`
 - Temp output staging modified UTC: `2026-08-30T23:00:19+00:00`
-- Process read bytes: `15,163,392`
-- Process write bytes: `2,666,049,536`
+- Process read bytes: `73,437,184`
+- Process write bytes: `3,618,189,312`
 
 ## Contingencies
 

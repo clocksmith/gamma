@@ -1,5 +1,86 @@
 # enwiki9 Research Register
 
+## 2026-09-01 - Exact HORIZON repricing and independent semantic replay are sealed
+
+The active retained-parent job remains
+`endpoint428_horizon_retained_parent_trace_q0_v1`, job
+`20260830T224837Z_a120752fb5`. At the latest read-only snapshot its trace held
+`1,138,126,840 / 5,182,388,736` rows (`21.961433%`). The process ancestry was
+intact, the guard remained `running`, and no RSS or official decimal-memory
+violation was recorded. Peak sampled single-process and tree RSS were
+`9,098,816 KiB` and `9,102,532 KiB`. This is operational progress only: the
+live header row count is intentionally incomplete, no analyzer has read the
+growing trace, and no scientific or archive conclusion exists.
+
+`evidence_conditioned_mutation_router_v8` corrects one governance defect in
+v7. A healthy nonterminal predecessor now means wait and authorizes no retry,
+successor, promotion, retirement, or scientific conclusion. Only a terminal
+infrastructure failure can authorize one correction-only retry. A causal,
+alignment, identity, or provenance failure is quarantined before any retry.
+All v7 scientific thresholds, exact-repricing requirements, source-family
+limits, and composition order remain bound by the exact v7 hash.
+
+The mandatory correction
+`endpoint428_horizon_retained_parent_trace_exact_q0_v2` is now implemented and
+sealed at candidate tree
+`77906aafeb9ba22f5318a53ddfdba1aec6e4c737806037581edc94e43721e344`.
+It preserves the active experiment's `2^63`, equal-prior, half-up law while
+replacing only `long double` posterior division with a source-ordered 63-bit
+unsigned-`__int128` quotient and exact remainder tie test. The full analyzer
+runs exact and legacy trajectories together, records their first divergence,
+requires legacy aggregate parity, and prices D/S/R/N twice on the same future
+immutable trace. The runner requires the adaptive snapshot ID, revision
+receipt, candidate-tree digest, and complete file closure. While v1 is live it
+fails before opening `parent.p1` or `manifest-a.bin`.
+
+Bounded arithmetic validation compiled both C++ sources under the frozen
+strict flags. Python arbitrary-precision arithmetic matched all 15 full-scale
+boundary vectors and all `225,450` exhaustive reduced-state rows. This proves
+the integer state transition implementation, not HORIZON gain. No exact full
+reanalysis ran and no v2 result directory was created.
+
+The prospective native one-byte design is frozen separately as
+`endpoint428_horizon_a_native_pkd_q0_v1`. It specifies an authoritative
+Endpoint428 parent, bookkeeping-identical K arm, exact D arm, a bounded oldest-
+anchor table, causal decoded-history spool, exact KT and Q63 state, P/K and K/D
+identity witnesses, coder/inverse gates, package accounting, and resource
+closure. It remains dormant and cannot become an adaptive proposal unless the
+terminal exact reanalysis passes every frozen scientific predicate.
+
+An independent audit also found that the sealed semantic-route v2 production
+envelope was not launchable: it rejected the canonical raw symlink, ignored
+the adaptive snapshot, did not prospectively bind the ordering addendum, and
+its Python verifier checked ABI shape rather than independently replaying
+semantic state. Full v2 execution therefore remains forbidden.
+
+Correction candidate `endpoint428_semantic_route_tape_q0_v3` is sealed at tree
+`c0f355845c3baa970d3f2c15255fc6a466528fa57aba1972236f4334c39f4cd0`.
+Its new native replay independently decodes the bounded WRT fixture to raw and
+checks every descriptor, route, ordinal, field ordinal, depth, event, flag,
+availability coordinate, and raw frontier. The valid A/B fixture passed, while
+five paired A/B corruptions of virtual ordinal, depth, field ordinal, raw
+coordinate, and equal-availability event order were all rejected. The
+contract-correction experiment binds the final design and ordering hashes.
+A complete semantic scan remains dormant until a future production runner
+binds this exact snapshot and holds the managed exclusive lease across both
+scans and verification.
+
+All artifacts in this entry are zero-credit governance, source, fixture, or
+causal-shadow work. The objective remains a completely counted deterministic
+score at or below `105,000,000` bytes. The verified Gamma full-1G score remains
+unknown; the best counted forecast remains `109,389,323`, or `4,389,323` bytes
+above target.
+
+Evidence:
+`operations/planning/evidence_conditioned_mutation_router_v8.json`,
+`operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_exact_q0_v2.json`,
+`operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_exact_q0_v2/20260901T131620927394Z_77906aafeb9b.json`,
+`operations/planning/endpoint428_horizon_a_native_pkd_q0_v1.json`,
+`operations/planning/endpoint428_semantic_route_tape_q0_v3.json`,
+`operations/adaptive/experiments/endpoint428_semantic_route_tape_q0_v3_contract_retry_v1.json`,
+and
+`operations/adaptive/candidate-revisions/endpoint428_semantic_route_tape_q0_v3/20260901T131904564070Z_c0f355845c3b.json`.
+
 ## 2026-08-31 - Endpoint428 router supersedes the stale q1 execution order
 
 `evidence_conditioned_mutation_router_v7` now governs prospective execution.
