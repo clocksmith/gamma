@@ -1,0 +1,32 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v9",
+  "scope": "sealed execution and runtime-authority provenance only",
+  "verdict": "BLOCK",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v9/20260901T180053142267Z_9155c111050f.json",
+    "sha256": "6f72c507e99d759222ae8326ba70b68939ae53ebe1a80a767ee7ca697eb1ac30",
+    "candidate_tree_sha256": "9155c111050f20f525b33108d6f34d0cb66feb7df4fb737666847594bd19cb5a"
+  },
+  "blocking_findings": [
+    "The v9 activation contract still binds the v7 future cgroup and contradicts the v9 producer and coordinator.",
+    "The activation contract says the adaptive running directory is empty, contradicting the producer's exactly-one-own-job rule, and does not name the materializer as an authority component.",
+    "Own-job admission checks only caller-controlled job_id and candidate_id strings; it does not bind the live adaptive worker PID/start identity, tool, arguments, revision, runner, or command digest.",
+    "The materializer does not bind a canonical adaptive terminal-job receipt, so its activation and producer-receipt hashes share one unauthenticated local origin.",
+    "Launcher validation uses substring tests instead of exact join/exec program reconstruction; cleanup and inode claims remain assertions after removal.",
+    "Producer lease validation omits exact runner_sha256 and guard_path.",
+    "The receipt schema is dependency-bound but not applied, contains unconstrained nested fields, and incorrectly requires a legitimate empty stderr artifact to contain at least one byte."
+  ],
+  "positive_findings": [
+    "The coordinator rederives the current delegated cgroup-parent identity, controllers, and direct occupants before an opening-1M execution.",
+    "Residual cgroup termination and cleanup handling improved.",
+    "The actual stage selects the exact stdlib-only v9 guard and binds the objective contract.",
+    "All sealed source-closure and runtime-closure hashes matched at audit time.",
+    "No q0 v9 activation, benchmark, cgroup, corpus, result, scratch, HORIZON access, or queue execution occurred."
+  ],
+  "authorized_successor": "One correction-only q0 v10 split with a separately frozen runtime-authority adaptive candidate and exact terminal-job provenance; no scientific mutation is authorized.",
+  "claim_boundary": "This receipt records an independent static BLOCK and supplies no runtime, memory, identity, compression, archive, inverse, score, or objective authority."
+}

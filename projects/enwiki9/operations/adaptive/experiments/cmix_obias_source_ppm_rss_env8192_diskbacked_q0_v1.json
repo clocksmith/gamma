@@ -1,0 +1,122 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1",
+  "proposalId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "The exact original source-built CMIX package with only CMIX_PPM_RSS_MB=8192 bound in a clean environment preserves payload, archive, inverse, and repeats while reducing PPM residency enough to remain below the strict decimal memory boundary.",
+    "falsification": "Reject the env-only correction if any payload, control/treatment archive, treatment repeat, inverse, package identity, lease, memory, disk, CPU-affinity, runtime projection, PPM trigger/drop/refault, phase, page-fault, IO, or cleanup predicate fails."
+  },
+  "changedMechanism": "Set the original package's existing runtime PPM residency threshold to 8192 MiB; do not change the executable, model, coder, archive format, source, or package assets.",
+  "invariants": [
+    "The treatment and control use the same exact original 468481-byte packaged compressor and 23002-byte head.",
+    "The treatment codec environment contains only PATH, KH_BITLSTM32, GAMMA_RESOURCE_PHASE_MARKERS, and CMIX_PPM_RSS_MB=8192; the control omits only CMIX_PPM_RSS_MB.",
+    "The first runnable gate is exactly the canonical opening 1000000 bytes; 100000000 is the only larger gate supported by this experiment revision.",
+    "Every encode and decode stage owns the current managed exclusive lease and strict resource-guard contract for its entire process lifetime.",
+    "Scratch is disk-backed, result/scratch/cgroup/lease paths are unique, and no existing artifact is overwritten.",
+    "Optional probability/state witnesses may corroborate the gate but are not required: output-neutral authority is limited to the exact same binary/source contract plus exact payload, control/treatment archive, treatment repeat, and inverse evidence.",
+    "The patched malloc-trim and phase-marker q0 implementation is a conditional successor only and receives no execution or score credit here.",
+    "The active HORIZON job blocks all corpus execution but not read-only validation."
+  ],
+  "controls": [
+    {"id": "P", "role": "comparator", "definition": "Exact original package in a clean environment with its default 9216 MiB PPM-RSS threshold."},
+    {"id": "E", "role": "treatment", "definition": "The byte-identical original package in the same clean environment with CMIX_PPM_RSS_MB=8192."},
+    {"id": "R", "role": "replay", "definition": "A second independent E encode must reproduce both payload and self-extracting archive byte-for-byte."},
+    {"id": "W", "role": "negative", "definition": "If optional probability/state witnesses are supplied, malformed, wrong-population, wrong-package, or unequal witnesses fail closed."}
+  ],
+  "population": {
+    "unit": "canonical opening raw byte",
+    "scopeBytes": 1000000,
+    "scopeSymbols": null,
+    "selection": "Exact first 1000000 bytes of canonical enwik9; a pass authorizes only the separately selected exact opening-100000000 gate.",
+    "coordinate": "Original raw byte offset and the exact deterministic transformed/coded sequence produced by the bound package."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "the exact current and prior input bytes available to the unchanged original CMIX package",
+      "current process RSS read by the existing PPM runtime control",
+      "the fixed ASCII option CMIX_PPM_RSS_MB=8192"
+    ],
+    "forbiddenInformation": [
+      "future corpus bytes or decoder-unavailable state",
+      "patched malloc-trim or phase-marker executable behavior",
+      "file-backed FXCM allocation",
+      "inference of probability identity from payload identity alone"
+    ]
+  },
+  "inputs": [
+    {"id": "original-1m-receipt", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/decision.json", "sha256": "sha256:c7c70a8349f42169fd07d782a9439cedc512a3b687aae2518bb982496079d312"},
+    {"id": "original-package", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/cmix", "sha256": "sha256:4ba53d3652c4e6de4126b4c03006e45a5f7e0511abd5d9661bf8132236ef1d2a"},
+    {"id": "original-head", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/head.blob", "sha256": "sha256:35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078"},
+    {"id": "runtime-option-source", "path": "results/cmix_obias_memory_safe_parent_build_a_q0_v1/source-inputs/src/models/ppmd.cpp", "sha256": "sha256:d54d27616f756efa1fd5d08aaec85fe4688004b5dcd49f411caba92812cbb7e1"},
+    {"id": "patched-q0-manifest-conditional-only", "path": "programs/cmix_obias_memory_safe_parent_q0_v1/manifest.json", "sha256": "sha256:7eaea060a7efe41b1b90611473f3e2f48c8e11a19543beb82d3bfe02647db3de"},
+    {"id": "patched-q0-lock-conditional-only", "path": "programs/cmix_obias_memory_safe_parent_q0_v1/program-lock.json", "sha256": "sha256:8cc5875f0cd7ccb7aa546d9d5c7d77c982615718d7c83859478155d16f0ae055"},
+    {"id": "owned-managed-lease", "path": "programs/gamma_managed_exclusive_lease_owned_cleanup_q0_v1/managed_exclusive_lease.py", "sha256": "sha256:df96b87efb30e2c172f1d5182c7a81ef2b7bde6b7454c0181f2ac5cf39c20acb"},
+    {"id": "strict-resource-guard", "path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 64,
+    "expectedNetSavingsBytes": -64
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.1,
+    "expectedMemoryRatio": 0.94,
+    "uncertaintyRisk": 0.2,
+    "interactionRisk": 0.05
+  },
+  "measurements": [
+    {"id": "samePackageOutputNeutralIdentityPass", "definition": "Control and treatment bind the same source/package, exact payload and archive, treatment repeat, and exact inverse.", "unit": "boolean"},
+    {"id": "payloadIdentityPass", "definition": "Control and treatment coded payload artifacts agree exactly.", "unit": "boolean"},
+    {"id": "repeatIdentityPass", "definition": "Two treatment payload and archive artifacts agree exactly.", "unit": "boolean"},
+    {"id": "exactInversePass", "definition": "The treatment archive restores the exact selected raw prefix.", "unit": "boolean"},
+    {"id": "maximumTreeRssKiB", "definition": "Maximum guarded process-tree RSS over every stage.", "unit": "KiB"},
+    {"id": "maximumCgroupMemoryBytes", "definition": "Maximum cgroup-v2 memory peak over every stage.", "unit": "bytes"},
+    {"id": "maximumAllocatedTemporaryDiskBytes", "definition": "Maximum allocated temporary disk observed over result and scratch roots.", "unit": "bytes"},
+    {"id": "runtimeRatio", "definition": "Treatment-A encode elapsed seconds divided by matched control encode elapsed seconds.", "unit": "ratio"},
+    {"id": "pageFaultsAndIoComplete", "definition": "Process-tree minor/major faults, read/write bytes, and PPM mapping residency are recorded for every stage.", "unit": "boolean"},
+    {"id": "officialCompletePackageBytes", "definition": "Official score total of compressor, head, archive, and exact 69-byte compression plus 31-byte decompression command text; evidence-bundle bytes are separate zero-score accounting.", "unit": "bytes"},
+    {"id": "repeatedPpmDropsPass", "definition": "At 100M, the 8192 MiB total-RSS trigger is crossed and bounded mapping telemetry observes at least two PPM RSS drops plus later refault growth.", "unit": "boolean"},
+    {"id": "reservedRuntimeProjectionPass", "definition": "At 100M, linear full-scope encode/decode projections with a frozen 1.25 reserve remain below the Geekbench-bound phase limit; reject-only, never qualification.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "same-package-output-neutral", "measurement": "samePackageOutputNeutralIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "payload", "measurement": "payloadIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "repeat", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "inverse", "measurement": "exactInversePass", "operator": "eq", "threshold": true},
+    {"id": "memory", "measurement": "maximumTreeRssKiB", "operator": "lt", "threshold": 9765625},
+    {"id": "cgroup", "measurement": "maximumCgroupMemoryBytes", "operator": "lt", "threshold": 10000000000},
+    {"id": "disk", "measurement": "maximumAllocatedTemporaryDiskBytes", "operator": "lt", "threshold": 100000000000},
+    {"id": "telemetry", "measurement": "pageFaultsAndIoComplete", "operator": "eq", "threshold": true},
+    {"id": "ppm-drops", "measurement": "repeatedPpmDropsPass", "operator": "eq", "threshold": true},
+    {"id": "runtime-projection", "measurement": "reservedRuntimeProjectionPass", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "output-neutral-mismatch", "measurement": "samePackageOutputNeutralIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "payload-mismatch", "measurement": "payloadIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "inverse-failure", "measurement": "exactInversePass", "operator": "eq", "threshold": false},
+    {"id": "memory-failure", "measurement": "maximumTreeRssKiB", "operator": "gte", "threshold": 9765625},
+    {"id": "cgroup-failure", "measurement": "maximumCgroupMemoryBytes", "operator": "gte", "threshold": 10000000000},
+    {"id": "disk-failure", "measurement": "maximumAllocatedTemporaryDiskBytes", "operator": "gte", "threshold": 100000000000},
+    {"id": "ppm-trigger-or-drop-failure", "measurement": "repeatedPpmDropsPass", "operator": "eq", "threshold": false},
+    {"id": "runtime-projection-failure", "measurement": "reservedRuntimeProjectionPass", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-01T16:20:00Z"
+}

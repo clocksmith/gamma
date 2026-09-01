@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4",
+  "proposalId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "On exact canonical opening 1000000 bytes under one explicitly selected singleton CPU and the pinned canonical outer lease, the original byte-identical CMIX package with only CMIX_PPM_RSS_MB=8192 added reproduces the frozen payload and archive across P, E-A, and E-B and exactly decodes enwik9_uncompressed.",
+    "falsification": "Reject opening-1M identity authority on any affinity, pinned-lease, activation, source closure, known output, fresh-arm, decode, strict guard, lease evidence, disk-root separation, or manifest failure. Memory, runtime, and PPM-trigger eligibility remain null/N_A and cannot pass or falsify this 1M experiment."
+  },
+  "changedMechanism": "Bind the original package's existing CMIX_PPM_RSS_MB option to 8192 for an exact opening-1M identity experiment on a prospectively bound current host and singleton CPU; do not change executable, source, model, coder, archive, or head.",
+  "invariants": [
+    "The coordinator pins itself to exactly one explicitly selected allowed CPU before preflight or any stage; guard and codec descendants inherit it and receipts prove the exact singleton CPU.",
+    "The managed exclusive lease path is fixed to operations/runtime/exclusive_full1g.json with lock operations/runtime/exclusive_full1g.json.lock; no caller override exists.",
+    "An immutable activation receipt at the fixed v4 path must be SHA-bound by a future adaptive job and bind exact raw Geekbench 5, current-host fingerprint, independent runtime verification, and authoritative managed-lease verification artifacts.",
+    "The exact source.tar archive is a frozen prospective experiment input.",
+    "This coordinator has no gate-size argument and accepts exactly canonical opening 1000000 bytes only.",
+    "A pass cannot authorize or enqueue 100M/full; later work requires a separately prospectively frozen experiment.",
+    "Memory, runtime, and PPM-trigger eligibility are null/N_A and never synthesized PASS.",
+    "Promotion and kill predicate evaluations are emitted separately and exactly match the frozen predicate IDs.",
+    "P is default; E-A and E-B add only CMIX_PPM_RSS_MB=8192 to the byte-identical original package.",
+    "All three encode arms equal the exact known 172605-byte payload and 464298-byte archive; E-A decodes exactly to enwik9_uncompressed.",
+    "Result and scratch roots are distinct, disjoint, disk-backed, absent, and outside tmpfs, ramfs, and /dev/shm.",
+    "One outer managed lease spans all four arms; optional probability/state witnesses are corroboration only."
+  ],
+  "controls": [
+    {"id": "P", "role": "comparator", "definition": "Exact original package, clean environment, default PPM threshold."},
+    {"id": "E-A", "role": "treatment", "definition": "Exact original package, clean environment, CMIX_PPM_RSS_MB=8192."},
+    {"id": "E-B", "role": "replay", "definition": "Independent exact replay of E-A under the same pinned-CPU outer lease."},
+    {"id": "D", "role": "negative", "definition": "Exact E-A archive creates only enwik9_uncompressed with canonical opening-1M identity."}
+  ],
+  "population": {
+    "unit": "canonical opening raw byte",
+    "scopeBytes": 1000000,
+    "scopeSymbols": null,
+    "selection": "Exact first 1000000 bytes of canonical enwik9; no larger gate is included.",
+    "coordinate": "Original raw byte offset and deterministic payload/archive from the bound package."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "exact current and prior bytes available to the unchanged package",
+      "existing current-RSS PPM runtime control",
+      "fixed ASCII option CMIX_PPM_RSS_MB=8192",
+      "prospectively bound selected CPU and current-host runtime authority"
+    ],
+    "forbiddenInformation": [
+      "future corpus bytes or decoder-unavailable state",
+      "caller-selected lease namespace",
+      "unbound benchmark score or self-asserted isolation",
+      "100M/full qualification from opening 1M",
+      "reporting memory, runtime, or PPM-trigger eligibility PASS"
+    ]
+  },
+  "inputs": [
+    {"id": "original-receipt", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/decision.json", "sha256": "sha256:c7c70a8349f42169fd07d782a9439cedc512a3b687aae2518bb982496079d312"},
+    {"id": "original-package", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/cmix", "sha256": "sha256:4ba53d3652c4e6de4126b4c03006e45a5f7e0511abd5d9661bf8132236ef1d2a"},
+    {"id": "original-head", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/head.blob", "sha256": "sha256:35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078"},
+    {"id": "known-payload", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/out.cmix", "sha256": "sha256:a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"},
+    {"id": "known-archive", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/archive9", "sha256": "sha256:9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"},
+    {"id": "source-archive", "path": "results/cmix_obias_memory_safe_parent_build_a_q0_v1/source.tar", "sha256": "sha256:656a3100b7c4580658080fb0eda221a28b2f982f798f0b7ddc13409f2ce9c249"},
+    {"id": "runtime-option-source", "path": "results/cmix_obias_memory_safe_parent_build_a_q0_v1/source-inputs/src/models/ppmd.cpp", "sha256": "sha256:d54d27616f756efa1fd5d08aaec85fe4688004b5dcd49f411caba92812cbb7e1"},
+    {"id": "owned-managed-lease", "path": "programs/gamma_managed_exclusive_lease_owned_cleanup_q0_v1/managed_exclusive_lease.py", "sha256": "sha256:df96b87efb30e2c172f1d5182c7a81ef2b7bde6b7454c0181f2ac5cf39c20acb"},
+    {"id": "managed-lease-verifier", "path": "tools/managed_exclusive_lease_verify.py", "sha256": "sha256:68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"},
+    {"id": "strict-resource-guard", "path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"},
+    {"id": "stage-v3", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3_stage.py", "sha256": "sha256:ec5dd9d8577580c3226cbf10a1f825891890817a12ed7dd0bb932b4cec3da5b7"},
+    {"id": "v3-helpers", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3.py", "sha256": "sha256:f7092b45762ac01027098256a4e041c2ebe0d252eea5a813401d38f525ac29e7"},
+    {"id": "runtime-authority-verifier", "path": "tools/cmix_filebacked_fxcm_runtime_qualification_verify.py", "sha256": "sha256:ed8780f3680c3ff46ca4e16eff933b10829f1cf450b1a7775b72b0a6c58ac569"},
+    {"id": "runtime-host-schema", "path": "contracts/research/v1/cmix-runtime-host-fingerprint.schema.json", "sha256": "sha256:2bd1c4c72edb0ee02e719f21e2bc134a32e97b3299bdd0849b90024d176979a1"},
+    {"id": "runtime-verification-schema", "path": "contracts/research/v1/cmix-filebacked-fxcm-runtime-qualification-verification.schema.json", "sha256": "sha256:49c92bb04acfda0cc0f129b37fec42d70f95d6006be1359c6e46dca742f420ea"},
+    {"id": "activation-contract", "path": "operations/adaptive/activation-contracts/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4.json", "sha256": "sha256:4d708cb306ba324a8490a4fd341a568207dfce88baef6d3a5b93c08bc4fd6632"},
+    {"id": "coordinator-v4", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4.py", "sha256": "sha256:ebb6e7b3933184b15ed0f32c564f054eb8f26f7dcce2b4440a79b5ed0dbf00f7"}
+  ],
+  "pythonSourceClosureEntries": ["coordinator-v4"],
+  "budget": {"expectedGrossSavingsBytes": 0, "maximumAddedPackageBytes": 100, "expectedNetSavingsBytes": -100},
+  "search": {"expectedTransferRetention": 1.0, "expectedRuntimeRatio": 1.0, "expectedMemoryRatio": 1.0, "uncertaintyRisk": 0.1, "interactionRisk": 0.0},
+  "measurements": [
+    {"id": "packageSourceIdentityPass", "definition": "Exact frozen activation, source, package, known outputs, coordinator, stage, workflow, guard, and lease closure.", "unit": "boolean"},
+    {"id": "knownBaselinePayloadPass", "definition": "P, E-A, E-B each equal exact known 172605-byte payload.", "unit": "boolean"},
+    {"id": "knownBaselineArchivePass", "definition": "P, E-A, E-B each equal exact known 464298-byte archive.", "unit": "boolean"},
+    {"id": "freshArmIdentityPass", "definition": "Fresh P, E-A, E-B outputs are pairwise identical.", "unit": "boolean"},
+    {"id": "exactDecodePass", "definition": "E-A creates exact canonical enwik9_uncompressed.", "unit": "boolean"},
+    {"id": "guardContractPass", "definition": "All strict receipts and exact singleton CPU inheritance checks pass.", "unit": "boolean"},
+    {"id": "leaseEvidencePass", "definition": "Pinned canonical outer lease terminal evidence verifies and namespace is clean.", "unit": "boolean"},
+    {"id": "outputManifestCompletePass", "definition": "All deterministic outputs except self-referential decision are hash-accounted.", "unit": "boolean"},
+    {"id": "officialCompletePackageBytes", "definition": "Compressor, head, archive, exact 69-byte compression and 31-byte decompression commands.", "unit": "bytes"},
+    {"id": "memoryEligibilityAtOpening1m", "definition": "Always null/N_A.", "unit": "tri-state"},
+    {"id": "runtimeEligibilityAtOpening1m", "definition": "Always null/N_A.", "unit": "tri-state"},
+    {"id": "ppmTriggerEligibilityAtOpening1m", "definition": "Always null/N_A.", "unit": "tri-state"},
+    {"id": "optionalWitnessIdentityPass", "definition": "Null/N_A absent; exact paired corroboration when supplied.", "unit": "tri-state"}
+  ],
+  "promotionPredicates": [
+    {"id": "package-source-identity", "measurement": "packageSourceIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "known-payload", "measurement": "knownBaselinePayloadPass", "operator": "eq", "threshold": true},
+    {"id": "known-archive", "measurement": "knownBaselineArchivePass", "operator": "eq", "threshold": true},
+    {"id": "fresh-arms", "measurement": "freshArmIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "exact-decode", "measurement": "exactDecodePass", "operator": "eq", "threshold": true},
+    {"id": "strict-guards", "measurement": "guardContractPass", "operator": "eq", "threshold": true},
+    {"id": "lease-evidence", "measurement": "leaseEvidencePass", "operator": "eq", "threshold": true},
+    {"id": "complete-manifest", "measurement": "outputManifestCompletePass", "operator": "eq", "threshold": true},
+    {"id": "official-accounting", "measurement": "officialCompletePackageBytes", "operator": "eq", "threshold": 955881}
+  ],
+  "killPredicates": [
+    {"id": "package-source-drift", "measurement": "packageSourceIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "known-payload-mismatch", "measurement": "knownBaselinePayloadPass", "operator": "eq", "threshold": false},
+    {"id": "known-archive-mismatch", "measurement": "knownBaselineArchivePass", "operator": "eq", "threshold": false},
+    {"id": "fresh-arm-mismatch", "measurement": "freshArmIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "decode-mismatch", "measurement": "exactDecodePass", "operator": "eq", "threshold": false},
+    {"id": "guard-failure", "measurement": "guardContractPass", "operator": "eq", "threshold": false},
+    {"id": "lease-failure", "measurement": "leaseEvidencePass", "operator": "eq", "threshold": false},
+    {"id": "manifest-failure", "measurement": "outputManifestCompletePass", "operator": "eq", "threshold": false}
+  ],
+  "outputs": ["results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4/decision.json"],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-01T17:00:00Z"
+}

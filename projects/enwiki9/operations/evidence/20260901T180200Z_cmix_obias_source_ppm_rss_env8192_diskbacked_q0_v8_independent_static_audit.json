@@ -1,0 +1,51 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v8",
+  "scope": "sealed execution and activation authority only",
+  "verdict": "BLOCK",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v8/20260901T175115312984Z_d2b986e8779a.json",
+    "sha256": "863a38b16af449f83d66ec9ccf2ab4bb500384f664ed00a6bc9588cd499df861",
+    "candidate_tree_sha256": "d2b986e8779ab29990f3b9d38a0513da8aa60380ad854f400e09e4ded4ba4bc8"
+  },
+  "blocking_findings": [
+    {
+      "id": "activation-contract-cgroup-version-mismatch",
+      "finding": "The sealed activation contract binds a future cgroup name ending q0-v7 while the v8 producer and coordinator require q0-v8.",
+      "required_correction": "A new candidate version must bind one exact future cgroup path consistently across contract, producer, coordinator, runtime closure, and source closure."
+    },
+    {
+      "id": "producer-execution-not-authoritative",
+      "finding": "The coordinator validates internally consistent receipt-provided launcher and cleanup fields but does not bind an independently authoritative invocation of the sealed producer; the activation namespace can therefore be populated by synthetic evidence.",
+      "required_correction": "Bind a sealed producer execution and decision-last complete output manifest through the canonical adaptive workflow or an equivalent independently verified outer execution boundary."
+    },
+    {
+      "id": "launcher-and-cleanup-underconstrained",
+      "finding": "The coordinator does not compare the launcher to exact expected join/exec semantics, does not verify owned_inode or every per-PID affinity map, trusts post-cleanup booleans, and omits producer runner_sha256 and guard_path from the terminal lease comparison.",
+      "required_correction": "Recompute exact launcher semantics and identities, verify all sampled PID/affinity relations and lease identities, and bind lifecycle evidence that proves same-inode empty cleanup."
+    },
+    {
+      "id": "receipt-schema-not-strictly-applied",
+      "finding": "The activation receipt schema is permissive and the coordinator does not apply it.",
+      "required_correction": "Use a stdlib verifier for an exact recursively closed receipt shape, or apply an equivalently strict prospectively bound schema without adding an unbound dependency."
+    },
+    {
+      "id": "future-parent-identity-not-rederived",
+      "finding": "The 1M preflight checks only that the future cgroup is absent and its parent directory exists; it does not re-stat the current parent inode, owner, controllers, and direct occupants.",
+      "required_correction": "Rederive the delegated-parent contract immediately before the opening-1M stages."
+    }
+  ],
+  "positive_findings": [
+    "The actual opening-1M stages select tools/run_with_resource_guard_q0_v8.py.",
+    "The guard is stdlib-only and binds the exact objective-contract hash.",
+    "The frozen runtime and source closure hashes match their current artifacts.",
+    "Package accounting binds 100 command bytes and a 955881-byte opening-1M complete package.",
+    "Memory, runtime, and PPM-trigger eligibility remain null and N_A at opening 1M.",
+    "No q0 v8 activation, Geekbench, cgroup, corpus, result, scratch, archive, inverse, HORIZON access, or queue execution occurred."
+  ],
+  "authorized_successor": "One correction-only cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v9 execution envelope; no scientific or parameter mutation is authorized.",
+  "claim_boundary": "This receipt records an independent static BLOCK. It supplies no runtime, memory, identity, compression, archive, inverse, score, or objective authority."
+}

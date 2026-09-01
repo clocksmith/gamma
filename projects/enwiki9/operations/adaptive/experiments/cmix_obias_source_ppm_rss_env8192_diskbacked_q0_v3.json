@@ -1,0 +1,131 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3",
+  "proposalId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "On the exact canonical opening 1000000 bytes, the original byte-identical CMIX package with only CMIX_PPM_RSS_MB=8192 added in a clean environment reproduces the frozen known payload and archive across matched P, E-A, and E-B arms and exactly decodes enwik9_uncompressed.",
+    "falsification": "Reject opening-1M identity authority on any source/package closure drift, known payload or archive mismatch, fresh-arm mismatch, inverse failure, strict guard failure, outer-lease verification failure, current-host Geekbench binding failure, or incomplete output manifest. Memory eligibility, runtime eligibility, and PPM trigger eligibility are N/A at this scope and can neither pass nor falsify the mechanism."
+  },
+  "changedMechanism": "Bind the original package's existing CMIX_PPM_RSS_MB runtime option to 8192 for exact opening-1M output-neutral identity only; do not change the executable, source, model, coder, archive, or head.",
+  "invariants": [
+    "This revision has no gate-size argument and accepts exactly canonical opening 1000000 bytes only.",
+    "A v3 pass does not enqueue, authorize, qualify, or select a 100M or full-corpus run; any later 100M experiment must be separately prospectively frozen.",
+    "Memory eligibility, runtime eligibility, and PPM trigger eligibility have tri-state applicability N/A at 1M and are never reported PASS.",
+    "P uses the exact original package with the default PPM threshold; E-A and E-B use the byte-identical package with only CMIX_PPM_RSS_MB=8192 added.",
+    "P, E-A, and E-B must each equal the frozen 172605-byte payload a723ca62... and 464298-byte archive 9065eaf5..., and E-A must decode exactly to enwik9_uncompressed.",
+    "The exact original binary exposes no non-mutating probability/state witness; paired witnesses are optional corroboration, while source audit plus exact known payload/archive and inverse are authoritative at 1M.",
+    "One outer managed exclusive lease spans P, E-A, E-B, and decode to prevent inter-arm contamination.",
+    "Result and scratch roots are disk-backed and never under tmpfs, ramfs, or /dev/shm.",
+    "The active HORIZON job blocks execution but not read-only validation.",
+    "The frozen cmix_obias_memory_safe_parent_q0_v1 source/program remains conditional-successor provenance only."
+  ],
+  "controls": [
+    {"id": "P", "role": "comparator", "definition": "Exact original package, clean environment, default PPM threshold."},
+    {"id": "E-A", "role": "treatment", "definition": "Exact original package, clean environment, CMIX_PPM_RSS_MB=8192."},
+    {"id": "E-B", "role": "replay", "definition": "Independent exact replay of E-A under the same outer experiment lease."},
+    {"id": "D", "role": "negative", "definition": "Exact E-A archive must create only enwik9_uncompressed and reproduce the canonical opening 1M."}
+  ],
+  "population": {
+    "unit": "canonical opening raw byte",
+    "scopeBytes": 1000000,
+    "scopeSymbols": null,
+    "selection": "Exact first 1000000 bytes of canonical enwik9; no other gate is included.",
+    "coordinate": "Original raw byte offset and exact deterministic coded payload/archive produced by the bound package."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "exact current and prior input bytes available to the unchanged package",
+      "the package's existing current-RSS runtime control",
+      "fixed ASCII option CMIX_PPM_RSS_MB=8192"
+    ],
+    "forbiddenInformation": [
+      "future corpus bytes or decoder-unavailable state",
+      "patched q0 executable behavior",
+      "100M or full-corpus qualification from this 1M identity result",
+      "reporting memory, runtime, or PPM-trigger eligibility PASS at opening 1M",
+      "claiming probability identity from payload identity alone"
+    ]
+  },
+  "inputs": [
+    {"id": "original-receipt", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/decision.json", "sha256": "sha256:c7c70a8349f42169fd07d782a9439cedc512a3b687aae2518bb982496079d312"},
+    {"id": "original-package", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/cmix", "sha256": "sha256:4ba53d3652c4e6de4126b4c03006e45a5f7e0511abd5d9661bf8132236ef1d2a"},
+    {"id": "original-head", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/head.blob", "sha256": "sha256:35cd24fed87c3409994abf5573b5697be19ea03b5ece0928b69b1cdc4f3b6078"},
+    {"id": "known-payload", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/out.cmix", "sha256": "sha256:a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"},
+    {"id": "known-archive", "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/archive9", "sha256": "sha256:9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"},
+    {"id": "runtime-option-source", "path": "results/cmix_obias_memory_safe_parent_build_a_q0_v1/source-inputs/src/models/ppmd.cpp", "sha256": "sha256:d54d27616f756efa1fd5d08aaec85fe4688004b5dcd49f411caba92812cbb7e1"},
+    {"id": "owned-managed-lease", "path": "programs/gamma_managed_exclusive_lease_owned_cleanup_q0_v1/managed_exclusive_lease.py", "sha256": "sha256:df96b87efb30e2c172f1d5182c7a81ef2b7bde6b7454c0181f2ac5cf39c20acb"},
+    {"id": "managed-lease-verifier", "path": "tools/managed_exclusive_lease_verify.py", "sha256": "sha256:68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"},
+    {"id": "strict-resource-guard", "path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"},
+    {"id": "stage-base", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1_stage.py", "sha256": "sha256:955dfddcc740116359d7edbc530de416499eb5d68a55f8c236767045b253ebd3"},
+    {"id": "coordinator-base", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2.py", "sha256": "sha256:c4f370e178c782001cc18bd77cb8e8699ad2505ccf2fb9a99fc87ae047a81639"},
+    {"id": "stage-v3", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3_stage.py", "sha256": "sha256:ec5dd9d8577580c3226cbf10a1f825891890817a12ed7dd0bb932b4cec3da5b7"},
+    {"id": "coordinator-v3", "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3.py", "sha256": "sha256:f7092b45762ac01027098256a4e041c2ebe0d252eea5a813401d38f525ac29e7"}
+  ],
+  "pythonSourceClosureEntries": ["stage-v3", "coordinator-v3"],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 100,
+    "expectedNetSavingsBytes": -100
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 1.0,
+    "expectedMemoryRatio": 1.0,
+    "uncertaintyRisk": 0.1,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {"id": "packageSourceIdentityPass", "definition": "Frozen source, package, head, known outputs, runner, stage, guard, lease, experiment, proposal, and candidate revision closure is exact.", "unit": "boolean"},
+    {"id": "knownBaselinePayloadPass", "definition": "P, E-A, and E-B each equal the exact known 172605-byte payload hash.", "unit": "boolean"},
+    {"id": "knownBaselineArchivePass", "definition": "P, E-A, and E-B each equal the exact known 464298-byte archive hash.", "unit": "boolean"},
+    {"id": "freshArmIdentityPass", "definition": "Fresh P, E-A, and E-B payloads and archives are pairwise identical.", "unit": "boolean"},
+    {"id": "exactDecodePass", "definition": "E-A creates exactly enwik9_uncompressed with canonical opening-1M bytes and hash.", "unit": "boolean"},
+    {"id": "guardContractPass", "definition": "All four strict guard receipts exactly bind commands, labels, cgroups, scratch, markers, limits, joins, measurements, guards, events, and telemetry.", "unit": "boolean"},
+    {"id": "leaseEvidencePass", "definition": "One outer experiment lease spans all arms and terminal transition/evidence verification is authoritative and clean.", "unit": "boolean"},
+    {"id": "outputManifestCompletePass", "definition": "All and only deterministic result artifacts other than the self-referential decision are hash-accounted.", "unit": "boolean"},
+    {"id": "officialCompletePackageBytes", "definition": "Compressor plus head plus archive plus exact 69-byte compression and 31-byte decompression commands.", "unit": "bytes"},
+    {"id": "memoryEligibilityAtOpening1m", "definition": "Always null/N_A at opening 1M; guard compliance is infrastructure evidence, not memory qualification.", "unit": "tri-state"},
+    {"id": "runtimeEligibilityAtOpening1m", "definition": "Always null/N_A at opening 1M; no runtime projection or qualification is made.", "unit": "tri-state"},
+    {"id": "ppmTriggerEligibilityAtOpening1m", "definition": "Always null/N_A at opening 1M; no PPM trigger crossing is required or claimed.", "unit": "tri-state"},
+    {"id": "optionalWitnessIdentityPass", "definition": "Null/N_A when absent; paired exact corroboration when supplied; never required because the binary exposes no non-mutating witness.", "unit": "tri-state"}
+  ],
+  "promotionPredicates": [
+    {"id": "package-source-identity", "measurement": "packageSourceIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "known-payload", "measurement": "knownBaselinePayloadPass", "operator": "eq", "threshold": true},
+    {"id": "known-archive", "measurement": "knownBaselineArchivePass", "operator": "eq", "threshold": true},
+    {"id": "fresh-arms", "measurement": "freshArmIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "exact-decode", "measurement": "exactDecodePass", "operator": "eq", "threshold": true},
+    {"id": "strict-guards", "measurement": "guardContractPass", "operator": "eq", "threshold": true},
+    {"id": "lease-evidence", "measurement": "leaseEvidencePass", "operator": "eq", "threshold": true},
+    {"id": "complete-manifest", "measurement": "outputManifestCompletePass", "operator": "eq", "threshold": true},
+    {"id": "official-accounting", "measurement": "officialCompletePackageBytes", "operator": "eq", "threshold": 955881}
+  ],
+  "killPredicates": [
+    {"id": "package-source-drift", "measurement": "packageSourceIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "known-payload-mismatch", "measurement": "knownBaselinePayloadPass", "operator": "eq", "threshold": false},
+    {"id": "known-archive-mismatch", "measurement": "knownBaselineArchivePass", "operator": "eq", "threshold": false},
+    {"id": "fresh-arm-mismatch", "measurement": "freshArmIdentityPass", "operator": "eq", "threshold": false},
+    {"id": "decode-mismatch", "measurement": "exactDecodePass", "operator": "eq", "threshold": false},
+    {"id": "guard-failure", "measurement": "guardContractPass", "operator": "eq", "threshold": false},
+    {"id": "lease-failure", "measurement": "leaseEvidencePass", "operator": "eq", "threshold": false},
+    {"id": "manifest-failure", "measurement": "outputManifestCompletePass", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-01T16:50:00Z"
+}

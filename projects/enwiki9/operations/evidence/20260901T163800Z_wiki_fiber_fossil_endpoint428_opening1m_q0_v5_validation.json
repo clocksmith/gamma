@@ -1,0 +1,47 @@
+{
+  "schema": "gamma.enwiki9.wiki-fiber-fossil-v5-validation.v1",
+  "candidate_id": "wiki_fiber_fossil_endpoint428_opening1m_q0_v5",
+  "audit_conclusion": "V4 is not hard-bounded under adaptive execution: execute_job launches the bound runner with plain subprocess.Popen and v4 observes only RUSAGE_SELF.ru_maxrss after computation.",
+  "validation_only": true,
+  "corpus_accessed": false,
+  "corpus_job_enqueued": false,
+  "active_horizon_artifact_accessed": false,
+  "parent": {
+    "candidate_id": "wiki_fiber_fossil_endpoint428_opening1m_q0_v4",
+    "revision": "operations/adaptive/candidate-revisions/wiki_fiber_fossil_endpoint428_opening1m_q0_v4/20260901T162108477696Z_b7150abf828e.json",
+    "revision_sha256": "1abe2172b43f6ee469bf9f016378569dc1835958413d2d7e7f7aea52d69c2c82"
+  },
+  "v5": {
+    "algorithm_sha256": "4fd89c60a726c754bfd49967e02ddb811a74075c16f93783dbe78283ba537a22",
+    "algorithm_byte_identical_to_v4": true,
+    "runner_sha256": "91fc906caf8224b199f1fc95f98bcb926dff583a72cec8e02fd541159996e8fd",
+    "experiment_sha256": "eb54e7338de566caf849c6683fd6023f749c699fb66f2f97a8c7ab715d6e5808",
+    "controls_identical_to_v4": true,
+    "hypothesis_identical_to_v4": true,
+    "population_identical_to_v4": true,
+    "causal_boundary_identical_to_v4": true
+  },
+  "hard_memory_validation": {
+    "requested_rlimit_as_bytes": 536870912,
+    "effective_parent_soft_bytes": 536870912,
+    "effective_parent_hard_bytes": 536870912,
+    "inherited_child_soft_bytes": 536870912,
+    "inherited_child_hard_bytes": 536870912,
+    "process_tree_rss_abort_kib": 524288,
+    "process_tree_sample_interval_seconds": 0.01,
+    "normal_mode_requires_effective_cgroup_v2_memory_max_at_most_bytes": 536870912,
+    "validation_host_normal_mode_admitted": false,
+    "rlimit_inheritance_pass": true,
+    "uncapped_host_failed_closed_before_corpus_pass": true,
+    "pass": true
+  },
+  "horizon_denial_validation": {
+    "python_open_denied_before_access": true,
+    "subprocess_argument_denied_before_launch": true,
+    "denied_roots": [
+      "/home/x/deco/gamma/projects/enwiki9/results/*horizon*",
+      "/home/x/enwiki9-nonproof/results/*horizon*"
+    ],
+    "pass": true
+  }
+}

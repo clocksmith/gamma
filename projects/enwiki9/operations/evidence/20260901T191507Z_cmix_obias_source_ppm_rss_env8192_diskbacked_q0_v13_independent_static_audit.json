@@ -1,0 +1,86 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "created_at_utc": "2026-09-01T19:15:07Z",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+  "scope": "sealed opening-1M identity bootstrap, pre-import source closure, and resource-authority semantics",
+  "verdict": "PASS",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/20260901T191023552396Z_4b7cd7b5c67e.json",
+    "sha256": "138020ee7b08a329b24f8a9f2a1ad422089d52ffc52a6fd0e589b17f39f0b5ce",
+    "candidate_tree_sha256": "4b7cd7b5c67e3daeb0979f3985b2509ef1e06968e81c930836923ccf8dc29773"
+  },
+  "reviewed_artifacts": {
+    "coordinator": {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.py",
+      "sha256": "37c815ae4140424857bcc38a2aa4f36af63924a971ddd7986a3007fd2282c603"
+    },
+    "resource_guard": {
+      "path": "tools/run_with_resource_guard_q0_v13.py",
+      "sha256": "638622edf44657bd2831229a1a968a81062477347890fe848ee0decd259f58d7"
+    },
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+      "sha256": "9636f124987e664136ba8ad58c5270e0dd92fbfd381c8e519b7e75c1765b3e09"
+    },
+    "proposal": {
+      "path": "operations/adaptive/proposals/developed/949_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+      "sha256": "5529df24e0cfd10cd6ae040afb6730054b241960ecde9e97311abcfecdefc63b"
+    },
+    "source_closure": {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+      "sha256": "619704155f7b4657fbb4a3316d5970c3e0ccb6acf02067b72fabf97f37fddf75"
+    },
+    "python_runtime_closure": {
+      "path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+      "sha256": "4fac4c655a78ce6bffe4c3df29976c8dd3c1a320ebf0ca9d48eafb3d14d3fd73"
+    },
+    "preimport_drift_fixture": {
+      "path": "tests/test_cmix_obias_q0_v13_preimport.py",
+      "sha256": "951d6fd93f493c8e9cbeb4b9fa3acfed249ec3160826abad31140e0eefa60140"
+    }
+  },
+  "blocking_findings": [],
+  "verified": {
+    "coordinator_local_stdlib_hashing_precedes_importlib_and_inherited_code": true,
+    "guard_local_stdlib_hashing_precedes_importlib_and_inherited_code": true,
+    "coordinator_preimport_table_covers_13_inherited_runtime_artifacts": true,
+    "guard_preimport_table_covers_v12_v11_v10_guard_chain": true,
+    "source_closure_26_records_exact": true,
+    "runtime_closure_15_records_exact": true,
+    "direct_runtime_set_equals_runtime_closure_index": true,
+    "candidate_revision_and_program_bind_v13_coordinator_and_guard_hashes": true,
+    "coordinator_drift_sentinel_does_not_execute": true,
+    "guard_drift_sentinel_does_not_execute": true,
+    "dynamic_import_ast_boundary_test_passes": true,
+    "preflight_schema_is_v13": true,
+    "memory_max_exact_10000000000_inherited": true,
+    "memory_swap_max_exact_zero_before_child_inherited": true,
+    "cpu_disk_elapsed_are_diagnostic_only": true,
+    "resource_and_ppm_eligibility_are_n_a": true,
+    "larger_gate_authorized_false": true,
+    "next_gate_bytes_null": true,
+    "separate_100m_experiment_required_true": true,
+    "p_ea_eb_decode_identity_semantics_preserved": true,
+    "complete_output_manifest_semantics_preserved": true,
+    "managed_lease_and_cleanup_semantics_preserved": true,
+    "official_complete_package_bytes_955881": true,
+    "added_command_bytes_100": true
+  },
+  "validation_evidence": {
+    "preimport_test_command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_cmix_obias_q0_v13_preimport",
+    "preimport_test_result": "PASS: 3 tests",
+    "validation_only_result": {
+      "schema": "gamma.enwiki9.cmix-obias-opening1m-preflight.v13",
+      "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+      "expected_only_blocker": "future adaptive job must explicitly select --cpu",
+      "preimport_artifact_count": 13,
+      "direct_runtime_artifact_count": 15,
+      "transitive_executable_closure_verified": true,
+      "larger_gates_supported": []
+    }
+  },
+  "claim_boundary": "This is a zero-authority static PASS for the sealed v13 envelope only. It proves no codec execution, payload, archive, inverse, memory eligibility, runtime eligibility, PPM-trigger eligibility, compression gain, score, or Hutter objective result. A future opening-1M job must still bind the exact source-closure SHA-256 and explicit CPU; v13 authorizes no 100M or full-corpus gate. No corpus, cgroup, lease, active HORIZON artifact, Geekbench, codec, adaptive job, result execution, or scratch execution was accessed or launched by this audit."
+}

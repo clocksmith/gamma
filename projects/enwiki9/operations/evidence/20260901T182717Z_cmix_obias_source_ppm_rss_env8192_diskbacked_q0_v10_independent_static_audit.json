@@ -1,0 +1,88 @@
+{
+  "schema": "gamma.enwiki9.independent-static-audit.v1",
+  "created_at_utc": "2026-09-01T18:27:17Z",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+  "scope": "sealed opening-1M identity execution envelope and zero-authority safety-contract audit",
+  "verdict": "BLOCK",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "scientific_credit": false,
+  "reviewed_revision": {
+    "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10/20260901T182036268003Z_c06a4899c0b9.json",
+    "sha256": "8d8221a187619e9893c0b25def9981cb2c50e390afaaddb5aced77396f8f98d8",
+    "candidate_tree_sha256": "c06a4899c0b999bcfc634744e7b4ba4fc37fc4753d8d2401e4e9f324697ec019"
+  },
+  "reviewed_artifacts": {
+    "coordinator": {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py",
+      "sha256": "7044081f6fa4e31ee4ce6d9895e124fd6dc9d16a99f85830f46a0cc7807c597f"
+    },
+    "resource_guard": {
+      "path": "tools/run_with_resource_guard_q0_v10.py",
+      "sha256": "6b1bff8c9a7c00278cbce04713a3ce759ad89ee0041da7d05adc1dea1c93ea57"
+    },
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json",
+      "sha256": "87013b223aaa96c3bb4349c02b794fee07155ce52babca91c4ca25bce11dd456"
+    },
+    "proposal": {
+      "path": "operations/adaptive/proposals/developed/949_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json",
+      "sha256": "1543c8bd025248064a3ba2e8c7691432d43d4fd22da9470f5df7865adbf039e4"
+    },
+    "source_closure": {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json",
+      "sha256": "4493d75d79dfa767dac689b2a3f95536b7091c0c9301953ca5bb6d608e9f09a2"
+    },
+    "python_runtime_closure": {
+      "path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json",
+      "sha256": "e4d6b95676866839126c60cd061376530d3f3b9c5484ba6c1497d2f1d180dbe9"
+    }
+  },
+  "blocking_findings": [
+    {
+      "id": "cpu-limit-is-sampled-not-hard",
+      "finding": "The experiment requires a strict singleton-CPU safety receipt, but the guard does not configure cgroup cpuset.cpus/cpuset.cpus.effective or another kernel-enforced one-CPU boundary. It inherits coordinator affinity and samples descendant affinity every 0.5 seconds. A descendant can widen and restore its affinity between samples, so a passing receipt does not prove the asserted hard CPU cap.",
+      "evidence": [
+        "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json:13",
+        "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json:22",
+        "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:147-187",
+        "tools/run_with_resource_guard_q0_v10.py:607-617",
+        "tools/run_with_resource_guard_q0_v10.py:710-712",
+        "tools/run_with_resource_guard_q0_v10.py:742"
+      ]
+    },
+    {
+      "id": "disk-limit-is-sampled-not-hard",
+      "finding": "The asserted 100000000000-byte disk cap is a periodic directory scan, not a quota or isolated bounded filesystem. Usage can exceed the limit and be deleted between samples, and writes outside the two scanned roots are not included. Therefore guardContractPass cannot certify the frozen strict disk-safety claim.",
+      "evidence": [
+        "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json:13",
+        "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.json:22",
+        "tools/run_with_resource_guard_q0_v10.py:226-276",
+        "tools/run_with_resource_guard_q0_v10.py:607-608",
+        "tools/run_with_resource_guard_q0_v10.py:706-709",
+        "tools/run_with_resource_guard_q0_v10.py:742"
+      ]
+    },
+    {
+      "id": "swap-is-not-bounded",
+      "finding": "memory.max is a real cgroup hard cap, but the guard neither requires nor sets memory.swap.max=0. The sealed contract's 10GB memory-safety wording therefore does not establish a hard total-memory-plus-swap envelope.",
+      "evidence": [
+        "tools/run_with_resource_guard_q0_v10.py:56-108",
+        "tools/run_with_resource_guard_q0_v10.py:491-499"
+      ]
+    }
+  ],
+  "positive_findings": [
+    "Geekbench and activation authority are absent; memory, runtime, and PPM-trigger eligibility are always null/N_A.",
+    "All 19 source-closure records and all 9 Python-runtime-closure records matched their sealed byte counts and SHA-256 identities during this audit.",
+    "The coordinator fixes result, scratch, cgroup-base, canonical managed-lease, source-closure, stage, package, head, source archive, objective, and guard identities and rejects caller runtime-path overrides.",
+    "P, E-A, E-B, and E-decode semantics are exact and the stage binds the canonical opening-1M SHA-256, clean environments, expected payload/archive identities, and exact enwik9_uncompressed decode filename.",
+    "The output manifest rejects symlinks and requires the exact non-decision result path set with path, byte count, and SHA-256 records.",
+    "Complete counted-package arithmetic is coherent: 468481 + 23002 + 464298 + 69 + 31 = 955881 bytes; proposal and experiment both budget 100 command bytes.",
+    "No larger gate is authorized; a new separately frozen experiment is required.",
+    "A bounded static fail-closed fixture rejected an incorrect source-closure SHA-256 and accepted the exact sealed source-closure SHA-256.",
+    "No codec, corpus, active HORIZON artifact, cgroup, managed lease, Geekbench process, queue job, result execution, or scratch execution was accessed or launched by this audit."
+  ],
+  "required_correction": "Use a kernel-enforced singleton cpuset, require zero swap, and place all writable execution roots on a quota-enforced or otherwise hard-bounded filesystem before claiming strict CPU/memory/disk caps. If v10 intentionally provides sampled diagnostics only, revise the frozen guard claim and promotion predicate in a new version rather than treating guardContractPass as hard-cap proof.",
+  "claim_boundary": "This receipt records an independent static BLOCK. It supplies no runtime, memory, identity, compression, archive, inverse, package-score, or Hutter objective authority and authorizes no execution or larger gate."
+}

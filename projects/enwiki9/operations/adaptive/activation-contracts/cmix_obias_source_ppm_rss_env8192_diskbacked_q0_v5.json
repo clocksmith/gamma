@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.enwiki9.cmix-opening1m-runtime-activation-contract.v2",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5",
+  "scope_bytes": 1000000,
+  "activation_receipt_path": "operations/adaptive/activations/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5.json",
+  "activation_receipt_must_remain_absent_until_authoritative_materialization": true,
+  "future_job_binding": {
+    "required_argument": "--activation-sha256",
+    "path_is_fixed_by_coordinator": true,
+    "digest_must_equal_exact_activation_receipt": true
+  },
+  "required_activation_artifacts": {
+    "geekbench5_report": "Exact raw Geekbench 5 report with one rederived positive Single-Core Score and explicit Geekbench 5 product marker.",
+    "host_fingerprint": "Exact gamma.enwiki9.cmix-runtime-host-fingerprint.v1 artifact equal to the independently rederived current host.",
+    "runtime_qualification": "Exact source qualification receipt binding the same raw report, host fingerprint, fixed roots, and fixed cgroup identity.",
+    "runtime_qualification_verification": "Exact authoritative gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1 with every check true and no errors.",
+    "managed_lease_verification": "Exact authoritative managed-exclusive-lease owned-cleanup verification authorizing canonical migration with no score credit."
+  },
+  "selected_cpu": {
+    "source": "activation receipt and future adaptive job --cpu must agree",
+    "required": true,
+    "coordinator_must_pin_before_preflight": true,
+    "all_descendants_must_inherit_and_prove_singleton_affinity": true
+  },
+  "runtime_paths": {
+    "result_root": "/home/x/deco/gamma/projects/enwiki9/results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5",
+    "scratch_root": "/home/x/deco/gamma/projects/enwiki9/scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5",
+    "cgroup_base": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-cmix-obias-env8192-opening1m-q0-v5",
+    "cgroup_parent_identity": {
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "inode": 8608,
+      "uid": 1000,
+      "gid": 1000
+    },
+    "result_and_scratch_must_be_absent": true,
+    "cgroup_base_must_be_absent": true,
+    "result_and_scratch_must_be_distinct_disjoint_disk_backed": true
+  },
+  "exclusive_lease": {
+    "path": "operations/runtime/exclusive_full1g.json",
+    "lock_path": "operations/runtime/exclusive_full1g.json.lock",
+    "caller_override_forbidden": true
+  },
+  "python_runtime_authority": {
+    "source_closure_path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5.json",
+    "entry_input_ids": [
+      "coordinator-v5",
+      "runtime-authority-verifier"
+    ],
+    "jsonschema_external_dependency_must_match_accounting": true,
+    "dynamic_imports_must_be_explicitly_declared": true
+  },
+  "status": "awaiting-exact-runtime-authority",
+  "claim_boundary": "This prospective contract defines the only accepted v5 activation. It is not benchmark, lease, gate, score, or larger-scope authority."
+}

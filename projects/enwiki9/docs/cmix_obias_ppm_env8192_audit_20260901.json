@@ -1,0 +1,217 @@
+{
+  "schema": "gamma.enwiki9.cmix-obias-ppm-env8192-audit.v1",
+  "created_at_utc": "2026-09-01T16:00:00Z",
+  "operational_status": "read_only_audit_zero_credit",
+  "claim_authority": "none",
+  "verdict": "test_the_original_source_built_binary_with_CMIX_PPM_RSS_MB_8192_before_the_patched_q0_binary",
+  "materialized_candidate": {
+    "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+    "scope": "canonical opening 1000000 raw bytes only",
+    "experiment": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+    "experiment_sha256": "9636f124987e664136ba8ad58c5270e0dd92fbfd381c8e519b7e75c1765b3e09",
+    "candidate_revision": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/20260901T191023552396Z_4b7cd7b5c67e.json",
+    "candidate_revision_sha256": "138020ee7b08a329b24f8a9f2a1ad422089d52ffc52a6fd0e589b17f39f0b5ce",
+    "candidate_tree_sha256": "4b7cd7b5c67e3daeb0979f3985b2509ef1e06968e81c930836923ccf8dc29773",
+    "runner": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.py",
+    "runner_sha256": "37c815ae4140424857bcc38a2aa4f36af63924a971ddd7986a3007fd2282c603",
+    "stage_runner": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3_stage.py",
+    "stage_runner_sha256": "ec5dd9d8577580c3226cbf10a1f825891890817a12ed7dd0bb932b4cec3da5b7",
+    "source_closure": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+    "source_closure_sha256": "619704155f7b4657fbb4a3316d5970c3e0ccb6acf02067b72fabf97f37fddf75",
+    "python_runtime_closure": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+    "python_runtime_closure_sha256": "4fac4c655a78ce6bffe4c3df29976c8dd3c1a320ebf0ca9d48eafb3d14d3fd73",
+    "resource_guard": "tools/run_with_resource_guard_q0_v13.py",
+    "resource_guard_sha256": "638622edf44657bd2831229a1a968a81062477347890fe848ee0decd259f58d7",
+    "activation_contract": null,
+    "activation_contract_sha256": null,
+    "bounded_package_score_bytes": 955881,
+    "execution_status": "v13 contract, pre-import drift fixtures, validation-only preflight, and independent static audit passed; no gate queued or executed",
+    "blocked_by": [
+      "active HORIZON job 20260830T224837Z_a120752fb5 owns the corpus-heavy lane"
+    ],
+    "superseded_unmeasured_envelopes": [
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v4",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v6",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v7",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v8",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v9",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11",
+      "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12"
+    ]
+  },
+  "mechanism": {
+    "candidate_shape": "exact original CMIX-OBIAS package with one runtime PPM residency threshold override",
+    "encode_command": "CMIX_PPM_RSS_MB=8192 KH_BITLSTM32=head.blob ./cmix -e enwik9 out.cmix",
+    "decode_command": "CMIX_PPM_RSS_MB=8192 ./archive9",
+    "encode_command_bytes_conservative": 69,
+    "decode_command_bytes_conservative": 31,
+    "clean_environment_rule": "unset every optional KH_* and CMIX_* variable except the exact bound KH_BITLSTM32 path during encode and CMIX_PPM_RSS_MB=8192 during both phases",
+    "source_behavior": {
+      "default_trigger_mib": 9216,
+      "selected_trigger_mib": 8192,
+      "check_interval_modeled_bytes": 5000,
+      "action": "MADV_DONTNEED on the file-backed PPM heap when total process RSS meets or exceeds the selected threshold",
+      "prediction_semantics_claim": "residency-only; must still be proved by exact payload, archive, inverse, and repeat identity"
+    }
+  },
+  "why_before_patched_q0": [
+    "The original source already parses CMIX_PPM_RSS_MB, so a rebuild is not required to select 8192 MiB.",
+    "The runtime override changes one causal axis while patched q0 also adds malloc_trim and phase-marker code.",
+    "The runtime override preserves the existing 468481-byte packaged compressor and expected archive binary shape if payload identity holds.",
+    "External stage and resource guards can record phase, cgroup, process-tree, fault, IO, and disk evidence without modifying the codec."
+  ],
+  "provisional_economics": {
+    "existing_archive_bytes": 108022224,
+    "existing_packaged_compressor_bytes": 468481,
+    "existing_head_bytes": 23002,
+    "existing_counted_files_bytes": 108513707,
+    "conservatively_counted_command_bytes": 100,
+    "provisional_complete_counted_bytes": 108513807,
+    "current_strict_one_percent_ceiling_bytes": 109685196,
+    "provisional_margin_below_ceiling_bytes": 1171389,
+    "authority": "planning arithmetic only until a fresh exact materialized package and command receipt exists"
+  },
+  "memory_plausibility": {
+    "selected_trigger_kib": 8388608,
+    "strict_decimal_ceiling_kib": 9765625,
+    "trigger_to_ceiling_margin_kib": 1377017,
+    "retained_current_vmrss_kib": 8508652,
+    "retained_current_ppm_temp_rss_kib": 92464,
+    "estimated_current_non_ppm_rss_kib": 8416188,
+    "estimated_post_purge_strict_margin_kib": 1349437,
+    "estimated_post_purge_9000000_engineering_margin_kib": 583812,
+    "largest_retained_parent_vmhwm_lower_bound_kib": 10472880,
+    "largest_retained_parent_excess_lower_bound_kib": 707255,
+    "naive_arm_b_peak_after_one_for_one_trigger_shift_kib": 9377168,
+    "naive_largest_retained_peak_after_one_for_one_trigger_shift_kib": 9424304,
+    "naive_arm_b_engineering_excess_kib": 377168,
+    "naive_largest_retained_engineering_excess_kib": 424304,
+    "verdict": "numerically_plausible_not_proved",
+    "uncertainty": "No peak-time smaps receipt attributes the retained VmHWM to resident PPM pages. A naive one-for-one trigger shift could clear the strict limit while still missing the 9000000 KiB engineering gate. Success also depends on late non-PPM growth, the inter-check refault burst, and block-backed dirty-page reclaim behavior."
+  },
+  "gate_authority": {
+    "opening_1m": {
+      "proves": [
+        "exact payload and archive identity",
+        "exact inverse",
+        "two-repeat identity",
+        "environment propagation",
+        "runner correctness",
+        "exact package and command accounting"
+      ],
+      "does_not_prove": [
+        "mature memory compliance",
+        "full-corpus runtime eligibility"
+      ]
+    },
+    "opening_100m": {
+      "implementation_status": "not implemented; v13 cannot authorize it. A new separately frozen successor may be considered only after an opening-1M v13 identity pass and exact official Geekbench 5 binary/report authority",
+      "authority": "reject_only_for_resources",
+      "required_for_meaningful_result": [
+        "exact inverse and payload identity pass",
+        "peak process-tree and cgroup usage stay below 9000000 KiB",
+        "no cgroup max or OOM event occurs",
+        "matched default-control and 8192-treatment PPM residency, process-tree fault, IO, tree-RSS, cgroup, and disk telemetry is complete",
+        "runtime projection is bound to an isolated Geekbench5 receipt with a frozen reserve"
+      ],
+      "diagnostic_rule": "Sampled PPM mapping drops and refault growth are recorded when visible, but zero sampled events is inconclusive because the native 5000-byte purge check can occur between external samples.",
+      "limitation": "A pass does not prove late-corpus behavior because PPM occupancy, dirty pages, writeback, and refaults are history-dependent."
+    },
+    "full_1g": {
+      "implementation_status": "not implemented; requires separate Arm A and Arm B contracts after the 100M successor passes",
+      "authority": "first_authoritative_memory_and_runtime_gate",
+      "requirements": [
+        "block-backed scratch",
+        "one-CPU affinity",
+        "decimal-10GB cgroup and process-tree pass",
+        "exact payload and archive identity",
+        "exact canonical inverse",
+        "bound per-phase runtime",
+        "temporary disk below 100GB",
+        "dependency and license closure",
+        "exact complete counted score",
+        "independent Arm B repeat"
+      ]
+    }
+  },
+  "kill_and_mutation_rules": [
+    "Any opening-1M probability or payload mismatch quarantines the output-neutrality claim.",
+    "Any opening-100M strict-memory failure denies full-scope authorization.",
+    "A full failure whose post-purge trough already exceeds 10GB retires PPM purging as the remedy.",
+    "A full failure caused only by the 5000-byte inter-check sawtooth authorizes one measured cadence successor, not another threshold.",
+    "A failure before Predictor construction authorizes the existing malloc_trim patch as the single successor.",
+    "A bound runtime failure retires this implementation and does not reopen q1.",
+    "A strict memory pass above 9000000 KiB may retain external-record feasibility but denies Gamma specialist integration."
+  ],
+  "stale_runner_findings": [
+    "The dormant q0 full runner references nonexistent baseline.SCRATCH_BASE.",
+    "It calls keyword-only baseline.run_stage positionally.",
+    "It assigns the return of baseline.update_peak even though that function returns None.",
+    "It expects restored filename enwik9 although the archive emits enwik9_uncompressed.",
+    "It omits adaptive integration, CPU binding, and required command bytes from accounting."
+  ],
+  "execution_authority_history": [
+    {
+      "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10",
+      "verdict": "BLOCK",
+      "reason": "swap was not disabled and sampled CPU/disk observations were overstated as hard caps",
+      "evidence": "operations/evidence/20260901T182717Z_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10_independent_static_audit.json",
+      "sha256": "76714b19b54dfa6c33f5839047ac8f01692c3f433510b40821165b120066ae5e"
+    },
+    {
+      "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11",
+      "verdict": "BLOCK",
+      "reason": "transitive executable closure was not directly reverified, the preflight schema leaked v10, and the separate-successor-required flag had the wrong polarity",
+      "evidence": "operations/evidence/20260901T183852Z_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v11_independent_static_audit.json",
+      "sha256": "81b3633de9fde0a53c28c1a4baddf0474105388ef46684cb138930f3d3c98d15"
+    },
+    {
+      "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12",
+      "verdict": "BLOCK",
+      "reason": "the transitive source chain was hashed only after inherited modules executed, so unverified code supplied part of its own verifier",
+      "evidence": "operations/evidence/20260901T185015Z_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v12_independent_static_audit.json",
+      "sha256": "a6933c438dcc685e2e9b39a7b177b6f10b04afa8e89a8656a8cb3d21c96aeb3a"
+    },
+    {
+      "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+      "verdict": "PASS",
+      "reason": "both entrypoints verify inherited code with local stdlib hashing before dynamic import; all identity and no-authority semantics remain intact",
+      "evidence": "operations/evidence/20260901T191507Z_cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13_independent_static_audit.json",
+      "sha256": "df5345c4b32d7c47e05ac4b14474488d9946ccb0645a264229d691c5b6e7ca4a"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "results/cmix_obias_memory_safe_parent_build_a_q0_v1/source-inputs/src/models/ppmd.cpp",
+      "sha256": "d54d27616f756efa1fd5d08aaec85fe4688004b5dcd49f411caba92812cbb7e1"
+    },
+    {
+      "path": "results/cmix_obias_source_full1g_roundtrip_a_qm0_v1/decision.json",
+      "sha256": "1e7b785606d3319b25f72a99ce77083f1fd47c802bdd1261432596fe3ec6b50c"
+    },
+    {
+      "path": "results/cmix_obias_source_full1g_ab_terminal_audit_v2/decision.json",
+      "sha256": "bd5433b3cf239c4fd76ba0b4a4e236d0a1353bc0763e4b98b7a38cbeb54b30c1"
+    },
+    {
+      "path": "operations/planning/cmix_obias_memory_phase_attribution_q0_v2.json",
+      "sha256": "7273f593f48b84319f9efff8b9e0d4921d6ac6b2c8960b1cf2178f1e962af7ba"
+    },
+    {
+      "path": "operations/planning/cmix_obias_source_full1g_roundtrip_b_terminal_evidence_lock_v1.json",
+      "sha256": "a00ae103708ea44d524832381ebbbadaecff4a5980e0039061511c8618539e82"
+    }
+  ],
+  "claim_boundary": [
+    "This audit gives zero compression or objective credit.",
+    "The env-only v13 candidate has not been executed and has no 100M or full-corpus authority.",
+    "Opening-1M v13 intentionally assigns memory, runtime, CPU, disk, and PPM-trigger eligibility N/A; Geekbench 5 is deferred to a separately frozen resource-bearing successor.",
+    "The 8192 MiB setting is a plausible correction hypothesis, not a memory proof.",
+    "The official threshold and rules are external facts that must be re-read before submission."
+  ]
+}

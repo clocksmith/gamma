@@ -1,0 +1,55 @@
+{
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2",
+  "claimed_at": "2026-09-01T16:15:33+00:00",
+  "created_at": "2026-09-01T16:15:27+00:00",
+  "developed_at": "2026-09-01T16:15:33+00:00",
+  "evidence": [
+    {
+      "path": "results/cmix_obias_source_1m_roundtrip_qm3_v1/decision.json",
+      "sha256": "sha256:c7c70a8349f42169fd07d782a9439cedc512a3b687aae2518bb982496079d312"
+    },
+    {
+      "path": "programs/cmix_obias_memory_safe_parent_q0_v1/manifest.json",
+      "sha256": "sha256:7eaea060a7efe41b1b90611473f3e2f48c8e11a19543beb82d3bfe02647db3de"
+    },
+    {
+      "path": "programs/cmix_obias_memory_safe_parent_q0_v1/program-lock.json",
+      "sha256": "sha256:8cc5875f0cd7ccb7aa546d9d5c7d77c982615718d7c83859478155d16f0ae055"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2.json",
+    "sha256": "sha256:ceaa288e321f2db50f3959b3bd49d70f330cf4c7a106f5874a488f8242dd7e17"
+  },
+  "hypothesis": "The exact original source-built CMIX package with only CMIX_PPM_RSS_MB=8192 bound in a clean environment preserves payload, archive, inverse, and repeats and can constrain PPM residency below the 9000000 KiB 100M engineering limit.",
+  "interfaces_exposed": [
+    "exact original CMIX package plus clean CMIX_PPM_RSS_MB=8192 comparative execution envelope"
+  ],
+  "kill_condition": "Any identity, package, lease, comparative-telemetry availability, 9000000 KiB engineering peak, official resource, or reserved-runtime failure rejects the execution envelope; zero externally sampled drops is inconclusive.",
+  "max_program_bytes": 64,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-q0-envelope",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact opening 1M identity/resource pass authorizes only reject-only opening 100M; 100M additionally requires comparative residency/fault/IO telemetry, a treatment peak below 9000000 KiB, and reserved runtime projections below the bound.",
+  "proposal_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v2",
+  "retired_neighborhoods": [
+    "external smaps drop counts as direct purge-call evidence"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Original CMIX env-only 8192 MiB comparative-residency envelope"
+}
