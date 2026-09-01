@@ -209,6 +209,12 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.reflection-receipt.v1": (
         CONTRACT_ROOT / "reflection-receipt.schema.json"
     ),
+    "gamma.enwiki9.endpoint428-horizon-terminal-route.v1": (
+        CONTRACT_ROOT / "endpoint428-horizon-terminal-route.schema.json"
+    ),
+    "gamma.enwiki9.endpoint428-horizon-output-closure-receipt.v1": (
+        CONTRACT_ROOT / "endpoint428-horizon-output-closure-receipt-v1.schema.json"
+    ),
     "gamma.enwiki9.release-receipt-index.v1": (
         CONTRACT_ROOT / "release-receipt-index.schema.json"
     ),
@@ -817,6 +823,106 @@ def _validate_reflection_receipt(
         "jobId": job.get("job_id"),
         "netBytesSaved": value["measurements"]["netBytesSaved"],
         "validExperiment": validity["valid"],
+    }
+
+
+def _validate_endpoint428_horizon_terminal_route(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    if verify_files and value["status"] == "TERMINAL_ROUTED":
+        for name, reference in value["bindings"].items():
+            path = _project_file_reference(
+                reference, f"{artifact_path}: bindings/{name}"
+            )
+            _require(
+                path.stat().st_size == reference["bytes"],
+                f"{artifact_path}: binding byte count differs: {path}",
+            )
+        for index, reference in enumerate(
+            value.get("output_closure", {}).get("artifacts", [])
+        ):
+            path = _project_file_reference(
+                reference,
+                f"{artifact_path}: output_closure/artifacts/{index}",
+            )
+            _require(
+                path.stat().st_size == reference["bytes"],
+                f"{artifact_path}: output artifact byte count differs: {path}",
+            )
+    return {
+        "candidateId": value["candidate_id"],
+        "status": value["status"],
+        "branch": value.get("branch"),
+        "hostLaneRelease": value.get("host_lane_release", False),
+        "filesVerified": verify_files and value["status"] == "TERMINAL_ROUTED",
+    }
+
+
+def _validate_endpoint428_horizon_output_closure(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    def verify(reference: dict[str, Any], context: str) -> Path:
+        path = _project_file_reference(reference, context)
+        _require(
+            path.stat().st_size == reference["bytes"],
+            f"{context}: artifact byte count differs: {path}",
+        )
+        return path
+
+    activation = value["activation"]
+    _require(
+        activation["terminal_route_receipt_hash_argument"]
+        == activation["terminal_route_receipt"]["sha256"],
+        f"{artifact_path}: activation hash argument differs from route receipt",
+    )
+    decision = value["decision_preservation"]
+    _require(
+        decision["source"] == value["immutable_bindings"]["decision"],
+        f"{artifact_path}: preserved source differs from terminal decision binding",
+    )
+    _require(
+        decision["preserved_copy"] == value["output_manifest"]["decision_entry"],
+        f"{artifact_path}: output decision entry differs from preserved copy",
+    )
+    _require(
+        decision["source"]["bytes"] == decision["preserved_copy"]["bytes"]
+        and decision["source"]["sha256"] == decision["preserved_copy"]["sha256"],
+        f"{artifact_path}: preserved decision identity differs from source",
+    )
+    source = value["source_namespace"]
+    source_names = [Path(row["path"]).name for row in source["artifacts"]]
+    _require(
+        sorted(source_names) == source["expected_names"]
+        and len(source_names) == len(set(source_names)),
+        f"{artifact_path}: source namespace artifacts differ from exact names",
+    )
+    if verify_files:
+        verify(
+            activation["terminal_route_receipt"],
+            f"{artifact_path}: activation/terminal_route_receipt",
+        )
+        for group_name in ("dependencies", "immutable_bindings"):
+            for name, reference in value[group_name].items():
+                verify(reference, f"{artifact_path}: {group_name}/{name}")
+        for index, reference in enumerate(source["artifacts"]):
+            verify(
+                reference,
+                f"{artifact_path}: source_namespace/artifacts/{index}",
+            )
+        verify(
+            decision["preserved_copy"],
+            f"{artifact_path}: decision_preservation/preserved_copy",
+        )
+    return {
+        "candidateId": value["candidate_id"],
+        "status": value["status"],
+        "scientificBranch": value["routing"]["recomputed_scientific_branch"],
+        "scoreCreditBytes": value["authority"]["score_credit_bytes"],
+        "filesVerified": verify_files,
     }
 
 
@@ -3219,6 +3325,14 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         }
     elif schema_id == "gamma.enwiki9.reflection-receipt.v1":
         result = _validate_reflection_receipt(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.endpoint428-horizon-terminal-route.v1":
+        result = _validate_endpoint428_horizon_terminal_route(
+            value, artifact_path, verify_files
+        )
+    elif schema_id == "gamma.enwiki9.endpoint428-horizon-output-closure-receipt.v1":
+        result = _validate_endpoint428_horizon_output_closure(
+            value, artifact_path, verify_files
+        )
     elif schema_id == "gamma.enwiki9.release-receipt-index.v1":
         result = _validate_release_receipt_index(value, artifact_path)
     elif schema_id == "gamma.enwiki9.search-policy.v1":
