@@ -1,5 +1,96 @@
 # enwiki9 Research Register
 
+## 2026-09-03 - HARM-Delta is frozen as a distinct causal edit-residual mechanism
+
+Broad HARM is rejected as a replacement codec. The retained mechanism is
+`harm_route_edit_residual_shadow_q0_v1`: a bounded auxiliary predictor over the
+most recent fully completed value of the exact decoder-visible template-name
+plus explicit-field-key route. It operates in Endpoint428 WRT-byte space and
+never reorders pages, emits copy commands, transmits a route or source address,
+installs an offline dictionary, changes Endpoint428 state, or selects an edit
+path after seeing the completed current value.
+
+V1 fixes one implementation rather than a parameter family: a 4,096-slot
+direct-mapped value bank with exact route-and-witness tag checks, a 512-byte
+value cap, offsets from -8 through +8, match/substitute/insert/delete states,
+integer forward mass normalized to `2^30`, and one global sleeping Q63 mixture
+for each of L/E/G/S/R; N shares E's pretruth weight and owns no state. Candidate byte masses are converted to MSB-first conditional integer
+probabilities using only the already decoded prefix of the current byte. The
+current value becomes a future donor only after its field exit and all delayed
+semantic commits. Overflowing values sleep and are not installed.
+
+The frozen arms are `P/K/L/E/G/S/R/N`. `L` is exact same-route lockstep without
+edit tolerance; `E` is the route-conditioned edit treatment; `G` applies the
+same edit arithmetic to a physical HORIZON field-entry donor; `S` resolves the
+immediately preceding completed route through E's same collision/tag geometry;
+`R` uses a deterministic
+truth-independent SplitMix64 route bucket; and `N` reflects E's exact pretruth
+byte distribution through xor-255 without owning edit or calibration state.
+P/K identity, E over L, E over G, and E over S/R/N are separate required
+attributions. Fiber-CTS is neither an antecedent nor a promotion prerequisite:
+short route-local context and alignment to a complete prior value are different
+hypotheses. Because they share the semantic-route population and route-local
+donor universe, this mechanism distinction is not evidence of statistical
+independence, residual gain, or complementarity.
+
+The restricted GSRT2 adapter applies delayed value commits, then structural
+callbacks, then prediction. It does not expose event-3 `raw_after`, current raw
+expansion, future field length, descriptor sidecar, or offline tape state to the
+predictor. A source-only fixture repeats byte-identically, preserves exact P/K
+probabilities, distinguishes inserted-byte and silent-donor-deletion paths from
+lockstep, keeps sleeping mixtures exactly parent-neutral, rejects malformed or
+missing deferred events and forged physical seeds, and changes state only after
+the first differing truth in a twin-future causality check. The frozen known
+answers are probability SHA-256
+`8ba2a030e57ad0399b98a33cfe9a691517d4e975bb82638da79b5fb46824689d`
+and terminal-state SHA-256
+`2bfa5c120b9293d22c0b7ee76af125da055e362116433cc4ca4d8b4b7813c334`.
+These are implementation checks only; they access no corpus and grant zero
+archive or score authority.
+
+One required ABI is intentionally not fabricated. The current `GHORA1`
+manifest contains a target coordinate and four donor bytes but no historical
+source coordinate or bounded continuation, so it cannot drive G's edit
+transducer. After the active HORIZON experiment terminalizes, a separately
+frozen zero-authority observer must reconstruct and repeat a field-entry source
+coordinate and donor continuation from decoded history. Opening-1M can reject
+HARM-Delta but cannot establish E over G because the physical age floor is
+100,000,000 WRT bytes. Promotion requires opening and distant state-warm scopes;
+the distant sparse parent trace must cover every HARM-active coordinate through
+the measured interval so route, alignment, and Q63 state are truly warm.
+
+The current design uses the provisional Endpoint428 gross floor of
+`40,163,160` bits only as a prospective shadow gate. It must be rebound if an
+exact native parent package changes the debt. A miss retires the exact route
+population, memory geometry, drift band, transition/emission law, and endpoint
+without a sweep. HARM-conditioned MIDAS remains forbidden until HARM-Delta and
+compact MIDAS independently produce paying native archives, followed by a new
+joint replay.
+
+The two v1 shadow scopes are now fixed in canonical raw coordinates before any
+parent trace is read: opening `[0,1,000,000)` and distant
+`[500,000,000,510,000,000)`. State is replayed from raw byte zero; only the
+bound interval is measured. Chronological thirds use each prediction's
+pretruth `raw_before` coordinate under the fixed floor formula, never WRT
+length. Provisional density screens are respectively
+`40,164` and `401,632` ideal mixture-gain bits. They grant no forecast or score
+credit. E must also be positive in every third, exceed L/S/R/N in both scopes,
+and exceed an admissible matched physical G in the distant scope. Route, edit,
+drift, support, and positive-opportunity reports are diagnostics only.
+
+G is fixed to the Endpoint428 HORIZON-A source law, not an arbitrary donor and
+not the existing one-byte HORIZON endpoint: a `2^24` direct-mapped
+oldest-surviving clock over exact preceding-16-byte contexts, polynomial base
+`0x9e3779b185ebca87`, high-32-bit tag, exact historical verification, and age
+strictly greater than `100,000,000` WRT bytes. At field entry it supplies its
+already decoded continuation, bounded by the current coordinate, to the same
+edit arithmetic as E. A repeated source-coordinate observer is mandatory;
+without it the G comparison is inadmissible.
+
+Evidence: `operations/planning/harm_route_edit_residual_shadow_q0_v1.json`,
+`programs/harm_route_edit_residual_shadow_q0_v1/`, and
+`tests/test_harm_route_edit_residual_shadow.py`.
+
 ## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
 
 The active `endpoint428_horizon_retained_parent_trace_q0_v1` job remains
