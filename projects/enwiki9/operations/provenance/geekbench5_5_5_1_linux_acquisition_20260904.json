@@ -1,0 +1,174 @@
+{
+  "artifact_id": "geekbench5_5_5_1_linux_acquisition_20260904",
+  "artifact_type": "runtime-authority-binary-acquisition",
+  "created_at_utc": "2026-09-04T22:06:17Z",
+  "status": "archive_and_help_bound_calibration_not_authorized",
+  "claim_authority": "none",
+  "objective_credit_bytes": 0,
+  "benchmark_executed": false,
+  "measured_single_core_score": null,
+  "execution_authorized_by_this_artifact": false,
+  "antecedent": {
+    "path": "operations/provenance/geekbench5_runtime_authority_preparation_20260904.json",
+    "sha256": "cf0caa0bf85774a31dd11d32d25519e02608728ff653d6ef312244c410861471"
+  },
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "contract_path": "contracts/research/v1/objective-contract.json",
+    "contract_sha256": "774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967",
+    "runtime_formula_seconds": "252000000 / measured Geekbench 5 single-core score T"
+  },
+  "acquisition": {
+    "vendor_url": "https://cdn.geekbench.com/Geekbench-5.5.1-Linux.tar.gz",
+    "argv": [
+      "curl",
+      "--fail",
+      "--location",
+      "--proto",
+      "=https",
+      "--dump-header",
+      "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/download.headers",
+      "--output",
+      "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/Geekbench-5.5.1-Linux.tar.gz",
+      "https://cdn.geekbench.com/Geekbench-5.5.1-Linux.tar.gz"
+    ],
+    "exit_code": 0,
+    "response": {
+      "http_status": 200,
+      "content_type": "application/octet-stream",
+      "content_length": 93199992,
+      "last_modified": "Wed, 08 Feb 2023 15:45:56 GMT",
+      "etag": "\"63e3c3b4-58e1e78\""
+    },
+    "archive": {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/Geekbench-5.5.1-Linux.tar.gz",
+      "bytes": 93199992,
+      "sha256": "32037e55c3dc8f360fe16b7fbb188d31387ea75980e48d8cf028330e3239c404"
+    },
+    "headers": {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/download.headers",
+      "bytes": 262,
+      "sha256": "9df040ba23914f74046d3bc8321e3570c0e32d904867dec53511acb4f70e0f48"
+    }
+  },
+  "archive_safety_audit": {
+    "member_count": 4,
+    "allowed_types": [
+      "directory",
+      "regular_file"
+    ],
+    "absolute_paths": 0,
+    "parent_traversals": 0,
+    "symbolic_links": 0,
+    "hard_links": 0,
+    "devices_or_fifos": 0,
+    "unexpected_top_level_paths": 0,
+    "members_path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/archive.members.txt",
+    "members_bytes": 132,
+    "members_sha256": "f25f0e5040655899b64a179bd621dc67dc1dfbe4022c6ae23c5b52319276d290",
+    "verbose_members_path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/archive.members.verbose.txt",
+    "verbose_members_bytes": 326,
+    "verbose_members_sha256": "171c3281fa9129fdbc1268be32598ceec5445d7dff631d17ca52c076ba770f41",
+    "extraction_root_was_new": true,
+    "overwrote_system_installation": false
+  },
+  "extracted_closure": {
+    "root": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/extracted/Geekbench-5.5.1-Linux",
+    "files": [
+      {
+        "path": "geekbench5",
+        "bytes": 3489648,
+        "mode": "0755",
+        "sha256": "06e19139fd73fb36f0941c0d80a08ca783f7f5ff0fb69a2018bfa97ded19c8a6",
+        "file_type": "ELF 64-bit LSB executable, x86-64, dynamically linked"
+      },
+      {
+        "path": "geekbench_x86_64",
+        "bytes": 57511816,
+        "mode": "0755",
+        "sha256": "bb0c4bc97fc09f823f03c834ccfd4160426ccd8b373b6e2229a644928d6e38d7",
+        "file_type": "ELF 64-bit LSB executable, x86-64, dynamically linked"
+      },
+      {
+        "path": "geekbench.plar",
+        "bytes": 73474223,
+        "mode": "0644",
+        "sha256": "de749e1333d31fe099732ca9f6507649df08a7973a0f5e172571dd5ca45d210b",
+        "file_type": "data"
+      }
+    ],
+    "dynamic_system_dependencies_are_not_yet_a_frozen_calibration_closure": true
+  },
+  "nonbenchmark_inspection": {
+    "argv": [
+      "env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "./geekbench5",
+      "--help"
+    ],
+    "working_directory": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/extracted/Geekbench-5.5.1-Linux",
+    "exit_code": 0,
+    "stdout": {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/help.stdout",
+      "bytes": 743,
+      "sha256": "d3899d07775a910d9425c864c1c1f85e5e1370cce62b24dc0a48b6b72fff7972"
+    },
+    "stderr": {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/help.stderr",
+      "bytes": 96,
+      "sha256": "3ffa6e7a4734b91de4656923e79edd173cc2b3fa4ef671696e8b56ec74a94881"
+    },
+    "observed_identity": "Geekbench 5.5.1 Tryout",
+    "advertised_cpu_action": true,
+    "advertised_sysinfo_action": true,
+    "advertised_no_upload_option": false,
+    "advertised_save_option": false,
+    "static_worker_strings_contain_no_upload_and_save": true,
+    "static_worker_strings_are_capability_authority": false,
+    "static_option_extract": {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/option-strings.stdout",
+      "bytes": 262,
+      "sha256": "251dd45c1c659610931d36287923b386faaf731455145daf68df740ca064d904"
+    },
+    "benchmark_started": false,
+    "network_result_upload_attempted": false,
+    "license_material_read_or_recorded": false
+  },
+  "retained_diagnostics": [
+    {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/file.stdout",
+      "bytes": 363,
+      "sha256": "09ed70f84311cb4b8c5b2ef4686716da30ae04839dd289747b92096a88a3821e"
+    },
+    {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/ldd-geekbench5.stdout",
+      "bytes": 538,
+      "sha256": "6c4bc485bf20ebef629365e9b2fa84a65a56975eeab2ccd07daa58a6f8798c36"
+    },
+    {
+      "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/ldd-geekbench-x86-64.stdout",
+      "bytes": 538,
+      "sha256": "98f75ae46942164283a02f9a56287038312cfaf0ce4432dfcf459b0bbead321b"
+    }
+  ],
+  "scientific_interpretation": {
+    "binary_identity_acquired": true,
+    "offline_capability_established": false,
+    "current_host_score_established": false,
+    "runtime_authority_established": false,
+    "cmix_100m_successor_authorized": false,
+    "reason": "The exact acquired binary is a Tryout build whose emitted help does not advertise --no-upload or --save. Static strings show those options exist in the worker, but that does not prove they are enabled without a lawful Pro unlock. No benchmark was launched to avoid creating an unfrozen, possibly uploaded score."
+  },
+  "next_gate": {
+    "required": true,
+    "action": "Freeze a distinct nonbenchmark option-parser and license-availability check, or bind a lawful Geekbench 5 Pro installation, before freezing the guarded current-host calibration.",
+    "forbidden_without_success": [
+      "Run the CPU benchmark",
+      "Claim a Geekbench 5 single-core score",
+      "Use this artifact as runtime eligibility authority",
+      "Promote the CMIX env8192 lane to its 100M resource successor"
+    ]
+  }
+}
