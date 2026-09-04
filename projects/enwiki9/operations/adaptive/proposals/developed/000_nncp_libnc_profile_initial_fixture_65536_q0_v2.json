@@ -1,0 +1,63 @@
+{
+  "candidate_id": "nncp_libnc_profile_initial_fixture_65536_q0_v2",
+  "claimed_at": "2026-09-04T20:52:15+00:00",
+  "created_at": "2026-09-04T20:52:08+00:00",
+  "developed_at": "2026-09-04T20:52:15+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/proposals/rejected/000_nncp_libnc_profile_initial_fixture_65536_q0_v1.json",
+      "sha256": "sha256:9ee9a9de4078ad01cc4429645d8b3575dfdc723992afb419025319396d5388c7"
+    },
+    {
+      "path": "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_q0_v1.json",
+      "sha256": "sha256:17737264a82107ff77ce424402ffaa747eb421a76cd1b97c5a4482f5d31a98ae"
+    },
+    {
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T203102394482Z_cc0c7f3c292e.json",
+      "sha256": "sha256:b95a5fe8480277e575ee9ee4cd4ebd503624581b5c43a7ef632d992d4c616bec"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_q0_v2.json",
+    "sha256": "sha256:c67be16434341ef1ae613a1dd9cd115abb6f074eb7b5ef9e1c623df8370687c1"
+  },
+  "hypothesis": "Two fresh seed-123 initializations of the exact retained LibNC production profile produce a byte-identical block-zero boundary before any model forward, gradient, update, or coded symbol: all 246 parameters, all 491 optimizer tensors, exactly 20 zero recurrent-memory tensors, the exact first input/target batch, and the complete 65,536-symbol stream-major population required by the Gamma open MIDAS replay.",
+  "interfaces_exposed": [
+    "exact block-zero parameters + optimizer + stripped recurrent state + 65,536 BE16 symbols -> open MIDAS population input"
+  ],
+  "kill_condition": "With exact inputs and unique patch intact, the two initialization fixtures differ.",
+  "max_program_bytes": 2000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-prize-20260904",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1500,
+  "promotion_condition": "All frozen topology, zero-activation, zero-memory, symbol-mapping, pre-forward, and exact-repeat predicates pass.",
+  "proposal_id": "nncp_libnc_profile_initial_fixture_65536_q0_v2",
+  "retired_neighborhoods": [
+    "No block-256 gradients or train_h activations may be repackaged as block-zero treatment state."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1500,
+  "state": "developed",
+  "title": "Standalone pre-forward block-zero NNCP initialization fixture"
+}

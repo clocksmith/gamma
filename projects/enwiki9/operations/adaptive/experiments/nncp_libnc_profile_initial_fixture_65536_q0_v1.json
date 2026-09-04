@@ -1,0 +1,187 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_libnc_profile_initial_fixture_65536_q0_v1",
+  "proposalId": "nncp_libnc_profile_initial_fixture_65536_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_libnc_profile_update_fixture_64_q3_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_update_fixture_64_q3_v1/20260815T235108401451Z_8dd1739ed187.json",
+      "sha256": "sha256:e6e76f4de716574f9ddf6dfb4d47c9fdbc5ad5b1d3f3dc86ecf32dee9854ff3d"
+    }
+  },
+  "hypothesis": {
+    "claim": "Two fresh seed-123 initializations of the exact retained LibNC production profile produce a byte-identical block-zero boundary before any model forward, gradient, update, or coded symbol: all 246 parameters, all 491 optimizer tensors, exactly 20 zero recurrent-memory tensors, the exact first input/target batch, and the complete 65,536-symbol stream-major population required by the Gamma open MIDAS replay.",
+    "falsification": "Any external identity drift, non-unique source patch, forward/gradient/update activity, missing or extra tensor, retained train_h activation, nonzero block-zero memory, symbol-coordinate mismatch, schedule mismatch, or repeat mismatch rejects this frozen initialization fixture and forbids the integrated replay from consuming it."
+  },
+  "changedMechanism": "Replace q3's block-256 post-forward update-boundary observer with a block-zero initialization-only observer that fills the first causal batch directly from the exact stream partition, saves no train_h activation, and exits before the first forward loop.",
+  "invariants": [
+    "The exact q3 LibNC fixture decision and valid promotion reflection remain hash-bound, but q3 gradient and train_h payloads are never treatment inputs.",
+    "The Gamma integrated MIDAS consumer remains bound to tree cc0c7f3c292ee97eac4acea145fb5086247411bcc08f098980c7c312e4fb8789.",
+    "The production profile remains seed 123, 20 layers, width 1024, 32 streams, segment 64, memory 256, vocabulary 16392, and BF16 parameters with one F32 embedding tensor.",
+    "The population is exactly the first 65,536 big-endian preprocessed symbols split into 32 contiguous streams of stride 2,048.",
+    "The initial state contains only input_all_streams, target_all_streams, and mem_h_0 through mem_h_19; train_h and every other tensor are forbidden.",
+    "The capture occurs after model reset and before the normal forward loop; forward, gradient, update, and coded-symbol counters remain zero.",
+    "The external teacher fixture is oracle evidence and contributes zero compression, archive, package, or objective credit."
+  ],
+  "controls": [
+    {
+      "id": "initialization-first",
+      "role": "treatment",
+      "definition": "A fresh exact-source LibNC process emits the stripped block-zero fixture and symbol population, then exits before its first forward."
+    },
+    {
+      "id": "initialization-repeat",
+      "role": "replay",
+      "definition": "A second fresh process must emit the identical ordered file population, byte sizes, and per-file digests."
+    },
+    {
+      "id": "q3-source-parent",
+      "role": "comparator",
+      "definition": "The retained q3 decision and reflection bind the exact production source and parameter/optimizer topology without exposing q3 gradient or activation payloads."
+    },
+    {
+      "id": "integrated-consumer",
+      "role": "comparator",
+      "definition": "The sealed Gamma open MIDAS revision fixes the only accepted stripped-state and 65,536-symbol consumer interface."
+    }
+  ],
+  "population": {
+    "unit": "one complete 65,536-symbol production initialization population",
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "selection": "The first 65,536 exact preprocessed symbols, partitioned into 32 contiguous 2,048-symbol streams, plus the first 64-symbol causal batch per stream at train step zero.",
+    "coordinate": "stream-major preprocessed coordinates stream*2048+position; batch-zero execution order state*32+stream"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "The exact source, dictionary, preprocessed symbol stream, seed, profile, deterministic initialized parameters and optimizer, reset recurrent memory, and first causal input/target batch.",
+      "The complete truth population only as a zero-credit offline replay population whose candidate probabilities must still be generated causally."
+    ],
+    "forbiddenInformation": [
+      "Any train_h activation, gradient, post-update parameter, future recurrent state, teacher probability, or teacher branch trace as a treatment input.",
+      "Any compression, archive-saving, package, transfer, or objective claim from initialization identity alone."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "q3-decision",
+      "path": "results/nncp_libnc_profile_update_fixture_64_q3_v1/decision.json",
+      "sha256": "sha256:bc97b91d2c1ff3b5b2a3b50f6784e571381bf929e13df4d6a0742b3d61095e0f"
+    },
+    {
+      "id": "q3-reflection",
+      "path": "operations/adaptive/reflections/20260815T235124Z_86c7e4f805.json",
+      "sha256": "sha256:2b16b966687c90f96d3b40e0ddfa861f75464cc4a33f6142fe55e42ea96f1069"
+    },
+    {
+      "id": "integrated-revision",
+      "path": "operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T203102394482Z_cc0c7f3c292e.json",
+      "sha256": "sha256:b95a5fe8480277e575ee9ee4cd4ebd503624581b5c43a7ef632d992d4c616bec"
+    },
+    {
+      "id": "objective-contract",
+      "path": "contracts/research/v1/objective-contract.json",
+      "sha256": "sha256:774aab7b321c606410b58de95be93b379331e6f3c0f926c66ed36d10743c1967"
+    },
+    {
+      "id": "runtime-source-enwiki9-python-source-closure",
+      "path": "tools/enwiki9_python_source_closure.py",
+      "sha256": "sha256:b78ecd909e4b48ffca7bfb197d16d5e65aeb4efe64143f58d64e28c2dc0e7e3a"
+    },
+    {
+      "id": "runtime-source-nncp-libnc-profile-initial-fixture-65536-q0",
+      "path": "tools/nncp_libnc_profile_initial_fixture_65536_q0.py",
+      "sha256": "sha256:df600dc6da9d412f178fa422d189dbe0f9934ad9d889884e54a16dd8b565161a"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 2000000,
+    "expectedNetSavingsBytes": -2000000
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 0.1,
+    "expectedMemoryRatio": 0.8,
+    "uncertaintyRisk": 0.1,
+    "interactionRisk": 0.05
+  },
+  "measurements": [
+    {"id": "parentPass", "definition": "The exact q3 teacher fixture remains promotable.", "unit": "boolean"},
+    {"id": "integratedRevisionBound", "definition": "The exact stripped-state MIDAS consumer revision remains bound.", "unit": "boolean"},
+    {"id": "externalInputsBound", "definition": "Every source, object, library, dictionary, and preprocessed external input retains its frozen digest.", "unit": "boolean"},
+    {"id": "capturePatchUnique", "definition": "Both injection markers occur exactly once and place capture before the forward loop.", "unit": "boolean"},
+    {"id": "fixtureComplete", "definition": "Exactly six declared fixture files exist and the completion marker was written last.", "unit": "boolean"},
+    {"id": "fixtureRepeatByteIdentical", "definition": "Fresh initialization processes emit the same ordered file hashes.", "unit": "boolean"},
+    {"id": "parameterTensorCount", "definition": "Exact initial parameter tensor population.", "unit": "tensors"},
+    {"id": "optimizerTensorCount", "definition": "Exact initial optimizer tensor population.", "unit": "tensors"},
+    {"id": "stateTensorCount", "definition": "Exact stripped initial-state tensor population.", "unit": "tensors"},
+    {"id": "activationTensorCount", "definition": "Retained train_h activation tensors in the production fixture.", "unit": "tensors"},
+    {"id": "batchZeroMappingExact", "definition": "Saved input and target tensors equal the independent stream-major symbol mapping.", "unit": "boolean"},
+    {"id": "initialMemoryAllZero", "definition": "Every byte of every block-zero recurrent-memory payload is zero.", "unit": "boolean"},
+    {"id": "learningRateExact", "definition": "The train-step-zero learning-rate bits equal 0x1.4f8b58p-13.", "unit": "boolean"},
+    {"id": "preForwardBoundary", "definition": "Forward, gradient, and update call counts are all zero.", "unit": "boolean"},
+    {"id": "populationSymbols", "definition": "Exact retained symbol population.", "unit": "symbols"},
+    {"id": "symbolBytes", "definition": "Big-endian symbol payload byte count.", "unit": "bytes"},
+    {"id": "streamPopulation", "definition": "Production stream population.", "unit": "streams"},
+    {"id": "streamStride", "definition": "Contiguous symbol count per production stream.", "unit": "symbols"},
+    {"id": "segmentPopulation", "definition": "States per first production batch and per-stream analytical segment.", "unit": "symbols"},
+    {"id": "layerPopulation", "definition": "Transformer recurrent-memory layer population.", "unit": "layers"},
+    {"id": "trainStepBefore", "definition": "Optimizer step at the captured boundary.", "unit": "steps"},
+    {"id": "targetBlock", "definition": "Stream-local block coordinate at capture.", "unit": "symbols"},
+    {"id": "fixtureBytes", "definition": "Retained local raw initialization fixture bytes.", "unit": "bytes"},
+    {"id": "sourceClosureBytes", "definition": "Compressed incremental Gamma source closure.", "unit": "bytes"}
+  ],
+  "promotionPredicates": [
+    {"id": "p-parent", "measurement": "parentPass", "operator": "eq", "threshold": true},
+    {"id": "p-consumer", "measurement": "integratedRevisionBound", "operator": "eq", "threshold": true},
+    {"id": "p-external", "measurement": "externalInputsBound", "operator": "eq", "threshold": true},
+    {"id": "p-patch", "measurement": "capturePatchUnique", "operator": "eq", "threshold": true},
+    {"id": "p-complete", "measurement": "fixtureComplete", "operator": "eq", "threshold": true},
+    {"id": "p-repeat", "measurement": "fixtureRepeatByteIdentical", "operator": "eq", "threshold": true},
+    {"id": "p-parameters", "measurement": "parameterTensorCount", "operator": "eq", "threshold": 246},
+    {"id": "p-optimizer", "measurement": "optimizerTensorCount", "operator": "eq", "threshold": 491},
+    {"id": "p-state", "measurement": "stateTensorCount", "operator": "eq", "threshold": 22},
+    {"id": "p-no-activations", "measurement": "activationTensorCount", "operator": "eq", "threshold": 0},
+    {"id": "p-mapping", "measurement": "batchZeroMappingExact", "operator": "eq", "threshold": true},
+    {"id": "p-zero-memory", "measurement": "initialMemoryAllZero", "operator": "eq", "threshold": true},
+    {"id": "p-learning-rate", "measurement": "learningRateExact", "operator": "eq", "threshold": true},
+    {"id": "p-pre-forward", "measurement": "preForwardBoundary", "operator": "eq", "threshold": true},
+    {"id": "p-symbols", "measurement": "populationSymbols", "operator": "eq", "threshold": 65536},
+    {"id": "p-symbol-bytes", "measurement": "symbolBytes", "operator": "eq", "threshold": 131072},
+    {"id": "p-streams", "measurement": "streamPopulation", "operator": "eq", "threshold": 32},
+    {"id": "p-stride", "measurement": "streamStride", "operator": "eq", "threshold": 2048},
+    {"id": "p-segment", "measurement": "segmentPopulation", "operator": "eq", "threshold": 64},
+    {"id": "p-layers", "measurement": "layerPopulation", "operator": "eq", "threshold": 20},
+    {"id": "p-step", "measurement": "trainStepBefore", "operator": "eq", "threshold": 0},
+    {"id": "p-block", "measurement": "targetBlock", "operator": "eq", "threshold": 0},
+    {"id": "p-source", "measurement": "sourceClosureBytes", "operator": "lte", "threshold": 2000000}
+  ],
+  "killPredicates": [
+    {"id": "k-parent", "measurement": "parentPass", "operator": "eq", "threshold": true},
+    {"id": "k-consumer", "measurement": "integratedRevisionBound", "operator": "eq", "threshold": true},
+    {"id": "k-external", "measurement": "externalInputsBound", "operator": "eq", "threshold": true},
+    {"id": "k-patch", "measurement": "capturePatchUnique", "operator": "eq", "threshold": true},
+    {"id": "k-complete", "measurement": "fixtureComplete", "operator": "eq", "threshold": true},
+    {"id": "k-repeat", "measurement": "fixtureRepeatByteIdentical", "operator": "eq", "threshold": false}
+  ],
+  "outputs": [
+    "results/nncp_libnc_profile_initial_fixture_65536_q0_v1/decision.json",
+    "results/nncp_libnc_profile_initial_fixture_65536_q0_v1/fixture-manifest.json",
+    "results/nncp_libnc_profile_initial_fixture_65536_q0_v1/execution.json",
+    "results/nncp_libnc_profile_initial_fixture_65536_q0_v1/incremental_source.tar.xz"
+  ],
+  "generatedUtc": "2026-09-04T20:45:32Z"
+}

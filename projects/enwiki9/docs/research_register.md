@@ -292,6 +292,28 @@ rejected, and release, ASAN/UBSAN, and focused source tests pass. The required
 block-zero fixture has not been materialized and no production replay has run,
 so this remains zero-credit implementation evidence.
 
+A tenth source-only checkpoint freezes the missing block-zero producer without
+executing it. The first proposal, q0 v1, was rejected at development because
+its intended q3 lifecycle parent has historically valid oracle evidence but an
+obsolete runtime-source binding: the current validator correctly refuses to
+treat that legacy experiment as live successor authority. Q0 v2 is therefore a
+standalone oracle candidate. It still hash-binds q3's decision and reflection
+as evidence, the exact `cc0c7f3c292e...` Gamma consumer tree, and the rejected
+v1 registration, but claims no parent-derived credit.
+
+The v2 runner patches the exact retained LibNC source immediately after model
+reset and exits before the first normal forward loop. It directly constructs
+the causal block-zero input/target batch from the frozen 32-by-2,048 stream
+partition and permits only `246` initial parameters, `491` optimizer tensors,
+`20` zero recurrent memories, and the exact `65,536`-symbol BE16 population.
+`train_h`, gradients, post-update state, and teacher probabilities are absent.
+The patch compiles, its standalone self-test passes, and four focused tests
+pass. Revision `eee5b268497a7ca1bce7736f3f3a91ef6833cf141086677b4313d77f89504108`
+is sealed. Its guarded enqueue command is frozen but execution remains disabled
+until HORIZON terminalizes and releases the heavy lane. No fixture has been
+materialized, no MIDAS arm has run, and all scientific, compression, package,
+and objective credit remains zero.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -308,6 +330,11 @@ Evidence:
 [`treatment-only branch-trace source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T201112895649Z_90f33d9a2229.json),
 [`complete population-driver source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T202742577734Z_44116ba66e9d.json),
 [`stripped initial-state loader source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T203102394482Z_cc0c7f3c292e.json),
+[`rejected legacy-parent initializer proposal`](../operations/adaptive/proposals/rejected/000_nncp_libnc_profile_initial_fixture_65536_q0_v1.json),
+[`standalone initializer experiment`](../operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_q0_v2.json),
+[`standalone initializer proposal`](../operations/adaptive/proposals/developed/000_nncp_libnc_profile_initial_fixture_65536_q0_v2.json),
+[`standalone initializer source revision`](../operations/adaptive/candidate-revisions/nncp_libnc_profile_initial_fixture_65536_q0_v2/20260904T205258240267Z_eee5b268497a.json),
+[`held initializer execution plan`](../operations/planning/nncp_libnc_profile_initial_fixture_65536_q0_v2.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
