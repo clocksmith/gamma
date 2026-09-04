@@ -1,0 +1,202 @@
+{
+  "schema": "gamma.enwiki9.cmix-zombiefix-source-validation.v1",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1",
+  "corpus_accessed": false,
+  "processes_launched": false,
+  "lifecycle": {
+    "schema": "gamma.enwiki9.cmix-zombiefix-q0-v1-lifecycle-validation.v1",
+    "validation_only": true,
+    "corpus_accessed": false,
+    "processes_launched": false,
+    "passed": true,
+    "cases": [
+      {
+        "case": "stable",
+        "observed": "sample",
+        "expected": "sample",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "vanished_during_io",
+        "observed": "exit_race",
+        "expected": "exit_race",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "vanished_after_io",
+        "observed": "exit_race",
+        "expected": "exit_race",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "enumerated_then_vanished",
+        "observed": "exit_race",
+        "expected": "exit_race",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "same_identity_zombie",
+        "observed": "exit_race",
+        "expected": "exit_race",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "missing_io_still_live",
+        "observed": "live_io_missing",
+        "expected": "live_io_missing",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "reused_missing_io",
+        "observed": "identity_reused",
+        "expected": "identity_reused",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "reused_successful_io",
+        "observed": "identity_reused",
+        "expected": "identity_reused",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "permission_denied_then_exit",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "permission_denied_live",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "malformed_io_then_exit",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "unreadable_after_identity",
+        "observed": "invalid_identity",
+        "expected": "invalid_identity",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "unreadable_before_identity",
+        "observed": "invalid_identity",
+        "expected": "invalid_identity",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "observed_v14_prior_sampled_zombie_eacces",
+        "observed": "sampled_terminal_io_unavailable",
+        "expected": "sampled_terminal_io_unavailable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_dead_x_eacces",
+        "observed": "sampled_terminal_io_unavailable",
+        "expected": "sampled_terminal_io_unavailable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_dead_lower_x_eacces",
+        "observed": "sampled_terminal_io_unavailable",
+        "expected": "sampled_terminal_io_unavailable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "never_sampled_zombie_eacces",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": false
+      },
+      {
+        "case": "prior_sampled_live_eacces",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_live_to_zombie_eacces",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_zombie_to_live_eacces",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_reused_zombie_eacces",
+        "observed": "identity_reused",
+        "expected": "identity_reused",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_zombie_unreadable_after",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_zombie_disappeared_after",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_zombie_eperm",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      },
+      {
+        "case": "prior_sampled_zombie_malformed_io",
+        "observed": "io_unreadable",
+        "expected": "io_unreadable",
+        "prior_successful_sample": true
+      }
+    ]
+  },
+  "affinity": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "successful_empty_terminal",
+        "observed": true,
+        "expected": true
+      },
+      {
+        "case": "failed_stage_empty_terminal",
+        "observed": false,
+        "expected": false
+      },
+      {
+        "case": "malformed_live_row",
+        "observed": false,
+        "expected": false
+      },
+      {
+        "case": "empty_rows_nonempty_union",
+        "observed": false,
+        "expected": false
+      },
+      {
+        "case": "incomplete_live_affinity",
+        "observed": false,
+        "expected": false
+      },
+      {
+        "case": "wrong_live_cpu",
+        "observed": false,
+        "expected": false
+      }
+    ],
+    "processes_launched": false
+  },
+  "preimport_artifact_count": 17
+}

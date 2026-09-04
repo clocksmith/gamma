@@ -1,0 +1,49 @@
+{
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1",
+  "claimed_at": "2026-09-04T21:36:42+00:00",
+  "created_at": "2026-09-04T21:36:42+00:00",
+  "developed_at": "2026-09-04T21:36:42+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260904T212504Z_3be6dfb803.json",
+      "sha256": "sha256:fd54d0c5e702a22acd94f42e7d824d2a958d63b78d2e25adb976bd923d53be33"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/p/execution.json",
+      "sha256": "sha256:b04e545d079f8854d50e7dfde4943ed9a97fe8666d461a19f32d80581da55d18"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1.json",
+    "sha256": "sha256:cea5ffabb1554d683a41889498805e22d7e40393d86df2c69d7dba42f75c3753"
+  },
+  "hypothesis": "On exact canonical opening 1000000 bytes, preserve v14 P/E-A/E-B/decode identity and package accounting while treating EACCES as nonfatal terminal telemetry only when both stat snapshots prove the same terminal PID/start identity and a prior successful IO sample of that exact identity exists.",
+  "interfaces_exposed": [
+    "previously sampled same-identity terminal EACCES handling"
+  ],
+  "kill_condition": "Reject if a live, never-sampled, reused or stat-unreadable process can receive the terminal EACCES exemption; if any other unexpected IO error is exempted; or if codec source, outputs, controls, 955881 counted bytes, 10GB memory/zero-swap bounds, N_A eligibility or no-larger-gate authority changes.",
+  "max_program_bytes": 100,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex-cmix-parallel",
+  "parent": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14",
+  "parent_proposal_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14",
+  "priority": 1800,
+  "promotion_condition": "Opening-1M exact comparator/treatment/replay/decode identity only; no resource eligibility or larger gate.",
+  "proposal_id": "cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1800,
+  "state": "developed",
+  "title": "CMIX opening-1M prior-sampled terminal zombie IO correction"
+}
