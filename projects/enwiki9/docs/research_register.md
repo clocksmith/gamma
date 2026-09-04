@@ -176,6 +176,40 @@ identity procedure and resource limits are unchanged. Evidence:
 `operations/evidence/20260904_cmix_zombiefix_lifecycle_source_validation.json`
 and `operations/evidence/20260904_cmix_zombiefix_final_preflight_validation.json`.
 
+Job `20260904T213959Z_0fd9095639` now passes the complete frozen opening-1M
+identity gate. P, E-A and E-B each produce the exact baseline 172,605-byte
+payload and 464,298-byte archive. The env8192 archive decodes to the exact
+canonical 1,000,000 bytes. All four guards and terminal execution receipts
+pass, including one retained, previously sampled terminal-zombie EACCES event
+per arm. Peak cgroup memory is 8,587,251,712 bytes; scratch, owned cgroups and
+the canonical lease are removed. The counted opening package is 955,881 bytes,
+including the 100 command bytes. This is output-identity evidence only:
+memory, runtime and PPM-trigger eligibility remain N_A, and full-corpus score
+credit is zero. The canonical reflection is valid/supported/hold, with no
+larger-gate authority. The next constructive CMIX step is a separately frozen
+resource experiment, including runtime authority, before larger execution.
+
+Both independent opening gates are now terminal: CMIX identity passes and
+Fiber's frozen retrieval configuration is retired after its scientific miss.
+HORIZON remains observing under its existing native observer, without early
+science access. The full objective remains unproved. Exact final handoff:
+`operations/evidence/20260904_parallel_opening1m_terminal_handoff.json`.
+CMIX's canonical ledger registration is
+`operations/evidence/20260904_cmix_zombiefix_canonical_ledger_registration.json`.
+
+The sealed correction then completed all four opening-1M arms. P, E-A and E-B
+each reproduced the exact known 172,605-byte payload and 464,298-byte archive;
+E-A decoded exactly to the canonical 1,000,000-byte prefix. Every arm retained
+one prior-sampled, same-PID/start terminal EACCES event and no other telemetry
+error. The 42-file output closure, lease, cleanup and one-CPU/zero-swap guards
+all passed. This supports output-neutral identity only: observed peak cgroup
+memory was 8,574,197,760 to 8,587,251,712 bytes, resource eligibility remains
+N/A, and no larger gate is authorized. A separate prospectively frozen
+resource experiment is mandatory. Evidence:
+`results/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1/decision.json`,
+`operations/evidence/20260904_cmix_zombiefix_opening1m_terminal_independent_audit.json`,
+and `operations/adaptive/reflections/20260904T213959Z_0fd9095639.json`.
+
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 
 The proposal ranker previously considered proposal status, experiment

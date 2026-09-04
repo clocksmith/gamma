@@ -1,0 +1,122 @@
+{
+  "schema": "gamma.enwiki9.cmix-zombiefix-opening1m-terminal-independent-audit.v1",
+  "generated_utc": "2026-09-04T21:55:58Z",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1",
+  "job": {
+    "job_id": "20260904T213959Z_0fd9095639",
+    "path": "operations/adaptive/completed/000_20260904T213959Z_0fd9095639.json",
+    "sha256": "7a0fc86a418a12d1a06564752c4c24c89ffc7afb929dbe188d9d17bcfe85eb9f"
+  },
+  "bindings": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1.json",
+      "sha256": "cea5ffabb1554d683a41889498805e22d7e40393d86df2c69d7dba42f75c3753"
+    },
+    "candidate_revision": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1/20260904T213642839821Z_36416cdbc2f9.json",
+      "sha256": "d81a26929546d1fbab2d59a8932c3dbfc9c74e3ad5df524ad979a753bd269b39",
+      "candidate_tree_sha256": "36416cdbc2f962688b3fc481c4b54f6caf99e9938e0a4d7b53f910b99c968fe4"
+    },
+    "source_closure": {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1.json",
+      "sha256": "2ca009caca219f8a2e7b65bc611c933ac095d0a72e1e3d0cabfda32830f18abc"
+    },
+    "decision": {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1/decision.json",
+      "sha256": "a0993ccfd2635be3070b2ea75007a63c56c9f2e14b35aef07889e2a7ecf0cc67"
+    }
+  },
+  "independent_checks": {
+    "candidate_revision_and_experiment_contracts": "PASS",
+    "source_closure_and_exact_runtime_index": "PASS",
+    "terminal_pass": true,
+    "decision_errors": [],
+    "complete_output_manifest": {
+      "status": "PASS",
+      "declared_regular_files_excluding_decision": 42,
+      "observed_regular_files_excluding_decision": 42,
+      "all_byte_counts_and_sha256_verified": true,
+      "undeclared_files": [],
+      "missing_files": []
+    },
+    "payload_identity": {
+      "status": "PASS",
+      "arms": [
+        "P",
+        "E-A",
+        "E-B"
+      ],
+      "bytes_each": 172605,
+      "sha256_each": "a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"
+    },
+    "archive_identity": {
+      "status": "PASS",
+      "arms": [
+        "P",
+        "E-A",
+        "E-B"
+      ],
+      "bytes_each": 464298,
+      "sha256_each": "9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"
+    },
+    "exact_decode": {
+      "status": "PASS",
+      "bytes": 1000000,
+      "sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "filename": "enwik9_uncompressed"
+    },
+    "terminal_io_exception": {
+      "status": "PASS",
+      "events_per_arm": 1,
+      "arms": [
+        "P",
+        "E-A",
+        "E-B",
+        "E-decode"
+      ],
+      "rule_verified": "Every event is errno EACCES after a prior successful sample of the exact PID/start identity, with identical before/after PID/start and both states in Z/X/x; the retained successful process row is present and no measurement error remains.",
+      "fabricated_counters": false
+    },
+    "guards": {
+      "status": "PASS",
+      "all_returncodes_zero": true,
+      "all_measurements_complete": true,
+      "all_abort_flags_false": true,
+      "singleton_cpu": 2,
+      "requested_cgroup_memory_max_bytes": 10000000000,
+      "effective_cgroup_memory_max_bytes": 9999998976,
+      "memory_max_rounding_bytes": 1024,
+      "memory_swap_max_bytes": 0,
+      "peak_cgroup_memory_bytes": {
+        "P": 8585011200,
+        "E-A": 8587251712,
+        "E-B": 8587227136,
+        "E-decode": 8574197760
+      }
+    },
+    "cleanup": {
+      "status": "PASS",
+      "candidate_scratch_absent": true,
+      "canonical_lease_absent": true,
+      "canonical_lease_lock_absent": true
+    }
+  },
+  "package_accounting": {
+    "original_package_bytes": 468481,
+    "head_bytes": 23002,
+    "archive_bytes": 464298,
+    "required_command_bytes": 100,
+    "complete_opening_identity_count_bytes": 955881
+  },
+  "verdict": {
+    "opening_1m_output_neutral_identity": "PASS",
+    "deterministic_replay": "PASS",
+    "exact_inversion": "PASS",
+    "scientific_credit_bytes": 0,
+    "resource_eligibility": "N_A",
+    "ppm_trigger_eligibility": "N_A",
+    "larger_gate_authorized": false,
+    "next_gate_bytes": null,
+    "required_next_action": "Freeze a separate resource experiment before any larger-scope CMIX execution. Do not promote this opening identity receipt as memory, runtime, or Hutter eligibility evidence."
+  }
+}
