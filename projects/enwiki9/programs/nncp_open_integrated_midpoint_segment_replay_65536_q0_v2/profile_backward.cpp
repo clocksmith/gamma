@@ -24,6 +24,13 @@ std::size_t Product(
   return result;
 }
 
+std::size_t Sum(std::size_t left, std::size_t right, const char* label) {
+  if (left > std::numeric_limits<std::size_t>::max() - right) {
+    throw std::invalid_argument(std::string(label) + " geometry is invalid");
+  }
+  return left + right;
+}
+
 void Require(const Bf16Buffer& values, std::size_t expected, const char* label) {
   if (values.size() != expected) {
     throw std::invalid_argument(
@@ -100,7 +107,10 @@ std::vector<GradientDescriptor> CanonicalGradientDescriptors(
       Product({2, geometry.transformer.inner}, "profile double inner");
   const std::size_t two_model = Product({2, model}, "profile double model");
   std::vector<GradientDescriptor> descriptors;
-  descriptors.reserve(Product({geometry.layers, 12}, "profile layer descriptors") + 6);
+  descriptors.reserve(Sum(
+      Product({geometry.layers, 12}, "profile layer descriptors"),
+      6,
+      "profile descriptors"));
   AddDescriptor(
       descriptors,
       "embed_out",

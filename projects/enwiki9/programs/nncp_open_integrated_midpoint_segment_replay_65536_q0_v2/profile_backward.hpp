@@ -25,6 +25,10 @@ struct ProfileWeights {
   Bf16Buffer output_weight;
   Bf16Buffer final_ln_gain;
   std::vector<TransformerLayerWeights> layers;
+  F32Buffer embedding;
+  Bf16Buffer shared_relative_bias;
+  Bf16Buffer final_ln_bias;
+  Bf16Buffer output_bias;
 };
 
 struct ProfileCache {

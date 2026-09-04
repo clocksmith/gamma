@@ -18,13 +18,17 @@ struct TransformerGeometry {
 
 struct TransformerLayerWeights {
   Bf16Buffer ln_g1;
+  Bf16Buffer ln_b1;
   Bf16Buffer w_q;
   Bf16Buffer w_kv;
   Bf16Buffer relative_weight;
   Bf16Buffer w_o;
   Bf16Buffer ln_g2;
+  Bf16Buffer ln_b2;
   Bf16Buffer ff1;
+  Bf16Buffer ff_bias1;
   Bf16Buffer ff2;
+  Bf16Buffer ff_bias2;
 };
 
 struct TransformerLayerCache {

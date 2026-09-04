@@ -1,15 +1,27 @@
 #include "midpoint_kernels.hpp"
+#include "profile_artifacts.hpp"
 #include "profile_backward.hpp"
+#include "profile_fixture.hpp"
+#include "profile_forward.hpp"
+#include "tensor_container.hpp"
 #include "transformer_backward.hpp"
 
 #include <algorithm>
 #include <bit>
+#include <cerrno>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <stdexcept>
 #include <string>
+#include <unistd.h>
+#include <utility>
+#include <vector>
 
 namespace nncp = gamma_enwiki9::nncp;
 
@@ -22,6 +34,335 @@ void Require(bool value, const char* message) {
 nncp::Bf16 Make(std::size_t index, float scale = 0.015625F) {
   const int centered = static_cast<int>((index * 37U + 11U) % 29U) - 14;
   return nncp::FloatToBf16(static_cast<float>(centered) * scale);
+}
+
+void PutU32(std::vector<std::uint8_t>& bytes, std::uint32_t value) {
+  for (unsigned int shift = 0; shift < 32; shift += 8) {
+    bytes.push_back(static_cast<std::uint8_t>(value >> shift));
+  }
+}
+
+void AddTensor(
+    std::vector<std::uint8_t>& bytes,
+    std::uint32_t type,
+    const std::string& name,
+    const std::vector<std::uint32_t>& dimensions,
+    const std::vector<std::uint8_t>& payload) {
+  PutU32(bytes, UINT32_C(0x23f4aefa));
+  PutU32(bytes, type);
+  PutU32(bytes, static_cast<std::uint32_t>(dimensions.size()));
+  PutU32(bytes, static_cast<std::uint32_t>(name.size()));
+  for (std::uint32_t dimension : dimensions) PutU32(bytes, dimension);
+  bytes.insert(bytes.end(), name.begin(), name.end());
+  bytes.insert(bytes.end(), payload.begin(), payload.end());
+}
+
+std::vector<std::uint8_t> NewContainer(const std::string& configuration) {
+  std::vector<std::uint8_t> bytes;
+  PutU32(bytes, UINT32_C(0x23f4aefb));
+  PutU32(bytes, static_cast<std::uint32_t>(configuration.size()));
+  bytes.insert(bytes.end(), configuration.begin(), configuration.end());
+  return bytes;
+}
+
+std::vector<std::uint8_t> Bf16Bytes(
+    std::size_t count,
+    nncp::Bf16 value = 0) {
+  std::vector<std::uint8_t> bytes;
+  bytes.reserve(count * 2);
+  for (std::size_t index = 0; index < count; ++index) {
+    bytes.push_back(static_cast<std::uint8_t>(value));
+    bytes.push_back(static_cast<std::uint8_t>(value >> 8U));
+  }
+  return bytes;
+}
+
+std::vector<std::uint8_t> F32Bytes(
+    std::size_t count,
+    float value = 0.0F) {
+  std::vector<std::uint8_t> bytes;
+  bytes.reserve(count * 4);
+  for (std::size_t index = 0; index < count; ++index) {
+    PutU32(bytes, std::bit_cast<std::uint32_t>(value));
+  }
+  return bytes;
+}
+
+std::vector<std::uint8_t> U32Bytes(
+    const std::vector<std::uint32_t>& values) {
+  std::vector<std::uint8_t> bytes;
+  bytes.reserve(values.size() * 4);
+  for (std::uint32_t value : values) PutU32(bytes, value);
+  return bytes;
+}
+
+class TemporaryFile {
+ public:
+  TemporaryFile() {
+    char pattern[] = "/tmp/gamma-nncp-container-XXXXXX";
+    fd_ = mkstemp(pattern);
+    if (fd_ < 0) {
+      throw std::runtime_error(std::string("mkstemp failed: ") + std::strerror(errno));
+    }
+    path_ = pattern;
+  }
+
+  ~TemporaryFile() {
+    if (fd_ >= 0) close(fd_);
+    if (!path_.empty()) unlink(path_.c_str());
+  }
+
+  void Write(const std::vector<std::uint8_t>& bytes) {
+    std::size_t offset = 0;
+    while (offset < bytes.size()) {
+      const ssize_t count = write(fd_, bytes.data() + offset, bytes.size() - offset);
+      if (count < 0) {
+        if (errno == EINTR) continue;
+        throw std::runtime_error(std::string("temporary write failed: ") +
+                                 std::strerror(errno));
+      }
+      if (count == 0) throw std::runtime_error("temporary write made no progress");
+      offset += static_cast<std::size_t>(count);
+    }
+    if (close(fd_) != 0) {
+      fd_ = -1;
+      throw std::runtime_error("temporary close failed");
+    }
+    fd_ = -1;
+  }
+
+  const std::string& path() const { return path_; }
+
+ private:
+  int fd_ = -1;
+  std::string path_;
+};
+
+class TemporaryDirectory {
+ public:
+  TemporaryDirectory() {
+    char pattern[] = "/tmp/gamma-nncp-artifacts-XXXXXX";
+    const char* created = mkdtemp(pattern);
+    if (created == nullptr) {
+      throw std::runtime_error(std::string("mkdtemp failed: ") +
+                               std::strerror(errno));
+    }
+    path_ = created;
+  }
+
+  ~TemporaryDirectory() {
+    std::error_code error;
+    std::filesystem::remove_all(path_, error);
+  }
+
+  const std::filesystem::path& path() const { return path_; }
+
+ private:
+  std::filesystem::path path_;
+};
+
+void TestTensorContainer() {
+  std::vector<std::uint8_t> bytes = NewContainer("cfg");
+  std::vector<std::uint8_t> bf16_payload;
+  for (std::size_t index = 0; index < 8; ++index) {
+    const nncp::Bf16 value = Make(index);
+    bf16_payload.push_back(static_cast<std::uint8_t>(value));
+    bf16_payload.push_back(static_cast<std::uint8_t>(value >> 8U));
+  }
+  AddTensor(bytes, 1, "bf", {8}, bf16_payload);
+  std::vector<std::uint8_t> f32_payload;
+  for (float value : {1.0F, -2.0F, 3.5F, 4.0F}) {
+    PutU32(f32_payload, std::bit_cast<std::uint32_t>(value));
+  }
+  AddTensor(bytes, 0, "fp", {2, 2}, f32_payload);
+  std::vector<std::uint8_t> u32_payload;
+  PutU32(u32_payload, 17);
+  PutU32(u32_payload, 29);
+  AddTensor(bytes, 5, "ui", {2}, u32_payload);
+  TemporaryFile file;
+  file.Write(bytes);
+  const nncp::TensorContainer container(file.path());
+  Require(container.configuration() == "cfg", "container configuration differs");
+  Require(container.tensors().size() == 3, "container tensor count differs");
+  Require(container.contains("fp") && !container.contains("missing"),
+          "container name index differs");
+  const nncp::Bf16Buffer bf = container.CopyBf16("bf", {8});
+  Require(bf.size() == 8 && bf[3] == Make(3), "container BF16 copy differs");
+  const std::vector<float> fp = container.CopyF32("fp", {2, 2});
+  Require(fp == std::vector<float>({1.0F, -2.0F, 3.5F, 4.0F}),
+          "container F32 copy differs");
+  const std::vector<std::uint32_t> ui = container.CopyU32("ui", {2});
+  Require(ui == std::vector<std::uint32_t>({17, 29}),
+          "container U32 copy differs");
+  bool rejected = false;
+  try {
+    static_cast<void>(container.CopyBf16("bf", {4, 2}));
+  } catch (const std::runtime_error&) {
+    rejected = true;
+  }
+  Require(rejected, "container accepted a forged tensor shape");
+}
+
+void TestProfileFixtureLoader() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {2, 2, 1, 128, 126, 128},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  constexpr std::uint32_t model = 128;
+  constexpr std::uint32_t positions = 128;
+  constexpr std::uint32_t inner = 128;
+  std::vector<std::uint8_t> parameters = NewContainer("p\n");
+  const auto add_bf16 = [&parameters](
+                              const std::string& name,
+                              std::vector<std::uint32_t> dimensions,
+                              std::size_t elements,
+                              nncp::Bf16 value = 0) {
+    AddTensor(
+        parameters, 1, name, dimensions, Bf16Bytes(elements, value));
+  };
+  add_bf16("b_r_0", {positions, 1}, positions);
+  add_bf16("w_r_0", {128, positions, 1}, positions * model);
+  add_bf16("w_q_0", {model, model}, model * model);
+  add_bf16("w_kv_0", {2 * model, model}, 2 * model * model);
+  add_bf16("w_o_0", {model, model}, model * model);
+  add_bf16("ff1_0", {2 * inner, model}, 2 * inner * model);
+  add_bf16("ff_bias1_0", {2 * inner}, 2 * inner);
+  add_bf16("ff2_0", {model, inner}, model * inner);
+  add_bf16("ff_bias2_0", {model}, model);
+  add_bf16("ln_g_0", {model}, model, nncp::FloatToBf16(1.0F));
+  add_bf16("ln_b_0", {model}, model);
+  add_bf16("ln_g_1", {model}, model, nncp::FloatToBf16(1.0F));
+  add_bf16("ln_b_1", {model}, model);
+  add_bf16("ln_g_2", {model}, model, nncp::FloatToBf16(1.0F));
+  add_bf16("ln_b_2", {model}, model);
+  AddTensor(
+      parameters,
+      0,
+      "embed",
+      {model, 8},
+      F32Bytes(static_cast<std::size_t>(model) * 8));
+  add_bf16("embed_out", {8, model}, static_cast<std::size_t>(model) * 8);
+  add_bf16("out_bias", {8}, 8);
+
+  std::vector<std::uint8_t> state = NewContainer("s\n");
+  const std::vector<std::uint32_t> symbols{0, 1, 2, 3};
+  AddTensor(state, 5, "input_all_streams", {2, 2}, U32Bytes(symbols));
+  AddTensor(state, 5, "target_all_streams", {2, 2}, U32Bytes(symbols));
+  AddTensor(
+      state,
+      1,
+      "mem_h_0",
+      {model, 2, 126},
+      Bf16Bytes(static_cast<std::size_t>(model) * 2 * 126));
+  AddTensor(
+      state,
+      1,
+      "train_h_0",
+      {model, 2, 2},
+      Bf16Bytes(static_cast<std::size_t>(model) * 2 * 2));
+  TemporaryFile parameter_file;
+  TemporaryFile state_file;
+  parameter_file.Write(parameters);
+  state_file.Write(state);
+  const nncp::ProfileFixtureInputs fixture = nncp::LoadProfileFixture(
+      geometry,
+      parameter_file.path(),
+      state_file.path(),
+      nncp::FutureInputPolicy::kPreserve);
+  Require(fixture.weights.layers.size() == 1, "fixture layer count differs");
+  Require(fixture.input_symbols == symbols, "fixture input symbols differ");
+  Require(fixture.targets == symbols, "fixture targets differ");
+  Require(fixture.memory_inputs.size() == 1, "fixture memory count differs");
+  Require(
+      fixture.memory_inputs[0].size() ==
+          static_cast<std::size_t>(model) * 2 * 126,
+      "fixture memory geometry differs");
+}
+
+void TestGradientArtifacts() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {2, 2, 1, 128, 126, 128},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  constexpr std::size_t model = 128;
+  constexpr std::size_t positions = 128;
+  constexpr std::size_t inner = 128;
+  nncp::TransformerLayerGradients layer{
+      .ff2 = nncp::Bf16Buffer(model * inner, 0),
+      .ff1 = nncp::Bf16Buffer(2 * inner * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, 0),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * inner, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .w_r = nncp::Bf16Buffer(positions * model, 0),
+      .w_kv = nncp::Bf16Buffer(2 * model * model, 0),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .ln_g1 = nncp::Bf16Buffer(model, 0),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
+      .relative_bias_contribution = nncp::Bf16Buffer(positions, 0),
+  };
+  nncp::ProfileGradients gradients{
+      .output_weight = nncp::Bf16Buffer(8 * model, 0),
+      .layers = {std::move(layer)},
+      .shared_relative_bias = nncp::Bf16Buffer(positions, 0),
+      .embedding = nncp::F32Buffer(model * 8, 0.0F),
+      .final_ln_gain = nncp::Bf16Buffer(model, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(8, 0),
+  };
+  const std::vector<nncp::GradientArtifactView> artifacts =
+      nncp::CanonicalGradientArtifacts(geometry, gradients);
+  Require(artifacts.size() == 18, "synthetic artifact count differs");
+  Require(artifacts.front().descriptor.name == "embed_out",
+          "synthetic first artifact differs");
+  Require(artifacts[9].descriptor.name == "b_r_0",
+          "synthetic shared-bias position differs");
+  Require(artifacts[14].descriptor.name == "embed" &&
+              artifacts[14].f32_values == &gradients.embedding,
+          "synthetic F32 artifact binding differs");
+  Require(artifacts.back().descriptor.name == "out_bias",
+          "synthetic last artifact differs");
+
+  TemporaryDirectory temporary;
+  const std::filesystem::path output = temporary.path() / "gradients";
+  nncp::WriteCanonicalGradientArtifacts(output, geometry, gradients);
+  std::size_t regular_files = 0;
+  for (const auto& entry : std::filesystem::directory_iterator(output)) {
+    Require(entry.is_regular_file(), "artifact output is not a regular file");
+    Require(entry.path().extension() != ".partial",
+            "artifact output retained a partial file");
+    ++regular_files;
+  }
+  Require(regular_files == artifacts.size() * 2,
+          "artifact file population differs");
+  Require(std::filesystem::file_size(output / "0000_embed_out.bin") ==
+              8 * model * sizeof(nncp::Bf16),
+          "first artifact payload size differs");
+  std::ifstream metadata(output / "0014_embed.meta", std::ios::binary);
+  const std::string metadata_text{
+      std::istreambuf_iterator<char>(metadata),
+      std::istreambuf_iterator<char>()};
+  Require(
+      metadata_text ==
+          "index=14\nname=embed\nitem_type=0\nitem_size=4\n"
+          "dims=128,8\nbyte_order=little\ncolumn_index=none\n",
+      "F32 artifact metadata differs");
+
+  gradients.output_bias.pop_back();
+  bool rejected = false;
+  try {
+    static_cast<void>(nncp::CanonicalGradientArtifacts(geometry, gradients));
+  } catch (const std::invalid_argument&) {
+    rejected = true;
+  }
+  Require(rejected, "artifact binder accepted a truncated gradient");
 }
 
 void TestBf16() {
@@ -367,13 +708,17 @@ void TestTransformerLayerZeroAdjoint() {
   constexpr std::size_t samples = 4;
   nncp::TransformerLayerWeights weights{
       .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
       .w_q = nncp::Bf16Buffer(model * model, 0),
       .w_kv = nncp::Bf16Buffer(model * 2 * model, 0),
       .relative_weight = nncp::Bf16Buffer(positions * model, 0),
       .w_o = nncp::Bf16Buffer(model * model, 0),
       .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
       .ff1 = nncp::Bf16Buffer(model * 2 * geometry.inner, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * geometry.inner, 0),
       .ff2 = nncp::Bf16Buffer(geometry.inner * model, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
   };
   nncp::TransformerLayerCache cache{
       .hidden_input = nncp::Bf16Buffer(samples * model, 0),
@@ -441,13 +786,17 @@ void TestProfileBackwardTopology() {
   constexpr std::size_t samples = 4;
   nncp::TransformerLayerWeights layer_weights{
       .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
       .w_q = nncp::Bf16Buffer(model * model, 0),
       .w_kv = nncp::Bf16Buffer(model * 2 * model, 0),
       .relative_weight = nncp::Bf16Buffer(positions * model, 0),
       .w_o = nncp::Bf16Buffer(model * model, 0),
       .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
       .ff1 = nncp::Bf16Buffer(model * 2 * geometry.transformer.inner, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * geometry.transformer.inner, 0),
       .ff2 = nncp::Bf16Buffer(geometry.transformer.inner * model, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
   };
   nncp::TransformerLayerCache layer_cache{
       .hidden_input = nncp::Bf16Buffer(samples * model, 0),
@@ -477,6 +826,10 @@ void TestProfileBackwardTopology() {
       .output_weight = nncp::Bf16Buffer(model * geometry.vocabulary, 0),
       .final_ln_gain = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
       .layers = {layer_weights},
+      .embedding = nncp::F32Buffer(model * geometry.vocabulary, 0.0F),
+      .shared_relative_bias = nncp::Bf16Buffer(positions, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(geometry.vocabulary, 0),
   };
   const nncp::ProfileCache cache{
       .pre_final_hidden = nncp::Bf16Buffer(samples * model, 0),
@@ -505,6 +858,72 @@ void TestProfileBackwardTopology() {
       "zero profile embedding gradient became nonzero");
   Require(all_zero_bf16(result.checkpoints.embedding_input_adjoint),
           "zero profile input adjoint became nonzero");
+}
+
+void TestProfileForwardBackwardComposition() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {2, 2, 1, 128, 126, 128},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  constexpr std::size_t model = 128;
+  constexpr std::size_t positions = 128;
+  constexpr std::size_t samples = 4;
+  nncp::TransformerLayerWeights layer{
+      .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .w_kv = nncp::Bf16Buffer(model * 2 * model, 0),
+      .relative_weight = nncp::Bf16Buffer(positions * model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
+      .ff1 = nncp::Bf16Buffer(model * 2 * geometry.transformer.inner, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * geometry.transformer.inner, 0),
+      .ff2 = nncp::Bf16Buffer(geometry.transformer.inner * model, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
+  };
+  const nncp::ProfileWeights weights{
+      .output_weight = nncp::Bf16Buffer(model * geometry.vocabulary, 0),
+      .final_ln_gain = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .layers = {std::move(layer)},
+      .embedding = nncp::F32Buffer(model * geometry.vocabulary, 0.0F),
+      .shared_relative_bias = nncp::Bf16Buffer(positions, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(geometry.vocabulary, 0),
+  };
+  const std::vector<std::uint32_t> symbols{0, 1, 2, 3};
+  const nncp::ProfileCache cache = nncp::ProfileForward(
+      geometry,
+      weights,
+      symbols,
+      symbols,
+      {nncp::Bf16Buffer(
+          geometry.transformer.memory * geometry.transformer.streams * model, 0)});
+  Require(cache.layers.size() == 1, "forward layer cache count differs");
+  Require(cache.final_hidden.size() == samples * model,
+          "forward final hidden size differs");
+  Require(cache.probabilities.size() == samples * geometry.vocabulary,
+          "forward probability size differs");
+  for (float probability : cache.probabilities) {
+    Require(probability == 0.125F, "zero-logit probability differs");
+  }
+  const nncp::ProfileBackwardResult backward =
+      nncp::ProfileBackward(geometry, weights, cache);
+  Require(
+      std::any_of(
+          backward.gradients.output_bias.begin(),
+          backward.gradients.output_bias.end(),
+          [](nncp::Bf16 value) { return value != 0; }),
+      "live causal loss produced no output-bias gradient");
+  Require(
+      std::all_of(
+          backward.gradients.embedding.begin(),
+          backward.gradients.embedding.end(),
+          [](float value) { return value == 0.0F; }),
+      "zero output matrix leaked a gradient into embedding");
 }
 
 void TestPanelledInputAdjoint() {
@@ -645,6 +1064,9 @@ void TestRmsNormSchedules() {
 int main() {
   try {
     nncp::ValidateArithmeticEnvironment();
+    TestTensorContainer();
+    TestProfileFixtureLoader();
+    TestGradientArtifacts();
     TestBf16();
     TestStatewiseBias();
     TestStatewiseWeight();
@@ -657,6 +1079,7 @@ int main() {
     TestRelativeProjectionAndKvMerge();
     TestTransformerLayerZeroAdjoint();
     TestProfileBackwardTopology();
+    TestProfileForwardBackwardComposition();
     TestAttentionBridge();
     TestRmsNormSchedules();
     std::cout << "MIDPOINT_KERNEL_SELFTEST_OK\n";
