@@ -280,6 +280,18 @@ state, and symbol fixture plus its complete input lock. No production arm has
 run, so all arithmetic, compression, archive, package, and objective credit
 remain unproved and zero.
 
+A ninth source-only revision,
+`cc0c7f3c292ee97eac4acea145fb5086247411bcc08f098980c7c312e4fb8789`,
+hardens that pending block-zero boundary. The production population executable
+now uses a distinct initial-state loader that accepts only the two symbol
+tensors and one recurrent-memory tensor per layer. It rejects every retained
+`train_h` activation and every extra tensor; the activation-bearing q3 fixture
+format remains confined to the separate bounded comparator loader. A synthetic
+stripped state loads exactly, the corresponding activation-bearing state is
+rejected, and release, ASAN/UBSAN, and focused source tests pass. The required
+block-zero fixture has not been materialized and no production replay has run,
+so this remains zero-credit implementation evidence.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -295,6 +307,7 @@ Evidence:
 [`O/K/F/S segment-arm source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T200044496649Z_2dcf287e75f2.json),
 [`treatment-only branch-trace source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T201112895649Z_90f33d9a2229.json),
 [`complete population-driver source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T202742577734Z_44116ba66e9d.json),
+[`stripped initial-state loader source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T203102394482Z_cc0c7f3c292e.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 

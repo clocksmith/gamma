@@ -38,11 +38,12 @@ std::string LayerName(const char* prefix, std::size_t layer) {
 
 }  // namespace
 
-ProfileFixtureInputs LoadProfileFixture(
+static ProfileFixtureInputs LoadProfileFixtureInternal(
     const ProfileGeometry& geometry,
     const std::filesystem::path& parameter_container,
     const std::filesystem::path& state_container,
-    FutureInputPolicy future_policy) {
+    FutureInputPolicy future_policy,
+    bool require_train_h_comparators) {
   const std::size_t states = geometry.transformer.states;
   const std::size_t streams = geometry.transformer.streams;
   const std::size_t heads = geometry.transformer.heads;
@@ -63,7 +64,9 @@ ProfileFixtureInputs LoadProfileFixture(
       6,
       "fixture parameter population");
   const std::size_t expected_state = Sum(
-      Product({geometry.layers, 2}, "fixture state population"),
+      Product(
+          {geometry.layers, require_train_h_comparators ? 2U : 1U},
+          "fixture state population"),
       2,
       "fixture state population");
   if (parameters.tensors().size() != expected_parameters) {
@@ -141,11 +144,15 @@ ProfileFixtureInputs LoadProfileFixture(
   for (std::size_t layer = 0; layer < geometry.layers; ++layer) {
     memory_inputs.push_back(state.CopyBf16(
         LayerName("mem_h", layer), {model, streams, memory}));
-    // train_h is a teacher activation/comparator, never a treatment input.
-    const TensorMetadata& train = state.metadata(LayerName("train_h", layer));
-    if (train.type != 1 ||
-        train.dimensions != std::vector<std::size_t>({model, streams, states})) {
-      throw std::runtime_error("fixture train_h comparator geometry differs");
+    if (require_train_h_comparators) {
+      // train_h is a teacher activation/comparator, never copied into the
+      // returned treatment inputs.
+      const TensorMetadata& train = state.metadata(LayerName("train_h", layer));
+      if (train.type != 1 ||
+          train.dimensions !=
+              std::vector<std::size_t>({model, streams, states})) {
+        throw std::runtime_error("fixture train_h comparator geometry differs");
+      }
     }
   }
   return {
@@ -154,6 +161,31 @@ ProfileFixtureInputs LoadProfileFixture(
       .targets = std::move(targets),
       .memory_inputs = std::move(memory_inputs),
   };
+}
+
+ProfileFixtureInputs LoadProfileFixture(
+    const ProfileGeometry& geometry,
+    const std::filesystem::path& parameter_container,
+    const std::filesystem::path& state_container,
+    FutureInputPolicy future_policy) {
+  return LoadProfileFixtureInternal(
+      geometry,
+      parameter_container,
+      state_container,
+      future_policy,
+      true);
+}
+
+ProfileFixtureInputs LoadProfileInitialFixture(
+    const ProfileGeometry& geometry,
+    const std::filesystem::path& parameter_container,
+    const std::filesystem::path& initial_state_container) {
+  return LoadProfileFixtureInternal(
+      geometry,
+      parameter_container,
+      initial_state_container,
+      FutureInputPolicy::kPreserve,
+      false);
 }
 
 }  // namespace gamma_enwiki9::nncp

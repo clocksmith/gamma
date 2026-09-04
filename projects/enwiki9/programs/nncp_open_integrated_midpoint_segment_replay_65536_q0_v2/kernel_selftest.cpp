@@ -327,6 +327,42 @@ void TestProfileFixtureLoader() {
       fixture.memory_inputs[0].size() ==
           static_cast<std::size_t>(model) * 2 * 126,
       "fixture memory geometry differs");
+
+  std::vector<std::uint8_t> initial_state = NewContainer("initial\n");
+  AddTensor(
+      initial_state,
+      5,
+      "input_all_streams",
+      {2, 2},
+      U32Bytes(symbols));
+  AddTensor(
+      initial_state,
+      5,
+      "target_all_streams",
+      {2, 2},
+      U32Bytes(symbols));
+  AddTensor(
+      initial_state,
+      1,
+      "mem_h_0",
+      {model, 2, 126},
+      Bf16Bytes(static_cast<std::size_t>(model) * 2 * 126));
+  TemporaryFile initial_state_file;
+  initial_state_file.Write(initial_state);
+  const nncp::ProfileFixtureInputs initial = nncp::LoadProfileInitialFixture(
+      geometry, parameter_file.path(), initial_state_file.path());
+  Require(initial.input_symbols == symbols && initial.targets == symbols &&
+              initial.memory_inputs.size() == 1,
+          "stripped initial fixture differs");
+  bool activation_state_rejected = false;
+  try {
+    static_cast<void>(nncp::LoadProfileInitialFixture(
+        geometry, parameter_file.path(), state_file.path()));
+  } catch (const std::runtime_error&) {
+    activation_state_rejected = true;
+  }
+  Require(activation_state_rejected,
+          "initial fixture accepted a retained activation tensor");
 }
 
 void TestGradientArtifacts() {

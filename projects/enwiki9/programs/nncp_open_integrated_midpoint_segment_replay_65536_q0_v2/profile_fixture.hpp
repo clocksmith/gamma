@@ -30,6 +30,14 @@ ProfileFixtureInputs LoadProfileFixture(
     const std::filesystem::path& state_container,
     FutureInputPolicy future_policy);
 
+// Production population loader for the block-zero boundary. The state
+// container must contain only input_all_streams, target_all_streams, and one
+// mem_h tensor per layer; retained train_h activations are rejected.
+ProfileFixtureInputs LoadProfileInitialFixture(
+    const ProfileGeometry& geometry,
+    const std::filesystem::path& parameter_container,
+    const std::filesystem::path& initial_state_container);
+
 }  // namespace gamma_enwiki9::nncp
 
 #endif

@@ -116,11 +116,10 @@ int main(int argc, char** argv) {
         .loss_start = 0,
         .loss_length = kStates,
     };
-    nncp::ProfileFixtureInputs fixture = nncp::LoadProfileFixture(
+    nncp::ProfileFixtureInputs fixture = nncp::LoadProfileInitialFixture(
         geometry,
         parameters,
-        initial_state,
-        nncp::FutureInputPolicy::kPreserve);
+        initial_state);
     nncp::ProfileAdamState optimizer = nncp::LoadProfileAdamState(
         geometry, optimizer_path, 1);
     const std::vector<std::uint32_t> symbols =
