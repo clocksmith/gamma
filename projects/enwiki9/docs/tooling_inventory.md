@@ -82,6 +82,7 @@ heavy lane.
 | `nncp_delta_midas_decoder_feature_probe.py` | Runs the prospectively frozen train/validation/test hashed-linear residual probe from retained traces; it cannot launch NNCP or a compressor and binds causal features, shifted control, quantized model, and held-out zero-credit evidence. |
 | `harm_delta_sparse_input_abi_q0_v1.py` | Cannot launch a compressor or read corpus/HORIZON scientific data; it executes the snapshot-bound generated HARM-Delta HSP1/HGS1 input fixture, validates exact sparse callback coverage and repeat identity, and emits zero-credit infrastructure evidence. |
 | `harm_delta_sparse_parent_materializer_q0_v1.py` | Cannot launch a compressor or accept production paths; it executes the generated CMX21P1/GSRT2-to-HSP1 fixture, checks exact coordinate/count copying, A/B identity, transcript witnesses, and ten fail-closed corruptions, and emits zero-credit infrastructure evidence. |
+| `harm_delta_horizon_field_entry_observer_q0_v1.py` | Cannot launch a compressor or accept production paths; it executes the snapshot-bound HORIZON-A/GSRT2 field-entry fixture, checks native/reference and A/B identity, pretruth witnesses, measured HGS1 compatibility, frozen production constants, and eight fail-closed corruptions, and emits zero-credit infrastructure evidence. |
 | `fx2_loss_probe.py` | Probes loss data from fx2-style runs. |
 | `fx2_loss_ledger.py` | Builds loss accounting views. |
 | `fx2_loss_windows.py` | Breaks loss into windows. |

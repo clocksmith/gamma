@@ -1,0 +1,40 @@
+{
+  "schema": "gamma.enwiki9.candidate-interface.v1",
+  "candidate_id": "harm_delta_horizon_field_entry_observer_q0_v1",
+  "role": "zero-credit HORIZON-A field-entry source observer",
+  "entrypoints": {
+    "native_source": "horizon-field-entry-observer.cpp",
+    "fixture_coordinator": "fixture.py",
+    "managed_program": "program.py"
+  },
+  "raw_observer_abi": {
+    "magic": "HGSR1\\u0000\\u0000\\u0000",
+    "header_bytes": 32,
+    "record_bytes": 32,
+    "record": [
+      "uint64 target_wrt_coordinate",
+      "uint64 source_wrt_coordinate",
+      "uint64 exact_context_hash",
+      "uint64 pretruth_anchor_transition_hash"
+    ],
+    "endianness": "little"
+  },
+  "production_constants": {
+    "wrt_bytes": 647798592,
+    "key_bytes": 16,
+    "hash_base": "9e3779b185ebca87",
+    "hash_base_power_16": "6fe6ef9fbd3b9581",
+    "table_bits": 24,
+    "minimum_age_bytes": 100000000,
+    "donor_bytes": 512
+  },
+  "timing": "At coordinate c, consume causal callbacks, observe event-type-2 presence, lookup and emit from state through c-1, then update from truth c.",
+  "production_activation": "Not exposed by v1. A new successor must bind terminal HORIZON and repeated production GSRT2 before enabling corpus paths.",
+  "authority": {
+    "archive_authority": false,
+    "corpus_execution_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0
+  }
+}

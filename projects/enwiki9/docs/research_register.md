@@ -342,6 +342,26 @@ Production materialization remains a separately frozen successor gated by the
 terminal HORIZON router, repeated corpus GSRT2, exact raw/WRT/coder mapping,
 and distant HGS1 evidence.
 
+The physical-comparator source boundary is now also source-valid and held as
+`harm_delta_horizon_field_entry_observer_q0_v1`. Its native observer replays
+the exact frozen HORIZON-A oldest-anchor state but performs lookups only at
+causal GSRT2 explicit-field-entry coordinates. In the generated 128-byte gate,
+native A/B emitted the same two target/source/context/transition rows as an
+independent Python state machine, selected no non-entry callback, and matched
+terminal rolling, anchor-table, and anchor-transition witnesses. The rows also
+passed the already measured HGS1 parser and reconstructed the expected causal
+donors through HARM's frozen G adapter.
+
+All eight frozen path, header, event-count, callback-order, population,
+pretruth, timing, and route-identity corruptions failed closed. Maximum self
+RSS was `96,088 KiB`; corpus and active-HORIZON access counts were both zero.
+This establishes causality, arithmetic/source-law identity, repeatability, and
+container compatibility only. It measures no parent-relative gain and grants
+no archive, native-integration, corpus-execution, or objective authority. A
+production A/B successor remains forbidden until the terminal HORIZON router
+and repeated full-WRT GSRT2 inputs are bound, and it must reproduce all three
+frozen source-census terminal witnesses before emitting admissible HGS1.
+
 Evidence: `operations/planning/harm_route_edit_residual_shadow_q0_v1.json`,
 `programs/harm_route_edit_residual_shadow_q0_v1/`, and
 `tests/test_harm_route_edit_residual_shadow.py`; sparse-boundary evidence:
@@ -353,7 +373,12 @@ materializer evidence:
 `operations/planning/harm_delta_sparse_parent_materializer_q0_v1.json`,
 `operations/adaptive/experiments/harm_delta_sparse_parent_materializer_q0_v1.json`,
 `results/harm_delta_sparse_parent_materializer_q0_v1/decision.json`, and
-`operations/adaptive/reflections/20260904T163548Z_e7983e7de3.json`.
+`operations/adaptive/reflections/20260904T163548Z_e7983e7de3.json`;
+physical-observer evidence:
+`operations/planning/harm_delta_horizon_field_entry_observer_q0_v1.json`,
+`operations/adaptive/experiments/harm_delta_horizon_field_entry_observer_q0_v1.json`,
+`results/harm_delta_horizon_field_entry_observer_q0_v1/decision.json`, and
+`operations/adaptive/reflections/20260904T165807Z_e8c7faaa7d.json`.
 
 ## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
 
