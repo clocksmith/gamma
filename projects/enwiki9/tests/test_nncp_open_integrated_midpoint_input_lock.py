@@ -198,6 +198,8 @@ def test_exact_kernel_library_compiles_and_self_checks(tmp_path: Path) -> None:
             "-fno-fast-math",
             "-ffp-contract=off",
             str(source_root / "midpoint_kernels.cpp"),
+            str(source_root / "transformer_backward.cpp"),
+            str(source_root / "profile_backward.cpp"),
             str(source_root / "kernel_selftest.cpp"),
             "-o",
             str(executable),
