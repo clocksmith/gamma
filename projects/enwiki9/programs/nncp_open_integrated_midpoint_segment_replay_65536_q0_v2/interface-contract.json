@@ -1,7 +1,7 @@
 {
   "schema": "gamma.enwiki9.nncp-open-integrated-midpoint-replay-interface.v2",
   "program_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
-  "implementation_status": "input_lock_forward_backward_and_treatment_materializer_implemented_unvalidated",
+  "implementation_status": "input_lock_forward_backward_adam_and_midpoint_segment_implemented_unvalidated",
   "execution_authorized": false,
   "closed_runtime_allowed": false,
   "network_allowed": false,
@@ -38,13 +38,15 @@
       "production fixture loader that excludes retained train_h activations from treatment inputs",
       "LibNC-free full transformer forward candidate with embedding, attention, relative shift, GEGLU, final normalization, output, and softmax caches",
       "separate treatment-only executable that accepts no gradient or activation oracle path",
-      "canonical collision-safe 246-gradient BF16/F32 artifact materializer with completion marker written last"
+      "canonical collision-safe 246-gradient BF16/F32 artifact materializer with completion marker written last",
+      "exact candidate per-tensor gradient norm, clipping, compensated-BF16/F32 Adam update, and retained scalar bit schedule",
+      "exact shift-and-append recurrent memory transition using decoder-visible rebuilt layer inputs",
+      "frozen two-update midpoint segment schedule with zeroed future inputs and truths, unchanged persistent memory at midpoint, causal full rebuild, and one terminal memory shift"
     ],
     "missing": [
       "exact forward checkpoint and all-246-gradient parity against prospectively bound comparator oracles",
-      "Adam update and recurrent state transition",
-      "midpoint rebuild and second-half forward traversal",
       "complete population input lock and treatment-output hash closure",
+      "complete-population O/K/F/S driver, oracle comparator, and state hashing",
       "O/K/F/S replay and oracle comparisons",
       "repeat, dependency, and resource closure"
     ]

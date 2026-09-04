@@ -1,8 +1,11 @@
+#include "adam_update.hpp"
 #include "midpoint_kernels.hpp"
+#include "midpoint_segment.hpp"
 #include "profile_artifacts.hpp"
 #include "profile_backward.hpp"
 #include "profile_fixture.hpp"
 #include "profile_forward.hpp"
+#include "profile_state.hpp"
 #include "tensor_container.hpp"
 #include "transformer_backward.hpp"
 
@@ -96,6 +99,18 @@ std::vector<std::uint8_t> U32Bytes(
   return bytes;
 }
 
+std::vector<std::uint8_t> U16Bytes(
+    std::size_t count,
+    std::uint16_t value) {
+  std::vector<std::uint8_t> bytes;
+  bytes.reserve(count * 2);
+  for (std::size_t index = 0; index < count; ++index) {
+    bytes.push_back(static_cast<std::uint8_t>(value));
+    bytes.push_back(static_cast<std::uint8_t>(value >> 8U));
+  }
+  return bytes;
+}
+
 class TemporaryFile {
  public:
   TemporaryFile() {
@@ -179,11 +194,12 @@ void TestTensorContainer() {
   PutU32(u32_payload, 17);
   PutU32(u32_payload, 29);
   AddTensor(bytes, 5, "ui", {2}, u32_payload);
+  AddTensor(bytes, 7, "u16", {3}, U16Bytes(3, UINT16_C(0x9abc)));
   TemporaryFile file;
   file.Write(bytes);
   const nncp::TensorContainer container(file.path());
   Require(container.configuration() == "cfg", "container configuration differs");
-  Require(container.tensors().size() == 3, "container tensor count differs");
+  Require(container.tensors().size() == 4, "container tensor count differs");
   Require(container.contains("fp") && !container.contains("missing"),
           "container name index differs");
   const nncp::Bf16Buffer bf = container.CopyBf16("bf", {8});
@@ -194,6 +210,11 @@ void TestTensorContainer() {
   const std::vector<std::uint32_t> ui = container.CopyU32("ui", {2});
   Require(ui == std::vector<std::uint32_t>({17, 29}),
           "container U32 copy differs");
+  const std::vector<std::uint16_t> u16 =
+      container.CopyU16Type7("u16", {3});
+  Require(
+      u16 == std::vector<std::uint16_t>(3, UINT16_C(0x9abc)),
+      "container type-7 U16 copy differs");
   bool rejected = false;
   try {
     static_cast<void>(container.CopyBf16("bf", {4, 2}));
@@ -363,6 +384,405 @@ void TestGradientArtifacts() {
     rejected = true;
   }
   Require(rejected, "artifact binder accepted a truncated gradient");
+}
+
+void TestProfileAdamUpdate() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {1, 1, 1, 8, 7, 8},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  constexpr std::size_t model = 8;
+  constexpr std::size_t positions = 8;
+  constexpr std::size_t inner = 8;
+  nncp::TransformerLayerWeights layer{
+      .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .w_kv = nncp::Bf16Buffer(2 * model * model, 0),
+      .relative_weight = nncp::Bf16Buffer(positions * model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
+      .ff1 = nncp::Bf16Buffer(2 * inner * model, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * inner, 0),
+      .ff2 = nncp::Bf16Buffer(model * inner, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
+  };
+  nncp::ProfileWeights weights{
+      .output_weight = nncp::Bf16Buffer(8 * model, 0),
+      .final_ln_gain = nncp::Bf16Buffer(
+          model, nncp::FloatToBf16(1.0F)),
+      .layers = {std::move(layer)},
+      .embedding = nncp::F32Buffer(model * 8, 1.0F),
+      .shared_relative_bias = nncp::Bf16Buffer(positions, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(
+          8, nncp::FloatToBf16(1.0F)),
+  };
+  nncp::TransformerLayerGradients layer_gradient{
+      .ff2 = nncp::Bf16Buffer(model * inner, 0),
+      .ff1 = nncp::Bf16Buffer(2 * inner * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, 0),
+      .ln_b2 = nncp::Bf16Buffer(model, 0),
+      .ff_bias1 = nncp::Bf16Buffer(2 * inner, 0),
+      .ff_bias2 = nncp::Bf16Buffer(model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .w_r = nncp::Bf16Buffer(positions * model, 0),
+      .w_kv = nncp::Bf16Buffer(2 * model * model, 0),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .ln_g1 = nncp::Bf16Buffer(model, 0),
+      .ln_b1 = nncp::Bf16Buffer(model, 0),
+      .relative_bias_contribution = nncp::Bf16Buffer(positions, 0),
+  };
+  nncp::ProfileGradients gradients{
+      .output_weight = nncp::Bf16Buffer(8 * model, 0),
+      .layers = {std::move(layer_gradient)},
+      .shared_relative_bias = nncp::Bf16Buffer(positions, 0),
+      .embedding = nncp::F32Buffer(model * 8, 0.125F),
+      .final_ln_gain = nncp::Bf16Buffer(model, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(
+          8, nncp::FloatToBf16(0.25F)),
+  };
+
+  std::vector<std::uint8_t> optimizer = NewContainer(
+      "gamma.nncp.production.update.optimizer.v1");
+  const std::vector<nncp::GradientDescriptor> descriptors =
+      nncp::CanonicalGradientDescriptors(geometry);
+  for (const nncp::GradientDescriptor& descriptor : descriptors) {
+    std::vector<std::uint32_t> dimensions;
+    std::size_t elements = 1;
+    for (const std::size_t dimension : descriptor.dimensions) {
+      dimensions.push_back(static_cast<std::uint32_t>(dimension));
+      elements *= dimension;
+    }
+    if (descriptor.element_type == nncp::GradientElementType::kBf16) {
+      AddTensor(
+          optimizer,
+          1,
+          descriptor.name + ".grad_v",
+          dimensions,
+          Bf16Bytes(elements));
+      AddTensor(
+          optimizer,
+          7,
+          descriptor.name + ".low",
+          dimensions,
+          U16Bytes(elements, UINT16_C(0x8000)));
+    } else {
+      AddTensor(
+          optimizer,
+          0,
+          descriptor.name + ".grad_v",
+          dimensions,
+          F32Bytes(elements));
+    }
+  }
+  TemporaryFile optimizer_file;
+  optimizer_file.Write(optimizer);
+  nncp::ProfileAdamState state = nncp::LoadProfileAdamState(
+      geometry, optimizer_file.path(), 5);
+  Require(state.tensors.size() == descriptors.size(),
+          "Adam state tensor count differs");
+  Require(state.next_update_exponent == 5,
+          "Adam initial exponent differs");
+
+  nncp::ProfileWeights repeat_weights = weights;
+  nncp::ProfileAdamState repeat_state = state;
+
+  const nncp::ProfileAdamUpdateResult result = nncp::ApplyProfileAdamUpdate(
+      geometry, weights, gradients, state, 0x1.4f7e76p-13F);
+  const nncp::ProfileAdamUpdateResult repeat_result =
+      nncp::ApplyProfileAdamUpdate(
+          geometry,
+          repeat_weights,
+          gradients,
+          repeat_state,
+          0x1.4f7e76p-13F);
+  Require(result.update_exponent == 5 && state.next_update_exponent == 6,
+          "Adam exponent transition differs");
+  Require(result.tensors.size() == descriptors.size(),
+          "Adam diagnostic count differs");
+  Require(result.clipped_tensors == 2,
+          "Adam per-tensor clipping count differs");
+  Require(std::bit_cast<std::uint32_t>(result.beta2_power) ==
+              UINT32_C(0x3f7fdf3c) &&
+              std::bit_cast<std::uint32_t>(result.bias_correction) ==
+                  UINT32_C(0x3cb72c0b) &&
+              std::bit_cast<std::uint32_t>(result.epsilon_squared) ==
+                  UINT32_C(0x1f6c19e7),
+          "Adam retained scalar schedule differs");
+  Require(std::bit_cast<std::uint32_t>(result.tensors[14].gradient_norm) ==
+              UINT32_C(0x3f800000) &&
+              std::bit_cast<std::uint32_t>(
+                  result.tensors[14].gradient_scale) == UINT32_C(0x3d4ccccd),
+          "Adam F32 norm or clip schedule differs");
+  Require(result.tensors.front().name == "embed_out" &&
+              result.tensors.back().name == "out_bias",
+          "Adam canonical traversal differs");
+  Require(std::any_of(
+              state.tensors.back().low_words.begin(),
+              state.tensors.back().low_words.end(),
+              [](std::uint16_t value) { return value != UINT16_C(0x8000); }),
+          "Adam did not update the compensated BF16 parameter");
+  Require(std::all_of(
+              weights.embedding.begin(),
+              weights.embedding.end(),
+              [](float value) { return value != 1.0F; }),
+          "Adam did not update the F32 parameter");
+  Require(std::any_of(
+              state.tensors.back().variance_bf16.begin(),
+              state.tensors.back().variance_bf16.end(),
+              [](nncp::Bf16 value) { return value != 0; }),
+          "Adam did not update the BF16 variance");
+  Require(std::any_of(
+              state.tensors[14].variance_f32.begin(),
+              state.tensors[14].variance_f32.end(),
+              [](float value) { return value != 0.0F; }),
+          "Adam did not update the F32 variance");
+
+  std::vector<nncp::ParameterArtifactView> parameter_artifacts =
+      nncp::CanonicalParameterArtifacts(geometry, weights);
+  std::vector<nncp::ParameterArtifactView> repeat_parameter_artifacts =
+      nncp::CanonicalParameterArtifacts(geometry, repeat_weights);
+  Require(parameter_artifacts.size() == repeat_parameter_artifacts.size(),
+          "Adam repeat parameter population differs");
+  for (std::size_t index = 0; index < parameter_artifacts.size(); ++index) {
+    const nncp::ParameterArtifactView& first = parameter_artifacts[index];
+    const nncp::ParameterArtifactView& second =
+        repeat_parameter_artifacts[index];
+    if (first.descriptor.element_type == nncp::GradientElementType::kBf16) {
+      Require(*first.bf16_values == *second.bf16_values,
+              "Adam BF16 parameter repeat differs");
+    } else {
+      Require(*first.f32_values == *second.f32_values,
+              "Adam F32 parameter repeat differs");
+    }
+    Require(state.tensors[index].low_words ==
+                repeat_state.tensors[index].low_words &&
+                state.tensors[index].variance_bf16 ==
+                    repeat_state.tensors[index].variance_bf16 &&
+                state.tensors[index].variance_f32 ==
+                    repeat_state.tensors[index].variance_f32,
+            "Adam optimizer repeat differs");
+  }
+  Require(std::bit_cast<std::uint32_t>(result.alpha) ==
+              std::bit_cast<std::uint32_t>(repeat_result.alpha) &&
+              result.clipped_tensors == repeat_result.clipped_tensors,
+          "Adam diagnostic repeat differs");
+}
+
+void TestProfileMemoryTransition() {
+  nncp::ProfileGeometry geometry{
+      .transformer = {2, 2, 1, 2, 3, 8},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  nncp::Bf16Buffer prior(12);
+  nncp::Bf16Buffer current(8);
+  for (std::size_t index = 0; index < prior.size(); ++index) {
+    prior[index] = static_cast<nncp::Bf16>(index + 1);
+  }
+  for (std::size_t index = 0; index < current.size(); ++index) {
+    current[index] = static_cast<nncp::Bf16>(index + 101);
+  }
+  nncp::ProfileCache cache;
+  cache.layers.resize(1);
+  cache.layers[0].attention_input = current;
+  const std::vector<nncp::Bf16Buffer> shifted =
+      nncp::AdvanceProfileMemory(geometry, {prior}, cache);
+  nncp::Bf16Buffer expected(prior.begin() + 8, prior.end());
+  expected.insert(expected.end(), current.begin(), current.end());
+  Require(shifted == std::vector<nncp::Bf16Buffer>({expected}),
+          "memory shift-and-append differs");
+
+  geometry.transformer.memory = 1;
+  const nncp::Bf16Buffer short_prior(4, 7);
+  const std::vector<nncp::Bf16Buffer> replaced =
+      nncp::AdvanceProfileMemory(geometry, {short_prior}, cache);
+  Require(
+      replaced == std::vector<nncp::Bf16Buffer>({nncp::Bf16Buffer(
+                      current.begin() + 4, current.end())}),
+      "short-memory tail selection differs");
+}
+
+nncp::ProfileWeights ZeroProfileWeights(const nncp::ProfileGeometry& geometry) {
+  const std::size_t model =
+      geometry.transformer.heads * geometry.transformer.head_width;
+  const std::size_t positions =
+      geometry.transformer.memory + geometry.transformer.states;
+  std::vector<nncp::TransformerLayerWeights> layers;
+  layers.reserve(geometry.layers);
+  for (std::size_t layer = 0; layer < geometry.layers; ++layer) {
+    layers.push_back({
+        .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+        .ln_b1 = nncp::Bf16Buffer(model, 0),
+        .w_q = nncp::Bf16Buffer(model * model, 0),
+        .w_kv = nncp::Bf16Buffer(2 * model * model, 0),
+        .relative_weight = nncp::Bf16Buffer(
+            geometry.transformer.head_width * positions *
+                geometry.transformer.heads,
+            0),
+        .w_o = nncp::Bf16Buffer(model * model, 0),
+        .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+        .ln_b2 = nncp::Bf16Buffer(model, 0),
+        .ff1 = nncp::Bf16Buffer(
+            2 * geometry.transformer.inner * model, 0),
+        .ff_bias1 = nncp::Bf16Buffer(2 * geometry.transformer.inner, 0),
+        .ff2 = nncp::Bf16Buffer(
+            model * geometry.transformer.inner, 0),
+        .ff_bias2 = nncp::Bf16Buffer(model, 0),
+    });
+  }
+  return {
+      .output_weight = nncp::Bf16Buffer(
+          geometry.vocabulary * model, 0),
+      .final_ln_gain = nncp::Bf16Buffer(
+          model, nncp::FloatToBf16(1.0F)),
+      .layers = std::move(layers),
+      .embedding = nncp::F32Buffer(
+          model * geometry.vocabulary, 0.0F),
+      .shared_relative_bias = nncp::Bf16Buffer(
+          positions * geometry.transformer.heads, 0),
+      .final_ln_bias = nncp::Bf16Buffer(model, 0),
+      .output_bias = nncp::Bf16Buffer(geometry.vocabulary, 0),
+  };
+}
+
+nncp::ProfileAdamState ZeroAdamState(
+    const nncp::ProfileGeometry& geometry,
+    std::uint64_t next_update_exponent) {
+  nncp::ProfileAdamState state{
+      .next_update_exponent = next_update_exponent,
+      .tensors = {},
+  };
+  const std::vector<nncp::GradientDescriptor> descriptors =
+      nncp::CanonicalGradientDescriptors(geometry);
+  state.tensors.reserve(descriptors.size());
+  for (const nncp::GradientDescriptor& descriptor : descriptors) {
+    std::size_t elements = 1;
+    for (const std::size_t dimension : descriptor.dimensions) {
+      elements *= dimension;
+    }
+    nncp::AdamTensorState tensor{
+        .descriptor = descriptor,
+        .low_words = {},
+        .variance_bf16 = {},
+        .variance_f32 = {},
+    };
+    if (descriptor.element_type == nncp::GradientElementType::kBf16) {
+      tensor.low_words.assign(elements, UINT16_C(0x8000));
+      tensor.variance_bf16.assign(elements, 0);
+    } else {
+      tensor.variance_f32.assign(elements, 0.0F);
+    }
+    state.tensors.push_back(std::move(tensor));
+  }
+  return state;
+}
+
+void TestIntegratedMidpointSegment() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {64, 1, 1, 64, 8, 8},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 64,
+  };
+  nncp::ProfileWeights weights = ZeroProfileWeights(geometry);
+  nncp::ProfileAdamState optimizer = ZeroAdamState(geometry, 5);
+  const std::vector<nncp::Bf16Buffer> memory{
+      nncp::Bf16Buffer(8 * 64, 0)};
+  const std::vector<std::uint32_t> inputs(64, 0);
+  const std::vector<std::uint32_t> targets(64, 0);
+  nncp::ProfileWeights repeat_weights = weights;
+  nncp::ProfileAdamState repeat_optimizer = optimizer;
+  const nncp::MidpointSegmentResult result = nncp::RunMidpointSegment(
+      geometry,
+      weights,
+      optimizer,
+      memory,
+      inputs,
+      targets,
+      0x1.4f7e76p-13F);
+  const nncp::MidpointSegmentResult repeat = nncp::RunMidpointSegment(
+      geometry,
+      repeat_weights,
+      repeat_optimizer,
+      memory,
+      inputs,
+      targets,
+      0x1.4f7e76p-13F);
+  Require(result.coded_probabilities.size() == 64 * 8,
+          "midpoint coded probability population differs");
+  Require(result.first_update.update_exponent == 5 &&
+              result.second_update.update_exponent == 6 &&
+              optimizer.next_update_exponent == 7,
+          "midpoint two-update schedule differs");
+  Require(std::all_of(
+              result.coded_probabilities.begin(),
+              result.coded_probabilities.begin() + 32 * 8,
+              [](float probability) { return probability == 0.125F; }),
+          "midpoint first-half parent probabilities changed");
+  Require(result.coded_probabilities[32 * 8] != 0.125F,
+          "midpoint rebuild did not affect the second half");
+  Require(result.coded_probabilities == repeat.coded_probabilities &&
+              result.next_memory == repeat.next_memory,
+          "midpoint segment repeat differs");
+  Require(optimizer.next_update_exponent ==
+              repeat_optimizer.next_update_exponent,
+          "midpoint optimizer repeat exponent differs");
+  const std::vector<nncp::ParameterArtifactView> parameters =
+      nncp::CanonicalParameterArtifacts(geometry, weights);
+  const std::vector<nncp::ParameterArtifactView> repeat_parameters =
+      nncp::CanonicalParameterArtifacts(geometry, repeat_weights);
+  for (std::size_t index = 0; index < parameters.size(); ++index) {
+    if (parameters[index].descriptor.element_type ==
+        nncp::GradientElementType::kBf16) {
+      Require(*parameters[index].bf16_values ==
+                  *repeat_parameters[index].bf16_values,
+              "midpoint BF16 parameter repeat differs");
+    } else {
+      Require(*parameters[index].f32_values ==
+                  *repeat_parameters[index].f32_values,
+              "midpoint F32 parameter repeat differs");
+    }
+    Require(optimizer.tensors[index].low_words ==
+                repeat_optimizer.tensors[index].low_words &&
+                optimizer.tensors[index].variance_bf16 ==
+                    repeat_optimizer.tensors[index].variance_bf16 &&
+                optimizer.tensors[index].variance_f32 ==
+                    repeat_optimizer.tensors[index].variance_f32,
+            "midpoint optimizer tensor repeat differs");
+  }
+
+  nncp::ProfileWeights changed_weights = ZeroProfileWeights(geometry);
+  nncp::ProfileAdamState changed_optimizer = ZeroAdamState(geometry, 5);
+  std::vector<std::uint32_t> changed_inputs = inputs;
+  std::vector<std::uint32_t> changed_targets = targets;
+  std::fill(changed_inputs.begin() + 32, changed_inputs.end(), 7);
+  std::fill(changed_targets.begin() + 32, changed_targets.end(), 7);
+  const nncp::MidpointSegmentResult changed = nncp::RunMidpointSegment(
+      geometry,
+      changed_weights,
+      changed_optimizer,
+      memory,
+      changed_inputs,
+      changed_targets,
+      0x1.4f7e76p-13F);
+  Require(std::equal(
+              result.coded_probabilities.begin(),
+              result.coded_probabilities.begin() + 32 * 8,
+              changed.coded_probabilities.begin()),
+          "future symbols changed first-half midpoint probabilities");
+  Require(result.first_update.clipped_tensors ==
+              changed.first_update.clipped_tensors,
+          "future symbols changed the first-half update diagnostics");
 }
 
 void TestBf16() {
@@ -1067,6 +1487,9 @@ int main() {
     TestTensorContainer();
     TestProfileFixtureLoader();
     TestGradientArtifacts();
+    TestProfileAdamUpdate();
+    TestProfileMemoryTransition();
+    TestIntegratedMidpointSegment();
     TestBf16();
     TestStatewiseBias();
     TestStatewiseWeight();

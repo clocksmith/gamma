@@ -45,6 +45,9 @@ class TensorContainer {
   std::vector<std::uint32_t> CopyU32(
       std::string_view name,
       const std::vector<std::size_t>& dimensions) const;
+  std::vector<std::uint16_t> CopyU16Type7(
+      std::string_view name,
+      const std::vector<std::size_t>& dimensions) const;
 
  private:
   class Impl;

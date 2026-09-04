@@ -22,6 +22,7 @@ constexpr std::uint32_t kTensorMagic = UINT32_C(0x23f4aefa);
 constexpr std::uint32_t kF32 = 0;
 constexpr std::uint32_t kBf16 = 1;
 constexpr std::uint32_t kU32 = 5;
+constexpr std::uint32_t kU16Type7 = 7;
 
 std::size_t TypeSize(std::uint32_t type) {
   constexpr std::size_t sizes[] = {4, 2, 2, 1, 2, 4, 1, 2, 4};
@@ -282,6 +283,21 @@ std::vector<std::uint32_t> TensorContainer::CopyU32(
         (static_cast<std::uint32_t>(source[index * 4 + 1]) << 8U) |
         (static_cast<std::uint32_t>(source[index * 4 + 2]) << 16U) |
         (static_cast<std::uint32_t>(source[index * 4 + 3]) << 24U);
+  }
+  return output;
+}
+
+std::vector<std::uint16_t> TensorContainer::CopyU16Type7(
+    std::string_view name,
+    const std::vector<std::size_t>& dimensions) const {
+  const Impl::Record& record = impl_->Find(name);
+  impl_->Require(record, kU16Type7, dimensions);
+  std::vector<std::uint16_t> output(record.metadata.elements);
+  const std::uint8_t* source = impl_->Payload(record);
+  for (std::size_t index = 0; index < output.size(); ++index) {
+    output[index] =
+        static_cast<std::uint16_t>(source[index * 2]) |
+        static_cast<std::uint16_t>(source[index * 2 + 1] << 8U);
   }
   return output;
 }

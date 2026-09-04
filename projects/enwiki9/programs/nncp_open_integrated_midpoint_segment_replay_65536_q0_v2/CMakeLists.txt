@@ -3,11 +3,14 @@ project(nncp_open_integrated_midpoint_v2 LANGUAGES CXX)
 
 add_library(
   midpoint_kernels STATIC
+  adam_update.cpp
+  midpoint_segment.cpp
   midpoint_kernels.cpp
   transformer_backward.cpp
   profile_backward.cpp
   profile_artifacts.cpp
   profile_forward.cpp
+  profile_state.cpp
   tensor_container.cpp
   profile_fixture.cpp)
 target_compile_features(midpoint_kernels PUBLIC cxx_std_20)

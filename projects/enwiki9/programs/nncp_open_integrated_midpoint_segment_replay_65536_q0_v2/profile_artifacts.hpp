@@ -17,11 +17,23 @@ struct GradientArtifactView {
   const F32Buffer* f32_values = nullptr;
 };
 
+struct ParameterArtifactView {
+  GradientDescriptor descriptor;
+  Bf16Buffer* bf16_values = nullptr;
+  F32Buffer* f32_values = nullptr;
+};
+
 // Binds every canonical descriptor to the corresponding treatment-owned
 // buffer and rejects missing, duplicate, wrong-type, or wrong-size bindings.
 std::vector<GradientArtifactView> CanonicalGradientArtifacts(
     const ProfileGeometry& geometry,
     const ProfileGradients& gradients);
+
+// Binds the mutable parameter buffers to the same canonical topology used by
+// gradients and optimizer state.
+std::vector<ParameterArtifactView> CanonicalParameterArtifacts(
+    const ProfileGeometry& geometry,
+    ProfileWeights& weights);
 
 // Creates directory and writes one .bin/.meta pair per canonical gradient.
 // The directory must not already exist.

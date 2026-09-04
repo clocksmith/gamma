@@ -21,6 +21,12 @@ struct UntypedGradientView {
   const F32Buffer* f32_values;
 };
 
+struct UntypedParameterView {
+  GradientElementType element_type;
+  Bf16Buffer* bf16_values;
+  F32Buffer* f32_values;
+};
+
 std::size_t Product(
     const std::vector<std::size_t>& dimensions,
     const char* label) {
@@ -115,6 +121,28 @@ void Insert(
 }
 
 void Insert(
+    std::unordered_map<std::string, UntypedParameterView>& bindings,
+    std::string name,
+    Bf16Buffer& values) {
+  const auto [unused, inserted] = bindings.emplace(
+      std::move(name),
+      UntypedParameterView{GradientElementType::kBf16, &values, nullptr});
+  static_cast<void>(unused);
+  if (!inserted) throw std::logic_error("duplicate BF16 parameter binding");
+}
+
+void Insert(
+    std::unordered_map<std::string, UntypedParameterView>& bindings,
+    std::string name,
+    F32Buffer& values) {
+  const auto [unused, inserted] = bindings.emplace(
+      std::move(name),
+      UntypedParameterView{GradientElementType::kF32, nullptr, &values});
+  static_cast<void>(unused);
+  if (!inserted) throw std::logic_error("duplicate F32 parameter binding");
+}
+
+void Insert(
     std::unordered_map<std::string, UntypedGradientView>& bindings,
     std::string name,
     const F32Buffer& values) {
@@ -185,6 +213,72 @@ std::vector<GradientArtifactView> CanonicalGradientArtifacts(
     if (observed != expected) {
       throw std::invalid_argument(
           "gradient buffer size differs for " + descriptor.name);
+    }
+    artifacts.push_back(
+        {std::move(descriptor),
+         found->second.bf16_values,
+         found->second.f32_values});
+  }
+  return artifacts;
+}
+
+std::vector<ParameterArtifactView> CanonicalParameterArtifacts(
+    const ProfileGeometry& geometry,
+    ProfileWeights& weights) {
+  if (weights.layers.size() != geometry.layers) {
+    throw std::invalid_argument("parameter layer population differs");
+  }
+  std::vector<GradientDescriptor> descriptors =
+      CanonicalGradientDescriptors(geometry);
+  std::unordered_map<std::string, UntypedParameterView> bindings;
+  bindings.reserve(descriptors.size());
+  Insert(bindings, "embed_out", weights.output_weight);
+  for (std::size_t layer = 0; layer < geometry.layers; ++layer) {
+    const std::string suffix = "_" + std::to_string(layer);
+    TransformerLayerWeights& current = weights.layers[layer];
+    Insert(bindings, "ff2" + suffix, current.ff2);
+    Insert(bindings, "ff1" + suffix, current.ff1);
+    Insert(bindings, "ln_g_" + std::to_string(2 * layer + 1), current.ln_g2);
+    Insert(bindings, "ln_b_" + std::to_string(2 * layer + 1), current.ln_b2);
+    Insert(bindings, "ff_bias1" + suffix, current.ff_bias1);
+    Insert(bindings, "ff_bias2" + suffix, current.ff_bias2);
+    Insert(bindings, "w_o" + suffix, current.w_o);
+    Insert(bindings, "w_r" + suffix, current.relative_weight);
+    Insert(bindings, "w_kv" + suffix, current.w_kv);
+    Insert(bindings, "w_q" + suffix, current.w_q);
+    Insert(bindings, "ln_g_" + std::to_string(2 * layer), current.ln_g1);
+    Insert(bindings, "ln_b_" + std::to_string(2 * layer), current.ln_b1);
+  }
+  Insert(bindings, "b_r_0", weights.shared_relative_bias);
+  Insert(bindings, "embed", weights.embedding);
+  Insert(
+      bindings,
+      "ln_g_" + std::to_string(2 * geometry.layers),
+      weights.final_ln_gain);
+  Insert(
+      bindings,
+      "ln_b_" + std::to_string(2 * geometry.layers),
+      weights.final_ln_bias);
+  Insert(bindings, "out_bias", weights.output_bias);
+  if (bindings.size() != descriptors.size()) {
+    throw std::logic_error("parameter binding population differs from topology");
+  }
+  std::vector<ParameterArtifactView> artifacts;
+  artifacts.reserve(descriptors.size());
+  for (GradientDescriptor& descriptor : descriptors) {
+    const auto found = bindings.find(descriptor.name);
+    if (found == bindings.end() ||
+        found->second.element_type != descriptor.element_type) {
+      throw std::logic_error("parameter binding differs for " + descriptor.name);
+    }
+    const std::size_t expected = Product(descriptor.dimensions, "parameter");
+    const std::size_t observed =
+        descriptor.element_type == GradientElementType::kBf16
+            ? found->second.bf16_values->size()
+            : found->second.f32_values->size();
+    if (observed != expected) {
+      throw std::invalid_argument(
+          "parameter buffer size differs for " + descriptor.name);
     }
     artifacts.push_back(
         {std::move(descriptor),
