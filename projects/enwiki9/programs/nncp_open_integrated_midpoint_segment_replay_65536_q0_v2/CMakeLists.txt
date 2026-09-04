@@ -9,6 +9,7 @@ add_library(
   transformer_backward.cpp
   profile_backward.cpp
   profile_artifacts.cpp
+  profile_compare.cpp
   profile_forward.cpp
   profile_state.cpp
   tensor_container.cpp
@@ -75,3 +76,19 @@ target_compile_options(
     -ffp-contract=off
 )
 target_link_libraries(midpoint_profile_treatment PRIVATE midpoint_kernels)
+
+add_executable(midpoint_profile_comparator profile_comparator.cpp)
+target_compile_features(midpoint_profile_comparator PRIVATE cxx_std_20)
+target_compile_options(
+  midpoint_profile_comparator
+  PRIVATE
+    -O2
+    -Wall
+    -Wextra
+    -Werror
+    -mavx2
+    -mfma
+    -fno-fast-math
+    -ffp-contract=off
+)
+target_link_libraries(midpoint_profile_comparator PRIVATE midpoint_kernels)

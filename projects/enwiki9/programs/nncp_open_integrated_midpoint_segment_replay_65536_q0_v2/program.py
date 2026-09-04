@@ -3,8 +3,8 @@
 
 This source is deliberately not an executable scientific result yet. The
 ``inspect`` mode validates the prospective immutable input closure. Replay,
-comparison, and repeat modes remain disabled until the complete open backward
-and state-transition implementation are sealed in this same candidate tree.
+comparison, and repeat modes remain disabled until production-oracle parity
+and the complete population/state closure are sealed in this candidate tree.
 """
 
 from __future__ import annotations
@@ -340,7 +340,8 @@ def _parser() -> argparse.ArgumentParser:
 
 def _unimplemented(mode: str) -> NoReturn:
     raise ContractError(
-        f"mode {mode} is sealed dormant: complete open backward closure is absent"
+        f"mode {mode} is sealed dormant: production parity and complete "
+        "population/state closure are absent"
     )
 
 

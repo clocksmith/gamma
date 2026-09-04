@@ -1,7 +1,7 @@
 {
   "schema": "gamma.enwiki9.nncp-open-integrated-midpoint-replay-interface.v2",
   "program_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
-  "implementation_status": "input_lock_forward_backward_adam_and_midpoint_segment_implemented_unvalidated",
+  "implementation_status": "input_lock_forward_backward_adam_midpoint_segment_and_post_treatment_comparator_implemented_unvalidated",
   "execution_authorized": false,
   "closed_runtime_allowed": false,
   "network_allowed": false,
@@ -41,7 +41,8 @@
       "canonical collision-safe 246-gradient BF16/F32 artifact materializer with completion marker written last",
       "exact candidate per-tensor gradient norm, clipping, compensated-BF16/F32 Adam update, and retained scalar bit schedule",
       "exact shift-and-append recurrent memory transition using decoder-visible rebuilt layer inputs",
-      "frozen two-update midpoint segment schedule with zeroed future inputs and truths, unchanged persistent memory at midpoint, causal full rebuild, and one terminal memory shift"
+      "frozen two-update midpoint segment schedule with zeroed future inputs and truths, unchanged persistent memory at midpoint, causal full rebuild, and one terminal memory shift",
+      "separately linked post-treatment comparator that requires a complete zero-teacher treatment before opening retained oracle paths and checks all 246 gradients plus 20 rebuilt train_h tensors byte-exactly"
     ],
     "missing": [
       "exact forward checkpoint and all-246-gradient parity against prospectively bound comparator oracles",

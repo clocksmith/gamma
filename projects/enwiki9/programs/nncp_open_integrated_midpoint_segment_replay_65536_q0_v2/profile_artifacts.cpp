@@ -155,6 +155,12 @@ void Insert(
 
 }  // namespace
 
+std::string CanonicalGradientArtifactStem(
+    std::size_t index,
+    const GradientDescriptor& descriptor) {
+  return IndexName(index, descriptor.name);
+}
+
 std::vector<GradientArtifactView> CanonicalGradientArtifacts(
     const ProfileGeometry& geometry,
     const ProfileGradients& gradients) {
@@ -299,7 +305,8 @@ void WriteCanonicalGradientArtifacts(
   }
   for (std::size_t index = 0; index < artifacts.size(); ++index) {
     const GradientArtifactView& artifact = artifacts[index];
-    const std::string stem = IndexName(index, artifact.descriptor.name);
+    const std::string stem =
+        CanonicalGradientArtifactStem(index, artifact.descriptor);
     unsigned int item_type;
     unsigned int item_size;
     if (artifact.descriptor.element_type == GradientElementType::kBf16) {

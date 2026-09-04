@@ -3,6 +3,7 @@
 #include "midpoint_segment.hpp"
 #include "profile_artifacts.hpp"
 #include "profile_backward.hpp"
+#include "profile_compare.hpp"
 #include "profile_fixture.hpp"
 #include "profile_forward.hpp"
 #include "profile_state.hpp"
@@ -376,6 +377,96 @@ void TestGradientArtifacts() {
           "dims=128,8\nbyte_order=little\ncolumn_index=none\n",
       "F32 artifact metadata differs");
 
+  const auto write_text = [](const std::filesystem::path& path,
+                             const std::string& text) {
+    std::ofstream stream(path, std::ios::binary);
+    stream.write(text.data(), static_cast<std::streamsize>(text.size()));
+    if (!stream) throw std::runtime_error("synthetic comparator write failed");
+  };
+  const std::filesystem::path treatment = temporary.path() / "treatment";
+  std::filesystem::rename(output, temporary.path() / "saved-gradients");
+  std::filesystem::create_directory(treatment);
+  std::filesystem::rename(
+      temporary.path() / "saved-gradients", treatment / "gradients");
+  const std::filesystem::path checkpoints = treatment / "checkpoints";
+  std::filesystem::create_directory(checkpoints);
+  write_text(checkpoints / "embedding_input_adjoint.bf16", "");
+  write_text(checkpoints / "output_probabilities.f32", "");
+  write_text(checkpoints / "top_attention_dp_source.bf16", "");
+  write_text(checkpoints / "top_attention_dp_stream_major.bf16", "");
+  const std::vector<std::uint8_t> train_h_bytes =
+      Bf16Bytes(model * geometry.transformer.streams *
+                geometry.transformer.states);
+  {
+    std::ofstream stream(checkpoints / "train_h_0.bf16", std::ios::binary);
+    stream.write(
+        reinterpret_cast<const char*>(train_h_bytes.data()),
+        static_cast<std::streamsize>(train_h_bytes.size()));
+    if (!stream) throw std::runtime_error("synthetic train_h write failed");
+  }
+  write_text(
+      treatment / "treatment.txt",
+      "schema=gamma.enwiki9.nncp-open-midpoint-treatment.v2\n"
+      "mode=full-comparator\n"
+      "claim_label=synthetic\n"
+      "gradient_count=18\n"
+      "teacher_gradient_inputs=0\n"
+      "objective_credit_bytes=0\n");
+  write_text(treatment / "complete.marker", "COMPLETE\n");
+
+  const std::filesystem::path oracle = temporary.path() / "oracle";
+  std::filesystem::create_directory(oracle);
+  std::filesystem::copy(
+      treatment / "gradients",
+      oracle / "gradients",
+      std::filesystem::copy_options::recursive);
+  write_text(oracle / "complete.marker", "COMPLETE\n");
+  write_text(
+      oracle / "boundary.txt",
+      "block_idx=256\n"
+      "train_step_before=4\n"
+      "learning_rate=0x1.4f7e76p-13\n"
+      "block_idx_after=320\n"
+      "train_step_after=5\n"
+      "learning_rate_after=0x1.4f7e76p-13\n");
+  std::vector<std::uint8_t> oracle_state = NewContainer("synthetic\n");
+  AddTensor(
+      oracle_state,
+      1,
+      "train_h_0",
+      {static_cast<std::uint32_t>(model),
+       static_cast<std::uint32_t>(geometry.transformer.streams),
+       static_cast<std::uint32_t>(geometry.transformer.states)},
+      train_h_bytes);
+  {
+    std::ofstream stream(oracle / "state_initial.params", std::ios::binary);
+    stream.write(
+        reinterpret_cast<const char*>(oracle_state.data()),
+        static_cast<std::streamsize>(oracle_state.size()));
+    if (!stream) throw std::runtime_error("synthetic state write failed");
+  }
+  const nncp::ProfileComparisonSummary exact =
+      nncp::CompareCompleteProfileTreatment(geometry, treatment, oracle);
+  Require(exact.exact() && exact.gradient_count == 18 &&
+              exact.train_h_count == 1 &&
+              exact.train_h_bytes == train_h_bytes.size(),
+          "complete profile comparator exact result differs");
+  {
+    std::fstream stream(
+        treatment / "gradients" / "0000_embed_out.bin",
+        std::ios::binary | std::ios::in | std::ios::out);
+    const char changed = 1;
+    stream.write(&changed, 1);
+    if (!stream) throw std::runtime_error("synthetic mutation failed");
+  }
+  const nncp::ProfileComparisonSummary different =
+      nncp::CompareCompleteProfileTreatment(geometry, treatment, oracle);
+  Require(!different.exact() &&
+              different.gradient_payload_mismatch_bytes == 1 &&
+              different.first_mismatch_kind == "gradient_payload" &&
+              different.first_mismatch_name == "0000_embed_out",
+          "complete profile comparator mismatch result differs");
+
   gradients.output_bias.pop_back();
   bool rejected = false;
   try {
@@ -384,6 +475,55 @@ void TestGradientArtifacts() {
     rejected = true;
   }
   Require(rejected, "artifact binder accepted a truncated gradient");
+}
+
+void TestExactFileComparator() {
+  TemporaryDirectory temporary;
+  const std::filesystem::path expected = temporary.path() / "expected.bin";
+  const std::filesystem::path observed = temporary.path() / "observed.bin";
+  {
+    std::ofstream output(expected, std::ios::binary);
+    output << "abcdef";
+  }
+  {
+    std::ofstream output(observed, std::ios::binary);
+    output << "abcxefg";
+  }
+  const nncp::ExactFileComparison different =
+      nncp::CompareRegularFilesExact(expected, observed);
+  Require(different.expected_bytes == 6 && different.observed_bytes == 7,
+          "file comparator byte counts differ");
+  Require(different.mismatch_bytes == 2 &&
+              different.first_mismatch.has_value() &&
+              different.first_mismatch->offset == 3 &&
+              different.first_mismatch->expected_byte == 'd' &&
+              different.first_mismatch->observed_byte == 'x',
+          "file comparator mismatch differs");
+  const std::vector<std::uint8_t> same{'a', 'b', 'c', 'x', 'e', 'f', 'g'};
+  Require(nncp::CompareRegularFileToBytes(same, observed).exact(),
+          "memory-to-file exact comparator differs");
+
+  const std::filesystem::path incomplete = temporary.path() / "incomplete";
+  std::filesystem::create_directory(incomplete);
+  bool rejected_before_oracle = false;
+  try {
+    const nncp::ProfileGeometry geometry{
+        .transformer = {2, 2, 1, 128, 126, 128},
+        .layers = 1,
+        .vocabulary = 8,
+        .loss_start = 0,
+        .loss_length = 2,
+    };
+    static_cast<void>(nncp::CompareCompleteProfileTreatment(
+        geometry,
+        incomplete,
+        temporary.path() / "oracle-must-not-be-opened"));
+  } catch (const std::runtime_error& error) {
+    rejected_before_oracle =
+        std::string(error.what()).find("population differs") != std::string::npos;
+  }
+  Require(rejected_before_oracle,
+          "profile comparator did not reject incomplete treatment first");
 }
 
 void TestProfileAdamUpdate() {
@@ -1487,6 +1627,7 @@ int main() {
     TestTensorContainer();
     TestProfileFixtureLoader();
     TestGradientArtifacts();
+    TestExactFileComparator();
     TestProfileAdamUpdate();
     TestProfileMemoryTransition();
     TestIntegratedMidpointSegment();

@@ -212,6 +212,21 @@ all-gradient oracles, no complete-population state lock exists, and O/K/F/S
 have not run. It receives zero arithmetic, compression, archive, package, or
 objective credit.
 
+A fifth source-only revision,
+`28a2f9b6960eeac24ec9644f036e0e90bdf3fa0d32c2bffe37f80dc303203580`,
+adds the isolated production-comparator boundary without reading any retained
+gradient payload during implementation. The treatment executable still has no
+oracle argument. A separately linked comparator first requires the completed
+full-comparator treatment marker and exact zero-teacher-input receipt; only
+then may it open the retained oracle fixture. It verifies the canonical
+metadata and every byte of all `246` gradient payloads plus all `20` rebuilt
+`train_h` tensors, accounts for length differences, records the first differing
+byte, and emits a collision-refusing zero-credit receipt. Release and
+ASAN/UBSAN builds, the focused seven-test suite, and synthetic exact,
+one-byte-different, and incomplete-treatment cases pass. No production oracle
+comparison has run, so exact arithmetic parity, compression gain, package
+credit, and objective credit remain unproved and zero.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -223,6 +238,7 @@ Evidence:
 [`complete-topology source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T184647005158Z_08b47bf74339.json),
 [`forward and treatment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T191749467383Z_d4e5927df08d.json),
 [`Adam and midpoint-segment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T193633977336Z_a9261969f38c.json),
+[`post-treatment comparator source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T195020353197Z_28a2f9b6960e.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 

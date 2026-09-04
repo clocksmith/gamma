@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <filesystem>
+#include <string>
 #include <vector>
 
 namespace gamma_enwiki9::nncp {
@@ -34,6 +35,12 @@ std::vector<GradientArtifactView> CanonicalGradientArtifacts(
 std::vector<ParameterArtifactView> CanonicalParameterArtifacts(
     const ProfileGeometry& geometry,
     ProfileWeights& weights);
+
+// Stable file stem shared by the treatment materializer and its separately
+// linked, post-treatment comparator.
+std::string CanonicalGradientArtifactStem(
+    std::size_t index,
+    const GradientDescriptor& descriptor);
 
 // Creates directory and writes one .bin/.meta pair per canonical gradient.
 // The directory must not already exist.
