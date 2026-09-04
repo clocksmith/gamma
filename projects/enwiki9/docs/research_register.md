@@ -257,6 +257,29 @@ suite passes. The production 65,536-row trace has not run, so this is still
 zero-credit implementation evidence and establishes no arithmetic parity,
 compression gain, archive saving, or objective progress.
 
+An eighth source-only revision,
+`44116ba66e9d6c05f29a1a03c6be6a60d5ff6aee257925d8e8e5de02438cc082`,
+implements the complete treatment trajectory without activating it. It reads
+exactly 65,536 big-endian symbols, bridges the 32 stream-major sequences into
+32 model-update batches of 64 states, and preserves the distinct count of
+1,024 per-stream analytical segments. Original coordinates are checked for
+complete one-to-one coverage. Each batch executes the frozen O, K, F, or S
+two-update law at the exact parent-batch learning rate and emits only a compact
+integer branch trace plus SHA-256 witnesses over every future-affecting model,
+compensated low-word, Adam-moment, update-exponent, and recurrent-memory byte.
+
+The treatment executable has no oracle parameter. Its separately linked
+comparator requires the exact four-file output closure, a complete 32-batch
+state-witness trajectory, and explicit zero teacher/oracle inputs before the
+retained trace path is opened. Known-answer SHA-256, symbol decoding,
+coordinate mapping, q3 learning-rate bits, state sensitivity, exact/mutated
+trace comparison, and pre-oracle rejection tests pass in release and
+ASAN/UBSAN builds; the focused seven-test suite also passes. Activation still
+requires a prospectively bound block-zero parameter, optimizer, recurrent
+state, and symbol fixture plus its complete input lock. No production arm has
+run, so all arithmetic, compression, archive, package, and objective credit
+remain unproved and zero.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -271,6 +294,7 @@ Evidence:
 [`post-treatment comparator source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T195020353197Z_28a2f9b6960e.json),
 [`O/K/F/S segment-arm source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T200044496649Z_2dcf287e75f2.json),
 [`treatment-only branch-trace source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T201112895649Z_90f33d9a2229.json),
+[`complete population-driver source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T202742577734Z_44116ba66e9d.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
