@@ -1,5 +1,55 @@
 # enwiki9 Research Register
 
+## 2026-09-04 - Independent opening-1M gates may overlap HORIZON
+
+The user's instruction, "we can do things in parallel", supersedes the
+scheduling-only wait in the eligibility-first strategy. The active HORIZON
+trace and its observer remain unchanged, and HORIZON-dependent analysis still
+requires validated terminal recovery. Host admission found 16 physical cores
+and 105,779,836 KiB of available memory. The independent CMIX identity gate is
+bounded to 10,000,000,000 bytes with zero swap; Fiber is bounded to 536,870,912
+bytes with zero swap. Shared-host timing receives no official runtime credit.
+
+The sealed CMIX env8192 v13 runner passes its existing validation unchanged.
+It can execute the opening-1M comparator, repeated treatment and exact decode
+on CPU 2 under its own managed lease. Its resource eligibility remains N_A
+and it authorizes no larger gate. Fiber v8 cannot execute through the current
+adaptive workflow because its frozen workflow digest is stale. New v9
+preserves the byte-identical v4 scientific core and the v8 runner after
+namespace substitution, including all controls, HORIZON denial and
+decision-last authority. It binds the current workflow and unique output
+namespace at tree `43db3b59add06042b97fdd935cb56b8a00a9c1133a4fe400ea6320dc08468b3b`.
+Contract and candidate validation pass. Synthetic lifecycle validation passed
+the 512 MiB cap, zero swap, hard address-space limit, HORIZON denial, child
+exit and same-inode cgroup cleanup with a 14,544,896-byte peak. The independent
+Fiber CPU is 3. Queue records and exact
+terminal receipts remain the execution authorities; this decision grants no
+measured gain or score.
+
+Geekbench 5 preparation proceeds independently. Its official version-specific
+download is identified, but no qualifying local executable or current-host
+raw report was found. No calibration or larger CMIX gate follows from that
+preparation alone.
+
+Evidence: `operations/planning/hutter_parallel_opening1m_20260904.json`,
+`operations/evidence/20260904_cmix_env8192_v13_parallel_launch_static_audit.json`,
+`operations/evidence/20260904_cmix_env8192_v13_parallel_validation_only.json`,
+`operations/evidence/20260904_fiber_fossil_v9_parallel_validation_only.json`,
+and `operations/provenance/geekbench5_runtime_authority_preparation_20260904.json`.
+
+The shared-workspace workers consumed CMIX job
+`20260904T205826Z_fdcae0ea3e` and Fiber job
+`20260904T205845Z_7dcfb4f773` before this coordinator's planned launch.
+CMIX entered its guarded comparator on CPU 2. Fiber failed before its denial
+probe, candidate import or corpus access: the enqueue command omitted the
+required `--scratch-directory
+results/wiki_fiber_fossil_endpoint428_opening1m_q0_v9`. Its output directory
+remained absent. This is a launch-configuration failure, not a scientific
+result. The same sealed v9 can be retried with that argument after a validated
+retry reflection. The canonical enqueue operation rejects an occupied CMIX
+lease, so retry admission waits for that owner to release its lease; no lease
+is removed or bypassed.
+
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 
 The proposal ranker previously considered proposal status, experiment

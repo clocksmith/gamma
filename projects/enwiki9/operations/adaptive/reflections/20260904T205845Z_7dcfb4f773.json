@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Queue configuration omitted --scratch-directory results/wiki_fiber_fossil_endpoint428_opening1m_q0_v9 even though the immutable v9 runner requires that empty directory before the guarded worker starts."
+  },
+  "candidateId": "wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+  "candidateRevision": {
+    "candidateId": "wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+    "candidateTreeSha256": "sha256:43db3b59add06042b97fdd935cb56b8a00a9c1133a4fe400ea6320dc08468b3b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/wiki_fiber_fossil_endpoint428_opening1m_q0_v9/20260904T205822908428Z_43db3b59add0.json",
+      "sha256": "sha256:7df795ee2130f417c8dde84b16a852277c83776d936800d8c5fd23e63caf640f"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Retry the identical sealed revision and experiment with only the missing adaptive scratch-directory declaration corrected.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20260904T205845Z_7dcfb4f773.log",
+      "sha256": "sha256:e4aff86cb4f2d8db5ba7b95e1d2e488ac1ab4baa7a1d3a5709700cf87b2fc76c"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.json",
+    "sha256": "sha256:9dffa32745688c40719c10792d7d03eb9f4cc20cb6f6b437370677f49e9e5db0"
+  },
+  "generatedUtc": "2026-09-04T21:02:12+00:00",
+  "hypothesis": {
+    "rationale": "No corpus byte, route tape, parent probability, candidate probability, or finite-coder arm was read or produced; the frozen Fiber-FOSSIL hypothesis received no evidence.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260904T205845Z_7dcfb4f773.json",
+    "sha256": "sha256:1426e96a042bfcb78dd249805f728369095b40779daa814cf860692e621ec82e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Retain the exact v9 revision and experiment; requeue it with its candidate-owned result root in scratch_directories so the adaptive executor materializes the empty namespace before launch."
+    ],
+    "uncertainties": [
+      "Fiber-FOSSIL retained-parent gain remains wholly unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260904t205845z_7dcfb4f773",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "The adaptive job omitted the declared candidate-owned result scratch directory, so the guarded worker failed before corpus access when its pretruth HORIZON-denial probe required an already-created empty output root."
+    ],
+    "valid": false
+  }
+}
