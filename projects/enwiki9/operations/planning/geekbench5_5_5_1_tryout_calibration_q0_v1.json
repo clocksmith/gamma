@@ -23,8 +23,8 @@
   "implementation": {
     "producer": {
       "path": "tools/geekbench5_tryout_calibration_q0_v1.py",
-      "bytes": 23405,
-      "sha256": "4b2977a509f3a5c4ae91eecc65a9f00438c1350232c92d07f3558358badc1a5a"
+      "bytes": 23757,
+      "sha256": "e2c4456c8ee3243453d8c77b55c7cbfaf77e8c5d41add1384a5e182702c166d6"
     },
     "worker": {
       "path": "tools/geekbench5_tryout_calibration_worker_q0_v1.py",
@@ -33,8 +33,8 @@
     },
     "verifier": {
       "path": "tools/geekbench5_tryout_calibration_verify_q0_v1.py",
-      "bytes": 13750,
-      "sha256": "b81c4e26fe8b1070a146c55af9c86df076385f3c07bcae1e6de7f17a62513082"
+      "bytes": 13921,
+      "sha256": "a6483b41625d1b751c8ada3b9660802285806f864cc8d396a207e98e77501b9f"
     },
     "managed_lease": {
       "path": "tools/managed_exclusive_lease.py",
@@ -152,13 +152,17 @@
       "/usr/bin/python3.14",
       "tools/geekbench5_tryout_calibration_q0_v1.py",
       "--plan",
-      "operations/planning/geekbench5_5_5_1_tryout_calibration_q0_v1.json"
+      "operations/planning/geekbench5_5_5_1_tryout_calibration_q0_v1.json",
+      "--plan-sha256",
+      "<required-committed-plan-sha256>"
     ],
     "verify": [
       "/usr/bin/python3.14",
       "tools/geekbench5_tryout_calibration_verify_q0_v1.py",
       "--plan",
       "operations/planning/geekbench5_5_5_1_tryout_calibration_q0_v1.json",
+      "--plan-sha256",
+      "<required-committed-plan-sha256>",
       "--receipt",
       "/home/x/enwiki9-nonproof/geekbench5-5.5.1-tryout-calibration-v1/producer-receipt.json",
       "--output",

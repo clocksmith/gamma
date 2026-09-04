@@ -275,11 +275,15 @@ def dynamic_preflight(plan: dict[str, Any]) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--plan", required=True, type=Path)
+    parser.add_argument("--plan-sha256")
     parser.add_argument("--validation-only", action="store_true")
     args = parser.parse_args()
 
     plan_path = args.plan if args.plan.is_absolute() else PROJECT / args.plan
     plan = load_json(plan_path, "calibration plan")
+    observed_plan_sha256 = sha256_file(plan_path)
+    if args.plan_sha256 is not None and args.plan_sha256 != observed_plan_sha256:
+        raise RuntimeError("calibration plan SHA-256 mismatch")
     if (
         plan.get("$schema") != PLAN_SCHEMA
         or plan.get("candidate_id") != CANDIDATE
@@ -317,6 +321,8 @@ def main() -> int:
     if args.validation_only:
         print(json.dumps(validation, sort_keys=True, indent=2))
         return 0
+    if args.plan_sha256 is None:
+        raise RuntimeError("execution requires an explicit frozen --plan-sha256")
     if preflight["blockers"]:
         raise RuntimeError(f"calibration admission failed: {preflight['blockers']}")
 
