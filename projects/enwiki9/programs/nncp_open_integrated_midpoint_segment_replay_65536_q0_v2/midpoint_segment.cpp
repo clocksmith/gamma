@@ -1,6 +1,7 @@
 #include "midpoint_segment.hpp"
 
 #include "profile_forward.hpp"
+#include "profile_output_head.hpp"
 #include "profile_state.hpp"
 
 #include <algorithm>
@@ -13,6 +14,26 @@ namespace gamma_enwiki9::nncp {
 
 MidpointSegmentResult RunMidpointSegment(
     const ProfileGeometry& production_geometry,
+    ProfileWeights& weights,
+    ProfileAdamState& optimizer,
+    const std::vector<Bf16Buffer>& memory,
+    const std::vector<std::uint32_t>& input_symbols,
+    const std::vector<std::uint32_t>& targets,
+    float learning_rate) {
+  return RunMidpointSegmentArm(
+      production_geometry,
+      MidpointArm::kF,
+      weights,
+      optimizer,
+      memory,
+      input_symbols,
+      targets,
+      learning_rate);
+}
+
+MidpointSegmentResult RunMidpointSegmentArm(
+    const ProfileGeometry& production_geometry,
+    MidpointArm arm,
     ProfileWeights& weights,
     ProfileAdamState& optimizer,
     const std::vector<Bf16Buffer>& memory,
@@ -51,6 +72,15 @@ MidpointSegmentResult RunMidpointSegment(
   {
     std::vector<std::uint32_t> first_inputs = input_symbols;
     std::vector<std::uint32_t> first_targets = targets;
+    if (arm == MidpointArm::kS) {
+      for (std::size_t state = 0; state < kHalf; ++state) {
+        const std::size_t shifted_state = (state + 1) % kHalf;
+        std::copy_n(
+            targets.begin() + shifted_state * streams,
+            streams,
+            first_targets.begin() + state * streams);
+      }
+    }
     for (std::size_t state = kHalf; state < kStates; ++state) {
       std::fill_n(first_inputs.begin() + state * streams, streams, 0);
       std::fill_n(first_targets.begin() + state * streams, streams, 0);
@@ -66,14 +96,38 @@ MidpointSegmentResult RunMidpointSegment(
         first_cache.probabilities.begin(),
         first_values,
         coded_probabilities.begin());
-    const ProfileBackwardResult first_backward =
-        ProfileBackward(first_geometry, weights, first_cache);
-    first_update = ApplyProfileAdamUpdate(
-        first_geometry,
-        weights,
-        first_backward.gradients,
-        optimizer,
-        learning_rate);
+    if (arm == MidpointArm::kF) {
+      const ProfileBackwardResult first_backward =
+          ProfileBackward(first_geometry, weights, first_cache);
+      first_update = ApplyProfileAdamUpdate(
+          first_geometry,
+          weights,
+          first_backward.gradients,
+          optimizer,
+          learning_rate);
+    } else if (arm == MidpointArm::kK) {
+      const ProfileBackwardResult first_backward =
+          ProfileBackward(first_geometry, weights, first_cache);
+      first_update = ApplyProfileAdamOutputHeadUpdate(
+          first_geometry,
+          weights,
+          first_backward.gradients.output_weight,
+          first_backward.gradients.output_bias,
+          optimizer,
+          learning_rate);
+    } else if (arm == MidpointArm::kO || arm == MidpointArm::kS) {
+      const ProfileOutputHeadBackwardResult first_backward =
+          ProfileOutputHeadBackward(first_geometry, first_cache);
+      first_update = ApplyProfileAdamOutputHeadUpdate(
+          first_geometry,
+          weights,
+          first_backward.output_weight,
+          first_backward.output_bias,
+          optimizer,
+          learning_rate);
+    } else {
+      throw std::invalid_argument("unknown midpoint arm");
+    }
   }
 
   ProfileGeometry second_geometry = production_geometry;

@@ -352,10 +352,16 @@ ProfileAdamState LoadProfileAdamState(
   return state;
 }
 
-ProfileAdamUpdateResult ApplyProfileAdamUpdate(
-    const ProfileGeometry& geometry,
-    ProfileWeights& weights,
-    const ProfileGradients& gradients,
+namespace {
+
+struct IndexedGradientArtifact {
+  std::size_t parameter_index;
+  GradientArtifactView gradient;
+};
+
+ProfileAdamUpdateResult ApplySelectedProfileAdamUpdate(
+    std::vector<ParameterArtifactView>& parameters,
+    const std::vector<IndexedGradientArtifact>& selected,
     ProfileAdamState& state,
     float learning_rate) {
   if (!std::isfinite(learning_rate) || learning_rate <= 0.0F) {
@@ -366,13 +372,14 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
           std::numeric_limits<std::uint64_t>::max()) {
     throw std::invalid_argument("Adam update exponent is invalid");
   }
-  std::vector<ParameterArtifactView> parameters =
-      CanonicalParameterArtifacts(geometry, weights);
-  const std::vector<GradientArtifactView> gradient_artifacts =
-      CanonicalGradientArtifacts(geometry, gradients);
-  if (parameters.size() != gradient_artifacts.size() ||
-      parameters.size() != state.tensors.size()) {
+  if (parameters.size() != state.tensors.size() || selected.empty()) {
     throw std::invalid_argument("Adam tensor population differs");
+  }
+  for (std::size_t index = 0; index < parameters.size(); ++index) {
+    if (!SameDescriptor(parameters[index].descriptor, state.tensors[index].descriptor)) {
+      throw std::invalid_argument("Adam state descriptor differs at index " +
+                                  std::to_string(index));
+    }
   }
 
   volatile float beta2_source = kBeta2;
@@ -397,13 +404,22 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
       .clipped_tensors = 0,
       .tensors = {},
   };
-  result.tensors.reserve(parameters.size());
-  for (std::size_t index = 0; index < parameters.size(); ++index) {
+  result.tensors.reserve(selected.size());
+  std::size_t previous_index = 0;
+  bool has_previous = false;
+  for (const IndexedGradientArtifact& item : selected) {
+    const std::size_t index = item.parameter_index;
+    if (index >= parameters.size() ||
+        (has_previous && index <= previous_index)) {
+      throw std::invalid_argument(
+          "selected Adam indexes must be unique canonical order");
+    }
+    previous_index = index;
+    has_previous = true;
     const ParameterArtifactView& parameter = parameters[index];
-    const GradientArtifactView& gradient = gradient_artifacts[index];
+    const GradientArtifactView& gradient = item.gradient;
     const AdamTensorState& tensor = state.tensors[index];
-    if (!SameDescriptor(parameter.descriptor, gradient.descriptor) ||
-        !SameDescriptor(parameter.descriptor, tensor.descriptor)) {
+    if (!SameDescriptor(parameter.descriptor, gradient.descriptor)) {
       throw std::invalid_argument("Adam tensor descriptor differs at index " +
                                   std::to_string(index));
     }
@@ -411,6 +427,7 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
     if (parameter.descriptor.element_type == GradientElementType::kBf16) {
       if (parameter.bf16_values == nullptr || gradient.bf16_values == nullptr ||
           parameter.f32_values != nullptr || gradient.f32_values != nullptr ||
+          gradient.bf16_values->size() != parameter.bf16_values->size() ||
           tensor.low_words.size() != parameter.bf16_values->size() ||
           tensor.variance_bf16.size() != parameter.bf16_values->size() ||
           !tensor.variance_f32.empty()) {
@@ -423,6 +440,7 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
     } else {
       if (parameter.f32_values == nullptr || gradient.f32_values == nullptr ||
           parameter.bf16_values != nullptr || gradient.bf16_values != nullptr ||
+          gradient.f32_values->size() != parameter.f32_values->size() ||
           tensor.variance_f32.size() != parameter.f32_values->size() ||
           !tensor.low_words.empty() || !tensor.variance_bf16.empty()) {
         throw std::invalid_argument("Adam F32 state geometry differs for " +
@@ -440,11 +458,14 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
     result.tensors.push_back({parameter.descriptor.name, norm, scale});
   }
 
-  for (std::size_t index = 0; index < parameters.size(); ++index) {
+  for (std::size_t selected_index = 0;
+       selected_index < selected.size();
+       ++selected_index) {
+    const std::size_t index = selected[selected_index].parameter_index;
     ParameterArtifactView& parameter = parameters[index];
-    const GradientArtifactView& gradient = gradient_artifacts[index];
+    const GradientArtifactView& gradient = selected[selected_index].gradient;
     AdamTensorState& tensor = state.tensors[index];
-    const float scale = result.tensors[index].gradient_scale;
+    const float scale = result.tensors[selected_index].gradient_scale;
     if (parameter.descriptor.element_type == GradientElementType::kBf16) {
       UpdateBf16(
           *parameter.bf16_values,
@@ -466,6 +487,62 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
   }
   ++state.next_update_exponent;
   return result;
+}
+
+}  // namespace
+
+ProfileAdamUpdateResult ApplyProfileAdamUpdate(
+    const ProfileGeometry& geometry,
+    ProfileWeights& weights,
+    const ProfileGradients& gradients,
+    ProfileAdamState& state,
+    float learning_rate) {
+  std::vector<ParameterArtifactView> parameters =
+      CanonicalParameterArtifacts(geometry, weights);
+  const std::vector<GradientArtifactView> gradient_artifacts =
+      CanonicalGradientArtifacts(geometry, gradients);
+  if (parameters.size() != gradient_artifacts.size()) {
+    throw std::invalid_argument("Adam gradient population differs");
+  }
+  std::vector<IndexedGradientArtifact> selected;
+  selected.reserve(gradient_artifacts.size());
+  for (std::size_t index = 0; index < gradient_artifacts.size(); ++index) {
+    selected.push_back({index, gradient_artifacts[index]});
+  }
+  return ApplySelectedProfileAdamUpdate(
+      parameters, selected, state, learning_rate);
+}
+
+ProfileAdamUpdateResult ApplyProfileAdamOutputHeadUpdate(
+    const ProfileGeometry& geometry,
+    ProfileWeights& weights,
+    const Bf16Buffer& output_weight_gradient,
+    const Bf16Buffer& output_bias_gradient,
+    ProfileAdamState& state,
+    float learning_rate) {
+  std::vector<ParameterArtifactView> parameters =
+      CanonicalParameterArtifacts(geometry, weights);
+  std::vector<IndexedGradientArtifact> selected;
+  selected.reserve(2);
+  for (std::size_t index = 0; index < parameters.size(); ++index) {
+    const GradientDescriptor& descriptor = parameters[index].descriptor;
+    if (descriptor.name == "embed_out") {
+      selected.push_back({
+          index,
+          GradientArtifactView{descriptor, &output_weight_gradient, nullptr},
+      });
+    } else if (descriptor.name == "out_bias") {
+      selected.push_back({
+          index,
+          GradientArtifactView{descriptor, &output_bias_gradient, nullptr},
+      });
+    }
+  }
+  if (selected.size() != 2) {
+    throw std::logic_error("output-head Adam topology differs");
+  }
+  return ApplySelectedProfileAdamUpdate(
+      parameters, selected, state, learning_rate);
 }
 
 }  // namespace gamma_enwiki9::nncp

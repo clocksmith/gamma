@@ -11,6 +11,7 @@ add_library(
   profile_artifacts.cpp
   profile_compare.cpp
   profile_forward.cpp
+  profile_output_head.cpp
   profile_state.cpp
   tensor_container.cpp
   profile_fixture.cpp)

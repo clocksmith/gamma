@@ -630,6 +630,35 @@ void TestProfileAdamUpdate() {
   Require(state.next_update_exponent == 5,
           "Adam initial exponent differs");
 
+  nncp::ProfileWeights head_weights = weights;
+  nncp::ProfileAdamState head_state = state;
+  nncp::Bf16Buffer head_weight_gradient(
+      gradients.output_weight.size(), nncp::FloatToBf16(0.125F));
+  const nncp::ProfileAdamUpdateResult head_result =
+      nncp::ApplyProfileAdamOutputHeadUpdate(
+          geometry,
+          head_weights,
+          head_weight_gradient,
+          gradients.output_bias,
+          head_state,
+          0x1.4f7e76p-13F);
+  Require(head_result.update_exponent == 5 &&
+              head_state.next_update_exponent == 6 &&
+              head_result.tensors.size() == 2 &&
+              head_result.tensors.front().name == "embed_out" &&
+              head_result.tensors.back().name == "out_bias",
+          "output-head Adam selection differs");
+  Require(head_state.tensors.front().variance_bf16 !=
+                  state.tensors.front().variance_bf16 &&
+              head_state.tensors.back().variance_bf16 !=
+                  state.tensors.back().variance_bf16,
+          "output-head Adam did not update both selected optimizer tensors");
+  Require(head_weights.embedding == weights.embedding &&
+              head_weights.final_ln_gain == weights.final_ln_gain &&
+              head_state.tensors[14].variance_f32 ==
+                  state.tensors[14].variance_f32,
+          "output-head Adam changed an unselected tensor");
+
   nncp::ProfileWeights repeat_weights = weights;
   nncp::ProfileAdamState repeat_state = state;
 
@@ -923,6 +952,113 @@ void TestIntegratedMidpointSegment() {
   Require(result.first_update.clipped_tensors ==
               changed.first_update.clipped_tensors,
           "future symbols changed the first-half update diagnostics");
+}
+
+void TestMidpointArms() {
+  const nncp::ProfileGeometry geometry{
+      .transformer = {64, 1, 1, 64, 8, 8},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 64,
+  };
+  nncp::ProfileWeights base_weights = ZeroProfileWeights(geometry);
+  for (std::size_t symbol = 0; symbol < geometry.vocabulary; ++symbol) {
+    for (std::size_t feature = 0; feature < 64; ++feature) {
+      const int centered = static_cast<int>(
+          (symbol * 11 + feature * 7 + 3) % 23) - 11;
+      base_weights.embedding[symbol * 64 + feature] =
+          static_cast<float>(centered) * 0.0078125F;
+    }
+  }
+  const nncp::ProfileAdamState base_optimizer = ZeroAdamState(geometry, 5);
+  const std::vector<nncp::Bf16Buffer> memory{
+      nncp::Bf16Buffer(8 * 64, 0)};
+  std::vector<std::uint32_t> inputs(64);
+  std::vector<std::uint32_t> targets(64);
+  for (std::size_t state = 0; state < 64; ++state) {
+    inputs[state] = static_cast<std::uint32_t>((state * 3 + state / 5) % 8);
+    targets[state] = static_cast<std::uint32_t>((state * 5 + state / 11) % 8);
+  }
+
+  nncp::ProfileWeights o_weights = base_weights;
+  nncp::ProfileWeights k_weights = base_weights;
+  nncp::ProfileWeights s_weights = base_weights;
+  nncp::ProfileAdamState o_optimizer = base_optimizer;
+  nncp::ProfileAdamState k_optimizer = base_optimizer;
+  nncp::ProfileAdamState s_optimizer = base_optimizer;
+  const nncp::MidpointSegmentResult o = nncp::RunMidpointSegmentArm(
+      geometry,
+      nncp::MidpointArm::kO,
+      o_weights,
+      o_optimizer,
+      memory,
+      inputs,
+      targets,
+      0x1.4f7e76p-13F);
+  const nncp::MidpointSegmentResult k = nncp::RunMidpointSegmentArm(
+      geometry,
+      nncp::MidpointArm::kK,
+      k_weights,
+      k_optimizer,
+      memory,
+      inputs,
+      targets,
+      0x1.4f7e76p-13F);
+  const nncp::MidpointSegmentResult s = nncp::RunMidpointSegmentArm(
+      geometry,
+      nncp::MidpointArm::kS,
+      s_weights,
+      s_optimizer,
+      memory,
+      inputs,
+      targets,
+      0x1.4f7e76p-13F);
+  Require(o.first_update.tensors.size() == 2 &&
+              o.first_update.tensors.front().name == "embed_out" &&
+              o.first_update.tensors.back().name == "out_bias" &&
+              k.first_update.tensors.size() == 2,
+          "midpoint output-head update population differs");
+  Require(o.coded_probabilities == k.coded_probabilities &&
+              o.next_memory == k.next_memory,
+          "midpoint O/K probability or memory identity differs");
+  std::vector<nncp::ParameterArtifactView> o_parameters =
+      nncp::CanonicalParameterArtifacts(geometry, o_weights);
+  std::vector<nncp::ParameterArtifactView> k_parameters =
+      nncp::CanonicalParameterArtifacts(geometry, k_weights);
+  for (std::size_t index = 0; index < o_parameters.size(); ++index) {
+    if (o_parameters[index].descriptor.element_type ==
+        nncp::GradientElementType::kBf16) {
+      Require(*o_parameters[index].bf16_values ==
+                  *k_parameters[index].bf16_values,
+              "midpoint O/K BF16 parameter identity differs");
+    } else {
+      Require(*o_parameters[index].f32_values ==
+                  *k_parameters[index].f32_values,
+              "midpoint O/K F32 parameter identity differs");
+    }
+    Require(o_optimizer.tensors[index].low_words ==
+                k_optimizer.tensors[index].low_words &&
+                o_optimizer.tensors[index].variance_bf16 ==
+                    k_optimizer.tensors[index].variance_bf16 &&
+                o_optimizer.tensors[index].variance_f32 ==
+                    k_optimizer.tensors[index].variance_f32,
+            "midpoint O/K optimizer identity differs");
+  }
+  Require(o_optimizer.next_update_exponent ==
+              k_optimizer.next_update_exponent,
+          "midpoint O/K optimizer exponent identity differs");
+  const std::size_t first_values = 32 * geometry.vocabulary;
+  Require(std::equal(
+              o.coded_probabilities.begin(),
+              o.coded_probabilities.begin() + first_values,
+              s.coded_probabilities.begin()),
+          "shifted control changed pre-update probabilities");
+  Require(!std::equal(
+              o.coded_probabilities.begin() + first_values,
+              o.coded_probabilities.end(),
+              s.coded_probabilities.begin() + first_values),
+          "shifted control did not change rebuilt probabilities");
 }
 
 void TestBf16() {
@@ -1631,6 +1767,7 @@ int main() {
     TestProfileAdamUpdate();
     TestProfileMemoryTransition();
     TestIntegratedMidpointSegment();
+    TestMidpointArms();
     TestBf16();
     TestStatewiseBias();
     TestStatewiseWeight();

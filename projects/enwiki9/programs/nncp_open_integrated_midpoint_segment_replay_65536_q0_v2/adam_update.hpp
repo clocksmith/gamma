@@ -59,6 +59,17 @@ ProfileAdamUpdateResult ApplyProfileAdamUpdate(
     ProfileAdamState& state,
     float learning_rate);
 
+// Applies one global optimizer step to only the existing untied output weight
+// and output bias. Every other parameter and per-parameter optimizer tensor is
+// preserved bit-for-bit, matching the retained output-head-only callback law.
+ProfileAdamUpdateResult ApplyProfileAdamOutputHeadUpdate(
+    const ProfileGeometry& geometry,
+    ProfileWeights& weights,
+    const Bf16Buffer& output_weight_gradient,
+    const Bf16Buffer& output_bias_gradient,
+    ProfileAdamState& state,
+    float learning_rate);
+
 }  // namespace gamma_enwiki9::nncp
 
 #endif

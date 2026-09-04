@@ -227,6 +227,21 @@ one-byte-different, and incomplete-treatment cases pass. No production oracle
 comparison has run, so exact arithmetic parity, compression gain, package
 credit, and objective credit remain unproved and zero.
 
+A sixth source-only revision,
+`2dcf287e75f259565c1bf44ea932c98cc91adccf2612dedec677fc2ea95404a4`,
+implements the four frozen segment arms without activating the population.
+F commits the complete first-half gradient; O computes and commits only
+`embed_out` and `out_bias`; K executes the complete backward bookkeeping but
+commits exactly those same two gradients; and S changes only the first-half
+truth association to the frozen next-state cyclic control. All arms then use
+the same causal rebuild, complete second-half update, and one terminal memory
+shift. The selected Adam path advances the global exponent while preserving
+every unselected parameter, low word, and moment. On a synthetic causal model,
+O and K are bit-identical across probabilities, parameters, optimizer state,
+and memory, while S is identical before the update and changes the rebuilt
+probabilities. Release, ASAN/UBSAN, and focused source tests pass. Production
+parity and all compression and objective credit remain unproved and zero.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -239,6 +254,7 @@ Evidence:
 [`forward and treatment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T191749467383Z_d4e5927df08d.json),
 [`Adam and midpoint-segment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T193633977336Z_a9261969f38c.json),
 [`post-treatment comparator source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T195020353197Z_28a2f9b6960e.json),
+[`O/K/F/S segment-arm source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T200044496649Z_2dcf287e75f2.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 

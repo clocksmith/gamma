@@ -205,6 +205,7 @@ def test_exact_kernel_library_compiles_and_self_checks(tmp_path: Path) -> None:
             str(source_root / "profile_artifacts.cpp"),
             str(source_root / "profile_compare.cpp"),
             str(source_root / "profile_forward.cpp"),
+            str(source_root / "profile_output_head.cpp"),
             str(source_root / "profile_state.cpp"),
             str(source_root / "tensor_container.cpp"),
             str(source_root / "profile_fixture.cpp"),
