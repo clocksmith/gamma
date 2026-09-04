@@ -1,5 +1,28 @@
 # enwiki9 Research Register
 
+## 2026-09-04 - Live Hutter rule authority remains byte-identical
+
+The official task, detailed-rules, and FAQ pages were fetched directly over
+HTTPS and rehashed. Their returned sizes and SHA-256 values remain exactly
+equal to the frozen authority documents in
+`hutter_prize_rules_20260822`: `48,606` bytes and
+`065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7`,
+`15,907` bytes and
+`e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163`,
+and `96,252` bytes and
+`9233864b9ab2ce7b75ca2092416b518b196fcd498ab4e70e8c8f20b1bc42f52b`.
+No rule migration is required: the published record remains `110,793,128`
+bytes, the minimum eligible next score remains strictly below `109,685,197`,
+and Gamma's `105,000,000`-byte objective remains the stronger threshold. The
+single-CPU-core, no-GPU, decimal-`10 GB` RAM, decimal-`100 GB` temporary-disk,
+Geekbench5 wall-time, necessary-option-byte, self-contained execution, and
+public documented OSI-source requirements remain binding.
+
+This is rule evidence only. It grants no candidate score, package, resource,
+or eligibility credit, and the live pages must be checked again immediately
+before an actual submission. Evidence:
+`operations/provenance/hutter_prize_rules_20260904_revalidation.json`.
+
 ## 2026-09-04 - Reflected exact HORIZON recovery bridge is sealed
 
 `endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3` closes the
