@@ -1,4 +1,6 @@
 #include "midpoint_kernels.hpp"
+#include "profile_backward.hpp"
+#include "transformer_backward.hpp"
 
 #include <algorithm>
 #include <bit>
@@ -204,6 +206,307 @@ void TestLossAndSoftmax() {
   }
 }
 
+void TestAttentionReverseProducts() {
+  const nncp::AttentionGeometry geometry{3, 2, 2, 8, 8};
+  nncp::Bf16Buffer probability(
+      geometry.states * geometry.streams * geometry.heads * geometry.keys);
+  nncp::Bf16Buffer incoming(
+      geometry.states * geometry.streams * geometry.heads * geometry.width);
+  nncp::Bf16Buffer key(
+      geometry.streams * geometry.heads * geometry.keys * geometry.width);
+  nncp::Bf16Buffer query(incoming.size());
+  nncp::Bf16Buffer score(probability.size());
+  for (std::size_t index = 0; index < probability.size(); ++index) {
+    probability[index] = Make(index + 1201U, 0.00390625F);
+    score[index] = Make(index + 1301U, 0.00390625F);
+  }
+  for (std::size_t index = 0; index < incoming.size(); ++index) {
+    incoming[index] = Make(index + 1409U, 0.0078125F);
+    query[index] = Make(index + 1601U, 0.0078125F);
+  }
+  for (std::size_t index = 0; index < key.size(); ++index) {
+    key[index] = Make(index + 1801U, 0.0078125F);
+  }
+  const nncp::Bf16Buffer value_gradient =
+      nncp::AttentionValueGradient(probability, incoming, geometry);
+  const nncp::AttentionDotBackwardResult dot =
+      nncp::AttentionDotBackward(key, query, score, geometry);
+  Require(value_gradient.size() == key.size(), "attention value gradient size differs");
+  Require(dot.key_adjoint.size() == key.size(), "attention key adjoint size differs");
+  Require(dot.query_adjoint.size() == query.size(), "attention query adjoint size differs");
+
+  const std::size_t stream = 1;
+  const std::size_t head = 0;
+  const std::size_t key_index = 3;
+  const std::size_t feature = 5;
+  float expected_value = 0.0F;
+  float expected_key = 0.0F;
+  for (std::size_t state = 0; state < geometry.states; ++state) {
+    const std::size_t score_index =
+        (((state * geometry.streams + stream) * geometry.heads + head) *
+         geometry.keys + key_index);
+    const std::size_t vector_index =
+        (((state * geometry.streams + stream) * geometry.heads + head) *
+         geometry.width + feature);
+    expected_value = nncp::RoundToBf16(std::fma(
+        nncp::Bf16ToFloat(probability[score_index]),
+        nncp::Bf16ToFloat(incoming[vector_index]),
+        expected_value));
+    expected_key = nncp::RoundToBf16(
+        expected_key +
+        nncp::Bf16ToFloat(score[score_index]) *
+            nncp::Bf16ToFloat(query[vector_index]));
+  }
+  const std::size_t key_vector_index =
+      (((stream * geometry.heads + head) * geometry.keys + key_index) *
+       geometry.width + feature);
+  Require(
+      value_gradient[key_vector_index] == nncp::FloatToBf16(expected_value),
+      "attention value gradient arithmetic differs");
+  Require(
+      dot.key_adjoint[key_vector_index] == nncp::FloatToBf16(expected_key),
+      "attention key adjoint arithmetic differs");
+}
+
+void TestRelativeShiftBackward() {
+  constexpr std::size_t states = 4;
+  constexpr std::size_t streams = 2;
+  constexpr std::size_t heads = 2;
+  constexpr std::size_t positions = 8;
+  nncp::Bf16Buffer shifted(states * streams * heads * positions);
+  for (std::size_t index = 0; index < shifted.size(); ++index) {
+    shifted[index] = static_cast<nncp::Bf16>(index + 1);
+  }
+  const nncp::Bf16Buffer raw = nncp::RelativeShiftBackward(
+      shifted, states, streams, heads, positions);
+  std::size_t assigned = 0;
+  for (std::size_t state = 0; state < states; ++state) {
+    for (std::size_t stream = 0; stream < streams; ++stream) {
+      for (std::size_t head = 0; head < heads; ++head) {
+        for (std::size_t position = 0; position < positions; ++position) {
+          const std::size_t flat = states + state * positions + position;
+          const std::size_t raw_state = flat / (positions + 1);
+          const std::size_t padded_position = flat % (positions + 1);
+          if (raw_state >= states || padded_position == 0) continue;
+          const std::size_t shifted_index =
+              (((state * streams + stream) * heads + head) * positions + position);
+          const std::size_t raw_index =
+              (((raw_state * streams + stream) * heads + head) * positions +
+               padded_position - 1);
+          Require(raw[raw_index] == shifted[shifted_index], "relative shift differs");
+          ++assigned;
+        }
+      }
+    }
+  }
+  Require(assigned > 0 && assigned < raw.size(), "relative shift control is dead");
+}
+
+void TestRelativeProjectionAndKvMerge() {
+  const nncp::AttentionGeometry geometry{2, 2, 2, 8, 8};
+  nncp::Bf16Buffer query(
+      geometry.states * geometry.streams * geometry.heads * geometry.width);
+  nncp::Bf16Buffer weight(
+      geometry.heads * geometry.keys * geometry.width);
+  nncp::Bf16Buffer raw(
+      geometry.states * geometry.streams * geometry.heads * geometry.keys);
+  for (std::size_t index = 0; index < query.size(); ++index) query[index] = Make(index);
+  for (std::size_t index = 0; index < weight.size(); ++index) {
+    weight[index] = Make(index + 1901U, 0.0078125F);
+  }
+  for (std::size_t index = 0; index < raw.size(); ++index) {
+    raw[index] = Make(index + 2003U, 0.00390625F);
+  }
+  const nncp::RelativeProjectionBackwardResult relative =
+      nncp::RelativeProjectionBackward(query, weight, raw, geometry, 4.0F);
+  Require(relative.weight_gradient.size() == weight.size(), "relative weight size differs");
+  Require(
+      relative.bias_gradient.size() == geometry.heads * geometry.keys,
+      "relative bias size differs");
+  Require(relative.query_adjoint.size() == query.size(), "relative query size differs");
+
+  constexpr std::size_t positions = 4;
+  nncp::Bf16Buffer key(
+      geometry.streams * geometry.heads * positions * geometry.width);
+  nncp::Bf16Buffer value(key.size());
+  for (std::size_t index = 0; index < key.size(); ++index) {
+    key[index] = static_cast<nncp::Bf16>(index + 1);
+    value[index] = static_cast<nncp::Bf16>(index + 1001);
+  }
+  const nncp::Bf16Buffer merged = nncp::MergeKeyValueAdjoints(
+      key, value, geometry.streams, geometry.heads, positions, geometry.width);
+  const nncp::Bf16Buffer current = nncp::SlicePositionRange(
+      merged,
+      positions,
+      geometry.streams,
+      2 * geometry.heads * geometry.width,
+      1,
+      2);
+  Require(
+      current.size() == 2 * geometry.streams * 2 * geometry.heads * geometry.width,
+      "K/V current slice size differs");
+  const std::size_t head = 1;
+  const std::size_t feature = 3;
+  const std::size_t stream = 1;
+  const std::size_t position = 2;
+  const std::size_t model_width = geometry.heads * geometry.width;
+  const std::size_t source =
+      (((stream * geometry.heads + head) * positions + position) * geometry.width +
+       feature);
+  const std::size_t target =
+      (position * geometry.streams + stream) * 2 * model_width +
+      head * geometry.width + feature;
+  Require(merged[target] == key[source], "merged key coordinate differs");
+  Require(merged[target + model_width] == value[source], "merged value coordinate differs");
+}
+
+void TestTransformerLayerZeroAdjoint() {
+  const nncp::TransformerGeometry geometry{2, 2, 1, 128, 126, 128};
+  constexpr std::size_t model = 128;
+  constexpr std::size_t positions = 128;
+  constexpr std::size_t samples = 4;
+  nncp::TransformerLayerWeights weights{
+      .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .w_kv = nncp::Bf16Buffer(model * 2 * model, 0),
+      .relative_weight = nncp::Bf16Buffer(positions * model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ff1 = nncp::Bf16Buffer(model * 2 * geometry.inner, 0),
+      .ff2 = nncp::Bf16Buffer(geometry.inner * model, 0),
+  };
+  nncp::TransformerLayerCache cache{
+      .hidden_input = nncp::Bf16Buffer(samples * model, 0),
+      .attention_input = nncp::Bf16Buffer(samples * model, 0),
+      .attention_residual = nncp::Bf16Buffer(samples * model, 0),
+      .feedforward_input = nncp::Bf16Buffer(samples * model, 0),
+      .merged_attention = nncp::Bf16Buffer(samples * model, 0),
+      .ff1_output = nncp::Bf16Buffer(samples * 2 * geometry.inner, 0),
+      .geglu = nncp::Bf16Buffer(samples * geometry.inner, 0),
+      .memory_attention_input =
+          nncp::Bf16Buffer(geometry.memory * geometry.streams * model, 0),
+      .query = nncp::Bf16Buffer(samples * model, 0),
+      .key = nncp::Bf16Buffer(geometry.streams * positions * model, 0),
+      .value = nncp::Bf16Buffer(geometry.streams * positions * model, 0),
+      .attention_probability =
+          nncp::Bf16Buffer(samples * positions, nncp::FloatToBf16(1.0F / 128.0F)),
+  };
+  const nncp::Bf16Buffer incoming(samples * model, 0);
+  const nncp::TransformerLayerBackwardResult result =
+      nncp::TransformerLayerBackward(geometry, weights, cache, incoming);
+  Require(result.hidden_input_adjoint == incoming, "zero layer adjoint became nonzero");
+  const auto all_zero = [](const nncp::Bf16Buffer& values) {
+    return std::all_of(values.begin(), values.end(), [](nncp::Bf16 value) {
+      return value == 0;
+    });
+  };
+  Require(all_zero(result.gradients.ff2), "zero FF2 gradient became nonzero");
+  Require(all_zero(result.gradients.ff1), "zero FF1 gradient became nonzero");
+  Require(all_zero(result.gradients.w_o), "zero w_o gradient became nonzero");
+  Require(all_zero(result.gradients.w_r), "zero w_r gradient became nonzero");
+  Require(all_zero(result.gradients.w_kv), "zero w_kv gradient became nonzero");
+  Require(all_zero(result.gradients.w_q), "zero w_q gradient became nonzero");
+}
+
+void TestProfileBackwardTopology() {
+  const nncp::ProfileGeometry production{
+      .transformer = {64, 32, 8, 128, 256, 3072},
+      .layers = 20,
+      .vocabulary = 16392,
+      .loss_start = 0,
+      .loss_length = 32,
+  };
+  const std::vector<nncp::GradientDescriptor> descriptors =
+      nncp::CanonicalGradientDescriptors(production);
+  Require(descriptors.size() == 246, "production gradient count differs");
+  Require(descriptors[0].name == "embed_out", "first gradient differs");
+  Require(descriptors[1].name == "ff2_19", "top FF2 gradient differs");
+  Require(descriptors[236].name == "w_r_0", "bottom relative weight differs");
+  Require(descriptors[237].name == "b_r_0", "shared relative bias differs");
+  Require(descriptors[242].name == "embed", "embedding gradient differs");
+  Require(
+      descriptors[242].element_type == nncp::GradientElementType::kF32,
+      "embedding gradient type differs");
+  Require(descriptors[245].name == "out_bias", "last gradient differs");
+
+  const nncp::ProfileGeometry geometry{
+      .transformer = {2, 2, 1, 128, 126, 128},
+      .layers = 1,
+      .vocabulary = 8,
+      .loss_start = 0,
+      .loss_length = 1,
+  };
+  constexpr std::size_t model = 128;
+  constexpr std::size_t positions = 128;
+  constexpr std::size_t samples = 4;
+  nncp::TransformerLayerWeights layer_weights{
+      .ln_g1 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .w_q = nncp::Bf16Buffer(model * model, 0),
+      .w_kv = nncp::Bf16Buffer(model * 2 * model, 0),
+      .relative_weight = nncp::Bf16Buffer(positions * model, 0),
+      .w_o = nncp::Bf16Buffer(model * model, 0),
+      .ln_g2 = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .ff1 = nncp::Bf16Buffer(model * 2 * geometry.transformer.inner, 0),
+      .ff2 = nncp::Bf16Buffer(geometry.transformer.inner * model, 0),
+  };
+  nncp::TransformerLayerCache layer_cache{
+      .hidden_input = nncp::Bf16Buffer(samples * model, 0),
+      .attention_input = nncp::Bf16Buffer(samples * model, 0),
+      .attention_residual = nncp::Bf16Buffer(samples * model, 0),
+      .feedforward_input = nncp::Bf16Buffer(samples * model, 0),
+      .merged_attention = nncp::Bf16Buffer(samples * model, 0),
+      .ff1_output =
+          nncp::Bf16Buffer(samples * 2 * geometry.transformer.inner, 0),
+      .geglu = nncp::Bf16Buffer(samples * geometry.transformer.inner, 0),
+      .memory_attention_input = nncp::Bf16Buffer(
+          geometry.transformer.memory * geometry.transformer.streams * model, 0),
+      .query = nncp::Bf16Buffer(samples * model, 0),
+      .key = nncp::Bf16Buffer(
+          geometry.transformer.streams * positions * model, 0),
+      .value = nncp::Bf16Buffer(
+          geometry.transformer.streams * positions * model, 0),
+      .attention_probability = nncp::Bf16Buffer(samples * positions, 0),
+  };
+  nncp::F32Buffer probabilities(samples * geometry.vocabulary, 0.0F);
+  std::vector<std::uint32_t> targets(samples);
+  for (std::size_t sample = 0; sample < samples; ++sample) {
+    targets[sample] = static_cast<std::uint32_t>(sample % geometry.vocabulary);
+    probabilities[sample * geometry.vocabulary + targets[sample]] = 1.0F;
+  }
+  const nncp::ProfileWeights weights{
+      .output_weight = nncp::Bf16Buffer(model * geometry.vocabulary, 0),
+      .final_ln_gain = nncp::Bf16Buffer(model, nncp::FloatToBf16(1.0F)),
+      .layers = {layer_weights},
+  };
+  const nncp::ProfileCache cache{
+      .pre_final_hidden = nncp::Bf16Buffer(samples * model, 0),
+      .final_hidden = nncp::Bf16Buffer(samples * model, 0),
+      .layers = {layer_cache},
+      .probabilities = probabilities,
+      .targets = targets,
+      .input_symbols = targets,
+  };
+  const nncp::ProfileBackwardResult result =
+      nncp::ProfileBackward(geometry, weights, cache);
+  const auto all_zero_bf16 = [](const nncp::Bf16Buffer& values) {
+    return std::all_of(values.begin(), values.end(), [](nncp::Bf16 value) {
+      return value == 0;
+    });
+  };
+  Require(all_zero_bf16(result.gradients.output_weight),
+          "zero profile output gradient became nonzero");
+  Require(all_zero_bf16(result.gradients.shared_relative_bias),
+          "zero profile relative bias became nonzero");
+  Require(
+      std::all_of(
+          result.gradients.embedding.begin(),
+          result.gradients.embedding.end(),
+          [](float value) { return value == 0.0F; }),
+      "zero profile embedding gradient became nonzero");
+  Require(all_zero_bf16(result.checkpoints.embedding_input_adjoint),
+          "zero profile input adjoint became nonzero");
+}
+
 void TestPanelledInputAdjoint() {
   constexpr std::size_t samples = 2;
   constexpr std::size_t reduction = 256;
@@ -349,6 +652,11 @@ int main() {
     TestPanelledInputAdjoint();
     TestElementwiseBackward();
     TestLossAndSoftmax();
+    TestAttentionReverseProducts();
+    TestRelativeShiftBackward();
+    TestRelativeProjectionAndKvMerge();
+    TestTransformerLayerZeroAdjoint();
+    TestProfileBackwardTopology();
     TestAttentionBridge();
     TestRmsNormSchedules();
     std::cout << "MIDPOINT_KERNEL_SELFTEST_OK\n";

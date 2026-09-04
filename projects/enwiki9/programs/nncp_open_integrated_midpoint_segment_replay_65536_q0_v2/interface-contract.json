@@ -1,7 +1,7 @@
 {
   "schema": "gamma.enwiki9.nncp-open-integrated-midpoint-replay-interface.v2",
   "program_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
-  "implementation_status": "input_lock_implemented_backward_missing",
+  "implementation_status": "input_lock_and_complete_backward_topology_implemented_unvalidated",
   "execution_authorized": false,
   "closed_runtime_allowed": false,
   "network_allowed": false,
@@ -29,11 +29,15 @@
       "symlink-free contained artifact and producer paths",
       "exact byte-size and SHA-256 validation",
       "complete unique role closure and deterministic ordering",
-      "immutable canonical inspection receipt"
+      "immutable canonical inspection receipt",
+      "LibNC-free BF16 kernels for output, feed-forward, RMSNorm, residual, attention, QKV, and relative-position backward paths",
+      "reverse traversal of every transformer layer with shared relative-bias accumulation",
+      "canonical 246-gradient descriptor topology including the F32 embedding gradient",
+      "integrated top-attention state/head/stream/key layout checkpoint"
     ],
     "missing": [
       "complete open forward cache",
-      "complete open backward for all 246 update targets",
+      "exact all-246-gradient comparison of the implemented backward topology against prospectively bound checkpoint oracles",
       "Adam update and recurrent state transition",
       "O/K/F/S replay and oracle comparisons",
       "repeat, dependency, and resource closure"

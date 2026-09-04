@@ -161,6 +161,20 @@ remaining attention/QKV backward, optimizer/state traversal, population input
 lock, oracle parity, repeats, and resource closure are still absent. This is an
 implementation checkpoint with zero scientific or objective credit.
 
+A second source-only revision,
+`08b47bf743395906b76884a03f28b5e2646555dcd7fe886c3b56198e8186a669`,
+now implements a candidate complete reverse topology. It adds content and
+relative attention adjoints, Q/K/V and projection paths, reverse traversal of
+all transformer layers, shared `b_r_0` accumulation, the output and final-norm
+roots, the F32 embedding gradient, and the exact 246-entry production gradient
+descriptor order. Release and ASAN/UBSAN self-tests pass, and the focused
+seven-test source suite still passes. This does not yet satisfy the
+`complete_open_backward` dependency: several previously unattributed reduction
+schedules remain implementation hypotheses until the treatment materializes
+all 246 payloads and compares them against prospectively bound oracles. No
+teacher gradient payload was read as a treatment input, and this checkpoint
+receives zero arithmetic, compression, archive, package, or objective credit.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -169,6 +183,7 @@ Evidence:
 [`integrated v2 plan`](../operations/planning/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
 [`integrated v2 experiment`](../operations/adaptive/experiments/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
 [`integrated source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T182911157959Z_651287cce12b.json),
+[`complete-topology source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T184647005158Z_08b47bf74339.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 

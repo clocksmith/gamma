@@ -116,6 +116,75 @@ Bf16Buffer SoftmaxBackward(
     std::size_t rows,
     std::size_t keys);
 
+Bf16Buffer ScaleBf16(const Bf16Buffer& values, float scale);
+
+// Invert the fixed Transformer-XL relative shift. Both buffers use
+// [state, stream, head, position]. Coordinates discarded by the forward shift
+// receive zero adjoint.
+Bf16Buffer RelativeShiftBackward(
+    const Bf16Buffer& shifted,
+    std::size_t states,
+    std::size_t streams,
+    std::size_t heads,
+    std::size_t positions);
+
+// Probability uses [state, stream, head, key]; incoming attended adjoints use
+// [state, stream, head, width]. The result is [stream, head, key, width].
+Bf16Buffer AttentionValueGradient(
+    const Bf16Buffer& probability,
+    const Bf16Buffer& incoming,
+    const AttentionGeometry& geometry);
+
+struct AttentionDotBackwardResult {
+  Bf16Buffer key_adjoint;
+  Bf16Buffer query_adjoint;
+};
+
+// Backward for score = key dot query. Key is [stream, head, key, width], query
+// is [state, stream, head, width], and score is [state, stream, head, key].
+AttentionDotBackwardResult AttentionDotBackward(
+    const Bf16Buffer& key,
+    const Bf16Buffer& query,
+    const Bf16Buffer& score_adjoint,
+    const AttentionGeometry& geometry);
+
+struct RelativeProjectionBackwardResult {
+  Bf16Buffer weight_gradient;
+  Bf16Buffer bias_gradient;
+  Bf16Buffer query_adjoint;
+};
+
+// Query is [state, stream, head, width], relative weights are
+// [head, position, width], and raw adjoints are
+// [state, stream, head, position]. Returned weights preserve the same layout;
+// bias is [head, position], and query adjoint preserves query layout.
+RelativeProjectionBackwardResult RelativeProjectionBackward(
+    const Bf16Buffer& query,
+    const Bf16Buffer& relative_weight,
+    const Bf16Buffer& raw_adjoint,
+    const AttentionGeometry& geometry,
+    float bias_scale);
+
+// Merge split-head K/V adjoints to the projection output order
+// [position, stream, 2 * heads * width].
+Bf16Buffer MergeKeyValueAdjoints(
+    const Bf16Buffer& key_adjoint,
+    const Bf16Buffer& value_adjoint,
+    std::size_t streams,
+    std::size_t heads,
+    std::size_t positions,
+    std::size_t width);
+
+// Extract current positions from [position, stream, features], preserving
+// [state, stream, features] order.
+Bf16Buffer SlicePositionRange(
+    const Bf16Buffer& values,
+    std::size_t positions,
+    std::size_t streams,
+    std::size_t features,
+    std::size_t start,
+    std::size_t length);
+
 // All buffers use [state, stream, feature], except gain which is [feature].
 // The two schedules encode the independently attributed arithmetic distinction
 // between the final concat root and layer-local sequential graph nodes.

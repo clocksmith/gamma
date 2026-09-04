@@ -570,6 +570,357 @@ Bf16Buffer SoftmaxBackward(
   return output;
 }
 
+Bf16Buffer ScaleBf16(const Bf16Buffer& values, float scale) {
+  if (!std::isfinite(scale)) {
+    throw std::invalid_argument("BF16 scale must be finite");
+  }
+  Bf16Buffer output(values.size());
+  for (std::size_t index = 0; index < values.size(); ++index) {
+    const float result = Bf16ToFloat(values[index]) * scale;
+    if (!std::isfinite(result)) {
+      throw std::runtime_error("non-finite BF16 scale result");
+    }
+    output[index] = FloatToBf16(result);
+  }
+  return output;
+}
+
+Bf16Buffer RelativeShiftBackward(
+    const Bf16Buffer& shifted,
+    std::size_t states,
+    std::size_t streams,
+    std::size_t heads,
+    std::size_t positions) {
+  const std::size_t elements = CheckedProduct(
+      {states, streams, heads, positions}, "relative-shift backward");
+  RequireSize(shifted, elements, "relative-shift incoming");
+  Bf16Buffer raw(elements, 0);
+  const std::size_t padded_width = positions + 1;
+  for (std::size_t state = 0; state < states; ++state) {
+    for (std::size_t stream = 0; stream < streams; ++stream) {
+      for (std::size_t head = 0; head < heads; ++head) {
+        for (std::size_t position = 0; position < positions; ++position) {
+          const std::size_t flat = states + state * positions + position;
+          const std::size_t raw_state = flat / padded_width;
+          const std::size_t padded_position = flat % padded_width;
+          if (raw_state >= states || padded_position == 0) continue;
+          const std::size_t raw_position = padded_position - 1;
+          const std::size_t shifted_index =
+              (((state * streams + stream) * heads + head) * positions + position);
+          const std::size_t raw_index =
+              (((raw_state * streams + stream) * heads + head) * positions +
+               raw_position);
+          if (raw[raw_index] != 0) {
+            throw std::runtime_error("relative-shift inverse is not one-to-one");
+          }
+          raw[raw_index] = shifted[shifted_index];
+        }
+      }
+    }
+  }
+  return raw;
+}
+
+Bf16Buffer AttentionValueGradient(
+    const Bf16Buffer& probability,
+    const Bf16Buffer& incoming,
+    const AttentionGeometry& geometry) {
+  RequireSize(
+      probability,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.keys},
+          "attention probability"),
+      "attention probability");
+  RequireSize(
+      incoming,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.width},
+          "attended incoming"),
+      "attended incoming");
+  Bf16Buffer output(CheckedProduct(
+      {geometry.streams, geometry.heads, geometry.keys, geometry.width},
+      "attention value gradient"), 0);
+  for (std::size_t state = 0; state < geometry.states; ++state) {
+    for (std::size_t stream = 0; stream < geometry.streams; ++stream) {
+      for (std::size_t head = 0; head < geometry.heads; ++head) {
+        for (std::size_t key = 0; key < geometry.keys; ++key) {
+          const std::size_t probability_index =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.keys + key);
+          const float p = Bf16ToFloat(probability[probability_index]);
+          for (std::size_t feature = 0; feature < geometry.width; ++feature) {
+            const std::size_t incoming_index =
+                (((state * geometry.streams + stream) * geometry.heads + head) *
+                 geometry.width + feature);
+            const std::size_t output_index =
+                (((stream * geometry.heads + head) * geometry.keys + key) *
+                 geometry.width + feature);
+            const float prior = Bf16ToFloat(output[output_index]);
+            const float gradient = Bf16ToFloat(incoming[incoming_index]);
+            output[output_index] = FloatToBf16(std::fma(p, gradient, prior));
+          }
+        }
+      }
+    }
+  }
+  return output;
+}
+
+AttentionDotBackwardResult AttentionDotBackward(
+    const Bf16Buffer& key,
+    const Bf16Buffer& query,
+    const Bf16Buffer& score_adjoint,
+    const AttentionGeometry& geometry) {
+  if (geometry.width == 0 || geometry.width % kLanes != 0) {
+    throw std::invalid_argument("attention width must be a multiple of eight");
+  }
+  RequireSize(
+      key,
+      CheckedProduct(
+          {geometry.streams, geometry.heads, geometry.keys, geometry.width},
+          "attention key"),
+      "attention key");
+  RequireSize(
+      query,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.width},
+          "attention query"),
+      "attention query");
+  RequireSize(
+      score_adjoint,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.keys},
+          "attention score adjoint"),
+      "attention score adjoint");
+  Bf16Buffer key_adjoint(key.size(), 0);
+  Bf16Buffer query_adjoint(query.size(), 0);
+
+  for (std::size_t state = 0; state < geometry.states; ++state) {
+    for (std::size_t stream = 0; stream < geometry.streams; ++stream) {
+      for (std::size_t head = 0; head < geometry.heads; ++head) {
+        for (std::size_t feature = 0; feature < geometry.width;
+             feature += kLanes) {
+          __m256 query_total = _mm256_setzero_ps();
+          for (std::size_t panel = 0; panel < geometry.keys;
+               panel += kReductionPanel) {
+            __m256 partial = _mm256_setzero_ps();
+            const std::size_t end = std::min(
+                geometry.keys, panel + kReductionPanel);
+            for (std::size_t key_index = panel; key_index < end; ++key_index) {
+              const std::size_t score_index =
+                  (((state * geometry.streams + stream) * geometry.heads + head) *
+                   geometry.keys + key_index);
+              const float gradient = Bf16ToFloat(score_adjoint[score_index]);
+              const std::size_t key_index_base =
+                  (((stream * geometry.heads + head) * geometry.keys + key_index) *
+                   geometry.width + feature);
+              partial = _mm256_fmadd_ps(
+                  _mm256_set1_ps(gradient),
+                  LoadBf16x8(key.data() + key_index_base),
+                  partial);
+            }
+            query_total = _mm256_add_ps(query_total, partial);
+          }
+          const std::size_t query_index =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.width + feature);
+          StoreBf16x8(
+              query_adjoint.data() + query_index,
+              query_total,
+              "attention query adjoint");
+        }
+
+        for (std::size_t key_index = 0; key_index < geometry.keys; ++key_index) {
+          const std::size_t score_index =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.keys + key_index);
+          const float gradient = Bf16ToFloat(score_adjoint[score_index]);
+          for (std::size_t feature = 0; feature < geometry.width; feature += kLanes) {
+            const std::size_t target =
+                (((stream * geometry.heads + head) * geometry.keys + key_index) *
+                 geometry.width + feature);
+            const std::size_t query_index =
+                (((state * geometry.streams + stream) * geometry.heads + head) *
+                 geometry.width + feature);
+            const __m256 contribution = _mm256_mul_ps(
+                _mm256_set1_ps(gradient),
+                LoadBf16x8(query.data() + query_index));
+            StoreBf16x8(
+                key_adjoint.data() + target,
+                _mm256_add_ps(LoadBf16x8(key_adjoint.data() + target), contribution),
+                "attention key adjoint");
+          }
+        }
+      }
+    }
+  }
+  return {std::move(key_adjoint), std::move(query_adjoint)};
+}
+
+RelativeProjectionBackwardResult RelativeProjectionBackward(
+    const Bf16Buffer& query,
+    const Bf16Buffer& relative_weight,
+    const Bf16Buffer& raw_adjoint,
+    const AttentionGeometry& geometry,
+    float bias_scale) {
+  if (!std::isfinite(bias_scale)) {
+    throw std::invalid_argument("relative bias scale must be finite");
+  }
+  RequireSize(
+      query,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.width},
+          "relative query"),
+      "relative query");
+  RequireSize(
+      relative_weight,
+      CheckedProduct(
+          {geometry.heads, geometry.keys, geometry.width},
+          "relative weight"),
+      "relative weight");
+  RequireSize(
+      raw_adjoint,
+      CheckedProduct(
+          {geometry.states, geometry.streams, geometry.heads, geometry.keys},
+          "relative raw adjoint"),
+      "relative raw adjoint");
+
+  const std::size_t samples =
+      CheckedProduct({geometry.states, geometry.streams}, "relative samples");
+  Bf16Buffer weight_gradient(relative_weight.size());
+  Bf16Buffer bias_gradient(
+      CheckedProduct({geometry.heads, geometry.keys}, "relative bias"));
+  Bf16Buffer query_adjoint(query.size());
+  Bf16Buffer head_query(CheckedProduct({samples, geometry.width}, "head query"));
+  Bf16Buffer head_raw(CheckedProduct({samples, geometry.keys}, "head raw"));
+  Bf16Buffer input_major_weight(
+      CheckedProduct({geometry.width, geometry.keys}, "relative packed weight"));
+  for (std::size_t head = 0; head < geometry.heads; ++head) {
+    for (std::size_t state = 0; state < geometry.states; ++state) {
+      for (std::size_t stream = 0; stream < geometry.streams; ++stream) {
+        const std::size_t sample = state * geometry.streams + stream;
+        for (std::size_t feature = 0; feature < geometry.width; ++feature) {
+          const std::size_t source =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.width + feature);
+          head_query[sample * geometry.width + feature] = query[source];
+        }
+        for (std::size_t position = 0; position < geometry.keys; ++position) {
+          const std::size_t source =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.keys + position);
+          head_raw[sample * geometry.keys + position] = raw_adjoint[source];
+        }
+      }
+    }
+    for (std::size_t position = 0; position < geometry.keys; ++position) {
+      for (std::size_t feature = 0; feature < geometry.width; ++feature) {
+        input_major_weight[feature * geometry.keys + position] =
+            relative_weight[(head * geometry.keys + position) * geometry.width + feature];
+      }
+    }
+    const Bf16Buffer head_weight_gradient = StatewiseWeightGradient(
+        head_query,
+        head_raw,
+        geometry.states,
+        geometry.streams,
+        geometry.width,
+        geometry.keys);
+    for (std::size_t feature = 0; feature < geometry.width; ++feature) {
+      for (std::size_t position = 0; position < geometry.keys; ++position) {
+        weight_gradient[(head * geometry.keys + position) * geometry.width + feature] =
+            head_weight_gradient[feature * geometry.keys + position];
+      }
+    }
+    const Bf16Buffer head_bias =
+        ScaleBf16(
+            StatewiseBiasGradient(
+                head_raw,
+                geometry.states,
+                geometry.streams,
+                geometry.keys),
+            bias_scale);
+    std::copy(
+        head_bias.begin(),
+        head_bias.end(),
+        bias_gradient.begin() + head * geometry.keys);
+    const Bf16Buffer head_query_adjoint = Panel128InputAdjoint(
+        input_major_weight,
+        head_raw,
+        samples,
+        geometry.keys,
+        geometry.width);
+    for (std::size_t state = 0; state < geometry.states; ++state) {
+      for (std::size_t stream = 0; stream < geometry.streams; ++stream) {
+        const std::size_t sample = state * geometry.streams + stream;
+        for (std::size_t feature = 0; feature < geometry.width; ++feature) {
+          const std::size_t target =
+              (((state * geometry.streams + stream) * geometry.heads + head) *
+               geometry.width + feature);
+          query_adjoint[target] =
+              head_query_adjoint[sample * geometry.width + feature];
+        }
+      }
+    }
+  }
+  return {
+      std::move(weight_gradient),
+      std::move(bias_gradient),
+      std::move(query_adjoint),
+  };
+}
+
+Bf16Buffer MergeKeyValueAdjoints(
+    const Bf16Buffer& key_adjoint,
+    const Bf16Buffer& value_adjoint,
+    std::size_t streams,
+    std::size_t heads,
+    std::size_t positions,
+    std::size_t width) {
+  const std::size_t split_elements =
+      CheckedProduct({streams, heads, positions, width}, "split K/V adjoint");
+  RequireSize(key_adjoint, split_elements, "key adjoint");
+  RequireSize(value_adjoint, split_elements, "value adjoint");
+  const std::size_t model_width = CheckedProduct({heads, width}, "model width");
+  Bf16Buffer result(CheckedProduct(
+      {positions, streams, 2, model_width}, "merged K/V adjoint"));
+  for (std::size_t position = 0; position < positions; ++position) {
+    for (std::size_t stream = 0; stream < streams; ++stream) {
+      for (std::size_t head = 0; head < heads; ++head) {
+        for (std::size_t feature = 0; feature < width; ++feature) {
+          const std::size_t source =
+              (((stream * heads + head) * positions + position) * width + feature);
+          const std::size_t base =
+              (position * streams + stream) * 2 * model_width + head * width + feature;
+          result[base] = key_adjoint[source];
+          result[base + model_width] = value_adjoint[source];
+        }
+      }
+    }
+  }
+  return result;
+}
+
+Bf16Buffer SlicePositionRange(
+    const Bf16Buffer& values,
+    std::size_t positions,
+    std::size_t streams,
+    std::size_t features,
+    std::size_t start,
+    std::size_t length) {
+  if (start > positions || length > positions - start) {
+    throw std::invalid_argument("position slice is outside its source");
+  }
+  RequireSize(
+      values,
+      CheckedProduct({positions, streams, features}, "position source"),
+      "position source");
+  Bf16Buffer result(CheckedProduct({length, streams, features}, "position slice"));
+  const std::size_t row = CheckedProduct({streams, features}, "position row");
+  std::copy_n(values.begin() + start * row, length * row, result.begin());
+  return result;
+}
+
 RmsNormBackwardResult RmsNormBackward(
     const Bf16Buffer& input,
     const Bf16Buffer& incoming,

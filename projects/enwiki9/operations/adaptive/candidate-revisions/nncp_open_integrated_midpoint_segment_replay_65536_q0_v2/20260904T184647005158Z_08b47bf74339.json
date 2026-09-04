@@ -1,0 +1,119 @@
+{
+  "candidateId": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
+  "candidateTreeSha256": "sha256:08b47bf743395906b76884a03f28b5e2646555dcd7fe886c3b56198e8186a669",
+  "change": {
+    "evidence": [
+      "Local release and ASAN/UBSAN builds pass MIDPOINT_KERNEL_SELFTEST_OK; the focused input-lock/kernel suite passes 7 tests."
+    ],
+    "hypothesis": "One LibNC-free source tree can materialize the production 246-gradient topology from decoder-visible first-half truths and open forward caches while preserving the frozen BF16 reduction schedules and top-attention layout bridge.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Complete the source-only reverse-mode path from causal loss through output head, final RMSNorm, all transformer layers, shared relative bias, and F32 embedding; add canonical gradient descriptors and fail-closed self-tests. This revision is unvalidated against teacher comparator payloads and receives zero credit."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/9b/9b6a5ae894a926411378109becdb0afc03a815e56f05c5a1bd1f72f7d2d998cd",
+      "bytes": 877,
+      "normalization": "verbatim",
+      "path": "CMakeLists.txt",
+      "sha256": "9b6a5ae894a926411378109becdb0afc03a815e56f05c5a1bd1f72f7d2d998cd"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/bc/bc6ddd379c6e80eba102f3efd7d00dec21b1c8a159ffc0afaaf40a318103b602",
+      "bytes": 2458,
+      "normalization": "verbatim",
+      "path": "interface-contract.json",
+      "sha256": "bc6ddd379c6e80eba102f3efd7d00dec21b1c8a159ffc0afaaf40a318103b602"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/27/278f43c9f392dedf6b94f3e489439f2221c05ab354dc15eb8952d65df0325490",
+      "bytes": 28443,
+      "normalization": "verbatim",
+      "path": "kernel_selftest.cpp",
+      "sha256": "278f43c9f392dedf6b94f3e489439f2221c05ab354dc15eb8952d65df0325490"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/f2/f22c02a391a940387ff99b90c743869cc19f6fe315bbf1b839d6f4c13a55bcb9",
+      "bytes": 1551,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "f22c02a391a940387ff99b90c743869cc19f6fe315bbf1b839d6f4c13a55bcb9"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/d5/d5c374e6ba96e6776e617bb6813c66fc7038b773de49aeffb6b0b4a6fccd4281",
+      "bytes": 43602,
+      "normalization": "verbatim",
+      "path": "midpoint_kernels.cpp",
+      "sha256": "d5c374e6ba96e6776e617bb6813c66fc7038b773de49aeffb6b0b4a6fccd4281"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/e5/e5d2bf868b2f2b04f7ee53d0e29e7932b43c92818878bb3bae4c86c19aa19300",
+      "bytes": 7117,
+      "normalization": "verbatim",
+      "path": "midpoint_kernels.hpp",
+      "sha256": "e5d2bf868b2f2b04f7ee53d0e29e7932b43c92818878bb3bae4c86c19aa19300"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/1c/1c3f5f5056cb294f75f29031d2c402f4f00d3f20778ee10e3ef3e0306d401474",
+      "bytes": 10827,
+      "normalization": "verbatim",
+      "path": "profile_backward.cpp",
+      "sha256": "1c3f5f5056cb294f75f29031d2c402f4f00d3f20778ee10e3ef3e0306d401474"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/4f/4f48871420a8dbd1d1494bd0963e9eda99c0a479cdb1d83adb9266f30b8ee2f8",
+      "bytes": 2296,
+      "normalization": "verbatim",
+      "path": "profile_backward.hpp",
+      "sha256": "4f48871420a8dbd1d1494bd0963e9eda99c0a479cdb1d83adb9266f30b8ee2f8"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/5d/5d2a0c7193770d0d531ef114029e42afccbb17fa9eca64865acc668fd1da627e",
+      "bytes": 13943,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "5d2a0c7193770d0d531ef114029e42afccbb17fa9eca64865acc668fd1da627e"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/39/39bc4213e3c0c07cd4643d29935fdc9e89644ef219b6798e1406d220508e171c",
+      "bytes": 12085,
+      "normalization": "verbatim",
+      "path": "transformer_backward.cpp",
+      "sha256": "39bc4213e3c0c07cd4643d29935fdc9e89644ef219b6798e1406d220508e171c"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/60/60b4fb023d4229bd9a7eb5bc663b1ce5bbcc011d9e47edd0c1a56c0d9292cce9",
+      "bytes": 2009,
+      "normalization": "verbatim",
+      "path": "transformer_backward.hpp",
+      "sha256": "60b4fb023d4229bd9a7eb5bc663b1ce5bbcc011d9e47edd0c1a56c0d9292cce9"
+    }
+  ],
+  "generatedUtc": "2026-09-04T18:46:47+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "parentRevision": {
+    "candidateId": "nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1",
+    "candidateTreeSha256": "sha256:4e4432dcbbd66e1ff6111d5440043354ad542d2a921c737cbbb531f01459bd94",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/20260904T152600038581Z_4e4432dcbbd6.json",
+      "sha256": "sha256:1c5db0a7a7cde8090c3071b9c17ea499d4768b333a8bf898ed83ba085f6f0cf9"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T182911157959Z_651287cce12b.json",
+    "sha256": "sha256:ad27e1b829b4837793d2ec135e58dbbb1a3832855dbffe46fe23000c28c8489e"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

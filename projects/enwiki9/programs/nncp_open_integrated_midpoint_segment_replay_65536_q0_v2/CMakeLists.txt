@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(nncp_open_integrated_midpoint_v2 LANGUAGES CXX)
 
-add_library(midpoint_kernels STATIC midpoint_kernels.cpp)
+add_library(
+  midpoint_kernels STATIC
+  midpoint_kernels.cpp
+  transformer_backward.cpp
+  profile_backward.cpp)
 target_compile_features(midpoint_kernels PUBLIC cxx_std_20)
 target_compile_options(
   midpoint_kernels
