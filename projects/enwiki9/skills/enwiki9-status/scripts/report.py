@@ -483,6 +483,12 @@ def render_live_state(status: dict[str, Any]) -> list[str]:
                 f"- Command PID: `{live.get('pid', 'unknown')}`; candidate label: `{live.get('label', 'unknown')}`.",
             ]
         )
+        scope_bytes = live.get("scope_bytes")
+        progress_percent = live.get("progress_percent")
+        if isinstance(scope_bytes, int) and isinstance(progress_percent, (int, float)):
+            lines.append(
+                f"- Live gate scope `{fmt_int(scope_bytes)}`; progress `{progress_percent:.2f}%`."
+            )
         if isinstance(guard_elapsed, (int, float)):
             lines.append(
                 f"- Guard elapsed: `{guard_elapsed:.4f}` seconds; samples `{fmt_int(sample_count)}`."
@@ -499,6 +505,11 @@ def render_live_state(status: dict[str, Any]) -> list[str]:
         if isinstance(decimal_limit, int):
             lines.append(f"- Decimal guard limit: `{fmt_int(decimal_limit)}` KiB.")
             lines.append(f"- Official decimal over-limit KiB: `{fmt_int(over_limit)}`.")
+            if isinstance(single_rss, int):
+                decimal_margin = decimal_limit - single_rss
+                lines.append(
+                    f"- Decimal single-process margin `{fmt_int(decimal_margin)}` KiB."
+                )
     else:
         lines.append("- No live resource-guarded run was observed.")
     lines.append("")
@@ -633,25 +644,23 @@ def render_markdown(status: dict[str, Any]) -> str:
             "roundtrip, and score at or below 105,000,000 is a win.",
         ]
     )
-    if official["won"]:
-        continuation = (
-            "Hutter target achieved. Preserve the exact proof, reproduce it from "
-            "the counted package, and complete submission packaging."
-        )
+    active = next(
+        (
+            row
+            for row in status["candidates"]
+            if row.get("status") in {"active", "promotable"}
+        ),
+        None,
+    )
+    lines.extend(["", "## Recorded Frontier State", ""])
+    lines.append(f"- Verified target state: `{'won' if official['won'] else 'not won'}`.")
+    if active:
+        lines.append(f"- Active candidate: `{active['id']}`.")
+        lines.append(f"- Recorded next gate: {active.get('next_gate') or '`none`'}.")
     else:
-        active = next(
-            (
-                row
-                for row in status["candidates"]
-                if row.get("status") in {"active", "promotable"}
-            ),
-            None,
-        )
-        next_gate = active.get("next_gate") if active else None
-        continuation = "Continue toward the Hutter Prize."
-        if next_gate:
-            continuation += f" Highest-value next gate: {next_gate}"
-    lines.extend(["", "## Continue", "", continuation, ""])
+        lines.append("- Active candidate: `none`.")
+        lines.append("- Recorded next gate: `none`.")
+    lines.append("")
     return "\n".join(lines)
 
 

@@ -116,6 +116,15 @@ pip install -r requirements.txt
 python gamma.py game  # Run the game
 ```
 
+### Development validation
+
+- Verify the active CLI before relying on flags: `python gamma.py help <mode>`.
+- Engine changes: run `tests/test_engine_interface.py` and `tests/test_engine_factory.py`.
+- Game changes: run `tests/test_game.py` and `tests/test_ui_components.py`.
+- Mind Meld changes: run the matching `tests/test_mind_meld*.py` files.
+- Run `python -m py_compile gamma.py` and import the changed package before handoff.
+- Model downloads, remote providers, and compute jobs require the corresponding user authority.
+
 ## No engineering-work time estimates
 
 - Do not estimate how long coding, debugging, refactoring, documentation,

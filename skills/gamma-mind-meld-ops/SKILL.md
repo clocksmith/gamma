@@ -1,38 +1,58 @@
 ---
 name: gamma-mind-meld-ops
-description: Run and troubleshoot high-signal Mind Meld operation loops with preset selection, deterministic prompts, diagnostics, strategy comparison, and report capture.
+description: Run a reproducible Gamma Mind Meld experiment when models, prompt, steps, strategy, and diagnostic flags are explicitly supplied.
 ---
 
-# GAMMA Mind Meld Ops
+# Gamma Mind Meld Run
 
-Use for reproducible Mind Meld runs and focused diagnostics.
+## Prerequisites
 
-## References
+- Run from the Gamma repository root.
+- Record model revisions, engines, prompt, steps, strategy, seed or determinism policy,
+  diagnostics, and output path.
+- Validate engine/logits compatibility with `gamma-engine-compat` when uncertain.
 
-- `src/mind_meld/README.md`
-- `docs/BENCHMARKING.md`
-- `tools/README.md`
+## Procedure
 
-## Workflow
+1. Inspect available presets and the active command surface:
 
-1. Choose surface: `tools/run_mind_meld_cli.py` or `gamma.py mind-meld`.
-2. Use fixed prompt, fixed `--steps`, and `--summary-only` for comparable runs.
-3. Add `--meld-diagnostics` when debugging swaps, logits, or templates.
-4. For quality instability, test `--shared-chat-template`, `--order-neutral`, and `--soft-swap`.
-5. Prefer same-family model pairs before cross-architecture experiments.
+   ```bash
+   PY=.venv/bin/python; [ -x "$PY" ] || PY=python3
+   "$PY" tools/run_mind_meld_cli.py --list-presets
+   "$PY" tools/run_mind_meld_cli.py --help
+   ```
 
-## Commands
+2. Run the supplied configuration with fixed prompt and steps. Add
+   `--meld-diagnostics` only when requested or needed to explain swaps/logits/templates.
+3. For a strategy comparison, vary only strategy while keeping models, prompt, steps,
+   templates, and decoding policy fixed.
+4. Preserve raw output and diagnostics before summarizing.
+
+Example benchmark surface:
 
 ```bash
-PY=.venv/bin/python; [ -x "$PY" ] || PY=python3
-$PY tools/run_mind_meld_cli.py --list-presets
-$PY tools/run_mind_meld_cli.py --preset creative --prompt "Explain transformers simply" --steps 64 --summary-only
-$PY gamma.py mind-meld --models pytorch:gpt2 pytorch:distilgpt2 --strategy pattern --summary-only --meld-diagnostics
-PYTHONPATH=. $PY src/benchmarks/mind_meld_benchmark.py --strategies confidence perplexity fixed_interval --prompt "Once upon a time" --models gpt2 gpt2-medium
+PYTHONPATH=. "$PY" src/benchmarks/mind_meld_benchmark.py \
+  --strategies confidence perplexity fixed_interval \
+  --prompt "Once upon a time" --models gpt2 gpt2-medium
 ```
 
-## Report
+## Validation
 
-- Models, engines, strategy, prompt, steps, and diagnostics flag
-- Output quality notes tied to exact run settings
-- Performance deltas only for comparable prompts and token budgets
+The report includes exact models/engines, prompt, steps, strategy, decoding settings,
+command, raw artifact, and diagnostics flag. Compared rows differ only by the declared
+strategy variable.
+
+## Stop Conditions
+
+Stop when a model lacks required logits, inputs differ across comparison rows, fallback
+changes an execution lane, or a remote/paid provider lacks authorization. Do not make a
+general quality or model-family recommendation from one run.
+
+## Outputs
+
+Raw run artifacts and a settings-bound comparison report.
+
+## Side Effects
+
+Runs model inference and writes result artifacts. It does not change presets, model
+selection policy, or promotion state.

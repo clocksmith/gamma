@@ -25,6 +25,9 @@ Encode discoverable agent workflows that faithfully operate Gamma's existing aut
 - A skill never overrides an applicable CATSCAN or AGENTS instruction.
 - Workflow guidance distinguishes diagnostics from promoted evidence.
 - Missing prerequisites cause an explicit stop or fallback.
+- Every skill declares objective validation and explicit stop conditions.
+- Open-ended development, research prioritization, model choice without supplied
+  criteria, and writing style remain outside skill authority.
 
 ## Acceptance
 

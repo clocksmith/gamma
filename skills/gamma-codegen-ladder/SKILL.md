@@ -1,11 +1,23 @@
 ---
 name: gamma-codegen-ladder
-description: Design and run GAMMA code generation benchmarks across JavaScript and TypeScript variants, prompt-quality levels, providers, and temperature sweeps. Use for TS vs JS comparisons, prompt-level studies, and src/benchmarks/codegen leaderboard work.
+description: Run a controlled Gamma code-generation matrix when its tasks, languages, prompt levels, providers, temperatures, and run counts are explicitly supplied.
 ---
 
 # GAMMA Codegen Ladder
 
 Use for `src/benchmarks/codegen/` experiments where dimensions must stay comparable.
+
+## Prerequisites
+
+Supply the task or category, language set, prompt levels, provider/model, temperature,
+run count, comparison metric, and authorization for any paid or remote provider.
+
+## Procedure
+
+1. Enumerate supported axes and dry-run the exact supplied matrix.
+2. Run the fixed baseline, then vary only the declared independent axis.
+3. Validate raw artifacts and regenerate the report without changing the benchmark
+   question, prompts, or provider selection.
 
 ## Axes
 
@@ -68,3 +80,23 @@ node src/benchmarks/codegen/index.js \
 - Confirm provider availability before live runs.
 - Use `query_cli.js` only after artifacts exist:
   `node src/benchmarks/codegen/query_cli.js "Which model is strongest for TypeScript?"`
+
+## Validation
+
+Every compared row has identical axis values except the declared independent
+variable, includes its raw artifact, and appears in the regenerated report.
+
+## Stop Conditions
+
+Stop before running paid or remote providers without authorization. Stop comparison
+when prompts, providers, temperatures, run counts, or output parsing are not aligned.
+
+## Outputs
+
+Raw matrix artifacts and a report of the declared axis deltas, pass rate, latency, and
+variance.
+
+## Side Effects
+
+Runs provider/model workloads and writes benchmark artifacts. It does not choose the
+benchmark question, alter prompts, update leaderboards, or make product recommendations.
