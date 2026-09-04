@@ -175,6 +175,23 @@ all 246 payloads and compares them against prospectively bound oracles. No
 teacher gradient payload was read as a treatment input, and this checkpoint
 receives zero arithmetic, compression, archive, package, or objective credit.
 
+A third source-only revision,
+`d4e5927df08df92d42d5b0f5e5f5cd56ce40710da5f30f3b04fa5e29389a7192`,
+closes the source-materialization boundary without activating the experiment.
+It adds a bounds-checked tensor-container parser, an exact production fixture
+loader that refuses to consume retained `train_h` activations as treatment
+inputs, a candidate full open transformer forward, and a separate treatment
+executable with no oracle-path argument. The executable binds every produced
+gradient to the canonical 246-entry descriptor sequence and emits typed
+BF16/F32 payloads plus checkpoints through collision-refusing partial files,
+with its completion marker written last. A small end-to-end emitter test,
+release build, ASAN/UBSAN build, and the seven focused source-contract tests
+pass. Forward checkpoints and all 246 gradients have not yet been compared to
+prospectively bound teacher payloads, so the arithmetic remains unvalidated
+and this revision receives zero scientific, compression, package, or objective
+credit. Adam, recurrent transition, midpoint rebuild, population locking, and
+the O/K/F/S replay remain missing.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -184,6 +201,7 @@ Evidence:
 [`integrated v2 experiment`](../operations/adaptive/experiments/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
 [`integrated source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T182911157959Z_651287cce12b.json),
 [`complete-topology source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T184647005158Z_08b47bf74339.json),
+[`forward and treatment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T191749467383Z_d4e5927df08d.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
