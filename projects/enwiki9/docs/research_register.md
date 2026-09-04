@@ -1,5 +1,24 @@
 # enwiki9 Research Register
 
+## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
+
+The proposal ranker previously considered proposal status, experiment
+validity, and parent reflection but not the developed candidate's own state.
+That made the live HORIZON trace and already reflected, held HARM-Delta source
+fixtures appear eligible for duplicate scheduling. `enwiki9_reflections.py`
+now overlays candidate metadata and all durable queue states before granting
+eligibility. Pending or running candidates, candidates marked
+`blocked_dependency`, `measured_negative`, or `retired`, and candidates whose
+latest terminal job still awaits reflection are fail-closed. A reflected
+`retry` or `next-gate` remains actionable.
+
+Nine focused tests cover held/negative/retired states, pending and running
+jobs, the latest-terminal reflection barrier, reflected retry, and an
+undeveloped proposal. The real inventory check now excludes both running
+HORIZON candidates and all four reflected HARM-Delta source prerequisites.
+This is scheduling-integrity evidence only; it changes no candidate,
+probability, experiment population, scientific result, archive, or score.
+
 ## 2026-09-04 - Live Hutter rule authority remains byte-identical
 
 The official task, detailed-rules, and FAQ pages were fetched directly over

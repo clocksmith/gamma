@@ -23,7 +23,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Adaptive experiment loop | `enwiki9_lab.py` |
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
 | Project-local Python source closure | `enwiki9_python_source_closure.py` |
-| Terminal reflection and evidence-aware ranking | `enwiki9_reflections.py` |
+| Terminal reflection and lifecycle-safe evidence ranking | `enwiki9_reflections.py` |
 | Objective and receipt validation | `research_contracts.py` |
 | Count and stage a dependency closure | `enwiki9_dependency_closure.py` |
 | Sealed full-1G package replay | `enwiki9_clean_room_replay.py` |
@@ -42,6 +42,13 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Decide or continue a cmix21 gate | `cmix21_gate_decider.py`, `cmix21_continue_active_gate.py` |
 | Rebuild the run ledger | `backfill_run_ledger.py` |
 | Freeze a predicate-preserving implementation retry | `enwiki9_freeze_implementation_retry.py` |
+
+`next-experiment` overlays each developed proposal with its candidate metadata
+and durable queue history. A candidate is excluded when it is already pending
+or running, has a held/negative/retired status, or has a newer terminal job
+that has not yet received a reflection. Reflected `retry` and `next-gate`
+candidates remain eligible; proposals that have not yet been developed have no
+candidate lifecycle to inspect.
 
 New implementation retries automatically use the strict output manifest and
 must declare each newly retained artifact with `--additional-output`. The

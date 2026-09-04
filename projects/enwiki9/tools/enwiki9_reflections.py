@@ -23,6 +23,12 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 ADAPTIVE = ROOT / "operations" / "adaptive"
 REFLECTIONS = ADAPTIVE / "reflections"
 TERMINAL_STATES = ("completed", "failed", "cancelled")
+LIVE_STATES = ("pending", "running")
+NON_ACTIONABLE_CANDIDATE_STATUSES = {
+    "blocked_dependency",
+    "measured_negative",
+    "retired",
+}
 MEASUREMENT_FIELDS = {
     "idealBitsSaved",
     "minimumPartitionIdealBitsSaved",
@@ -399,9 +405,118 @@ def _collect_inherited_non_actionable_proposals(
     return non_actionable
 
 
+def _candidate_job_index() -> dict[str, list[dict[str, str]]]:
+    """Return the durable queue history needed to prevent duplicate scheduling."""
+    jobs: dict[str, list[dict[str, str]]] = {}
+    for state in (*LIVE_STATES, *TERMINAL_STATES):
+        for path in sorted((ADAPTIVE / state).glob("*.json")):
+            try:
+                job = _load_json(path)
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            candidate_id = job.get("candidate_id")
+            job_id = job.get("job_id")
+            if not isinstance(candidate_id, str) or not isinstance(job_id, str):
+                continue
+            jobs.setdefault(candidate_id, []).append(
+                {
+                    "jobId": job_id,
+                    "state": state,
+                    "path": path.relative_to(ROOT).as_posix(),
+                }
+            )
+    return jobs
+
+
+def _candidate_lifecycle(
+    candidate_id: Any,
+    jobs_by_candidate: dict[str, list[dict[str, str]]],
+) -> dict[str, Any]:
+    """Resolve scheduling authority from candidate metadata and queue history."""
+    if not isinstance(candidate_id, str):
+        return {
+            "candidateId": None,
+            "candidateStatus": None,
+            "schedulingBlock": None,
+            "liveJobs": [],
+            "latestTerminalJob": None,
+        }
+
+    metadata_path = ROOT / "programs" / candidate_id / "meta.json"
+    metadata: dict[str, Any] | None = None
+    metadata_error: str | None = None
+    try:
+        metadata = _load_json(metadata_path)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        metadata_error = str(exc)
+
+    candidate_status = metadata.get("status") if metadata is not None else None
+    candidate_jobs = jobs_by_candidate.get(candidate_id, [])
+    live_jobs = sorted(
+        (job for job in candidate_jobs if job["state"] in LIVE_STATES),
+        key=lambda job: (
+            0 if job["state"] == "running" else 1,
+            job["jobId"],
+            job["path"],
+        ),
+    )
+    terminal_jobs = sorted(
+        (job for job in candidate_jobs if job["state"] in TERMINAL_STATES),
+        key=lambda job: (job["jobId"], job["state"], job["path"]),
+    )
+    latest_terminal = terminal_jobs[-1] if terminal_jobs else None
+
+    reflected_job_ids: set[str] = set()
+    if metadata is not None:
+        measured = metadata.get("measured")
+        reflections = (
+            measured.get("reflections") if isinstance(measured, dict) else None
+        )
+        if isinstance(reflections, dict):
+            reflected_job_ids = {
+                job_id for job_id in reflections if isinstance(job_id, str)
+            }
+
+    scheduling_block: dict[str, Any] | None = None
+    if metadata_error is not None:
+        scheduling_block = {
+            "code": "candidate-metadata-unavailable",
+            "detail": metadata_error,
+        }
+    elif live_jobs:
+        scheduling_block = {
+            "code": "candidate-already-scheduled",
+            "jobId": live_jobs[0]["jobId"],
+            "queueState": live_jobs[0]["state"],
+        }
+    elif candidate_status in NON_ACTIONABLE_CANDIDATE_STATUSES:
+        scheduling_block = {
+            "code": "candidate-status-non-actionable",
+            "candidateStatus": candidate_status,
+        }
+    elif (
+        latest_terminal is not None
+        and latest_terminal["jobId"] not in reflected_job_ids
+    ):
+        scheduling_block = {
+            "code": "terminal-job-awaiting-reflection",
+            "jobId": latest_terminal["jobId"],
+            "queueState": latest_terminal["state"],
+        }
+
+    return {
+        "candidateId": candidate_id,
+        "candidateStatus": candidate_status,
+        "schedulingBlock": scheduling_block,
+        "liveJobs": live_jobs,
+        "latestTerminalJob": latest_terminal,
+    }
+
+
 def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
     policy = research_contracts.validate_search_policy()
     non_actionable = _collect_inherited_non_actionable_proposals(proposals)
+    jobs_by_candidate = _candidate_job_index()
     latest: dict[str, dict[str, Any]] = {}
     for reflection in iter_reflections(strict=False):
         if reflection.get("_validation_error"):
@@ -409,6 +524,9 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
         latest[reflection["candidateId"]] = reflection
     rows: list[dict[str, Any]] = []
     for proposal in proposals:
+        lifecycle = _candidate_lifecycle(
+            proposal.get("candidate_id"), jobs_by_candidate
+        )
         experiment: dict[str, Any] | None = None
         experiment_error: str | None = None
         experiment_reference = proposal.get("experiment")
@@ -478,7 +596,13 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
             or (reflection is not None and reflection["validity"]["valid"])
         )
         experiment_valid = experiment is not None
-        eligible = operational and experiment_valid and parent_evidence_valid
+        lifecycle_actionable = lifecycle["schedulingBlock"] is None
+        eligible = (
+            operational
+            and experiment_valid
+            and parent_evidence_valid
+            and lifecycle_actionable
+        )
         rank_key = (
             int(eligible),
             int(experiment_valid),
@@ -517,6 +641,7 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "experimentError": experiment_error,
                 "eligible": eligible,
                 "operationalStatus": effective_status,
+                "candidateLifecycle": lifecycle,
                 "rankKey": list(rank_key[:-1]),
                 "searchPriority": proposal.get(
                     "search_priority", proposal.get("priority", 0)
