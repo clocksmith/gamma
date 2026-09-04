@@ -1,0 +1,84 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "harm_delta_scope_coordinate_mapper_q0_v1",
+  "revision": 1,
+  "operational_status": "source_fixture_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "purpose": "Close HARM-Delta's raw/WRT/coder coordinate boundary with a compact exact mapping receipt derived from the frozen Endpoint428 WRT inverse, without opening corpus or active HORIZON artifacts.",
+  "dependencies": [
+    {
+      "artifact": "harm_route_edit_residual_shadow_q0_v1",
+      "required_evidence": "Preserve canonical raw scope economics, Endpoint428 WRT prediction coordinates, MSB-first coder-bit coordinates, and the exact opening and distant half-open bounds."
+    },
+    {
+      "artifact": "endpoint428_semantic_route_tape_q0_v3",
+      "required_evidence": "Bind revision SHA-256 031036a3f62bee9adaab1a88c2070ea71c66c8bc900b67e2b1b033f338d0bb58 and preserve its independently replayed WRT inverse equations."
+    },
+    {
+      "artifact": "harm_delta_sparse_input_abi_q0_v1",
+      "required_evidence": "Supply the nonempty frontend boundary digests and exact measure/coder bounds required by the measured sparse-input manifest."
+    }
+  ],
+  "coordinate_law": {
+    "raw_frontier": "For WRT coordinate c, raw_before(c) is the number of canonical raw bytes reconstructed from WRT coordinates strictly below c; define raw_before(W)=raw_population_bytes at terminal W.",
+    "boundary": "map(r)=min c in [0,W] such that raw_before(c)>=r. This lower-bound rule assigns a multi-byte dictionary expansion to the WRT symbol whose pretruth raw frontier precedes the expansion and starts the next raw scope only at the following WRT coordinate.",
+    "scope": "For canonical raw [a,b), measure WRT [map(a),map(b)) and coder bits [8*map(a),8*map(b)); replay always begins at WRT zero and ends at map(b). Each HARM prediction is finally selected by its GSRT2 raw_before value in [a,b).",
+    "mapping_transcript": "SHA-256 over every little-endian <uint64 wrt_coordinate,uint64 raw_before,uint64 raw_after> row in WRT order. The compact digest binds the complete map without emitting a multi-gigabyte coordinate ledger.",
+    "frontend_state": "At each boundary, SHA-256 a domain-separated fixed-width serialization of WRT coordinate, raw position, decoded length header, raw and WRT prefix FNV states, pending dictionary code and byte counts, dictionary word count, uppercase/capitalized/escape flags, and reserved zero byte.",
+    "coder_order": "Each WRT byte contributes exactly eight parent bits in MSB-first order; coderBitBegin and coderBitEnd are WRT bounds multiplied by eight with checked arithmetic."
+  },
+  "production_identity": {
+    "store_bytes": 647798597,
+    "store_wrapper_bytes": 5,
+    "store_sha256": "fe6ab5b96ad7bf2b6f7bd9f7cd3b3212ffc7320ae290e098f68e97b53295ceb9",
+    "wrt_population_bytes": 647798592,
+    "raw_population_bytes": 1000000000,
+    "raw_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "dictionary_bytes": 411996,
+    "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+    "raw_boundaries": [0, 1000000, 500000000, 510000000, 1000000000],
+    "scopes": {
+      "opening": [0, 1000000],
+      "distant": [500000000, 510000000]
+    },
+    "activation": "A separately frozen production successor must hash-bind all inputs, run A/B after terminal HORIZON routing, reproduce exact output, and cross-check its WRT/raw terminal digests against repeated GSRT2 before the receipt may enter a HARM manifest."
+  },
+  "fixture": {
+    "raw_bytes": 38,
+    "wrt_bytes": 32,
+    "dictionary_words": 3921,
+    "boundaries": [0, 7, 14, 21, 25, 30, 38],
+    "coverage": [
+      "one-, two-, and three-byte dictionary codes with multi-raw-byte expansion",
+      "raw boundaries crossed inside dictionary expansions",
+      "capitalized and uppercase word controls",
+      "escaped literal and remapped structural literals",
+      "zero-output WRT header and control coordinates",
+      "terminal boundary"
+    ],
+    "reference": "An independent Python inverse must match every boundary row, mapping transcript digest, input digest, frontend state digest, and derived scope/coder bound from two native processes."
+  },
+  "negative_controls": [
+    "store symlink",
+    "raw symlink",
+    "dictionary symlink",
+    "store wrapper drift",
+    "raw truth mismatch",
+    "raw length-header mismatch",
+    "incomplete terminal dictionary code",
+    "dictionary word-count drift"
+  ],
+  "active_horizon_rule": "The v1 program exposes only generated fixture and production-description modes. It accepts no corpus, production store, production dictionary, route tape, parent trace, result, or HORIZON namespace path and reports zero corpus and active-trace access.",
+  "authority": {
+    "archive_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "corpus_execution_authority": false,
+    "objective_credit_bytes": 0
+  }
+}

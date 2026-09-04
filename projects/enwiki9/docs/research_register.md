@@ -362,6 +362,31 @@ production A/B successor remains forbidden until the terminal HORIZON router
 and repeated full-WRT GSRT2 inputs are bound, and it must reproduce all three
 frozen source-census terminal witnesses before emitting admissible HGS1.
 
+The final source-only coordinate boundary is valid and held as
+`harm_delta_scope_coordinate_mapper_q0_v1`. It defines `map(r)` as the first
+WRT coordinate whose pretruth raw frontier is at least raw boundary `r`, then
+maps raw `[a,b)` to WRT `[map(a),map(b))` and MSB-first coder bits
+`[8*map(a),8*map(b))`. A complete little-endian coordinate/raw-span
+transcript is represented by one SHA-256 digest, while each requested boundary
+also binds every future-affecting inverse state in a domain-separated digest.
+This removes the remaining ambiguity when a canonical raw boundary falls
+inside a multi-byte dictionary expansion without emitting a corpus-scale
+ledger.
+
+The generated 38-raw-byte, 32-WRT-byte fixture mapped the seven frozen raw
+boundaries to WRT coordinates `0, 9, 12, 16, 19, 24, 32`. Two native processes
+were byte-identical and matched an independent Python inverse at every
+boundary, input identity, transcript digest, frontend-state digest, and
+derived scope/coder bound. The constant-only production descriptor closed,
+all eight symlink, wrapper, raw-truth, length-header, terminal-code, and
+dictionary-count corruptions failed before output, and maximum self RSS was
+`132,116 KiB`. Corpus and active-HORIZON access counts were zero. This is a
+causality/arithmetic/representation/repeat proof for the source boundary only;
+it measures no gain and grants no production, archive, native-integration, or
+objective authority. A separately frozen production A/B successor still waits
+for terminal HORIZON routing and must reconcile its terminal witnesses against
+repeated GSRT2 before supplying HARM's opening and distant bounds.
+
 Evidence: `operations/planning/harm_route_edit_residual_shadow_q0_v1.json`,
 `programs/harm_route_edit_residual_shadow_q0_v1/`, and
 `tests/test_harm_route_edit_residual_shadow.py`; sparse-boundary evidence:
@@ -378,7 +403,12 @@ physical-observer evidence:
 `operations/planning/harm_delta_horizon_field_entry_observer_q0_v1.json`,
 `operations/adaptive/experiments/harm_delta_horizon_field_entry_observer_q0_v1.json`,
 `results/harm_delta_horizon_field_entry_observer_q0_v1/decision.json`, and
-`operations/adaptive/reflections/20260904T165807Z_e8c7faaa7d.json`.
+`operations/adaptive/reflections/20260904T165807Z_e8c7faaa7d.json`;
+coordinate-mapper evidence:
+`operations/planning/harm_delta_scope_coordinate_mapper_q0_v1.json`,
+`operations/adaptive/experiments/harm_delta_scope_coordinate_mapper_q0_v1.json`,
+`results/harm_delta_scope_coordinate_mapper_q0_v1/decision.json`, and
+`operations/adaptive/reflections/20260904T172918Z_909f4801d8.json`.
 
 ## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
 

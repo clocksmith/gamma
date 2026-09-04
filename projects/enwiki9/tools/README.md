@@ -31,6 +31,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
 | HARM-Delta sparse input ABI fixture | `harm_delta_sparse_input_abi_q0_v1.py` |
+| HARM-Delta scope-coordinate mapper fixture | `harm_delta_scope_coordinate_mapper_q0_v1.py` |
 | Direct-F32 DELTA-MIDAS named-gradient retry | `nncp_delta_midas_named_midpoint_gradient_q3.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
@@ -121,6 +122,14 @@ event-type-2 coordinates before truth, compares A/B output with an independent
 state machine, bridges the rows through measured HGS1, and checks eight
 fail-closed corruptions. It accepts no production paths and has no compressor,
 corpus, live-HORIZON, retained-gain, archive, or objective authority.
+
+`harm_delta_scope_coordinate_mapper_q0_v1.py` exposes only a snapshot-bound
+generated Endpoint428 inverse fixture. It checks the prospective lower-bound
+raw-to-WRT law, MSB-first coder bounds, complete mapping-transcript and
+future-state digests, two-process identity, an independent reference, and
+eight fail-closed corruptions. It accepts no production paths and has no
+compressor, corpus, live-HORIZON, retained-gain, archive, or objective
+authority.
 
 `nncp_delta_midas_named_midpoint_gradient_q3.py` launches the closed NNCP
 teacher twice and is zero-credit attribution work. Run it only through a

@@ -1,0 +1,34 @@
+{
+  "schema": "gamma.enwiki9.candidate-interface.v1",
+  "candidate_id": "harm_delta_scope_coordinate_mapper_q0_v1",
+  "role": "zero-credit raw/WRT/coder scope-coordinate mapper",
+  "entrypoints": {
+    "native_source": "scope-coordinate-mapper.cpp",
+    "fixture_coordinator": "fixture.py",
+    "managed_program": "program.py"
+  },
+  "coordinate_abi": {
+    "raw_boundary_law": "map(r) is the minimum c in [0,W] for which raw_before(c) >= r",
+    "scope_law": "raw [a,b) maps to WRT [map(a),map(b)) and coder bits [8*map(a),8*map(b))",
+    "coder_order": "MSB-first, eight bits per WRT byte",
+    "mapping_transcript_row": "little-endian <uint64 wrt_coordinate,uint64 raw_before,uint64 raw_after>",
+    "frontend_state_domain": "HARM-FRONTEND-STATE-v1\\0",
+    "frontend_state_layout": "little-endian <5Q4I4B>"
+  },
+  "production_identity": {
+    "store_bytes": 647798597,
+    "store_wrapper_bytes": 5,
+    "wrt_bytes": 647798592,
+    "raw_bytes": 1000000000,
+    "dictionary_bytes": 411996,
+    "raw_boundaries": [0, 1000000, 500000000, 510000000, 1000000000]
+  },
+  "production_activation": "Not exposed by v1. A separately frozen successor must bind exact production inputs, repeat the mapping, reconcile GSRT2, and wait for terminal HORIZON routing.",
+  "authority": {
+    "archive_authority": false,
+    "corpus_execution_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0
+  }
+}
