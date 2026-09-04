@@ -12,7 +12,6 @@ import argparse
 import datetime as dt
 import hashlib
 import json
-import os
 import pathlib
 import re
 import shlex
@@ -21,6 +20,7 @@ import sys
 from typing import Any
 
 import cmix21_gate_decider
+import enwiki9_lab
 try:
     from projects.enwiki9.tools import research_contracts
 except ModuleNotFoundError:
@@ -1197,34 +1197,7 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
         if not job:
             continue
         worker_pid = job.get("worker_pid")
-        worker_pid_live = False
-        if isinstance(worker_pid, int) and not isinstance(worker_pid, bool) and worker_pid > 0:
-            try:
-                os.kill(worker_pid, 0)
-                command = [
-                    token.decode("utf-8", errors="replace")
-                    for token in pathlib.Path(f"/proc/{worker_pid}/cmdline")
-                    .read_bytes()
-                    .split(b"\0")
-                    if token
-                ]
-            except OSError:
-                worker_pid_live = False
-            else:
-                tool = job.get("tool")
-                if isinstance(tool, str):
-                    expected_command = str((ROOT / tool).resolve())
-                    worker_pid_live = expected_command in command
-                else:
-                    expected_command = str(
-                        (ROOT / "tools" / "candidate_triage.py").resolve()
-                    )
-                    candidate_id = job.get("candidate_id")
-                    worker_pid_live = (
-                        expected_command in command
-                        and isinstance(candidate_id, str)
-                        and candidate_id in command
-                    )
+        worker_pid_live = enwiki9_lab.worker_pid_matches_job(job)
         jobs.append(
             {
                 "job_id": job.get("job_id") or path.stem,
