@@ -34,12 +34,12 @@ def test_adaptive_status_reuses_managed_worker_identity(
     monkeypatch.setattr(status_receipt, "REPO_ROOT", tmp_path)
     observed: list[dict] = []
 
-    def matches(value: dict) -> bool:
+    def matches(_root: Path, _triage: Path, value: dict) -> bool:
         observed.append(value)
         return True
 
     monkeypatch.setattr(
-        status_receipt.enwiki9_lab, "worker_pid_matches_job", matches
+        status_receipt.worker_identity, "worker_pid_matches_job", matches
     )
     result = status_receipt.adaptive_running_jobs_state()
     assert observed == [job]
