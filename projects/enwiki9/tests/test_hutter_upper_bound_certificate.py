@@ -13,6 +13,13 @@ from projects.enwiki9.tools import hutter_upper_bound_certificate as certificate
 
 
 class BestForecastRecordTests(unittest.TestCase):
+    def setUp(self) -> None:
+        canonical = mock.patch.object(
+            certificate, "canonical_frontier_forecast_record", return_value=None
+        )
+        canonical.start()
+        self.addCleanup(canonical.stop)
+
     def test_falls_back_to_calibrated_baseline(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             selected = certificate.best_forecast_record(Path(temp_dir))
