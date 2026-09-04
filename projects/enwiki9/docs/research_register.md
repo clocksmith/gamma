@@ -165,6 +165,17 @@ start ticks plus stable Z/X terminal state. Unreadable live, unsampled or
 reused process identities remain fatal. This new revision preserves all codec,
 opening-1M, source-accounting and resource requirements.
 
+The correction is materialized as
+`cmix_obias_source_ppm_rss_env8192_zombiefix_q0_v1`, with sealed source closure
+`2ca009caca219f8a2e7b65bc611c933ac095d0a72e1e3d0cabfda32830f18abc`.
+Its lifecycle validation includes the retained v14 observation and requires
+prior successful exact-identity sampling for terminal EACCES. Nonterminal,
+never-sampled, changed-identity and other unreadable cases remain failures.
+The experiment contract validates, and the original four-arm opening-1M
+identity procedure and resource limits are unchanged. Evidence:
+`operations/evidence/20260904_cmix_zombiefix_lifecycle_source_validation.json`
+and `operations/evidence/20260904_cmix_zombiefix_final_preflight_validation.json`.
+
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 
 The proposal ranker previously considered proposal status, experiment
