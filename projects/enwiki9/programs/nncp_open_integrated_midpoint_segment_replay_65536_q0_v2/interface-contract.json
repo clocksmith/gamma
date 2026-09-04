@@ -1,7 +1,7 @@
 {
   "schema": "gamma.enwiki9.nncp-open-integrated-midpoint-replay-interface.v2",
   "program_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
-  "implementation_status": "input_lock_forward_backward_adam_midpoint_arms_and_isolated_trace_comparators_implemented_unvalidated",
+  "implementation_status": "complete_open_population_driver_and_isolated_comparators_implemented_unvalidated_unactivated",
   "execution_authorized": false,
   "closed_runtime_allowed": false,
   "network_allowed": false,
@@ -21,7 +21,8 @@
     "inspect": "--input-lock INPUT_LOCK --mode inspect --receipt RECEIPT",
     "repeat_compare": "--input-lock INPUT_LOCK --mode repeat-compare --first RECEIPT --second RECEIPT --receipt RECEIPT",
     "run_arm": "--input-lock INPUT_LOCK --mode replay --arm O|K|F|S --output-root OUTPUT_ROOT --receipt RECEIPT",
-    "compare_trace": "midpoint_profile_trace_comparator COMPLETE_CANDIDATE_TRACE INDEXED_ORACLE RECEIPT"
+    "run_population_treatment": "midpoint_profile_population_treatment PARAMETERS OPTIMIZER INITIAL_STATE SYMBOLS_BE16 O|K|F|S OUTPUT_DIR CLAIM_LABEL",
+    "compare_trace": "midpoint_profile_trace_comparator COMPLETE_TREATMENT_DIR INDEXED_ORACLE RECEIPT"
   },
   "current_boundary": {
     "implemented": [
@@ -46,12 +47,14 @@
       "separately linked post-treatment comparator that requires a complete zero-teacher treatment before opening retained oracle paths and checks all 246 gradients plus 20 rebuilt train_h tensors byte-exactly",
       "frozen F full-update, O direct output-head, K full-bookkeeping/output-head-commit, and S shifted-truth segment arms with selected Adam state preservation and exact synthetic O/K identity",
       "treatment-only compact branch-trace writer that receives no teacher path, reproduces the retained LibNC AVX2 reduction and balanced-tree quantization law, seals completion last, and refuses output collisions",
-      "separately linked post-treatment branch comparator that checks complete candidate and retained NNNTR4 populations by coordinate, execution order, truth path, vocabulary, branch count, and every integer probability"
+      "separately linked post-treatment branch comparator that validates the exact output closure, complete state-witness trajectory, and zero-teacher receipt before opening an oracle, then checks retained NNNTR4 coordinates, execution order, truths, branch counts, and every integer probability",
+      "exact 65,536-symbol BE16 loader and stream-major to state-major bridge with complete original-coordinate coverage and the retained parent-segment learning-rate schedule",
+      "one treatment-only O/K/F/S driver over exactly 32 model-update batches and 1,024 per-stream analytical segments, with no oracle path, exact two-update schedule checks, compact probability output, completion-last semantics, and SHA-256 witnesses over every future-affecting parameter, compensated low word, Adam moment, exponent, and recurrent-memory byte"
     ],
     "missing": [
       "exact forward checkpoint and all-246-gradient parity against prospectively bound comparator oracles",
+      "prospectively bound block-zero parameter, optimizer, recurrent-state, and symbol fixture",
       "complete population input lock and treatment-output hash closure",
-      "complete-population O/K/F/S driver and state hashing",
       "O/K/F/S replay and oracle comparisons",
       "repeat, dependency, and resource closure"
     ]

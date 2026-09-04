@@ -6,6 +6,7 @@
 #include "profile_compare.hpp"
 #include "profile_fixture.hpp"
 #include "profile_forward.hpp"
+#include "profile_population.hpp"
 #include "profile_state.hpp"
 #include "profile_trace.hpp"
 #include "tensor_container.hpp"
@@ -559,7 +560,7 @@ void TestCandidateBranchTrace() {
         0.125F, 0.125F, 0.125F, 0.125F,
         0.125F, 0.125F, 0.125F, 0.125F};
     const std::array<float, 8> skewed{
-        0.0625F, 0.0625F, 0.125F, 0.25F,
+        0.0F, 0.0F, 0.125F, 0.375F,
         0.125F, 0.125F, 0.125F, 0.125F};
     writer.WriteRow(73, 1, uniform);
     writer.WriteRow(11, 6, skewed);
@@ -648,6 +649,74 @@ void TestCandidateBranchTrace() {
               mismatch.first_mismatch->row == 0 &&
               mismatch.first_mismatch->branch == 0,
           "candidate trace mismatch comparison differs");
+
+  std::vector<std::uint8_t> incomplete_bytes = candidate_bytes;
+  std::fill_n(incomplete_bytes.begin() + 28, 4, 0);
+  const std::filesystem::path incomplete = temporary.path() / "incomplete.trace";
+  write_bytes(incomplete, incomplete_bytes);
+  bool rejected_before_oracle = false;
+  try {
+    static_cast<void>(nncp::CompareCandidateTraceToIndexedOracle(
+        incomplete, temporary.path() / "oracle-must-not-exist", 2, 8));
+  } catch (const std::runtime_error& error) {
+    rejected_before_oracle =
+        std::string(error.what()).find("candidate trace header") !=
+        std::string::npos;
+  }
+  Require(rejected_before_oracle,
+          "trace comparator reached oracle before candidate completion");
+}
+
+void TestProfilePopulationMapping() {
+  const std::string abc = "abc";
+  Require(
+      nncp::Sha256Hex(std::span<const std::uint8_t>(
+          reinterpret_cast<const std::uint8_t*>(abc.data()), abc.size())) ==
+          "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "SHA-256 known-answer digest differs");
+
+  TemporaryDirectory temporary;
+  const std::filesystem::path symbol_path = temporary.path() / "symbols.be16";
+  const std::vector<std::uint32_t> expected_symbols{1, 2, 3, 4, 5, 6, 7, 0};
+  {
+    std::ofstream output(symbol_path, std::ios::binary | std::ios::trunc);
+    for (const std::uint32_t symbol : expected_symbols) {
+      output.put(static_cast<char>(symbol >> 8U));
+      output.put(static_cast<char>(symbol));
+    }
+    if (!output) throw std::runtime_error("synthetic BE16 write failed");
+  }
+  const std::vector<std::uint32_t> symbols =
+      nncp::LoadBigEndianProfileSymbols(symbol_path, 8, 8);
+  Require(symbols == expected_symbols, "BE16 symbol loader differs");
+  const nncp::ProfilePopulationBatch first =
+      nncp::BuildProfilePopulationBatch(symbols, 2, 2, 0, 8);
+  Require(first.input_symbols == std::vector<std::uint32_t>({0, 0, 1, 5}) &&
+              first.targets == std::vector<std::uint32_t>({1, 5, 2, 6}) &&
+              first.original_coordinates ==
+                  std::vector<std::uint64_t>({0, 4, 1, 5}),
+          "first population batch mapping differs");
+  const nncp::ProfilePopulationBatch second =
+      nncp::BuildProfilePopulationBatch(symbols, 2, 2, 1, 8);
+  Require(second.input_symbols == std::vector<std::uint32_t>({2, 6, 3, 7}) &&
+              second.targets == std::vector<std::uint32_t>({3, 7, 4, 0}) &&
+              second.original_coordinates ==
+                  std::vector<std::uint64_t>({2, 6, 3, 7}),
+          "second population batch mapping differs");
+  Require(
+      std::bit_cast<std::uint32_t>(nncp::FrozenProfileLearningRate(0)) ==
+              std::bit_cast<std::uint32_t>(1.6e-4F) &&
+          std::bit_cast<std::uint32_t>(nncp::FrozenProfileLearningRate(4)) ==
+              std::bit_cast<std::uint32_t>(0x1.4f7e76p-13F),
+      "frozen profile learning-rate schedule differs");
+  bool rejected = false;
+  try {
+    static_cast<void>(
+        nncp::BuildProfilePopulationBatch(symbols, 2, 2, 2, 8));
+  } catch (const std::invalid_argument&) {
+    rejected = true;
+  }
+  Require(rejected, "population mapper accepted an out-of-range segment");
 }
 
 void TestProfileAdamUpdate() {
@@ -753,6 +822,22 @@ void TestProfileAdamUpdate() {
           "Adam state tensor count differs");
   Require(state.next_update_exponent == 5,
           "Adam initial exponent differs");
+  std::vector<nncp::Bf16Buffer> witness_memory{
+      nncp::Bf16Buffer(geometry.transformer.memory *
+          geometry.transformer.streams * model, 0)};
+  nncp::ProfileWeights witness_weights = weights;
+  nncp::ProfileAdamState witness_state = state;
+  const std::string witness = nncp::ProfileFutureStateSha256(
+      geometry, witness_weights, witness_state, witness_memory);
+  Require(
+      witness == nncp::ProfileFutureStateSha256(
+          geometry, witness_weights, witness_state, witness_memory),
+      "profile future-state witness is not deterministic");
+  witness_memory[0].back() = 1;
+  Require(
+      witness != nncp::ProfileFutureStateSha256(
+          geometry, witness_weights, witness_state, witness_memory),
+      "profile future-state witness missed recurrent memory");
 
   nncp::ProfileWeights head_weights = weights;
   nncp::ProfileAdamState head_state = state;
@@ -1889,6 +1974,7 @@ int main() {
     TestGradientArtifacts();
     TestExactFileComparator();
     TestCandidateBranchTrace();
+    TestProfilePopulationMapping();
     TestProfileAdamUpdate();
     TestProfileMemoryTransition();
     TestIntegratedMidpointSegment();

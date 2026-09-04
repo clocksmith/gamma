@@ -174,8 +174,8 @@ std::vector<Branch> BranchPath(
     throw std::invalid_argument("trace probability geometry differs");
   }
   for (const float probability : probabilities) {
-    if (!std::isfinite(probability) || probability <= 0.0F) {
-      throw std::invalid_argument("trace probability is not finite and positive");
+    if (!std::isfinite(probability) || probability < 0.0F) {
+      throw std::invalid_argument("trace probability is not finite and nonnegative");
     }
   }
   std::vector<Branch> branches;
@@ -217,6 +217,59 @@ void RequireAvailable(
     const char* label) {
   if (offset > bytes.size() || count > bytes.size() - offset) {
     throw std::runtime_error(std::string("truncated ") + label);
+  }
+}
+
+void ValidateCandidateTraceBeforeOracle(
+    const std::vector<std::uint8_t>& candidate,
+    std::uint64_t expected_rows,
+    std::uint32_t expected_vocabulary) {
+  RequireAvailable(candidate, 0, kCandidateHeaderBytes, "candidate header");
+  if (!std::equal(
+          kCandidateMagic.begin(), kCandidateMagic.end(), candidate.begin())) {
+    throw std::runtime_error("candidate trace magic differs");
+  }
+  const std::uint64_t rows = GetLittle(candidate.data() + 8, 8);
+  const std::uint64_t branches = GetLittle(candidate.data() + 16, 8);
+  const std::uint32_t vocabulary =
+      static_cast<std::uint32_t>(GetLittle(candidate.data() + 24, 4));
+  const std::uint32_t complete =
+      static_cast<std::uint32_t>(GetLittle(candidate.data() + 28, 4));
+  if (complete != 1 || rows != expected_rows ||
+      vocabulary != expected_vocabulary) {
+    throw std::runtime_error("candidate trace header contract differs");
+  }
+  std::size_t offset = kCandidateHeaderBytes;
+  std::uint64_t counted_branches = 0;
+  for (std::uint64_t row = 0; row < rows; ++row) {
+    RequireAvailable(candidate, offset, kCandidateRowBytes, "candidate row");
+    const std::uint64_t execution = GetLittle(candidate.data() + offset + 8, 8);
+    const std::uint16_t symbol = static_cast<std::uint16_t>(
+        GetLittle(candidate.data() + offset + 16, 2));
+    const std::uint8_t count = candidate[offset + 18];
+    const std::uint8_t reserved = candidate[offset + 19];
+    if (execution != row || symbol >= vocabulary || count == 0 || reserved != 0) {
+      throw std::runtime_error("candidate trace row contract differs");
+    }
+    offset += kCandidateRowBytes;
+    RequireAvailable(
+        candidate,
+        offset,
+        static_cast<std::size_t>(count) * kBranchBytes,
+        "candidate branches");
+    for (std::size_t branch = 0; branch < count; ++branch) {
+      const std::uint16_t probability = static_cast<std::uint16_t>(GetLittle(
+          candidate.data() + offset + branch * kBranchBytes, 2));
+      const std::uint8_t bit = candidate[offset + branch * kBranchBytes + 2];
+      if (probability == 0 || probability >= kProbabilityUnit || bit > 1) {
+        throw std::runtime_error("candidate trace branch contract differs");
+      }
+    }
+    offset += static_cast<std::size_t>(count) * kBranchBytes;
+    counted_branches += count;
+  }
+  if (offset != candidate.size() || counted_branches != branches) {
+    throw std::runtime_error("candidate trace terminal population differs");
   }
 }
 
@@ -333,8 +386,11 @@ TraceComparisonSummary CompareCandidateTraceToIndexedOracle(
     std::uint64_t expected_rows,
     std::uint32_t expected_vocabulary) {
   const std::vector<std::uint8_t> candidate = ReadFile(candidate_path);
+  // Oracle bytes are unreachable until the candidate is independently known
+  // to be complete and structurally closed.
+  ValidateCandidateTraceBeforeOracle(
+      candidate, expected_rows, expected_vocabulary);
   const std::vector<std::uint8_t> oracle = ReadFile(oracle_path);
-  RequireAvailable(candidate, 0, kCandidateHeaderBytes, "candidate header");
   RequireAvailable(oracle, 0, kOracleHeaderBytes, "oracle header");
   if (!std::equal(kCandidateMagic.begin(), kCandidateMagic.end(), candidate.begin()) ||
       !std::equal(kOracleMagic.begin(), kOracleMagic.end(), oracle.begin())) {
