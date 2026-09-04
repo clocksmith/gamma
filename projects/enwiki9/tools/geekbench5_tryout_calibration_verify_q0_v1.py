@@ -121,6 +121,7 @@ def check(condition: bool, name: str, checks: dict[str, bool], errors: list[str]
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--plan", required=True, type=Path)
+    parser.add_argument("--plan-sha256", required=True)
     parser.add_argument("--receipt", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
@@ -129,6 +130,8 @@ def main() -> int:
         args.plan if args.plan.is_absolute() else PROJECT / args.plan,
         "calibration plan",
     )
+    if sha256_file(plan_path) != args.plan_sha256:
+        raise RuntimeError("calibration plan SHA-256 mismatch")
     receipt_path, receipt = load_json(args.receipt, "producer receipt")
     if plan.get("$schema") != PLAN_SCHEMA or plan.get("candidate_id") != CANDIDATE:
         raise RuntimeError("calibration plan identity mismatch")
