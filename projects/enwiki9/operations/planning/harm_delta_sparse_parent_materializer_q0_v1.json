@@ -1,0 +1,99 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "harm_delta_sparse_parent_materializer_q0_v1",
+  "revision": 1,
+  "operational_status": "source_fixture_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "purpose": "Convert an immutable terminal CMX21P1 parent transcript and a repeated GSRT2 route tape into the exact HSP1 sparse probability stream required by the frozen HARM-Delta replay, without rerunning or changing Endpoint428.",
+  "dependencies": [
+    {
+      "artifact": "harm_delta_sparse_input_abi_q0_v1",
+      "required_evidence": "Bind the measured HSP1 interface, its authorize-successor decision, and its valid hold reflection."
+    },
+    {
+      "artifact": "endpoint428_horizon_retained_parent_trace_q0_v1",
+      "required_evidence": "Production use requires the exact terminal router receipt, immutable complete CMX21P1 artifact, terminal decision and reflection, and all content hashes before the parent trace is opened."
+    },
+    {
+      "artifact": "Endpoint428 semantic route tape GSRT2",
+      "required_evidence": "Production use requires independently materialized byte-identical A/B tapes whose full headers, bodies, bindings, coordinate populations, and terminal receipts verify."
+    },
+    {
+      "artifact": "Endpoint428 WRT truth stream",
+      "required_evidence": "Bind exact size and digest so the rolling parent transcript witness commits each pretruth probability row together with its subsequently decoded truth byte."
+    }
+  ],
+  "contract": {
+    "scientific_boundary": "This is zero-credit population infrastructure. It selects existing Endpoint428 probabilities at prospectively frozen HARM coordinates and changes no probability, route, truth, donor, edit law, mixture, control, scope, or parent state.",
+    "cmx21p1": {
+      "magic": "CMX21P1\\u0000",
+      "header_bytes": 16,
+      "row_bytes": 2,
+      "row_count": "exactly WRT population bytes times eight",
+      "byte_mapping": "WRT byte coordinate c maps to eight consecutive little-endian uint16 rows beginning at file offset 16 + 16*c.",
+      "bit_order": "Rows zero through seven are the Endpoint428 pretruth P1 counts for truth bits seven through zero, respectively.",
+      "probability_domain": "Every selected count must be in [1,65535]."
+    },
+    "gsrt2_selection": {
+      "magic": "GSRT2\\u0000\\u0000\\u0000",
+      "version": 2,
+      "header_bytes": 192,
+      "record_bytes": 88,
+      "selection": "Select every and only event-type-3 field_value_byte record with source in the half-open replay interval. Its validated source equals availability and is the HARM parent-provider coordinate.",
+      "ordering": "All tape records are validated in causal availability/priority/source order. Predictive coordinates must be unique and strictly increasing.",
+      "repeat": "Materialize A from GSRT2-A and B independently from GSRT2-B; the complete HSP1 outputs and receipts must be byte-identical."
+    },
+    "hsp1_output": {
+      "format": "The exact HSP1 v1 format frozen by harm_delta_sparse_input_abi_q0_v1.",
+      "record": "Copy the selected CMX21P1 probability bytes without requantization after prefixing their WRT byte coordinate.",
+      "coverage": "Output rows equal every and only predictive GSRT2 coordinate in the declared replay interval.",
+      "atomicity": "Write an exclusive temporary file, finish and fsync it, validate its complete HSP1 geometry and bindings, then atomically install it at a previously absent output path."
+    },
+    "parent_transcript_witness": {
+      "meaning": "An observational trajectory witness, not a claim to serialize opaque Endpoint428 internal state.",
+      "initialization": "SHA-256 over a fixed domain separator, the bound parent-observer digest, exact CMX21P1 header, exact WRT artifact digest, WRT population, and replay begin/end.",
+      "update": "For every WRT coordinate from replay begin through replay end minus one, append little-endian coordinate, the subsequently decoded truth byte, and the exact sixteen CMX21P1 probability bytes.",
+      "bindings": "The digest before the first update occupies HSP1 parentStateBeginSha256; the digest after the final update occupies parentStateEndSha256.",
+      "limitation": "A later prize-facing native P/K proof still requires its own complete future-affecting state hashes; this observer witness cannot substitute for native synchronization evidence."
+    },
+    "terminal_barrier": "No production path may stat, open, hash, mmap, or otherwise inspect the active HORIZON parent trace until the frozen terminal router authorizes access. The source fixture uses only generated temporary bytes.",
+    "production_successor": "Corpus materialization requires a separately frozen activation-gated experiment binding terminal HORIZON, GSRT2 A/B, WRT, raw/WRT/coder mapping, and scope receipts. This v1 source fixture grants no corpus execution authority."
+  },
+  "source_fixture_gate": {
+    "population": "Nine generated WRT bytes, a complete 72-row CMX21P1 stream, and a GSRT2 tape containing four predictive and four nonpredictive callbacks.",
+    "required_passes": [
+      "two independent materializations are byte-identical",
+      "all and only the four event-type-3 coordinates appear in HSP1",
+      "all eight counts at every selected coordinate match the source trace exactly",
+      "the frozen HSP1 parser accepts the output and agrees with its header binding",
+      "an independent reference calculation reproduces both transcript boundary witnesses",
+      "source-fixture execution opens neither canonical corpus nor active HORIZON output",
+      "every prospectively frozen corruption is rejected",
+      "all outputs retain zero objective credit"
+    ],
+    "negative_corruptions": [
+      "CMX21P1 magic drift",
+      "CMX21P1 row-count drift",
+      "CMX21P1 file-length drift",
+      "zero selected parent probability",
+      "GSRT2 magic drift",
+      "GSRT2 event-accounting drift",
+      "duplicate predictive coordinate",
+      "GSRT2/WRT population mismatch",
+      "bound WRT digest mismatch",
+      "expected terminal transcript-witness mismatch"
+    ]
+  },
+  "authority": {
+    "archive_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0,
+    "corpus_execution_authority": false
+  }
+}

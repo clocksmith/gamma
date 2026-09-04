@@ -323,13 +323,37 @@ or active HORIZON scientific output, measured no HARM gain, and grants zero
 archive, native-integration, or objective credit. It is held until terminal
 HORIZON routing and the repeated corpus-bound GSRT2/HSP1/HGS1 inputs exist.
 
+The next conversion boundary is also source-valid and held as
+`harm_delta_sparse_parent_materializer_q0_v1`. It fixes the otherwise implicit
+coordinate law: a predictive GSRT2 event-3 byte at WRT coordinate `c` copies
+the eight little-endian CMX21P1 counts at offset `16 + 16*c`, in unchanged
+MSB-first coder-bit order. Its generated nine-byte gate selected exactly four
+predictive coordinates and 32 counts, emitted byte-identical A/B HSP1 files,
+passed the already measured HSP1 parser, and reproduced independently computed
+boundary witnesses over the complete truth/probability transcript. All ten
+frozen trace, route, population, probability, identity, and witness corruptions
+failed before output installation; maximum self RSS was `22,992 KiB`.
+
+The boundary witness is deliberately described as observational trajectory
+evidence, not opaque Endpoint428 state serialization. Native P/K still needs
+complete future-affecting state hashes. This fixture opened neither corpus nor
+the active HORIZON result namespace and grants zero scientific or score credit.
+Production materialization remains a separately frozen successor gated by the
+terminal HORIZON router, repeated corpus GSRT2, exact raw/WRT/coder mapping,
+and distant HGS1 evidence.
+
 Evidence: `operations/planning/harm_route_edit_residual_shadow_q0_v1.json`,
 `programs/harm_route_edit_residual_shadow_q0_v1/`, and
 `tests/test_harm_route_edit_residual_shadow.py`; sparse-boundary evidence:
 `operations/planning/harm_delta_sparse_input_abi_q0_v1.json`,
 `operations/adaptive/experiments/harm_delta_sparse_input_abi_q0_v1.json`,
 `results/harm_delta_sparse_input_abi_q0_v1/decision.json`, and
-`operations/adaptive/reflections/20260904T161256Z_2483c5c0e6.json`.
+`operations/adaptive/reflections/20260904T161256Z_2483c5c0e6.json`;
+materializer evidence:
+`operations/planning/harm_delta_sparse_parent_materializer_q0_v1.json`,
+`operations/adaptive/experiments/harm_delta_sparse_parent_materializer_q0_v1.json`,
+`results/harm_delta_sparse_parent_materializer_q0_v1/decision.json`, and
+`operations/adaptive/reflections/20260904T163548Z_e7983e7de3.json`.
 
 ## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
 
