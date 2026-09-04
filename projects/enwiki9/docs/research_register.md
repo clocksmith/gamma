@@ -264,10 +264,10 @@ and terminal-state SHA-256
 These are implementation checks only; they access no corpus and grant zero
 archive or score authority.
 
-One required ABI is intentionally not fabricated. The current `GHORA1`
-manifest contains a target coordinate and four donor bytes but no historical
-source coordinate or bounded continuation, so it cannot drive G's edit
-transducer. After the active HORIZON experiment terminalizes, a separately
+The required corpus input is intentionally not fabricated. The current
+`GHORA1` manifest contains a target coordinate and four donor bytes but no
+historical source coordinate or bounded continuation, so it cannot drive G's
+edit transducer. After the active HORIZON experiment terminalizes, a separately
 frozen zero-authority observer must reconstruct and repeat a field-entry source
 coordinate and donor continuation from decoded history. Opening-1M can reject
 HARM-Delta but cannot establish E over G because the physical age floor is
@@ -303,9 +303,33 @@ already decoded continuation, bounded by the current coordinate, to the same
 edit arithmetic as E. A repeated source-coordinate observer is mandatory;
 without it the G comparison is inadmissible.
 
+The source-only sparse boundary is now implemented and validly reflected as
+`harm_delta_sparse_input_abi_q0_v1`. HSP1 stores one coordinate plus eight Q16
+parent counts in a 24-byte record and advances monotonically with the GSRT2
+replay; a missing callback row and an unused row are both fatal. HGS1 binds a
+field-entry target, causal source, exact-context hash, and rolling anchor-state
+witness in a 32-byte record. Both formats bind full headers, payload and
+coordinate-set hashes, parent/observer state, and separately materialized A/B
+identity. The manifest additionally binds raw, WRT, coder-bit, mapping, and
+frontend/parent boundary state.
+
+Its generated eight-byte gate consumed exactly six parent rows for six
+predictive callbacks in both repeats, preserved P/K identity, woke E on all
+three bytes of the second route occurrence, kept absent opening G
+inadmissible, reconstructed one valid causal physical donor, and rejected all
+ten prospectively frozen malformed-input controls. Maximum self RSS was
+`24,796 KiB`. This proves only the input and replay boundary: it read no corpus
+or active HORIZON scientific output, measured no HARM gain, and grants zero
+archive, native-integration, or objective credit. It is held until terminal
+HORIZON routing and the repeated corpus-bound GSRT2/HSP1/HGS1 inputs exist.
+
 Evidence: `operations/planning/harm_route_edit_residual_shadow_q0_v1.json`,
 `programs/harm_route_edit_residual_shadow_q0_v1/`, and
-`tests/test_harm_route_edit_residual_shadow.py`.
+`tests/test_harm_route_edit_residual_shadow.py`; sparse-boundary evidence:
+`operations/planning/harm_delta_sparse_input_abi_q0_v1.json`,
+`operations/adaptive/experiments/harm_delta_sparse_input_abi_q0_v1.json`,
+`results/harm_delta_sparse_input_abi_q0_v1/decision.json`, and
+`operations/adaptive/reflections/20260904T161256Z_2483c5c0e6.json`.
 
 ## 2026-09-01 - HORIZON terminal routing is made fail-closed before observation
 
