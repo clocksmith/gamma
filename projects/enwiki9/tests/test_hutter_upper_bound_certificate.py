@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from projects.enwiki9.tools import hutter_upper_bound_certificate as certificate
@@ -169,6 +170,38 @@ class BestForecastRecordTests(unittest.TestCase):
         self.assertEqual(selected["projected_score"], 109_452_151)
         self.assertEqual(selected["projected_margin_bytes"], -4_452_151)
         self.assertIs(selected["codec_replay_complete"], True)
+
+
+class ActiveCandidateContextTests(unittest.TestCase):
+    def test_uses_shared_managed_worker_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            running = root / "operations" / "adaptive" / "running"
+            running.mkdir(parents=True)
+            job = {
+                "job_id": "job-id",
+                "candidate_id": "candidate-id",
+                "gate_size": 17,
+                "worker_pid": 1234,
+            }
+            receipt = running / "job.json"
+            receipt.write_text(json.dumps(job) + "\n")
+            with (
+                mock.patch.object(certificate, "ROOT", root),
+                mock.patch.object(
+                    certificate.worker_identity,
+                    "worker_pid_matches_job",
+                    return_value=True,
+                ) as matches,
+            ):
+                candidate, scope, source = certificate.active_candidate_context()
+
+        self.assertEqual(candidate, "candidate-id")
+        self.assertEqual(scope, 17)
+        self.assertIn("job.json", source)
+        matches.assert_called_once_with(
+            root, root / "tools" / "candidate_triage.py", job
+        )
 
 
 if __name__ == "__main__":

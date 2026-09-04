@@ -20,7 +20,7 @@ import sys
 from typing import Any
 
 import cmix21_gate_decider
-import enwiki9_lab
+import enwiki9_worker_identity as worker_identity
 try:
     from projects.enwiki9.tools import research_contracts
 except ModuleNotFoundError:
@@ -1197,7 +1197,9 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
         if not job:
             continue
         worker_pid = job.get("worker_pid")
-        worker_pid_live = enwiki9_lab.worker_pid_matches_job(job)
+        worker_pid_live = worker_identity.worker_pid_matches_job(
+            ROOT, ROOT / "tools" / "candidate_triage.py", job
+        )
         jobs.append(
             {
                 "job_id": job.get("job_id") or path.stem,

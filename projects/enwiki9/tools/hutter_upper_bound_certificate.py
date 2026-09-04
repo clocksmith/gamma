@@ -22,6 +22,11 @@ from dataclasses import dataclass
 from typing import Any
 
 try:
+    from projects.enwiki9.tools import enwiki9_worker_identity as worker_identity
+except ModuleNotFoundError:
+    import enwiki9_worker_identity as worker_identity
+
+try:
     from projects.enwiki9.tools import research_contracts
 except ModuleNotFoundError:
     import research_contracts
@@ -730,25 +735,9 @@ def active_candidate_context() -> tuple[str | None, int | None, str]:
             or not isinstance(scope, int)
         ):
             continue
-        try:
-            os.kill(worker_pid, 0)
-            command = [
-                token.decode("utf-8", errors="replace")
-                for token in pathlib.Path(f"/proc/{worker_pid}/cmdline")
-                .read_bytes()
-                .split(b"\0")
-                if token
-            ]
-        except OSError:
-            continue
-        tool = job.get("tool")
-        if isinstance(tool, str):
-            expected_command = str((ROOT / tool).resolve())
-            command_matches = expected_command in command
-        else:
-            expected_command = str((ROOT / "tools" / "candidate_triage.py").resolve())
-            command_matches = expected_command in command and candidate in command
-        if not command_matches:
+        if not worker_identity.worker_pid_matches_job(
+            ROOT, ROOT / "tools" / "candidate_triage.py", job
+        ):
             continue
         return candidate, scope, f"live adaptive worker receipt: {path.relative_to(ROOT)}"
     return None, None, "no live adaptive worker"

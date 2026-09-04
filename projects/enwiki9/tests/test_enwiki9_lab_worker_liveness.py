@@ -14,6 +14,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 import enwiki9_lab as lab  # noqa: E402
+import enwiki9_worker_identity as worker_identity  # noqa: E402
 
 
 def managed_fixture(
@@ -51,7 +52,9 @@ def managed_fixture(
         "GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON": json.dumps(revision),
         "GAMMA_ENWIKI9_EXPERIMENT_JSON": json.dumps(experiment),
     }
-    monkeypatch.setattr(lab.tempfile, "gettempdir", lambda: str(tmp_path))
+    monkeypatch.setattr(
+        worker_identity.tempfile, "gettempdir", lambda: str(tmp_path)
+    )
     return job, environment
 
 
@@ -59,7 +62,9 @@ def test_managed_snapshot_environment_authenticates_execed_worker(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     job, environment = managed_fixture(tmp_path, monkeypatch)
-    assert lab._managed_snapshot_environment_matches_job(job, environment)
+    assert worker_identity.managed_snapshot_environment_matches_job(
+        job, environment, temporary_directory=tmp_path
+    )
 
 
 @pytest.mark.parametrize(
@@ -76,7 +81,9 @@ def test_managed_snapshot_environment_rejects_identity_drift(
 ) -> None:
     job, environment = managed_fixture(tmp_path, monkeypatch)
     environment[field] += "-drift"
-    assert not lab._managed_snapshot_environment_matches_job(job, environment)
+    assert not worker_identity.managed_snapshot_environment_matches_job(
+        job, environment, temporary_directory=tmp_path
+    )
 
 
 def test_worker_liveness_accepts_snapshot_exec_and_binds_start_ticks(
@@ -84,14 +91,20 @@ def test_worker_liveness_accepts_snapshot_exec_and_binds_start_ticks(
 ) -> None:
     job, environment = managed_fixture(tmp_path, monkeypatch)
     job["worker_pid"] = os.getpid()
-    ticks = lab._proc_start_ticks(os.getpid())
+    ticks = worker_identity.proc_start_ticks(os.getpid())
     assert ticks is not None
     job["worker_proc_start_ticks"] = ticks
-    monkeypatch.setattr(lab, "_proc_environment", lambda _pid: environment)
-    assert lab.worker_pid_matches_job(job)
+    monkeypatch.setattr(
+        worker_identity, "proc_environment", lambda _pid: environment
+    )
+    assert worker_identity.worker_pid_matches_job(
+        PROJECT, PROJECT / "tools" / "candidate_triage.py", job
+    )
 
     job["worker_proc_start_ticks"] = ticks + 1
-    assert not lab.worker_pid_matches_job(job)
+    assert not worker_identity.worker_pid_matches_job(
+        PROJECT, PROJECT / "tools" / "candidate_triage.py", job
+    )
 
 
 def test_managed_snapshot_environment_rejects_symlink_root(
@@ -103,4 +116,6 @@ def test_managed_snapshot_environment_rejects_symlink_root(
     original.rename(alternate)
     original.symlink_to(alternate, target_is_directory=True)
     environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT"] = str(original)
-    assert not lab._managed_snapshot_environment_matches_job(job, environment)
+    assert not worker_identity.managed_snapshot_environment_matches_job(
+        job, environment, temporary_directory=tmp_path
+    )

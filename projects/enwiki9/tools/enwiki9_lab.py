@@ -33,6 +33,7 @@ from enwiki9_omega import (
 )
 import enwiki9_candidate_revisions as candidate_revisions
 import enwiki9_reflections
+import enwiki9_worker_identity as worker_identity
 import cmix_memory_safe_parent_qualification_verify_v3 as parent_qualification_v3
 import research_contracts
 
@@ -59,12 +60,7 @@ EXCLUSIVE_FULL1G_PATH = RUNTIME_DIR / "exclusive_full1g.json"
 
 
 def _proc_start_ticks(pid: int) -> int | None:
-    try:
-        stat = (pathlib.Path("/proc") / str(pid) / "stat").read_text()
-        fields = stat[stat.rfind(")") + 2 :].split()
-        return int(fields[19])
-    except (OSError, ValueError, IndexError):
-        return None
+    return worker_identity.proc_start_ticks(pid)
 
 
 def _file_sha256(path: pathlib.Path) -> str | None:
@@ -1319,35 +1315,13 @@ def resource_ready(*, min_free_mib: int, max_load: float) -> tuple[bool, dict[st
 def pid_is_alive(value: Any) -> bool:
     """Return whether a persisted worker PID still names a live process."""
 
-    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
-        return False
-    try:
-        os.kill(value, 0)
-    except (OSError, ProcessLookupError):
-        return False
-    return True
+    return worker_identity.pid_is_alive(value)
 
 
 def _proc_environment(pid: int) -> dict[str, str] | None:
     """Read one process environment without accepting malformed entries."""
 
-    try:
-        payload = pathlib.Path(f"/proc/{pid}/environ").read_bytes()
-    except OSError:
-        return None
-    environment: dict[str, str] = {}
-    for raw in payload.split(b"\0"):
-        if not raw:
-            continue
-        key_raw, separator, value_raw = raw.partition(b"=")
-        if not separator or not key_raw:
-            return None
-        key = key_raw.decode("utf-8", errors="surrogateescape")
-        value = value_raw.decode("utf-8", errors="surrogateescape")
-        if key in environment:
-            return None
-        environment[key] = value
-    return environment
+    return worker_identity.proc_environment(pid)
 
 
 def _managed_snapshot_environment_matches_job(
@@ -1355,81 +1329,15 @@ def _managed_snapshot_environment_matches_job(
 ) -> bool:
     """Authenticate a worker that exec'd into its immutable candidate snapshot."""
 
-    candidate_id = job.get("candidate_id")
-    job_id = job.get("job_id")
-    if not isinstance(candidate_id, str) or not isinstance(job_id, str):
-        return False
-    if environment.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID") != candidate_id:
-        return False
-    snapshot_text = environment.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT")
-    if not snapshot_text:
-        return False
-    try:
-        snapshot = pathlib.Path(snapshot_text)
-        temporary_root = pathlib.Path(tempfile.gettempdir()).resolve(strict=True)
-        resolved = snapshot.resolve(strict=True)
-    except OSError:
-        return False
-    if (
-        not snapshot.is_absolute()
-        or not resolved.is_dir()
-        or snapshot.is_symlink()
-        or resolved.name != candidate_id
-        or resolved.parent.parent != temporary_root
-        or not resolved.parent.name.startswith(f"gamma-enwiki9-{job_id}-")
-    ):
-        return False
-    try:
-        revision = json.loads(
-            environment["GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON"]
-        )
-        experiment = json.loads(environment["GAMMA_ENWIKI9_EXPERIMENT_JSON"])
-    except (KeyError, json.JSONDecodeError):
-        return False
-    expected_revision = {
-        "candidateId": candidate_id,
-        "candidateTreeSha256": job.get("candidate_tree_sha256"),
-        "receipt": job.get("candidate_revision"),
-    }
-    return revision == expected_revision and experiment == job.get("experiment")
+    return worker_identity.managed_snapshot_environment_matches_job(
+        job, environment
+    )
 
 
 def worker_pid_matches_job(job: dict[str, Any]) -> bool:
     """Require the live PID to still execute the command claimed by the job."""
 
-    worker_pid = job.get("worker_pid")
-    if not pid_is_alive(worker_pid):
-        return False
-    expected_start_ticks = job.get("worker_proc_start_ticks")
-    if (
-        expected_start_ticks is not None
-        and _proc_start_ticks(worker_pid) != expected_start_ticks
-    ):
-        return False
-    try:
-        command = [
-            token.decode("utf-8", errors="replace")
-            for token in pathlib.Path(f"/proc/{worker_pid}/cmdline").read_bytes().split(b"\0")
-            if token
-        ]
-    except OSError:
-        return False
-    tool = job.get("tool")
-    if isinstance(tool, str):
-        expected_path = str((ROOT / tool).resolve())
-        if expected_path in command:
-            return True
-        environment = _proc_environment(worker_pid)
-        return environment is not None and _managed_snapshot_environment_matches_job(
-            job, environment
-        )
-    expected_triage = str(TRIAGE.resolve())
-    candidate_id = job.get("candidate_id")
-    return (
-        expected_triage in command
-        and isinstance(candidate_id, str)
-        and candidate_id in command
-    )
+    return worker_identity.worker_pid_matches_job(ROOT, TRIAGE, job)
 
 
 def running_job_liveness(job: dict[str, Any]) -> str:
