@@ -1,0 +1,101 @@
+{
+  "artifact_id": "cmix_v14_independent_source_review_20260904",
+  "artifact_type": "independent-source-and-retained-evidence-review",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14",
+  "component_intent": "preserved",
+  "review_pass": true,
+  "unresolved_review_blockers": [],
+  "scope_bytes": 1000000,
+  "scientific_result_established": false,
+  "execution_authorized_by_review": false,
+  "larger_gate_authorized": false,
+  "objective_credit_bytes": 0,
+  "reviewer_actions": {
+    "source_read_and_static_diff": true,
+    "artifact_hashes_recomputed": true,
+    "new_tests_executed": false,
+    "candidate_or_benchmark_launched": false,
+    "horizon_processes_or_artifacts_accessed": false,
+    "measured_or_historical_source_modified": false
+  },
+  "bindings": [
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14.py",
+      "sha256": "75440ddc37aa59dad6db211595c219a33c1ebcac1114f691fc9f946994631dfb"
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14_stage.py",
+      "sha256": "fc2256c1113f3f453dca0c4ee9103ac321e6433219758a848c1d93777d1ae2e6"
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14_telemetry.py",
+      "sha256": "aec29c8522f3437d3d911d34fc8b00e88302ff6523080ed464657dd8026bbd69"
+    },
+    {
+      "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14.json",
+      "sha256": "6f718655b3223314ff1c1b0475952fe1262891402a7c4025ca5abd69329fd963"
+    },
+    {
+      "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14.json",
+      "sha256": "2606d31563ec33cfc4be41ab78b2f4793110e30f64a336439e2ca6231f4d42ed"
+    },
+    {
+      "path": "operations/adaptive/python-runtime-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14.json",
+      "sha256": "ac8931757a70352820e69c59bf5c16d44b605430be6ae165f0d78900a61225fe"
+    },
+    {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/20260904T211840690710Z_0079bc6e5aae.json",
+      "sha256": "56d17ae5d51667ffec2ee9f9ac8d7118ee9a778c0157576643237c43663de89d"
+    },
+    {
+      "path": "operations/evidence/20260904_cmix_v14_lifecycle_affinity_preflight_validation.json",
+      "sha256": "8449636a8dc24a271020b31982846c1a2f97bf546d44fc138f07ef8abed39e14"
+    }
+  ],
+  "verified_source_properties": {
+    "preimport_bindings_exact": 17,
+    "full_source_closure_artifacts_exact": 29,
+    "runtime_index_artifacts_exact_in_source_closure": 18,
+    "helper_verified_before_stage_import": true,
+    "both_inherited_stage_command_paths_use_v14": true,
+    "new_result_scratch_cgroup_and_candidate_identities": true,
+    "historical_v13_source_unchanged": true,
+    "exact_scientific_stage_commands_environment_population_and_hashes_unchanged": true,
+    "original_package_and_100_counted_option_bytes_unchanged": true,
+    "bounded_package_accounting_bytes": 955881,
+    "same_guard_memory_zero_swap_and_singleton_cpu_contracts": true
+  },
+  "lifecycle_and_retention_review": [
+    "IO reads are bracketed by PID, start-ticks and process-state observations. Missing IO for a still-live identity fails; reused identity fails even when IO was read successfully.",
+    "Permission errors and malformed telemetry remain failures even if the process subsequently disappears. ENOENT/ESRCH with verified disappearance or the same identity in a terminal state is retained as an explicit exit race.",
+    "Unexpected observation exceptions set measurement failure and retain partial counters. Both encode and decode persist execution.json before evaluating the codec return code and measurement-completeness gate.",
+    "The four execution.json artifacts are added to the exact result manifest. They receive no codec-score credit.",
+    "An empty latest affinity sample is accepted only for a successful complete guard with complete affinity/process evidence, zero live threads/RSS, no persistent misses, empty CPU union, and correctly pinned nonempty peak codec samples. Malformed live rows fail.",
+    "Unique-tree read/write totals are null. A separately retained raw counter sum explicitly grants no physical-total or bound authority because /proc/PID/io includes waited-for children."
+  ],
+  "retained_validation_evidence": {
+    "execution_ready": true,
+    "blockers": [],
+    "lifecycle_cases": 13,
+    "lifecycle_all_observed_equal_expected": true,
+    "affinity_cases": 6,
+    "affinity_all_observed_equal_expected": true,
+    "validation_was_run_by_implementing_agent": true,
+    "reviewer_reran_validation": false,
+    "does_not_establish_real_codec_roundtrip": true
+  },
+  "predecessor_diagnosis": {
+    "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+    "terminal_pass": false,
+    "p_payload": {"bytes": 172605, "sha256": "a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"},
+    "p_archive": {"bytes": 464298, "sha256": "9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"},
+    "guard_violations": false,
+    "peak_cgroup_memory_bytes": 8578621440,
+    "lease_verification_pass": true,
+    "exact_inner_failure_branch": "unknown: the old stage discarded execution before emitting stage.json; its traceback combines nonzero codec return and incomplete telemetry.",
+    "demonstrable_source_defects": ["unclassified disappearing-child IO race", "rejection of correctly empty terminal affinity sample", "execution evidence discarded before stage failure"],
+    "retrospective_treatment_or_decode_credit": false
+  },
+  "external_semantics_source": "https://man7.org/linux/man-pages/man5/proc_pid_io.5.html",
+  "remaining_execution_boundary": "The separately owned adaptive runner must admit and execute the sealed opening-1M experiment. This review does not establish any resource eligibility, scientific pass, larger-gate permission, or full-corpus score."
+}
