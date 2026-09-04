@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-01T19:20:56+00:00`
+- Generated at UTC: `2026-09-04T14:32:56+00:00`
 
 ## Target State
 
@@ -15,28 +15,28 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
-- Scope bytes: `1,000,000,000`
-- Scope symbols: `647,798,592`
-- Scope unit: `Endpoint428 WRT bit at a frozen A-active byte`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
+- Gate verdict: `None`
+- Gate next action: `None`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
-- Active scorer observed: `true`
-- Active cmix mode: `text_compress`
-- Driver result present: `false`
-- RSS guard status: `running`
-- RSS samples: `159,257`
+- Active scorer observed: `false`
+- Active cmix mode: `n/a`
+- Driver result present: `unknown`
+- RSS guard status: `n/a`
+- RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `9,098,816`
-- Latest sampled single RSS KiB: `9,098,468`
-- Tightest binary single-process margin KiB: `1,386,944`
-- Tightest decimal single-process margin KiB: `666,809`
-- Latest binary single-process margin KiB: `1,387,292`
-- Latest decimal single-process margin KiB: `667,157`
-- Safe to launch candidate gate: `false`
+- Max sampled single RSS KiB: `n/a`
+- Latest sampled single RSS KiB: `n/a`
+- Tightest binary single-process margin KiB: `n/a`
+- Tightest decimal single-process margin KiB: `n/a`
+- Latest binary single-process margin KiB: `n/a`
+- Latest decimal single-process margin KiB: `n/a`
+- Safe to launch candidate gate: `true`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `26`
 - Held pending adaptive jobs: `26`
@@ -51,60 +51,40 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
-- Candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
-- Scope bytes: `1,000,000,000`
-- Scope symbols: `647,798,592`
-- Scope unit: `Endpoint428 WRT bit at a frozen A-active byte`
+- Gate verdict: `unknown`
+- Next action: `unknown`
+- Candidate: `unknown`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/decision.json`
-- Driver result present: `false`
-- RSS guard JSON: `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json`
-- RSS guard present: `true`
-- Active scorer observed: `true`
-- Live gate: `true`
-- Liveness classification: `live_observed_owner`
-- Matching adaptive jobs: `1`
+- Driver result JSON: `not present`
+- Driver result present: `unknown`
+- RSS guard JSON: `not present`
+- RSS guard present: `unknown`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
-- RSS guard status: `running`
-- RSS guard JSON bytes: `7,057`
-- RSS guard JSON modified UTC: `2026-09-01T19:20:55+00:00`
-- RSS guard JSON SHA-256: `be454309a082b02e1a8b9d01b3195b2701e52ac2d79fc209effb038e723ae576`
-- RSS samples: `159,257`
-- Max sampled single RSS KiB: `9,098,816`
-- Max sampled tree RSS KiB: `9,102,532`
-- Single-process RSS margin KiB: `1,386,944`
-- Single-process decimal `10GB` margin KiB: `666,809`
-- Tree RSS margin KiB: `1,383,228`
-- Tree decimal `10GB` margin KiB: `663,093`
-- Latest sampled single RSS KiB: `9,098,468`
-- Latest sampled tree RSS KiB: `9,101,992`
-- Latest sampled single-process margin KiB: `1,387,292`
-- Latest sampled single-process decimal `10GB` margin KiB: `667,157`
-- Latest sampled tree margin KiB: `1,383,768`
-- Latest sampled tree decimal `10GB` margin KiB: `663,633`
-- Cgroup memory peak bytes: `n/a`
-- Latest cgroup current bytes: `n/a`
-- Cgroup event deltas: `n/a`
 
 ## Gate Evidence Status
 
-- Claim status: `live_guard_monitor_only`
+- Claim status: `awaiting_gate_receipts`
 - Driver result terminal: `false`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
-- Live guard only: `true`
+- Live guard only: `false`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
 
-- Expected candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
-- Expected scope bytes: `1,000,000,000`
+- Expected candidate: `None`
+- Expected scope bytes: `n/a`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -115,8 +95,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
-- Expected active scope bytes: `1,000,000,000`
+- Expected active candidate: `None`
+- Expected active scope bytes: `n/a`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -126,9 +106,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Action
 
-- Safe to launch candidate gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Safe to launch candidate gate: `true`
+- Action: `inspect_queue_before_launch`
+- Reason: `no terminal receipt blocks the next candidate queue decision`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -136,7 +116,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
+- Recommended action: `inspect_queue_before_launch`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
 
@@ -149,71 +129,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `935`
-- Registered programs: `476`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=34, candidate=220, measured_negative=100, retired=563`
+- Program directories: `940`
+- Registered programs: `479`
+- Untracked nonignored entries: `9`
+- Modified tracked entries: `8`
+- Candidate statuses: `active=18, blocked_dependency=34, candidate=223, measured_negative=100, retired=564, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 2,878,317 | 902,673 | 37,920 | `python3 tools/enwiki9_lab.py run --candidate endpoint428_horizon_retained_parent_trace_q0_v1 --max-workers 1 --min-free-mib 32768` |
-| `process` | 2,878,467 | 2,878,317 | 20,792 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/endpoint428_horizon_retained_parent_trace_q0_v1.py` |
-| `rss_guard` | 2,965,296 | 2,878,467 | 31,560 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
-| `process` | 2,965,314 | 2,965,296 | 3,524 | `/home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/comp9a-decomp9 c /home/x/deco/gam...` |
-| `native_cmix` | 2,965,315 | 2,965,314 | 9,098,468 | `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix -t /home/x/deco/gamma/projects/enwik...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 2,629,046,272 | `2026-09-01T19:22:13+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-01T19:22:13+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 36,782,080 | `2026-09-01T19:21:44+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 237,389 | `2026-09-01T19:21:40+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix` | 1,625,944 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.log` | 4,803 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b-guard.json` | 4,348 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.bin` | 30,309,597 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/scan-b.json` | 4,286 | `2026-08-30T23:00:07+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-a.log` | 4,803 | `2026-08-30T22:56:04+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `2965315`
-- Active cmix mode: `text_compress`
-- Max cmix RSS KiB: `9,098,468`
-- Active process tree RSS KiB: `9,192,264`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,387,292`
-- Single-process decimal margin KiB: `667,157`
-- Active process tree margin KiB (binary): `1,293,496`
-- Active process tree decimal margin KiB: `573,361`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/data/enwik9`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp`
-- Temp input bytes: `1,000,000,000`
-- Temp output bytes: `36,765,696`
-- Temp output staging bytes: `647,798,592`
-- Temp input modified UTC: `2011-06-01T15:29:40+00:00`
-- Temp output modified UTC: `2026-09-01T19:20:29+00:00`
-- Temp output staging modified UTC: `2026-08-30T23:00:19+00:00`
-- Process read bytes: `95,195,136`
-- Process write bytes: `3,970,781,184`
-
-## Contingencies
-
-- If current gate passes: `record pass and apply candidate target-gate promotion rule`
-- Pass next scope: `n/a`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
+| n/a | n/a | n/a |
 
 ## Proof Boundary
 

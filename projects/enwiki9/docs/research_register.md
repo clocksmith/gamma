@@ -1,5 +1,134 @@
 # enwiki9 Research Register
 
+## 2026-09-04 - Reflected exact HORIZON recovery bridge is sealed
+
+`endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3` closes the
+single admissibility gap created when the original retained-parent controller
+disappeared but its exact wrapper and CMIX child continued. It is a new
+zero-credit candidate, not a repair or mutation of the active v1 source. The
+only scientific input change is evidence admission: v3 requires the
+prospective orphan observer to publish a validated `SEALED_IMMUTABLE_TRACE`
+result with both adopted identities absent, complete geometry, unchanged
+static inputs, no scientific access, and
+`continuousResourceProofPass=false`. A valid adaptive reflection must bind the
+exact recovery-result digest before any probability row is opened.
+
+V3 does not synthesize the missing terminal v1 decision or pretend that
+forward observation repairs the stopped resource guard. It verifies the
+candidate snapshot and complete source binding before trace access. It then
+resolves `parent.p1`, `parent.archive`, and `manifest-a.bin` only through the
+recovery receipt; checks regular-file, one-link, size, digest, device, inode,
+timestamp, and trace-header identity; and rehashes those inputs after analysis.
+
+The scientific code remains byte-identical. Two independent builds and runs
+of the frozen v1 floating-posterior analyzer must agree. Two independent
+builds and runs of the frozen exact-v2 unsigned-`__int128` analyzer must agree.
+The latter's embedded legacy trajectory must reproduce the former's complete
+aggregate values. The arbitrary-precision Q63 fixture, exact `2^63` half-up
+law, `2,331,505` active coordinates, D/S/R/N controls, chronological thirds,
+and `40,163,160`-bit target-bearing gate are unchanged. Each phase uses one
+logical CPU. The diagnostic analyzer ceiling is `9,500,000 KiB`, below the
+official decimal limit; this accommodates the frozen sparse `mmap` working set
+and conveys no native resource authority.
+
+The selected candidate is sealed at tree
+`39e29c51d13b3b16c1178007d1c98de981b220018e017191199ebf5416f9323f`
+and remains dormant while the observer is live. The independently prepared
+`endpoint428_horizon_retained_parent_trace_recovered_exact_q0_v3` tree
+`a236ae6296c7bb86fd3c804fb8bd75e5ca8a32c4a548b411f9d05f6b164e2946`
+is retained but will not execute: its `1,048,576 KiB` ceiling is not credible
+for the frozen sparse mapping and it omitted the required adaptive reflection.
+This is a pre-execution infrastructure rejection, not HORIZON evidence.
+
+A complete selected-v3 pass may authorize only a recovered-dependency version
+of the already-planned native P/K/D implementation. It grants no archive
+score, inverse proof, package credit, composite resource evidence, or Hutter
+result. Recovery, identity, fixture, repeat, legacy-crosscheck, or resource
+failure invalidates the analysis attempt without judging HORIZON. With those
+foundations valid, missing target scale, any nonpositive third, or any failed
+control margin retires physical HORIZON without reinterpretation.
+
+Evidence:
+`operations/planning/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.json`,
+`operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.json`,
+`operations/adaptive/proposals/developed/000_endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.json`,
+`operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3/20260904T142927224038Z_39e29c51d13b.json`,
+`programs/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3/`,
+and
+`tools/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.py`.
+
+## 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow
+
+`palimpsest_market_v2` is the separately versioned successor to the retained
+HARM mechanism, not a revival of the historical broad PALIMPSEST factorization.
+The old portfolio warning remains binding: semantic elegance does not excuse
+parser, realization, source, framing, model, table, package, runtime, or memory
+cost. The proposal is therefore `dormant_dependency` while the active HORIZON
+experiment continues unchanged. No corpus replay may read HORIZON's scientific
+outputs before its fail-closed terminal route.
+
+The frozen nested arms are `P/K/A/M/H/T/X/C/G`. A is exactly HARM-Delta's
+latest completed exact-route value and generic causal edit transducer. M changes
+only the exact-route reservoir depth from one to eight. H adds only normalized
+route-shape and content-type backoff, with current content type inferred from
+the already decoded value prefix. T adds one fixed typed leaf per unchanged H
+donor: signed-integer affine variants, delimiter-preserving substitution,
+bounded token alignment, or prefix/suffix grafting. X preserves T geometry but
+permutes donor routes within power-of-two age and length buckets. C retains the
+correct donors and generic leaves but changes every typed-kernel assignment to
+a different valid kernel. G uses physical-history donors matched to each H
+donor's exact causal age, content type, and length bucket. P is immutable;
+K executes all bookkeeping while sending only P to its coder.
+
+All markets use fixed factorized priors: equivalence masses `8/5/3`, newest to
+oldest ancestor masses `128/64/32/16/8/4/2/1`, and generic-to-typed masses
+`3/1`. Per-occurrence leaf weights and the global parent-versus-market weight
+use exact Q63 sleeping Bayesian updates. A sleeping leaf is multiplied by the
+awake market truth count, preserving its relative mass; transducers update only
+after the complete truth byte. Coin betting is excluded from v2 and can enter
+only as a new one-axis successor.
+
+The decision surface is literal finite arithmetic, not ideal gain. Every arm
+owns a 32-bit E1/E2/E3 arithmetic interval, explicit bit-count frame,
+termination, byte padding, and decoder replay. P and K must match at every Q16
+probability, interval transition, payload byte, and hash. Actual payload,
+framing, source, model, table, and transmitted package bytes enter economics.
+Process-tree memory and measured runtime remain separate hard gates and are
+never converted into fictional byte charges. Bootstrap and ideal-log-loss
+summaries are diagnostic only.
+
+The prospective populations remain canonical raw opening `[0,1,000,000)` and
+distant `[500,000,000,510,000,000)`, state-warm from raw byte zero. T must save
+at least `5,021` and `50,204` exact payload bytes respectively and be positive
+in every independently terminated chronological third. M must beat A by at
+least `9/82` opening/distant bytes, H must beat M by `33/328`, and T must beat H
+by `66/656`; these are density screens for frozen incremental package ceilings
+of `8,192`, `32,768`, and `65,536` full-scope bytes. T must also beat admissible
+A/M/H/X/C/G controls economically on both scopes. Any extension failure stops
+at the simpler surviving arm without a rescue sweep. Only a complete T pass
+may authorize one new native candidate, which still requires fresh package and
+composite resource evidence.
+
+The source-only implementation now fixes the reservoirs, all four typed
+kernels, hierarchical sleeping updates, matched controls, and independent
+finite coder. It opens no corpus and grants zero credit. Repeated fixture replay
+passes exact HARM-A probability identity, P/K probability/interval/payload
+identity, X/G admissibility, every arm's finite decode, a 4,096-bit coder stress
+roundtrip, and all typed-kernel exercises. The known-answer run SHA-256 is
+`a0614457cd000abf604fbe333458fe883d55a44a4f2bb4bd62d2be61147c82fa`.
+
+MIDAS is not privileged as a combination. A later study must measure both
+conditional PALIMPSEST marginals given MIDAS active/asleep and reverse MIDAS
+marginals given PALIMPSEST active/asleep. Dominant overlap routes to expert
+competition. Complementary residuals may expose only decoder-visible posterior
+entropy, selected transformation family, and parent-surprise gap, followed by a
+fresh joint finite archive. Separate gains are never added.
+
+Evidence: `operations/planning/palimpsest_market_v2.json`,
+`operations/adaptive/experiments/palimpsest_market_v2.json`,
+`operations/adaptive/proposals/proposed/000_palimpsest_market_v2.json`, and
+`programs/palimpsest_market_v2/`.
+
 ## 2026-09-03 - HARM-Delta is frozen as a distinct causal edit-residual mechanism
 
 Broad HARM is rejected as a replacement codec. The retained mechanism is
