@@ -7,6 +7,7 @@
 #include "profile_fixture.hpp"
 #include "profile_forward.hpp"
 #include "profile_state.hpp"
+#include "profile_trace.hpp"
 #include "tensor_container.hpp"
 #include "transformer_backward.hpp"
 
@@ -44,6 +45,29 @@ void PutU32(std::vector<std::uint8_t>& bytes, std::uint32_t value) {
   for (unsigned int shift = 0; shift < 32; shift += 8) {
     bytes.push_back(static_cast<std::uint8_t>(value >> shift));
   }
+}
+
+void PutU16(std::vector<std::uint8_t>& bytes, std::uint16_t value) {
+  bytes.push_back(static_cast<std::uint8_t>(value));
+  bytes.push_back(static_cast<std::uint8_t>(value >> 8U));
+}
+
+void PutU64(std::vector<std::uint8_t>& bytes, std::uint64_t value) {
+  for (unsigned int shift = 0; shift < 64; shift += 8) {
+    bytes.push_back(static_cast<std::uint8_t>(value >> shift));
+  }
+}
+
+std::uint64_t GetU64(
+    const std::vector<std::uint8_t>& bytes,
+    std::size_t offset) {
+  Require(offset <= bytes.size() && bytes.size() - offset >= 8,
+          "little-endian U64 read exceeds buffer");
+  std::uint64_t value = 0;
+  for (unsigned int shift = 0; shift < 64; shift += 8) {
+    value |= static_cast<std::uint64_t>(bytes[offset + shift / 8]) << shift;
+  }
+  return value;
 }
 
 void AddTensor(
@@ -524,6 +548,106 @@ void TestExactFileComparator() {
   }
   Require(rejected_before_oracle,
           "profile comparator did not reject incomplete treatment first");
+}
+
+void TestCandidateBranchTrace() {
+  TemporaryDirectory temporary;
+  const std::filesystem::path candidate = temporary.path() / "candidate.trace";
+  {
+    nncp::CandidateBranchTraceWriter writer(candidate, 8);
+    const std::array<float, 8> uniform{
+        0.125F, 0.125F, 0.125F, 0.125F,
+        0.125F, 0.125F, 0.125F, 0.125F};
+    const std::array<float, 8> skewed{
+        0.0625F, 0.0625F, 0.125F, 0.25F,
+        0.125F, 0.125F, 0.125F, 0.125F};
+    writer.WriteRow(73, 1, uniform);
+    writer.WriteRow(11, 6, skewed);
+    writer.Finalize();
+  }
+
+  bool collision_rejected = false;
+  try {
+    nncp::CandidateBranchTraceWriter collision(candidate, 8);
+  } catch (const std::runtime_error&) {
+    collision_rejected = true;
+  }
+  Require(collision_rejected, "candidate trace accepted an output collision");
+
+  std::ifstream candidate_stream(candidate, std::ios::binary);
+  const std::vector<std::uint8_t> candidate_bytes{
+      std::istreambuf_iterator<char>(candidate_stream),
+      std::istreambuf_iterator<char>()};
+  Require(!candidate_stream.bad(), "candidate trace test read failed");
+  Require(candidate_bytes.size() >= 32 &&
+              GetU64(candidate_bytes, 8) == 2 &&
+              GetU64(candidate_bytes, 16) == 6,
+          "candidate trace header differs");
+
+  std::vector<std::uint8_t> oracle_bytes{
+      'N', 'N', 'N', 'T', 'R', '4', 0, 0};
+  PutU64(oracle_bytes, 2);
+  PutU64(oracle_bytes, 6);
+  PutU64(oracle_bytes, 0);
+  PutU64(oracle_bytes, 0);
+  std::size_t candidate_offset = 32;
+  for (std::uint64_t row = 0; row < 2; ++row) {
+    Require(candidate_offset <= candidate_bytes.size() &&
+                candidate_bytes.size() - candidate_offset >= 20,
+            "candidate trace test row is truncated");
+    PutU64(oracle_bytes, GetU64(candidate_bytes, candidate_offset));
+    PutU64(oracle_bytes, GetU64(candidate_bytes, candidate_offset + 8));
+    for (std::size_t field = 0; field < 6; ++field) PutU64(oracle_bytes, 0);
+    oracle_bytes.push_back(candidate_bytes[candidate_offset + 16]);
+    oracle_bytes.push_back(candidate_bytes[candidate_offset + 17]);
+    PutU16(oracle_bytes, 8);
+    const std::uint8_t branches = candidate_bytes[candidate_offset + 18];
+    oracle_bytes.push_back(branches);
+    oracle_bytes.push_back(0);
+    oracle_bytes.push_back(0);
+    candidate_offset += 20;
+    const std::size_t branch_bytes = static_cast<std::size_t>(branches) * 3;
+    Require(candidate_offset <= candidate_bytes.size() &&
+                branch_bytes <= candidate_bytes.size() - candidate_offset,
+            "candidate trace test branches are truncated");
+    oracle_bytes.insert(
+        oracle_bytes.end(),
+        candidate_bytes.begin() + static_cast<std::ptrdiff_t>(candidate_offset),
+        candidate_bytes.begin() +
+            static_cast<std::ptrdiff_t>(candidate_offset + branch_bytes));
+    candidate_offset += branch_bytes;
+  }
+  Require(candidate_offset == candidate_bytes.size(),
+          "candidate trace test has trailing bytes");
+
+  const auto write_bytes = [](const std::filesystem::path& path,
+                              const std::vector<std::uint8_t>& bytes) {
+    std::ofstream stream(path, std::ios::binary | std::ios::trunc);
+    stream.write(
+        reinterpret_cast<const char*>(bytes.data()),
+        static_cast<std::streamsize>(bytes.size()));
+    if (!stream) throw std::runtime_error("synthetic trace write failed");
+  };
+  const std::filesystem::path oracle = temporary.path() / "oracle.trace";
+  write_bytes(oracle, oracle_bytes);
+  const nncp::TraceComparisonSummary exact =
+      nncp::CompareCandidateTraceToIndexedOracle(candidate, oracle, 2, 8);
+  Require(exact.exact() && exact.rows == 2 && exact.branches == 6,
+          "candidate trace exact comparison differs");
+
+  std::vector<std::uint8_t> changed_bytes = oracle_bytes;
+  constexpr std::size_t kFirstOracleProbability = 40 + 71;
+  changed_bytes[kFirstOracleProbability] ^= 1;
+  const std::filesystem::path changed = temporary.path() / "changed.trace";
+  write_bytes(changed, changed_bytes);
+  const nncp::TraceComparisonSummary mismatch =
+      nncp::CompareCandidateTraceToIndexedOracle(candidate, changed, 2, 8);
+  Require(!mismatch.exact() && mismatch.probability_mismatches == 1 &&
+              mismatch.maximum_probability_difference == 1 &&
+              mismatch.first_mismatch.has_value() &&
+              mismatch.first_mismatch->row == 0 &&
+              mismatch.first_mismatch->branch == 0,
+          "candidate trace mismatch comparison differs");
 }
 
 void TestProfileAdamUpdate() {
@@ -1764,6 +1888,7 @@ int main() {
     TestProfileFixtureLoader();
     TestGradientArtifacts();
     TestExactFileComparator();
+    TestCandidateBranchTrace();
     TestProfileAdamUpdate();
     TestProfileMemoryTransition();
     TestIntegratedMidpointSegment();

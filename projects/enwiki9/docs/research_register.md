@@ -242,6 +242,21 @@ and memory, while S is identical before the update and changes the rebuilt
 probabilities. Release, ASAN/UBSAN, and focused source tests pass. Production
 parity and all compression and objective credit remain unproved and zero.
 
+A seventh source-only revision,
+`90f33d9a2229c7d712b9edef9dd81203174b66db73013bbd55af627189edd6c8`,
+separates probability production from retained-teacher inspection. The
+treatment side now writes a compact collision-refusing branch trace using the
+attributed LibNC AVX2 reduction, balanced-tree path, and integer quantization;
+it accepts no oracle path and seals its completion header only after every row
+is closed. A separately linked comparator then checks the completed candidate
+against the retained NNNTR4 population by original coordinate, execution
+order, symbol, vocabulary, truth branch, branch count, and integer
+probability. Synthetic exact and one-count-different traces pass their expected
+verdicts under release and ASAN/UBSAN builds, and the focused seven-test source
+suite passes. The production 65,536-row trace has not run, so this is still
+zero-credit implementation evidence and establishes no arithmetic parity,
+compression gain, archive saving, or objective progress.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -255,6 +270,7 @@ Evidence:
 [`Adam and midpoint-segment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T193633977336Z_a9261969f38c.json),
 [`post-treatment comparator source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T195020353197Z_28a2f9b6960e.json),
 [`O/K/F/S segment-arm source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T200044496649Z_2dcf287e75f2.json),
+[`treatment-only branch-trace source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T201112895649Z_90f33d9a2229.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 

@@ -13,6 +13,7 @@ add_library(
   profile_forward.cpp
   profile_output_head.cpp
   profile_state.cpp
+  profile_trace.cpp
   tensor_container.cpp
   profile_fixture.cpp)
 target_compile_features(midpoint_kernels PUBLIC cxx_std_20)
@@ -93,3 +94,19 @@ target_compile_options(
     -ffp-contract=off
 )
 target_link_libraries(midpoint_profile_comparator PRIVATE midpoint_kernels)
+
+add_executable(midpoint_profile_trace_comparator profile_trace_comparator.cpp)
+target_compile_features(midpoint_profile_trace_comparator PRIVATE cxx_std_20)
+target_compile_options(
+  midpoint_profile_trace_comparator
+  PRIVATE
+    -O2
+    -Wall
+    -Wextra
+    -Werror
+    -mavx2
+    -mfma
+    -fno-fast-math
+    -ffp-contract=off
+)
+target_link_libraries(midpoint_profile_trace_comparator PRIVATE midpoint_kernels)
