@@ -114,6 +114,14 @@ binds a domain-separated truth/probability transcript witness. It has no
 compressor, corpus, live-HORIZON, retained-gain, or archive authority; a later
 production runner must first verify the terminal HORIZON router.
 
+`harm_delta_horizon_field_entry_observer_q0_v1.py` exposes only a
+snapshot-bound generated fixture for HARM's physical G source. It strictly
+compiles the frozen oldest-anchor observer, samples only causal GSRT2
+event-type-2 coordinates before truth, compares A/B output with an independent
+state machine, bridges the rows through measured HGS1, and checks eight
+fail-closed corruptions. It accepts no production paths and has no compressor,
+corpus, live-HORIZON, retained-gain, archive, or objective authority.
+
 `nncp_delta_midas_named_midpoint_gradient_q3.py` launches the closed NNCP
 teacher twice and is zero-credit attribution work. Run it only through a
 revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by

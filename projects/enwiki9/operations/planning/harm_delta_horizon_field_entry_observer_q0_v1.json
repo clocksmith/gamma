@@ -1,0 +1,75 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "harm_delta_horizon_field_entry_observer_q0_v1",
+  "revision": 1,
+  "operational_status": "source_fixture_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "purpose": "Implement the missing zero-authority HORIZON-A field-entry source observer for HARM-Delta's matched physical G comparator without reading the active HORIZON experiment or changing either mechanism.",
+  "dependencies": [
+    {
+      "artifact": "endpoint428_horizon_dualclock_source_census_q0_retry_v1",
+      "required_evidence": "Bind source SHA-256 ff08edea191055ceecc23ebf6008e1aaa2f0f573c1a005b61d6a48c45be68b8a and its repeated causal source-census decision SHA-256 26afdc413eb4200279f9061e28569090bf98053c0fb8ad4d8d4f08ff658dfae4."
+    },
+    {
+      "artifact": "harm_route_edit_residual_shadow_q0_v1",
+      "required_evidence": "Preserve the exact G source law and HARM callback timing; G changes only physical versus semantic donor selection under the identical edit machinery."
+    },
+    {
+      "artifact": "harm_delta_sparse_input_abi_q0_v1",
+      "required_evidence": "Production output must satisfy the already measured HGS1 format and repeat boundary."
+    },
+    {
+      "artifact": "Endpoint428 semantic route tape GSRT2",
+      "required_evidence": "Production observation requires exact repeated GSRT2 and selects only decoder-visible explicit-field-entry event type 2 before the target truth."
+    }
+  ],
+  "source_law": {
+    "context": "The exact preceding 16 decoded WRT bytes before target coordinate c.",
+    "hash": "Unsigned modulo-2^64 polynomial hash with base 0x9e3779b185ebca87 and base^16 0x6fe6ef9fbd3b9581.",
+    "table": "2^24 direct-mapped Record{uint32 high-hash tag,uint32 continuation_plus_one} slots.",
+    "retention": "At each coordinate i >= 16, install continuation i only when the slot is empty or its high-32-bit tag differs; otherwise preserve the oldest same-tag continuation.",
+    "eligibility": "Before target truth, require nonempty slot, exact tag, source in [16,c), c-source strictly greater than 100000000, exact 16-byte historical context equality, and source+512 <= c.",
+    "field_entry": "Observe only unique GSRT2 event-type-2 availability coordinates inside the replay interval. Multiple entry callbacks at the same coordinate share the same prospectively selected physical donor.",
+    "transition_witness": "Before each field-entry lookup, record the HORIZON-A FNV transition state after coordinate c-1. Each posttruth update hashes i, pretruth rolling hash, slot index, old record, retained/new record, and truth in the exact source-census order.",
+    "update_order": "Consume all callbacks available at c, perform the field-entry lookup, then read truth c, update the anchor table and transition witness, and finally roll the context hash."
+  },
+  "production_identity": {
+    "full_wrt_bytes": 647798592,
+    "minimum_age_bytes": 100000000,
+    "table_entries": 16777216,
+    "expected_terminal_rolling_hash": "01345eea197318a2",
+    "expected_terminal_anchor_table_hash": "199185a886ba1064",
+    "expected_terminal_anchor_transition_hash": "46e3b81f2877dde1",
+    "rule": "A future production run over the complete bound WRT stream must reproduce all three frozen source-census terminal witnesses before any HGS1 output becomes admissible."
+  },
+  "fixture": {
+    "geometry": "A generated 128-byte WRT stream, 16-byte contexts, 2^8 slots, age strictly greater than 32, and two unique field-entry targets.",
+    "scope": "The reduced table and age exercise the unchanged lookup, retention, exact-context, pretruth, transition, and rolling-hash equations; they prove no production population result.",
+    "reference": "An independent Python implementation must reproduce every emitted target/source/context/transition row and terminal rolling, table, and transition witness.",
+    "container_bridge": "A clearly labeled fixture-only coordinate lift may place the already verified rows into production-valid HGS1 geometry solely to recheck the measured HGS1 parser and causal donor reconstruction. It grants no source-coordinate evidence."
+  },
+  "negative_controls": [
+    "WRT symlink",
+    "GSRT2 magic drift",
+    "GSRT2 event-count drift",
+    "GSRT2 causal-order regression",
+    "GSRT2/WRT population mismatch",
+    "GSRT2 pretruth-violation flag",
+    "predictive callback timing drift",
+    "routed callback with zero route identity"
+  ],
+  "active_horizon_rule": "The managed v1 fixture accepts no corpus, store, production route-tape, or HORIZON result path and must never stat, open, hash, mmap, or semantically inspect the active HORIZON namespace.",
+  "future_execution_rule": "Production A/B observation is a new activation-gated experiment after the exact HORIZON terminal router and repeated corpus GSRT2 terminal receipts exist. The observer output remains forbidden submission input and zero credit.",
+  "authority": {
+    "archive_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0,
+    "corpus_execution_authority": false
+  }
+}
