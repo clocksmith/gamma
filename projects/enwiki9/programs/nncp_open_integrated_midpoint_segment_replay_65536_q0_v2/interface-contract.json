@@ -1,0 +1,43 @@
+{
+  "schema": "gamma.enwiki9.nncp-open-integrated-midpoint-replay-interface.v2",
+  "program_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
+  "implementation_status": "input_lock_implemented_backward_missing",
+  "execution_authorized": false,
+  "closed_runtime_allowed": false,
+  "network_allowed": false,
+  "dynamic_input_discovery_allowed": false,
+  "arithmetic": {
+    "bf16_conversion": "round-to-nearest-even integer bit operation",
+    "fast_math": false,
+    "fma_contraction": false,
+    "ftz": false,
+    "daz": false,
+    "reference": "scalar IEEE-754 with frozen source-order accumulation",
+    "rounding": "FE_TONEAREST",
+    "threads": 1
+  },
+  "commands": {
+    "compare": "--input-lock INPUT_LOCK --mode compare --arm-receipts O,K,F,S --receipt RECEIPT",
+    "inspect": "--input-lock INPUT_LOCK --mode inspect --receipt RECEIPT",
+    "repeat_compare": "--input-lock INPUT_LOCK --mode repeat-compare --first RECEIPT --second RECEIPT --receipt RECEIPT",
+    "run_arm": "--input-lock INPUT_LOCK --mode replay --arm O|K|F|S --output-root OUTPUT_ROOT --receipt RECEIPT"
+  },
+  "current_boundary": {
+    "implemented": [
+      "canonical duplicate-key-safe JSON parsing",
+      "exact population and runtime invariants",
+      "symlink-free contained artifact and producer paths",
+      "exact byte-size and SHA-256 validation",
+      "complete unique role closure and deterministic ordering",
+      "immutable canonical inspection receipt"
+    ],
+    "missing": [
+      "complete open forward cache",
+      "complete open backward for all 246 update targets",
+      "Adam update and recurrent state transition",
+      "O/K/F/S replay and oracle comparisons",
+      "repeat, dependency, and resource closure"
+    ]
+  },
+  "implementation_rule": "Replay modes remain fail-closed until every missing boundary is implemented and this tree is sealed prospectively. Inspection grants zero arithmetic, compression, archive, package, or objective credit."
+}
