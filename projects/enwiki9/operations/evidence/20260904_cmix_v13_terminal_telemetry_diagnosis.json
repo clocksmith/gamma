@@ -1,0 +1,135 @@
+{
+  "schema": "gamma.enwiki9.cmix-opening1m-terminal-diagnosis.v1",
+  "created_at_utc": "2026-09-04T21:07:29.033073+00:00",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+  "job_id": "20260904T205826Z_fdcae0ea3e",
+  "classification": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "objective_credit_bytes": 0,
+  "codec_exit_status": "not persisted; unknown",
+  "exact_failure_branch": "codec nonzero exit or incomplete inner IO/fault telemetry; combined exception lost the execution report",
+  "actual_comparator_outputs": [
+    {
+      "path": "scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/out.cmix",
+      "bytes": 172605,
+      "sha256": "a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"
+    },
+    {
+      "path": "scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/archive9",
+      "bytes": 464298,
+      "sha256": "9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"
+    }
+  ],
+  "known_payload_identity": true,
+  "known_archive_identity": true,
+  "outer_guard_flags": {
+    "affinity_observed_abort": false,
+    "cgroup_memory_guard_exceeded": false,
+    "measurement_incomplete": false,
+    "official_decimal_memory_exceeded": false,
+    "phase_marker_invalid": false,
+    "rss_guard_exceeded": false,
+    "temporary_disk_observed_abort": false,
+    "wall_time_guard_exceeded": false
+  },
+  "outer_cgroup_peak_bytes": 8578621440,
+  "outer_cgroup_events": {
+    "baseline": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    },
+    "delta": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    },
+    "final": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    }
+  },
+  "outer_lease_verification": {
+    "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/experiment-lease-verification.json",
+    "bytes": 604,
+    "sha256": "c82587911ff2b4c20f18a3d14977180cc4466eeb1ba0ea510c98a1684bf05898"
+  },
+  "confirmed_implementation_defects": [
+    {
+      "location": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1_stage.py:run_observed",
+      "defect": "Separate stat/io reads without identity/lifecycle revalidation turn a disappearing child into a permanent telemetry error. This is a source defect; the lost v13 execution report does not prove it was the observed trigger."
+    },
+    {
+      "location": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3_stage.py:108 and :139",
+      "defect": "Both encode/decode raise before persisting execution returncode and measurement_errors."
+    },
+    {
+      "location": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py:affinity_samples_pass",
+      "defect": "Rejects an empty terminal latest_sample even though it represents completed process exit. Current receipt has correct CPU2 live peak rows and empty terminal row."
+    }
+  ],
+  "scientific_boundaries": [
+    "Default false decision measurements do not establish archive/payload mismatch, failed inverse or model failure.",
+    "Only comparator P ran; E-A/E-B/decode remain unmeasured.",
+    "Observed comparator identity does not promote or complete the opening1M experiment."
+  ],
+  "correction_scope": [
+    "New prospective v14 candidate/coordinator/stage/telemetry source with new result/scratch/cgroup namespaces.",
+    "Bracket IO with process identity/lifecycle observations; live/reused/unreadable identities fail closed; record proven exit races separately.",
+    "Persist execution diagnostics before checking combined success for encode and decode.",
+    "Keep live affinity checks and accept only verified successful empty terminal sample.",
+    "Keep exact scientific controls/codec package/known payload/archive, command accounting, memory and zero swap limits, no resource eligibility and no larger gate."
+  ],
+  "source_free_retry_safe": false,
+  "source_free_retry_reason": "v13 fixed output roots are occupied and cannot be overridden; code defects require a new immutable successor.",
+  "evidence": [
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/decision.json",
+      "bytes": 92107,
+      "sha256": "2cc0fd8f9654421fa10f01341491e30023c7fe1e25da12cecfcae9c67742b8d8"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/guard.json",
+      "bytes": 51194,
+      "sha256": "9c1e10440c326d6cfc982f03c513578723a593397e43bbcc4227306a76034738"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/guard.stderr",
+      "bytes": 476,
+      "sha256": "a2aa1b0b8332e3e9e547c95f9bd73c5fd204c9461c261c498a78744545fdf13d"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/codec.stdout",
+      "bytes": 192,
+      "sha256": "873fcb54e35f92d5b562876df382dbb2c607c3b7b31d92efd08a10a3b4623322"
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v1_stage.py",
+      "bytes": 19246,
+      "sha256": "955dfddcc740116359d7edbc530de416499eb5d68a55f8c236767045b253ebd3"
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v3_stage.py",
+      "bytes": 7647,
+      "sha256": "ec5dd9d8577580c3226cbf10a1f825891890817a12ed7dd0bb932b4cec3da5b7"
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py",
+      "bytes": 29442,
+      "sha256": "7044081f6fa4e31ee4ce6d9895e124fd6dc9d16a99f85830f46a0cc7807c597f"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "gamma.enwiki9.cmix-opening1m-comparator-failure-audit.v1",
+  "createdUtc": "2026-09-04T21:07:55.394395+00:00",
+  "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+  "jobId": "20260904T205826Z_fdcae0ea3e",
+  "classification": "infrastructure-failure",
+  "hypothesisVerdict": "not-tested",
+  "scopeBytes": 1000000,
+  "comparatorPayload": {
+    "path": "scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/out.cmix",
+    "bytes": 172605,
+    "sha256": "a723ca62ae2237354888dc23c3e2bb08eb166276719a011eb95bf52774d70db7"
+  },
+  "comparatorArchive": {
+    "path": "scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/archive9",
+    "bytes": 464298,
+    "sha256": "9065eaf54f81e441598fd53c39f909db49d6a9627ae0456eabb8c77099b8ccc4"
+  },
+  "payloadMatchesFrozenBaseline": true,
+  "archiveMatchesFrozenBaseline": true,
+  "treatmentArmsExecuted": false,
+  "stageExecutionTelemetryPresent": false,
+  "outerGuard": {
+    "status": "complete",
+    "returncode": 1,
+    "guards": {
+      "affinity_observed_abort": false,
+      "cgroup_memory_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_observed_abort": false,
+      "wall_time_guard_exceeded": false
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 8578621440,
+      "max_observed_process_vmhwm_kib": 8343232,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 8578097152,
+      "max_sampled_scratch_allocated_bytes": 21708800,
+      "max_sampled_scratch_logical_bytes": 14689791611,
+      "max_sampled_single_rss_kib": 8343232,
+      "max_sampled_tree_live_threads": 4,
+      "max_sampled_tree_rss_kib": 8367128,
+      "max_sampled_tree_runnable_threads": 2
+    },
+    "cgroupEventDelta": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    }
+  },
+  "leaseCleanupVerified": true,
+  "errors": [
+    "RuntimeError: stage failed: P"
+  ],
+  "failureInterpretation": "The stage rejected a combined codec-exit-status or internal-telemetry-completeness check, then discarded its execution dictionary. The exact failing branch and process identity cannot be reconstructed. Default false decision measurements do not establish payload or archive mismatches.",
+  "identifiedImplementationDefects": [
+    "The inherited observer permanently marks missing process I/O after a successful stat read without rechecking that exact process identity for exit.",
+    "The stage does not persist its execution dictionary before raising on a failed combined check.",
+    "The affinity verifier requires nonempty latest_sample even though successful process termination produces an empty terminal sample."
+  ],
+  "disposition": "Preserve v13 results and scratch; freeze one correction-only v14 with unchanged comparator/treatment/coder semantics, durable execution diagnostics and process-identity-aware lifecycle handling.",
+  "scoreCreditBytes": 0,
+  "largerGateAuthorized": false,
+  "evidence": [
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/decision.json",
+      "bytes": 92107,
+      "sha256": "2cc0fd8f9654421fa10f01341491e30023c7fe1e25da12cecfcae9c67742b8d8"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/guard.json",
+      "bytes": 51194,
+      "sha256": "9c1e10440c326d6cfc982f03c513578723a593397e43bbcc4227306a76034738"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/p/guard.stderr",
+      "bytes": 476,
+      "sha256": "a2aa1b0b8332e3e9e547c95f9bd73c5fd204c9461c261c498a78744545fdf13d"
+    },
+    {
+      "path": "operations/adaptive/failed/000_20260904T205826Z_fdcae0ea3e.json",
+      "bytes": 2302,
+      "sha256": "462496d6f77d019558689d42dae22eec62f01a6eb45418994ec69dfb0317bfc0"
+    }
+  ]
+}
