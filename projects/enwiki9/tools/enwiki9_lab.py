@@ -1328,11 +1328,83 @@ def pid_is_alive(value: Any) -> bool:
     return True
 
 
+def _proc_environment(pid: int) -> dict[str, str] | None:
+    """Read one process environment without accepting malformed entries."""
+
+    try:
+        payload = pathlib.Path(f"/proc/{pid}/environ").read_bytes()
+    except OSError:
+        return None
+    environment: dict[str, str] = {}
+    for raw in payload.split(b"\0"):
+        if not raw:
+            continue
+        key_raw, separator, value_raw = raw.partition(b"=")
+        if not separator or not key_raw:
+            return None
+        key = key_raw.decode("utf-8", errors="surrogateescape")
+        value = value_raw.decode("utf-8", errors="surrogateescape")
+        if key in environment:
+            return None
+        environment[key] = value
+    return environment
+
+
+def _managed_snapshot_environment_matches_job(
+    job: dict[str, Any], environment: dict[str, str]
+) -> bool:
+    """Authenticate a worker that exec'd into its immutable candidate snapshot."""
+
+    candidate_id = job.get("candidate_id")
+    job_id = job.get("job_id")
+    if not isinstance(candidate_id, str) or not isinstance(job_id, str):
+        return False
+    if environment.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID") != candidate_id:
+        return False
+    snapshot_text = environment.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT")
+    if not snapshot_text:
+        return False
+    try:
+        snapshot = pathlib.Path(snapshot_text)
+        temporary_root = pathlib.Path(tempfile.gettempdir()).resolve(strict=True)
+        resolved = snapshot.resolve(strict=True)
+    except OSError:
+        return False
+    if (
+        not snapshot.is_absolute()
+        or not resolved.is_dir()
+        or snapshot.is_symlink()
+        or resolved.name != candidate_id
+        or resolved.parent.parent != temporary_root
+        or not resolved.parent.name.startswith(f"gamma-enwiki9-{job_id}-")
+    ):
+        return False
+    try:
+        revision = json.loads(
+            environment["GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON"]
+        )
+        experiment = json.loads(environment["GAMMA_ENWIKI9_EXPERIMENT_JSON"])
+    except (KeyError, json.JSONDecodeError):
+        return False
+    expected_revision = {
+        "candidateId": candidate_id,
+        "candidateTreeSha256": job.get("candidate_tree_sha256"),
+        "receipt": job.get("candidate_revision"),
+    }
+    return revision == expected_revision and experiment == job.get("experiment")
+
+
 def worker_pid_matches_job(job: dict[str, Any]) -> bool:
     """Require the live PID to still execute the command claimed by the job."""
 
     worker_pid = job.get("worker_pid")
     if not pid_is_alive(worker_pid):
+        return False
+    expected_start_ticks = job.get("worker_proc_start_ticks")
+    if (
+        expected_start_ticks is not None
+        and _proc_start_ticks(worker_pid) != expected_start_ticks
+    ):
         return False
     try:
         command = [
@@ -1345,7 +1417,12 @@ def worker_pid_matches_job(job: dict[str, Any]) -> bool:
     tool = job.get("tool")
     if isinstance(tool, str):
         expected_path = str((ROOT / tool).resolve())
-        return expected_path in command
+        if expected_path in command:
+            return True
+        environment = _proc_environment(worker_pid)
+        return environment is not None and _managed_snapshot_environment_matches_job(
+            job, environment
+        )
     expected_triage = str(TRIAGE.resolve())
     candidate_id = job.get("candidate_id")
     return (
@@ -1509,6 +1586,9 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
                 stderr=subprocess.STDOUT,
             )
             job["worker_pid"] = process.pid
+            worker_proc_start_ticks = _proc_start_ticks(process.pid)
+            if worker_proc_start_ticks is not None:
+                job["worker_proc_start_ticks"] = worker_proc_start_ticks
             job["worker_started_at"] = utc_now()
             atomic_json(running_path, job)
             returncode = process.wait()
