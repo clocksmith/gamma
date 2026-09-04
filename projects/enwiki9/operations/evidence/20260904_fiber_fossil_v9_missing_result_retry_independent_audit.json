@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.enwiki9.independent-retry-static-audit.v1",
+  "created_at_utc": "2026-09-04T21:02:36.016388+00:00",
+  "reviewer": "/root/cmix_parallel",
+  "candidate_id": "wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+  "failed_job_id": "20260904T205845Z_7dcfb4f773",
+  "verdict": "PASS_CORRECTED_RETRY_AFTER_EXISTING_LEASE_RELEASE",
+  "source_changes_required": false,
+  "scientific_credit": false,
+  "objective_credit_bytes": 0,
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/000_20260904T205845Z_7dcfb4f773.json",
+      "bytes": 1773,
+      "sha256": "1426e96a042bfcb78dd249805f728369095b40779daa814cf860692e621ec82e"
+    },
+    {
+      "path": "run_logs/adaptive/20260904T205845Z_7dcfb4f773.log",
+      "bytes": 2383,
+      "sha256": "e4aff86cb4f2d8db5ba7b95e1d2e488ac1ab4baa7a1d3a5709700cf87b2fc76c"
+    },
+    {
+      "path": "tools/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.py",
+      "bytes": 55794,
+      "sha256": "7fff5b3c997140e6ecf6b8f1477663e13fb30ea082547d6a4a48cbf158f1ecc5"
+    },
+    {
+      "path": "tools/enwiki9_lab.py",
+      "bytes": 87963,
+      "sha256": "a787fe898bac382971369b9b6743b04cf55769eb6a531b58801fb83e044f39b3"
+    }
+  ],
+  "finding": {
+    "failure_class": "infrastructure-failure",
+    "failed_job_scratch_directories": [],
+    "failure_location": "tools/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.py:531 perform_guarded_horizon_probe",
+    "trigger": "canonical candidate result root was not precreated and empty",
+    "failure_precedes": [
+      "synthetic HORIZON denial probe",
+      "candidate core loading",
+      "corpus evidence reads",
+      "scientific coding"
+    ],
+    "correction": "Keep the identical sealed v9 candidate/revision and add --scratch-directory results/wiki_fiber_fossil_endpoint428_opening1m_q0_v9 to enqueue-tool --force after a valid retry reflection."
+  },
+  "lease_admission": {
+    "canonical_function": "tools/enwiki9_lab.py:enqueue_job -> require_no_exclusive_lease",
+    "force_bypasses_lease_check": false,
+    "unvalidated_existing_lease_file_still_blocks": true,
+    "safe_next_action": "Record retry reflection and prepare command now; enqueue only after the existing CMIX owner releases its canonical lease.",
+    "lease_mutation_or_bypass_authorized": false,
+    "active_v13_mutation_authorized": false
+  },
+  "scope": "Static review only; no process control, cgroup modification, tests, corpus execution, or active HORIZON data access."
+}

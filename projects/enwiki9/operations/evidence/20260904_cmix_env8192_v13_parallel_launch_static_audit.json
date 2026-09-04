@@ -1,0 +1,109 @@
+{
+  "schema": "gamma.enwiki9.concurrent-launch-static-audit.v1",
+  "created_at_utc": "2026-09-04T20:53:15.955614+00:00",
+  "candidate_id": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+  "intent_preserved": true,
+  "implementation_changes": [],
+  "scope_bytes": 1000000,
+  "objective_credit_bytes": 0,
+  "user_scheduling_instruction": "we can do things in parallel",
+  "classification": "validation_and_prospective_scheduling_only",
+  "scientific_execution_started": false,
+  "adaptive_job_enqueued": false,
+  "validation": {
+    "path": "operations/evidence/20260904_cmix_env8192_v13_parallel_validation_only.json",
+    "bytes": 14487,
+    "sha256": "a3a0a8c8efa487319bda5ee61f1c94f5e3cb2aeb490e7feec02dc0f8fbbf27cd"
+  },
+  "source_closure": {
+    "path": "operations/adaptive/source-closures/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+    "bytes": 5244,
+    "sha256": "619704155f7b4657fbb4a3316d5970c3e0ccb6acf02067b72fabf97f37fddf75"
+  },
+  "invoked_preflight": "v13 -> v12 -> v11 -> v10 preflight; older v2/v3 active_horizon_jobs preflights are not called",
+  "sealed_scientific_contract_unchanged": {
+    "arms": [
+      "P",
+      "E-A",
+      "E-B",
+      "E-decode"
+    ],
+    "arm_order": "sequential",
+    "original_package_and_baseline_identity": true,
+    "encode_and_decode_ppm_rss_mb": 8192,
+    "canonical_opening_1m_only": true,
+    "required_complete_package_bytes": 955881,
+    "resource_eligibility": "N_A",
+    "larger_gate_authorized": false
+  },
+  "concurrency_findings": [
+    "The invoked v13 experiment and preflight do not require HORIZON terminality.",
+    "The existing strategy requires post-HORIZON scheduling; a durable user-authorized scheduling decision must explicitly supersede that scheduling restriction before launch.",
+    "v13 acquires the canonical exclusive_full1g lease and does not support an alternate namespace or caller lease override.",
+    "Any already-owned canonical lease or lock blocks v13; do not replace or bypass the owner.",
+    "v13 uses its own fixed result, scratch, per-arm cgroup paths, and new subprocess sessions.",
+    "The v13 managed lease retains no signaling authority over HORIZON.",
+    "No active HORIZON science data or process control was accessed by this audit."
+  ],
+  "observed_static_host_pins": {
+    "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+    "inode": 8608,
+    "uid": 1000,
+    "gid": 1000,
+    "controllers": [
+      "cpu",
+      "memory",
+      "pids"
+    ],
+    "direct_occupants": [],
+    "canonical_lease_present": false,
+    "canonical_lease_lock_present": false,
+    "host_process_visibility_authority": "not established by sandbox audit; parent must verify host context"
+  },
+  "execution_guard": {
+    "memory_max_bytes": 10000000000,
+    "memory_swap_max_bytes": 0,
+    "memory_binding": "before child exec",
+    "cpu": "one explicitly selected CPU, inherited by coordinator/guard/stage/codec",
+    "observed_max_logical_cpus": 1,
+    "temporary_disk_abort_bytes": 100000000000,
+    "cpu_disk_elapsed_classification": "diagnostic, no eligibility credit",
+    "result_path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+    "scratch_path": "scratch/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+    "cgroup_base": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-cmix-obias-env8192-opening1m-q0-v13"
+  },
+  "launch_prerequisites": [
+    "Parent records scheduling decision under current user authorization and checks host-visible resources.",
+    "Parent chooses an available single CPU based on the existing owner resource attestation without changing HORIZON affinity or ownership.",
+    "Canonical lease and lock remain absent; result/scratch roots and per-arm cgroups remain absent.",
+    "Frozen cgroup parent identity and required controllers match in actual execution context.",
+    "Complete source-closure validation remains PASS.",
+    "Queue via enwiki9_lab enqueue-tool with explicit CPU and exact source closure SHA; publish ownership under adaptive handoff procedure.",
+    "Do not set enqueue-tool --scratch-directory: v13 requires its result root absent and creates it itself.",
+    "Launch only this candidate with one adaptive worker and explicit memory headroom; remain responsible for its receipts and handoff."
+  ],
+  "validation_cpu": 2,
+  "validation_cpu_is_launch_selection": false,
+  "source_references": [
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.py",
+      "line": 205
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py",
+      "line": 262
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py",
+      "line": 372
+    },
+    {
+      "path": "tools/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v10.py",
+      "line": 142
+    },
+    {
+      "path": "docs/eligibility_first_cmix_horizon_strategy_20260901.json",
+      "line": 354
+    }
+  ]
+}
