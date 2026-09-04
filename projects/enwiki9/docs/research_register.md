@@ -80,17 +80,15 @@ Evidence:
 and
 `tools/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.py`.
 
-## 2026-09-04 - PALIMPSEST-MARKET-v2 is rejected before execution
+## 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow
 
-`palimpsest_market_v2` was concurrently materialized as a nine-arm nested
-extension of the retained HARM mechanism. It is now rejected before execution:
-the frozen campaign directive permits only the independent HARM-Delta edit
-kernel, forbids broad HARM, and forbids combination before independently paying
-native singles exist. No corpus replay, candidate measurement, activation, or
-score credit exists. Its plan, experiment, and source are retained only as
-zero-credit design evidence; the rejected proposal has no scheduling or
-successor authority. The remaining description records what was considered,
-not an active lane.
+`palimpsest_market_v2` is the separately versioned successor to the retained
+HARM mechanism, not a revival of the historical broad PALIMPSEST factorization.
+The old portfolio warning remains binding: semantic elegance does not excuse
+parser, realization, source, framing, model, table, package, runtime, or memory
+cost. The proposal is therefore `dormant_dependency` while the active HORIZON
+experiment continues unchanged. No corpus replay may read HORIZON's scientific
+outputs before its fail-closed terminal route.
 
 The frozen nested arms are `P/K/A/M/H/T/X/C/G`. A is exactly HARM-Delta's
 latest completed exact-route value and generic causal edit transducer. M changes
@@ -151,7 +149,7 @@ fresh joint finite archive. Separate gains are never added.
 
 Evidence: `operations/planning/palimpsest_market_v2.json`,
 `operations/adaptive/experiments/palimpsest_market_v2.json`,
-`operations/adaptive/proposals/rejected/000_palimpsest_market_v2.json`, and
+`operations/adaptive/proposals/proposed/000_palimpsest_market_v2.json`, and
 `programs/palimpsest_market_v2/`.
 
 ## 2026-09-03 - HARM-Delta is frozen as a distinct causal edit-residual mechanism
