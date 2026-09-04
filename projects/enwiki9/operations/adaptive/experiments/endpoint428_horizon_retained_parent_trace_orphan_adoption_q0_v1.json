@@ -1,0 +1,272 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1",
+  "proposalId": "endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "endpoint428_horizon_retained_parent_trace_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_q0_v1/20260830T224806838440Z_565130472695.json",
+      "sha256": "sha256:f27573bb08cac47dfe9ed0915617a692c72d8fa5f0c406c0517e3664574013f4"
+    }
+  },
+  "hypothesis": {
+    "claim": "The exact already-running orphaned Endpoint428 parent process can be observed without control or scientific inspection and will leave an immutable 10,364,777,488-byte CMX21P1 trace plus a nonempty archive whose frozen pretrace inputs remain byte-identical, thereby authorizing one zero-credit immutable-trace analysis continuation while preserving continuous-resource-proof=false.",
+    "falsification": "Forbid analysis from this artifact set if adopted process identity changes, a frozen pretrace input changes, the terminal trace has the wrong byte count/header/row count, the archive is empty, source-v1 is mutated by the observer, or scientific values are accessed before both adopted processes are absent."
+  },
+  "changedMechanism": "Add only a forward, read-only adoption observer and terminal immutable-artifact sealer around the already-running orphaned v1 wrapper/CMIX process; do not change v1 execution, probabilities, files, process state, or scientific predicates.",
+  "invariants": [
+    "The observer binds boot ID, PID, Linux process start ticks, parent relation, and raw argv SHA-256 before accepting a live process.",
+    "The observer never signals, reparents, renices, changes affinity, migrates cgroups, opens writable descriptors to, or otherwise controls either adopted process.",
+    "Before both adopted process identities are absent, the observer reads only process metadata, file metadata, the already-existing guard JSON, frozen small inputs, and the fixed 16-byte trace header.",
+    "No gain, arm, control margin, chronological partition, or verdict is read or derived by this experiment.",
+    "The source-v1 result namespace is never written, renamed, linked, truncated, deleted, or completed by this observer.",
+    "The pretrace build, both manifests, and both scans remain byte-identical to the hashes frozen before adoption.",
+    "Terminal success requires exact CMX21P1 magic, 5,182,388,736 rows, 10,364,777,488 bytes, a nonempty stable parent archive, and three stable terminal file-stat samples.",
+    "The original monitoring gap is permanent: continuousResourceProofPass is false by construction and no resource qualification can be inferred from forward samples.",
+    "A recovery pass authorizes only a separately frozen immutable-trace analyzer; it grants no HORIZON scientific pass, native integration, archive saving, package score, or Hutter credit."
+  ],
+  "controls": [
+    {
+      "id": "A",
+      "role": "treatment",
+      "definition": "Forward read-only adoption of the exact frozen wrapper/CMIX identities followed by terminal immutable trace and archive sealing."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "The source-v1 namespace and adopted processes continue without any observer write or control action; frozen pretrace inputs must remain byte-identical."
+    },
+    {
+      "id": "I",
+      "role": "negative",
+      "definition": "Wrong PID/start/boot/argv identity, changed static input, malformed trace geometry, or source mutation must fail closed in synthetic tests and canonical execution."
+    }
+  ],
+  "population": {
+    "unit": "Endpoint428 parent pretruth probability row emitted by the already-running v1 process",
+    "scopeBytes": 10364777488,
+    "scopeSymbols": 5182388736,
+    "selection": "Exactly the terminal parent.p1 and parent.archive produced by the already-running source job 20260830T224837Z_a120752fb5; no rerun or replacement process is admissible.",
+    "coordinate": "Trace header followed by one little-endian uint16 parent probability per WRT truth bit in original source order."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "process identity and /proc resource metadata",
+      "source-v1 file names, sizes, inodes, and timestamps",
+      "the fixed 16-byte CMX21P1 trace header",
+      "already-frozen build, manifest, scan, job, guard, runner, experiment, and candidate-revision bytes"
+    ],
+    "forbiddenInformation": [
+      "any parent probability row beyond the fixed header before terminal process absence",
+      "any HORIZON gain, arm output, control margin, chronological partition, or verdict",
+      "any mutation or control of source-v1 files or adopted processes",
+      "any claim that forward observation repairs the missing continuous resource interval"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "adoption-plan",
+      "path": "operations/planning/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1.json",
+      "sha256": "sha256:6b39c52fce1eaf5b25a4e4552b9e24c6e1d59fb1367c72f39a59aa69502044c4"
+    },
+    {
+      "id": "v1-experiment",
+      "path": "operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_q0_v1.json",
+      "sha256": "sha256:1ee83f431531f05654ac0990de302acbbbde36fa4ac42acd3bebbd9dd26f20aa"
+    },
+    {
+      "id": "v1-candidate-revision",
+      "path": "operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_q0_v1/20260830T224806838440Z_565130472695.json",
+      "sha256": "sha256:f27573bb08cac47dfe9ed0915617a692c72d8fa5f0c406c0517e3664574013f4"
+    },
+    {
+      "id": "v1-runner",
+      "path": "tools/endpoint428_horizon_retained_parent_trace_q0_v1.py",
+      "sha256": "sha256:f1f309dfc58f704d316af840b91cdefedbe277da87347a05fbed5c10121645a1"
+    },
+    {
+      "id": "v1-build",
+      "path": "results/endpoint428_horizon_retained_parent_trace_q0_v1/build.json",
+      "sha256": "sha256:7b7d2bb447794c796c67bbeca1778b964a5bdf15e865a518bba7922dc2563947"
+    },
+    {
+      "id": "v1-manifest-a",
+      "path": "results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-a.bin",
+      "sha256": "sha256:33d382c511f106dfc6c7459f0220edae3a6a67a92bfbf07476652db2fc685d27"
+    },
+    {
+      "id": "v1-manifest-b",
+      "path": "results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.bin",
+      "sha256": "sha256:33d382c511f106dfc6c7459f0220edae3a6a67a92bfbf07476652db2fc685d27"
+    },
+    {
+      "id": "v1-scan-a",
+      "path": "results/endpoint428_horizon_retained_parent_trace_q0_v1/scan-a.json",
+      "sha256": "sha256:df0cf2ce43680a1cd96d22ad0863c41f467ab37680ce5c9bf79ca0f200f1c01f"
+    },
+    {
+      "id": "v1-scan-b",
+      "path": "results/endpoint428_horizon_retained_parent_trace_q0_v1/scan-b.json",
+      "sha256": "sha256:df0cf2ce43680a1cd96d22ad0863c41f467ab37680ce5c9bf79ca0f200f1c01f"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 0,
+    "expectedNetSavingsBytes": 0
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 0,
+    "interactionRisk": 0
+  },
+  "measurements": [
+    {
+      "id": "processIdentityAdopted",
+      "definition": "Both live processes matched the frozen boot/PID/start/parent/argv identity before observation.",
+      "unit": "boolean"
+    },
+    {
+      "id": "terminalProcessAbsence",
+      "definition": "Both exact adopted process identities are absent before terminal artifact access.",
+      "unit": "boolean"
+    },
+    {
+      "id": "traceBytes",
+      "definition": "Stable terminal parent.p1 byte count.",
+      "unit": "bytes"
+    },
+    {
+      "id": "traceRows",
+      "definition": "Stable terminal CMX21P1 declared row count.",
+      "unit": "rows"
+    },
+    {
+      "id": "traceGeometryPass",
+      "definition": "Terminal magic, row count, byte count, and stable regular-file identity all match.",
+      "unit": "boolean"
+    },
+    {
+      "id": "archiveBytes",
+      "definition": "Stable terminal parent.archive byte count.",
+      "unit": "bytes"
+    },
+    {
+      "id": "staticInputsIdentityPass",
+      "definition": "Every prospectively hash-bound pretrace input remained identical.",
+      "unit": "boolean"
+    },
+    {
+      "id": "sourceMutationDetected",
+      "definition": "The observer detected a source-v1 write attributable to itself or a forbidden namespace mutation.",
+      "unit": "boolean"
+    },
+    {
+      "id": "scienceAccessedBeforeTerminal",
+      "definition": "The observer read or derived a probability row, gain, margin, partition, or verdict before terminal process absence.",
+      "unit": "boolean"
+    },
+    {
+      "id": "forwardObservationComplete",
+      "definition": "The observer recorded from successful adoption through terminal process absence and stable file sealing.",
+      "unit": "boolean"
+    },
+    {
+      "id": "continuousResourceProofPass",
+      "definition": "Always false because the predecessor monitor disappeared before this prospective adoption.",
+      "unit": "boolean"
+    },
+    {
+      "id": "recoveryIntegrityPass",
+      "definition": "All recovery-integrity predicates pass, excluding the permanently false resource-proof field.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "adopted-exact-processes",
+      "measurement": "processIdentityAdopted",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "observed-terminal-absence",
+      "measurement": "terminalProcessAbsence",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "complete-trace-geometry",
+      "measurement": "traceGeometryPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "nonempty-parent-archive",
+      "measurement": "archiveBytes",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "static-input-identity",
+      "measurement": "staticInputsIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "no-source-mutation",
+      "measurement": "sourceMutationDetected",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "no-adaptive-science-read",
+      "measurement": "scienceAccessedBeforeTerminal",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "complete-forward-observation",
+      "measurement": "forwardObservationComplete",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "recovery-integrity",
+      "measurement": "recoveryIntegrityPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "recovery-integrity-failure",
+      "measurement": "recoveryIntegrityPass",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "outputs": [
+    "results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/adoption.json",
+    "results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/progress.json",
+    "results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/samples.jsonl",
+    "results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/terminal-source.json",
+    "results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/result.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-04T13:24:00Z"
+}
