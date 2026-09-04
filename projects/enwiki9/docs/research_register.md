@@ -76,6 +76,29 @@ Evidence: `operations/evidence/20260904_cmix_env8192_v13_p_terminal_failure.json
 `operations/adaptive/reflections/20260904T205826Z_fdcae0ea3e.json`, and
 `operations/adaptive/reflections/20260904T210420Z_720cd4eb87.json`.
 
+The correction-only CMIX v14 is sealed at candidate tree
+`0079bc6e5aaedc3e9237e15499fe2fcbf22cd5e89e452d464a338c7978346759`.
+Its source closure is
+`2606d31563ec33cfc4be41ab78b2f4793110e30f64a336439e2ca6231f4d42ed`.
+Validation records 13 process-lifecycle cases and six terminal-affinity cases.
+Per-process I/O samples remain diagnostic; unique-tree I/O totals are unknown
+because parent counters may include waited-for children. The inherited v13
+memory guard, original codec, P/E-A/E-B/decode arms, package accounting and
+opening-1M authority remain unchanged. Fiber receiptfix-v1 is sealed at tree
+`1cf407a40b2258071c6d0c201c9b4057eb061463861ac3ca0af5756dc387a847`.
+It preserves the access classifier and scientific core while publishing
+`source-access-denial-probe.json`. Its synthetic validation now exercises that
+actual guarded publication and readback under the resource cap. Both
+corrections require their own validated queue records and unique output roots;
+neither inherits a scientific result from the failed wrappers.
+
+Fiber's capped validation passed actual diagnostic publication and readback,
+one denied synthetic access, a 14,819,328-byte memory peak, zero memory events,
+successful child exit and verified cgroup removal. Evidence:
+`operations/evidence/20260904_fiber_fossil_receiptfix_q0_v1_guarded_publication_validation.json`,
+`operations/evidence/20260904_cmix_v14_lifecycle_affinity_preflight_validation.json`,
+and `operations/provenance/cmix_v14_independent_source_review_20260904.json`.
+
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 
 The proposal ranker previously considered proposal status, experiment
