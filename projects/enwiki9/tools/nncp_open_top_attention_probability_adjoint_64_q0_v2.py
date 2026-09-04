@@ -20,13 +20,15 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 CANDIDATE_ID = "nncp_open_top_attention_probability_adjoint_64_q0_v2"
+EXPERIMENT_ID = "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate"
 RESULT = ROOT / "results" / CANDIDATE_ID
 PROGRAM = ROOT / "programs" / CANDIDATE_ID
 SOURCE = PROGRAM / "attention_probability_adjoint.cpp"
 META = PROGRAM / "meta.json"
 DESCRIPTOR = PROGRAM / "program.py"
 CONTRACT = ROOT / "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2.json"
-PROPOSAL = ROOT / "operations/adaptive/proposals/proposed/000_nncp_open_top_attention_probability_adjoint_64_q0_v2.json"
+TOOLCHAIN_CONTRACT = ROOT / "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2_toolchain.json"
+EXPERIMENT = ROOT / "operations/adaptive/experiments" / f"{EXPERIMENT_ID}.json"
 LEASE = ROOT / "operations/runtime/exclusive_full1g.json"
 RESOURCE_GUARD = ROOT / "tools/run_with_resource_guard_v3.py"
 TASKSET = Path("/usr/bin/taskset")
@@ -46,18 +48,16 @@ SOURCE_SHA256 = "94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe2
 ELEMENTS = 5_242_880
 SOURCE_CEILING = 500_000
 
-COMPILER = Path("/home/x/enwiki9-nonproof/toolchains/clang17/root/usr/bin/clang++-17")
-TOOLCHAIN_LIB = COMPILER.parents[1] / "lib/x86_64-linux-gnu"
-LLVM_BIN = Path("/home/x/enwiki9-nonproof/cmix-obias-donor/cmix-obias/tools/llvm17-local/bin")
-LINKER = LLVM_BIN / "ld.lld"
+COMPILER = Path("/usr/bin/x86_64-linux-gnu-g++-15")
+LINKER = Path("/usr/bin/x86_64-linux-gnu-ld")
 FLAGS = [
-    "-std=c++17", "-O3", "-mavx2", "-mfma", "-ffp-contract=off",
-    "-fno-fast-math", "-fno-associative-math", "-fuse-ld=lld",
-    "-Wall", "-Wextra", "-Werror",
+    "-std=c++17", "-O2", "-Wall", "-Wextra", "-Werror", "-pedantic",
+    "-mavx2", "-mfma", "-fno-fast-math", "-fno-associative-math",
+    "-ffp-contract=off", "-march=x86-64", "-mtune=generic",
+    "-Wl,--build-id=none",
 ]
 ENVIRONMENT = {
-    "PATH": f"{LLVM_BIN}:/usr/bin:/bin",
-    "LD_LIBRARY_PATH": str(TOOLCHAIN_LIB),
+    "PATH": "/usr/bin:/bin",
     "LANG": "C",
     "LC_ALL": "C",
     "TZ": "UTC",
@@ -94,6 +94,84 @@ def sha256(path: Path) -> str:
 
 def artifact(path: Path) -> dict[str, Any]:
     return {"path": str(path), "bytes": path.stat().st_size, "sha256": sha256(path)}
+
+
+def bound_proposal() -> Path:
+    matches = []
+    for state in ("developed", "claimed", "proposed"):
+        matches.extend(
+            (ROOT / "operations" / "adaptive" / "proposals" / state).glob(
+                f"*_{EXPERIMENT_ID}.json"
+            )
+        )
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected one bound {EXPERIMENT_ID} proposal, found {len(matches)}"
+        )
+    return matches[0]
+
+
+def verify_adaptive_bindings() -> dict[str, Any]:
+    raw_revision = os.environ.get("GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON")
+    raw_experiment = os.environ.get("GAMMA_ENWIKI9_EXPERIMENT_JSON")
+    snapshot_id = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ID")
+    snapshot_root = os.environ.get("GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT")
+    if not all((raw_revision, raw_experiment, snapshot_id, snapshot_root)):
+        raise RuntimeError("revision-bound adaptive execution environment is required")
+    revision = json.loads(raw_revision)
+    experiment_reference = json.loads(raw_experiment)
+    if revision.get("candidateId") != CANDIDATE_ID or snapshot_id != CANDIDATE_ID:
+        raise RuntimeError("adaptive candidate identity mismatch")
+    expected_experiment_path = EXPERIMENT.relative_to(ROOT).as_posix()
+    if experiment_reference.get("path") != expected_experiment_path:
+        raise RuntimeError("adaptive experiment path mismatch")
+    expected_experiment_sha256 = experiment_reference.get("sha256")
+    if expected_experiment_sha256 != f"sha256:{sha256(EXPERIMENT)}":
+        raise RuntimeError("adaptive experiment digest mismatch")
+    snapshot = Path(snapshot_root).resolve(strict=True)
+    for relative, live in (
+        ("attention_probability_adjoint.cpp", SOURCE),
+        ("meta.json", META),
+        ("program.py", DESCRIPTOR),
+    ):
+        sealed = snapshot / relative
+        if not sealed.is_file() or sha256(sealed) != sha256(live):
+            raise RuntimeError(f"sealed candidate snapshot differs: {relative}")
+    return {
+        "candidate_revision": revision,
+        "experiment": experiment_reference,
+        "snapshot_root": str(snapshot),
+    }
+
+
+def verify_toolchain() -> dict[str, Any]:
+    contract = json.loads(TOOLCHAIN_CONTRACT.read_text(encoding="utf-8"))
+    if contract.get("candidate_id") != CANDIDATE_ID or contract.get("flags") != FLAGS:
+        raise RuntimeError("pinned toolchain contract differs from runner")
+    records = [contract.get("compiler"), contract.get("linker"), *contract.get("tools", [])]
+    for record in records:
+        if not isinstance(record, dict):
+            raise RuntimeError("malformed pinned toolchain record")
+        path = Path(str(record.get("path", "")))
+        if not path.is_file() or sha256(path) != record.get("sha256"):
+            raise RuntimeError(f"pinned tool identity mismatch: {path}")
+    compiler_line = subprocess.run(
+        [str(COMPILER), "--version"], env=ENVIRONMENT, check=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    ).stdout.splitlines()[0]
+    linker_line = subprocess.run(
+        [str(LINKER), "--version"], env=ENVIRONMENT, check=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    ).stdout.splitlines()[0]
+    if compiler_line != contract["compiler"]["version_line"]:
+        raise RuntimeError("pinned compiler version line mismatch")
+    if linker_line != contract["linker"]["version_line"]:
+        raise RuntimeError("pinned linker version line mismatch")
+    return {
+        "contract": artifact(TOOLCHAIN_CONTRACT),
+        "compiler_version_line": compiler_line,
+        "linker_version_line": linker_line,
+    }
 
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
@@ -263,8 +341,13 @@ def compare(left: Path, right: Path) -> dict[str, Any]:
             "maximum_absolute_error": maximum}
 
 
-def source_package(path: Path) -> None:
-    members = sorted((SOURCE, META, DESCRIPTOR, Path(__file__).resolve(), RESOURCE_GUARD, CONTRACT, PROPOSAL),
+def source_package(path: Path, proposal: Path) -> None:
+    members = sorted((SOURCE, META, DESCRIPTOR, Path(__file__).resolve(), RESOURCE_GUARD,
+                      ROOT / "tools/research_contracts.py",
+                      ROOT / "tools/enwiki9_python_source_closure.py",
+                      ROOT / "contracts/research/v1/objective-contract.json",
+                      ROOT / "contracts/research/v1/objective-contract.schema.json",
+                      CONTRACT, TOOLCHAIN_CONTRACT, EXPERIMENT, proposal),
                      key=lambda item: str(item.relative_to(ROOT)))
     tar_path = path.with_suffix("")
     with tarfile.open(tar_path, "w") as archive:
@@ -283,7 +366,11 @@ def source_package(path: Path) -> None:
 
 def main() -> int:
     assert_exclusive_host_released()
-    for path in (SOURCE, META, DESCRIPTOR, CONTRACT, PROPOSAL, COMPILER, LINKER, RESOURCE_GUARD, TASKSET, SHELL):
+    proposal = bound_proposal()
+    adaptive_bindings = verify_adaptive_bindings()
+    for path in (SOURCE, META, DESCRIPTOR, CONTRACT, TOOLCHAIN_CONTRACT, EXPERIMENT,
+                 proposal, COMPILER,
+                 LINKER, RESOURCE_GUARD, TASKSET, SHELL):
         if not path.is_file():
             raise FileNotFoundError(path)
     cgroups = [require_empty_cgroup("GAMMA_NNCP_CGROUP_A"), require_empty_cgroup("GAMMA_NNCP_CGROUP_B")]
@@ -298,6 +385,7 @@ def main() -> int:
     verify(VALUE, VALUE_BYTES, VALUE_SHA256, "value state")
     verify(ATTENDED, ATTENDED_BYTES, ATTENDED_SHA256, "attended adjoint")
     verify(SOURCE_ADJOINT, OUTPUT_BYTES, SOURCE_SHA256, "source probability adjoint")
+    toolchain = verify_toolchain()
     antecedents = []
     for relative, expected in ANTECEDENTS:
         path = ROOT / relative
@@ -305,8 +393,10 @@ def main() -> int:
             raise RuntimeError(f"antecedent drift: {relative}")
         antecedents.append(artifact(path))
     if RESULT.exists():
-        raise FileExistsError(f"refusing to overwrite {RESULT}")
-    RESULT.mkdir(parents=True)
+        if not RESULT.is_dir() or any(RESULT.iterdir()):
+            raise FileExistsError(f"refusing to overwrite nonempty {RESULT}")
+    else:
+        RESULT.mkdir(parents=True)
     decision: dict[str, Any] = {
         "schema": "gamma.enwiki9.nncp_open_attention_probability_adjoint.v2",
         "candidate_id": CANDIDATE_ID,
@@ -314,11 +404,14 @@ def main() -> int:
         "claim_authority": "none",
         "objective_credit_bytes": 0,
         "promotion_authorized": False,
+        "adaptive_bindings": adaptive_bindings,
+        "toolchain": toolchain,
         "antecedents": antecedents,
         "inputs": {"value": artifact(VALUE), "attended": artifact(ATTENDED),
                    "source_probability_adjoint": artifact(SOURCE_ADJOINT)},
         "program": {"source": artifact(SOURCE), "contract": artifact(CONTRACT),
-                    "proposal": artifact(PROPOSAL), "compiler": artifact(COMPILER),
+                    "experiment": artifact(EXPERIMENT), "proposal": artifact(proposal),
+                    "compiler": artifact(COMPILER),
                     "linker": artifact(LINKER), "resource_guard": artifact(RESOURCE_GUARD),
                     "flags": FLAGS},
         "resource_contract": {
@@ -375,7 +468,7 @@ def main() -> int:
                                      "replay_identity": replay_identity,
                                      "forbidden_dynamic_dependencies": forbidden, "ldd": ldd}
 
-        source_package(RESULT / "incremental_source.tar.xz")
+        source_package(RESULT / "incremental_source.tar.xz", proposal)
         comparisons = decision["execution"]["comparisons"]
         gates = {
             "complete_population": all(row["elements"] == ELEMENTS for row in comparisons.values()),

@@ -1,0 +1,265 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
+  "proposalId": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/20260904T152600038581Z_4e4432dcbbd6.json",
+      "sha256": "sha256:1c5db0a7a7cde8090c3071b9c17ea499d4768b333a8bf898ed83ba085f6f0cf9"
+    }
+  },
+  "hypothesis": {
+    "claim": "The zero-credit dP layout bridge can be incorporated into one LibNC-free complete 65,536-symbol causal replay whose O, K, F, and S arms exactly reproduce retained integer probabilities and every future-affecting checkpoint without captured teacher gradients as treatment inputs.",
+    "falsification": "After complete input and implementation closure exists, any population omission, hidden treatment input, dP bridge mismatch, O or F oracle mismatch, K versus O mismatch, dead shifted control, nondeterministic output, dependency escape, or resource failure rejects the integrated implementation. Missing closure keeps the experiment dormant and supplies no scientific verdict."
+  },
+  "changedMechanism": "Replace the retired isolated-primitive ladder with one complete open first-half forward, loss, backward, midpoint Adam update, state rebuild, and second-half replay; apply and independently re-verify the fixed dP serialization bridge only at its integrated checkpoint.",
+  "invariants": [
+    "The v3 isolated dP source-layout gate remains failed with zero credit; this experiment cannot relabel or rescue it.",
+    "The F and O traces fix all 65,536 row, symbol, tree, truth-path, branch, segment, and execution coordinates before implementation.",
+    "Captured teacher gradients, parameters after update, hidden states, and caches may be read only as comparators after the corresponding open treatment payload is complete.",
+    "No additional isolated backward primitive, layout correction, tolerance, layer subset, rank, scale, or parameter sweep is authorized.",
+    "Every future-affecting parameter, optimizer value, recurrent state, attention state, cache, cursor, truth position, and pending update enters canonical state hashes.",
+    "Compression, archive, package-score, and objective credit remain exactly zero even if parity passes."
+  ],
+  "controls": [
+    {
+      "id": "O",
+      "role": "comparator",
+      "definition": "Open output-head-only trajectory must reproduce the immutable O probability oracle and every bound O checkpoint."
+    },
+    {
+      "id": "K",
+      "role": "replay",
+      "definition": "Execute complete bookkeeping and state rebuild while committing only the O update; K must equal O at every probability and future-affecting state checkpoint."
+    },
+    {
+      "id": "F",
+      "role": "treatment",
+      "definition": "Execute the complete open full-model first-half backward, midpoint Adam update, rebuild, and second-half trajectory; F must reproduce the immutable F oracle."
+    },
+    {
+      "id": "S",
+      "role": "shifted",
+      "definition": "Run identical F machinery after the preregistered 257-segment cyclic reassignment of first-half truth-to-update associations; the control must be live and must not equal F."
+    },
+    {
+      "id": "layout-bridge",
+      "role": "replay",
+      "definition": "At the integrated top-attention dP checkpoint, retain the open state,head,stream,key payload, materialize the fixed state,stream,head,key view independently, and require exact comparator identity without tolerance."
+    }
+  ],
+  "population": {
+    "unit": "transformed symbol",
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "selection": "All 65,536 immutable rows, 1,024 contiguous 64-symbol segments, and 917,527 truth-path branches in the retained F/O trace pair.",
+    "coordinate": "Original transformed-symbol ordinal; first half is positions 0 through 31 and second half is positions 32 through 63 within each frozen segment."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Content-addressed initial model, Adam, recurrent, attention, cache, population, and truth state once the missing input lock is materialized.",
+      "Already decoded first-half truths at their original causal positions.",
+      "The open treatment's own forward activations and partial backward values.",
+      "Comparator tensors only after the corresponding treatment payload and its hash are committed."
+    ],
+    "forbiddenInformation": [
+      "Captured teacher gradients or post-update state as treatment inputs.",
+      "Future truths, future probabilities, fitted scale, fitted permutation, tolerance, selected segments, or selected layers.",
+      "A LibNC or NNCP executable, shared object, service, network endpoint, or unbound generated artifact during treatment execution.",
+      "Any partial HORIZON scientific output or state."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "planning-contract",
+      "path": "operations/planning/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json",
+      "sha256": "sha256:59366d6d08cba0329a55815e8e61260b18092159070092d8a02a5247c5fc53b7"
+    },
+    {
+      "id": "v3-negative-decision",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json",
+      "sha256": "sha256:2a99acc939078f97518149094bb0626806c93b0347a912b0fc5ba3050f121f43"
+    },
+    {
+      "id": "layout-bridge-verification",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json",
+      "sha256": "sha256:d092a18211c734738d015957f8ac0754bd227b546b52fb0816e6d99e71d156c0"
+    },
+    {
+      "id": "layout-bridge-reflection",
+      "path": "operations/adaptive/reflections/20260904T152612Z_cde41120fb.json",
+      "sha256": "sha256:4732fda29e2cb6b9130d1796d12eb9557ec36a30a72e8cdebcb8c9911a082042"
+    },
+    {
+      "id": "isolated-dp-exclusion",
+      "path": "operations/adaptive/exclusions/nncp_open_top_attention_probability_adjoint_64_q0_v3_source_layout_negative.json",
+      "sha256": "sha256:59f81879048d0966bb701a64e79f27fa108bcaebd1e66a099bc87634ee484746"
+    },
+    {
+      "id": "deep-residual-decision",
+      "path": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+      "sha256": "sha256:15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8"
+    },
+    {
+      "id": "F-probability-oracle",
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/F_trace.bin",
+      "sha256": "sha256:73ae287ac4c55d3c24eb0d4805054e38e50e72bb9873c1f4b3a28d44cb76d569"
+    },
+    {
+      "id": "O-probability-oracle",
+      "path": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/O_trace.bin",
+      "sha256": "sha256:f0a7c9185c93f58316209810c2f7515b86934af188ca1a1ffc933f552bd8a54c"
+    },
+    {
+      "id": "single-boundary-open-chain",
+      "path": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "sha256": "sha256:1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 2000000,
+    "expectedNetSavingsBytes": -2000000
+  },
+  "search": {
+    "expectedTransferRetention": 0.0,
+    "expectedRuntimeRatio": 0.1,
+    "expectedMemoryRatio": 0.5,
+    "uncertaintyRisk": 1.0,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {
+      "id": "inputClosurePass",
+      "definition": "The complete population, model, optimizer, state, oracle, implementation, build, and runtime lock validates before execution.",
+      "unit": "boolean"
+    },
+    {
+      "id": "completeOpenBackwardPass",
+      "definition": "All 246 update-target gradients at every frozen update boundary are produced from open causal inputs and match their comparators exactly.",
+      "unit": "boolean"
+    },
+    {
+      "id": "layoutBridgePass",
+      "definition": "The integrated top-attention dP payload reproduces the bound source comparator after only the frozen head/stream serialization permutation.",
+      "unit": "boolean"
+    },
+    {
+      "id": "populationComplete",
+      "definition": "All 65,536 rows and 917,527 branches execute exactly once in frozen order.",
+      "unit": "boolean"
+    },
+    {
+      "id": "KEqualsOPass",
+      "definition": "K and O are byte-identical at every probability and future-affecting state checkpoint.",
+      "unit": "boolean"
+    },
+    {
+      "id": "FEqualsOraclePass",
+      "definition": "Open F reproduces every integer probability and authoritative full-update checkpoint.",
+      "unit": "boolean"
+    },
+    {
+      "id": "shiftedControlLive",
+      "definition": "S executes the same geometry and differs from F on at least one update payload and downstream probability.",
+      "unit": "boolean"
+    },
+    {
+      "id": "repeatIdentityPass",
+      "definition": "Two complete clean executions produce byte-identical payloads, checkpoint hashes, controls, and decision fields.",
+      "unit": "boolean"
+    },
+    {
+      "id": "resourceAndDependencyPass",
+      "definition": "Single-core process-tree memory, scratch, runtime-root, dependency, network, and source-package checks all pass.",
+      "unit": "boolean"
+    },
+    {
+      "id": "scientificExecutionInvalid",
+      "definition": "A launched execution has complete locked inputs but fails population, causality, arithmetic, replay, dependency, or resource validity before a parity verdict.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "input-closure",
+      "measurement": "inputClosurePass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "complete-open-backward",
+      "measurement": "completeOpenBackwardPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "layout-bridge",
+      "measurement": "layoutBridgePass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "complete-population",
+      "measurement": "populationComplete",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "K-equals-O",
+      "measurement": "KEqualsOPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "F-equals-oracle",
+      "measurement": "FEqualsOraclePass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "shifted-control-live",
+      "measurement": "shiftedControlLive",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "repeat-identity",
+      "measurement": "repeatIdentityPass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "resource-dependency",
+      "measurement": "resourceAndDependencyPass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "invalid-execution",
+      "measurement": "scientificExecutionInvalid",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "outputs": [
+    "results/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/input-lock.json",
+    "results/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/decision.json"
+  ],
+  "generatedUtc": "2026-09-04T15:35:16Z"
+}

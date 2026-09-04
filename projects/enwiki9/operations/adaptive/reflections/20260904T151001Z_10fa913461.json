@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "verify_adaptive_bindings used byte hashing for semantic-meta-v1 instead of accepting its canonical materialization."
+  },
+  "candidateId": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "candidateRevision": {
+    "candidateId": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+    "candidateTreeSha256": "sha256:4df5d60663f63224b6037086032cc436770dd81887ade52a0c848549bcc16d0f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_probability_adjoint_64_q0_v2/20260904T150905464990Z_4df5d60663f6.json",
+      "sha256": "sha256:bcf73fac34d3c2e0f0c299e13e7dba1a6aaca2f2e23032ff57f7d6aea9c70c96"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "The live metadata was canonicalized byte-for-byte to the already bound immutable semantic-meta-v1 blob without changing the candidate tree, runner, experiment, arithmetic, population, or controls.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20260904T151001Z_10fa913461.log",
+      "sha256": "sha256:e7172602a3f921c97ddef9f54c9764f71fe6d6338b6e3c8a0571a627a0dbe26e"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v2_gate.json",
+    "sha256": "sha256:a6699b6e62dda70d58d2615a1e2a3632adbc088d7e67eafb32d048195051d9c7"
+  },
+  "generatedUtc": "2026-09-04T15:12:29+00:00",
+  "hypothesis": {
+    "rationale": "No evaluator was built and no treatment, comparator, control, or oracle output was computed.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260904T151001Z_10fa913461.json",
+    "sha256": "sha256:f0eff76e4065083834a48573c1fece72d5ed956a24cfcb96f9fac480f27558c6"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Revision-normalized metadata must be compared in its canonical representation; cosmetic live JSON formatting is outside the semantic candidate tree."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260904t151001z_10fa913461",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The runner compared raw meta.json bytes even though candidate revisions intentionally materialize semantic-meta-v1 canonical bytes; execution stopped before compilation or oracle evaluation."
+    ],
+    "valid": false
+  }
+}

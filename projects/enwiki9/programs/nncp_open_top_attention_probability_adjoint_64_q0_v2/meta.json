@@ -10,5 +10,41 @@
   "family": "nncp_update_schedule",
   "hypothesis": "Scalar explicit-FMA and AVX2/FMA implementations both reproduce the complete source probability adjoint exactly.",
   "id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
-  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1"
+  "measured": {
+    "reflections": {
+      "20260904T151001Z_10fa913461": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260904T151001Z_10fa913461.json",
+        "sha256": "sha256:b9ad3bbba7dfb8b5b7d18f97d7602cab4cf5a815310a7d3fe331e955846a4f3a",
+        "valid": false
+      },
+      "20260904T151236Z_9e1f7ef3fd": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260904T151236Z_9e1f7ef3fd.json",
+        "sha256": "sha256:d8e6e56d41efdf05e3bd654b496ebc8e1c656ac75ba2d475dc34d3243c2d3962",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v2_gate.json",
+      "sha256": "sha256:a6699b6e62dda70d58d2615a1e2a3632adbc088d7e67eafb32d048195051d9c7"
+    },
+    "interfaces_exposed": [
+      "exact open value-state and attended-adjoint to scalar probability adjoint",
+      "same inputs to AVX2 probability adjoint",
+      "source, layout, sign, replay, package, and resource comparators"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+    "retired_neighborhoods": [
+      "AVX-only probability-adjoint claims without an exposed scalar reference",
+      "tolerance, mismatch-fitted correction, alternate layouts, and captured-output substitution"
+    ]
+  },
+  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "status": "candidate",
+  "verdict": "Use the single correction-only v3 successor changing only metadata normalization and evidence packaging; preserve source tensors, C++ arithmetic, controls, thresholds, toolchain, and resource contract."
 }

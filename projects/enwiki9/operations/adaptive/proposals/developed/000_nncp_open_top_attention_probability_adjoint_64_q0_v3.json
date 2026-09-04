@@ -1,0 +1,58 @@
+{
+  "candidate_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "claimed_at": "2026-09-04T15:19:11+00:00",
+  "created_at": "2026-09-04T15:19:02+00:00",
+  "developed_at": "2026-09-04T15:19:12+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v3.json",
+      "sha256": "sha256:609c7741c03e2785390bda4d9dc01e91a0bc7b3209e58df4c8cffb78f45d87ad"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260904T151001Z_10fa913461.json",
+      "sha256": "sha256:b9ad3bbba7dfb8b5b7d18f97d7602cab4cf5a815310a7d3fe331e955846a4f3a"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260904T151236Z_9e1f7ef3fd.json",
+      "sha256": "sha256:d8e6e56d41efdf05e3bd654b496ebc8e1c656ac75ba2d475dc34d3243c2d3962"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v3.json",
+    "sha256": "sha256:de86904d2e95a2f2122abb026a556734bed37a2457ac02cb7d316576322ba299"
+  },
+  "hypothesis": "With semantic-meta-v1 snapshot verification corrected and every mathematical input held fixed, the LibNC-free scalar and AVX2/FMA implementations exactly reproduce each other and the complete 5,242,880-word source probability adjoint.",
+  "interfaces_exposed": [
+    "semantic-meta-v1 normalized snapshot verification",
+    "unchanged scalar and AVX exact probability-adjoint edge",
+    "unchanged source, layout, sign, replay, package, and resource comparators"
+  ],
+  "kill_condition": "Any pre-arithmetic failure exhausts this correction route; any integrity-valid arithmetic or control failure retires the exact implementation without fitting or tolerance.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "parent_proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+  "priority": 1603,
+  "promotion_condition": "Every exact arithmetic, matched-control, replay, dependency, package, cleanup, snapshot, and external resource predicate passes; authorize only the bounded integrated open replay.",
+  "proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "retired_neighborhoods": [
+    "raw-byte comparison of revision-normalized candidate metadata",
+    "further correction successors after v3"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1603,
+  "state": "developed",
+  "title": "Correction-only exact attention-probability adjoint v3"
+}

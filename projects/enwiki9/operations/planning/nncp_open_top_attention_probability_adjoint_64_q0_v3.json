@@ -1,0 +1,50 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "revision": 1,
+  "operational_status": "actionable_correction_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "parent_candidate": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "parent_experiment": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v2_gate.json",
+  "correction_evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260904T151001Z_10fa913461.json",
+      "classification": "implementation-failure",
+      "hypothesis_verdict": "not-tested"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260904T151236Z_9e1f7ef3fd.json",
+      "classification": "implementation-failure",
+      "hypothesis_verdict": "not-tested"
+    }
+  ],
+  "correction": {
+    "changed": "Compare meta.json under the candidate revision protocol's semantic-meta-v1 normalization, excluding only the fixed derived reporting fields.",
+    "unchanged": [
+      "all three tensor inputs and their SHA-256 identities",
+      "the 5,242,880-word complete population",
+      "the scalar explicit-FMA evaluator",
+      "the eight-key AVX2/FMA evaluator",
+      "BF16 widening, accumulation order, and final rounding",
+      "wrong-layout and sign-negation controls",
+      "two complete evaluation replays",
+      "the source-package ceiling and forbidden dependencies",
+      "the one-thread decimal memory and temporary-disk resource contract"
+    ]
+  },
+  "terminal_router": {
+    "pre_arithmetic_failure": "infrastructure retry is exhausted; stop and audit the execution substrate",
+    "arithmetic_or_control_failure": "retire this exact probability-adjoint implementation without tolerance or fitting",
+    "pass": "authorize only the already bounded integrated open midpoint replay; compression and score credit remain zero"
+  },
+  "claim_boundary": [
+    "A pass proves one exact backward arithmetic edge only.",
+    "No captured oracle tensor may ship in a Gamma codec.",
+    "A pass does not prove softmax backward, value adjoints, midpoint learning, an integrated predictor, compression gain, or Hutter eligibility."
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "$schema": "campaign-static-contract.schema.json",
   "artifact_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
-  "revision": 1,
-  "operational_status": "dormant_dependency",
+  "revision": 2,
+  "operational_status": "actionable",
   "claim_authority": "none",
   "objective": {
     "objective_id": "gamma-enwiki9-hutter-105m-v1",
@@ -56,7 +56,7 @@
       "scalar_reference": "One explicit scalar hardware FMA per feature in ascending feature order, accumulated from +0.0f.",
       "avx_treatment": "Eight adjacent keys per AVX2 vector, one explicit fused multiply-add per feature in ascending feature order, accumulated from +0.0f.",
       "output_materialization": "One round-to-nearest-even FP32-to-BF16 conversion after the 128th FMA.",
-      "compiler_policy": "fast-math and implicit contraction disabled; explicit FMA intrinsics only",
+      "compiler_policy": "/usr/bin/x86_64-linux-gnu-g++-15 with -O2, -mavx2, -mfma, -fno-fast-math, -fno-associative-math, -ffp-contract=off, -march=x86-64, -mtune=generic, and --build-id=none; explicit FMA intrinsics only",
       "threading": "single process, single thread, fixed iteration and serialization order"
     },
     "controls": {
@@ -78,6 +78,16 @@
     "The pinned compiler and linker identities are retained",
     "All temporary output is removed after retained artifacts are materialized",
     "A valid exclusive resource receipt accompanies execution"
+  ],
+  "activation_evidence": [
+    {
+      "path": "results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-receipt.json",
+      "sha256": "e02b7d65dd4bd2370d314a40e69c39ef381f1cf64121a2bec7b704803ada3d9b"
+    },
+    {
+      "path": "results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-verification.json",
+      "sha256": "cc2647167a0bd62e3c165be86337d77abadcd7d1f38d39d7022acc2798c2ce3c"
+    }
   ],
   "claim_boundary": [
     "Objective and compression credit are zero",

@@ -1,0 +1,325 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+  "proposalId": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "oracle",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_forward_inputs_64_q0_v1/20260816T180145043560Z_42fbc4bdbdc3.json",
+      "sha256": "sha256:95975e0f794c3958681fd8bd81a9a4004582f0a5f0e2eb6f8f76097198b46c5f"
+    }
+  },
+  "hypothesis": {
+    "claim": "A LibNC-free scalar explicit-FMA reference and an eight-key AVX2/FMA treatment produce the same complete BF16 layer-19 probability adjoint and both exactly match the independently captured 5,242,880-word oracle.",
+    "falsification": "Any antecedent drift, incomplete output, scalar/source mismatch, AVX/source mismatch, scalar/AVX mismatch, dead negative control, replay drift, forbidden dependency, source-package overflow, cleanup failure, or resource failure rejects this exact implementation. No tolerance or fitted correction is permitted."
+  },
+  "changedMechanism": "Execute the already specified open layer-19 probability-adjoint arithmetic through a revision-bound prospective gate, with a pinned system toolchain, scalar and AVX implementations, matched layout/sign controls, two complete replays, and independent external resource receipts.",
+  "invariants": [
+    "The value state, attended adjoint, and independent source comparator retain their frozen byte counts and SHA-256 identities.",
+    "BF16 inputs widen by exact upper-word placement, each reduction uses 128 ascending explicit hardware FMAs from positive zero, and the output rounds once to BF16 round-to-nearest-even.",
+    "Scalar and AVX arms differ only in eight-key SIMD packing; population order and serialized state-head-stream-key output are identical.",
+    "No LibNC, GGML, CUDA, OpenMP, GOMP, BLAS, teacher execution, fitted correction, tolerance, or captured-output substitution participates in treatment execution.",
+    "Both complete evaluations run as one-thread children in distinct empty cgroup-v2 domains under the decimal 10,000,000,000-byte memory cap.",
+    "This gate earns zero compression and score credit and authorizes only the already bounded integrated open replay path."
+  ],
+  "controls": [
+    {
+      "id": "scalar",
+      "role": "comparator",
+      "definition": "One scalar explicit FMA per feature in ascending order, compared byte-for-byte with the independent source adjoint."
+    },
+    {
+      "id": "avx",
+      "role": "treatment",
+      "definition": "Eight adjacent keys per AVX2 vector with the identical feature order and BF16 materialization."
+    },
+    {
+      "id": "wrong-layout",
+      "role": "shifted",
+      "definition": "Serialize the AVX values in state-stream-head-key order and require a nonzero source mismatch count."
+    },
+    {
+      "id": "negated",
+      "role": "negative",
+      "definition": "Negate the attended adjoint before the same AVX reduction and require a nonzero source mismatch count."
+    },
+    {
+      "id": "replay",
+      "role": "replay",
+      "definition": "Two complete guarded evaluations must reproduce all scalar, AVX, wrong-layout, and negated outputs byte-for-byte."
+    }
+  ],
+  "population": {
+    "unit": "BF16 layer-19 attention-probability-adjoint word",
+    "scopeBytes": null,
+    "scopeSymbols": 5242880,
+    "selection": "The complete frozen 64-state by 8-head by 32-stream by 320-key tensor; no sampling.",
+    "coordinate": "state, head, stream, key in source serialization order"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Frozen exact open value state, exact open attended adjoint, independent captured source comparator, antecedent receipts, and pinned arithmetic/toolchain contracts."
+    ],
+    "forbiddenInformation": [
+      "Any post-run parameter choice, tolerance, mismatch-coordinate fitting, teacher runtime execution, future symbol, or use of the captured comparator as treatment output."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "static-plan",
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2.json",
+      "sha256": "sha256:3a36bbeb4a9136cfbd3b3c50398899099e71e1849116b2ea8b9e28387991954a"
+    },
+    {
+      "id": "toolchain-binding",
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2_toolchain.json",
+      "sha256": "sha256:2aeb86a7e5eb7280097d9a678949c3fe3d58f8411a3623edb2d9cb223a210b71"
+    },
+    {
+      "id": "superseded-legacy-proposal",
+      "path": "operations/adaptive/proposals/rejected/000_nncp_open_top_attention_probability_adjoint_64_q0_v2.json",
+      "sha256": "sha256:740614b31c7ec7244f5ec478943ca3198f57f1fa59115bbf2796a78ac842e3bb"
+    },
+    {
+      "id": "evaluator-source",
+      "path": "programs/nncp_open_top_attention_probability_adjoint_64_q0_v2/attention_probability_adjoint.cpp",
+      "sha256": "sha256:034b116fecae5b8c124ddcf2d93516d5e987e333c22344e3a434708f084cd972"
+    },
+    {
+      "id": "program-descriptor",
+      "path": "programs/nncp_open_top_attention_probability_adjoint_64_q0_v2/program.py",
+      "sha256": "sha256:e5e9ef1f189fa3e880b4e9c7374784044332265f2293e282f3e9c2fcf7925c59"
+    },
+    {
+      "id": "runner",
+      "path": "tools/nncp_open_top_attention_probability_adjoint_64_q0_v2.py",
+      "sha256": "sha256:18924b3b969a6800554a62479e9801cfc40b35ec976a4aa6012d0b34a265c8de"
+    },
+    {
+      "id": "resource-guard",
+      "path": "tools/run_with_resource_guard_v3.py",
+      "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    },
+    {
+      "id": "arm-b-terminal-receipt",
+      "path": "results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-receipt.json",
+      "sha256": "sha256:e02b7d65dd4bd2370d314a40e69c39ef381f1cf64121a2bec7b704803ada3d9b"
+    },
+    {
+      "id": "arm-b-terminal-verification",
+      "path": "results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-verification.json",
+      "sha256": "sha256:cc2647167a0bd62e3c165be86337d77abadcd7d1f38d39d7022acc2798c2ce3c"
+    },
+    {
+      "id": "parent-decision",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/decision.json",
+      "sha256": "sha256:67e97ef019583d4fe6e8d7d31b62c5b2b4bc1494350dea62519c23fbf8086558"
+    },
+    {
+      "id": "parent-execution",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/execution.json",
+      "sha256": "sha256:713a9c20bb48bb4b0eebea831d48f5867a8bccb47095f57155780684461a1f0d"
+    },
+    {
+      "id": "parent-guard",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/guard.json",
+      "sha256": "sha256:2e9ffa542921cdc3748d53737aa959c71d3bc87d6179b0d48d23b1837d4e966c"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260816T220926Z_56872cd576.json",
+      "sha256": "sha256:6629f6923b631c87e7ff83fbfc8787c4590bc4b7be50c84178faf94e00b1022d"
+    },
+    {
+      "id": "open-value-state",
+      "path": "results/nncp_open_top_attention_forward_inputs_64_q0_v1/open-exact-value-state.bf16",
+      "sha256": "sha256:71968ffd71811ef06db7064c675872bcbd98344abd7e9d09f2231dd538e3f790"
+    },
+    {
+      "id": "source-decision",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/decision.json",
+      "sha256": "sha256:e9011ea1891c14d82db1d3c1d733f183efaf63c1c04091fa91d9e4debd14a37d"
+    },
+    {
+      "id": "source-execution",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/execution.json",
+      "sha256": "sha256:4fd30f759b0665a48a5359d6382e0d8520bd211a2b719a39d564add94ae31b4c"
+    },
+    {
+      "id": "source-guard",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/guard.json",
+      "sha256": "sha256:4978f9d430bf78eaf69d992e995deeb4b9af18ea951c8f41f1df4a9543e9fa31"
+    },
+    {
+      "id": "source-reflection",
+      "path": "operations/adaptive/reflections/20260816T174722Z_8b88b4a53d.json",
+      "sha256": "sha256:a2191bedd789d7f7ca55076d87c36cf367ba6789ec0cbc380cbfaa7077b2083a"
+    },
+    {
+      "id": "source-probability-adjoint",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/source-attention-probability-adjoint.bf16",
+      "sha256": "sha256:94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22"
+    },
+    {
+      "id": "concat-decision",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/decision.json",
+      "sha256": "sha256:f0dc7bf5832700ac458be3cd0bdddfb8fb4a2f1c7242d1a14e180ccf6fd155e5"
+    },
+    {
+      "id": "concat-execution",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/execution.json",
+      "sha256": "sha256:fe3b310868a9a702b81eb4c1061d591acd39a2e46103794b45bdccd31998a4b0"
+    },
+    {
+      "id": "concat-guard",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/guard.json",
+      "sha256": "sha256:40e3e3865fa6664ef5cdfbc0055ebce6c52018cfd6f0a157b4ee585d759efac0"
+    },
+    {
+      "id": "concat-reflection",
+      "path": "operations/adaptive/reflections/20260816T175422Z_91aae07812.json",
+      "sha256": "sha256:a05c513aebdef149e64e3aab32bf6fbc969449632de744a9057ed17357692859"
+    },
+    {
+      "id": "open-attended-adjoint",
+      "path": "results/nncp_open_concat_head_identity_64_q0_v1/open-exact-attended-adjoint.bf16",
+      "sha256": "sha256:481b6d3c8ec04a8302adca1ed7c0d43ad47c2459aa4586b4950726af05c2e27a"
+    },
+    {
+      "id": "panel-decision",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/decision.json",
+      "sha256": "sha256:a3a5b8b76cd878ac904acd2b674a2972b0a13c740d8a2748ef18977c16f1ed75"
+    },
+    {
+      "id": "panel-execution",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/execution.json",
+      "sha256": "sha256:2ca946fa990a0b07ab6c70c0fdda90f54a4f0b491ba4abce76793db828df4ede"
+    },
+    {
+      "id": "panel-guard",
+      "path": "results/nncp_open_w_o_input_adjoint_block128_64_q0_v1/guard.json",
+      "sha256": "sha256:c5a43f9f7d3446521259ca8a0366c9842466960329e58ab9ba984dd623504fa6"
+    },
+    {
+      "id": "panel-reflection",
+      "path": "operations/adaptive/reflections/20260816T164348Z_ff5718724e.json",
+      "sha256": "sha256:35c9bd3b0c90adcf69f2620f8544b559765e10d19d219c8a43c604a4ef6ee008"
+    },
+    {
+      "id": "result-schema",
+      "path": "contracts/research/v1/adaptive-experiment-result.schema.json",
+      "sha256": "sha256:05fa224b9ac7ec759b445139bb9969202981ad777584e82c66518d89d734f35e"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 500000,
+    "expectedNetSavingsBytes": -500000
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 0.1,
+    "expectedMemoryRatio": 0.02,
+    "uncertaintyRisk": 0.1,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {
+      "id": "completePopulationPass",
+      "definition": "Every comparator covers exactly 5,242,880 BF16 words.",
+      "unit": "boolean"
+    },
+    {
+      "id": "scalarSourceMismatchCount",
+      "definition": "Scalar output words unequal to the independent source comparator.",
+      "unit": "words"
+    },
+    {
+      "id": "avxSourceMismatchCount",
+      "definition": "AVX output words unequal to the independent source comparator.",
+      "unit": "words"
+    },
+    {
+      "id": "scalarAvxMismatchCount",
+      "definition": "Scalar output words unequal to AVX output words.",
+      "unit": "words"
+    },
+    {
+      "id": "wrongLayoutMismatchCount",
+      "definition": "Wrong-layout control words unequal to the source comparator.",
+      "unit": "words"
+    },
+    {
+      "id": "negatedMismatchCount",
+      "definition": "Negated-adjoint control words unequal to the source comparator.",
+      "unit": "words"
+    },
+    {
+      "id": "repeatIdentityPass",
+      "definition": "All four complete outputs are byte-identical across evaluations A and B.",
+      "unit": "boolean"
+    },
+    {
+      "id": "resourceAuthorityPass",
+      "definition": "Both external cgroup-v2 resource receipts terminalize cleanly under one logical CPU and the decimal memory and disk limits.",
+      "unit": "boolean"
+    },
+    {
+      "id": "dependencyClosurePass",
+      "definition": "The evaluator links no forbidden LibNC, GGML, CUDA, OpenMP, GOMP, or BLAS dependency.",
+      "unit": "boolean"
+    },
+    {
+      "id": "sourcePackagePass",
+      "definition": "The retained incremental source package is at most 500,000 bytes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "cleanupPass",
+      "definition": "The private work directory is removed after retained artifacts are materialized.",
+      "unit": "boolean"
+    },
+    {
+      "id": "scientificFailure",
+      "definition": "A complete integrity-valid evaluation falsifies at least one arithmetic or matched-control predicate.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {"id": "complete-population", "measurement": "completePopulationPass", "operator": "eq", "threshold": true},
+    {"id": "scalar-source-exact", "measurement": "scalarSourceMismatchCount", "operator": "eq", "threshold": 0},
+    {"id": "avx-source-exact", "measurement": "avxSourceMismatchCount", "operator": "eq", "threshold": 0},
+    {"id": "scalar-avx-exact", "measurement": "scalarAvxMismatchCount", "operator": "eq", "threshold": 0},
+    {"id": "wrong-layout-live", "measurement": "wrongLayoutMismatchCount", "operator": "gt", "threshold": 0},
+    {"id": "negated-live", "measurement": "negatedMismatchCount", "operator": "gt", "threshold": 0},
+    {"id": "repeat-exact", "measurement": "repeatIdentityPass", "operator": "eq", "threshold": true},
+    {"id": "resources-pass", "measurement": "resourceAuthorityPass", "operator": "eq", "threshold": true},
+    {"id": "dependencies-pass", "measurement": "dependencyClosurePass", "operator": "eq", "threshold": true},
+    {"id": "source-package-pass", "measurement": "sourcePackagePass", "operator": "eq", "threshold": true},
+    {"id": "cleanup-pass", "measurement": "cleanupPass", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "exact-implementation-failed", "measurement": "scientificFailure", "operator": "eq", "threshold": true}
+  ],
+  "outputs": [
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/decision.json",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/open-exact-probability-adjoint.bf16",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/evaluator",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/incremental_source.tar.xz",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/evaluation-a.guard.json",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v2/evaluation-b.guard.json"
+  ],
+  "generatedUtc": "2026-09-04T15:10:00Z"
+}

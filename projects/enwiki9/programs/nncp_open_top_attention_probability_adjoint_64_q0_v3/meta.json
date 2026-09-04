@@ -1,0 +1,45 @@
+{
+  "added": "2026-09-04",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [
+    "nncp_open_top_attention_forward_inputs_64_q0_v1",
+    "nncp_libnc_top_attention_product_oracle_64_q0_retry_v2",
+    "nncp_open_concat_head_identity_64_q0_v1",
+    "nncp_open_w_o_input_adjoint_block128_64_q0_v1"
+  ],
+  "description": "Correction-only exact attention-probability adjoint v3",
+  "family": "nncp_update_schedule",
+  "hypothesis": "With semantic-meta-v1 snapshot verification corrected and every mathematical input held fixed, the LibNC-free scalar and AVX2/FMA implementations exactly reproduce each other and the complete 5,242,880-word source probability adjoint.",
+  "id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "measured": {
+    "reflections": {
+      "20260904T151950Z_c9dcdc1798": {
+        "decision": "retry",
+        "path": "operations/adaptive/reflections/20260904T151950Z_c9dcdc1798.json",
+        "sha256": "sha256:7ff76fcdcb2d7acd1bbdd15aabe4a8e8f83afa5206ea9f2c7eb77bdf1772b934",
+        "valid": false
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v3.json",
+      "sha256": "sha256:de86904d2e95a2f2122abb026a556734bed37a2457ac02cb7d316576322ba299"
+    },
+    "interfaces_exposed": [
+      "semantic-meta-v1 normalized snapshot verification",
+      "unchanged scalar and AVX exact probability-adjoint edge",
+      "unchanged source, layout, sign, replay, package, and resource comparators"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+    "proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+    "retired_neighborhoods": [
+      "raw-byte comparison of revision-normalized candidate metadata",
+      "further correction successors after v3"
+    ]
+  },
+  "parent": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "status": "candidate",
+  "verdict": "Do not rerun or modify the scientific population. Authorize one zero-credit read-only terminal verifier that can exit zero after validating the immutable negative evidence."
+}

@@ -80,6 +80,63 @@ Evidence:
 and
 `tools/endpoint428_horizon_retained_parent_trace_exact_recovery_q0_v3.py`.
 
+## 2026-09-04 - Isolated open dP is terminal negative; only integrated replay remains
+
+The open top-attention probability-adjoint lineage has a valid terminal
+scientific answer. Two v2 jobs failed before arithmetic because their runners
+compared raw `meta.json` bytes against revisions whose identity contract uses
+`semantic-meta-v1`; those jobs are implementation evidence only. The single
+correction-only v3 then executed the complete `5,242,880`-word population twice
+under external single-core resource guards. Scalar and AVX2/FMA treatments are
+byte-identical, both repetitions are exact, the negated control is live, the
+source package and dependency closure pass, and no work tree survived.
+
+The frozen primary source-layout predicate nevertheless fails. Treatment and
+source differ at `5,197,470` BF16 words. The prospectively registered alternate
+serialization, originally labeled the wrong-layout control, equals all
+`5,242,880` source words exactly and has SHA-256
+`94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22`.
+The open kernel emits `state,head,stream,key`; the retained source tensor is
+`state,stream,head,key`. This is an exact representation bridge, not a passed
+isolated dP gate.
+
+A separate read-only verifier independently recounted the treatment mismatch,
+materialized the fixed permutation twice, reproduced the source digest, and
+validated the population, repeats, controls, resource receipts, package,
+dependency log, cleanup, terminal job, and source reflection. Its valid
+reflection promotes only that zero-credit bridge. The OMEGA exclusion retires
+the frozen source-equivalence claim and every further isolated dP layout,
+permutation, tolerance, or correction successor. V3 receives no arithmetic,
+compression, package-score, or objective credit.
+
+The only allowable MIDAS continuation is
+`nncp_open_integrated_midpoint_segment_replay_65536_q0_v2`. Its modern
+experiment and proposal are prospectively frozen and validate, but the proposal
+is `dormant_dependency`. It preserves three exact boundaries: the retained
+`65,536`-row, `917,527`-branch F/O probability population; the one-boundary open
+chain in which all `246` Adam parameter payloads, `20` memory layers, `244`
+next-forward tensor groups, and `896` branch rows match; and the exact dP layout
+bridge. Those boundaries do not compose themselves.
+
+Activation still requires a complete open backward that generates every update
+target without captured teacher gradients, a canonical full-population lock for
+model, optimizer, recurrent, attention, cache, truth, activation, and oracle
+state, and one sealed LibNC-free integrated runner. Missing closure keeps the
+experiment dormant and is not a MIDAS failure. No more disconnected backward
+primitive is authorized. Even complete integrated parity would remain a
+zero-credit causality proof; finite archive gain would require a later compact
+native candidate and fresh replay.
+
+Evidence:
+[`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
+[`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
+[`valid reflection`](../operations/adaptive/reflections/20260904T152612Z_cde41120fb.json),
+[`OMEGA exclusion`](../operations/adaptive/exclusions/nncp_open_top_attention_probability_adjoint_64_q0_v3_source_layout_negative.json),
+[`integrated v2 plan`](../operations/planning/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
+[`integrated v2 experiment`](../operations/adaptive/experiments/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
+and
+[`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
+
 ## 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow
 
 `palimpsest_market_v2` is the separately versioned successor to the retained
