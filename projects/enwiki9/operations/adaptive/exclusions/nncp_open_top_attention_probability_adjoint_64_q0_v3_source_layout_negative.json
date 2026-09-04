@@ -1,0 +1,20 @@
+{
+  "evidence": [
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json",
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json",
+    "operations/adaptive/reflections/20260904T152612Z_cde41120fb.json"
+  ],
+  "exclusion_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3_source_layout_negative",
+  "failure": "Valid exact replay produced 5,197,470 treatment/source mismatches; the prospectively registered alternate layout permutation alone reproduced all 5,242,880 source words exactly, so the primary source-layout gate failed and receives zero dP credit",
+  "mechanism": "Isolated open top-attention probability-adjoint kernel serialized as state,head,stream,key and compared directly with the LibNC state,stream,head,key source tensor",
+  "population": "Frozen 64-token q0 top-attention probability-adjoint population: 5,242,880 BF16 words (10,485,760 bytes)",
+  "recorded_at": "2026-09-04T15:30:50+00:00",
+  "retired_dimensions": [
+    "The frozen v3 isolated state,head,stream,key treatment as a source-equivalent dP implementation",
+    "All further isolated dP layout-correction or permutation-successor gates"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "One prospectively frozen integrated 65,536-symbol midpoint replay that consumes the verified state,stream,head,key bridge without claiming an isolated dP pass"
+  ]
+}

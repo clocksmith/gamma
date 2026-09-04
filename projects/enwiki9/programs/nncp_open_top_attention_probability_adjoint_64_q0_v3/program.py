@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+"""Descriptor for the scalar and AVX attention-probability adjoint v2 gate."""
+
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+RUNNER = ROOT / "tools/nncp_open_top_attention_probability_adjoint_64_q0_v3.py"

@@ -1,0 +1,62 @@
+{
+  "candidate_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2",
+  "claimed_at": "2026-09-04T15:09:05+00:00",
+  "created_at": "2026-09-04T15:08:55+00:00",
+  "developed_at": "2026-09-04T15:09:05+00:00",
+  "evidence": [
+    {
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2.json",
+      "sha256": "sha256:3a36bbeb4a9136cfbd3b3c50398899099e71e1849116b2ea8b9e28387991954a"
+    },
+    {
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v2_toolchain.json",
+      "sha256": "sha256:2aeb86a7e5eb7280097d9a678949c3fe3d58f8411a3623edb2d9cb223a210b71"
+    },
+    {
+      "path": "operations/adaptive/proposals/rejected/000_nncp_open_top_attention_probability_adjoint_64_q0_v2.json",
+      "sha256": "sha256:740614b31c7ec7244f5ec478943ca3198f57f1fa59115bbf2796a78ac842e3bb"
+    },
+    {
+      "path": "results/cmix_obias_source_full1g_roundtrip_b_qm0_v1/oom-terminal-verification.json",
+      "sha256": "sha256:cc2647167a0bd62e3c165be86337d77abadcd7d1f38d39d7022acc2798c2ce3c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_open_top_attention_probability_adjoint_64_q0_v2_gate.json",
+    "sha256": "sha256:a6699b6e62dda70d58d2615a1e2a3632adbc088d7e67eafb32d048195051d9c7"
+  },
+  "hypothesis": "A LibNC-free scalar explicit-FMA reference and an eight-key AVX2/FMA treatment produce the same complete BF16 layer-19 probability adjoint and both exactly match the independently captured 5,242,880-word oracle.",
+  "interfaces_exposed": [
+    "exact open value-state and attended-adjoint to scalar probability adjoint",
+    "same inputs to AVX2 probability adjoint",
+    "source, layout, sign, replay, package, and resource comparators"
+  ],
+  "kill_condition": "A complete integrity-valid mismatch retires this exact implementation; infrastructure failure permits only one correction-only successor with unchanged tensors, arithmetic, controls, and comparator.",
+  "max_program_bytes": 500000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "owner": "codex",
+  "parent": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "parent_proposal_id": "nncp_open_top_attention_forward_inputs_64_q0_v1",
+  "priority": 1602,
+  "promotion_condition": "All scalar, AVX, source, replay, matched-control, dependency, package, cleanup, snapshot, and external resource predicates pass exactly; authorize only the bounded integrated open replay path.",
+  "proposal_id": "nncp_open_top_attention_probability_adjoint_64_q0_v2_gate",
+  "retired_neighborhoods": [
+    "AVX-only probability-adjoint claims without an exposed scalar reference",
+    "tolerance, mismatch-fitted correction, alternate layouts, and captured-output substitution"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 1617,
+  "state": "developed",
+  "title": "Exact open attention-probability adjoint v2 gate"
+}

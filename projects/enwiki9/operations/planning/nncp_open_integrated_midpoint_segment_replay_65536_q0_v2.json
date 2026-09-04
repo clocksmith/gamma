@@ -1,0 +1,177 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "nncp_open_integrated_midpoint_segment_replay_65536_q0_v2",
+  "revision": 2,
+  "operational_status": "dormant_dependency",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwiki9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "dependencies": [
+    {
+      "artifact": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json",
+      "required_evidence": "SHA-256 2a99acc939078f97518149094bb0626806c93b0347a912b0fc5ba3050f121f43; valid negative source-layout decision with zero credit"
+    },
+    {
+      "artifact": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json",
+      "required_evidence": "SHA-256 d092a18211c734738d015957f8ac0754bd227b546b52fb0816e6d99e71d156c0; exact state,head,stream,key to state,stream,head,key bridge"
+    },
+    {
+      "artifact": "operations/adaptive/reflections/20260904T152612Z_cde41120fb.json",
+      "required_evidence": "SHA-256 4732fda29e2cb6b9130d1796d12eb9557ec36a30a72e8cdebcb8c9911a082042; valid reflection promotes only the zero-credit bridge"
+    },
+    {
+      "artifact": "operations/adaptive/exclusions/nncp_open_top_attention_probability_adjoint_64_q0_v3_source_layout_negative.json",
+      "required_evidence": "SHA-256 59f81879048d0966bb701a64e79f27fa108bcaebd1e66a099bc87634ee484746; all further isolated dP layout corrections retired"
+    },
+    {
+      "artifact": "results/delta_midas_deep_residual_65536_q0_v1/decision.json",
+      "required_evidence": "SHA-256 15764e6479d69613536e5e84f99436fc5cd7b126d905735edffd050028d3c9c8; exact 65,536-row F/O population and residual signal"
+    },
+    {
+      "artifact": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/F_trace.bin",
+      "required_evidence": "SHA-256 73ae287ac4c55d3c24eb0d4805054e38e50e72bb9873c1f4b3a28d44cb76d569; immutable full-update probability oracle"
+    },
+    {
+      "artifact": "results/nncp_libnc_output_head_midpoint_attribution_65536_qm1_v1/O_trace.bin",
+      "required_evidence": "SHA-256 f0a7c9185c93f58316209810c2f7515b86934af188ca1a1ffc933f552bd8a54c; immutable output-head-only probability oracle"
+    },
+    {
+      "artifact": "results/nncp_open_profile_update_forward_chain_64_q0_retry_v1/decision.json",
+      "required_evidence": "SHA-256 1789512d9d60e365ca61380cf8aa0fa7dd694f1cfbbb1e91c594082d88ffabb5; exact one-boundary Adam, memory transition, and next-forward precedent"
+    },
+    {
+      "artifact": "complete_open_backward_closure_v2",
+      "required_evidence": "Currently absent: one source-counted implementation must generate all 246 dense gradients for every frozen update boundary without reading teacher gradients"
+    },
+    {
+      "artifact": "integrated_65536_input_lock_v2",
+      "required_evidence": "Currently absent: concrete hashes, sizes, dtypes, shapes, layouts, and producer receipts for population, model, optimizer, recurrent state, forward activations, backward oracles, rebuild state, and controls"
+    },
+    {
+      "artifact": "integrated_65536_runner_revision_v2",
+      "required_evidence": "Currently absent: sealed LibNC-free single-thread runner and complete runtime source closure"
+    }
+  ],
+  "contract": {
+    "generated_utc": "2026-09-04T15:35:16Z",
+    "purpose": "Attempt one complete open causal midpoint replay over the retained 65,536-symbol population. This is the next MIDAS boundary; no additional isolated backward primitive is authorized.",
+    "supersession": {
+      "preserved_artifacts": [
+        "operations/planning/nncp_open_integrated_midpoint_segment_replay_65536_q0_v1.json",
+        "operations/adaptive/experiments/nncp_open_integrated_midpoint_segment_replay_65536_q0_v1.json",
+        "operations/planning/delta_midas_functional_jvp_65536_q0_v1.json"
+      ],
+      "effect": "The v1 execution path cannot activate because it required a probability-adjoint pass that did not occur. V2 replaces only that activation logic and carries the verified layout bridge as zero-credit input.",
+      "forbidden_rewrite": "Do not edit v1 to imply that v2 or v3 passed the isolated dP source-layout gate."
+    },
+    "frozen_negative_boundary": {
+      "isolated_dp_pass": false,
+      "isolated_dp_credit": 0,
+      "treatment_source_mismatch_words": 5197470,
+      "population_words": 5242880,
+      "verified_layout_permutation_source_mismatch_words": 0,
+      "layout_bridge": "The open kernel emits state,head,stream,key. The retained source comparator is state,stream,head,key. The fixed head/stream permutation is exact and must be re-verified inside the integrated checkpoint.",
+      "retired": [
+        "Any claim that the frozen v3 treatment directly equals the source serialization",
+        "Any additional isolated dP correction, layout, permutation, vector-width, or tolerance successor"
+      ]
+    },
+    "population": {
+      "unit": "transformed symbol",
+      "row_count": 65536,
+      "branch_count": 917527,
+      "segments": 1024,
+      "segment_length": 64,
+      "first_half_length": 32,
+      "coordinate": "Original transformed-symbol ordinal from the immutable F/O trace pair",
+      "freeze_rule": "F/O row, symbol, tree, branch-truth, segment, and execution identity are immutable. Neither trace supplies hidden state, parameter state, optimizer state, or backward closure."
+    },
+    "available_exact_boundaries": [
+      {
+        "boundary": "retained_functional_signal",
+        "scope": "65,536 rows and 917,527 branches",
+        "evidence": "F and O align exactly; F gains 22,783.981772296793 ideal second-half bits, all three thirds are positive, and 1,001 of 1,024 segments are positive",
+        "authority": "teacher probability oracle only"
+      },
+      {
+        "boundary": "one_production_update_and_next_forward",
+        "scope": "one 64-symbol production update boundary",
+        "evidence": "246 post-update parameter payloads, 20 memory layers, 244 next-forward tensor groups, and 896 branch rows match exactly and repeat",
+        "authority": "open update/rebuild/forward precedent; dense gradients remain teacher-captured inputs"
+      },
+      {
+        "boundary": "top_attention_probability_adjoint_layout",
+        "scope": "5,242,880 BF16 words",
+        "evidence": "scalar and AVX arithmetic agree exactly; fixed serialization permutation reproduces the source comparator exactly",
+        "authority": "zero-credit layout bridge, not an isolated dP pass"
+      }
+    ],
+    "missing_closure": [
+      {
+        "id": "complete_open_backward",
+        "present": false,
+        "requirement": "Generate every update-target gradient across all model layers and every frozen midpoint from decoder-visible truths and open forward activations only. Captured teacher gradients may be comparators after treatment materialization, never treatment inputs."
+      },
+      {
+        "id": "complete_population_state_lock",
+        "present": false,
+        "requirement": "Bind initial parameters, Adam moments and steps, recurrent memory, attention/KV state, caches, per-segment truths, and every future-affecting byte for the complete 65,536-symbol trajectory."
+      },
+      {
+        "id": "authoritative_checkpoint_oracles",
+        "present": false,
+        "requirement": "Bind first-half forward, loss, complete backward, post-update parameters, rebuilt state, and second-half forward checkpoints for every frozen segment."
+      },
+      {
+        "id": "integrated_open_runner",
+        "present": false,
+        "requirement": "One sealed source-counted executable must run the complete path twice under the official single-core memory and scratch envelope without LibNC, NNCP, a network service, or hidden generated state."
+      }
+    ],
+    "arms": {
+      "O": "Open output-head-only trajectory matching the immutable O oracle.",
+      "K": "Execute full bookkeeping and rebuild, but commit the O update only; K must equal O at every future-affecting checkpoint.",
+      "F": "Open first-half forward, loss, complete backward, full midpoint Adam update, state rebuild, and second-half forward matching the immutable F oracle.",
+      "S": "Identical F machinery with the preregistered 257-segment cyclic truth-to-update association shift."
+    },
+    "execution_graph": [
+      "input-lock verification",
+      "first-half open forward",
+      "exact causal loss",
+      "complete open backward",
+      "state,head,stream,key to state,stream,head,key bridge verification",
+      "midpoint Adam update in source order",
+      "complete state rebuild",
+      "second-half open forward and integer probability comparison",
+      "shifted-control replay",
+      "complete clean repeat",
+      "dependency, package, memory, scratch, and runtime closure"
+    ],
+    "decision": {
+      "promotion": "Only exact K=O and F=oracle parity over the complete population, live shifted control, byte-identical repeat, and resource/dependency closure may authorize the separately frozen functional-JVP successor. Compression credit remains zero.",
+      "implementation_failure": "At most one correction-only integrated successor may change the first recorded divergence. It may not create or revive an isolated primitive gate.",
+      "closure_failure": "Remain dormant. Missing captured state or missing open backward source is not a scientific MIDAS failure.",
+      "parity_failure_after_valid_closure": "Retire the exact integrated implementation and preserve the first-divergence receipt; do not infer probability gain.",
+      "no_fit": "No scale, rank, layer, segment, update, layout, permutation, or tolerance sweep is allowed on this population."
+    },
+    "execution_authorized": false,
+    "score_credit_bytes": 0
+  },
+  "activation_requirements": [
+    "Materialize and hash the complete open backward closure for all 246 update targets without teacher-gradient treatment inputs.",
+    "Materialize a canonical input lock covering all complete-population model, optimizer, recurrent, attention, cache, truth, activation, and oracle state.",
+    "Seal one integrated LibNC-free runner revision and its complete runtime source closure.",
+    "Validate a modern adaptive experiment and proposal whose parent is the verified zero-credit layout bridge.",
+    "Require a separate managed resource lease; do not disturb the active HORIZON process or inspect its partial scientific output."
+  ],
+  "claim_boundary": [
+    "This contract freezes the next allowable MIDAS computation but does not authorize it while closure is absent.",
+    "The isolated probability-adjoint gate failed and receives no arithmetic, compression, package, or objective credit.",
+    "The exact layout permutation is reusable implementation knowledge only.",
+    "The retained F/O teacher traces prove parent-relative residual information on one population, not an open codec or archive saving.",
+    "Even a complete integrated parity pass would prove open causal replay only and would award zero Hutter score credit."
+  ]
+}

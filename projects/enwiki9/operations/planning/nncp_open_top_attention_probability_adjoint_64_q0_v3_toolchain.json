@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.enwiki9.pinned-diagnostic-toolchain.v1",
+  "candidate_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "purpose": "Bind the exact host compiler and command tools before the correction-only probability-adjoint oracle gate executes.",
+  "compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-g++-15",
+    "sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d",
+    "version_line": "x86_64-linux-gnu-g++-15 (Ubuntu 15.2.0-16ubuntu1) 15.2.0"
+  },
+  "linker": {
+    "path": "/usr/bin/x86_64-linux-gnu-ld",
+    "sha256": "97f48d93b8b076a92d2809ec29dcb17f0f37c8827358f832255e2ed22fef6075",
+    "version_line": "GNU ld (GNU Binutils for Ubuntu) 2.46"
+  },
+  "tools": [
+    {
+      "path": "/usr/bin/ldd",
+      "sha256": "b6c9a28572ea3920442c2f5b1ea11b0999adc407913ffdd7f92e530dfc051894"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "sha256": "42acb8e233943873f3bf9eeb1e15bd3281498b5603a5b10d0f9bc37067a12d57"
+    },
+    {
+      "path": "/bin/sh",
+      "sha256": "c626229526bb58ec2d0f585f3c3ae1412e6f973b4353385042d11c38d8426917"
+    }
+  ],
+  "flags": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-mavx2",
+    "-mfma",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-ffp-contract=off",
+    "-march=x86-64",
+    "-mtune=generic",
+    "-Wl,--build-id=none"
+  ],
+  "generated_utc": "2026-09-04T15:17:00Z"
+}

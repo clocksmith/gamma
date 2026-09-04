@@ -1,0 +1,33 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1",
+  "revision": 1,
+  "operational_status": "actionable_read_only_verifier",
+  "claim_authority": "none",
+  "purpose": "Independently authenticate the complete v3 negative experiment after its runner incorrectly returned nonzero for a scientific rejection.",
+  "source_candidate": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+  "source_job": "20260904T151950Z_c9dcdc1798",
+  "fixed_evidence": {
+    "decision_sha256": "2a99acc939078f97518149094bb0626806c93b0347a912b0fc5ba3050f121f43",
+    "guard_a_sha256": "7ff9537aaae40c0fe0875752d829b50438a4ca4ba8cb6871917f256612efb777",
+    "guard_b_sha256": "62f73f2976fdda3d384f076adcd3a291751a3b94dbe6b6dbcb40a7e15c875a5a",
+    "retained_treatment_sha256": "367e837fcc15db00dbca258e50bfd2edf1274f869e74bb7c95aeb09560b887ba",
+    "source_comparator_sha256": "94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22"
+  },
+  "verification": [
+    "Rehash every fixed input and require the failed job to bind the exact v3 revision, experiment, proposal, and runner.",
+    "Revalidate both external resource receipts, complete population, repeat hashes, dependency closure, package bound, and work cleanup.",
+    "Independently count retained-treatment versus source mismatches.",
+    "Independently permute retained state-head-stream-key treatment bytes into state-stream-head-key order twice and require byte identity with the source comparator.",
+    "Confirm scalar and AVX hashes agree across A and B, the negated control repeats and differs, and no execution output is inferred from size alone."
+  ],
+  "terminal_router": {
+    "all_checks_pass": "authenticate a valid negative result, retire v3, and preserve only the exact layout bridge for the integrated replay",
+    "any_check_fails": "invalidate the terminal interpretation and stop this route"
+  },
+  "claim_boundary": [
+    "The verifier reruns no tensor arithmetic and awards zero compression or score credit.",
+    "A passing verifier does not convert v3 into a passing dP gate.",
+    "The exact permutation may inform a prospectively frozen integrated replay but cannot rescue the failed v3 primary predicates."
+  ]
+}

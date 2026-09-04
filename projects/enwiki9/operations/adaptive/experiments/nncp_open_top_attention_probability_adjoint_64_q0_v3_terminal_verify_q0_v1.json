@@ -1,0 +1,163 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1",
+  "proposalId": "nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "infrastructure",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "nncp_open_top_attention_probability_adjoint_64_q0_v3",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/nncp_open_top_attention_probability_adjoint_64_q0_v3/20260904T151912434636Z_7d86fbaf278a.json",
+      "sha256": "sha256:05640d060434f943fc59c250b383b57d7f91846d6d7fe7dcd5160d86fbb7301a"
+    }
+  },
+  "hypothesis": {
+    "claim": "The immutable v3 artifacts authenticate a complete, repeatable, resource-valid negative dP experiment: the scalar and AVX treatment agree, the registered source layout fails, and one fixed state-head-stream-key to state-stream-head-key permutation exactly equals the source comparator.",
+    "falsification": "Any evidence hash drift, job or reflection mismatch, incomplete population, resource failure, replay inconsistency, dependency or package failure, surviving work directory, treatment mismatch-count disagreement, or nonzero independently permuted source mismatch invalidates the terminal interpretation."
+  },
+  "changedMechanism": "Read and independently verify the immutable negative outputs only. Recompute the treatment/source mismatch count and the fixed layout permutation twice; do not rerun tensor arithmetic or alter v3.",
+  "invariants": [
+    "Every source artifact is read-only and bound by SHA-256 before verification.",
+    "The verifier reruns no scalar or AVX FMA and cannot change the v3 primary predicates.",
+    "The permutation geometry is fixed at 64 states, 8 heads, 32 streams, and 320 keys.",
+    "A pass authenticates a negative result and exact representation bridge only; it does not pass dP or award compression or score credit."
+  ],
+  "controls": [
+    {
+      "id": "treatment-source",
+      "role": "comparator",
+      "definition": "Independently count retained treatment words unequal to the source comparator and require 5,197,470."
+    },
+    {
+      "id": "layout-permutation",
+      "role": "treatment",
+      "definition": "Permute state-head-stream-key rows into state-stream-head-key order and require exact source identity."
+    },
+    {
+      "id": "permutation-repeat",
+      "role": "replay",
+      "definition": "Two independent materializations of the fixed permutation must be byte-identical."
+    },
+    {
+      "id": "negated",
+      "role": "negative",
+      "definition": "The recorded negated arm must repeat across A/B and remain distinct from the source comparator."
+    }
+  ],
+  "population": {
+    "unit": "retained BF16 probability-adjoint word",
+    "scopeBytes": null,
+    "scopeSymbols": 5242880,
+    "selection": "All words in the immutable retained v3 treatment and source-comparator files.",
+    "coordinate": "state, head, stream, key before the fixed head/stream serialization permutation"
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Immutable v3 decision, failed job receipt, reflection, guards, retained treatment, comparator, package, and dependency log."
+    ],
+    "forbiddenInformation": [
+      "Any tensor recomputation, tolerance, fitted permutation, edited receipt, altered primary predicate, or promotion of v3."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "verification-plan",
+      "path": "operations/planning/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1.json",
+      "sha256": "sha256:f48685b8adeeca6586c9cee26cc3334ce00b5e29715d30658ee47628448e36eb"
+    },
+    {
+      "id": "verifier",
+      "path": "tools/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1.py",
+      "sha256": "sha256:2348d8d5fdd1a69dd47cefae85859121b23fa04f4e7251d9f23a535aec34ee69"
+    },
+    {
+      "id": "source-decision",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json",
+      "sha256": "sha256:2a99acc939078f97518149094bb0626806c93b0347a912b0fc5ba3050f121f43"
+    },
+    {
+      "id": "source-job",
+      "path": "operations/adaptive/failed/000_20260904T151950Z_c9dcdc1798.json",
+      "sha256": "sha256:e2daf1cb648626762c7ca18f729013d590432bfbccfc3022a5c2a889cf1a0d18"
+    },
+    {
+      "id": "source-reflection",
+      "path": "operations/adaptive/reflections/20260904T151950Z_c9dcdc1798.json",
+      "sha256": "sha256:7ff76fcdcb2d7acd1bbdd15aabe4a8e8f83afa5206ea9f2c7eb77bdf1772b934"
+    },
+    {
+      "id": "guard-a",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/evaluation-a.guard.json",
+      "sha256": "sha256:7ff9537aaae40c0fe0875752d829b50438a4ca4ba8cb6871917f256612efb777"
+    },
+    {
+      "id": "guard-b",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/evaluation-b.guard.json",
+      "sha256": "sha256:62f73f2976fdda3d384f076adcd3a291751a3b94dbe6b6dbcb40a7e15c875a5a"
+    },
+    {
+      "id": "retained-treatment",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/open-exact-probability-adjoint.bf16",
+      "sha256": "sha256:367e837fcc15db00dbca258e50bfd2edf1274f869e74bb7c95aeb09560b887ba"
+    },
+    {
+      "id": "source-comparator",
+      "path": "results/nncp_libnc_top_attention_product_oracle_64_q0_retry_v2/source-attention-probability-adjoint.bf16",
+      "sha256": "sha256:94763dc5ad7c78020c2620a06b0824fd7f2280c6a2a4c3783618931da44dbe22"
+    },
+    {
+      "id": "source-package",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/incremental_source.tar.xz",
+      "sha256": "sha256:096283b3b9b9218f2b6daf1ab648aec499347295d33933cb25e5f0d942082822"
+    },
+    {
+      "id": "dependency-log",
+      "path": "results/nncp_open_top_attention_probability_adjoint_64_q0_v3/ldd.stdout",
+      "sha256": "sha256:2c14e4614df089b4fe419d2ae771531bb8a3f91bc22e8792e8f10c840777b80e"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": -65536
+  },
+  "search": {
+    "expectedTransferRetention": 1.0,
+    "expectedRuntimeRatio": 0.01,
+    "expectedMemoryRatio": 0.01,
+    "uncertaintyRisk": 0.05,
+    "interactionRisk": 0.0
+  },
+  "measurements": [
+    {"id": "verificationPass", "definition": "Every independent verifier check passes.", "unit": "boolean"},
+    {"id": "treatmentSourceMismatchCount", "definition": "Independent retained-treatment versus source mismatch count.", "unit": "words"},
+    {"id": "permutationSourceMismatchCount", "definition": "Independent permuted-treatment versus source mismatch count.", "unit": "words"},
+    {"id": "permutationRepeatPass", "definition": "Both independent fixed permutations are byte-identical.", "unit": "boolean"},
+    {"id": "resourceReceiptsPass", "definition": "Both retained external resource receipts pass.", "unit": "boolean"},
+    {"id": "verificationFailure", "definition": "At least one independent verification check fails.", "unit": "boolean"}
+  ],
+  "promotionPredicates": [
+    {"id": "verification-pass", "measurement": "verificationPass", "operator": "eq", "threshold": true},
+    {"id": "treatment-count-bound", "measurement": "treatmentSourceMismatchCount", "operator": "eq", "threshold": 5197470},
+    {"id": "permutation-exact", "measurement": "permutationSourceMismatchCount", "operator": "eq", "threshold": 0},
+    {"id": "permutation-repeat", "measurement": "permutationRepeatPass", "operator": "eq", "threshold": true},
+    {"id": "resource-receipts", "measurement": "resourceReceiptsPass", "operator": "eq", "threshold": true}
+  ],
+  "killPredicates": [
+    {"id": "verification-failed", "measurement": "verificationFailure", "operator": "eq", "threshold": true}
+  ],
+  "outputs": [
+    "results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json"
+  ],
+  "generatedUtc": "2026-09-04T15:26:00Z"
+}
