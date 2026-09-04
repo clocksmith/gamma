@@ -1,0 +1,97 @@
+{
+  "archiveAuthority": false,
+  "bindings": {
+    "adaptiveRunner": {
+      "bytes": 87963,
+      "path": "tools/enwiki9_lab.py",
+      "sha256": "a787fe898bac382971369b9b6743b04cf55769eb6a531b58801fb83e044f39b3"
+    },
+    "candidateRevision": {
+      "bytes": 3543,
+      "path": "operations/adaptive/candidate-revisions/wiki_fiber_fossil_endpoint428_opening1m_q0_v9/20260904T205822908428Z_43db3b59add0.json",
+      "sha256": "7df795ee2130f417c8dde84b16a852277c83776d936800d8c5fd23e63caf640f"
+    },
+    "experiment": {
+      "bytes": 24477,
+      "path": "operations/adaptive/experiments/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.json",
+      "sha256": "9dffa32745688c40719c10792d7d03eb9f4cc20cb6f6b437370677f49e9e5db0"
+    },
+    "failedJob": {
+      "bytes": 1773,
+      "path": "operations/adaptive/failed/000_20260904T205845Z_7dcfb4f773.json",
+      "sha256": "1426e96a042bfcb78dd249805f728369095b40779daa814cf860692e621ec82e"
+    },
+    "failedLog": {
+      "bytes": 2383,
+      "path": "run_logs/adaptive/20260904T205845Z_7dcfb4f773.log",
+      "sha256": "e4aff86cb4f2d8db5ba7b95e1d2e488ac1ab4baa7a1d3a5709700cf87b2fc76c"
+    },
+    "runner": {
+      "bytes": 55794,
+      "path": "tools/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.py",
+      "sha256": "7fff5b3c997140e6ecf6b8f1477663e13fb30ea082547d6a4a48cbf158f1ecc5"
+    }
+  },
+  "candidateId": "wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+  "candidateTreeSha256": "sha256:43db3b59add06042b97fdd935cb56b8a00a9c1133a4fe400ea6320dc08468b3b",
+  "cause": "The operator enqueue command incorrectly omitted --scratch-directory, leaving the canonical result root absent. The guarded worker rejected that missing precondition before the denial probe, candidate core load, or corpus evidence access.",
+  "decision": "retry",
+  "executionBoundary": {
+    "basis": "Failed traceback matched to the hash-bound runner control flow; no runtime corpus-access counter was emitted.",
+    "cgroupCleanupReceiptPresent": false,
+    "exceptionFunction": "perform_guarded_horizon_probe",
+    "exceptionPrecedes": [
+      "synthetic HORIZON denial attempt",
+      "horizon-denial-probe.json installation",
+      "run_gate",
+      "load_candidate_module",
+      "opening any corpus evidence"
+    ],
+    "resourceAuthority": false
+  },
+  "failureClass": "infrastructure-failure",
+  "generatedUtc": "2026-09-04T21:02:58+00:00",
+  "hypothesisVerdict": "not-tested",
+  "jobId": "20260904T205845Z_7dcfb4f773",
+  "killPass": null,
+  "objectiveCreditBytes": 0,
+  "observations": {
+    "failedJobReturncode": 1,
+    "resultDirectoryExists": false,
+    "scientificResultPresent": false,
+    "scratchDirectories": [],
+    "terminalDecisionPresent": false
+  },
+  "operatorCorrection": "The assistant instruction to omit --scratch-directory was wrong. Preserve the frozen source and supply the required directory through canonical job metadata.",
+  "promotionPass": null,
+  "retry": {
+    "admission": "Do not enqueue while CMIX owns the canonical lease. --force does not waive that check. Owner release must precede retry queue admission.",
+    "candidateNamespaceChange": false,
+    "candidateSourceChange": false,
+    "command": [
+      "python3",
+      "tools/enwiki9_lab.py",
+      "enqueue-tool",
+      "wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+      "--tool",
+      "tools/wiki_fiber_fossil_endpoint428_opening1m_q0_v9.py",
+      "--gate-size",
+      "1000000",
+      "--purpose",
+      "diagnostic",
+      "--priority",
+      "1800",
+      "--tag",
+      "concurrent-opening1m",
+      "--scratch-directory",
+      "results/wiki_fiber_fossil_endpoint428_opening1m_q0_v9",
+      "--force"
+    ],
+    "precreationMechanism": "enwiki9_lab.py materialize_job_scratch_directories runs before the worker subprocess and creates only the candidate-scoped declared scratch directory.",
+    "requireCanonicalExclusiveLeaseAbsent": true,
+    "requireValidInfrastructureReflection": true,
+    "resultRootPrecondition": "Absent before queue materialization, or an explicitly verified empty directory; do not remove any existing artifact."
+  },
+  "schema": "gamma.enwiki9.fiber-fossil-infrastructure-failure.v1",
+  "scientificAuthority": false
+}
