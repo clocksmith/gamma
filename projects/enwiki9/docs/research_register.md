@@ -146,6 +146,21 @@ primitive is authorized. Even complete integrated parity would remain a
 zero-credit causality proof; finite archive gain would require a later compact
 native candidate and fresh replay.
 
+Source implementation has begun inside that single integrated identity without
+activating or executing the experiment. Revision
+`651287cce12b60e38e5e49b058a4b04cccf55317098a529b0d5e42151bac9e98`
+implements a canonical duplicate-key-safe input-lock inspector and a one-thread
+LibNC-free C++ arithmetic library. The library consolidates the already
+attributed BF16 rules for flat and chronological-state parameter reductions,
+ordered 128-coordinate transpose panels, final-root and sequential RMSNorm
+backward, GEGLU, residual joins, causal loss residuals, scalar softmax backward,
+the value-product probability adjoint, and the frozen head/stream layout bridge.
+Seven local source tests pass, including compilation with AVX2/FMA and disabled
+implicit contraction. Replay remains fail-closed: full forward caches,
+remaining attention/QKV backward, optimizer/state traversal, population input
+lock, oracle parity, repeats, and resource closure are still absent. This is an
+implementation checkpoint with zero scientific or objective credit.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -153,6 +168,7 @@ Evidence:
 [`OMEGA exclusion`](../operations/adaptive/exclusions/nncp_open_top_attention_probability_adjoint_64_q0_v3_source_layout_negative.json),
 [`integrated v2 plan`](../operations/planning/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
 [`integrated v2 experiment`](../operations/adaptive/experiments/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json),
+[`integrated source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T182911157959Z_651287cce12b.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
