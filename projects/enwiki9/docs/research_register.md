@@ -192,6 +192,26 @@ and this revision receives zero scientific, compression, package, or objective
 credit. Adam, recurrent transition, midpoint rebuild, population locking, and
 the O/K/F/S replay remain missing.
 
+A fourth source-only revision,
+`a9261969f38c518eaee3b365213672a40d1369434e010ad7e4c824c6bfadf93b`,
+composes the next previously exact boundaries without running the production
+population. It loads the 491-tensor optimizer state under exact names, types,
+shapes, and configuration; binds it to the same canonical parameter/gradient
+topology; and implements per-tensor norm and clipping, compensated BF16 low
+words, the F32 embedding path, second-moment state, and the two-update bias
+correction schedule. The update-5 scalar schedule matches the retained exact
+Adam receipt bit-for-bit. It also implements the decoder-visible recurrent
+shift-and-append law and the frozen segment sequence: zeroed future graph,
+first-half update, full causal rebuild without shifting persistent memory,
+second-half update, and one end-of-segment memory shift. Synthetic topology,
+causality, exact-repeat, release, ASAN/UBSAN, and focused contract tests pass.
+The test changes second-half inputs and truths and confirms first-half
+probability identity. This remains an unvalidated implementation: no
+production treatment has been materialized and compared against forward or
+all-gradient oracles, no complete-population state lock exists, and O/K/F/S
+have not run. It receives zero arithmetic, compression, archive, package, or
+objective credit.
+
 Evidence:
 [`v3 decision`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3/decision.json),
 [`terminal verification`](../results/nncp_open_top_attention_probability_adjoint_64_q0_v3_terminal_verify_q0_v1/verification.json),
@@ -202,6 +222,7 @@ Evidence:
 [`integrated source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T182911157959Z_651287cce12b.json),
 [`complete-topology source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T184647005158Z_08b47bf74339.json),
 [`forward and treatment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T191749467383Z_d4e5927df08d.json),
+[`Adam and midpoint-segment source revision`](../operations/adaptive/candidate-revisions/nncp_open_integrated_midpoint_segment_replay_65536_q0_v2/20260904T193633977336Z_a9261969f38c.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
