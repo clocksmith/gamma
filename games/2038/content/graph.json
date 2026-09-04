@@ -1,75 +1,53 @@
 {
   "schemaVersion": 1,
   "variables": "content/data/variables.json",
-  "playerCopyContract": "content/player-copy-contract.json",
   "contexts": {
     "headlines": {
-      "path": "content/data/headlines.json",
-      "overlays": [
-        "content/copy/headlines.json"
-      ]
+      "path": "components/headlines.json"
     },
     "factions": {
-      "path": "content/data/factions.json",
-      "overlays": [
-        "content/copy/factions.json"
-      ]
+      "path": "components/factions.json"
     },
     "referenceCards": {
-      "path": "content/data/reference-cards.json",
-      "collection": "eraCards",
-      "overlays": [
-        "content/copy/reference-cards.json"
-      ]
+      "path": "components/reference-cards.json",
+      "collection": "eraCards"
     },
     "gameConfig": {
-      "path": "content/data/game-config.json",
-      "overlays": [
-        "content/copy/game-config.json"
-      ]
+      "path": "components/game.json"
     },
     "ruleChangeRegister": {
-      "path": "content/data/rule-change-register.json",
-      "collection": "changes",
-      "overlays": [
-        "content/copy/rule-change-register.json"
-      ]
+      "path": "components/rule-changes.json",
+      "collection": "changes"
     },
     "mandates": {
-      "path": "content/data/mandates.json",
-      "collection": "mandates",
-      "overlays": [
-        "content/copy/mandates.json"
-      ]
+      "path": "components/mandates.json",
+      "collection": "mandates"
     },
     "escalations": {
-      "path": "content/data/escalations.json",
-      "collection": "escalations",
-      "overlays": [
-        "content/copy/escalations.json"
-      ]
+      "path": "components/programs.json",
+      "collection": "escalations"
     },
     "tactics": {
-      "path": "experimental/data/tactics.json",
-      "collection": "tactics",
-      "overlays": [
-        "experimental/copy/tactics.json"
-      ]
+      "path": "experimental/components/tactics.json",
+      "collection": "tactics"
     },
     "worldCopy": {
-      "path": "content/data/world-copy.json",
-      "collection": "endings",
-      "overlays": [
-        "content/copy/world-copy.json"
-      ]
+      "path": "components/world.json",
+      "collection": "endings"
     },
-    "uiCopy": "content/runtime/ui-copy.json"
+    "uiCopy": "ui.json"
   },
   "artifacts": [
     {
-      "source": "content/data/era-situation-ledger.json",
+      "source": "world.md",
+      "target": "dist/docs/thematic-content-bible.md",
+      "format": "text",
+      "section": "world-guide"
+    },
+    {
+      "source": "world.md",
       "target": "dist/contracts/era-situation-ledger.json",
-      "format": "json"
+      "format": "scenario-index"
     },
     {
       "source": "content/data/content-manifest.json",
@@ -77,42 +55,27 @@
       "format": "json"
     },
     {
-      "source": "content/data/factions.json",
-      "overlays": [
-        "content/copy/factions.json"
-      ],
+      "source": "components/factions.json",
       "target": "dist/runtime/factions.json",
       "format": "json"
     },
     {
-      "source": "content/data/game-config.json",
-      "overlays": [
-        "content/copy/game-config.json"
-      ],
+      "source": "components/game.json",
       "target": "dist/runtime/game-config.json",
       "format": "json"
     },
     {
-      "source": "content/data/rule-change-register.json",
-      "overlays": [
-        "content/copy/rule-change-register.json"
-      ],
+      "source": "components/rule-changes.json",
       "target": "dist/runtime/rule-change-register.json",
       "format": "json"
     },
     {
-      "source": "content/data/headlines.json",
-      "overlays": [
-        "content/copy/headlines.json"
-      ],
+      "source": "components/headlines.json",
       "target": "dist/runtime/headlines.json",
       "format": "json"
     },
     {
-      "source": "content/data/mandates.json",
-      "overlays": [
-        "content/copy/mandates.json"
-      ],
+      "source": "components/mandates.json",
       "target": "dist/runtime/mandates.json",
       "format": "json"
     },
@@ -122,26 +85,17 @@
       "format": "json"
     },
     {
-      "source": "content/data/reference-cards.json",
-      "overlays": [
-        "content/copy/reference-cards.json"
-      ],
+      "source": "components/reference-cards.json",
       "target": "dist/runtime/reference-cards.json",
       "format": "json"
     },
     {
-      "source": "experimental/data/reserve-specialists.json",
-      "overlays": [
-        "experimental/copy/reserve-specialists.json"
-      ],
+      "source": "experimental/components/reserve-specialists.json",
       "target": "dist/runtime/reserve-specialists.json",
       "format": "json"
     },
     {
-      "source": "experimental/data/secret-objectives.json",
-      "overlays": [
-        "experimental/copy/secret-objectives.json"
-      ],
+      "source": "experimental/components/secret-objectives.json",
       "target": "dist/runtime/secret-objectives.json",
       "format": "json"
     },
@@ -151,66 +105,58 @@
       "format": "json"
     },
     {
-      "source": "experimental/data/tactics.json",
-      "overlays": [
-        "experimental/copy/tactics.json"
-      ],
+      "source": "experimental/components/tactics.json",
       "target": "dist/runtime/tactics.json",
       "format": "json"
     },
     {
-      "source": "content/runtime/ui-copy.json",
+      "source": "ui.json",
       "target": "dist/runtime/ui-copy.json",
       "format": "json"
     },
     {
-      "source": "content/data/escalations.json",
-      "overlays": [
-        "content/copy/escalations.json"
-      ],
+      "source": "components/programs.json",
       "target": "dist/runtime/escalations.json",
       "format": "json"
     },
     {
-      "source": "content/data/world-copy.json",
-      "overlays": [
-        "content/copy/world-copy.json"
-      ],
+      "source": "components/world.json",
       "target": "dist/runtime/world-copy.json",
       "format": "json"
     },
     {
-      "source": "content/copy/core-rules.md",
+      "source": "rules.md",
       "target": "dist/docs/core-rules.md",
       "format": "text"
     },
     {
-      "source": "content/copy/map-reference.md",
+      "source": "content/templates/map-reference.md",
       "target": "dist/docs/map-reference.md",
       "format": "text"
     },
     {
-      "source": "content/copy/component-reference.md",
+      "source": "content/templates/component-reference.md",
       "target": "dist/docs/component-reference.md",
       "format": "text"
     },
     {
-      "source": "content/copy/card-reference.md",
+      "source": "content/templates/card-reference.md",
       "target": "dist/docs/card-reference.md",
       "format": "text"
     },
     {
-      "source": "content/copy/advanced-play.md",
+      "source": "advanced.md",
       "target": "dist/docs/advanced-play.md",
       "format": "text"
     },
     {
-      "source": "content/copy/world-and-institutions.md",
+      "source": "world.md",
       "target": "dist/docs/world-and-institutions.md",
-      "format": "text"
+      "format": "text",
+      "section": "player-world"
     },
     {
-      "source": "content/copy/rule-change-register.md",
+      "source": "content/templates/rule-change-register.md",
       "target": "dist/docs/rule-change-register.md",
       "format": "text"
     },
@@ -236,8 +182,125 @@
     }
   ],
   "sourceRoots": [
+    "components/",
     "content/",
     "experimental/",
-    "web/"
-  ]
+    "web/",
+    "world.md",
+    "rules.md",
+    "advanced.md",
+    "ui.json"
+  ],
+  "world": "world.md",
+  "deploymentProfiles": {
+    "public-playtest": {
+      "deployable": true,
+      "accessControlled": false,
+      "outputRoot": "dist/firebase/public",
+      "feedbackUrl": "https://github.com/clocksmith/gamma/issues/new?labels=mandate-2038-playtest",
+      "interfaces": [
+        "playable-game",
+        "first-game-guide"
+      ],
+      "documents": [
+        "core-rules.html",
+        "map-reference.html",
+        "component-reference.html",
+        "card-reference.html",
+        "world-and-institutions.html"
+      ],
+      "galleries": [
+        "baseline"
+      ],
+      "runtimeArtifacts": [
+        "dist/runtime/escalations.json",
+        "dist/runtime/factions.json",
+        "dist/runtime/game-config.json",
+        "dist/runtime/headlines.json",
+        "dist/runtime/mandates.json",
+        "dist/runtime/player-strategies.json",
+        "dist/runtime/reference-cards.json",
+        "dist/runtime/simulation-copy.json",
+        "dist/runtime/ui-copy.json"
+      ],
+      "webFiles": [
+        "api-client.js",
+        "app.js",
+        "favicon.svg",
+        "first-game-guide.css",
+        "first-game-guide.js",
+        "src/engine.js",
+        "src/hex-layout.js",
+        "styles.css"
+      ],
+      "labModules": [
+        "cancellation.js",
+        "content/simulation-copy.js",
+        "contracts/decision-contract.js",
+        "environment/core-economy-match.js",
+        "environment/rules-variant.js",
+        "environment/selected-rules-match.js",
+        "personas/player-profile.js",
+        "policies/weighted-policy.js",
+        "rules/local-power-allocation.js",
+        "runtime/create-browser-interactive-game.js",
+        "runtime/interactive-game-core.js",
+        "scenarios/agi-declaration-window.js"
+      ]
+    },
+    "internal-review": {
+      "deployable": false,
+      "accessControlled": false,
+      "outputRoot": "dist/review",
+      "feedbackUrl": "https://github.com/clocksmith/gamma/issues/new?labels=mandate-2038-review",
+      "interfaces": [
+        "playable-game",
+        "first-game-guide",
+        "simulation-lab"
+      ],
+      "documents": [
+        "*"
+      ],
+      "galleries": [
+        "baseline",
+        "complete"
+      ],
+      "runtimeArtifacts": [
+        "*"
+      ],
+      "webFiles": [
+        "README.md",
+        "api-client.js",
+        "app.js",
+        "favicon.svg",
+        "first-game-guide.css",
+        "first-game-guide.js",
+        "report-visualizations.js",
+        "simulation-app.js",
+        "simulation.css",
+        "src/engine.js",
+        "src/hex-layout.js",
+        "styles.css",
+        "templates/first-game-guide.html",
+        "templates/prototype.html",
+        "templates/simulation.html"
+      ],
+      "labModules": [
+        "cancellation.js",
+        "content/simulation-copy.js",
+        "contracts/decision-contract.js",
+        "contracts/report-migrations.js",
+        "environment/core-economy-match.js",
+        "environment/rules-variant.js",
+        "environment/selected-rules-match.js",
+        "personas/player-profile.js",
+        "policies/weighted-policy.js",
+        "rules/local-power-allocation.js",
+        "runtime/create-browser-interactive-game.js",
+        "runtime/interactive-game-core.js",
+        "scenarios/agi-declaration-window.js"
+      ],
+      "warning": "This profile contains internal design, evidence, manufacturing, simulation, and deferred-module material. It is not access-controlled and must not be deployed as a private review surface."
+    }
+  }
 }

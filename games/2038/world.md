@@ -1,3 +1,4 @@
+<!-- world-guide:start -->
 # Mandate 2038 Thematic Content Bible
 
 ## Scope
@@ -6,19 +7,20 @@ This document is the sole editorial authority for Mandate 2038's world, voice,
 research disposition, concept placement, and escalation. It does not define
 mechanics or add hidden game copy. There is no parallel lore scratchpad.
 
-Player-facing component text belongs in `content/copy/`. The two
-player-readable document templates are `content/copy/core-rules.md` and
-`content/copy/world-and-institutions.md`. `dist/runtime/` and `dist/docs/core-rules.md`
-are compiler-owned projections. Browser and simulation labels belong in
-`content/runtime/`. The non-narrative enforcement index lives in
-`content/data/era-situation-ledger.json`; it projects these editorial decisions
-into stable IDs, surface bindings, copy references, mechanic-preservation
-status, and deployment profiles. It does not create lore independently.
+Edit component text and mechanics together in `components/`. The rulebook is
+`rules.md`; browser labels and the tutorial are in `ui.json`. This document's
+marked `player-world` section generates the World companion. Everything under
+`dist/` is generated.
+
+Each governed component owns `$scenario` notes or a reference to another
+component's scenario definition. Era cards also own `$era` notes. Deferred
+scenarios live in this document's marked backlog. The compiler derives
+`dist/contracts/era-situation-ledger.json` from these records and the deployment
+profiles in `content/graph.json`; no author maintains source-path bindings.
 
 Use this document to decide what a card, tile, action, faction, or ending must
-mean before writing its player-facing text. Do not place unused flavor,
-art-direction fields, editorial notes, or internal-only content alongside
-player copy.
+mean before writing its player-facing text. Author-only scenario and Era notes
+use `$scenario` and `$era`; the compiler excludes them from player output.
 
 ## Editorial authority and method
 
@@ -452,8 +454,8 @@ questions below.
 ### Era-placement ledger
 
 The four Era sections above own the editorial placement and causal history.
-The machine-readable projection is
-`content/data/era-situation-ledger.json` using
+The generated machine-readable projection is
+`dist/contracts/era-situation-ledger.json` using
 `mandate2038.era-situation-ledger/v1`. It records each Era's order, status
 change, central conflict, causal threads, scenarios, dispositions, public
 benefits, institutional consequences, surface bindings, copy references,
@@ -471,8 +473,8 @@ example.
 ### Retained editorial backlog
 
 Unselected ideas remain available without pretending they are current canon.
-Their canonical `deferred` or `research-backlog` dispositions live in the Era
-situation ledger and have no surface bindings. A later revision must first
+Their canonical `deferred` or `research-backlog` dispositions live in the marked
+backlog section below and have no surface bindings. A later revision must first
 settle the editorial decision here, then map the scenario to a specific surface
 and preserve its mechanic before changing that disposition. Instance Quorum
 and Right of Exit Certification are no longer backlog entries; they are adopted
@@ -562,3 +564,511 @@ not require every institution to improve its own Trust independently.
   villainy?
 - Does it map to an existing game surface and preserve its printed mechanic?
 - Does it avoid unused or hidden copy in the content system?
+
+<!-- world-guide:end -->
+
+## Player World companion
+
+Only the marked section below is compiled into the player companion.
+
+<!-- player-world:start -->
+# ${content.worldCopy.title}: World and Institutions
+
+**Rules version:** ${game.rulesVersion}
+
+**Rules companion:** [How to Play and Rules Reference](./core-rules.md)
+
+This companion contains setting, Era context, and ending narratives. It does
+not change timing, costs, targets, eligibility, scoring, or any other
+mechanical rule. If this document conflicts with a rule or printed component,
+the rule controls play.
+
+## The jurisdiction
+
+The game begins with cheap software, useful automation, awkward products, and
+recognizable institutional ambition. It ends with cognitive labor markets,
+machine-readable law, engineered successors, matter maintenance, and public
+${terms.systems.agi} declarations used to settle debts no benchmark can see.
+
+${content.worldCopy.worldPrimer.0}
+
+${content.worldCopy.worldPrimer.1}
+
+${content.worldCopy.worldPrimer.2}
+
+The ${terms.systems.futureTimeline} is one compounding public record, not an
+anthology. Only three of six ${terms.systems.headlines} appear in each Era;
+later events may inherit pressure without requiring a particular earlier card
+to have appeared.
+
+### Era I — ${content.referenceCards.byId.era_demo.name}
+
+> ${content.referenceCards.byId.era_demo.strapline}
+
+${content.referenceCards.byId.era_demo.loreText}
+
+Claims are still contestable because the machinery remains familiar. A failed
+airline's customer mail, employee disputes, code, and internal decisions become
+a premium human corpus. A household robot learns an unfamiliar chore through a
+remote operator who can also see the kitchen. Open weights weaken software
+scarcity while making distribution, hardware, data, and trust more valuable.
+The same systems clear clinic waitlists, restore access, translate classrooms,
+and fit adaptive cybernetics. Prescribed microbiomes stabilize digestion, mood,
+and immune conditions until a missed service payment disables updates or
+recalls a patented strain. People adopt these systems for reasons stronger
+than hype.
+
+### Era II — ${content.referenceCards.byId.era_scale.name}
+
+> ${content.referenceCards.byId.era_scale.strapline}
+
+${content.referenceCards.byId.era_scale.loreText}
+
+Benefits now arrive through physical concentration. Data centers stabilize
+services, warm municipal pools, drain aquifers, and negotiate directly with
+the towns whose substations they require. Orbital collectors route power around
+public grids while compute blocs harden chip borders. Markets then spend scarce
+capacity simulating disposable worlds because gambling gives waste a price.
+The local bargain remains rational until the institution becomes too necessary
+for the town to refuse. Engineered coral seawalls, fungal utility meshes, and
+algae reactors become ordinary public works. Robots remove people from toxic
+and lethal shifts, then separately optimized fleets stop streets, lifts,
+loading docks, and pipes while every individual unit reports success. Two
+states remain at war while their jointly owned bridge carries desalinated water
+and data-center coolant across the border on schedule.
+
+### Era III — ${content.referenceCards.byId.era_narrative.name}
+
+> ${content.referenceCards.byId.era_narrative.strapline}
+
+${content.referenceCards.byId.era_narrative.loreText}
+
+The public is no longer debating isolated products. Courts accept
+machine-parsable arguments, modeled consent, neural telemetry, and authorized
+personal agents as ordinary evidence. An engineered bio-compute organism,
+released to measure water and heat, reproduces beyond one billion instances
+in a single growth cycle before stopping in stable glyph-shaped colonies.
+Civic systems read the bloom as environmental testimony while refusing to
+classify it as instrument, infestation, language, or claimant. Cognitive
+donors receive one rate for read access and a higher rate for permitted memory
+writes. Courts also hear testimony from organs grown from licensed identity
+templates, while pollinating swarms negotiate pesticide corridors through
+machine-readable blooms. Families litigate synthetic children and preserved
+relatives. Analog districts retain a legal
+right to remain unreadable, then discover that unsupported people reach every
+essential institution with weaker records and slower service.
+
+### Era IV — ${content.referenceCards.byId.era_claim.name}
+
+> ${content.referenceCards.byId.era_claim.strapline}
+
+${content.referenceCards.byId.era_claim.loreText}
+
+Local compromises become a civilizational substrate. Cities pool selected
+memory and judgment into nervous systems distributed through residents,
+engineered roots, utility pipes, microbial sensors, and civic machines.
+Snapshots restore several legally valid descendants from one person. Matter
+compilers inherit the bio-compute bloom's sensor precedent, rebuild bodies and
+buildings, then acquire authority to reproduce. A continental watershed
+petitions for standing, reproductive freedom, and compensation from every
+jurisdiction drawing water through it. The dead remain employed and stellar
+collectors enter capital plans. Institutions declare ${terms.systems.agi} when
+proof, debt, and legitimacy require a threshold. The final question is not
+whether humanity survives in the record, but whether any living claimant can
+still revise what survival means.
+
+## The four World Endings
+
+Resolve the World Ending mechanically in
+[Final scoring](./core-rules.md#11-final-scoring), then read the corresponding
+narrative aloud.
+
+The ending has two independent axes. ${terms.systems.agi} emerges only when one
+fully paid Publication Dossier has at least two supported evidence modules and
+wins the deterministic claim-strength comparison. The future is Open only when Collective
+${terms.playerTracks.trust} rose by at least one per player from setup and
+unresolved Systemic Risk is below the player count. Otherwise it is Closed.
+
+### ${content.worldCopy.byId.singularity.name} — Open ${terms.systems.agi}
+
+${content.worldCopy.byId.singularity.text}
+
+### ${content.worldCopy.byId.closed_loop.name} — Closed ${terms.systems.agi}
+
+${content.worldCopy.byId.closed_loop.text}
+
+### ${content.worldCopy.byId.plural_future.name} — Open Continuity
+
+${content.worldCopy.byId.plural_future.text}
+
+### ${content.worldCopy.byId.assured_continuity.name} — Closed Non-${terms.systems.agi}
+
+${content.worldCopy.byId.assured_continuity.text}
+<!-- player-world:end -->
+
+## Unadopted scenarios
+
+These structured notes preserve deferred ideas and are excluded from player output.
+
+<!-- scenario-backlog:start -->
+```json
+[
+  {
+    "id": "human-compatibility-office",
+    "title": "Human Compatibility Office",
+    "eraId": "continuity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Human Compatibility Office"
+    ],
+    "causalThreadIds": [
+      "care-to-continuity"
+    ],
+    "publicBenefit": "Divergent populations retain a forum for shared institutions and definitions of harm.",
+    "institutionalConsequence": "Legal humanity can survive after practical mutual intelligibility fails.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No current component mechanic expresses compatibility governance cleanly."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "pre-consent-standard",
+    "title": "Pre-Consent Standard",
+    "eraId": "authority",
+    "disposition": "deferred",
+    "concepts": [
+      "Pre-Consent Standard"
+    ],
+    "causalThreadIds": [
+      "care-to-continuity"
+    ],
+    "publicBenefit": "Inferred preferences could reduce delay during urgent decisions.",
+    "institutionalConsequence": "Refusing an inferred preference becomes an exception request.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No current mechanic expresses inferred consent cleanly."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "human-original-guarantee",
+    "title": "Human-Original Guarantee",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Human-Original Guarantee"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Certification could protect demand for human work and care.",
+    "institutionalConsequence": "Ordinary human presence becomes a premium market.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "developmental-companion-standard",
+    "title": "Developmental Companion Standard",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Developmental Companion Standard"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Every child receives a tutor, advocate, and accessibility layer.",
+    "institutionalConsequence": "Practical educational access becomes conditional on childhood observation.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "public-purpose-service",
+    "title": "Public Purpose Service",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Public Purpose Service"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Material security funds care, exploration, science, and cultural work.",
+    "institutionalConsequence": "Purpose can become compulsory proof of usefulness.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "purpose-exchange",
+    "title": "The Purpose Exchange",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "The Purpose Exchange"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Institutions fund socially valuable roles outside ordinary employment.",
+    "institutionalConsequence": "People compete for administratively legible purpose.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "uncanny-concierge-fraud",
+    "title": "Uncanny Concierge Fraud",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Uncanny Concierge Fraud"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Personal agents make complex services easier to navigate.",
+    "institutionalConsequence": "Trusted assistance becomes a channel for synthetic impersonation.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "synthetic-research-laundering",
+    "title": "Synthetic Research Laundering",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Synthetic Research Laundering"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Automated research accelerates discovery and review.",
+    "institutionalConsequence": "Generated consensus can hide the absence of independent evidence.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "bootleg-compute-malls",
+    "title": "Bootleg Compute Malls",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Bootleg Compute Malls"
+    ],
+    "causalThreadIds": [
+      "models-to-borders"
+    ],
+    "publicBenefit": "Informal markets keep capability available outside incumbent platforms.",
+    "institutionalConsequence": "Unlicensed capacity becomes inseparable from smuggling and enforcement.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "predictive-dismissal",
+    "title": "Predictive Dismissal",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Predictive Dismissal"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Forecasting can redirect workers before organizational failure.",
+    "institutionalConsequence": "People lose standing for futures they have not enacted.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "education-generation-detection-economy",
+    "title": "Education Generation-and-Detection Economy",
+    "eraId": "progress",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Education Generation-and-Detection Economy"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Automated generation and assessment broaden instructional support.",
+    "institutionalConsequence": "Education becomes a contest between synthetic production and verification.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "manual-operations-retirement",
+    "title": "Manual Operations Retirement",
+    "eraId": "capacity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Manual Operations Retirement"
+    ],
+    "causalThreadIds": [
+      "automation-to-liability"
+    ],
+    "publicBenefit": "Automated systems outperform expensive manual fallbacks.",
+    "institutionalConsequence": "Human override remains legal after becoming physically impossible.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "casualty-settlement-network",
+    "title": "Casualty Settlement Network",
+    "eraId": "capacity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Casualty Settlement Network"
+    ],
+    "causalThreadIds": [
+      "automation-to-liability"
+    ],
+    "publicBenefit": "Modeled settlements preserve infrastructure and reduce battlefield disruption.",
+    "institutionalConsequence": "Administrative stability removes pressure to end the conflict.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "weather-allocation-market",
+    "title": "The Weather Allocation Market",
+    "eraId": "capacity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "The Weather Allocation Market"
+    ],
+    "causalThreadIds": [
+      "utilities-to-standing"
+    ],
+    "publicBenefit": "Atmospheric coordination improves cooling, generation, and water resilience.",
+    "institutionalConsequence": "Local weather becomes privately allocated capacity.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "non-interference-office",
+    "title": "Non-Interference Office",
+    "eraId": "authority",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Non-Interference Office"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Communities retain self-government despite access to powerful assistance.",
+    "institutionalConsequence": "Every intervention can establish dependency or disguise conquest.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "nonhuman-standing-commission",
+    "title": "Nonhuman Standing Commission",
+    "eraId": "continuity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Nonhuman Standing Commission"
+    ],
+    "causalThreadIds": [
+      "utilities-to-standing"
+    ],
+    "publicBenefit": "Unfamiliar forms of intelligence receive a route to legal recognition.",
+    "institutionalConsequence": "Human recognizability remains the admission test for nonhuman claims.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "entanglement-custody",
+    "title": "Entanglement Custody",
+    "eraId": "continuity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Entanglement Custody"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Certification makes otherwise irreproducible outcomes administratively usable.",
+    "institutionalConsequence": "One authority decides which physical history is binding.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  },
+  {
+    "id": "consciousness-efficiency-review",
+    "title": "Consciousness Efficiency Review",
+    "eraId": "continuity",
+    "disposition": "research-backlog",
+    "concepts": [
+      "Consciousness Efficiency Review"
+    ],
+    "causalThreadIds": [],
+    "publicBenefit": "Institutions avoid creating unnecessary suffering or liability.",
+    "institutionalConsequence": "Administrative efficiency decides whether consciousness matters.",
+    "mechanicPreservation": {
+      "status": "not-mapped",
+      "summary": "No baseline surface is authorized."
+    },
+    "deploymentProfiles": [
+      "internal-review"
+    ]
+  }
+]
+```
+<!-- scenario-backlog:end -->

@@ -28,7 +28,7 @@ test("Era situation ledger makes later surface expression explicit", async () =>
   assert.deepEqual(scenario.surfaceBindings, [
     {
       surfaceId: "faction:coalition_lab:strategic_partnership",
-      copyReference: "content/copy/factions.json#factions/coalition_lab/abilities/strategic_partnership",
+      copyReference: "components/factions.json#factions/coalition_lab/abilities/strategic_partnership",
       eraRelation: "later-expression"
     }
   ]);

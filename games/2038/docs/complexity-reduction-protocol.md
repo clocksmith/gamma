@@ -7,13 +7,13 @@ as isolated rules candidates.
 ## Authority and status
 
 The canonical Default Game remains the `defaultGame` profile in
-`content/data/game-config.json`. Accepted baseline simplifications are not
+`components/game.json`. Accepted baseline simplifications are not
 optional rule modules. A future candidate must be registered as proposed and
 remain outside `playRuleModules` and both supported profiles until selected.
 
-The source of status is `content/data/rule-change-register.json`; the generated
+The source of status is `components/rule-changes.json`; the generated
 ledger is `dist/docs/rule-change-register.md`. Rationale belongs in this protocol
-and `docs/design-decisions.md`; player-facing rules belong in `content/copy/` only
+and `docs/design-decisions.md`; player-facing rules belong in `rules.md` and `components/`
 after a candidate is accepted.
 
 ## Current simplified baseline
@@ -31,7 +31,7 @@ after a candidate is accepted.
 Selection authorizes implementation, not a balance claim. The original
 single-Generator candidate and its receipts remain in `experimental/` and
 `evidence/` as historical provenance; the canonical contract now lives in
-`content/data/game-config.json` and player-facing rules.
+`components/game.json` and player-facing rules.
 
 ## Test sequence
 

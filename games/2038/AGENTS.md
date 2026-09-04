@@ -23,17 +23,19 @@ systems and incentives, not jokes or allegations about real people.
 
 ## Canonical Boundaries
 
-- `content/data/` owns authored mechanics, stable IDs, values, and shared
-  terminology.
-- `content/copy/` owns authored component copy and the player-readable
-  rulebook and World companion sources.
-- `content/runtime/` owns authored browser UI, simulation, and strategy copy.
+- `components/` owns complete component records: mechanics, IDs, wording, and
+  author-only `$scenario` notes. Era cards also own structured `$era` notes.
+- `rules.md` owns the rulebook; `advanced.md` owns the Advanced Play companion.
+  `world.md` owns lore guidance and the marked player World companion section.
+- `ui.json` owns browser labels and tutorial wording. `content/runtime/`
+  owns simulation and strategy copy; `content/data/` owns shared variables
+  and the component inventory. `content/templates/` assembles player references.
 - `physical/` owns the physical component specification, state encoding, and
   human-readable box inventory. Mechanical counts remain in `content/data/`;
   generated physical-kit output remains in `dist/physical-kit/`.
 - `experimental/` owns deferred optional modules; its content is never part of
   baseline play unless the user explicitly activates it.
-- `content/graph.json` composes the authored sources and declares every
+- `content/graph.json` declares deployment profiles, authored sources, and every
   generated projection. Do not hand-edit any target it declares.
 - `dist/runtime/` owns compiler-generated runtime JSON; `dist/docs/` owns the
   generated rulebooks; `dist/site/` owns rendered site output; and
@@ -47,11 +49,15 @@ systems and incentives, not jokes or allegations about real people.
   identity, test protocol, comparison classes, and change control.
 - `docs/manufacturing-and-publishing-study.md` contains dated planning research,
   not quotes, legal advice, or authorization to manufacture.
-- `docs/thematic-content-bible.md` is the sole authority for lore, editorial
+- `world.md` is the sole authority for lore, editorial
   method, concept placement, research provenance, tone, and writing-layer
-  contracts. `content/data/era-situation-ledger.json` is its machine-enforced
+  contracts. `dist/contracts/era-situation-ledger.json` is its machine-enforced
   traceability and deployment projection, not a parallel lore authority. Do
   not create a parallel lore scratchpad or thematic authority.
+- Scenario bindings are generated from component records, never maintained
+  separately. Shared scenarios have one definition and `$scenario.ref` links.
+  Deferred scenario notes live in the marked backlog section of `world.md`.
+  The compiler strips `$scenario` and `$era` from all playable outputs.
 - `docs/simulation-and-player-strategies.md` documents the executable
   simulation surface and must name any gap from the canonical rulebook.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,

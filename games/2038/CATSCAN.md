@@ -17,7 +17,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 ## Contracts
 
-- Input: The authored semantic graph, [Era-situation ledger](content/data/era-situation-ledger.json), and [balance contract](lab/contracts/balance-contract.json).
+- Input: Complete records in `components/`, `world.md`, `rules.md`, `ui.json`, the build declarations in `content/graph.json`, and the [balance contract](lab/contracts/balance-contract.json).
 - Output: Generated runtime, rules, site, physical-kit artifacts, and versioned evidence.
 
 ## Invariants
@@ -25,6 +25,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - Generated graph targets are never hand-edited.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
+- Component records own their scenario notes. The Era-situation index and its
+  source-path bindings are derived outputs; there are no separate copy overlays
+  or hand-maintained binding registries. Editorial metadata never enters play.
 - Only the public-playtest publication profile is deployable; internal-review
   artifacts remain local evidence.
 - Fictional identities remain fictional and simulated sessions remain labeled.
@@ -33,7 +36,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 ## Acceptance
 
 - Content, runtime, deterministic simulation, balance, and generated projections pass the package checks.
-- Evidence: [package scripts](package.json), [player-copy contract](content/player-copy-contract.json), and [project instructions](AGENTS.md).
+- Evidence: [package scripts](package.json), [content boundary checks](tasks/content/check-boundaries.mjs), and [project instructions](AGENTS.md).
 
 ## Non-goals
 

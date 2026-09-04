@@ -19,7 +19,7 @@ machine-enforced game data.
 - `production/` is reserved for printer-ready specifications, dielines, and
   vendor-facing files once those are deliberately approved.
 
-The numeric rules limits remain in `content/data/game-config.json`. A physical
+The numeric rules limits remain in `components/game.json`. A physical
 specification may describe a double-sided Facility or a track cube, but may
 not quietly change how many Facilities a player owns, a resource cap, or a
 legal game state. Make that rules change in `content/data/` first.

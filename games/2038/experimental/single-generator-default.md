@@ -3,7 +3,7 @@
 **Status:** promoted into the canonical baseline; retained only as evidence provenance.
 
 This file records the frozen contract that preceded promotion. The authoritative
-rule now lives in `content/data/game-config.json`; both supported profiles use
+rule now lives in `components/game.json`; both supported profiles use
 it. The historical paired configuration remains at
 [`data/single-generator-default.rules-configurations.json`](data/single-generator-default.rules-configurations.json)
 for replaying the registered comparison, not for configuring current play.
