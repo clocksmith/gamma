@@ -11,6 +11,7 @@ runner-adjacent.
 | Tool | Purpose |
 |---|---|
 | `enwiki9_lab.py` | Primary adaptive experiment loop: creates and clones candidates, records mutation lineage, selects the next exact gate, manages atomic durable jobs, fans out small gates, serializes heavy work, and refreshes inventories and reports after terminal batches. |
+| `enwiki9_reflections.py` | Creates validated terminal reflections, projects retired dimensions into search memory, and ranks proposals with parent-evidence plus candidate-lifecycle gates; pending/running, held/negative/retired, and awaiting-reflection candidates are not eligible for duplicate scheduling. |
 | `run_with_rss_guard.py` | Wraps commands with RSS sampling and guard enforcement; writes live and final guard JSON. |
 | `cmix_filebacked_fxcm_100m_identity_resource.py` | Coordinates the opening-100M parent/q1 identity arms and observer-free q1 resource arm only after validating the distinct 149-member Python/schema harness closure and all retained q1 antecedents. It emits zero compression and score credit. |
 | `cmix_filebacked_fxcm_100m_identity_resource_verify.py` | Cannot launch a compressor; independently rederives the opening-100M harness closure, artifacts, modeled-coordinate identity, phase resources, cleanup, and gate decision from the raw receipt. |
