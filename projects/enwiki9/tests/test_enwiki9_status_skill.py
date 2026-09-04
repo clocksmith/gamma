@@ -25,7 +25,7 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
         "schema": "enwiki9_hutter_frontier_v1",
         "target": {
             "input_bytes": 1_000_000_000,
-            "score_bytes": 108_000_000,
+            "score_bytes": 105_000_000,
             "required_roundtrip": True,
         },
         "canonical_best_forecast_id": "candidate",
@@ -48,7 +48,7 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
         "quarantine": [],
     }
     operational = {
-        "target_score_10_95": 108_000_000,
+        "target_score_10_95": 105_000_000,
         "best_forecast": {"projected_score": 109_557_404},
         "best_full_1g": {"status": "not verified"},
         "has_10_95_constructive_upper_bound": False,
@@ -65,17 +65,19 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
 
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is False
-    assert status["canonical_forecast"]["forecast_margin_bytes"] == -1_557_404
+    assert status["canonical_forecast"]["forecast_margin_bytes"] == -4_557_404
     markdown = MODULE.render_markdown(status)
-    assert "Target score: `108,000,000` bytes (`10.8000000%`)" in markdown
+    assert "Target score: `105,000,000` bytes (`10.5000000%`)" in markdown
     assert "Verified official full-1G score: `unknown`" in markdown
     assert "Best counted forecast: `109,557,404` (`10.9557404%`)" in markdown
     assert "distance above target `4,557,404`" in markdown
     assert "`0.4557404 percentage points`" in markdown
     assert "Active candidate provisional projection: `109,557,404` (`10.9557404%`)" in markdown
-    assert "## Continue" in markdown
-    assert "Continue toward the Hutter Prize" in markdown
-    assert "Highest-value next gate: test" in markdown
+    assert "## Recorded Frontier State" in markdown
+    assert "Verified target state: `not won`" in markdown
+    assert "Active candidate: `candidate`" in markdown
+    assert "Recorded next gate: test" in markdown
+    assert "Continue toward the Hutter Prize" not in markdown
 
 
 def test_nonconstructive_score_credit_fails_closed(tmp_path: Path) -> None:
@@ -111,7 +113,7 @@ def test_verified_official_win_requires_roundtrip(tmp_path: Path) -> None:
     assert status["official"]["verified_full_corpus_result"] is False
 
 
-def test_verified_win_closes_with_proof_preservation(tmp_path: Path) -> None:
+def test_verified_win_reports_state_without_prescribing_work(tmp_path: Path) -> None:
     _, ledger, operational = write_fixture(tmp_path)
     operational["best_full_1g"] = {
         "scope_bytes": 1_000_000_000,
@@ -125,8 +127,8 @@ def test_verified_win_closes_with_proof_preservation(tmp_path: Path) -> None:
 
     assert errors == []
     assert status["official"]["won"] is True
-    assert "Hutter target achieved" in markdown
-    assert "submission packaging" in markdown
+    assert "Verified target state: `won`" in markdown
+    assert "submission packaging" not in markdown
 
 
 def test_metric_assertion_detects_receipt_drift(tmp_path: Path) -> None:
@@ -221,8 +223,8 @@ def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
     markdown = MODULE.render_markdown(status)
 
     assert errors == []
-    assert "scope `10,000,000`; progress `35.02%`" in markdown
-    assert "decimal single-process margin `765,625` KiB" in markdown
+    assert "Live gate scope `10,000,000`; progress `35.02%`" in markdown
+    assert "Decimal single-process margin `765,625` KiB" in markdown
 
 
 def test_score_percentage_uses_full_corpus_denominator() -> None:
