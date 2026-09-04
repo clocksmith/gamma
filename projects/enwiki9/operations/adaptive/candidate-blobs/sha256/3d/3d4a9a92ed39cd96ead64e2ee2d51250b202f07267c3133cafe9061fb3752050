@@ -1,0 +1,56 @@
+{
+  "schema": "gamma.enwiki9.harm-delta-sparse-input-interface.v1",
+  "candidate_id": "harm_delta_sparse_input_abi_q0_v1",
+  "role": "zero-credit streaming input boundary for frozen HARM-Delta",
+  "formats": {
+    "HSP1": {
+      "version": 1,
+      "header_bytes": 256,
+      "record_bytes": 24,
+      "record_little_endian": [
+        "uint64 wrt_coordinate",
+        "uint16 parent_p1_bit_0",
+        "uint16 parent_p1_bit_1",
+        "uint16 parent_p1_bit_2",
+        "uint16 parent_p1_bit_3",
+        "uint16 parent_p1_bit_4",
+        "uint16 parent_p1_bit_5",
+        "uint16 parent_p1_bit_6",
+        "uint16 parent_p1_bit_7"
+      ],
+      "probability_scale": 65536,
+      "coverage": "strictly increasing unique rows equal every and only HARM predictive parent-provider request"
+    },
+    "HGS1": {
+      "version": 1,
+      "header_bytes": 192,
+      "record_bytes": 32,
+      "record_little_endian": [
+        "uint64 target_wrt_coordinate",
+        "uint64 source_wrt_coordinate",
+        "uint64 exact_context_hash",
+        "uint64 rolling_anchor_transition_hash"
+      ],
+      "coverage": "strictly increasing unique field-entry targets; nonempty and exactly repeated for distant G"
+    },
+    "GSRT2": {
+      "version": 2,
+      "header_bytes": 192,
+      "record_bytes": 88,
+      "source": "unchanged frozen HARM callback adapter"
+    }
+  },
+  "execution": {
+    "state_warm": "Replay WRT zero through the declared replay end; score only the raw and WRT measurement intersection.",
+    "parent_timing": "Consume one eight-count HSP1 row only when the callback adapter requests the current coordinate before truth.",
+    "repeat": "A and B GSRT2, HSP1, and any HGS1 inputs must be byte-identical and yield identical replay results.",
+    "distant_g": "Distant scope requires a nonempty HGS1 pair and the frozen callback adapter must find G awake and admissible."
+  },
+  "authority": {
+    "archive_authority": false,
+    "corpus_execution_authority": false,
+    "native_integration_authority": false,
+    "objective_credit_bytes": 0,
+    "retained_parent_gain_authority": false
+  }
+}

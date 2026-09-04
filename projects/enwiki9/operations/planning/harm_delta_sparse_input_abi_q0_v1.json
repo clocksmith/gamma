@@ -1,0 +1,125 @@
+{
+  "$schema": "campaign-static-contract.schema.json",
+  "artifact_id": "harm_delta_sparse_input_abi_q0_v1",
+  "revision": 1,
+  "operational_status": "source_fixture_only",
+  "claim_authority": "none",
+  "objective": {
+    "objective_id": "gamma-enwik9-hutter-105m-v1",
+    "corpus_bytes": 1000000000,
+    "target_complete_counted_bytes": 105000000
+  },
+  "purpose": "Provide a streaming, sparse, fail-closed retained-parent input boundary for the already frozen HARM-Delta mechanism without opening the active HORIZON scientific output or changing HARM arithmetic.",
+  "dependencies": [
+    {
+      "artifact": "harm_route_edit_residual_shadow_q0_v1",
+      "required_evidence": "The exact source-binding digest and every bound source artifact must verify before the ABI imports the HARM-Delta core or callback adapter."
+    },
+    {
+      "artifact": "Endpoint428 semantic route tape GSRT2",
+      "required_evidence": "Two byte-identical restricted tapes and their full TapeBinding metadata must be supplied; positional predictive records remain forbidden."
+    },
+    {
+      "artifact": "Endpoint428 sparse pretruth observer",
+      "required_evidence": "Two byte-identical HSP1 streams must contain exactly one eight-Q16 row for every HARM predictive coordinate encountered during state-warm replay and no other rows."
+    },
+    {
+      "artifact": "HORIZON-A field-entry source observer",
+      "required_evidence": "The distant scope requires two byte-identical HGS1 streams binding target, causal source, context hash, transition witness, observer identity, and terminal transition state."
+    }
+  ],
+  "contract": {
+    "scientific_boundary": "This ABI changes no route, donor, edit, mixture, control, population, threshold, or update rule. It supplies inputs to HARM-Delta and grants zero gain, archive, native-integration, or objective credit.",
+    "hsp1": {
+      "magic": "HSP1\\u0000\\u0000\\u0000\\u0000",
+      "version": 1,
+      "header_bytes": 256,
+      "record_bytes": 24,
+      "record": "little-endian uint64 WRT coordinate followed by eight little-endian uint16 Endpoint428 pretruth P1 counts in MSB-first truth-bit order",
+      "probability_scale": 65536,
+      "probability_domain": "Every count is in [1,65535]. Coordinates are strictly increasing, unique, inside the declared replay interval, and cover the callback adapter's parent requests exactly.",
+      "header_bindings": [
+        "WRT population bytes",
+        "replay WRT begin and end",
+        "record count and first/last coordinates",
+        "record-payload SHA-256",
+        "coordinate-union SHA-256",
+        "parent-observer SHA-256",
+        "parent state at replay begin",
+        "parent state at replay end"
+      ],
+      "streaming_rule": "The provider advances monotonically with replay. A requested coordinate before or after the next record, a duplicate, an unused terminal record, a short record, or trailing bytes is fatal."
+    },
+    "hgs1": {
+      "magic": "HGS1\\u0000\\u0000\\u0000\\u0000",
+      "version": 1,
+      "header_bytes": 192,
+      "record_bytes": 32,
+      "record": "little-endian uint64 target coordinate, source coordinate, exact 16-byte context hash, and rolling anchor-transition witness",
+      "header_bindings": [
+        "WRT population bytes",
+        "record count",
+        "terminal anchor-transition hash",
+        "record-payload SHA-256",
+        "observer SHA-256",
+        "observer-configuration SHA-256",
+        "target-union SHA-256"
+      ],
+      "repeat_rule": "A and B files, observer identities, payload hashes, target unions, and terminal transition hashes must match exactly.",
+      "causal_rule": "The frozen HARM callback adapter independently verifies age, exact historical context, context hash, and the complete already-decoded 512-byte donor before G can be admissible."
+    },
+    "manifest": {
+      "paths": "Every input path is project-relative, regular, nonsymlinked, and bound by byte count plus SHA-256.",
+      "required_artifacts": [
+        "HARM-Delta source binding",
+        "WRT stream",
+        "raw-to-WRT mapping receipt",
+        "GSRT2 A and B",
+        "HSP1 A and B",
+        "HGS1 A and B for distant scope"
+      ],
+      "coordinate_binding": "The manifest binds raw, WRT, and coder-bit half-open scope bounds, state-warm replay bounds, raw and WRT population sizes, frontend state at both measurement boundaries, and Endpoint428 state at both replay boundaries.",
+      "scope_rules": {
+        "fixture": "Synthetic source-only validation; physical G may be absent and is inadmissible.",
+        "opening": "Canonical raw [0,1000000); replay starts at WRT zero; physical G is absent and inadmissible.",
+        "distant": "Canonical raw [500000000,510000000); replay starts at WRT zero; a nonempty repeated HGS1 input and admissible G are mandatory."
+      }
+    },
+    "repeat": "Replay A uses the A route, parent, and physical streams. Replay B uses the separately materialized B streams. Scientific results and terminal HARM state must be identical.",
+    "active_horizon_rule": "Only bounded generated fixtures may execute while endpoint428_horizon_retained_parent_trace_q0_v1 is nonterminal. No active parent trace bytes, partial gains, controls, partitions, or scientific summaries may be read.",
+    "future_execution_rule": "A corpus-bound successor requires a new prospective experiment, a terminal HORIZON router decision, exact repeated route and sparse-parent inputs, a guarded output closure, and the original HARM opening/distant primary gates."
+  },
+  "source_fixture_gate": {
+    "population": "Eight generated WRT bytes with six explicit-field predictive coordinates and no corpus access.",
+    "required_passes": [
+      "HARM source binding and all bound artifacts verify",
+      "valid A and B manifests replay identically",
+      "sparse parent records cover all six and only the six predictive coordinates",
+      "P/K identity holds",
+      "E wakes on the second completed-route occurrence",
+      "opening-style absence of HGS1 keeps G inadmissible",
+      "physical HGS1 source binding parses independently",
+      "all frozen negative corruptions are rejected",
+      "the result retains zero objective credit"
+    ],
+    "negative_corruptions": [
+      "parent A/B content drift",
+      "missing parent coordinate",
+      "extra nonpredictive parent coordinate",
+      "duplicate or reordered parent coordinate",
+      "zero parent probability",
+      "parent payload digest drift",
+      "GSRT2 A/B content drift",
+      "HARM source-binding digest drift",
+      "physical observer repeat drift",
+      "raw/WRT/coder scope arithmetic drift"
+    ]
+  },
+  "authority": {
+    "archive_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0,
+    "corpus_execution_authority": false
+  }
+}

@@ -30,6 +30,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Release evidence router | `enwiki9_release_receipts.py` |
 | Frozen F/O DELTA-MIDAS residual attribution | `nncp_delta_midas_deep_residual.py` |
 | Prospective decoder-visible DELTA-MIDAS probe | `nncp_delta_midas_decoder_feature_probe.py` |
+| HARM-Delta sparse input ABI fixture | `harm_delta_sparse_input_abi_q0_v1.py` |
 | Direct-F32 DELTA-MIDAS named-gradient retry | `nncp_delta_midas_named_midpoint_gradient_q3.py` |
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
@@ -98,6 +99,13 @@ and emits a zero-credit experiment receipt with a copy of the executed analyzer.
 `nncp_delta_midas_decoder_feature_probe.py` likewise cannot launch a compressor
 or teacher; it fits only its frozen train partition and emits sealed validation,
 test, shifted-control, quantized-payload, and causal-feature evidence.
+
+`harm_delta_sparse_input_abi_q0_v1.py` cannot launch a compressor, read the
+canonical corpus, or inspect the active HORIZON scientific output. It runs a
+snapshot-bound generated fixture for the HSP1 sparse parent and HGS1 physical
+seed formats, demands exact GSRT2/HSP1 repeat and parent-coordinate coverage,
+and rejects the prospectively frozen malformed-input controls. Its result is
+zero-credit infrastructure evidence only.
 
 `nncp_delta_midas_named_midpoint_gradient_q3.py` launches the closed NNCP
 teacher twice and is zero-credit attribution work. Run it only through a
