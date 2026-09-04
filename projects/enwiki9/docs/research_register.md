@@ -90,6 +90,13 @@ cost. The proposal is therefore `dormant_dependency` while the active HORIZON
 experiment continues unchanged. No corpus replay may read HORIZON's scientific
 outputs before its fail-closed terminal route.
 
+The later explicit PALIMPSEST directive supersedes the earlier instruction to
+retain only HARM-Delta when deciding whether this shadow may be frozen. Its
+nested arms are matched ablations inside one zero-credit experiment, not a
+combination of separately measured score gains. The prohibition on a broad
+replacement codec and on adding gains across changed probability trajectories
+remains fully binding.
+
 The frozen nested arms are `P/K/A/M/H/T/X/C/G`. A is exactly HARM-Delta's
 latest completed exact-route value and generic causal edit transducer. M changes
 only the exact-route reservoir depth from one to eight. H adds only normalized
