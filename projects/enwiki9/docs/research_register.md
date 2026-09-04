@@ -1,5 +1,35 @@
 # enwiki9 Research Register
 
+## 2026-09-04 - Fiber-FOSSIL exact semantic retrieval is retired
+
+The corrected opening-1M gate
+`wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1` completed with an
+authoritative decision. Every evidentiary control passed: the raw inverse and
+all eight finite-coder inverses were exact, the repeated semantic tape and
+probability construction were identical, `P == K`, the output manifest was
+complete, active-HORIZON access was denied, and the owned 512 MiB/zero-swap
+cgroup peaked at 273,793,024 bytes and was removed without residue.
+
+The scientific hypothesis was decisively refuted. Parent `P`, bookkeeping `K`,
+and inactive opening-scope physical control `G` each produced a 173,859-byte
+payload. Same-route exact-continuation `D` produced 173,937 bytes, a loss of 78
+bytes instead of the required 4,080-byte saving. Its minimum chronological-third
+saving was -42 bytes, its minimum control margin was -42 bytes, and it had zero
+positive virtual-distance buckets. Only 311 bytes activated `D`; 253 donor
+bytes were correct, confirming again that correct-byte counts do not establish
+retained information against a mature parent.
+
+This retires the frozen Fiber-FOSSIL same-route 16-byte exact-retrieval axis and
+its dependent Fiber-LOOM/route-fast-weight successors without a parameter
+sweep. It does not retire HARM-Delta. HARM-Delta remains a distinct experiment:
+it aligns complete prior route values through causal match/substitute/insert/
+delete state rather than requiring exact 16-byte lockstep. No Fiber result is
+credited to or subtracted from HARM-Delta.
+
+Evidence: `results/wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1/decision.json`,
+`results/wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1/receipt.json`,
+and `operations/adaptive/reflections/20260904T212450Z_50c3d23da3.json`.
+
 ## 2026-09-04 - Independent opening-1M gates may overlap HORIZON
 
 The user's instruction, "we can do things in parallel", supersedes the
@@ -98,6 +128,42 @@ successful child exit and verified cgroup removal. Evidence:
 `operations/evidence/20260904_fiber_fossil_receiptfix_q0_v1_guarded_publication_validation.json`,
 `operations/evidence/20260904_cmix_v14_lifecycle_affinity_preflight_validation.json`,
 and `operations/provenance/cmix_v14_independent_source_review_20260904.json`.
+
+Fiber job `20260904T212450Z_50c3d23da3` completed successfully with a valid
+scientific miss. The exact D payload is 173,937 bytes versus 173,859 for P/K:
+78 bytes larger, against the required 4,080-byte saving. D loses bytes in all
+three chronological thirds and all six distance buckets. All inverse,
+repeatability, denial, output-manifest and cgroup-lifecycle checks pass. Peak
+cgroup memory is 273,793,024 bytes, with zero memory events and zero swap.
+The independently verified reflection retires this frozen exact-retrieval
+configuration; it gives no archive or full-corpus score credit. The canonical
+run-ledger entry retains null complete-package metrics and binds a diagnostic
+registration outside the immutable 22-output namespace.
+
+CMIX v14 job `20260904T212504Z_3be6dfb803` entered execution under the published
+source and queue ownership. Host inspection verified its comparator process
+on CPU 2, with the 10,000,000,000-byte requested cap rounded down by the kernel
+to 9,999,998,976 bytes, zero swap and no resource violations. Its native guard
+and persistent candidate worker own execution through P/E-A/E-B/decode.
+HORIZON remains nonterminal under its existing observer; no partial science
+access or duplicate monitor is introduced. Neither live operation authorizes
+a larger gate before its frozen terminal requirements are evaluated.
+
+Evidence: `operations/evidence/20260904_fiber_fossil_receiptfix_q0_v1_terminal_independent_audit.json`,
+`operations/adaptive/reflections/20260904T212450Z_50c3d23da3.json`,
+`operations/evidence/20260904_fiber_receiptfix_canonical_ledger_registration.json`,
+and `operations/evidence/20260904_parallel_opening1m_live_handoff.json`.
+
+The v14 comparator subsequently stopped on a now-localized implementation
+failure. Its retained execution report proves codec exit zero and identifies
+the exact previously sampled process as a zombie before and after its I/O
+read returned EACCES. The v14 classifier handles vanished processes but still
+rejects this terminal-zombie case. Treatment and decode arms did not execute;
+the reflection is implementation-failure/not-tested/retry. The selected
+correction requires an earlier successful sample of the exact same PID and
+start ticks plus stable Z/X terminal state. Unreadable live, unsampled or
+reused process identities remain fatal. This new revision preserves all codec,
+opening-1M, source-accounting and resource requirements.
 
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 

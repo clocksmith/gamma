@@ -1,0 +1,99 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "classify_observation checks non-ENOENT I/O errors before recognizing a stable same-identity Z/X terminal process; Linux returned EACCES for /proc/<pid>/io after the previously sampled codec became a zombie."
+  },
+  "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14",
+  "candidateRevision": {
+    "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14",
+    "candidateTreeSha256": "sha256:0079bc6e5aaedc3e9237e15499fe2fcbf22cd5e89e452d464a338c7978346759",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/20260904T211840690710Z_0079bc6e5aae.json",
+      "sha256": "sha256:56d17ae5d51667ffec2ee9f9ac8d7118ee9a778c0157576643237c43663de89d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze one correction-only successor that preserves codec, scope, arms, and envelopes, adds the observed EACCES-on-stable-zombie lifecycle case, and admits it only for a previously sampled identical process.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/decision.json",
+      "sha256": "sha256:82d49688d1afe5905824b26b2810dda4989e9b333ce44fec07f3857f463d27ba"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/p/execution.json",
+      "sha256": "sha256:b04e545d079f8854d50e7dfde4943ed9a97fe8666d461a19f32d80581da55d18"
+    },
+    {
+      "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/p/guard.json",
+      "sha256": "sha256:5fd34f110d421b1f0477269e9239a70c242c0aff85ba9d736121c6ad2376f9c3"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14.json",
+    "sha256": "sha256:6f718655b3223314ff1c1b0475952fe1262891402a7c4025ca5abd69329fd963"
+  },
+  "generatedUtc": "2026-09-04T21:31:26+00:00",
+  "hypothesis": {
+    "rationale": "Only comparator P ran. The PPM=8192 treatment, independent repeat, and exact decode were not executed, so archive identity and eligibility remain unmeasured.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260904T212504Z_3be6dfb803.json",
+    "sha256": "sha256:32ae6e21103fd66f375232c57922c424758bfd77fd9ba19ef404d45c201a796f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A nonfatal terminal-zombie observation must require unchanged PID/start ticks, Z/X state, and an earlier successful sample of that exact identity; live unreadable I/O must remain fatal."
+    ],
+    "uncertainties": [
+      "CMIX_PPM_RSS_MB=8192 output identity remains untested because v14 stopped after comparator P."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/preflight/scope_bytes",
+      "source": {
+        "path": "results/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v14/decision.json",
+        "sha256": "sha256:82d49688d1afe5905824b26b2810dda4989e9b333ce44fec07f3857f463d27ba"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 1000000,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260904t212504z_3be6dfb803",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "The sealed comparator completed with codec returncode 0 and exact 172605-byte payload output, but the v14 observer rejected a same-identity terminal zombie because /proc/3180435/io returned EACCES; treatment and decode arms never ran."
+    ],
+    "valid": false
+  }
+}
