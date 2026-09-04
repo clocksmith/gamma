@@ -1,0 +1,141 @@
+{
+  "artifacts": [
+    {
+      "id": "fixture-evidence",
+      "path": "results/harm_delta_sparse_parent_materializer_q0_v1/fixture-evidence.json",
+      "sha256": "sha256:78d1b2d81011201f05a708fc5ab0cc18a62d5cfc6c326311f7cb1c76a937fedb"
+    }
+  ],
+  "candidateId": "harm_delta_sparse_parent_materializer_q0_v1",
+  "candidateRevision": {
+    "candidateId": "harm_delta_sparse_parent_materializer_q0_v1",
+    "candidateTreeSha256": "sha256:55568d02e70583a56d3df68ca1d239d9444c83a97910947889fc9d81dd0c00a1",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/harm_delta_sparse_parent_materializer_q0_v1/20260904T163540131164Z_55568d02e705.json",
+      "sha256": "sha256:e252358931733c86bfa20ba8eb108cfd218fc8d8b4724c332ee858110ad04742"
+    }
+  },
+  "decision": "authorize-successor",
+  "evidenceClass": "infrastructure",
+  "experiment": {
+    "path": "operations/adaptive/experiments/harm_delta_sparse_parent_materializer_q0_v1.json",
+    "sha256": "sha256:4f92ab0289f3402de08eb701d60e845680369283ce7c5e2a0f0b67abd045d384"
+  },
+  "generatedUtc": "2026-09-04T16:35:53.466275Z",
+  "killPass": false,
+  "killPredicates": [
+    {
+      "id": "k-source-closure",
+      "measurement": "sourceClosurePass",
+      "observed": true,
+      "operator": "eq",
+      "passed": false,
+      "threshold": false
+    }
+  ],
+  "measurements": {
+    "activeTraceAccessCount": 0,
+    "corpusAccessCount": 0,
+    "exactCoordinateExtractionPass": true,
+    "hspAbiAcceptancePass": true,
+    "maximumSelfRssKiB": 22992,
+    "negativeControlRejectCount": 10,
+    "predictiveRecordCount": 4,
+    "repeatIdentityPass": true,
+    "sourceClosurePass": true,
+    "transcriptWitnessPass": true
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "objectiveCreditBytes": 0,
+  "promotionPass": true,
+  "promotionPredicates": [
+    {
+      "id": "p-source-closure",
+      "measurement": "sourceClosurePass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-extraction",
+      "measurement": "exactCoordinateExtractionPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-repeat",
+      "measurement": "repeatIdentityPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-witness",
+      "measurement": "transcriptWitnessPass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-hsp-abi",
+      "measurement": "hspAbiAcceptancePass",
+      "observed": true,
+      "operator": "eq",
+      "passed": true,
+      "threshold": true
+    },
+    {
+      "id": "p-negative-controls",
+      "measurement": "negativeControlRejectCount",
+      "observed": 10,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 10
+    },
+    {
+      "id": "p-record-count",
+      "measurement": "predictiveRecordCount",
+      "observed": 4,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 4
+    },
+    {
+      "id": "p-no-corpus",
+      "measurement": "corpusAccessCount",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-no-active-trace",
+      "measurement": "activeTraceAccessCount",
+      "observed": 0,
+      "operator": "eq",
+      "passed": true,
+      "threshold": 0
+    },
+    {
+      "id": "p-resource",
+      "measurement": "maximumSelfRssKiB",
+      "observed": 22992,
+      "operator": "lte",
+      "passed": true,
+      "threshold": 262144
+    }
+  ],
+  "schema": "gamma.enwiki9.adaptive-experiment-result.v1"
+}

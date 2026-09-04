@@ -1,0 +1,35 @@
+{
+  "schema": "gamma.enwiki9.candidate-interface.v1",
+  "candidate_id": "harm_delta_sparse_parent_materializer_q0_v1",
+  "role": "zero-credit sparse parent transcript materializer",
+  "inputs": {
+    "CMX21P1": "Exact immutable Endpoint428 pretruth uint16 stream with 16-byte header and eight MSB-first rows per WRT byte.",
+    "GSRT2": "Exact repeated semantic-route tape; only validated event-type-3 coordinates inside the replay prefix are selected.",
+    "WRT": "Exact truth stream used only after each pretruth probability row to build the observational trajectory witness.",
+    "observer": "Prospectively bound 32-byte SHA-256 identity of the parent observer implementation and configuration."
+  },
+  "output": {
+    "format": "HSP1 v1",
+    "record": "little-endian uint64 WRT coordinate plus the corresponding unchanged sixteen CMX21P1 bytes",
+    "installation": "exclusive temporary file, full self-validation and fsync, atomic no-replace hard-link installation"
+  },
+  "coordinate_law": {
+    "trace_offset": "16 + 16 * wrt_coordinate",
+    "prediction_event": 3,
+    "required_relation": "GSRT2 source == availability == wrt_coordinate",
+    "coverage": "every and only predictive coordinates in [0,replay_end)"
+  },
+  "witness": {
+    "kind": "observational truth/probability transcript",
+    "not_claimed": "opaque parent state serialization or native P/K synchronization",
+    "update_order": "coordinate, postprediction truth byte, exact sixteen-byte pretruth probability row"
+  },
+  "authority": {
+    "archive_authority": false,
+    "corpus_execution_authority": false,
+    "native_integration_authority": false,
+    "retained_parent_gain_authority": false,
+    "objective_credit_bytes": 0
+  },
+  "production_barrier": "A separately frozen successor must verify the exact HORIZON terminal-router receipt before statting or opening production CMX21P1."
+}

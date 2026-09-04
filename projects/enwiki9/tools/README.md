@@ -107,6 +107,13 @@ seed formats, demands exact GSRT2/HSP1 repeat and parent-coordinate coverage,
 and rejects the prospectively frozen malformed-input controls. Its result is
 zero-credit infrastructure evidence only.
 
+`harm_delta_sparse_parent_materializer_q0_v1.py` likewise exposes only a
+snapshot-bound generated fixture. It verifies the exact CMX21P1 byte mapping,
+selects every and only GSRT2 event-type-3 coordinate, emits repeated HSP1, and
+binds a domain-separated truth/probability transcript witness. It has no
+compressor, corpus, live-HORIZON, retained-gain, or archive authority; a later
+production runner must first verify the terminal HORIZON router.
+
 `nncp_delta_midas_named_midpoint_gradient_q3.py` launches the closed NNCP
 teacher twice and is zero-credit attribution work. Run it only through a
 revision-bound `enwiki9_lab.py enqueue-tool` job wrapped by
