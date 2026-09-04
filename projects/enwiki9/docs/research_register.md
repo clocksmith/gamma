@@ -50,6 +50,32 @@ retry reflection. The canonical enqueue operation rejects an occupied CMIX
 lease, so retry admission waits for that owner to release its lease; no lease
 is removed or bypassed.
 
+CMIX's comparator subsequently terminalized with its exact frozen
+172,605-byte payload and 464,298-byte archive, no outer resource violation,
+and verified lease cleanup. The stage failed its combined codec-exit or
+internal-telemetry check and discarded the execution dictionary. The exact
+trigger therefore remains unknown. Source review identified a disappearing
+child between `/proc` stat and I/O reads, missing durable failure telemetry,
+and an affinity check that rejects the guard's valid empty terminal sample.
+The v13 reflection is infrastructure-failure/not-tested/retry, with no
+scientific kill or promotion. New v14 is restricted to correcting those
+execution defects while preserving the codec and opening-1M experiment.
+
+Fiber retry `20260904T210420Z_720cd4eb87` correctly precreated its output root,
+then failed before science when the unchanged access guard rejected its own
+`horizon-denial-probe.json` diagnostic filename. Its reflection records an
+implementation failure. Our selected correction keeps that guard policy and
+the exact scientific core, renames the diagnostic, and exercises the actual
+guarded diagnostic publication in synthetic validation. Concurrent workspace
+edits occupied the proposed v10 namespace, so this coordinator's correction
+uses the distinct `wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1`
+identity. The unrelated v10 candidate is not adopted or launched here.
+
+Evidence: `operations/evidence/20260904_cmix_env8192_v13_p_terminal_failure.json`,
+`operations/evidence/20260904_cmix_v13_terminal_telemetry_diagnosis.json`,
+`operations/adaptive/reflections/20260904T205826Z_fdcae0ea3e.json`, and
+`operations/adaptive/reflections/20260904T210420Z_720cd4eb87.json`.
+
 ## 2026-09-04 - Adaptive ranking now respects candidate lifecycle
 
 The proposal ranker previously considered proposal status, experiment

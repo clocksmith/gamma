@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "The terminal stage lacks durable execution telemetry; inherited observer has a stat-to-io process-exit race and terminal affinity verification rejects a valid empty final sample. The exact v13 triggering branch is unknown."
+  },
+  "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+  "candidateRevision": {
+    "candidateId": "cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13",
+    "candidateTreeSha256": "sha256:4b7cd7b5c67e3daeb0979f3985b2509ef1e06968e81c930836923ccf8dc29773",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13/20260901T191023552396Z_4b7cd7b5c67e.json",
+      "sha256": "sha256:138020ee7b08a329b24f8a9f2a1ad422089d52ffc52a6fd0e589b17f39f0b5ce"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Preserve occupied v13 result and scratch namespaces and freeze one correction-only v14, with unchanged codec, controls and 1M scope.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/evidence/20260904_cmix_env8192_v13_p_terminal_failure.json",
+      "sha256": "sha256:264b850a93dccbd3a3a7b867c191b9b2777612d259d969b9be5e26a349ce7c83"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v13.json",
+    "sha256": "sha256:9636f124987e664136ba8ad58c5270e0dd92fbfd381c8e519b7e75c1765b3e09"
+  },
+  "generatedUtc": "2026-09-04T21:08:26+00:00",
+  "hypothesis": {
+    "rationale": "The complete frozen scientific comparison was not executed; this failure grants no algorithmic loss, gain or promotion.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/000_20260904T205826Z_fdcae0ea3e.json",
+    "sha256": "sha256:462496d6f77d019558689d42dae22eec62f01a6eb45418994ec69dfb0317bfc0"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Persist execution telemetry before evaluating stage success; recheck exact process identity on vanished I/O and distinguish empty terminal samples from missing live evidence."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "objectiveId": "gamma-enwiki9-hutter-105m-v1",
+    "objectivePath": "contracts/research/v1/objective-contract.json",
+    "targetScoreBytes": 105000000
+  },
+  "reflectionId": "r-20260904t205826z_fdcae0ea3e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "The comparator produced the exact frozen payload and archive but the stage rejected its combined exit-or-telemetry check and discarded the execution dictionary. Treatment and repeat arms were not run."
+    ],
+    "valid": false
+  }
+}
