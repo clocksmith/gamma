@@ -1646,9 +1646,12 @@ def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | 
         }
     elif not is_ppmd_cmix_candidate(candidate):
         pass_action = {
-            "action": "record pass and apply candidate target-gate promotion rule",
-            "next_scope_bytes": next_scope,
-            "reason": "non-cmix candidates may need archive ceilings, target-gate metadata, or candidate-specific guard labels",
+            "action": "record pass and inspect the frozen candidate promotion rule",
+            "next_scope_bytes": None,
+            "reason": (
+                "the generic scope ladder grants no candidate-specific authority; "
+                "a larger scope requires an explicitly authorized successor gate"
+            ),
         }
     return {
         "if_passes": pass_action,
