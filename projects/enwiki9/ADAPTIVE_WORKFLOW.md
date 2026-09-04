@@ -238,7 +238,12 @@ python3 projects/enwiki9/tools/enwiki9_lab.py activate-proposal <proposal_id> \
 
 Claim is valid only from `proposed`; development is valid only from `claimed`.
 Parked, blocked, and dormant proposals fail closed rather than relying on a
-human remembering their prose ordering.
+human remembering their prose ordering. A prospectively sealed recovery
+candidate that already exists in `developed` state may be activated in place,
+but only after the activation verifier binds both its terminal dependency
+result and the unique valid reflection over that exact result. Enqueue
+independently requires `operational_status: actionable`, so source availability
+cannot bypass the receipt gate.
 
 Materialize a claimed proposal as a candidate:
 

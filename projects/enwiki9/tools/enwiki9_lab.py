@@ -696,8 +696,15 @@ def develop_proposal(
 
 
 def _activation_project_file(path_text: str, label: str) -> pathlib.Path:
+    relative = pathlib.PurePosixPath(path_text)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(f"required {label} path is not project-relative: {path_text}")
+    candidate = (ROOT / relative).resolve()
+    project_root = ROOT.resolve()
+    if project_root not in candidate.parents:
+        raise ValueError(f"required {label} escapes project: {path_text}")
     try:
-        return parent_qualification_v3.regular_file(ROOT / path_text, label)
+        return parent_qualification_v3.regular_file(candidate, label)
     except (OSError, ValueError) as error:
         raise ValueError(f"required {label} is unavailable: {path_text}") from error
 
@@ -856,6 +863,94 @@ def _verify_parent_qualification_v3_activation(
     }
 
 
+def _verify_reflected_terminal_recovery_activation(
+    requirement: dict[str, Any],
+    evidence_set: set[str],
+) -> dict[str, Any]:
+    candidate_id = requirement.get("candidate_id")
+    result_text = requirement.get("result_path")
+    required_decision = requirement.get("required_decision")
+    required_promotion = requirement.get("required_promotion_pass")
+    required_kill = requirement.get("required_kill_pass")
+    require_reflection = requirement.get("required_valid_reflection")
+    if (
+        not isinstance(candidate_id, str)
+        or not isinstance(result_text, str)
+        or not isinstance(required_decision, str)
+        or not isinstance(required_promotion, bool)
+        or not isinstance(required_kill, bool)
+        or require_reflection is not True
+    ):
+        raise ValueError("malformed reflected-terminal-recovery activation requirement")
+    if result_text not in evidence_set:
+        raise ValueError(
+            "activation evidence must include required recovery result: "
+            f"{result_text}"
+        )
+
+    result_path = _activation_project_file(result_text, "terminal recovery result")
+    research_contracts.validate_artifact(result_path)
+    result = load_json(result_path)
+    if (
+        result.get("schema") != "gamma.enwiki9.adaptive-experiment-result.v1"
+        or result.get("candidateId") != candidate_id
+        or result.get("decision") != required_decision
+        or result.get("promotionPass") is not required_promotion
+        or result.get("killPass") is not required_kill
+    ):
+        raise ValueError("terminal recovery result does not satisfy activation requirement")
+
+    result_reference = artifact_reference(result_path)
+    reflection_root = ROOT / "operations" / "adaptive" / "reflections"
+    matches: list[tuple[pathlib.Path, dict[str, Any]]] = []
+    for reflection_path in sorted(reflection_root.glob("*.json")):
+        try:
+            reflection = load_json(reflection_path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            continue
+        if reflection.get("candidateId") != candidate_id:
+            continue
+        if result_reference not in reflection.get("evidence", []):
+            continue
+        research_contracts.validate_artifact(reflection_path)
+        validity = reflection.get("validity")
+        decision = reflection.get("decision")
+        if (
+            not isinstance(validity, dict)
+            or validity.get("valid") is not True
+            or validity.get("classification") != "valid"
+            or not isinstance(decision, dict)
+            or decision.get("promotionPredicatesPass") is not required_promotion
+            or decision.get("killPredicatesPass") is not required_kill
+            or decision.get("verdict") not in {"promote", "next-gate"}
+        ):
+            continue
+        matches.append((reflection_path, reflection))
+    if len(matches) != 1:
+        raise ValueError(
+            "activation requires exactly one valid reflection binding the recovery result"
+        )
+    reflection_path, reflection = matches[0]
+    reflection_text = reflection_path.relative_to(ROOT).as_posix()
+    if reflection_text not in evidence_set:
+        raise ValueError(
+            "activation evidence must include the validated recovery reflection: "
+            f"{reflection_text}"
+        )
+    return {
+        "kind": "reflected_terminal_recovery",
+        "candidate_id": candidate_id,
+        "result_path": result_text,
+        "result_sha256": result_reference["sha256"],
+        "result_decision": result["decision"],
+        "reflection_path": reflection_text,
+        "reflection_sha256": artifact_reference(reflection_path)["sha256"],
+        "reflection_decision": reflection["decision"]["verdict"],
+        "promotion_pass": required_promotion,
+        "kill_pass": required_kill,
+    }
+
+
 def activate_proposal(proposal_id: str, evidence: list[str]) -> dict[str, Any]:
     if not evidence:
         raise ValueError("proposal activation requires receipt-backed evidence")
@@ -863,8 +958,8 @@ def activate_proposal(proposal_id: str, evidence: list[str]) -> dict[str, Any]:
     if located is None:
         raise FileNotFoundError(f"proposal not found: {proposal_id}")
     state, path = located
-    if state not in {"proposed", "claimed"}:
-        raise ValueError("only a proposed or claimed proposal can be activated")
+    if state not in {"proposed", "claimed", "developed"}:
+        raise ValueError("only a proposed, claimed, or developed proposal can be activated")
     proposal = load_json(path)
     requirements = proposal.get("activation_requirements", [])
     if not isinstance(requirements, list):
@@ -878,6 +973,13 @@ def activate_proposal(proposal_id: str, evidence: list[str]) -> dict[str, Any]:
         if requirement_kind == "terminal_parent_qualification_v3":
             verified.append(
                 _verify_parent_qualification_v3_activation(requirement, evidence_set)
+            )
+            continue
+        if requirement_kind == "reflected_terminal_recovery":
+            verified.append(
+                _verify_reflected_terminal_recovery_activation(
+                    requirement, evidence_set
+                )
             )
             continue
         if requirement_kind != "terminal_scientific_decision":
@@ -982,6 +1084,7 @@ def enqueue_job(
     candidate_meta(candidate_id)
     require_terminal_reflections(candidate_id, "enter another gate")
     proposal_path_value, proposal = candidate_proposal(candidate_id)
+    require_actionable_proposal(proposal, "be enqueued")
     inferred_path, _experiment_value, experiment_reference = (
         load_proposal_experiment(proposal)
     )
