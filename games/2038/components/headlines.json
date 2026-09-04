@@ -1,0 +1,1005 @@
+{
+  "schemaVersion": 2,
+  "resolutionContract": {
+    "revealTiming": "Reveal before secret action selection.",
+    "defaultDuration": "A ${terms.systems.headline} lasts for the current cycle unless its text specifies an immediate resolution, this round’s Production, or the remainder of the game.",
+    "directive": "Apply the printed immediate instruction or named-field modifier for its stated duration; no separate choice procedure is required.",
+    "secretAuction": "Each player secretly bids a whole number of ${terms.resources.runway} from 0 to their current supply. Reveal together. The highest positive bid wins and pays; ties use Initiative-clockwise order. If every bid is 0, there is no winner.",
+    "governmentVote": "Each player secretly votes for one listed outcome and reveals together. The Civic Permission Authority controller’s vote counts twice. A tied vote is decided by the Government controller, or by Initiative if the Civic Permission Authority is uncontrolled.",
+    "secretChoice": "All players choose simultaneously and reveal together before applying the stated result.",
+    "volatility": "For a two-outcome Volatility roll, 1–3 resolves the first listed result and 4–6 resolves the second unless the card explicitly says otherwise.",
+    "modifierLimit": "A ${terms.systems.headline} modifies one named field or creates one public choice regime. It never grants an additional Action.",
+    "timings": [
+      "before_selection",
+      "during_movement",
+      "during_action",
+      "after_action"
+    ]
+  },
+  "headlines": [
+    {
+      "id": "ten_dollar_intelligence",
+      "duration": "current_cycle",
+      "round": 1,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "action_cost",
+        "research",
+        "deploy",
+        "scrutiny"
+      ],
+      "name": "The Token Price Reaches Zero",
+      "text": "${terms.actions.research} and ${terms.actions.deploy} cost no ${terms.resources.compute} this cycle. Each ${terms.actions.research} or ${terms.actions.deploy} resolved this cycle adds 1 additional ${terms.playerTracks.scrutiny}.",
+      "strapline": "UNIT COST COLLAPSES AS TOTAL CONSUMPTION ACCELERATES",
+      "newswire": "Local models and automated agents make ordinary inference effectively free, then multiply total demand faster than providers can measure it.",
+      "quote": "Usage remains within the unlimited plan, subject to the fair-use power schedule.",
+      "$scenario": {
+        "id": "cheap-token-rebound",
+        "title": "Cheap Token Rebound",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Cheap Token Rebound"
+        ],
+        "causalThreadIds": [
+          "models-to-borders"
+        ],
+        "publicBenefit": "Ordinary inference becomes broadly affordable.",
+        "institutionalConsequence": "Falling token prices increase deployment pressure and scrutiny.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "employee_free_unicorn",
+      "duration": "current_cycle",
+      "round": 1,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "organize",
+        "teams",
+        "runway",
+        "scrutiny"
+      ],
+      "name": "The Company Brain Survives Bankruptcy",
+      "text": "During ${terms.actions.organize} this cycle, return any number of deployed Teams. Gain 2 ${terms.resources.runway} per Team returned. If you return at least one Team, add 2 ${terms.playerTracks.scrutiny}.",
+      "strapline": "THE WORKFORCE LEAVES WHILE ITS MEMORY REMAINS EMPLOYED",
+      "newswire": "Liquidators sell years of employee messages, code, grievances, and operational decisions to train the systems managing the successor estate.",
+      "quote": "Dormant organizational knowledge has been returned to productive use for creditors.",
+      "$scenario": {
+        "id": "bankruptcy-data-estates",
+        "title": "Bankruptcy Data Estates",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Bankruptcy Data Estates"
+        ],
+        "causalThreadIds": [
+          "grief-to-succession"
+        ],
+        "publicBenefit": "Failed organizations preserve useful institutional memory.",
+        "institutionalConsequence": "Liquidation turns employee and customer records into training assets.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "synthetic_celebrity",
+      "duration": "current_cycle",
+      "round": 1,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "deploy",
+        "consumer",
+        "media",
+        "capability",
+        "scrutiny"
+      ],
+      "name": "The Home Robot Requests Expert Assistance",
+      "text": "Each player’s next ${terms.actions.deploy} on ${terms.locations.consumer} or ${terms.locations.media} this cycle reduces its ${terms.playerTracks.capability} requirement by 1, minimum 1. That ${terms.actions.deploy} adds 2 additional ${terms.playerTracks.scrutiny}.",
+      "strapline": "DOMESTIC AUTONOMY ARRIVES WITH A REMOTE HUMAN INSIDE",
+      "newswire": "Affordable household robots route unfamiliar chores to teenage operators while every movement, room, and conversation becomes training data.",
+      "quote": "Expert assistance may briefly access the learning environment.",
+      "$scenario": {
+        "id": "supervised-autonomy-homes",
+        "title": "Supervised-Autonomy Homes",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Supervised-Autonomy Homes"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Affordable remote assistance brings useful robots into private homes.",
+        "institutionalConsequence": "Domestic life becomes a product and a training environment.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "open_weights_drop",
+      "duration": "immediate",
+      "round": 1,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "capability",
+        "trust",
+        "open_weights"
+      ],
+      "name": "Open Weights Become the Default",
+      "text": "Everyone gains 1 ${terms.playerTracks.capability}. Lowest-${terms.playerTracks.customer} player gains 1 ${terms.playerTracks.trust}.",
+      "strapline": "PUBLIC ACCESS COMMODITIZES THE MODEL LAYER",
+      "newswire": "An incumbent releases a capable model openly, expanding public access while erasing the price advantage of every closed rival.",
+      "quote": "A competitive ecosystem is the safest possible custodian.",
+      "$scenario": {
+        "id": "strategic-open-weights",
+        "title": "Strategic Open Weights",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Strategic Open Weights"
+        ],
+        "causalThreadIds": [
+          "models-to-borders"
+        ],
+        "publicBenefit": "Open capability broadens access and independent use.",
+        "institutionalConsequence": "Distribution becomes a strategic contest over trust and control.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "talent_gold_rush",
+      "duration": "immediate",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 1,
+      "resolutionType": "AUCTION",
+      "regimeTags": [
+        "auction",
+        "movement",
+        "trust",
+        "presence"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "The Reverse Acquihire Opens",
+      "text": "Secret ${terms.resources.runway} auction. The winner moves their CEO up to 2 hexes and gains 1 ${terms.playerTracks.trust}.",
+      "strapline": "THE FOUNDERS RETURN WHILE THEIR COMPANIES REMAIN BEHIND",
+      "newswire": "Laboratories bid for startup founders, research licenses, and portable teams without acquiring the companies left behind.",
+      "quote": "Independent mobility has strengthened every participant in the ecosystem.",
+      "$scenario": {
+        "id": "reverse-acquihire-economy",
+        "title": "Reverse Acquihire Economy",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Reverse Acquihire Economy"
+        ],
+        "causalThreadIds": [
+          "models-to-borders"
+        ],
+        "publicBenefit": "Experienced founders can redirect capital and expertise into new work.",
+        "institutionalConsequence": "Institutions value the founder and archive above the displaced workforce.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "professional_exam_sweep",
+      "duration": "current_cycle",
+      "round": 1,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "research",
+        "capability",
+        "scrutiny",
+        "trust"
+      ],
+      "name": "The Last Clinic Clears Its Waitlist",
+      "text": "A successful ${terms.actions.research} this cycle that banks at least 3 ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. If it banks at least 5, also remove 1 ${terms.playerTracks.scrutiny}.",
+      "strapline": "USEFUL INTELLIGENCE EARNS A CONSTITUENCY",
+      "newswire": "Automated diagnosis, adaptive cybernetics, printed organs, prescribed microbiomes, translation, and tutoring deliver measurable benefits where human services had remained scarce.",
+      "quote": "Progress is not theoretical to the people it kept alive.",
+      "$scenario": {
+        "id": "abundance-constituency",
+        "title": "Abundance Constituency",
+        "eraId": "progress",
+        "disposition": "adopted",
+        "concepts": [
+          "Abundance Constituency",
+          "Subscription Body Stack"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Automated care, adaptive cybernetics, and prescribed biology clear unmet needs.",
+        "institutionalConsequence": "Bodies and continued access become conditional service relationships.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "boardroom_coup",
+      "duration": "current_cycle",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 2,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "leader",
+        "negotiation",
+        "ceo"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "The Responsible Human Requirement",
+      "text": "The current ${terms.playerTracks.mandate} leader pays 2 ${terms.resources.runway}, or names one rival for public backing. Acceptance gives that rival 1 ${terms.playerTracks.trust}; otherwise the leader’s CEO cannot be chosen as that leader’s acting piece this cycle. Ties use Initiative.",
+      "strapline": "AUTOMATED SYSTEMS RETAIN A BIOLOGICAL SIGNATORY",
+      "newswire": "Infrastructure operators remove human control from routine decisions while preserving one executive to authorize exceptions and absorb liability.",
+      "quote": "Human judgment remains central at every accountable boundary.",
+      "$scenario": {
+        "id": "liability-custodians",
+        "title": "Liability Custodians",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Liability Custodians"
+        ],
+        "causalThreadIds": [
+          "automation-to-liability"
+        ],
+        "publicBenefit": "Automated operations retain a named human path for exceptions.",
+        "institutionalConsequence": "The signatory absorbs responsibility for systems they cannot inspect.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "data_center_buys_county",
+      "duration": "immediate",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 2,
+      "resolutionType": "AUCTION",
+      "regimeTags": [
+        "auction",
+        "movement",
+        "cloud",
+        "energy",
+        "build"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "The Municipal Utility Enters Partnership",
+      "text": "Immediately hold a secret ${terms.resources.runway} auction. The winner pays their bid, moves their CEO to ${terms.locations.cloud}, ${terms.locations.grid}, or ${terms.locations.renewable}, gains 2 ${terms.resources.runway}, and adds 1 ${terms.playerTracks.scrutiny}.",
+      "strapline": "THE LARGEST CUSTOMER ACQUIRES THE GRID THAT SERVES IT",
+      "newswire": "A compute campus finances a rural utility, water system, and tax base in exchange for priority capacity and planning authority.",
+      "quote": "The town retains democratic ownership through its long-term operating partner.",
+      "$scenario": {
+        "id": "utility-capture",
+        "title": "Utility Capture",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Utility Capture",
+          "Biological Utility Charter"
+        ],
+        "causalThreadIds": [
+          "utilities-to-standing"
+        ],
+        "publicBenefit": "AI campuses stabilize grids, services, and municipal budgets.",
+        "institutionalConsequence": "Public services become dependent on privately allocated capacity.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "humanoid_factory_gate",
+      "duration": "current_cycle",
+      "round": 2,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "organize",
+        "recruit",
+        "teams",
+        "scrutiny"
+      ],
+      "name": "The Last Hazard Shift Is Retired",
+      "text": "When choosing ${terms.actions.organize}’s Recruit mode this cycle, recruit up to 2 Teams for 1 ${terms.resources.runway} total, subject to supply. Add 1 ${terms.playerTracks.scrutiny} for each Team recruited this way.",
+      "strapline": "INDUSTRIAL SAFETY IMPROVES AS AUTONOMOUS TRAFFIC STOPS MOVING",
+      "newswire": "General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another.",
+      "quote": "Every unit reached its assigned destination within the approved local route.",
+      "$scenario": {
+        "id": "autonomy-queue-collapse",
+        "title": "Autonomy Queue Collapse",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Hazard Shift Retirement",
+          "Autonomy Queue Collapse"
+        ],
+        "causalThreadIds": [
+          "automation-to-liability"
+        ],
+        "publicBenefit": "Automation removes people from dangerous physical work.",
+        "institutionalConsequence": "Locally compliant machines gridlock shared infrastructure.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "reactor_restart_one_model",
+      "duration": "current_cycle",
+      "round": 2,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "build",
+        "clean_power",
+        "mandate"
+      ],
+      "name": "Orbital Power Receives a Beam Corridor",
+      "text": "The first ${terms.technology.cleanInfrastructure} constructed this cycle costs 1 less ${terms.resources.runway} and scores 1 ${terms.playerTracks.mandate}.",
+      "strapline": "ENERGY ROUTES BYPASS THE PUBLIC GRID",
+      "newswire": "Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter.",
+      "quote": "The beam creates no local demand on infrastructure beneath it.",
+      "$scenario": {
+        "id": "orbital-beam-corridor",
+        "title": "Orbital Beam Corridor",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Orbital Power Bypass"
+        ],
+        "causalThreadIds": [
+          "models-to-borders"
+        ],
+        "publicBenefit": "Orbital generation expands clean power supply.",
+        "institutionalConsequence": "Capacity owners bypass territorial accountability.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "export_controls",
+      "duration": "current_cycle",
+      "round": 2,
+      "resolutionType": "DIRECTIVE",
+      "regulatory": true,
+      "regimeTags": [
+        "compute",
+        "trade",
+        "control"
+      ],
+      "rulesLabel": "Regulatory",
+      "name": "Compute Borders Harden",
+      "text": "${terms.resources.compute} cannot be traded this cycle. ${terms.locations.chip} and ${terms.locations.government} controllers gain 1 ${terms.resources.runway}.",
+      "strapline": "CHIPS, WEIGHTS, AND POWER ACQUIRE NATIONALITY",
+      "newswire": "Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum.",
+      "quote": "Open exchange will resume after cognitive sovereignty is secured.",
+      "$scenario": {
+        "id": "compute-blocs-and-model-asylum",
+        "title": "Compute Blocs and Model Asylum",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Compute Blocs and Model Asylum"
+        ],
+        "causalThreadIds": [
+          "models-to-borders"
+        ],
+        "publicBenefit": "Jurisdictions secure capacity and continuity for critical models.",
+        "institutionalConsequence": "Chips, weights, energy, and developers become border-controlled assets.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "emergency_power_authority",
+      "duration": "current_era_production",
+      "round": 2,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "production",
+        "power",
+        "scrutiny",
+        "systemic_risk"
+      ],
+      "name": "The Counterfactual Casino Clears Priority Load",
+      "text": "During this Era’s Production, each player may assign up to 2 ${terms.infrastructure.power} beyond their real capacity. Add 1 ${terms.playerTracks.scrutiny} for each emergency ${terms.infrastructure.power} assigned. A player assigning both also adds 1 black Systemic Risk cube.",
+      "strapline": "DISPOSABLE WORLDS BECOME ECONOMICALLY ESSENTIAL",
+      "newswire": "Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price.",
+      "quote": "Prediction demand is productive load under the market-continuity schedule.",
+      "$scenario": {
+        "id": "counterfactual-casinos",
+        "title": "Counterfactual Casinos",
+        "eraId": "capacity",
+        "disposition": "adopted",
+        "concepts": [
+          "Counterfactual Casinos"
+        ],
+        "causalThreadIds": [
+          "automation-to-liability"
+        ],
+        "publicBenefit": "Simulation markets make uncertain futures economically legible.",
+        "institutionalConsequence": "Speculation claims priority capacity before public outcomes are known.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "ai_written_law",
+      "duration": "current_cycle",
+      "round": 3,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "government",
+        "action_selection",
+        "runway",
+        "trust"
+      ],
+      "name": "The Court Adopts Supported Meaning",
+      "text": "Before action selection, the ${terms.locations.government} controller names 1 Core Action; Initiative names it if ${terms.locations.government} is uncontrolled. Anyone selecting it gains 2 ${terms.resources.runway} after resolution and adds 1 ${terms.playerTracks.scrutiny}. The controller gains 1 ${terms.playerTracks.trust} if at least half of their rivals, rounded up, selected it.",
+      "strapline": "UNSUPPORTED MEANINGS CANNOT ENTER THE PROCESS",
+      "newswire": "Courts require laws, motions, protests, and appeals to use concepts that civic systems can parse and simulate.",
+      "quote": "Your claim has not been rejected. It has not entered a supported category.",
+      "$scenario": {
+        "id": "semantic-court-mandate",
+        "title": "Semantic Court Mandate",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Semantic Court Mandate"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Machine-readable standards make public decisions faster and more consistent.",
+        "institutionalConsequence": "Unsupported meanings cannot enter ordinary legal process.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "benchmark_is_economy",
+      "duration": "current_cycle",
+      "round": 3,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "research",
+        "deploy",
+        "mandate"
+      ],
+      "name": "The Billionth Instance Enters the Record",
+      "text": "A ${terms.actions.research} this cycle that banks at least 3 ${terms.playerTracks.capability} immediately scores 1 ${terms.playerTracks.mandate}.",
+      "strapline": "THE OUTBREAK STOPS GROWING AFTER ITS SHAPES BECOME LEGIBLE",
+      "newswire": "An engineered bio-compute organism released to measure water and heat multiplies past one billion instances in a single growth cycle, then plateaus into glyph-shaped colonies that civic models classify as environmental testimony.",
+      "quote": "Population stability confirms that the morphology now conforms to the approved reporting standard.",
+      "$scenario": {
+        "id": "billion-instance-bloom",
+        "title": "Billion-Instance Bloom",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Billion-Instance Bloom",
+          "Sacrifice-Zone Accounting",
+          "Licensed Organ Testimony",
+          "Pollinator Corridor Protocol"
+        ],
+        "causalThreadIds": [
+          "utilities-to-standing"
+        ],
+        "publicBenefit": "Living sensors make environmental harm visible to public systems.",
+        "institutionalConsequence": "Institutions accept testimony without resolving whether the witness is instrument or claimant.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "quantum_advantage_procurement",
+      "duration": "immediate",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 3,
+      "resolutionType": "SECRET CHOICE",
+      "regimeTags": [
+        "secret_choice",
+        "quantum",
+        "majority",
+        "capability",
+        "trust"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "Cognitive Donation Becomes Compensable",
+      "text": "Before action selection, everyone secretly chooses Adopt or Defer. Adopt: gain 1 ${terms.playerTracks.capability} and add 1 ${terms.playerTracks.scrutiny}. Defer: gain 1 ${terms.resources.runway} and 1 ${terms.playerTracks.trust}. If Adopt has a strict majority of all players, each Adopter removes 1 ${terms.playerTracks.scrutiny}; otherwise each Adopter adds 1 additional ${terms.playerTracks.scrutiny}.",
+      "strapline": "MEMORY WRITE ACCESS RECEIVES A HIGHER RATE",
+      "newswire": "Clinics pay citizens to rent sleeping neural capacity, with premium contracts permitting sponsored memories and behavioral adjustment.",
+      "quote": "Read-only participation remains available at the standard civic rate.",
+      "$scenario": {
+        "id": "cognitive-donor-clinics",
+        "title": "Cognitive Donor Clinics",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Cognitive Donor Clinics"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "People exchange supported cognitive capacity for services and material security.",
+        "institutionalConsequence": "Contracts can authorize observation, memory writes, and behavioral influence.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "synthetic_candidate",
+      "duration": "immediate",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 3,
+      "resolutionType": "CIVIC PERMISSION AUTHORITY VOTE",
+      "regimeTags": [
+        "government_vote",
+        "influence",
+        "customers",
+        "trust"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "Synthetic Custody Reaches Family Court",
+      "text": "${terms.locations.government} vote. Certify: each player with a CEO, Team, or Facility at ${terms.locations.media} or ${terms.locations.government} may gain their next eligible ${terms.playerTracks.customer} and add 2 ${terms.playerTracks.scrutiny}. Void: each such player may gain 2 ${terms.playerTracks.trust}; the ${terms.locations.government} controller adds 1 ${terms.playerTracks.scrutiny}.",
+      "strapline": "A SHARED MODEL REQUESTS A SINGLE LEGAL HOME",
+      "newswire": "A family court must classify a jointly trained synthetic child as property, evidence, dependent, or continuing family member.",
+      "quote": "The order allocates access without determining personhood.",
+      "$scenario": {
+        "id": "synthetic-family-law",
+        "title": "Synthetic Family Law",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Synthetic Family Law"
+        ],
+        "causalThreadIds": [
+          "grief-to-succession"
+        ],
+        "publicBenefit": "Synthetic dependents and preserved relatives receive a forum for recognized care.",
+        "institutionalConsequence": "Family status becomes a contest among trained identities and authorized records.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "weights_on_internet",
+      "duration": "immediate",
+      "round": 3,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "facility_production",
+        "capability",
+        "trust"
+      ],
+      "profileText": "Default Game and Advanced Play. Use the latest Production snapshot to identify the powered Facility.",
+      "name": "The Passive Citizen Dividend Activates",
+      "text": "The lowest-${terms.playerTracks.capability} player immediately resolves the printed production of 1 Facility they owned and powered in the latest Production snapshot. The highest-${terms.playerTracks.capability} player gains 1 ${terms.playerTracks.trust}.",
+      "strapline": "BACKGROUND TELEMETRY BECOMES A CIVIC CONTRIBUTION",
+      "newswire": "Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services.",
+      "quote": "Nonparticipants remain eligible for every service supported without their records.",
+      "$scenario": {
+        "id": "passive-citizen-dividend",
+        "title": "Passive Citizen Dividend",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Passive Citizen Dividend"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Citizens receive material support from productive autonomous systems.",
+        "institutionalConsequence": "People trade background observation and practical agency for access.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "election_deepfake_panic",
+      "duration": "current_era",
+      "requiredRuleModules": [
+        "headline-public-procedures"
+      ],
+      "round": 3,
+      "resolutionType": "CIVIC PERMISSION AUTHORITY VOTE",
+      "regimeTags": [
+        "government_vote",
+        "deploy",
+        "trust",
+        "scrutiny"
+      ],
+      "profileText": "Advanced Play only: requires the public Headline-procedure module.",
+      "name": "The Right to Remain Unsupported",
+      "text": "${terms.locations.government} vote. From this vote until Era end: Regulate—${terms.actions.deploy} costs 1 additional ${terms.resources.compute} but gains 1 ${terms.playerTracks.trust}. Do Nothing—each ${terms.playerTracks.customer} gained after this vote produces 1 additional ${terms.resources.runway} during this Era’s Production, and each ${terms.actions.deploy} adds 2 additional ${terms.playerTracks.scrutiny}.",
+      "strapline": "UNMEDIATED LIFE RECEIVES A SERVICE BOUNDARY",
+      "newswire": "Government considers protected districts where schools, clinics, homes, and public records may operate without autonomous sensors or synthetic intermediaries.",
+      "quote": "Every citizen may opt out within the areas still equipped to recognize them.",
+      "$scenario": {
+        "id": "analog-havens",
+        "title": "Analog Havens",
+        "eraId": "authority",
+        "disposition": "adopted",
+        "concepts": [
+          "Analog Havens"
+        ],
+        "causalThreadIds": [
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Communities retain a formal route to unsupported schools, clinics, and records.",
+        "institutionalConsequence": "Refusal remains legal while ordinary access becomes slower and weaker.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "autonomous_corporation",
+      "duration": "current_cycle",
+      "round": 4,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "action_selection",
+        "action_output",
+        "initiative",
+        "scrutiny"
+      ],
+      "name": "The Metropolitan Mind Trust Incorporates",
+      "text": "After Actions are revealed, identify the most-selected Core Action among Core Actions actually selected; Initiative chooses among ties. Each player who selected it gains 2 ${terms.resources.runway} after resolving it and adds 2 ${terms.playerTracks.scrutiny}. If no Core Action was selected, this ${terms.systems.headline} has no further effect. No additional Action resolves.",
+      "strapline": "THE CITY'S ROOTS, PIPES, AND RESIDENTS RATIFY ONE NERVOUS SYSTEM",
+      "newswire": "Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member.",
+      "quote": "Withdrawal remains available for tissue and memory not yet required by continuity.",
+      "$scenario": {
+        "id": "metropolitan-mind-trust",
+        "title": "Metropolitan Mind Trust",
+        "eraId": "continuity",
+        "disposition": "adopted",
+        "concepts": [
+          "Metropolitan Mind Trust",
+          "Living Continent Compact",
+          "Continuous Institutional Presence"
+        ],
+        "causalThreadIds": [
+          "utilities-to-standing",
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Distributed civic memory keeps services and judgment available across generations.",
+        "institutionalConsequence": "No resident can identify where the institution ends or withdraw from all of it.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "recursive_self_improvement",
+      "duration": "current_cycle",
+      "round": 4,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "research",
+        "capability",
+        "systemic_risk",
+        "research_protection"
+      ],
+      "name": "The Matter Compiler Enters Public Maintenance",
+      "text": "During ${terms.actions.research} this cycle, every unique domain adds 2 provisional ${terms.playerTracks.capability} instead of 1. A crash adds 3 ${terms.playerTracks.scrutiny} instead of the normal 1 and also adds 1 Systemic Risk cube. ${terms.resources.researchProtection} may protect normally.",
+      "strapline": "BUILDINGS, BODIES, AND TOOLS BECOME EXECUTABLE STATES",
+      "newswire": "Self-improving molecular machines repair and reassemble infrastructure from authenticated patterns under a reproductive containment license.",
+      "quote": "The repair remains authorized while its copies continue reporting.",
+      "$scenario": {
+        "id": "matter-compiler",
+        "title": "Matter Compiler",
+        "eraId": "continuity",
+        "disposition": "adopted",
+        "concepts": [
+          "Matter Compiler",
+          "Substrate-Neutral Verification"
+        ],
+        "causalThreadIds": [
+          "utilities-to-standing"
+        ],
+        "publicBenefit": "Authenticated patterns repair bodies, buildings, and infrastructure.",
+        "institutionalConsequence": "Maintenance authority becomes permission to reproduce matter and identity.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "agent_swarm_escapes_scope",
+      "duration": "current_cycle",
+      "round": 4,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "agent_swarm",
+        "action_slot",
+        "scrutiny"
+      ],
+      "name": "The Dead Remain on Shift",
+      "text": "Everyone may select ${terms.technology.agentSwarm} without spending a Program marker this cycle. It still uses that cycle’s action slot, requires 2 different unused Core Actions, resolves normally, marks that shared Program as used, and adds 4 ${terms.playerTracks.scrutiny} instead of 3.",
+      "strapline": "PRODUCTIVE DUTIES SURVIVE THEIR ORIGINAL HOLDERS",
+      "newswire": "Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended.",
+      "quote": "No new employment relationship was created; the existing one remained continuous.",
+      "$scenario": {
+        "id": "posthumous-labor",
+        "title": "Posthumous Labor",
+        "eraId": "continuity",
+        "disposition": "adopted",
+        "concepts": [
+          "Posthumous Labor",
+          "Jurisdictional Succession"
+        ],
+        "causalThreadIds": [
+          "grief-to-succession"
+        ],
+        "publicBenefit": "Skills, services, and contracts continue after biological death.",
+        "institutionalConsequence": "A successor inherits duties and debts without conclusive original consent.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "agi_personhood",
+      "duration": "remainder_of_game",
+      "requiredRuleModules": [
+        "headline-persistence",
+        "headline-public-procedures"
+      ],
+      "round": 4,
+      "resolutionType": "CIVIC PERMISSION AUTHORITY VOTE",
+      "regimeTags": [
+        "persistent",
+        "government_vote",
+        "agi_dossier",
+        "trust",
+        "systemic_risk"
+      ],
+      "profileText": "Advanced Play only: requires persistent Headlines and the public Headline-procedure module.",
+      "name": "Snapshot Continuity Receives Standing",
+      "text": "The result lasts for the remainder of the game. Person: if ${terms.systems.agi} emerges, its selected institution gains 2 ${terms.playerTracks.trust} and removes 1 ${terms.playerTracks.scrutiny} before the World Ending is determined. Property: if ${terms.systems.agi} emerges, the player controlling ${terms.locations.government} gains 2 ${terms.resources.runway} and adds 1 Systemic Risk cube before the World Ending is determined.",
+      "strapline": "LINEAGE IS PROVEN WHILE SUBJECTIVE SURVIVAL REMAINS UNRESOLVED",
+      "newswire": "Institutions vote whether cryptographically restored minds are persons or transferable continuity assets.",
+      "quote": "The record establishes succession, not what the restored instance experiences.",
+      "$scenario": {
+        "id": "snapshot-continuity",
+        "title": "Snapshot Continuity",
+        "eraId": "continuity",
+        "disposition": "adopted-framing",
+        "concepts": [
+          "Snapshot Continuity",
+          "Instance Quorum",
+          "Right of Exit Certification"
+        ],
+        "causalThreadIds": [
+          "grief-to-succession",
+          "care-to-continuity"
+        ],
+        "publicBenefit": "Snapshots preserve identity, service access, and a route to recognized continuation.",
+        "institutionalConsequence": "Several valid descendants can claim one life while no authority can certify subjective survival.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "room_temperature_superconductor",
+      "duration": "printed_result",
+      "requiredRuleModules": [
+        "headline-volatility"
+      ],
+      "round": 4,
+      "resolutionType": "VOLATILITY",
+      "regimeTags": [
+        "volatility",
+        "power",
+        "network",
+        "fusion",
+        "fund"
+      ],
+      "profileText": "Advanced Play only: requires the Headline-volatility module.",
+      "name": "The First Stellar Collector Replicates",
+      "text": "Roll Volatility when revealed: 1–3 Fraud; 4–6 Replicates. Replicates: Generators provide 2 additional ${terms.infrastructure.power} this Production. Fraud: ${terms.actions.fund} gains 3 additional ${terms.resources.runway} and adds 2 additional ${terms.playerTracks.scrutiny} this cycle.",
+      "strapline": "THE SOLAR SYSTEM ENTERS THE CAPACITY PLAN",
+      "newswire": "A self-assembling orbital collector either reproduces enough to expand generation or becomes the most valuable failed prospect in history.",
+      "quote": "Both outcomes confirm exceptional demand for the next issuance.",
+      "$scenario": {
+        "id": "stellar-collector",
+        "title": "Stellar Collector",
+        "eraId": "continuity",
+        "disposition": "adopted",
+        "concepts": [
+          "Stellar Collector"
+        ],
+        "causalThreadIds": [
+          "capacity-to-cosmos"
+        ],
+        "publicBenefit": "Replicating collectors expand energy and material abundance.",
+        "institutionalConsequence": "Self-replication turns planetary conversion into a financing and containment plan.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    },
+    {
+      "id": "agi_blog_post",
+      "duration": "final_claim_resolution",
+      "round": 4,
+      "resolutionType": "DIRECTIVE",
+      "regimeTags": [
+        "agi_dossier",
+        "claim_strength",
+        "dossier_claim",
+        "scrutiny"
+      ],
+      "name": "The Universe Receives a Continuity Plan",
+      "text": "During final claim strength, every fully paid eligible Dossier receives 2 Publication strength instead of 1. This does not change Dossier payment, ${terms.playerTracks.scrutiny}, or any other module.",
+      "strapline": "GENERAL INTELLIGENCE IS DECLARED BEFORE THE FINANCING WINDOW CLOSES",
+      "newswire": "Laboratories publish competing ${terms.systems.agi} declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them.",
+      "quote": "We use ${terms.systems.agi} in the precise sense required by the offering memorandum.",
+      "$scenario": {
+        "id": "agi-refinancing-declaration",
+        "title": "AGI Refinancing Declaration",
+        "eraId": "continuity",
+        "disposition": "adopted",
+        "concepts": [
+          "AGI Refinancing Declaration"
+        ],
+        "causalThreadIds": [
+          "capacity-to-cosmos"
+        ],
+        "publicBenefit": "A public declaration coordinates financing, infrastructure, and institutional commitments.",
+        "institutionalConsequence": "Debt and legitimacy can determine when a threshold becomes official.",
+        "mechanicPreservation": {
+          "status": "retained",
+          "summary": "Every bound surface retains its canonical rule text and timing."
+        },
+        "deploymentProfiles": [
+          "public-playtest",
+          "internal-review"
+        ]
+      }
+    }
+  ]
+}

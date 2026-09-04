@@ -188,7 +188,7 @@ test("complexity positioning stays broad, unmeasured, and profile-scoped", async
 
 test("the thematic inventory matches the two-source Power contract", async () => {
   const [bible, inventory, specification] = await Promise.all([
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
+    readFile(new URL("world.md", root), "utf8"),
     readFile(new URL("physical/component-inventory.md", root), "utf8"),
     readFile(new URL("physical/component-spec.md", root), "utf8")
   ]);
@@ -208,8 +208,8 @@ test("the thematic inventory matches the two-source Power contract", async () =>
 
 test("one thematic authority governs every lore-bearing surface", async () => {
   const [bible, eraLedger, prototype, world, tactics, reserve, objectives] = await Promise.all([
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8"),
-    readJson("content/data/era-situation-ledger.json"),
+    readFile(new URL("world.md", root), "utf8"),
+    readJson("dist/contracts/era-situation-ledger.json"),
     readFile(new URL("web/templates/prototype.html", root), "utf8"),
     readJson("dist/runtime/world-copy.json"),
     readJson("dist/runtime/tactics.json"),
@@ -775,7 +775,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
   const [world, thematicBible] = await Promise.all([
     readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
+    readFile(new URL("world.md", root), "utf8")
   ]);
 
   const bible = thematicBible.replace(/\s+/g, " ");

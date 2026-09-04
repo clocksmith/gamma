@@ -1,9 +1,10 @@
 import { readFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildScenarioIndex, scenarioSurfaces } from "./scenario-index.mjs";
+import { documentSection, playerContent } from "./authored.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
-const ledgerPath = "content/data/era-situation-ledger.json";
 const adoptedDispositions = new Set(["adopted", "adopted-framing"]);
 const deferredDispositions = new Set(["deferred", "research-backlog"]);
 const expectedEraIds = ["progress", "capacity", "authority", "continuity"];
@@ -30,64 +31,9 @@ function addSurface(registry, surfaceId, eraOrder, copyReference) {
 }
 
 async function canonicalSurfaceRegistry() {
-  const [headlines, mandates, references, escalations, factions, world] = await Promise.all([
-    readJson("content/data/headlines.json"),
-    readJson("content/data/mandates.json"),
-    readJson("content/data/reference-cards.json"),
-    readJson("content/data/escalations.json"),
-    readJson("content/data/factions.json"),
-    readJson("content/data/world-copy.json")
-  ]);
   const registry = new Map();
-  for (const headline of headlines.headlines) {
-    addSurface(
-      registry,
-      `headline:${headline.id}`,
-      headline.round,
-      `content/copy/headlines.json#headlines/${headline.id}`
-    );
-  }
-  for (const mandate of mandates.mandates) {
-    addSurface(
-      registry,
-      `mandate:${mandate.id}`,
-      mandate.era,
-      `content/copy/mandates.json#mandates/${mandate.id}`
-    );
-  }
-  for (const reference of references.eraCards) {
-    addSurface(
-      registry,
-      `reference:${reference.id}`,
-      reference.round,
-      `content/copy/reference-cards.json#eraCards/${reference.id}`
-    );
-  }
-  for (const escalation of escalations.escalations) {
-    addSurface(
-      registry,
-      `escalation:${escalation.id}`,
-      escalation.unlockedRound,
-      `content/copy/escalations.json#escalations/${escalation.id}`
-    );
-  }
-  for (const faction of factions.factions) {
-    for (const ability of faction.abilities) {
-      addSurface(
-        registry,
-        `faction:${faction.id}:${ability.id}`,
-        ability.round,
-        `content/copy/factions.json#factions/${faction.id}/abilities/${ability.id}`
-      );
-    }
-  }
-  for (const ending of world.endings) {
-    addSurface(
-      registry,
-      `ending:${ending.id}`,
-      4,
-      `content/copy/world-copy.json#endings/${ending.id}`
-    );
+  for (const surface of await scenarioSurfaces()) {
+    addSurface(registry, surface.surfaceId, surface.eraOrder, surface.copyReference);
   }
   return registry;
 }
@@ -257,23 +203,27 @@ async function validateDeploymentProfiles(ledger) {
 
 async function assertDeferredTermsAbsentFromBaseline(scenarios) {
   const baselinePaths = [
-    "content/copy/core-rules.md",
-    "content/copy/map-reference.md",
-    "content/copy/component-reference.md",
-    "content/copy/card-reference.md",
-    "content/copy/world-and-institutions.md",
-    "content/copy/game-config.json",
-    "content/copy/headlines.json",
-    "content/copy/mandates.json",
-    "content/copy/reference-cards.json",
-    "content/copy/escalations.json",
-    "content/copy/factions.json",
-    "content/copy/world-copy.json",
+    "rules.md",
+    "content/templates/map-reference.md",
+    "content/templates/component-reference.md",
+    "content/templates/card-reference.md",
+    "world.md",
+    "components/game.json",
+    "components/headlines.json",
+    "components/mandates.json",
+    "components/reference-cards.json",
+    "components/programs.json",
+    "components/factions.json",
+    "components/world.json",
     "web/templates/prototype.html",
     "web/templates/first-game-guide.html"
   ];
   const baseline = (await Promise.all(
-    baselinePaths.map((path) => readFile(resolve(projectRoot, path), "utf8"))
+    baselinePaths.map(async path => {
+      const source = await readFile(resolve(projectRoot, path), "utf8");
+      if (path === "world.md") return documentSection(source, "player-world");
+      return path.endsWith(".json") ? JSON.stringify(playerContent(JSON.parse(source))) : source;
+    })
   )).join("\n").toLocaleLowerCase("en-US");
   for (const scenario of scenarios.filter((entry) => deferredDispositions.has(entry.disposition))) {
     if (baseline.includes(scenario.title.toLocaleLowerCase("en-US"))) {
@@ -283,14 +233,14 @@ async function assertDeferredTermsAbsentFromBaseline(scenarios) {
 }
 
 export async function loadEraSituationLedger() {
-  return readJson(ledgerPath);
+  return buildScenarioIndex();
 }
 
 export async function validateEraSituationLedger(ledger) {
   if (ledger?.$schema !== "mandate2038.era-situation-ledger/v1" || ledger.schemaVersion !== 1) {
     throw new Error("Era ledger must use mandate2038.era-situation-ledger/v1.");
   }
-  if (ledger.editorialAuthority !== "docs/thematic-content-bible.md") {
+  if (ledger.editorialAuthority !== "world.md") {
     throw new Error("Era ledger must point to the sole thematic editorial authority.");
   }
   await validateDeploymentProfiles(ledger);

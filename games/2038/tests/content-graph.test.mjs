@@ -26,14 +26,14 @@ test("player copy is bound to declared player-facing surfaces", async () => {
   );
   assert.match(
     stdout,
-    /content-boundaries: verified \d+ surface-bound player-copy sources/
+    /content-boundaries: verified \d+ complete component sources/
   );
 });
 
 test("release content identity includes every player-copy source", async () => {
   const graph = await readJson("content/graph.json");
   const releaseSources = new Set(contentSourceFiles(graph));
-  assert.ok(releaseSources.has(graph.playerCopyContract));
+  assert.ok(releaseSources.has(graph.world));
   for (const artifact of graph.artifacts) {
     assert.ok(releaseSources.has(artifact.source), `release binds ${artifact.source}`);
     for (const overlay of artifact.overlays || []) {
@@ -100,19 +100,19 @@ test("physical sources are projected from declared ownership roots", async () =>
   const sources = new Set(graph.artifacts.map((artifact) => artifact.source));
   const physicalSources = [
     "content/data/content-manifest.json",
-    "content/copy/core-rules.md",
-    "content/copy/map-reference.md",
-    "content/copy/component-reference.md",
-    "content/copy/card-reference.md",
-    "content/copy/advanced-play.md",
-    "content/copy/world-and-institutions.md",
-    "content/data/factions.json",
-    "content/data/game-config.json",
-    "content/data/headlines.json",
-    "content/data/mandates.json",
-    "content/data/reference-cards.json",
-    "content/data/escalations.json",
-    "content/data/world-copy.json"
+    "rules.md",
+    "content/templates/map-reference.md",
+    "content/templates/component-reference.md",
+    "content/templates/card-reference.md",
+    "advanced.md",
+    "world.md",
+    "components/factions.json",
+    "components/game.json",
+    "components/headlines.json",
+    "components/mandates.json",
+    "components/reference-cards.json",
+    "components/programs.json",
+    "components/world.json"
   ];
 
   for (const source of physicalSources) {
@@ -136,7 +136,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   const simulation = await readJson("dist/runtime/simulation-copy.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
   const rulesSource = await readFile(
-    new URL("content/copy/core-rules.md", root),
+    new URL("rules.md", root),
     "utf8"
   );
   const graph = await readJson("content/graph.json");
@@ -309,7 +309,7 @@ test("Era panel data is the single source for the world-companion escalation lor
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const worldSource = await readFile(
-    new URL("content/copy/world-and-institutions.md", root),
+    new URL("world.md", root),
     "utf8"
   );
 
@@ -327,7 +327,7 @@ test("retained signature abilities project concrete continuity institutions", as
   const [factionsDocument, mandatesDocument, eraLedger] = await Promise.all([
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/mandates.json"),
-    readJson("content/data/era-situation-ledger.json")
+    readJson("dist/contracts/era-situation-ledger.json")
   ]);
   const factions = Object.fromEntries(
     factionsDocument.factions.map((faction) => [faction.id, faction])
@@ -475,7 +475,7 @@ test("numeric typography preserves exact card digits while prose may spell numbe
   const [{ headlines }, mapReference, thematicBible] = await Promise.all([
     readJson("dist/runtime/headlines.json"),
     readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
-    readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
+    readFile(new URL("world.md", root), "utf8")
   ]);
   const normalizedBible = thematicBible.replace(/\s+/g, " ");
 
@@ -529,7 +529,7 @@ test("fictional institution identities are canonical across generated game surfa
 });
 
 test("canonical faction source contains no real-person identity vocabulary", async () => {
-  const source = await readFile(new URL("content/data/factions.json", root), "utf8");
+  const source = await readFile(new URL("components/factions.json", root), "utf8");
   for (const name of [
     "Sam Altman",
     "Mark Zuckerberg",

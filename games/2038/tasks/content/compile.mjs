@@ -1,6 +1,7 @@
 import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
-import { mergeContent } from "./merge.mjs";
+import { documentSection, playerContent } from "./authored.mjs";
+import { buildScenarioIndex } from "./scenario-index.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
@@ -19,42 +20,24 @@ function sourceRootsFor(graph) {
     throw new Error("Content graph sourceRoots must be a non-empty array.");
   }
   return roots.map((sourceRoot) => {
-    if (typeof sourceRoot !== "string" || !sourceRoot.endsWith("/")) {
+    if (typeof sourceRoot !== "string" || !sourceRoot) {
       throw new Error(`Invalid content source root: ${sourceRoot}`);
     }
     const rootPath = resolve(projectRoot, sourceRoot);
     if (!insideProject(rootPath) || rootPath === projectRoot) {
       throw new Error(`Content source root escapes project: ${sourceRoot}`);
     }
-    return rootPath;
+    return { path: rootPath, directory: sourceRoot.endsWith("/") };
   });
 }
 
 function isCanonicalSource(path, sourceRoots) {
-  return sourceRoots.some((sourceRoot) => path.startsWith(`${sourceRoot}${sep}`));
+  return sourceRoots.some((sourceRoot) => sourceRoot.directory
+    ? path.startsWith(`${sourceRoot.path}${sep}`) : path === sourceRoot.path);
 }
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
-}
-
-async function readComposedJson(path, overlayPaths = []) {
-  let value = await readJson(path);
-  for (const overlayPath of overlayPaths) {
-    const overlayDocument = await readJson(overlayPath);
-    if (
-      !overlayDocument ||
-      typeof overlayDocument !== "object" ||
-      Array.isArray(overlayDocument) ||
-      !overlayDocument.content ||
-      typeof overlayDocument.content !== "object" ||
-      Array.isArray(overlayDocument.content)
-    ) {
-      throw new Error(`Content overlay must wrap an object in \"content\": ${overlayPath}`);
-    }
-    value = mergeContent(value, overlayDocument.content, overlayPath);
-  }
-  return value;
 }
 
 function resolveSourcePath(source, label, sourceRoots) {
@@ -66,14 +49,6 @@ function resolveSourcePath(source, label, sourceRoots) {
     throw new Error(`Content source must live under a graph source root: ${source}`);
   }
   return path;
-}
-
-function overlayPathsFor(descriptor, label, sourceRoots) {
-  const overlays = typeof descriptor === "string" ? [] : descriptor.overlays || [];
-  if (!Array.isArray(overlays)) {
-    throw new Error(`Content overlays must be an array: ${label}`);
-  }
-  return overlays.map((overlay) => resolveSourcePath(overlay, label, sourceRoots));
 }
 
 const graphPath = resolve(projectRoot, "content/graph.json");
@@ -92,8 +67,7 @@ for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
   const path = typeof descriptor === "string" ? descriptor : descriptor.path;
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
   const contextPath = resolveSourcePath(path, `context ${name}`, sourceRoots);
-  const overlayPaths = overlayPathsFor(descriptor, `context ${name}`, sourceRoots);
-  const raw = await readComposedJson(contextPath, overlayPaths);
+  const raw = playerContent(await readJson(contextPath));
   const collections = Object.values(raw).filter(Array.isArray);
   const entries = collectionName
     ? raw[collectionName]
@@ -151,20 +125,18 @@ for (const artifact of graph.artifacts) {
 
   let output;
   if (artifact.format === "json") {
-    const overlayPaths = overlayPathsFor(artifact, artifact.target, sourceRoots);
     const resolved = resolveValue(
-      await readComposedJson(sourcePath, overlayPaths),
+      playerContent(await readJson(sourcePath)),
       variables
     );
     assertNoReferences(resolved, artifact.source);
     output = `${JSON.stringify(resolved, null, 2)}\n`;
   } else if (artifact.format === "text") {
-    if ((artifact.overlays || []).length) {
-      throw new Error(`Text artifacts do not support overlays: ${artifact.target}`);
-    }
     const source = await readFile(sourcePath, "utf8");
-    output = resolveString(source, variables);
+    output = resolveString(artifact.section ? documentSection(source, artifact.section) : source, variables);
     assertNoReferences(output, artifact.source);
+  } else if (artifact.format === "scenario-index") {
+    output = `${JSON.stringify(await buildScenarioIndex(), null, 2)}\n`;
   } else {
     throw new Error(`Unsupported content format: ${artifact.format}`);
   }

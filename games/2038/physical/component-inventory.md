@@ -1,7 +1,7 @@
 # Supported box component inventory
 
 This is the physical requirement for the supported game. Numeric limits are
-governed by `content/data/game-config.json`. Default Game components stay in
+governed by `components/game.json`. Default Game components stay in
 the main insert; Advanced-only pieces stay in one sealed module.
 
 ## Shared Governance Board

@@ -2,7 +2,7 @@
 
 This is the canonical physical-form record for Mandate 2038. It specifies what
 players manipulate and how components express state. Mechanical quantities and
-limits remain authoritative in `content/data/game-config.json`.
+limits remain authoritative in `components/game.json`.
 
 ## Colour allocation
 

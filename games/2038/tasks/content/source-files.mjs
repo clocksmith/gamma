@@ -5,11 +5,10 @@ export function contentSourceFiles(graph, {
   return [
     graphPath,
     graph.variables,
-    graph.playerCopyContract,
+    graph.world,
     provenancePath,
-    ...graph.artifacts.flatMap((artifact) => [
-      artifact.source,
-      ...(artifact.overlays || [])
-    ])
+    ...Object.values(graph.contexts || {}).map(descriptor =>
+      typeof descriptor === "string" ? descriptor : descriptor.path),
+    ...graph.artifacts.map(artifact => artifact.source)
   ].filter((path, index, paths) => path && paths.indexOf(path) === index);
 }
