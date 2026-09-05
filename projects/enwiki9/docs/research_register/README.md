@@ -5,7 +5,9 @@ Archived files preserve complete H2 records.
 
 ## Partition contract
 
-- Keep the current register and every archive part at or below 800 lines.
+- Keep new records, the current register and archive parts at or below 800 lines.
+  An existing larger indivisible record may occupy its own clearly marked part;
+  preserve its original content rather than splitting its historical statement.
 - Partition only immediately before an H2 record; never divide one record.
 - Name archive parts monotonically and preserve record order.
 - Update this index, the current register, and the archive index in the same change.
@@ -33,3 +35,10 @@ Archived files preserve complete H2 records.
 - [archive/part-017.md: 2026-08-10 - Full-score accounting q0 isolates one fixture-size error through 2026-08-10 - Conservative cmix-obias package boundaries are certified](archive/part-017.md)
 - [archive/part-018.md: 2026-08-09 - Branch-residual-weighted cache-32 proposed through 2026-08-09 - Historical FRACTAL-8 survival-hazard result recovered and retired](archive/part-018.md)
 - [archive/part-019.md: 2026-08-10 - Production output-head attribution is dependency-frozen through 2026-08-09 - cmix-obias technical source/runtime closure frozen](archive/part-019.md)
+- [part-020.md: 2026-09-03 - HARM-Delta is frozen as a distinct causal edit-residual mechanism through 2026-08-31 - Endpoint428 router supersedes the stale q1 execution order](archive/part-020.md)
+- [part-021.md: 2026-08-28 - score-first HORIZON-FIBER pivot replaces q1 blocking through 2026-08-24 - midpoint v5 freezes 130 typed tensors and bounded dirty scheduling](archive/part-021.md)
+- [part-022.md: 2026-08-24 - midpoint v5 receives a canonical observability ABI through 2026-08-24 - Named-gradient lineage removed from the actionable scheduler](archive/part-022.md)
+- [part-023.md: 2026-08-23 - canonical CMIX/q1 interpretation and corrected launch ladder through 2026-08-23 - canonical CMIX/q1 interpretation and corrected launch ladder](archive/part-023.md)
+- [part-024.md: 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring through 2026-08-16 - The exact FF2 transpose uses ordered 128-feature panels](archive/part-024.md)
+- [part-025.md: 2026-08-16 - The first remaining divergence is the FF2 transpose through 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target](archive/part-025.md)
+- [part-026.md: 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound through 2026-08-10 - Production output-head attribution implementation reaches exact smoke parity](archive/part-026.md)

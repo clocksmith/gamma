@@ -1,0 +1,85 @@
+{
+  "schema": "gamma.enwiki9.competitive-frontier.v1",
+  "asOfDate": "2026-09-05",
+  "sources": [
+    {
+      "url": "https://mattmahoney.net/dc/text.html",
+      "retrievedUtc": "2026-09-05T14:38:24.957608+00:00",
+      "path": "operations/provenance/sources/2026-09-05/mahoney-text.html",
+      "bytes": 684800,
+      "sha256": "3191dc539073b94bd184f75596e669af975509329e4c2655042a9a01fc622972"
+    },
+    {
+      "url": "https://www.hutter1.net/prize/",
+      "retrievedUtc": "2026-09-05T14:38:25.622311+00:00",
+      "path": "operations/provenance/sources/2026-09-05/hutter-prize.html",
+      "bytes": 48606,
+      "sha256": "065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7"
+    },
+    {
+      "url": "https://www.hutter1.net/prize/hrules.htm",
+      "retrievedUtc": "2026-09-05T14:38:26.150757+00:00",
+      "path": "operations/provenance/sources/2026-09-05/hutter-rules.html",
+      "bytes": 15907,
+      "sha256": "e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163"
+    }
+  ],
+  "official": {
+    "displayedRecordBytes": 110793128,
+    "improvementFraction": {
+      "numerator": 1,
+      "denominator": 100
+    },
+    "maximumEligibleBytes": 109685196,
+    "formula": "floor(referenceBytes * 99 / 100)",
+    "verificationStatus": "official page displayed record; committee must confirm applicable accounting and reference"
+  },
+  "submittedVersions": [
+    {
+      "version": "July 2026 submission",
+      "archiveBytes": 96996198,
+      "compressorPackageBytes": 3428474,
+      "totalBytes": 100424672
+    },
+    {
+      "version": "August 21 2026 correction",
+      "archiveBytes": 96994188,
+      "compressorPackageBytes": 3426642,
+      "totalBytes": 100420830
+    }
+  ],
+  "submittedVerificationStatus": "published benchmark figures; not evidence of an awarded prize or complete required-option accounting",
+  "contingent": {
+    "referenceVersion": "August 21 2026 correction",
+    "referenceBytes": 100420830,
+    "maximumEligibleBytes": 99416621,
+    "formula": "floor(referenceBytes * 99 / 100)",
+    "condition": "committee accepts corrected submission and its accounting as reference"
+  },
+  "engineering": {
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetCompleteBytes": 99000000,
+    "meaning": "provisional engineering target, not committee eligibility certification",
+    "historicalMilestoneBytes": 105000000,
+    "endpoint428ForecastBytes": 109389323,
+    "endpoint428PlanningDebtBytes": 10389323,
+    "endpoint428DebtClass": "forecast-based planning debt, not a measured full-corpus deficit"
+  },
+  "scoring": {
+    "primary": "compressor_or_reproducible_source_package_bytes + self_extracting_archive_bytes + required_option_bytes",
+    "alternative": "archive_bytes + compressor_package_bytes + 2 * separate_decompressor_package_bytes + required_option_bytes",
+    "requiredOptionBytes": "not independently verified for published submissions",
+    "completePackageRequired": true,
+    "alternativeSharedCompressorDecoder": "archive_bytes + compressor_package_bytes + shared_decoder_package_bytes + required_option_bytes (the separate decoder multiplier reduces from 2 to 1 when compressor and decoder are identical; ask committee about exact packaging)"
+  },
+  "committeeConfirmation": {
+    "status": "not sent",
+    "questions": [
+      "Which submitted or awarded reference will govern a Gamma submission, including the August fx2-cmix-transformer correction?",
+      "Which source/executable packaging form and command-line/compilation-option accounting apply to that reference and Gamma?",
+      "How do submission order and the public-comment period affect the applicable threshold?"
+    ],
+    "draftPath": "workbench/committee-inquiry.eml",
+    "deliveryBlocker": "No email-sending connector is available in this session; draft prepared, not sent."
+  }
+}

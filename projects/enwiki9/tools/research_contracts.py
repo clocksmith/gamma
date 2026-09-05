@@ -26,8 +26,12 @@ except ModuleNotFoundError:
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = PROJECT_ROOT.parents[1]
 CONTRACT_ROOT = PROJECT_ROOT / "contracts" / "research" / "v1"
-OBJECTIVE_PATH = CONTRACT_ROOT / "objective-contract.json"
-SCHEMA_PATH = CONTRACT_ROOT / "objective-contract.schema.json"
+OBJECTIVE_PATHS = {
+    version: PROJECT_ROOT / "contracts" / "research" / version / "objective-contract.json"
+    for version in ("v1", "v2")
+}
+OBJECTIVE_PATH = OBJECTIVE_PATHS["v2"]
+SCHEMA_PATH = OBJECTIVE_PATH.with_name("objective-contract.schema.json")
 NAMED_GRADIENT_BLOCK_STRIDE = 64
 SCHEMA_PATHS = {
     "gamma.enwiki9.adaptive-experiment-contract.v1": (
@@ -40,7 +44,8 @@ SCHEMA_PATHS = {
     "gamma.enwiki9.algorithm-proposal.v2": (
         CONTRACT_ROOT / "algorithm-proposal.schema.json"
     ),
-    "gamma.enwiki9.objective-contract.v1": SCHEMA_PATH,
+    **{f"gamma.enwiki9.objective-contract.{version}": path.with_name("objective-contract.schema.json")
+       for version, path in OBJECTIVE_PATHS.items()},
     "gamma.enwiki9.candidate-revision.v1": (
         CONTRACT_ROOT / "candidate-revision.schema.json"
     ),
@@ -268,9 +273,24 @@ def load_json(path: Path) -> Any:
         return json.load(stream)
 
 
-def validate_objective(verify_corpus: bool = False) -> dict[str, Any]:
-    schema = load_json(SCHEMA_PATH)
-    objective = load_json(OBJECTIVE_PATH)
+def _objective_path(objective_path: str | Path | None = None) -> Path:
+    path = OBJECTIVE_PATH if objective_path is None else Path(objective_path)
+    if not path.is_absolute():
+        registered = {f"contracts/research/{version}/objective-contract.json": item
+                      for version, item in OBJECTIVE_PATHS.items()}
+        if path.as_posix() not in registered:
+            raise ValueError(f"unregistered objective version: {objective_path}")
+        path = registered[path.as_posix()]
+    path = path.resolve()
+    if path not in {item.resolve() for item in OBJECTIVE_PATHS.values()}:
+        raise ValueError(f"unregistered objective version: {objective_path}")
+    return path
+
+
+def validate_objective(verify_corpus: bool = False, *, objective_path: str | Path | None = None) -> dict[str, Any]:
+    path = _objective_path(objective_path)
+    schema = load_json(path.with_name("objective-contract.schema.json"))
+    objective = load_json(path)
     jsonschema.Draft202012Validator.check_schema(schema)
     jsonschema.Draft202012Validator(
         schema,
@@ -297,13 +317,15 @@ def validate_objective(verify_corpus: bool = False) -> dict[str, Any]:
     return objective
 
 
-def objective_binding(verify_corpus: bool = False) -> dict[str, Any]:
-    objective = validate_objective(verify_corpus)
+def objective_binding(verify_corpus: bool = False, *, objective_path: str | Path | None = None) -> dict[str, Any]:
+    path = _objective_path(objective_path)
+    objective = validate_objective(verify_corpus, objective_path=path)
     digest = hashlib.sha256(canonical_bytes(objective)).hexdigest()
     return {
         "objectiveId": objective["objectiveId"],
         "objectiveDigest": f"sha256:{digest}",
-        "objectivePath": "contracts/research/v1/objective-contract.json",
+        "objectivePath": next(f"contracts/research/{version}/objective-contract.json"
+                              for version, item in OBJECTIVE_PATHS.items() if item.resolve() == path),
         "targetScoreBytes": objective["score"]["targetBytes"],
         "corpusBytes": objective["corpus"]["bytes"],
         "corpusSha256": objective["corpus"]["sha256"],
@@ -331,8 +353,8 @@ def validate_schemas() -> None:
 
 def _validate_objective_binding(value: dict[str, Any], context: str) -> None:
     _require(
-        value == objective_binding(),
-        f"{context}: objective binding differs from the canonical objective",
+        value == objective_binding(objective_path=value.get("objectivePath", "")),
+        f"{context}: objective binding differs from its immutable objective version",
     )
 
 
@@ -2086,7 +2108,7 @@ def _validate_dependency_closure(
         or value["entryPoint"] in command_text,
         f"{artifact_path}: declared commands never invoke the counted entry point",
     )
-    accepted_platforms = validate_objective()["distribution"][
+    accepted_platforms = validate_objective(objective_path=value["objective"]["objectivePath"])["distribution"][
         "acceptedExecutableSystems"
     ]
     _require(
@@ -2475,7 +2497,7 @@ def _validate_clean_room_attempt(
         and manifest["candidateTreeSha256"] == value["candidateTreeSha256"],
         f"{artifact_path}: attempt and manifest identify different candidates",
     )
-    binding = objective_binding()
+    binding = value["objective"]
     _require(
         value["corpus"]["bytes"] == binding["corpusBytes"]
         and value["corpus"]["sha256"] == binding["corpusSha256"],
@@ -2597,7 +2619,7 @@ def _validate_release_receipt_index(
 
 
 def _resource_guard_checks(value: dict[str, Any]) -> dict[str, bool]:
-    objective = validate_objective()
+    objective = validate_objective(objective_path=value["objective"]["objectivePath"])
     resources = objective["resources"]
     wall_time_complete = value["wall_time_measurement_complete"]
     wall_time_pass = (
@@ -2645,7 +2667,7 @@ def _validate_resource_guard(
     artifact_path: Path,
 ) -> dict[str, Any]:
     _validate_objective_binding(value["objective"], str(artifact_path))
-    objective = validate_objective()
+    objective = validate_objective(objective_path=value["objective"]["objectivePath"])
     score = value["geekbench5_single_core_score"]
     expected_wall_limit = (
         objective["resources"]["wallTime"]["maximumSecondsNumerator"] / score
@@ -2779,7 +2801,7 @@ def _validate_run_receipt(
     verify_files: bool,
 ) -> dict[str, Any]:
     _validate_objective_binding(value["objective"], str(artifact_path))
-    binding = objective_binding()
+    binding = value["objective"]
     _require(
         value["corpus"]["bytes"] == binding["corpusBytes"]
         and value["corpus"]["sha256"] == binding["corpusSha256"],
@@ -3086,9 +3108,9 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_adaptive_job(value, artifact_path)
     elif schema_id == "gamma.enwiki9.algorithm-proposal.v2":
         result = _validate_algorithm_proposal(value, artifact_path)
-    elif schema_id == "gamma.enwiki9.objective-contract.v1":
+    elif schema_id in {"gamma.enwiki9.objective-contract.v1", "gamma.enwiki9.objective-contract.v2"}:
         _require(
-            value == validate_objective(),
+            value == validate_objective(objective_path=OBJECTIVE_PATHS["v" + str(value["version"])]),
             f"{artifact_path}: objective differs from canonical contract",
         )
         result: dict[str, Any] = {"objectiveId": value["objectiveId"]}
