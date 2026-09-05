@@ -103,7 +103,7 @@ powerful but contestable rather than passively advantaged.
 - Whether choosing three of six Actions feels difficult rather than
   restrictive.
 - Whether Power bargaining feels strategic, coerced, or kingmaking.
-- Whether Realignment feels memorable, arbitrary, or administratively heavy.
+- Whether local Power and fixed-map placement create meaningful choices.
 - Whether faction abilities are remembered and understood.
 - Whether the four promoted rules feel thematic without explanation.
 - Whether players recount the Future Timeline afterward.
@@ -237,7 +237,7 @@ Executable reference ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
 
 This is a derived controlled-test kit, not a manufacturing package. It contains
-the four frozen Default Game documents, the world companion, baseline
+the four frozen Mandate 2038 documents, the world companion, baseline
 component masters, exact source data, release manifests, receipt contract, and
 two-session protocol. Deferred Tactics, secret objectives, and Reserve
 Specialists are excluded from the component masters.

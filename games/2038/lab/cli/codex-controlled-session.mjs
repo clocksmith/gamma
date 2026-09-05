@@ -47,7 +47,7 @@ Harness source: \`${session.gameplayIdentity.provenance.sourceCommit}\`
 ## Recorded path
 
 - Emulated unboxing and component sorting: ${session.stages.unboxing.length} participant records.
-- Independent source-chunk reading across all four frozen Default Game documents: ${Object.values(session.stages.documentReadings).reduce((total, records) => total + records.length, 0)} records.
+- Independent source-chunk reading across all four frozen Mandate 2038 documents: ${Object.values(session.stages.documentReadings).reduce((total, records) => total + records.length, 0)} records.
 - Cross-document rules synthesis: ${session.stages.rulesReading.length} participant records.
 - Initial participant questions: ${session.stages.initialQuestions.length}.
 - Source-grounded facilitator answers: ${session.stages.initialFacilitation.synthesis.output.answers.length}.

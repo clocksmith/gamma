@@ -7,7 +7,7 @@ limits remain authoritative in `components/game.json`.
 ## Colour allocation
 
 The six saturated RGB colours are reserved for player ownership. Every CEO,
-Team, Facility, Generator, Scrutiny cube, Mandate marker, and ballot accent uses
+Team, Facility, Generator, Scrutiny cube, and Mandate marker uses
 its faction's colour.
 
 | Faction | Ownership colour | Hex value |
@@ -29,7 +29,7 @@ gold, silver, and bronze. Finish never creates an additional rules state.
 | Governance Board | Shared map frame and public dashboard | One rigid folding board with tile wells, card rails, tracks, and a writable panel | Map geometry, Era, Timeline, Mandate, Initiative, contracts, current criterion, and final resolution |
 | Era | Progressive rules unlock | Four panels printed on the Governance Board plus one Current Era marker | Marker position; panel text is open information |
 | Faction board | One institution's dashboard | Thick dual-layer board with six captive sliders | Runway, Compute, Capability, Customers, Trust, and Research Protection |
-| Player aid | Turn and scoring reminder | One four-panel foldout per faction tray | Four authored aid topics in one object |
+| Player aid | Turn and scoring reminder | One three-panel foldout per faction tray | Three authored aid topics in one object |
 | CEO | Movable acting piece; one presence | Large faction-coloured pawn | District position |
 | Team | Movable acting piece; one presence | Small faction-coloured pawn | District position |
 | Facility | Stationary institutional site | Faction-coloured node, visibly numbered 1–4 | Stable Facility ID and district position |
@@ -46,9 +46,6 @@ gold, silver, and bronze. Finish never creates an additional rules state.
 | Joint Venture / Mega-Cluster | Named shared project | Matched numbered token pair | Host positions and pair number; Mega-Clusters have one owner |
 | Initiative | Resolution and tie order | One shared marker | Current holder |
 | Fusion Demonstrator | Unique advanced-generation project | One shared marker | Grid position or unbuilt supply |
-| Link — Advanced | Facility connection to its owner's Network | Faction-coloured connector token | Attached to one Facility |
-| Realignment — Advanced | Secret jurisdiction motion | One square four-way ballot per faction | Edge aimed toward board center while face down |
-| Volatility — Advanced | Two-result Headline resolver | One ordinary six-sided die | Printed result mapping |
 | Headline, Mandate, Action, Program, Training | Information and choices | Cards | Face, orientation, markers, and printed text |
 | Ordinary Power contract | Generator rules at point of construction | Printed in the Grid and Renewable tile visit boxes | Tile identity; no separate reference card |
 
@@ -142,13 +139,10 @@ Each faction board provides:
   center.
 
 Captive sliders must expose exact integer positions and resist accidental
-movement. They replace loose track markers; they do not alter caps. Advanced
-Network connectivity is read from the shared map and has no slider.
+movement. They replace loose track markers; they do not alter caps.
 
 Each board and its faction-specific pieces, cards, and foldout aid are packed
-as one labelled tray. Advanced Link tokens and the Realignment ballot stay in
-the separate Advanced module so Default setup never asks a new player to sort
-unused systems.
+as one labelled tray.
 
 ## State encoding
 
@@ -166,10 +160,8 @@ Allocate step and remain as the latest completed Production snapshot.
 
 A built Facility without a cube is offline. The retained cubes govern
 powered-Facility Mandates and Headlines, the Deployment Dossier, and final
-offline penalties. They are not a permanent Power contract and are not carried
-through Realignment as a fresh eligibility calculation. They travel with their
-marked hosts as the previous snapshot; the next Production recalculates and
-replaces them.
+offline penalties. They mark the previous snapshot; the next Production
+recalculates local eligibility and replaces them.
 
 ### Current Mandate ledger
 
@@ -202,21 +194,11 @@ following:
 Until every condition passes, manufacture and rules counts remain twenty-four
 Dossier cards.
 
-### Realignment ballot
-
-The Advanced ballot is rotationally symmetric on its back. Its face prints one
-choice on each edge: Consolidate Core, Expand Periphery, Counter-Cycle, and
-Pass. All players orient and place their ballots face down before anyone
-reveals. Pass is equivalent to naming no motion. The physical redesign replaces
-three cards per player with one and changes no plurality or tie rule.
-
 ## Packaging and setup order
 
-The insert has six faction trays, four Default Era packets, one Training deck
-well, one shared-component well, and one clearly separated Advanced module.
-The Era I–IV packets hold `5 / 4 / 3 / 4` Default Headlines respectively and
-three Mandates each. The Advanced module holds its eight badged Headlines
-sorted `1 / 2 / 3 / 2` by Era alongside Links, ballots, and the Volatility die.
+The insert has six faction trays, four Era packets, one Training deck well,
+and one shared-component well. The Era I–IV packets hold `5 / 4 / 3 / 4`
+Headlines respectively and three Mandates each.
 
 Labels must match the board's Era numerals and canonical component names. Trays
 and packets organize setup but create no hidden game state and need not remain

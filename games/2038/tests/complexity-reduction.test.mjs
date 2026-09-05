@@ -33,22 +33,11 @@ function maximizingPowerPolicy() {
   };
 }
 
-test("single-generator contract is canonical in both play profiles", async () => {
-  const config = await readJson("dist/runtime/game-config.json");
-  const defaultRules = effectiveRulesVariant(config);
-  const advancedRules = effectiveRulesVariant(config, {
-    playProfileId: "advanced-play"
-  });
-
-  assert.equal(defaultRules.singleGeneratorRule.id, "single-generator-default");
-  assert.equal(advancedRules.singleGeneratorRule.id, "single-generator-default");
-  assert.deepEqual(defaultRules.singleGeneratorRule, advancedRules.singleGeneratorRule);
-  assert.ok(!config.playProfiles.defaultGame.moduleIds.includes(
-    "single-generator-default"
-  ));
-  assert.ok(!config.playProfiles.advancedPlay.moduleIds.includes(
-    "single-generator-default"
-  ));
+test("single-generator contract is canonical and obsolete options fail closed", async () => {
+ const config=await readJson("dist/runtime/game-config.json");
+ assert.equal(effectiveRulesVariant(config).singleGeneratorRule.id,"single-generator-default");
+ for(const key of ["playProfileId","moduleIds","realignmentEnabled","networkInfrastructureEnabled","powerPurchaseRequests","headlinePersistentEffectsEnabled","headlinePublicProceduresEnabled","headlineVolatilityEnabled"])
+  assert.throws(()=>effectiveRulesVariant(config,{[key]:true}), /Unsupported rules option/);
 });
 
 test("precision patch prints final Generator prices and consolidated state", async () => {
@@ -91,7 +80,7 @@ test("precision patch prints final Generator prices and consolidated state", asy
   const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
   const vertical = factions.factions.find((faction) => faction.id === "vertical_empire");
   assert.match(coalition.abilities[1].text, /both fixed host Facilities are powered and within 2 hexes/);
-  assert.match(vertical.abilities[1].text, /legal Power eligibility under the selected profile/);
+  assert.match(vertical.abilities[1].text, /local Power eligibility/);
   assert.doesNotMatch(vertical.abilities[1].text, /Recalculate its Network/);
 });
 
@@ -223,12 +212,10 @@ test("single-generator allocation cannot spend dedicated grid Power elsewhere", 
     connectedGenerators: [{
       id: "generator",
       tileId: "generator-tile",
-      capacity: 3
+      capacity: 2
     }],
     startingGridPower: 1,
-    importedPower: 0,
-    supplementalPower: 0,
-    exportedPower: 1
+    supplementalPower: 0
   };
 
   assert.equal(canAllocateLocalPower({
@@ -238,39 +225,6 @@ test("single-generator allocation cannot spend dedicated grid Power elsewhere", 
   assert.equal(canAllocateLocalPower({
     ...common,
     selectedFacilityIds: ["local-a", "local-b", "local-c"]
-  }), false);
-});
-
-test("Default purchased Power remains bound to its named buyer Facility endpoint", () => {
-  const board = [
-    { instanceId: "first-tile", q: 0, r: 0 },
-    { instanceId: "buyer-tile", q: 1, r: 0 },
-    { instanceId: "other-tile", q: 0, r: 1 }
-  ];
-  const player = {
-    facilities: [
-      { id: "first", tileId: "first-tile" },
-      { id: "buyer", tileId: "buyer-tile" },
-      { id: "other", tileId: "other-tile" }
-    ]
-  };
-  const common = {
-    board,
-    player,
-    connectedGenerators: [],
-    startingGridPower: 1,
-    importedPower: 0,
-    importedFacilityIds: ["buyer"],
-    supplementalPower: 0,
-    exportedPower: 0
-  };
-  assert.equal(canAllocateLocalPower({
-    ...common,
-    selectedFacilityIds: ["first", "buyer"]
-  }), true);
-  assert.equal(canAllocateLocalPower({
-    ...common,
-    selectedFacilityIds: ["first", "other"]
   }), false);
 });
 

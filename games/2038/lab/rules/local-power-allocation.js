@@ -22,12 +22,11 @@ export function canAllocateLocalPower({
   selectedFacilityIds,
   connectedGenerators,
   startingGridPower,
-  importedPower,
-  importedFacilityIds = [],
   supplementalPower,
-  exportedPower,
-  additionalFacilityDemandIds = []
+  additionalFacilityDemandIds = [],
+  ...unsupported
 }) {
+  if (Object.keys(unsupported).length) throw new RangeError(`Unsupported Power allocation option: ${Object.keys(unsupported)[0]}`);
   const selected = selectedFacilityIds.map((facilityId) => {
     const facility = player.facilities.find((candidate) => candidate.id === facilityId);
     if (!facility) throw new RangeError(`Unknown selected Facility: ${facilityId}.`);
@@ -40,12 +39,6 @@ export function canAllocateLocalPower({
       const tile = board.find((candidate) => candidate.instanceId === generator.tileId);
       return repeatedUnits("generator", generator.capacity, { tile });
     }),
-    ...repeatedUnits("imported", importedPower),
-    ...importedFacilityIds.map((facilityId, index) => ({
-      kind: "imported_endpoint",
-      index,
-      facilityId
-    })),
     ...repeatedUnits("supplemental", supplementalPower)
   ];
   const demands = [
@@ -56,21 +49,14 @@ export function canAllocateLocalPower({
         throw new RangeError(`Unknown additional-demand Facility: ${facilityId}.`);
       }
       return { kind: "facility", facility };
-    }),
-    ...repeatedUnits("export", exportedPower)
+    })
   ];
   const eligibleUnitIndexes = demands.map((demand) =>
     units.flatMap((unit, index) => {
-      if (demand.kind === "export") {
-        return unit.kind === "generator" ? [index] : [];
-      }
       if (unit.kind === "starting_grid") {
         return demand.facility.id === firstFacilityId ? [index] : [];
       }
-      if (["imported", "supplemental"].includes(unit.kind)) return [index];
-      if (unit.kind === "imported_endpoint") {
-        return demand.facility.id === unit.facilityId ? [index] : [];
-      }
+      if (unit.kind === "supplemental") return [index];
       const facilityTile = board.find(
         (candidate) => candidate.instanceId === demand.facility.tileId
       );

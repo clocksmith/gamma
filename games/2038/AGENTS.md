@@ -25,11 +25,14 @@ systems and incentives, not jokes or allegations about real people.
 
 - `components/` owns complete component records: mechanics, IDs, wording, and
   author-only `$scenario` notes. Era cards also own structured `$era` notes.
-- `rules.md` owns Default procedures, map instructions, component states, and
+- `rules.md` owns Game procedures, map instructions, component states, and
   supported inventory prose. Its named excerpts generate the map, component,
   and inventory references; the compact Core Rules omit those detailed sections.
-  `advanced.md` owns the Advanced Play companion.
   `world.md` owns lore guidance and the marked player World companion section.
+- The game has one ruleset: a static map, local Power, and the sixteen current
+  Headlines. There is no selectable rules profile, connected Network, Link,
+  Power market, Realignment, or Volatility module. Simulation parameter research
+  must not reintroduce retired modes through unchecked options.
 - `ui.json` owns browser labels and tutorial wording. `content/runtime/`
   owns simulation and strategy copy; `content/data/` owns shared variables.
   `components/game.json` owns board and supply records. `content/templates/`

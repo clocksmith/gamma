@@ -149,12 +149,10 @@ claims.
 
 ## Negotiation model
 
-Simulation negotiation is defection-capable. Before selection, a policy may
-make no promise or publicly promise another seat first consideration for Power.
-The later buyer may ask, and the supplier may sell or refuse under its current
-self-interest. Promises do not bind. Outcomes are recorded as fulfilled,
-broken, superseded, or unexercised, and relationships affect later policy
-scores.
+Simulation models immediate resource offers and accept/reject decisions for
+Joint Ventures. General promises about future turns are not executable
+agreements. Older reports retain promise and supplier telemetry for their
+frozen contracts; those fields do not establish current negotiation behavior.
 
 This is still a model. It cannot reproduce human tone, social pressure, bluff
 credibility, table memory, or the emotional meaning of betrayal.
@@ -222,7 +220,7 @@ Every registered cell receives initial coverage. Subsequent batches target
 uncertainty and thin factor coverage. Reports include partially pooled
 marginals and interactions, head-to-head strategy cells, bounded sequential
 intervals, credible cycle detection, declaration blockers, Mandate sources,
-Audit pressure, promises, trades, causal suppliers, supplier placement, the
+Audit pressure, immediate resource trades, Joint Ventures, the
 seven-stage AGI funnel, and realized faction-ability value. Per-player-count
 summaries keep scaling effects such as Foundry revenue visible.
 Action selections and Mandate sources are also aggregated by profile, not only
@@ -397,7 +395,7 @@ not estimate balance or compare providers.
 The controlled-session runner extends the same strict `CodexCliCaller`
 decision path with a receipt-bearing `CodexCliRunner` for pre-play and postgame
 stages. It records emulated unboxing and sorting, independent reading of all
-four frozen Default Game documents, participant questions, source-grounded
+four frozen game documents, participant questions, source-grounded
 facilitator answers, follow-up questions, every game decision, and postgame
 winner and World Ending reconstruction.
 
@@ -445,13 +443,13 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 `nineteen-hex-simplified-v1` covers the complete nineteen-tile board, four Eras,
 all baseline Headlines and shared Programs, factions, Training, two-source
-Power, Default local Power, Advanced Links and Networks, retained Power cubes
+Power, local Power, retained Power cubes
 replaced at each Allocate step, the bounded pre-resolution resource trade,
-Joint Ventures, Audit, Realignment, visible scoring, deterministic Dossiers,
+Joint Ventures, Audit, visible scoring, deterministic Dossiers,
 and the shared ending. Tactics and
 secret objectives remain deferred.
 
 Simulation can measure action pressure, faction/seat/backend interaction,
-declaration pathways, supplier viability, and procedural integrity. Physical
+declaration pathways, local infrastructure viability, and procedural integrity. Physical
 tests must still determine teachability, duration, negotiation quality,
 handling, fairness, and fun.

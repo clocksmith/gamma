@@ -37,7 +37,6 @@ import {
 } from "../lab/versioning/game-identity.js";
 import { buildDecisionPrompt } from "../lab/contracts/decision-contract.js";
 import {
-  causallyNecessaryImportSuppliers,
   immediateTradePacketCeiling
 } from "../lab/environment/selected-rules-match.js";
 import {
@@ -137,7 +136,7 @@ test("World Ending crosses AGI emergence with both Open-continuity gates", async
   })).id, "assured_continuity");
 });
 
-test("interactive snapshots expose canonical Headline copy and the selected play profile", async () => {
+test("interactive snapshots expose canonical Headline copy without a rules selector", async () => {
   const options = {
     playerCount: 3,
     factionId: "coalition_lab",
@@ -148,7 +147,7 @@ test("interactive snapshots expose canonical Headline copy and the selected play
   defaultMatch.activeHeadline = headline;
   const defaultSnapshot = defaultMatch.snapshot();
 
-  assert.equal(defaultSnapshot.playProfileId, "default-game");
+  assert.ok(!("playProfileId" in defaultSnapshot));
   assert.deepEqual(defaultSnapshot.activeHeadline, {
     id: headline.id,
     name: headline.name,
@@ -158,11 +157,7 @@ test("interactive snapshots expose canonical Headline copy and the selected play
     quote: headline.quote
   });
 
-  const { match: advancedMatch } = await createInteractiveGame({
-    ...options,
-    rulesVariant: { playProfileId: "advanced-play" }
-  }, () => {});
-  assert.equal(advancedMatch.snapshot().playProfileId, "advanced-play");
+  await assert.rejects(createInteractiveGame({...options, rulesVariant: {playProfileId: "advanced-play"}}, () => {}), /Unsupported rules option/);
 });
 
 test("Scientific Method charges only when its protection is actually consumed", async () => {
@@ -1286,24 +1281,6 @@ test("Agent Swarm suppresses the second destination bonus before affordability",
   assert.equal(player.compute, 0);
 });
 
-test("supplier attribution requires counterfactual Power necessity", () => {
-  assert.deepEqual(causallyNecessaryImportSuppliers({
-    localAvailable: 1,
-    importedSupplierSeats: [1, 2],
-    allocatedDemand: 3
-  }), [1, 2]);
-  assert.deepEqual(causallyNecessaryImportSuppliers({
-    localAvailable: 2,
-    importedSupplierSeats: [1, 2],
-    allocatedDemand: 3
-  }), []);
-  assert.deepEqual(causallyNecessaryImportSuppliers({
-    localAvailable: 3,
-    importedSupplierSeats: [],
-    allocatedDemand: 3
-  }), []);
-});
-
 test("Talent production exposes Team movement through a decision packet", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "talent-production-choice" },
@@ -1554,73 +1531,6 @@ test("immediate exchanges are exactly one-for-one across Runway and Compute", as
   assert.equal(partner.runway, 1);
   assert.equal(player.roundMetrics.dealFlowUsed, undefined);
   assert.equal(player.metrics.factionAbilityValues.deal_flow, undefined);
-});
-
-test("Boardroom Coup removes the leader's CEO from legal action movement", async () => {
-  const { match } = await createInteractiveGame(
-    { playerCount: 3, seed: "boardroom-ceo-lock" },
-    () => {}
-  );
-  match.round = 3;
-  match.cycle = 1;
-  const headline = match.headlineDocument.headlines.find(
-    (candidate) => candidate.id === "boardroom_coup"
-  );
-  match.headlineDecks[3][0] = headline;
-  match.choose = async (_policies, _seat, _stage, decisions) =>
-    decisions.find((decision) => decision.decisionId === "boardroom_accept_lock");
-
-  await match.prepareHeadline([]);
-
-  const leader = match.players[match.regime.cycle.ceoLockedSeat];
-  assert.ok(leader);
-  assert.ok(match.legalResolutions(leader.seat, "fund").length > 0);
-  assert.ok(match.legalResolutions(leader.seat, "fund")
-    .every((decision) => decision.parameters.pieceId !== leader.pieces.find(
-      (piece) => piece.kind === "ceo"
-    ).id));
-});
-
-test("Stellar Collector Replicates does not discount Links or Fusion", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      seed: "entanglement-printed-fields-only",
-      rulesVariant: { networkInfrastructureEnabled: true }
-    },
-    () => {}
-  );
-  match.round = 4;
-  match.regime.cycle = { superconductor: "replicates" };
-  const player = match.players[0];
-  player.facilities = [{
-    id: "entanglement-facility",
-    tileId: player.pieces[0].tileId,
-    category: "frontier",
-    powered: false
-  }];
-
-  player.runway = 0;
-  assert.equal(
-    match.legalResolutions(player.seat, "build")
-      .some((decision) => decision.parameters?.buildMode === "link"),
-    false
-  );
-  player.runway = 1;
-  const links = match.legalResolutions(player.seat, "build")
-    .filter((decision) => decision.parameters?.buildMode === "link");
-  assert.ok(links.length > 0);
-  assert.ok(links.every((decision) => decision.parameters.actualRunwayCost === 1));
-
-  player.runway = 4;
-  assert.deepEqual(
-    match.legalEscalationResolutions(player.seat, "fusion_demonstrator"),
-    []
-  );
-  player.runway = 5;
-  const fusion = match.legalEscalationResolutions(player.seat, "fusion_demonstrator");
-  assert.ok(fusion.length > 0);
-  assert.ok(fusion.every((decision) => decision.parameters.cost === 5));
 });
 
 test("Loopfold stacks Social Graph with its destination-dependent Installed Base", async () => {
@@ -1888,8 +1798,7 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
-      seed: "grid-ready-lifecycle",
-      rulesVariant: { playProfileId: "advanced-play" }
+      seed: "grid-ready-lifecycle"
     },
     () => {}
   );
@@ -1914,7 +1823,6 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
     category: tile.category,
       powered: false
   }));
-  player.links = player.facilities.slice(1).map((facility) => facility.id);
   player.generators = [{
     id: "s0-generator-1",
     tileId: sites[0].instanceId,
@@ -2244,8 +2152,7 @@ test("rejected immediate trades end without counteroffers or claims", async () =
   const runtime = await createInteractiveGame(
     {
       playerCount: 4,
-      seed: "open-counteroffer",
-      rulesVariant: { playProfileId: "advanced-play" }
+      seed: "open-counteroffer"
     },
     () => {}
   );
@@ -3530,7 +3437,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.experiment.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(first.variant.kind, "canonical");
-  assert.equal(first.variant.effective.playProfileId, "default-game");
+  assert.ok(!("playProfileId" in first.variant.effective));
   assert.equal(first.rng.algorithm, "mulberry32");
   assert.ok(first.factions.length >= 4 && first.factions.length <= 6);
   assert.equal(first.profiles.length, 4);
@@ -3550,10 +3457,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.samples[0].replay.filter((event) =>
     event.type === "realignment_resolved"
   ).length, 0);
-  assert.equal(
-    Object.values(first.matchMetrics.realignments).reduce((sum, count) => sum + count, 0),
-    0
-  );
+  assert.ok(!("realignments" in first.matchMetrics));
   assert.equal(
     first.matchMetrics.agiFunnel.playerOpportunities,
     options.runs * options.playerCount
@@ -3566,20 +3470,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.samples[0].replay.at(-1).type, "round_settled");
   assert.equal(first.samples[0].replay.at(-1).round, 4);
 
-  const advanced = await createSimulation({
-    ...options,
-    runs: 1,
-    seed: "simulation-contract-advanced",
-    rulesVariant: { playProfileId: "advanced-play" }
-  });
-  assert.equal(advanced.variant.effective.playProfileId, "advanced-play");
-  assert.equal(advanced.samples[0].replay.filter((event) =>
-    event.type === "realignment_resolved"
-  ).length, 1);
-  assert.equal(
-    Object.values(advanced.matchMetrics.realignments).reduce((sum, count) => sum + count, 0),
-    1
-  );
+  await assert.rejects(createSimulation({...options, runs: 1, rulesVariant: {playProfileId: "advanced-play"}}), /Unsupported rules option/);
 });
 
 test("simulation reports deterministic turn and round projections", async () => {

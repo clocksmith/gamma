@@ -127,93 +127,6 @@ export function axialDistance(left, right) {
   );
 }
 
-function rotateBoardRing(board, coordinates, steps) {
-  if (!steps) return [];
-  const normalized = ((steps % coordinates.length) + coordinates.length) % coordinates.length;
-  const indexByCoordinate = new Map(
-    coordinates.map(([q, r], index) => [coordinateKey(q, r), index])
-  );
-  const occupants = board
-    .filter((tile) => indexByCoordinate.has(coordinateKey(tile.q, tile.r)))
-    .map((tile) => ({
-      tile,
-      from: indexByCoordinate.get(coordinateKey(tile.q, tile.r))
-    }));
-  if (occupants.length !== coordinates.length) {
-    throw new Error(`Cannot rotate incomplete ${coordinates.length}-space ring.`);
-  }
-  return occupants.map(({ tile, from }) => {
-    const destination = coordinates[(from + normalized) % coordinates.length];
-    const movement = {
-      tileId: tile.instanceId,
-      from: { q: tile.q, r: tile.r },
-      to: { q: destination[0], r: destination[1] }
-    };
-    tile.q = destination[0];
-    tile.r = destination[1];
-    return movement;
-  });
-}
-
-export function applyBoardMotion(board, motion) {
-  if (!motion || typeof motion.id !== "string") {
-    throw new TypeError("A realignment motion is required.");
-  }
-  return {
-    motionId: motion.id,
-    movements: [
-      ...rotateBoardRing(board, BOARD_RINGS.inner, motion.innerSteps || 0),
-      ...rotateBoardRing(
-        board,
-        ringCoordinates(
-          "outer",
-          board.filter((tile) => tile.placementRing === "outer").length
-        ),
-        motion.outerSteps || 0
-      )
-    ]
-  };
-}
-
-export function resolveBlindRealignmentVote(ballots, initiativeSeat, motionIds) {
-  const validMotions = new Set(motionIds);
-  const bySeat = new Map();
-  const counts = Object.fromEntries(motionIds.map((id) => [id, 0]));
-  for (const ballot of ballots) {
-    if (!Number.isInteger(ballot.seat) || bySeat.has(ballot.seat)) {
-      throw new TypeError("Realignment ballots require one unique integer seat each.");
-    }
-    if (ballot.motionId !== null && !validMotions.has(ballot.motionId)) {
-      throw new TypeError(`Unknown realignment motion: ${ballot.motionId}.`);
-    }
-    bySeat.set(ballot.seat, ballot.motionId);
-    if (ballot.motionId !== null) counts[ballot.motionId] += 1;
-  }
-  if (ballots.length === 0) throw new TypeError("At least one realignment ballot is required.");
-  const maximum = Math.max(...Object.values(counts));
-  const leaders = new Set(
-    Object.entries(counts)
-      .filter(([, count]) => count === maximum)
-      .map(([id]) => id)
-  );
-  let winningMotionId;
-  for (let offset = 0; offset < ballots.length; offset += 1) {
-    const seat = (initiativeSeat + offset) % ballots.length;
-    const motionId = bySeat.get(seat);
-    if (leaders.has(motionId)) {
-      winningMotionId = motionId;
-      break;
-    }
-  }
-  return {
-    winningMotionId,
-    leadingMotionIds: [...leaders],
-    counts,
-    tied: leaders.size > 1,
-    initiativeSeat
-  };
-}
-
 export function calculateAuditDraws(baseDraws, playerCount) {
   return Math.max(1, Math.round(Number(baseDraws) * Number(playerCount) / 4));
 }
@@ -394,7 +307,6 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     ],
     facilities: [],
     generators: [],
-    links: [],
     startingGridConnection: {
       ...structuredClone(config.board.startingGridConnection),
       assignedFacilityId: null
@@ -410,10 +322,10 @@ export function createGame(
   seed,
   factionId,
   playerCount = 4,
-  { playProfileId = config.playProfiles?.defaultGame?.id ?? "default-game" } = {}
+  options = {}
 ) {
   const board = generateBoard(config, seed);
-  const profile = resolvePlayProfile(config, playProfileId);
+  if (Object.keys(options).length) throw new Error("Game setup does not accept alternate rules options.");
   const faction = factions.factions.find((entry) => entry.id === factionId) || factions.factions[0];
   const frontier = board.find((tile) => tile.id === "frontier");
   const boundedPlayerCount = Number(playerCount);
@@ -427,7 +339,6 @@ export function createGame(
   }
   const state = {
     seed: String(seed),
-    playProfileId,
     playerCount: boundedPlayerCount,
     round: config.rounds[0].number,
     cycle: 1,
@@ -437,19 +348,16 @@ export function createGame(
     selectedAction: null,
     selectedPieceId: null,
     selectedTileId: null,
-    pendingRoundSettlement: null,
-    lastRealignment: null,
     board,
     player: createPlayer(config, faction, frontier.instanceId, boundedPlayerCount),
     headlines: shuffle(
-      availableHeadlines(headlines, 1, profile),
+      availableHeadlines(headlines, 1),
       createRng(`${seed}:headlines:1`)
     ),
     metrics: {
       actionSelections: [],
       poweredFacilityRounds: [],
       researchCapabilityGains: [],
-      realignmentVotes: [],
       auditHitsByPlayer: { [faction.id]: 0 },
       earliestAgiEligibility: null
     },
@@ -462,39 +370,8 @@ export function createGame(
   return state;
 }
 
-export function resolvePlayProfile(
-  config,
-  profileId = config.playProfiles?.defaultGame?.id ?? "default-game"
-) {
-  const profile = Object.values(config.playProfiles || {}).find(
-    (candidate) => candidate.id === profileId
-  );
-  if (!profile) throw new Error(`Unknown play profile: ${profileId}.`);
-
-  const settings = { ...(config.playRuleDefaults || {}) };
-  for (const moduleId of profile.moduleIds || []) {
-    const module = config.playRuleModules?.[moduleId];
-    if (!module) {
-      throw new Error(`Play profile ${profileId} names unknown rule module: ${moduleId}.`);
-    }
-    Object.assign(settings, module.settings || {});
-  }
-  if (settings.immediateTradeThirdPartyClaims && !settings.immediateTradeCounteroffers) {
-    throw new Error("Third-party trade claims require trade counteroffers.");
-  }
-  return { ...profile, ...settings };
-}
-
-function playProfile(config, state) {
-  return resolvePlayProfile(config, state.playProfileId);
-}
-
-export function availableHeadlines(headlineDocument, round, profile) {
-  const enabledModules = new Set(profile.moduleIds || []);
-  return headlineDocument.headlines.filter((headline) =>
-    headline.round === round &&
-    (headline.requiredRuleModules || []).every((moduleId) => enabledModules.has(moduleId))
-  );
+export function availableHeadlines(headlineDocument, round) {
+  return headlineDocument.headlines.filter(headline => headline.round === round);
 }
 
 export function availableCoreActions(config, state) {
@@ -607,6 +484,7 @@ function resolveCore(config, state, actionId, destination, options) {
 
   if (actionId === "build") {
     const mode = options.buildMode || "facility";
+    if (!["facility", "generator"].includes(mode)) throw new RangeError(`Unknown build mode: ${mode}`);
     if (mode === "facility") {
       if (destination.category === "frontier") {
         return "Facility failed: Frontier has no Facility spaces.";
@@ -653,21 +531,7 @@ function resolveCore(config, state, actionId, destination, options) {
       });
       return `${source.name} constructed at ${destination.name}: ${source.capacity} Power.`;
     }
-    if (mode === "link") {
-      if (!playProfile(config, state).networkInfrastructureEnabled) {
-        return "Link failed: Links are an Advanced Play infrastructure rule.";
-      }
-      if (state.round < 2) return "Link failed: Networks unlock in Capacity.";
-      const facility = player.facilities.find(
-        (entry) => entry.tileId === destination.instanceId && !player.links.includes(entry.id)
-      );
-      if (!facility || player.runway < 1 || player.links.length >= config.playerSupply.linkTokens) {
-        return "Link failed: choose an unlinked Facility and pay 1 Runway.";
-      }
-      player.runway -= 1;
-      player.links.push(facility.id);
-      return `Network Link installed at ${destination.name}; its Facility is a Network anchor.`;
-    }
+
   }
 
   if (actionId === "organize") {
@@ -714,14 +578,12 @@ function allocatePower(config, state) {
     : 0;
   const generatedCapacity = player.generators.reduce((sum, item) => sum + item.capacity, 0);
   const generation = startingGridCapacity + generatedCapacity;
-  const networked = networkedFacilityIds(state.board, player, {
-    networkInfrastructureEnabled: playProfile(config, state).networkInfrastructureEnabled
-  });
+  const locallyEligible = locallyEligibleFacilityIds(state.board, player);
   let available = generation;
   let powered = 0;
   for (const facility of player.facilities) {
     const demand = 1;
-    facility.powered = networked.has(facility.id) && available >= demand;
+    facility.powered = locallyEligible.has(facility.id) && available >= demand;
     if (facility.powered) {
       available -= demand;
       powered += 1;
@@ -736,60 +598,16 @@ function allocatePower(config, state) {
   };
 }
 
-export function networkedFacilityIds(
-  board,
-  player,
-  { networkInfrastructureEnabled = true } = {}
-) {
+export function locallyEligibleFacilityIds(board, player) {
   const result = new Set();
   const startingId = player.startingGridConnection?.assignedFacilityId;
   if (startingId) result.add(startingId);
-  if (!networkInfrastructureEnabled) {
-    for (const facility of player.facilities) {
-      const tile = board.find((entry) => entry.instanceId === facility.tileId);
-      if (player.generators.some((generator) => {
-        const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
-        return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
-      })) result.add(facility.id);
-    }
-    return result;
-  }
-  for (const id of player.links || []) result.add(id);
-  const connectedGenerators = new Set();
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const generator of player.generators) {
-      if (connectedGenerators.has(generator.id)) continue;
-      const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
-      if (player.facilities.some((facility) => {
-        if (!result.has(facility.id)) return false;
-        const facilityTile = board.find((entry) => entry.instanceId === facility.tileId);
-        return generatorTile && facilityTile &&
-          axialDistance(generatorTile, facilityTile) <= 1;
-      })) {
-        connectedGenerators.add(generator.id);
-        changed = true;
-      }
-    }
-    for (const facility of player.facilities) {
-      if (result.has(facility.id)) continue;
-      const tile = board.find((entry) => entry.instanceId === facility.tileId);
-      const adjacentFacility = player.facilities.some((candidate) => {
-        if (!result.has(candidate.id)) return false;
-        const candidateTile = board.find((entry) => entry.instanceId === candidate.tileId);
-        return tile && candidateTile && axialDistance(tile, candidateTile) <= 1;
-      });
-      const adjacentGenerator = player.generators.some((generator) => {
-        if (!connectedGenerators.has(generator.id)) return false;
-        const generatorTile = board.find((entry) => entry.instanceId === generator.tileId);
-        return tile && generatorTile && axialDistance(tile, generatorTile) <= 1;
-      });
-      if (adjacentFacility || adjacentGenerator) {
-        result.add(facility.id);
-        changed = true;
-      }
-    }
+  for (const facility of player.facilities) {
+    const tile = board.find(entry => entry.instanceId === facility.tileId);
+    if (player.generators.some(generator => {
+      const generatorTile = board.find(entry => entry.instanceId === generator.tileId);
+      return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
+    })) result.add(facility.id);
   }
   return result;
 }
@@ -826,22 +644,11 @@ function finishRound(config, headlines, state) {
   );
   recordAgiEligibility(config, state, "after_production");
   synchronizePublicMandate(config, state, "production");
-  state.pendingRoundSettlement = {
-    round: state.round,
-    finalRound: state.round === config.rounds.at(-1).number
-  };
-  if (state.round === 3 && playProfile(config, state).realignmentEnabled) {
-    state.phase = "realign";
-    state.log.unshift(
-      "Mandate scoring complete. Every institution now submits its one secret Jurisdictional Realignment ballot."
-    );
-  } else {
-    advanceAfterRealignment(config, headlines, state);
-  }
+
+  advanceRound(config, headlines, state);
 }
 
-function advanceAfterRealignment(config, headlines, state) {
-  state.pendingRoundSettlement = null;
+function advanceRound(config, headlines, state) {
   if (state.round < config.rounds.at(-1).number) {
     state.round += 1;
     state.cycle = 1;
@@ -849,7 +656,7 @@ function advanceAfterRealignment(config, headlines, state) {
     state.player.programUses = config.rounds[state.round - 1].programUses;
     state.player.researchProtection = state.player.factionId === "safety_laboratory" ? 2 : 1;
     state.headlines = shuffle(
-      availableHeadlines(headlines, state.round, playProfile(config, state)),
+      availableHeadlines(headlines, state.round),
       createRng(`${state.seed}:headlines:${state.round}`)
     );
     state.log.unshift(`Era ${state.round} begins: ${config.rounds[state.round - 1].name}.`);
@@ -857,54 +664,6 @@ function advanceAfterRealignment(config, headlines, state) {
     state.phase = "complete";
     state.log.unshift("Era IV settled. Final scoring is ready for manual review.");
   }
-}
-
-export function castRealignmentVote(config, headlines, state, motionId) {
-  if (!playProfile(config, state).realignmentEnabled) {
-    throw new Error("Jurisdictional Realignment is available only in Advanced Play.");
-  }
-  if (state.phase !== "realign" || !state.pendingRoundSettlement) {
-    throw new Error("No Jurisdictional Realignment vote is waiting.");
-  }
-  const motions = config.board.realignment.motions;
-  const selected = motions.find((motion) => motion.id === motionId);
-  if (!selected) throw new Error(`Unknown realignment motion: ${motionId}.`);
-
-  const rng = createRng(`${state.seed}:realignment:${state.round}`);
-  const ballots = [{ seat: 0, motionId }];
-  for (let seat = 1; seat < state.playerCount; seat += 1) {
-    ballots.push({
-      seat,
-      motionId: motions[Math.floor(rng() * motions.length)].id
-    });
-  }
-  const result = resolveBlindRealignmentVote(
-    ballots,
-    state.initiativeSeat,
-    motions.map((motion) => motion.id)
-  );
-  const winner = motions.find((motion) => motion.id === result.winningMotionId);
-  const movement = applyBoardMotion(state.board, winner);
-  const receipt = {
-    round: state.round,
-    activeBallot: motionId,
-    ballots,
-    ...result,
-    movedTiles: movement.movements.length
-  };
-  state.lastRealignment = receipt;
-  state.metrics.realignmentVotes.push(receipt);
-  state.log.unshift(
-    `${winner.name} adopted${result.tied ? " by Initiative-order tie-break" : ""}: ` +
-    `${winner.ballotText} Network reach will be recalculated from visible adjacency.`
-  );
-  state.log.unshift(
-    `Secret ballots revealed: ${motions.map((motion) =>
-      `${motion.name} ${result.counts[motion.id]}`
-    ).join(" · ")}.`
-  );
-  advanceAfterRealignment(config, headlines, state);
-  return receipt;
 }
 
 export function commitAction(state, actionId, kind = "core") {
@@ -922,6 +681,9 @@ export function commitAction(state, actionId, kind = "core") {
 
 export function resolveSelectedAction(config, headlines, state, pieceId, tileId, options = {}) {
   if (state.phase !== "move" || !state.selectedAction) throw new Error("No revealed action is waiting for resolution.");
+  if (state.selectedAction.id === "build" && options.buildMode && !["facility", "generator"].includes(options.buildMode)) {
+    throw new RangeError(`Unknown build mode: ${options.buildMode}`);
+  }
   const legal = legalDestinations(state, pieceId);
   if (!legal.some((entry) => entry.instanceId === tileId)) throw new Error("Destination is more than two hexes away.");
 

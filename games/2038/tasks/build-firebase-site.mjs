@@ -107,14 +107,14 @@ function pageListItem(page) {
 
 const publicGroupOrder = [
   "Start here",
-  "Required Default Game Play Kit",
+  "Required Play Kit",
   "Learn the game",
   "Optional play",
   "Development and evidence",
   "Component review"
 ];
 
-const defaultGamePlayKitOrder = new Map([
+const playKitOrder = new Map([
   ["Core Rules", 0],
   ["Map Reference", 1],
   ["Component Reference", 2],
@@ -133,10 +133,10 @@ function renderPageGroups(pages) {
     .filter((group) => grouped.get(group).length)
     .map((group) => {
       const entries = grouped.get(group);
-      if (group === "Required Default Game Play Kit") {
+      if (group === "Required Play Kit") {
         entries.sort((left, right) =>
-          defaultGamePlayKitOrder.get(left.title) -
-            defaultGamePlayKitOrder.get(right.title)
+          playKitOrder.get(left.title) -
+            playKitOrder.get(right.title)
         );
       }
       return `<section class="page-group"><h2>${escapeHtml(group)}</h2><ul class="page-list">
@@ -163,7 +163,7 @@ export function buildIndexHtml({
     ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
     : worldCopy?.box
       ? `${worldCopy.box.frontStrapline} ${worldCopy.box.shortPitch}`
-      : "The four documents required to set up and play Default Game.";
+      : "The four documents required to set up and play Mandate 2038.";
   const routeLink = library
     ? '<p><a href="../">Return to Mandate 2038.</a></p>'
     : "";
@@ -340,7 +340,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   const docsSource = resolve(projectRoot, "dist/site/docs");
   const docsTarget = resolve(outputRoot, "docs");
   const includeAllDocuments = profile.documents.includes("*");
-  const defaultGamePlayKit = new Set([
+  const playKit = new Set([
     "core-rules.html",
     "map-reference.html",
     "component-reference.html",
@@ -356,8 +356,8 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
         (word) => word[0].toUpperCase() + word.slice(1)
       ).join(" ");
     pages.push({
-      group: defaultGamePlayKit.has(name)
-        ? "Required Default Game Play Kit"
+      group: playKit.has(name)
+        ? "Required Play Kit"
         : name === "world-and-institutions.html"
         ? "Learn the game"
         : name === "optional-tactics.html"
@@ -365,7 +365,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
           : name === "component-spec.html" || name === "component-inventory.html"
             ? "Component review"
           : "Development and evidence",
-      kind: defaultGamePlayKit.has(name)
+      kind: playKit.has(name)
         ? "Required play-kit document"
         : name === "index.html"
         ? "Index"
@@ -379,9 +379,9 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
         : name === "map-reference.html"
           ? "The 19-district jurisdiction, adjacency, movement, and location effects."
           : name === "component-reference.html"
-            ? "Every Default Game component, its purpose, and its setup location."
+            ? "Every Mandate 2038 component, its purpose, and its setup location."
             : name === "card-reference.html"
-              ? "Printable canonical faces for every Default Game card type."
+              ? "Printable canonical faces for every Mandate 2038 card type."
         : name === "world-and-institutions.html"
           ? "Setting, tone, Era fiction, and ending narratives."
         : name === "optional-tactics.html"
@@ -389,7 +389,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
             : name === "component-spec.html"
               ? "What every physical component is and how its state is made visible."
               : name === "component-inventory.html"
-                ? "Default Game box contents and Advanced-only exclusions."
+                ? "Supported box contents and component quantities."
         : "Design, testing, and implementation record."
     });
   }
@@ -511,7 +511,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   await writeFile(resolve(outputRoot, "index.html"), `${rootHtml}\n`);
   if (profileId === "internal-review") {
     const libraryPages = pages
-      .filter((page) => page.group !== "Required Default Game Play Kit")
+      .filter((page) => page.group !== "Required Play Kit")
       .map((page) => ({ ...page, href: `../${page.href}` }));
     const libraryHtml = buildIndexHtml({
       identity,

@@ -298,11 +298,7 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
       {
         id: "probe",
         overlay: {
-          foundryNewArchitectureDemandCoupling: {
-            baseCompute: 1,
-            computePerLicense: 1,
-            maximumCompute: 3
-          }
+          foundryStartingCompute: 4
         }
       }
     ],
@@ -374,11 +370,7 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
 test("package interaction matrices require and record multiple selected levers", async () => {
   const packageOverlay = {
     verticalIndustrialVelocityMandate: 1,
-    foundryNewArchitectureDemandCoupling: {
-      baseCompute: 0,
-      computePerLicense: 1,
-      maximumCompute: 3
-    }
+    foundryStartingCompute: 4
   };
   await assert.rejects(
     runUnifiedMatrix({

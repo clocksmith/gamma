@@ -6,10 +6,9 @@ as isolated rules candidates.
 
 ## Authority and status
 
-The canonical Default Game remains the `defaultGame` profile in
-`components/game.json`. Accepted baseline simplifications are not
-optional rule modules. A future candidate must be registered as proposed and
-remain outside `playRuleModules` and both supported profiles until selected.
+The canonical game is defined by `rules.md` and `components/`. Research
+overlays are named, validated simulation inputs; they cannot introduce alternate
+play modes. Proposals require explicit selection before changing the game.
 
 The source of status is `components/rule-changes.json`; the generated
 ledger is `dist/docs/rule-change-register.md`. Rationale belongs in this protocol
@@ -20,13 +19,12 @@ after a candidate is accepted.
 
 | Accepted decision | Canonical change | Protected identity | Remaining evidence question |
 | --- | --- | --- | --- |
-| `single-generator-default` | One location-defined Generator per player | Energy geography, Power negotiation, Scrutiny, and a visible retained allocation snapshot | Energy-site dominance or Initiative advantage |
+| `single-generator-default` | One location-defined Generator per player | Energy geography, local Power, Scrutiny, and a visible retained allocation snapshot | Energy-site dominance or Initiative advantage |
 | `equal-presence-control` | CEO, Team, and Facility each contribute one presence; ties control nothing | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
 | `shared-program-display` | Six public Program cards and two markers per player replace private copies and a track | Public escalation, timing pressure, and once-per-game choices | Programs become scripted or insufficiently contested |
 | `research-protection-refresh` | Research Protection refreshes each Era and Research visits protect only that run | Push-your-luck identity without a second spendable currency | Research becomes too safe or protection feels forgettable |
 | `deterministic-dossier` | Supported evidence and printed claim strength replace bag draws and comeback arithmetic | Secret commitments, uncertainty, evidence, and a dramatic endgame claim | Resolution becomes predictable too early |
-| `nineteen-hex-board` | One center, six inner, and twelve outer tiles form a complete radius-two board | Geographic specialization, movement, control, and Realignment | Added space weakens interaction or increases setup burden |
-| `simplified-profile-boundary` | Default is the teachable core; Advanced adds six distinct experiences | One coherent baseline and one coherent expansion | Advanced setup cost exceeds its added strategic value |
+| `nineteen-hex-board` | One center, six inner, and twelve outer tiles form a complete radius-two board | Geographic specialization, movement and control | Added space weakens interaction or increases setup burden |
 
 Selection authorizes implementation, not a balance claim. The original
 single-Generator candidate and its receipts remain in `experimental/` and

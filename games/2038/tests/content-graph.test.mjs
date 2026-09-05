@@ -65,7 +65,6 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/docs/map-reference.md",
     "dist/docs/component-reference.md",
     "dist/docs/card-reference.md",
-    "dist/docs/advanced-play.md",
     "dist/docs/world-and-institutions.md",
     "dist/docs/optional-tactics.md",
     "dist/contracts/era-situation-ledger.json",
@@ -105,7 +104,6 @@ test("physical sources are projected from declared ownership roots", async () =>
     "content/templates/map-reference.md",
     "content/templates/component-reference.md",
     "content/templates/card-reference.md",
-    "advanced.md",
     "world.md",
     "components/factions.json",
     "components/game.json",
@@ -186,14 +184,8 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.ok(rules.includes(`#### ${advancedName}`));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
-  assert.match(
-    simulation.coverage.selectedRules.automated.join("\n"),
-    /Default local Power, Advanced Networks and Links/
-  );
-  assert.match(
-    simulation.coverage.selectedRules.modeledAbstractions.join("\n"),
-    /Default Game recalculates local Power eligibility.*Advanced Play instead recalculates Network reach/
-  );
+  assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Power/);
+  assert.match(simulation.coverage.selectedRules.modeledAbstractions.join("\n"), /Local Power eligibility/);
   assert.doesNotMatch(
     simulation.coverage.selectedRules.automated.join("\n"),
     /adjacency Networks/
@@ -209,7 +201,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.ok(!rules.includes("${"));
 });
 
-test("Headline cards own their exact text while the Default book owns timing", async () => {
+test("Headline cards own their exact text while the rulebook owns timing", async () => {
   const { headlines } = await readJson("dist/runtime/headlines.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
   const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
@@ -220,22 +212,22 @@ test("Headline cards own their exact text while the Default book owns timing", a
 
   for (const headline of headlines) {
     assert.ok(headline.name && headline.text, `card owns ${headline.id}`);
-    assert.ok(!rules.includes(headline.text), `Default book does not duplicate ${headline.id}`);
+    assert.ok(!rules.includes(headline.text), `rulebook does not duplicate ${headline.id}`);
     assert.ok(cardReference.includes(headline.name), `reference projects ${headline.id} name`);
     assert.ok(cardReference.includes(headline.text), `reference projects ${headline.id} text`);
   }
   assert.match(rules, /A Headline is revealed before secret action selection/);
-  assert.match(componentReference, /without an\s+\*\*Advanced Play\*\* badge/);
+  assert.doesNotMatch(cardReference, /Advanced Play/);
 });
 
-test("Mandate cards own their exact text while the Default book owns scoring timing", async () => {
+test("Mandate cards own their exact text while the rulebook owns scoring timing", async () => {
   const { mandates } = await readJson("dist/runtime/mandates.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
   const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
 
   for (const mandate of mandates) {
     assert.ok(mandate.name && mandate.rulesText, `card owns ${mandate.id}`);
-    assert.ok(!rules.includes(mandate.rulesText), `Default book does not duplicate ${mandate.id}`);
+    assert.ok(!rules.includes(mandate.rulesText), `rulebook does not duplicate ${mandate.id}`);
     assert.ok(cardReference.includes(mandate.name), `reference projects ${mandate.id} name`);
     assert.ok(cardReference.includes(mandate.rulesText), `reference projects ${mandate.id} text`);
   }
@@ -272,7 +264,7 @@ test("Card and Board Reference projects every other required card surface", asyn
     assert.ok(cardReference.includes(era.unlockText));
   }
   assert.match(cardReference, /## Governance Board Era panels/);
-  assert.match(cardReference, /## Four-panel player aid/);
+  assert.match(cardReference, /## Three-panel player aid/);
   assert.match(cardReference, /## Printed Power contracts/);
   assert.match(cardReference, /No separate Power Source\s+cards are used/);
   for (const reference of referenceDocument.playerReferences) {
@@ -288,13 +280,12 @@ test("Card and Board Reference projects every other required card surface", asyn
     [
       ["foldout_player_aid", 1],
       ["foldout_player_aid", 2],
-      ["foldout_player_aid", 3],
-      ["foldout_player_aid", 4]
+      ["foldout_player_aid", 3]
     ]
   );
   const eraThree = referenceDocument.eraCards.find((era) => era.id === "era_narrative");
   assert.match(eraThree.unlockText, /Joint Ventures/);
-  assert.match(eraThree.unlockText, /Advanced Play adds one Production Power request/);
+
   for (const action of config.actions) assert.ok(cardReference.includes(action.summary));
   for (const training of config.trainingDeck.cards) {
     assert.ok(cardReference.includes(training.rulesText));
@@ -401,12 +392,11 @@ test("retained signature abilities project concrete continuity institutions", as
   assert.deepEqual(humanCompatibility.surfaceBindings, []);
 });
 
-test("Default Rules are compact while every moved authority has one table surface", async () => {
-  const [rules, mapReference, componentReference, advanced, world, tactics, tacticDocument] = await Promise.all([
+test("Core Rules are compact while every moved authority has one table surface", async () => {
+  const [rules, mapReference, componentReference, world, tactics, tacticDocument] = await Promise.all([
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
     readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
     readFile(new URL("dist/docs/component-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/advanced-play.md", root), "utf8"),
     readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("dist/docs/optional-tactics.md", root), "utf8"),
     readJson("dist/runtime/tactics.json")
@@ -417,14 +407,14 @@ test("Default Rules are compact while every moved authority has one table surfac
     .filter(Boolean).length;
 
   assert.ok(wordCount >= 5000, "Default procedure retains enough authority");
-  assert.ok(wordCount <= 6500, "Default Rules stay printable");
+  assert.ok(wordCount <= 6500, "Core Rules stay printable");
   assert.match(rules, /## How to Play/);
   assert.match(rules, /## Rules Reference/);
   assert.ok(rules.indexOf("## How to Play") < rules.indexOf("## Rules Reference"));
-  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for an accelerated Default Game/);
+  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for an accelerated introduction/);
   assert.match(rules, /## 9\. Printed card authorities/);
   assert.match(rules, /## 10\. Map and component reference/);
-  assert.match(rules, /## Advanced Play/);
+  assert.doesNotMatch(rules, /Advanced Play/);
   assert.doesNotMatch(rules, /Jurisdictional Realignment/);
   assert.doesNotMatch(rules, /Every recognized successor enters the quorum/);
   assert.doesNotMatch(rules, /adds 1 additional Runway/);
@@ -436,12 +426,6 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(componentReference, /### Training deck: 40 cards/);
   assert.match(componentReference, /integrated starting-grid identifier/);
   assert.match(componentReference, /## Defined markers and effects/);
-  assert.match(advanced, /## Connected infrastructure/);
-  assert.match(advanced, /## Immediate resource trades/);
-  assert.match(advanced, /## Production Power request/);
-  assert.match(advanced, /## Headline procedures/);
-  assert.match(advanced, /## Era III Jurisdictional Realignment/);
-  assert.match(advanced, /and every\s+Advanced-badged Headline to its matching Era packet/);
 
   assert.match(world, /## The jurisdiction/);
   assert.doesNotMatch(world, /\*\*Interpretation\.\*\*/);
@@ -461,7 +445,7 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
   assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock Era:\*\* 3; passive/);
   assert.match(cardReference, /Allocation Window[\s\S]*Unlock Era:\*\* 2; once when unlocked/);
-  assert.match(cardReference, /Advanced Play only: requires the public Headline-procedure module/);
+  assert.doesNotMatch(cardReference, /Advanced Play/);
   assert.match(cardReference, /Each Faction ability unlocks at the Era printed on its board/);
   assert.match(cardReference, /latest Production snapshot/);
 

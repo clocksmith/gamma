@@ -16,7 +16,7 @@ test("current release declaration separates executable game from physical rules 
   assert.match(current.gameVersion, /^\d+\.\d+\.\d+$/);
   assert.equal(packageDocument.name, "mandate-2038");
   assert.equal(packageDocument.version, current.gameVersion);
-  assert.match(current.rulesCandidate.version, /^0\.8\.0-rc\.\d+(-test)?$/);
+  assert.match(current.rulesCandidate.version, /^0\.9\.0-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
   assert.equal(current.contracts.mechanicsProjectionVersion, 2);
@@ -29,7 +29,7 @@ test("current release declaration separates executable game from physical rules 
   ]);
 });
 
-test("physical authority separates profiles and preserves automatic blind Audit draws", async () => {
+test("physical authority defines one inventory and preserves automatic blind Audit draws", async () => {
   const [spec, inventory, governanceLedger, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
     readFile(new URL("dist/docs/component-inventory.md", root), "utf8"),
@@ -54,12 +54,7 @@ test("physical authority separates profiles and preserves automatic blind Audit 
   assert.match(spec, /Two distinct shared tokens/);
 
   assert.match(inventory, /## One prepacked faction tray per player/);
-  assert.match(inventory, /## Advanced module/);
-  assert.match(inventory, /8 Advanced-badged Headline cards/);
-  assert.match(inventory, /12 Link tokens/);
-  assert.match(inventory, /6 four-way Realignment ballot cards/);
-  assert.match(inventory, /1 ordinary six-sided Volatility die/);
-  assert.match(inventory, /No component tracks Network capacity/);
+
   assert.match(inventory, /six captive sliders/);
   assert.match(inventory, /6 shared Program cards/);
   assert.match(inventory, /twelve Program markers/);
@@ -85,8 +80,8 @@ test("physical authority separates profiles and preserves automatic blind Audit 
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /140 Default or 154 with Advanced/);
-  assert.match(manufacturing, /Advanced Play adds six four-way Realignment ballots/);
+  assert.match(manufacturing, /134 standard cards plus 6 foldouts/);
+
   assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
   const mapSurface = manifest.surfaces.find((surface) => surface.id === "map_tile_types");
@@ -119,18 +114,16 @@ test("release artifacts are immutable once a version path exists", async () => {
 
 test("complexity-reduction review rules preserve precision and remove table accounting", async () => {
   const current = await readJson("versions/current-release.json");
-  const [rules, mapReference, componentReference, advanced] = await Promise.all([
+  const [rules, mapReference, componentReference] = await Promise.all([
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
     readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
     readFile(new URL("dist/docs/component-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/advanced-play.md", root), "utf8")
   ]);
-  const normalizedRules = [rules, mapReference, componentReference, advanced].join("\n").replace(/\s+/g, " ");
+  const normalizedRules = [rules, mapReference, componentReference].join("\n").replace(/\s+/g, " ");
   for (const clause of [
     `**Rules version:** ${current.rulesCandidate.version}`,
     `synchronized with executable game ${current.gameVersion}`,
     "Political control uses the CEO, Teams, and Facilities already on the board",
-    "cards without an **Advanced Play** badge",
     "A Mega-Cluster uses two adjacent Facilities you own",
     "Each Facility may host at most one Mega-Cluster",
     "The starting grid powers only its assigned first Facility",
@@ -144,17 +137,12 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "Every outer district touches its two outer neighbors",
     "These ring pools are fixed; shuffle tiles only within their listed ring",
     "All copies of one named district are mechanically identical",
-    "Every player board presents the same five Production boxes",
+    "Every player board presents the same four Production boxes",
     "Leave these cubes until the next Allocate step",
     "No separate Power Source cards are used",
-    "Each moving tile carries every CEO, Team, Facility, Generator, Link",
-    "A Pass names no motion",
-    "Default Game makes no Power purchase request",
-    "In Advanced Play, each player may make one request",
     "The secret AGI Dossier",
     "There is no Prediction Bag",
     "Do not run a second Production calculation",
-    "Every Headline card is eligible",
     "Every Faction has one persistent institutional identity and one signature ability",
     "each applicable Faction modifier",
     "There is no hidden or deferred conversion",
@@ -168,22 +156,22 @@ test("complexity-reduction review rules preserve precision and remove table acco
   assert.ok(!normalizedRules.includes("Power Purchase Agreement"));
 });
 
-test("complexity positioning stays broad, unmeasured, and profile-scoped", async () => {
+test("complexity positioning stays broad, unmeasured, and game-scoped", async () => {
   const [comparisons, decisions, manufacturing] = await Promise.all([
     readFile(new URL("docs/comparisons.md", root), "utf8"),
     readFile(new URL("docs/design-decisions.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8")
   ]);
 
-  assert.match(comparisons, /Default Game is designed as \*\*upper-medium\*\*/);
+  assert.match(comparisons, /Mandate 2038 is designed as \*\*upper-medium\*\*/);
   assert.match(comparisons, /`3\.0–3\.4`/);
-  assert.match(comparisons, /`3\.6–4\.0`/);
+
   assert.match(comparisons, /broad positioning hypotheses, not\s+community ratings/);
   assert.match(comparisons, /No current evidence supports a narrower Weight estimate/);
   assert.doesNotMatch(comparisons, /`3\.0–3\.2`/);
   assert.match(manufacturing, /ages 14\+, upper-medium strategy/);
   assert.match(decisions, /Presentation cannot create a new phase/);
-  assert.match(decisions, /Production remains the five numbered boxes,\s+followed by the separate Audit and Mandate phases/);
+  assert.match(decisions, /Production remains the four numbered boxes,\s+followed by the separate Audit and Mandate phases/);
 });
 
 test("the thematic inventory matches the two-source Power contract", async () => {
@@ -195,7 +183,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.doesNotMatch(bible, /## Player-copy design inventory/);
   assert.doesNotMatch(bible, /## Physical quantity interpretation/);
   assert.match(bible, /This Bible\s+does not repeat those counts/);
-  assert.match(inventory, /1 four-panel foldout player aid/);
+  assert.match(inventory, /1 three-panel foldout player aid/);
   assert.match(inventory, /6 shared Program cards/);
   assert.match(inventory, /2 Program markers/);
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
@@ -228,10 +216,10 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   assert.match(bible, /### Era-placement ledger/);
   assert.match(bible, /### Retained editorial backlog/);
   assert.doesNotMatch(bible, /GENERATED:ERA_SITUATION_LEDGER/);
-  assert.equal(eraLedger.scenarios.length, 43);
+  assert.equal(eraLedger.scenarios.length, 40);
   assert.equal(
     eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
-    62
+    54
   );
   assert.match(bible, /Bankruptcy Data Estates/);
   const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
@@ -243,14 +231,13 @@ test("one thematic authority governs every lore-bearing surface", async () => {
 
   assert.equal(tactics.tactics.length, 12);
   assert.equal(reserve.specialists.length, 12);
-  assert.equal(objectives.objectives.length, 18);
+  assert.equal(objectives.objectives.length, 17);
   const deferredLore = JSON.stringify({ tactics, reserve, objectives });
   for (const phrase of [
     "Cheap-Token Rebound",
     "Failed Institutions",
     "Cognitive Donation",
     "The Refinancing Threshold",
-    "Shared Cooling Corridor",
     "Parameters Successfully Expanded"
   ]) {
     assert.match(deferredLore, new RegExp(phrase));
@@ -287,14 +274,6 @@ test("selected deck contracts have exact physical counts", async () => {
     ),
     [5, 4, 3, 4]
   );
-  assert.deepEqual(
-    [1, 2, 3, 4].map((era) =>
-      headlines.headlines.filter(
-        (headline) => headline.round === era && headline.requiredRuleModules?.length
-      ).length
-    ),
-    [1, 2, 3, 2]
-  );
   const defaultStandardCards =
     config.playerSupply.coreActionCards * config.players.max +
     config.sharedSupply.sharedProgramCards +
@@ -303,13 +282,8 @@ test("selected deck contracts have exact physical counts", async () => {
     trainingCount +
     config.playerSupply.agiDossierCards * config.players.max;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  const advancedPrintedPieces =
-    defaultPrintedPieces +
-    (headlines.headlines.length - defaultHeadlineCount) +
-    config.playerSupply.realignmentBallotCards * config.players.max;
   assert.equal(defaultStandardCards, 134);
   assert.equal(defaultPrintedPieces, 140);
-  assert.equal(advancedPrintedPieces, 154);
   assert.deepEqual(
     config.powerSources.filter((source) => !source.isProgram).map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -376,12 +350,10 @@ test("factions and player supplies match the selected limits", async () => {
       teams: config.playerSupply.teams,
       facilities: config.playerSupply.facilities,
       generators: config.playerSupply.generators,
-      linkTokens: config.playerSupply.linkTokens,
       influenceCubes: config.playerSupply.influenceCubes,
       scrutinyCubes: config.playerSupply.scrutinyCubes,
       factionBoardCaptiveSliders: config.playerSupply.factionBoardCaptiveSliders,
       programMarkers: config.playerSupply.programMarkers,
-      realignmentBallotCards: config.playerSupply.realignmentBallotCards,
       agiDossierCards: config.playerSupply.agiDossierCards,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
@@ -389,12 +361,10 @@ test("factions and player supplies match the selected limits", async () => {
       teams: 3,
       facilities: 4,
       generators: 1,
-      linkTokens: 2,
       influenceCubes: 0,
       scrutinyCubes: 10,
       factionBoardCaptiveSliders: 6,
       programMarkers: 2,
-      realignmentBallotCards: 1,
       agiDossierCards: 4,
       startingGridIdentifiers: 1
     }
@@ -467,7 +437,7 @@ test("faction truth constrains balance without becoming a point-buy budget", asy
   }
 });
 
-test("Faction boards project into Card and Board Reference without duplicating their card text in Default Rules", async () => {
+test("Faction boards project into Card and Board Reference without duplicating their card text in Core Rules", async () => {
   const factions = await readJson("dist/runtime/factions.json");
   const [rules, cardReference] = await Promise.all([
     readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
@@ -497,9 +467,9 @@ test("headline and board boundaries remain explicit", async () => {
   const config = await readJson("dist/runtime/game-config.json");
   const headlines = await readJson("dist/runtime/headlines.json");
 
-  assert.equal(headlines.headlines.length, 24);
+  assert.equal(headlines.headlines.length, 16);
   for (const round of [1, 2, 3, 4]) {
-    assert.equal(headlines.headlines.filter((headline) => headline.round === round).length, 6);
+    assert.equal(headlines.headlines.filter((headline) => headline.round === round).length, [5, 4, 3, 4][round - 1]);
   }
   const expandedTiles = config.board.tiles.reduce((sum, tile) => sum + tile.count, 0);
   assert.equal(config.board.selectedTileCount, 19);
@@ -512,103 +482,10 @@ test("headline and board boundaries remain explicit", async () => {
     3
   );
   assert.equal(config.board.startingGridConnection.capacity, 1);
-  assert.deepEqual(config.playRuleDefaults, {
-    immediateTradeCounteroffers: false,
-    immediateTradeThirdPartyClaims: false,
-    powerPurchaseRequests: 0,
-    realignmentEnabled: false,
-    networkInfrastructureEnabled: false,
-    headlinePersistentEffectsEnabled: false,
-    headlinePublicProceduresEnabled: false,
-    headlineVolatilityEnabled: false
-  });
-  assert.deepEqual(
-    Object.fromEntries(
-      Object.entries(config.playRuleModules).map(([id, module]) => [id, module.settings])
-    ),
-    {
-      "advanced-power-market": { powerPurchaseRequests: 1 },
-      "jurisdictional-realignment": { realignmentEnabled: true },
-      "network-infrastructure": { networkInfrastructureEnabled: true },
-      "headline-persistence": { headlinePersistentEffectsEnabled: true },
-      "headline-public-procedures": { headlinePublicProceduresEnabled: true },
-      "headline-volatility": { headlineVolatilityEnabled: true }
-    }
-  );
-  assert.deepEqual(config.playProfiles, {
-    defaultGame: {
-      id: "default-game",
-      moduleIds: [],
-      name: "Default Game",
-      summary: "The primary four-Era game: one optional 1-for-1 resource trade before resolution, local Power, immediate Headlines, and a static nineteen-district jurisdiction."
-    },
-    advancedPlay: {
-      id: "advanced-play",
-      moduleIds: [
-        "advanced-power-market",
-        "jurisdictional-realignment",
-        "network-infrastructure",
-        "headline-persistence",
-        "headline-public-procedures",
-        "headline-volatility"
-      ],
-      name: "Advanced Play",
-      summary: "The bundled Advanced profile adds connected Networks, one Production Power request, procedural and persistent Headlines, Volatility, and Era III Jurisdictional Realignment."
-    }
-  });
-  const register = await readJson("dist/runtime/rule-change-register.json");
-  const implementedModuleIds = register.changes
-    .filter((change) => change.implementation === "implemented")
-    .flatMap((change) => change.moduleIds)
-    .sort();
-  assert.deepEqual(Object.keys(config.playRuleModules).sort(), implementedModuleIds);
-  for (const profile of Object.values(config.playProfiles)) {
-    for (const moduleId of profile.moduleIds) {
-      assert.ok(implementedModuleIds.includes(moduleId));
-    }
-  }
-  const acceptedSimplifications = register.changes
-    .filter((change) => [
-      "equal-presence-control",
-      "single-generator-default",
-      "shared-program-display",
-      "research-protection-refresh",
-      "deterministic-dossier",
-      "nineteen-hex-board",
-      "simplified-profile-boundary"
-    ].includes(change.id) && change.status.id === "accepted_current")
-    .map((change) => change.id)
-    .sort();
-  assert.deepEqual(acceptedSimplifications, [
-    "deterministic-dossier",
-    "equal-presence-control",
-    "nineteen-hex-board",
-    "research-protection-refresh",
-    "shared-program-display",
-    "simplified-profile-boundary",
-    "single-generator-default"
-  ]);
-  assert.ok(
-    acceptedSimplifications.every(
-      (id) => !Object.values(config.playProfiles).some((profile) => profile.moduleIds.includes(id))
-    ),
-    "canonical simplifications do not masquerade as optional modules"
-  );
-  assert.deepEqual(
-    config.board.realignment.motions.map((motion) => motion.id),
-    ["consolidate_core", "expand_periphery", "counter_cycle"]
-  );
-  assert.deepEqual(config.board.realignment.ballot, {
-    cardsPerPlayer: 1,
-    orientationChoices: [
-      "consolidate_core",
-      "expand_periphery",
-      "counter_cycle",
-      "pass"
-    ],
-    passChoice: "pass"
-  });
-  assert.equal(config.playerSupply.realignmentBallotCards, 1);
+  assert.deepEqual(config.playRules, {immediateTradeCounteroffers: false, immediateTradeThirdPartyClaims: false});
+  assert.ok(!('playProfiles' in config));
+  assert.ok(!('playRuleModules' in config));
+  assert.ok(!('realignment' in config.board));
   assert.equal(config.playerSupply.factionBoardCaptiveSliders, 6);
   assert.equal(config.playerSupply.programMarkers, 2);
   assert.deepEqual(
@@ -642,11 +519,7 @@ test("headline and board boundaries remain explicit", async () => {
       `${tile.id} placement matches physical count`
     );
   }
-  for (const motion of config.board.realignment.motions) {
-    for (const field of ["name", "ballotText", "flavorText"]) {
-      assert.ok(motion[field], `${motion.id} has ${field}`);
-    }
-  }
+
   assert.equal(
     config.board.tiles.reduce(
       (sum, tile) => sum + Object.values(tile.placement).reduce((total, count) => total + count, 0),
@@ -660,16 +533,13 @@ test("headline and board boundaries remain explicit", async () => {
   assert.match(blogPost.text, /does not change Dossier payment, Scrutiny/);
 });
 
-test("Headline deck preserves eight anchors and sixteen future regimes", async () => {
+test("Headline deck contains the sixteen selected procedures", async () => {
   const { headlines, resolutionContract } = await readJson("dist/runtime/headlines.json");
   const ids = new Set(headlines.map((headline) => headline.id));
   const anchors = [
     "open_weights_drop",
-    "talent_gold_rush",
-    "boardroom_coup",
     "export_controls",
     "weights_on_internet",
-    "election_deepfake_panic",
     "agent_swarm_escapes_scope",
     "agi_blog_post"
   ];
@@ -678,18 +548,13 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
     "employee_free_unicorn",
     "synthetic_celebrity",
     "professional_exam_sweep",
-    "data_center_buys_county",
     "humanoid_factory_gate",
     "reactor_restart_one_model",
     "emergency_power_authority",
     "ai_written_law",
     "benchmark_is_economy",
-    "quantum_advantage_procurement",
-    "synthetic_candidate",
     "autonomous_corporation",
     "recursive_self_improvement",
-    "agi_personhood",
-    "room_temperature_superconductor"
   ];
   const retired = [
     "chatbot_breakout",
@@ -711,41 +576,36 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
   ];
 
   for (const id of [...anchors, ...replacements]) assert.ok(ids.has(id), `${id} is in the selected deck`);
+  retired.push(...["talent_gold_rush","boardroom_coup","data_center_buys_county","quantum_advantage_procurement","synthetic_candidate","election_deepfake_panic","agi_personhood","room_temperature_superconductor"]);
   for (const id of retired) assert.ok(!ids.has(id), `${id} is retired`);
-  assert.equal(anchors.filter((id) => ids.has(id)).length, 8);
-  assert.equal(replacements.filter((id) => ids.has(id)).length, 16);
+  assert.equal(anchors.filter((id) => ids.has(id)).length, 5);
+  assert.equal(replacements.filter((id) => ids.has(id)).length, 11);
 
   for (const field of [
     "revealTiming",
     "defaultDuration",
     "directive",
-    "secretAuction",
-    "governmentVote",
     "secretChoice",
-    "volatility",
     "modifierLimit",
     "timings"
   ]) {
     assert.ok(resolutionContract[field], `Headline resolution defines ${field}`);
   }
-  assert.match(resolutionContract.secretAuction, /highest positive bid/);
+
   assert.match(resolutionContract.directive, /no separate choice procedure/);
-  assert.match(resolutionContract.governmentVote, /counts twice/);
+
   assert.match(resolutionContract.modifierLimit, /never grants an additional Action/);
 
   const byId = Object.fromEntries(headlines.map((headline) => [headline.id, headline]));
   const allowedResolutionTypes = new Set([
     "DIRECTIVE",
     "SECRET CHOICE",
-    "CIVIC PERMISSION AUTHORITY VOTE",
-    "AUCTION",
-    "VOLATILITY"
   ]);
   assert.ok(
     headlines.every((headline) => allowedResolutionTypes.has(headline.resolutionType)),
     "every Headline has exactly one supported resolution type"
   );
-  assert.equal(byId.talent_gold_rush.name, "The Reverse Acquihire Opens");
+
   assert.ok(
     headlines.every((headline) => headline.resolutionType !== "REGIME"),
     "standard Headline instructions use the procedural DIRECTIVE badge"
@@ -753,11 +613,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
   assert.match(byId.emergency_power_authority.text, /Systemic Risk/);
   assert.match(byId.benchmark_is_economy.text, /immediately scores 1 Mandate/);
   assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
-  assert.match(byId.agi_personhood.text, /remainder of the game/);
-  assert.match(byId.agi_personhood.text, /gains 2 Trust/);
-  assert.match(byId.boardroom_coup.text, /cannot be chosen as that leader’s acting piece/);
-  assert.match(byId.room_temperature_superconductor.text, /1–3 Fraud; 4–6 Replicates/);
-  assert.doesNotMatch(byId.room_temperature_superconductor.text, /Link|Fusion|discount/);
+
   assert.ok(
     headlines.every((headline) => !headline.regimeTags.includes("bonus_action")),
     "Agent Swarm remains the only compound Action surface"
@@ -766,10 +622,7 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
     byId.agent_swarm_escapes_scope.name,
     "The Dead Remain on Shift"
   );
-  assert.equal(
-    byId.room_temperature_superconductor.name,
-    "The First Stellar Collector Replicates"
-  );
+
 });
 
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
@@ -830,11 +683,7 @@ test("every player-facing content surface has complete copy", async () => {
       assert.ok(tile[field], `${tile.id} has ${field}`);
     }
   }
-  for (const motion of config.board.realignment.motions) {
-    for (const field of ["name", "ballotText", "flavorText"]) {
-      assert.ok(motion[field], `${motion.id} has ${field}`);
-    }
-  }
+
   for (const [resourceId, resource] of Object.entries(config.resources)) {
     for (const field of ["name", "microcopy"]) {
       assert.ok(resource[field], `${resourceId} has ${field}`);
@@ -940,10 +789,7 @@ test("every player-facing content surface has complete copy", async () => {
   assert.doesNotMatch(simulationCopy.decisions.reorganizeReturn, /ready one Action/i);
   assert.equal("megaClusterAccept" in simulationCopy.decisions, false);
   assert.equal("megaClusterReject" in simulationCopy.decisions, false);
-  assert.equal(
-    objectives.objectives.find((objective) => objective.id === "compute_diplomacy").name,
-    "Shared Cooling Corridor"
-  );
+  assert.ok(objectives.objectives.every(objective => objective.id !== "compute_diplomacy"));
 });
 
 test("the selected lore inventory is complete and preserves era placement", async () => {
@@ -967,12 +813,12 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8")
   ]);
 
-  assert.equal(headlines.length, 24);
+  assert.equal(headlines.length, 16);
   for (const era of [1, 2, 3, 4]) {
     assert.equal(
       headlines.filter((headline) => headline.round === era).length,
-      6,
-      `Era ${era} has six selected Headlines`
+      [5, 4, 3, 4][era - 1],
+      `Era ${era} has its selected Headlines`
     );
     assert.equal(
       mandates.filter((mandate) => mandate.era === era).length,
@@ -1084,9 +930,9 @@ test("new thematic decks and reference surfaces have complete draft inventories"
   const manifest = await readJson("dist/runtime/content-manifest.json");
 
   assert.equal(mandates.mandates.length, 12);
-  assert.equal(objectives.objectives.length, 18);
+  assert.equal(objectives.objectives.length, 17);
   assert.equal(references.eraCards.length, 4);
-  assert.equal(references.playerReferences.length, 4);
+  assert.equal(references.playerReferences.length, 3);
   assert.equal(reserve.specialists.length, 12);
   assert.equal(world.agiDeclarations, undefined);
   assert.equal(factions.factions.filter((faction) => faction.agiDeclaration).length, 6);
@@ -1121,7 +967,7 @@ test("prototype renders canonical names from faction data without a legacy refer
   assert.match(app, /faction\.motto/);
 });
 
-test("browser renders canonical Headline copy and isolates Advanced Play realignment copy", async () => {
+test("browser renders canonical Headline copy without a rules selector", async () => {
   const [app, engine, template, uiCopy] = await Promise.all([
     readFile(new URL("web/app.js", root), "utf8"),
     readFile(new URL("web/src/engine.js", root), "utf8"),
@@ -1137,12 +983,10 @@ test("browser renders canonical Headline copy and isolates Advanced Play realign
     assert.match(app, new RegExp(`headline\\?\\.${field}|headline\\.${field}`));
     assert.match(template, new RegExp(`id="headline-${field === "text" ? "consequence" : field}"`));
   }
-  assert.match(app, /profileFor\(game\?\.state\)\.realignmentEnabled/);
-  assert.match(app, /copy\.realignment\.advancedTitle/);
-  assert.match(app, /copy\.realignment\.prompt/);
-  assert.match(template, /id="play-profile"><\/select>/);
+
+  assert.doesNotMatch(template, /id="play-profile"/);
   assert.doesNotMatch(template, /rc\.5-test|frontier-2038/);
   assert.match(uiCopy.prototype.browser.startingStatus, /deterministic browser opponents/);
-  assert.equal(uiCopy.prototype.realignment.advancedTitle, "Advanced Play: Jurisdictional Realignment");
-  assert.match(uiCopy.prototype.power.reminder, /^In Advanced Play,/);
+  assert.ok(!("realignment" in uiCopy.prototype));
+  assert.doesNotMatch(JSON.stringify(uiCopy), /Advanced Play/);
 });

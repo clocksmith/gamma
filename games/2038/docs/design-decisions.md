@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.21-test`
+**Rules reference:** `0.9.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -9,12 +9,27 @@ rulebook source for the physical game; component records own exact printed effec
 
 The former complexity-proposal document was folded into this ledger after its
 five selected proposals were implemented. Earlier 19-tile, every-Era
-Realignment, Transmission, Tactic, secret-objective, and endgame-scoring
+map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
+
+## One ruleset — 2026-09-05
+
+The user selected removal of the alternate play layer. The game now uses a
+fixed map, local Power, sixteen Headlines, and three player-aid panels.
+Mode selection, extra infrastructure components, market requests, map ballots,
+and the supplemental Headline procedures are removed from authored sources,
+runtime, and generated references. Retired selectors fail before play begins.
+
+This removes the former extension while preserving the ordinary game's costs,
+scoring, faction authority, and four-Era progression. Shared scenario notes
+remain with surviving components; unique themes are carried by their existing
+Era framing. Historical releases retain their original rules and evidence.
+This user-selected change makes no claim about measured balance or human
+teachability.
 
 ## Authoring consolidation — 2026-09-05
 
-Default procedures, map instructions, component states, and supported inventory
+Game procedures, map instructions, component states, and supported inventory
 prose now share one authored rulebook. Named excerpts generate the compact Core
 Rules and detailed references. Component records continue to own exact effects;
 reference layouts arrange those fields without rewriting them. The editing and
@@ -82,11 +97,8 @@ variation to test the central engine.
 
 - **Progress:** movement, Core Actions, Research, Facilities, Customers, and
   Scrutiny.
-- **Capacity:** Generators and early Programs. Advanced Play also introduces
-  Networks and Links.
+- **Capacity:** Generators, Mega-Clusters, and early Programs.
 - **Authority:** persistent agreements and competing public realities.
-  Advanced Play also introduces Government votes and persistent Headline
-  procedures.
 - **Continuity:** Agent Swarm, Fusion, AGI, and the civilizational ending.
 
 Later systems remain visible from setup, but the Current Era panel is the sole unlock
@@ -95,10 +107,10 @@ authority.
 ### Presentation cannot create a new phase
 
 The current player board may group End-of-Era Resolution into four visual
-bands—**Power** for Generate, Trade, and Allocate; **Economy** for Produce and
+bands—**Power** for Generate and Allocate; **Economy** for Produce and
 Partner; **Dossier** for the simultaneous secret filing; and **Consequences**
 for Audit and Mandate. This is a presentation
-hypothesis, not a rules change. Production remains the five numbered boxes,
+hypothesis, not a rules change. Production remains the four numbered boxes,
 followed by the separate Audit and Mandate phases. Human testing must justify
 the visual grouping before it becomes a selected component layout.
 
@@ -127,21 +139,10 @@ Government, and Renewable. Every non-Frontier tile has two Facility spaces.
 The complete ring preserves exact sixfold geometry, removes empty perimeter
 positions, and keeps every action category reachable.
 
-Power delivery is profile-specific. Default Game uses local Power: a Generator
-can power its owner's Facilities on its own hex or an adjacent hex. Advanced
-Play gives each player one Infrastructure Network; adjacency and two Link
-tokens govern pooled Power delivery. There is no Network production bonus or
-separate Transmission graph.
-
-The integrated starting-grid identity exists from setup. Generators and
-Mega-Clusters unlock in Era II. Links and binary Network connectivity are
-Advanced Play additions that also unlock in Era II.
-
-Default Game keeps the randomized jurisdiction fixed for all four Eras.
-Jurisdictional Realignment is preserved as part of the single bundled Advanced
-Play profile: its blind vote rotates a physical ring while every site-bound
-component travels with its district. Players then receive all three Era IV
-actions to respond. There is no postgame rotation.
+Power delivery is local: a Generator can power its owner’s Facilities on its
+own hex or an adjacent hex. The starting grid powers its assigned Facility.
+Generators and Mega-Clusters unlock in Era II. The randomized jurisdiction
+remains fixed for all four Eras.
 
 Fusion deliberately occupies one of the Grid tile’s three Generator slots.
 Filling those slots can deny Fusion; the first controlled test must measure
@@ -149,24 +150,17 @@ whether that creates meaningful spatial competition or an accidental lockout.
 
 ## Selected interaction contract
 
-In Default Game, one immediate resource trade may occur during any player’s
-resolution: a complete named offer is accepted or rejected. Each player may
-make one Production Power purchase request. Advanced Play is one bundled
-profile, but its constituent changes are separately identified in the
-rule-change register below. Counteroffers and third-party claims are distinct:
-a counteroffer can be accepted or rejected by the original offer maker; claims
-let other eligible players compete for that published counteroffer.
-Influence is required for persistent Joint Ventures and Trust manipulation.
-Power is bought immediately during Production from a consenting adjacent
-Network; no Power contract persists.
+One immediate resource trade may occur before a player’s resolution: offer
+exactly one Runway for one Compute, or the reverse, to a named counterparty.
+The counterparty accepts or rejects. Influence is required to propose or
+terminate a persistent Joint Venture and to change Trust or Scrutiny.
 
 Influence is an action, not a component supply. The acting CEO or Team must end
 at Media, Government, or Capital to change Trust or Scrutiny. Political control
-counts CEOs as two presence and Teams and Facilities as one; ties remain
+counts each CEO, Team, and Facility as one presence; ties remain
 uncontrolled. A Joint Venture must be proposed or terminated by an acting piece
 at one of the player’s Facilities. Joint Ventures use numbered neutral host
-pairs. Their identities survive Realignment; operation still depends on printed
-range, Power, and connectivity.
+pairs. Their operation depends on printed range and the latest Production snapshot.
 
 Promises about later turns are not binding. The game supports negotiation
 without requiring a general contract-enforcement system.
@@ -174,18 +168,14 @@ without requiring a general contract-enforcement system.
 ## Rule-change register
 
 The generated [rule-change register](../dist/docs/rule-change-register.md)
-is the single status record for Default/Advanced changes. Its structured
-source records each change’s decision, implementation state, dependencies, and
-module IDs. It does not authorize players to assemble ad hoc profiles: Default
-Game and Advanced Play remain the only supported profiles until a new profile
-is deliberately selected and validated.
+records decisions and implementation state. The game has one ruleset; the
+register does not offer selectable combinations of procedures.
 
 Future complexity reductions are governed by the
 [`complexity-reduction-protocol.md`](complexity-reduction-protocol.md). The
 August 2026 simplification package is current: one location-defined Generator,
 presence-only politics, two programs per Faction, removal of seven stored-token
-families, and a stricter Default/Advanced boundary. These are baseline rules,
-not optional modules, so they do not appear in either profile’s module list.
+families, and one set of local Power and interaction procedures.
 The register records them as accepted current decisions.
 
 ## Selected risk and ending contract
@@ -247,13 +237,12 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.14.18` implements `0.8.0-rc.19-test` under engine coverage
+Executable game `0.15.1` implements `0.9.0-rc.2-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
 six shared Programs, Research Protection, a forty-card Training deck, solo
-Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, binary
-Advanced Networks, and deterministic evidence-backed Dossier resolution.
+Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, local Power, and deterministic evidence-backed Dossier resolution.
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract. The published root now presents the
 playable game as its primary action. The public deployment now contains only
@@ -416,16 +405,15 @@ selection; those rules are not part of the current game.
 
 The `0.10.2` / `0.7.0-rc.3-test` alignment patch changes no mechanic or
 number. It makes the selected integrated physical state authoritative in the
-machine-readable player supply, distinguishes Default local Power from
-Advanced Networks in runtime copy, and synchronizes component inventories,
-profile language, and the explicitly unmeasured complexity forecast. The
+machine-readable player supply and synchronizes component inventories,
+Power language, and the explicitly unmeasured complexity forecast. The
 renamed supply and round fields are contract corrections, not new pieces or
 new procedures.
 
 The `0.10.1` / `0.7.0-rc.2-test` precision patch changes no mechanic or
 number. It prints final Generator prices on their only legal Energy districts,
 removes the obsolete Energy discounts, describes Faction programs and Power
-eligibility without assuming the Advanced Network profile, and uses
+local Power eligibility, and uses
 Escalation availability on one faction-board track everywhere. It also removes
 duplicate loose-component descriptions created by the selected double-sided
 and track-based physical forms.
@@ -450,12 +438,9 @@ requires. Because legal decision packets and deterministic sampling change,
 earlier simulation remains historical evidence rather than balance authority
 for this executable.
 
-The `0.9.0` / `0.6.0-rc.1-test` advancement creates a new Default Game:
-one-offer immediate trades, one Production Power request per player, and no
-Era III Realignment. Advanced Play restores all three former procedures as
-one profile. This is a mechanical revision requiring new three-, four-, and
-five-player evidence; `0.8.35` and earlier reports remain historical
-full-rules evidence and do not qualify the new Default Game.
+The `0.9.0` / `0.6.0-rc.1-test` advancement changed the interaction and map
+procedures. Those historical rules and reports do not qualify the current
+ruleset; immutable releases retain the exact earlier contracts.
 
 The `0.8.34` / `0.5.0-rc.34-test` advancement changes no legal action, cost,
 resource value, Mandate award, faction ability, setup, or end condition. It
@@ -475,9 +460,8 @@ actually reduces a completed Facility’s cost; Jensen’s New Architecture
 self-Compute follows accepted licenses with no automatic base; and Customers
 four and five score one Mandate each while retaining full income. Every other
 numerical rule is frozen pending human evidence.
-That Grid-Ready rule was removed in `0.7.0-rc.6-test`. Realignment is retained
-only in Advanced Play pending comparative human
-evidence.
+That Grid-Ready rule was removed in `0.7.0-rc.6-test`. Later revisions also
+removed the alternate map and market procedures.
 
 `0.5.0-rc.21-test` changes no playable rule from rc.20. Executable `0.8.20`
 adds complete realized-value telemetry for Emergency Pause, Audited Deployment,
@@ -557,8 +541,7 @@ Measure before changing numbers:
 - Can unfamiliar four-player groups complete the game from the rulebook?
 - Does the nineteen-tile map create useful spatial choice without eliminating
   scarcity or creating compulsory routes?
-- Does Default Game preserve enough adaptation without Realignment, and does
-  bundled Advanced Play justify its additional interruption?
+- Does the fixed jurisdiction preserve satisfying spatial adaptation across all four Eras?
 - Are non-declaration strategies competitive?
 - Does emergency generation dominate after its actual Audit cost is attributed?
 - Does Loopfold AI lead after each Production?
@@ -589,8 +572,7 @@ those remain physical-test questions.
 The current rules candidate closes the following previously implicit contracts:
 
 - The Card and Board Reference prints every Mandate minimum, every Faction ability’s
-  printed unlock Era and timing, and every Headline’s Default/Advanced profile
-  requirement. The Era IV card introduces only abilities printed as Era IV; the
+  printed unlock Era and timing, and every Headline’s procedure. The Era IV card introduces only abilities printed as Era IV; the
   Faction board remains authoritative for earlier abilities.
 - Production Power cubes remain on powered Facilities and satisfied
   Mega-Cluster demand as the latest Production snapshot until the next
@@ -613,8 +595,8 @@ The current rules candidate closes the following previously implicit contracts:
   Strategic Partnership forms. Influence Joint Venture proposals must use the
   acting piece’s destination Facility.
 
-<!-- profile-register:start -->
-This generated register is the current decision record for Default/Advanced
-scope. It records a change’s decision state separately from its implementation.
-Only the module IDs in `game-config.json` activate rules in a profile.
-<!-- profile-register:end -->
+<!-- decision-register:start -->
+This generated register records selected design decisions and their
+implementation state. The canonical procedures are in the Core Rules; exact
+component effects remain with their component records.
+<!-- decision-register:end -->

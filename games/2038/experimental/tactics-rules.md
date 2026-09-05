@@ -5,8 +5,7 @@
 **Baseline status:** Deferred; do not use for baseline play or balance evidence
 
 **Executable opt-in:** set the selected-rules variant field
-`tacticsEnabled: true`. It is `false` by default and is never enabled by either
-supported play profile.
+`tacticsEnabled: true`. It is `false` by default and is not part of the game.
 
 **Rules companion:** [How to Play and Rules Reference](./core-rules.md)
 

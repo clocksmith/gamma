@@ -1,5 +1,3 @@
-import { resolvePlayProfile } from "../../web/src/engine.js";
-
 const SINGLE_GENERATOR_POLICIES = Object.freeze({
   delivery: "own-or-adjacent-facilities",
   slotContention: "initiative-order-no-reservations"
@@ -48,9 +46,6 @@ function validateSingleGeneratorRule(config, rule) {
       throw new RangeError(`single-generator-default ${field} must be ${expected}.`);
     }
   }
-  if (rule.powerSalesPerSupplier !== 1) {
-    throw new RangeError("single-generator-default permits one Power sale per supplier.");
-  }
   if (rule.megaClusterDemand !== 2) {
     throw new RangeError("single-generator-default keeps Mega-Cluster demand at two Power.");
   }
@@ -60,13 +55,8 @@ function validateSingleGeneratorRule(config, rule) {
 export function canonicalRulesVariant(config) {
   const lateCapabilityThreshold =
     config.scoring.capabilityThresholds.find((entry) => entry.value >= 9);
-  const profile = resolvePlayProfile(config);
   return {
-    playProfileId: profile.id,
-    immediateTradeCounteroffers: profile.immediateTradeCounteroffers,
-    immediateTradeThirdPartyClaims: profile.immediateTradeThirdPartyClaims,
-    powerPurchaseRequests: profile.powerPurchaseRequests,
-    realignmentEnabled: profile.realignmentEnabled,
+    ...config.playRules,
     singleGeneratorRule: structuredClone(config.singleGeneratorRule),
     auditMultiplier: 1,
     fundConservative: 2,
@@ -121,16 +111,16 @@ export const legacyPrePromotionRulesOverlay = Object.freeze({
 });
 
 export function effectiveRulesVariant(config, overlay = {}) {
-  const requestedProfileId = overlay.playProfileId ??
-    config.playProfiles?.defaultGame?.id ?? "default-game";
-  const profile = resolvePlayProfile(config, requestedProfileId);
-  if (!profile) throw new RangeError(`Unknown play profile: ${requestedProfileId}.`);
+  const canonical = canonicalRulesVariant(config);
+  for (const key of Object.keys(overlay)) {
+    if (!Object.hasOwn(canonical, key)) {
+      throw new RangeError(`Unsupported rules option: ${key}.`);
+    }
+  }
   const effective = {
-    ...canonicalRulesVariant(config),
-    ...profile,
+    ...canonical,
     ...overlay
   };
-  effective.playProfileId = requestedProfileId;
   if (
     Object.hasOwn(overlay, "customerMandate") &&
     !Object.hasOwn(overlay, "customerMandateSchedule")

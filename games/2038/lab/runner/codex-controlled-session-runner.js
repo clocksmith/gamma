@@ -325,7 +325,7 @@ export function finalReadinessPrompt({
     `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
     `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
     "The following operational session facts are authoritative and resolve any conflicting inference in your follow-up record:",
-    `- This is a ${playerCount}-player Default Game. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card and Board Reference do not apply to you.`,
+    `- This is a ${playerCount}-player Mandate 2038. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card and Board Reference do not apply to you.`,
     `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
     "- No Facility is placed during setup. All four begin in supply; the first Facility has the integrated starting-grid identifier and receives that Power after it is legally constructed.",
     "- Core Rules are the baseline authority. A Headline changes only its named rule while that specific Headline is currently revealed and active; unrelated Headline variants are not simultaneous alternatives.",
@@ -597,7 +597,7 @@ export async function runCodexControlledSession({
           "Do not use tools or inspect the filesystem; the complete source chunk is embedded below.",
           participantContext(participant),
           `Your earlier unboxing notes:\n${JSON.stringify(unboxing[index].output, null, 2)}`,
-          `This part inherits the section heading ${document.activeHeading}. Record the rules this source chunk contributes, explicit cross-references you still need, and concrete questions. Do not use outside knowledge or Advanced Play procedures.`,
+          `This part inherits the section heading ${document.activeHeading}. Record the rules this source chunk contributes, explicit cross-references you still need, and concrete questions. Do not use outside rules knowledge procedures.`,
           fencedSources([document])
         ].join("\n\n")
       }),
@@ -617,7 +617,7 @@ export async function runCodexControlledSession({
       responseSchema: rulesResponseSchema,
       signal,
       prompt: [
-        "You are the same first-time participant after reading all four frozen Default Game documents.",
+        "You are the same first-time participant after reading all four frozen Mandate 2038 documents.",
         "Do not use tools or outside knowledge. Synthesize only the recorded document-reading notes below.",
         participantContext(participant),
         `Document-reading records:\n${JSON.stringify(Object.fromEntries(

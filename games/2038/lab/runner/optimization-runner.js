@@ -13,8 +13,6 @@ const RULE_BOUNDS = {
   deployComputeCost: [0, 3, 1],
   startingGridPower: [1, 3, 1],
   customerMandate: [1, 4, 1],
-  agiCapability: [6, 12, 1],
-  agiComputeCost: [1, 5, 1],
   customerCapabilityOffset: [-2, 2, 1],
   startingTeamsDeployed: [0, 3, 1]
 };
@@ -28,8 +26,6 @@ const DEFAULT_RULE_VARIANT = {
   deployComputeCost: 1,
   startingGridPower: 1,
   customerMandate: 2,
-  agiCapability: 6,
-  agiComputeCost: 3,
   customerCapabilityOffset: 0,
   startingTeamsDeployed: 1
 };

@@ -11,7 +11,7 @@ machine-enforced game data.
   the map and public information.
 - [Supported box inventory](../dist/docs/component-inventory.md) is generated
   from the `inventory` section of [rules.md](../rules.md). It separates Default
-  requirements, Advanced additions, and deferred content. Edit the rulebook or
+  requirements and deferred content. Edit the rulebook or
   its referenced component records, then build; there is no second authored inventory here.
 - `governance-ledger.md` specifies the single writable board panel for the
   current Mandate, Setup Collective Trust, and final public resolution. The

@@ -27,16 +27,6 @@
     "id": "initiative_clockwise",
     "text": "When lowest, highest, or most is tied, the tied player nearest Initiative clockwise is the target unless the effect explicitly applies to everyone."
   },
-  "playRuleDefaults": {
-    "immediateTradeCounteroffers": false,
-    "immediateTradeThirdPartyClaims": false,
-    "powerPurchaseRequests": 0,
-    "realignmentEnabled": false,
-    "networkInfrastructureEnabled": false,
-    "headlinePersistentEffectsEnabled": false,
-    "headlinePublicProceduresEnabled": false,
-    "headlineVolatilityEnabled": false
-  },
   "singleGeneratorRule": {
     "id": "single-generator-default",
     "ordinaryGeneratorLimit": 1,
@@ -51,68 +41,8 @@
       }
     },
     "localDelivery": "own-or-adjacent-facilities",
-    "powerSalesPerSupplier": 1,
     "megaClusterDemand": 2,
     "slotContention": "initiative-order-no-reservations"
-  },
-  "playRuleModules": {
-    "advanced-power-market": {
-      "id": "advanced-power-market",
-      "settings": {
-        "powerPurchaseRequests": 1
-      }
-    },
-    "jurisdictional-realignment": {
-      "id": "jurisdictional-realignment",
-      "settings": {
-        "realignmentEnabled": true
-      }
-    },
-    "network-infrastructure": {
-      "id": "network-infrastructure",
-      "settings": {
-        "networkInfrastructureEnabled": true
-      }
-    },
-    "headline-persistence": {
-      "id": "headline-persistence",
-      "settings": {
-        "headlinePersistentEffectsEnabled": true
-      }
-    },
-    "headline-public-procedures": {
-      "id": "headline-public-procedures",
-      "settings": {
-        "headlinePublicProceduresEnabled": true
-      }
-    },
-    "headline-volatility": {
-      "id": "headline-volatility",
-      "settings": {
-        "headlineVolatilityEnabled": true
-      }
-    }
-  },
-  "playProfiles": {
-    "defaultGame": {
-      "id": "default-game",
-      "moduleIds": [],
-      "name": "Default Game",
-      "summary": "${content.ruleChangeRegister.profileSummaries.defaultGame}"
-    },
-    "advancedPlay": {
-      "id": "advanced-play",
-      "moduleIds": [
-        "advanced-power-market",
-        "jurisdictional-realignment",
-        "network-infrastructure",
-        "headline-persistence",
-        "headline-public-procedures",
-        "headline-volatility"
-      ],
-      "name": "Advanced Play",
-      "summary": "${content.ruleChangeRegister.profileSummaries.advancedPlay}"
-    }
   },
   "factionRules": {
     "imperial": {
@@ -169,8 +99,7 @@
       "newThisEra": [
         "Generators",
         "Mega-Clusters",
-        "${terms.systems.escalations}",
-        "Advanced Play: Links and binary connected Networks"
+        "${terms.systems.escalations}"
       ]
     },
     {
@@ -187,9 +116,7 @@
         "narrative_capture"
       ],
       "newThisEra": [
-        "Joint Ventures",
-        "Advanced Play: Civic Permission Authority votes",
-        "Advanced Play: persistent Headline effects"
+        "Joint Ventures"
       ]
     },
     {
@@ -250,19 +177,18 @@
     {
       "id": "build",
       "name": "${terms.actions.build}",
-      "summary": "Construct a Facility or Generator. Advanced Play also permits Links.",
+      "summary": "Construct a Facility or Generator.",
       "turnContract": {
         "cost": "Printed by mode",
         "modes": [
           "Facility",
-          "Generator",
-          "Advanced Play: Link"
+          "Generator"
         ],
         "risk": "Industrial modes unlock in ${terms.eras.scale}"
       },
       "initiativeName": "Make the System Physical",
       "slogan": "A planned future requires sites, power, permits, and maintenance.",
-      "flavorText": "Turn a declared future into facilities, generators, links, and regional dependencies."
+      "flavorText": "Turn a declared future into facilities, generators, and regional dependencies."
     },
     {
       "id": "organize",
@@ -357,14 +283,12 @@
     "teams": 3,
     "facilities": 4,
     "generators": 1,
-    "linkTokens": 2,
     "influenceCubes": 0,
     "scrutinyCubes": 10,
     "factionBoardCaptiveSliders": 6,
     "coreActionCards": 6,
     "escalationCards": 0,
     "programMarkers": 2,
-    "realignmentBallotCards": 1,
     "agiDossierCards": 4,
     "startingGridIdentifiers": 1,
     "facilityConstructionOrder": [
@@ -400,55 +324,9 @@
       "maximumDistance": 4,
       "placementRule": "Shuffle each ring pool independently. ${terms.locations.frontier} remains fixed at center."
     },
-    "realignment": {
-      "ballot": {
-        "cardsPerPlayer": 1,
-        "orientationChoices": [
-          "consolidate_core",
-          "expand_periphery",
-          "counter_cycle",
-          "pass"
-        ],
-        "passChoice": "pass"
-      },
-      "motions": [
-        {
-          "id": "consolidate_core",
-          "innerSteps": 1,
-          "outerSteps": 0,
-          "name": "Consolidate the Core",
-          "ballotText": "Rotate the six inner-ring districts one position clockwise.",
-          "flavorText": "The center has been reorganized for clearer accountability."
-        },
-        {
-          "id": "expand_periphery",
-          "innerSteps": 0,
-          "outerSteps": 1,
-          "name": "Expand the Periphery",
-          "ballotText": "Rotate the twelve outer-ring districts one position clockwise.",
-          "flavorText": "The edge has been moved closer to opportunity without changing its distance."
-        },
-        {
-          "id": "counter_cycle",
-          "innerSteps": 1,
-          "outerSteps": -1,
-          "name": "Authorize Counter-Cycle",
-          "ballotText": "Rotate the inner ring one position clockwise and the outer ring one position counterclockwise.",
-          "flavorText": "Competing jurisdictions have synchronized by moving in opposite directions."
-        }
-      ],
-      "name": "Advanced Play: ${terms.systems.realignment}",
-      "timing": "Advanced Play only: exactly once, after ${terms.playerTracks.mandate} scoring in Era III.",
-      "vote": "Every player secretly rotates one four-way ballot so Consolidate Core, Expand Periphery, Counter-Cycle, or Pass points toward the board center, places it face down, then reveals simultaneously. Pass names no motion. The motion with the most ballots resolves.",
-      "tieBreak": "Among tied leading motions, scan players clockwise from Initiative; the first ballot naming a tied motion selects it.",
-      "contentsRule": "Location tiles and everything on them move together. ${terms.locations.frontier} never moves.",
-      "networkRule": "After movement, recalculate Network reach from the starting-grid Facility, Generators, Link-marked Facilities, and visible adjacency. No pieces are lifted or re-laid.",
-      "agreementRule": "Joint Ventures remain owned but produce only while their fixed host Facilities remain in range. Advanced Power purchases never persist through Realignment."
-    },
     "facilitySpacesPerHex": 2,
     "startingGridConnection": {
       "capacity": 1,
-      "requiresLink": false,
       "target": "first_facility",
       "restrictions": "Cannot supply ${terms.technology.megaCluster} demand and cannot be sold."
     },
@@ -732,7 +610,7 @@
       "physicalSurface": "grid_reactor_tile",
       "name": "${terms.technology.emergencyInfrastructure}",
       "tagline": "Exceptional capacity under continuous renewal.",
-      "rulesText": "Era II. Construct only on ${terms.locations.grid} for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. It operates automatically during Production when it has a legal recipient and adds 1 ${terms.playerTracks.scrutiny} each Production it operates. Its installed capacity may be sold. One ordinary Generator per player.",
+      "rulesText": "Era II. Construct only on ${terms.locations.grid} for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. It operates automatically during Production when it has a legal recipient and adds 1 ${terms.playerTracks.scrutiny} each Production it operates. One ordinary Generator per player.",
       "publicClaim": "Four immediate ${terms.infrastructure.power} under a continuously renewed emergency."
     },
     {
@@ -862,5 +740,9 @@
       "assuredContinuity": "${content.worldCopy.byId.assured_continuity.name}"
     }
   },
-  "title": "${content.worldCopy.title}"
+  "title": "${content.worldCopy.title}",
+  "playRules": {
+    "immediateTradeCounteroffers": false,
+    "immediateTradeThirdPartyClaims": false
+  }
 }

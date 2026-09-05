@@ -1,12 +1,15 @@
 # Editing Mandate 2038
 
+For human review of lore, voice, and rule clarity, begin with the
+[creative writer's review guide](../components/README.md). It gives the reading
+order and the questions to bring to each source.
+
 Start here to find a source. The printed play kit has several documents, but
 those documents are generated views of the sources below.
 
 | Change | Author here |
 | --- | --- |
-| Default procedures, map setup/control, component states, inventory prose | [rules.md](../rules.md) |
-| Advanced procedures | [advanced.md](../advanced.md) |
+| Game procedures, map setup/control, component states, inventory prose | [rules.md](../rules.md) |
 | A card, faction, action, ending, or district's exact effect | [components/](../components/) |
 | Board geometry and component supply records | [components/game.json](../components/game.json) |
 | Shared terminology and numeric variables | [data/variables.json](data/variables.json) |
@@ -38,8 +41,8 @@ standalone document; it changes no prose.
   Duration and timing labels are selected from shared labels using the record's value.
 - The `player-world` excerpt becomes World and Institutions. Editorial guidance
   and backlog stay outside that companion.
-- Rule Change Register combines the design ledger's `profile-register` introduction
-  with existing profile records.
+- Rule Change Register combines the design ledger's `decision-register` introduction
+  with the component change records.
 
 `content/templates/` owns headings, field labels, and arrangement. It has no
 independently authored rule paragraphs. The compiler and boundary check reject
@@ -50,7 +53,7 @@ whether prose in its owning source describes the intended game correctly.
 ## Build paths
 
 ```text
-rules.md / advanced.md / world.md / components/ / ui.json / content/data/
+rules.md / world.md / components/ / ui.json / content/data/
   + content/graph.json + reference layouts
   -> tasks/content/compile.mjs
   -> dist/runtime/ (JSON consumed by lab/ and web/)

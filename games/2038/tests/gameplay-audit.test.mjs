@@ -186,7 +186,7 @@ test("Recruit and Redistribute retain exact sequential movement choices", async 
   assert.equal(movement, 2);
 });
 
-test("effective costs are applied before legality for Cloud, Foundry, and deepfake Deploy", async () => {
+test("effective costs are applied before legality for Cloud and Foundry", async () => {
   const match = await makeMatch({ seed: "effective-cost-legality" });
   const player = match.players[0];
   player.compute = 0;
@@ -205,20 +205,6 @@ test("effective costs are applied before legality for Cloud, Foundry, and deepfa
   assert.ok(foundryBuild.length > 0);
   assert.ok(foundryBuild.every((decision) => decision.parameters.actualRunwayCost === 1));
 
-  player.capability = 12;
-  player.compute = 1;
-  match.regime.round = { deepfake: "regulate" };
-  assert.equal(match.legalResolutions(0, "deploy").some(
-    (decision) =>
-      decision.parameters.destinationCategory === "media" &&
-      decision.parameters.computeCost === 2
-  ), false);
-  player.compute = 2;
-  assert.equal(match.legalResolutions(0, "deploy").some(
-    (decision) =>
-      decision.parameters.destinationCategory === "media" &&
-      decision.parameters.computeCost === 2
-  ), true);
 });
 
 test("Production Compute includes Joint Ventures but excludes immediate Facility effects", async () => {
@@ -278,10 +264,9 @@ test("Production Compute includes Joint Ventures but excludes immediate Facility
   assert.equal(leftPlayer.roundMetrics.computeProduced, immediateBefore);
 });
 
-test("Advanced supplemental Power is chosen before Headline Power and allocation", async () => {
+test("Headline supplemental Power is chosen before local allocation", async () => {
   const match = await makeMatch({
-    seed: "supplemental-power-timing",
-    rulesVariant: { playProfileId: "advanced-play" }
+    seed: "supplemental-power-timing"
   });
   match.round = 3;
   await match.beginRound([]);
@@ -314,12 +299,6 @@ test("Advanced supplemental Power is chosen before Headline Power and allocation
   const stages = [];
   match.choose = async (_policies, seat, stage, decisions) => {
     stages.push(stage);
-    if (stage === "power_purchase_0" && seat === buyer.seat) {
-      return decisions.find((decision) => decision.parameters?.supplierSeat === supplier.seat);
-    }
-    if (stage.startsWith("power_sale_") && seat === supplier.seat) {
-      return decisions.find((decision) => decision.decisionId.startsWith("power_sale_accept_"));
-    }
     if (stage === "production_emergency_power") {
       return decisions.find((decision) => decision.parameters.power === 0);
     }
@@ -332,8 +311,7 @@ test("Advanced supplemental Power is chosen before Headline Power and allocation
     return decisions[0];
   };
   await match.produceAll([]);
-  assert.ok(stages.indexOf("power_purchase_0") >= 0);
-  assert.ok(stages.indexOf("production_emergency_power") > stages.indexOf("power_purchase_0"));
+  assert.ok(stages.every(stage => !/^power_(purchase|sale)/.test(stage)));
   assert.ok(stages.indexOf("production_emergency_power") < stages.indexOf("power_allocation"));
 });
 
@@ -405,28 +383,6 @@ test("Allocation Window creates real unsold Compute and expires it at cycle end"
   await match.postCycle([], match.players.map(() => "fund"));
   assert.equal(foundry.compute, computeBefore);
   assert.equal(foundry.temporaryCompute, 0);
-});
-
-test("deepfake policy and its Customer baseline persist for the Era", async () => {
-  const match = await makeMatch({ seed: "deepfake-era-baseline" });
-  await match.beginRound([]);
-  const player = match.players[0];
-  player.customers = 1;
-  player.runway = 0;
-  match.regime.round.deepfake = "do_nothing";
-  match.regime.round.deepfakeIncome = true;
-  match.regime.round.deepfakeCustomersAtVote = match.players.map(
-    (candidate) => candidate.customers
-  );
-  match.regime.cycle = { id: "later_cycle" };
-  player.customers = 2;
-  match.choose = async (_policies, _seat, stage, decisions) =>
-    stage === "power_allocation"
-      ? decisions.find((decision) => decision.parameters.demand === 0) || decisions[0]
-      : decisions[0];
-  await match.produceAll([]);
-  assert.equal(match.regime.round.deepfake, "do_nothing");
-  assert.equal(player.runway, 3);
 });
 
 test("Mega-Clusters require two adjacent Facilities owned by the acting player", async () => {
@@ -817,35 +773,4 @@ test("Tactic action context and exact target choices are retained", async () => 
   assert.ok(leakChoices.some((decision) => decision.parameters.facilityId === "leak-cloud"));
   assert.ok(leakChoices.some((decision) => decision.parameters.facilityId === "leak-capital"));
   assert.equal(leakPlayer.runway, 2);
-});
-
-test("Open Letter is public evidence before ordinary Government votes", async () => {
-  const match = await makeMatch({
-    seed: "open-letter-precommit",
-    rulesVariant: { tacticsEnabled: true }
-  });
-  match.players[0].tactics = ["open_letter"];
-  match.players[1].tactics = [];
-  match.players[2].tactics = [];
-  const capturedVotes = [];
-  match.choose = async (_policies, seat, stage, decisions) => {
-    if (stage.endsWith("open_letter_precommit")) {
-      return decisions.find((decision) => decision.parameters.outcomeId === "accept");
-    }
-    if (stage.endsWith("_vote")) capturedVotes.push(...decisions);
-    return decisions[0];
-  };
-  await match.governmentVote([], "fixture_vote", [
-    { id: "accept", label: "Accept" },
-    { id: "reject", label: "Reject" }
-  ]);
-  assert.ok(match.regime.cycle.publicVoteInterventions.some(
-    (entry) => entry.seat === 0 && entry.outcomeId === "accept"
-  ));
-  assert.ok(match.publicHistory.some((entry) => entry.type === "open_letter_committed"));
-  assert.ok(capturedVotes.some(
-    (decision) =>
-      decision.parameters.outcomeId === "accept" &&
-      decision.consequences.publicVotes === 1
-  ));
 });

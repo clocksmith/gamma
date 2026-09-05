@@ -190,7 +190,6 @@ function buildHeadlines(data) {
         subtitle: h.strapline,
         badgeList: [
           roundBadge(h.round),
-          ...(h.requiredRuleModules?.length ? ["Advanced Play"] : [])
         ],
         bodyHtml: `${textRows([
           { text: h.newswire, kind: "flavor" },
@@ -201,7 +200,7 @@ function buildHeadlines(data) {
       })
     )
     .join("");
-  return section("headlines", "Headlines", data.headlines.length, cards, "Three revealed per Era. Default Game uses cards without the Advanced Play badge; Advanced Play uses all six per Era.");
+  return section("headlines", "Headlines", data.headlines.length, cards, "Sixteen Headlines, in Era packets of five, four, three, and four. Reveal three per Era.");
 }
 
 function buildMandates(data) {

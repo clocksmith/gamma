@@ -5,7 +5,6 @@ import {
   getBridgeToken
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
-import { resolvePlayProfile } from "./src/engine.js";
 import { pointyTopAxialPosition } from "./src/hex-layout.js";
 
 const [factions, config, profilesDocument, uiCopy] = await Promise.all([
@@ -24,19 +23,16 @@ const guideErasSeen = new Set();
 
 const $ = (id) => document.getElementById(id);
 const elements = Object.fromEntries([
-  "advanced-controls", "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
+  "provider-controls", "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
   "connect-bridge", "decision-context", "decision-count", "decision-title",
   "decisions", "export", "faction", "game-status", "headline-consequence",
   "headline-label", "headline-name", "headline-newswire", "headline-quote",
   "headline-strapline", "log", "max-llm-decisions", "model", "opponent-config",
-  "phase", "play-profile", "player-count", "players", "round-title", "seed", "setup", "start-game"
+  "phase", "player-count", "players", "round-title", "seed", "setup", "start-game"
 ].map((id) => [id, $(id)]));
 
 for (const faction of factions.factions) {
   elements.faction.add(new Option(`${faction.name} — ${faction.motto}`, faction.id));
-}
-for (const profile of Object.values(config.playProfiles)) {
-  elements["play-profile"].add(new Option(profile.name, profile.id));
 }
 
 let game = null;
@@ -62,11 +58,6 @@ function formatCopy(template, values = {}) {
 
 function factionColor(player) {
   return factionColors.get(player.factionId) || "#000000";
-}
-
-function profileFor(state) {
-  const id = state?.playProfileId || config.playProfiles.defaultGame.id;
-  return resolvePlayProfile(config, id);
 }
 
 function backendOptions() {
@@ -145,7 +136,7 @@ function updateStartAvailability() {
   const needsLlm = llmRequested();
   const needsRemoteBridge = needsLlm && bridgeRequired;
   elements["bridge-panel"].hidden = !needsRemoteBridge;
-  if (needsRemoteBridge) elements["advanced-controls"].open = true;
+  if (needsRemoteBridge) elements["provider-controls"].open = true;
   elements["start-game"].disabled = Boolean(
     needsLlm && (!elements["allow-llm"].checked || !bridgeConnected)
   );
@@ -315,9 +306,7 @@ function renderPlayers(state) {
 
 function decisionStage(packet, state) {
   const stage = packet?.requestId?.split(":").at(-2) || copy.browser.decision;
-  if (stage === "realignment_ballot" && profileFor(state).realignmentEnabled) {
-    return copy.realignment.advancedTitle;
-  }
+
   return stage.replaceAll("_", " ");
 }
 
@@ -696,10 +685,7 @@ function renderDecisions() {
   }
   elements["decision-title"].textContent = decisionStage(packet, game?.state);
   elements["decision-context"].textContent =
-    (packet.requestId.includes(":realignment_ballot:") &&
-      profileFor(game?.state).realignmentEnabled
-      ? copy.realignment.prompt
-      : formatCopy(copy.browser.decisionContext, packet));
+    (formatCopy(copy.browser.decisionContext, packet));
   elements["decision-count"].textContent =
     formatCopy(copy.browser.legalChoices, {
       count: packet.legalDecisions.length,
@@ -788,7 +774,6 @@ elements["start-game"].addEventListener("click", async () => {
       factionId: elements.faction.value,
       playerCount: Number(elements["player-count"].value),
       seed: elements.seed.value,
-      rulesVariant: { playProfileId: elements["play-profile"].value },
       ...opponents
     };
     if (!opponents.opponentBackends.some((backend) => llmBackends.has(backend))) {

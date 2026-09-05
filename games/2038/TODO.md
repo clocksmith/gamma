@@ -264,7 +264,7 @@ release identities.
 
 ## Deferred optional Tactic module
 
-These findings do not block Default Game or Advanced Play because
+These findings do not block the game because
 `components/game.json` disables Tactics and
 `experimental/tactics-rules.md:3-8` excludes them from baseline play and balance
 evidence. They do block any future claim that the preserved optional module is
