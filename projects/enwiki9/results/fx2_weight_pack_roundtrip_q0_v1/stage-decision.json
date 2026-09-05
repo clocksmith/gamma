@@ -1,0 +1,5252 @@
+{
+  "candidate_id": "fx2_weight_pack_roundtrip_q0_v1",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "probe.cpp",
+        "-o",
+        "probe"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 0.7030586951877922,
+      "missing_diagnostics": [],
+      "phase": "compile-probe",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/compile-probe.stdout",
+      "system_cpu_seconds": 0.04765,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.5959829999999999
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "test_weights_compressed.cpp",
+        "weights_io.cpp",
+        "weights_io_compressed.cpp",
+        "-o",
+        "reference",
+        "-lm"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 0.9034125218167901,
+      "missing_diagnostics": [],
+      "phase": "compile-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/compile-reference.stdout",
+      "system_cpu_seconds": 0.08737600000000001,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.7819120000000002
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/usr/bin/python3",
+        "fixtures.py",
+        "--output-dir",
+        "fixtures"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10289908200502396,
+      "missing_diagnostics": [],
+      "phase": "generate-fixtures",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/generate-fixtures.stdout",
+      "system_cpu_seconds": 0.008578999999999976,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.03769599999999995
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1030003831256181,
+      "missing_diagnostics": [],
+      "phase": "zero_tensors-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/zero_tensors-reference.stdout",
+      "system_cpu_seconds": 0.007397000000000015,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0026839999999999087
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/zero_tensors.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10291103506460786,
+      "missing_diagnostics": [],
+      "phase": "zero_tensors-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/zero_tensors-parent.stdout",
+      "system_cpu_seconds": 0.04422899999999999,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.003991000000000078
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/zero_tensors.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10434713889844716,
+      "missing_diagnostics": [],
+      "phase": "zero_tensors-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/zero_tensors-pack.stdout",
+      "system_cpu_seconds": 0.042272000000000004,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006955999999999962
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/zero_tensors.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1028177379630506,
+      "missing_diagnostics": [],
+      "phase": "zero_tensors-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/zero_tensors-unpack.stdout",
+      "system_cpu_seconds": 0.043523000000000006,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005889000000000033
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/zero_tensors.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/zero_tensors.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10284635284915566,
+      "missing_diagnostics": [],
+      "phase": "zero_tensors-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/zero_tensors-repack.stdout",
+      "system_cpu_seconds": 0.04124699999999998,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006985000000000019
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1029070969671011,
+      "missing_diagnostics": [],
+      "phase": "all_tags_and_rows-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/all_tags_and_rows-reference.stdout",
+      "system_cpu_seconds": 0.007477000000000011,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.002757999999999816
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/all_tags_and_rows.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10293541010469198,
+      "missing_diagnostics": [],
+      "phase": "all_tags_and_rows-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/all_tags_and_rows-parent.stdout",
+      "system_cpu_seconds": 0.039625999999999995,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.010911000000000115
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/all_tags_and_rows.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10297316196374595,
+      "missing_diagnostics": [],
+      "phase": "all_tags_and_rows-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/all_tags_and_rows-pack.stdout",
+      "system_cpu_seconds": 0.04405999999999999,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0050840000000000884
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/all_tags_and_rows.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10264948196709156,
+      "missing_diagnostics": [],
+      "phase": "all_tags_and_rows-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/all_tags_and_rows-unpack.stdout",
+      "system_cpu_seconds": 0.04685600000000001,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0019919999999999938
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/all_tags_and_rows.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10272634611465037,
+      "missing_diagnostics": [],
+      "phase": "all_tags_and_rows-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/all_tags_and_rows-repack.stdout",
+      "system_cpu_seconds": 0.03941899999999998,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.00824199999999986
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1029033800587058,
+      "missing_diagnostics": [],
+      "phase": "row_width_one-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/row_width_one-reference.stdout",
+      "system_cpu_seconds": 0.007757000000000069,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0021329999999999405
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/row_width_one.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10295866383239627,
+      "missing_diagnostics": [],
+      "phase": "row_width_one-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/row_width_one-parent.stdout",
+      "system_cpu_seconds": 0.047970999999999986,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.001980000000000093
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/row_width_one.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10308307898230851,
+      "missing_diagnostics": [],
+      "phase": "row_width_one-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/row_width_one-pack.stdout",
+      "system_cpu_seconds": 0.03805700000000001,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.010267999999999944
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/row_width_one.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10304646985605359,
+      "missing_diagnostics": [],
+      "phase": "row_width_one-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/row_width_one-unpack.stdout",
+      "system_cpu_seconds": 0.04386699999999999,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005842000000000125
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/row_width_one.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/row_width_one.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1043006528634578,
+      "missing_diagnostics": [],
+      "phase": "row_width_one-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/row_width_one-repack.stdout",
+      "system_cpu_seconds": 0.04441099999999998,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006008000000000013
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10310196410864592,
+      "missing_diagnostics": [],
+      "phase": "scalar_f32-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/scalar_f32-reference.stdout",
+      "system_cpu_seconds": 0.009361999999999981,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0009809999999998986
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/scalar_f32.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1030707850586623,
+      "missing_diagnostics": [],
+      "phase": "scalar_f32-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/scalar_f32-parent.stdout",
+      "system_cpu_seconds": 0.04178800000000005,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.008318999999999965
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/scalar_f32.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10300781694240868,
+      "missing_diagnostics": [],
+      "phase": "scalar_f32-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/scalar_f32-pack.stdout",
+      "system_cpu_seconds": 0.04140099999999991,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006769999999999943
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/scalar_f32.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1033731650095433,
+      "missing_diagnostics": [],
+      "phase": "scalar_f32-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/scalar_f32-unpack.stdout",
+      "system_cpu_seconds": 0.04113200000000006,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006882000000000055
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/scalar_f32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/scalar_f32.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1043808029498905,
+      "missing_diagnostics": [],
+      "phase": "scalar_f32-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/scalar_f32-repack.stdout",
+      "system_cpu_seconds": 0.043723999999999985,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005034000000000205
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10315188812091947,
+      "missing_diagnostics": [],
+      "phase": "range_adaptation_stress-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/range_adaptation_stress-reference.stdout",
+      "system_cpu_seconds": 0.007839999999999958,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.002126999999999768
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/range_adaptation_stress.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10276009002700448,
+      "missing_diagnostics": [],
+      "phase": "range_adaptation_stress-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/range_adaptation_stress-parent.stdout",
+      "system_cpu_seconds": 0.04398100000000005,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005310000000000148
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/range_adaptation_stress.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10308913001790643,
+      "missing_diagnostics": [],
+      "phase": "range_adaptation_stress-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/range_adaptation_stress-pack.stdout",
+      "system_cpu_seconds": 0.044624,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0038269999999998028
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/range_adaptation_stress.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10292302700690925,
+      "missing_diagnostics": [],
+      "phase": "range_adaptation_stress-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/range_adaptation_stress-unpack.stdout",
+      "system_cpu_seconds": 0.038297000000000025,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.011699000000000126
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/range_adaptation_stress.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/range_adaptation_stress.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10310682305134833,
+      "missing_diagnostics": [],
+      "phase": "range_adaptation_stress-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/range_adaptation_stress-repack.stdout",
+      "system_cpu_seconds": 0.04248799999999997,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006876000000000104
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/reference",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.weights.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.tfwc2"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10302982805296779,
+      "missing_diagnostics": [],
+      "phase": "maximum_native_dimensions-reference",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/maximum_native_dimensions-reference.stdout",
+      "system_cpu_seconds": 0.009279999999999955,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0008079999999999199
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/maximum_native_dimensions.parent"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10290053393691778,
+      "missing_diagnostics": [],
+      "phase": "maximum_native_dimensions-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/maximum_native_dimensions-parent.stdout",
+      "system_cpu_seconds": 0.04140300000000008,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.007288999999999879
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/maximum_native_dimensions.pack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10347117017954588,
+      "missing_diagnostics": [],
+      "phase": "maximum_native_dimensions-pack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/maximum_native_dimensions-pack.stdout",
+      "system_cpu_seconds": 0.0436129999999999,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.004012000000000127
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/maximum_native_dimensions.unpack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10292551200836897,
+      "missing_diagnostics": [],
+      "phase": "maximum_native_dimensions-unpack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/maximum_native_dimensions-unpack.stdout",
+      "system_cpu_seconds": 0.04170399999999996,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.006055999999999839
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/maximum_native_dimensions.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/maximum_native_dimensions.repack"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10288507607765496,
+      "missing_diagnostics": [],
+      "phase": "maximum_native_dimensions-repack",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/maximum_native_dimensions-repack.stdout",
+      "system_cpu_seconds": 0.04253700000000005,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005021000000000164
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/bad_magic.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/bad_magic.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10387980006635189,
+      "missing_diagnostics": [],
+      "phase": "bad_magic",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/bad_magic.stdout",
+      "system_cpu_seconds": 0.0016100000000001113,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.001875000000000071
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/nonzero_initial_cache.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/nonzero_initial_cache.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10302026011049747,
+      "missing_diagnostics": [],
+      "phase": "nonzero_initial_cache",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/nonzero_initial_cache.stdout",
+      "system_cpu_seconds": 0.00162299999999993,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0019059999999999633
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/truncated_header.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/truncated_header.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10305299214087427,
+      "missing_diagnostics": [],
+      "phase": "truncated_header",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/truncated_header.stdout",
+      "system_cpu_seconds": 0.0016130000000000866,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0017579999999999263
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/truncated_stream.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/truncated_stream.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10308537282980978,
+      "missing_diagnostics": [],
+      "phase": "truncated_stream",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/truncated_stream.stdout",
+      "system_cpu_seconds": 0.015307999999999877,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.001871000000000178
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/missing_final_flush_byte.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/missing_final_flush_byte.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10311699309386313,
+      "missing_diagnostics": [],
+      "phase": "missing_final_flush_byte",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/missing_final_flush_byte.stdout",
+      "system_cpu_seconds": 0.01238500000000009,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.00482999999999989
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/extra_trailing_byte.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/extra_trailing_byte.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1030639330856502,
+      "missing_diagnostics": [],
+      "phase": "extra_trailing_byte",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/extra_trailing_byte.stdout",
+      "system_cpu_seconds": 0.014917000000000069,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0020759999999999668
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/tensor_count_exceeds_probe_bound.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/tensor_count_exceeds_probe_bound.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1029323551338166,
+      "missing_diagnostics": [],
+      "phase": "tensor_count_exceeds_probe_bound",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/tensor_count_exceeds_probe_bound.stdout",
+      "system_cpu_seconds": 0.0023919999999999497,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0009570000000000967
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/duplicate_names.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/duplicate_names.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10356628894805908,
+      "missing_diagnostics": [],
+      "phase": "duplicate_names",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/duplicate_names.stdout",
+      "system_cpu_seconds": 0.015098999999999974,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0018559999999998578
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/unknown_dtype.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/unknown_dtype.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10292880819179118,
+      "missing_diagnostics": [],
+      "phase": "unknown_dtype",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/unknown_dtype.stdout",
+      "system_cpu_seconds": 0.012965000000000115,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.003605999999999998
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/too_many_dimensions.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/too_many_dimensions.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1029695151373744,
+      "missing_diagnostics": [],
+      "phase": "too_many_dimensions",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/too_many_dimensions.stdout",
+      "system_cpu_seconds": 0.013790999999999887,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.003107000000000193
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/unknown_encoding.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/unknown_encoding.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10287904390133917,
+      "missing_diagnostics": [],
+      "phase": "unknown_encoding",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/unknown_encoding.stdout",
+      "system_cpu_seconds": 0.01323300000000005,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0036919999999998065
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/int4_wrong_dtype.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/int4_wrong_dtype.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10299742687493563,
+      "missing_diagnostics": [],
+      "phase": "int4_wrong_dtype",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/int4_wrong_dtype.stdout",
+      "system_cpu_seconds": 0.014492999999999867,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0027800000000000047
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/bf16_wrong_dtype.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/bf16_wrong_dtype.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10300225601531565,
+      "missing_diagnostics": [],
+      "phase": "bf16_wrong_dtype",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/bf16_wrong_dtype.stdout",
+      "system_cpu_seconds": 0.014966000000000035,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0018849999999999145
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/plane_wrong_dtype.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/plane_wrong_dtype.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10312442691065371,
+      "missing_diagnostics": [],
+      "phase": "plane_wrong_dtype",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/plane_wrong_dtype.stdout",
+      "system_cpu_seconds": 0.01396900000000012,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0028880000000000017
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/int4_outside_public_writer_domain.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/int4_outside_public_writer_domain.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10301514994353056,
+      "missing_diagnostics": [],
+      "phase": "int4_outside_public_writer_domain",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/int4_outside_public_writer_domain.stdout",
+      "system_cpu_seconds": 0.010802999999999896,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005912000000000139
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/rope_missing_inverse_frequency.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/rope_missing_inverse_frequency.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10329129104502499,
+      "missing_diagnostics": [],
+      "phase": "rope_missing_inverse_frequency",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/rope_missing_inverse_frequency.stdout",
+      "system_cpu_seconds": 0.016032000000000046,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0009749999999999481
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/rope_wrong_dtype.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/rope_wrong_dtype.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10295528778806329,
+      "missing_diagnostics": [],
+      "phase": "rope_wrong_dtype",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/rope_wrong_dtype.stdout",
+      "system_cpu_seconds": 0.014893000000000045,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0018260000000001053
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/rope_wrong_frequency_shape.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/rope_wrong_frequency_shape.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10287264105863869,
+      "missing_diagnostics": [],
+      "phase": "rope_wrong_frequency_shape",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/rope_wrong_frequency_shape.stdout",
+      "system_cpu_seconds": 0.01399399999999984,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.00262999999999991
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/rope_nonvector_frequency.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/rope_nonvector_frequency.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10290491301566362,
+      "missing_diagnostics": [],
+      "phase": "rope_nonvector_frequency",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/rope_nonvector_frequency.stdout",
+      "system_cpu_seconds": 0.014979000000000076,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0021780000000000133
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/extent_exceeds_probe_bound.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/extent_exceeds_probe_bound.rejected"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10293609206564724,
+      "missing_diagnostics": [],
+      "phase": "extent_exceeds_probe_bound",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/extent_exceeds_probe_bound.stdout",
+      "system_cpu_seconds": 0.016158000000000117,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0008060000000000844
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/missing_row_reset.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/missing_row_reset.restored"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10288942302577198,
+      "missing_diagnostics": [],
+      "phase": "missing_row_reset",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/missing_row_reset.stdout",
+      "system_cpu_seconds": 0.011618999999999824,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.005522000000000027
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/missing_tensor_reset.gfwpack1",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/missing_tensor_reset.restored"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10290906997397542,
+      "missing_diagnostics": [],
+      "phase": "missing_tensor_reset",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/missing_tensor_reset.stdout",
+      "system_cpu_seconds": 0.015286000000000133,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.0016140000000000043
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/preexisting"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.10304547706618905,
+      "missing_diagnostics": [],
+      "phase": "preexisting-output",
+      "returncode": 1,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/preexisting-output.stdout",
+      "system_cpu_seconds": 0.04041899999999976,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.009763999999999884
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "15",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/fixtures/all_tags_and_rows.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/receipt-failure-model"
+      ],
+      "elapsed_cap_seconds": 15,
+      "elapsed_seconds": 0.1028981099370867,
+      "missing_diagnostics": [],
+      "phase": "receipt-write-failure",
+      "returncode": 1,
+      "stdout": "/dev/full",
+      "system_cpu_seconds": 0.04347600000000007,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.004785000000000039
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "parent",
+        "/home/x/deco/gamma/projects/enwiki9/external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/model.parent"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 0.8033859198912978,
+      "missing_diagnostics": [],
+      "phase": "model-parent",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/model-parent.stdout",
+      "system_cpu_seconds": 0.05443599999999993,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.6891369999999999
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/model.packed"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 0.8049990290310234,
+      "missing_diagnostics": [],
+      "phase": "model-packed",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/model-packed.stdout",
+      "system_cpu_seconds": 0.05447000000000024,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.7240310000000001
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "unpack",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/model.packed",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/model.restored"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 0.8051002789288759,
+      "missing_diagnostics": [],
+      "phase": "model-restored",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/model-restored.stdout",
+      "system_cpu_seconds": 0.06096299999999988,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.7326130000000002
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/probe",
+        "pack",
+        "/home/x/deco/gamma/projects/enwiki9/external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/work/model.repeat"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 0.8031083771493286,
+      "missing_diagnostics": [],
+      "phase": "model-repeat",
+      "returncode": 0,
+      "stdout": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_pack_roundtrip_q0_v1/model-repeat.stdout",
+      "system_cpu_seconds": 0.05422799999999994,
+      "timing_authority": "shared-host diagnostic; outer guard closure still required",
+      "user_cpu_seconds": 0.7257739999999995
+    }
+  ],
+  "confirmation": "one fixed public model; no parameter selection",
+  "continuous_guard_decision": "pending canonical outer guard closure",
+  "deterministic_ok": true,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_pack_roundtrip_q0_v1.json",
+    "sha256": "sha256:9070aa0357b4336299dacc7df60da3503524608c1122717b6fabc37283f3fc64"
+  },
+  "full_corpus_score_bytes": null,
+  "larger_gate_authorized": false,
+  "model": {
+    "input_bytes": 2930652,
+    "inverse_ok": true,
+    "mode": "pack",
+    "objective_credit_bytes": 0,
+    "original_stream_regeneration_ok": true,
+    "output_bytes": 2938887,
+    "regenerated_rope_bytes": 33554432,
+    "repeat_ok": true,
+    "schema": "gamma.fx2-weight-pack-probe.v1",
+    "tensor_payload_bytes": 6034374,
+    "tensors": [
+      {
+        "dtype": 0,
+        "elements": 39360,
+        "encoding": 1,
+        "name": "embedding.weight.q",
+        "represented_bytes": 39360,
+        "row_width": 192,
+        "stored_payload_bytes": 39360
+      },
+      {
+        "dtype": 1,
+        "elements": 205,
+        "encoding": 2,
+        "name": "embedding.weight.scale",
+        "represented_bytes": 410,
+        "row_width": 205,
+        "stored_payload_bytes": 410
+      },
+      {
+        "dtype": 0,
+        "elements": 39360,
+        "encoding": 1,
+        "name": "prior_embedding.weight.q",
+        "represented_bytes": 39360,
+        "row_width": 205,
+        "stored_payload_bytes": 39360
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "prior_embedding.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "prior_embedding.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 6,
+        "encoding": 3,
+        "name": "skip_connection_weights.value",
+        "represented_bytes": 24,
+        "row_width": 6,
+        "stored_payload_bytes": 24
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.0.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.0.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.0.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.0.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.0.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.0.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.0.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.0.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.0.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.0.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.0.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.0.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.0.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.0.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.0.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.0.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.0.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.0.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.0.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.0.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.0.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.0.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.0.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.1.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.1.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.1.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.1.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.1.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.1.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.1.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.1.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.1.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.1.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.1.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.1.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.1.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.1.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.1.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.1.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.1.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.1.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.1.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.1.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.1.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.1.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.1.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.2.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.2.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.2.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.2.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.2.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.2.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.2.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.2.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.2.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.2.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.2.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.2.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.2.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.2.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.2.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.2.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.2.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.2.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.2.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.2.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.2.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.2.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.2.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.3.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.3.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.3.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.3.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.3.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.3.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.3.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.3.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.3.attention.quantize_queries.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.3.attention.quantize_keys.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.3.attention.quantize_values.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.3.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.3.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.3.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.3.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.3.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.3.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.3.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.4.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.4.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.4.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.4.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.4.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.4.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.4.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.4.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.4.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.4.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.4.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.4.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.4.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.4.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.4.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.4.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.4.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.4.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.4.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.4.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.4.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.4.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.4.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.5.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.5.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.5.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.5.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.5.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.5.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.5.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.5.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.5.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.5.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.5.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.5.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.5.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.5.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.5.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.5.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.5.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.5.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.5.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.5.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.5.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.5.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.5.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.6.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.6.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.6.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.6.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.6.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.6.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.6.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.6.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.6.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.6.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.6.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.6.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.6.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.6.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.6.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.6.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.6.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.6.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.6.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.6.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.6.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.6.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.6.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.7.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.7.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.7.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.7.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.7.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.7.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.7.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.7.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.7.attention.quantize_queries.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.7.attention.quantize_keys.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.7.attention.quantize_values.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.7.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.7.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.7.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.7.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.7.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.7.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.7.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.8.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.8.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.8.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.8.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.8.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.8.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.8.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.8.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.8.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.8.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.8.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.8.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.8.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.8.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.8.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.8.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.8.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.8.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.8.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.8.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.8.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.8.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.8.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.9.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.9.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.9.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.9.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.9.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.9.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.9.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.9.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.9.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.9.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.9.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.9.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.9.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.9.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.9.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.9.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.9.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.9.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.9.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.9.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.9.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.9.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.9.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.10.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.10.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 3,
+        "encoding": 3,
+        "name": "blocks.10.attention.log_baseline_decay_rate",
+        "represented_bytes": 12,
+        "row_width": 3,
+        "stored_payload_bytes": 12
+      },
+      {
+        "dtype": 2,
+        "elements": 192,
+        "encoding": 3,
+        "name": "blocks.10.attention.dt_bias",
+        "represented_bytes": 768,
+        "row_width": 192,
+        "stored_payload_bytes": 768
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.10.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.10.attention.query_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.10.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.10.attention.key_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.10.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 768,
+        "encoding": 3,
+        "name": "blocks.10.attention.value_convolution.weight",
+        "represented_bytes": 3072,
+        "row_width": 4,
+        "stored_payload_bytes": 3072
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.10.attention.forget_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.10.attention.forget_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.forget_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.10.attention.forget_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.forget_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.forget_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 576,
+        "encoding": 3,
+        "name": "blocks.10.attention.beta_projection.weight",
+        "represented_bytes": 2304,
+        "row_width": 192,
+        "stored_payload_bytes": 2304
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.10.attention.output_gate_projection.up.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 192,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 64,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_gate_projection.up.weight.scale",
+        "represented_bytes": 128,
+        "row_width": 64,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_gate_projection.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 12288,
+        "encoding": 1,
+        "name": "blocks.10.attention.output_gate_projection.down.weight.q",
+        "represented_bytes": 12288,
+        "row_width": 64,
+        "stored_payload_bytes": 12288
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_gate_projection.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_gate_projection.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 64,
+        "encoding": 3,
+        "name": "blocks.10.attention.output_fused_norm_gate.weight",
+        "represented_bytes": 256,
+        "row_width": 64,
+        "stored_payload_bytes": 256
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.10.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.10.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.10.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.10.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.10.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.10.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.11.residual_stream_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 2,
+        "elements": 1,
+        "encoding": 3,
+        "name": "blocks.11.token_embedding_coefficient.value",
+        "represented_bytes": 4,
+        "row_width": 1,
+        "stored_payload_bytes": 4
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.11.attention.query_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.11.attention.query_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.attention.query_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.11.attention.key_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.11.attention.key_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.attention.key_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.11.attention.value_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.11.attention.value_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.attention.value_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.11.attention.quantize_queries.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.11.attention.quantize_keys.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 1,
+        "elements": 3,
+        "encoding": 2,
+        "name": "blocks.11.attention.quantize_values.scale",
+        "represented_bytes": 6,
+        "row_width": 3,
+        "stored_payload_bytes": 6
+      },
+      {
+        "dtype": 0,
+        "elements": 36864,
+        "encoding": 1,
+        "name": "blocks.11.attention.output_projection.weight.q",
+        "represented_bytes": 36864,
+        "row_width": 192,
+        "stored_payload_bytes": 36864
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.11.attention.output_projection.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.attention.output_projection.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.11.mlp.up.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 192,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 768,
+        "encoding": 2,
+        "name": "blocks.11.mlp.up.weight.scale",
+        "represented_bytes": 1536,
+        "row_width": 768,
+        "stored_payload_bytes": 1536
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.mlp.up.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 147456,
+        "encoding": 1,
+        "name": "blocks.11.mlp.down.weight.q",
+        "represented_bytes": 147456,
+        "row_width": 768,
+        "stored_payload_bytes": 147456
+      },
+      {
+        "dtype": 1,
+        "elements": 192,
+        "encoding": 2,
+        "name": "blocks.11.mlp.down.weight.scale",
+        "represented_bytes": 384,
+        "row_width": 192,
+        "stored_payload_bytes": 384
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "blocks.11.mlp.down.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 0,
+        "elements": 39360,
+        "encoding": 1,
+        "name": "unembedding.weight.q",
+        "represented_bytes": 39360,
+        "row_width": 192,
+        "stored_payload_bytes": 39360
+      },
+      {
+        "dtype": 1,
+        "elements": 205,
+        "encoding": 2,
+        "name": "unembedding.weight.scale",
+        "represented_bytes": 410,
+        "row_width": 205,
+        "stored_payload_bytes": 410
+      },
+      {
+        "dtype": 1,
+        "elements": 1,
+        "encoding": 2,
+        "name": "unembedding.quantize_activation.scale",
+        "represented_bytes": 2,
+        "row_width": 1,
+        "stored_payload_bytes": 2
+      },
+      {
+        "dtype": 2,
+        "elements": 32,
+        "encoding": 3,
+        "name": "rope.inv_freq",
+        "represented_bytes": 128,
+        "row_width": 32,
+        "stored_payload_bytes": 128
+      },
+      {
+        "dtype": 2,
+        "elements": 4194304,
+        "encoding": 4,
+        "name": "rope.sin",
+        "represented_bytes": 16777216,
+        "row_width": 32,
+        "stored_payload_bytes": 0
+      },
+      {
+        "dtype": 2,
+        "elements": 4194304,
+        "encoding": 5,
+        "name": "rope.cos",
+        "represented_bytes": 16777216,
+        "row_width": 32,
+        "stored_payload_bytes": 0
+      },
+      {
+        "dtype": 3,
+        "elements": 11,
+        "encoding": 3,
+        "name": "config.ints",
+        "represented_bytes": 44,
+        "row_width": 11,
+        "stored_payload_bytes": 44
+      },
+      {
+        "dtype": 3,
+        "elements": 12,
+        "encoding": 3,
+        "name": "config.kimi",
+        "represented_bytes": 48,
+        "row_width": 12,
+        "stored_payload_bytes": 48
+      }
+    ]
+  },
+  "model_archive_saved_bytes": -8235,
+  "objective_credit_bytes": 0,
+  "package": {
+    "bytes": 1928,
+    "path": "results/fx2_weight_pack_roundtrip_q0_v1/package.json",
+    "sha256": "6dbb5fa83fe3cad2e2fbeebff930891a9247eeb51c6936a97a72baf1bfd56b0e"
+  },
+  "roundtrip_ok": true,
+  "schema": "gamma.enwiki9.fx2-weight-pack-stage.v1",
+  "status": "passed",
+  "synthetic": {
+    "comparison_controls": 3,
+    "corrupted_hash_admission_rejected": true,
+    "preexisting_output_preserved": true,
+    "rejection_cases": 20,
+    "status": "passed",
+    "stdout_failure_detected": true,
+    "upstream_raw_tensor_comparison": true,
+    "valid_populations": 6
+  }
+}

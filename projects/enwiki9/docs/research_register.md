@@ -29,12 +29,22 @@ archive remains 3,223 bytes. [Native audit](../operations/provenance/public_fx2_
 and [validated reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json)
 retain the exact traces and closed guard. D/K diagnostic CPU ratio was 0.9987045,
 missing the frozen 0.99 budget trigger. Hold this correct mechanism without a
-larger runtime gate; next test lossless model packing for counted byte savings.
+larger runtime gate. The following model-packing comparison also failed.
 This budget decision does not refute argmax reuse generally. Preserve
 [launcher-affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json)
 and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json)
 failures unchanged. Public FX2/CMIX/model authorship remains upstream; Gamma's
 framing, comparisons and prospective argmax change receive no compression credit.
+
+
+`fx2_weight_pack_roundtrip_q0_v1` restores and repeats the full public model exactly,
+but grows it from 2,930,652 to 2,938,887 bytes. Six independent synthetic tensor
+fixtures and all negative controls pass; peak cgroup memory was 133,156,864 bytes.
+The [weight audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json)
+and [validated reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json)
+retire this exact preceding-symbol configuration before native integration.
+Its extra 8,235 asset bytes exclude added loader costs. Other weight coders remain
+untested; this result grants no full-corpus score or package qualification.
 
 ## 2026-09-05 - Restore missing terminal receipt links
 
@@ -83,6 +93,40 @@ fixture reuse; it does not authorize a new integrated codec gate.
 | `nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1` | [authorize-successor](../results/nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1/decision.json) |
 | `nncp_open_top_pre_ff_total_adjoint_64_q0_v1` | [retire](../results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/decision.json) |
 | `nncp_open_w_o_weight_slice_post_add_64_q0_v1` | [authorize-successor](../results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/decision.json) |
+
+## 2026-09-05 - Native MIDAS coder and causal scheduler pass synthetic checks
+
+`lib/midas_native_codec.hpp` provides native finite Q16 arithmetic encoding and
+decoding, explicit raw-byte identity framing, a pre-truth byte-to-bit adapter,
+complete coder checkpoints and an exact first-state-divergence comparison.
+`lib/midas_midpoint_schedule.hpp` provides the P/K/F/S update boundary: ordinary
+parent updates after each 64 decoded bytes, an additional F update after the
+first 32, and S with those already decoded targets cyclically shifted left once.
+Every update rebuilds the active prefix from its retained segment origin. K
+executes update and rebuild on a discarded copy, preserving the authoritative
+parent. These are reusable components, not a sealed corpus candidate.
+
+Three targeted tests pass with strict C++17 compilation. Separate address and
+undefined-behavior sanitizer executions also pass. The native counting-fixture
+payload equals the independently implemented Python payload; finite inverses,
+repeats, corruption rejection, checkpoint continuation, P/K probability and
+payload identity, and encoder/decoder state synchronization pass on synthetic
+fixtures. The scheduler's sentinel deliberately invalidates recurrent state at
+update, so prediction without rebuilding fails. These fixtures do not implement
+or prove a neural predictor, complete-model gradients, or a MIDAS gain.
+
+Evidence: `operations/evidence/20260905_midas_native_codec_scheduler_unit_validation.json`
+binds source SHA-256 values, test commands, compiler identity and observed output.
+Score credit is zero. The standalone trainable parent roundtrip remains missing.
+No corpus experiment was launched and no partial HORIZON science was read.
+
+The concurrent unregistered `programs/compact_midas_open_parent_q0_v1` source
+tree was left untouched. Coordinate its owner before integrating the one compact
+challenger: validate full gradients and optimizer/recurrent state, measure its
+dominant kernel, and prospectively freeze the bounded parent P/K/F/S archive
+gate. An independent eligible-parent explorer must preserve that ownership and
+HORIZON's sole observer, retain source/package/resource bindings, and produce
+exact finite archives without inheriting compression claims from a teacher.
 
 ## 2026-09-05 - Execute bounded comparisons against the updated frontier
 

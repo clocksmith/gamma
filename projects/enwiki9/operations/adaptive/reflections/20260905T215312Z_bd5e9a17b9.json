@@ -1,0 +1,109 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "The fixed preceding-symbol context partition adds net model code length. Relative adaptation, tensor reset and conditional redundancy contributions remain unmeasured."
+  },
+  "candidateId": "fx2_weight_pack_roundtrip_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_weight_pack_roundtrip_q0_v1",
+    "candidateTreeSha256": "sha256:ce438e09316eb5ef5dad58efbf51112d1965f36e275672e31413dd7262393602",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_weight_pack_roundtrip_q0_v1/20260905T215300832754Z_ce438e09316e.json",
+      "sha256": "sha256:dedf86d12c2713cbf6256671418b9466667a179907265e611822ea0c267764a2"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this exact packing configuration because the mandatory positive component-savings predicate fails. Preserve exact artifacts; any successor needs a diagnosed mechanism and a separate frozen experiment.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_weight_pack_terminal_20260905.json",
+      "sha256": "sha256:cef68113c1b01d49fbf1029a776fb1a6424a4ebb655408862eaf8e6bded43696"
+    },
+    {
+      "path": "results/fx2_weight_pack_roundtrip_q0_v1/decision.json",
+      "sha256": "sha256:b1706a876f7b26b903f920ff7a803b776a146f0bed472f22748cb0439e449056"
+    },
+    {
+      "path": "results/fx2_weight_pack_roundtrip_q0_v1/package.json",
+      "sha256": "sha256:6dbb5fa83fe3cad2e2fbeebff930891a9247eeb51c6936a97a72baf1bfd56b0e"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_pack_roundtrip_q0_v1.json",
+    "sha256": "sha256:9070aa0357b4336299dacc7df60da3503524608c1122717b6fabc37283f3fc64"
+  },
+  "generatedUtc": "2026-09-05T21:57:29+00:00",
+  "hypothesis": {
+    "rationale": "The treatment model is 2938887 bytes versus 2930652 for the original: 8235 bytes larger before added loader or package costs.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260905T215312Z_bd5e9a17b9.json",
+    "sha256": "sha256:396636fc142f5e39951b737444e475a0c91e0fd2a9d4d52fa71337878224f2b5"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "This fixed tensor-local previous-symbol INT4 packing configuration on the pinned public model."
+    ],
+    "transferableLessons": [
+      "Exact model transcoding does not establish useful package economics; compare the packed asset before native integration."
+    ],
+    "uncertainties": [
+      "Other weight coders, per-tensor attribution, native loader transfer, complete package closure and model licensing remain unresolved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/population/bytes",
+      "source": {
+        "path": "operations/provenance/public_fx2_weight_pack_terminal_20260905.json",
+        "sha256": "sha256:cef68113c1b01d49fbf1029a776fb1a6424a4ebb655408862eaf8e6bded43696"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/tensors",
+      "source": {
+        "path": "operations/provenance/public_fx2_weight_pack_terminal_20260905.json",
+        "sha256": "sha256:cef68113c1b01d49fbf1029a776fb1a6424a4ebb655408862eaf8e6bded43696"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 2930652,
+    "scopeSymbols": 434,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t215312z_bd5e9a17b9",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All frozen synthetic controls, upstream tensor comparisons, exact original model restoration and independent repeat passed; source/artifact hashes recomputed and operational discovery guard closed within bounds."
+    ],
+    "valid": true
+  }
+}

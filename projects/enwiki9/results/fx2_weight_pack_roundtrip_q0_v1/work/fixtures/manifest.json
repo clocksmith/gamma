@@ -1,0 +1,360 @@
+{
+  "comparison_controls": [
+    {
+      "id": "missing_row_reset",
+      "input": {
+        "bytes": 367,
+        "path": "missing_row_reset.gfwpack1",
+        "sha256": "d989f8aa2f27b6f6dcec8ee00dfb330aa0dd03ab1bb6b7ba89352f52e48249d8"
+      },
+      "required": "must differ from independent correct treatment; reject or fail exact-parent restoration"
+    },
+    {
+      "id": "missing_tensor_reset",
+      "input": {
+        "bytes": 366,
+        "path": "missing_tensor_reset.gfwpack1",
+        "sha256": "090716f5b5d6114c4b1f35f2de4a1d0ed494254ee7f80a94cac544212d845a8c"
+      },
+      "required": "must differ from independent correct treatment; reject or fail exact-parent restoration"
+    },
+    {
+      "expected_parent_sha256": "f8028829cefa947e9e410e7bd25389c80a81ad5cd6b6ba87c2ffe7a84674e939",
+      "id": "bit_corruption",
+      "input": {
+        "bytes": 366,
+        "path": "bit_corruption.tfwc2",
+        "sha256": "826739ccd71d28ed6de5daab7920e4c59acf3628978f5efa3714dfb70f5063f5"
+      },
+      "required": "input hash must differ from pinned parent and be rejected by admission; decoder rejection alone is not guaranteed"
+    }
+  ],
+  "generator_sha256": "ceaa09d0523cf8e608ba503118ff5bc01b8ae4bf2a02861ee3a874fc54983fa4",
+  "integrity_boundary": "TFWC2 has no authenticated checksum. Arbitrary corruption may encode a different valid model; pin the input hash before invocation.",
+  "objective_credit_bytes": 0,
+  "real_model_accessed": false,
+  "rejection": [
+    {
+      "id": "bad_magic",
+      "input": {
+        "bytes": 366,
+        "path": "bad_magic.tfwc2",
+        "sha256": "8a7e97f6674921ecb4782d167d2af3220d0c5ce09d645a01f8a93199f1d49830"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "nonzero_initial_cache",
+      "input": {
+        "bytes": 366,
+        "path": "nonzero_initial_cache.tfwc2",
+        "sha256": "e0c7efd09470ebeb7861b53795970cf6a797e5bb2966bcd133904f7beb75b724"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "truncated_header",
+      "input": {
+        "bytes": 11,
+        "path": "truncated_header.tfwc2",
+        "sha256": "ec727118e0550c5424df2443b21bfaf4da0891192558f5d30e002393b05c0496"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "truncated_stream",
+      "input": {
+        "bytes": 183,
+        "path": "truncated_stream.tfwc2",
+        "sha256": "4a7a23549d86e0ab45fabba0d0ec90239c1ce30953446d98d5129557f7d8a265"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "missing_final_flush_byte",
+      "input": {
+        "bytes": 365,
+        "path": "missing_final_flush_byte.tfwc2",
+        "sha256": "a7d9636c2bb27f5ff6b32701eb375b225e0301b9760e6ec080a5090373e22d6e"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "extra_trailing_byte",
+      "input": {
+        "bytes": 367,
+        "path": "extra_trailing_byte.tfwc2",
+        "sha256": "ae19a03fcc013093419b5ac88551e14bed2ab5f7433260b7b73a6c7a5e107165"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "tensor_count_exceeds_probe_bound",
+      "input": {
+        "bytes": 366,
+        "path": "tensor_count_exceeds_probe_bound.tfwc2",
+        "sha256": "ec7231f4a941afdc508cbec31fc62e6cb4ab805b42856f58c2a8100d4d8d3926"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "duplicate_names",
+      "input": {
+        "bytes": 50,
+        "path": "duplicate_names.tfwc2",
+        "sha256": "8a73076f7e835b60ac4c2e8ac9cd2bdda1626ac2db7d62246ef751a6c70522ba"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "unknown_dtype",
+      "input": {
+        "bytes": 24,
+        "path": "unknown_dtype.tfwc2",
+        "sha256": "97e9041a66e3060a89d7ff3c4195241c978fddeb2f99b6028f236493eff1eb6c"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "too_many_dimensions",
+      "input": {
+        "bytes": 49,
+        "path": "too_many_dimensions.tfwc2",
+        "sha256": "f90f40a0e89a5fa9284d0242bc8206117bb1c4301811288a7af4ddb3f6b84fa4"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "unknown_encoding",
+      "input": {
+        "bytes": 27,
+        "path": "unknown_encoding.tfwc2",
+        "sha256": "476d8f34fcd5ae70269f6ed3ad063d7c9dd8ebaeb34858d14c6e6d266276021c"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "int4_wrong_dtype",
+      "input": {
+        "bytes": 28,
+        "path": "int4_wrong_dtype.tfwc2",
+        "sha256": "8ef4d01541425d64c06adb0beb74345b051d3a25a56bb3af16ff509db966db66"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "bf16_wrong_dtype",
+      "input": {
+        "bytes": 29,
+        "path": "bf16_wrong_dtype.tfwc2",
+        "sha256": "9fa74a29e9ad082873f1e58ff978cdbfd3cd73f3880b94675c1698ad16292ff4"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "plane_wrong_dtype",
+      "input": {
+        "bytes": 28,
+        "path": "plane_wrong_dtype.tfwc2",
+        "sha256": "1687d7dd5f93ab0f46e2ed8c612a6d41f601df36e9d9a61360be4154f054c5d4"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "int4_outside_public_writer_domain",
+      "input": {
+        "bytes": 28,
+        "path": "int4_outside_public_writer_domain.tfwc2",
+        "sha256": "1552f5a179bab7fecb56742957b07b81e048cb63e27d25c69002f50c6d10d610"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "rope_missing_inverse_frequency",
+      "input": {
+        "bytes": 36,
+        "path": "rope_missing_inverse_frequency.tfwc2",
+        "sha256": "193279cfc8f19e0152ad5d61e15ecfc7edd5f285901e90490c45b17bc7ae005e"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "rope_wrong_dtype",
+      "input": {
+        "bytes": 36,
+        "path": "rope_wrong_dtype.tfwc2",
+        "sha256": "6b71a08540a7bfe7efb8ba1953861214aa1740a7f5ddaf28fb3e0f9f3c6c5a66"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "rope_wrong_frequency_shape",
+      "input": {
+        "bytes": 67,
+        "path": "rope_wrong_frequency_shape.tfwc2",
+        "sha256": "8d5139072821f7a1c5b1d6f75e0d2c02c2684ff3d574a6495d19768913bcc498"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "rope_nonvector_frequency",
+      "input": {
+        "bytes": 67,
+        "path": "rope_nonvector_frequency.tfwc2",
+        "sha256": "a5a032cfd5c3f76a200a566e019b8436b52c5c1752cac87b42533278b4870fe8"
+      },
+      "required": "nonzero exit with no published output"
+    },
+    {
+      "id": "extent_exceeds_probe_bound",
+      "input": {
+        "bytes": 31,
+        "path": "extent_exceeds_probe_bound.tfwc2",
+        "sha256": "6047fa4f45a42d0ff92558f2b8f28d3646f44cbd5e18446df83e0faf182642b4"
+      },
+      "required": "nonzero exit with no published output"
+    }
+  ],
+  "scalar_boundary": "Zero dimensions are accepted by both pinned readers. Direct grammar fixtures do not assert upstream NumPy exporter behavior.",
+  "schema": "gamma.fx2-weight-pack-synthetic-fixtures.v1",
+  "strict_subset_rejections": [
+    "int4_outside_public_writer_domain",
+    "extent_exceeds_probe_bound",
+    "rope_nonvector_frequency"
+  ],
+  "upstream_commit": "83f2603f3f7751da5f429fd32669807eb8510494",
+  "valid": [
+    {
+      "expected_treatment": {
+        "bytes": 17,
+        "path": "zero_tensors.gfwpack1",
+        "sha256": "49ecc0f76b69d02d8d33c1558656c747661d15356f748e6955c8987aed33bb63"
+      },
+      "id": "zero_tensors",
+      "parent": {
+        "bytes": 17,
+        "path": "zero_tensors.tfwc2",
+        "sha256": "895e09ac56358eb2f140f69846218cd8d197b9305e47d2835880303a471a6e73"
+      },
+      "raw_reference": {
+        "bytes": 12,
+        "path": "zero_tensors.weights.bin",
+        "sha256": "63a7eecae451cd87318ccf35f93b929bf2b96dcafde68e66aaa3414cff8add4a"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 0,
+      "tensor_payload_bytes": 0
+    },
+    {
+      "expected_treatment": {
+        "bytes": 367,
+        "path": "all_tags_and_rows.gfwpack1",
+        "sha256": "48ceeae764592b0e58a03d55083500e60880632249013e91bea397481e9ad755"
+      },
+      "id": "all_tags_and_rows",
+      "parent": {
+        "bytes": 366,
+        "path": "all_tags_and_rows.tfwc2",
+        "sha256": "f8028829cefa947e9e410e7bd25389c80a81ad5cd6b6ba87c2ffe7a84674e939"
+      },
+      "raw_reference": {
+        "bytes": 551,
+        "path": "all_tags_and_rows.weights.bin",
+        "sha256": "a1e4826c69f80a12bbed9560910026808ebc3424eca718129714061118293a9b"
+      },
+      "regenerated_rope_bytes": 16,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 16,
+      "tensor_payload_bytes": 114
+    },
+    {
+      "expected_treatment": {
+        "bytes": 49,
+        "path": "row_width_one.gfwpack1",
+        "sha256": "cc198e14510284303358f1b0e51eac4466636714f64d6c4d8c2597f495d21eb9"
+      },
+      "id": "row_width_one",
+      "parent": {
+        "bytes": 49,
+        "path": "row_width_one.tfwc2",
+        "sha256": "e9951c61f7746598556af4660b83f74898a1a7d2c4881cb9de163abf03d62bbe"
+      },
+      "raw_reference": {
+        "bytes": 58,
+        "path": "row_width_one.weights.bin",
+        "sha256": "6e0792e467656692c243977f6f63a515c6fb24531a1538701a505229872d187e"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 1,
+      "tensor_payload_bytes": 15
+    },
+    {
+      "expected_treatment": {
+        "bytes": 34,
+        "path": "scalar_f32.gfwpack1",
+        "sha256": "3b2761b233fe6551e67b454070e96cc4866ae6d13e081b79dd947f90bd3f748d"
+      },
+      "id": "scalar_f32",
+      "parent": {
+        "bytes": 34,
+        "path": "scalar_f32.tfwc2",
+        "sha256": "6a30258d6585c936b0b831c6caa71e860971104761f0a555546d3a1af20a5917"
+      },
+      "raw_reference": {
+        "bytes": 35,
+        "path": "scalar_f32.weights.bin",
+        "sha256": "2290a268a337cb7640c3c902e096695ad967473bc28827673ae292f2ebd0739d"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 1,
+      "tensor_payload_bytes": 4
+    },
+    {
+      "expected_treatment": {
+        "bytes": 602,
+        "path": "range_adaptation_stress.gfwpack1",
+        "sha256": "abbe3b325d5ba500f7b0f582c2cea4a00725df96b7ef4b12a2b49d2e1702d092"
+      },
+      "id": "range_adaptation_stress",
+      "parent": {
+        "bytes": 2087,
+        "path": "range_adaptation_stress.tfwc2",
+        "sha256": "aa870fd660193937135ae64db35dca6b6bcb202696dfc60b97bb1e33bdcb513c"
+      },
+      "raw_reference": {
+        "bytes": 4137,
+        "path": "range_adaptation_stress.weights.bin",
+        "sha256": "4537c3ff992db601c70c6048747687680a6c32cd767a69ed8bc64e7754512856"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 1,
+      "tensor_payload_bytes": 4096
+    },
+    {
+      "expected_treatment": {
+        "bytes": 60,
+        "path": "maximum_native_dimensions.gfwpack1",
+        "sha256": "f440ca726d8cb56da6d9fb8550cf3218553bd7b13c166742ed72f858805247fe"
+      },
+      "id": "maximum_native_dimensions",
+      "parent": {
+        "bytes": 60,
+        "path": "maximum_native_dimensions.tfwc2",
+        "sha256": "b50616c793988932e867dd65fd0cecd61062a961bf1a03fc4587dec72e46c98d"
+      },
+      "raw_reference": {
+        "bytes": 70,
+        "path": "maximum_native_dimensions.weights.bin",
+        "sha256": "4c09d0e6692af61d7067099ebcab2c0089213e08f081bb0a113c5184ed156eee"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "parent regeneration equals parent; pack equals independent treatment; unpack equals parent; repeat pack identity",
+      "tensor_count": 1,
+      "tensor_payload_bytes": 1
+    }
+  ]
+}
