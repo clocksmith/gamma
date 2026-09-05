@@ -3858,7 +3858,7 @@ test("paired faction arms receive their registered canonical prompt treatment", 
   });
   assert.ok(seen.get("coalition_lab") > 0);
   assert.ok(seen.get("safety_laboratory") > 0);
-  assert.equal(report.comparisons[0].paired.pairs, 1);
+  assert.equal(report.comparisons[0].paired.pairs, 1, JSON.stringify(report.quarantine));
   assert.notEqual(
     report.comparisons[0].left.strategiesFingerprint,
     report.comparisons[0].right.strategiesFingerprint
