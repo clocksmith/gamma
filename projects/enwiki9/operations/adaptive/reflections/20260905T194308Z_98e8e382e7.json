@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "One-thread taskset startup retained allowed CPUs 0-31 at the initial guard sample; the declared CPU set contains only CPU2."
+  },
+  "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:c34d07a6c86181c0c998d250e4fa69de351212ad9cce4537d563ee9c71017d07",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "One new job may rerun the unchanged candidate and frozen fixture contract, using taskset CPU2 on the lab launcher; source, controls, limits and guards remain unchanged. Empty candidate output directory is verified in the failure audit.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json",
+      "sha256": "sha256:ee29609840809e4272bf861707a7e7c8c6c652df08fc5eae3be3636ab81add90"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json",
+    "sha256": "sha256:e688ea6a4c383c43743afe7c77ff85b4cf59f6dac2afd43d39b517f451a7267f"
+  },
+  "generatedUtc": "2026-09-05T19:50:31+00:00",
+  "hypothesis": {
+    "rationale": "No build, model inference, mapping or archive phase executed.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/999_20260905T194308Z_98e8e382e7.json",
+    "sha256": "sha256:fd96acebba8f18f5a9740808c474eefa09da78946a39b103a4155f5458d01d8e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Pin the parent lab launcher to the assigned CPU set before the guard spawns its first process."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t194308z_98e8e382e7",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Outer guard caught inherited CPU affinity before taskset narrowed it; candidate never started and cleanup completed."
+    ],
+    "valid": false
+  }
+}
