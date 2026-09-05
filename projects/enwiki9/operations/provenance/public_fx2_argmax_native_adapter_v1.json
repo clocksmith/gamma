@@ -1,0 +1,146 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "public_fx2_argmax_native_adapter_v1",
+  "status": "prospective_uncompiled_native_comparison",
+  "parent_commit": "83f2603f3f7751da5f429fd32669807eb8510494",
+  "prerequisite_adapter": {
+    "path": "operations/provenance/public_fx2_argmax_adapter_v1.json",
+    "bytes": 15548,
+    "sha256": "a234d29dee910ec8b77bffa3d47948b51ce4d2bba09597cb40ffce40fb978f0c"
+  },
+  "application_order": [
+    "materialize pinned upstream build inputs",
+    "apply authenticated static vocabulary adapter",
+    "apply prerequisite argmax unit adapter to header and source",
+    "apply this native adapter",
+    "copy trace header to src/coder/gamma-coder-trace.h"
+  ],
+  "files": [
+    {
+      "source_path": "src/models/byte-model.cpp",
+      "source_bytes": 2865,
+      "source_sha256": "f331fb574470730bbc5527b44e26f6726f4c724a8f67f57f93e7751ba7470146",
+      "patched_bytes": 3577,
+      "patched_sha256": "eaa4d97707b6d0b34a6ab35c2b059d0ca63af798c4cb9a7ffd9884ab9faccbbe",
+      "replacements": [
+        {
+          "before": "#include <cstring>",
+          "after": "#include <cstdio>\n#include <cstdlib>\n#include <cstring>"
+        },
+        {
+          "before": "    bot_(0),  vocab_(vocab), probs_(1.0 / 256, 256) {}",
+          "after": "    bot_(0),  vocab_(vocab), probs_(1.0 / 256, 256) {\n  const char* arm = std::getenv(\"GAMMA_FX2_ARGMAX_ARM\");\n  if (!arm) return;  // Unspecified means the original P behavior.\n  if (!arm[0] || arm[1]) {\n    std::fprintf(stderr, \"Gamma argmax arm must be P, K, D or C\\n\");\n    std::exit(125);\n  }\n  switch (arm[0]) {\n    case 'P': GammaSetArgmaxArm(GammaArgmaxArm::P); break;\n    case 'K': GammaSetArgmaxArm(GammaArgmaxArm::K); break;\n    case 'D': GammaSetArgmaxArm(GammaArgmaxArm::D); break;\n    case 'C': GammaSetArgmaxArm(GammaArgmaxArm::C); break;\n    default:\n      std::fprintf(stderr, \"Gamma argmax arm must be P, K, D or C\\n\");\n      std::exit(125);\n  }\n  std::fprintf(stderr, \"\\nGamma argmax selected=%c\\n\", arm[0]);\n}"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_bytes": 914,
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "patched_bytes": 1108,
+      "patched_sha256": "e1586dca62d959dff81f156512d37a22a5e2abbb332c77962e0e8a0a0c646d29",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_bytes": 832,
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "patched_bytes": 1026,
+      "patched_sha256": "cfed5d718bc6d1e797bb7c22be769040a7407086baf7918fcb522fd558c25258",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "destination": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "activation": {
+    "variable": "GAMMA_FX2_ARGMAX_ARM",
+    "values": [
+      "P",
+      "K",
+      "D",
+      "C"
+    ],
+    "default": "P",
+    "scope": "every ByteModel constructor; each native process receives one explicit arm",
+    "invalid_values": "fail with exit 125",
+    "instrumentation_counters": "GAMMA_FX2_ARGMAX_INSTRUMENT omitted; no counter storage or updates",
+    "receipt": "Every explicit arm selection emits Gamma argmax selected=<arm> to stderr once per ByteModel; runner checks exactly three selected-arm lines in the frozen full-mixer configuration."
+  },
+  "trace": {
+    "variable": "GAMMA_FX2_CODER_TRACE",
+    "record_bytes": 28,
+    "encoding": "seven little-endian uint32 words per coded bit, no struct padding",
+    "fields": [
+      "predictor_probability_binary32_bits",
+      "coder_quantized_probability",
+      "low_before_coding",
+      "high_before_coding",
+      "low_after_renormalization",
+      "high_after_renormalization",
+      "decoded_bit"
+    ],
+    "scope": "one exact pre-truth Predictor::Predict call; decoder derives its probability and bit independently",
+    "write_failure": "fail with exit 125",
+    "existing_path": "exclusive creation rejects replacement",
+    "no_path": "trace disabled; comparison runner must provide a unique path",
+    "proof_requirement": "Exact full record byte comparison, raw inverse and archive repeat; SHA digests alone do not replace direct comparison",
+    "timing": "Trace-enabled phase costs are diagnostic. Runtime benefit needs a trace-disabled matched comparison.",
+    "not_observed": [
+      "full CMIX internal model serialization",
+      "decoder arithmetic input register (not equal to encoder state)",
+      "cross-vendor behavior"
+    ],
+    "destructor_failure": "Clear file pointer before fclose; print, flush stderr and _Exit(125), avoiding recursive exit processing."
+  },
+  "required_gates": [
+    "validated synthetic argmax reflection before candidate selection",
+    "same candidate binary for P/K/D/C",
+    "P archive equals retained unmodified parent on identical public fixture",
+    "all P/K/D/C record streams and archives identical",
+    "each arm separate encoder/decoder process, exact raw inverse and deterministic reencoding",
+    "closed CPU, memory, scratch and elapsed guard",
+    "explicit package/source/options inventory"
+  ],
+  "attribution": {
+    "upstream": "FX2/CMIX model and coder mechanisms remain upstream work",
+    "Gamma": "conditional argmax reuse, explicit arm activation and diagnostic coder records"
+  },
+  "objective_credit_bytes": 0,
+  "expected_archive_gain_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "execution_authorized": false
+}
