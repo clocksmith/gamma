@@ -108,13 +108,14 @@ remain unchanged, without partial scientific access.
 | `fx2_cmix_transformer_argmax_fixture50051_q0_v1` | Same public fixture, P/K/D/C | All archives 3,223 bytes; twelve complete coder traces identical; [audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json) |
 | `fx2_weight_pack_roundtrip_q0_v1` | Full pinned trained model, six synthetic populations | Exact inverse/repeat but model grows 2,930,652 to 2,938,887 bytes; [audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json) |
 | `fx2_weight_marginal_roundtrip_q0_v1` | Full pinned trained model, eight synthetic populations, P/K/D/G | D: 2,908,329 bytes, saving 22,323; G: 2,911,998 bytes, saving 18,654; exact inverse/repeat; [audit](../operations/provenance/public_fx2_weight_marginal_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T222955Z_5eb35a57d6.json) |
+| `fx2_weight_native_fixture50051_q0_v1` | Same public fixture, native P/K/D; all 434 tensors including RoPE | All archives 3,223 bytes and nine coder streams identical; native runtime-pair components save 20,070 bytes; [audit](../operations/provenance/public_fx2_weight_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T230139Z_d8475c03dc.json) |
 
 Native argmax D/K diagnostic CPU ratio 0.9987045 missed the frozen 0.99 budget trigger: hold without a larger runtime gate.
 Retire preceding-symbol weight packing for 8,235 extra asset bytes before loader costs; neither result rejects its whole information source.
 Fixed-marginal P/K preserve the original 2,930,652 model bytes; each D/G restore and fresh repeat is exact. Both savings include all 7,169 extra side-information bytes.
-The frozen size rule selects D, with scientific status held for separately frozen native integration and measured added-package transfer.
+The frozen size rule selected D; native integration now passes exact tensor, probability, inverse and repeat checks with 12,288 added executable bytes per copy.
 The standalone utility does not pay: D runtime/source inventories exceed the original model alone by 89,671/38,977 bytes; G exceeds it by 93,340/42,646 bytes.
-Native archive/control replay and complete package economics remain missing; component savings authorize no larger launch or full-corpus credit.
+Native components save 20,070 bytes for two runtime copies, or 21,489 for the separate source-compressor/decoder alternative. Opening/distant transfer, complete package closure and full-corpus qualification remain missing; no full-score credit.
 Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
 [Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
