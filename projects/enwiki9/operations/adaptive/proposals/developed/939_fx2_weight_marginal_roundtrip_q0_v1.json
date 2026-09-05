@@ -1,0 +1,49 @@
+{
+  "candidate_id": "fx2_weight_marginal_roundtrip_q0_v1",
+  "claimed_at": "2026-09-05T22:29:53+00:00",
+  "created_at": "2026-09-05T22:29:53+00:00",
+  "developed_at": "2026-09-05T22:29:54+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_weight_pack_terminal_20260905.json",
+      "sha256": "sha256:cef68113c1b01d49fbf1029a776fb1a6424a4ebb655408862eaf8e6bded43696"
+    },
+    {
+      "path": "operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json",
+      "sha256": "sha256:121c6586ccb0bca066f8c7602e97b02177d20966ca74409481dfd651babce1ab"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_marginal_roundtrip_q0_v1.json",
+    "sha256": "sha256:2ec9dd3814c89e1445fb732b55fdcfe928d9e1ae2d5f680d0a97cecf74400a02"
+  },
+  "hypothesis": "Replacing online INT4 probability adaptation with explicitly transmitted fixed empirical marginals reduces the pinned complete model asset for at least one of the two frozen local/global arms, while P/K and every inverse/repeat preserve exact original model bytes.",
+  "interfaces_exposed": [
+    "FX2TFWC2 / GFX2MAR1 P K D G restore"
+  ],
+  "kill_condition": "Neither fixed D/G arm saves complete model bytes, or mandatory exactness fails. Keep execution budgets and implementation failures separate.",
+  "max_program_bytes": 1048576,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 40,
+  "promotion_condition": "All exact synthetic and P/K/D/G inverse/repeat checks pass and the smaller fixed D/G model saves bytes including every histogram; separate native package comparison required.",
+  "proposal_id": "fx2_weight_marginal_roundtrip_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 60,
+  "state": "developed",
+  "title": "Public FX2 fixed marginal model comparison"
+}

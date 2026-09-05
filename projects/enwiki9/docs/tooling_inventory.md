@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **970 files** (33 .c, 58 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 872 .py, 3 .sh).
+Coverage: **972 files** (33 .c, 59 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 873 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -312,7 +312,7 @@ Coverage: **970 files** (33 .c, 58 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 872 .py,
 | [`tools/fx2_mwcc_router_shadow.py`](../tools/fx2_mwcc_router_shadow.py) | Causal MWCC/router exact-shadow test over fx2 residual rows. MWCC here means a deterministic mixture-of-weak-causal-corrections router. Each expert is a tiny residual-bias table keyed by causal row fields. The router tracks each expert's prior online loss and picks the currently best expert for the next bit. All experts update only after the bit is encoded. | none found |
 | [`tools/fx2_profile_summary.py`](../tools/fx2_profile_summary.py) | Summarize FX2_LOSS_PROFILE stderr output. | none found |
 | [`tools/fx2_public_repro_queue.py`](../tools/fx2_public_repro_queue.py) | Lane 0 public fx2-cmix reproduction helper. This helper is intentionally full-corpus only. The upstream `cmix -e` path uses fixed enwik9 split/reorder constants and emits `archive9`, so prefix gates are not meaningful for reproducing the published Hutter entry. | none found |
-| [`tools/fx2_public_vocabulary.py`](../tools/fx2_public_vocabulary.py) | Authenticate the public fx2 submission vocabulary without executing it. | none found |
+| [`tools/fx2_public_vocabulary.py`](../tools/fx2_public_vocabulary.py) | Authenticate public fx2 vocabulary and optional package components without execution. | none found |
 | [`tools/fx2_rdo_feasibility.py`](../tools/fx2_rdo_feasibility.py) | Estimate copy-style RDO headroom from FX2_LOSS_LEDGER rows. | none found |
 | [`tools/fx2_reorder_dictionary.py`](../tools/fx2_reorder_dictionary.py) | Reorder/dictionary experiments. | none found |
 | [`tools/fx2_residual_apm_score.py`](../tools/fx2_residual_apm_score.py) | Score a tiny causal residual APM on FX2_RESIDUAL_ROW logs. The input is produced by fx2 builds compiled with FX2_RESIDUAL_LOG. This tool does not use future bits: it predicts from current counts, emits corrected loss, then updates the count table with the observed bit. | none found |
@@ -642,6 +642,8 @@ Coverage: **970 files** (33 .c, 58 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 872 .py,
 | [`tools/nncp_open_ff1_weight_slice_kernel_grid_64_q0_materializer.py`](../tools/nncp_open_ff1_weight_slice_kernel_grid_64_q0_materializer.py) | Freeze the LibNC-free FF1 weight-slice arithmetic grid. | [1](../operations/adaptive/experiments/nncp_open_ff1_weight_slice_kernel_grid_64_q0_v1.json) |
 | [`tools/nncp_open_ff1_weight_slice_post_add_64_q0.py`](../tools/nncp_open_ff1_weight_slice_post_add_64_q0.py) | Confirm the immutable post-dot-add open FF1 weight-slice kernel. | [1](../operations/adaptive/experiments/nncp_open_ff1_weight_slice_post_add_64_q0_v1.json) |
 | [`tools/nncp_open_ff1_weight_slice_post_add_64_q0_materializer.py`](../tools/nncp_open_ff1_weight_slice_post_add_64_q0_materializer.py) | Freeze the exact post-dot-add open FF1 weight-slice kernel. | [1](../operations/adaptive/experiments/nncp_open_ff1_weight_slice_post_add_64_q0_v1.json) |
+| [`tools/nncp_open_midas_initial_state_parity_65536_q0_v1.cpp`](../tools/nncp_open_midas_initial_state_parity_65536_q0_v1.cpp) | SPDX-License-Identifier: MIT Production initialization parity only; no forward, gradient, update or coding. | none found |
+| [`tools/nncp_open_midas_initial_state_parity_65536_q0_v1.py`](../tools/nncp_open_midas_initial_state_parity_65536_q0_v1.py) | Compare the sealed open MIDAS loader with the exact raw initialization state. | none found |
 | [`tools/nncp_open_profile_adam_replay_64_q0.py`](../tools/nncp_open_profile_adam_replay_64_q0.py) | Replay the complete production-profile Adam update in open code. | [1](../operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_v1.json) |
 | [`tools/nncp_open_profile_adam_replay_64_q0_retry_v1.py`](../tools/nncp_open_profile_adam_replay_64_q0_retry_v1.py) | Replay the complete production-profile Adam update in open code. | [1](../operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_retry_v1.json) |
 | [`tools/nncp_open_profile_adam_replay_64_q0_retry_v2.py`](../tools/nncp_open_profile_adam_replay_64_q0_retry_v2.py) | Replay the complete production-profile Adam update in open code. | [3](../operations/adaptive/experiments/nncp_open_profile_adam_replay_64_q0_retry_v2.json) |
