@@ -1,0 +1,85 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-fixture-diagnostic.v1",
+  "candidate_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+  "status": "execution_failed",
+  "scope_bytes": 50051,
+  "scope": "upstream public prof_input/input; not a canonical prefix",
+  "objective_credit_bytes": 0,
+  "roundtrip_ok": null,
+  "deterministic_ok": null,
+  "mapping_gate_pass": null,
+  "complete_trained_mapping_equivalence": false,
+  "larger_gate_authorized": false,
+  "input": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work/prof_input/input",
+    "bytes": 50051,
+    "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "600",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "cwd": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work",
+      "returncode": 0,
+      "elapsed_seconds": 15.720235537039116,
+      "elapsed_cap_seconds": 600,
+      "timing_authority": "shared-host diagnostic only"
+    }
+  ],
+  "binary": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work/cmix",
+    "bytes": 487944,
+    "sha256": "d3a51af103baa2eb8dc7d01d0bfc7851088b17dd4566127e82bccaa6d2593dcb"
+  },
+  "error": "RuntimeError: portable instruction guard failed",
+  "guard_returncode": 1,
+  "guard": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.json",
+    "bytes": 20452,
+    "sha256": "6855d34458c4dcb43dd7d608bd0c79937305e89b09f9c198dd3812b228e8ab15"
+  },
+  "guard_command": [
+    "/usr/bin/python3",
+    "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_q0_v13.py",
+    "--limit-kib",
+    "9667968",
+    "--official-decimal-limit-kib",
+    "9667968",
+    "--cgroup-memory-max-bytes",
+    "9899999232",
+    "--cgroup-path",
+    "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v3",
+    "--temporary-disk-limit-bytes",
+    "16000000000",
+    "--scratch-path",
+    "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+    "--phase-marker-path",
+    "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/phases.jsonl",
+    "--guard-json",
+    "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.json",
+    "--label",
+    "fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+    "--max-logical-cpus",
+    "1",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "2",
+    "/usr/bin/timeout",
+    "--kill-after=5",
+    "1100",
+    "/usr/bin/python3",
+    "/home/x/deco/gamma/projects/enwiki9/tools/fx2_cmix_transformer_gcc_fixture50051_q0_v3.py",
+    "--stage"
+  ]
+}

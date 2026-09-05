@@ -1,0 +1,41 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-strict-math-validation.v1",
+  "generated_at": "2026-09-05T16:59:40.862320+00:00",
+  "candidate_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v4",
+  "normalized_diff_is_only_gcc_arithmetic_flags_and_identity": true,
+  "arithmetic_adaptation": "GCC fno-fast-math and fno-math-errno replace fast-math; no claim of equality to clang arithmetic.",
+  "python_syntax_valid": true,
+  "unchanged_scientific_gate_fields": {
+    "hypothesis": true,
+    "controls": true,
+    "population": true,
+    "causalBoundary": true,
+    "budget": true,
+    "search": true,
+    "measurements": true,
+    "promotionPredicates": true,
+    "killPredicates": true
+  },
+  "source_validation": {
+    "source_binding_pass": true,
+    "files": 131,
+    "no_build_or_codec_execution": true,
+    "build_argv": [
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+    ]
+  },
+  "executed_compiler_or_codec": false,
+  "upstream_instruction_guard_scope": {
+    "path": "external/fx2-cmix-transformer-v1/build_and_construct_comp.sh",
+    "lines": "79-95",
+    "finding": "Whole-binary objdump reciprocal-estimate rejection matches the frozen gate; no transformer-only exemption."
+  },
+  "v3_symbol_localization_limit": "Upstream final link strips symbols and deletes object files; exact symbol attribution unavailable without another build.",
+  "objective_credit_bytes": 0,
+  "larger_gate_authorized": false
+}

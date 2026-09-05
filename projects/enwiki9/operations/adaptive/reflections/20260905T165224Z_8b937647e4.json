@@ -1,0 +1,94 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The GCC fast-math adapter generated24 vrsqrtss,12 vrsqrtps and10 vrcpps instructions despite mrecip=none; GCC documents that fast-math itself permits such sequences."
+  },
+  "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+  "candidateRevision": {
+    "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+    "candidateTreeSha256": "sha256:bfd77f4592ae0a1e98bd5167b39e1f2547827fc765f191603a5ac324e2182728",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v3/20260905T165131887463Z_bfd77f4592ae.json",
+      "sha256": "sha256:b2002cd321f9b840b0acf712abb0059acbd14bca5da111d60e46aff181a89aff"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "A separately frozen strict-math GCC portability correction can retain the public source/model identities, instruction audit and scientific gates. No compression verdict or larger-gate authority is earned; no further launch occurred.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_gcc_fixture_v3_terminal_20260905.json",
+      "sha256": "sha256:ceb6cce5269ea8bd5ca8c1b27c620f13738b1e93c650b238f7257a1b2fa26170"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/compile.execution.json",
+      "sha256": "sha256:ae0262b7aec4b19ac89e9819c13aaba25cd5bb33a1abceaac5ddfbf00b48c7ef"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/decision.json",
+      "sha256": "sha256:0a57377209bfc5bc4c5df26c6c62276ad7d025f7e86c2fa309fa4dfcca6d4531"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/instruction-audit.json",
+      "sha256": "sha256:0eff373430db331d205785ceda4acf79d8f74eb958009fa41fe371d69c80de88"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v3.json",
+    "sha256": "sha256:000b0d3635d30f9b3adf3365fcce77a14ca2349ce580aaee7f779ffc73c79137"
+  },
+  "generatedUtc": "2026-09-05T16:57:29+00:00",
+  "hypothesis": {
+    "rationale": "The GCC binary violated the required no-estimate instruction policy; fixture mapping, exact decode and deterministic replay were not invoked.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/999_20260905T165224Z_8b937647e4.json",
+    "sha256": "sha256:5c0a03fb7f65780f555e33d1f19fb187ba2cfe73a64f7f0acc13791a81fea373"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A GCC adapter must preserve the pinned upstream no-estimate invariant through actual binary disassembly; copying the clang mrecip flag is insufficient."
+    ],
+    "uncertainties": [
+      "No equivalence of a future strict-math GCC binary with upstream clang arithmetic is established."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t165224z_8b937647e4",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Build succeeded, but the frozen instruction audit rejected46 reciprocal-estimate instructions before preprocessing or codec execution. Resource guards were complete without a limit violation and cleanup completed."
+    ],
+    "valid": false
+  }
+}
