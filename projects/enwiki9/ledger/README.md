@@ -1,60 +1,33 @@
 # Research ledger
 
-[Open the ledger](index.html) · [JSON export](ledger.json) ·
-[Workbench](../workbench/README.md) · [Prompts](../workbench/PROMPTS.md)
+[Open browser](index.html) · [JSON export](ledger.json) ·
+[Command manual](../ADAPTIVE_WORKFLOW.md#start-and-find-records) ·
+[Tool catalogue](../docs/tooling_inventory.md)
 
-One searchable view of existing research records. Rebuild it from
-`gamma/projects/enwiki9/`:
+The ledger projects canonical research records into a searchable local view.
+From `gamma/projects/enwiki9/`, rebuild it with:
 
 ```bash
 python3 tools/enwiki9_ledger.py
 ```
 
-The project's [AGENTS.md](../AGENTS.md) applies here. Edit canonical records
-through the workbench workflow; regenerate `index.html` and `ledger.json`
-instead of editing those snapshots. Both generated files are local and ignored
-by Git, so rebuild them on each device.
+Open `ledger/index.html` directly; no server, installation, or network is needed.
+The HTML and JSON are ignored local snapshots, so rebuild on each device.
+`--summary` reports coverage without writing them. Agents can query records
+directly through the command manual's `enwiki9_lab.py records` interface.
 
-Open `ledger/index.html` directly in a browser. No server, dependencies, or
-network are required. `--summary` prints coverage without writing files.
+| Browser view | Contents |
+| --- | --- |
+| Algorithms | Candidates, proposals, ideas, lineage, and linked evidence |
+| Running & queued | Jobs, holds, and host/timestamp-specific process observations |
+| Results | Exact receipts and retained summaries with scope, units, and verdicts |
+| Mixes | Composition graphs and explicitly described combinations |
+| Research notes | Register decisions, archives, and historical candidate notes |
+| Tools | Generated catalogue of existing implementations and utilities |
 
-Agents can read the same records without generating the browser snapshot:
-
-```bash
-python3 tools/enwiki9_lab.py start
-python3 tools/enwiki9_lab.py records --search 'MECHANISM' --limit 20
-python3 tools/enwiki9_lab.py records --candidate CANDIDATE --limit 20
-python3 tools/enwiki9_lab.py records --view notes --search 'MECHANISM'
-python3 tools/enwiki9_lab.py records --view reviews --state completed --state failed
-```
-
-All commands use the project root. Replace uppercase placeholders with recorded
-names. CLI views are `algorithms`, `runs`, `notes`, `mixes`, `proposals`, and
-`reviews`; use `--offset` and the returned `next_offset` to page through matches.
-Research-note search covers full sections and returns a source path, line number,
-and excerpt. Candidate detail retains all source links and pages its run history.
-The reviews view lists the latest bound job per candidate missing a reflection;
-`--include-legacy` also lists unbound historical jobs. These are discovery checks,
-not validated verdicts, and need review before entering scientific conclusions.
-
-The browser has five views:
-
-- **Algorithms:** candidates, proposals, portfolio ideas, and retained result
-  collections. Filter their recorded status or kind; open an entry for its
-  parents, children, evidence links, notes, and complete indexed run history.
-- **Running & queued:** running, waiting, and held job records. Process
-  observations name their host and timestamp. A source process and its observer
-  can have separate jobs; their count is not a compressor count.
-- **Results:** driver receipts, terminal jobs, and retained report summaries,
-  preserving their scope, units, and recorded verdicts.
-- **Mixes:** recorded composition graphs and portfolio combinations, plus a
-  separate search grouping of candidates explicitly described as mixtures.
-- **Research notes:** decisions from the current register, its archives, and
-  historical candidate notes, with links back to their full text.
-
-Search within each view. Candidate details retain their full indexed history
-even when a search is active. Lists are paginated. Open source links to resolve
-a claim before acting on it.
+Current algorithm/result views keep active work visible. Enable history or
+search explicitly to find retired work; candidate detail retains complete indexed
+lineage and runs. Lists are paginated. Follow source links before using a claim.
 
 ## Record map
 
@@ -73,15 +46,14 @@ a claim before acting on it.
 | Generated operator report | [Status receipt](../docs/status_receipt.md) and its JSON companion; verify timestamp and process evidence |
 | Atlas-Clockwork problem binding and activation | `docs/atlas_clockwork_seal_*.md` and [seal operations](../operations/atlas_clockwork_seal_v2/) |
 
-The generated HTML and JSON are disposable local snapshots, never another
-registry or queue. They do not validate evidence or authorize a transition.
-Missing metrics stay missing; completed jobs and reported passes do not imply
-scientific success. Lineage uses explicit references, not library dependencies
-or guesses from names. An entry without a summary still links its retained
-artifact directory; oversized or unreadable summary records are listed as source
-issues. Raw traces and active scientific outputs are not read.
+## Evidence boundaries
 
-Rebuild after updating canonical records. The generator reads process metadata
-once and may reuse the existing HORIZON observer's operational receipt; it does
-not take monitoring ownership or start a worker. See
-[the workbench](../workbench/README.md) for making and recording changes.
+Edit canonical records through the [workflow](../ADAPTIVE_WORKFLOW.md), then
+regenerate snapshots. This view creates no registry, queue, verdict, or launch
+authority. Completed jobs and reported passes alone do not establish scientific
+success; missing metrics stay missing. Lineage uses explicit recorded references.
+
+Unreadable or oversized summaries remain visible as source issues. The generator
+reads process metadata and may reuse HORIZON's existing operational receipt; it
+does not read raw traces or active scientific outputs, take observer ownership,
+or launch workers. See [AGENTS.md](../AGENTS.md) for operating rules.

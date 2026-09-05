@@ -1,77 +1,61 @@
 # enwiki9 Adaptive Workflow
 
-This is the primary operating workflow for enwiki9 research.
+This is the command manual for enwiki9 research. Follow [AGENTS.md](AGENTS.md)
+for permissions and evidence invariants, and the [record map](ledger/README.md#record-map)
+for canonical storage. Run commands from `gamma/projects/enwiki9/`. Uppercase
+names and angle-bracketed values are placeholders resolved from actual records.
 
-For a concise entry path, read [workbench/README.md](workbench/README.md).
-From the project root, `python3 tools/enwiki9_lab.py start` reports ownership,
-record coverage, and next read commands; `records --search QUERY` retrieves
-bounded context. These read-only commands do not launch or mutate experiments.
-The [record map](ledger/README.md#record-map) identifies each canonical source.
+The [active objective](contracts/research/v2/objective-contract.json) is
+**99,000,000 complete bytes** with exact full-corpus reconstruction and independent
+resource compliance. Preserve historical v1 bindings and its 105M milestone;
+copied target values are not independent authority.
 
-All proposal, mutation, gate, and promotion decisions are subordinate to the
-versioned objective in `contracts/research/v1/objective-contract.json`.
-Receipts must eventually bind its canonical SHA-256; copied target values are
-not independent authority.
+## Start And Find Records
 
-The loop is:
+```bash
+python3 tools/enwiki9_lab.py start
+python3 tools/enwiki9_lab.py records --search 'QUERY' --limit 20
+python3 tools/enwiki9_lab.py records --candidate CANDIDATE --limit 20
+python3 tools/enwiki9_lab.py records --view runs --state running
+python3 tools/enwiki9_lab.py records --view reviews
+python3 tools/enwiki9_lab.py records --view tools --search 'QUERY'
+```
+
+`start` reports local ownership, held work, record coverage, and next read
+commands. These queries launch nothing and do not validate evidence or grant
+execution authority. Follow source links and inspect actual host process
+identities before source changes or resource-intensive work; a recorded running
+state does not establish liveness.
+
+Views are `algorithms`, `runs`, `notes`, `mixes`, `proposals`, `reviews`, and
+`tools`. Algorithm/run lists focus on current work, retaining active queued jobs.
+Use `--history` for retired, failed, rejected, or superseded candidates.
+An explicit `--search`, `--candidate`, or `--state` also retrieves matching history.
+Candidate detail retains lineage and run history. Search matches all words,
+ignoring case; page with `--offset` and the returned `next_offset`.
+Reviews identify bound terminal jobs missing reflections; `--include-legacy`
+also includes historical unbound jobs. Presence is not a scientific verdict.
+
+The [tool catalogue](docs/tooling_inventory.md) indexes available utilities;
+inspect a selected tool's source and `--help` before use. The
+[ledger guide](ledger/README.md) covers browser navigation.
+
+On “go”, find the next justified action and complete this loop:
 
 ```text
-analyze evidence
--> freeze a structured experiment contract
--> propose and rank a mechanism against that contract
--> claim and develop
--> create or mutate
--> queue
--> run the smallest missing exact gate
--> record result and lifecycle state
--> refresh inventories and reports
--> promote, retry explicitly, mutate, or retire
+evidence -> frozen experiment -> proposal -> claim -> develop/seal
+         -> bounded gate -> validated reflection -> recorded decision -> next action
 ```
 
-OMEGA is the archive-search layer inside this loop. It does not compress data
-and receives no score credit. It preserves negative mechanism knowledge,
-prioritizes mechanism changes over parameter changes, and retains productive
-lineages even when an ancestor is not an immediate score leader.
-
-Before proposing a successor in a measured neighborhood, inspect exclusions:
-
-```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py exclusions
-python3 projects/enwiki9/tools/enwiki9_lab.py productivity
-```
-
-Record a decisive negative result:
-
-```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py exclude <exclusion_id> \
-  --mechanism "<information source or coding mechanism>" \
-  --population "<exact measured population>" \
-  --failure "<receipt-backed terminal failure>" \
-  --retired-dimension "<dimension no longer worth sweeping>" \
-  --unsettled-successor "<materially different successor>" \
-  --evidence <receipt>
-```
-
-Use `tools/enwiki9_lab.py` for this loop. Do not build separate ad hoc launchers
-or keep experiment state only in chat.
+A held gate or unrelated reflection backlog does not stop independent research.
+Use this lifecycle rather than another launcher, queue, or chat-only notebook.
 
 ## Record The Discovery Boundary
 
-The project has four distinct durable layers. Do not collapse them:
-
-```text
-considered idea or conclusion
-    -> docs/research_register.md
-
-ranked batch of unmeasured ideas
-    -> dated docs/*portfolio*.md and docs/*portfolio*.json
-
-actionable falsifiable experiment
-    -> operations/adaptive/proposals/
-
-completed exact evidence
-    -> results/<candidate_id>/ and results/run_ledger.jsonl
-```
+Use the [canonical record map](ledger/README.md#record-map): considered ideas
+and conclusions go in the research register, unmeasured batches in dated
+portfolios, actionable experiments in adaptive proposals, and exact evidence
+in results with its canonical run row.
 
 Every algorithm that receives meaningful analysis must be recorded even when
 it is rejected before implementation, merged into an existing lineage, parked,
@@ -95,7 +79,7 @@ Process completion does not update scientific candidate status. Every terminal
 revision-bound job must first receive one validated reflection:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py reflect <job_id> \
+python3 tools/enwiki9_lab.py reflect <job_id> \
   --validity valid \
   --validity-reason "<why the causal comparison is valid>" \
   --hypothesis-verdict supported \
@@ -133,7 +117,7 @@ measurement or promotion credit. Backfill and audit the projection with
 Rank actionable proposals after reflection with:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py next-experiment
+python3 tools/enwiki9_lab.py next-experiment
 ```
 
 The ordering is versioned in `contracts/research/v1/search-policy.json`. It is
@@ -176,12 +160,50 @@ a structural router, not proof that its large artifacts were rehashed.
 
 ## Discover And Propose Algorithms
 
+Search prior results, lineage, and scoped exclusions before choosing a mechanism:
+
+```bash
+python3 tools/enwiki9_lab.py exclusions
+python3 tools/enwiki9_lab.py productivity
+```
+
+Use primary papers, authors' implementations, and current official prize sources.
+Pin source and asset identities, inspect licensing and model provenance, and
+keep external results separate from Gamma's attributable modifications. The
+[competitive frontier](operations/provenance/competitive_frontier_v1.json) records
+dated sources; a changed objective needs a new version, not rewritten history.
+
+OMEGA preserves negative mechanism knowledge and productive lineages; it is
+search machinery with zero score credit. Record a scoped negative result with:
+
+```bash
+python3 tools/enwiki9_lab.py exclude <exclusion_id> \
+  --mechanism "<information source or coding mechanism>" \
+  --population "<exact measured population>" \
+  --failure "<receipt-backed terminal failure>" \
+  --retired-dimension "<dimension no longer worth sweeping>" \
+  --unsettled-successor "<materially different successor>" \
+  --evidence <receipt>
+```
+
+Do not rename retired Fiber-FOSSIL exact retrieval as a new experiment. HARM
+causal edit alignment and compact MIDAS require their own measured comparisons.
+Choose one challenger per lane and diagnose opportunity scarcity, parent
+redundancy, calibration, state interference, or runtime before changing a mechanism.
+
+Freeze the parent, hypothesis, changed mechanism, development budget, selection
+population, sealed confirmation, package estimate, resources, and stop rule.
+Budgeted parameter selection belongs on development data; freeze the candidate
+before confirmation. Forecast-based stops are budget decisions, not impossibility
+proofs. Smaller package-paying gains may remain components; combinations still
+need fresh joint archives.
+
 Algorithm discovery is separate from gate discovery. Freeze and validate
 `operations/adaptive/experiments/<id>.json` before recording a proposal or
 writing candidate source:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py propose <proposal_id> \
+python3 tools/enwiki9_lab.py propose <proposal_id> \
   --title "<mechanism>" \
   --hypothesis "<falsifiable hypothesis>" \
   --mechanism-class endpoint \
@@ -189,7 +211,7 @@ python3 projects/enwiki9/tools/enwiki9_lab.py propose <proposal_id> \
   --max-program-bytes <bytes> \
   --promotion "<numeric promotion condition>" \
   --kill "<numeric kill condition>" \
-  --experiment projects/enwiki9/operations/adaptive/experiments/<id>.json \
+  --experiment operations/adaptive/experiments/<id>.json \
   --mechanism-change change_coded_alphabet \
   --interface "<clean interface exposed to descendants>" \
   --retired-neighborhood "<negative neighborhood this does not repeat>" \
@@ -200,25 +222,11 @@ Mechanism classes are `substrate`, `endpoint`, `representation`, and `coder`.
 Keep orthogonal proposals active rather than collapsing search into one tuning
 ladder.
 
-Mechanism-change classes receive an explicit search bonus or penalty:
-
-```text
-favor:
-  delete_predictor_work
-  change_coded_alphabet
-  change_update_schedule
-  replace_representation
-  add_state_coordinate
-  compile_state_machine
-  add_macro_family
-
-penalize:
-  parameter_tuning
-  mixture_expansion
-```
-
-The bonus changes search ordering only. It never changes measured archive
-bytes, counted package bytes, runtime, memory, or promotion gates.
+The search policy favors deleting predictor work, changing the coded alphabet
+or update schedule, replacing representation, adding a state coordinate,
+compiling a state machine, and adding a macro family over parameter tuning or
+mixture expansion. These priorities affect ordering only, never measured values
+or promotion authority; see `contracts/research/v1/search-policy.json`.
 
 For more than eight independently positive components, do not enumerate the
 full subset lattice. Measure singles, screen pairs, use branch-and-bound,
@@ -228,8 +236,8 @@ small set.
 List and claim proposals:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py proposals
-python3 projects/enwiki9/tools/enwiki9_lab.py claim <proposal_id> --owner <owner>
+python3 tools/enwiki9_lab.py proposals
+python3 tools/enwiki9_lab.py claim <proposal_id> --owner <owner>
 ```
 
 Dependency-gated proposals carry `operational_status: dormant_dependency` and
@@ -238,7 +246,7 @@ until an operator verifies the required terminal receipts and records that
 evidence explicitly:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py activate-proposal <proposal_id> \
+python3 tools/enwiki9_lab.py activate-proposal <proposal_id> \
   --evidence results/<dependency>/decision.json
 ```
 
@@ -254,7 +262,7 @@ cannot bypass the receipt gate.
 Materialize a claimed proposal as a candidate:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py develop \
+python3 tools/enwiki9_lab.py develop \
   <proposal_id> <candidate_id>
 ```
 
@@ -270,7 +278,7 @@ gate, and kill gate are concrete enough to run.
 Create a blank candidate:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py new <candidate_id> \
+python3 tools/enwiki9_lab.py new <candidate_id> \
   --hypothesis "<falsifiable hypothesis>"
 ```
 
@@ -288,7 +296,7 @@ receipt. After implementing a new scaffold or making any pre-measurement edit,
 seal the exact tree explicitly:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py seal <candidate_id> \
+python3 tools/enwiki9_lab.py seal <candidate_id> \
   --hypothesis "<falsifiable mechanism claim>" \
   --change "<complete semantic change>" \
   --evidence <proposal-or-design-receipt>
@@ -309,14 +317,14 @@ measured candidate in place.
 Clone a parent:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py mutate <parent_id> <new_id> \
+python3 tools/enwiki9_lab.py mutate <parent_id> <new_id> \
   --hypothesis "<one changed mechanism and expected byte effect>"
 ```
 
 For a small deterministic source mutation:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py mutate <parent_id> <new_id> \
+python3 tools/enwiki9_lab.py mutate <parent_id> <new_id> \
   --hypothesis "<hypothesis>" \
   --replace 'OLD_TEXT=NEW_TEXT'
 ```
@@ -348,31 +356,43 @@ delta; it refuses to overwrite an existing frozen contract.
 
 ## Queue
 
-Queue an explicit gate:
+Queue an exact codec gate with its frozen discovery resource envelope:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py enqueue <candidate_id> \
-  --gate-size 1000000 \
-  --archive-ceiling <exact-kill-bytes> \
-  --purpose candidate \
-  --tag <lane>
+python3 tools/enwiki9_lab.py enqueue CANDIDATE \
+  --gate-size SCOPE --purpose candidate --tag LANE \
+  --mode discovery --cpu-set CPU_SET \
+  --memory-limit-bytes MEMORY_BYTES --disk-limit-bytes SCRATCH_BYTES \
+  --wall-time-limit-seconds STOP_SECONDS --cgroup-parent DELEGATED_CGROUP_PARENT
 ```
 
-Use `--archive-ceiling` whenever the proposal has a frozen archive kill bound.
-The runner forwards it to both the first archive and deterministic-reencode
-checks. Exceeding the ceiling skips decompression and re-encode rather than
-spending the serialized lane on a result that is already terminal.
+Supply `--archive-ceiling BYTES` when the contract freezes an archive kill bound.
+The first archive and repeat obey it; an exceeded bound skips decode/re-encode
+and remains a budget decision. Worker count alone is not a memory guard.
 
-Queue a receipt-producing diagnostic, infrastructure, or oracle tool through
-the same durable lifecycle:
+Discovery may share the host under admission controls. Unknown ownership blocks
+admission, and legacy jobs without an explicit mode remain held. Qualification
+uses `--mode qualification` with a bound calibration plan/receipt and exclusive
+lease; consult `enqueue --help` for their arguments. Concurrent timing remains
+diagnostic. A candidate with a nested guard must declare its exact cgroup and
+memory allocation; the aggregate budget includes coordination overhead and the
+deadline covers all owned processes.
+
+A simulation, proxy, infrastructure check, or oracle uses the same lifecycle:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py enqueue-tool <candidate_id> \
-  --tool tools/<tool.py> \
-  --tool-arg <argument> \
-  --purpose oracle \
-  --gate-size 1000000
+python3 tools/enwiki9_lab.py enqueue-tool CANDIDATE \
+  --tool tools/TOOL.py --purpose diagnostic --gate-size SCOPE \
+  --mode discovery --cpu-set CPU_SET \
+  --memory-limit-bytes MEMORY_BYTES --disk-limit-bytes SCRATCH_BYTES \
+  --wall-time-limit-seconds STOP_SECONDS --cgroup-parent DELEGATED_CGROUP_PARENT
 ```
+
+Pass arguments with repeated `--tool-arg=VALUE`. Declare required precreated
+paths with `--scratch-directory results/CANDIDATE` and follow the selected tool's
+output contract. Tool purposes are `diagnostic`, `infrastructure`, or `oracle`;
+simulation describes the experiment, not a CLI purpose. These jobs get zero
+score credit.
 
 Tool paths are restricted to `projects/enwiki9/tools/`. Tool jobs cannot use a
 score-bearing purpose and never update candidate lifecycle or frontier credit.
@@ -380,37 +400,13 @@ The tool digest is bound as the v3 runner, and the candidate's proposal-bound
 experiment is inferred unless `--experiment` is supplied to assert the same
 reference explicitly.
 
-Job purpose controls lifecycle mutation:
+Only `candidate`, `proof`, and `adaptive_discovery` exact gates may update
+scientific status after validated reflection. Infrastructure checks can prove
+imports, compilation, inversion, or determinism; they cannot promote or retire
+an algorithm without its frozen scientific comparison.
 
-```text
-candidate, proof, adaptive_discovery
-    -> exact triage may update candidate status
-
-infrastructure, diagnostic, oracle
-    -> preserve receipts but never update candidate status
-```
-
-An infrastructure smoke may prove imports, compilation, roundtrip, or
-determinism. It cannot retire or promote the underlying algorithm unless a
-separate candidate gate covers the proposal's frozen population and metric.
-
-Create or mutate and immediately queue:
-
-```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py mutate <parent_id> <new_id> \
-  --hypothesis "<hypothesis>" \
-  --enqueue
-```
-
-Jobs move atomically through:
-
-```text
-operations/adaptive/pending/
-operations/adaptive/running/
-operations/adaptive/completed/
-operations/adaptive/failed/
-operations/adaptive/cancelled/
-```
+Jobs move atomically through `operations/adaptive/{pending,running,completed,
+failed,cancelled}/`. Queue after source sealing and explicit resource binding.
 
 Each candidate-and-scope pair runs once unless an operator explicitly uses
 `--force`.
@@ -419,8 +415,8 @@ A pending job may be made durable but unclaimable without cancelling its queue
 identity:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py hold <job_id> --reason <reason>
-python3 projects/enwiki9/tools/enwiki9_lab.py release <job_id> --reason <evidence>
+python3 tools/enwiki9_lab.py hold <job_id> --reason <reason>
+python3 tools/enwiki9_lab.py release <job_id> --reason <evidence>
 ```
 
 Workers always skip `held: true` jobs, including generic adaptive workers.
@@ -431,13 +427,13 @@ Release only when the recorded dependency or portfolio decision is satisfied.
 Preview the next missing exact gate for eligible candidates:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py discover-gates --dry-run
+python3 tools/enwiki9_lab.py discover-gates --dry-run
 ```
 
 Queue those gates:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py discover-gates
+python3 tools/enwiki9_lab.py discover-gates
 ```
 
 The exact gate ladder is:
@@ -446,27 +442,25 @@ The exact gate ladder is:
 1K -> 250K -> 1M -> 10M -> 100M -> 1G
 ```
 
-A scope counts as passed only when candidate metadata records exact roundtrip
-and deterministic replay. Adaptive discovery selects the next larger scope; it
-does not infer success from forecasts, partial archives, or process state.
+A scope counts as passed only with exact roundtrip and deterministic replay.
+Choose diagnostic populations appropriate to the mechanism: opening and distant
+populations can differ, and history-dependent tests need causal warmup through a
+verified checkpoint or prefix replay. A cold 10M run cannot exercise matches
+requiring over 100M transformed bytes. Frontend coordinates must agree before
+reusing sealed parent traces; WRT and token traces are not interchangeable.
+Adaptive discovery does not infer success from forecasts or process state.
 
 ## Run
 
-Run one available batch:
+After publishing ownership, run the named eligible gate:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py run --max-workers 4
+python3 tools/enwiki9_lab.py run --candidate CANDIDATE --max-workers 1
 ```
 
-Continuously discover and run work on demand:
-
-```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py run \
-  --adaptive \
-  --continuous \
-  --max-workers 4 \
-  --min-free-mib 4096
-```
+Use `run --adaptive --continuous` only within the authorized ownership and
+resource envelope; `--max-workers` and admission limits do not replace each
+job's frozen guards.
 
 The runner adapts to current one-minute system load and available memory before
 claiming a batch. Independent gates may run concurrently up to the configured
@@ -492,19 +486,19 @@ Worker output is stored in `run_logs/adaptive/<job_id>.log`.
 Show current jobs, recent outcomes, load, and available memory:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py status
+python3 tools/enwiki9_lab.py status
 ```
 
 Cancel a pending job:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py cancel <job_id>
+python3 tools/enwiki9_lab.py cancel <job_id>
 ```
 
 Refresh generated views without launching a gate:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py refresh
+python3 tools/enwiki9_lab.py refresh
 ```
 
 Stop a continuous runner with the normal process interrupt. Pending and
@@ -515,27 +509,25 @@ terminal job records remain durable.
 Git is the replication layer for algorithms and evidence. Active processes,
 resource usage, and logs still being written are host-local.
 
-Before work on a device:
+Before work on another device, start from the project root:
 
 ```bash
-cd /home/clocksmith/deco
+cd ../../..
 ./rdpull.sh
-cd gamma
-python3 projects/enwiki9/tools/enwiki9_lab.py status
+cd gamma/projects/enwiki9
+python3 tools/enwiki9_lab.py start
 ```
 
-Before a resource-intensive run:
-
-1. Pull current state.
-2. Claim the proposal and queue a unique candidate-and-scope gate.
-3. Push the ownership record before another host begins related work.
-4. Inspect the selected host's process table and available memory and storage.
+Before a resource-intensive run, pull, claim and queue the unique work, publish
+ownership, then inspect the selected host's process identities and available
+memory/storage. Do not infer cross-device liveness from committed status.
 
 After a terminal result or decisive research conclusion:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_lab.py refresh
-cd /home/clocksmith/deco
+python3 tools/enwiki9_lab.py refresh
+python3 tools/enwiki9_ledger.py
+cd ../../..
 ./rdpush.sh
 ```
 
@@ -545,33 +537,39 @@ and refreshed status. Logs that are still being written are not durable
 evidence. A committed status receipt describes the producing host at its
 timestamp; it is not proof that the process remains live elsewhere.
 
-## Promotion And Kill Rules
+## Executable Comparison And Release Checks
 
-- Start with the smallest decisive gate.
-- State the hypothesis, baseline, expected byte leverage, promotion condition,
-  and kill condition in candidate metadata.
-- Promote only exact roundtrip and deterministic evidence at the measured
-  scope.
-- Before a larger gate, include counted program cost and remaining target debt.
-- A failed implementation retires that candidate, not the entire algorithm
-  family.
-- A retry requires `--force` and a recorded reason; a source change requires a
-  new candidate ID.
-- Never edit candidate source underneath a running job.
-- Never treat a partial archive, forecast, oracle, teacher, or shadow result as
-  a full official score.
+[lib/predictor.py](lib/predictor.py) defines Q16 pre-truth bit probabilities,
+decoded-bit updates, deterministic initialization, serialization, digests, and
+frontend/trace identities. Its arithmetic codec is a correctness fixture.
+Other frontends need explicit adapters.
 
-## Source Of Truth
+The existing [driver](lib/driver.py) accepts `--comparison SPEC.json --limit BYTES
+--output results/CANDIDATE/NEW_RUN`. A candidate supplies `compress_arm` and
+`decompress_arm`; the specification binds parent, bookkeeping, treatment and
+applicable controls, plus hypothesis, changed mechanism, development budget,
+selection and sealed confirmation populations, and stop rule. Run comparisons
+through the frozen queued candidate. Retain archives, restored bytes, repeats,
+and first-divergence diagnostics before publishing an atomic decision. Missing
+optional telemetry stays explicit; missing mandatory evidence blocks promotion.
+Matching sizes alone do not establish encoder/decoder state agreement.
 
-| Question | Source |
-|---|---|
-| What algorithms have been considered, merged, parked, or rejected? | `docs/research_register.md` |
-| What unmeasured batches and rankings were recorded? | The dated `docs/*portfolio*.md` and `docs/*portfolio*.json` named by the research register |
-| What algorithms are proposed or claimed? | `operations/adaptive/proposals/` |
-| What work is queued or running? | `operations/adaptive/<state>/` |
-| How was a candidate derived? | `operations/adaptive/mutations.jsonl` and `programs/<id>/meta.json` |
-| What did a worker emit? | `run_logs/adaptive/<job_id>.log` |
-| What exact run was recorded? | `results/<id>/` and `results/run_ledger.jsonl` |
-| What is each candidate's lifecycle? | `candidate_inventory.json` |
-| What source-bound evidence affects the target? | `docs/hutter_frontier.json` and `docs/hutter_run_ledger.json` |
-| What is the current proof boundary? | `docs/status_receipt.md` and `UPPER_BOUND_CERTIFICATE.md` |
+Exercise the existing predictor and packaging tools without installation:
+
+```bash
+python3 -m unittest discover -s tests -p test_enwiki9_predictor_driver.py -v
+python3 -m unittest discover -s tests -p test_enwiki9_release_canary.py -v
+python3 tools/enwiki9_clean_room_replay.py --verify-canary results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/canary-receipt.json
+```
+
+For a fresh release canary, use `python3 tests/test_enwiki9_release_canary.py
+--bundle results/release_canary_rle_q0_v1/release/NEW_RECEIPT`. This exercises three
+independent builds, exact reconstruction, repeat archives, missing-file rejection,
+and license reporting with zero objective credit. The
+[prize-facing package procedure](#compose-prize-facing-evidence) remains separate.
+
+Before submission, confirm the accepted reference and accounting with the
+committee, prepare public source/package and an algorithm explanation, document
+authorship and external contributions, and provide build/encode/decode commands.
+The [committee inquiry](workbench/committee-inquiry.eml) is prepared but unsent;
+sending it requires an authorized sender and email channel.

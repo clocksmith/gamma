@@ -166,14 +166,19 @@ def normalize_row(row: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]
 def build_ledger(project_root: Path, frontier: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     objective = research_contracts.objective_binding()
-    target = frontier.get("target", {})
+    source_target = frontier.get("target", {})
+    source_objective = frontier.get("objective", {})
+    try:
+        research_contracts._validate_objective_binding(source_objective, "source frontier")
+    except (ValueError, KeyError, OSError) as exc:
+        errors.append(f"frontier objective binding is invalid: {exc}")
     if (
-        target.get("input_bytes") != objective["corpusBytes"]
-        or target.get("score_bytes") != objective["targetScoreBytes"]
+        source_target.get("input_bytes") != objective["corpusBytes"]
+        or source_target.get("score_bytes") != source_objective.get("targetScoreBytes")
     ):
-        errors.append("frontier target is not the canonical enwiki9 target")
-    if frontier.get("objective") != objective:
-        errors.append("frontier objective binding is missing or stale")
+        errors.append("frontier target differs from its bound objective")
+    target = {**source_target, "input_bytes": objective["corpusBytes"],
+              "score_bytes": objective["targetScoreBytes"]}
 
     rows: list[dict[str, Any]] = []
     seen_run_ids: set[str] = set()
@@ -257,6 +262,8 @@ def build_ledger(project_root: Path, frontier: dict[str, Any]) -> tuple[dict[str
     ledger = {
         "schema": "enwiki9_hutter_run_ledger_v1",
         "source_frontier": "docs/hutter_frontier.json",
+        "source_objective": source_objective,
+        "source_target": source_target,
         "objective": objective,
         "target": target,
         "summary": summary,

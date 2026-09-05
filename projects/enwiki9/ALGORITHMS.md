@@ -1,25 +1,22 @@
 # enwiki9 Algorithm Reference
 
-This document explains the custom compression algorithms in this folder and how
-to read their benchmark results. It is intentionally evidence-first: rows marked
-`MEASURED` come from `results/<program_id>/*.json` with `roundtrip_ok: true`.
-Rows marked `SOURCE-ONLY` describe code that exists but does not have a matching
-benchmark artifact in this checkout.
+This reference explains compression mechanisms and their historical measurements.
+Rows marked `MEASURED` cite exact result artifacts; `SOURCE-ONLY` describes code
+without a matching benchmark artifact in this checkout.
 
-The main README explains the Hutter score math and run protocol. This file
-answers the next question: what each algorithm is actually doing, which ones are
-currently strongest, and what each measurement proves.
+The [active objective](contracts/research/v2/objective-contract.json) owns the
+current target. Use the [generated status](docs/status_receipt.md) for its dated
+operator view and the [command manual](ADAPTIVE_WORKFLOW.md#start-and-find-records)
+to inspect actual ownership and records. The [ledger](ledger/README.md) routes
+algorithms and lineage; [algorithm cards](docs/algorithm_cards.md) explain the
+mechanisms, and [evidence rankings](docs/evidence_matrix.md) link measured results.
 
-Canonical authority note: this long-form reference contains historical
-snapshots. For the live frontier use `docs/hutter_frontier.json`, for exact
-source-bound history use `docs/hutter_run_ledger.json`, and for current process
-and queue state use `docs/status_receipt.md`. The current design target is
-`105,000,000`, the verified full-1G score is unknown, and the best counted
-forecast is `109,389,323` with unresolved runtime eligibility.
+## Historical Strategy And Status
 
-For orientation, use `docs/algorithm_cards.md`. It gives
-plain-English cards with mechanism, score, proof boundary, and next role. For
-generated rankings from result JSONs only, use `docs/evidence_matrix.md`.
+The strategy, targets, forecasts, “current” labels, and next actions below are
+retained snapshots. They do not establish present host occupancy, select today's
+parent, or authorize a launch. Follow each claim's source-bound evidence and
+preserve its original scientific scope.
 
 Strategic pivot: the prize-facing baseline is the admissible `fx2-cmix`
 lineage, with `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` as the calibrated

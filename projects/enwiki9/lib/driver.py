@@ -22,6 +22,7 @@ The driver:
 from __future__ import annotations
 
 import argparse
+import ast
 import datetime as _dt
 import hashlib
 import importlib.util
@@ -30,6 +31,7 @@ import os
 import pathlib
 import platform
 import stat
+import subprocess
 import sys
 import tempfile
 import time
@@ -329,7 +331,7 @@ def _build_run_ledger_row(
         recorded_utc=_dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
     )
 
-def run(
+def _run_local(
     program_id: str,
     data_path: pathlib.Path,
     limit: int | None,
@@ -346,6 +348,7 @@ def run(
     module=None,
     artifact_dir: pathlib.Path | None = None,
     mode: str = "discovery",
+    package_inventory: tuple | None = None,
 ) -> dict:
     run_started = time.perf_counter()
     objective = research_contracts.objective_binding()
@@ -381,6 +384,7 @@ def run(
     stats_fn = getattr(mod, "stats", None)
     program_stats = _optional_diagnostic(stats_fn, "program_stats", missing_diagnostics) if callable(stats_fn) else None
     compressed_size = len(compressed)
+    rss_after_compress = sample()
 
     archive_ceiling_missed = archive_ceiling is not None and compressed_size > archive_ceiling
     if archive_ceiling_missed:
@@ -392,14 +396,12 @@ def run(
         t_decompress = time.perf_counter() - decompress_started
         ok = decompressed == raw
     program_dir = src_path.parent
-    program_files, package_accounting = _program_package_inventory(
-        program_dir,
-        metadata,
+    program_files, package_accounting = package_inventory or _program_package_inventory(
+        program_dir, metadata,
     )
     program_size = sum(sz for _, sz in program_files)
     archive_md5 = hashlib.md5(compressed).hexdigest()
     archive_sha256 = hashlib.sha256(compressed).hexdigest()
-    rss_after_compress = sample()
 
     determinism: dict | None = None
     should_check_determinism = (
@@ -528,9 +530,355 @@ def run(
     return result
 
 
+
+def _comparison_source_closure(source: pathlib.Path) -> list[pathlib.Path]:
+    """Collect local Python imports without executing candidate or tool code."""
+    program = source.parent.resolve()
+    paths = {source.resolve(), *[p.resolve() for p in (ROOT / "lib").glob("*.py")],
+             *research_contracts.local_source_closure([ROOT / "tools/research_contracts.py"])}
+    pending = [*paths, *program.rglob("*.py")]
+    visited = set()
+    while pending:
+        path = pending.pop().resolve()
+        if path in visited or path.suffix != ".py":
+            continue
+        visited.add(path)
+        paths.add(path)
+        for node in ast.walk(ast.parse(path.read_bytes(), filename=str(path))):
+            if isinstance(node, ast.Import):
+                modules = [alias.name for alias in node.names]
+                bases = [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT.parents[1]]
+            elif isinstance(node, ast.ImportFrom):
+                prefix = node.module or ""
+                modules = [prefix, *[f"{prefix}.{alias.name}".strip(".") for alias in node.names]]
+                bases = ([path.parents[node.level - 1]] if node.level
+                         else [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT.parents[1]])
+            else:
+                continue
+            for module in modules:
+                if not module or "*" in module:
+                    continue
+                for base in bases:
+                    target = base.joinpath(*module.split("."))
+                    for candidate in (target.with_suffix(".py"), target / "__init__.py"):
+                        resolved = candidate.resolve()
+                        if candidate.is_file() and (resolved.is_relative_to(ROOT) or resolved.is_relative_to(program)):
+                            pending.append(resolved)
+    return sorted(paths)
+
+
+def _freeze_comparison_build(program_id: str, source: pathlib.Path, output: pathlib.Path,
+                             *, inventory: tuple | None = None,
+                             source_hashes: dict | None = None) -> dict:
+    """Retain exact input bytes; every phase imports only these local sources."""
+    inventory = inventory or _program_package_inventory(source.parent, _load_program_metadata(program_id))
+    closure = _comparison_source_closure(source)
+    inputs = {path: pathlib.Path("projects/enwiki9") / path.relative_to(ROOT)
+              for path in closure if path.is_relative_to(ROOT) and not path.is_relative_to(source.parent)}
+    for record in inventory[1]["counted_files"]:
+        path = source.parent / record["path"]
+        inputs[path] = pathlib.Path("projects/enwiki9/programs") / program_id / record["path"]
+    if (source.parent / "meta.json").is_file():
+        inputs[source.parent / "meta.json"] = pathlib.Path("projects/enwiki9/programs") / program_id / "meta.json"
+    expected = {str(path): _sha256_file(path) for path in inputs}
+    expected.update({str(source.parent / record["path"]): record["sha256"]
+                     for record in inventory[1]["counted_files"]})
+    expected.update(source_hashes or {})
+    build_root = output / "build"
+    build_root.mkdir(parents=True, exist_ok=False)
+    files = {}
+    for path, relative in sorted(inputs.items()):
+        payload = path.read_bytes()
+        digest = hashlib.sha256(payload).hexdigest()
+        if digest != expected[str(path)]:
+            raise ValueError(f"source changed while freezing comparison build: {path}")
+        target = build_root / relative
+        _write_atomic(target, payload)
+        target.chmod(0o444 | (path.stat().st_mode & 0o111))
+        files[relative.as_posix()] = {"bytes": len(payload), "sha256": digest}
+    manifest = {"schema": "gamma.enwiki9.comparison-build.v1", "candidate_id": program_id,
+                "files": files,
+                "source_policy": "retained candidate files and hash-checked local Python imports; native/external executables, absolute-path inputs, third-party dependencies and filesystem isolation are not verified"}
+    manifest_path = output / "build.json"
+    _write_atomic(manifest_path, (json.dumps(manifest, indent=2) + "\n").encode())
+    return {"root": build_root, "manifest_path": manifest_path, "manifest": manifest,
+            "sha256": _sha256_file(manifest_path), "package_inventory": inventory,
+            "source": build_root / "projects/enwiki9/programs" / program_id / "program.py"}
+
+
+# This bootstrap is passed directly to Python. It verifies the frozen driver
+# before executing it, then verifies the bytes of each imported local module.
+_COMPARISON_BOOTSTRAP = r'''
+import hashlib, importlib.abc, importlib.machinery, json, os, pathlib, sys
+build, manifest_path, expected, receipt_path, original_root, *arguments = sys.argv[1:]
+build, original_root = pathlib.Path(build).resolve(), pathlib.Path(original_root).resolve()
+payload = pathlib.Path(manifest_path).read_bytes()
+if hashlib.sha256(payload).hexdigest() != expected:
+    raise ValueError("frozen build manifest changed")
+manifest = json.loads(payload)
+loaded = {}
+def checked_code(path):
+    path = pathlib.Path(path).resolve()
+    relative = path.relative_to(build).as_posix()
+    record = manifest["files"].get(relative)
+    payload = path.read_bytes()
+    digest = hashlib.sha256(payload).hexdigest()
+    if record != {"bytes": len(payload), "sha256": digest}:
+        raise ValueError("frozen source bytes changed: " + relative)
+    loaded[relative] = digest
+    return compile(payload, str(path), "exec")
+class CheckedLoader(importlib.machinery.SourceFileLoader):
+    def get_code(self, fullname):
+        return checked_code(self.path)
+class CheckedFinder(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        spec = importlib.machinery.PathFinder.find_spec(fullname, path, target)
+        if spec and spec.origin and spec.origin.endswith((".py", ".pyc")):
+            origin = pathlib.Path(spec.origin).resolve()
+            if origin.is_relative_to(build):
+                if origin.suffix != ".py":
+                    raise ImportError("local bytecode import lacks a source binding: " + str(origin))
+                spec.loader = CheckedLoader(fullname, str(origin))
+            elif origin.is_relative_to(original_root):
+                raise ImportError("unfrozen project import: " + str(origin))
+        return spec
+sys.meta_path.insert(0, CheckedFinder())
+sys.path.insert(0, str(build))
+sys.path.insert(0, str(build / "projects/enwiki9/lib"))
+sys.path.insert(0, str(pathlib.Path(arguments[1]).parent))
+sys._gamma_checked_code = checked_code
+driver = build / "projects/enwiki9/lib/driver.py"
+sys.argv = [str(driver), *arguments]
+try:
+    exec(checked_code(driver), {"__name__": "__main__", "__file__": str(driver)})
+finally:
+    record = {"build_manifest_sha256": expected, "loaded_sources": loaded, "pid": os.getpid()}
+    destination = pathlib.Path(receipt_path)
+    temporary = destination.with_suffix(".tmp")
+    temporary.write_text(json.dumps(record, indent=2) + "\n")
+    temporary.replace(destination)
+'''
+
+
+def _codec_phase_worker(arguments: list[str]) -> int:
+    """Private child entry point: one source build, one operation, stdin bytes only."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source", type=pathlib.Path)
+    parser.add_argument("phase", choices=("encode", "decode", "repeat"))
+    parser.add_argument("arm")
+    parser.add_argument("output", type=pathlib.Path)
+    parser.add_argument("diagnostics", type=pathlib.Path)
+    args = parser.parse_args(arguments)
+    diagnostics = {"phase": args.phase, "pid": os.getpid(), "missing_diagnostics": []}
+    try:
+        source = args.source.resolve(strict=True)
+        spec = importlib.util.spec_from_file_location("enwiki9_codec_phase", source)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        checked_code = getattr(sys, "_gamma_checked_code", None)
+        if not callable(checked_code):
+            raise ValueError("codec phase requires a verified frozen build")
+        exec(checked_code(source), module.__dict__)
+        operation = "decompress_arm" if args.phase == "decode" else "compress_arm"
+        function = getattr(module, operation, None)
+        if not callable(function):
+            raise ValueError(f"candidate lacks {operation} adapter")
+        phase_input = sys.stdin.buffer.read()
+        started = time.perf_counter()
+        payload = function(phase_input, args.arm)
+        diagnostics["codec_time_s"] = time.perf_counter() - started
+        if not isinstance(payload, (bytes, bytearray, memoryview)):
+            raise TypeError("codec operation must return bytes")
+        _write_atomic(args.output, payload)
+        diagnostics["codec_complete"] = True
+    except Exception as exc:
+        diagnostics["codec_complete"] = False
+        diagnostics["error"] = {"type": type(exc).__name__, "message": str(exc)}
+    if diagnostics["codec_complete"] and args.phase != "decode":
+        try:
+            stats = getattr(module, "stats", None)
+        except Exception as exc:
+            stats = None
+            diagnostics["missing_diagnostics"].append({"name": "program_stats", "reason": f"{type(exc).__name__}: {exc}"})
+        if callable(stats):
+            diagnostics["program_stats"] = _optional_diagnostic(stats, "program_stats", diagnostics["missing_diagnostics"])
+    try:
+        _write_atomic(args.diagnostics, (json.dumps(diagnostics, indent=2, allow_nan=False) + "\n").encode())
+    except Exception as exc:
+        # The closed codec output remains authoritative when optional telemetry
+        # cannot be published. The parent records this explicit diagnostic gap.
+        print(f"phase diagnostics unavailable: {type(exc).__name__}: {exc}", file=sys.stderr)
+    return 0 if diagnostics["codec_complete"] else 1
+
+
+def _artifact_binding(path: pathlib.Path) -> dict:
+    return {"path": path.name, "bytes": path.stat().st_size, "sha256": _sha256_file(path)}
+
+
+def _verify_frozen_build(build: dict) -> list[str]:
+    failures = []
+    try:
+        if _sha256_file(build["manifest_path"]) != build["sha256"]:
+            failures.append("frozen build manifest changed")
+    except OSError as exc:
+        failures.append(f"frozen build manifest: {exc}")
+    for relative, expected in build["manifest"]["files"].items():
+        path = build["root"] / relative
+        try:
+            if (path.is_symlink() or path.stat().st_size != expected["bytes"]
+                    or _sha256_file(path) != expected["sha256"]):
+                failures.append(f"frozen build bytes changed: {relative}")
+        except OSError as exc:
+            failures.append(f"frozen build {relative}: {exc}")
+    return failures
+
+
+def _run_independent_arm(local_arguments: tuple, local_options: dict, directory: pathlib.Path) -> dict:
+    from types import SimpleNamespace
+
+    program_id = local_arguments[0] if local_arguments else local_options["program_id"]
+    arm = local_options["arm"]
+    directory.mkdir(parents=True, exist_ok=False)
+    local_options = dict(local_options)
+    build = local_options.pop("frozen_build", None)
+    if build is None:
+        build = _freeze_comparison_build(
+            program_id, _candidate_program_dir(program_id) / "program.py", directory,
+        )
+    source = build["source"]
+    context = {"active_phase": None, "artifacts": {}, "phases": {}, "missing_diagnostics": []}
+    proxy = SimpleNamespace()
+    encode_calls = 0
+
+    def phase(operation: str, payload: bytes) -> bytes:
+        context["active_phase"] = operation
+        if operation == "encode":
+            context.update(data_size=len(payload), data_sha256=hashlib.sha256(payload).hexdigest())
+        filename = {"encode": "archive.bin", "decode": "restored.bin", "repeat": "repeat.bin"}[operation]
+        artifact_name = {"encode": "archive", "decode": "restored", "repeat": "repeat_archive"}[operation]
+        output = directory / filename
+        diagnostics = directory / f"{operation}.json"
+        source_receipt = directory / f"{operation}.sources.json"
+        build_errors = _verify_frozen_build(build)
+        if build_errors:
+            raise ValueError("; ".join(build_errors))
+        command = [sys.executable, "-c", _COMPARISON_BOOTSTRAP,
+                   str(build["root"].resolve()), str(build["manifest_path"].resolve()),
+                   build["sha256"], str(source_receipt.resolve()), str(ROOT.resolve()), "--_codec-phase",
+                   str(source.resolve()), operation, arm, str(output.resolve()), str(diagnostics.resolve())]
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        with (directory / f"{operation}.stdout.log").open("xb") as stdout, (directory / f"{operation}.stderr.log").open("xb") as stderr:
+            completed = subprocess.run(command, input=payload, stdout=stdout, stderr=stderr,
+                                       cwd=build["root"] / "projects/enwiki9", env=environment)
+        for suffix in ("stdout.log", "stderr.log"):
+            context["artifacts"][f"{operation}_{suffix}"] = _artifact_binding(directory / f"{operation}.{suffix}")
+        detail = {}
+        try:
+            detail = json.loads(diagnostics.read_text())
+            if not isinstance(detail, dict):
+                raise ValueError("phase diagnostics must be an object")
+            context["artifacts"][f"{operation}_diagnostics"] = _artifact_binding(diagnostics)
+        except (OSError, ValueError) as exc:
+            context["missing_diagnostics"].append({"name": "phase_diagnostics", "phase": operation,
+                                                     "reason": f"{type(exc).__name__}: {exc}"})
+        context["phases"][operation] = {"returncode": completed.returncode, "pid": detail.get("pid"),
+                                          "input_bytes": len(payload), "input_sha256": hashlib.sha256(payload).hexdigest(),
+                                          "codec_time_s": detail.get("codec_time_s")}
+        context["missing_diagnostics"].extend(detail.get("missing_diagnostics", []))
+        if output.is_file():
+            context["artifacts"][artifact_name] = _artifact_binding(output)
+        # Loaded-source identity is mandatory evidence, unlike codec statistics.
+        receipt = json.loads(source_receipt.read_text())
+        loaded = receipt.get("loaded_sources")
+        if receipt.get("build_manifest_sha256") != build["sha256"] or not isinstance(loaded, dict):
+            raise ValueError("codec child has no valid loaded-source receipt")
+        for relative, digest in loaded.items():
+            if build["manifest"]["files"].get(relative, {}).get("sha256") != digest:
+                raise ValueError(f"codec child loaded unbound source: {relative}")
+        if completed.returncode == 0 and source.relative_to(build["root"]).as_posix() not in loaded:
+            raise ValueError("codec child did not bind its loaded candidate source")
+        context["artifacts"][f"{operation}_sources"] = _artifact_binding(source_receipt)
+        context["phases"][operation]["loaded_sources"] = loaded
+        context["phases"][operation]["build_manifest_sha256"] = build["sha256"]
+        if completed.returncode != 0:
+            error = detail.get("error") or {}
+            raise RuntimeError(f"{operation} child exited {completed.returncode}: {error.get('type', 'codec failure')}: {error.get('message', '')}")
+        if not output.is_file():
+            raise RuntimeError(f"{operation} child exited without a closed output")
+        if operation == "encode" and "program_stats" in detail and detail["program_stats"] is not None:
+            proxy.stats = lambda: detail["program_stats"]
+        context["active_phase"] = None
+        return output.read_bytes()
+
+    def compress(raw, _arm):
+        nonlocal encode_calls
+        operation = "encode" if encode_calls == 0 else "repeat"
+        encode_calls += 1
+        return phase(operation, raw)
+
+    proxy.compress_arm = compress
+    proxy.decompress_arm = lambda archive, _arm: phase("decode", archive)
+    options = {**local_options, "module": proxy, "artifact_dir": None,
+               "package_inventory": build["package_inventory"]}
+    try:
+        result = _run_local(*local_arguments, **options)
+        result["failed_phase"] = None
+    except Exception as exc:
+        result = {"schema": "gamma.enwiki9.driver-arm-failure.v1", "program_id": program_id, "arm": arm,
+                  "failed_phase": context["active_phase"] or "result-preparation",
+                  "failure": {"type": type(exc).__name__, "message": str(exc)},
+                  "data_size": context.get("data_size"), "data_sha256": context.get("data_sha256"),
+                  "roundtrip_ok": False, "determinism": None,
+                  "execution_mode": local_options.get("mode", "discovery"), "timing_authority": "diagnostic",
+                  "resource_evidence_complete": False, "prize_claimable": False, "missing_diagnostics": []}
+    result["artifacts"] = context["artifacts"]
+    result["phase_execution"] = context["phases"]
+    result["codec_process_state"] = "fresh-process-per-encode-decode-repeat"
+    result["build_manifest_sha256"] = build["sha256"]
+    result["codec_time_scope"] = "compress_time_s/decompress_time_s include child startup, initialization, codec execution and publication; phase_execution codec_time_s measures the child codec call only"
+    result["missing_diagnostics"].extend(context["missing_diagnostics"])
+    _write_atomic(directory / "result.json", (json.dumps(result, indent=2) + "\n").encode())
+    return result
+
+
+def run(*args, **kwargs) -> dict:
+    """Preserve legacy calls; comparison arms use independent codec processes."""
+    if kwargs.get("arm") is None:
+        return _run_local(*args, **kwargs)
+    directory = kwargs.get("artifact_dir")
+    if directory is not None:
+        return _run_independent_arm(args, kwargs, directory)
+    with tempfile.TemporaryDirectory(prefix="enwiki9-arm-") as temporary:
+        result = _run_independent_arm(args, kwargs, pathlib.Path(temporary) / "arm")
+        result.pop("artifacts", None)
+        return result
+
+
+def _verify_arm_artifacts(directory: pathlib.Path, result: dict) -> list[str]:
+    failures = []
+    expected = (json.dumps(result, indent=2) + "\n").encode()
+    result_path = directory / "result.json"
+    try:
+        if result_path.is_symlink() or result_path.read_bytes() != expected:
+            failures.append("result.json differs from the closed arm result")
+    except OSError as exc:
+        failures.append(f"result.json: {exc}")
+    for name, binding in result.get("artifacts", {}).items():
+        path = directory / binding["path"]
+        try:
+            if (path.is_symlink() or path.resolve().parent != directory.resolve()
+                    or path.stat().st_size != binding["bytes"] or _sha256_file(path) != binding["sha256"]):
+                failures.append(f"{name}: retained artifact binding changed")
+        except OSError as exc:
+            failures.append(f"{name}: {exc}")
+    return failures
+
+
+
 def compare(program_id: str, data_path: pathlib.Path, limit: int, specification: dict,
             output: pathlib.Path, *, mode: str = "discovery", record_ledger: bool = False) -> dict:
-    """Run all frozen arms from one module/build; close artifacts before decision.
+    """Run all frozen arms from one build in fresh processes; close artifacts before decision.
 
     Qualification timing remains uncertified here: the isolated queue and release
     resource verifier supply that evidence. Neither this mode flag nor a byte win
@@ -549,47 +897,82 @@ def compare(program_id: str, data_path: pathlib.Path, limit: int, specification:
         raise ValueError("comparison needs an explicit bounded input scope <=10MB")
     if record_ledger and not output.resolve().is_relative_to((ROOT / "results").resolve()):
         raise ValueError("canonical comparisons must retain artifacts under project results/")
-    module, source = _load(program_id)
-    if not all(callable(getattr(module, name, None)) for name in ("compress_arm", "decompress_arm")):
-        raise ValueError("candidate must implement explicit compress_arm/decompress_arm adapters")
+    source = _candidate_program_dir(program_id) / "program.py"
+    if not source.is_file():
+        raise ValueError("candidate source is missing")
     metadata = _load_program_metadata(program_id)
-    inventory_before = _program_package_inventory(source.parent, metadata)[1]["counted_files"]
-    implementation_paths = [source, *sorted((ROOT / "lib").glob("*.py")),
-                            *research_contracts.local_source_closure([ROOT / "tools/research_contracts.py"])]
+    package_inventory_before = _program_package_inventory(source.parent, metadata)
+    inventory_before = package_inventory_before[1]["counted_files"]
+    implementation_paths = _comparison_source_closure(source)
     implementation_before = {str(path): _sha256_file(path) for path in implementation_paths}
     output.mkdir(parents=True, exist_ok=False)
-    _write_atomic(output / "specification.json", (json.dumps(specification, indent=2) + "\n").encode())
+    build = _freeze_comparison_build(program_id, source, output,
+                                    inventory=package_inventory_before,
+                                    source_hashes=implementation_before)
+    specification_payload = (json.dumps(specification, indent=2) + "\n").encode()
+    _write_atomic(output / "specification.json", specification_payload)
     rows = {}
     errors = {}
     for role, arm in arms.items():
         try:
             rows[role] = run(program_id, data_path, limit, True, run_purpose="control" if role != "treatment" else "candidate",
-                             arm=arm, module=module, artifact_dir=output / arm, mode=mode)
+                             arm=arm, artifact_dir=output / arm, mode=mode, frozen_build=build)
+            if rows[role].get("failed_phase"):
+                errors[role] = {"phase": rows[role]["failed_phase"], **rows[role]["failure"]}
         except Exception as exc:
             errors[role] = {"type": type(exc).__name__, "message": str(exc)}
-    source_stable = (inventory_before == _program_package_inventory(source.parent, metadata)[1]["counted_files"]
-                     and implementation_before == {str(path): _sha256_file(path) for path in implementation_paths})
-    population_stable = len({(r["data_size"], r["data_sha256"]) for r in rows.values()}) == 1
-    exact = not errors and population_stable and all(r["roundtrip_ok"] is True and r["determinism"]["single_host_byte_equal"] is True for r in rows.values())
+    try:
+        source_stable = (inventory_before == _program_package_inventory(source.parent, metadata)[1]["counted_files"]
+                         and implementation_before == {str(path): _sha256_file(path) for path in implementation_paths})
+    except OSError as exc:
+        source_stable = False
+        errors["source"] = {"type": type(exc).__name__, "message": str(exc)}
+    artifact_errors = {role: failures for role, row in rows.items()
+                       if (failures := _verify_arm_artifacts(output / arms[role], row))}
+    build_errors = _verify_frozen_build(build)
+    if build_errors:
+        artifact_errors["build"] = build_errors
+    loaded_build_complete = len(rows) == len(arms) and all(
+        all(phase in row.get("phase_execution", {})
+            and row["phase_execution"][phase].get("build_manifest_sha256") == build["sha256"]
+            and build["source"].relative_to(build["root"]).as_posix()
+                in row["phase_execution"][phase].get("loaded_sources", {})
+            for phase in ("encode", "decode", "repeat"))
+        for row in rows.values()
+    )
+    specification_stable = (output / "specification.json").read_bytes() == specification_payload
+    if not specification_stable:
+        artifact_errors["specification"] = ["frozen specification changed during comparison"]
+    population_stable = bool(rows) and len({(r["data_size"], r["data_sha256"]) for r in rows.values()}) == 1
+    exact = not errors and not artifact_errors and loaded_build_complete and population_stable and all(r["roundtrip_ok"] is True and r["determinism"]["single_host_byte_equal"] is True for r in rows.values())
     identity = bool(exact and rows["parent"]["compressed_sha256"] == rows["bookkeeping"]["compressed_sha256"])
-    delta = rows["treatment"]["compressed_size"] - rows["parent"]["compressed_size"] if "treatment" in rows and "parent" in rows else None
+    treatment_bytes = rows.get("treatment", {}).get("compressed_size")
+    parent_bytes = rows.get("parent", {}).get("compressed_size")
+    delta = treatment_bytes - parent_bytes if isinstance(treatment_bytes, int) and isinstance(parent_bytes, int) else None
     decision = {
         "schema": "gamma.enwiki9.driver-comparison.v1", "objective": research_contracts.objective_binding(),
-        "program_id": program_id, "specification_sha256": _sha256_file(output / "specification.json"),
+        "program_id": program_id, "specification_sha256": hashlib.sha256(specification_payload).hexdigest(),
         "source_files": inventory_before, "driver_sha256": _sha256_file(pathlib.Path(__file__)),
         "implementation_files": {str(pathlib.Path(path).relative_to(ROOT)) if pathlib.Path(path).is_relative_to(ROOT) else path: digest
                                  for path, digest in implementation_before.items()},
-        "source_stable": source_stable, "same_candidate_build": source_stable,
+        "source_stable": source_stable, "same_candidate_build": source_stable and loaded_build_complete and not build_errors,
+        "same_candidate_build_scope": "retained candidate files and loaded local Python source closure",
+        "frozen_build": {"manifest": "build.json", "sha256": build["sha256"],
+                         "source_policy": build["manifest"]["source_policy"]},
         "same_input_population": population_stable,
+        "artifact_closure_valid": not artifact_errors, "artifact_validation_errors": artifact_errors,
+        "codec_process_state": "fresh-process-per-arm-encode-decode-repeat",
         "exact_roundtrips_and_repeats": exact, "parent_bookkeeping_identity": identity,
         "treatment_minus_parent_bytes": delta, "execution_mode": mode, "timing_authority": "diagnostic",
         "qualification_complete": False, "promotion_authorized": False, "objective_credit": 0,
-        "arms": {role: {"arm": arms[role], "result": f"{arms[role]}/result.json", "result_sha256": _sha256_file(output / arms[role] / "result.json")} for role in rows},
+        "arms": {role: {"arm": arms[role], "result": f"{arms[role]}/result.json", "result_sha256": hashlib.sha256((json.dumps(rows[role], indent=2) + "\n").encode()).hexdigest()} for role in rows},
         "errors": errors,
         "verdict": "invalid" if not (exact and identity and source_stable) else "measured-improvement" if delta < 0 else "measured-no-improvement",
     }
     if record_ledger:
         for role, row in rows.items():
+            if row.get("failed_phase") or role in artifact_errors:
+                continue
             result_path = output / arms[role] / "result.json"
             _append_run_ledger(_build_run_ledger_row(row, result_path, row.get("program_name"), False))
     _write_atomic(output / "decision.json", (json.dumps(decision, indent=2) + "\n").encode())
@@ -597,6 +980,8 @@ def compare(program_id: str, data_path: pathlib.Path, limit: int, specification:
 
 
 def main() -> int:
+    if sys.argv[1:2] == ["--_codec-phase"]:
+        return _codec_phase_worker(sys.argv[2:])
     ap = argparse.ArgumentParser()
     ap.add_argument("program_id")
     ap.add_argument("--data", type=pathlib.Path, default=DATA_DEFAULT)

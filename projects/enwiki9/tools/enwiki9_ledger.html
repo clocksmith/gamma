@@ -156,6 +156,7 @@
         <div class="field search-field"><label for="search">Search the ledger</label><input id="search" type="search" placeholder="Algorithm, mechanism, run ID, or research note" autocomplete="off"></div>
         <div class="field" id="kind-field"><label for="kind-filter">Kind</label><select id="kind-filter"></select></div>
         <div class="field" id="filter-field"><label for="filter">Status</label><select id="filter"></select></div>
+        <div class="field" id="history-field"><label><input id="show-history" type="checkbox"> Include history</label></div>
       </div>
       <p id="result-count" class="result-count" aria-live="polite"></p>
       <div id="content"></div>
@@ -240,6 +241,8 @@
     const proposals = list(data.proposals);
     const mixes = list(data.mixes);
     const notes = list(data.notes);
+    const tools = list(data.tools);
+    const reviews = list(data.reviews);
     const algorithmById = new Map(algorithms.map(item => [item.id, item]));
     const mixCandidates = [...new Set(list(data.mix_candidates))].map(id => algorithmById.get(id)).filter(Boolean);
     const searchable = new WeakMap();
@@ -264,7 +267,9 @@
       running: {title:'Running & queued', description:'Queue records and process observations captured when this page was generated. Counts are records, not independent compressors; a process and its observer may appear separately. Rebuild the snapshot to check current activity.', values:sortedRuns(runs.filter(isActive)), filter:'state'},
       results: {title:'Results', description:'Recorded results with their original scope, units, and evidence links. Open a run for its validity, hypothesis, and source details.', values:sortedRuns(runs.filter(run => !isActive(run))), filter:'outcome'},
       mixes: {title:'Mixes', description:'Recorded combinations, their components, interactions, and conclusions. Component gains do not establish a combined result.', values:mixes},
-      notes: {title:'Research notes', description:'Research decisions and supporting notes, linked to their source documents.', values:notes}
+      notes: {title:'Research notes', description:'Research decisions and supporting notes, linked to their source documents.', values:notes},
+      reviews: {title:'Needs review', description:'Latest terminal jobs without linked reflections. Bound records appear first; include history to inspect legacy gaps. Presence is not validation. Review relevant ancestry before selecting a descendant.', values:reviews, filter:'state'},
+      tools: {title:'Tools', description:'Source-derived descriptions, inputs, outputs, and declared resource requirements. Unknown fields need inspection. This catalogue grants no launch permission.', values:tools}
     };
     let currentView = 'algorithms';
     const PAGE_SIZE = 75;
@@ -446,6 +451,19 @@
       if (note.path) card.append(node('span', note.path, 'subtext identifier'));
       return card;
     };
+    const toolCard = tool => {
+      const card = node('article', null, 'card');
+      const title = node('h2'); title.append(sourceLink(tool.name || tool.id, tool.path)); card.append(title);
+      card.append(node('p', tool.purpose || 'Purpose not documented', 'description'));
+      const details = node('details'); details.append(node('summary', 'Inputs, outputs & requirements'));
+      const facts = node('dl', null, 'facts detail-body');
+      for (const [label,key] of [['Inputs','inputs'],['Outputs','outputs'],['Process execution','launch_capability'],['Resources','resources'],['Diagnostics','diagnostics']]) appendFact(facts, label, tool[key]);
+      details.append(facts); card.append(details);
+      const sources = node('div', null, 'source-links');
+      for (const path of list(tool.sources).slice(1,7)) sources.append(sourceLink(path, path));
+      card.append(sources);
+      return card;
+    };
     const renderAlgorithm = id => {
       const algorithm = algorithmById.get(id);
       const content = byId('content');
@@ -524,6 +542,7 @@
       byId('toolbar').hidden = false; byId('view-title').textContent = view.title; byId('view-description').textContent = view.description;
       byId('filter-field').hidden = !view.filter;
       byId('kind-field').hidden = currentView !== 'algorithms';
+      byId('history-field').hidden = !['algorithms','results','reviews'].includes(currentView);
       const kindSelect = byId('kind-filter');
       if (!kindSelect.childNodes.length) {
         const allKinds = node('option', 'All kinds'); allKinds.value = ''; kindSelect.append(allKinds);
@@ -540,8 +559,17 @@
         select.dataset.view = currentView;
       }
       byId('filter-field').querySelector('label').textContent = view.filter === 'outcome' ? 'Outcome' : 'Recorded status';
-      const filtered = view.values.filter(item => matches(item) && (!view.filter || !select.value || String(item[view.filter] || 'unknown') === select.value) && (currentView !== 'algorithms' || !kindSelect.value || String(item.kind || 'unknown') === kindSelect.value));
-      byId('result-count').textContent = display(filtered.length) + ' of ' + display(view.values.length) + ' ' + (currentView === 'algorithms' ? 'algorithms' : currentView === 'mixes' ? 'mixes' : currentView === 'notes' ? 'notes' : 'run records') + (byId('search').value.trim() ? ' matching your search' : ' in this snapshot');
+      const includeHistory = byId('show-history').checked || byId('search').value.trim() || (view.filter && select.value);
+      let visible = view.values;
+      if (!includeHistory && ['algorithms','results'].includes(currentView)) visible = visible.filter(item => item.browsing_state !== 'historical');
+      if (!includeHistory && currentView === 'results') {
+        const seen = new Set();
+        visible = visible.filter(item => { if (seen.has(item.candidate_id)) return false; seen.add(item.candidate_id); return true; });
+      }
+      if (!includeHistory && currentView === 'reviews') visible = visible.filter(item => item.revision);
+      if (currentView === 'algorithms') visible = visible.slice().sort((a,b) => Number(!!b.has_active_job_record) - Number(!!a.has_active_job_record) || String(b.updated_at || '').localeCompare(String(a.updated_at || '')) || a.id.localeCompare(b.id));
+      const filtered = visible.filter(item => matches(item) && (!view.filter || !select.value || String(item[view.filter] || 'unknown') === select.value) && (currentView !== 'algorithms' || !kindSelect.value || String(item.kind || 'unknown') === kindSelect.value));
+      byId('result-count').textContent = display(filtered.length) + ' of ' + display(view.values.length) + ' records' + (byId('search').value.trim() ? ' matching your search' : ' in this snapshot') + (visible.length < view.values.length ? '; historical entries remain available through search or Include history.' : '');
       if (currentView === 'results' || currentView === 'running') content.append(metricsNotice());
       const slice = pageSlice(filtered, page); page = slice.page;
       if (currentView === 'mixes') content.append(node('h2', 'Recorded graphs & compositions'));
@@ -549,7 +577,7 @@
       else if (currentView === 'algorithms') content.append(algorithmTable(slice.values));
       else {
         const stack = node('div', null, 'stack');
-        const renderer = currentView === 'mixes' ? mixCard : currentView === 'notes' ? noteCard : runCard;
+        const renderer = currentView === 'mixes' ? mixCard : currentView === 'notes' ? noteCard : currentView === 'tools' ? toolCard : runCard;
         for (const item of slice.values) stack.append(renderer(item)); content.append(stack);
       }
       if (filtered.length) content.append(pagination(slice, value => { page = value; render(); byId('main').focus({preventScroll:true}); window.scrollTo(0,0); }));
@@ -566,6 +594,7 @@
     byId('search').addEventListener('input', filterChanged);
     byId('filter').addEventListener('change', filterChanged);
     byId('kind-filter').addEventListener('change', filterChanged);
+    byId('show-history').addEventListener('change', filterChanged);
     window.addEventListener('hashchange', () => { page = 0; historyPage = 0; mixCandidatePage = 0; render(true); byId('main').focus({preventScroll:true}); window.scrollTo(0,0); });
     render(true);
   })();

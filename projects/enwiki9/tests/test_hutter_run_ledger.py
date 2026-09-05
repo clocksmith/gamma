@@ -19,7 +19,8 @@ def fixture(tmp_path: Path) -> dict:
     receipt.write_text(json.dumps({"archive": 90, "gain": 10, "roundtrip": True}))
     return {
         "schema": "enwiki9_hutter_frontier_v1",
-        "objective": MODULE.research_contracts.objective_binding(),
+        "objective": MODULE.research_contracts.objective_binding(
+            objective_path=TOOL.parents[1] / "contracts/research/v1/objective-contract.json"),
         "target": {
             "input_bytes": 1_000_000_000,
             "score_bytes": 105_000_000,
@@ -77,7 +78,9 @@ def test_expands_scopes_and_computes_forecast(tmp_path: Path) -> None:
     assert ledger["summary"]["runs_by_scope"] == {"1000000": 1, "10000000": 1}
     primary = next(row for row in ledger["runs"] if row["primary_frontier_run"])
     assert primary["forecast_percent"] == 10.94
-    assert primary["forecast_margin_bytes"] == -4_400_000
+    assert primary["forecast_margin_bytes"] == MODULE.research_contracts.objective_binding()["targetScoreBytes"] - 109_400_000
+    assert ledger["source_target"]["score_bytes"] == 105_000_000
+    assert ledger["source_objective"]["objectiveId"] == "gamma-enwiki9-hutter-105m-v1"
     additional = next(row for row in ledger["runs"] if not row["primary_frontier_run"])
     assert additional["population"] == "opening_prefix"
     assert additional["archive_bytes"] == 90

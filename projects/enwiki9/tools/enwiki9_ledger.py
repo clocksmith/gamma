@@ -14,12 +14,21 @@ import re
 import shutil
 import socket
 import sys
-import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from lib.artifacts import atomic_write
+try:
+    from . import research_contracts
+except ImportError:
+    import research_contracts
 STATES = ("pending", "running", "completed", "failed", "cancelled")
 MAX_JSON = 8 * 1024 * 1024
+HISTORICAL_STATUSES = {"failed", "failure", "cancelled", "superseded", "merged",
+                       "parked", "archive_miss", "measured_negative"}
+ACTIVE_JOB_STATES = {"running", "pending", "queued", "held"}
 
 
 def text(value):
@@ -93,7 +102,14 @@ def live_job(job, root=ROOT):
         from . import enwiki9_worker_identity as identity
     except ImportError:
         import enwiki9_worker_identity as identity
-    matched = identity.worker_pid_matches_job(root, root / "tools/candidate_triage.py", job)
+    if isinstance(job.get("execution_resources"), dict):
+        try:
+            from . import enwiki9_lab as lab
+        except ImportError:
+            import enwiki9_lab as lab
+        matched = lab.worker_pid_matches_job(job)
+    else:
+        matched = identity.worker_pid_matches_job(root, root / "tools/candidate_triage.py", job)
     return {"state": "live" if matched else "unknown", "pid": job.get("worker_pid"),
             "observed_at": utc(), "detail": "Canonical worker identity matches on this host"
             if matched else "Recorded running; exact worker identity was not verified on this host"}
@@ -130,6 +146,22 @@ def ledger_record(row, source):
             "scope_bytes": row.get("data_size"), "roundtrip_ok": row.get("roundtrip_ok"),
             "deterministic_ok": row.get("determinism_ok"),
             **{key: row.get(key) for key in ("compressed_size", "program_size", "hutter_score")}}
+
+
+def project_browsing_state(algorithms, runs):
+    """Hide recorded retired configurations, never infer scientific eligibility."""
+    active = {r["candidate_id"] for r in runs if r["kind"] == "job"
+              and r["state"] in ACTIVE_JOB_STATES}
+    for algorithm in algorithms:
+        status = algorithm["status"].lower().replace("-", "_")
+        historical = (status in HISTORICAL_STATUSES
+                      or status.startswith(("retired", "rejected", "merged_"))
+                      or status.endswith("_superseded"))
+        algorithm["browsing_state"] = "historical" if historical and algorithm["id"] not in active else "current"
+        algorithm["has_active_job_record"] = algorithm["id"] in active
+    by_id = {a["id"]: a for a in algorithms}
+    for run in runs:
+        run["browsing_state"] = by_id.get(run["candidate_id"], {}).get("browsing_state", "current")
 
 
 def build(root):
@@ -440,22 +472,34 @@ def build(root):
             a["coverage"].append("artifact directory; algorithm identity unrecorded")
         if any(edge["id"] not in algorithms for edge in a["parents"]):
             a["coverage"].append("unresolved parent reference")
-    objective = records.read("contracts/research/v2/objective-contract.json")
+    project_browsing_state(list(algorithms.values()), runs)
+    try:
+        from .enwiki9_tool_catalogue import build_catalogue
+    except ImportError:
+        from enwiki9_tool_catalogue import build_catalogue
+    catalogue = build_catalogue(root)
+    objective_path = research_contracts.objective_binding()["objectivePath"]
+    objective = records.read(objective_path)
     data = {"generated_at": utc(), "host": socket.gethostname(),
         "objective": {"targetScoreBytes": objective.get("score", {}).get("targetBytes"),
                       "corpusBytes": objective.get("corpus", {}).get("bytes"),
-                      "path": "contracts/research/v2/objective-contract.json"},
+                      "path": objective_path},
         "algorithms": sorted(algorithms.values(), key=lambda a: a["id"]),
-        "runs": runs, "proposals": proposals, "mixes": mixes, "notes": notes, "issues": records.issues,
+        "runs": runs, "proposals": proposals, "mixes": mixes, "notes": notes, "tools": catalogue,
+        "issues": records.issues,
         "mix_candidates": sorted(a["id"] for a in algorithms.values()
             if a["kind"] == "candidate" and re.search(
                 r"\b(mix(?:er|ing|ture|es|ed)?|blend(?:ing|ed)?|hybrid|ensemble|fusion|compos(?:ite|ition))\b",
                 " ".join(text(a.get(k)) for k in ("id", "name", "description")).replace("_", " "), re.I))}
     data["counts"] = {"algorithms": len(algorithms), "programs": len([p for p in records.files("programs/*") if p.is_dir()]),
         "proposals": len(proposals), "runs": len(runs), "mixes": len(mixes), "notes": len(notes),
+        "tools": len(catalogue),
+        "current_algorithms": sum(a["browsing_state"] == "current" for a in algorithms.values()),
+        "historical_algorithms": sum(a["browsing_state"] == "historical" for a in algorithms.values()),
         "running": sum(r["state"] == "running" and r["liveness"].get("state") == "live" for r in runs),
         "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") != "live" for r in runs),
         "jobs": dict(Counter(d.get("state") for _, d in jobs)), "read_issues": len(records.issues)}
+    data["reviews"] = review_backlog(data)
     return data
 
 
@@ -473,13 +517,14 @@ def review_backlog(data):
 
 def record_options(parser):
     parser.add_argument("--search", help="case-insensitive search; all words must match")
-    parser.add_argument("--view", choices=("algorithms", "runs", "notes", "mixes", "proposals", "reviews"),
+    parser.add_argument("--view", choices=("algorithms", "runs", "notes", "mixes", "proposals", "reviews", "tools"),
                         help="record collection (default: algorithms; candidate detail: runs)")
     parser.add_argument("--candidate", help="exact candidate ID; include identity, lineage, sources, and history")
     parser.add_argument("--state", action="append", help="recorded state or status; repeat to include alternatives")
     parser.add_argument("--limit", type=int, default=20, help="records per page, 1–100 (default: 20)")
     parser.add_argument("--offset", type=int, default=0, help="skip this many matching records")
     parser.add_argument("--include-legacy", action="store_true", help="include unbound historical jobs in the reviews view")
+    parser.add_argument("--history", action="store_true", help="include retired configurations and all run repeats; explicit search, state, or candidate also includes history")
 
 
 def record_query(data, args):
@@ -504,8 +549,29 @@ def record_query(data, args):
                 return row["id"] in algorithm["proposal_ids"]
             if view == "notes":
                 return any(n["path"] == row["path"] and n["title"] == row["title"] for n in algorithm["notes"])
+            if view == "tools":
+                return algorithm["id"] in row.get("candidate_ids", [])
             return (row.get("composition") or {}).get("candidateId") == algorithm["id"]
         rows = [row for row in rows if related(row)]
+    history = bool(getattr(args, "history", False) or algorithm or args.search or args.state)
+    hidden = 0
+    if not history and view in {"algorithms", "runs"}:
+        before = len(rows)
+        rows = [row for row in rows if row.get("browsing_state") != "historical"]
+        if view == "runs":
+            latest, visible = set(), []
+            for row in rows:
+                # Running and queued records always remain visible, including
+                # unknown process identities. Retain the latest result too.
+                if row["state"] in ACTIVE_JOB_STATES:
+                    visible.append(row)
+                elif row["candidate_id"] not in latest:
+                    latest.add(row["candidate_id"])
+                    visible.append(row)
+            rows = visible
+        else:
+            rows = sorted(rows, key=lambda row: (row.get("has_active_job_record", False), row.get("updated_at", ""), row["id"]), reverse=True)
+        hidden = before - len(rows)
     if args.state:
         states = {state.casefold() for state in args.state}
         rows = [row for row in rows if text(row.get("state", row.get("status"))).casefold() in states]
@@ -515,15 +581,22 @@ def record_query(data, args):
     page = rows[args.offset:args.offset + args.limit]
     # Keep search over full research records, but bound what an agent receives.
     if view == "algorithms":
-        keys = ("id", "name", "description", "kind", "family", "status", "parents", "coverage")
+        keys = ("id", "name", "description", "kind", "family", "status", "parents", "coverage", "browsing_state")
         page = [{**{key: row.get(key) for key in keys}, "run_count": len(row["run_ids"]),
                  "sources": row["sources"][:4]} for row in page]
     elif view == "notes":
         page = [{key: value for key, value in row.items() if key != "text"} for row in page]
+    elif view == "tools":
+        page = [{**{key: row.get(key) for key in ("id", "path", "purpose", "launch_capability",
+                    "launch_authority", "artifact", "contract_count", "diagnostics")},
+                 **{key: row.get(key, [])[:8] for key in ("inputs", "outputs", "resources", "arguments", "sources", "contract_outputs")},
+                 "argument_count": len(row.get("arguments", [])),
+                 "candidate_count": len(row.get("candidate_ids", []))} for row in page]
     result = {"schema": "enwiki9_record_query_v1", "generated_at": data["generated_at"],
               "host": data["host"], "view": view, "total": len(rows), "offset": args.offset,
               "limit": args.limit, "next_offset": args.offset + args.limit if args.offset + args.limit < len(rows) else None,
-              "records": page, "source_issues": data["issues"]}
+              "records": page, "source_issues": data["issues"],
+              "history_included": history, "hidden_historical_records": hidden}
     if algorithm:
         result["candidate"] = algorithm
     if view == "reviews":
@@ -568,7 +641,8 @@ def start_payload(data, root):
         "project_root": str(root.resolve()), "objective": data["objective"],
         "go": "Inspect evidence and ownership, choose one justified experiment or research question, use the adaptive workflow, record its outcome, and continue from the evidence.",
         "entry_points": {"instructions": "AGENTS.md", "workbench": "workbench/README.md",
-            "prompts": "workbench/PROMPTS.md", "workflow": "ADAPTIVE_WORKFLOW.md", "record_map": "ledger/README.md"},
+            "prompts": "workbench/PROMPTS.md", "workflow": "ADAPTIVE_WORKFLOW.md", "record_map": "ledger/README.md",
+            "tool_catalogue": "docs/tooling_inventory.md"},
         "environment": {"python": sys.executable, "python_version": sys.version.split()[0], "modules": dependencies,
             "tools": {name: shutil.which(name) for name in ("git", "make", "g++", "bzip2")},
             "corpus": {"path": corpus_ref, "bytes": corpus_size, "expected_bytes": expected, "hash_verified": False},
@@ -587,6 +661,7 @@ def start_payload(data, root):
         "proposed_work": {"count": len(proposed), "examples": proposed[:5],
             "meaning": "Recorded as proposed and actionable, not ranked or launch-qualified. Inspect parent evidence, exclusions, and dependencies before claiming."},
         "next_commands": {"search": "python3 tools/enwiki9_lab.py records --search YOUR_MECHANISM",
+            "tools": "python3 tools/enwiki9_lab.py records --view tools --search YOUR_TASK",
             "running": "python3 tools/enwiki9_lab.py records --view runs --state running",
             "history": "python3 tools/enwiki9_lab.py records --candidate CANDIDATE_ID",
             "research": "python3 tools/enwiki9_lab.py records --view notes --search YOUR_MECHANISM",
@@ -599,14 +674,7 @@ def start_payload(data, root):
 
 
 def write_atomic(path, content):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False, encoding="utf-8") as f:
-        temp = Path(f.name)
-        f.write(content)
-    try:
-        temp.replace(path)
-    finally:
-        temp.unlink(missing_ok=True)
+    atomic_write(path, content)
 
 
 def main():
@@ -620,7 +688,7 @@ def main():
         if args.start:
             print(json.dumps(start_payload(data, ROOT), ensure_ascii=False, allow_nan=False, indent=2))
             return 0
-        if args.search is not None or args.view or args.candidate or args.state or args.include_legacy:
+        if args.search is not None or args.view or args.candidate or args.state or args.include_legacy or args.history:
             print(json.dumps(record_query(data, args), ensure_ascii=False, allow_nan=False, indent=2))
             return 0
     except ValueError as exc:

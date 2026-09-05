@@ -1,5 +1,15 @@
 # cmix21 Lock-Safe Queue
 
+Retained CMIX21 queue and memory-boundary reference. The working set, guard
+limits, “current” labels, and actions below are historical snapshots with their
+original evidence scope.
+
+Use the [active objective](contracts/research/v2/objective-contract.json),
+[generated status](docs/status_receipt.md), and
+[command manual](ADAPTIVE_WORKFLOW.md#start-and-find-records) for current economics,
+dated operational records, and actual ownership checks. This reference grants
+no launch or promotion authority.
+
 ## Current Fine-Valve Working Set
 
 The fine PPMD-only search is terminal after the 20352 KiB family established
