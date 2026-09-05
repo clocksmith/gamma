@@ -1,0 +1,108 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "The fixed marginal model component improves, but standalone source/runtime inventories do not pay and native loader/package transfer is unmeasured."
+  },
+  "candidateId": "fx2_weight_marginal_roundtrip_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_weight_marginal_roundtrip_q0_v1",
+    "candidateTreeSha256": "sha256:7579adf5cf20154085c6fc7dc0e0294eff349fabf0c89e2b9d4b1e67a3aeddf0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_weight_marginal_roundtrip_q0_v1/20260905T222954309281Z_7579adf5cf20.json",
+      "sha256": "sha256:159f894be03f9c49fe14761d18e6d847debb4f13995a393a38867b3552dfc4ef"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "The frozen model-component predicates pass. Retain D for bounded preparation of a separately frozen native integration; measure its added package before corpus execution. No full score, larger launch or standalone package gain is authorized.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_weight_marginal_terminal_20260905.json",
+      "sha256": "sha256:b879a20c6a4f621c27e5d0ef247cddeccc2cb59a5e6ce776684140eb4a5adf62"
+    },
+    {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/decision.json",
+      "sha256": "sha256:51fd0c0aa11d9c0c2602160c4f802daa5542b456460333d8188677381468e9a0"
+    },
+    {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/package.json",
+      "sha256": "sha256:ec188d0c8b41307be54571ac43279ff21d6161e4622fd6c776efc08997f6505f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_marginal_roundtrip_q0_v1.json",
+    "sha256": "sha256:2ec9dd3814c89e1445fb732b55fdcfe928d9e1ae2d5f680d0a97cecf74400a02"
+  },
+  "generatedUtc": "2026-09-05T22:35:54+00:00",
+  "hypothesis": {
+    "rationale": "Fixed per-tensor D saves 22323 model bytes and fixed-global G saves 18654, both including all 7169 extra header bytes. D is selected by the frozen size rule; both repeat exactly.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260905T222955Z_5eb35a57d6.json",
+    "sha256": "sha256:c6a8e4f2c9e281a17609a1e9f23dae63911f1f330d5c66a73df78dd0aed9892f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Fixed marginals remove enough coding cost to pay for explicit histogram tables on this model; tensor granularity saves another 3669 bytes versus the same-header global control.",
+      "Separate positive model-component bytes from the added native program package; retain exact model restoration and require fresh native archive transfer."
+    ],
+    "uncertainties": [
+      "Native loader code size, integrated probability/archive identity, complete package closure, resource qualification and model licensing remain unresolved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/population/bytes",
+      "source": {
+        "path": "operations/provenance/public_fx2_weight_marginal_terminal_20260905.json",
+        "sha256": "sha256:b879a20c6a4f621c27e5d0ef247cddeccc2cb59a5e6ce776684140eb4a5adf62"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/int4_symbols",
+      "source": {
+        "path": "operations/provenance/public_fx2_weight_marginal_terminal_20260905.json",
+        "sha256": "sha256:b879a20c6a4f621c27e5d0ef247cddeccc2cb59a5e6ce776684140eb4a5adf62"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 2930652,
+    "scopeSymbols": 5868864,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t222955z_5eb35a57d6",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Eight independent synthetic populations and all controls passed; P/K and both inverse/repeat pairs preserve original model bytes. All 19 input hashes, 129 command receipts and indexed artifacts were independently recomputed; canonical guard and cleanup closed within bounds."
+    ],
+    "valid": true
+  }
+}
