@@ -1,0 +1,305 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "parent": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "experimentId": "fx2_weight_marginal_roundtrip_q0_v1",
+  "proposalId": "fx2_weight_marginal_roundtrip_q0_v1",
+  "hypothesis": {
+    "claim": "Replacing online INT4 probability adaptation with explicitly transmitted fixed empirical marginals reduces the pinned complete model asset for at least one of the two frozen local/global arms, while P/K and every inverse/repeat preserve exact original model bytes.",
+    "falsification": "The size hypothesis fails if neither frozen D nor G produces a smaller exact model asset including all histogram bytes. Any exactness, missing-evidence or source failure invalidates implementation evidence; execution budget exhaustion is not scientific refutation."
+  },
+  "changedMechanism": "Replace only INT4 online adaptation with fixed Q11 binary trees from counted histograms. D uses each tensor marginal; G uses the global marginal. Both carry the identical global and per-tensor histogram header except its mode byte. P remains original coding; K computes histograms but emits original bytes. Preserve all tensor values, scales, metadata, order and other coding models.",
+  "invariants": [
+    "CPU 2 only. Preserve HORIZON sole observer, MIDAS and other owners. No installations, corpus access, training, coarser quantization or native inference execution.",
+    "Canonical discovery limits: memory536870912 bytes, swap0, scratch67108864 bytes, aggregate elapsed stop300 seconds. Aggregate compiler cap120 seconds; synthetic subprocess cap15 seconds; each fixed-model subprocess cap45 seconds. No cap increase or automatic retry.",
+    "Freeze source, installed toolchain, semantic parent, diagnostic ancestry and all input hashes before compile. Retain verified source buffers at original relative paths before compiling; verify normalized local includes and all source/toolchain hashes before and after execution.",
+    "Authenticate the 2930652-byte public model without decoding during preflight. Run all eight synthetic populations, forty rejection cases, three comparison controls and four output controls before decoding the fixed trained model.",
+    "Use unchanged public C++ raw/compressed tensor checks on independent Python FX2TFW01 and FX2TFWC2 goldens. P/K must equal original bytes; D/G must equal independently written marginal goldens, restore original bytes and repeat in fresh processes.",
+    "Each marginal header is GFX2MAR1,u32 tensor count,u8 D/G mode,u32 INT4 record count,15 u32 global counts,then increasing tensor-index plus15 u32 local-count records. Stream offset77+64*N. Count every header byte. Original model has111 INT4 tensors and5868864 symbols, giving7181 header bytes,7169 more than parent.",
+    "Fixed subtree p0 is clamp(floor((2048*left+floor(total/2))/total),1,2047), or1024 for empty subtree. Leaf15 count is zero. No smoothing, parameter search, neighboring-symbol context or INT4 probability updates. Validate local counts against decoded symbols and shape, and global counts against local sums.",
+    "Exactly two predeclared histogram granularities D/G constitute the bounded comparison. Select the smaller complete model asset only after both arms pass; ties select G. This is selection on the complete public model component, not a claim of unseen-model generalization. Unchanged fresh-process restore/repeat for both arms is confirmation of determinism, not an independent compression population.",
+    "Both arms must retain identical model tensor metadata, matching the prior bound original-model receipt. RoPE tags preserve original regeneration instructions; no independent real RoPE float-generation claim.",
+    "Negative controls must reject malformed metadata, inconsistent counts, missing flush/trailing bytes, wrong input hashes and receipt failures. Preserve preexisting final/partial sentinel files; missing output directories stay absent. An intentionally preserved partial sentinel is evidence, not an unfinished codec output.",
+    "Publish D/G standalone source and runtime inventories separately with new code, header, license, model and options. These are incomplete alternative inventories, not integrated package gains. No summed gain, full corpus score, prize qualification or automatic larger launch.",
+    "Optional CPU diagnostics may be missing explicitly. Exit124 is a timeout budget stop;137 remains resource-or-signal stop until outer evidence disambiguates. Mandatory evidence failures block promotion. Publish final decisions/reflections only after outer guard, canonical job and all children/files close.",
+    "Positive component savings permit bounded preparation of a separately frozen native integration only. Before corpus execution that gate must measure the added native package and pass its budget; fresh native archives must establish unchanged probabilities and exact payloads. Release/package eligibility remains unresolved."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Original public adaptive coding; exact original stream regeneration."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Histogram bookkeeping with original coding unchanged; require P/K payload identity."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Fixed per-tensor empirical marginals with fully counted global and local histogram side information."
+    },
+    {
+      "id": "G",
+      "role": "comparator",
+      "definition": "Fixed global empirical marginal with identical side information; predeclared eligible alternative distinguishes tensor heterogeneity from online adaptation."
+    },
+    {
+      "id": "restore-repeat",
+      "role": "replay",
+      "definition": "Separate fresh processes restore each D/G stream to original FX2TFWC2 bytes and reproduce each arm."
+    },
+    {
+      "id": "negative",
+      "role": "negative",
+      "definition": "Forty rejected inputs, three comparison controls and four output-failure controls on frozen synthetic populations."
+    }
+  ],
+  "population": {
+    "unit": "packed model byte and decoded INT4 weight symbol",
+    "scopeBytes": 2930652,
+    "scopeSymbols": 5868864,
+    "selection": "Eight fixed synthetic populations, then one pinned public434-tensor model. Two frozen D/G alternatives, no parameter tuning, fresh restore/repeat for each. Component data are the target model itself, not a held-out corpus.",
+    "coordinate": "Original FX2TFWC2 tensor index/name, encoding and INT4 element position; no WRT, NNCP or corpus trace interchange."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Pinned public source and model identity; prior closed metadata and negative packing receipt",
+      "Histograms computed by the encoder and transmitted in full before decoding marginal symbols",
+      "Previously decoded metadata and fixed transmitted probabilities"
+    ],
+    "forbiddenInformation": [
+      "HORIZON science or controls",
+      "MIDAS source, state or active work",
+      "Untallied counts or table bytes hidden from the decoder",
+      "Changing arms, parameters or populations after observing these results"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/fx2_weight_marginal_roundtrip_q0_v1.py",
+      "sha256": "sha256:5020bc0eb9bb65541743f447591e400f5994f9bd8139df41bc8bb5ce1619c80b"
+    },
+    {
+      "id": "probe",
+      "path": "tools/fx2_weight_marginal_probe_v1.cpp",
+      "sha256": "sha256:eb23bcc621be8b75f75e42592e5af55014474530a9353cc4aa19893c2de1f08f"
+    },
+    {
+      "id": "format-library",
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "sha256": "sha256:aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "id": "fixtures",
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "sha256": "sha256:f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    },
+    {
+      "id": "artifact-helper",
+      "path": "lib/artifacts.py",
+      "sha256": "sha256:9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    },
+    {
+      "id": "toolchain",
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260905.json",
+      "sha256": "sha256:53ac253310a9812ca31fc016870c2762ea50c8b001c56630da4545875670a3b1"
+    },
+    {
+      "id": "source-audit",
+      "path": "operations/provenance/public_fx2_cmix_transformer_v1.json",
+      "sha256": "sha256:4e55dc96f722f769dd52dd9e518472f348e923e8c2b706a46ba0d1bbd972ae79"
+    },
+    {
+      "id": "parent-terminal",
+      "path": "operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json",
+      "sha256": "sha256:121c6586ccb0bca066f8c7602e97b02177d20966ca74409481dfd651babce1ab"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260905T195118Z_c39265f90c.json",
+      "sha256": "sha256:a93f49a42d9273135402d80240066e1c7b77e9d9e7eb61c383fed61255cb8228"
+    },
+    {
+      "id": "retired-packing-audit",
+      "path": "operations/provenance/public_fx2_weight_pack_terminal_20260905.json",
+      "sha256": "sha256:cef68113c1b01d49fbf1029a776fb1a6424a4ebb655408862eaf8e6bded43696"
+    },
+    {
+      "id": "retired-packing-reflection",
+      "path": "operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json",
+      "sha256": "sha256:5318510776a1e891bdd36a2bf5d21bb04166a4b848b9955986bb6c5b89662015"
+    },
+    {
+      "id": "model-metadata-reference",
+      "path": "results/fx2_weight_pack_roundtrip_q0_v1/model-parent.stdout",
+      "sha256": "sha256:fc5f3b8b2a2626e973f7f5bfae5c8320f90b2ca4c3644fae04293edc6c35825b"
+    },
+    {
+      "id": "trained-model",
+      "path": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2",
+      "sha256": "sha256:7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    {
+      "id": "license",
+      "path": "external/fx2-cmix-transformer-v1/LICENSE",
+      "sha256": "sha256:3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "id": "public-encoder",
+      "path": "external/fx2-cmix-transformer-v1/pysrc/weights_compress.py",
+      "sha256": "sha256:eb3a5404886f4cc8b67a0197385ef1f0f220721707f269fa54870f28ba53e6c8"
+    },
+    {
+      "id": "checker-0",
+      "path": "external/fx2-cmix-transformer-v1/cpp_infer/src/test_weights_compressed.cpp",
+      "sha256": "sha256:0eb136cfe217e185c0bdae2a71431cb2eafb7017ba79d55f5e0456822e492d32"
+    },
+    {
+      "id": "checker-1",
+      "path": "external/fx2-cmix-transformer-v1/cpp_infer/src/weights_io.cpp",
+      "sha256": "sha256:5b505339a8a3410661b74d2062d3843359709873dec0e759199a0f2a24f2b323"
+    },
+    {
+      "id": "checker-2",
+      "path": "external/fx2-cmix-transformer-v1/cpp_infer/src/weights_io_compressed.cpp",
+      "sha256": "sha256:d13fb385f7938ff84b2a5b2a34e09e17c14af3b6c321f020262e96e97c5c41a6"
+    },
+    {
+      "id": "checker-3",
+      "path": "external/fx2-cmix-transformer-v1/cpp_infer/src/weights_io.h",
+      "sha256": "sha256:c6abb82b462baa1a10c5244fa8ba52852397fc2b09950d483f9fc3873fd972ec"
+    }
+  ],
+  "pythonSourceClosureEntries": [
+    "runner"
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 1048576,
+    "expectedNetSavingsBytes": -1048576
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 0
+  },
+  "measurements": [
+    {
+      "id": "synthetic_pass",
+      "definition": "Every independent synthetic reference and negative control passes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "pk_identity",
+      "definition": "Both original-coding arms reproduce exact pinned parent bytes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "exact_roundtrip",
+      "definition": "Both marginal arms restore exact original bytes.",
+      "unit": "boolean"
+    },
+    {
+      "id": "repeat_exact",
+      "definition": "Fresh repeats reproduce both marginal arm streams.",
+      "unit": "boolean"
+    },
+    {
+      "id": "best_model_saved_bytes",
+      "definition": "Parent2930652 minus smaller D/G complete asset including all histograms; ties choose G. Component only, excluding added program/package.",
+      "unit": "bytes"
+    },
+    {
+      "id": "D_saved_bytes",
+      "definition": "Parent bytes minus D model bytes.",
+      "unit": "bytes"
+    },
+    {
+      "id": "G_saved_bytes",
+      "definition": "Parent bytes minus G model bytes.",
+      "unit": "bytes"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "synthetic-pass",
+      "measurement": "synthetic_pass",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "pk-identity",
+      "measurement": "pk_identity",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "exact-roundtrip",
+      "measurement": "exact_roundtrip",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "repeat-exact",
+      "measurement": "repeat_exact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "component-smaller",
+      "measurement": "best_model_saved_bytes",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "inverse-diverged",
+      "measurement": "exact_roundtrip",
+      "operator": "eq",
+      "threshold": false
+    },
+    {
+      "id": "neither-component-smaller",
+      "measurement": "best_model_saved_bytes",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "outputs": [
+    "results/fx2_weight_marginal_roundtrip_q0_v1/stage-decision.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/decision.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/synthetic.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/package.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/artifacts.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/work/fixtures/manifest.json",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/model-P.stdout",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/model-K.stdout",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/model-D.stdout",
+    "results/fx2_weight_marginal_roundtrip_q0_v1/model-G.stdout"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-05T22:29:05.182895+00:00"
+}
