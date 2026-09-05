@@ -75,16 +75,21 @@ remain unchanged, without partial scientific access.
 | `fx2_bytemodel_argmax_unit_q0_v1` | 32 synthetic families, 256 paths each | Exact state/probabilities; 4,641,532 fewer comparisons; [audit](../operations/provenance/public_fx2_argmax_unit_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T211007Z_358c05f2db.json) |
 | `fx2_cmix_transformer_argmax_fixture50051_q0_v1` | Same public fixture, P/K/D/C | All archives 3,223 bytes; twelve complete coder traces identical; [audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json) |
 | `fx2_weight_pack_roundtrip_q0_v1` | Full pinned trained model, six synthetic populations | Exact inverse/repeat but model grows 2,930,652 to 2,938,887 bytes; [audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json) |
+| `fx2_weight_marginal_roundtrip_q0_v1` | Full pinned trained model, eight synthetic populations, P/K/D/G | D: 2,908,329 bytes, saving 22,323; G: 2,911,998 bytes, saving 18,654; exact inverse/repeat; [audit](../operations/provenance/public_fx2_weight_marginal_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T222955Z_5eb35a57d6.json) |
 
 Native argmax D/K diagnostic CPU ratio 0.9987045 missed the frozen 0.99 budget trigger: hold without a larger runtime gate.
 Retire preceding-symbol weight packing for 8,235 extra asset bytes before loader costs; neither result rejects its whole information source.
+Fixed-marginal P/K preserve the original 2,930,652 model bytes; each D/G restore and fresh repeat is exact. Both savings include all 7,169 extra side-information bytes.
+The frozen size rule selects D, with scientific status held for separately frozen native integration and measured added-package transfer.
+The standalone utility does not pay: D runtime/source inventories exceed the original model alone by 89,671/38,977 bytes; G exceeds it by 93,340/42,646 bytes.
+Native archive/control replay and complete package economics remain missing; component savings authorize no larger launch or full-corpus credit.
 Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
 [Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
 The files total 100,420,830 bytes, including both model copies; [the official FAQ](https://www.hutter1.net/prize/hfaq.htm#addcomp) explains that intentional cost.
 Neither binary was executed for this inventory. Required options and committee acceptance remain unverified.
 
-Transfer peak cgroup memory: 5,826,895,872 bytes; weight probe: 133,156,864 bytes. Guards closed; concurrent timing is diagnostic.
+Transfer peak cgroup memory: 5,826,895,872 bytes; preceding-symbol weight probe: 133,156,864 bytes; fixed-marginal probe: 160,862,208 bytes. Guards closed; concurrent timing is diagnostic.
 The conservative transfer inventory is 9,403,013 raw bytes with overlapping source/runtime assets; package closure and model licensing remain open.
 Direct-WRT cold slices do not reproduce the public reorder/PHDA pipeline or a 1G score. FX2/CMIX/model authorship remains upstream; Gamma has no full-corpus gain credit.
 
@@ -756,81 +761,3 @@ Evidence:
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
 
-## 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow
-
-`palimpsest_market_v2` is the separately versioned successor to the retained
-HARM mechanism, not a revival of the historical broad PALIMPSEST factorization.
-The old portfolio warning remains binding: semantic elegance does not excuse
-parser, realization, source, framing, model, table, package, runtime, or memory
-cost. The proposal is therefore `dormant_dependency` while the active HORIZON
-experiment continues unchanged. No corpus replay may read HORIZON's scientific
-outputs before its fail-closed terminal route.
-
-The later explicit PALIMPSEST directive supersedes the earlier instruction to
-retain only HARM-Delta when deciding whether this shadow may be frozen. Its
-nested arms are matched ablations inside one zero-credit experiment, not a
-combination of separately measured score gains. The prohibition on a broad
-replacement codec and on adding gains across changed probability trajectories
-remains fully binding.
-
-The frozen nested arms are `P/K/A/M/H/T/X/C/G`. A is exactly HARM-Delta's
-latest completed exact-route value and generic causal edit transducer. M changes
-only the exact-route reservoir depth from one to eight. H adds only normalized
-route-shape and content-type backoff, with current content type inferred from
-the already decoded value prefix. T adds one fixed typed leaf per unchanged H
-donor: signed-integer affine variants, delimiter-preserving substitution,
-bounded token alignment, or prefix/suffix grafting. X preserves T geometry but
-permutes donor routes within power-of-two age and length buckets. C retains the
-correct donors and generic leaves but changes every typed-kernel assignment to
-a different valid kernel. G uses physical-history donors matched to each H
-donor's exact causal age, content type, and length bucket. P is immutable;
-K executes all bookkeeping while sending only P to its coder.
-
-All markets use fixed factorized priors: equivalence masses `8/5/3`, newest to
-oldest ancestor masses `128/64/32/16/8/4/2/1`, and generic-to-typed masses
-`3/1`. Per-occurrence leaf weights and the global parent-versus-market weight
-use exact Q63 sleeping Bayesian updates. A sleeping leaf is multiplied by the
-awake market truth count, preserving its relative mass; transducers update only
-after the complete truth byte. Coin betting is excluded from v2 and can enter
-only as a new one-axis successor.
-
-The decision surface is literal finite arithmetic, not ideal gain. Every arm
-owns a 32-bit E1/E2/E3 arithmetic interval, explicit bit-count frame,
-termination, byte padding, and decoder replay. P and K must match at every Q16
-probability, interval transition, payload byte, and hash. Actual payload,
-framing, source, model, table, and transmitted package bytes enter economics.
-Process-tree memory and measured runtime remain separate hard gates and are
-never converted into fictional byte charges. Bootstrap and ideal-log-loss
-summaries are diagnostic only.
-
-The prospective populations remain canonical raw opening `[0,1,000,000)` and
-distant `[500,000,000,510,000,000)`, state-warm from raw byte zero. T must save
-at least `5,021` and `50,204` exact payload bytes respectively and be positive
-in every independently terminated chronological third. M must beat A by at
-least `9/82` opening/distant bytes, H must beat M by `33/328`, and T must beat H
-by `66/656`; these are density screens for frozen incremental package ceilings
-of `8,192`, `32,768`, and `65,536` full-scope bytes. T must also beat admissible
-A/M/H/X/C/G controls economically on both scopes. Any extension failure stops
-at the simpler surviving arm without a rescue sweep. Only a complete T pass
-may authorize one new native candidate, which still requires fresh package and
-composite resource evidence.
-
-The source-only implementation now fixes the reservoirs, all four typed
-kernels, hierarchical sleeping updates, matched controls, and independent
-finite coder. It opens no corpus and grants zero credit. Repeated fixture replay
-passes exact HARM-A probability identity, P/K probability/interval/payload
-identity, X/G admissibility, every arm's finite decode, a 4,096-bit coder stress
-roundtrip, and all typed-kernel exercises. The known-answer run SHA-256 is
-`a0614457cd000abf604fbe333458fe883d55a44a4f2bb4bd62d2be61147c82fa`.
-
-MIDAS is not privileged as a combination. A later study must measure both
-conditional PALIMPSEST marginals given MIDAS active/asleep and reverse MIDAS
-marginals given PALIMPSEST active/asleep. Dominant overlap routes to expert
-competition. Complementary residuals may expose only decoder-visible posterior
-entropy, selected transformation family, and parent-surprise gap, followed by a
-fresh joint finite archive. Separate gains are never added.
-
-Evidence: `operations/planning/palimpsest_market_v2.json`,
-`operations/adaptive/experiments/palimpsest_market_v2.json`,
-`operations/adaptive/proposals/proposed/000_palimpsest_market_v2.json`, and
-`programs/palimpsest_market_v2/`.

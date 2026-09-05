@@ -1,0 +1,855 @@
+{
+  "comparison_controls": [
+    {
+      "expected_parent_sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1",
+      "id": "wrong_model_D",
+      "input": {
+        "bytes": 333,
+        "path": "wrong_model_D.gfx2mar1",
+        "sha256": "fc6a7dbe787085e5d2ae7753ef9f00ac2d75dc7021b08e59d24dc7ee8e099476"
+      },
+      "mode": "restore",
+      "required": "exit 1 with no output, or exit 0 with restored bytes unequal to the exact heterogeneous parent; no leftover partial"
+    },
+    {
+      "expected_parent_sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1",
+      "id": "wrong_model_G",
+      "input": {
+        "bytes": 348,
+        "path": "wrong_model_G.gfx2mar1",
+        "sha256": "80585aae01ac25311a16bc5f49092b401e1a035a84558a4cb50fda03874cfce0"
+      },
+      "mode": "restore",
+      "required": "exit 1 with no output, or exit 0 with restored bytes unequal to the exact heterogeneous parent; no leftover partial"
+    },
+    {
+      "expected_parent_sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1",
+      "id": "bit_corruption",
+      "input": {
+        "bytes": 104,
+        "path": "bit_corruption.tfwc2",
+        "sha256": "634e2b7d5e8c371dfdd15166fcb511a8911eb39ac703acbcd896fc1f97a3a777"
+      },
+      "mode": "hash_admission",
+      "required": "reject mismatching pinned input hash before invocation; decoder checksum detection is not claimed"
+    }
+  ],
+  "generator_sha256": "f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e",
+  "integrity_boundary": "Container hashes authenticate inputs; arbitrary corruption is not guaranteed to be an invalid model.",
+  "objective_credit_bytes": 0,
+  "output_controls": [
+    {
+      "expected_exit": 1,
+      "id": "preexisting_output",
+      "input": {
+        "bytes": 104,
+        "path": "heterogeneous_tensors.tfwc2",
+        "sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1"
+      },
+      "mode": "P",
+      "required": "exit 1; preserve sentinel final bytes; remove only newly created partial",
+      "sentinel": {
+        "bytes": 25,
+        "path": "output.sentinel",
+        "sha256": "a71d896b36da723dfef3703504d3739b3946bbb8fd376ff9f30f888aee1ecb42"
+      }
+    },
+    {
+      "expected_exit": 1,
+      "id": "preexisting_partial",
+      "input": {
+        "bytes": 104,
+        "path": "heterogeneous_tensors.tfwc2",
+        "sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1"
+      },
+      "mode": "P",
+      "required": "exit 1; preserve sentinel partial bytes; final remains absent",
+      "sentinel": {
+        "bytes": 25,
+        "path": "output.sentinel",
+        "sha256": "a71d896b36da723dfef3703504d3739b3946bbb8fd376ff9f30f888aee1ecb42"
+      }
+    },
+    {
+      "expected_exit": 1,
+      "id": "missing_output_directory",
+      "input": {
+        "bytes": 104,
+        "path": "heterogeneous_tensors.tfwc2",
+        "sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1"
+      },
+      "mode": "P",
+      "required": "exit 1; no final or partial created",
+      "sentinel": {
+        "bytes": 25,
+        "path": "output.sentinel",
+        "sha256": "a71d896b36da723dfef3703504d3739b3946bbb8fd376ff9f30f888aee1ecb42"
+      }
+    },
+    {
+      "expected_exit": 1,
+      "id": "stdout_failure",
+      "input": {
+        "bytes": 104,
+        "path": "heterogeneous_tensors.tfwc2",
+        "sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1"
+      },
+      "mode": "P",
+      "required": "redirect stdout to /dev/full; exit 1 with receipt-flush diagnostic; closed model output still equals parent",
+      "sentinel": {
+        "bytes": 25,
+        "path": "output.sentinel",
+        "sha256": "a71d896b36da723dfef3703504d3739b3946bbb8fd376ff9f30f888aee1ecb42"
+      }
+    }
+  ],
+  "real_model_accessed": false,
+  "rejection": [
+    {
+      "expected_exit": 1,
+      "id": "duplicate_names",
+      "input": {
+        "bytes": 50,
+        "path": "duplicate_names.invalid",
+        "sha256": "8a73076f7e835b60ac4c2e8ac9cd2bdda1626ac2db7d62246ef751a6c70522ba"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "unknown_dtype",
+      "input": {
+        "bytes": 24,
+        "path": "unknown_dtype.invalid",
+        "sha256": "97e9041a66e3060a89d7ff3c4195241c978fddeb2f99b6028f236493eff1eb6c"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "too_many_dimensions",
+      "input": {
+        "bytes": 49,
+        "path": "too_many_dimensions.invalid",
+        "sha256": "f90f40a0e89a5fa9284d0242bc8206117bb1c4301811288a7af4ddb3f6b84fa4"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "unknown_encoding",
+      "input": {
+        "bytes": 27,
+        "path": "unknown_encoding.invalid",
+        "sha256": "476d8f34fcd5ae70269f6ed3ad063d7c9dd8ebaeb34858d14c6e6d266276021c"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "int4_wrong_dtype",
+      "input": {
+        "bytes": 28,
+        "path": "int4_wrong_dtype.invalid",
+        "sha256": "8ef4d01541425d64c06adb0beb74345b051d3a25a56bb3af16ff509db966db66"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "bf16_wrong_dtype",
+      "input": {
+        "bytes": 29,
+        "path": "bf16_wrong_dtype.invalid",
+        "sha256": "9fa74a29e9ad082873f1e58ff978cdbfd3cd73f3880b94675c1698ad16292ff4"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "plane_wrong_dtype",
+      "input": {
+        "bytes": 28,
+        "path": "plane_wrong_dtype.invalid",
+        "sha256": "1687d7dd5f93ab0f46e2ed8c612a6d41f601df36e9d9a61360be4154f054c5d4"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "int4_outside_public_writer_domain",
+      "input": {
+        "bytes": 28,
+        "path": "int4_outside_public_writer_domain.invalid",
+        "sha256": "1552f5a179bab7fecb56742957b07b81e048cb63e27d25c69002f50c6d10d610"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "rope_missing_frequency",
+      "input": {
+        "bytes": 36,
+        "path": "rope_missing_frequency.invalid",
+        "sha256": "193279cfc8f19e0152ad5d61e15ecfc7edd5f285901e90490c45b17bc7ae005e"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "rope_wrong_dtype",
+      "input": {
+        "bytes": 36,
+        "path": "rope_wrong_dtype.invalid",
+        "sha256": "6b71a08540a7bfe7efb8ba1953861214aa1740a7f5ddaf28fb3e0f9f3c6c5a66"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "rope_wrong_frequency_shape",
+      "input": {
+        "bytes": 67,
+        "path": "rope_wrong_frequency_shape.invalid",
+        "sha256": "8d5139072821f7a1c5b1d6f75e0d2c02c2684ff3d574a6495d19768913bcc498"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "rope_nonvector_frequency",
+      "input": {
+        "bytes": 67,
+        "path": "rope_nonvector_frequency.invalid",
+        "sha256": "a5a032cfd5c3f76a200a566e019b8436b52c5c1752cac87b42533278b4870fe8"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "extent_exceeds_bound",
+      "input": {
+        "bytes": 31,
+        "path": "extent_exceeds_bound.invalid",
+        "sha256": "6047fa4f45a42d0ff92558f2b8f28d3646f44cbd5e18446df83e0faf182642b4"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_bad_magic",
+      "input": {
+        "bytes": 261,
+        "path": "parent_bad_magic.invalid",
+        "sha256": "eb71ce934d73343b3424b14600ce659dfb43a5513b64c43ae1f31301e26b1887"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_nonzero_cache",
+      "input": {
+        "bytes": 261,
+        "path": "parent_nonzero_cache.invalid",
+        "sha256": "aff09fc7786cce265cbb31ed64b9b1efce398c18995ccd9d21f6c6936be4069b"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_truncated_header",
+      "input": {
+        "bytes": 11,
+        "path": "parent_truncated_header.invalid",
+        "sha256": "551c94ed977edc067c430757b387784505ccfde1b8710b37051f0247a8452e72"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_truncated_stream",
+      "input": {
+        "bytes": 130,
+        "path": "parent_truncated_stream.invalid",
+        "sha256": "bc5a626f47a4f159edcc8849f24ea0899a77c3b39cc2bc0f4729a6af9e4aed1e"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_missing_flush",
+      "input": {
+        "bytes": 260,
+        "path": "parent_missing_flush.invalid",
+        "sha256": "7700f3916c0ed4c6d9d3a29fc336f32cdb6a79c1055dd5c6e1cd606d879a44e0"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_trailing_byte",
+      "input": {
+        "bytes": 262,
+        "path": "parent_trailing_byte.invalid",
+        "sha256": "a114794f0ddde4adf2ca19826b9fd335af0432e9ef5c2c758f842dc5c76216db"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "parent_tensor_limit",
+      "input": {
+        "bytes": 261,
+        "path": "parent_tensor_limit.invalid",
+        "sha256": "54ff6f886971447d8ddc13c36a56d6d935fe7902fa7e75e82b5ab2a48b73c352"
+      },
+      "mode": "P",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_bad_magic",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_bad_magic.invalid",
+        "sha256": "3ed9face32b2bb272f57ced2423b335713d9b2ef540d4837a0c3e3dc775c32dd"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_bad_mode",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_bad_mode.invalid",
+        "sha256": "b779a6c2781241e4df7305c8ea6cd483504c61c42eaeff5d4eed900069b3b140"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_truncated_header",
+      "input": {
+        "bytes": 76,
+        "path": "marginal_truncated_header.invalid",
+        "sha256": "02bdfef0d28fc6b2905c405781526bb396dfdf1fc164817e2e4c6e3253ba68d2"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_truncated_record",
+      "input": {
+        "bytes": 140,
+        "path": "marginal_truncated_record.invalid",
+        "sha256": "05d66ddc0db3dab9cbe1be5afe8e5f817d79dae27ae077ae9ee9fd7ee718c9b1"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_truncated_stream",
+      "input": {
+        "bytes": 273,
+        "path": "marginal_truncated_stream.invalid",
+        "sha256": "c18e16220a94d6f4ac505d67032aff32053825bf5d5ed6b85abded9f62deeafc"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_nonzero_cache",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_nonzero_cache.invalid",
+        "sha256": "1a666e8401f520c2fbe762e9097e51b6eecf9b2ef32760fad6d372b7f0410a08"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_missing_flush",
+      "input": {
+        "bytes": 332,
+        "path": "marginal_missing_flush.invalid",
+        "sha256": "62d7713e1ecde2e06bb21f5e827106e502cdd46e5381ec13f4d554fa4b55b5c3"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_trailing_byte",
+      "input": {
+        "bytes": 334,
+        "path": "marginal_trailing_byte.invalid",
+        "sha256": "f63dc175f835bfadff85df6dfb8051d9dd5191a47369ecfe1693550626e18a63"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_tensor_limit",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_tensor_limit.invalid",
+        "sha256": "e0abd70f501e74d4527b2c4c9d66ec059c45c0cb03a043dbabc234f5a13b6577"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_record_limit",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_record_limit.invalid",
+        "sha256": "a2c1e5a2c819db2e797e067a202126e986d4c60aba52bfe91ada775a304cdd50"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_global_sum_mismatch",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_global_sum_mismatch.invalid",
+        "sha256": "ae3b0eb4054b88ef38ca291e4e8983321b6898b4e40bc8fed8d87057fefc4187"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_count_exceeds_bound",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_count_exceeds_bound.invalid",
+        "sha256": "183fe4447d77c585bc927fbafd6cc45bda8412c93e9094321b71df563fbe9219"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_duplicate_index",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_duplicate_index.invalid",
+        "sha256": "4f5a437ff14af843dab33b8eb44d0f3c82e7e188101be38220c294cce8c85c27"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_index_out_of_range",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_index_out_of_range.invalid",
+        "sha256": "63a626583da842a8a56178a36a337cbf9889ce454c9724626a06da04ca835f14"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_unsorted_indices",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_unsorted_indices.invalid",
+        "sha256": "f4795a7681a41ee407478d95f0154c0b9a7a29afe0185e3fafbaeaf089503254"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_missing_empty_record",
+      "input": {
+        "bytes": 269,
+        "path": "marginal_missing_empty_record.invalid",
+        "sha256": "bdc45a0cddf4a4410a602ba39a351b1a9364f065539bad7a558b53f453398172"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_record_on_nonint4",
+      "input": {
+        "bytes": 390,
+        "path": "marginal_record_on_nonint4.invalid",
+        "sha256": "c618c0f15e5468ef198b10cb955543010eb861e350c9a38ee2a54facfdecba49"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_actual_counts_differ_D",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_actual_counts_differ_D.invalid",
+        "sha256": "f1bde77ccd41daf69b4d702bdb7f272eb8030afe6bd57e0b2d44e3494064294f"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_actual_counts_differ_G",
+      "input": {
+        "bytes": 349,
+        "path": "marginal_actual_counts_differ_G.invalid",
+        "sha256": "7de6522e4812bca5634676af6790e8eea3fa89dfeaac975caef399a068441f64"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    },
+    {
+      "expected_exit": 1,
+      "id": "marginal_local_sum_differs_from_shape",
+      "input": {
+        "bytes": 333,
+        "path": "marginal_local_sum_differs_from_shape.invalid",
+        "sha256": "37ea15c26e11c078421a202b9049ed28b67a30a01269b154d0b4aaf290876f75"
+      },
+      "mode": "restore",
+      "output_must_be_absent": true,
+      "partial_must_be_absent": true
+    }
+  ],
+  "scalar_boundary": "Direct zero-dimensional grammar fixtures do not assert that the NumPy exporter preserves scalar shape.",
+  "schema": "gamma.fx2-weight-marginal-synthetic-fixtures.v1",
+  "strict_subset_rejections": [
+    "int4_outside_public_writer_domain",
+    "extent_exceeds_bound",
+    "rope_nonvector_frequency"
+  ],
+  "upstream_commit": "83f2603f3f7751da5f429fd32669807eb8510494",
+  "valid": [
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 82,
+        "path": "zero_tensors.D.gfx2mar1",
+        "sha256": "b031bd21fdff4e117213be6372afd2ac69f6c679847c27d6933cd2c8c71c2966"
+      },
+      "expected_G": {
+        "bytes": 82,
+        "path": "zero_tensors.G.gfx2mar1",
+        "sha256": "1a195cebf6a42e65fec33f5b7673a25322198bc983a68dd83ea095462809f860"
+      },
+      "id": "zero_tensors",
+      "int4_tensor_count": 0,
+      "parent": {
+        "bytes": 17,
+        "path": "zero_tensors.tfwc2",
+        "sha256": "895e09ac56358eb2f140f69846218cd8d197b9305e47d2835880303a471a6e73"
+      },
+      "range_stream_offset": 77,
+      "raw_reference": {
+        "bytes": 12,
+        "path": "zero_tensors.weights.bin",
+        "sha256": "63a7eecae451cd87318ccf35f93b929bf2b96dcafde68e66aaa3414cff8add4a"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 65,
+      "tensor_count": 0,
+      "tensor_payload_bytes": 0
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 281,
+        "path": "uniform_marginal.D.gfx2mar1",
+        "sha256": "55d55670cfc7603967f926b2f1652b52f0bd03ed0be8dc826d59a5fff8b3af79"
+      },
+      "expected_G": {
+        "bytes": 281,
+        "path": "uniform_marginal.G.gfx2mar1",
+        "sha256": "118c46d8b9339b94fba30c016f4db97878f9233a30bb6b41ceb3259a7bae01cd"
+      },
+      "id": "uniform_marginal",
+      "int4_tensor_count": 1,
+      "parent": {
+        "bytes": 156,
+        "path": "uniform_marginal.tfwc2",
+        "sha256": "2ffe29871ded91ec11adaaf34a6700a2350d385f1554567396d91519991bc59f"
+      },
+      "range_stream_offset": 141,
+      "raw_reference": {
+        "bytes": 276,
+        "path": "uniform_marginal.weights.bin",
+        "sha256": "961ed2924abb04d2b5c097f5896da65a8284c369e62762ad1e2adb9d5e623f93"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 129,
+      "tensor_count": 1,
+      "tensor_payload_bytes": 240
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 176,
+        "path": "skewed_marginal.D.gfx2mar1",
+        "sha256": "2a38a1dd7b46742d9668fc9b9bf8c3e6b97c25968f0514fd13b5901aa51d2ddb"
+      },
+      "expected_G": {
+        "bytes": 176,
+        "path": "skewed_marginal.G.gfx2mar1",
+        "sha256": "f99c384fcf9b184ebb2a42de8db5a9540d6266616b5528196c83e587be3857d8"
+      },
+      "id": "skewed_marginal",
+      "int4_tensor_count": 1,
+      "parent": {
+        "bytes": 63,
+        "path": "skewed_marginal.tfwc2",
+        "sha256": "178ac34ed9007fb4e64d73f66c1693c6ba1aa40d99d32e49c807bd70d5aa8f5d"
+      },
+      "range_stream_offset": 141,
+      "raw_reference": {
+        "bytes": 291,
+        "path": "skewed_marginal.weights.bin",
+        "sha256": "581bc9bb00a9570095fc40c25658af4256dac44d110e5a5cbb2d89b6ccdb9d83"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 129,
+      "tensor_count": 1,
+      "tensor_payload_bytes": 256
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 333,
+        "path": "heterogeneous_tensors.D.gfx2mar1",
+        "sha256": "7414738ad4fb7e7817f961ab0a15f7dc1eda4bf0ec5060bbe29a85ed58f983ab"
+      },
+      "expected_G": {
+        "bytes": 348,
+        "path": "heterogeneous_tensors.G.gfx2mar1",
+        "sha256": "dc9c031784a17ea493b251d963afe0a0f2c0ce69cb196769d734c4d66a32e2d0"
+      },
+      "id": "heterogeneous_tensors",
+      "int4_tensor_count": 3,
+      "parent": {
+        "bytes": 104,
+        "path": "heterogeneous_tensors.tfwc2",
+        "sha256": "4cd25ab32065885ff8b1a53d7ef690899e46508dfb740aeaf3c769570f6db4e1"
+      },
+      "range_stream_offset": 269,
+      "raw_reference": {
+        "bytes": 219,
+        "path": "heterogeneous_tensors.weights.bin",
+        "sha256": "1954621ccdea2393acf95f36f08a4961baa21e1d98a9afcfafbd706a2d78308c"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 257,
+      "tensor_count": 3,
+      "tensor_payload_bytes": 128
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 346,
+        "path": "empty_and_scalar.D.gfx2mar1",
+        "sha256": "5dce2e66a6eda12522c2b8f37fd439005d05bc03b74baa59233de239c00c7cde"
+      },
+      "expected_G": {
+        "bytes": 346,
+        "path": "empty_and_scalar.G.gfx2mar1",
+        "sha256": "abff61258739f172aa1ed324d36050f165f55d07a012781eaf0fc484519ece44"
+      },
+      "id": "empty_and_scalar",
+      "int4_tensor_count": 3,
+      "parent": {
+        "bytes": 89,
+        "path": "empty_and_scalar.tfwc2",
+        "sha256": "fb91a8bdd9df2c1cdfb45720863566ec2fa74a9af5e5db8af4fa827875710d25"
+      },
+      "range_stream_offset": 269,
+      "raw_reference": {
+        "bytes": 111,
+        "path": "empty_and_scalar.weights.bin",
+        "sha256": "c7ba4d60b95841d7e5f51cb4e38d0a797593bc93429e61ec90e8cfde6ddc2c24"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 257,
+      "tensor_count": 4,
+      "tensor_payload_bytes": 5
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 390,
+        "path": "all_tags_and_rows.D.gfx2mar1",
+        "sha256": "5d652c02fab8fcff400e7a85c4c0bf1dde6ceb5598033afef66090fa176babfc"
+      },
+      "expected_G": {
+        "bytes": 390,
+        "path": "all_tags_and_rows.G.gfx2mar1",
+        "sha256": "19a9dfbe5ba7a79df03489e4ec00472a857d3204d081ab354d46843e1bc981d2"
+      },
+      "id": "all_tags_and_rows",
+      "int4_tensor_count": 1,
+      "parent": {
+        "bytes": 261,
+        "path": "all_tags_and_rows.tfwc2",
+        "sha256": "2a8aaa98f266bcfcc3a87102309858e586ac7d53544b6d3e460a03faa7bce641"
+      },
+      "range_stream_offset": 141,
+      "raw_reference": {
+        "bytes": 372,
+        "path": "all_tags_and_rows.weights.bin",
+        "sha256": "5e5c8fdf72063981fbf770766f48c74dd4fd8222519ea25f86dd92199f10be76"
+      },
+      "regenerated_rope_bytes": 16,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 129,
+      "tensor_count": 11,
+      "tensor_payload_bytes": 81
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 2265,
+        "path": "range_adaptation_stress.D.gfx2mar1",
+        "sha256": "39dc8077270867c9e783ad99dd2d6e59c38d465533729e4aad45e5ba26737ab5"
+      },
+      "expected_G": {
+        "bytes": 3101,
+        "path": "range_adaptation_stress.G.gfx2mar1",
+        "sha256": "b52ff14ec0c836e5c877aba370d1fe1b76122666f49b91bd8a5f4a80206a9873"
+      },
+      "id": "range_adaptation_stress",
+      "int4_tensor_count": 2,
+      "parent": {
+        "bytes": 2171,
+        "path": "range_adaptation_stress.tfwc2",
+        "sha256": "b07e2e8be7f7c1ecd76bb8c2c680d6cbde7b4e16e5374d8aca5515d93e6644f4"
+      },
+      "range_stream_offset": 205,
+      "raw_reference": {
+        "bytes": 8266,
+        "path": "range_adaptation_stress.weights.bin",
+        "sha256": "ee9f70b17d1e0dc1b8c96a084968cc4dd4ad43e7b9a20dff5cf6430a91c0e466"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 193,
+      "tensor_count": 2,
+      "tensor_payload_bytes": 8192
+    },
+    {
+      "D_G_side_information_identical_except_mode": true,
+      "P_K_bytes_identical": true,
+      "expected_D": {
+        "bytes": 189,
+        "path": "maximum_native_dimensions.D.gfx2mar1",
+        "sha256": "21a1dc9ba9713cbd4295f2592edc4620baa52e2b1fdd5a7dd79b5140c74027f0"
+      },
+      "expected_G": {
+        "bytes": 189,
+        "path": "maximum_native_dimensions.G.gfx2mar1",
+        "sha256": "f96541cb40e33d407d4f3fa72977bec6632b5657d6fd87088ec5e79f26a2c049"
+      },
+      "id": "maximum_native_dimensions",
+      "int4_tensor_count": 1,
+      "parent": {
+        "bytes": 60,
+        "path": "maximum_native_dimensions.tfwc2",
+        "sha256": "b50616c793988932e867dd65fd0cecd61062a961bf1a03fc4587dec72e46c98d"
+      },
+      "range_stream_offset": 141,
+      "raw_reference": {
+        "bytes": 70,
+        "path": "maximum_native_dimensions.weights.bin",
+        "sha256": "4c09d0e6692af61d7067099ebcab2c0089213e08f081bb0a113c5184ed156eee"
+      },
+      "regenerated_rope_bytes": 0,
+      "required": "upstream raw tensor equality; P/K equal parent; D/G equal goldens; separate restores equal parent; fresh repeats equal each arm",
+      "side_information_bytes": 129,
+      "tensor_count": 1,
+      "tensor_payload_bytes": 1
+    }
+  ]
+}

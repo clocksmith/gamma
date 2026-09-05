@@ -42,3 +42,4 @@ Archived files preserve complete H2 records.
 - [part-024.md: 2026-08-24 - FOSSIL-MATCH targets exact history beyond FXCM's 16 MiB ring through 2026-08-16 - The exact FF2 transpose uses ordered 128-feature panels](archive/part-024.md)
 - [part-025.md: 2026-08-16 - The first remaining divergence is the FF2 transpose through 2026-08-09 - Agent A/B strategy and ownership merge under the 105M target](archive/part-025.md)
 - [part-026.md: 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound through 2026-08-10 - Production output-head attribution implementation reaches exact smoke parity](archive/part-026.md)
+- [part-027.md: 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow](archive/part-027.md)
