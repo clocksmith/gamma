@@ -760,4 +760,3 @@ Evidence:
 [`held initializer execution plan`](../operations/planning/nncp_libnc_profile_initial_fixture_65536_q0_v2.json),
 and
 [`integrated v2 proposal`](../operations/adaptive/proposals/proposed/934_nncp_open_integrated_midpoint_segment_replay_65536_q0_v2.json).
-
