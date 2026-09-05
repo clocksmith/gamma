@@ -5,17 +5,64 @@
     "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
   },
   "candidate_tree_sha256": "sha256:c34d07a6c86181c0c998d250e4fa69de351212ad9cce4537d563ee9c71017d07",
+  "elapsed_seconds": 0.175,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "existing_guard": {
+        "inode": 223761,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-static-vocab-fixture50051-q0-v1"
+      },
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1100
+    },
+    "cgroup_inode": 223805,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T194308Z_98e8e382e7",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": false,
+        "inode": 223761,
+        "kernel_cpuset": false,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-static-vocab-fixture50051-q0-v1"
+      },
+      {
+        "created": true,
+        "inode": 223805,
+        "kernel_cpuset": false,
+        "memory_bytes": 99999744,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T194308Z_98e8e382e7"
+      }
+    ],
+    "guard_command_sha256": "78c9d6753568c4741028feb37aef4a649bfff17dfbbf683f28d1ce2b7cfbce4d",
+    "guard_path": "run_logs/adaptive/20260905T194308Z_98e8e382e7.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json",
     "sha256": "sha256:e688ea6a4c383c43743afe7c77ff85b4cf59f6dac2afd43d39b517f451a7267f"
   },
+  "finished_at": "2026-09-05T19:44:24+00:00",
   "gate_size": 50051,
   "job_id": "20260905T194308Z_98e8e382e7",
+  "log_path": "run_logs/adaptive/20260905T194308Z_98e8e382e7.log",
   "priority": 0,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/029_fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json",
@@ -38,6 +85,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1100
   },
+  "returncode": 75,
   "runner": {
     "path": "tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py",
     "sha256": "sha256:bd13107db64291c5400a7c43fed12306cf92b5f6edbc4ceb27ac720fd7cbdb61"
@@ -46,7 +94,8 @@
   "scratch_directories": [
     "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-05T19:44:23+00:00",
+  "state": "failed",
   "submitted_at": "2026-09-05T19:43:08+00:00",
   "tags": [
     "public-fx2-static-vocabulary"
@@ -56,5 +105,8 @@
   "tool_args": [
     "--cgroup-path",
     "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-static-vocab-fixture50051-q0-v1"
-  ]
+  ],
+  "worker_pid": 1224751,
+  "worker_proc_start_ticks": 173360186,
+  "worker_started_at": "2026-09-05T19:44:24+00:00"
 }
