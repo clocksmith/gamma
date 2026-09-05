@@ -1,0 +1,35 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter.v1",
+  "source_path": "src/runner.cpp",
+  "source_sha256": "7d0f28c6298bc112a5a6d6f6be0ad825dff38b2e070d16a406efcde69cbd6bf6",
+  "patched_sha256": "241dd65dddc11b7a47c09b373753986b0d0554ec1eba12e3d745aa7bd5d61852",
+  "vocabulary_receipt": {
+    "path": "operations/provenance/public_fx2_authenticated_vocabulary_20260905.json",
+    "sha256": "515773fe04e18a687171142913a4be6effa281e3298865fc015f3ad0770f336b"
+  },
+  "decoder_changed": true,
+  "replacements": [
+    {
+      "before": "  std::vector<bool> vocab(256, false);\n  if (temp_bytes < kMinVocabFileSize)",
+      "after": "  const bool gamma_static_frontend = !extraction.transformer.empty();\n  char gamma_literal_header[5] = {0};\n  if (gamma_static_frontend) {\n    if (temp_bytes < kMinVocabFileSize + 5) Fail(\"static vocabulary fixture is too small\");\n    temp_in.read(gamma_literal_header, 5);\n    if (temp_in.gcount() != 5 || gamma_literal_header[0] != 7) Fail(\"expected one TEXT block header\");\n    temp_bytes -= 5;\n  }\n  std::vector<bool> vocab(256, false);\n  if (temp_bytes < kMinVocabFileSize)"
+    },
+    {
+      "before": "    ExtractVocab(temp_bytes, &temp_in, &vocab);\n    temp_in.seekg(0, std::ios::beg);",
+      "after": "    ExtractVocab(temp_bytes, &temp_in, &vocab);\n    // Explicit static alphabet from authenticated public archive asset 540574386.\n    // This counted map is written into the archive; the Gamma decoder restores literal framing.\n    if (!extraction.transformer.empty()) {\n      static const unsigned char trained_vocab[32] = {232, 22, 4, 0, 255, 255, 255, 3, 1, 252, 15, 249, 254, 255, 255, 7, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255};\n      for (int byte = 0; byte < 256; ++byte) {\n        bool allowed = (trained_vocab[byte / 8] & (1 << (byte % 8))) != 0;\n        if (vocab[byte] && !allowed) Fail(\"byte outside authenticated transformer alphabet: %d\", byte);\n        vocab[byte] = allowed;\n      }\n    }\n    temp_in.seekg(gamma_static_frontend ? 5 : 0, std::ios::beg);"
+    },
+    {
+      "before": "  WriteHeader(temp_bytes, vocab, dictionary != NULL, &data_out);",
+      "after": "  if (gamma_static_frontend) {\n    data_out.write(\"GFV1\", 4);\n    data_out.write(gamma_literal_header, 5);\n  }\n  WriteHeader(temp_bytes, vocab, dictionary != NULL, &data_out);"
+    },
+    {
+      "before": "  bool dictionary_used;\n  ReadHeader(&data_in, output_bytes, &dictionary_used, &vocab);",
+      "after": "  bool dictionary_used;\n  const bool gamma_static_frontend = !extraction.transformer.empty();\n  char gamma_literal_header[5] = {0};\n  if (gamma_static_frontend) {\n    char magic[4] = {0};\n    data_in.read(magic, 4);\n    if (data_in.gcount() != 4 || memcmp(magic, \"GFV1\", 4) != 0) Fail(\"invalid Gamma static vocabulary envelope\");\n    data_in.read(gamma_literal_header, 5);\n    if (data_in.gcount() != 5 || gamma_literal_header[0] != 7) Fail(\"invalid literal TEXT block header\");\n  }\n  ReadHeader(&data_in, output_bytes, &dictionary_used, &vocab);"
+    },
+    {
+      "before": "  Decompress(*output_bytes, &data_in, &temp_out, &p);",
+      "after": "  if (gamma_static_frontend) temp_out.write(gamma_literal_header, 5);\n  Decompress(*output_bytes, &data_in, &temp_out, &p);"
+    }
+  ],
+  "frontend_identity": "gamma-public-fx2-literal-first-block-v1",
+  "framing": "Counted GFV1 magic and five literal first-block framing bytes precede the standard CMIX header; only the remaining WRT bytes enter the authenticated205-symbol predictor. Decoder restores the literal framing before unchanged preprocessing inverse."
+}
