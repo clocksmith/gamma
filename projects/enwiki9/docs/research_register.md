@@ -2,48 +2,39 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
-## 2026-09-05 - Public FX2 passes two frozen canonical transfer slices
+## 2026-09-05 - Public FX2 parent reproduction and argmax comparison
 
-`fx2_cmix_transformer_transfer250k_q0_v2` produced **33,429 bytes** from raw
-`[0,250000)` and **9,499 bytes** from `[500000000,500250000)`. Both independent
-cold starts pass exact inversion, deterministic re-encoding and the authenticated
-205-symbol map. [Terminal audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json)
-and [validated reflection](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json)
-bind the same parent binary/model, 310 inputs and closed CPU 2 discovery guard.
-Peak cgroup memory was 5,826,895,872 bytes; conservative raw package inventory
-was 9,403,013 bytes. Qualification, complete licensing/package closure and any
-Gamma compression gain remain unproved; these cold slices use direct WRT,
-without the public reorder/PHDA pipeline. No full-corpus extrapolation is earned.
-The [v1 preflight failure](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json)
-preserves its rejected corpus-symlink check; v2 changes only that preflight rule.
-Retain the parent. Next test conditional argmax reuse against the original scan,
-then require matched native probability, payload and inverse comparisons.
+| Frozen gate | Population | Exact archive result |
+|---|---|---|
+| `fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` | Public 50,051-byte profiling fixture | 3,223 bytes; inverse, repeat, malformed envelope and repeated kernel probabilities pass |
+| `fx2_cmix_transformer_transfer250k_q0_v2` | Canonical raw `[0,250000)` and `[500000000,500250000)` | 33,429 and 9,499 bytes; independent cold inverses/repeats pass |
+| `fx2_bytemodel_argmax_unit_q0_v1` | 32 synthetic families, 256 paths each | Original/P/K/D/C probabilities and state agree; D avoids 4,641,532 of 8,224,768 comparisons per repeat |
 
+The [fixture audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json)
+and [transfer audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json)
+bind the authenticated 205-symbol vocabulary, source, archive hashes and closed
+guards. Their reflections are [fixture](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json)
+and [transfer](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json).
+Transfer peak cgroup memory was 5,826,895,872 bytes. Conservative raw inventory
+was 9,403,013 bytes, including overlapping source/runtime assets; complete
+package closure and model licensing remain unresolved. These direct-WRT cold
+slices do not reproduce the public reorder/PHDA pipeline or establish a 1G score.
 
-## 2026-09-05 - Public FX2 parent passes authenticated fixture replay
-
-`fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` is a reproduced external
-research parent: **50,051 raw bytes -> 3,223 archive bytes**, exact inverse and
-byte-identical fresh re-encoding. The counted framing adapter uses the trained
-205-byte alphabet authenticated from the pinned public archive. The malformed
-envelope control and repeated native transformer probabilities also pass.
-[Terminal audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json)
-and [validated reflection](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json)
-bind source, population, controls, archives, package inventory and closed guards.
-
-CPU 2 diagnostic encode/decode/re-encode costs were 18.230/17.724/17.722 seconds.
-Synthetic steady-state transformer cost was 76.494-76.715 microseconds/token;
-summed cgroup peaks were 5,461,880,832 bytes. Conservative raw package inventory
-is 9,403,055 bytes, including overlapping source/runtime assets; submission
-closure and model licensing remain unresolved. This public profiling fixture
-does not establish a canonical corpus result or a Gamma compression gain.
-The [initial launcher affinity failure](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json)
-remains recorded separately. The unchanged retry pinned the parent launcher.
-
-Decision: retain and hold for a separately frozen transfer/comparison gate.
-Next establish representative frontend-compatible populations and a matched
-parent comparison. Preserve upstream authorship, MIDAS ownership, HORIZON's
-observer and the active 99,000,000-byte complete-package objective.
+The [unit audit](../operations/provenance/public_fx2_argmax_unit_terminal_20260905.json)
+and [validated unit reflection](../operations/adaptive/reflections/20260905T211007Z_358c05f2db.json)
+authorize preparing a native comparison, with no archive or speedup credit.
+`fx2_cmix_transformer_argmax_fixture50051_q0_v1` passed all four native
+roundtrips/repeats and twelve complete 259,824-bit coder-record streams. Every
+archive remains 3,223 bytes. [Native audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json)
+and [validated reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json)
+retain the exact traces and closed guard. D/K diagnostic CPU ratio was 0.9987045,
+missing the frozen 0.99 budget trigger. Hold this correct mechanism without a
+larger runtime gate; next test lossless model packing for counted byte savings.
+This budget decision does not refute argmax reuse generally. Preserve
+[launcher-affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json)
+and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json)
+failures unchanged. Public FX2/CMIX/model authorship remains upstream; Gamma's
+framing, comparisons and prospective argmax change receive no compression credit.
 
 ## 2026-09-05 - Restore missing terminal receipt links
 
