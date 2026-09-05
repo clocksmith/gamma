@@ -51,7 +51,9 @@ class BestForecastRecordTests(unittest.TestCase):
 
         self.assertEqual(selected["program_id"], "endpoint428")
         self.assertEqual(selected["projected_score"], 109_557_404)
-        self.assertEqual(selected["projected_margin_bytes"], -4_557_404)
+        self.assertEqual(selected["projected_margin_bytes"], certificate.TARGET_10_95 - 109_557_404)
+        self.assertEqual(selected["source_projected_margin_bytes"], -4_557_404)
+        self.assertEqual(selected["source_target_score_bytes"], 105_000_000)
         self.assertEqual(selected["scope_bytes"], 10_000_000)
         self.assertIn("retire_economics_miss", selected["evidence"])
 
@@ -104,7 +106,9 @@ class BestForecastRecordTests(unittest.TestCase):
 
         self.assertEqual(selected["program_id"], "endpoint428_pair_layer0")
         self.assertEqual(selected["projected_score"], 109_524_268)
-        self.assertEqual(selected["projected_margin_bytes"], -4_524_268)
+        self.assertEqual(selected["projected_margin_bytes"], certificate.TARGET_10_95 - 109_524_268)
+        self.assertEqual(selected["source_projected_margin_bytes"], -4_524_268)
+        self.assertIsNone(selected["source_target_score_bytes"])
         self.assertEqual(selected["archive_bytes"], 1_635_174)
 
     def test_lzma_replay_projection_supersedes_bzip2_miss(self) -> None:
@@ -175,11 +179,38 @@ class BestForecastRecordTests(unittest.TestCase):
             selected["program_id"], "endpoint428_pair_layer0_lzma_replay"
         )
         self.assertEqual(selected["projected_score"], 109_452_151)
-        self.assertEqual(selected["projected_margin_bytes"], -4_452_151)
+        self.assertEqual(selected["projected_margin_bytes"], certificate.TARGET_10_95 - 109_452_151)
+        self.assertEqual(selected["source_projected_margin_bytes"], -4_452_151)
         self.assertIs(selected["codec_replay_complete"], True)
 
 
 class ActiveCandidateContextTests(unittest.TestCase):
+    def test_existing_observer_uses_raw_scope_and_preserves_resource_gap(self) -> None:
+        import enwiki9_status_receipt as status
+        observer = {"candidate": "source", "scope_bytes": 1_000_000_000,
+                    "scope_symbols": 647_798_592, "source_processes_live": True,
+                    "observer_job_id": "existing-observer"}
+        with (
+            mock.patch.object(status, "adaptive_running_jobs_state", return_value={}),
+            mock.patch.object(status, "existing_horizon_observer_state", return_value=observer),
+        ):
+            candidate, scope, source = certificate.active_candidate_context()
+        self.assertEqual((candidate, scope), ("source", 1_000_000_000))
+        self.assertIn("continuous resource proof remains missing", source)
+
+    def test_vanished_saved_worker_does_not_establish_idle(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            running = root / "operations/adaptive/running"
+            running.mkdir(parents=True)
+            (running / "job.json").write_text(json.dumps({"candidate_id": "source", "gate_size": 17, "worker_pid": 1234}))
+            with (mock.patch.object(certificate, "ROOT", root),
+                  mock.patch.object(certificate.worker_identity, "worker_pid_matches_job", return_value=False)):
+                candidate, scope, source = certificate.active_candidate_context()
+        self.assertIsNone(candidate)
+        self.assertIsNone(scope)
+        self.assertIn("unknown", source)
+
     def test_uses_shared_managed_worker_identity(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

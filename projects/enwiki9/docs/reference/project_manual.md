@@ -1,7 +1,9 @@
 > Technical reference preserved from the project README on 2026-09-05.
 > Historical status and prize claims below are snapshots. For navigation, use the
 > [project home](../../README.md); for current local records, rebuild the
-> [ledger](../../ledger/README.md). The [objective contract](../../contracts/research/v1/objective-contract.json) owns the research target.
+> [ledger](../../ledger/README.md). The [active objective](../../contracts/research/v2/objective-contract.json)
+> owns the current target; [ADAPTIVE_WORKFLOW.md](../../ADAPTIVE_WORKFLOW.md)
+> owns current commands. The historical body below retains its original claims.
 
 # enwiki9
 

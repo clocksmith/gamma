@@ -464,11 +464,11 @@ def best_forecast_record(
             "conservative_projected_margin_bytes",
             economics.get("provisional_target_margin_bytes"),
         )
-        target_score = economics.get("target_score_bytes", TARGET_10_95)
+        target_score = economics.get("target_score_bytes")
         if (
             isinstance(projected_score, bool)
             or not isinstance(projected_score, int)
-            or target_score != TARGET_10_95
+            or projected_score <= 0
         ):
             continue
         try:
@@ -488,7 +488,11 @@ def best_forecast_record(
                 "source": source,
                 "scope_bytes": 10_000_000,
                 "archive_bytes": economics.get("candidate_archive_bytes_10m"),
-                "projected_margin_bytes": projected_margin,
+                "source_target_score_bytes": target_score,
+                "source_projected_margin_bytes": projected_margin,
+                "projected_margin_bytes": TARGET_10_95 - projected_score,
+                "target_score_bytes": TARGET_10_95,
+                "planning_debt_bytes": projected_score - TARGET_10_95,
                 "codec_replay_complete": bool(
                     isinstance(proof, dict)
                     and proof.get("roundtrip_ok") is True
@@ -719,6 +723,16 @@ def active_candidate_context() -> tuple[str | None, int | None, str]:
     """
 
     running_dir = ROOT / "operations" / "adaptive" / "running"
+    # Reuse the sole existing observer's metadata and exact identity checks.
+    # Its gate_size counts opportunities; it is not a raw byte scope.
+    import enwiki9_status_receipt as status_receipt
+    if ROOT.resolve() == status_receipt.ROOT.resolve():
+        observer = status_receipt.existing_horizon_observer_state(
+            status_receipt.adaptive_running_jobs_state()
+        )
+        if observer and observer.get("source_processes_live"):
+            return (observer["candidate"], observer["scope_bytes"],
+                    f"existing observer: {observer['observer_job_id']}; continuous resource proof remains missing")
     for path in sorted(running_dir.glob("*.json")):
         try:
             job = json.loads(path.read_text())
@@ -735,11 +749,18 @@ def active_candidate_context() -> tuple[str | None, int | None, str]:
             or not isinstance(scope, int)
         ):
             continue
-        if not worker_identity.worker_pid_matches_job(
-            ROOT, ROOT / "tools" / "candidate_triage.py", job
-        ):
+        if isinstance(job.get("execution_resources"), dict):
+            import enwiki9_lab as lab
+            matches = lab.worker_pid_matches_job(job)
+        else:
+            matches = worker_identity.worker_pid_matches_job(
+                ROOT, ROOT / "tools" / "candidate_triage.py", job
+            )
+        if not matches:
             continue
         return candidate, scope, f"live adaptive worker receipt: {path.relative_to(ROOT)}"
+    if any(running_dir.glob("*.json")):
+        return None, None, "recorded jobs have unknown host liveness"
     return None, None, "no live adaptive worker"
 
 
@@ -885,6 +906,18 @@ def build_top_status(
         )
     )
     active_candidate_id, active_scope_override, active_source = active_candidate_context()
+    if active_source.startswith("existing observer:"):
+        rows.append(top_status_record(
+            "active candidate", "running diagnostic",
+            "Existing observer binds the active source processes; terminal scientific evidence is absent.",
+            program_id=active_candidate_id, scope_bytes=active_scope_override,
+            active_source=active_source))
+        rows.append(top_status_record(
+            "active gate", "running",
+            "Wait for the existing observer. Recovered probabilities cannot restore missing continuous resource evidence.",
+            program_id=active_candidate_id, scope_bytes=active_scope_override,
+            active_source=active_source))
+        return rows
     active_result = (
         latest_constructive_result(all_rows, active_candidate_id)
         if active_candidate_id is not None
@@ -933,8 +966,9 @@ def build_top_status(
         rows.append(
             top_status_record(
                 "active candidate",
-                "idle",
-                "no live adaptive worker or directly observed scorer is present",
+                "unknown" if "unknown" in active_source else "idle",
+                ("Recorded ownership remains unresolved; no launch permission is inferred."
+                 if "unknown" in active_source else "no live adaptive worker or directly observed scorer is present"),
                 program_id=None,
                 active_source=active_source,
             )

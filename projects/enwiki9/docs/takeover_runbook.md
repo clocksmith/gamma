@@ -1,8 +1,15 @@
 # enwiki9 Takeover Runbook
 
-This page is the current operator orientation. Generated state remains
-authoritative; do not copy live process, queue, or candidate counts into this
-document.
+This runbook is a retained operator snapshot. Its numeric targets, commands,
+decision boundary, and “current” labels below are historical; they do not
+establish present ownership or launch authority.
+
+For an active handoff, follow [AGENTS.md](../AGENTS.md) and the
+[command manual](../ADAPTIVE_WORKFLOW.md#start-and-find-records).
+The [active objective](../contracts/research/v2/objective-contract.json) owns the
+target. The [generated status](status_receipt.md) reports a named host and
+timestamp; inspect actual process identities before treating a job as live.
+Use the [ledger](../ledger/README.md) to retrieve canonical records and evidence.
 
 ## Establish Current State
 

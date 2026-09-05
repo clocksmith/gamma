@@ -7,10 +7,10 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 ## Target
 
 - Full input bytes: `1,000,000,000`
-- 10.5000000% target score: `105,000,000`
+- 10.5000000% target score: `99,000,000`
 - Calibrated baseline score: `110,181,114`
-- Required net gain from calibrated baseline: `5,181,114` bytes
-- Required archive slope before program cost: `0.041448912` bits/byte
+- Required net gain from calibrated baseline: `11,181,114` bytes
+- Required archive slope before program cost: `0.089448912` bits/byte
 
 ## Proof Status
 
@@ -26,7 +26,8 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `n/a` | n/a | n/a | no live adaptive worker or directly observed scorer is present | idle |
+| active candidate | `endpoint428_horizon_retained_parent_trace_q0_v1` | 1,000,000,000 | n/a | Existing observer binds the active source processes; terminal scientific evidence is absent. | running diagnostic |
+| active gate | `endpoint428_horizon_retained_parent_trace_q0_v1` | 1,000,000,000 | n/a | Wait for the existing observer. Recovered probabilities cannot restore missing continuous resource evidence. | running |
 
 ## Best Full-Corpus Result
 

@@ -1,28 +1,17 @@
 # Algorithm Cards
 
-Historical mechanism reference. Start with the [ledger](../ledger/README.md)
-for the consolidated index and recorded outcomes; rebuild it for current local
-jobs. The [objective contract](../contracts/research/v1/objective-contract.json)
-owns the active target. Dated status and next-action claims below remain historical.
+Historical mechanism reference: each card explains what an algorithm does, what
+was measured, and what that evidence proves. The cards complement the
+[algorithm reference](../ALGORITHMS.md) and link the underlying artifacts.
 
-This file is the orientation layer for `enwiki9`. Each card answers:
+Use the [ledger](../ledger/README.md) for indexed records and the
+[active objective](../contracts/research/v2/objective-contract.json) for the
+current target. The [generated status](status_receipt.md) is a dated operator
+snapshot; inspect present ownership through the
+[command manual](../ADAPTIVE_WORKFLOW.md#start-and-find-records).
 
-```text
-What does it do?
-What did it score?
-What does that prove?
-What should happen next?
-```
-
-It does not replace `ALGORITHMS.md`; it points readers to the right evidence
-without requiring them to read every lane report first.
-
-Canonical current authority is `docs/hutter_frontier.json` for the counted
-frontier and `docs/status_receipt.md` for live execution. Older cards below are
-historical mechanism references. As of 2026-08-09 the design target is
-`108,000,000`, the verified full-1G result is unknown, the best counted
-forecast is endpoint428 at `109,389,323`, the remaining debt is `1,389,323`,
-and runtime eligibility is unresolved.
+Targets, scores, “active” labels, and next-action claims below retain their
+historical context. They do not identify today's gate or grant launch authority.
 
 ## Score Legend
 

@@ -33,6 +33,8 @@ GENERATORS = [
     ["python3", "projects/enwiki9/tools/streaming_retrieval_mixer_plan.py"],
     ["python3", "projects/enwiki9/tools/enwiki9_artifact_fingerprint_audit.py"],
     ["python3", "projects/enwiki9/tools/enwiki9_status_receipt.py"],
+    ["python3", "projects/enwiki9/tools/enwiki9_tool_catalogue.py"],
+    ["python3", "projects/enwiki9/tools/enwiki9_ledger.py"],
 ]
 
 CHECKS = [
@@ -49,6 +51,7 @@ CHECKS = [
     ["python3", "projects/enwiki9/tools/streaming_retrieval_mixer_plan.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_artifact_fingerprint_audit.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_status_receipt.py", "--check"],
+    ["python3", "projects/enwiki9/tools/enwiki9_tool_catalogue.py", "--check"],
     ["python3", "projects/enwiki9/tools/enwiki9_doc_lint.py"],
     ["python3", "-m", "json.tool", "projects/enwiki9/upper_bound_certificate.json"],
     ["python3", "-m", "json.tool", "projects/enwiki9/docs/status_receipt.json"],
@@ -56,6 +59,8 @@ CHECKS = [
 
 
 def run_command(command: list[str]) -> dict[str, Any]:
+    if command[0] == "python3":
+        command = [sys.executable, *command[1:]]
     proc = subprocess.run(
         command,
         cwd=REPO_ROOT,

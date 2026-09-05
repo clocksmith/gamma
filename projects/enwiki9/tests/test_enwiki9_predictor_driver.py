@@ -114,7 +114,12 @@ class DriverTests(unittest.TestCase):
         for row in decision["arms"].values():
             result = output / row["result"]
             self.assertEqual(hashlib.sha256(result.read_bytes()).hexdigest(), row["result_sha256"])
-            for artifact in json.loads(result.read_text())["artifacts"].values():
+            arm_result = json.loads(result.read_text())
+            self.assertIn("program_stats", {item["name"] for item in arm_result["missing_diagnostics"]})
+            self.assertFalse(arm_result["resource_evidence_complete"])
+            self.assertEqual(arm_result["phase_execution"]["decode"]["input_sha256"], arm_result["compressed_sha256"])
+            self.assertEqual(arm_result["phase_execution"]["encode"]["input_sha256"], arm_result["data_sha256"])
+            for artifact in arm_result["artifacts"].values():
                 self.assertTrue((result.parent / artifact["path"]).is_file())
         with self.assertRaises(FileExistsError):
             driver.compare("fixture", self.raw, 1024, self.spec, output)
@@ -144,6 +149,191 @@ class DriverTests(unittest.TestCase):
             decision = driver.compare("fixture", self.raw, 1024, self.spec, self.root / "changed-input")
         self.assertFalse(decision["same_input_population"])
         self.assertEqual(decision["verdict"], "invalid")
+
+    def test_decoder_cannot_reuse_encoder_truth_cache(self):
+        with (self.program / "program.py").open("a") as stream:
+            stream.write('cached = None\n'
+                         'def compress_arm(raw, arm):\n'
+                         ' global cached\n'
+                         ' cached=raw\n'
+                         ' return b"" if arm == "T" else zlib.compress(raw)\n'
+                         'def decompress_arm(archive, arm):\n'
+                         ' return cached if arm == "T" else zlib.decompress(archive)\n')
+        output = self.root / "cached-truth"
+        decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "invalid")
+        failure = json.loads((output / "T/result.json").read_text())
+        self.assertEqual(failure["failed_phase"], "decode")
+        self.assertEqual((output / "T/archive.bin").read_bytes(), b"")
+        self.assertIn("archive", failure["artifacts"])
+        self.assertIn("decode_stderr.log", failure["artifacts"])
+
+    def test_arm_initial_state_is_independent_of_prior_arms(self):
+        with (self.program / "program.py").open("a") as stream:
+            stream.write('parent_seen=False\n'
+                         'def compress_arm(raw, arm):\n'
+                         ' global parent_seen\n'
+                         ' if arm == "P": parent_seen=True\n'
+                         ' return zlib.compress(raw, 9 if arm == "T" and parent_seen else 1)\n')
+        output = self.root / "arm-state"
+        decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "measured-no-improvement")
+        self.assertEqual(decision["treatment_minus_parent_bytes"], 0)
+        pids = []
+        for row in decision["arms"].values():
+            result = json.loads((output / row["result"]).read_text())
+            pids.extend(phase["pid"] for phase in result["phase_execution"].values())
+        self.assertEqual(len(pids), len(set(pids)))
+
+    def test_archive_replacement_between_arms_invalidates_decision(self):
+        output = self.root / "replaced-archive"
+        original = driver.run
+        calls = 0
+        def replace_after_arm(*args, **kwargs):
+            nonlocal calls
+            result = original(*args, **kwargs)
+            calls += 1
+            if calls == 2:
+                (output / "P/archive.bin").write_bytes(b"replacement")
+            return result
+        with patch.object(driver, "run", side_effect=replace_after_arm):
+            decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "invalid")
+        self.assertFalse(decision["artifact_closure_valid"])
+        self.assertIn("parent", decision["artifact_validation_errors"])
+
+    def test_result_replacement_between_arms_keeps_original_binding(self):
+        output = self.root / "replaced-result"
+        original = driver.run
+        original_digest = None
+        def replace_result(*args, **kwargs):
+            nonlocal original_digest
+            result = original(*args, **kwargs)
+            if kwargs["arm"] == "P":
+                path = output / "P/result.json"
+                original_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                path.write_text("{}\n")
+            return result
+        with patch.object(driver, "run", side_effect=replace_result):
+            decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "invalid")
+        self.assertEqual(decision["arms"]["parent"]["result_sha256"], original_digest)
+        self.assertIn("parent", decision["artifact_validation_errors"])
+
+    def test_repeat_failure_retains_first_archive_and_restored_output(self):
+        marker = self.root / "encode-count.json"
+        with (self.program / "program.py").open("a") as stream:
+            stream.write('from pathlib import Path\nimport json\n'
+                         f'counts_path=Path({str(marker)!r})\n'
+                         'def compress_arm(raw, arm):\n'
+                         ' counts=json.loads(counts_path.read_text()) if counts_path.exists() else {}\n'
+                         ' counts[arm]=counts.get(arm,0)+1\n'
+                         ' counts_path.write_text(json.dumps(counts))\n'
+                         ' if counts[arm] == 2: raise ValueError("injected repeat failure")\n'
+                         ' return zlib.compress(raw)\n')
+        output = self.root / "repeat-failure"
+        decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "invalid")
+        result = json.loads((output / "P/result.json").read_text())
+        self.assertEqual(result["failed_phase"], "repeat")
+        self.assertIn("archive", result["artifacts"])
+        self.assertIn("restored", result["artifacts"])
+        self.assertEqual((output / "P/restored.bin").read_bytes(), self.raw.read_bytes()[:1024])
+
+    def add_local_helper(self):
+        helper = self.program / "support.py"
+        helper.write_text('import zlib\ndef encode(raw): return zlib.compress(raw)\n')
+        with (self.program / "program.py").open("a") as stream:
+            stream.write('import support\ndef compress_arm(raw, arm): return support.encode(raw)\n')
+        return helper
+
+    def test_live_source_and_helper_substitution_cannot_change_frozen_arms(self):
+        helper = self.add_local_helper()
+        source = self.program / "program.py"
+        originals = {path: path.read_bytes() for path in (source, helper)}
+        output = self.root / "frozen-source"
+        original_run = driver.run
+
+        def substitute_during_arm(*args, **kwargs):
+            if kwargs["arm"] != "K":
+                return original_run(*args, **kwargs)
+            for path in originals:
+                path.write_text('raise ValueError("substituted live source")\n')
+            try:
+                return original_run(*args, **kwargs)
+            finally:
+                for path, payload in originals.items():
+                    path.write_bytes(payload)
+
+        with patch.object(driver, "run", side_effect=substitute_during_arm):
+            decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertTrue(decision["same_candidate_build"])
+        self.assertEqual(decision["verdict"], "measured-no-improvement")
+        manifest = json.loads((output / "build.json").read_text())
+        for row in decision["arms"].values():
+            result = json.loads((output / row["result"]).read_text())
+            for phase in result["phase_execution"].values():
+                for path, payload in originals.items():
+                    relative = "projects/enwiki9/programs/fixture/" + path.name
+                    expected = hashlib.sha256(payload).hexdigest()
+                    self.assertEqual(phase["loaded_sources"][relative], expected)
+                    self.assertEqual(manifest["files"][relative]["sha256"], expected)
+
+    def test_frozen_helper_substitution_after_parent_check_is_rejected(self):
+        self.add_local_helper()
+        output = self.root / "frozen-race"
+        original_subprocess = driver.subprocess.run
+        injected = False
+
+        def substitute_at_child_start(command, **kwargs):
+            nonlocal injected
+            if injected or command[1:2] != ["-c"]:
+                return original_subprocess(command, **kwargs)
+            injected = True
+            helper = output / "build/projects/enwiki9/programs/fixture/support.py"
+            original = helper.read_bytes()
+            helper.chmod(0o644)
+            helper.write_text('import zlib\ndef encode(raw): return zlib.compress(raw, 9)\n')
+            try:
+                return original_subprocess(command, **kwargs)
+            finally:
+                helper.write_bytes(original)
+                helper.chmod(0o444)
+
+        with patch.object(driver.subprocess, "run", side_effect=substitute_at_child_start):
+            decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertTrue(injected)
+        self.assertTrue(decision["source_stable"])
+        self.assertFalse(decision["same_candidate_build"])
+        self.assertEqual(decision["verdict"], "invalid")
+        self.assertIn("frozen source bytes changed", decision["errors"]["parent"]["message"])
+
+    def test_missing_loaded_source_receipt_is_mandatory_evidence_failure(self):
+        output = self.root / "missing-source-receipt"
+        original_subprocess = driver.subprocess.run
+
+        def remove_mandatory_receipt(command, **kwargs):
+            result = original_subprocess(command, **kwargs)
+            if command[1:2] == ["-c"]:
+                Path(command[6]).unlink(missing_ok=True)
+            return result
+
+        with patch.object(driver.subprocess, "run", side_effect=remove_mandatory_receipt):
+            decision = driver.compare("fixture", self.raw, 1024, self.spec, output)
+        self.assertEqual(decision["verdict"], "invalid")
+        self.assertFalse(decision["same_candidate_build"])
+        result = json.loads((output / "P/result.json").read_text())
+        self.assertEqual(result["failed_phase"], "encode")
+        self.assertIn("archive", result["artifacts"])
+
+    def test_changed_input_source_is_rejected_while_freezing(self):
+        source = self.program / "program.py"
+        expected = {str(source): hashlib.sha256(source.read_bytes()).hexdigest()}
+        source.write_text('raise ValueError("replacement")\n')
+        with self.assertRaisesRegex(ValueError, "source changed while freezing"):
+            driver._freeze_comparison_build("fixture", source, self.root / "freeze-race",
+                                           source_hashes=expected)
+
 
 
 class ObjectiveTests(unittest.TestCase):

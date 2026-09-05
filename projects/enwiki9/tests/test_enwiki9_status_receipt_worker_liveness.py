@@ -17,6 +17,28 @@ if str(TOOLS) not in sys.path:
 import enwiki9_status_receipt as status_receipt  # noqa: E402
 
 
+def test_enveloped_job_views_reuse_exact_guard_identity(tmp_path, monkeypatch):
+    import enwiki9_lab as lab
+    import enwiki9_ledger as ledger
+    running = tmp_path / "operations/adaptive/running"
+    running.mkdir(parents=True)
+    job = {"job_id": "guarded", "candidate_id": "candidate", "worker_pid": 1234,
+           "execution_resources": {"guard_command_sha256": "bound-command"},
+           "execution_mode": "discovery", "resource_budget": {"cpus": [2]}}
+    (running / "guarded.json").write_text(json.dumps(job))
+    seen = []
+    monkeypatch.setattr(lab, "worker_pid_matches_job", lambda row: seen.append(row) or True)
+    monkeypatch.setattr(status_receipt, "ROOT", tmp_path)
+    monkeypatch.setattr(status_receipt, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(status_receipt.worker_identity, "worker_pid_matches_job",
+                        lambda *args: pytest.fail("enveloped job used legacy matcher"))
+    state = status_receipt.adaptive_running_jobs_state()
+    assert state["running_jobs"][0]["liveness"] == "live"
+    assert state["running_jobs"][0]["resource_budget"] == {"cpus": [2]}
+    assert ledger.live_job(job, tmp_path)["state"] == "live"
+    assert seen == [job, job]
+
+
 def test_adaptive_status_reuses_managed_worker_identity(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

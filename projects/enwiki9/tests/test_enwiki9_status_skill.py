@@ -23,6 +23,9 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
     evidence.write_text("{}\n")
     ledger = {
         "schema": "enwiki9_hutter_frontier_v1",
+        "objective": MODULE.research_contracts.objective_binding(
+            objective_path="contracts/research/v1/objective-contract.json"
+        ),
         "target": {
             "input_bytes": 1_000_000_000,
             "score_bytes": 105_000_000,
@@ -48,6 +51,9 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
         "quarantine": [],
     }
     operational = {
+        "objective": MODULE.research_contracts.objective_binding(),
+        "certificate_objective": ledger["objective"],
+        "target_score_bytes": 99_000_000,
         "target_score_10_95": 105_000_000,
         "best_forecast": {"projected_score": 109_557_404},
         "best_full_1g": {"status": "not verified"},
@@ -65,13 +71,17 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
 
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is False
-    assert status["canonical_forecast"]["forecast_margin_bytes"] == -4_557_404
+    assert status["canonical_forecast"]["forecast_margin_bytes"] == -10_557_404
+    assert status["canonical_forecast"]["source_forecast_margin_bytes"] == -4_557_404
+    assert status["source_target"] == ledger["target"]
+    assert status["source_objective"] == ledger["objective"]
     markdown = MODULE.render_markdown(status)
-    assert "Target score: `105,000,000` bytes (`10.5000000%`)" in markdown
+    assert "Target score: `99,000,000` bytes (`9.9000000%`)" in markdown
+    assert "Historical frontier target: `105,000,000` bytes" in markdown
     assert "Verified official full-1G score: `unknown`" in markdown
     assert "Best counted forecast: `109,557,404` (`10.9557404%`)" in markdown
-    assert "distance above target `4,557,404`" in markdown
-    assert "`0.4557404 percentage points`" in markdown
+    assert "distance above target `10,557,404`" in markdown
+    assert "`1.0557404 percentage points`" in markdown
     assert "Active candidate provisional projection: `109,557,404` (`10.9557404%`)" in markdown
     assert "## Recorded Frontier State" in markdown
     assert "Verified target state: `not won`" in markdown
@@ -115,12 +125,7 @@ def test_verified_official_win_requires_roundtrip(tmp_path: Path) -> None:
 
 def test_verified_win_reports_state_without_prescribing_work(tmp_path: Path) -> None:
     _, ledger, operational = write_fixture(tmp_path)
-    operational["best_full_1g"] = {
-        "scope_bytes": 1_000_000_000,
-        "hutter_score": 104_999_999,
-        "roundtrip_ok": True,
-    }
-    operational["has_10_95_constructive_upper_bound"] = True
+    write_complete_proof(tmp_path, operational)
 
     status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
     markdown = MODULE.render_markdown(status)
@@ -191,14 +196,14 @@ def test_present_optional_assertion_source_still_detects_drift(
 
 def test_under_target_forecast_renders_margin_below_target(tmp_path: Path) -> None:
     _, ledger, operational = write_fixture(tmp_path)
-    ledger["candidates"][0]["forecast_score"] = 104_908_345
-    operational["best_forecast"]["projected_score"] = 104_908_345
+    ledger["candidates"][0]["forecast_score"] = 98_908_345
+    operational["best_forecast"]["projected_score"] = 98_908_345
 
     status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
     markdown = MODULE.render_markdown(status)
 
     assert errors == []
-    assert "Best counted forecast: `104,908,345` (`10.4908345%`)" in markdown
+    assert "Best counted forecast: `98,908,345` (`9.8908345%`)" in markdown
     assert "margin below target `91,655` bytes" in markdown
     assert "distance above target `0`" not in markdown
 
@@ -230,3 +235,114 @@ def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
 def test_score_percentage_uses_full_corpus_denominator() -> None:
     assert MODULE.fmt_score_percent(108_000_000) == "10.8000000%"
     assert MODULE.fmt_score_percent(109_492_151) == "10.9492151%"
+
+
+def write_complete_proof(tmp_path: Path, operational: dict) -> dict:
+    objective = MODULE.research_contracts.objective_binding()
+    source = {
+        "program_id": "candidate",
+        "data_size": objective["corpusBytes"],
+        "data_sha256": objective["corpusSha256"],
+        "compressed_size": 98_000_000,
+        "program_size": 999_999,
+        "hutter_score": 98_999_999,
+        "roundtrip_ok": True,
+        "determinism": {"single_host_byte_equal": True},
+        "objective": objective,
+        "score_accounting_complete": True,
+        "package_accounting": {"dependency_closure_complete": True},
+        "resource_evidence_complete": True,
+        "independent_decode_ok": True,
+        "license_audit_ok": True,
+        "prize_claimable": True,
+    }
+    (tmp_path / "full-result.json").write_text(json.dumps(source) + "\n")
+    operational["best_full_1g"] = {
+        "program_id": "candidate",
+        "scope_bytes": objective["corpusBytes"],
+        "hutter_score": source["hutter_score"],
+        "roundtrip_ok": True,
+        "result_path": "full-result.json",
+    }
+    operational["has_current_objective_constructive_upper_bound"] = True
+    return source
+
+
+def test_historical_target_cannot_override_active_economics(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    source = write_complete_proof(tmp_path, operational)
+    source["hutter_score"] = 104_999_999
+    source["program_size"] = 6_999_999
+    (tmp_path / "full-result.json").write_text(json.dumps(source) + "\n")
+    operational["best_full_1g"]["hutter_score"] = 104_999_999
+    operational["has_10_95_constructive_upper_bound"] = True
+    operational["has_current_objective_constructive_upper_bound"] = False
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert errors == []
+    assert status["official"]["verified_full_corpus_result"] is True
+    assert status["official"]["won"] is False
+    assert status["official"]["distance_bytes"] == 5_999_999
+
+
+def test_roundtrip_alone_cannot_establish_a_win(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    operational["best_full_1g"] = {
+        "scope_bytes": 1_000_000_000,
+        "hutter_score": 98_999_999,
+        "roundtrip_ok": True,
+    }
+    operational["has_current_objective_constructive_upper_bound"] = True
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("no readable source receipt" in error for error in errors)
+    assert status["official"]["verified_full_corpus_result"] is False
+    assert status["official"]["won"] is False
+
+
+def test_missing_resource_evidence_blocks_source_bound_win(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    source = write_complete_proof(tmp_path, operational)
+    source["resource_evidence_complete"] = False
+    (tmp_path / "full-result.json").write_text(json.dumps(source) + "\n")
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("complete active-objective proof" in error for error in errors)
+    assert status["official"]["won"] is False
+
+
+def test_replaced_receipt_cannot_keep_old_score_claim(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    source = write_complete_proof(tmp_path, operational)
+    source["hutter_score"] += 1
+    (tmp_path / "full-result.json").write_text(json.dumps(source) + "\n")
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("disagrees with its source receipt" in error for error in errors)
+    assert status["official"]["won"] is False
+
+
+def test_false_operational_proof_flag_never_renders_win(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    write_complete_proof(tmp_path, operational)
+    operational["has_current_objective_constructive_upper_bound"] = False
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("operational proof flag" in error for error in errors)
+    assert status["official"]["won"] is False
+    assert "Verified target state: `not won`" in MODULE.render_markdown(status)
+
+
+def test_historical_binding_is_validated_without_rewriting(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    ledger["objective"]["targetScoreBytes"] = 99_000_000
+
+    _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("immutable objective version" in error for error in errors)
+    assert any("frontier target differs" in error for error in errors)

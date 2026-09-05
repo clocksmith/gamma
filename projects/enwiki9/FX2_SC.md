@@ -1,13 +1,14 @@
 # FX2-SC: Structural-Cognitive Context Mixing
 
-This document is a design thesis and execution roadmap for an `enwik9`
-compressor lane that leaves the raw byte stream untouched while feeding
-recomputed structural context into a context-mixing backend.
+This historical design thesis studies recomputed structural context in a
+context-mixing backend. Its hypothesis, roadmap, status tables, and “active”
+labels retain their original context; they are not present operational authority.
 
-It is not a benchmark result. Measured program scores belong in
-`ALGORITHMS.md`, `index.json`, and `results/<program_id>/*.json`. This document
-separates the research hypothesis from the empirical ledger so implementation
-work can be reviewed without overstating unmeasured claims.
+Use the [active objective](contracts/research/v2/objective-contract.json) for the
+target, the [ledger](ledger/README.md) for measured artifacts and lineage, and the
+[generated status](docs/status_receipt.md) for its dated operator view. Inspect
+actual ownership and choose work through the
+[command manual](ADAPTIVE_WORKFLOW.md#start-and-find-records).
 
 ## Top Status
 

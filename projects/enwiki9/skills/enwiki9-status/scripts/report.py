@@ -10,7 +10,15 @@ import re
 from pathlib import Path
 import subprocess
 import shlex
+import sys
 from typing import Any
+
+try:
+    from projects.enwiki9.tools import hutter_upper_bound_certificate, research_contracts
+except ModuleNotFoundError:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "tools"))
+    import hutter_upper_bound_certificate
+    import research_contracts
 
 
 ALLOWED_TIERS = {
@@ -339,13 +347,41 @@ def validate_and_normalize(
     errors: list[str] = []
     if ledger.get("schema") != "enwiki9_hutter_frontier_v1":
         errors.append("unsupported frontier schema")
-    target = ledger.get("target", {})
-    target_score = target.get("score_bytes")
-    target_input = target.get("input_bytes")
-    if target_score != 105_000_000 or target_input != 1_000_000_000:
-        errors.append("target must be exact full enwik9 at score 105000000")
-    if operational.get("target_score_10_95") != target_score:
-        errors.append("operational receipt and frontier target disagree")
+    objective = research_contracts.objective_binding()
+    target_score = objective["targetScoreBytes"]
+    target_input = objective["corpusBytes"]
+    target = {
+        "input_bytes": target_input,
+        "score_bytes": target_score,
+        "required_roundtrip": True,
+    }
+    source_target = ledger.get("target", {})
+    source_objective = ledger.get("objective", {})
+    certificate_objective = operational.get("certificate_objective", {})
+    for label, binding in (
+        ("frontier", source_objective),
+        ("operational", operational.get("objective", {})),
+        ("certificate", certificate_objective),
+    ):
+        try:
+            research_contracts._validate_objective_binding(binding, label)
+        except (ValueError, TypeError, AttributeError) as error:
+            errors.append(str(error))
+    if (
+        source_target.get("score_bytes") != source_objective.get("targetScoreBytes")
+        or source_target.get("input_bytes") != source_objective.get("corpusBytes")
+    ):
+        errors.append("frontier target differs from its source objective")
+    if source_objective.get("corpusSha256") != objective["corpusSha256"]:
+        errors.append("frontier corpus differs from the active objective")
+    if operational.get("target_score_bytes") != operational.get("objective", {}).get(
+        "targetScoreBytes"
+    ):
+        errors.append("operational target differs from its source objective")
+    if operational.get("target_score_10_95") != certificate_objective.get(
+        "targetScoreBytes"
+    ):
+        errors.append("certificate target differs from its source objective")
 
     normalized: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -369,6 +405,9 @@ def validate_and_normalize(
             if not isinstance(score, int):
                 errors.append(f"{candidate_id}: forecast_score must be an integer")
             else:
+                row["source_forecast_margin_bytes"] = (
+                    source_target.get("score_bytes", target_score) - score
+                )
                 row["forecast_margin_bytes"] = target_score - score
                 row["forecast_debt_bytes"] = max(score - target_score, 0)
         sources = source_audit(project_root, row.get("source_paths", []))
@@ -402,27 +441,62 @@ def validate_and_normalize(
     if canonical is not None and operational_forecast.get("projected_score") != canonical.get("forecast_score"):
         errors.append("canonical frontier forecast disagrees with operational receipt")
 
-    official = operational.get("best_full_1g", {})
-    official_verified = bool(
-        official.get("scope_bytes") == target_input
-        and official.get("roundtrip_ok") is True
-        and isinstance(official.get("hutter_score"), int)
-    )
+    official = operational.get("best_full_1g") or {}
+    official_verified = False
+    official_source = None
+    if official.get("hutter_score") is not None:
+        raw_path = official.get("result_path")
+        path = project_root / raw_path if isinstance(raw_path, str) else None
+        result = (
+            hutter_upper_bound_certificate.load_result(path)
+            if path and path.is_file()
+            else None
+        )
+        if result is None:
+            errors.append("full-corpus result has no readable source receipt")
+        elif not result.is_full_corpus_proof:
+            errors.append(
+                "full-corpus source does not establish the complete active-objective proof"
+            )
+        elif (
+            type(official.get("hutter_score")) is not int
+            or official["hutter_score"] != result.hutter_score
+            or result.hutter_score < 0
+            or official.get("scope_bytes") != result.data_size
+            or official.get("roundtrip_ok") is not True
+            or official.get("program_id") != result.program_id
+        ):
+            errors.append("full-corpus status disagrees with its source receipt")
+        else:
+            official_verified = True
+            official_source = {
+                "path": raw_path,
+                "sha256": research_contracts.file_digest(path, "sha256"),
+            }
     official_win = bool(
         official_verified and official["hutter_score"] <= target_score
     )
-    if official_win and not operational.get("has_10_95_constructive_upper_bound"):
+    if (
+        official_win
+        and operational.get("has_current_objective_constructive_upper_bound") is not True
+    ):
         errors.append("official win conflicts with operational proof flag")
+    official_verified = official_verified and not errors
+    official_win = official_win and not errors
 
     return (
         {
             "schema": "enwiki9_hutter_status_v1",
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+            "objective": objective,
             "target": target,
+            "source_objective": source_objective,
+            "source_target": source_target,
             "official": {
                 "verified_full_corpus_result": official_verified,
                 "won": official_win,
                 "result": official,
+                "source": official_source,
                 "distance_bytes": (
                     official["hutter_score"] - target_score
                     if official_verified
@@ -436,6 +510,8 @@ def validate_and_normalize(
             "quarantine": quarantine,
             "operational": {
                 "generated_at_utc": operational.get("generated_at_utc"),
+                "source_objective": operational.get("objective"),
+                "certificate_objective": certificate_objective,
                 "active_gate": operational.get("active_gate"),
                 "active_processes": operational.get("active_processes"),
                 "operator_action": operational.get("operator_action"),
@@ -527,6 +603,12 @@ def render_markdown(status: dict[str, Any]) -> str:
         f"- Target score: `{fmt_int(target_score)}` bytes "
         f"(`{fmt_score_percent(target_score)}`)."
     )
+    source_score = status["source_target"].get("score_bytes")
+    if source_score != target_score:
+        lines.append(
+            f"- Historical frontier target: `{fmt_int(source_score)}` bytes; "
+            "source records retain their original objective binding."
+        )
     if official["won"]:
         lines.append(
             f"- Verified official full-1G score: "
@@ -544,7 +626,7 @@ def render_markdown(status: dict[str, Any]) -> str:
         )
     else:
         lines.append(
-            "- Verified official full-1G score: `unknown`; no exact result exists."
+            "- Verified official full-1G score: `unknown`; complete proof is absent or unverified."
         )
         lines.append("- Official distance: `unknown`.")
     forecast_score = forecast.get("forecast_score")
@@ -641,7 +723,9 @@ def render_markdown(status: dict[str, Any]) -> str:
         [
             "",
             "Only an exact 1,000,000,000-byte replay with complete accounting, "
-            "roundtrip, and score at or below 105,000,000 is a win.",
+            f"roundtrip, deterministic replay, independently measured resource compliance, "
+            f"and score at or below {target_score:,} achieves the engineering target; "
+            "committee acceptance is separate.",
         ]
     )
     active = next(

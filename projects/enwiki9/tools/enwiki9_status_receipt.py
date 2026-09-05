@@ -1202,9 +1202,13 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
         if not job:
             continue
         worker_pid = job.get("worker_pid")
-        worker_pid_live = worker_identity.worker_pid_matches_job(
-            ROOT, ROOT / "tools" / "candidate_triage.py", job
-        )
+        if isinstance(job.get("execution_resources"), dict):
+            import enwiki9_lab as lab
+            worker_pid_live = lab.worker_pid_matches_job(job)
+        else:
+            worker_pid_live = worker_identity.worker_pid_matches_job(
+                ROOT, ROOT / "tools" / "candidate_triage.py", job
+            )
         jobs.append(
             {
                 "job_id": job.get("job_id") or path.stem,
@@ -1214,6 +1218,10 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
                 "started_at": job.get("started_at"),
                 "worker_pid": worker_pid,
                 "worker_pid_live": worker_pid_live,
+                "liveness": "live" if worker_pid_live else "unknown",
+                "execution_mode": job.get("execution_mode", "legacy"),
+                "resource_budget": job.get("resource_budget"),
+                "timing_authority": job.get("timing_authority", "unverified"),
                 "experiment": job.get("experiment"),
                 "path": logical_rel(path),
             }
@@ -1331,6 +1339,8 @@ def existing_horizon_observer_state(adaptive_state: dict[str, Any]) -> dict[str,
         source_live = all(process_matches.values())
         source["adopted_processes_live"] = source_live
         source["observer_job_id"] = observer.get("job_id")
+        source["liveness"] = "live" if source_live else "unknown"
+        source["liveness_source"] = "existing observer binds source process identities; saved worker PID is separate"
         population = source_experiment.get("population") or {}
         return {
             "candidate": source.get("candidate_id"), "gate_size": source.get("gate_size"),
@@ -2421,7 +2431,7 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Active `{100 * data['objective']['targetScoreBytes'] / data['objective']['corpusBytes']:.7f}%` target score: `{fmt_int(data.get('target_score_bytes'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
         f"- Active objective constructive upper bound present: `{fmt_bool(data.get('has_current_objective_constructive_upper_bound'))}`",
-        f"- Historical certificate target: `{fmt_int(data.get('target_score_10_95'))}`; certificate upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
+        f"- Source certificate target (legacy field names): `{fmt_int(data.get('target_score_10_95'))}`; certificate upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
         "",
         "## Operator Summary",
         "",

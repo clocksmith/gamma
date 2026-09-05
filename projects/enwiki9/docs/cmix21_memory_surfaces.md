@@ -12,8 +12,8 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `n/a`
-- Active scope bytes: `n/a`
+- Active candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
+- Active scope bytes: `1,000,000,000`
 - cmix21 candidates with result or guard evidence: `9`
 
 ## Observed Knob Values

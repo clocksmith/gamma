@@ -745,23 +745,26 @@ def check_observed_gate_command(findings: list[Finding]) -> None:
 
 
 def check_live_docs_name_active_candidate(findings: list[Finding]) -> None:
+    """Current process identities belong only in the generated status view."""
     cert = load_json(ROOT / "upper_bound_certificate.json")
     active_candidate, _active_scope = active_gate_from_certificate(cert)
     if not active_candidate:
         return
-    required = [
+    status_path = ROOT / "docs" / "status_receipt.md"
+    status_text = status_path.read_text() if status_path.exists() else ""
+    if active_candidate not in status_text:
+        findings.append(Finding(status_path, "does not name the active candidate"))
+    references = [
         ROOT / "ALGORITHMS.md",
         ROOT / "CMIX21_LOCK_SAFE_QUEUE.md",
         ROOT / "FX2_SC.md",
-        ROOT / "PROJECT_ORGANIZATION.md",
         ROOT / "docs" / "algorithm_cards.md",
-        ROOT / "docs" / "status_receipt.md",
         ROOT / "docs" / "takeover_runbook.md",
     ]
-    for path in required:
+    for path in references:
         text = path.read_text() if path.exists() else ""
-        if active_candidate not in text:
-            findings.append(Finding(path, "does not name the active candidate"))
+        if "status_receipt.md" not in text:
+            findings.append(Finding(path, "does not link to the generated current status receipt"))
 
 
 def check_operator_scripts_use_certificate_gate(findings: list[Finding]) -> None:
@@ -795,16 +798,14 @@ def check_operator_scripts_use_certificate_gate(findings: list[Finding]) -> None
 
 
 def check_tool_inventory(findings: list[Finding]) -> None:
+    try:
+        from .enwiki9_tool_catalogue import build_durable_catalogue, render_markdown
+    except ImportError:
+        from enwiki9_tool_catalogue import build_durable_catalogue, render_markdown
     inventory = ROOT / "docs" / "tooling_inventory.md"
     text = inventory.read_text() if inventory.exists() else ""
-    listed = set(re.findall(r"`([^`]+\.(?:py|sh|cpp))`", text))
-    actual = {path.name for path in TOOLS.iterdir() if path.suffix in {".py", ".sh", ".cpp"}}
-    missing = sorted(actual - listed)
-    extra = sorted(listed - actual)
-    if missing:
-        findings.append(Finding(inventory, "missing tool entries: " + ", ".join(missing)))
-    if extra:
-        findings.append(Finding(inventory, "stale tool entries: " + ", ".join(extra)))
+    if text != render_markdown(build_durable_catalogue(ROOT)):
+        findings.append(Finding(inventory, "generated tool inventory is stale; run python3 tools/enwiki9_tool_catalogue.py"))
 
 
 def check_residual_matrix_summary_counts(findings: list[Finding]) -> None:
