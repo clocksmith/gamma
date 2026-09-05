@@ -325,6 +325,8 @@ def load_result(path: pathlib.Path) -> Result | None:
         data = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError):
         return None
+    if not isinstance(data, dict):
+        return None
 
     program_id = data.get("program_id")
     if not isinstance(program_id, str) or not program_id:
