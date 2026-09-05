@@ -1,0 +1,263 @@
+{
+  "candidate_id": "fx2_cmix_transformer_transfer250k_q0_v2",
+  "continuous_guard_decision": "passed",
+  "decision": "hold",
+  "decision_scope": "Retain the external parent after exact cold-slice transfer. No larger launch or prize-score promotion. A Gamma treatment requires its own frozen comparison.",
+  "discovery_resource_evidence_complete": true,
+  "frontend_identity": "gamma-public-fx2-literal-first-block-v1",
+  "full_corpus_score_bytes": null,
+  "guard": {
+    "bytes": 50443,
+    "path": "run_logs/adaptive/20260905T204313Z_bd6edb2ed4.resources/guard.json",
+    "sha256": "79cba3fab53d1bf7cff174f3d4ac49726dbb44ea7ad6c5dc431d87dc6527d873"
+  },
+  "job": {
+    "bytes": 3598,
+    "path": "operations/adaptive/completed/959_20260905T204313Z_bd6edb2ed4.json",
+    "sha256": "c0b19174f7a0a8c611dd21c6517ddc97fb7f1b9a6d4c8b86fed192b60c91e778"
+  },
+  "larger_gate_authorized": false,
+  "measured_Gamma_compression_gain_bytes": null,
+  "objective_credit_bytes": 0,
+  "populations": [
+    {
+      "archive_bytes": 33429,
+      "archive_header_verified": true,
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "30",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-s",
+            "english.dic",
+            "opening.raw",
+            "opening.stored"
+          ],
+          "elapsed_cap_seconds": 30,
+          "elapsed_seconds": 0.10289105284027755,
+          "phase": "opening-preprocess",
+          "returncode": 0,
+          "system_cpu_seconds": 0.002301,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 0.009127999999999999
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-c",
+            "english.dic",
+            "opening-encode.raw",
+            "opening-encode.cmix",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 43.85308466106653,
+          "phase": "opening-encode",
+          "returncode": 0,
+          "system_cpu_seconds": 2.010936,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 40.934553
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-d",
+            "english.dic",
+            "opening-decode.cmix",
+            "opening-decoded.raw",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 43.14590954314917,
+          "phase": "opening-decode",
+          "returncode": 0,
+          "system_cpu_seconds": 2.106693,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 40.796842
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-c",
+            "english.dic",
+            "opening-reencode.raw",
+            "opening-reencode.cmix",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 42.639685343019664,
+          "phase": "opening-reencode",
+          "returncode": 0,
+          "system_cpu_seconds": 2.061266,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 40.282408000000004
+        }
+      ],
+      "deterministic_ok": true,
+      "driver_result": {
+        "bytes": 53851,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/opening/result.json",
+        "sha256": "f8470697e60949a495acd0d5cbe73e11a7bdb4a9ff5a17d0952499c196d5b67a"
+      },
+      "first_block_header_hex": "070003d090",
+      "first_out_of_alphabet_positions": [],
+      "input": {
+        "bytes": 250000,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/work/opening.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "mapping_gate_pass": true,
+      "modeled_bytes": 151210,
+      "name": "opening",
+      "out_of_alphabet_count": 0,
+      "preprocessed_bytes": 151215,
+      "raw_offset": 0,
+      "roundtrip_ok": true,
+      "stored": {
+        "bytes": 151220,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/work/opening.stored",
+        "sha256": "9cc29963608bb990b820bc88e836532b4c2a1cfc1a5b633a14b1c3bad78765ab"
+      }
+    },
+    {
+      "archive_bytes": 9499,
+      "archive_header_verified": true,
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "30",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-s",
+            "english.dic",
+            "distant.raw",
+            "distant.stored"
+          ],
+          "elapsed_cap_seconds": 30,
+          "elapsed_seconds": 0.10297334101051092,
+          "phase": "distant-preprocess",
+          "returncode": 0,
+          "system_cpu_seconds": 0.004381000000000412,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 0.006798000000003412
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-c",
+            "english.dic",
+            "distant-encode.raw",
+            "distant-encode.cmix",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 45.64361694990657,
+          "phase": "distant-encode",
+          "returncode": 0,
+          "system_cpu_seconds": 1.897321999999999,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 43.412294
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-d",
+            "english.dic",
+            "distant-decode.cmix",
+            "distant-decoded.raw",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 45.34295752411708,
+          "phase": "distant-decode",
+          "returncode": 0,
+          "system_cpu_seconds": 1.919143,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 43.1867
+        },
+        {
+          "command": [
+            "/usr/bin/timeout",
+            "--signal=TERM",
+            "--kill-after=5",
+            "180",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_transfer250k_q0_v2/work/cmix",
+            "-c",
+            "english.dic",
+            "distant-reencode.raw",
+            "distant-reencode.cmix",
+            "--transformer",
+            "weights.tfwc2"
+          ],
+          "elapsed_cap_seconds": 180,
+          "elapsed_seconds": 45.443551199976355,
+          "phase": "distant-reencode",
+          "returncode": 0,
+          "system_cpu_seconds": 1.9394650000000002,
+          "timing_authority": "shared-host diagnostic",
+          "user_cpu_seconds": 43.18585299999998
+        }
+      ],
+      "deterministic_ok": true,
+      "driver_result": {
+        "bytes": 53847,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/distant/result.json",
+        "sha256": "556eaca2e603e423796efbd8582553bbc29571e75b534848d7f9c8c93ca4e6fe"
+      },
+      "first_block_header_hex": "070003d090",
+      "first_out_of_alphabet_positions": [],
+      "input": {
+        "bytes": 250000,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/work/distant.raw",
+        "sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8"
+      },
+      "mapping_gate_pass": true,
+      "modeled_bytes": 166098,
+      "name": "distant",
+      "out_of_alphabet_count": 0,
+      "preprocessed_bytes": 166103,
+      "raw_offset": 500000000,
+      "roundtrip_ok": true,
+      "stored": {
+        "bytes": 166108,
+        "path": "results/fx2_cmix_transformer_transfer250k_q0_v2/work/distant.stored",
+        "sha256": "4d9e14e8a0e482824f8322f03e2133bc0c62a6bfdd6e8c4772a87bd8173b91db"
+      }
+    }
+  ],
+  "published_after_guard_closure_at": "2026-09-05T21:02:34.448817+00:00",
+  "qualification_resource_evidence_complete": false,
+  "schema": "gamma.enwiki9.fx2-transfer-diagnostic.v1",
+  "scope_bytes": 500000,
+  "status": "passed"
+}
