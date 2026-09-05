@@ -1,0 +1,99 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The supported algorithmic property is deterministic initialization only; compression gain was not tested and objective credit remains zero. The canonical verdict projection changes no measurements."
+  },
+  "candidateId": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+  "candidateRevision": {
+    "candidateId": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+    "candidateTreeSha256": "sha256:fd8da588b989725deb0b0c77898a6054f75625c824928f2882874e13f31b84f0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/20260905T150413404305Z_fd8da588b989.json",
+      "sha256": "sha256:39128306aaa628ac3892a66253d6ea8bf47e9d9fca6554ddb79e7a5ab6a720b8"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Promote the zero-credit initialization fixture for a new pre-forward open-consumer parity gate only. No archive-saving or larger population authority is granted.",
+    "verdict": "promote"
+  },
+  "evidence": [
+    {
+      "path": "operations/evidence/20260905_midas_initializer_closurefix_terminal_audit.json",
+      "sha256": "sha256:66e8e7d7a25bfd87998c188748db2ea40c973c18f5f4dd1c619872a4cdb48041"
+    },
+    {
+      "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision-normalization.json",
+      "sha256": "sha256:bc5cddd55286a12cdaa91db4a94bd8bf53fc58eb1a5fda6d08f4268e1c0b1263"
+    },
+    {
+      "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.canonical.json",
+      "sha256": "sha256:b021f8b7cfc8747f60ad18de09e0b45d90788c572aadb23f20f373b210f14564"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json",
+    "sha256": "sha256:410afe2b6e6ebd7d93001b7548f696a900fba75030db0a1f60190459102c04ce"
+  },
+  "generatedUtc": "2026-09-05T16:58:35+00:00",
+  "hypothesis": {
+    "rationale": "Two fresh seed-123 production initializations produced identical complete pre-forward state over 65536 symbols, with no retained activations or forward, gradient, update or coded symbol.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/000_20260905T162230Z_26e9a86cd5.json",
+    "sha256": "sha256:af64d1da5f426e624b6a4e06adf5ecbf902183c596b584a986844e89874a3943"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "The production block-zero state is now an exact local input for the unchanged open MIDAS consumer. Its 246 parameter, 491 optimizer and 22 stripped-state tensors reproduce identically."
+    ],
+    "uncertainties": [
+      "Initialization supplies no compression result. Complete integrated replay remains blocked by its own full input lock; next work is a distinct pre-forward input/state parity gate."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/measurements/populationSymbols",
+      "source": {
+        "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.canonical.json",
+        "sha256": "sha256:b021f8b7cfc8747f60ad18de09e0b45d90788c572aadb23f20f373b210f14564"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 65536,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t162230z_26e9a86cd5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All retained tensor hashes, topology, causal input mapping, exact repeat manifests and terminal guards pass. The raw legacy verdict is preserved and a source-bound canonical result repairs its enum only."
+    ],
+    "valid": true
+  }
+}

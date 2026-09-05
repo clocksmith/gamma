@@ -1,0 +1,108 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "transfer-failure",
+    "localizedCause": "The public50051-byte profiling fixture preprocesses to32483 bytes with an observed sorted202-symbol mapping incompatible with the declared trained205-symbol/separator assumptions."
+  },
+  "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v4",
+  "candidateRevision": {
+    "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v4",
+    "candidateTreeSha256": "sha256:312abc1014c52e5d6f6021695353dae9ce8237150bc91e8d75b93157eaf433fe",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v4/20260905T165940540730Z_312abc1014c5.json",
+      "sha256": "sha256:c2c2a5ce088b13ab0e9afde5e90a178ad5918527513e0fd5d22b475047cb31f0"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Hold this transformer replay pathway after the valid fixture-incompatible predicate. This scope does not retire the underlying model; any compatible mapping/population requires a new evidence-bound contract. No larger gate or further launch is authorized.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_gcc_fixture_v4_terminal_20260905.json",
+      "sha256": "sha256:4dc0d59c879c7df616f48bba91169bd8b06a1b26e5e843dbbbaeacf32c805ee9"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v4/decision.json",
+      "sha256": "sha256:3be43c67237cd90474ad7d51cfc8234c06b7eb2dd71415fe3b2fe5897e688ff4"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v4/instruction-audit.json",
+      "sha256": "sha256:f9a7e0d20d00ac4b793463d11cfe5bdd3c4378be4da209fc725aad1397cf4e98"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v4/preprocess.execution.json",
+      "sha256": "sha256:8c45af274ec9e395d1278b0db516bdfabefdd1fb2a7cef605329a41e949ee724"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v4/vocabulary-gate.json",
+      "sha256": "sha256:a83bfb6d222cc15cf153ad53f9a2c4732f03036c0c7fd76987bf11c2fabe9ddc"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v4.json",
+    "sha256": "sha256:d1b06ffa740e550b73dece2e175389405d9b90212afe8b6e150684f0d07df028"
+  },
+  "generatedUtc": "2026-09-05T17:04:37+00:00",
+  "hypothesis": {
+    "rationale": "The declared public fixture cannot satisfy this frozen transformer reproduction gate: its transformed alphabet has202 symbols, not205, and its first-separator indices differ. Exact replay was correctly skipped.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/999_20260905T165958Z_904c9150c5.json",
+    "sha256": "sha256:6ee28b969ccefa68a7894a55fb1c2b3af1b3458383bf8251c00e103dc824d176"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "An upstream profiling fixture is not sufficient evidence of a compatible pretrained transformer alphabet; reject incompatible mapping before model compression."
+    ],
+    "uncertainties": [
+      "No transformer archive, exact decode, deterministic replay or upstream-clang equivalence was measured.",
+      "The full trained byte-to-token map has not been independently authenticated."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/scope_bytes",
+      "source": {
+        "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v4/decision.json",
+        "sha256": "sha256:3be43c67237cd90474ad7d51cfc8234c06b7eb2dd71415fe3b2fe5897e688ff4"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 50051,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t165958z_904c9150c5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "The bound strict-math build, whole-binary instruction audit and public-fixture preprocessing completed; independent byte-level recomputation confirms the frozen mapping rejection, and both resource guards and cleanup passed."
+    ],
+    "valid": true
+  }
+}
