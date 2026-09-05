@@ -1,5 +1,9 @@
 # Mandate 2038
 
+**The game's most important human review is its lore, prose, and rule clarity.**
+Start with the [creative writer's review guide](components/README.md), which
+leads through the world, Eras, factions, Headlines, endings, and play instructions.
+
 A 3–5 player strategy game about building, deploying, regulating, and
 plausibly declaring AGI.
 
@@ -8,33 +12,30 @@ five-player games are fully supported configurations with their own evidence
 gates; they are not shortened or extended afterthoughts.
 
 The standard game lasts four rounds with three simultaneous action selections
-per player per round. Players build networks across a complete nineteen-tile
+per player per round. Players build institutions across a complete nineteen-tile
 radius-two hex
 economy, push risky Training Runs, negotiate shared infrastructure, and manage
 public scrutiny without direct combat or elimination. Each Faction has two
 abilities, six shared Programs create public one-use opportunities, each player
 has one location-defined Generator, and political control
 uses visible CEO, Team, and Facility presence rather than Influence cubes.
-Default Game keeps the jurisdiction static; bundled Advanced Play adds the
-former late-game spatial Realignment and full public-market procedure.
+The jurisdiction stays fixed throughout the game, and Power eligibility is local.
 
 ## Status
 
 This repository is a **prototype**, not a manufactured or published product.
 
-- The required **Default Game Play Kit** is the generated
+- The required **Play Kit** is the generated
   [Core Rules](dist/docs/core-rules.md),
   [Map Reference](dist/docs/map-reference.md),
   [Component Reference](dist/docs/component-reference.md), and
   [Card and Board Reference](dist/docs/card-reference.md). Together, these four
-  documents contain the complete Default Game procedure, board, component,
+  documents contain the complete game procedure, board, component,
   and card information needed to play.
 - The browser’s First Game Guide teaches those rules interactively; it is an
   onboarding aid, not a second rules authority.
 - [World and Institutions](dist/docs/world-and-institutions.md) is the
   optional setting companion for tone, Era fiction, and ending narratives.
-- [Advanced Play](dist/docs/advanced-play.md) is the optional bundled profile
-  that restores the advanced market and Realignment modules.
 - The excluded Tactic module retains its complete contract in
   [Optional Tactic Rules](dist/docs/optional-tactics.md).
 - Current rationale and implementation boundaries are recorded in
@@ -71,8 +72,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.8.0-rc.21-test`.
-Executable game `0.14.20` implements that candidate under
+`0.9.0-rc.2-test`.
+Executable game `0.15.1` implements that candidate under
 `nineteen-hex-simplified-v1`, including retained Production Power snapshots,
 one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
 Power contracts, Research Protection, four secret Era Dossier choices, and
@@ -88,7 +89,7 @@ physical teachability, numerical balance, or that the AGI coda is enjoyable.
 - [`world.md`](world.md), [`rules.md`](rules.md), and [`ui.json`](ui.json) own lore, play instructions, and browser wording.
 - [`components/`](components/) contains complete component records with wording, mechanics, and scenario notes; deferred modules live under `experimental/components/`.
 - [`content/`](content/README.md) contains build declarations, reference templates, shared variables, simulation copy, and numeric provenance.
-- [`physical/`](physical/README.md) owns component form, state encoding, and the physical box inventory; it does not own game-copy or mechanical values.
+- [`physical/`](physical/README.md) owns component form and state encoding. The supported box inventory is generated from `rules.md`.
 - [`dist/docs/`](dist/docs/) is compiler-owned Markdown projected from declared
   sources; `npm run docs:html` turns every file there into the deployed
   Documentation reader.
@@ -109,9 +110,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.14.20` game and export its
+- `http://localhost:8038/` — play the synchronized `0.15.1` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.14.20` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.15.1` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -195,8 +196,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.14.20`
-bundle, its synchronized `0.8.0-rc.21-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.15.1`
+bundle, its synchronized `0.9.0-rc.2-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

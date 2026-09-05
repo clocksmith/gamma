@@ -53,6 +53,14 @@ function resolveSourcePath(source, label, sourceRoots) {
 
 const graphPath = resolve(projectRoot, "content/graph.json");
 const graph = await readJson(graphPath);
+const retiredTargets = (graph.retiredTargets || []).map((target) => {
+  const path = resolve(projectRoot, target);
+  if (!path.startsWith(`${resolve(projectRoot, "dist")}${sep}`) ||
+      graph.artifacts.some((artifact) => resolve(projectRoot, artifact.target) === path)) {
+    throw new Error(`Retired target must be an unused generated path under dist/: ${target}`);
+  }
+  return { target, path };
+});
 const sourceRoots = sourceRootsFor(graph);
 const variablesPath = resolve(projectRoot, graph.variables);
 if (!insideProject(variablesPath) || !isCanonicalSource(variablesPath, sourceRoots)) {
@@ -159,6 +167,14 @@ if (validateOnly) {
   );
 } else if (checkOnly) {
   const stale = [];
+  for (const { target, path } of retiredTargets) {
+    try {
+      await access(path);
+      stale.push(`${target} (retired projection)`);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+  }
   for (const artifact of artifacts) {
     let actual;
     try {
@@ -186,6 +202,7 @@ if (validateOnly) {
   );
 } else {
   await rm(retiredRuntimeDirectory, { recursive: true, force: true });
+  for (const { path } of retiredTargets) await rm(path, { force: true });
   for (const artifact of artifacts) {
     await mkdir(dirname(artifact.targetPath), { recursive: true });
     await writeFile(artifact.targetPath, artifact.output);

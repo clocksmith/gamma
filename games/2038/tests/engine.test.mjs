@@ -4,18 +4,14 @@ import test from "node:test";
 import {
   addScrutiny,
   availableHeadlines,
-  applyBoardMotion,
   axialDistance,
   calculateAuditDraws,
-  castRealignmentVote,
   commitAction,
   createGame,
   generateBoard,
   legalDestinations,
-  networkedFacilityIds,
+  locallyEligibleFacilityIds,
   publicMandateAwards,
-  resolveBlindRealignmentVote,
-  resolvePlayProfile,
   resolveTieByInitiative,
   resolveSelectedAction,
   simulateTrainingRun,
@@ -41,38 +37,17 @@ test("board generation is deterministic by seed", async () => {
   assert.equal(first.length, 19);
 });
 
-test("play profiles compose declared rule modules without exposing ad hoc player profiles", async () => {
-  const [config] = await load();
-  assert.deepEqual(resolvePlayProfile(config, "default-game"), {
-    ...config.playProfiles.defaultGame,
-    ...config.playRuleDefaults
-  });
-  assert.deepEqual(resolvePlayProfile(config, "advanced-play"), {
-    ...config.playProfiles.advancedPlay,
-    ...config.playRuleDefaults,
-    powerPurchaseRequests: 1,
-    realignmentEnabled: true,
-    networkInfrastructureEnabled: true,
-    headlinePersistentEffectsEnabled: true,
-    headlinePublicProceduresEnabled: true,
-    headlineVolatilityEnabled: true
-  });
-  const invalid = structuredClone(config);
-  invalid.playProfiles.advancedPlay.moduleIds = ["unknown-module"];
-  assert.throws(() => resolvePlayProfile(invalid, "advanced-play"), /unknown rule module/);
+test("game setup rejects obsolete rules selectors", async () => {
+ const [config,factions,headlines]=await load();
+ for(const playProfileId of ["default-game","advanced-play"])
+  assert.throws(()=>createGame(config,factions,headlines,"retired-options","coalition_lab",4,{playProfileId}), /alternate rules options/);
 });
 
-test("Default Game excludes Advanced-only Headline procedures while Advanced Play restores them", async () => {
-  const [config, , headlines] = await load();
-  const defaultProfile = resolvePlayProfile(config, "default-game");
-  const advancedProfile = resolvePlayProfile(config, "advanced-play");
-  for (const round of [1, 2, 3, 4]) {
-    const defaultDeck = availableHeadlines(headlines, round, defaultProfile);
-    const advancedDeck = availableHeadlines(headlines, round, advancedProfile);
-    assert.ok(defaultDeck.length >= 3, `Default Game has three Headline cards in Era ${round}`);
-    assert.ok(defaultDeck.every((card) => !card.requiredRuleModules?.length));
-    assert.equal(advancedDeck.length, 6);
-  }
+test("one Headline deck supplies three draws in every Era", async () => {
+ const [, , headlines]=await load();
+ assert.deepEqual([1,2,3,4].map(round=>availableHeadlines(headlines,round).length),[5,4,3,4]);
+ assert.equal(new Set(headlines.headlines.map(card=>card.id)).size,16);
+ assert.ok(headlines.headlines.every(card=>!('requiredRuleModules' in card)&&!('profileText' in card)));
 });
 
 test("board is a complete sixfold-symmetric nineteen-hex layout with balanced ring pools", async () => {
@@ -154,63 +129,6 @@ test("complete radius-two topology and duplicated ring resources remain exact", 
   }
 });
 
-test("Realignment rotates full rings, carries tile identity, and changes cross-ring adjacency", async () => {
-  const [config] = await load();
-  const board = generateBoard(config, "realignment-geometry");
-  const frontier = board.find((tile) => tile.id === "frontier");
-  const inner = board.find((tile) => tile.q === 1 && tile.r === 0);
-  const outer = board.find((tile) => tile.q === 2 && tile.r === -1);
-  const frontierBefore = { q: frontier.q, r: frontier.r };
-  assert.equal(Math.max(
-    Math.abs(inner.q - outer.q),
-    Math.abs(inner.r - outer.r),
-    Math.abs((-inner.q - inner.r) - (-outer.q - outer.r))
-  ), 1);
-
-  const motion = config.board.realignment.motions.find(
-    (candidate) => candidate.id === "consolidate_core"
-  );
-  const receipt = applyBoardMotion(board, motion);
-  assert.equal(receipt.movements.length, 6);
-  assert.deepEqual({ q: frontier.q, r: frontier.r }, frontierBefore);
-  assert.deepEqual({ q: inner.q, r: inner.r }, { q: 0, r: 1 });
-  assert.equal(Math.max(
-    Math.abs(inner.q - outer.q),
-    Math.abs(inner.r - outer.r),
-    Math.abs((-inner.q - inner.r) - (-outer.q - outer.r))
-  ), 2);
-});
-
-test("blind Realignment ties resolve by the first Initiative-clockwise leading ballot", () => {
-  const result = resolveBlindRealignmentVote(
-    [
-      { seat: 0, motionId: "core" },
-      { seat: 1, motionId: "outer" },
-      { seat: 2, motionId: "core" },
-      { seat: 3, motionId: "outer" }
-    ],
-    1,
-    ["core", "outer", "counter"]
-  );
-  assert.equal(result.winningMotionId, "outer");
-  assert.equal(result.tied, true);
-});
-
-test("absent Realignment ballots leave the tied choice to Initiative", () => {
-  const result = resolveBlindRealignmentVote(
-    [
-      { seat: 0, motionId: null },
-      { seat: 1, motionId: null },
-      { seat: 2, motionId: null }
-    ],
-    1,
-    ["core", "outer", "counter"]
-  );
-  assert.equal(result.winningMotionId, undefined);
-  assert.deepEqual(result.leadingMotionIds, ["core", "outer", "counter"]);
-  assert.equal(result.tied, true);
-});
-
 test("Audit profiles scale from the four-player base", () => {
   assert.deepEqual(
     [3, 4, 5].map((players) =>
@@ -268,7 +186,7 @@ test("action identity locks before piece and destination", async () => {
   assert.ok(legalDestinations(state, "ceo").length > 1);
 });
 
-test("three different Core Actions advance exactly one era without early Realignment", async () => {
+test("three different Core Actions advance exactly one era on the fixed map", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "round-contract", "coalition_lab");
   const frontier = state.board.find((tile) => tile.id === "frontier");
@@ -285,7 +203,7 @@ test("three different Core Actions advance exactly one era without early Realign
     state.metrics.actionSelections.map((selection) => selection.actionId),
     ["fund", "influence", "organize"]
   );
-  assert.equal(state.metrics.realignmentVotes.length, 0);
+  assert.ok(!("realignmentVotes" in state.metrics));
 });
 
 test("the first Facility is powered by the basic starting grid connection", async () => {
@@ -333,31 +251,7 @@ test("Loopfold AI's starting Customer is Customer one", async () => {
   assert.ok(state.log.some((entry) => /Customer 2 needs Capability 4/.test(entry)));
 });
 
-test("Advanced Networks use the first Facility, visible adjacency, and bounded Links", async () => {
-  const [config, factions, headlines] = await load();
-  const state = createGame(config, factions, headlines, "network-contract", "coalition_lab");
-  const [first, adjacent, remote] = state.board.filter((tile) =>
-    ["frontier", "research", "consumer"].includes(tile.id)
-  );
-  state.player.facilities = [
-    { id: "first", tileId: first.instanceId, powered: false },
-    { id: "adjacent", tileId: adjacent.instanceId, powered: false },
-    { id: "remote", tileId: remote.instanceId, powered: false }
-  ];
-  state.player.startingGridConnection.assignedFacilityId = "first";
-  state.player.links = ["remote"];
-  const connected = networkedFacilityIds(state.board, state.player);
-  assert.ok(connected.has("first"));
-  assert.ok(connected.has("remote"));
-  if (Math.max(
-    Math.abs(first.q - adjacent.q),
-    Math.abs(first.r - adjacent.r),
-    Math.abs((-first.q - first.r) - (-adjacent.q - adjacent.r))
-  ) <= 1) assert.ok(connected.has("adjacent"));
-  assert.equal(config.playerSupply.linkTokens, 2);
-});
-
-test("an isolated Advanced Generator cannot seed a disconnected Network", async () => {
+test("an isolated Generator powers only its nearby Facilities", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "isolated-generator", "coalition_lab");
   state.board = [
@@ -372,13 +266,11 @@ test("an isolated Advanced Generator cannot seed a disconnected Network", async 
   state.player.generators = [{ id: "isolated", tileId: "remote-tile", capacity: 3 }];
   state.player.links = [];
 
-  const connected = networkedFacilityIds(state.board, state.player, {
-    networkInfrastructureEnabled: true
-  });
-  assert.deepEqual([...connected], ["first"]);
+  const connected = locallyEligibleFacilityIds(state.board, state.player);
+  assert.deepEqual([...connected], ["first", "remote"]);
 });
 
-test("Default Game local Power ignores Links and does not propagate through Facilities", async () => {
+test("local Power does not propagate through Facilities", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "local-power-contract", "coalition_lab");
   const [first, adjacent, remote] = state.board.filter((tile) =>
@@ -391,9 +283,7 @@ test("Default Game local Power ignores Links and does not propagate through Faci
   ];
   state.player.startingGridConnection.assignedFacilityId = "first";
   state.player.links = ["remote"];
-  const local = networkedFacilityIds(state.board, state.player, {
-    networkInfrastructureEnabled: false
-  });
+  const local = locallyEligibleFacilityIds(state.board, state.player);
   assert.deepEqual([...local], ["first"]);
 });
 

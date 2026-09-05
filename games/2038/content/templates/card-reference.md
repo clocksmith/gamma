@@ -46,7 +46,7 @@ ${content.referenceCards.byId.era_claim.loreText}
 
 **Unlocks:** ${content.referenceCards.byId.era_claim.unlockText}
 
-## Four-panel player aid
+## Three-panel player aid
 
 ${excerpts.rules.player-aids}
 
@@ -95,8 +95,6 @@ ${excerpts.rules.player-aids}
 - ${content.referenceCards.playerReferences.2.frontText.1}
 - ${content.referenceCards.playerReferences.2.frontText.2}
 - ${content.referenceCards.playerReferences.2.frontText.3}
-- ${content.referenceCards.playerReferences.2.frontText.4}
-- ${content.referenceCards.playerReferences.2.frontText.5}
 
 **Back:**
 
@@ -105,24 +103,7 @@ ${excerpts.rules.player-aids}
 - ${content.referenceCards.playerReferences.2.backText.2}
 - ${content.referenceCards.playerReferences.2.backText.3}
 - ${content.referenceCards.playerReferences.2.backText.4}
-
-### ${content.referenceCards.playerReferences.3.name}
-
-**Front:**
-
-- ${content.referenceCards.playerReferences.3.frontText.0}
-- ${content.referenceCards.playerReferences.3.frontText.1}
-- ${content.referenceCards.playerReferences.3.frontText.2}
-- ${content.referenceCards.playerReferences.3.frontText.3}
-
-**Back:**
-
-- ${content.referenceCards.playerReferences.3.backText.0}
-- ${content.referenceCards.playerReferences.3.backText.1}
-- ${content.referenceCards.playerReferences.3.backText.2}
-- ${content.referenceCards.playerReferences.3.backText.3}
-- ${content.referenceCards.playerReferences.3.backText.4}
-- ${content.referenceCards.playerReferences.3.backText.5}
+- ${content.referenceCards.playerReferences.2.backText.5}
 
 ## Faction boards
 
@@ -384,20 +365,6 @@ ${content.headlines.byId.open_weights_drop.newswire}
 
 > ${content.headlines.byId.open_weights_drop.quote}
 
-### ${content.headlines.byId.talent_gold_rush.name}
-
-**${content.headlines.byId.talent_gold_rush.resolutionType} · ${content.headlines.byId.talent_gold_rush.strapline}**
-
-**Duration:** ${content.headlines.byId.talent_gold_rush.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.talent_gold_rush.profileText}
-
-${content.headlines.byId.talent_gold_rush.newswire}
-
-**Rules:** ${content.headlines.byId.talent_gold_rush.text}
-
-> ${content.headlines.byId.talent_gold_rush.quote}
-
 ### ${content.headlines.byId.professional_exam_sweep.name}
 
 **${content.headlines.byId.professional_exam_sweep.resolutionType} · ${content.headlines.byId.professional_exam_sweep.strapline}**
@@ -409,34 +376,6 @@ ${content.headlines.byId.professional_exam_sweep.newswire}
 **Rules:** ${content.headlines.byId.professional_exam_sweep.text}
 
 > ${content.headlines.byId.professional_exam_sweep.quote}
-
-### ${content.headlines.byId.boardroom_coup.name}
-
-**${content.headlines.byId.boardroom_coup.resolutionType} · ${content.headlines.byId.boardroom_coup.strapline}**
-
-**Duration:** ${content.headlines.byId.boardroom_coup.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.boardroom_coup.profileText}
-
-${content.headlines.byId.boardroom_coup.newswire}
-
-**Rules:** ${content.headlines.byId.boardroom_coup.text}
-
-> ${content.headlines.byId.boardroom_coup.quote}
-
-### ${content.headlines.byId.data_center_buys_county.name}
-
-**${content.headlines.byId.data_center_buys_county.resolutionType} · ${content.headlines.byId.data_center_buys_county.strapline}**
-
-**Duration:** ${content.headlines.byId.data_center_buys_county.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.data_center_buys_county.profileText}
-
-${content.headlines.byId.data_center_buys_county.newswire}
-
-**Rules:** ${content.headlines.byId.data_center_buys_county.text}
-
-> ${content.headlines.byId.data_center_buys_county.quote}
 
 ### ${content.headlines.byId.humanoid_factory_gate.name}
 
@@ -510,61 +449,18 @@ ${content.headlines.byId.benchmark_is_economy.newswire}
 
 > ${content.headlines.byId.benchmark_is_economy.quote}
 
-### ${content.headlines.byId.quantum_advantage_procurement.name}
-
-**${content.headlines.byId.quantum_advantage_procurement.resolutionType} · ${content.headlines.byId.quantum_advantage_procurement.strapline}**
-
-**Duration:** ${content.headlines.byId.quantum_advantage_procurement.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.quantum_advantage_procurement.profileText}
-
-${content.headlines.byId.quantum_advantage_procurement.newswire}
-
-**Rules:** ${content.headlines.byId.quantum_advantage_procurement.text}
-
-> ${content.headlines.byId.quantum_advantage_procurement.quote}
-
-### ${content.headlines.byId.synthetic_candidate.name}
-
-**${content.headlines.byId.synthetic_candidate.resolutionType} · ${content.headlines.byId.synthetic_candidate.strapline}**
-
-**Duration:** ${content.headlines.byId.synthetic_candidate.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.synthetic_candidate.profileText}
-
-${content.headlines.byId.synthetic_candidate.newswire}
-
-**Rules:** ${content.headlines.byId.synthetic_candidate.text}
-
-> ${content.headlines.byId.synthetic_candidate.quote}
-
 ### ${content.headlines.byId.weights_on_internet.name}
 
 **${content.headlines.byId.weights_on_internet.resolutionType} · ${content.headlines.byId.weights_on_internet.strapline}**
 
 **Duration:** ${content.headlines.byId.weights_on_internet.duration|label:terms.durations}
 
-**Profile:** ${content.headlines.byId.weights_on_internet.profileText}
 
 ${content.headlines.byId.weights_on_internet.newswire}
 
 **Rules:** ${content.headlines.byId.weights_on_internet.text}
 
 > ${content.headlines.byId.weights_on_internet.quote}
-
-### ${content.headlines.byId.election_deepfake_panic.name}
-
-**${content.headlines.byId.election_deepfake_panic.resolutionType} · ${content.headlines.byId.election_deepfake_panic.strapline}**
-
-**Duration:** ${content.headlines.byId.election_deepfake_panic.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.election_deepfake_panic.profileText}
-
-${content.headlines.byId.election_deepfake_panic.newswire}
-
-**Rules:** ${content.headlines.byId.election_deepfake_panic.text}
-
-> ${content.headlines.byId.election_deepfake_panic.quote}
 
 ### ${content.headlines.byId.autonomous_corporation.name}
 
@@ -613,34 +509,6 @@ ${content.headlines.byId.agi_blog_post.newswire}
 **Rules:** ${content.headlines.byId.agi_blog_post.text}
 
 > ${content.headlines.byId.agi_blog_post.quote}
-
-### ${content.headlines.byId.agi_personhood.name}
-
-**${content.headlines.byId.agi_personhood.resolutionType} · ${content.headlines.byId.agi_personhood.strapline}**
-
-**Duration:** ${content.headlines.byId.agi_personhood.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.agi_personhood.profileText}
-
-${content.headlines.byId.agi_personhood.newswire}
-
-**Rules:** ${content.headlines.byId.agi_personhood.text}
-
-> ${content.headlines.byId.agi_personhood.quote}
-
-### ${content.headlines.byId.room_temperature_superconductor.name}
-
-**${content.headlines.byId.room_temperature_superconductor.resolutionType} · ${content.headlines.byId.room_temperature_superconductor.strapline}**
-
-**Duration:** ${content.headlines.byId.room_temperature_superconductor.duration|label:terms.durations}
-
-**Profile:** ${content.headlines.byId.room_temperature_superconductor.profileText}
-
-${content.headlines.byId.room_temperature_superconductor.newswire}
-
-**Rules:** ${content.headlines.byId.room_temperature_superconductor.text}
-
-> ${content.headlines.byId.room_temperature_superconductor.quote}
 
 ## Mandate cards
 

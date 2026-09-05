@@ -10,9 +10,8 @@ kind of world results.**
 
 ## Complexity positioning — unmeasured
 
-Default Game is designed as **upper-medium**, with a working internal forecast
-of roughly `3.0–3.4` on a BoardGameGeek-like five-point scale. Advanced Play's
-working forecast is `3.6–4.0`. These are broad positioning hypotheses, not
+Mandate 2038 is designed as **upper-medium**, with a working internal forecast
+of roughly `3.0–3.4` on a BoardGameGeek-like five-point scale. These are broad positioning hypotheses, not
 community ratings, measured outcomes, or publication claims. BoardGameGeek
 itself notes that Weight mixes rules burden, planning difficulty, randomness,
 technical skill, and required experience rather than defining one calibrated
@@ -25,7 +24,7 @@ at 3.27, [Scythe](https://boardgamegeek.com/boardgame/169786/scythe) and
 [Agricola Revised](https://boardgamegeek.com/boardgame/200680/agricola-revised-edition)
 at 3.45, [Brass: Birmingham](https://boardgamegeek.com/boardgame/224517/brass-birmingham)
 at 3.86, and [Terra Mystica](https://boardgamegeek.com/boardgame/120677/terra-mystica)
-at 3.97. The current design hypothesis places Default between Race for the
+at 3.97. The current design hypothesis places the game between Race for the
 Galaxy and Terraforming Mars in overall burden, while recognizing that Mandate
 moves more of that burden into negotiation, spatial timing, and shared-state
 administration.

@@ -12,7 +12,7 @@ function clone(value) {
 test("Era situation ledger binds every deployed era surface exactly once", async () => {
   const ledger = await loadEraSituationLedger();
   const result = await validateEraSituationLedger(ledger);
-  assert.deepEqual(result, { eras: 4, scenarios: 43, surfaces: 62 });
+  assert.deepEqual(result, { eras: 4, scenarios: 40, surfaces: 54 });
   assert.deepEqual(ledger.eras.map(({ id, order }) => [id, order]), [
     ["progress", 1],
     ["capacity", 2],

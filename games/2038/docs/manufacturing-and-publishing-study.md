@@ -51,12 +51,10 @@ Likely commercial format:
   public ledger
 - Nineteen thick modular hex tiles
 - Six dual-layer faction boards with six captive sliders each
-- 134 Default standard cards plus 6 foldout aids; 148 standard cards plus 6
-  foldouts with Advanced Play
+- 134 standard cards plus 6 foldout aids
 - Stock wooden pieces and cubes
 - Several punchboard sheets
 - One opaque Audit bag
-- One ordinary six-sided Volatility die
 - 24–32-page rulebook
 - Planning MSRP: $69–$79
 
@@ -76,21 +74,19 @@ locked component specification.
 | Faction/player boards | 6 dual-layer boards with 6 captive sliders each | selected physical authority; slider construction unresolved |
 | Core Action cards | 36, six per player | confirmed |
 | Shared Program cards | 6, one shared copy of each named Program | confirmed |
-| Realignment ballot cards | 6 square four-way cards, one per player | Advanced Play only |
-| Headline cards | 24: 16 Default plus 8 Advanced | confirmed profile split |
+| Headline cards | 16 | Era packets contain 5 / 4 / 3 / 4 |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
 | Training cards | 40 | confirmed test contract |
 | Mandate cards | 12 | selected wording; balance provisional |
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
 | Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
-| Player aids | 6 four-panel foldouts | replaces twenty-four separate reference cards |
+| Player aids | 6 three-panel foldouts | replaces twenty-four separate reference cards |
 | Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its shared Program card | replaces three separate reference cards |
-| Total printed card-and-aid pieces | 140 Default or 154 with Advanced | 134 / 148 standard cards plus 6 foldouts; manufacturing overage excluded |
+| Total printed card-and-aid pieces | 140 | 134 standard cards plus 6 foldouts; manufacturing overage excluded |
 | CEO pieces | 6 | confirmed concept |
 | Team pieces | 18 | three per faction |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |
-| Link tokens | 12 | Advanced Play only; two per faction |
 | Starting-grid identifiers | 6 | integrated into each faction's first Facility |
 | Separate Grid-Ready pieces | 0 | no persistent Grid-Ready state exists |
 | Faction-board sliders | 36 captive sliders: Runway, Compute, Capability, Customers, Trust, and Research Protection on each board | integrated into boards; no loose track markers |
@@ -102,7 +98,6 @@ locked component specification.
 | Shared dry-erase marker | 1 fine-tip marker | serves the Governance Board ledger |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Audit bag | 1 opaque cloth bag | confirmed concept |
-| Volatility die | 1 stock d6 | Advanced Play only |
 | Rulebook | 24–32 pages | expected |
 | Box | rigid two-piece box with cardboard insert | recommendation |
 
@@ -154,14 +149,12 @@ locations. The inner ring contains one each of Research, Cloud, Foundry,
 Capital, Talent, and Grid. The outer ring contains two each of Research,
 Cloud, Consumer, Media, Government, and Renewable. Every outer tile has the
 same geometric role, and all twelve outer positions are occupied.
-Advanced Play adds six four-way Realignment ballots for six factions; Default
-Game uses none. Its vote occurs only after Era III.
 
 ### Resolved: Mandates and references
 
 The baseline contains twelve Era-specific Mandates and four Era panels printed
 on the Governance Board. Mandate balance remains provisional. The box contains
-six identical four-panel foldout player aids; only final fold and layout remain
+six identical three-panel foldout player aids; only final fold and layout remain
 unresolved.
 
 ### Resolved rules, unresolved production format
@@ -177,12 +170,11 @@ Power cubes remain on the map as the latest Production snapshot until the next
 Allocate step. One shared marker records only the current Mandate criterion,
 Setup Collective Trust, and final public resolution.
 
-Six labelled faction trays, four Default Era packets, and one separately packed
-Advanced module are selected setup organization. Their exact insert material
+Six labelled faction trays and four Era packets organize setup. Their exact insert material
 and construction remain quote variables.
 
 The remaining manufacturing decisions are material, dimensions, player-board
-tracking, card sizing, Link and Generator format, punchboard organization, and
+tracking, card sizing, Generator format, punchboard organization, and
 insert design.
 
 ## Planning cost bands
@@ -408,7 +400,7 @@ First:
 
 1. Run the controlled four-player `0.8.0-rc.19-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
-3. Decide the physical format of Generators, Links, tracks, and shared tokens.
+3. Decide the physical format of Generators, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.
 5. Produce six to ten blind-testable prototypes after the first corrections
    are selected.

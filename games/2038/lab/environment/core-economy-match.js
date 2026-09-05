@@ -105,7 +105,7 @@ function createPlayer(
       actions: {},
       openingActions: [],
       forcedNoOps: 0,
-      realignmentBallots: {},
+
       researchCapability: [],
       poweredFacilityRounds: [],
       auditHits: 0,

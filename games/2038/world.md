@@ -47,10 +47,11 @@ the fictional component layer. A source can support that a mechanism exists;
 it cannot prove the motive assigned to a fictional institution or the future
 consequence imagined here.
 
-The four Eras have six Headline designs each. That budget controls the deck,
+The four Eras contain sixteen Headline designs: five, four, three, and four.
+That budget controls the deck,
 not the size of the world. A concept can appear in the World companion, a
 faction, a deferred component, or the editorial backlog without becoming a
-seventh Headline or changing a mechanic.
+additional Headline or changing a mechanic.
 
 ## Creative thesis
 
@@ -168,7 +169,7 @@ Existing expressions:
 - Era II Headlines: the responsible-human requirement, municipal utility
   acquisition, hazardous-work retirement with autonomous congestion, orbital
   power, compute borders, and a counterfactual casino with priority load.
-- Board systems: Facilities, Generators, Links, power delivery, land, and
+- Board systems: Facilities, Generators, local power delivery, land, and
   contested spatial access.
 - Coalition and Program copy: wartime shared infrastructure and biological
   utilities give cooperation an awkward physical shape without ending the
@@ -220,7 +221,7 @@ Existing expressions:
   synthetic custody, the passive citizen dividend, and the right to remain
   unsupported.
 - Era III companion: licensed-organ testimony and pollinator corridor
-  negotiations extend standing without adding a seventh Headline.
+  negotiations extend standing without adding a additional Headline.
 - Existing actions: Influence, media, government, and Narrative Capture are
   the institutional tools for making one interpretation feel normal.
 - Existing faction surface: Select the Public Outcome is an early personal
@@ -597,7 +598,7 @@ ${content.worldCopy.worldPrimer.1}
 ${content.worldCopy.worldPrimer.2}
 
 The ${terms.systems.futureTimeline} is one compounding public record, not an
-anthology. Only three of six ${terms.systems.headlines} appear in each Era;
+anthology. Only three ${terms.systems.headlines} appear in each Era;
 later events may inherit pressure without requiring a particular earlier card
 to have appeared.
 

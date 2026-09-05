@@ -157,7 +157,6 @@ export class WeightedPlayerPolicy {
 
     if (decision.parameters?.buildMode === "facility") return 4;
     if (decision.parameters?.buildMode === "generator") return 3;
-    if (decision.parameters?.buildMode === "link") return 2.5;
     if (decision.parameters?.mode === "recruit") return 2;
     return 1.25;
   }
@@ -183,10 +182,6 @@ export class WeightedPlayerPolicy {
   score(packet, decision) {
     const strategy = this.profile.strategy;
     const negotiation = strategy.negotiation;
-    if (decision.decisionId === "negotiation_none") return 1;
-    if (decision.decisionId.startsWith("negotiation_power_")) {
-      return negotiation.promiseWeight * this.partnerMultiplier(decision);
-    }
     if (decision.decisionId === "trade_none") {
       return decision.consequences?.selectedActionCurrentlyResolvable === false
         ? 0.01

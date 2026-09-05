@@ -3,23 +3,14 @@
 
 **Suggested player count:** ${game.suggestedPlayerRange}
 
-## Play profiles
-
-**Default Game** is authoritative in this book, the browser, and simulation.
-Use the browser **First Game Guide** for an accelerated Default Game.
-[**Advanced Play**](/docs/advanced-play.html) is an extension layer with additional complexity.
-**Advanced Play** is selected before setup and must be used for the entire game or not used at all.
-
-The symbol **◆** marks a rule that changes in Advanced Play.
-Use the base rule in Default Game, then apply the corresponding change from
-the [**Advanced Play supplement**](/docs/advanced-play.html).
+Use the browser **First Game Guide** for an accelerated introduction.
 
 The separately printed [**World and Institutions**](/docs/world-and-institutions.html) companion contains setting
 and ending narratives.
 
 ## How to Play
 
-Default Game lasts four Eras. The institution with the most
+The game lasts four Eras. The institution with the most
 ${terms.playerTracks.mandate} is the provisional winner. The strongest eligible
 ${terms.systems.agi} claim can replace that result. Resolve
 the institutional winner and shared World Ending separately. Follow the
@@ -30,8 +21,7 @@ numbered sections in order.
 1. Unfold the Governance Board. Build the nineteen-tile map in its wells as described in **Modular hex board**:
    ${terms.locations.frontier} in the center, the shuffled six-tile operational ring around it,
    and the shuffled twelve-tile public ring around the complete outer edge.
-2. Separate the ${terms.systems.headline} cards by Era. **◆** Use only the
-   Default-eligible cards: cards without an **Advanced Play** badge. Shuffle
+2. Separate the sixteen ${terms.systems.headline} cards by Era. Shuffle
    each deck into its printed Era panel's Headline well. Each Era uses three
    ${terms.systems.headlines}. Place the Current Era marker in its Start bay.
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
@@ -108,7 +98,7 @@ Facilities and Generators cannot act. ${terms.actions.organize}
 receives normal acting-piece movement before its additional movement,
 recruitment, restructuring, or relocation.
 
-### Effect precedence ◆
+### Effect precedence
 
 Apply these sources in order:
 
@@ -249,7 +239,7 @@ surcharges, then discounts. The final cost cannot fall below zero.
 
 The board is one jurisdiction whose districts represent physical and
 institutional dependencies rather than ordinary distance. The shuffled map
-remains fixed for all four Eras. **◆** Rival pieces coexist; there is no combat
+remains fixed for all four Eras. Rival pieces coexist; there is no combat
 or player elimination.
 
 The detailed setup, district effects, and control procedure print in the
@@ -340,9 +330,9 @@ only one ordinary Generator; the full Fusion contract is printed on its Era IV
 Program card.
 <!-- map:end -->
 
-### ${terms.infrastructure.power} connections ◆
+### ${terms.infrastructure.power} connections
 
-Default Game uses **local Power**, not a Network graph. The starting grid
+Power eligibility is **local**. The starting grid
 powers only its assigned first Facility. Each Generator powers only Facilities
 on its own hex or an adjacent hex. A Facility cannot pass Power onward to
 another Facility.
@@ -386,7 +376,7 @@ Either participant may instead use ${terms.actions.influence} to terminate one s
 Venture. Return its pair. Termination cannot be combined with another
 ${terms.actions.influence} effect.
 
-### ${terms.infrastructure.power} delivery ◆
+### ${terms.infrastructure.power} delivery
 
 ${terms.infrastructure.power} is Production capacity and cannot be stored.
 
@@ -424,7 +414,7 @@ it online.
 Era I activates movement, Core Actions, Training, the starting grid,
 Facilities, Customers, and Scrutiny.
 
-### Era II — ${terms.eras.scale} ◆
+### Era II — ${terms.eras.scale}
 
 Each player receives one Program marker and unlocks:
 
@@ -471,8 +461,7 @@ Reorganization never resolves or readies another Action.
 ### Era III — ${terms.eras.narrative}
 
 Each player receives one Program marker. Previous Programs remain
-unlocked. Joint Ventures now enter play. Production Power purchases are an
-Advanced Play rule.
+unlocked. Joint Ventures now enter play.
 
 #### Public Capability Covenant
 
@@ -605,7 +594,7 @@ At the beginning of each cycle:
 4. Resolve clockwise from Initiative: **move**, then **act**.
 5. Pass Initiative clockwise.
 
-#### Immediate resource trade ◆
+#### Immediate resource trade
 
 Immediately before resolving the selected Action, the active player may make
 one offer to one rival: give exactly one ${terms.resources.runway} for one
@@ -635,47 +624,31 @@ creates consent or forces a deal.
 
 ### C. ${terms.infrastructure.power} and Production
 
-Every player board presents the same five Production boxes. Resolve a box for
+Every player board presents the same four Production boxes. Resolve a box for
 every player before advancing to the next box:
 
 1. **Generate:** determine every Generator’s local eligible Facilities. Every
    Generator with at least one eligible Facility operates automatically. Add one ${terms.playerTracks.scrutiny} for every
    ${terms.technology.emergencyInfrastructure}. Add any ${terms.systems.headline} generation.
-2. **Trade ◆:** Default Game skips this box. In Advanced Play, in Initiative
-   order, each player may make one ${terms.infrastructure.power}
-   purchase request through one named pair of adjacent Facilities. Name one of
-   your locally eligible Facilities as the buyer endpoint and one rival Facility
-   as the supplier endpoint. The supplier endpoint need not itself be powered,
-   but it must be on or adjacent to one of that rival's installed Generators or
-   Fusion with unsold capacity. The named supplier accepts
-   or rejects. A rejected, passed, or unanswered request fails; the buyer then
-   allocates with the ${terms.infrastructure.power} they have. An accepted buyer pays one
-   ${terms.resources.runway} per ${terms.infrastructure.power} directly to the consenting supplier. Each supplier may sell
-   at most one ${terms.infrastructure.power} this Production. Only installed Generator or Fusion
-   capacity may be sold; starting-grid and Headline-granted supplemental
-   ${terms.infrastructure.power} may not. Emergency Infrastructure is an installed Generator, so
-   its capacity is exportable. The purchased unit enters the buyer's connected
-   Network.
-3. **Allocate:** after all purchase requests, resolve any Headline that lets a
+2. **Allocate:** resolve any Headline that lets a
    player choose supplemental ${terms.infrastructure.power}. Then each player chooses one complete
-   allocation of starting-grid, Generator, purchased, and supplemental
+   allocation of starting-grid, Generator, and supplemental
    ${terms.infrastructure.power} among legal local Facilities and Mega-Cluster demand. Remove the
    previous snapshot, then place one Power cube on each powered Facility and
    per satisfied Mega-Cluster demand. Leave these cubes until the next Allocate
    step. A built Facility without a cube is offline. The cubes are total demand
    satisfied.
-4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
+3. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer},
    and active Mega-Clusters, in that order.
-5. **Partner:** produce active Joint Ventures in ascending contract-number
+4. **Partner:** produce active Joint Ventures in ascending contract-number
    order.
 
 Complete each box for every player before entering the next. Do not let one
-player finish Production while others still generate, trade, or allocate. This
-keeps sales and contracts tied to one visible capacity state. Within a box,
+player finish Production while others still generate or allocate. This
+keeps contracts tied to one visible capacity state. Within a box,
 resolve in Initiative order unless that box specifies otherwise.
 
-Purchased ${terms.infrastructure.power} lasts only this Production and creates no contract or
-future obligation. A supplier may leave its own Facility offline. The retained
+The retained
 Power cubes remain the authority for the next Mandate, any
 powered-Facility Headline, the Era IV Dossier, and final offline penalties.
 
@@ -685,7 +658,7 @@ When an Era Mandate counts **Compute produced during Production**, count printed
 Compute output before the universal cap. Include powered Facilities, active
 Mega-Clusters, and either side of an active
 Joint Venture that receives Compute. Do not count an immediate Facility effect
-outside the five Production boxes.
+outside the four Production boxes.
 
 ### D. File the Era Dossier
 
@@ -805,7 +778,7 @@ only the seven ordinary domains listed above that were banked successfully.
 Benchmark Leak and Human Evaluation never count unless an effect names them
 explicitly.
 
-### ${terms.actions.build} ◆
+### ${terms.actions.build}
 
 Choose one mode.
 
@@ -952,12 +925,12 @@ World and Institutions companion.
 <!-- era-panels:end -->
 
 <!-- player-aids:start -->
-Each player receives one foldout containing the following four panels. Six
-identical foldouts replace twenty-four separate reference cards.
+Each player receives one foldout containing the following three panels: the turn sequence, local Power, and public Mandate.
+Each player uses one foldout.
 <!-- player-aids:end -->
 
 <!-- headline-selection:start -->
-Default Game uses cards without an **Advanced Play** badge. Resolve the listed procedure and rules text.
+Use all sixteen Headlines in their printed Era decks. Resolve the listed procedure and rules text.
 <!-- headline-selection:end -->
 
 ## 10. Map and component reference
@@ -969,8 +942,7 @@ from component records. Keep these references beside the Core Rules during play.
 
 <!-- components:start -->
 <!-- inventory:start -->
-Default Game components stay in the main insert; Advanced-only pieces stay
-in one sealed module.
+Pack the components in the labelled trays and Era packets described below.
 
 ### Shared Governance Board
 
@@ -1015,22 +987,22 @@ Each of the six trays contains:
 - ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
 - ${content.gameConfig.playerSupply.agiDossierCards} Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs and Commit / Hedge
   orientations
-- 1 four-panel foldout player aid
+- 1 three-panel foldout player aid
 
-There is no private Program hand, Escalation slider, Network slider, Safety
+There is no private Program hand, Escalation slider, Safety
 currency, personal score sheet, Grid-Ready piece, Power Source selector,
 Influence cube, Prediction Bag token, AGI chart, or AGI die.
 
 Generators do not count against the Facility limit.
 
-### Default Game shared components
+### Shared components
 
 - ${content.gameConfig.sharedSupply.governanceBoards} Governance Board
 - ${content.gameConfig.board.selectedTileCount} district tiles: Frontier, six operational, and twelve public
 - ${content.gameConfig.sharedSupply.sharedProgramCards} shared Program cards
 - ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era marker
 - ${content.gameConfig.sharedSupply.sharedDryEraseMarkers} shared fine-tip dry-erase marker
-- 16 Default-eligible Headline cards; reveal 12 per game
+- 16 Headline cards; reveal 12 per game
 - 12 Mandate cards; reveal 4 per game
 - 40 Training cards
 - ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture pairs
@@ -1049,31 +1021,15 @@ Fusion is a single shared project; its dedicated marker leaves the supply once
 constructed. Unused contract tokens cannot be reserved; create a Joint Venture
 or Mega-Cluster only while a matched pair is available.
 
-### Advanced module
-
-Advanced Play uses every Default component and adds:
-
-- 8 Advanced-badged Headline cards, distributed `1 / 2 / 3 / 2` across Eras
-  I–IV
-- 12 Link tokens, two per faction
-- 6 four-way Realignment ballot cards, one per faction
-- 1 ordinary six-sided Volatility die
-
-Each square ballot has four oriented edges: Consolidate Core, Expand
-Periphery, Counter-Cycle, and Pass. No component tracks Network capacity; the
-board position of Facilities, Generators, and Links determines connectivity.
-
 ### Setup packaging
 
 The insert provides six labelled faction trays, four labelled Era packets, one
-shared Program well, one Training well, one contract/power well, and the sealed
-Advanced module. Era packets contain `5 / 4 / 3 / 4` Default Headlines plus
-three Mandates each. The Advanced module holds its eight badged Headlines
-sorted `1 / 2 / 3 / 2`.
+shared Program well, one Training well, and one contract/power well. Era packets
+contain `5 / 4 / 3 / 4` Headlines plus three Mandates each.
 
 ### Exact printed-paper count
 
-Default Game contains 134 standard cards plus 6 foldout player aids:
+The game contains 134 standard cards plus 6 foldout player aids:
 
 - 36 Core Actions
 - 6 shared Programs
@@ -1083,8 +1039,7 @@ Default Game contains 134 standard cards plus 6 foldout player aids:
 - 24 AGI Dossier cards
 - 6 foldout player aids
 
-Advanced Play adds 8 Headlines and 6 ballots, for 148 standard cards plus 6
-foldouts. Printed Era panels and Power contracts are part of the Governance
+Printed Era panels and Power contracts are part of the Governance
 Board, tiles, and Program cards.
 
 ### Excluded deferred content
@@ -1115,8 +1070,7 @@ current card, shuffle the discard, and continue.
 
 #### Headline decks
 
-In Default Game, each Era deck contains every card for that Era without an
-**Advanced Play** badge. Reveal three each Era. Leave every resolved card face
+Each Era deck contains every card for that Era. Reveal three each Era. Leave every resolved card face
 up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
 
 #### Shared Program display
@@ -1150,8 +1104,7 @@ Rules** for their contracts.
 - **Dossier orientation:** place the current Era's Dossier face down with its
   arrow toward the table center for Commit or toward its owner for Hedge. Never
   inspect a filed card before the Era IV reveal.
-- **Offline recovery:** reassess Power and, in Advanced Play, Network
-  connectivity every Production. Facilities never flip.
+- **Offline recovery:** reassess local Power eligibility every Production. Facilities never flip.
 <!-- components:end -->
 
 ## 11. Final scoring
@@ -1229,11 +1182,6 @@ Find design rationale and balance qualification in
 [**Balance and Exploitability**](/docs/balance-and-exploitability.html). Find observation
 protocols in [**Playtesting and Evidence**](/docs/playtesting-and-evidence.html).
 
-## Advanced Play
-
-The separate [**Advanced Play supplement**](/docs/advanced-play.html) is the complete authority for the
-bundled Advanced profile. Do not import one Advanced procedure into Default
-Game.
 ## Document record
 
 **Rules version:** ${game.rulesVersion}

@@ -22,8 +22,11 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 ## Invariants
 
+- Mandate 2038 has one ruleset. The map stays fixed; Power eligibility is local.
+  Setup, components, references, runtime options, and publication expose no
+  alternate rules mode. Retired mode selectors and module overrides are rejected.
 - Generated graph targets are never hand-edited.
-- Default procedures and inventory prose have one authored home in `rules.md`;
+- Game procedures and inventory prose have one authored home in `rules.md`;
   exact component effects remain in `components/`. Reference layouts may arrange
   sourced excerpts and fields, but cannot independently author rule paragraphs
   or numeric overrides. Named excerpts produce the compact Core Rules and the

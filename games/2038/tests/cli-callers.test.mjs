@@ -134,13 +134,13 @@ test("missing formal responses use the rulebook reject or pass default", async (
   });
   const powerResponse = await policy.decide({
     ...structuredClone(packet),
-    requestId: "fixture:r3:c1:s1:power_sale_0_1:1",
+    requestId: "fixture:r3:c1:s1:immediate_trade_response:1",
     legalDecisions: [
-      { decisionId: "power_sale_accept_0_1", label: "Accept" },
-      { decisionId: "power_sale_reject_0_1", label: "Reject" }
+      { decisionId: "trade_accept", label: "Accept" },
+      { decisionId: "trade_reject", label: "Reject" }
     ]
   });
-  assert.equal(powerResponse.decision.decisionId, "power_sale_reject_0_1");
+  assert.equal(powerResponse.decision.decisionId, "trade_reject");
   assert.equal(powerResponse.receipt.provider, "rulebook-default");
   assert.equal(powerResponse.receipt.formalResponseDefault, true);
 
@@ -162,22 +162,6 @@ test("missing formal responses use the rulebook reject or pass default", async (
         { decisionId: "mega_cluster_reject", label: "Reject" }
       ],
       "mega_cluster_reject"
-    ],
-    [
-      "fixture:r3:c1:s1:boardroom_coup_response:4",
-      [
-        { decisionId: "boardroom_back", label: "Back" },
-        { decisionId: "boardroom_refuse", label: "Refuse" }
-      ],
-      "boardroom_refuse"
-    ],
-    [
-      "fixture:r3:c1:s1:realignment_ballot:5",
-      [
-        { decisionId: "realignment_core", label: "Core" },
-        { decisionId: "realignment_no_ballot", label: "No ballot" }
-      ],
-      "realignment_no_ballot"
     ]
   ]) {
     const response = await policy.decide({
@@ -212,10 +196,10 @@ test("strict LLM evidence rejects formal and weighted fallback paths", async () 
   await assert.rejects(
     () => policy.decide({
       ...structuredClone(packet),
-      requestId: "fixture:r3:c1:s1:power_sale_0_1:strict",
+      requestId: "fixture:r3:c1:s1:immediate_trade_response:strict",
       legalDecisions: [
-        { decisionId: "power_sale_accept_0_1", label: "Accept" },
-        { decisionId: "power_sale_reject_0_1", label: "Reject" }
+        { decisionId: "trade_accept", label: "Accept" },
+        { decisionId: "trade_reject", label: "Reject" }
       ]
     }),
     (error) =>

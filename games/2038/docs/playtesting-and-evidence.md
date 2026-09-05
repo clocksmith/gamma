@@ -107,17 +107,16 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`dist/docs/core-rules.md` is a review draft at `0.8.0-rc.19-test`. Executable
-game `0.14.18` implements its Default Game profile under
-`nineteen-hex-simplified-v1`. New automated reports must name either
-`default-game` or `advanced-play`; historical `0.8.35` reports describe the
-former full rules and do not qualify Default Game. Implementation proof does
-not transfer simulation outcomes into human-play evidence.
+Current executable and physical-candidate identities are declared in
+`versions/current-release.json`. Reports must name the exact release, engine,
+rules variant, seed, and content hashes. There is one playable ruleset. Earlier
+results qualify only their frozen sources; implementation proof does not
+transfer simulation outcomes into human-play evidence.
 
 Candidate `0.7.0-rc.3-test` and executable `0.10.2` established the simplified
 baseline selected on 2026-08-08: one location-defined Generator, two programs
 per Faction, presence-only politics, removal of seven stored-token families,
-and the tightened Default/Advanced boundary. The earlier single-Generator
+and simpler interaction procedures. The earlier single-Generator
 matrix qualifies only that isolated contract and its executable integrity. No
 historical report establishes the combined package’s balance, negotiation
 quality, or physical teachability; those gates restart from this identity.
@@ -128,8 +127,7 @@ Escalation hands with six shared Programs, remove Safety currency, reduce
 Training to forty cards, make Mega-Clusters solo projects, restrict immediate
 trades to one direct 1-for-1 exchange, make Audit penalties automatic, remove
 the Prediction Bag, and resolve supported Dossier claims deterministically.
-Default Game has no Power market; Advanced Play adds binary Networks and one
-Power request without a Network production bonus. A selectable Action must
+Power eligibility is local and the map stays fixed. A selectable Action must
 already have a legal resolution before the optional trade window. These are
 implementation claims, not human teachability, negotiation-quality, or balance
 evidence; all three supported player counts require fresh evidence. The rc.18
@@ -200,15 +198,15 @@ not qualify the current game.
 
 Candidate `0.7.0-rc.3-test` changed no mechanic or number from
 `0.7.0-rc.2-test`. It
-corrects the machine-readable component and round vocabulary, separates
-Default local Power from Advanced Network language across executable copy, and
-records one broad profile-scoped complexity forecast as unmeasured. Evidence
+corrects the machine-readable component and round vocabulary, aligns
+local Power language across executable copy and records the complexity
+forecast as unmeasured. Evidence
 from the predecessor remains historically valid for its exact identity but
 does not silently transfer to the new release manifest.
 
 Candidate `0.6.0-rc.3-test` changes no physical rule from rc.2. Executable
 `0.9.2` adds the inactive, receipt-bound `single-generator-default` comparison
-path without changing Default Game or Advanced Play. Its results are candidate
+path without changing the game rules. Its results are candidate
 evidence only and cannot qualify canonical balance.
 
 Candidate `0.6.0-rc.2-test` changed no physical rule from rc.1.
@@ -343,17 +341,9 @@ diagnostics rather than balance-authority evidence.
 - when every Generator is built, its clean or emergency source, its Scrutiny,
   and its realized Audit cost;
 - every Build selection and whether Energy-slot Initiative causes frustration;
-- Links, Network reach, and stranded Facilities;
-- Joint Ventures, immediate Power purchases, Mega-Clusters, payments, and
-  suspensions;
-- every supplier’s requested and accepted compensation, including Runway,
-  reciprocal resources, Joint Ventures, Realignment promises, political
-  commitments, and other bundled terms;
-- every Power request, demanded price, acceptance, and refusal, plus whether
-  the one-Generator limit creates bargaining or merely removes surplus;
-- whether a supplier forgoes Power needed by its own Facilities, whether a
-  refusal threat changes the deal, and whether participants describe the
-  bargain as strategic, coerced, or kingmaking;
+- locally eligible Facilities, powered Facilities, and stranded capacity;
+- Joint Ventures, Mega-Clusters, immediate resource trades, and refusals;
+- whether local Generator scarcity creates meaningful placement choices;
 - whether a trailing institution treats Publication as a credible hidden pivot
   rather than an automatic or irrelevant choice;
 - whether module, Capability, and comeback tokens are understandable at reveal
@@ -385,19 +375,10 @@ diagnostics rather than balance-authority evidence.
   institution, applied tiebreak, and whether the claim changed the winner;
 - final institutional winner and shared World Ending.
 
-### Advanced Play Realignment and narrative
+### Narrative
 
-- when Advanced Play is selected, every secret ballot and winning motion;
-- discussion and voting time, followed separately by physical rotation and
-  Network-recalculation time;
-- rules questions caused by Realignment;
-- tie-break, moved ring, and changed adjacencies;
-- Network and contract state before and after rotation;
-- contracts and plans disrupted, plus whether each player describes the
-  result afterward as exciting, arbitrary, or tedious;
 - all twelve Future Timeline Headlines;
 - whether each Headline changed at least one intended action;
-- auctions, blocs, votes, and Volatility outcomes;
 - player recall of faction, Headline, Escalation, and location identities;
 - moments described as surprising, funny, excessive, confusing, or flat.
 
@@ -423,8 +404,7 @@ completion, memory, and faction-correlation measures.
 1. Twelve decisions create a complete engine without filler.
 2. Four Eras reach the absurd climax without exhausting the table.
 3. The smaller map creates scarcity while preserving viable strategies.
-4. Default Game preserves satisfying spatial adaptation without a Era III
-   interruption; Advanced Play earns its extra Realignment procedure.
+4. The fixed jurisdiction preserves satisfying spatial adaptation across four Eras.
 5. Research remains tense after players understand its probabilities.
 6. Audit creates meaningful exposure, including in Era IV.
 7. AGI is dramatic and optional rather than expected graduation.

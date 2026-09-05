@@ -14,18 +14,9 @@ function formalResponseDefault(packet) {
           ? "agreement_reject"
           : stage === "mega_cluster_partner"
             ? "mega_cluster_reject"
-            : stage === "boardroom_coup_response"
-              ? "boardroom_refuse"
-              : stage === "realignment_ballot"
-                ? "realignment_no_ballot"
-                : null;
+            : null;
   if (decisionId) {
     return packet.legalDecisions.find((decision) => decision.decisionId === decisionId) || null;
-  }
-  if (stage.startsWith("power_sale_")) {
-    return packet.legalDecisions.find((decision) =>
-      decision.decisionId.startsWith("power_sale_reject_")
-    ) || null;
   }
   if (stage.startsWith("allocation_response_")) {
     return packet.legalDecisions.find((decision) =>

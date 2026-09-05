@@ -297,7 +297,7 @@ function aggregateMatchMetrics(outcomes) {
     mandates: {},
     escalations: {},
     tactics: {},
-    realignments: {},
+
     systemicRiskCreated: 0,
     declarations: 0,
     declarationPpaIterations: 0,
@@ -341,8 +341,7 @@ function aggregateMatchMetrics(outcomes) {
       "headlineOutcomes",
       "mandates",
       "escalations",
-      "tactics",
-      "realignments"
+      "tactics"
     ]) {
       mergeCounts(totals[key], metrics[key]);
     }
@@ -613,7 +612,7 @@ function compactObservation(outcome, matchIndex) {
     agiFunnel: outcome.matchMetrics?.agiFunnel || [],
     scenario: outcome.matchMetrics?.scenario || null,
     declarations: outcome.matchMetrics?.declarations || 0,
-    realignments: outcome.matchMetrics?.realignments || {},
+
     systemicRiskCreated: outcome.matchMetrics?.systemicRiskCreated || 0,
     futureTimeline: outcome.matchMetrics?.futureTimeline || []
   };
@@ -648,7 +647,7 @@ class BatchAccumulator {
       blockedAfterCommitment: 0
     };
     this.metrics = {
-      headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {}, realignments: {},
+      headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {},
       systemicRiskCreated: 0, declarations: 0, declarationPpaIterations: 0, declarationCapacityOps: 0,
       agiFunnel: {
         playerOpportunities: 0, coreRequirementsMet: 0,
@@ -769,7 +768,7 @@ class BatchAccumulator {
   addMetrics(outcome) {
     const totals = this.metrics;
     const metrics = outcome.matchMetrics || {};
-    for (const key of ["headlines", "headlineOutcomes", "mandates", "escalations", "tactics", "realignments"]) {
+    for (const key of ["headlines", "headlineOutcomes", "mandates", "escalations", "tactics"]) {
       mergeCounts(totals[key], metrics[key]);
     }
     totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;
