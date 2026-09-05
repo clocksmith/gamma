@@ -1,0 +1,666 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "9765624", "--official-decimal-limit-kib", "9765624", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T162230Z_26e9a86cd5", "--cgroup-memory-max-bytes", "9999998976", "--temporary-disk-limit-bytes", "20000000000", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources/phases.jsonl", "--max-logical-cpus", "4", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources/guard.json", "--label", "20260905T162230Z_26e9a86cd5", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260905T162230Z_26e9a86cd5-qqtmxl8h/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--", "/usr/bin/taskset", "--cpu-list", "4,5,6,7", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py", "--limit-kib", "9765625", "--limit-mode", "tree", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/guard.json", "--label", "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--phase", "diagnostic", "--scratch-path", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--temporary-disk-limit-bytes", "20000000000", "--", "/usr/bin/python3.14", "tools/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.py", "--experiment", "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json", "--output", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.json"], "job": {"candidate_id": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/20260905T150413404305Z_fd8da588b989.json", "sha256": "sha256:39128306aaa628ac3892a66253d6ea8bf47e9d9fca6554ddb79e7a5ab6a720b8"}, "candidate_tree_sha256": "sha256:fd8da588b989725deb0b0c77898a6054f75625c824928f2882874e13f31b84f0", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [4, 5, 6, 7], "memory_bytes": 9999998976, "scratch_bytes": 20000000000, "swap_bytes": 0, "wall_seconds": 600}, "cgroup_inode": 222397, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T162230Z_26e9a86cd5", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 222397, "kernel_cpuset": false, "memory_bytes": 9999998976, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T162230Z_26e9a86cd5"}], "guard_command_sha256": "9839e2efd5d6e74cf8ea504690b16e5eeff928e81e1509e1a1e598fd26167575", "guard_path": "run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json", "sha256": "sha256:410afe2b6e6ebd7d93001b7548f696a900fba75030db0a1f60190459102c04ce"}, "gate_size": 65536, "job_id": "20260905T162230Z_26e9a86cd5", "priority": 1500, "proposal": {"path": "operations/adaptive/proposals/developed/000_nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json", "sha256": "sha256:5d669868a2ef8e79cb3dc945d50ed853bb1aa71eab3acfa45fa5794244355a2f"}, "proposal_id": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "purpose": "oracle", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [4, 5, 6, 7], "memory_bytes": 9999998976, "scratch_bytes": 20000000000, "swap_bytes": 0, "wall_seconds": 600}, "runner": {"path": "tools/run_with_rss_guard.py", "sha256": "sha256:005d55cdec6f3fabd5caa4acb78e75e0d6a07340e45e0e9577c5c7d8ea13d00e"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1"], "started_at": "2026-09-05T16:47:34+00:00", "state": "running", "submitted_at": "2026-09-05T16:22:30+00:00", "tags": ["block-zero", "midas", "pre-forward", "zero-credit"], "timing_authority": "diagnostic", "tool": "tools/run_with_rss_guard.py", "tool_args": ["--limit-kib", "9765625", "--limit-mode", "tree", "--official-decimal-limit-kib", "9765625", "--guard-json", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/guard.json", "--label", "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--phase", "diagnostic", "--scratch-path", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "--temporary-disk-limit-bytes", "20000000000", "--", "/usr/bin/python3.14", "tools/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.py", "--experiment", "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json", "--output", "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.json"]}}
+{"artifacts": [{"id": "fixture-manifest", "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/fixture-manifest.json", "sha256": "sha256:a38950528c7ec7731b6daa525b822b92c951d1b884eaa7660051137a9e9716b9"}, {"id": "execution", "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/execution.json", "sha256": "sha256:a893e77ce497fc124b119b42c1d44cf867d6326f8dc2235b34ae11c1a46da4cb"}, {"id": "source-package", "path": "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/incremental_source.tar.xz", "sha256": "sha256:3112dfead10d8300219222fa6976cd23ac801457962131a51459c700eef2db67"}], "candidateId": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "candidateRevision": {"candidateId": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1", "candidateTreeSha256": "sha256:fd8da588b989725deb0b0c77898a6054f75625c824928f2882874e13f31b84f0", "receipt": {"path": "operations/adaptive/candidate-revisions/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/20260905T150413404305Z_fd8da588b989.json", "sha256": "sha256:39128306aaa628ac3892a66253d6ea8bf47e9d9fca6554ddb79e7a5ab6a720b8"}}, "decision": "authorize-integrated-replay", "evidenceClass": "oracle", "experiment": {"path": "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json", "sha256": "sha256:410afe2b6e6ebd7d93001b7548f696a900fba75030db0a1f60190459102c04ce"}, "generatedUtc": "2026-09-05T16:47:44+00:00", "killPass": false, "killPredicates": [{"id": "k-evidence", "measurement": "parentPass", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "k-consumer", "measurement": "integratedRevisionBound", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "k-external", "measurement": "externalInputsBound", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "k-patch", "measurement": "capturePatchUnique", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "k-complete", "measurement": "fixtureComplete", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "k-repeat", "measurement": "fixtureRepeatByteIdentical", "observed": true, "operator": "eq", "passed": false, "threshold": false}], "measurements": {"activationTensorCount": 0, "batchZeroMappingExact": true, "capturePatchUnique": true, "externalInputsBound": true, "fixtureBytes": 2247290537, "fixtureComplete": true, "fixtureRepeatByteIdentical": true, "initialMemoryAllZero": true, "integratedRevisionBound": true, "layerPopulation": 20, "learningRateExact": true, "optimizerTensorCount": 491, "parameterTensorCount": 246, "parentPass": true, "populationSymbols": 65536, "preForwardBoundary": true, "segmentPopulation": 64, "sourceClosureBytes": 13476, "stateTensorCount": 22, "streamPopulation": 32, "streamStride": 2048, "symbolBytes": 131072, "targetBlock": 0, "trainStepBefore": 0}, "objective": {"corpusBytes": 1000000000, "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc", "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288", "objectiveId": "gamma-enwiki9-hutter-99m-v2", "objectivePath": "contracts/research/v2/objective-contract.json", "targetScoreBytes": 99000000}, "objectiveCreditBytes": 0, "promotionPass": true, "promotionPredicates": [{"id": "p-evidence", "measurement": "parentPass", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-consumer", "measurement": "integratedRevisionBound", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-external", "measurement": "externalInputsBound", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-patch", "measurement": "capturePatchUnique", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-complete", "measurement": "fixtureComplete", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-repeat", "measurement": "fixtureRepeatByteIdentical", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-parameters", "measurement": "parameterTensorCount", "observed": 246, "operator": "eq", "passed": true, "threshold": 246}, {"id": "p-optimizer", "measurement": "optimizerTensorCount", "observed": 491, "operator": "eq", "passed": true, "threshold": 491}, {"id": "p-state", "measurement": "stateTensorCount", "observed": 22, "operator": "eq", "passed": true, "threshold": 22}, {"id": "p-no-activations", "measurement": "activationTensorCount", "observed": 0, "operator": "eq", "passed": true, "threshold": 0}, {"id": "p-mapping", "measurement": "batchZeroMappingExact", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-zero-memory", "measurement": "initialMemoryAllZero", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-learning-rate", "measurement": "learningRateExact", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-pre-forward", "measurement": "preForwardBoundary", "observed": true, "operator": "eq", "passed": true, "threshold": true}, {"id": "p-symbols", "measurement": "populationSymbols", "observed": 65536, "operator": "eq", "passed": true, "threshold": 65536}, {"id": "p-symbol-bytes", "measurement": "symbolBytes", "observed": 131072, "operator": "eq", "passed": true, "threshold": 131072}, {"id": "p-streams", "measurement": "streamPopulation", "observed": 32, "operator": "eq", "passed": true, "threshold": 32}, {"id": "p-stride", "measurement": "streamStride", "observed": 2048, "operator": "eq", "passed": true, "threshold": 2048}, {"id": "p-segment", "measurement": "segmentPopulation", "observed": 64, "operator": "eq", "passed": true, "threshold": 64}, {"id": "p-layers", "measurement": "layerPopulation", "observed": 20, "operator": "eq", "passed": true, "threshold": 20}, {"id": "p-step", "measurement": "trainStepBefore", "observed": 0, "operator": "eq", "passed": true, "threshold": 0}, {"id": "p-block", "measurement": "targetBlock", "observed": 0, "operator": "eq", "passed": true, "threshold": 0}, {"id": "p-source", "measurement": "sourceClosureBytes", "observed": 13476, "operator": "lte", "passed": true, "threshold": 2000000}], "schema": "gamma.enwiki9.adaptive-experiment-result.v1"}
+{
+  "rss_guard": {
+    "schema": "gamma.enwiki9.resource-guard-receipt.v2",
+    "objective": {
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000,
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+    },
+    "label": "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+    "phase": "diagnostic",
+    "command": [
+      "/usr/bin/python3.14",
+      "tools/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.py",
+      "--experiment",
+      "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json",
+      "--output",
+      "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.json"
+    ],
+    "sample_interval_seconds": 5.0,
+    "geekbench5_single_core_score": null,
+    "wall_time_limit_seconds": null,
+    "wall_time_measurement_complete": false,
+    "wall_time_exceeded": false,
+    "limit_kib": 9765625,
+    "limit_mode": "tree",
+    "official_decimal_limit_kib": 9765625,
+    "official_decimal_over_limit_kib": 0,
+    "scratch_paths": [
+      "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1"
+    ],
+    "temporary_disk_limit_bytes": 20000000000,
+    "temporary_disk_measurement_complete": true,
+    "max_sampled_temporary_disk_bytes": 2596557539,
+    "max_logical_cpus": null,
+    "affinity_measurement_complete": true,
+    "max_sampled_allowed_cpu_count": 4,
+    "logical_cpu_guard_exceeded": false,
+    "max_sampled_tree_live_threads": 5,
+    "max_sampled_tree_runnable_threads": 1,
+    "max_sampled_single_rss_kib": 3114728,
+    "max_sampled_tree_rss_kib": 3150248,
+    "peak_sample": {
+      "processes": [
+        {
+          "pid": 3330989,
+          "rss_kib": 35520,
+          "live_threads": 1,
+          "runnable_threads": 0,
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "pid": 3331804,
+          "rss_kib": 3114728,
+          "live_threads": 4,
+          "runnable_threads": 1,
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "max_single_rss_kib": 3114728,
+      "tree_rss_kib": 3150248,
+      "tree_live_threads": 5,
+      "tree_runnable_threads": 1,
+      "allowed_cpu_union": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "peak_tree_sample": {
+      "processes": [
+        {
+          "pid": 3330989,
+          "rss_kib": 35520,
+          "live_threads": 1,
+          "runnable_threads": 0,
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "pid": 3331804,
+          "rss_kib": 3114728,
+          "live_threads": 4,
+          "runnable_threads": 1,
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "max_single_rss_kib": 3114728,
+      "tree_rss_kib": 3150248,
+      "tree_live_threads": 5,
+      "tree_runnable_threads": 1,
+      "allowed_cpu_union": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "latest_sample": {
+      "processes": [],
+      "max_single_rss_kib": 0,
+      "tree_rss_kib": 0,
+      "tree_live_threads": 0,
+      "tree_runnable_threads": 0,
+      "allowed_cpu_union": []
+    },
+    "sample_count": 3,
+    "rss_guard_exceeded": false,
+    "official_decimal_memory_exceeded": false,
+    "temporary_disk_guard_exceeded": false,
+    "returncode": 0,
+    "status": "complete",
+    "elapsed_s": 10.0051
+  }
+}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 222397,
+      "joined_before_exec": true,
+      "memory_max_bytes": 9999998976,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T162230Z_26e9a86cd5",
+      "previous_memory_max": "9999998976",
+      "requested_memory_max_bytes": 9999998976
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "4,5,6,7",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py",
+      "--limit-kib",
+      "9765625",
+      "--limit-mode",
+      "tree",
+      "--official-decimal-limit-kib",
+      "9765625",
+      "--guard-json",
+      "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/guard.json",
+      "--label",
+      "nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+      "--phase",
+      "diagnostic",
+      "--scratch-path",
+      "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+      "--temporary-disk-limit-bytes",
+      "20000000000",
+      "--",
+      "/usr/bin/python3.14",
+      "tools/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.py",
+      "--experiment",
+      "operations/adaptive/experiments/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.json",
+      "--output",
+      "results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1/decision.json"
+    ],
+    "command_sha256": "043be404a2772ef63c7597ced47e237d31344ca38bfd07f0381f79fc5423bb2a",
+    "elapsed_s": 10.6021,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260905T162230Z_26e9a86cd5",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 2300399616,
+      "elapsed_s": 10.6006,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 2247426048,
+      "scratch_file_count": 16,
+      "scratch_logical_bytes": 2247365464,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 9765624,
+    "limit_mode": "tree",
+    "max_logical_cpus": 4,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000
+    },
+    "official_decimal_limit_kib": 9765624,
+    "peak_process_vmhwm": {
+      "comm": "nncp_profile_in",
+      "observed_elapsed_s": 4.0806,
+      "pid": 3331804,
+      "start_ticks": 172299559,
+      "vmhwm_kib": 3114728
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "cgroup_current_bytes": 5546217472,
+      "elapsed_s": 4.0806,
+      "max_single_rss_kib": 3114728,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3330957,
+          "rss_kib": 31632,
+          "runnable_threads": 0,
+          "start_ticks": 172299252,
+          "vmhwm_kib": 31632
+        },
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "python3.14",
+          "live_threads": 1,
+          "pid": 3330989,
+          "rss_kib": 35520,
+          "runnable_threads": 0,
+          "start_ticks": 172299263,
+          "vmhwm_kib": 362000
+        },
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "nncp_profile_in",
+          "live_threads": 4,
+          "pid": 3331804,
+          "rss_kib": 3114728,
+          "runnable_threads": 0,
+          "start_ticks": 172299559,
+          "vmhwm_kib": 3114728
+        }
+      ],
+      "scratch_allocated_bytes": 2248589312,
+      "scratch_file_count": 18,
+      "scratch_logical_bytes": 2248519582,
+      "scratch_race_count": 0,
+      "tree_live_threads": 6,
+      "tree_rss_kib": 3181880,
+      "tree_runnable_threads": 0
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "cgroup_current_bytes": 5546217472,
+      "elapsed_s": 4.0806,
+      "max_single_rss_kib": 3114728,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3330957,
+          "rss_kib": 31632,
+          "runnable_threads": 0,
+          "start_ticks": 172299252,
+          "vmhwm_kib": 31632
+        },
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "python3.14",
+          "live_threads": 1,
+          "pid": 3330989,
+          "rss_kib": 35520,
+          "runnable_threads": 0,
+          "start_ticks": 172299263,
+          "vmhwm_kib": 362000
+        },
+        {
+          "allowed_cpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "comm": "nncp_profile_in",
+          "live_threads": 4,
+          "pid": 3331804,
+          "rss_kib": 3114728,
+          "runnable_threads": 0,
+          "start_ticks": 172299559,
+          "vmhwm_kib": 3114728
+        }
+      ],
+      "scratch_allocated_bytes": 2248589312,
+      "scratch_file_count": 18,
+      "scratch_logical_bytes": 2248519582,
+      "scratch_race_count": 0,
+      "tree_live_threads": 6,
+      "tree_rss_kib": 3181880,
+      "tree_runnable_threads": 0
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 7845318656,
+      "max_observed_process_vmhwm_kib": 3114728,
+      "max_sampled_allowed_cpu_count": 4,
+      "max_sampled_cgroup_current_bytes": 7825920000,
+      "max_sampled_scratch_allocated_bytes": 4495654912,
+      "max_sampled_scratch_logical_bytes": 4495565063,
+      "max_sampled_single_rss_kib": 3114728,
+      "max_sampled_tree_live_threads": 6,
+      "max_sampled_tree_rss_kib": 3181880,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0223,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 22,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T162230Z_26e9a86cd5.resources",
+      "/tmp/gamma-enwiki9-20260905T162230Z_26e9a86cd5-qqtmxl8h/nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0223,
+        "processes": [
+          {
+            "pid": 3330957,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1944,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 40,
+              "Private_Dirty": 1944,
+              "Private_Hugetlb": 0,
+              "Pss": 2527,
+              "Pss_Anon": 1944,
+              "Pss_Dirty": 1944,
+              "Pss_File": 583,
+              "Pss_Shmem": 0,
+              "Referenced": 7508,
+              "Rss": 7508,
+              "Shared_Clean": 5524,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299252
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 7112
+      },
+      {
+        "elapsed_s": 1.0252,
+        "processes": [
+          {
+            "pid": 3330957,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17908,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 0,
+              "Private_Dirty": 17908,
+              "Private_Hugetlb": 0,
+              "Pss": 19155,
+              "Pss_Anon": 17908,
+              "Pss_Dirty": 17908,
+              "Pss_File": 1247,
+              "Pss_Shmem": 0,
+              "Referenced": 31632,
+              "Rss": 31632,
+              "Shared_Clean": 13724,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299252
+          },
+          {
+            "pid": 3330989,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 14200,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 36,
+              "Private_Dirty": 14200,
+              "Private_Hugetlb": 0,
+              "Pss": 15300,
+              "Pss_Anon": 14200,
+              "Pss_Dirty": 14200,
+              "Pss_File": 1100,
+              "Pss_Shmem": 0,
+              "Referenced": 26664,
+              "Rss": 26664,
+              "Shared_Clean": 12428,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299263
+          },
+          {
+            "pid": 3331235,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 402800,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 496,
+              "Private_Dirty": 402900,
+              "Private_Hugetlb": 0,
+              "Pss": 403433,
+              "Pss_Anon": 402800,
+              "Pss_Dirty": 402900,
+              "Pss_File": 633,
+              "Pss_Shmem": 0,
+              "Referenced": 405744,
+              "Rss": 405744,
+              "Shared_Clean": 2348,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299344
+          }
+        ],
+        "reason": "rss_growth",
+        "tree_rss_kib": 435264
+      },
+      {
+        "elapsed_s": 1.5338,
+        "processes": [
+          {
+            "pid": 3330957,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17908,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 0,
+              "Private_Dirty": 17908,
+              "Private_Hugetlb": 0,
+              "Pss": 19155,
+              "Pss_Anon": 17908,
+              "Pss_Dirty": 17908,
+              "Pss_File": 1247,
+              "Pss_Shmem": 0,
+              "Referenced": 31632,
+              "Rss": 31632,
+              "Shared_Clean": 13724,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299252
+          },
+          {
+            "pid": 3330989,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 14200,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 36,
+              "Private_Dirty": 14200,
+              "Private_Hugetlb": 0,
+              "Pss": 15300,
+              "Pss_Anon": 14200,
+              "Pss_Dirty": 14200,
+              "Pss_File": 1100,
+              "Pss_Shmem": 0,
+              "Referenced": 26664,
+              "Rss": 26664,
+              "Shared_Clean": 12428,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299263
+          },
+          {
+            "pid": 3331235,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2974248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 496,
+              "Private_Dirty": 2974348,
+              "Private_Hugetlb": 0,
+              "Pss": 2974881,
+              "Pss_Anon": 2974248,
+              "Pss_Dirty": 2974348,
+              "Pss_File": 633,
+              "Pss_Shmem": 0,
+              "Referenced": 2977192,
+              "Rss": 2977192,
+              "Shared_Clean": 2348,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172299344
+          }
+        ],
+        "reason": "rss_growth",
+        "tree_rss_kib": 3023624
+      },
+      {
+        "elapsed_s": 10.6006,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 20000000000,
+    "wall_time_limit_seconds": null
+  }
+}
