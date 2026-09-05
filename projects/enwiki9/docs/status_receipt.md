@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-05T18:20:09+00:00`
+- Generated at UTC: `2026-09-05T19:59:51+00:00`
 
 ## Target State
 
@@ -28,7 +28,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `n/a`
-- RSS samples: `10,246`
+- RSS samples: `10,842`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `n/a`
@@ -69,12 +69,12 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Existing observer job: `20260904T134731Z_441f96254f`
 - Observer worker verified on this host: `true`
 - Adopted source identities verified on this host: `true`
-- Observer progress UTC: `2026-09-05T18:20:07+00:00`
+- Observer progress UTC: `2026-09-05T19:59:45+00:00`
 - Observer progress fresh: `true`
-- Trace bytes: `8,312,942,592` / `10,364,777,488`
-- Archive bytes: `94,576,640`
-- Observer samples: `10,246`
-- Maximum observed tree RSS bytes: `9,320,493,056`
+- Trace bytes: `8,410,693,632` / `10,364,777,488`
+- Archive bytes: `95,649,792`
+- Observer samples: `10,842`
+- Maximum observed tree RSS bytes: `9,320,497,152`
 - Continuous resource proof: `false`
 - Science accessed before terminal: `false`
 - Observer state: `observing`
@@ -143,11 +143,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `959`
-- Registered programs: `498`
-- Untracked nonignored entries: `53`
-- Modified tracked entries: `40`
-- Candidate statuses: `active=18, blocked_dependency=40, candidate=235, measured_negative=100, retired=565, track_source_before_evolution=1`
+- Program directories: `960`
+- Registered programs: `499`
+- Untracked nonignored entries: `38`
+- Modified tracked entries: `5`
+- Candidate statuses: `active=18, blocked_dependency=41, candidate=235, measured_negative=100, retired=565, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -159,9 +159,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 8,314,298,368 | `2026-09-05T18:21:31+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 94,593,024 | `2026-09-05T18:20:56+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 330,634 | `2026-09-05T18:20:49+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 8,412,135,424 | `2026-09-05T20:01:14+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 95,674,368 | `2026-09-05T20:01:11+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 332,249 | `2026-09-05T20:01:10+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-04T12:55:53+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |

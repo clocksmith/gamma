@@ -1,0 +1,8 @@
+cpp_infer/src/opt/kda.cpp: In function 'void fx2::opt::kda_layer_reset(KdaState&)':
+cpp_infer/src/opt/kda.cpp:265:49: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct fx2::opt::KdaState'; use assignment or value-initialization instead [-Wclass-memaccess]
+  265 | void kda_layer_reset(KdaState& st) { std::memset(&st, 0, sizeof(st)); }
+      |                                      ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+In file included from cpp_infer/src/opt/kda.cpp:29:
+cpp_infer/src/opt/kda.h:45:20: note: 'struct fx2::opt::KdaState' declared here
+   45 | struct alignas(64) KdaState {
+      |                    ^~~~~~~~

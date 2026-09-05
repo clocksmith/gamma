@@ -1,0 +1,360 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-fixture-diagnostic.v1",
+  "candidate_id": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "status": "passed",
+  "scope_bytes": 50051,
+  "scope": "upstream public prof_input/input; not a canonical prefix",
+  "objective_credit_bytes": 0,
+  "roundtrip_ok": true,
+  "deterministic_ok": true,
+  "mapping_gate_pass": true,
+  "complete_trained_mapping_equivalence": false,
+  "larger_gate_authorized": false,
+  "input": {
+    "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+    "bytes": 50051,
+    "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "600",
+        "/usr/bin/make",
+        "-j1",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os",
+        "tf_weights_io.o",
+        "tf_weights_io_compressed.o",
+        "tf_qmat_dense.o",
+        "tf_qmat_sparse.o",
+        "tf_attn.o",
+        "tf_kda.o",
+        "tf_glue.o",
+        "tf_arena_build.o",
+        "tf_model_opt.o"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 4.607349544065073,
+      "elapsed_cap_seconds": 600,
+      "user_cpu_seconds": 4.112753,
+      "system_cpu_seconds": 0.35964399999999996,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/usr/bin/g++",
+        "-m64",
+        "-O3",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-Wl,--gc-sections",
+        "-Icpp_infer/src",
+        "/home/x/deco/gamma/projects/enwiki9/tools/fx2_transformer_kernel_probe_v1.cpp",
+        "tf_weights_io.o",
+        "tf_weights_io_compressed.o",
+        "tf_qmat_dense.o",
+        "tf_qmat_sparse.o",
+        "tf_attn.o",
+        "tf_kda.o",
+        "tf_glue.o",
+        "tf_arena_build.o",
+        "tf_model_opt.o",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fx2_kernel_probe",
+        "-lm"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 0.30283094593323767,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 0.22550999999999988,
+      "system_cpu_seconds": 0.031133999999999995,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fx2_kernel_probe",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.probabilities.f32le"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 0.7029266180470586,
+      "elapsed_cap_seconds": 30,
+      "user_cpu_seconds": 0.6442150000000009,
+      "system_cpu_seconds": 0.04990900000000004,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "600",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 10.913300117012113,
+      "elapsed_cap_seconds": 600,
+      "user_cpu_seconds": 9.958233,
+      "system_cpu_seconds": 0.825733,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-s",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.stored"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 0.10314940800890326,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 0.005525000000000446,
+      "system_cpu_seconds": 0.0035399999999998766,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 18.229502003872767,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.846388,
+      "system_cpu_seconds": 1.685528,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-d",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.cmix",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/restored",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 17.723688079975545,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.798894,
+      "system_cpu_seconds": 1.7046259999999998,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/replay.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 17.721869961824268,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.831609999999998,
+      "system_cpu_seconds": 1.6438710000000007,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "10",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-d",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/invalid-magic.cmix",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/invalid-output",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 1,
+      "elapsed_seconds": 0.10300406394526362,
+      "elapsed_cap_seconds": 10,
+      "user_cpu_seconds": 0.0007900000000020668,
+      "system_cpu_seconds": 0.0029479999999999507,
+      "expected_returncode": 1,
+      "timing_authority": "shared-host diagnostic only"
+    }
+  ],
+  "kernel_repeat_ok": true,
+  "kernel_evidence": {
+    "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.json",
+    "bytes": 3912,
+    "sha256": "eae6f67f96ae3dc86bae22f6ce42e59c77e3bb9d3460fe74a2af9d7d99d0e575"
+  },
+  "binary": {
+    "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+    "bytes": 483848,
+    "sha256": "08b9e9cf3734ad5952b7a3a5eb403fdc1c4cbb1a853cda613392d52f0a77bea0"
+  },
+  "conservative_local_package_bytes": 9403055,
+  "archive_vocabulary_matches_public_submission": true,
+  "outputs": {
+    "archive": {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.cmix",
+      "bytes": 3223,
+      "sha256": "cc94af1a3af764b9c3906f1a30397ed987e71df19b02dca81c50b62146b27805"
+    },
+    "restored": {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/restored",
+      "bytes": 50051,
+      "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+    },
+    "replay": {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/replay.cmix",
+      "bytes": 3223,
+      "sha256": "cc94af1a3af764b9c3906f1a30397ed987e71df19b02dca81c50b62146b27805"
+    }
+  },
+  "invalid_envelope_rejected": true,
+  "package_inventory": {
+    "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/package.json",
+    "bytes": 31159,
+    "sha256": "dbcd62887205bc84ea9309d80410c429f258db48030e53cedfc45861f8368546"
+  },
+  "coded_population_bytes": 32478,
+  "framing_and_header_bytes": 46,
+  "codec_phase_costs": [
+    {
+      "phase": "encode",
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 18.229502003872767,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.846388,
+      "system_cpu_seconds": 1.685528,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "phase": "decode",
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-d",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/fixture.cmix",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/restored",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 17.723688079975545,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.798894,
+      "system_cpu_seconds": 1.7046259999999998,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    },
+    {
+      "phase": "reencode",
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/prof_input/input",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/replay.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/models/6m-q4-fp32.tfwc2"
+      ],
+      "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+      "returncode": 0,
+      "elapsed_seconds": 17.721869961824268,
+      "elapsed_cap_seconds": 120,
+      "user_cpu_seconds": 15.831609999999998,
+      "system_cpu_seconds": 1.6438710000000007,
+      "expected_returncode": 0,
+      "timing_authority": "shared-host diagnostic only"
+    }
+  ]
+}

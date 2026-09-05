@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5",
+    "600",
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+  ],
+  "cwd": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work",
+  "returncode": 0,
+  "elapsed_seconds": 10.913300117012113,
+  "elapsed_cap_seconds": 600,
+  "user_cpu_seconds": 9.958233,
+  "system_cpu_seconds": 0.825733,
+  "expected_returncode": 0,
+  "timing_authority": "shared-host diagnostic only"
+}
