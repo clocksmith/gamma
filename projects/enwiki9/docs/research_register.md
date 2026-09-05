@@ -2,6 +2,38 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-05 - Incremental open MIDAS preserves the retained reference
+
+`lib/midas_open_profile_incremental_fixture.hpp` adds a separate cached-forward
+implementation of the fixed one-layer integration fixture. The original parent
+and sealed neural kernels remain unchanged. Its translation unit includes the
+original forward source instead of linking it twice, preserving the arithmetic
+helpers. Future zero-symbol K/V placeholders and the full masked softmax row are
+retained; the reference exponential floor does not make masked weights zero.
+Every parameter update invalidates the cache and replays the causal prefix.
+
+Nine regression tests pass. On 65- and 129-byte synthetic populations, all
+P/K/F/S F32 rows, Q16 probabilities and finite archives match the reference.
+Model, optimizer, detached memory and discarded K-shadow states also match.
+Encoder/decoder checkpoints include the complete incremental cache, including
+pending predictions at every bit offset around midpoint and segment boundaries.
+Cross-decoding, deterministic repeats, partial-segment inverses and corrupted
+cache rejection pass. No corpus data or teacher state enters these tests.
+
+The paired 129-byte F diagnostic records reference encode/decode CPU of
+0.243620/0.229980 seconds versus incremental 0.034700/0.034990 seconds, with
+13,996 KiB cumulative process peak RSS. Initialization, full updates and cache
+resets are included. This is shared-host diagnostic evidence, not qualification.
+The synthetic F/S archives are 170 bytes versus P/K's 169; no gain is claimed.
+
+Evidence: `operations/evidence/20260905_midas_incremental_profile_identity_unit.json`.
+The receipt distinguishes implementation validation from budget exhaustion and
+retains exact finite bytes, source bindings and sanitizer outcomes. This adds no
+compression, package, resource-qualification or full-corpus score credit. Before
+a corpus successor, coordinate the compact-parent owner and freeze the chosen
+architecture, population, package, memory and kernel/runtime budgets. HORIZON
+and the other agent's FX2 work remain unchanged by this implementation.
+
 ## 2026-09-05 - Real open MIDAS parent passes a bounded native roundtrip
 
 `lib/midas_open_profile_fixture.hpp` connects the existing Gamma open neural
