@@ -152,6 +152,7 @@ resolves first and who wins unresolved ties; it cannot be traded or retained.
 
 ### Program markers and ${terms.systems.escalations}
 
+<!-- program-selection:start -->
 The six shared Program cards are public. At the start of each Era, each player
 sets aside the printed number of their two Program markers: zero, one, one,
 then two. Commit one available marker to select an Era-unlocked Program:
@@ -161,6 +162,7 @@ then two. Commit one available marker to select an Era-unlocked Program:
 - Each named Program is usable once per player per game.
 - At Era end, return committed markers; unused markers do not carry forward.
 - Previously unlocked unused Programs remain available later.
+<!-- program-selection:end -->
 
 **Global after movement** means the acting piece moves normally, then the
 Action resolves without a destination restriction.
@@ -246,15 +248,97 @@ surcharges, then discounts. The final cost cannot fall below zero.
 ## 4. Modular hex board
 
 The board is one jurisdiction whose districts represent physical and
-institutional dependencies rather than ordinary distance. The [**Map reference**](/docs/map-reference.html)
-is authoritative for its nineteen-tile setup, adjacency, ring pools, tile
-effects, Facility spaces, presence, and control. The shuffled map remains
-fixed for all four Eras. **◆**
+institutional dependencies rather than ordinary distance. The shuffled map
+remains fixed for all four Eras. **◆** Rival pieces coexist; there is no combat
+or player elimination.
 
-One movement step crosses one shared tile edge; an acting CEO or Team may move
-zero, one, or two steps. Every piece placed during setup begins at
-${terms.locations.frontier}. Rival pieces coexist; there is no combat or player
-elimination.
+The detailed setup, district effects, and control procedure print in the
+[**Map Reference**](/docs/map-reference.html).
+
+<!-- map:start -->
+### Build the jurisdiction
+
+Use nineteen tiles in a complete radius-two hexagon:
+
+- One ${terms.locations.frontier}
+- Three ${terms.locations.research}
+- Three ${terms.locations.cloud}
+- Two each of ${terms.locations.consumer}, ${terms.locations.media},
+  ${terms.locations.government}, and ${terms.locations.renewable}
+- One each of ${terms.locations.chip}, ${terms.locations.capital},
+  ${terms.locations.talent}, and ${terms.locations.grid}
+
+Place ${terms.locations.frontier} at the center. Six operational districts form
+the complete inner ring. Twelve public districts form the complete outer ring.
+Every outer district touches its two outer neighbors and either one or two
+inner districts according to the printed wells. One movement step crosses one
+shared tile edge; move up to ${content.gameConfig.board.geometry.movementRange} steps.
+
+Shuffle this operational ring around ${terms.locations.frontier}:
+
+- One ${terms.locations.research}
+- One ${terms.locations.cloud}
+- One ${terms.locations.chip}
+- One ${terms.locations.capital}
+- One ${terms.locations.talent}
+- The ${terms.locations.grid}
+
+Shuffle this public ring among the twelve outer positions:
+
+- Two ${terms.locations.research}
+- Two ${terms.locations.cloud}
+- Two ${terms.locations.consumer}
+- Two ${terms.locations.media}
+- Two ${terms.locations.government}
+- Two ${terms.locations.renewable}
+
+These ring pools are fixed; shuffle tiles only within their listed ring.
+All copies of one named district are mechanically identical. Names, art, and
+flavor may distinguish copies, but visit effects, production, Facility spaces,
+and contract icons must remain identical.
+
+Every piece placed on the board during setup begins at ${terms.locations.frontier}, the jurisdiction’s
+standing civic exception rather than property to be controlled. Two movement
+reaches any tile from the center; opposing outer tiles are four hexes apart.
+
+Every non-${terms.locations.frontier} hex has a visit bonus, two Facility spaces, Facility
+production, and a control value used by Headlines and Mandates. ${terms.locations.frontier} has
+no Facility spaces and is never controlled. It is not a category for the hex-category
+Mandate. Once pieces leave it, positioning, Teams, local Power, and negotiated adjacency
+matter.
+
+### Presence and control
+
+- CEO, Team, or Facility: one presence
+
+The player with the most presence controls each non-${terms.locations.frontier} hex. Ties mean
+nobody controls it. ${terms.locations.frontier} has no controller regardless of presence.
+
+### District effects
+
+| Location | Visit bonus | Facility production | Contract icon |
+| --- | --- | --- | --- |
+| ${content.gameConfig.board.tiles.0.name} | ${content.gameConfig.board.tiles.0.visit} | ${content.gameConfig.board.tiles.0.production} | None |
+| ${content.gameConfig.board.tiles.1.name} | ${content.gameConfig.board.tiles.1.visit} | ${content.gameConfig.board.tiles.1.production} | ${terms.resources.compute} |
+| ${content.gameConfig.board.tiles.2.name} | ${content.gameConfig.board.tiles.2.visit} | ${content.gameConfig.board.tiles.2.production} | ${terms.resources.compute} |
+| ${content.gameConfig.board.tiles.3.name} | ${content.gameConfig.board.tiles.3.visit} | ${content.gameConfig.board.tiles.3.production} | ${terms.resources.runway} |
+| ${content.gameConfig.board.tiles.4.name} | ${content.gameConfig.board.tiles.4.visit} | ${content.gameConfig.board.tiles.4.production} | ${terms.resources.compute} |
+| ${content.gameConfig.board.tiles.5.name} | ${content.gameConfig.board.tiles.5.visit} | ${content.gameConfig.board.tiles.5.production} | ${terms.resources.runway} |
+| ${content.gameConfig.board.tiles.6.name} | ${content.gameConfig.board.tiles.6.visit} | ${content.gameConfig.board.tiles.6.production} | ${terms.resources.runway} |
+| ${content.gameConfig.board.tiles.7.name} | ${content.gameConfig.board.tiles.7.visit} | ${content.gameConfig.board.tiles.7.production} | ${terms.resources.runway} |
+| ${content.gameConfig.board.tiles.8.name} | ${content.gameConfig.board.tiles.8.visit} | ${content.gameConfig.board.tiles.8.production} | ${terms.resources.runway} |
+| ${content.gameConfig.board.tiles.9.name} | ${content.gameConfig.board.tiles.9.visit} | ${content.gameConfig.board.tiles.9.production} | ${terms.resources.compute} |
+| ${content.gameConfig.board.tiles.10.name} | ${content.gameConfig.board.tiles.10.visit} | ${content.gameConfig.board.tiles.10.production} | ${terms.resources.runway} |
+
+Resolve ${terms.locations.frontier}’s optional ${terms.resources.runway} after the Action, once per acting player
+who ended movement there. It does not modify the Action or create production
+or ${terms.playerTracks.mandate}.
+
+The two Energy-tile visit boxes are the complete ordinary Generator contracts.
+No separate Power Source reference cards are used. Each player may construct
+only one ordinary Generator; the full Fusion contract is printed on its Era IV
+Program card.
+<!-- map:end -->
 
 ### ${terms.infrastructure.power} connections ◆
 
@@ -647,6 +731,7 @@ remaining at game end are unresolved Systemic Risk.
 
 ### F. Score the ${terms.playerTracks.mandate}
 
+<!-- mandate-scoring:start -->
 Each Era ${terms.playerTracks.mandate} has a minimum qualification. If nobody qualifies, nobody
 scores it. Otherwise the qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying
 leaders score one ${terms.playerTracks.mandate} each.
@@ -657,6 +742,8 @@ of the table’s public history. The ledger is a counting aid; clear
 it when the next Mandate is revealed.
 
 The revealed Mandate card is the exact qualification and scoring authority.
+<!-- mandate-scoring:end -->
+
 ## 7. Core Actions
 
 ### ${terms.actions.fund}
@@ -794,6 +881,7 @@ The ${terms.actions.influence} Action creates no separate presence piece.
 
 ## 8. Printed ${terms.infrastructure.power} contracts
 
+<!-- power-contracts:start -->
 The two ordinary contracts are printed at their point of use. The
 ${terms.locations.grid} tile always constructs
 ${terms.technology.emergencyInfrastructure}; the ${terms.locations.renewable}
@@ -801,6 +889,7 @@ tile always constructs ${terms.technology.cleanInfrastructure}. Fusion's full
 contract is printed on its Era IV Program card. No separate Power Source
 cards are used. Each player has one ordinary Generator, and each Energy hex
 still has three shared slots.
+<!-- power-contracts:end -->
 
 Every connected ordinary Generator operates automatically during Production.
 
@@ -825,12 +914,14 @@ The Era IV ${terms.systems.escalation} described above.
 
 ## 9. Printed card authorities
 
+<!-- card-authority:start -->
 Faction boards, Governance Board Era panels, map-tile Power contracts, Core
 Action cards, shared Program cards, Mandate cards, Training cards, player aids, and
 Headline cards are rules components. The [**Card and Board Reference**](/docs/card-reference.html)
 projects every authored face in one document; resolve that text or the matching
 physical surface. Printed text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
+<!-- card-authority:end -->
 
 All Factions and CEOs are fictional and imply no real-world claim or
 endorsement. Every Faction has one persistent institutional identity and one
@@ -853,12 +944,216 @@ When an effect immediately resolves one Facility's printed production, resolve
 only that Facility. Do not run a second Production calculation, reopen Power
 trading, or update unrelated Facilities.
 
+<!-- era-panels:start -->
+These four panels are printed on the Governance Board. Move the Current Era
+marker between them; no separate Era cards are used. The board prints the
+rules and unlock text. The longer setting text is reproduced here and in the
+World and Institutions companion.
+<!-- era-panels:end -->
+
+<!-- player-aids:start -->
+Each player receives one foldout containing the following four panels. Six
+identical foldouts replace twenty-four separate reference cards.
+<!-- player-aids:end -->
+
+<!-- headline-selection:start -->
+Default Game uses cards without an **Advanced Play** badge. Resolve the listed procedure and rules text.
+<!-- headline-selection:end -->
+
 ## 10. Map and component reference
 
-Use [**Map reference**](/docs/map-reference.html) for setup, adjacency, location effects, presence, and
-control. Use [**Component reference**](/docs/component-reference.html) for deck contracts, component limits, and
-defined markers. Use [**Card and Board Reference**](/docs/card-reference.html) for every authored face. Those references
-are part of the Default Game, not optional background.
+Use the [**Component Reference**](/docs/component-reference.html) for the
+supported inventory, deck contracts, and component states. The
+[**Card and Board Reference**](/docs/card-reference.html) prints exact effects
+from component records. Keep these references beside the Core Rules during play.
+
+<!-- components:start -->
+<!-- inventory:start -->
+Default Game components stay in the main insert; Advanced-only pieces stay
+in one sealed module.
+
+### Shared Governance Board
+
+The box includes one rigid folding Governance Board. It is the public table
+organizer and modular-map frame, not a fixed printed map.
+
+It provides:
+
+- one center well, six inner-ring wells, and twelve outer-ring wells for the
+  nineteen district tiles;
+- four printed Era panels, Headline wells, Mandate wells, a Current Era path,
+  and twelve Future Timeline positions;
+- a shared Mandate track, Initiative position, and writable Current Mandate
+  ledger with one row per faction;
+- Setup and final Collective Trust, unresolved Systemic Risk, Dossier result,
+  winner, and World Ending fields;
+- six shared Program-card positions;
+- six numbered Joint Venture pair bays, six numbered Mega-Cluster pair bays,
+  and one Fusion position; and
+- staging for the Audit bag, Scrutiny, Systemic Risk, Power cubes, Temporary
+  Compute, and unused contract pairs.
+
+The Grid and Renewable tiles print ordinary Power contracts. Fusion's contract
+is printed on its shared Program card. Tile wells retain pieces but create no
+extra rules state.
+
+### One prepacked faction tray per player
+
+Each of the six trays contains:
+
+- 1 faction board with six captive sliders: Runway, Compute, Capability,
+  Customers, Trust, and Research Protection
+- ${content.gameConfig.playerSupply.ceos} CEO
+- ${content.gameConfig.playerSupply.teams} Teams
+- ${content.gameConfig.playerSupply.facilities} Facilities, numbered 1–${content.gameConfig.playerSupply.facilities}
+- ${content.gameConfig.playerSupply.generators} Generator
+- ${content.gameConfig.playerSupply.startingGridIdentifiers} integrated starting-grid identifier on Facility 1; Facilities are
+  constructed in number order
+- ${content.gameConfig.playerSupply.scrutinyCubes} ${terms.playerTracks.scrutiny} cubes
+- 1 Mandate marker
+- ${content.gameConfig.playerSupply.programMarkers} Program markers
+- ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
+- ${content.gameConfig.playerSupply.agiDossierCards} Era-labelled ${terms.systems.agi} Dossier cards with symmetrical backs and Commit / Hedge
+  orientations
+- 1 four-panel foldout player aid
+
+There is no private Program hand, Escalation slider, Network slider, Safety
+currency, personal score sheet, Grid-Ready piece, Power Source selector,
+Influence cube, Prediction Bag token, AGI chart, or AGI die.
+
+Generators do not count against the Facility limit.
+
+### Default Game shared components
+
+- ${content.gameConfig.sharedSupply.governanceBoards} Governance Board
+- ${content.gameConfig.board.selectedTileCount} district tiles: Frontier, six operational, and twelve public
+- ${content.gameConfig.sharedSupply.sharedProgramCards} shared Program cards
+- ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era marker
+- ${content.gameConfig.sharedSupply.sharedDryEraseMarkers} shared fine-tip dry-erase marker
+- 16 Default-eligible Headline cards; reveal 12 per game
+- 12 Mandate cards; reveal 4 per game
+- 40 Training cards
+- ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture pairs
+- ${content.gameConfig.sharedSupply.megaClusterPairs} matched Mega-Cluster pairs
+- 1 Fusion Demonstrator marker
+- 18 Systemic Risk pieces, tactually identical to Scrutiny while concealed
+- 1 opaque Audit bag
+- 1 Initiative marker
+- ${content.gameConfig.sharedSupply.powerAllocationMarkers} silver Power cubes
+- ${content.gameConfig.sharedSupply.temporaryComputeTokens} distinct Temporary Compute tokens for Allocation Window
+
+The six faction trays supply six Mandate markers, twelve Program markers, and
+six player aids.
+
+Fusion is a single shared project; its dedicated marker leaves the supply once
+constructed. Unused contract tokens cannot be reserved; create a Joint Venture
+or Mega-Cluster only while a matched pair is available.
+
+### Advanced module
+
+Advanced Play uses every Default component and adds:
+
+- 8 Advanced-badged Headline cards, distributed `1 / 2 / 3 / 2` across Eras
+  I–IV
+- 12 Link tokens, two per faction
+- 6 four-way Realignment ballot cards, one per faction
+- 1 ordinary six-sided Volatility die
+
+Each square ballot has four oriented edges: Consolidate Core, Expand
+Periphery, Counter-Cycle, and Pass. No component tracks Network capacity; the
+board position of Facilities, Generators, and Links determines connectivity.
+
+### Setup packaging
+
+The insert provides six labelled faction trays, four labelled Era packets, one
+shared Program well, one Training well, one contract/power well, and the sealed
+Advanced module. Era packets contain `5 / 4 / 3 / 4` Default Headlines plus
+three Mandates each. The Advanced module holds its eight badged Headlines
+sorted `1 / 2 / 3 / 2`.
+
+### Exact printed-paper count
+
+Default Game contains 134 standard cards plus 6 foldout player aids:
+
+- 36 Core Actions
+- 6 shared Programs
+- 16 Headlines
+- 12 Mandates
+- 40 Training cards
+- 24 AGI Dossier cards
+- 6 foldout player aids
+
+Advanced Play adds 8 Headlines and 6 ballots, for 148 standard cards plus 6
+foldouts. Printed Era panels and Power contracts are part of the Governance
+Board, tiles, and Program cards.
+
+### Excluded deferred content
+
+The supported box does not require Tactics, Secret Objectives, Specialists, or
+Patrons.
+
+### Production form
+
+Power cubes remain on powered Facilities and satisfied Mega-Cluster demand
+until the next Allocate step. A built Facility without a cube is offline.
+Board dimensions, fold pattern, material, writable finish, and retention
+tolerances remain manufacturing decisions; the zones and quantities above are
+mechanical requirements.
+<!-- inventory:end -->
+
+### Deck contracts
+
+#### Training deck: 40 cards
+
+- Four copies of each of seven domains: 28
+- Four Curated Corpus
+- Four Benchmark Leak
+- Four Human Evaluation
+
+Discard every revealed card after a run. If the deck empties, resolve the
+current card, shuffle the discard, and continue.
+
+#### Headline decks
+
+In Default Game, each Era deck contains every card for that Era without an
+**Advanced Play** badge. Reveal three each Era. Leave every resolved card face
+up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
+
+#### Shared Program display
+
+Place all six Program cards face up. They are public rules surfaces, not player
+hands. Each player tracks use with two faction-coloured Program markers. A
+marker on a Program means that player has used that named Program this game.
+
+#### Deferred Tactic deck: 36 cards
+
+Tactics are absent from the baseline game and evidence; see **Optional Tactic
+Rules** for their contracts.
+
+### Defined markers and effects
+
+- **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your
+  cubes from the Audit bag to your supply. If fewer are present, remove as many
+  as possible.
+- **Research Protection:** refresh to one at Era start; Orisonix refreshes to
+  two. Spend one when a duplicate appears to discard it and bank the run. It is
+  not a tradeable resource.
+- **Latest Production snapshot:** during Allocate, remove the prior snapshot,
+  then place one Power cube on each powered Facility and one per satisfied unit
+  of Mega-Cluster demand. Leave every cube in place until the next Allocate.
+  Built Facilities without cubes are offline. This visible snapshot governs
+  Mandates, the Dossier, powered-Facility Headlines, and final penalties.
+- **Current Mandate ledger:** after revealing the Era Mandate, write its
+  criterion and minimum. Use one public row per faction to retain only the
+  value that card asks the table to count. Reset this-Era values; evaluate
+  current-state criteria when scored.
+- **Dossier orientation:** place the current Era's Dossier face down with its
+  arrow toward the table center for Commit or toward its owner for Hedge. Never
+  inspect a filed card before the Era IV reveal.
+- **Offline recovery:** reassess Power and, in Advanced Play, Network
+  connectivity every Production. Facilities never flip.
+<!-- components:end -->
+
 ## 11. Final scoring
 
 All earned ${terms.playerTracks.mandate} is already on the public track. Do not score it again.

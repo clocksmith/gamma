@@ -1,16 +1,10 @@
 # ${content.worldCopy.title} — Card and Board Reference
 
-This generated reading copy projects every authored card, board panel, tile
-contract, and foldout-aid panel needed at the table. The matching physical
-surface and generated runtime data remain authoritative if a print mismatch is
-found.
+${excerpts.rules.card-authority}
 
 ## Governance Board Era panels
 
-These four panels are printed on the Governance Board. Move the Current Era
-marker between them; no separate Era cards are used. The board prints the
-rules and unlock text. The longer setting text is reproduced here and in the
-World and Institutions companion.
+${excerpts.rules.era-panels}
 
 ### ${content.referenceCards.byId.era_demo.name}
 
@@ -54,12 +48,11 @@ ${content.referenceCards.byId.era_claim.loreText}
 
 ## Four-panel player aid
 
-Each player receives one foldout containing the following four panels. Six
-identical foldouts replace twenty-four separate reference cards.
+${excerpts.rules.player-aids}
 
 ### ${content.referenceCards.playerReferences.0.name}
 
-**Front**
+**Front:**
 
 - ${content.referenceCards.playerReferences.0.frontText.0}
 - ${content.referenceCards.playerReferences.0.frontText.1}
@@ -68,7 +61,7 @@ identical foldouts replace twenty-four separate reference cards.
 - ${content.referenceCards.playerReferences.0.frontText.4}
 - ${content.referenceCards.playerReferences.0.frontText.5}
 
-**Back**
+**Back:**
 
 - ${content.referenceCards.playerReferences.0.backText.0}
 - ${content.referenceCards.playerReferences.0.backText.1}
@@ -79,7 +72,7 @@ identical foldouts replace twenty-four separate reference cards.
 
 ### ${content.referenceCards.playerReferences.1.name}
 
-**Front**
+**Front:**
 
 - ${content.referenceCards.playerReferences.1.frontText.0}
 - ${content.referenceCards.playerReferences.1.frontText.1}
@@ -87,7 +80,7 @@ identical foldouts replace twenty-four separate reference cards.
 - ${content.referenceCards.playerReferences.1.frontText.3}
 - ${content.referenceCards.playerReferences.1.frontText.4}
 
-**Back**
+**Back:**
 
 - ${content.referenceCards.playerReferences.1.backText.0}
 - ${content.referenceCards.playerReferences.1.backText.1}
@@ -96,7 +89,7 @@ identical foldouts replace twenty-four separate reference cards.
 
 ### ${content.referenceCards.playerReferences.2.name}
 
-**Front**
+**Front:**
 
 - ${content.referenceCards.playerReferences.2.frontText.0}
 - ${content.referenceCards.playerReferences.2.frontText.1}
@@ -105,7 +98,7 @@ identical foldouts replace twenty-four separate reference cards.
 - ${content.referenceCards.playerReferences.2.frontText.4}
 - ${content.referenceCards.playerReferences.2.frontText.5}
 
-**Back**
+**Back:**
 
 - ${content.referenceCards.playerReferences.2.backText.0}
 - ${content.referenceCards.playerReferences.2.backText.1}
@@ -115,14 +108,14 @@ identical foldouts replace twenty-four separate reference cards.
 
 ### ${content.referenceCards.playerReferences.3.name}
 
-**Front**
+**Front:**
 
 - ${content.referenceCards.playerReferences.3.frontText.0}
 - ${content.referenceCards.playerReferences.3.frontText.1}
 - ${content.referenceCards.playerReferences.3.frontText.2}
 - ${content.referenceCards.playerReferences.3.frontText.3}
 
-**Back**
+**Back:**
 
 - ${content.referenceCards.playerReferences.3.backText.0}
 - ${content.referenceCards.playerReferences.3.backText.1}
@@ -133,23 +126,23 @@ identical foldouts replace twenty-four separate reference cards.
 
 ## Faction boards
 
-Each board's starts, starting public Mandate, and abilities are printed below.
+
 
 ### ${content.factions.byId.coalition_lab.name}
 
 **CEO:** ${content.factions.byId.coalition_lab.chiefExecutive}
 
-**Starts:** ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.coalition_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.coalition_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.coalition_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.coalition_lab.starts.researchProtection} Research Protection; ${content.factions.byId.coalition_lab.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.coalition_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.coalition_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.coalition_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.coalition_lab.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.coalition_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.coalition_lab.abilities.0.name} — ${content.factions.byId.coalition_lab.abilities.0.displayName}:** ${content.factions.byId.coalition_lab.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timingLabel}.
 
 _${content.factions.byId.coalition_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.coalition_lab.abilities.1.name} — ${content.factions.byId.coalition_lab.abilities.1.displayName}:** ${content.factions.byId.coalition_lab.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timingLabel}.
 
 _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
@@ -157,19 +150,19 @@ _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.platform_empire.chiefExecutive}
 
-**Starts:** ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.platform_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.platform_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.platform_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.platform_empire.starts.researchProtection} Research Protection; ${content.factions.byId.platform_empire.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.platform_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.platform_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.platform_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.platform_empire.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.platform_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
-**Platform sequence:** begins at ${content.factions.byId.platform_empire.starts.customerOrdinal} ${terms.playerTracks.customer}; its next ${terms.actions.deploy} needs ${content.factions.byId.platform_empire.starts.nextCustomerCapability} ${terms.playerTracks.capability}.
+**Customer ordinal:** ${content.factions.byId.platform_empire.starts.customerOrdinal} ${terms.playerTracks.customer}; **Next Deploy Capability:** ${content.factions.byId.platform_empire.starts.nextCustomerCapability} ${terms.playerTracks.capability}.
 
 **${content.factions.byId.platform_empire.abilities.0.name} — ${content.factions.byId.platform_empire.abilities.0.displayName}:** ${content.factions.byId.platform_empire.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timingLabel}.
 
 _${content.factions.byId.platform_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.platform_empire.abilities.1.name} — ${content.factions.byId.platform_empire.abilities.1.displayName}:** ${content.factions.byId.platform_empire.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timingLabel}.
 
 _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
@@ -177,19 +170,19 @@ _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.imperial_research_lab.chiefExecutive}
 
-**Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.imperial_research_lab.starts.researchProtection} Research Protection; ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.imperial_research_lab.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.imperial_research_lab.scoringRule.name}:** ${content.factions.byId.imperial_research_lab.scoringRule.text}
 
 **${content.factions.byId.imperial_research_lab.abilities.0.name} — ${content.factions.byId.imperial_research_lab.abilities.0.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timingLabel}.
 
 _${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
 
 **${content.factions.byId.imperial_research_lab.abilities.1.name} — ${content.factions.byId.imperial_research_lab.abilities.1.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timingLabel}.
 
 _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
@@ -197,17 +190,17 @@ _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.vertical_empire.chiefExecutive}
 
-**Starts:** ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.vertical_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.vertical_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.vertical_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.vertical_empire.starts.researchProtection} Research Protection; ${content.factions.byId.vertical_empire.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.vertical_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.vertical_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.vertical_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.vertical_empire.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.vertical_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.vertical_empire.abilities.0.name} — ${content.factions.byId.vertical_empire.abilities.0.displayName}:** ${content.factions.byId.vertical_empire.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timingLabel}.
 
 _${content.factions.byId.vertical_empire.abilities.0.flavorText}_
 
 **${content.factions.byId.vertical_empire.abilities.1.name} — ${content.factions.byId.vertical_empire.abilities.1.displayName}:** ${content.factions.byId.vertical_empire.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timingLabel}.
 
 _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
@@ -215,17 +208,17 @@ _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.safety_laboratory.chiefExecutive}
 
-**Starts:** ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${content.factions.byId.safety_laboratory.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.safety_laboratory.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.safety_laboratory.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.safety_laboratory.starts.researchProtection} Research Protection; ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${content.factions.byId.safety_laboratory.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.safety_laboratory.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.safety_laboratory.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.safety_laboratory.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.safety_laboratory.abilities.0.name} — ${content.factions.byId.safety_laboratory.abilities.0.displayName}:** ${content.factions.byId.safety_laboratory.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timingLabel}.
 
 _${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
 
 **${content.factions.byId.safety_laboratory.abilities.1.name} — ${content.factions.byId.safety_laboratory.abilities.1.displayName}:** ${content.factions.byId.safety_laboratory.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timingLabel}.
 
 _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
@@ -233,23 +226,23 @@ _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.foundry.chiefExecutive}
 
-**Starts:** ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway}, ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, ${content.factions.byId.foundry.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.foundry.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.foundry.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.foundry.starts.researchProtection} Research Protection; ${content.factions.byId.foundry.starts.startingPublicMandate} starting public ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway}, ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, ${content.factions.byId.foundry.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.foundry.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.foundry.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.foundry.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.foundry.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.foundry.abilities.0.name} — ${content.factions.byId.foundry.abilities.0.displayName}:** ${content.factions.byId.foundry.abilities.0.text}
 
-**Unlock:** Era ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timingLabel}.
+**Unlock Era:** ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timingLabel}.
 
 _${content.factions.byId.foundry.abilities.0.flavorText}_
 
 **${content.factions.byId.foundry.abilities.1.name} — ${content.factions.byId.foundry.abilities.1.displayName}:** ${content.factions.byId.foundry.abilities.1.text}
 
-**Unlock:** Era ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timingLabel}.
+**Unlock Era:** ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timingLabel}.
 
 _${content.factions.byId.foundry.abilities.1.flavorText}_
 
 ## Core Action cards
 
-Use Default Rules §7 for full resolution. These are the printed action summaries.
+
 
 ### ${content.gameConfig.actions.0.name}
 
@@ -289,11 +282,11 @@ _${content.gameConfig.actions.5.flavorText}_
 
 ## Shared Program cards
 
-Commit one of this Era's Program markers to select an unlocked shared card. Each named Program is once per player per game.
+${excerpts.rules.program-selection}
 
 ### ${content.escalations.byId.mega_cluster.name} — ${content.escalations.byId.mega_cluster.displayName}
 
-**Unlock:** Era ${content.escalations.byId.mega_cluster.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.mega_cluster.unlockedRound} · **Timing:** ${content.escalations.byId.mega_cluster.timing|label:terms.programTimings}
 
 ${content.escalations.byId.mega_cluster.text}
 
@@ -301,7 +294,7 @@ _${content.escalations.byId.mega_cluster.flavorText}_
 
 ### ${content.escalations.byId.reorganization.name} — ${content.escalations.byId.reorganization.displayName}
 
-**Unlock:** Era ${content.escalations.byId.reorganization.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.reorganization.unlockedRound} · **Timing:** ${content.escalations.byId.reorganization.timing|label:terms.programTimings}
 
 ${content.escalations.byId.reorganization.text}
 
@@ -309,7 +302,7 @@ _${content.escalations.byId.reorganization.flavorText}_
 
 ### ${content.escalations.byId.open_weights.name} — ${content.escalations.byId.open_weights.displayName}
 
-**Unlock:** Era ${content.escalations.byId.open_weights.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.open_weights.unlockedRound} · **Timing:** ${content.escalations.byId.open_weights.timing|label:terms.programTimings}
 
 ${content.escalations.byId.open_weights.text}
 
@@ -317,7 +310,7 @@ _${content.escalations.byId.open_weights.flavorText}_
 
 ### ${content.escalations.byId.narrative_capture.name} — ${content.escalations.byId.narrative_capture.displayName}
 
-**Unlock:** Era ${content.escalations.byId.narrative_capture.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.narrative_capture.unlockedRound} · **Timing:** ${content.escalations.byId.narrative_capture.timing|label:terms.programTimings}
 
 ${content.escalations.byId.narrative_capture.text}
 
@@ -325,7 +318,7 @@ _${content.escalations.byId.narrative_capture.flavorText}_
 
 ### ${content.escalations.byId.agent_swarm.name} — ${content.escalations.byId.agent_swarm.displayName}
 
-**Unlock:** Era ${content.escalations.byId.agent_swarm.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.agent_swarm.unlockedRound} · **Timing:** ${content.escalations.byId.agent_swarm.timing|label:terms.programTimings}
 
 ${content.escalations.byId.agent_swarm.text}
 
@@ -333,7 +326,7 @@ _${content.escalations.byId.agent_swarm.flavorText}_
 
 ### ${content.escalations.byId.fusion_demonstrator.name} — ${content.escalations.byId.fusion_demonstrator.displayName}
 
-**Unlock:** Era ${content.escalations.byId.fusion_demonstrator.unlockedRound} · **Timing:** during your Action resolution
+**Unlock Era:** ${content.escalations.byId.fusion_demonstrator.unlockedRound} · **Timing:** ${content.escalations.byId.fusion_demonstrator.timing|label:terms.programTimings}
 
 ${content.escalations.byId.fusion_demonstrator.text}
 
@@ -341,13 +334,13 @@ _${content.escalations.byId.fusion_demonstrator.flavorText}_
 
 ## Headline cards
 
-Default Game uses cards without an **Advanced Play** badge. Resolve the listed procedure and rules text.
+${excerpts.rules.headline-selection}
 
 ### ${content.headlines.byId.ten_dollar_intelligence.name}
 
 **${content.headlines.byId.ten_dollar_intelligence.resolutionType} · ${content.headlines.byId.ten_dollar_intelligence.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.ten_dollar_intelligence.duration|label:terms.durations}
 
 ${content.headlines.byId.ten_dollar_intelligence.newswire}
 
@@ -359,7 +352,7 @@ ${content.headlines.byId.ten_dollar_intelligence.newswire}
 
 **${content.headlines.byId.employee_free_unicorn.resolutionType} · ${content.headlines.byId.employee_free_unicorn.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.employee_free_unicorn.duration|label:terms.durations}
 
 ${content.headlines.byId.employee_free_unicorn.newswire}
 
@@ -371,7 +364,7 @@ ${content.headlines.byId.employee_free_unicorn.newswire}
 
 **${content.headlines.byId.synthetic_celebrity.resolutionType} · ${content.headlines.byId.synthetic_celebrity.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.synthetic_celebrity.duration|label:terms.durations}
 
 ${content.headlines.byId.synthetic_celebrity.newswire}
 
@@ -383,7 +376,7 @@ ${content.headlines.byId.synthetic_celebrity.newswire}
 
 **${content.headlines.byId.open_weights_drop.resolutionType} · ${content.headlines.byId.open_weights_drop.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.open_weights_drop.duration|label:terms.durations}
 
 ${content.headlines.byId.open_weights_drop.newswire}
 
@@ -395,7 +388,7 @@ ${content.headlines.byId.open_weights_drop.newswire}
 
 **${content.headlines.byId.talent_gold_rush.resolutionType} · ${content.headlines.byId.talent_gold_rush.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.talent_gold_rush.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.talent_gold_rush.profileText}
 
@@ -409,7 +402,7 @@ ${content.headlines.byId.talent_gold_rush.newswire}
 
 **${content.headlines.byId.professional_exam_sweep.resolutionType} · ${content.headlines.byId.professional_exam_sweep.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.professional_exam_sweep.duration|label:terms.durations}
 
 ${content.headlines.byId.professional_exam_sweep.newswire}
 
@@ -421,7 +414,7 @@ ${content.headlines.byId.professional_exam_sweep.newswire}
 
 **${content.headlines.byId.boardroom_coup.resolutionType} · ${content.headlines.byId.boardroom_coup.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.boardroom_coup.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.boardroom_coup.profileText}
 
@@ -435,7 +428,7 @@ ${content.headlines.byId.boardroom_coup.newswire}
 
 **${content.headlines.byId.data_center_buys_county.resolutionType} · ${content.headlines.byId.data_center_buys_county.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.data_center_buys_county.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.data_center_buys_county.profileText}
 
@@ -449,7 +442,7 @@ ${content.headlines.byId.data_center_buys_county.newswire}
 
 **${content.headlines.byId.humanoid_factory_gate.resolutionType} · ${content.headlines.byId.humanoid_factory_gate.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.humanoid_factory_gate.duration|label:terms.durations}
 
 ${content.headlines.byId.humanoid_factory_gate.newswire}
 
@@ -461,7 +454,7 @@ ${content.headlines.byId.humanoid_factory_gate.newswire}
 
 **${content.headlines.byId.reactor_restart_one_model.resolutionType} · ${content.headlines.byId.reactor_restart_one_model.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.reactor_restart_one_model.duration|label:terms.durations}
 
 ${content.headlines.byId.reactor_restart_one_model.newswire}
 
@@ -473,7 +466,7 @@ ${content.headlines.byId.reactor_restart_one_model.newswire}
 
 **${content.headlines.byId.export_controls.resolutionType} · ${content.headlines.byId.export_controls.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.export_controls.duration|label:terms.durations}
 
 ${content.headlines.byId.export_controls.newswire}
 
@@ -485,7 +478,7 @@ ${content.headlines.byId.export_controls.newswire}
 
 **${content.headlines.byId.emergency_power_authority.resolutionType} · ${content.headlines.byId.emergency_power_authority.strapline}**
 
-**Duration:** This Era's Production
+**Duration:** ${content.headlines.byId.emergency_power_authority.duration|label:terms.durations}
 
 ${content.headlines.byId.emergency_power_authority.newswire}
 
@@ -497,7 +490,7 @@ ${content.headlines.byId.emergency_power_authority.newswire}
 
 **${content.headlines.byId.ai_written_law.resolutionType} · ${content.headlines.byId.ai_written_law.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.ai_written_law.duration|label:terms.durations}
 
 ${content.headlines.byId.ai_written_law.newswire}
 
@@ -509,7 +502,7 @@ ${content.headlines.byId.ai_written_law.newswire}
 
 **${content.headlines.byId.benchmark_is_economy.resolutionType} · ${content.headlines.byId.benchmark_is_economy.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.benchmark_is_economy.duration|label:terms.durations}
 
 ${content.headlines.byId.benchmark_is_economy.newswire}
 
@@ -521,7 +514,7 @@ ${content.headlines.byId.benchmark_is_economy.newswire}
 
 **${content.headlines.byId.quantum_advantage_procurement.resolutionType} · ${content.headlines.byId.quantum_advantage_procurement.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.quantum_advantage_procurement.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.quantum_advantage_procurement.profileText}
 
@@ -535,7 +528,7 @@ ${content.headlines.byId.quantum_advantage_procurement.newswire}
 
 **${content.headlines.byId.synthetic_candidate.resolutionType} · ${content.headlines.byId.synthetic_candidate.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.synthetic_candidate.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.synthetic_candidate.profileText}
 
@@ -549,7 +542,7 @@ ${content.headlines.byId.synthetic_candidate.newswire}
 
 **${content.headlines.byId.weights_on_internet.resolutionType} · ${content.headlines.byId.weights_on_internet.strapline}**
 
-**Duration:** Immediate
+**Duration:** ${content.headlines.byId.weights_on_internet.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.weights_on_internet.profileText}
 
@@ -563,7 +556,7 @@ ${content.headlines.byId.weights_on_internet.newswire}
 
 **${content.headlines.byId.election_deepfake_panic.resolutionType} · ${content.headlines.byId.election_deepfake_panic.strapline}**
 
-**Duration:** Remainder of this Era
+**Duration:** ${content.headlines.byId.election_deepfake_panic.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.election_deepfake_panic.profileText}
 
@@ -577,7 +570,7 @@ ${content.headlines.byId.election_deepfake_panic.newswire}
 
 **${content.headlines.byId.autonomous_corporation.resolutionType} · ${content.headlines.byId.autonomous_corporation.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.autonomous_corporation.duration|label:terms.durations}
 
 ${content.headlines.byId.autonomous_corporation.newswire}
 
@@ -589,7 +582,7 @@ ${content.headlines.byId.autonomous_corporation.newswire}
 
 **${content.headlines.byId.recursive_self_improvement.resolutionType} · ${content.headlines.byId.recursive_self_improvement.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.recursive_self_improvement.duration|label:terms.durations}
 
 ${content.headlines.byId.recursive_self_improvement.newswire}
 
@@ -601,7 +594,7 @@ ${content.headlines.byId.recursive_self_improvement.newswire}
 
 **${content.headlines.byId.agent_swarm_escapes_scope.resolutionType} · ${content.headlines.byId.agent_swarm_escapes_scope.strapline}**
 
-**Duration:** Current cycle
+**Duration:** ${content.headlines.byId.agent_swarm_escapes_scope.duration|label:terms.durations}
 
 ${content.headlines.byId.agent_swarm_escapes_scope.newswire}
 
@@ -613,7 +606,7 @@ ${content.headlines.byId.agent_swarm_escapes_scope.newswire}
 
 **${content.headlines.byId.agi_blog_post.resolutionType} · ${content.headlines.byId.agi_blog_post.strapline}**
 
-**Duration:** Final claim resolution
+**Duration:** ${content.headlines.byId.agi_blog_post.duration|label:terms.durations}
 
 ${content.headlines.byId.agi_blog_post.newswire}
 
@@ -625,7 +618,7 @@ ${content.headlines.byId.agi_blog_post.newswire}
 
 **${content.headlines.byId.agi_personhood.resolutionType} · ${content.headlines.byId.agi_personhood.strapline}**
 
-**Duration:** Remainder of game
+**Duration:** ${content.headlines.byId.agi_personhood.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.agi_personhood.profileText}
 
@@ -639,7 +632,7 @@ ${content.headlines.byId.agi_personhood.newswire}
 
 **${content.headlines.byId.room_temperature_superconductor.resolutionType} · ${content.headlines.byId.room_temperature_superconductor.strapline}**
 
-**Duration:** Current cycle or this Production, per roll
+**Duration:** ${content.headlines.byId.room_temperature_superconductor.duration|label:terms.durations}
 
 **Profile:** ${content.headlines.byId.room_temperature_superconductor.profileText}
 
@@ -651,7 +644,7 @@ ${content.headlines.byId.room_temperature_superconductor.newswire}
 
 ## Mandate cards
 
-Reveal one from the current Era’s deck. If nobody meets its minimum qualification, nobody scores; otherwise the leader scores 2 Mandate and tied leaders score 1 each. Each card below prints its minimum qualification.
+${excerpts.rules.mandate-scoring}
 
 ### ${content.mandates.byId.quarter_humanity_notices.name}
 
@@ -751,7 +744,7 @@ _${content.mandates.byId.responsible_acceleration.flavorText}_
 
 ## Training cards
 
-Use the Training procedure in Default Rules §7 to resolve ordinary domains and special cards.
+
 
 - **${content.gameConfig.trainingDeck.cards.0.name}:** ${content.gameConfig.trainingDeck.cards.0.rulesText} _${content.gameConfig.trainingDeck.cards.0.flavorText}_
 - **${content.gameConfig.trainingDeck.cards.1.name}:** ${content.gameConfig.trainingDeck.cards.1.rulesText} _${content.gameConfig.trainingDeck.cards.1.flavorText}_
@@ -766,15 +759,11 @@ Use the Training procedure in Default Rules §7 to resolve ordinary domains and 
 
 ## Printed Power contracts
 
-The first two contracts are printed directly on their Energy tiles. Fusion is
-printed on its Program card. The entries below reproduce those surfaces;
-there are no separate Power Source cards.
-
-Use Default Rules §8 for construction, capacity, and Production effects.
+${excerpts.rules.power-contracts}
 
 ### ${content.gameConfig.powerSources.0.name}
 
-**Printed on:** ${terms.locations.renewable} tile
+**Printed on tile:** ${terms.locations.renewable}
 
 **${content.gameConfig.powerSources.0.tagline}**
 
@@ -784,7 +773,7 @@ ${content.gameConfig.powerSources.0.publicClaim}
 
 ### ${content.gameConfig.powerSources.1.name}
 
-**Printed on:** ${terms.locations.grid} tile
+**Printed on tile:** ${terms.locations.grid}
 
 **${content.gameConfig.powerSources.1.tagline}**
 
@@ -794,7 +783,7 @@ ${content.gameConfig.powerSources.1.publicClaim}
 
 ### ${content.gameConfig.powerSources.2.name}
 
-**Printed on:** ${terms.technology.advancedGeneration} Program card
+**Printed on Program card:** ${terms.technology.advancedGeneration}
 
 **${content.gameConfig.powerSources.2.tagline}**
 
