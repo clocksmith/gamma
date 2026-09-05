@@ -117,6 +117,7 @@ The frozen size rule selected D; native integration now passes exact tensor, pro
 The standalone utility does not pay: D runtime/source inventories exceed the original model alone by 89,671/38,977 bytes; G exceeds it by 93,340/42,646 bytes.
 Native components save 20,070 bytes for two runtime copies, or 21,489 for the separate source-compressor/decoder alternative. Opening/distant transfer, complete package closure and full-corpus qualification remain missing; no full-score credit.
 Source-only successor considered: transmit the exact Q11 trees directly. Fourteen 11-bit values plus the constrained final node fit 20 bytes per tree; 112 tables would remove 4,480 header bytes per model before changed loader costs. This is byte arithmetic, without implementation, measured gain, or descendant selection.
+[Dependency gap review](../operations/provenance/public_fx2_dependency_gap_review_20260905.json) retains versioned LLVM terms and declared CUDA/libdevice provenance; model permission evidence, runtime closure and two unsupported license identifiers remain explicit gaps, without an incompatibility finding.
 Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
 [Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
