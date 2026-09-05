@@ -1,0 +1,49 @@
+{
+  "candidate_id": "fx2_bytemodel_argmax_unit_q0_v1",
+  "claimed_at": "2026-09-05T21:09:24+00:00",
+  "created_at": "2026-09-05T21:09:24+00:00",
+  "developed_at": "2026-09-05T21:09:25+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_argmax_adapter_v1.json",
+      "sha256": "sha256:a234d29dee910ec8b77bffa3d47948b51ce4d2bba09597cb40ffce40fb978f0c"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260905T195118Z_c39265f90c.json",
+      "sha256": "sha256:a93f49a42d9273135402d80240066e1c7b77e9d9e7eb61c383fed61255cb8228"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_bytemodel_argmax_unit_q0_v1.json",
+    "sha256": "sha256:60f052487d2466066aea27520ed9f967b4e5f01f4b4e33334c34e3bc49cc47ab"
+  },
+  "hypothesis": "Conditional reuse of a surviving within-byte argmax winner preserves every tested probability bit and expert index against the pinned original while strictly reducing original comparison counts on the frozen synthetic population.",
+  "interfaces_exposed": [
+    "ByteModel::Predict and Perceive with optional per-instance GammaArgmaxArm"
+  ],
+  "kill_condition": "Reject this exact implementation on divergent probability bits or ex; classify build, resource and evidence failures separately.",
+  "max_program_bytes": 1048576,
+  "mechanism_change": "delete_predictor_work",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "argmax_explore",
+  "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 950,
+  "promotion_condition": "All frozen state and repeat checks pass and D avoids original comparisons; separate native codec contract required.",
+  "proposal_id": "fx2_bytemodel_argmax_unit_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 970,
+  "state": "developed",
+  "title": "Public FX2 exact argmax cache unit gate"
+}

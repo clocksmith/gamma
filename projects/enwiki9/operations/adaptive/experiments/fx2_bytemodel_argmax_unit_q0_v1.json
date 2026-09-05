@@ -1,0 +1,229 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "fx2_bytemodel_argmax_unit_q0_v1",
+  "proposalId": "fx2_bytemodel_argmax_unit_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "hypothesis": {
+    "claim": "Conditional reuse of a surviving within-byte argmax winner preserves every tested probability bit and expert index against the pinned original while strictly reducing original comparison counts on the frozen synthetic population.",
+    "falsification": "Fail the exact configuration if any tested probability bit or expert index diverges, repeats differ, or the cached arm avoids no original comparisons. Compile, missing evidence and resource stops are implementation or budget outcomes, not mathematical rejection."
+  },
+  "changedMechanism": "Gamma conditional cache of ByteModel argmax only. Preserve exact accumulation expressions, strict-greater tie order, NaN-at-bot fallback, lazy caching after subclass ByteUpdate, and P default. Compile optional counters only for this synthetic unit gate; no native codec activation.",
+  "invariants": [
+    "CPU 2 only; canonical lab parent starts under taskset -c 2. Preserve every other owner and observer.",
+    "Cgroup memory cap 536870912 bytes, zero swap, scratch cap 67108864 bytes, aggregate stop 150 seconds. Compiler stop 60 seconds; each of two probe processes stop 30 seconds. No cap increases or automatic retry.",
+    "Use existing pinned compiler and stdlib only; no installations, model weights, corpus reads, training or native codec execution.",
+    "Retain independent original and patched source copies. Verify exact patch preimages and outputs, source closure and executable hashes before execution and after artifacts close.",
+    "Freeze all 32 row families before any compilation. Exhaust 256 truth paths per row, eight bits per truth, two predictions per bit; no parameter selection. Second process is sealed confirmation with no changes after first process.",
+    "P and K retain original scanning; C invalidates before every prediction; D alone reuses eligible cache. Compare all arms with the actual unmodified original source in the same binary.",
+    "Counter storage and updates require GAMMA_FX2_ARGMAX_INSTRUMENT=1. Count known scan length once per scan, never increment inside the original comparison loop. Unit results grant no production speedup.",
+    "The original constructor initializes ex and mid to zero; preserve that exact parent-specific check. PPMD-style post-base normalization includes a row whose argmax changes from 200 to 0.",
+    "Full corpus score, Gamma compression gain, release package completeness and resource qualification remain unknown or false. Synthetic malformed/nonfinite rows are correctness cases, not valid codec probability claims.",
+    "Atomic stage decisions follow closed processes and files. Final decision and reflection require the canonical outer guard and terminal job to close.",
+    "A passing unit gate supports a separate native archive comparison contract only; no automatic integration or launch."
+  ],
+  "controls": [
+    {
+      "id": "original",
+      "role": "comparator",
+      "definition": "Actual pinned unmodified ByteModel source compiled under a class-name macro in the same executable."
+    },
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Original argmax scan with optional comparison accounting."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Cache bookkeeping and eligibility checks but original scan on every call."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Use cached argmax only when valid, within the narrowed interval, and new bot is not NaN."
+    },
+    {
+      "id": "C",
+      "role": "negative",
+      "definition": "Invalidate before each prediction; original scan remains mandatory."
+    },
+    {
+      "id": "repeat",
+      "role": "replay",
+      "definition": "Fresh independent process repeats identical sources, fixtures and all arms, with no adaptation."
+    }
+  ],
+  "population": {
+    "unit": "synthetic decoded-byte truth path within a frozen probability-row family",
+    "scopeBytes": null,
+    "scopeSymbols": 8192,
+    "selection": "Exactly 32 prospectively frozen fixture families times all 256 truth paths. Each process executes two independent internal repeats. First process is implementation validation; unchanged second process is confirmation.",
+    "coordinate": "Row family, decoded byte 0..255, bit 7..0, first/repeated Predict or Perceive; no WRT or NNCP trace coordinates."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Pinned public ByteModel source and authenticated vocabulary bitmap",
+      "Synthetic pre-truth row and already decoded bits",
+      "Closed guarded comparison outputs"
+    ],
+    "forbiddenInformation": [
+      "HORIZON data or controls",
+      "MIDAS source, state or active work",
+      "Model assets, canonical corpus, native archives or training",
+      "Tuning after observed fixture results"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/fx2_bytemodel_argmax_unit_q0_v1.py",
+      "sha256": "sha256:9213f931450eba845246775ebf40d3be7277400362a2b64adb3e57c47ee50d89"
+    },
+    {
+      "id": "probe",
+      "path": "tools/fx2_bytemodel_argmax_probe_v1.cpp",
+      "sha256": "sha256:1e38ea1944fda18c656ce384738c982f1cb4e0779def8a4285ccf92dbbf5ae5f"
+    },
+    {
+      "id": "adapter",
+      "path": "operations/provenance/public_fx2_argmax_adapter_v1.json",
+      "sha256": "sha256:a234d29dee910ec8b77bffa3d47948b51ce4d2bba09597cb40ffce40fb978f0c"
+    },
+    {
+      "id": "artifact-helper",
+      "path": "lib/artifacts.py",
+      "sha256": "sha256:9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    },
+    {
+      "id": "toolchain",
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260905.json",
+      "sha256": "sha256:53ac253310a9812ca31fc016870c2762ea50c8b001c56630da4545875670a3b1"
+    },
+    {
+      "id": "source-audit",
+      "path": "operations/provenance/public_fx2_cmix_transformer_v1.json",
+      "sha256": "sha256:4e55dc96f722f769dd52dd9e518472f348e923e8c2b706a46ba0d1bbd972ae79"
+    },
+    {
+      "id": "vocabulary",
+      "path": "operations/provenance/public_fx2_authenticated_vocabulary_20260905.json",
+      "sha256": "sha256:515773fe04e18a687171142913a4be6effa281e3298865fc015f3ad0770f336b"
+    },
+    {
+      "id": "parent-terminal",
+      "path": "operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json",
+      "sha256": "sha256:121c6586ccb0bca066f8c7602e97b02177d20966ca74409481dfd651babce1ab"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260905T195118Z_c39265f90c.json",
+      "sha256": "sha256:a93f49a42d9273135402d80240066e1c7b77e9d9e7eb61c383fed61255cb8228"
+    },
+    {
+      "id": "upstream-0",
+      "path": "external/fx2-cmix-transformer-v1/src/models/byte-model.h",
+      "sha256": "sha256:815a9d270c0feca69f39e72087063e6a74e6fcce75bf98b0818ec6a7da8ba383"
+    },
+    {
+      "id": "upstream-1",
+      "path": "external/fx2-cmix-transformer-v1/src/models/byte-model.cpp",
+      "sha256": "sha256:86340c1a0a2fc9d14c0ffd5fb93c011bb705678fdcc1c84839b4ec5a1e77197e"
+    },
+    {
+      "id": "upstream-2",
+      "path": "external/fx2-cmix-transformer-v1/src/models/model.h",
+      "sha256": "sha256:031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc"
+    }
+  ],
+  "pythonSourceClosureEntries": [
+    "runner"
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 1048576,
+    "expectedNetSavingsBytes": -1048576
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 0
+  },
+  "measurements": [
+    {
+      "id": "exact_state_agreement",
+      "definition": "Every original and P/K/D/C probability bit, expert index and interval state agree after every tested call.",
+      "unit": "boolean"
+    },
+    {
+      "id": "repeat_exact",
+      "definition": "Independent process outputs repeat exactly; each process also compares internal reference transcripts word for word.",
+      "unit": "boolean"
+    },
+    {
+      "id": "comparisons_avoided_per_repeat",
+      "definition": "Original strict-greater comparisons avoided by D on one complete 32-row synthetic population; not a runtime or compression measurement.",
+      "unit": "comparisons"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "states-exact",
+      "measurement": "exact_state_agreement",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "repeats-exact",
+      "measurement": "repeat_exact",
+      "operator": "eq",
+      "threshold": true
+    },
+    {
+      "id": "comparisons-reduced",
+      "measurement": "comparisons_avoided_per_repeat",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "states-diverged",
+      "measurement": "exact_state_agreement",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "outputs": [
+    "results/fx2_bytemodel_argmax_unit_q0_v1/stage-decision.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/decision.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/source-manifest.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/build.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/unit.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/compile.execution.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/unit.execution.json",
+    "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.execution.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-05T21:08:44.471426+00:00"
+}

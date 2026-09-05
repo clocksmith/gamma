@@ -1,0 +1,249 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "public_fx2_argmax_adapter_v1",
+  "status": "prospective_unexecuted_unit_gate",
+  "parent_commit": "83f2603f3f7751da5f429fd32669807eb8510494",
+  "source_audit": {
+    "path": "operations/provenance/public_fx2_cmix_transformer_v1.json",
+    "bytes": 30905,
+    "sha256": "4e55dc96f722f769dd52dd9e518472f348e923e8c2b706a46ba0d1bbd972ae79"
+  },
+  "parent_fixture_receipt": {
+    "path": "operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json",
+    "bytes": 26943,
+    "sha256": "121c6586ccb0bca066f8c7602e97b02177d20966ca74409481dfd651babce1ab"
+  },
+  "vocabulary_receipt": {
+    "path": "operations/provenance/public_fx2_authenticated_vocabulary_20260905.json",
+    "bytes": 3406,
+    "sha256": "515773fe04e18a687171142913a4be6effa281e3298865fc015f3ad0770f336b"
+  },
+  "files": [
+    {
+      "source_path": "src/models/byte-model.h",
+      "source_sha256": "815a9d270c0feca69f39e72087063e6a74e6fcce75bf98b0818ec6a7da8ba383",
+      "patched_sha256": "b3f962317fe9718eae2c8332e8a8927b87664524b4b0d8f4e4393fd9d960a06c",
+      "source_bytes": 468,
+      "patched_bytes": 1591,
+      "replacements": [
+        {
+          "before": "#include <valarray>",
+          "after": "#include <cstdint>\n#include <valarray>"
+        },
+        {
+          "before": "  int ex;\n",
+          "after": "  int ex;\n  // Gamma synthetic gate: P remains the default; codec activation is separate.\n  enum class GammaArgmaxArm { P, K, D, C };\n  struct GammaArgmaxStats {\n    std::uint64_t predict_calls = 0;\n    std::uint64_t argmax_comparisons = 0;\n    std::uint64_t scans = 0;\n    std::uint64_t cache_hits = 0;\n    std::uint64_t byte_updates = 0;\n    std::uint64_t forced_invalidations = 0;\n    std::uint64_t cache_range_misses = 0;\n    std::uint64_t nan_bot_checks = 0;\n    std::uint64_t nan_bot_fallbacks = 0;\n  };\n  void GammaSetArgmaxArm(GammaArgmaxArm arm) {\n    gamma_argmax_arm_ = arm;\n    gamma_argmax_valid_ = false;\n  }\n  GammaArgmaxArm GammaGetArgmaxArm() const { return gamma_argmax_arm_; }\n#if defined(GAMMA_FX2_ARGMAX_INSTRUMENT) && GAMMA_FX2_ARGMAX_INSTRUMENT\n  const GammaArgmaxStats& GammaArgmaxCounters() const { return gamma_argmax_stats_; }\n#endif\n"
+        },
+        {
+          "before": "  std::valarray<float> probs_;\n",
+          "after": "  std::valarray<float> probs_;\n private:\n  GammaArgmaxArm gamma_argmax_arm_ = GammaArgmaxArm::P;\n#if defined(GAMMA_FX2_ARGMAX_INSTRUMENT) && GAMMA_FX2_ARGMAX_INSTRUMENT\n  GammaArgmaxStats gamma_argmax_stats_;\n#endif\n  int gamma_argmax_index_ = -1;\n  bool gamma_argmax_valid_ = false;\n"
+        }
+      ]
+    },
+    {
+      "source_path": "src/models/byte-model.cpp",
+      "source_sha256": "86340c1a0a2fc9d14c0ffd5fb93c011bb705678fdcc1c84839b4ec5a1e77197e",
+      "patched_sha256": "f331fb574470730bbc5527b44e26f6726f4c724a8f67f57f93e7751ba7470146",
+      "source_bytes": 1057,
+      "patched_bytes": 2865,
+      "replacements": [
+        {
+          "before": "#include <numeric>\n",
+          "after": "#include <cstring>\n#include <numeric>\n\nnamespace {\nbool GammaArgmaxBotIsNaN(float value) {\n  static_assert(sizeof(float) == sizeof(std::uint32_t), \"binary32 required\");\n  std::uint32_t bits;\n  std::memcpy(&bits, &value, sizeof(bits));\n  // Inspect bits so a finite-math optimization cannot remove this guard.\n  return (bits & 0x7fffffffU) > 0x7f800000U;\n}\n}  // namespace\n\n#if defined(GAMMA_FX2_ARGMAX_INSTRUMENT) && GAMMA_FX2_ARGMAX_INSTRUMENT\n#define GAMMA_ARGMAX_COUNT(field, amount) (gamma_argmax_stats_.field += (amount))\n#else\n#define GAMMA_ARGMAX_COUNT(field, amount) ((void)0)\n#endif\n"
+        },
+        {
+          "before": "  ex = bot_;\n    float max_prob_val = probs_[bot_];\n    for (int i = bot_ + 1; i <= top_; i++) {\n      if (probs_[i] > max_prob_val) {\n        max_prob_val = probs_[i];\n        ex = i;\n      }\n    }\n",
+          "after": "  GAMMA_ARGMAX_COUNT(predict_calls, 1);\n  bool gamma_reuse = false;\n  if (gamma_argmax_arm_ != GammaArgmaxArm::P) {\n    if (gamma_argmax_arm_ == GammaArgmaxArm::C) {\n      gamma_argmax_valid_ = false;\n      GAMMA_ARGMAX_COUNT(forced_invalidations, 1);\n    }\n    if (gamma_argmax_valid_ && gamma_argmax_index_ >= bot_ &&\n        gamma_argmax_index_ <= top_) {\n      GAMMA_ARGMAX_COUNT(nan_bot_checks, 1);\n      if (GammaArgmaxBotIsNaN(probs_[bot_])) {\n        // Upstream pins ex to bot when its first value is NaN. Rescan exactly.\n        GAMMA_ARGMAX_COUNT(nan_bot_fallbacks, 1);\n      } else if (gamma_argmax_arm_ == GammaArgmaxArm::D) {\n        gamma_reuse = true;\n      }\n    } else {\n      GAMMA_ARGMAX_COUNT(cache_range_misses, 1);\n    }\n  }\n  if (gamma_reuse) {\n    ex = gamma_argmax_index_;\n    GAMMA_ARGMAX_COUNT(cache_hits, 1);\n  } else {\n  ex = bot_;\n    float max_prob_val = probs_[bot_];\n    for (int i = bot_ + 1; i <= top_; i++) {\n      if (probs_[i] > max_prob_val) {\n        max_prob_val = probs_[i];\n        ex = i;\n      }\n    }\n    GAMMA_ARGMAX_COUNT(scans, 1);\n    GAMMA_ARGMAX_COUNT(argmax_comparisons, top_ - bot_);\n  }\n  if (gamma_argmax_arm_ != GammaArgmaxArm::P) {\n    gamma_argmax_index_ = ex;\n    gamma_argmax_valid_ = true;\n  }\n"
+        },
+        {
+          "before": "void ByteModel::ByteUpdate() {\n",
+          "after": "void ByteModel::ByteUpdate() {\n  // PPMD still normalizes after this base call; seed only in the next Predict.\n  gamma_argmax_valid_ = false;\n  GAMMA_ARGMAX_COUNT(byte_updates, 1);\n"
+        },
+        {
+          "before": "    if (!vocab_[i]) probs_[i] = 0;\n  }\n}\n",
+          "after": "    if (!vocab_[i]) probs_[i] = 0;\n  }\n}\n\n#undef GAMMA_ARGMAX_COUNT\n"
+        }
+      ]
+    }
+  ],
+  "application": {
+    "destination": "A new retained copy only; never external checkout or existing measured result trees.",
+    "checks": [
+      "Verify every original source hash before any replacement.",
+      "Each literal replacement must occur exactly once in listed order.",
+      "Verify every patched hash and byte count before compilation.",
+      "Retain a separate unmodified original header and cpp for the in-binary reference.",
+      "Both source copies use the same hash-verified model.h."
+    ],
+    "production_default": "P original argmax behavior. Instrumentation storage and counter updates are compiled out unless GAMMA_FX2_ARGMAX_INSTRUMENT=1. No production timing result exists.",
+    "activation": "Only the synthetic probe calls GammaSetArgmaxArm. No production predictor or codec arm selection is added.",
+    "decoder_source_affected": true,
+    "archive_identity_proven": false,
+    "larger_codec_gate_authorized": false
+  },
+  "mechanism": {
+    "hypothesis": "With an unchanged row, narrowing [bot,top] retains its lowest-index maximum when that cached index survives and the new bot is not NaN; rescanning the exact upstream loop otherwise reduces redundant argmax comparisons.",
+    "P": "Always execute the original strict-greater scan; no cache lookup or seeding in Predict. Optional comparison counters.",
+    "K": "Maintain the same cache and test eligibility, but always execute the original strict-greater scan.",
+    "D": "Reuse an eligible cached winner; otherwise execute the original strict-greater scan.",
+    "C": "Force cache invalidation before every Predict, then use the same bookkeeping and original scan.",
+    "preserved_expressions": [
+      "float num = std::accumulate(&probs_[mid + 1], &probs_[top_ + 1], 0.0f);",
+      "float denom = std::accumulate(&probs_[bot_], &probs_[mid + 1], num);",
+      "if (denom == 0) outputs_[0] = 0.5;",
+      "else outputs_[0] = num / denom;"
+    ],
+    "tie_rule": "The original > scan selects the lowest-index maximum, including equal infinities and signed zero ties. Cached selection retains that rule.",
+    "nan_rule": "NaN at bot causes the original scan to keep bot, even if an earlier interval cached a larger surviving index. Detect NaN from IEEE binary32 bits and run the exact scan. Interior NaNs are ignored by the original > comparisons.",
+    "invalidation": "Invalidate at ByteUpdate entry and arm change. Seed lazily in Predict, after subclass post-base normalization. Perceive only narrows bounds.",
+    "counter_meaning": "argmax_comparisons counts the original probs_[i] > max_prob_val evaluations only. Range checks and bitwise NaN checks are reported separately, not credited as absent runtime cost.",
+    "instrumentation": "Compile-time opt-in GAMMA_FX2_ARGMAX_INSTRUMENT=1, required by the unit fixture and omitted for any later codec timing comparison. Count top_-bot_ once after a scan; never insert a counter in the comparison loop. Counter storage and updates are absent without the flag."
+  },
+  "audited_update_semantics": [
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/models/byte-model.cpp",
+      "bytes": 1057,
+      "sha256": "86340c1a0a2fc9d14c0ffd5fb93c011bb705678fdcc1c84839b4ec5a1e77197e",
+      "finding": "Perceive narrows bot/top without changing probabilities; ByteUpdate resets bounds and masks vocabulary."
+    },
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/models/ppmd.cpp",
+      "bytes": 31575,
+      "sha256": "fe371c9f43a3d4f9cce2f24f87df0ce888858466a7aa5530523e047ea008dac1",
+      "finding": "PPMD::ByteUpdate writes probs, invokes base ByteUpdate, then divides by probs_.sum(); cache must remain invalid until next Predict."
+    },
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/models/bracket.cpp",
+      "bytes": 2207,
+      "sha256": "1e2de39d146b910ca50354b3efdf7f2beb5f68c81139a20ce235fbb4364f4ac2",
+      "finding": "Bracket::ByteUpdate replaces its probability row then invokes base ByteUpdate last."
+    },
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/mixer/byte-mixer.cpp",
+      "bytes": 1250,
+      "sha256": "0a371b43cd41ac4e8710131a60da0beff2c6f9239925bed7c6087f1e2856e506",
+      "finding": "ByteMixer::SetProbs and ByteMixer::ByteUpdate fill the row then invoke base ByteUpdate last; per-bit row mutation is absent."
+    },
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/predictor.cpp",
+      "bytes": 27424,
+      "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "finding": "Predictor retains byte_mixer_->ex as lstmex; Gamma must preserve the exact expert index."
+    },
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/models/fxcmv1.cpp",
+      "bytes": 166241,
+      "sha256": "b3de8853b1577ed9b6276abdb61e9b446fdf0b4bf42a3106c4aa98d3fea70b6c",
+      "finding": "lstmex contributes to mxA[9].cxt; it is not dead output."
+    }
+  ],
+  "probe": {
+    "path": "tools/fx2_bytemodel_argmax_probe_v1.cpp",
+    "bytes": 15740,
+    "sha256": "1e38ea1944fda18c656ce384738c982f1cb4e0779def8a4285ccf92dbbf5ae5f",
+    "selection": "--all-arms; two repeats from independently initialized models, all P/K/D/C in one binary.",
+    "reference": "Include the retained, unmodified upstream byte-model.h and .cpp under the sole class-name macro ByteModel=GammaPublicByteModel. No copied hand-written reference algorithm.",
+    "families": [
+      "constructor state without ByteUpdate",
+      "uniform",
+      "authenticated 205-symbol zero mask",
+      "boundary and checkerboard ties",
+      "eight peak positions",
+      "all zero and signed zeros",
+      "all masked",
+      "ascending and descending",
+      "subnormal ties",
+      "negative finite values",
+      "quiet NaN at initial bot",
+      "quiet NaNs at newly selected bots 64 and 128 with a surviving cached winner",
+      "interior and all-NaN payloads",
+      "positive, negative and mixed infinities",
+      "masked nonfinite values",
+      "PPMD-style normalization after base update: positive, overflow and zero-to-NaN rows"
+    ],
+    "paths": "Every row exhausts all 256 decoded bytes, eight bits each; Predict twice before each Perceive. Reuse models across byte updates to expose stale cache state.",
+    "checks": [
+      "Compare float probability bits, ex, bot, top and mid against the independent original after constructor/load, every Predict and every Perceive.",
+      "Compare all 256 probability bits after each row load.",
+      "P/K/C each perform exactly 257024 original > comparisons per row family; D must not exceed that and must reduce total comparisons.",
+      "C forces invalidation on every prediction; no control may report cache hits.",
+      "Require NaN-boundary fallback to execute.",
+      "Repeat reference state vectors compare exactly word for word, with all arms independently equal to reference in both repeats.",
+      "FNV-1a transcript digests are diagnostic; they do not replace exact state comparisons.",
+      "The overflow-after-base-update row has pre-normalization winner 200 but becomes all zeros with winner 0; this detects premature cache seeding."
+    ],
+    "not_covered": [
+      "signaling-NaN exception flags or floating-point trap modes",
+      "probability mutation between Predict calls without audited ByteUpdate invalidation",
+      "non-IEEE binary32 targets",
+      "native full-codec archives, cross-vendor replay or production timing"
+    ],
+    "row_families": 32,
+    "truth_paths_per_repeat": 8192
+  },
+  "source_closure": [
+    {
+      "path": "external/fx2-cmix-transformer-v1/src/models/model.h",
+      "bytes": 402,
+      "sha256": "031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc",
+      "finding": "Shared unchanged base Model for original and patched ByteModel."
+    }
+  ],
+  "compile_argv_template": [
+    "/usr/bin/g++",
+    "-DGAMMA_FX2_ARGMAX_INSTRUMENT=1",
+    "-std=c++17",
+    "-O3",
+    "-m64",
+    "-march=x86-64-v3",
+    "-mtune=generic",
+    "-mrecip=none",
+    "-fno-fast-math",
+    "-fno-finite-math-only",
+    "-ffp-contract=off",
+    "-Wall",
+    "-Wextra",
+    "-pedantic",
+    "-DGAMMA_FX2_ORIGINAL_BYTE_MODEL_HEADER=\"{original}/src/models/byte-model.h\"",
+    "-DGAMMA_FX2_ORIGINAL_BYTE_MODEL_SOURCE=\"{original}/src/models/byte-model.cpp\"",
+    "-I{patched}/src",
+    "{probe}",
+    "{patched}/src/models/byte-model.cpp",
+    "-o",
+    "{output}/fx2_bytemodel_argmax_probe"
+  ],
+  "run_argv_template": [
+    "/usr/bin/taskset",
+    "-c",
+    "2",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "30",
+    "{output}/fx2_bytemodel_argmax_probe",
+    "--all-arms"
+  ],
+  "execution": {
+    "authority": "Source preparation only. No compilation or execution has occurred for this adapter. Root owns CPU 2 admission and any frozen unit contract.",
+    "required_cpu": [
+      2
+    ],
+    "probe_alarm_seconds": 30,
+    "model_assets_required": false,
+    "dependency_installation_authorized": false,
+    "scientific_unit_gate_only": true
+  },
+  "package_and_credit": {
+    "new_state": "One cached index, one validity flag and explicit arm selector per ByteModel. Diagnostic counter storage exists only under GAMMA_FX2_ARGMAX_INSTRUMENT=1. Probe sizeof reports instrumented layout; package and runtime deltas require separate uninstrumented measured codec builds.",
+    "model_bytes_added": 0,
+    "expected_archive_gain_bytes": 0,
+    "measured_Gamma_compression_gain_bytes": null,
+    "full_corpus_score_bytes": null,
+    "complete_submission_package": false,
+    "resource_qualification": false
+  },
+  "attribution": {
+    "upstream": "Public FX2/CMIX predictor, probabilities and source remain upstream work.",
+    "Gamma": "Prospective conditional argmax reuse, exact multi-file patch adapter and synthetic comparison fixture."
+  }
+}
