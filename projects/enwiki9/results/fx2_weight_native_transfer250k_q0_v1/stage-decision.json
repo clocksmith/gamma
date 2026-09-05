@@ -1,0 +1,898 @@
+{
+  "all_archives_match_original_parent": true,
+  "archive_saved_bytes": 0,
+  "artifact_index_diagnostics": {
+    "bytes": 321,
+    "path": "results/fx2_weight_native_transfer250k_q0_v1/artifact-index-diagnostics.json",
+    "sha256": "ab1a4d6405afc4a45c87e02a6c84a6e1b393445cde11b13c1eae2c45728e0b2e"
+  },
+  "artifact_index_exclusions": [
+    {
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/ppm.temp",
+      "reason": "transient metadata and cleanup outcome recorded separately",
+      "residual_present": false,
+      "role": "transient PPM scratch, not a mandatory codec artifact",
+      "status": "absent"
+    }
+  ],
+  "artifact_index_status": "complete",
+  "artifacts": {
+    "bytes": 118851,
+    "path": "results/fx2_weight_native_transfer250k_q0_v1/artifacts.json",
+    "sha256": "f1bcd70b57e084b9fb98fc0d33ac90fcb7a945039aac0a2107cf378484c8c863"
+  },
+  "build_reused_exactly": true,
+  "candidate_id": "fx2_weight_native_transfer250k_q0_v1",
+  "child_closure_ok": true,
+  "coder_records_identical": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "opening.raw",
+        "opening.stored"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10300161712802947,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.004834,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.006815
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-P-encode.raw",
+        "opening-P-encode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.35150625510141,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-encode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.339462,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 42.98648
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "opening-P-decode.cmix",
+        "opening-P-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 49.45431794296019,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-decode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.403157,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 46.48036499999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-P-reencode.raw",
+        "opening-P-reencode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 45.15003728191368,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-reencode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-P-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.3930039999999995,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 42.29406800000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-K-encode.raw",
+        "opening-K-encode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 43.54478319291957,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-K-encode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-K-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.2561,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 40.81757999999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "opening-K-decode.cmix",
+        "opening-K-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 48.15306403813884,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-K-decode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-K-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.3404030000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 45.315752
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-K-reencode.raw",
+        "opening-K-reencode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 45.65692722098902,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-K-reencode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-K-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.3854489999999995,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 42.77823600000002
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-D-encode.raw",
+        "opening-D-encode.cmix",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 45.049684011144564,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-D-encode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.395712999999999,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 42.23127099999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "opening-D-decode.cmix",
+        "opening-D-decode.raw",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 51.154112868011,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-D-decode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.5056740000000026,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 48.026441999999975
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "opening-D-reencode.raw",
+        "opening-D-reencode.cmix",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 43.045379956951365,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-D-reencode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "opening-D-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.211496999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 40.42782399999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "distant.raw",
+        "distant.stored"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10293140402063727,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.005283000000002147,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.005804000000011911
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-P-encode.raw",
+        "distant-P-encode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.84917175886221,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-P-encode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1811679999999996,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 44.17609300000004
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "distant-P-decode.cmix",
+        "distant-P-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.45035129110329,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-P-decode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1658219999999986,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.81136299999997
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-P-reencode.raw",
+        "distant-P-reencode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 47.34735138900578,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-P-reencode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-P-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1756910000000005,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 44.632401000000016
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-K-encode.raw",
+        "distant-K-encode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 47.152733543887734,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-K-encode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-K-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1929760000000016,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 44.40532499999995
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "distant-K-decode.cmix",
+        "distant-K-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 45.85493408003822,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-K-decode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-K-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.209489999999999,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.121368000000075
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-K-reencode.raw",
+        "distant-K-reencode.cmix",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 45.74751839903183,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-K-reencode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-K-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.105685000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.14468899999997
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-D-encode.raw",
+        "distant-D-encode.cmix",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.35189956286922,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-D-encode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1430969999999974,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.60973000000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "distant-D-decode.cmix",
+        "distant-D-decode.raw",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.047628060914576,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-D-decode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.066237000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.425986999999964
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "distant-D-reencode.raw",
+        "distant-D-reencode.cmix",
+        "--transformer",
+        "models/model.D"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 46.052241986151785,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/distant-D-reencode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "distant-D-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.1123389999999986,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 43.390926000000036
+    }
+  ],
+  "compile_processes": 0,
+  "continuous_guard_decision": "pending canonical outer guard closure",
+  "deterministic_ok": true,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_native_transfer250k_q0_v1.json",
+    "sha256": "sha256:5f7fe8bf5084bf91b23f2066e5bc5cccbf7aba0bfbef1c6bd6f508056c8bdfd3"
+  },
+  "frontend_identity": "gamma-public-fx2-literal-first-block-v1",
+  "full_corpus_score_bytes": null,
+  "inherited_package_components_unchanged": true,
+  "larger_gate_authorized": false,
+  "mapping_gate_pass": true,
+  "modeled_bytes": 317308,
+  "native_binary": {
+    "bytes": 496136,
+    "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/cmix",
+    "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+  },
+  "objective_credit_bytes": 0,
+  "package_economics": {
+    "binary_delta_per_copy": 12288,
+    "dependency_closure_complete": false,
+    "full_corpus_score_bytes": null,
+    "meaning": "Incremental raw counted components against pinned source-built parent. Runtime pair and source-compressor alternatives are separate; neither is an awarded score. Both count two required model copies. Existing source/runtime and licensing gaps remain open.",
+    "model_delta_per_copy": -22323,
+    "native_binary": {
+      "bytes": 496136,
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cmix",
+      "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+    },
+    "needed_libraries_identical": true,
+    "option_delta_bytes": 0,
+    "option_text": "-c dictionary input archive --transformer model\n-d dictionary archive output --transformer model\n",
+    "parent_binary": {
+      "bytes": 483848,
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cmix",
+      "sha256": "08b9e9cf3734ad5952b7a3a5eb403fdc1c4cbb1a853cda613392d52f0a77bea0"
+    },
+    "pre_corpus_economic_gate_pass": true,
+    "raw_source_delta": 10869,
+    "runtime_pair_delta": -20070,
+    "source_compressor_plus_decoder_delta": -21489
+  },
+  "population_scope": "Two previously examined cold canonical slices; fresh execution confirmation, no statistical holdout or mature-history claim",
+  "populations": [
+    {
+      "archive_bytes": 33429,
+      "arms": {
+        "D": {
+          "archive": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/D/archive.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/D/repeat.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/D/restored.bin",
+            "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+          },
+          "result": {
+            "bytes": 51090,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/D/result.json",
+            "sha256": "bc2357212b67188158520188782c21551802e345b24dea5d1ab8d04438c631c0"
+          }
+        },
+        "K": {
+          "archive": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/K/archive.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/K/repeat.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/K/restored.bin",
+            "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+          },
+          "result": {
+            "bytes": 51109,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/K/result.json",
+            "sha256": "43c4f91ec8762e6248a6e3c0ba3df353ba6d6f6b5651449a1b0e4f22f65ffab6"
+          }
+        },
+        "P": {
+          "archive": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/archive.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 33429,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/repeat.bin",
+            "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/restored.bin",
+            "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+          },
+          "result": {
+            "bytes": 51109,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/result.json",
+            "sha256": "0c3fea32f403a0b792a41a33c60edb13737973ef3d925f1cf91a751806694877"
+          }
+        }
+      },
+      "coder_records": {
+        "bytes": 468809,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/opening-coder-records.json",
+        "sha256": "5844f8426638c48afea6d7f11239cefbe97182bcb394530ed71761f15dfc5e6c"
+      },
+      "first_block_header_hex": "070003d090",
+      "mapping_gate_pass": true,
+      "modeled_bytes": 151210,
+      "name": "opening",
+      "raw": {
+        "bytes": 250000,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "raw_bytes": 250000,
+      "raw_offset": 0,
+      "stored": {
+        "bytes": 151220,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+        "sha256": "9cc29963608bb990b820bc88e836532b4c2a1cfc1a5b633a14b1c3bad78765ab"
+      }
+    },
+    {
+      "archive_bytes": 9499,
+      "arms": {
+        "D": {
+          "archive": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/D/archive.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/D/repeat.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/D/restored.bin",
+            "sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8"
+          },
+          "result": {
+            "bytes": 51088,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/D/result.json",
+            "sha256": "1e8450c32cae00c2fb31f7eba00e545a29177e26b67ea709d590f0b935ad9f58"
+          }
+        },
+        "K": {
+          "archive": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/K/archive.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/K/repeat.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/K/restored.bin",
+            "sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8"
+          },
+          "result": {
+            "bytes": 51106,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/K/result.json",
+            "sha256": "9623e802e342bbd93662d363dd91a1721f987b82a4711e496dbbefc91c917dfc"
+          }
+        },
+        "P": {
+          "archive": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/P/archive.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "exact_inverse": true,
+          "exact_parent_archive": true,
+          "exact_repeat": true,
+          "loader_activation_verified": true,
+          "repeat": {
+            "bytes": 9499,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/P/repeat.bin",
+            "sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e"
+          },
+          "restored": {
+            "bytes": 250000,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/P/restored.bin",
+            "sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8"
+          },
+          "result": {
+            "bytes": 51105,
+            "path": "results/fx2_weight_native_transfer250k_q0_v1/distant/P/result.json",
+            "sha256": "2db725bc0bedede6d4f8081fa0dc6cc779c2bd8fc9abe48a7eab5a64c982a098"
+          }
+        }
+      },
+      "coder_records": {
+        "bytes": 514484,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/distant-coder-records.json",
+        "sha256": "eb977f2766d3b186715bc0e5a0deef7e98d1819264a6e19eba1f929717ca8c5d"
+      },
+      "first_block_header_hex": "070003d090",
+      "mapping_gate_pass": true,
+      "modeled_bytes": 166098,
+      "name": "distant",
+      "raw": {
+        "bytes": 250000,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/distant.raw",
+        "sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8"
+      },
+      "raw_bytes": 250000,
+      "raw_offset": 500000000,
+      "stored": {
+        "bytes": 166108,
+        "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/distant.stored",
+        "sha256": "4d9e14e8a0e482824f8322f03e2133bc0c62a6bfdd6e8c4772a87bd8173b91db"
+      }
+    }
+  ],
+  "positive_control_no_residual": true,
+  "roundtrip_ok": true,
+  "schema": "gamma.enwiki9.fx2-weight-native-transfer-stage.v1",
+  "scope_bytes": 500000,
+  "status": "passed",
+  "transient_cleanup": {
+    "bytes": 465,
+    "path": "results/fx2_weight_native_transfer250k_q0_v1/transient-cleanup.json",
+    "sha256": "1245985e415aff47e307efb41b0ad46e7290eefa16a59ee6c409370aae729c0f"
+  }
+}
