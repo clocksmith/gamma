@@ -2,6 +2,24 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-05 - Public FX2 passes two frozen canonical transfer slices
+
+`fx2_cmix_transformer_transfer250k_q0_v2` produced **33,429 bytes** from raw
+`[0,250000)` and **9,499 bytes** from `[500000000,500250000)`. Both independent
+cold starts pass exact inversion, deterministic re-encoding and the authenticated
+205-symbol map. [Terminal audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json)
+and [validated reflection](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json)
+bind the same parent binary/model, 310 inputs and closed CPU 2 discovery guard.
+Peak cgroup memory was 5,826,895,872 bytes; conservative raw package inventory
+was 9,403,013 bytes. Qualification, complete licensing/package closure and any
+Gamma compression gain remain unproved; these cold slices use direct WRT,
+without the public reorder/PHDA pipeline. No full-corpus extrapolation is earned.
+The [v1 preflight failure](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json)
+preserves its rejected corpus-symlink check; v2 changes only that preflight rule.
+Retain the parent. Next test conditional argmax reuse against the original scan,
+then require matched native probability, payload and inverse comparisons.
+
+
 ## 2026-09-05 - Public FX2 parent passes authenticated fixture replay
 
 `fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` is a reproduced external
