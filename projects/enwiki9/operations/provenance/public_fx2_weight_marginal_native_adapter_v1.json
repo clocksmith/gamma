@@ -1,0 +1,128 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "public_fx2_weight_marginal_native_adapter_v1",
+  "status": "prospective_uncompiled_native_loader",
+  "parent_commit": "83f2603f3f7751da5f429fd32669807eb8510494",
+  "prerequisite_reflection": {
+    "path": "operations/adaptive/reflections/20260905T222955Z_5eb35a57d6.json",
+    "sha256": "20f44314b2ea61ccf6063d8a3cae2c8f1a42de80bd11277b6e408c99c04033e6"
+  },
+  "format_reference": {
+    "path": "lib/fx2_weight_format_v1.hpp",
+    "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30",
+    "linked_into_native_binary": false
+  },
+  "application_order": [
+    "materialize pinned upstream source",
+    "apply each unique replacement in files order",
+    "verify every patched source hash before compilation"
+  ],
+  "files": [
+    {
+      "source_path": "cpp_infer/src/weights_io_compressed.cpp",
+      "source_bytes": 13740,
+      "source_sha256": "d13fb385f7938ff84b2a5b2a34e09e17c14af3b6c321f020262e96e97c5c41a6",
+      "patched_bytes": 21798,
+      "patched_sha256": "ea32c4e69e8f630c3aac19faeb28d81ebdd51a6b712791b70669c9ca6e14e466",
+      "replacements": [
+        {
+          "before": "#include <cmath>",
+          "after": "#include <algorithm>\n#include <array>\n#include <cmath>"
+        },
+        {
+          "before": "struct BinDecoder {",
+          "after": "// Gamma GFX2MAR1 loader, derived from the pinned public FX2 coder and\n// Gamma's measured fx2_weight_format_v1.hpp. Preserve upstream GPLv3 LICENSE.\n// No generic transcoder or predictor changes are linked into this loader.\nconstexpr uint64_t kGammaExpandedLimit = 128ull << 20;\nconstexpr size_t kGammaFileLimit = size_t(8) << 20;\nconstexpr uint32_t kGammaTensorLimit = 4096;\nusing GammaHistogram = std::array<uint32_t, 15>;\nstruct GammaHistogramRecord { uint32_t index; GammaHistogram counts; };\nstruct GammaMarginal {\n  unsigned mode = 0;\n  GammaHistogram global{};\n  std::vector<GammaHistogramRecord> records;\n};\n\nGammaMarginal gamma_read_marginal(Reader& r, uint32_t count) {\n  GammaMarginal result;\n  result.mode = r.u8();\n  if (result.mode != 1 && result.mode != 2) die(\"%s: invalid marginal mode\", r.path);\n  const uint32_t n = r.u32();\n  if (count > kGammaTensorLimit || n > count) die(\"%s: marginal tensor count exceeds bound\", r.path);\n  r.need(size_t(60) + size_t(n) * 64 + 5);\n  for (unsigned s = 0; s < 15; ++s) result.global[s] = r.u32();\n  std::array<uint64_t, 15> sums{};\n  uint64_t total = 0;\n  for (uint32_t k = 0; k < n; ++k) {\n    GammaHistogramRecord record{r.u32(), {}};\n    if (record.index >= count || (k && record.index <= result.records.back().index))\n      die(\"%s: marginal indices must be unique, ordered and in range\", r.path);\n    for (unsigned s = 0; s < 15; ++s) {\n      record.counts[s] = r.u32();\n      total += record.counts[s];\n      sums[s] += record.counts[s];\n      if (total > kGammaExpandedLimit) die(\"%s: marginal histogram exceeds bound\", r.path);\n    }\n    result.records.push_back(record);\n  }\n  for (unsigned s = 0; s < 15; ++s)\n    if (sums[s] != result.global[s]) die(\"%s: marginal global/local counts differ\", r.path);\n  return result;\n}\n\nstd::array<uint16_t, 16> gamma_fixed_tree(const GammaHistogram& counts) {\n  std::array<uint64_t, 32> totals{};\n  for (unsigned s = 0; s < 15; ++s) totals[16 + s] = counts[s];\n  std::array<uint16_t, 16> tree{};\n  tree.fill(1024);\n  for (unsigned node = 15; node; --node) {\n    const uint64_t left = totals[2 * node], total = left + totals[2 * node + 1];\n    totals[node] = total;\n    if (total) tree[node] = uint16_t(std::max<uint64_t>(1, std::min<uint64_t>(2047,\n        (2048 * left + total / 2) / total)));\n  }\n  return tree;\n}\n\n// D/G-only streaming canonicality check: independently re-encode each decoded\n// bit at its original probability, comparing emitted bytes directly to input.\n// This retains upstream decoder zero extension but rejects absent flush and\n// trailing bytes without buffering a second model or duplicating tensor logic.\nstruct GammaCanonicalRange {\n  const uint8_t* expected;\n  size_t length, position = 0;\n  bool enabled;\n  uint64_t low = 0, cache_size = 1;\n  uint32_t range = 0xffffffffu;\n  uint8_t cache = 0;\n  GammaCanonicalRange(const uint8_t* data, size_t size, bool active)\n      : expected(data), length(size), enabled(active) {}\n  void emit(uint8_t value) {\n    if (position >= length || expected[position] != value)\n      die(\"noncanonical marginal range stream at byte %zu\", position);\n    ++position;\n  }\n  void shift_low() {\n    if (low < 0xff000000ull || low > 0xffffffffull) {\n      const uint32_t carry = uint32_t(low >> 32);\n      emit(uint8_t(cache + carry));\n      for (uint64_t k = 1; k < cache_size; ++k) emit(uint8_t(0xffu + carry));\n      cache = uint8_t(low >> 24);\n      cache_size = 0;\n    }\n    ++cache_size;\n    low = uint32_t(low << 8);\n  }\n  void bit(uint16_t probability, unsigned value) {\n    if (!enabled) return;\n    const uint32_t bound = (range >> 11) * probability;\n    if (value) { low += bound; range -= bound; }\n    else range = bound;\n    while (range < (1u << 24)) { range <<= 8; shift_low(); }\n  }\n  void finish() {\n    if (!enabled) return;\n    for (unsigned k = 0; k < 5; ++k) shift_low();\n    if (position != length) die(\"trailing marginal range bytes at byte %zu\", position);\n  }\n};\n\nstruct BinDecoder {"
+        },
+        {
+          "before": "  BinDecoder(const uint8_t* data, size_t len) : p(data), end(data + len) {\n    p++;  // the first byte is the encoder's initial zero cache\n    for (int i = 0; i < 4; i++) code = (code << 8) | byte();\n  }\n  uint8_t byte() { return p < end ? *p++ : 0; }\n  int decode_bit(uint16_t* prob) {\n    uint32_t bound = (range >> 11) * *prob;",
+          "after": "  GammaCanonicalRange gamma_check;\n  BinDecoder(const uint8_t* data, size_t len, bool canonical = false)\n      : p(data), end(data + len), gamma_check(data, len, canonical) {\n    if (canonical && (len < 5 || data[0] != 0)) die(\"invalid marginal range cache or length\");\n    p++;  // the first byte is the encoder's initial zero cache\n    for (int i = 0; i < 4; i++) code = (code << 8) | byte();\n  }\n  uint8_t byte() { return p < end ? *p++ : 0; }\n  int decode_bit(uint16_t* prob, bool adaptive = true) {\n    const uint16_t original_probability = *prob;\n    uint32_t bound = (range >> 11) * *prob;"
+        },
+        {
+          "before": "      *prob = uint16_t(*prob + ((2048 - *prob) >> 5));",
+          "after": "      if (adaptive) *prob = uint16_t(*prob + ((2048 - *prob) >> 5));"
+        },
+        {
+          "before": "      *prob = uint16_t(*prob - (*prob >> 5));",
+          "after": "      if (adaptive) *prob = uint16_t(*prob - (*prob >> 5));"
+        },
+        {
+          "before": "      bit = 1;\n    }\n    while (range < (1u << 24)) {",
+          "after": "      bit = 1;\n    }\n    gamma_check.bit(original_probability, unsigned(bit));\n    while (range < (1u << 24)) {"
+        },
+        {
+          "before": "  uint32_t decode_tree(uint16_t* probs, int nbits) {\n    uint32_t node = 1;\n    for (int k = 0; k < nbits; k++) node = (node << 1) | decode_bit(&probs[node]);",
+          "after": "  uint32_t decode_tree(uint16_t* probs, int nbits, bool adaptive = true) {\n    uint32_t node = 1;\n    for (int k = 0; k < nbits; k++) node = (node << 1) | decode_bit(&probs[node], adaptive);"
+        },
+        {
+          "before": "WeightsFile load_v2(Reader& r, const char* path) {\n  uint32_t n_tensors = r.u32();\n  BinDecoder dec(r.p, r.left);",
+          "after": "WeightsFile load_v2(Reader& r, const char* path, bool marginal = false) {\n  uint32_t n_tensors = r.u32();\n  const char* bookkeeping_env = std::getenv(\"GAMMA_FX2_WEIGHT_BOOKKEEPING\");\n  const bool bookkeeping = bookkeeping_env && std::strcmp(bookkeeping_env, \"1\") == 0;\n  const bool track_histograms = marginal || bookkeeping;\n  if (track_histograms && n_tensors > kGammaTensorLimit) die(\"%s: tensor count exceeds bound\", path);\n  GammaMarginal gamma;\n  if (marginal) gamma = gamma_read_marginal(r, n_tensors);\n  size_t gamma_used = 0, gamma_histogram_tensors = 0;\n  uint64_t gamma_represented = 0, gamma_symbols = 0;\n  std::array<uint64_t, 15> gamma_actual_global{};\n  BinDecoder dec(r.p, r.left, marginal);"
+        },
+        {
+          "before": "      t.shape[d] = v;\n      numel *= v;",
+          "after": "      t.shape[d] = v;\n      if (track_histograms && v && numel > kGammaExpandedLimit / v)\n        die(\"%s: %s: tensor extent exceeds bound\", path, name.c_str());\n      numel *= v;"
+        },
+        {
+          "before": "    t.numel = numel;\n    size_t bytes = numel * dtype_size(t.dtype);\n    t.data.resize(bytes);\n    uint8_t encoding = get_meta();",
+          "after": "    t.numel = numel;\n    const size_t element_bytes = dtype_size(t.dtype);\n    if (track_histograms && numel > kGammaExpandedLimit / element_bytes)\n      die(\"%s: %s: tensor byte size exceeds bound\", path, name.c_str());\n    size_t bytes = numel * element_bytes;\n    if (track_histograms) {\n      if (gamma_represented > kGammaExpandedLimit - bytes)\n        die(\"%s: total tensor storage exceeds bound\", path);\n      gamma_represented += bytes;\n      if (name == \"rope.inv_freq\" && (t.dtype != DT_F32 || ndim != 1))\n        die(\"%s: RoPE frequency must be an F32 vector\", path);\n    }\n    t.data.resize(bytes);\n    uint8_t encoding = get_meta();"
+        },
+        {
+          "before": "        int8_t* out = reinterpret_cast<int8_t*>(t.data.data());\n        for (size_t k = 0; k < numel; k++)\n          out[k] = int8_t(int(dec.decode_tree(m.int4.data(), 4)) - 7);",
+          "after": "        int8_t* out = reinterpret_cast<int8_t*>(t.data.data());\n        const GammaHistogram* wanted = nullptr;\n        GammaHistogram actual{};\n        std::array<uint16_t, 16> fixed{};\n        if (marginal) {\n          if (gamma_used >= gamma.records.size() || gamma.records[gamma_used].index != i)\n            die(\"%s: missing histogram at tensor %u\", path, i);\n          wanted = &gamma.records[gamma_used++].counts;\n          uint64_t expected_symbols = 0;\n          for (uint32_t n : *wanted) expected_symbols += n;\n          if (expected_symbols != numel) die(\"%s: histogram total differs from tensor shape\", path);\n          fixed = gamma_fixed_tree(gamma.mode == 1 ? *wanted : gamma.global);\n        }\n        for (size_t k = 0; k < numel; k++) {\n          const uint32_t symbol = dec.decode_tree(marginal ? fixed.data() : m.int4.data(), 4, !marginal);\n          if (track_histograms) {\n            if (symbol >= 15) die(\"%s: invalid INT4 symbol\", path);\n            ++actual[symbol];\n            ++gamma_actual_global[symbol];\n          }\n          out[k] = int8_t(int(symbol) - 7);\n        }\n        if (track_histograms) { ++gamma_histogram_tensors; gamma_symbols += numel; }\n        if (wanted && actual != *wanted) die(\"%s: decoded local histogram differs\", path);"
+        },
+        {
+          "before": "        if (t.dtype != DT_F32 || ndim != 2)\n          die(\"%s: %s: bad rope tensor\", path, name.c_str());",
+          "after": "        if (t.dtype != DT_F32 || ndim != 2)\n          die(\"%s: %s: bad rope tensor\", path, name.c_str());\n        if (track_histograms && name != (encoding == ENC_ROPE_SIN ? \"rope.sin\" : \"rope.cos\"))\n          die(\"%s: generated RoPE tag/name mismatch\", path);"
+        },
+        {
+          "before": "  return wf;\n}\n\n}  // namespace\n\nWeightsFile WeightsFile::load_compressed",
+          "after": "  if (marginal) {\n    if (gamma_used != gamma.records.size()) die(\"%s: unused marginal histogram records\", path);\n    for (unsigned s = 0; s < 15; ++s)\n      if (gamma_actual_global[s] != gamma.global[s]) die(\"%s: decoded global histogram differs\", path);\n    dec.gamma_check.finish();\n  }\n  const char selected = marginal ? (gamma.mode == 1 ? 'D' : 'G') : bookkeeping ? 'K' : 'P';\n  if (std::fprintf(stderr, \"\\nGamma weight loader selected=%c tensors=%u histogram_tensors=%zu histogram_symbols=%llu side_information_bytes=%zu canonical=%d\\n\",\n      selected, n_tensors, gamma_histogram_tensors, static_cast<unsigned long long>(gamma_symbols),\n      marginal ? size_t(65) + gamma.records.size() * 64 : size_t(0), marginal ? 1 : 0) < 0 || std::fflush(stderr) != 0)\n    die(\"loader diagnostic flush failed\");\n  return wf;\n}\n\n}  // namespace\n\nWeightsFile WeightsFile::load_compressed"
+        },
+        {
+          "before": "  if (size < 12) die(\"%s: too small\", path);\n  std::vector<uint8_t> buf(static_cast<size_t>(size));",
+          "after": "  if (size < 12) die(\"%s: too small\", path);\n  if (static_cast<unsigned long>(size) > kGammaFileLimit) {\n    char prefix[8];\n    if (std::fread(prefix, 1, 8, f) != 8 || std::fseek(f, 0, SEEK_SET) != 0)\n      die(\"%s: header read failed\", path);\n    if (std::memcmp(prefix, \"GFX2MAR1\", 8) == 0) die(\"%s: marginal file exceeds bound\", path);\n  }\n  std::vector<uint8_t> buf(static_cast<size_t>(size));"
+        },
+        {
+          "before": "  if (std::memcmp(magic, \"FX2TFWC2\", 8) == 0) return load_v2(r, path);",
+          "after": "  if (std::memcmp(magic, \"GFX2MAR1\", 8) == 0) return load_v2(r, path, true);\n  if (std::memcmp(magic, \"FX2TFWC2\", 8) == 0) return load_v2(r, path);"
+        }
+      ]
+    },
+    {
+      "source_path": "cpp_infer/src/opt/arena_build.cpp",
+      "source_bytes": 8642,
+      "source_sha256": "d5a439ee00ae3d09f4db0e69a163e144a2aa82fc62a74075f95147b2c0b179a9",
+      "patched_bytes": 8706,
+      "patched_sha256": "0166dd25bcd182e488261518eb42fa4cba0284d8f2e684e06a9c48325a7a01ab",
+      "replacements": [
+        {
+          "before": "  WeightsFile wf = std::memcmp(magic, \"FX2TFWC\", 7) == 0\n                       ? WeightsFile::load_compressed(weights_path)",
+          "after": "  WeightsFile wf = (std::memcmp(magic, \"FX2TFWC\", 7) == 0 ||\n                    std::memcmp(magic, \"GFX2MAR1\", 8) == 0)\n                       ? WeightsFile::load_compressed(weights_path)"
+        }
+      ]
+    }
+  ],
+  "controls": {
+    "P": "Original FX2TFWC2 with bookkeeping environment unset; original adaptive tensor path.",
+    "K": "Original FX2TFWC2 with GAMMA_FX2_WEIGHT_BOOKKEEPING=1; histogram counting only, original adaptive probabilities and tensor materialization.",
+    "D": "GFX2MAR1 mode1; fixed local histogram probabilities with actual local/global count verification.",
+    "G": "GFX2MAR1 mode2; fixed global histogram probabilities, identical side information and count verification."
+  },
+  "loader_diagnostic": "Gamma weight loader selected=<P|K|D|G> tensors=<n> histogram_tensors=<n> histogram_symbols=<n> side_information_bytes=<n> canonical=<0|1>",
+  "validation": {
+    "marginal_file_cap_bytes": 8388608,
+    "tracked_expanded_tensor_cap_bytes": 134217728,
+    "tracked_tensor_cap": 4096,
+    "marginal_histogram_counts_exact": true,
+    "marginal_canonical_range_stream_checked": true,
+    "parent_tensor_decoding_unchanged_when_bookkeeping_unset": true,
+    "rope_math_unchanged": true,
+    "predictor_changed": false
+  },
+  "accounting": {
+    "selected_D_component_saved_bytes": 22323,
+    "integrated_package_delta_bytes": null,
+    "full_corpus_score_bytes": null,
+    "objective_credit_bytes": 0,
+    "note": "All added loader/source/option bytes remain to be measured; two-copy model arithmetic is not scored codec gain."
+  }
+}
