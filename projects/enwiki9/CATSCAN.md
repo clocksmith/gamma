@@ -10,6 +10,7 @@ Produce a Gamma-authored, self-contained codec that exactly reconstructs canonic
 
 - Owns the enwiki9 objective, adaptive research state, candidate lineage, measurement contracts, and proof frontier.
 - Does not own live Hutter Prize rules or grant score credit to teachers, forecasts, traces, or external compressors.
+- `ledger/` is a generated browsing projection of canonical records; `workbench/` routes research actions through the adaptive workflow. Neither creates another registry, queue, or evidence authority.
 
 ## Scope
 

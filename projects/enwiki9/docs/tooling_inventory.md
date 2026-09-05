@@ -3,6 +3,13 @@
 This inventory groups `projects/enwiki9/tools/` by purpose. It is a map for
 maintenance and handoff, not a claim that every script is current.
 
+## Research Navigation
+
+| Tool | Purpose |
+|---|---|
+| `enwiki9_ledger.py` | Builds disposable local HTML and JSON views of canonical candidates, explicit lineage, jobs, results, mixtures, and research notes; reads bounded records and process metadata without launching work or changing research state. |
+| `enwiki9_ledger.html` | Offline browser template used by the ledger generator; search, filters, source links, and paginated histories require no server or external dependencies. |
+
 ## Heavy-Gate And Driver Support
 
 These scripts can interact with scoring or guard infrastructure. Treat them as

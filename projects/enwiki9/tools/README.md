@@ -21,6 +21,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Task | Entry point |
 |---|---|
 | Adaptive experiment loop | `enwiki9_lab.py` |
+| Searchable local ledger and JSON export | `enwiki9_ledger.py` ([guide](../ledger/README.md)) |
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
 | Project-local Python source closure | `enwiki9_python_source_closure.py` |
 | Terminal reflection and lifecycle-safe evidence ranking | `enwiki9_reflections.py` |
