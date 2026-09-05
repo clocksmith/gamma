@@ -98,7 +98,7 @@ locked component specification.
 | Mandate markers | 6 | one loose faction-coloured marker per faction for the shared track |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
 | AGI Dossier cards | 24 | four Era-labelled Commit / Hedge cards per faction |
-| Shared punchboard tokens | 36 retained Power cubes, 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `physical/component-inventory.md` | selected counts; layout unresolved |
+| Shared punchboard tokens | 36 retained Power cubes, 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/docs/component-inventory.md` | selected counts; layout unresolved |
 | Shared dry-erase marker | 1 fine-tip marker | serves the Governance Board ledger |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Audit bag | 1 opaque cloth bag | confirmed concept |

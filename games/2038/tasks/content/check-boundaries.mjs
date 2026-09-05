@@ -1,5 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
+import { validateReferenceLayout } from "./authored.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const readJson = async path => JSON.parse(await readFile(resolve(root, path), "utf8"));
@@ -37,7 +38,15 @@ for (const directory of ["components", "experimental/components"]) {
 }
 for (const artifact of graph.artifacts) {
   if ("overlays" in artifact) throw new Error(`Retired copy overlay in ${artifact.target}`);
+  if (artifact.source.startsWith("content/templates/")) {
+    if (artifact.layout !== true) throw new Error(`Reference must declare a layout: ${artifact.source}`);
+    validateReferenceLayout(await readFile(resolve(root, artifact.source), "utf8"), artifact.source);
+  }
   if (artifact.format === "json") inspect(await readJson(artifact.target), artifact.target, false);
+}
+for (const target of ["dist/docs/map-reference.md", "dist/docs/component-reference.md", "dist/docs/component-inventory.md"]) {
+  const artifact = graph.artifacts.find(entry => entry.target === target);
+  if (!artifact?.layout) throw new Error(`Missing reference projection: ${target}`);
 }
 for (const descriptor of Object.values(graph.contexts)) {
   if (typeof descriptor === "object" && "overlays" in descriptor) throw new Error("Retired context overlay.");

@@ -22,7 +22,18 @@ function parseReference(reference) {
   return { path, formatters };
 }
 
-function formatValue(value, formatter) {
+function formatValue(value, formatter, variables) {
+  if (formatter === "headings-up") {
+    if (typeof value !== "string") throw new Error("Heading formatter requires a string.");
+    return value.replace(/^#{2,6} /gm, heading => heading.slice(1));
+  }
+  if (formatter.startsWith("label:")) {
+    const labels = lookup(variables, formatter.slice("label:".length));
+    if (typeof value !== "string" || !labels || !Object.hasOwn(labels, value)) {
+      throw new Error(`Unknown content label: ${value}`);
+    }
+    return labels[value];
+  }
   if (formatter !== "capitalize") {
     throw new Error(`Unknown content formatter: ${formatter}`);
   }
@@ -35,8 +46,11 @@ function formatValue(value, formatter) {
 
 function resolveReference(reference, variables, stack) {
   const { path, formatters } = parseReference(reference);
+  if (stack.includes(path)) {
+    throw new Error(`Circular content reference: ${[...stack, path].join(" -> ")}`);
+  }
   const resolved = resolveValue(lookup(variables, path), variables, [...stack, path]);
-  return formatters.reduce(formatValue, resolved);
+  return formatters.reduce((value, formatter) => formatValue(value, formatter, variables), resolved);
 }
 
 export function resolveString(value, variables, stack = []) {

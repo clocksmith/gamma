@@ -34,6 +34,7 @@ test("release content identity includes every player-copy source", async () => {
   const graph = await readJson("content/graph.json");
   const releaseSources = new Set(contentSourceFiles(graph));
   assert.ok(releaseSources.has(graph.world));
+  for (const source of Object.values(graph.excerpts)) assert.ok(releaseSources.has(source));
   for (const artifact of graph.artifacts) {
     assert.ok(releaseSources.has(artifact.source), `release binds ${artifact.source}`);
     for (const overlay of artifact.overlays || []) {
@@ -263,7 +264,7 @@ test("Card and Board Reference projects every other required card surface", asyn
   for (const escalation of escalationDocument.escalations) {
     assert.ok(cardReference.includes(escalation.name));
     assert.ok(cardReference.includes(escalation.text));
-    assert.ok(cardReference.includes(`**Unlock:** Era ${escalation.unlockedRound}`));
+    assert.ok(cardReference.includes(`**Unlock Era:** ${escalation.unlockedRound}`));
   }
   for (const era of referenceDocument.eraCards) {
     assert.equal(era.physicalSurface, "governance_board");
@@ -273,7 +274,7 @@ test("Card and Board Reference projects every other required card surface", asyn
   assert.match(cardReference, /## Governance Board Era panels/);
   assert.match(cardReference, /## Four-panel player aid/);
   assert.match(cardReference, /## Printed Power contracts/);
-  assert.match(cardReference, /there are no separate Power Source cards/);
+  assert.match(cardReference, /No separate Power Source\s+cards are used/);
   for (const reference of referenceDocument.playerReferences) {
     for (const line of [...reference.frontText, ...reference.backText]) {
       assert.ok(cardReference.includes(line), `foldout projects ${reference.id}: ${line}`);
@@ -458,8 +459,8 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
-  assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock:\*\* Era 3; passive/);
-  assert.match(cardReference, /Allocation Window[\s\S]*Unlock:\*\* Era 2; once when unlocked/);
+  assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock Era:\*\* 3; passive/);
+  assert.match(cardReference, /Allocation Window[\s\S]*Unlock Era:\*\* 2; once when unlocked/);
   assert.match(cardReference, /Advanced Play only: requires the public Headline-procedure module/);
   assert.match(cardReference, /Each Faction ability unlocks at the Era printed on its board/);
   assert.match(cardReference, /latest Production snapshot/);

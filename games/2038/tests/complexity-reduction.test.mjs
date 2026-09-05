@@ -72,19 +72,21 @@ test("precision patch prints final Generator prices and consolidated state", asy
     locations.get("renewable_basin").visit,
     "Build Civic Heat Battery here for 2 Runway. Capacity: 3 local Power. Gain 1 Trust when constructed. No recurring penalty. One ordinary Generator per player."
   );
-  assert.match(mapReference, /Power Corridor \| Build Emergency Power Complex here for one Runway: capacity four local Power/);
-  assert.match(mapReference, /Thermal and Water Basin \| Build Civic Heat Battery here for two Runway: capacity three local Power/);
+  for (const location of locations.values()) {
+    assert.ok(mapReference.includes(`| ${location.name} | ${location.visit} | ${location.production} |`),
+      `${location.id} prints its owned district effects`);
+  }
   assert.doesNotMatch(mapReference, /Infrastructure Build costs one less/);
   assert.doesNotMatch(mapReference, /Civic Heat Battery costs one less/);
 
   assert.match(coreRules, /four\s+Facilities/);
   assert.match(coreRules, /one persistent institutional identity and one\s+signature ability/);
   assert.doesNotMatch(coreRules, /Escalation token/);
-  assert.match(componentReference, /\n- Four Facilities, visibly numbered 1–4\n/);
-  assert.doesNotMatch(componentReference, /Grid-Ready/);
-  assert.match(componentReference, /Six shared Program cards/);
-  assert.match(componentReference, /Two Program markers/);
-  assert.doesNotMatch(componentReference, /private Program hand|Escalation slider/);
+  assert.ok(componentReference.includes(`\n- ${config.playerSupply.facilities} Facilities, numbered 1–${config.playerSupply.facilities}\n`));
+  assert.doesNotMatch(componentReference, /^- .*Grid-Ready/m);
+  assert.ok(componentReference.includes(`- ${config.sharedSupply.sharedProgramCards} shared Program cards`));
+  assert.ok(componentReference.includes(`- ${config.playerSupply.programMarkers} Program markers`));
+  assert.doesNotMatch(componentReference, /^- .*(?:private Program hand|Escalation slider)/m);
 
   const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
   const vertical = factions.factions.find((faction) => faction.id === "vertical_empire");
@@ -292,7 +294,9 @@ test("canonical simplification removes stored-token state and keeps two programs
     "Economic Benchmark",
     "Expert",
     "Spotlight",
-    "Public Research Grant",
-    "Influence cube"
+    "Public Research Grant"
   ]) assert.ok(!componentReference.includes(removed), `${removed} is absent`);
+  // The consolidated inventory mentions retired pieces only to exclude them.
+  assert.match(componentReference, /There is no[\s\S]*Influence cube/);
+  assert.doesNotMatch(componentReference, /^- .*Influence cube/m);
 });
