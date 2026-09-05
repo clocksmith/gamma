@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **961 files** (33 .c, 56 .cpp, 1 .gdb, 1 .h, 1 .html, 866 .py, 3 .sh).
+Coverage: **963 files** (33 .c, 56 .cpp, 1 .gdb, 1 .h, 1 .html, 868 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -238,7 +238,7 @@ Coverage: **961 files** (33 .c, 56 .cpp, 1 .gdb, 1 .h, 1 .html, 866 .py, 3 .sh).
 | [`tools/enwiki9_omega.py`](../tools/enwiki9_omega.py) | OMEGA archive operations for the enwiki9 adaptive search loop. | none found |
 | [`tools/enwiki9_package_accounting.py`](../tools/enwiki9_package_accounting.py) | Seal official Hutter score and Gamma expanded-closure package accounting. | none found |
 | [`tools/enwiki9_page_shards.py`](../tools/enwiki9_page_shards.py) | Split an enwiki9 XML byte stream at deterministic page boundaries. | none found |
-| [`tools/enwiki9_python_source_closure.py`](../tools/enwiki9_python_source_closure.py) | Resolve and hash the project-local Python import closure for an entry tool. | [104](../operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5.json) |
+| [`tools/enwiki9_python_source_closure.py`](../tools/enwiki9_python_source_closure.py) | Resolve and hash the project-local Python import closure for an entry tool. | [106](../operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5.json) |
 | [`tools/enwiki9_reflections.py`](../tools/enwiki9_reflections.py) | Create validated terminal reflections and rank successor proposals. | none found |
 | [`tools/enwiki9_release_receipts.py`](../tools/enwiki9_release_receipts.py) | Generate the canonical router for dependency bundles and release receipts. | none found |
 | [`tools/enwiki9_shard_container.py`](../tools/enwiki9_shard_container.py) | Pack independent codec archives into a small reversible shard container. | none found |
@@ -292,6 +292,8 @@ Coverage: **961 files** (33 .c, 56 .cpp, 1 .gdb, 1 .h, 1 .html, 866 .py, 3 .sh).
 | [`tools/fx2_cmix_transformer_gcc_fixture50051_q0_v4.py`](../tools/fx2_cmix_transformer_gcc_fixture50051_q0_v4.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v4.json) |
 | [`tools/fx2_cmix_transformer_gcc_fixture50051_q0_v4_materializer.py`](../tools/fx2_cmix_transformer_gcc_fixture50051_q0_v4_materializer.py) | Copy the fixed public source closure and verify every copied byte. | [2](../operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v4.json) |
 | [`tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py`](../tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
+| [`tools/fx2_cmix_transformer_transfer250k_q0_v1.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v1.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v1.json) |
+| [`tools/fx2_cmix_transformer_transfer250k_q0_v2.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v2.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v2.json) |
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
@@ -791,7 +793,7 @@ Coverage: **961 files** (33 .c, 56 .cpp, 1 .gdb, 1 .h, 1 .html, 866 .py, 3 .sh).
 | [`tools/random_window_novelty_screen.py`](../tools/random_window_novelty_screen.py) | Screen reversible Wikipedia transforms on deterministic random windows. This is a bounded representation-discovery probe. It deliberately uses two unrelated standard-library backends so a transform that only exploits one coder's quirks is visible. A positive result is proxy evidence only: it earns an exact target-substrate trace, never a Hutter score claim. Every candidate is decoder-rebuildable and carries no learned table payload: * wiki_graph_mtf: move-to-front references  | none found |
 | [`tools/record_driver_result.py`](../tools/record_driver_result.py) | Record one driver result JSON into a candidate meta.json file. | none found |
 | [`tools/renewal_hazard_gate.cpp`](../tools/renewal_hazard_gate.cpp) | unknown; inspect source and the selected experiment | none found |
-| [`tools/research_contracts.py`](../tools/research_contracts.py) | Validate the canonical enwik9 objective and its fail-closed receipts. | [102](../operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v1.json) |
+| [`tools/research_contracts.py`](../tools/research_contracts.py) | Validate the canonical enwik9 objective and its fail-closed receipts. | [104](../operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v1.json) |
 | [`tools/residual_odds_tree_gate.cpp`](../tools/residual_odds_tree_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/revlog_slot_bypass_oracle.py`](../tools/revlog_slot_bypass_oracle.py) | Measure REVLOG relational headroom on exact outer-XML WRT slots. | none found |
 | [`tools/route_d_timestamp_microblock_gate.py`](../tools/route_d_timestamp_microblock_gate.py) | Run the zero-credit Route D timestamp structural-microblock Q0 gate. | none found |
