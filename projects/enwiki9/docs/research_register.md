@@ -2,6 +2,31 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-05 - Public FX2 parent passes authenticated fixture replay
+
+`fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` is a reproduced external
+research parent: **50,051 raw bytes -> 3,223 archive bytes**, exact inverse and
+byte-identical fresh re-encoding. The counted framing adapter uses the trained
+205-byte alphabet authenticated from the pinned public archive. The malformed
+envelope control and repeated native transformer probabilities also pass.
+[Terminal audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json)
+and [validated reflection](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json)
+bind source, population, controls, archives, package inventory and closed guards.
+
+CPU 2 diagnostic encode/decode/re-encode costs were 18.230/17.724/17.722 seconds.
+Synthetic steady-state transformer cost was 76.494-76.715 microseconds/token;
+summed cgroup peaks were 5,461,880,832 bytes. Conservative raw package inventory
+is 9,403,055 bytes, including overlapping source/runtime assets; submission
+closure and model licensing remain unresolved. This public profiling fixture
+does not establish a canonical corpus result or a Gamma compression gain.
+The [initial launcher affinity failure](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json)
+remains recorded separately. The unchanged retry pinned the parent launcher.
+
+Decision: retain and hold for a separately frozen transfer/comparison gate.
+Next establish representative frontend-compatible populations and a matched
+parent comparison. Preserve upstream authorship, MIDAS ownership, HORIZON's
+observer and the active 99,000,000-byte complete-package objective.
+
 ## 2026-09-05 - Restore missing terminal receipt links
 
 These retained decisions were missing exact candidate references in the logical
