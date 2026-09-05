@@ -1,0 +1,93 @@
+{
+  "schema": "enwiki9_implementation_validation_v1",
+  "id": "midas_bit_predictor_join_validation_20260905",
+  "recorded_at": "2026-09-05T22:03:30Z",
+  "owner": "codex-native-midas-codec",
+  "evidence_class": "synthetic_implementation_correctness",
+  "candidate_id": null,
+  "objective_credit_bytes": 0,
+  "hypothesis_verdict": "not-tested",
+  "predecessor": {
+    "commit": "9d327137cde642266160bd062edadf5ec9d425fb",
+    "receipt": "operations/evidence/20260905_midas_native_codec_scheduler_unit_validation.json",
+    "interpretation": "Historical source bindings remain resolvable at this commit; the earlier receipt is unchanged."
+  },
+  "source_bindings": [
+    {
+      "path": "lib/midas_native_codec.hpp",
+      "sha256": "b118701ac897fdff76c88548e48a9a801be2486e29fc448ba7ab31bee4c843a7"
+    },
+    {
+      "path": "lib/midas_midpoint_schedule.hpp",
+      "sha256": "7cce0f4ec0efdd7aedb0071e02c1ce4a48b4eaef6a87c5ca0d5f566cf321ce43"
+    },
+    {
+      "path": "lib/midas_bit_predictor.hpp",
+      "sha256": "2af9e17702dc098a6468775a29084c8663a63c75658e598854ca92e179b0b4eb"
+    },
+    {
+      "path": "tests/native/midas_codec_fixture.cpp",
+      "sha256": "236720dd6c185264c8079944e5f5c96c64d5d053d5c0cf6b6cb0d92ce8798fbf"
+    },
+    {
+      "path": "tests/native/midas_schedule_fixture.cpp",
+      "sha256": "855bad9907114ac4f4757fd501eb75f6ce5e4c45748318fc7482cef33acca855"
+    },
+    {
+      "path": "tests/test_midas_native_codec.py",
+      "sha256": "a2d92cf086df7f962dd5035ce6651f9e68c33391f6ea8e4307bd56953c04cc84"
+    },
+    {
+      "path": "lib/predictor.py",
+      "sha256": "2291091f2f4eb2103eb98cc2b22900ce9cb001bcebab097d4076a56eef4b1bdb"
+    }
+  ],
+  "unit_validation": {
+    "command": "python3 -m unittest discover -s tests -p test_midas_native_codec.py -v",
+    "exit_code": 0,
+    "output": "test_causal_scheduler_with_sentinel_backend (test_midas_native_codec.NativeMidasCodecTest.test_causal_scheduler_with_sentinel_backend) ... ok\ntest_native_payload_matches_independent_python_coder (test_midas_native_codec.NativeMidasCodecTest.test_native_payload_matches_independent_python_coder) ... ok\ntest_native_state_and_inverse_known_answers (test_midas_native_codec.NativeMidasCodecTest.test_native_state_and_inverse_known_answers) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 3.195s\n\nOK\n"
+  },
+  "sanitizer_validation": {
+    "fixture": "tests/native/midas_schedule_fixture.cpp",
+    "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "compiler_flags": [
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer"
+    ],
+    "fixture_stop_seconds": 60,
+    "exit_code": 0,
+    "output": "sentinel-only midpoint scheduler: causal P/K/F/S, rebuild, exact state synchronization, joined checkpoints and inverse passed\n"
+  },
+  "established": [
+    "One native pre-truth bit interface joins the byte adapter and P/K/F/S midpoint schedule.",
+    "Joined restore rejects mismatched byte/bit clocks, pending-byte ownership, pre-truth distributions, total checkpoint bounds, truncation and trailing bytes.",
+    "Each arm independently decodes and repeats its finite sentinel payload with exact full predictor and normalized coder state agreement.",
+    "P/K probabilities, finite payloads and explicit authoritative-state projections are identical.",
+    "Checkpoint and continuation checks now exercise the composed interface before and after every encoded/decoded bit."
+  ],
+  "not_established": [
+    "A trainable compact model, complete-model gradient correctness, or a standalone MIDAS parent roundtrip.",
+    "Any corpus compression gain, kernel-selected architecture, complete package or resource qualification."
+  ],
+  "boundaries": {
+    "component_intent": "preserved",
+    "candidate_source_modified": false,
+    "corpus_access": false,
+    "horizon_source_or_observer_modified": false,
+    "partial_horizon_science_access": false
+  },
+  "publication": {
+    "rdpush_commit": "9d327137cde642266160bd062edadf5ec9d425fb",
+    "remote_published": false,
+    "failure": "GitHub SSH authentication rejected: Permission denied (publickey). SSH agent reported no identities.",
+    "credential_changes": false
+  },
+  "next_gate": "Coordinate the existing compact predictor owner and integrate one complete-update backend; freeze the kernel-selected parent archive gate before corpus measurements."
+}
