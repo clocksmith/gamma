@@ -6,12 +6,13 @@ Claim rule:
 
 ```text
 Rows here are artifact-backed only for their measured scope.
-No prefix row proves 10.5%.
+No prefix row proves 9.9000000%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `147`
+- Result JSON files scanned: `149`
 - Roundtrip-passing rows: `13`
+- Active target score: `99,000,000` bytes (`9.9000000%`)
 
 ## Scope `1,000,000,000` Bytes
 
