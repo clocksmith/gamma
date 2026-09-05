@@ -1,0 +1,258 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-terminal-audit.v1",
+  "generated_at": "2026-09-05T16:49:47.982632+00:00",
+  "candidate_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v2",
+  "job_id": "20260905T154326Z_bf606a9b82",
+  "validity": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "localized_cause": "GCC15 rejects unmodified upstream src/models/fxcmv1.cpp:156 because uintptr_t is not declared; compiler identifies missing <cstdint> at line133. make exits2 before a codec binary or any preprocessing/compression invocation.",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v2/20260905T150913856139Z_58e989021328.json",
+    "sha256": "sha256:c74e5256cb54b44bab1f8e8d5be3ba2268efcac2b9b44e72e12be1f99843fabe"
+  },
+  "candidate_tree_sha256": "sha256:58e9890213284fa31425f48e3c9328a12a29e15a9a1aea1b3066c19c83ac811c",
+  "fixture": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/work/prof_input/input",
+    "bytes": 50051,
+    "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+  },
+  "scientific_measurements": {
+    "mapping_gate_pass": null,
+    "roundtrip_ok": null,
+    "deterministic_ok": null,
+    "archive_bytes": null
+  },
+  "executed_phases": [
+    "compile"
+  ],
+  "compile_execution": {
+    "command": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5",
+      "600",
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+    ],
+    "cwd": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/work",
+    "returncode": 2,
+    "elapsed_seconds": 9.111948390956968,
+    "elapsed_cap_seconds": 600,
+    "timing_authority": "shared-host diagnostic only"
+  },
+  "guards": [
+    {
+      "artifact": {
+        "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/guard.json",
+        "bytes": 20445,
+        "sha256": "c7b8ac6dbe731dea0d272452922e12cceaaf002ba1ca16f9c0295e7aa79bd8a0"
+      },
+      "guards": {
+        "affinity_observed_abort": false,
+        "cgroup_memory_guard_exceeded": false,
+        "measurement_incomplete": false,
+        "official_decimal_memory_exceeded": false,
+        "phase_marker_invalid": false,
+        "rss_guard_exceeded": false,
+        "temporary_disk_observed_abort": false,
+        "wall_time_guard_exceeded": false
+      },
+      "measurements": {
+        "affinity_complete": true,
+        "cgroup_v2_complete": true,
+        "per_process_vmhwm_sampled": true,
+        "phase_markers_complete": true,
+        "process_tree_rss_complete": true,
+        "scratch_logical_and_allocated_complete": true,
+        "smaps_rollup_complete": true
+      },
+      "peaks": {
+        "cgroup_memory_peak_bytes": 380710912,
+        "max_observed_process_vmhwm_kib": 379452,
+        "max_sampled_allowed_cpu_count": 1,
+        "max_sampled_cgroup_current_bytes": 379138048,
+        "max_sampled_scratch_allocated_bytes": 6737920,
+        "max_sampled_scratch_logical_bytes": 6250863,
+        "max_sampled_single_rss_kib": 379452,
+        "max_sampled_tree_live_threads": 6,
+        "max_sampled_tree_rss_kib": 423016,
+        "max_sampled_tree_runnable_threads": 1
+      },
+      "cgroup_events_delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    {
+      "artifact": {
+        "path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/guard.json",
+        "bytes": 7903,
+        "sha256": "15ee801070c73a653c37db768bd16d8d453e7974c00c4635e5c43305634dac93"
+      },
+      "guards": {
+        "cgroup_memory_guard_exceeded": false,
+        "logical_cpu_guard_exceeded": false,
+        "measurement_incomplete": false,
+        "official_decimal_memory_exceeded": false,
+        "phase_marker_invalid": false,
+        "rss_guard_exceeded": false,
+        "temporary_disk_guard_exceeded": false,
+        "wall_time_guard_exceeded": false
+      },
+      "measurements": {
+        "affinity_complete": true,
+        "cgroup_v2_complete": true,
+        "per_process_vmhwm_sampled": true,
+        "phase_markers_complete": true,
+        "process_tree_rss_complete": true,
+        "scratch_logical_and_allocated_complete": true,
+        "smaps_rollup_complete": true
+      },
+      "peaks": {
+        "cgroup_memory_peak_bytes": 22872064,
+        "max_observed_process_vmhwm_kib": 22648,
+        "max_sampled_allowed_cpu_count": 1,
+        "max_sampled_cgroup_current_bytes": 22392832,
+        "max_sampled_scratch_allocated_bytes": 6799360,
+        "max_sampled_scratch_logical_bytes": 6288501,
+        "max_sampled_single_rss_kib": 22648,
+        "max_sampled_tree_live_threads": 2,
+        "max_sampled_tree_rss_kib": 44856,
+        "max_sampled_tree_runnable_threads": 1
+      },
+      "cgroup_events_delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    }
+  ],
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "existing_guard": {
+        "inode": 221209,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"
+      },
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1100
+    },
+    "cgroup_inode": 222353,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": false,
+        "inode": 221209,
+        "kernel_cpuset": false,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"
+      },
+      {
+        "created": true,
+        "inode": 222353,
+        "kernel_cpuset": false,
+        "memory_bytes": 99999744,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82"
+      }
+    ],
+    "guard_command_sha256": "e15c6f9a47874d0bdead1fbd5df84dd6b6474563d5483fbc305002a112c82494",
+    "guard_path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
+  "resource_guard_kill": false,
+  "objective_credit_bytes": 0,
+  "larger_gate_authorized": false,
+  "next_action": "Prospectively register a unique correction-only v3 adding GCC -include cstdint, with unchanged pinned upstream bytes, fixture, model, mapping predicates and caps. No automatic rerun of v2.",
+  "artifacts": [
+    {
+      "path": "operations/adaptive/failed/999_20260905T154326Z_bf606a9b82.json",
+      "bytes": 4479,
+      "sha256": "30e3a48fd1d0c5a5bc02701d0013d4dfe8e0c4a1a647100b8f93413c9db0958d"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/compile.execution.json",
+      "bytes": 837,
+      "sha256": "cb9fd13b666a29f24650a1006061285373541d3df6c6cc24243b830d3cd6cbd7"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/compile.stderr",
+      "bytes": 26472,
+      "sha256": "fc112225ac5a58ccee6b11b52c6405a039b3a44ebc609f0a70ba632cc4888cb9"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/compile.stdout",
+      "bytes": 933,
+      "sha256": "77ec74c7831270bb82216b2f1b55ef743866f1e69a62dd2f0560392f532367a2"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/decision.json",
+      "bytes": 2151,
+      "sha256": "c1ae4089ff395bdd62a385204f2284be59f1292ff42019be5db1508102e022c9"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/guard.json",
+      "bytes": 20445,
+      "sha256": "c7b8ac6dbe731dea0d272452922e12cceaaf002ba1ca16f9c0295e7aa79bd8a0"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/guard.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/guard.stdout",
+      "bytes": 21432,
+      "sha256": "a1ffb3fbbe53784d052a74f14964421fdc6a8e0105107ca37d92a293a6c0621f"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/phases.jsonl",
+      "bytes": 76,
+      "sha256": "0a541601c9a81f65b254a4f5cf2f43324bc18d0bf250f26bb62cc441395284f8"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/stage-decision.json",
+      "bytes": 742,
+      "sha256": "b316e6cb6b7a23dc875da8f7d00dc921e421f41a26c3ffc48730ee27c4d3aa74"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/guard.json",
+      "bytes": 7903,
+      "sha256": "15ee801070c73a653c37db768bd16d8d453e7974c00c4635e5c43305634dac93"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/phases.jsonl",
+      "bytes": 106,
+      "sha256": "83ef954c5cff6b24d8dc44f4288fda05f73c9de46433fe8e352cb1835c2119f1"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.log",
+      "bytes": 13931,
+      "sha256": "da7b4433efb517529d880dfb323467dbd62c43a2fc71afb2b554effcf5a722c2"
+    }
+  ]
+}
