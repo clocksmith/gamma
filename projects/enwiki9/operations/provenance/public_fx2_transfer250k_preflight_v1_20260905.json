@@ -1,0 +1,16 @@
+{
+  "schema": "gamma.enwiki9.preflight-diagnostic.v1",
+  "generated_at": "2026-09-05T20:40:31.125228+00:00",
+  "candidate_id": "fx2_cmix_transformer_transfer250k_q0_v1",
+  "status": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "job_launched": false,
+  "codec_executed": false,
+  "source_sha256": "f5ea27f96be2ebaf7ef4af4c31298d787ba20cadd1ba2b495686b00cd7afee08",
+  "contract_sha256": "f64a1f566b0d7ca2381227a1a1f5c2ccc86b6f185773979e656000fdf3c15522",
+  "cause": "The preflight rejected the configured corpus symlink before hashing. The frozen corpus hash itself equals the canonical billion-byte corpus hash.",
+  "canonical_corpus_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+  "correction": "Permit only the corpus input to be a symlink; still hash its entire referenced content. Keep regular-file requirements for all other frozen inputs. No changes to native codec, selected offsets or hashes, controls, package ceiling or resource budget.",
+  "successor": "fx2_cmix_transformer_transfer250k_q0_v2",
+  "objective_credit_bytes": 0
+}
