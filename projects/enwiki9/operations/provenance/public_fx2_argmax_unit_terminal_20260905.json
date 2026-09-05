@@ -1,0 +1,289 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-argmax-unit-terminal.v1",
+  "generated_at": "2026-09-05T21:13:55.398658+00:00",
+  "candidate_id": "fx2_bytemodel_argmax_unit_q0_v1",
+  "job_id": "20260905T211007Z_358c05f2db",
+  "owner": "argmax_explore",
+  "validity": "valid",
+  "hypothesis_verdict": "supported",
+  "decision": "hold",
+  "decision_scope": "Synthetic exact state agreement and fewer original argmax comparisons. Separate uninstrumented native codec comparison required; no launch or score authority.",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_bytemodel_argmax_unit_q0_v1/20260905T211006936496Z_0f4c3d6d4687.json",
+    "sha256": "sha256:d3d1eec28eee54489cbd0b82d94026db62faf95776feb64e24b4dd7f2f9d56f6"
+  },
+  "candidate_tree_sha256": "sha256:0f4c3d6d468714270c547306e60006005e5f7f781b1a51987a73aebb5cbb1133",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_bytemodel_argmax_unit_q0_v1.json",
+    "sha256": "sha256:60f052487d2466066aea27520ed9f967b4e5f01f4b4e33334c34e3bc49cc47ab"
+  },
+  "scientific_measurements": {
+    "exact_state_agreement": true,
+    "repeat_exact": true,
+    "scope_symbols": 8192,
+    "row_families": 32,
+    "independent_processes": 2,
+    "internal_repeats_per_process": 2,
+    "state_checks_per_repeat": 819200,
+    "probability_row_checks_per_repeat": 8388608,
+    "parent_comparisons_per_repeat": 8224768,
+    "cached_comparisons_per_repeat": 3583236,
+    "comparisons_avoided_per_repeat": 4641532
+  },
+  "nan_fallbacks_per_repeat": 7412,
+  "cached_hits_per_repeat": 86796,
+  "resources": {
+    "cpu": [
+      2
+    ],
+    "memory_cap_bytes": 536870912,
+    "scratch_cap_bytes": 67108864,
+    "aggregate_cap_seconds": 150,
+    "guard_pass": true,
+    "continuous_guard_decision": "closed and passed",
+    "peak_cgroup_memory_bytes": 168988672,
+    "peak_scratch_logical_bytes": 276659,
+    "peak_scratch_allocated_bytes": 389120,
+    "elapsed_seconds": 2.038,
+    "timing_authority": "shared-host whole-fixture diagnostic only",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "qualification": false
+  },
+  "phase_costs": [
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "60",
+        "/usr/bin/g++",
+        "-DGAMMA_FX2_ARGMAX_INSTRUMENT=1",
+        "-std=c++17",
+        "-O3",
+        "-m64",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-fno-fast-math",
+        "-fno-finite-math-only",
+        "-ffp-contract=off",
+        "-Wall",
+        "-Wextra",
+        "-pedantic",
+        "-DGAMMA_FX2_ORIGINAL_BYTE_MODEL_HEADER=\"/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/original/src/models/byte-model.h\"",
+        "-DGAMMA_FX2_ORIGINAL_BYTE_MODEL_SOURCE=\"/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/original/src/models/byte-model.cpp\"",
+        "-I/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/patched/src",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/probe.cpp",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/patched/src/models/byte-model.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/fx2_bytemodel_argmax_probe"
+      ],
+      "elapsed_cap_seconds": 60,
+      "elapsed_seconds": 1.1041645279619843,
+      "phase": "compile",
+      "returncode": 0,
+      "system_cpu_seconds": 0.09017,
+      "timing_authority": "shared-host diagnostic; not isolated argmax or codec timing",
+      "user_cpu_seconds": 0.939356
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/fx2_bytemodel_argmax_probe",
+        "--all-arms"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.3030357239767909,
+      "phase": "unit",
+      "returncode": 0,
+      "system_cpu_seconds": 0.003155999999999992,
+      "timing_authority": "shared-host diagnostic; not isolated argmax or codec timing",
+      "user_cpu_seconds": 0.2960379999999999
+    },
+    {
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_bytemodel_argmax_unit_q0_v1/work/fx2_bytemodel_argmax_probe",
+        "--all-arms"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.30243948101997375,
+      "phase": "repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.007985000000000006,
+      "timing_authority": "shared-host diagnostic; not isolated argmax or codec timing",
+      "user_cpu_seconds": 0.29130199999999995
+    }
+  ],
+  "source_validation": {
+    "retained_source_files": 7,
+    "retained_source_bytes": 22525,
+    "source_manifest": {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/source-manifest.json",
+      "bytes": 1383,
+      "sha256": "38683a308968808a974f66278a45228c5b0bc6d7d59e2c01c4eddffc509378da"
+    },
+    "artifact_refs_recomputed": 22,
+    "independent_process_stdout_sha256": "98d329abed19ce7998623f14b6ab169a96fce1d55dc84f70f13b323d0d3dd0c0",
+    "exact_stdout_repeat": true,
+    "production_instrumentation": "Counter code and storage are optional and must be disabled for any future codec timing comparison."
+  },
+  "package": {
+    "unit_executable": {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/fx2_bytemodel_argmax_probe",
+      "bytes": 75032,
+      "sha256": "f79f7375a163430f8f986eb76a5740e66f9c9e35e3166403467b86a836a02b7e"
+    },
+    "complete_submission_package": false,
+    "transitive_runtime_dependency_closure": false,
+    "model_assets_added": false
+  },
+  "authority": {
+    "objective_target_bytes": 99000000,
+    "objective_credit_bytes": 0,
+    "full_corpus_score_bytes": null,
+    "Gamma_compression_gain_bytes": null,
+    "production_speedup": null,
+    "larger_gate_authorized": false
+  },
+  "attribution": {
+    "upstream": "The public FX2/CMIX ByteModel and predictor lineage retain upstream authorship.",
+    "Gamma": "Conditional within-byte argmax reuse, exact source adapter, synthetic P/K/D/C controls and guarded replay harness."
+  },
+  "record_note": "The stage-derived decision retains its pre-closure pending-text field. This audit independently verifies the closed guard and states the terminal resource result above; all measured stage outputs remain unchanged.",
+  "artifacts": [
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/decision.json",
+      "bytes": 6917,
+      "sha256": "b849aeb480f62d425b49468646fa2dbd4d27f24a04c140b55ae460f6492b8021"
+    },
+    {
+      "path": "operations/adaptive/completed/959_20260905T211007Z_358c05f2db.json",
+      "bytes": 3517,
+      "sha256": "1567c2d93da4ae62f3c81430760697a5b70c91a892fd508499e1216543795392"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T211007Z_358c05f2db.resources/guard.json",
+      "bytes": 13774,
+      "sha256": "b11a64a2e564dfff86dd026dce4b59b2d229c8bf610d4bc91c500e345e294969"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/build.json",
+      "bytes": 1581,
+      "sha256": "671cd4a5ca6e3c63f37a2395e52cd6ec8775ff0d38b8891ab726f7f71d0d9aac"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/compile.execution.json",
+      "bytes": 1424,
+      "sha256": "a7e79257032bf88db27c4845319bf0acd25c1319049c04766bf9584b2d28f89d"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/compile.stderr",
+      "bytes": 1319,
+      "sha256": "04dfbf4a5b14fac47885dbf0e90388431b704b85f4d8129f7f0ddcf5bc718183"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.execution.json",
+      "bytes": 517,
+      "sha256": "3086a1156dd9a335cdfddc704f0de8d8f69f8a52820e3f85729834b1dc9c62ee"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.json",
+      "bytes": 46975,
+      "sha256": "f084b17f73230a3c8a36d3bcc73df106cab51648cff3460c16e45c45c939c309"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/repeat.stdout",
+      "bytes": 29055,
+      "sha256": "98d329abed19ce7998623f14b6ab169a96fce1d55dc84f70f13b323d0d3dd0c0"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/source-manifest.json",
+      "bytes": 1383,
+      "sha256": "38683a308968808a974f66278a45228c5b0bc6d7d59e2c01c4eddffc509378da"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/stage-decision.json",
+      "bytes": 759,
+      "sha256": "316504dba95dcba366839eeb72711ca70a63742807b989f56618eb60024540fe"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/unit.execution.json",
+      "bytes": 513,
+      "sha256": "22475abae34bc0fb3f77301410537d4cf52ddec91429aa6c6493dbd55ffe7227"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/unit.json",
+      "bytes": 46975,
+      "sha256": "f084b17f73230a3c8a36d3bcc73df106cab51648cff3460c16e45c45c939c309"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/unit.stdout",
+      "bytes": 29055,
+      "sha256": "98d329abed19ce7998623f14b6ab169a96fce1d55dc84f70f13b323d0d3dd0c0"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/fx2_bytemodel_argmax_probe",
+      "bytes": 75032,
+      "sha256": "f79f7375a163430f8f986eb76a5740e66f9c9e35e3166403467b86a836a02b7e"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/original/src/models/byte-model.cpp",
+      "bytes": 1057,
+      "sha256": "86340c1a0a2fc9d14c0ffd5fb93c011bb705678fdcc1c84839b4ec5a1e77197e"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/original/src/models/byte-model.h",
+      "bytes": 468,
+      "sha256": "815a9d270c0feca69f39e72087063e6a74e6fcce75bf98b0818ec6a7da8ba383"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/original/src/models/model.h",
+      "bytes": 402,
+      "sha256": "031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/patched/src/models/byte-model.cpp",
+      "bytes": 2865,
+      "sha256": "f331fb574470730bbc5527b44e26f6726f4c724a8f67f57f93e7751ba7470146"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/patched/src/models/byte-model.h",
+      "bytes": 1591,
+      "sha256": "b3f962317fe9718eae2c8332e8a8927b87664524b4b0d8f4e4393fd9d960a06c"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/patched/src/models/model.h",
+      "bytes": 402,
+      "sha256": "031c62ac432d3e477398011e860fac3960f58c6b217a443e0d8d733920f02abc"
+    },
+    {
+      "path": "results/fx2_bytemodel_argmax_unit_q0_v1/work/probe.cpp",
+      "bytes": 15740,
+      "sha256": "1e38ea1944fda18c656ce384738c982f1cb4e0779def8a4285ccf92dbbf5ae5f"
+    }
+  ]
+}
