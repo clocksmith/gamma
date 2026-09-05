@@ -1,0 +1,277 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "97656", "--official-decimal-limit-kib", "97656", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82", "--cgroup-memory-max-bytes", "99999744", "--temporary-disk-limit-bytes", "16000000000", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/guard.json", "--label", "20260905T154326Z_bf606a9b82", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_gcc_fixture50051_q0_v2", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260905T154326Z_bf606a9b82-qygya92a/fx2_cmix_transformer_gcc_fixture50051_q0_v2", "--", "/usr/bin/taskset", "--cpu-list", "2", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/fx2_cmix_transformer_gcc_fixture50051_q0_v2.py", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"], "job": {"candidate_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v2", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v2/20260905T150913856139Z_58e989021328.json", "sha256": "sha256:c74e5256cb54b44bab1f8e8d5be3ba2268efcac2b9b44e72e12be1f99843fabe"}, "candidate_tree_sha256": "sha256:58e9890213284fa31425f48e3c9328a12a29e15a9a1aea1b3066c19c83ac811c", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "existing_guard": {"inode": 221209, "memory_bytes": 9899999232, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"}, "memory_bytes": 9999998976, "scratch_bytes": 16000000000, "swap_bytes": 0, "wall_seconds": 1100}, "cgroup_inode": 222353, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": false, "inode": 221209, "kernel_cpuset": false, "memory_bytes": 9899999232, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"}, {"created": true, "inode": 222353, "kernel_cpuset": false, "memory_bytes": 99999744, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82"}], "guard_command_sha256": "e15c6f9a47874d0bdead1fbd5df84dd6b6474563d5483fbc305002a112c82494", "guard_path": "run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v2.json", "sha256": "sha256:75bda939b61bd32e4370ce027d46ebe476329b8b7ad83916e1ffa727cf071c77"}, "gate_size": 50051, "job_id": "20260905T154326Z_bf606a9b82", "priority": 0, "proposal": {"path": "operations/adaptive/proposals/developed/949_fx2_cmix_transformer_gcc_fixture50051_q0_v2.json", "sha256": "sha256:9b834ee4c03dbb803c2030be6a23493097bed372a9e3b0c2b0f6eaa62db66608"}, "proposal_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v2", "purpose": "diagnostic", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "existing_guard": {"inode": 221209, "memory_bytes": 9899999232, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"}, "memory_bytes": 9999998976, "scratch_bytes": 16000000000, "swap_bytes": 0, "wall_seconds": 1100}, "runner": {"path": "tools/fx2_cmix_transformer_gcc_fixture50051_q0_v2.py", "sha256": "sha256:5b406ad84a56e7648ca00adaaff14c4d2905847e2615dd5f0e120d33a7eb8f70"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/fx2_cmix_transformer_gcc_fixture50051_q0_v2"], "started_at": "2026-09-05T16:43:37+00:00", "state": "running", "submitted_at": "2026-09-05T15:43:26+00:00", "tags": ["public-fx2-transformer-fixture"], "timing_authority": "diagnostic", "tool": "tools/fx2_cmix_transformer_gcc_fixture50051_q0_v2.py", "tool_args": ["--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"]}}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 222353,
+      "joined_before_exec": true,
+      "memory_max_bytes": 99999744,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T154326Z_bf606a9b82",
+      "previous_memory_max": "99999744",
+      "requested_memory_max_bytes": 99999744
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "2",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/fx2_cmix_transformer_gcc_fixture50051_q0_v2.py",
+      "--cgroup-path",
+      "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v2"
+    ],
+    "command_sha256": "23a49afaeb1619f618ab6a975fa4dd815a40859e0c5b5aef42b2b79b5b3ce3f5",
+    "elapsed_s": 10.065,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260905T154326Z_bf606a9b82",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 512000,
+      "elapsed_s": 10.0631,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 6799360,
+      "scratch_file_count": 172,
+      "scratch_logical_bytes": 6288501,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 97656,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000
+    },
+    "official_decimal_limit_kib": 97656,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 9.5611,
+      "pid": 3278013,
+      "start_ticks": 172275514,
+      "vmhwm_kib": 22648
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 22343680,
+      "elapsed_s": 9.5611,
+      "max_single_rss_kib": 22648,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3277994,
+          "rss_kib": 22208,
+          "runnable_threads": 0,
+          "start_ticks": 172275509,
+          "vmhwm_kib": 22208
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3278013,
+          "rss_kib": 22648,
+          "runnable_threads": 0,
+          "start_ticks": 172275514,
+          "vmhwm_kib": 22648
+        }
+      ],
+      "scratch_allocated_bytes": 6774784,
+      "scratch_file_count": 171,
+      "scratch_logical_bytes": 6266241,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 44856,
+      "tree_runnable_threads": 0
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 22343680,
+      "elapsed_s": 9.5611,
+      "max_single_rss_kib": 22648,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3277994,
+          "rss_kib": 22208,
+          "runnable_threads": 0,
+          "start_ticks": 172275509,
+          "vmhwm_kib": 22208
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3278013,
+          "rss_kib": 22648,
+          "runnable_threads": 0,
+          "start_ticks": 172275514,
+          "vmhwm_kib": 22648
+        }
+      ],
+      "scratch_allocated_bytes": 6774784,
+      "scratch_file_count": 171,
+      "scratch_logical_bytes": 6266241,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 44856,
+      "tree_runnable_threads": 0
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 22872064,
+      "max_observed_process_vmhwm_kib": 22648,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 22392832,
+      "max_sampled_scratch_allocated_bytes": 6799360,
+      "max_sampled_scratch_logical_bytes": 6288501,
+      "max_sampled_single_rss_kib": 22648,
+      "max_sampled_tree_live_threads": 2,
+      "max_sampled_tree_rss_kib": 44856,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0228,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 1,
+    "sample_count": 21,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_cmix_transformer_gcc_fixture50051_q0_v2",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260905T154326Z_bf606a9b82.resources",
+      "/tmp/gamma-enwiki9-20260905T154326Z_bf606a9b82-qygya92a/fx2_cmix_transformer_gcc_fixture50051_q0_v2"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0228,
+        "processes": [
+          {
+            "pid": 3277994,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2836,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 28,
+              "Private_Dirty": 2836,
+              "Private_Hugetlb": 0,
+              "Pss": 3543,
+              "Pss_Anon": 2836,
+              "Pss_Dirty": 2836,
+              "Pss_File": 707,
+              "Pss_Shmem": 0,
+              "Referenced": 9232,
+              "Rss": 9232,
+              "Shared_Clean": 6368,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172275509
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 8808
+      },
+      {
+        "elapsed_s": 10.0631,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 16000000000,
+    "wall_time_limit_seconds": null
+  }
+}

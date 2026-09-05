@@ -1,0 +1,92 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Unmodified upstream src/models/fxcmv1.cpp:156 uses uintptr_t without an explicit cstdint include; GCC15 reports the missing standard header and make returns2."
+  },
+  "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v2",
+  "candidateRevision": {
+    "candidateId": "fx2_cmix_transformer_gcc_fixture50051_q0_v2",
+    "candidateTreeSha256": "sha256:58e9890213284fa31425f48e3c9328a12a29e15a9a1aea1b3066c19c83ac811c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v2/20260905T150913856139Z_58e989021328.json",
+      "sha256": "sha256:c74e5256cb54b44bab1f8e8d5be3ba2268efcac2b9b44e72e12be1f99843fabe"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Freeze a new correction-only v3 using -include cstdint with unchanged upstream source, fixture, model assets, scientific gates and caps. This compiler failure gives no compression verdict or larger-gate authority.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_gcc_fixture_v2_terminal_20260905.json",
+      "sha256": "sha256:da5ba1757687f28b3195d1b572334513cf8ff390b6cf946a1279bce84dfb7f99"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/compile.execution.json",
+      "sha256": "sha256:cb9fd13b666a29f24650a1006061285373541d3df6c6cc24243b830d3cd6cbd7"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/compile.stderr",
+      "sha256": "sha256:fc112225ac5a58ccee6b11b52c6405a039b3a44ebc609f0a70ba632cc4888cb9"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v2/decision.json",
+      "sha256": "sha256:c1ae4089ff395bdd62a385204f2284be59f1292ff42019be5db1508102e022c9"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v2.json",
+    "sha256": "sha256:75bda939b61bd32e4370ce027d46ebe476329b8b7ad83916e1ffa727cf071c77"
+  },
+  "generatedUtc": "2026-09-05T16:50:10+00:00",
+  "hypothesis": {
+    "rationale": "The missing cstdint declaration prevented construction of the public codec; mapping, exact decode and deterministic replay remain unmeasured.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/999_20260905T154326Z_bf606a9b82.json",
+    "sha256": "sha256:30e3a48fd1d0c5a5bc02701d0013d4dfe8e0c4a1a647100b8f93413c9db0958d"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Bind the GCC portability adapter with an explicit standard-header option before retrying this public-source build."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t154326z_bf606a9b82",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "GCC15 compilation failed before preprocessing or codec execution; the resource envelope remained within its frozen limits and cleanup completed."
+    ],
+    "valid": false
+  }
+}
