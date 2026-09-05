@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tools/enwiki9_dependency_closure.py", line 203, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/enwiki9_dependency_closure.py", line 197, in main
+    path = materialize(args)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/enwiki9_dependency_closure.py", line 163, in materialize
+    research_contracts.validate_artifact(manifest_path)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 3124, in validate_artifact
+    result = _validate_dependency_closure(value, artifact_path, verify_files)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 2084, in _validate_dependency_closure
+    _require(
+    ~~~~~~~~^
+        all(option in command_text for option in value["requiredOptions"]),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        f"{artifact_path}: a required option is absent from the declared commands",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 337, in _require
+    raise ValueError(message)
+ValueError: /home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/release/incomplete_dependency_closure_v1/dependency-closure.json: a required option is absent from the declared commands
