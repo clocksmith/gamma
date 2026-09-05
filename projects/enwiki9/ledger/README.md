@@ -18,6 +18,25 @@ by Git, so rebuild them on each device.
 Open `ledger/index.html` directly in a browser. No server, dependencies, or
 network are required. `--summary` prints coverage without writing files.
 
+Agents can read the same records without generating the browser snapshot:
+
+```bash
+python3 tools/enwiki9_lab.py start
+python3 tools/enwiki9_lab.py records --search 'MECHANISM' --limit 20
+python3 tools/enwiki9_lab.py records --candidate CANDIDATE --limit 20
+python3 tools/enwiki9_lab.py records --view notes --search 'MECHANISM'
+python3 tools/enwiki9_lab.py records --view reviews --state completed --state failed
+```
+
+All commands use the project root. Replace uppercase placeholders with recorded
+names. CLI views are `algorithms`, `runs`, `notes`, `mixes`, `proposals`, and
+`reviews`; use `--offset` and the returned `next_offset` to page through matches.
+Research-note search covers full sections and returns a source path, line number,
+and excerpt. Candidate detail retains all source links and pages its run history.
+The reviews view lists the latest bound job per candidate missing a reflection;
+`--include-legacy` also lists unbound historical jobs. These are discovery checks,
+not validated verdicts, and need review before entering scientific conclusions.
+
 The browser has five views:
 
 - **Algorithms:** candidates, proposals, portfolio ideas, and retained result
@@ -37,14 +56,22 @@ Search within each view. Candidate details retain their full indexed history
 even when a search is active. Lists are paginated. Open source links to resolve
 a claim before acting on it.
 
+## Record map
+
 | Record | Canonical source |
 | --- | --- |
 | Candidate identities and source | [Programs](../programs/), [curated registry](../index.json), [filesystem audit](../candidate_inventory.json) |
 | Lineage | [Mutation records](../operations/adaptive/mutations.jsonl), [candidate revisions](../operations/adaptive/candidate-revisions/) |
 | Ideas and proposals | [Research register](../docs/research_register.md), named portfolio JSONs in `docs/`, [proposals](../operations/adaptive/proposals/) |
 | Jobs and decisions | [Adaptive state](../operations/adaptive/), [reflections](../operations/adaptive/reflections/) |
+| Frozen comparison | [Experiments](../operations/adaptive/experiments/) |
+| Scoped negative findings | [OMEGA exclusions](../operations/adaptive/exclusions/) |
 | Measurements | [Run ledger](../results/run_ledger.jsonl), [retained results](../results/) |
 | Composition | [Explicit graphs](../operations/adaptive/composition/) and named composition portfolios in `docs/` |
+| Worker logs | [Adaptive logs](../run_logs/adaptive/) |
+| Counted proof frontier | [Frontier](../docs/hutter_frontier.json) and [proof run ledger](../docs/hutter_run_ledger.json) |
+| Generated operator report | [Status receipt](../docs/status_receipt.md) and its JSON companion; verify timestamp and process evidence |
+| Atlas-Clockwork problem binding and activation | `docs/atlas_clockwork_seal_*.md` and [seal operations](../operations/atlas_clockwork_seal_v2/) |
 
 The generated HTML and JSON are disposable local snapshots, never another
 registry or queue. They do not validate evidence or authorize a transition.

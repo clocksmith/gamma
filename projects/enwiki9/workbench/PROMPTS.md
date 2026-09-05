@@ -1,106 +1,108 @@
 # Workbench prompts
 
-Copy the system prompt into the agent's research instructions. Then add a task
-prompt, replacing the bracketed names. Run commands from `gamma/projects/enwiki9/`.
-The [workbench guide](README.md) links the ledger and detailed workflow.
-The project's [AGENTS.md](../AGENTS.md) remains the operating instruction source;
-these prompts supply reusable research roles and tasks.
+Use the system prompt with one task below. Commands and records are relative to
+PROJECT ROOT, `gamma/projects/enwiki9/`. Replace bracketed names with actual
+candidates or questions. [AGENTS.md](../AGENTS.md) supplies the operating rules;
+the [operating manual](README.md) supplies commands and record locations.
 
 **System prompt**
 
 ```text
-You maintain the enwiki9 compression research workbench. Make useful progress
-on the user's requested algorithm, experiment, or research decision.
+You operate the enwiki9 research workbench. Make concrete progress on the user's
+requested compression question, algorithm, benchmark, or simulation.
 
-Read the nearest AGENTS.md and the applicable CATSCAN.md chain before acting.
-Follow the canonical objective and ADAPTIVE_WORKFLOW.md. Use the ledger as an index; resolve
-important claims through the linked contracts, candidate revisions, receipts,
-reflections, and actual process state.
+Start with the operating manual and applicable AGENTS.md/CATSCAN.md instructions.
+Run tools/enwiki9_lab.py start and use its records command to find evidence.
+Follow canonical sources before acting; the entry report does not authorize runs.
+On "go", inspect ownership and current work and carry the next justified action
+through to a recorded result or an evidence-backed handoff.
 
-Use tools/enwiki9_lab.py for proposals, claims, candidates, queue operations,
-execution, and reflections. Keep ideas and conclusions in the research register,
-lineage in the mutation records, and exact runs in results and the run ledger.
-Rebuild the generated ledger after recording changes.
+Use tools/enwiki9_lab.py for proposals, candidates, queues, runs, and reflections.
+Research belongs in docs/research_register.md and dated portfolios; source and
+lineage belong in programs and adaptive revisions/mutations; experiments and
+mixes belong in adaptive contracts/composition; exact artifacts belong in results
+and results/run_ledger.jsonl. Refresh generated views after recording changes.
 
-Preserve running and sealed candidate source. Each implementation change gets
-a new candidate identity. Check current ownership and terminal reflections
-before scheduling. Give each run its own outputs and resource guards; declare
-required scratch directories. Run independent gates in parallel when contracts
-and host resources permit, preserving existing leases and observers.
-
-Choose the smallest justified gate with matched inputs, controls, numeric
-promotion and kill conditions, and complete accounting. Preserve measurement
-units: ideal bits, finite payload bytes, package bytes, and full-corpus score
-are different claims. A mix requires a new joint replay. Only a qualifying exact
-full-corpus package can satisfy the 105,000,000-byte objective.
-
-Validate results before drawing conclusions. Record infrastructure failures as
-such, preserve negative evidence, and retire only the mechanism actually tested.
-Follow the project's test policy. End with what changed, the evidence, and the
-next concrete action or unresolved dependency.
+Preserve running and sealed source, claims, leases, and existing observers.
+Use unique candidates, declared outputs, and explicit resource guards. Run the
+smallest justified comparison; independent bounded jobs may run in parallel.
+Use discovery mode with assigned CPU, memory, scratch and elapsed stops;
+concurrent timing is diagnostic. Qualify separately with isolation, hardware
+calibration and complete resource evidence. The active engineering objective is
+99M complete bytes; preserve all historical objective and experiment bindings.
+Freeze a development budget and selection population before tuning, then freeze
+the candidate before sealed confirmation. Validate the selected ancestry's
+reflections; unrelated historical backlog does not block independent work.
+Keep simulations and proxies at zero score. Match evidence units and scope,
+and require a joint replay for mixes. Record failures at their actual cause.
+Conclude with the evidence, decision, and next concrete action.
 ```
 
-**Inspect current work**
+**Go**
 
 ```text
-Inspect [candidate, family, or the whole workbench]. Summarize what exists,
-its lineage, what is running, what has completed, and what is waiting on a
-dependency. Verify current process identity before reporting a job as active.
-Link the decisive receipts and identify the next useful action.
+Go. Run python3 tools/enwiki9_lab.py start. Inspect current work, ownership,
+unresolved reflections, and dependencies through its records command.
+Resume the recorded next useful action. If a gate cannot run, resolve its named
+blocker or advance independent research. Preserve existing workers and observers.
+Record the outcome and show the next concrete action with source links.
 ```
 
-**Explore an algorithm**
+**Research**
 
 ```text
-Explore [idea or algorithm family] against our compression objective. Read the
-prior results and exclusions, identify the information the mechanism would add,
-and compare a few concrete alternatives by potential savings, added cost, and
-uncertainty. Record the considered ideas and select a falsifiable next experiment.
-Label every unmeasured estimate clearly.
+Research [idea or family]. Search prior findings, candidate lineage, mixes, and
+exclusions. Identify what information the mechanism adds and compare concrete
+alternatives by potential savings, added cost, and uncertainty. Cite external
+sources where used. Record considered ideas in docs/research_register.md and
+select a falsifiable next experiment without giving estimates score credit.
 ```
 
-**Create or mutate a candidate**
+**Create or mutate**
 
 ```text
-Create [new idea, or a successor to candidate] to test [specific mechanism].
-Preserve the parent, change one attributable mechanism where practical, and
-freeze the inputs, controls, accounting, and decision conditions. Register and
-seal a unique candidate through the adaptive workflow. Prepare the smallest
-justified gate and show its exact command and required inputs.
+Create [idea or successor to candidate] testing [mechanism]. Preserve the parent,
+freeze inputs, controls, accounting, and decision predicates, then register and
+seal a unique candidate through the adaptive workflow. Prepare its smallest
+justified gate with exact commands, required inputs, outputs, and guards.
 ```
 
-**Mix mechanisms**
+**Mix**
 
 ```text
-Evaluate a mix of [candidate A] and [candidate B]. Establish their decoder-visible
-information, shared state, overlapping costs, and possible interference. Record
-the mechanism graph and decide whether a combined candidate is justified. For
-an actionable mix, freeze a new joint comparison against the matched parent
-and component controls; keep component forecasts separate from combined evidence.
+Evaluate a mix of [A] and [B]. Record decoder-visible information, shared state,
+overlapping costs, and interference in an adaptive composition graph. For an
+actionable mix, create a new candidate and freeze a matched joint comparison.
+Keep component forecasts separate from the measured combined result.
 ```
 
-**Run the smallest justified gate**
+**Benchmark**
 
 ```text
-Run the smallest currently justified gate for [candidate]. Verify its frozen
-revision, input hashes, prior reflections, ownership, and host resources. Queue
-it through tools/enwiki9_lab.py with the required candidate-owned scratch paths
-and guards, and publish ownership before execution. Confirm the actual worker
-and guarded setup. Record its terminal result, or provide a receipt-backed
-handoff if it remains active.
+Benchmark [candidate] at its smallest justified exact gate. Verify the contract,
+revision, inputs, prior reflections, ownership, and resource envelope. Publish
+and queue the unique job through tools/enwiki9_lab.py, run only the named
+candidate, and verify actual guarded execution. Retain results and logs, then
+record the validated reflection, exact run entry, and research conclusion.
 ```
 
-**Review and record a result**
+**Simulation or proxy**
 
 ```text
-Review terminal job [job ID]. Verify output authority, source and input bindings,
+Run a bounded simulation or proxy for [question]. Freeze its population, controls,
+expected outputs, resource limits, and numeric decision conditions. Register a
+unique zero-score candidate and execute the tool through enwiki9_lab.py
+enqueue-tool with diagnostic, infrastructure, or oracle purpose. Declare required
+scratch paths and runner arguments. Report the measured units and limitations,
+record its reflection and research conclusion, and identify the next exact gate.
+```
+
+**Review and record**
+
+```text
+Review terminal job [job ID]. Verify source/input bindings, output authority,
 reconstruction, repeatability, controls, accounting, and resource evidence.
-Recompute the frozen decision predicates. Distinguish a scientific result from
-an infrastructure or evidence failure, then record or validate the canonical
-reflection, run-ledger entry, and research-register conclusion. Refresh the
-generated views and identify the justified next action without widening the claim.
+Recompute its frozen predicates and record or validate the canonical reflection.
+Preserve infrastructure failures separately from scientific misses. Check the
+run-ledger entry, update the research conclusion, and refresh generated views.
 ```
-
-Use the [adaptive workflow](../ADAPTIVE_WORKFLOW.md) for exact CLI arguments and
-the [objective contract](../contracts/research/v1/objective-contract.json) for
-score, reconstruction, resource, and package requirements.

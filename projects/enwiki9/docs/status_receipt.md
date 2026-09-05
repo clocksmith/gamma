@@ -2,32 +2,33 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-04T21:59:37+00:00`
+- Generated at UTC: `2026-09-05T16:40:25+00:00`
 
 ## Target State
 
-- Objective ID: `gamma-enwiki9-hutter-105m-v1`
-- Objective digest: `sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8`
-- Objective path: `contracts/research/v1/objective-contract.json`
-- `10.5000000%` target score: `105,000,000`
+- Objective ID: `gamma-enwiki9-hutter-99m-v2`
+- Objective digest: `sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288`
+- Objective path: `contracts/research/v2/objective-contract.json`
+- Active `9.9000000%` target score: `99,000,000`
 - Full-corpus constructive result present: `false`
-- `10.5000000%` constructive upper bound present: `false`
+- Active objective constructive upper bound present: `false`
+- Historical certificate target: `105,000,000`; certificate upper bound present: `false`
 
 ## Operator Summary
 
-- Candidate: `None`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
-- Gate verdict: `None`
-- Gate next action: `None`
+- Candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
+- Scope bytes: `1,000,000,000`
+- Scope symbols: `647,798,592`
+- Scope unit: `Endpoint428 WRT bit at a frozen A-active byte`
+- Gate verdict: `running`
+- Gate next action: `wait_for_existing_observer`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `false`
 - Active cmix mode: `n/a`
-- Driver result present: `unknown`
+- Driver result present: `false`
 - RSS guard status: `n/a`
-- RSS samples: `n/a`
+- RSS samples: `9,649`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `n/a`
@@ -36,45 +37,58 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch candidate gate: `true`
+- Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `26`
+- Pending adaptive jobs: `28`
 - Held pending adaptive jobs: `26`
-- Claimable pending adaptive jobs: `0`
+- Claimable pending adaptive jobs: `2`
 - Canonical release bundles: `0`
 - Validated release run receipts: `0`
 - Validated failed release attempts: `0`
 - Objective-achieved receipts: `0`
 - Release index mode: `structure-only-router`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
+- Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
 ## Active Gate
 
-- Gate verdict: `unknown`
-- Next action: `unknown`
-- Candidate: `unknown`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
+- Gate verdict: `running`
+- Next action: `wait_for_existing_observer`
+- Candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
+- Scope bytes: `1,000,000,000`
+- Scope symbols: `647,798,592`
+- Scope unit: `Endpoint428 WRT bit at a frozen A-active byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
 - Driver result JSON: `not present`
-- Driver result present: `unknown`
+- Driver result present: `false`
 - RSS guard JSON: `not present`
-- RSS guard present: `unknown`
+- RSS guard present: `false`
 - Active scorer observed: `false`
-- Live gate: `false`
-- Liveness classification: `not_persisted_running`
-- Matching adaptive jobs: `0`
+- Existing observer job: `20260904T134731Z_441f96254f`
+- Observer worker verified on this host: `true`
+- Adopted source identities verified on this host: `true`
+- Observer progress UTC: `2026-09-05T16:40:20+00:00`
+- Observer progress fresh: `true`
+- Trace bytes: `8,215,097,344` / `10,364,777,488`
+- Archive bytes: `93,601,792`
+- Observer samples: `9,649`
+- Maximum observed tree RSS bytes: `9,320,493,056`
+- Continuous resource proof: `false`
+- Science accessed before terminal: `false`
+- Observer state: `observing`
+- Progress source: `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_orphan_adoption_q0_v1/progress.json`
+- Live gate: `true`
+- Liveness classification: `live_observed_owner`
+- Matching adaptive jobs: `1`
 - Matching controllers: `0`
 - Matching driver observed: `false`
-- Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, or matching live worker PID and command.`
+- Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
 
 ## Gate Evidence Status
 
-- Claim status: `awaiting_gate_receipts`
+- Claim status: `observer_progress_only`
 - Driver result terminal: `false`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
@@ -83,8 +97,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `None`
-- Expected scope bytes: `n/a`
+- Expected candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
+- Expected scope bytes: `1,000,000,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -95,8 +109,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `None`
-- Expected active scope bytes: `n/a`
+- Expected active candidate: `endpoint428_horizon_retained_parent_trace_q0_v1`
+- Expected active scope bytes: `1,000,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -106,19 +120,19 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Action
 
-- Safe to launch candidate gate: `true`
-- Action: `inspect_queue_before_launch`
-- Reason: `no terminal receipt blocks the next candidate queue decision`
-- Allowed work: `n/a`
+- Safe to launch candidate gate: `false`
+- Action: `wait_for_existing_observer`
+- Reason: `The frozen HORIZON source identities remain live and its sole observer owns terminal routing.`
+- Allowed work: `independent work with its own frozen contract and resource authorization`
 - Forbidden work: `n/a`
 
 ## Handoff
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `inspect_queue_before_launch`
+- Recommended action: `wait_for_existing_observer`
 - Command source: `none while gate is non-terminal`
-- Claim rule: `No prefix row proves the 10.5000000% full-corpus target.`
+- Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
 ## Operator Logs
 
@@ -129,11 +143,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `953`
-- Registered programs: `493`
-- Untracked nonignored entries: `6`
-- Modified tracked entries: `8`
-- Candidate statuses: `active=18, blocked_dependency=39, candidate=231, measured_negative=100, retired=565`
+- Program directories: `956`
+- Registered programs: `496`
+- Untracked nonignored entries: `47`
+- Modified tracked entries: `21`
+- Candidate statuses: `active=18, blocked_dependency=39, candidate=231, measured_negative=100, retired=565, track_source_before_evolution=3`
 
 ## Active Runner Process Table
 
@@ -145,7 +159,27 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 8,216,461,312 | `2026-09-05T16:41:48+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 93,618,176 | `2026-09-05T16:41:39+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 329,036 | `2026-09-05T16:41:30+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-04T12:55:53+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/cmix` | 1,625,944 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.log` | 4,803 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b-guard.json` | 4,348 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.bin` | 30,309,597 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/scan-b.json` | 4,286 | `2026-08-30T23:00:07+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-a.log` | 4,803 | `2026-08-30T22:56:04+00:00` |
+
+## Contingencies
+
+- If current gate passes: `record pass and inspect the frozen candidate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 
@@ -157,4 +191,4 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Claim Rule
 
-No prefix row proves the `10.5000000%` full-corpus target.
+No prefix row proves the `9.9000000%` full-corpus target.

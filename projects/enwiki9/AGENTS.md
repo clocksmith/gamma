@@ -28,9 +28,18 @@ Create, mutate, measure, track, and promote compression algorithms through
 Commands below run from `gamma/projects/enwiki9/`:
 
 ```bash
-python3 tools/enwiki9_lab.py status
-sed -n '1,200p' docs/status_receipt.md
+python3 tools/enwiki9_lab.py start
+python3 tools/enwiki9_lab.py records --view runs --state running
 ```
+
+When the user says "go", follow [workbench/README.md](workbench/README.md):
+inspect ownership and relevant prior evidence, choose one justified benchmark,
+simulation, or research question, execute authorized work, record the outcome,
+and continue. A held gate can coexist with independent research. Do not turn a
+nonterminal wait or the entire historical review backlog into a blanket stop.
+Use `records --search QUERY`, `records --candidate ID`, and
+`records --view reviews` to retrieve bounded, source-linked context. Reviews
+separate bound jobs from legacy records; no automatic scientific verdict is given.
 
 Inspect live processes before source changes or resource-intensive work:
 
@@ -65,14 +74,21 @@ state transitions; do not create ad hoc launchers or root-level queue files.
 ## Proof Objective
 
 The canonical objective contract is
-`contracts/research/v1/objective-contract.json`. The objective is a
+`contracts/research/v2/objective-contract.json`. The objective is a
 constructive official full-corpus score:
 
 ```text
-score <= 105,000,000 bytes
+score <= 99,000,000 bytes
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
 ```
+
+The 99M target is provisional engineering economics. The unchanged v1 objective
+and its 105M milestone retain their historical digests. Consult
+[competitive provenance](operations/provenance/competitive_frontier_v1.json) for
+published submissions, official versus contingent thresholds, and unresolved
+committee accounting. Endpoint428's 109,389,323-byte forecast has 10,389,323
+bytes of planning debt; that is not a measured full-corpus deficit.
 
 Forecasts, prefixes, partial archives, oracles, teachers, and shadows guide
 search but are not the objective.
@@ -81,25 +97,37 @@ Before promoting to a larger gate, account for program/source/model/table bytes,
 measured archive bytes, memory, runtime, remaining target debt, and a numeric
 kill condition. Compare only identical corpus populations and scopes.
 
-## Durable State
+## Discovery and Qualification
 
-| State | Owner |
-|---|---|
-| Every considered algorithm, composition, merge, park, rejection, and conclusion | `docs/research_register.md` |
-| Machine-readable batch evaluations and ranked portfolios | `docs/*portfolio*.json` and their named companion registries |
-| Algorithm proposals | `operations/adaptive/proposals/` |
-| Candidate source and hypothesis | `programs/<id>/` |
-| Mutation lineage | `operations/adaptive/mutations.jsonl` |
-| Frozen experiments, source revisions, and terminal reflections | `operations/adaptive/experiments/`, `operations/adaptive/candidate-revisions/`, and `operations/adaptive/reflections/` |
-| Explicit mechanism combinations | `operations/adaptive/composition/` and named composition portfolios |
-| Pending/running/terminal jobs | `operations/adaptive/<state>/` |
-| Worker logs | `run_logs/adaptive/` |
-| Exact candidate receipts | `results/<id>/` |
-| Canonical run registry | `results/run_ledger.jsonl` |
-| Generated lifecycle inventory | `candidate_inventory.json` |
-| Source-bound proof frontier | `docs/hutter_frontier.json` and `docs/hutter_run_ledger.json` |
-| Current operator status | `docs/status_receipt.md` |
-| Atlas-Clockwork problem bank, binding audit, commitment, and activation | `docs/atlas_clockwork_seal_*.md` and `operations/atlas_clockwork_seal_v2/` |
+Discovery uses an explicit CPU set, memory, scratch and elapsed-time stop through
+the existing queue. It may share a host under admission controls while preserving
+HORIZON's sole observer. Concurrent timing is diagnostic. Unknown occupancy or a
+missing controller grants no launch permission. Qualification requires isolated
+timing, hardware calibration, and complete phase resource evidence; a future full
+corpus certificate is not a prerequisite for implementing its candidate.
+
+Freeze the hypothesis, parent, changed mechanism, development budget, selection
+population, sealed confirmation population and stop rule before measuring.
+Explicitly budgeted parameter selection is allowed on development data; freeze
+before confirmation. Preserve failed configurations and explain their scope.
+Economic stops are budget decisions; certified futility requires a proved bound.
+Require validated reflections for selected ancestry, then review unrelated backlog
+incrementally. Retired Fiber-FOSSIL exact retrieval is not a fresh candidate when
+renamed. HARM edit alignment and deep-MIDAS require their own evidence.
+
+Use synthetic checks, 250KB/1MB exact archives, opening and distant 10MB,
+100MB, then 1GB. History-dependent mechanisms need state-warm populations;
+a cold prefix cannot certify their mature-history behavior. Cache builds and
+parent traces only with matching frontend, source, state and coordinate identities.
+HORIZON's original scientific threshold stays fixed. Recovered probabilities
+cannot restore missing continuous runtime or memory evidence.
+
+## Record The Work
+
+Use the [canonical record map](ledger/README.md#record-map) for storage locations
+and the [operating manual](workbench/README.md) for research, benchmark, simulation,
+and result-recording commands. Candidate source, measured artifacts, and frozen
+contracts keep their evidence paths; organize discovery through the existing index.
 
 Record every meaningfully evaluated algorithm and decisive conclusion, including
 merges, parked ideas, preimplementation rejections, and oracle-only work. Use a
@@ -161,12 +189,12 @@ inspect that host directly.
   `VALID_BOUND`. Expert review of an `UNBOUND` draft is allowed.
 - Do not auto-install models or dependencies.
 - Follow `../../EMOJI.md`; do not add emojis.
-- Run tests only when the user requests them.
+- Standing permission covers source inspection, research, synthetic fixtures, targeted regression tests, the release canary, and independently bounded discovery gates on assigned resources. Large launches and dependency/model installation still require explicit user authorization.
 
 ## Status Replies
 
-When explicitly asked for Hutter status, include the `105,000,000` byte and
-`10.5000000%` targets, the verified full-1G score or `unknown`, the best counted
+When explicitly asked for Hutter status, include the `99,000,000` byte and
+`9.9000000%` targets, the verified full-1G score or `unknown`, the best counted
 forecast and signed target distance, and the active gate's receipt-backed
 scope, progress, guard state, and terminal status.
 

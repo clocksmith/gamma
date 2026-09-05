@@ -2,6 +2,12 @@
 
 This is the primary operating workflow for enwiki9 research.
 
+For a concise entry path, read [workbench/README.md](workbench/README.md).
+From the project root, `python3 tools/enwiki9_lab.py start` reports ownership,
+record coverage, and next read commands; `records --search QUERY` retrieves
+bounded context. These read-only commands do not launch or mutate experiments.
+The [record map](ledger/README.md#record-map) identifies each canonical source.
+
 All proposal, mutation, gate, and promotion decisions are subordinate to the
 versioned objective in `contracts/research/v1/objective-contract.json`.
 Receipts must eventually bind its canonical SHA-256; copied target values are

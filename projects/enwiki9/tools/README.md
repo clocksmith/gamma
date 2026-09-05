@@ -6,7 +6,9 @@ purpose here instead of being mass-moved.
 
 ## Primary Entry Point
 
-Use `enwiki9_lab.py` to propose and claim algorithms, create, clone, mutate,
+Start with `enwiki9_lab.py start` for agent orientation and
+`enwiki9_lab.py records` for bounded searches and candidate history.
+Use the same CLI to propose and claim algorithms, create, clone, mutate,
 queue, adaptively select gates, run parallel workers, inspect durable state,
 and refresh generated views:
 
@@ -21,6 +23,7 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Task | Entry point |
 |---|---|
 | Adaptive experiment loop | `enwiki9_lab.py` |
+| Agent entry, record search, and review backlog | `enwiki9_lab.py start`, `enwiki9_lab.py records` ([manual](../workbench/README.md)) |
 | Searchable local ledger and JSON export | `enwiki9_ledger.py` ([guide](../ledger/README.md)) |
 | Candidate revision and immutable blob binding | `enwiki9_candidate_revisions.py` |
 | Project-local Python source closure | `enwiki9_python_source_closure.py` |
@@ -59,8 +62,8 @@ explicit compatibility spelling. When both implementation entries are Python,
 the freezer automatically hashes their project-local runtime source closure into
 the prospective input manifest and names the runner and materializer as closure
 roots. That closure includes recursively imported modules under `tools/` and,
-when `research_contracts.py` is reachable, every JSON contract it loads from
-`contracts/research/v1/`; `--bind-python-source-closure` makes that requirement
+when `research_contracts.py` is reachable, the retained v1 contracts and active v2 objective JSON under
+`contracts/research/`; `--bind-python-source-closure` makes that requirement
 explicit. An
 implementation-only retry may retain extra diagnostic
 observations with `--additional-measurement ID=UNIT=DEFINITION`; this does not

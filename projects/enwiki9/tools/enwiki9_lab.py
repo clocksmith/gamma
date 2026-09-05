@@ -36,6 +36,7 @@ import enwiki9_reflections
 import enwiki9_worker_identity as worker_identity
 import cmix_memory_safe_parent_qualification_verify_v3 as parent_qualification_v3
 import research_contracts
+import managed_exclusive_lease
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
@@ -97,7 +98,7 @@ def _proc_command_sha256_candidates(pid: int, runner_sha256: str) -> set[str]:
 
 
 def get_exclusive_lease() -> dict[str, Any] | None:
-    if not EXCLUSIVE_FULL1G_PATH.is_file():
+    if EXCLUSIVE_FULL1G_PATH.is_symlink() or not EXCLUSIVE_FULL1G_PATH.is_file():
         return None
     try:
         data = json.loads(EXCLUSIVE_FULL1G_PATH.read_text())
@@ -116,10 +117,19 @@ def get_exclusive_lease() -> dict[str, Any] | None:
             return None
         if command_sha256 not in _proc_command_sha256_candidates(pid, runner_sha256):
             return None
+        if _proc_start_ticks(pid) != data.get("proc_start_ticks"):
+            return None
         return data
     except Exception:
         pass
     return None
+
+
+def exclusive_lease_state() -> dict[str, Any]:
+    lease = get_exclusive_lease()
+    present = EXCLUSIVE_FULL1G_PATH.exists() or EXCLUSIVE_FULL1G_PATH.is_symlink()
+    return {"state": "live" if lease is not None else "unknown" if present else "absent",
+            "path": str(EXCLUSIVE_FULL1G_PATH), "lease": lease}
 
 
 def require_no_exclusive_lease() -> None:
@@ -128,7 +138,7 @@ def require_no_exclusive_lease() -> None:
         raise ValueError(
             f"machine-wide exclusive lease active for candidate={lease.get('candidate_id')} (PID {lease.get('pid')})"
         )
-    if EXCLUSIVE_FULL1G_PATH.exists():
+    if EXCLUSIVE_FULL1G_PATH.exists() or EXCLUSIVE_FULL1G_PATH.is_symlink():
         raise ValueError(
             "machine-wide exclusive lease file exists but its process identity "
             "cannot be validated; resolve it explicitly before launching work"
@@ -562,6 +572,10 @@ def iter_proposals(states: set[str] | None = None) -> list[dict[str, Any]]:
             except (OSError, ValueError, json.JSONDecodeError):
                 continue
             proposal["_path"] = path.relative_to(ROOT).as_posix()
+            proposal["_directory_state"] = state
+            if proposal.get("state", state) != state:
+                proposal["_state_mismatch"] = True
+                proposal["operational_status"] = "inconsistent_state"
             rows.append(proposal)
     rows.sort(
         key=lambda row: (
@@ -574,6 +588,8 @@ def iter_proposals(states: set[str] | None = None) -> list[dict[str, Any]]:
 
 
 def require_actionable_proposal(proposal: dict[str, Any], action: str) -> None:
+    if proposal.get("state") not in {"proposed", "claimed", "developed"}:
+        raise ValueError(f"proposal {proposal.get('proposal_id')} cannot {action} with recorded state={proposal.get('state')!r}")
     operational_status = proposal.get("operational_status", "actionable")
     if operational_status != "actionable":
         raise ValueError(
@@ -596,6 +612,8 @@ def transition_proposal(
         raise FileNotFoundError(f"proposal not found: {proposal_id}")
     source_state, source_path = located
     proposal = load_json(source_path)
+    if target_state in {"claimed", "developed"} and proposal.get("state") != source_state:
+        raise ValueError("proposal state disagrees with its directory; reconcile the record before claiming or developing")
     if target_state == "claimed":
         if source_state != "proposed":
             raise ValueError("only a proposed proposal can be claimed")
@@ -1074,6 +1092,9 @@ def enqueue_job(
     tags: list[str],
     experiment: pathlib.Path | None,
     runner: pathlib.Path | None = None,
+    execution_mode: str | None = None,
+    resource_budget: dict[str, Any] | None = None,
+    tool_fields: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     ensure_layout()
     require_no_exclusive_lease()
@@ -1123,6 +1144,20 @@ def enqueue_job(
         "tags": sorted(set(tags)),
         "submitted_at": utc_now(),
     }
+    if tool_fields is not None:
+        job.update(tool_fields)
+    if execution_mode is not None:
+        job["execution_mode"] = execution_mode
+        job["resource_budget"] = resource_budget
+        validate_execution_budget(job)
+        if execution_mode == "qualification":
+            validate_qualification_calibration(job)
+        job["timing_authority"] = "diagnostic" if execution_mode == "discovery" else "isolated-measurement-pending-verification"
+        job["execution_guard"] = artifact_reference(ROOT / "tools/run_with_resource_guard_v3.py")
+    else:
+        job["execution_mode"] = "legacy"
+        job["held"] = True
+        job["hold_reason"] = "explicit execution mode and resource assignment required before execution"
     if archive_ceiling is not None:
         job["archive_ceiling"] = archive_ceiling
     filename = f"{999 - max(0, min(999, priority_value)):03d}_{job_id}.json"
@@ -1148,6 +1183,8 @@ def enqueue_tool_job(
     tags: list[str],
     experiment: pathlib.Path | None,
     scratch_directories: list[str],
+    execution_mode: str | None = None,
+    resource_budget: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if purpose not in {"diagnostic", "infrastructure", "oracle"}:
         raise ValueError(
@@ -1163,7 +1200,7 @@ def enqueue_tool_job(
             for value in scratch_directories
         }
     )
-    job = enqueue_job(
+    return enqueue_job(
         candidate_id=candidate_id,
         gate_size=gate_size,
         priority=priority,
@@ -1173,18 +1210,11 @@ def enqueue_tool_job(
         tags=tags,
         experiment=experiment,
         runner=tool_path,
+        execution_mode=execution_mode,
+        resource_budget=resource_budget,
+        tool_fields={"tool": tool_path.relative_to(ROOT).as_posix(),
+                     "tool_args": tool_args, "scratch_directories": normalized_scratch_directories},
     )
-    pending_path = next(
-        path
-        for path in QUEUE_DIRS["pending"].glob("*.json")
-        if load_json(path).get("job_id") == job["job_id"]
-    )
-    job["tool"] = tool_path.relative_to(ROOT).as_posix()
-    job["tool_args"] = tool_args
-    job["scratch_directories"] = normalized_scratch_directories
-    atomic_json(pending_path, job)
-    research_contracts.validate_artifact(pending_path)
-    return job
 
 
 def validate_candidate_scratch_directory(candidate_id: str, value: str) -> str:
@@ -1210,6 +1240,93 @@ def materialize_job_scratch_directories(job: dict[str, Any]) -> None:
         destination.mkdir(parents=True, exist_ok=True)
         if not destination.is_dir():
             raise ValueError(f"scratch directory is not a directory: {relative}")
+
+
+def validate_execution_budget(job: dict[str, Any]) -> dict[str, Any]:
+    mode = job.get("execution_mode")
+    budget = job.get("resource_budget")
+    if mode not in {"discovery", "qualification"} or not isinstance(budget, dict):
+        raise ValueError("explicit discovery/qualification mode and resource budget are required")
+    cpus = budget.get("cpus")
+    if (not isinstance(cpus, list) or not cpus
+            or any(not isinstance(cpu, int) or isinstance(cpu, bool) or cpu < 0 for cpu in cpus)
+            or len(set(cpus)) != len(cpus)):
+        raise ValueError("resource budget requires a unique explicit CPU set")
+    for key in ("memory_bytes", "scratch_bytes", "wall_seconds"):
+        value = budget.get(key)
+        if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+            raise ValueError(f"resource budget requires positive {key}")
+    if budget["memory_bytes"] < 1024 or budget.get("swap_bytes") != 0:
+        raise ValueError("resource budget requires at least 1024 memory bytes and zero swap")
+    parent = pathlib.Path(str(budget.get("cgroup_parent", "")))
+    if not parent.is_absolute() or not parent.is_relative_to("/sys/fs/cgroup"):
+        raise ValueError("cgroup parent must be an absolute delegated cgroup-v2 directory")
+    existing = budget.get("existing_guard")
+    if existing is not None:
+        if not isinstance(existing, dict):
+            raise ValueError("existing guard declaration must be an object")
+        path = pathlib.Path(str(existing.get("path", "")))
+        memory = existing.get("memory_bytes")
+        if (path.parent != parent or not isinstance(existing.get("inode"), int)
+                or not isinstance(memory, int) or memory <= 0 or memory % 1024
+                or budget["memory_bytes"] - memory < 16 * 1024 * 1024):
+            raise ValueError("existing guard requires one sibling cgroup and a separate coordinator memory budget")
+        if mode != "discovery":
+            raise ValueError("existing nested guard adoption currently supports diagnostic discovery only")
+    if mode == "qualification":
+        if not isinstance(budget.get("calibration"), dict):
+            raise ValueError("qualification requires source-bound verified host calibration")
+        objective = research_contracts.validate_objective()
+        if len(cpus) != 1:
+            raise ValueError("qualification requires one assigned CPU")
+        if (budget["memory_bytes"] > objective["resources"]["memory"]["maximumBytes"]
+                or budget["scratch_bytes"] > objective["resources"]["temporaryDisk"]["maximumBytes"]):
+            raise ValueError("qualification budget exceeds the active objective resource limits")
+    return budget
+
+
+def parse_cpu_set(value: str) -> set[int]:
+    result: set[int] = set()
+    for part in value.strip().split(","):
+        bounds = part.split("-")
+        if len(bounds) == 1:
+            result.add(int(bounds[0]))
+        elif len(bounds) == 2 and int(bounds[0]) <= int(bounds[1]):
+            result.update(range(int(bounds[0]), int(bounds[1]) + 1))
+        else:
+            raise ValueError("invalid CPU set")
+    return result
+
+
+def execution_options(args: argparse.Namespace) -> dict[str, Any]:
+    if args.mode is None:
+        return {}
+    cpus: set[int] = set()
+    for part in (args.cpu_set or "").split(","):
+        if not part:
+            continue
+        bounds = part.split("-")
+        if len(bounds) == 1:
+            cpus.add(int(bounds[0]))
+        elif len(bounds) == 2 and int(bounds[0]) <= int(bounds[1]):
+            cpus.update(range(int(bounds[0]), int(bounds[1]) + 1))
+        else:
+            raise ValueError("invalid CPU set")
+    budget = {"cpus": sorted(cpus), "memory_bytes": args.memory_limit_bytes,
+              "scratch_bytes": args.disk_limit_bytes, "wall_seconds": args.wall_time_limit_seconds,
+              "swap_bytes": 0, "cgroup_parent": str(args.cgroup_parent)}
+    if args.existing_guard_cgroup is not None:
+        path = args.existing_guard_cgroup
+        if path.is_symlink() or path.resolve() != path:
+            raise ValueError("existing guard cgroup must be a direct absolute path")
+        budget["existing_guard"] = {"path": str(path), "inode": path.stat().st_ino,
+                                    "memory_bytes": args.existing_guard_memory_bytes}
+    if args.calibration_plan is not None and args.calibration_receipt is not None:
+        budget["calibration"] = {"plan": artifact_reference(args.calibration_plan.resolve()),
+                                 "receipt": artifact_reference(args.calibration_receipt.resolve()),
+                                 "verifier": artifact_reference(ROOT / "tools/geekbench5_tryout_calibration_verify_q0_v1.py")}
+    validate_execution_budget({"execution_mode": args.mode, "resource_budget": budget})
+    return {"execution_mode": args.mode, "resource_budget": budget}
 
 
 def successful_scopes(meta: dict[str, Any]) -> set[int]:
@@ -1337,21 +1454,80 @@ def _managed_snapshot_environment_matches_job(
 def worker_pid_matches_job(job: dict[str, Any]) -> bool:
     """Require the live PID to still execute the command claimed by the job."""
 
+    resources = job.get("execution_resources")
+    if isinstance(resources, dict):
+        pid = job.get("worker_pid")
+        try:
+            before = pathlib.Path(f"/proc/{pid}/stat").read_text()
+            fields = before[before.rfind(")") + 2:].split()
+            expected = job.get("worker_proc_start_ticks")
+            raw = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().rstrip(b"\0")
+            after = pathlib.Path(f"/proc/{pid}/stat").read_text()
+            after_fields = after[after.rfind(")") + 2:].split()
+            return (expected is not None and int(fields[19]) == expected == int(after_fields[19])
+                    and fields[0] not in {"Z", "X", "x"} and after_fields[0] not in {"Z", "X", "x"}
+                    and resources.get("boot_id") == pathlib.Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+                    and hashlib.sha256(raw).hexdigest() == resources.get("guard_command_sha256"))
+        except (OSError, ValueError, IndexError):
+            return False
     return worker_identity.worker_pid_matches_job(ROOT, TRIAGE, job)
 
 
-def running_job_liveness(job: dict[str, Any]) -> str:
-    """Classify a running receipt from its persisted worker identity."""
+def running_job_liveness(job: dict[str, Any], adopted_live_jobs: set[str] | None = None) -> str:
+    """A vanished controller is unknown until exact terminal evidence resolves it."""
 
-    if worker_pid_matches_job(job):
+    if worker_pid_matches_job(job) or job.get("job_id") in (adopted_live_jobs or set()):
         return "live"
-    return "orphaned"
+    try:
+        path, terminal = enwiki9_reflections.terminal_job(job["job_id"])
+        for field in ("candidate_id", "candidate_tree_sha256", "candidate_revision", "experiment"):
+            if field not in job or terminal.get(field) != job[field]:
+                return "unknown"
+        metadata = candidate_meta(job["candidate_id"])
+        enwiki9_reflections.validated_terminal_reflection(
+            job["candidate_id"],
+            {"jobId": job["job_id"], "path": path.relative_to(ROOT).as_posix()},
+            metadata,
+        )
+        return "terminal"
+    except (KeyError, OSError, ValueError, RuntimeError, jsonschema.ValidationError):
+        return "unknown"
+
+
+def existing_observer_live_jobs(running: list[dict[str, Any]]) -> tuple[set[str], dict[str, Any] | None]:
+    """Resolve only the existing hash-bound observer; never start another monitor."""
+    import enwiki9_status_receipt as status_receipt
+    observer = None
+    if ROOT.resolve() == status_receipt.ROOT.resolve():
+        adaptive = {"running_jobs": [{**job, "worker_pid_live": worker_pid_matches_job(job)} for job in running]}
+        observer = status_receipt.existing_horizon_observer_state(adaptive)
+    adopted = {observer["adaptive_job_id"]} if observer and observer.get("source_processes_live") else set()
+    return adopted, observer
 
 
 def claim_jobs(
     limit: int, candidate_ids: set[str] | None = None
 ) -> list[tuple[pathlib.Path, dict[str, Any]]]:
+    # Directory locking serializes claims without introducing another queue file.
+    directory_fd = os.open(QUEUE_DIRS["running"], os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        fcntl.flock(directory_fd, fcntl.LOCK_EX)
+        require_no_exclusive_lease()
+        return _claim_jobs_locked(limit, candidate_ids)
+    finally:
+        os.close(directory_fd)
+
+
+def _claim_jobs_locked(
+    limit: int, candidate_ids: set[str] | None,
+) -> list[tuple[pathlib.Path, dict[str, Any]]]:
     claimed: list[tuple[pathlib.Path, dict[str, Any]]] = []
+    running = [load_json(path) for path in QUEUE_DIRS["running"].glob("*.json")]
+    adopted_live, _observer = existing_observer_live_jobs(running)
+    if any(running_job_liveness(row, adopted_live) == "unknown" for row in running):
+        return []
+    terminal_ids = {load_json(path).get("job_id") for state in ("completed", "failed", "cancelled")
+                    for path in QUEUE_DIRS[state].glob("*.json")}
     for pending_path in sorted(QUEUE_DIRS["pending"].glob("*.json")):
         if len(claimed) >= limit:
             break
@@ -1363,29 +1539,284 @@ def claim_jobs(
             continue
         if candidate_ids and preview.get("candidate_id") not in candidate_ids:
             continue
+        if preview.get("state") != "pending" or pending_path.is_symlink():
+            continue
+        try:
+            validate_execution_budget(preview)
+        except ValueError:
+            continue
+        if preview["execution_mode"] == "qualification":
+            if running:
+                continue
+            try:
+                validate_qualification_calibration(preview)
+            except (OSError, ValueError, RuntimeError):
+                continue
+        if any(set(row.get("resource_budget", {}).get("cpus", [])) & set(preview["resource_budget"]["cpus"])
+               for row in running):
+            continue
+        if any(row.get("execution_mode") == "qualification" for row in running):
+            continue
+        if preview.get("job_id") in terminal_ids:
+            continue
+        if any(row.get("job_id") == preview.get("job_id")
+               or row.get("candidate_id") == preview.get("candidate_id") for row in running):
+            continue
         running_path = QUEUE_DIRS["running"] / pending_path.name
         try:
-            os.replace(pending_path, running_path)
-        except FileNotFoundError:
+            os.link(pending_path, running_path, follow_symlinks=False)
+        except (FileNotFoundError, FileExistsError):
             continue
         try:
             job = load_json(running_path)
         except Exception:
-            failed_path = QUEUE_DIRS["failed"] / running_path.name
-            os.replace(running_path, failed_path)
+            running_path.unlink()
+            continue
+        if job != preview:
+            running_path.unlink()
             continue
         job["state"] = "running"
         job["started_at"] = utc_now()
+        if pending_path.exists() and os.path.samestat(pending_path.stat(), running_path.stat()):
+            pending_path.unlink()
         atomic_json(running_path, job)
         claimed.append((running_path, job))
+        running.append(job)
     return claimed
 
 
+def validate_qualification_calibration(job: dict[str, Any]) -> dict[str, Any]:
+    """Re-run the existing independent calibration verifier without benchmarking."""
+    calibration = validate_execution_budget(job).get("calibration", {})
+    paths = {}
+    for role in ("plan", "receipt", "verifier"):
+        binding = calibration.get(role)
+        if not isinstance(binding, dict) or not isinstance(binding.get("path"), str):
+            raise ValueError("qualification calibration bindings are incomplete")
+        path = (ROOT / binding["path"]).resolve()
+        if not path.is_relative_to(ROOT) or artifact_reference(path) != binding:
+            raise ValueError(f"qualification calibration {role} binding changed")
+        paths[role] = path
+    if paths["verifier"] != ROOT / "tools/geekbench5_tryout_calibration_verify_q0_v1.py":
+        raise ValueError("unsupported qualification calibration verifier")
+    with tempfile.TemporaryDirectory(prefix="enwiki9-calibration-validation-") as directory:
+        output = pathlib.Path(directory) / "verification.json"
+        result = subprocess.run([sys.executable, str(paths["verifier"]), "--plan", str(paths["plan"]),
+                                 "--plan-sha256", calibration["plan"]["sha256"].removeprefix("sha256:"),
+                                 "--receipt", str(paths["receipt"]), "--output", str(output)],
+                                cwd=ROOT, capture_output=True, text=True, timeout=60)
+        verification = load_json(output) if output.is_file() else {}
+    if result.returncode != 0 or verification.get("authority_verified") is not True:
+        raise ValueError("qualification lacks verified current-host Geekbench 5 authority")
+    runtime_limit = verification.get("runtime_limit_seconds")
+    if (isinstance(runtime_limit, bool) or not isinstance(runtime_limit, (int, float))
+            or not 0 < runtime_limit < float("inf")
+            or job["resource_budget"]["wall_seconds"] > runtime_limit):
+        raise ValueError("qualification wall budget exceeds or lacks a verified calibration runtime limit")
+    return verification
+
+
+def _group_write(descriptor: int, name: str, value: str) -> None:
+    fd = os.open(name, os.O_WRONLY | os.O_NOFOLLOW, dir_fd=descriptor)
+    try:
+        os.write(fd, value.encode())
+    finally:
+        os.close(fd)
+
+
+def _group_read(descriptor: int, name: str) -> str:
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=descriptor)
+    try:
+        with os.fdopen(fd) as stream:
+            return stream.read()
+    except BaseException:
+        raise
+
+
+def _group_populated(descriptor: int) -> bool:
+    return dict(line.split() for line in _group_read(descriptor, "cgroup.events").splitlines()).get("populated") != "0"
+
+
+def prepare_execution_envelope(job: dict[str, Any], command: list[str], snapshot: pathlib.Path) -> tuple[list[str], list[dict[str, Any]]]:
+    budget = validate_execution_budget(job)
+    guard = ROOT / "tools/run_with_resource_guard_v3.py"
+    if artifact_reference(guard) != job.get("execution_guard"):
+        raise ValueError("execution guard source differs from queued binding")
+    if not set(budget["cpus"]).issubset(os.sched_getaffinity(0)):
+        raise ValueError("assigned CPU set is unavailable to this worker")
+    parent = pathlib.Path(budget["cgroup_parent"])
+    if parent.is_symlink() or parent.resolve() != parent or not parent.is_dir():
+        raise ValueError("delegated cgroup parent is unavailable or redirected")
+    group = parent / f"gamma-enwiki9-{job['job_id']}"
+    existing = budget.get("existing_guard")
+    memory = budget["memory_bytes"] // 1024 * 1024
+    coordinator_memory = memory - (existing["memory_bytes"] if existing else 0)
+    handles: list[dict[str, Any]] = []
+    try:
+        if existing:
+            existing_path = pathlib.Path(existing["path"])
+            if existing_path.is_symlink() or existing_path.resolve() != existing_path:
+                raise ValueError("declared existing guard cgroup was redirected")
+            descriptor = os.open(existing_path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            handles.append({"path": str(existing_path), "descriptor": descriptor, "created": False,
+                            "inode": os.fstat(descriptor).st_ino, "memory_bytes": existing["memory_bytes"]})
+            if os.fstat(descriptor).st_ino != existing["inode"] or _group_populated(descriptor):
+                raise ValueError("declared existing guard cgroup changed or is occupied")
+        group.mkdir()
+        descriptor = os.open(group, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        handles.append({"path": str(group), "descriptor": descriptor, "created": True,
+                        "inode": os.fstat(descriptor).st_ino, "memory_bytes": coordinator_memory})
+        for handle in handles:
+            fd = handle["descriptor"]
+            _group_write(fd, "memory.swap.max", "0\n")
+            handle["kernel_cpuset"] = (parent / "cpuset.mems.effective").is_file()
+            if handle["kernel_cpuset"]:
+                _group_write(fd, "cpuset.mems", (parent / "cpuset.mems.effective").read_text())
+                _group_write(fd, "cpuset.cpus", ",".join(map(str, budget["cpus"])) + "\n")
+            _group_write(fd, "memory.max", str(handle["memory_bytes"]) + "\n")
+            # Open the kill interface before launching; lack of termination authority fails admission.
+            kill_fd = os.open("cgroup.kill", os.O_WRONLY | os.O_NOFOLLOW, dir_fd=fd)
+            os.close(kill_fd)
+        resources = RUN_LOGS / f"{job['job_id']}.resources"
+        resources.mkdir()
+        marker = resources / "phases.jsonl"
+        marker.touch(exist_ok=False)
+        receipt = resources / "guard.json"
+        scratch = ROOT / "results" / job["candidate_id"]
+        scratch.mkdir(parents=True, exist_ok=True)
+        limit_kib = coordinator_memory // 1024
+        wrapped = [sys.executable, str(guard), "--limit-kib", str(limit_kib),
+                   "--official-decimal-limit-kib", str(limit_kib), "--limit-mode", "tree",
+                   "--cgroup-path", str(group), "--cgroup-memory-max-bytes", str(limit_kib * 1024),
+                   "--temporary-disk-limit-bytes", str(budget["scratch_bytes"]),
+                   "--phase-marker-path", str(marker), "--max-logical-cpus", str(len(budget["cpus"])),
+                   "--guard-json", str(receipt), "--label", job["job_id"], "--phase", "diagnostic"]
+        log_path = RUN_LOGS / f"{job['job_id']}.log"
+        log_path.touch(exist_ok=False)
+        for path in sorted({scratch, snapshot, resources, log_path}):
+            wrapped.extend(["--scratch-path", str(path)])
+        marker_script = 'printf \'%s\\n\' \'{"phase":"diagnostic","event":"worker_start","detail":"operational envelope only; no codec phase credit"}\' >> "$GAMMA_RESOURCE_PHASE_MARKERS" || exit 125; exec "$@"'
+        wrapped.extend(["--", "/usr/bin/taskset", "--cpu-list", ",".join(map(str, budget["cpus"])),
+                        "/bin/sh", "-c", marker_script, "enwiki9-discovery-envelope", *command])
+        job["execution_resources"] = {"cgroup_path": str(group), "cgroup_inode": handles[-1]["inode"],
+                                      "groups": [{k: v for k, v in h.items() if k != "descriptor"} for h in handles],
+                                      "guard_path": str(receipt.relative_to(ROOT)),
+                                      "guard_command_sha256": hashlib.sha256(b"\0".join(os.fsencode(x) for x in wrapped)).hexdigest(),
+                                      "boot_id": pathlib.Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+                                      "cpu_enforcement": "kernel-cpuset-and-taskset" if all(h["kernel_cpuset"] for h in handles) else "taskset-and-sampled-affinity-guard",
+                                      "missing_diagnostics": [] if all(h["kernel_cpuset"] for h in handles) else ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"],
+                                      "budget": budget, "timing_authority": job.get("timing_authority")}
+        return wrapped, handles
+    except BaseException:
+        for handle in reversed(handles):
+            os.close(handle["descriptor"])
+            if handle["created"]:
+                pathlib.Path(handle["path"]).rmdir()
+        raise
+
+
+def wait_for_budgeted_worker(process: subprocess.Popen[Any], job: dict[str, Any], handles: list[dict[str, Any]], *, abort_reason: str | None = None) -> int:
+    deadline = time.monotonic() + job["resource_budget"]["wall_seconds"]
+    returncode = 125 if abort_reason is not None else None
+    if abort_reason is not None:
+        job["execution_resources"]["abort_reason"] = abort_reason
+    try:
+        while returncode is None:
+            for handle in handles:
+                descriptor = handle["descriptor"]
+                maximum = _group_read(descriptor, "memory.max").strip()
+                if (maximum == "max" or int(maximum) > handle["memory_bytes"]
+                        or _group_read(descriptor, "memory.swap.max").strip() != "0"
+                        or (handle.get("kernel_cpuset") and parse_cpu_set(_group_read(descriptor, "cpuset.cpus")) != set(job["resource_budget"]["cpus"]))):
+                    raise ValueError("owned cgroup memory or swap budget changed")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                job["wall_budget_exceeded"] = True
+                returncode = 124
+                break
+            try:
+                returncode = process.wait(timeout=min(0.25, remaining))
+            except subprocess.TimeoutExpired:
+                continue
+    finally:
+        # A root process exit does not prove all descendants exited. Kill residuals
+        # through already-open, inode-bound directories before recording terminal state.
+        errors = []
+        for handle in handles:
+            populated = True
+            try:
+                populated = _group_populated(handle["descriptor"])
+            except Exception as exc:
+                errors.append(f"{handle['path']}: read population: {exc}")
+            if populated:
+                job["residual_processes_terminated"] = True
+                try:
+                    _group_write(handle["descriptor"], "cgroup.kill", "1\n")
+                except Exception as exc:
+                    errors.append(f"{handle['path']}: terminate group: {exc}")
+        try:
+            if process.poll() is None:
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
+        except Exception as exc:
+            errors.append(f"worker termination: {exc}")
+        cleanup_deadline = time.monotonic() + 5
+        for handle in reversed(handles):
+            try:
+                while _group_populated(handle["descriptor"]) and time.monotonic() < cleanup_deadline:
+                    time.sleep(0.05)
+                if _group_populated(handle["descriptor"]):
+                    raise RuntimeError("owned group still has live members")
+                path = pathlib.Path(handle["path"])
+                if path.stat().st_ino != handle["inode"]:
+                    raise RuntimeError("owned cgroup identity changed")
+                path.rmdir()
+            except Exception as exc:
+                errors.append(f"{handle['path']}: remove group: {exc}")
+            finally:
+                try:
+                    os.close(handle["descriptor"])
+                except Exception as exc:
+                    errors.append(f"{handle['path']}: close handle: {exc}")
+        job["execution_resources"]["cleanup_complete"] = not errors
+        if errors:
+            job["execution_resources"]["cleanup_errors"] = errors
+            raise RuntimeError("owned execution cleanup incomplete: " + "; ".join(errors))
+    if returncode == 0 and job.get("residual_processes_terminated"):
+        return 125
+    return int(returncode)
+
+
 def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, Any]:
+    try:
+        return _execute_job(running_path, job)
+    except Exception as exc:
+        if job.get("worker_pid") is not None and job.get("execution_resources", {}).get("cleanup_complete") is not True:
+            job.update(observation_failure=str(exc), worker_liveness="unknown")
+            atomic_json(running_path, job)
+            return job
+        job.update(state="failed", finished_at=utc_now(), returncode=None,
+                   failure="execution_admission_or_observation_failed", failure_detail=str(exc))
+        atomic_json(running_path, job)
+        os.replace(running_path, QUEUE_DIRS["failed"] / running_path.name)
+        return job
+
+
+def _execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, Any]:
     candidate_id = str(job["candidate_id"])
     gate_size = int(job["gate_size"])
     job_id = str(job["job_id"])
     log_path = RUN_LOGS / f"{job_id}.log"
+    validate_execution_budget(job)
+    if job["execution_mode"] == "qualification":
+        validate_qualification_calibration(job)
     try:
         _, revision_receipt = candidate_revisions.verify_job_binding(job)
     except (FileNotFoundError, ValueError) as exc:
@@ -1461,6 +1892,7 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
 
     started = time.monotonic()
     process_environment = os.environ.copy()
+    process_environment["GAMMA_ENWIKI9_EXECUTION_MODE"] = job["execution_mode"]
     process_environment["GAMMA_ENWIKI9_CANDIDATE_REVISION_JSON"] = json.dumps(
         {
             "candidateId": candidate_id,
@@ -1481,25 +1913,61 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
         process_environment["GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT"] = str(
             snapshot_root
         )
+        command, execution_handles = prepare_execution_envelope(job, command, snapshot_root)
+        process_environment["TMPDIR"] = str(RUN_LOGS / f"{job_id}.resources")
+        lease = None
+        if job["execution_mode"] == "qualification":
+            resources_dir = RUN_LOGS / f"{job_id}.resources"
+            lease = managed_exclusive_lease.ManagedExclusiveLease.acquire(
+                lease_path=EXCLUSIVE_FULL1G_PATH, transition_path=resources_dir / "lease-transitions.json",
+                candidate_id=candidate_id,
+                command_sha256=hashlib.sha256(pathlib.Path("/proc/self/cmdline").read_bytes().rstrip(b"\0")).hexdigest(),
+                runner_sha256=artifact_reference(pathlib.Path(__file__))["sha256"].removeprefix("sha256:"),
+                guard_path=job["execution_resources"]["guard_path"],
+                result_path=str(ROOT / "results" / candidate_id), scratch_path=str(snapshot_root),
+                claim_boundary="isolated qualification measurement; no automatic resource or score certification")
+            job["exclusive_lease"] = {"path": str(EXCLUSIVE_FULL1G_PATH), "lease_id": lease.record["lease_id"]}
+
+        atomic_json(running_path, job)
         with log_path.open("w") as log:
             log.write(
                 json.dumps({"job": job, "command": command}, sort_keys=True) + "\n"
             )
             log.flush()
-            process = subprocess.Popen(
-                command,
-                cwd=ROOT,
-                env=process_environment,
-                stdout=log,
-                stderr=subprocess.STDOUT,
-            )
-            job["worker_pid"] = process.pid
-            worker_proc_start_ticks = _proc_start_ticks(process.pid)
-            if worker_proc_start_ticks is not None:
-                job["worker_proc_start_ticks"] = worker_proc_start_ticks
-            job["worker_started_at"] = utc_now()
-            atomic_json(running_path, job)
-            returncode = process.wait()
+            try:
+                process = subprocess.Popen(
+                    command,
+                    cwd=ROOT,
+                    env=process_environment,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                )
+            except BaseException:
+                for handle in reversed(execution_handles):
+                    os.close(handle["descriptor"])
+                    path = pathlib.Path(handle["path"])
+                    if path.stat().st_ino == handle["inode"]:
+                        path.rmdir()
+                if lease is not None:
+                    lease.release(evidence_path=resources_dir / "lease-terminal.json")
+                raise
+            try:
+                try:
+                    job["worker_pid"] = process.pid
+                    worker_proc_start_ticks = _proc_start_ticks(process.pid)
+                    if worker_proc_start_ticks is not None:
+                        job["worker_proc_start_ticks"] = worker_proc_start_ticks
+                    job["worker_started_at"] = utc_now()
+                    atomic_json(running_path, job)
+                except BaseException:
+                    wait_for_budgeted_worker(process, job, execution_handles,
+                                             abort_reason="worker-bookkeeping-failure")
+                    raise
+                else:
+                    returncode = wait_for_budgeted_worker(process, job, execution_handles)
+            finally:
+                if lease is not None and job["execution_resources"].get("cleanup_complete") is True:
+                    lease.release(evidence_path=resources_dir / "lease-terminal.json")
     elapsed = round(time.monotonic() - started, 3)
     final_state = "completed" if returncode == 0 else "failed"
     job.update(
@@ -1644,19 +2112,25 @@ def status_payload() -> dict[str, Any]:
     counts = {state: 0 for state in QUEUE_STATES}
     active: list[dict[str, Any]] = []
     orphaned: list[dict[str, Any]] = []
+    resolved_terminal: list[dict[str, Any]] = []
     latest: list[dict[str, Any]] = []
+    adopted_live, observer = existing_observer_live_jobs([job for state, _path, job in rows if state == "running"])
+    identities: dict[str, list[str]] = {}
     for state, _path, job in rows:
         counts[state] += 1
+        identities.setdefault(str(job.get("job_id")), []).append(state)
         if state == "pending" and job.get("held") is True:
             counts["held_pending"] = counts.get("held_pending", 0) + 1
         if state == "running":
             row = copy.deepcopy(job)
-            row["worker_liveness"] = running_job_liveness(job)
+            row["worker_liveness"] = running_job_liveness(job, adopted_live)
             guard = job_guard_snapshot(job)
             if guard is not None:
                 row["resource_guard"] = guard
             if row["worker_liveness"] == "live":
                 active.append(row)
+            elif row["worker_liveness"] == "terminal":
+                resolved_terminal.append(row)
             else:
                 orphaned.append(row)
         elif state in {"completed", "failed"}:
@@ -1666,20 +2140,25 @@ def status_payload() -> dict[str, Any]:
         min_free_mib=0,
         max_load=float("inf"),
     )
-    lease = get_exclusive_lease()
-    if lease is not None:
-        ready = False
+    lease_state = exclusive_lease_state()
+    duplicate_ids = {key: states for key, states in identities.items() if len(states) > 1}
     return {
         "schema": "enwiki9_adaptive_status_v1",
         "generated_at": utc_now(),
         "counts": counts,
         "active_jobs": active,
+        "unknown_running_jobs": orphaned,
         "orphaned_running_jobs": orphaned,
+        "terminal_running_records": resolved_terminal,
+        "duplicate_job_ids": duplicate_ids,
+        "existing_observer": observer,
         "latest_terminal_jobs": latest[:10],
         "resources": resources,
         "resource_probe_ok": ready,
-        "exclusive_lease": lease,
-        "safe_to_launch_candidate_gate": ready and lease is None,
+        "exclusive_lease": lease_state["lease"],
+        "exclusive_lease_state": lease_state,
+        "safe_to_launch_candidate_gate": False,
+        "launch_authority": "Status reports live/terminal/unknown evidence; a selected gate still requires its frozen contract, unique claim, lease, and resource authorization.",
     }
 
 
@@ -1698,9 +2177,9 @@ def cancel_job(
                 continue
             if job.get("job_id") != job_id:
                 continue
-            if state == "running" and running_job_liveness(job) == "live":
+            if state == "running" and running_job_liveness(job) != "terminal":
                 raise ValueError(
-                    f"running job still owns live worker PID {job.get('worker_pid')}"
+                    "running job needs validated terminal evidence before cancellation"
                 )
             job["state_before_cancel"] = state
             job["state"] = "cancelled"
@@ -1755,6 +2234,17 @@ def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--purpose", default="manual")
     parser.add_argument("--tag", action="append", default=[])
     parser.add_argument("--force", action="store_true")
+    parser.add_argument("--mode", choices=("discovery", "qualification"), help="explicit execution mode; omitted jobs remain held legacy records")
+    parser.add_argument("--cpu-set", help="assigned logical CPUs, such as 2 or 4-7")
+    parser.add_argument("--memory-limit-bytes", type=int)
+    parser.add_argument("--disk-limit-bytes", type=int)
+    parser.add_argument("--wall-time-limit-seconds", type=int)
+    parser.add_argument("--existing-guard-cgroup", type=pathlib.Path, help="one empty source-bound candidate cgroup; its memory is subtracted from the aggregate budget")
+    parser.add_argument("--existing-guard-memory-bytes", type=int)
+    parser.add_argument("--calibration-plan", type=pathlib.Path)
+    parser.add_argument("--calibration-receipt", type=pathlib.Path)
+    parser.add_argument("--cgroup-parent", type=pathlib.Path,
+                        default=pathlib.Path(f"/sys/fs/cgroup/user.slice/user-{os.getuid()}.slice/user@{os.getuid()}.service/app.slice"))
     parser.add_argument(
         "--experiment",
         type=pathlib.Path,
@@ -1767,6 +2257,11 @@ def build_parser() -> argparse.ArgumentParser:
         description="Create, mutate, queue, run, and track enwiki9 candidates."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    subparsers.add_parser("start", help="orient an agent: records, ownership, prerequisites, and next commands; read-only")
+    records_parser = subparsers.add_parser("records", help="search canonical research records or inspect candidate history; read-only")
+    from enwiki9_ledger import record_options
+    record_options(records_parser)
 
     propose = subparsers.add_parser("propose", help="record a new algorithm proposal")
     propose.add_argument("proposal_id")
@@ -2036,7 +2531,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
+    if args.command in {"start", "records"}:
+        from enwiki9_ledger import build, record_query, start_payload
+        try:
+            data = build(ROOT)
+            result = start_payload(data, ROOT) if args.command == "start" else record_query(data, args)
+        except ValueError as exc:
+            parser.error(str(exc))
+        print(json.dumps(result, ensure_ascii=False, allow_nan=False, indent=2))
+        return 0
     ensure_layout()
     try:
         if args.command == "propose":
@@ -2129,6 +2634,7 @@ def main() -> int:
                     force=args.force,
                     tags=args.tag,
                     experiment=args.experiment,
+                    **execution_options(args),
                 )
             print(json.dumps(result, indent=2, sort_keys=True))
             return 0
@@ -2157,6 +2663,7 @@ def main() -> int:
                     force=args.force,
                     tags=args.tag,
                     experiment=args.experiment,
+                    **execution_options(args),
                 )
             print(json.dumps(result, indent=2, sort_keys=True))
             return 0
@@ -2170,6 +2677,7 @@ def main() -> int:
                 force=args.force,
                 tags=args.tag,
                 experiment=args.experiment,
+                **execution_options(args),
             )
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0
@@ -2259,6 +2767,7 @@ def main() -> int:
                 tags=args.tag,
                 experiment=args.experiment,
                 scratch_directories=args.scratch_directory,
+                **execution_options(args),
             )
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0
