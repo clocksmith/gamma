@@ -1,0 +1,156 @@
+{
+  "schema": "gamma.enwiki9.resource-guard-receipt.v2",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "label": "release_canary_rle_q0_v1:build-first",
+  "phase": "diagnostic",
+  "command": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/timeout",
+    "--kill-after=2s",
+    "15s",
+    "/usr/bin/prlimit",
+    "--as=268435456",
+    "--fsize=16777216",
+    "--",
+    "/usr/bin/bwrap",
+    "--unshare-all",
+    "--die-with-parent",
+    "--new-session",
+    "--hostname",
+    "gamma-clean-room",
+    "--ro-bind",
+    "/usr",
+    "/usr",
+    "--symlink",
+    "usr/bin",
+    "/bin",
+    "--symlink",
+    "usr/lib",
+    "/lib",
+    "--symlink",
+    "usr/lib64",
+    "/lib64",
+    "--proc",
+    "/proc",
+    "--dev",
+    "/dev",
+    "--size",
+    "16777216",
+    "--tmpfs",
+    "/tmp",
+    "--dir",
+    "/input",
+    "--bind",
+    "/home/x/deco/gamma/projects/enwiki9/results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/replay/work/first",
+    "/work",
+    "--chdir",
+    "/work/package",
+    "--clearenv",
+    "--setenv",
+    "LC_ALL",
+    "C",
+    "--setenv",
+    "PATH",
+    "/usr/bin:/bin",
+    "--setenv",
+    "SOURCE_DATE_EPOCH",
+    "0",
+    "--setenv",
+    "TZ",
+    "UTC",
+    "--",
+    "/usr/bin/gcc",
+    "-std=c99",
+    "-O2",
+    "/work/package/codec.c",
+    "-o",
+    "/work/package/codec"
+  ],
+  "sample_interval_seconds": 0.1,
+  "geekbench5_single_core_score": null,
+  "wall_time_limit_seconds": null,
+  "wall_time_measurement_complete": false,
+  "wall_time_exceeded": false,
+  "limit_kib": 262144,
+  "limit_mode": "tree",
+  "official_decimal_limit_kib": 262144,
+  "official_decimal_over_limit_kib": 0,
+  "scratch_paths": [
+    "/home/x/deco/gamma/projects/enwiki9/results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/replay/work/first"
+  ],
+  "temporary_disk_limit_bytes": 16777216,
+  "temporary_disk_measurement_complete": true,
+  "max_sampled_temporary_disk_bytes": 18562,
+  "max_logical_cpus": 1,
+  "affinity_measurement_complete": true,
+  "max_sampled_allowed_cpu_count": 1,
+  "logical_cpu_guard_exceeded": false,
+  "max_sampled_tree_live_threads": 1,
+  "max_sampled_tree_runnable_threads": 1,
+  "max_sampled_single_rss_kib": 7824,
+  "max_sampled_tree_rss_kib": 7824,
+  "peak_sample": {
+    "processes": [
+      {
+        "pid": 1902090,
+        "rss_kib": 7824,
+        "live_threads": 1,
+        "runnable_threads": 0,
+        "allowed_cpus": [
+          0
+        ]
+      }
+    ],
+    "max_single_rss_kib": 7824,
+    "tree_rss_kib": 7824,
+    "tree_live_threads": 1,
+    "tree_runnable_threads": 0,
+    "allowed_cpu_union": [
+      0
+    ]
+  },
+  "peak_tree_sample": {
+    "processes": [
+      {
+        "pid": 1902090,
+        "rss_kib": 7824,
+        "live_threads": 1,
+        "runnable_threads": 0,
+        "allowed_cpus": [
+          0
+        ]
+      }
+    ],
+    "max_single_rss_kib": 7824,
+    "tree_rss_kib": 7824,
+    "tree_live_threads": 1,
+    "tree_runnable_threads": 0,
+    "allowed_cpu_union": [
+      0
+    ]
+  },
+  "latest_sample": {
+    "processes": [],
+    "max_single_rss_kib": 0,
+    "tree_rss_kib": 0,
+    "tree_live_threads": 0,
+    "tree_runnable_threads": 0,
+    "allowed_cpu_union": []
+  },
+  "sample_count": 3,
+  "rss_guard_exceeded": false,
+  "official_decimal_memory_exceeded": false,
+  "temporary_disk_guard_exceeded": false,
+  "returncode": 0,
+  "status": "complete",
+  "elapsed_s": 0.2049
+}

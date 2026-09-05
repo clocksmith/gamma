@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replay a full enwik9 package in independent sealed single-core sandboxes."""
+"""Replay a full enwik9 package, or an explicit zero-credit release canary."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ import platform
 import re
 import shutil
 import socket
+import stat
 import subprocess
 import sys
 from typing import Any
@@ -24,6 +25,10 @@ ROOT = Path(__file__).resolve().parents[1]
 BWRAP = Path("/usr/bin/bwrap")
 TASKSET = Path("/usr/bin/taskset")
 GUARD = ROOT / "tools" / "run_with_rss_guard.py"
+CANARY_MAX_INPUT_BYTES = 1 << 20
+CANARY_MEMORY_BYTES = 256 << 20
+CANARY_TEMP_BYTES = 16 << 20
+CANARY_PHASE_SECONDS = 15
 PLACEHOLDER = re.compile(r"\{([a-z_]+)\}")
 ENVIRONMENT = {
     "LC_ALL": "C",
@@ -119,7 +124,7 @@ def expand_command(
     return expanded
 
 
-def sandbox_prefix(work: Path, corpus: Path | None) -> list[str]:
+def sandbox_prefix(work: Path, corpus: Path | None, *, canary: bool = False) -> list[str]:
     command = [
         str(BWRAP),
         "--unshare-all",
@@ -143,6 +148,7 @@ def sandbox_prefix(work: Path, corpus: Path | None) -> list[str]:
         "/proc",
         "--dev",
         "/dev",
+        *(["--size", str(CANARY_TEMP_BYTES)] if canary else []),
         "--tmpfs",
         "/tmp",
         "--dir",
@@ -164,11 +170,14 @@ def verify_package_copy(
     package: Path,
     counted_files: list[dict[str, Any]],
 ) -> None:
-    actual = sorted(
-        path.relative_to(package).as_posix()
-        for path in package.rglob("*")
-        if path.is_file() and not path.is_symlink()
-    )
+    actual = []
+    for path in sorted(package.rglob("*")):
+        mode = path.lstat().st_mode
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISREG(mode):
+            raise ValueError("fresh package copy contains a symlink or special file")
+        actual.append(path.relative_to(package).as_posix())
     expected = sorted(record["path"] for record in counted_files)
     if actual != expected:
         raise ValueError("fresh package copy differs from the counted manifest")
@@ -217,27 +226,32 @@ def guarded_command(
     cpu = min(os.sched_getaffinity(0))
     objective = research_contracts.validate_objective()
     resources = objective["resources"]
+    canary = getattr(args, "canary", False)
+    if canary:
+        sandbox_command = ["/usr/bin/timeout", "--kill-after=2s",
+                           f"{CANARY_PHASE_SECONDS}s", "/usr/bin/prlimit",
+                           f"--as={CANARY_MEMORY_BYTES}", f"--fsize={CANARY_TEMP_BYTES}",
+                           "--", *sandbox_command]
     command = [
         sys.executable,
         str(GUARD),
         "--limit-kib",
-        str(resources["memory"]["linuxGuardKiB"]),
+        str(CANARY_MEMORY_BYTES // 1024 if canary else resources["memory"]["linuxGuardKiB"]),
         "--limit-mode",
         "tree",
         "--official-decimal-limit-kib",
-        str(resources["memory"]["linuxGuardKiB"]),
+        str(CANARY_MEMORY_BYTES // 1024 if canary else resources["memory"]["linuxGuardKiB"]),
         "--guard-json",
         str(guard_path),
         "--label",
         label,
         "--phase",
-        phase,
-        "--geekbench5-single-core-score",
-        str(args.geekbench5_single_core_score),
+        "diagnostic" if canary else phase,
+        *([] if canary else ["--geekbench5-single-core-score", str(args.geekbench5_single_core_score)]),
         "--scratch-path",
         str(work),
         "--temporary-disk-limit-bytes",
-        str(resources["temporaryDisk"]["maximumBytes"]),
+        str(CANARY_TEMP_BYTES if canary else resources["temporaryDisk"]["maximumBytes"]),
         "--max-logical-cpus",
         "1",
         "--sample-interval",
@@ -251,22 +265,24 @@ def guarded_command(
     return command, run_command(command, log_path)
 
 
-def probe_sandbox(work: Path) -> dict[str, Any]:
+def probe_sandbox(work: Path, *, canary: bool = False) -> dict[str, Any]:
     device_inner = ["/usr/bin/find", "/dev", "-maxdepth", "2", "-printf", "%p\n"]
     network_inner = ["/usr/bin/cat", "/proc/net/dev"]
     device = subprocess.run(
-        sandbox_prefix(work, None) + device_inner,
+        sandbox_prefix(work, None, canary=canary) + device_inner,
         env={},
         capture_output=True,
         text=True,
         check=False,
+        timeout=CANARY_PHASE_SECONDS if canary else None,
     )
     network = subprocess.run(
-        sandbox_prefix(work, None) + network_inner,
+        sandbox_prefix(work, None, canary=canary) + network_inner,
         env={},
         capture_output=True,
         text=True,
         check=False,
+        timeout=CANARY_PHASE_SECONDS if canary else None,
     )
     interfaces = sorted(
         line.split(":", 1)[0].strip()
@@ -324,6 +340,111 @@ def peer_identity_ok(
     )
 
 
+def validate_corpus(corpus: Path, binding: dict[str, Any], *, canary: bool) -> None:
+    if canary:
+        if not corpus.is_file() or not 0 < corpus.stat().st_size <= CANARY_MAX_INPUT_BYTES:
+            raise ValueError("canary input must contain 1 through 1048576 synthetic bytes")
+    elif (not corpus.is_file() or corpus.stat().st_size != binding["corpusBytes"]
+          or digest(corpus) != binding["corpusSha256"]):
+        raise ValueError("corpus does not match the canonical full enwik9 identity")
+
+
+def validate_canary_receipt(path: Path) -> dict[str, Any]:
+    """Verify retained canary evidence without entering the objective receipt path."""
+    value = load_json(path)
+    require = research_contracts._require
+    require(value["schema"] == "gamma.enwiki9.release-canary.v1", "not a release canary")
+    require(value["evidenceClass"] == "synthetic-canary" and value["objectiveCredit"] is False
+            and value["fullCorpusProof"] is False and value["officialScoreBytes"] is None,
+            "canary cannot carry objective score or proof credit")
+    require(value["objective"] == research_contracts.objective_binding(), "canary objective binding changed")
+    for name in ("manifest", "input", "archive", "repeatArchive", "restored", "cleanRoom", "verifier"):
+        research_contracts._verify_file_record(path.parent, value[name], f"canary {name}")
+    manifest_path = (path.parent / value["manifest"]["path"]).resolve()
+    research_contracts.validate_artifact(manifest_path)
+    manifest = load_json(manifest_path)
+    require(value["candidateId"] == manifest["candidateId"] and
+            value["candidateTreeSha256"] == manifest["candidateTreeSha256"], "canary candidate differs")
+    require(0 < value["input"]["bytes"] <= CANARY_MAX_INPUT_BYTES, "canary scope exceeds cap")
+    identity = lambda record: (record["bytes"], record["sha256"])
+    require(identity(value["input"]) == identity(value["restored"]), "canary roundtrip differs")
+    require(identity(value["archive"]) == identity(value["repeatArchive"]), "canary archive is nondeterministic")
+    require(value["countedPackageAndArchiveBytes"] == manifest["totalPackageBytes"]
+            + manifest["requiredOptionBytes"] + value["archive"]["bytes"], "canary accounting differs")
+    require(value["budgets"] == {"memoryBytes": CANARY_MEMORY_BYTES, "temporaryDiskBytes": CANARY_TEMP_BYTES,
+                                 "phaseSeconds": CANARY_PHASE_SECONDS, "logicalCpus": 1}, "canary budgets differ")
+    clean_path = (path.parent / value["cleanRoom"]["path"]).resolve()
+    clean = load_json(clean_path)
+    require(clean["schema"] == "gamma.enwiki9.clean-room-canary.v1", "canary clean-room schema differs")
+    require(clean["candidateTreeSha256"] == manifest["candidateTreeSha256"] and
+            clean["candidateId"] == manifest["candidateId"] and clean["objective"] == value["objective"],
+            "clean-room candidate/objective binding differs")
+    audit = research_contracts.dependency_license_audit(manifest)
+    require(clean["licenseAudit"] == audit and audit["approved"], "canary declared license audit failed")
+    probe = clean["probe"]
+    require(probe["deviceReturncode"] == probe["networkReturncode"] == 0
+            and set(probe["networkInterfaces"]) <= {"lo"}
+            and not any(marker in name.lower() for name in probe["devicePaths"]
+                        for marker in ("/dri", "kfd", "nvidia", "render", "vga")),
+            "canary isolation probe failed")
+    phases = ("build-first", "compression", "build-replay", "compression-replay", "build-decode", "decompression")
+    require([e["phase"] for e in clean["executions"]] == list(phases), "canary phase sequence differs")
+    bindings = {}
+    peaks = []
+    for execution in clean["executions"]:
+        phase = execution["phase"]
+        research_contracts._verify_file_record(clean_path.parent, execution["log"], f"canary {phase} log")
+        _, guard, _ = research_contracts._verify_reference(
+            clean_path, execution["guard"], "gamma.enwiki9.resource-guard-receipt.v2", True)
+        require(guard["phase"] == "diagnostic" and guard["geekbench5_single_core_score"] is None,
+                "canary guard must not claim prize benchmark calibration")
+        require(execution["returncode"] == guard["returncode"] == 0 and guard["status"] == "complete",
+                f"canary phase failed: {phase}")
+        require(execution["command"][execution["command"].index("--") + 1:] == guard["command"],
+                "canary command differs from guard")
+        require(guard["limit_mode"] == "tree" and guard["limit_kib"] == CANARY_MEMORY_BYTES // 1024
+                and guard["official_decimal_limit_kib"] == CANARY_MEMORY_BYTES // 1024
+                and guard["max_sampled_tree_rss_kib"] < CANARY_MEMORY_BYTES // 1024
+                and not guard["rss_guard_exceeded"] and not guard["official_decimal_memory_exceeded"],
+                "canary memory bound failed")
+        require(guard["temporary_disk_limit_bytes"] == CANARY_TEMP_BYTES
+                and guard["temporary_disk_measurement_complete"]
+                and guard["max_sampled_temporary_disk_bytes"] < CANARY_TEMP_BYTES
+                and not guard["temporary_disk_guard_exceeded"]
+                and guard["max_logical_cpus"] == 1 and guard["affinity_measurement_complete"]
+                and 0 < guard["max_sampled_allowed_cpu_count"] <= 1
+                and guard["elapsed_s"] < CANARY_PHASE_SECONDS, "canary disk, affinity, or time bound failed")
+        bindings[phase] = research_contracts._sandbox_binding_audit(guard["command"], clean_path, phase)
+        archive = "archive.replay" if phase in {"build-replay", "compression-replay"} else "archive.first"
+        command_name = "build" if phase.startswith("build-") else "decompress" if phase == "decompression" else "compress"
+        require(bindings[phase]["innerCommand"] == expand_command(manifest["commands"][command_name], manifest, archive),
+                "canary executed command differs from closure")
+        sandbox = sandbox_prefix(Path(bindings[phase]["workSource"]),
+                                 Path(bindings[phase]["corpusSource"]) if bindings[phase]["corpusSource"] else None,
+                                 canary=True)
+        expected_tail = ["/usr/bin/timeout", "--kill-after=2s", f"{CANARY_PHASE_SECONDS}s",
+                         "/usr/bin/prlimit", f"--as={CANARY_MEMORY_BYTES}", f"--fsize={CANARY_TEMP_BYTES}",
+                         "--", *sandbox, *bindings[phase]["innerCommand"]]
+        require(guard["command"][:2] == [str(TASKSET), "--cpu-list"]
+                and guard["command"][3:] == expected_tail, "canary hard-limit command differs")
+        peaks.append(guard["max_sampled_tree_rss_kib"] * 1024)
+    for build, run in (("build-first", "compression"), ("build-replay", "compression-replay"), ("build-decode", "decompression")):
+        require(bindings[build]["workSource"] == bindings[run]["workSource"], "build/run copies differ")
+    require(len({bindings[p]["workSource"] for p in phases if p.startswith("build-")}) == 3,
+            "canary did not use three independent builds")
+    input_path = (path.parent / value["input"]["path"]).resolve()
+    require(all(Path(bindings[p]["corpusSource"]).resolve() == input_path
+                for p in ("compression", "compression-replay")), "canary input binding differs")
+    require(clean["scratchCleaned"] and not (clean_path.parent / "work").exists()
+            and clean["packageCopiesVerified"] == 3 and clean["decodeCorpusExposed"] is False
+            and clean["allCommandsSucceeded"] is True, "canary cleanup/copy evidence differs")
+    require(value["verdict"] == "canary-pass", "canary verdict differs")
+    return {"valid": True, "roundtripOk": True, "determinismOk": True, "independentDecodeOk": True,
+            "objectiveCredit": False, "fullCorpusProof": False, "scopeBytes": value["input"]["bytes"],
+            "archiveBytes": value["archive"]["bytes"], "peakSampledTreeRssBytes": max(peaks),
+            "licenseAudit": audit}
+
+
 def replay(args: argparse.Namespace) -> Path:
     manifest_path = args.manifest.resolve()
     manifest = load_json(manifest_path)
@@ -332,7 +453,8 @@ def replay(args: argparse.Namespace) -> Path:
     bundle = manifest_path.parent
     package = bundle / manifest["candidateRoot"]
     replay_root = bundle / "replay"
-    receipt_path = bundle / "run-receipt.json"
+    canary = getattr(args, "canary", False)
+    receipt_path = bundle / ("canary-receipt.json" if canary else "run-receipt.json")
     if replay_root.exists() or receipt_path.exists():
         raise FileExistsError("replay output already exists; use a new dependency bundle")
     if not BWRAP.is_file() or not TASKSET.is_file() or not GUARD.is_file():
@@ -340,12 +462,9 @@ def replay(args: argparse.Namespace) -> Path:
 
     corpus = args.corpus.resolve()
     binding = research_contracts.objective_binding()
-    if (
-        not corpus.is_file()
-        or corpus.stat().st_size != binding["corpusBytes"]
-        or digest(corpus) != binding["corpusSha256"]
-    ):
-        raise ValueError("corpus does not match the canonical full enwik9 identity")
+    validate_corpus(corpus, binding, canary=canary)
+    if canary and args.peer_receipt is not None:
+        raise ValueError("canaries cannot consume objective peer receipts")
 
     peer: dict[str, Any] | None = None
     peer_path: Path | None = None
@@ -357,7 +476,7 @@ def replay(args: argparse.Namespace) -> Path:
             raise ValueError("peer receipt must be a non-recursive primary receipt")
 
     replay_root.mkdir(parents=True)
-    clean_path = replay_root / "clean-room-replay.json"
+    clean_path = replay_root / ("clean-room-canary.json" if canary else "clean-room-replay.json")
     work_root = replay_root / "work"
     work_root.mkdir()
     executions: list[dict[str, Any]] = []
@@ -366,7 +485,7 @@ def replay(args: argparse.Namespace) -> Path:
     try:
         probe_work = work_root / "probe"
         (probe_work / "package").mkdir(parents=True)
-        probe = probe_sandbox(probe_work)
+        probe = probe_sandbox(probe_work, canary=canary)
         if probe["deviceReturncode"] != 0 or probe["networkReturncode"] != 0:
             raise RuntimeError("clean-room isolation probe failed")
 
@@ -377,11 +496,17 @@ def replay(args: argparse.Namespace) -> Path:
         guard_paths: list[Path] = []
         for work_name, build_phase, run_phase, archive_name in phase_specs:
             work = fresh_work(work_root, work_name, package, manifest)
-            build = sandbox_prefix(work, None) + expand_command(
+            build = sandbox_prefix(work, None, canary=canary) + expand_command(
                 manifest["commands"]["build"], manifest, archive_name
             )
             build_log = replay_root / f"{build_phase}.log"
-            build_returncode = run_command(build, build_log)
+            if canary:
+                build_guard = replay_root / f"{build_phase}.guard.json"
+                build, build_returncode = guarded_command(args, f"{manifest['candidateId']}:{build_phase}",
+                                                         "diagnostic", work, build, build_guard, build_log)
+                guard_paths.append(build_guard)
+            else:
+                build_returncode = run_command(build, build_log)
             executions.append(
                 {
                     "phase": build_phase,
@@ -394,7 +519,7 @@ def replay(args: argparse.Namespace) -> Path:
             if build_returncode != 0:
                 raise RuntimeError(f"{build_phase} failed")
 
-            compression = sandbox_prefix(work, corpus) + expand_command(
+            compression = sandbox_prefix(work, corpus, canary=canary) + expand_command(
                 manifest["commands"]["compress"], manifest, archive_name
             )
             guard_path = replay_root / f"{run_phase}.guard.json"
@@ -430,11 +555,18 @@ def replay(args: argparse.Namespace) -> Path:
         decode_work = fresh_work(work_root, "decode", package, manifest)
         decode_archive = decode_work / "archive.first"
         shutil.copy2(retained["compression"], decode_archive)
-        build_decode = sandbox_prefix(decode_work, None) + expand_command(
+        build_decode = sandbox_prefix(decode_work, None, canary=canary) + expand_command(
             manifest["commands"]["build"], manifest, "archive.first"
         )
         build_decode_log = replay_root / "build-decode.log"
-        build_decode_returncode = run_command(build_decode, build_decode_log)
+        if canary:
+            build_guard = replay_root / "build-decode.guard.json"
+            build_decode, build_decode_returncode = guarded_command(
+                args, f"{manifest['candidateId']}:build-decode", "diagnostic", decode_work,
+                build_decode, build_guard, build_decode_log)
+            guard_paths.append(build_guard)
+        else:
+            build_decode_returncode = run_command(build_decode, build_decode_log)
         executions.append(
             {
                 "phase": "build-decode",
@@ -447,7 +579,7 @@ def replay(args: argparse.Namespace) -> Path:
         if build_decode_returncode != 0:
             raise RuntimeError("build-decode failed")
 
-        decompression = sandbox_prefix(decode_work, None) + expand_command(
+        decompression = sandbox_prefix(decode_work, None, canary=canary) + expand_command(
             manifest["commands"]["decompress"], manifest, "archive.first"
         )
         decompression_guard = replay_root / "decompression.guard.json"
@@ -486,12 +618,15 @@ def replay(args: argparse.Namespace) -> Path:
             "compression-replay": replay_root / "compression-replay.guard.json",
             "decompression": decompression_guard,
         }
+        if canary:
+            guard_by_phase.update({phase: replay_root / f"{phase}.guard.json"
+                                   for phase in ("build-first", "build-replay", "build-decode")})
         for execution in executions:
             guard_path = guard_by_phase.get(execution["phase"])
             if guard_path is not None:
                 execution["guard"] = guard_reference(clean_path, guard_path)
         clean_receipt = {
-            "schema": "gamma.enwiki9.clean-room-replay.v1",
+            "schema": "gamma.enwiki9.clean-room-canary.v1" if canary else "gamma.enwiki9.clean-room-replay.v1",
             "objective": binding,
             "candidateId": manifest["candidateId"],
             "candidateTreeSha256": manifest["candidateTreeSha256"],
@@ -527,6 +662,28 @@ def replay(args: argparse.Namespace) -> Path:
             .isoformat(),
         }
         write_json(clean_path, clean_receipt)
+        if canary:
+            receipt = {
+                "schema": "gamma.enwiki9.release-canary.v1", "objective": binding,
+                "evidenceClass": "synthetic-canary", "objectiveCredit": False,
+                "fullCorpusProof": False, "officialScoreBytes": None,
+                "receiptId": args.receipt_id, "candidateId": manifest["candidateId"],
+                "candidateTreeSha256": manifest["candidateTreeSha256"],
+                "manifest": artifact(receipt_path, manifest_path), "input": artifact(receipt_path, corpus),
+                "archive": artifact(receipt_path, retained["compression"]),
+                "repeatArchive": artifact(receipt_path, retained["compression-replay"]),
+                "restored": artifact(receipt_path, retained["restored"]),
+                "cleanRoom": artifact(receipt_path, clean_path),
+                "countedPackageAndArchiveBytes": manifest["totalPackageBytes"] + manifest["requiredOptionBytes"]
+                                                + retained["compression"].stat().st_size,
+                "budgets": {"memoryBytes": CANARY_MEMORY_BYTES, "temporaryDiskBytes": CANARY_TEMP_BYTES,
+                            "phaseSeconds": CANARY_PHASE_SECONDS, "logicalCpus": 1},
+                "verifier": artifact(receipt_path, Path(__file__)),
+                "verdict": "canary-pass", "generatedUtc": clean_receipt["generatedUtc"],
+            }
+            write_json(receipt_path, receipt)
+            validate_canary_receipt(receipt_path)
+            return receipt_path
         clean_result = research_contracts.validate_artifact(clean_path)
 
         first_record = artifact(receipt_path, retained["compression"])
@@ -686,7 +843,7 @@ def replay(args: argparse.Namespace) -> Path:
                 if path.is_file() and path != attempt_path
             ]
             attempt = {
-                "schema": "gamma.enwiki9.clean-room-attempt.v1",
+                "schema": "gamma.enwiki9.clean-room-canary-attempt.v1" if canary else "gamma.enwiki9.clean-room-attempt.v1",
                 "objective": binding,
                 "candidateId": manifest["candidateId"],
                 "candidateTreeSha256": manifest["candidateTreeSha256"],
@@ -700,20 +857,33 @@ def replay(args: argparse.Namespace) -> Path:
                 .replace(microsecond=0)
                 .isoformat(),
             }
+            if canary:
+                attempt.update({"evidenceClass": "synthetic-canary", "objectiveCredit": False,
+                                "fullCorpusProof": False, "officialScoreBytes": None})
             write_json(attempt_path, attempt)
-            research_contracts.validate_artifact(attempt_path)
+            if not canary:
+                research_contracts.validate_artifact(attempt_path)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--corpus", type=Path, required=True)
-    parser.add_argument("--geekbench5-single-core-score", type=float, required=True)
+    parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--corpus", type=Path)
+    parser.add_argument("--geekbench5-single-core-score", type=float)
     parser.add_argument("--peer-receipt", type=Path)
-    parser.add_argument("--receipt-id", required=True)
+    parser.add_argument("--receipt-id")
     parser.add_argument("--sample-interval-seconds", type=float, default=1.0)
+    parser.add_argument("--canary", action="store_true", help="synthetic input <=1 MiB; fixed low bounds; zero objective credit")
+    parser.add_argument("--verify-canary", type=Path, help="verify retained canary artifacts without execution")
     args = parser.parse_args()
-    if args.geekbench5_single_core_score <= 0:
+    if args.verify_canary is not None:
+        print(json.dumps(validate_canary_receipt(args.verify_canary.resolve()), indent=2))
+        return 0
+    if args.manifest is None or args.corpus is None or args.receipt_id is None:
+        parser.error("--manifest, --corpus, and --receipt-id are required for replay")
+    if not args.canary and args.geekbench5_single_core_score is None:
+        parser.error("full replay requires --geekbench5-single-core-score")
+    if args.geekbench5_single_core_score is not None and args.geekbench5_single_core_score <= 0:
         raise SystemExit("--geekbench5-single-core-score must be positive")
     if args.sample_interval_seconds <= 0:
         raise SystemExit("--sample-interval-seconds must be positive")

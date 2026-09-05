@@ -62,6 +62,7 @@ def local_source_closure(entries: Iterable[Path]) -> list[Path]:
                 pending.append(dependency)
     if RESEARCH_CONTRACTS.resolve() in closure:
         closure.update(path.resolve() for path in CONTRACT_ROOT.glob("*.json"))
+        closure.update(path.resolve() for path in (CONTRACT_ROOT.parent / "v2").glob("*.json"))
     return sorted(closure, key=lambda path: path.relative_to(ROOT).as_posix())
 
 

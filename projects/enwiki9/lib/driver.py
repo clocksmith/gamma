@@ -31,7 +31,9 @@ import pathlib
 import platform
 import stat
 import sys
+import tempfile
 import time
+import uuid
 
 from typing import Any
 
@@ -96,6 +98,38 @@ def _sample_rss_kib() -> int | None:
         return int(usage) if platform.system() != "Darwin" else int(usage // 1024)
     except Exception:
         return None
+
+
+def _optional_diagnostic(callback, name: str, missing: list[dict]):
+    try:
+        value = callback()
+        if value is None:
+            missing.append({"name": name, "reason": "unavailable"})
+        else:
+            json.dumps(value, allow_nan=False)
+        return value
+    except Exception as exc:
+        missing.append({"name": name, "reason": f"{type(exc).__name__}: {exc}"})
+        return None
+
+
+def _first_divergence(left: bytes, right: bytes) -> int | None:
+    if left == right:
+        return None
+    return next((i for i, (a, b) in enumerate(zip(left, right)) if a != b), min(len(left), len(right)))
+
+
+def _write_atomic(path: pathlib.Path, payload: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as stream:
+        temporary = pathlib.Path(stream.name)
+        stream.write(payload)
+        stream.flush()
+        os.fsync(stream.fileno())
+    try:
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _load_program_metadata(program_id: str) -> dict[str, Any]:
@@ -307,6 +341,11 @@ def run(
     run_context: str | None = None,
     run_source: str | None = None,
     run_tags: list[str] | None = None,
+    *,
+    arm: str | None = None,
+    module=None,
+    artifact_dir: pathlib.Path | None = None,
+    mode: str = "discovery",
 ) -> dict:
     run_started = time.perf_counter()
     objective = research_contracts.objective_binding()
@@ -319,21 +358,28 @@ def run(
     normalized_context = _normalize_text(run_context)
     normalized_source = _normalize_text(run_source)
     normalized_tags = run_tags or []
-    mod, src_path = _load(program_id)
+    if mode not in {"discovery", "qualification"}:
+        raise ValueError("unknown execution mode")
+    mod, src_path = _load(program_id) if module is None else (module, _candidate_program_dir(program_id) / "program.py")
+    compress = mod.compress if arm is None else lambda raw: mod.compress_arm(raw, arm)
+    decompress = mod.decompress if arm is None else lambda archive: mod.decompress_arm(archive, arm)
     metadata = _load_program_metadata(program_id)
     program_name = _load_program_name(metadata)
-    raw = data_path.read_bytes()
-    if limit is not None:
-        raw = raw[:limit]
+    if limit is not None and limit <= 0:
+        raise ValueError("input limit must be positive")
+    with data_path.open("rb") as stream:
+        raw = stream.read() if limit is None else stream.read(limit)
     data_md5 = hashlib.md5(raw).hexdigest()
     data_sha256 = hashlib.sha256(raw).hexdigest()
-    rss_before = _sample_rss_kib()
+    missing_diagnostics = []
+    sample = lambda: _optional_diagnostic(_sample_rss_kib, "rss", missing_diagnostics)
+    rss_before = sample()
 
     compress_started = time.perf_counter()
-    compressed = mod.compress(raw)
+    compressed = compress(raw)
     t_compress = time.perf_counter() - compress_started
     stats_fn = getattr(mod, "stats", None)
-    program_stats = stats_fn() if callable(stats_fn) else None
+    program_stats = _optional_diagnostic(stats_fn, "program_stats", missing_diagnostics) if callable(stats_fn) else None
     compressed_size = len(compressed)
 
     archive_ceiling_missed = archive_ceiling is not None and compressed_size > archive_ceiling
@@ -342,7 +388,7 @@ def run(
         ok = None
     else:
         decompress_started = time.perf_counter()
-        decompressed = mod.decompress(compressed)
+        decompressed = decompress(compressed)
         t_decompress = time.perf_counter() - decompress_started
         ok = decompressed == raw
     program_dir = src_path.parent
@@ -353,7 +399,7 @@ def run(
     program_size = sum(sz for _, sz in program_files)
     archive_md5 = hashlib.md5(compressed).hexdigest()
     archive_sha256 = hashlib.sha256(compressed).hexdigest()
-    rss_after_compress = _sample_rss_kib()
+    rss_after_compress = sample()
 
     determinism: dict | None = None
     should_check_determinism = (
@@ -365,7 +411,7 @@ def run(
         )
     )
     if should_check_determinism:
-        compressed2 = mod.compress(raw)
+        compressed2 = compress(raw)
         det_ok = compressed == compressed2
         det_md5 = hashlib.md5(compressed2).hexdigest()
         det_sha256 = hashlib.sha256(compressed2).hexdigest()
@@ -395,7 +441,7 @@ def run(
 
     bits_per_byte = (compressed_size * 8 / len(raw)) if raw else 0.0
     t_total = time.perf_counter() - run_started
-    rss_after = _sample_rss_kib()
+    rss_after = sample()
     rss_samples = [v for v in (rss_before, rss_after_compress, rss_after) if isinstance(v, int)]
     rss_peak = max(rss_samples) if rss_samples else None
 
@@ -422,6 +468,12 @@ def run(
         "compress_time_s": round(t_compress, 4),
         "decompress_time_s": round(t_decompress, 4),
         "roundtrip_ok": ok,
+        "first_divergence_byte": None if archive_ceiling_missed else _first_divergence(raw, decompressed),
+        "arm": arm,
+        "execution_mode": mode,
+        "timing_authority": "diagnostic",
+        "qualification_status": "not-certified-missing-isolation-calibration-and-continuous-resource-evidence",
+        "missing_diagnostics": missing_diagnostics,
         "roundtrip_skipped": {
             "reason": "archive_ceiling_missed",
             "archive_ceiling": archive_ceiling,
@@ -460,7 +512,88 @@ def run(
     )
     if program_stats is not None:
         result["program_stats"] = program_stats
+    if artifact_dir is not None:
+        artifact_dir.mkdir(parents=True, exist_ok=False)
+        artifacts = {"archive": ("archive.bin", compressed)}
+        if not archive_ceiling_missed:
+            artifacts["restored"] = ("restored.bin", decompressed)
+        if should_check_determinism:
+            artifacts["repeat_archive"] = ("repeat.bin", compressed2)
+        result["artifacts"] = {}
+        for name, (filename, payload) in artifacts.items():
+            path = artifact_dir / filename
+            _write_atomic(path, payload)
+            result["artifacts"][name] = {"path": filename, "bytes": len(payload), "sha256": _sha256_file(path)}
+        _write_atomic(artifact_dir / "result.json", (json.dumps(result, indent=2) + "\n").encode())
     return result
+
+
+def compare(program_id: str, data_path: pathlib.Path, limit: int, specification: dict,
+            output: pathlib.Path, *, mode: str = "discovery", record_ledger: bool = False) -> dict:
+    """Run all frozen arms from one module/build; close artifacts before decision.
+
+    Qualification timing remains uncertified here: the isolated queue and release
+    resource verifier supply that evidence. Neither this mode flag nor a byte win
+    grants automatic promotion.
+    """
+    required = ("hypothesis", "parent", "changed_mechanism", "development_budget",
+                "selection_population", "sealed_confirmation", "stop_rule", "arms")
+    if any(key not in specification or not specification[key] for key in required):
+        raise ValueError("comparison requires a complete bounded mutation specification")
+    arms = specification["arms"]
+    if not isinstance(arms, dict) or not {"parent", "bookkeeping", "treatment"} <= set(arms):
+        raise ValueError("comparison needs parent, bookkeeping and treatment arms")
+    if len(set(arms.values())) != len(arms) or any(not isinstance(a, str) or not a.replace("_", "").isalnum() for a in arms.values()):
+        raise ValueError("arm identifiers must be unique safe names")
+    if not 0 < limit <= 10_000_000:
+        raise ValueError("comparison needs an explicit bounded input scope <=10MB")
+    if record_ledger and not output.resolve().is_relative_to((ROOT / "results").resolve()):
+        raise ValueError("canonical comparisons must retain artifacts under project results/")
+    module, source = _load(program_id)
+    if not all(callable(getattr(module, name, None)) for name in ("compress_arm", "decompress_arm")):
+        raise ValueError("candidate must implement explicit compress_arm/decompress_arm adapters")
+    metadata = _load_program_metadata(program_id)
+    inventory_before = _program_package_inventory(source.parent, metadata)[1]["counted_files"]
+    implementation_paths = [source, *sorted((ROOT / "lib").glob("*.py")),
+                            *research_contracts.local_source_closure([ROOT / "tools/research_contracts.py"])]
+    implementation_before = {str(path): _sha256_file(path) for path in implementation_paths}
+    output.mkdir(parents=True, exist_ok=False)
+    _write_atomic(output / "specification.json", (json.dumps(specification, indent=2) + "\n").encode())
+    rows = {}
+    errors = {}
+    for role, arm in arms.items():
+        try:
+            rows[role] = run(program_id, data_path, limit, True, run_purpose="control" if role != "treatment" else "candidate",
+                             arm=arm, module=module, artifact_dir=output / arm, mode=mode)
+        except Exception as exc:
+            errors[role] = {"type": type(exc).__name__, "message": str(exc)}
+    source_stable = (inventory_before == _program_package_inventory(source.parent, metadata)[1]["counted_files"]
+                     and implementation_before == {str(path): _sha256_file(path) for path in implementation_paths})
+    population_stable = len({(r["data_size"], r["data_sha256"]) for r in rows.values()}) == 1
+    exact = not errors and population_stable and all(r["roundtrip_ok"] is True and r["determinism"]["single_host_byte_equal"] is True for r in rows.values())
+    identity = bool(exact and rows["parent"]["compressed_sha256"] == rows["bookkeeping"]["compressed_sha256"])
+    delta = rows["treatment"]["compressed_size"] - rows["parent"]["compressed_size"] if "treatment" in rows and "parent" in rows else None
+    decision = {
+        "schema": "gamma.enwiki9.driver-comparison.v1", "objective": research_contracts.objective_binding(),
+        "program_id": program_id, "specification_sha256": _sha256_file(output / "specification.json"),
+        "source_files": inventory_before, "driver_sha256": _sha256_file(pathlib.Path(__file__)),
+        "implementation_files": {str(pathlib.Path(path).relative_to(ROOT)) if pathlib.Path(path).is_relative_to(ROOT) else path: digest
+                                 for path, digest in implementation_before.items()},
+        "source_stable": source_stable, "same_candidate_build": source_stable,
+        "same_input_population": population_stable,
+        "exact_roundtrips_and_repeats": exact, "parent_bookkeeping_identity": identity,
+        "treatment_minus_parent_bytes": delta, "execution_mode": mode, "timing_authority": "diagnostic",
+        "qualification_complete": False, "promotion_authorized": False, "objective_credit": 0,
+        "arms": {role: {"arm": arms[role], "result": f"{arms[role]}/result.json", "result_sha256": _sha256_file(output / arms[role] / "result.json")} for role in rows},
+        "errors": errors,
+        "verdict": "invalid" if not (exact and identity and source_stable) else "measured-improvement" if delta < 0 else "measured-no-improvement",
+    }
+    if record_ledger:
+        for role, row in rows.items():
+            result_path = output / arms[role] / "result.json"
+            _append_run_ledger(_build_run_ledger_row(row, result_path, row.get("program_name"), False))
+    _write_atomic(output / "decision.json", (json.dumps(decision, indent=2) + "\n").encode())
+    return decision
 
 
 def main() -> int:
@@ -521,10 +654,21 @@ def main() -> int:
     )
     ap.add_argument("--no-save", action="store_true")
     ap.add_argument("--no-ledger", action="store_true")
+    ap.add_argument("--mode", choices=("discovery", "qualification"), default=os.environ.get("GAMMA_ENWIKI9_EXECUTION_MODE", "discovery"))
+    ap.add_argument("--comparison", type=pathlib.Path, help="frozen same-build arm and mutation specification")
+    ap.add_argument("--output", type=pathlib.Path, help="new comparison artifact directory")
     args = ap.parse_args()
 
     if not args.data.exists():
         raise SystemExit(f"dataset missing at {args.data} — run bench.py --setup first")
+
+    if args.comparison:
+        if args.output is None or args.limit is None:
+            ap.error("--comparison requires --output and --limit")
+        decision = compare(args.program_id, args.data, args.limit, json.loads(args.comparison.read_text()), args.output,
+                           mode=args.mode, record_ledger=not args.no_ledger)
+        print(json.dumps(decision, indent=2))
+        return 1 if decision["verdict"] == "invalid" else 0
 
     result = run(
         args.program_id,
@@ -538,14 +682,15 @@ def main() -> int:
         run_context=args.run_context,
         run_source=args.run_source,
         run_tags=_parse_run_tags(args.run_tag),
+        mode=args.mode,
     )
 
     if not args.no_save:
         out_dir = ROOT / "results" / args.program_id
         out_dir.mkdir(parents=True, exist_ok=True)
-        stamp = result["timestamp"].replace(":", "")
+        stamp = result["timestamp"].replace(":", "") + "_" + uuid.uuid4().hex[:12]
         result_path = out_dir / f"{stamp}.json"
-        result_path.write_text(json.dumps(result, indent=2) + "\n")
+        _write_atomic(result_path, (json.dumps(result, indent=2) + "\n").encode())
         if not args.no_ledger:
             ledger_row = _build_run_ledger_row(
                 result,

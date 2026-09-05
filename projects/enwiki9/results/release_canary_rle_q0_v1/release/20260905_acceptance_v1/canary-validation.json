@@ -1,0 +1,81 @@
+{
+  "closureTool": {
+    "bytes": 8281,
+    "path": "../../../../tools/enwiki9_dependency_closure.py",
+    "sha256": "690bba1d79c9e0692a0d73cfdd5838af2c250aa3ada98f5dc4be93fbdd2e4c52"
+  },
+  "evidenceClass": "synthetic-canary",
+  "fullCorpusProof": false,
+  "harness": {
+    "bytes": 7625,
+    "path": "../../../../tests/test_enwiki9_release_canary.py",
+    "sha256": "422a7ec00f56a3d1f62a630408c58a0fbc9a3eef54f5275c9772b775f4a14e20"
+  },
+  "licenseReport": {
+    "bytes": 453,
+    "path": "license-audit.json",
+    "sha256": "960b81595d56f60edce89af5a476be92f658dc65e05abbed75e07db85673645b"
+  },
+  "negativeCases": {
+    "canaryAsObjectiveReceipt": {
+      "error": "/home/x/deco/gamma/projects/enwiki9/results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/canary-receipt.json: unknown schema 'gamma.enwiki9.release-canary.v1'",
+      "rejected": true
+    },
+    "missingCleanBuildFile": {
+      "error": "fresh package copy differs from the counted manifest",
+      "rejected": true
+    },
+    "missingManifestFile": {
+      "error": "/home/x/deco/gamma/projects/enwiki9/results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/missing-file/dependency-closure.json: counted files do not exactly cover the candidate root",
+      "rejected": true
+    },
+    "tinyInputAsFullCorpus": {
+      "error": "corpus does not match the canonical full enwik9 identity",
+      "rejected": true
+    }
+  },
+  "objectiveCredit": false,
+  "receipt": {
+    "bytes": 2143,
+    "path": "canary-receipt.json",
+    "sha256": "4d5da96cfee2b57109c4c7fba6044b441dc9e7d69a2e88450ba9de8ef23752c5"
+  },
+  "reproduce": [
+    "python3",
+    "tests/test_enwiki9_release_canary.py",
+    "--bundle",
+    "results/release_canary_rle_q0_v1/release/NEW_RECEIPT"
+  ],
+  "result": {
+    "archiveBytes": 2998,
+    "determinismOk": true,
+    "fullCorpusProof": false,
+    "independentDecodeOk": true,
+    "licenseAudit": {
+      "approved": true,
+      "dependencyLicenses": [
+        "GPL-2.0-only",
+        "GPL-3.0-or-later",
+        "LGPL-2.1-or-later",
+        "MIT"
+      ],
+      "issues": [],
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    "objectiveCredit": false,
+    "peakSampledTreeRssBytes": 8011776,
+    "roundtripOk": true,
+    "scopeBytes": 7616,
+    "valid": true
+  },
+  "schema": "gamma.enwiki9.release-canary-validation.v1",
+  "verdict": "canary-pass",
+  "verify": [
+    "python3",
+    "tools/enwiki9_clean_room_replay.py",
+    "--verify-canary",
+    "results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/canary-receipt.json"
+  ]
+}

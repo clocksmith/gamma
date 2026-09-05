@@ -161,6 +161,15 @@ def materialize(args: argparse.Namespace) -> Path:
         temporary.write_text(json.dumps(manifest, indent=2) + "\n")
         os.replace(temporary, manifest_path)
         research_contracts.validate_artifact(manifest_path)
+        license_audit = research_contracts.dependency_license_audit(manifest)
+        if getattr(args, "require_license_audit", False) and not license_audit["approved"]:
+            raise ValueError("license audit failed: " + "; ".join(license_audit["issues"]))
+        (bundle / "license-audit.json").write_text(json.dumps({
+            "schema": "gamma.enwiki9.dependency-license-report.v1",
+            "manifestSha256": "sha256:" + digest(manifest_path),
+            "audit": license_audit,
+            "meaning": "Checks declared license identifiers and counted notices.",
+        }, indent=2) + "\n")
         return manifest_path
     except Exception:
         shutil.rmtree(bundle, ignore_errors=True)
@@ -182,6 +191,8 @@ def main() -> int:
     parser.add_argument("--required-option", action="append", default=[])
     parser.add_argument("--missing", action="append", default=[])
     parser.add_argument("--declare-complete", action="store_true")
+    parser.add_argument("--require-license-audit", action="store_true",
+                        help="reject incomplete or unapproved declared licenses; always emit a report")
     args = parser.parse_args()
     path = materialize(args)
     print(path.relative_to(ROOT))

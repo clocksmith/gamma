@@ -8,6 +8,7 @@ that conflicts with the generated certificate.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import pathlib
 import re
@@ -187,9 +188,16 @@ def check_research_register_partition(findings: list[Finding]) -> None:
         )
 
     bounded_files = [current, *parts]
+    preservation_path = ROOT / "operations/provenance/research_register_partition_20260905.json"
+    preservation = json.loads(preservation_path.read_text()) if preservation_path.is_file() else {}
+    preserved_oversize = {row["path"]: row["sha256"] for row in preservation.get("archives", [])
+                         if row.get("legacyOversize") is True}
     for path in bounded_files:
         lines = path.read_text().splitlines()
-        if len(lines) > RESEARCH_REGISTER_LINE_LIMIT:
+        preserved = (sum(line.startswith("## ") for line in lines) == 1
+                     and preserved_oversize.get(path.relative_to(ROOT).as_posix())
+                     == hashlib.sha256(path.read_bytes()).hexdigest())
+        if len(lines) > RESEARCH_REGISTER_LINE_LIMIT and not preserved:
             findings.append(
                 Finding(
                     path,
@@ -202,7 +210,7 @@ def check_research_register_partition(findings: list[Finding]) -> None:
         if len(lines) < 5 or not lines[0].startswith("# Research Register Archive "):
             findings.append(Finding(path, "archive part is missing its partition title"))
             continue
-        if not lines[2].startswith("[Register index]"):
+        if "[Register index](../README.md)" not in lines[2]:
             findings.append(Finding(path, "archive part is missing its navigation row"))
         if not lines[4].startswith("## "):
             findings.append(Finding(path, "archive content must begin at an H2 record boundary"))
@@ -215,10 +223,9 @@ def check_research_register_partition(findings: list[Finding]) -> None:
     current_text = current.read_text()
     index_text = register_index.read_text()
     archive_text = archive_index.read_text()
+    if "research_register/README.md" not in current_text:
+        findings.append(Finding(current, "current register must link the record index"))
     for name in actual_names:
-        current_link = f"research_register/archive/{name}"
-        if current_text.count(current_link) != 1:
-            findings.append(Finding(current, f"archive link {name!r} must appear exactly once"))
         if index_text.count(f"](archive/{name})") != 1:
             findings.append(Finding(register_index, f"archive link {name!r} must appear exactly once"))
         if archive_text.count(f"({name})") != 1:

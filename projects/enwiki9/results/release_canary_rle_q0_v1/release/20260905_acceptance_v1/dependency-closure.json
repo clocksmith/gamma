@@ -1,0 +1,99 @@
+{
+  "schema": "gamma.enwiki9.dependency-closure.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "candidateId": "release_canary_rle_q0_v1",
+  "candidateTreeSha256": "sha256:48e7c743ee2d1284b3c3ef003785a584c466776362b4fc437657bb665b88937f",
+  "candidateTreeDigestAlgorithm": "sha256-canonical-counted-files-v1",
+  "candidateRoot": "package",
+  "entryPoint": "codec.c",
+  "platform": "linux-x86-64",
+  "commands": {
+    "build": [
+      "/usr/bin/gcc",
+      "-std=c99",
+      "-O2",
+      "{entry_point}",
+      "-o",
+      "{package}/codec"
+    ],
+    "compress": [
+      "{package}/codec",
+      "c",
+      "{corpus}",
+      "{archive}"
+    ],
+    "decompress": [
+      "{package}/codec",
+      "d",
+      "{archive}",
+      "{restored}"
+    ]
+  },
+  "countedFiles": [
+    {
+      "path": "LICENSE",
+      "bytes": 1062,
+      "sha256": "1f748c27bac4bcdd487c3d95872cb7ce8e77cab1da1147b56e3db3907944e429",
+      "role": "license"
+    },
+    {
+      "path": "codec.c",
+      "bytes": 1332,
+      "sha256": "80c1d249d50677a917538af5af6f5be1c443ace02cd5d56ce9a350f9fe4114ad",
+      "role": "source"
+    }
+  ],
+  "requiredOptions": [
+    "-O2",
+    "-std=c99"
+  ],
+  "requiredOptionBytes": 11,
+  "totalPackageBytes": 2394,
+  "dependencies": [
+    {
+      "name": "Gamma canary source",
+      "kind": "bundled",
+      "provider": "codec.c",
+      "counted": true,
+      "license": "MIT"
+    },
+    {
+      "name": "Gamma license notice",
+      "kind": "bundled",
+      "provider": "LICENSE",
+      "counted": true,
+      "license": "MIT"
+    },
+    {
+      "name": "GCC",
+      "kind": "toolchain",
+      "provider": "/usr/bin/gcc",
+      "counted": false,
+      "license": "GPL-3.0-or-later"
+    },
+    {
+      "name": "C standard library and loader",
+      "kind": "standard-library",
+      "provider": "glibc",
+      "counted": false,
+      "license": "LGPL-2.1-or-later"
+    },
+    {
+      "name": "Linux",
+      "kind": "system",
+      "provider": "kernel",
+      "counted": false,
+      "license": "GPL-2.0-only"
+    }
+  ],
+  "complete": true,
+  "missing": [],
+  "generatedUtc": "2026-09-05T14:42:57+00:00"
+}
