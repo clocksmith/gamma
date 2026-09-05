@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Enwik9 research ledger</title>
+  <style>
+    :root { --ink:#202b35; --muted:#66717b; --line:#dce2e3; --paper:#fff; --canvas:#f5f7f6; --accent:#17635a; --soft:#e8f2ed; --amber:#875817; --red:#9b4140; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button,input,select { font:inherit; }
+    button,a,input,select,summary { -webkit-tap-highlight-color:transparent; }
+    a { color:var(--accent); text-underline-offset:3px; }
+    a:hover { text-decoration-thickness:2px; }
+    :focus-visible { outline:3px solid #71a99c; outline-offset:3px; }
+    button { cursor:pointer; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:30px; line-height:1.2; letter-spacing:-.8px; font-weight:680; }
+    h2 { font-size:18px; letter-spacing:-.2px; }
+    h3 { font-size:15px; }
+    code,.identifier { font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace; overflow-wrap:anywhere; }
+    .skip { position:absolute; left:16px; top:-80px; z-index:5; padding:10px; background:white; }
+    .skip:focus { top:12px; }
+    .shell { display:grid; grid-template-columns:236px minmax(0,1fr); min-height:100vh; }
+    .sidebar { min-width:0; padding:30px 20px; border-right:1px solid var(--line); background:#f0f4f1; display:flex; flex-direction:column; gap:28px; }
+    .brand { font-size:20px; font-weight:750; letter-spacing:-.5px; }
+    .eyebrow { color:var(--muted); font-size:11px; font-weight:650; text-transform:uppercase; letter-spacing:1.3px; }
+    .brand-sub { margin-top:3px; color:var(--muted); font-size:13px; }
+    nav { display:flex; flex-direction:column; gap:5px; }
+    .nav-item { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:10px 12px; border:0; border-radius:7px; text-decoration:none; color:var(--muted); font-size:14px; }
+    .nav-item:hover { background:#e5ece7; color:var(--ink); }
+    .nav-item[aria-current="page"] { color:var(--accent); background:#deebe3; font-weight:650; }
+    .nav-count { font-size:12px; font-variant-numeric:tabular-nums; }
+    .objective { border-top:1px solid #d5ded8; padding-top:22px; }
+    .target { display:block; margin:7px 0 3px; font-size:21px; font-weight:650; font-variant-numeric:tabular-nums; letter-spacing:-.5px; }
+    .sidebar-foot { margin-top:auto; font-size:12px; color:var(--muted); }
+    .sidebar-foot a { display:block; margin-top:8px; }
+    .workspace { min-width:0; padding:28px clamp(20px,4vw,60px) 60px; max-width:1580px; width:100%; }
+    .snapshot { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px 20px; padding-bottom:20px; margin-bottom:28px; border-bottom:1px solid var(--line); font-size:12px; color:var(--muted); }
+    .refresh { display:flex; flex-wrap:wrap; gap:5px 10px; }
+    .refresh code { color:var(--ink); }
+    .heading { margin-bottom:22px; }
+    .heading p { max-width:78ch; margin-top:8px; color:var(--muted); font-size:14px; }
+    .toolbar { display:flex; align-items:flex-end; flex-wrap:wrap; gap:12px; margin-bottom:12px; }
+    .field { display:flex; flex-direction:column; gap:5px; }
+    .field label { font-size:12px; color:var(--muted); font-weight:550; }
+    .search-field { flex:1; min-width:220px; }
+    input[type="search"],select { width:100%; min-height:43px; padding:9px 12px; border:1px solid #cbd5d1; border-radius:7px; color:var(--ink); background:var(--paper); }
+    input::placeholder { color:#87918c; }
+    select { min-width:160px; max-width:240px; }
+    .result-count { min-height:25px; color:var(--muted); font-size:12px; margin-bottom:9px; }
+    .panel { border:1px solid var(--line); border-radius:10px; background:var(--paper); overflow:hidden; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; text-align:left; }
+    .algorithm-table { table-layout:fixed; min-width:920px; }
+    .algorithm-table th:nth-child(1) { width:48%; }
+    .algorithm-table th:nth-child(2) { width:13%; }
+    .algorithm-table th:nth-child(3) { width:14%; }
+    .algorithm-table th:nth-child(4) { width:7%; }
+    .algorithm-table th:nth-child(5) { width:18%; }
+    .algorithm-table .name-link { overflow-wrap:anywhere; }
+    .algorithm-table .description { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    th { padding:12px 18px; font-size:11px; font-weight:650; color:var(--muted); letter-spacing:.5px; text-transform:uppercase; background:#fafbf9; border-bottom:1px solid var(--line); white-space:nowrap; }
+    td { padding:16px 18px; border-bottom:1px solid #edf0ee; vertical-align:top; font-size:13px; }
+    td:first-child { min-width:250px; }
+    td:last-child { max-width:250px; overflow-wrap:anywhere; }
+    tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#fbfcfb; }
+    .name-link { color:var(--ink); font-size:14px; font-weight:650; text-decoration:none; overflow-wrap:anywhere; }
+    .name-link:hover { color:var(--accent); text-decoration:underline; }
+    .subtext { display:block; margin-top:4px; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
+    .description { max-width:74ch; margin-top:7px; color:var(--muted); font-size:13px; }
+    .badge { display:inline-block; max-width:100%; padding:3px 8px; border-radius:5px; background:#eef1f3; color:#51616c; font-size:11px; font-weight:600; overflow-wrap:normal; }
+    .badge.good { color:#28614b; background:#e9f3ec; }
+    .badge.warn { color:var(--amber); background:#faf0dd; }
+    .badge.bad { color:var(--red); background:#faecea; }
+    .badge.working { color:#2f608c; background:#eaf1f9; }
+    .muted { color:var(--muted); }
+    .stack { display:flex; flex-direction:column; gap:12px; }
+    .card { padding:20px; border:1px solid var(--line); border-radius:9px; background:var(--paper); min-width:0; }
+    .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .card-top > div { min-width:0; }
+    .card-top > .badge { flex-shrink:0; max-width:35%; }
+    .card-meta { display:flex; flex-wrap:wrap; gap:5px 15px; color:var(--muted); font-size:12px; margin-top:9px; }
+    .metrics { display:flex; flex-wrap:wrap; gap:9px; margin-top:15px; }
+    .metric { min-width:135px; padding:9px 12px; border-radius:6px; background:#f5f7f5; }
+    .metric-label { display:block; color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
+    .metric-value { display:block; margin-top:2px; font-size:14px; font-weight:600; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .source-links { display:flex; flex-wrap:wrap; gap:5px 16px; margin-top:12px; font-size:12px; }
+    .source-links a { overflow-wrap:anywhere; }
+    details { margin-top:13px; font-size:13px; }
+    summary { cursor:pointer; color:var(--accent); width:fit-content; }
+    .detail-body { margin-top:12px; }
+    .facts { display:grid; grid-template-columns:minmax(90px,150px) minmax(0,1fr); gap:7px 16px; margin:0; font-size:13px; }
+    dt { color:var(--muted); }
+    dd { margin:0; overflow-wrap:anywhere; white-space:pre-wrap; }
+    .notice { border-left:3px solid #a6bbb1; background:#edf3ef; padding:12px 15px; font-size:12px; color:#4e6258; margin-bottom:20px; }
+    .issues { margin:20px 0 0; color:var(--amber); }
+    .issues summary { color:var(--amber); }
+    .empty { padding:44px 22px; text-align:center; }
+    .empty p { margin-top:6px; font-size:13px; color:var(--muted); }
+    .detail-header { display:flex; gap:12px; align-items:flex-start; justify-content:space-between; margin:17px 0; }
+    .detail-title { overflow-wrap:anywhere; }
+    .back { display:inline-block; font-size:13px; margin-bottom:12px; }
+    .section { margin-top:25px; }
+    .section > h2 { margin-bottom:12px; }
+    #content > h2 { margin-bottom:12px; }
+    .lineage { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .plain-list { margin:9px 0 0; padding-left:19px; }
+    .plain-list li { margin:5px 0; overflow-wrap:anywhere; }
+    .history-note { font-size:12px; color:var(--muted); margin-bottom:12px; }
+    .pagination { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-top:17px; color:var(--muted); font-size:12px; }
+    .page-buttons { display:flex; gap:8px; }
+    .page-button { border:1px solid #cbd5d1; background:var(--paper); color:var(--accent); padding:7px 12px; border-radius:6px; font-size:12px; }
+    .page-button:disabled { color:#939c96; cursor:default; background:#f0f3ef; }
+    .error { padding:20px; color:var(--red); border:1px solid #e6bdb7; border-radius:8px; background:#fff; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    [hidden] { display:none !important; }
+    @media(min-width:1100px) { .sidebar { position:sticky; top:0; height:100vh; } }
+    @media(max-width:800px) {
+      .shell { grid-template-columns:minmax(0,1fr); }
+      .sidebar { padding:17px 20px; border-right:0; border-bottom:1px solid var(--line); gap:15px; }
+      .brand-sub,.objective,.sidebar-foot { display:none; }
+      nav { flex-direction:row; overflow-x:auto; gap:4px; }
+      .nav-item { flex-shrink:0; padding:8px 10px; font-size:12px; }
+      .workspace { padding:22px 18px 40px; }
+      .snapshot { margin-bottom:22px; }
+      h1 { font-size:26px; }
+      th,td { padding:12px; }
+    }
+    @media(max-width:480px) {
+      .toolbar { flex-direction:column; align-items:stretch; }
+      select { max-width:none; }
+      .lineage { grid-template-columns:1fr; }
+      .card { padding:16px; }
+      .metric { min-width:0; flex:1 1 130px; }
+      .facts { grid-template-columns:1fr; gap:3px; }
+      dd { margin-bottom:8px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to ledger</a>
+  <div class="shell">
+    <aside class="sidebar">
+      <div><div class="brand">Enwik9 ledger</div><p class="brand-sub">Algorithms, evidence, and lineage</p></div>
+      <nav id="navigation" aria-label="Ledger views"></nav>
+      <div class="objective"><span class="eyebrow">Full-corpus target</span><span class="target" id="target"></span><p class="brand-sub" id="target-scope"></p><p class="brand-sub">Exact replay and complete accounting required.</p></div>
+      <div class="sidebar-foot">Research workspace<a href="../workbench/README.md">Workbench guide</a><a href="../workbench/PROMPTS.md">Research prompts</a></div>
+    </aside>
+    <main class="workspace" id="main" tabindex="-1">
+      <div class="snapshot"><span id="snapshot-time"></span><div class="refresh"><span>Refresh locally:</span><code>python3 tools/enwiki9_ledger.py</code></div></div>
+      <div class="heading"><h1 id="view-title">Algorithms</h1><p id="view-description"></p></div>
+      <div class="toolbar" id="toolbar">
+        <div class="field search-field"><label for="search">Search the ledger</label><input id="search" type="search" placeholder="Algorithm, mechanism, run ID, or research note" autocomplete="off"></div>
+        <div class="field" id="kind-field"><label for="kind-filter">Kind</label><select id="kind-filter"></select></div>
+        <div class="field" id="filter-field"><label for="filter">Status</label><select id="filter"></select></div>
+      </div>
+      <p id="result-count" class="result-count" aria-live="polite"></p>
+      <div id="content"></div>
+      <details id="issues" class="issues" hidden><summary id="issues-summary"></summary><ul id="issues-list" class="plain-list"></ul></details>
+      <noscript><p class="error">Enable JavaScript to browse this local snapshot. The source receipts remain available in the project directories.</p></noscript>
+    </main>
+  </div>
+  <script id="ledger-data" type="application/json">__LEDGER_DATA__</script>
+  <script>
+  (() => {
+    'use strict';
+    const byId = id => document.getElementById(id);
+    const node = (tag, text, className) => {
+      const result = document.createElement(tag);
+      if (text !== undefined && text !== null) result.textContent = String(text);
+      if (className) result.className = className;
+      return result;
+    };
+    const list = value => Array.isArray(value) ? value : [];
+    const display = value => {
+      if (value === null || value === undefined || value === '') return 'Not reported';
+      if (typeof value === 'number') return Number.isFinite(value) ? value.toLocaleString('en-US', {maximumFractionDigits:12}) : String(value);
+      if (typeof value === 'object') return JSON.stringify(value);
+      return String(value);
+    };
+    const label = value => display(value).replace(/_/g, ' ');
+    const structuredText = value => {
+      if (Array.isArray(value)) return value.map(structuredText).join('\n');
+      if (value && typeof value === 'object') return Object.entries(value).map(([key,item]) => label(key) + ': ' + structuredText(item)).join('\n');
+      return display(value);
+    };
+    const dateText = value => {
+      if (!value) return 'Date not reported';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? String(value) : date.toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC');
+    };
+    const localHref = path => {
+      if (typeof path !== 'string' || !path || /[\x00-\x1f\\]/.test(path)) return null;
+      const split = path.indexOf('#');
+      const file = (split < 0 ? path : path.slice(0, split)).replace(/^\.\//, '');
+      const directory = file.endsWith('/');
+      const segments = (directory ? file.slice(0, -1) : file).split('/');
+      if (!file || file.startsWith('/') || segments.some(part => part === '..' || part === '.' || part === '') || /^[a-z][a-z0-9+.-]*:/i.test(file)) return null;
+      return '../' + segments.map(encodeURIComponent).join('/') + (directory ? '/' : '') + (split < 0 ? '' : '#' + encodeURIComponent(path.slice(split + 1)));
+    };
+    const sourceLink = (title, path) => {
+      const href = localHref(path);
+      const result = node(href ? 'a' : 'span', title || path || 'Source not reported', href ? '' : 'muted');
+      if (href) result.href = href;
+      if (path) result.title = String(path);
+      return result;
+    };
+    const badge = value => {
+      const text = String(value || 'unknown');
+      const normalized = text.toLowerCase().replace(/_/g, '-');
+      let tone = '';
+      if (['passed','pass','complete','completed','supported','valid'].includes(normalized)) tone = ' good';
+      else if (['failed','failure','invalid','refuted','retired'].includes(normalized)) tone = ' bad';
+      else if (['held','hold','blocked','blocked-dependency','inconclusive','pending','queued'].includes(normalized)) tone = ' warn';
+      else if (['running','active','verified-live','live'].includes(normalized)) tone = ' working';
+      return node('span', label(text), 'badge' + tone);
+    };
+    const empty = (title, text) => {
+      const result = node('div', null, 'panel empty');
+      result.append(node('h2', title), node('p', text));
+      return result;
+    };
+    let data;
+    try { data = JSON.parse(byId('ledger-data').textContent); }
+    catch (_) {
+      byId('content').append(node('p', 'This snapshot could not be read. Run python3 tools/enwiki9_ledger.py from the project directory, then reopen the generated ledger.', 'error'));
+      byId('toolbar').hidden = true;
+      return;
+    }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      byId('content').append(node('p', 'The embedded ledger data is not an object. Regenerate the local snapshot.', 'error'));
+      byId('toolbar').hidden = true;
+      return;
+    }
+    const algorithms = list(data.algorithms);
+    const runs = list(data.runs);
+    const proposals = list(data.proposals);
+    const mixes = list(data.mixes);
+    const notes = list(data.notes);
+    const algorithmById = new Map(algorithms.map(item => [item.id, item]));
+    const mixCandidates = [...new Set(list(data.mix_candidates))].map(id => algorithmById.get(id)).filter(Boolean);
+    const searchable = new WeakMap();
+    const searchText = value => {
+      if (!value || typeof value !== 'object') return String(value || '').toLowerCase();
+      if (!searchable.has(value)) searchable.set(value, JSON.stringify(value).toLowerCase());
+      return searchable.get(value);
+    };
+    const matches = value => searchText(value).includes(byId('search').value.trim().toLowerCase());
+    const isActive = run => ['running','pending','queued','held','active','started','submitted'].includes(String(run.state).toLowerCase());
+    const sortedRuns = values => values.slice().sort((a,b) => String(b.date || '').localeCompare(String(a.date || '')) || String(a.id).localeCompare(String(b.id)));
+    const historyCache = new WeakMap();
+    const historyFor = algorithm => {
+      if (!historyCache.has(algorithm)) {
+        const ids = new Set(list(algorithm.run_ids));
+        historyCache.set(algorithm, sortedRuns(runs.filter(run => run.candidate_id === algorithm.id || ids.has(run.id))));
+      }
+      return historyCache.get(algorithm);
+    };
+    const views = {
+      algorithms: {title:'Algorithms', description:'Browse mechanisms and candidates. Open an algorithm for its sources, immediate lineage, and complete recorded run history.', values:algorithms, filter:'status'},
+      running: {title:'Running & queued', description:'Queue records and process observations captured when this page was generated. Counts are records, not independent compressors; a process and its observer may appear separately. Rebuild the snapshot to check current activity.', values:sortedRuns(runs.filter(isActive)), filter:'state'},
+      results: {title:'Results', description:'Recorded results with their original scope, units, and evidence links. Open a run for its validity, hypothesis, and source details.', values:sortedRuns(runs.filter(run => !isActive(run))), filter:'outcome'},
+      mixes: {title:'Mixes', description:'Recorded combinations, their components, interactions, and conclusions. Component gains do not establish a combined result.', values:mixes},
+      notes: {title:'Research notes', description:'Research decisions and supporting notes, linked to their source documents.', values:notes}
+    };
+    let currentView = 'algorithms';
+    const PAGE_SIZE = 75;
+    let page = 0;
+    let historyPage = 0;
+    let mixCandidatePage = 0;
+    const pageSlice = (values, requestedPage) => {
+      const last = Math.max(0, Math.ceil(values.length / PAGE_SIZE) - 1);
+      const selected = Math.min(Math.max(0, requestedPage), last);
+      return {page:selected, last, total:values.length, first:selected * PAGE_SIZE, values:values.slice(selected * PAGE_SIZE, (selected + 1) * PAGE_SIZE)};
+    };
+    const pagination = (slice, onChange) => {
+      const container = node('div', null, 'pagination');
+      container.append(node('span', slice.total ? display(slice.first + 1) + '–' + display(slice.first + slice.values.length) + ' of ' + display(slice.total) + ' records' : 'No records'));
+      if (slice.last > 0) {
+        const buttons = node('div', null, 'page-buttons');
+        const previous = node('button', 'Previous', 'page-button'); previous.type = 'button'; previous.disabled = slice.page === 0;
+        previous.addEventListener('click', () => onChange(slice.page - 1));
+        const next = node('button', 'Next', 'page-button'); next.type = 'button'; next.disabled = slice.page === slice.last;
+        next.addEventListener('click', () => onChange(slice.page + 1));
+        buttons.append(previous, next); container.append(buttons);
+      }
+      return container;
+    };
+    const navLinks = new Map();
+    for (const [id, view] of Object.entries(views)) {
+      const link = node('a', null, 'nav-item'); link.href = '#' + id;
+      if (id === 'running') link.title = 'Recorded entries; not a count of independent compressors';
+      link.append(node('span', view.title), node('span', display(view.values.length), 'nav-count'));
+      byId('navigation').append(link); navLinks.set(id, link);
+    }
+    const objective = data.objective || {};
+    byId('target').textContent = display(objective.targetScoreBytes) + ' bytes';
+    byId('target-scope').textContent = 'On ' + display(objective.corpusBytes) + ' corpus bytes';
+    byId('snapshot-time').textContent = 'Snapshot: ' + dateText(data.generated_at) + (data.host ? ' · ' + display(data.host) : '');
+    const issues = list(data.issues);
+    if (issues.length) {
+      byId('issues').hidden = false;
+      byId('issues-summary').textContent = display(issues.length) + ' source issues in this snapshot';
+      for (const issue of issues) {
+        const row = node('li'); row.append(sourceLink(issue.path, issue.path), node('span', ': ' + display(issue.reason)));
+        byId('issues-list').append(row);
+      }
+    }
+    const algorithmLink = (id, title) => {
+      const algorithm = algorithmById.get(id);
+      const result = node(algorithm ? 'a' : 'span', title || (algorithm && (algorithm.name || algorithm.id)) || id || 'Unassigned');
+      if (algorithm) result.href = '#algorithm=' + encodeURIComponent(id);
+      else result.className = 'muted';
+      return result;
+    };
+    const scopeText = scope => {
+      if (scope === null || scope === undefined) return 'Scope not reported';
+      if (typeof scope !== 'object') return 'Scope: ' + display(scope);
+      if (scope.value === null || scope.value === undefined) return 'Scope not reported';
+      return display(scope.value) + ' ' + (scope.unit || '(unit not reported)');
+    };
+    const appendFact = (facts, title, value) => {
+      if (value === null || value === undefined || value === '') return;
+      facts.append(node('dt', title), node('dd', structuredText(value)));
+    };
+    const runCard = run => {
+      const card = node('article', null, 'card');
+      const top = node('div', null, 'card-top');
+      const identity = node('div');
+      const name = algorithmLink(run.candidate_id); name.classList.add('name-link');
+      identity.append(name, node('span', run.id, 'subtext identifier'));
+      top.append(identity, badge(run.outcome || run.state)); card.append(top);
+      const meta = node('div', null, 'card-meta');
+      meta.append(node('span', scopeText(run.scope)), node('span', dateText(run.date)), node('span', 'Recorded state: ' + label(run.state)));
+      if (run.purpose) meta.append(node('span', label(run.purpose)));
+      card.append(meta);
+      if (run.summary) card.append(node('p', run.summary, 'description'));
+      if (list(run.metrics).length) {
+        const metrics = node('div', null, 'metrics');
+        for (const metric of run.metrics) {
+          const entry = node('div', null, 'metric');
+          entry.append(node('span', metric.label || 'Reported metric', 'metric-label'), node('span', display(metric.value) + (metric.unit ? ' ' + metric.unit : ''), 'metric-value'));
+          metrics.append(entry);
+        }
+        card.append(metrics);
+      }
+      const live = run.liveness && typeof run.liveness === 'object' && !Array.isArray(run.liveness) ? run.liveness : {};
+      if (isActive(run) || Object.keys(live).length > 0) {
+        const observation = node('div', null, 'detail-body');
+        observation.append(node('p', 'Process observation: ' + label(live.state || 'not checked'), 'subtext'));
+        if (live.detail) observation.append(node('p', display(live.detail), 'subtext'));
+        if (live.pid || live.observed_at) observation.append(node('p', [live.pid ? 'PID ' + display(live.pid) : '', live.observed_at ? dateText(live.observed_at) : ''].filter(Boolean).join(' · '), 'subtext'));
+        card.append(observation);
+      }
+      const detail = node('details'); detail.append(node('summary', 'Run details & sources'));
+      const body = node('div', null, 'detail-body'); const facts = node('dl', null, 'facts');
+      appendFact(facts, 'Kind', run.kind); appendFact(facts, 'Validity', run.validity); appendFact(facts, 'Hypothesis', run.hypothesis); appendFact(facts, 'Outcome', run.outcome);
+      if (run.scope && typeof run.scope === 'object') {
+        appendFact(facts, 'Scope population', run.scope.population);
+        appendFact(facts, 'Scope symbols', run.scope.symbols);
+        appendFact(facts, 'Scope coordinate', run.scope.coordinate);
+        appendFact(facts, 'Scope selection', run.scope.selection);
+      }
+      if (run.progress && typeof run.progress === 'object') {
+        for (const [key, value] of Object.entries(run.progress)) appendFact(facts, 'Progress: ' + label(key), value);
+      }
+      body.append(facts);
+      if (list(run.ledger_records).length) {
+        const records = node('section', null, 'section');
+        records.append(node('h3', 'Canonical run records'), node('p', 'Values attributed to each canonical source record. Missing fields remain not reported; these records do not independently establish a validated score.', 'history-note'));
+        const stack = node('div', null, 'stack');
+        for (const record of run.ledger_records) {
+          const entry = node('div', null, 'card');
+          entry.append(sourceLink(record.source || 'Source not reported', record.source));
+          const recordFacts = node('dl', null, 'facts detail-body');
+          const fields = [
+            ['Run ID','run_id'], ['Purpose','purpose'], ['Context','context'],
+            ['Scope bytes (record)','scope_bytes'], ['Roundtrip OK','roundtrip_ok'],
+            ['Deterministic OK','deterministic_ok'], ['Compressed size (bytes)','compressed_size'],
+            ['Program size (bytes)','program_size'], ['Hutter score (reported bytes)','hutter_score']
+          ];
+          for (const [title, field] of fields) recordFacts.append(node('dt', title), node('dd', structuredText(record[field])));
+          entry.append(recordFacts); stack.append(entry);
+        }
+        records.append(stack); body.append(records);
+      }
+      const links = node('div', null, 'source-links');
+      if (run.source) links.append(sourceLink('Run source', run.source));
+      if (run.revision) links.append(sourceLink('Candidate revision', typeof run.revision === 'string' ? run.revision : run.revision.path));
+      for (const link of list(run.links)) links.append(sourceLink(link.label || link.path, link.path));
+      if (!links.childNodes.length) links.append(node('span', 'No source links reported.', 'muted'));
+      detail.append(body); card.append(detail, links);
+      return card;
+    };
+    const metricsNotice = () => node('p', 'Metrics are reported snapshots in their original units. Prefix measurements, ideal bits, forecasts, and partial results do not establish a validated full-corpus score.', 'notice');
+    const algorithmTable = values => {
+      const container = node('div', null, 'panel table-wrap'); const table = node('table', null, 'algorithm-table');
+      const head = node('thead'); const row = node('tr');
+      for (const title of ['Algorithm / candidate','Family','Status','Runs','Parents']) row.append(node('th', title));
+      head.append(row); table.append(head); const body = node('tbody');
+      for (const algorithm of values) {
+        const tr = node('tr'); const main = node('td');
+        const link = algorithmLink(algorithm.id, algorithm.name || algorithm.id); link.classList.add('name-link'); main.append(link);
+        if (algorithm.name && algorithm.name !== algorithm.id) main.append(node('span', algorithm.id, 'subtext identifier'));
+        if (algorithm.description && algorithm.description !== algorithm.name) main.append(node('p', algorithm.description, 'description'));
+        tr.append(main, node('td', algorithm.family || algorithm.kind || 'Unclassified'));
+        const status = node('td'); status.append(badge(algorithm.status)); tr.append(status, node('td', display(historyFor(algorithm).length)));
+        const parents = node('td');
+        for (const [index, parent] of list(algorithm.parents).entries()) {
+          if (index) parents.append(node('span', ', '));
+          parents.append(algorithmLink(parent.id, parent.id));
+        }
+        if (!parents.childNodes.length) parents.append(node('span', 'None recorded', 'muted'));
+        tr.append(parents); body.append(tr);
+      }
+      table.append(body); container.append(table); return container;
+    };
+    const mixCard = mix => {
+      const card = node('article', null, 'card'); card.append(node('h2', mix.id || 'Recorded mix'));
+      if (mix.scope !== undefined && mix.scope !== null) card.append(node('p', scopeText(mix.scope), 'subtext'));
+      const facts = node('dl', null, 'facts detail-body');
+      if (Array.isArray(mix.components)) {
+        facts.append(node('dt', 'Components'));
+        const components = node('dd');
+        for (const [index,component] of mix.components.entries()) {
+          if (index) components.append(node('span', '\n'));
+          const id = typeof component === 'string' ? component : component && (component.candidate_id || component.id);
+          const title = typeof component === 'string' ? component : component && (component.name || component.title || id);
+          components.append(id ? algorithmLink(id, title || id) : node('span', structuredText(component)));
+          if (component && typeof component === 'object' && component.role) components.append(node('span', ' — ' + structuredText(component.role)));
+        }
+        if (!mix.components.length) components.append(node('span', 'None recorded', 'muted'));
+        facts.append(components);
+      } else appendFact(facts, 'Components', mix.components);
+      appendFact(facts, 'Interactions', mix.interactions); appendFact(facts, 'Composition', mix.composition); appendFact(facts, 'Conclusion', mix.conclusion);
+      card.append(facts); const links = node('div', null, 'source-links'); links.append(sourceLink('Mix source', mix.path)); card.append(links); return card;
+    };
+    const noteCard = note => {
+      const card = node('article', null, 'card'); const title = node('h2'); title.append(sourceLink(note.title || note.id, note.path)); card.append(title);
+      if (note.excerpt) card.append(node('p', note.excerpt, 'description'));
+      if (note.path) card.append(node('span', note.path, 'subtext identifier'));
+      return card;
+    };
+    const renderAlgorithm = id => {
+      const algorithm = algorithmById.get(id);
+      const content = byId('content');
+      byId('toolbar').hidden = true; byId('result-count').textContent = '';
+      byId('view-title').textContent = 'Algorithm detail'; byId('view-description').textContent = 'Sources, immediate lineage, and all runs recorded in this snapshot.';
+      const back = node('a', 'Back to algorithms', 'back'); back.href = '#algorithms'; content.append(back);
+      if (!algorithm) { content.append(empty('Algorithm not in this snapshot', 'Return to the ledger or regenerate it from the local project.')); return; }
+      const header = node('div', null, 'detail-header'); const title = node('div', null, 'detail-title');
+      title.append(node('h2', algorithm.name || algorithm.id), node('span', algorithm.id, 'subtext identifier'));
+      header.append(title, badge(algorithm.status)); content.append(header);
+      if (algorithm.description) content.append(node('p', algorithm.description, 'description'));
+      const facts = node('dl', null, 'facts detail-body');
+      appendFact(facts, 'Family', algorithm.family); appendFact(facts, 'Kind', algorithm.kind); appendFact(facts, 'Registered', algorithm.registered); appendFact(facts, 'Updated', algorithm.updated_at ? dateText(algorithm.updated_at) : null); content.append(facts);
+      if (list(algorithm.coverage).length) appendFact(facts, 'Coverage', algorithm.coverage);
+      const sources = node('div', null, 'source-links');
+      for (const path of list(algorithm.sources)) sources.append(sourceLink(path, path));
+      if (list(algorithm.sources).length > 12) {
+        const sourceDetails = node('details');
+        sourceDetails.append(node('summary', 'Source files (' + display(algorithm.sources.length) + ')'), sources);
+        content.append(sourceDetails);
+      } else content.append(sources);
+      const lineage = node('section', null, 'section'); lineage.append(node('h2', 'Lineage'));
+      const columns = node('div', null, 'lineage');
+      for (const side of ['Parents','Children']) {
+        const card = node('div', null, 'card'); card.append(node('h3', side)); const ul = node('ul', null, 'plain-list');
+        const relatives = side === 'Parents' ? list(algorithm.parents) : list(algorithm.children).map(child => ({id:child}));
+        for (const relative of relatives) {
+          const li = node('li'); li.append(algorithmLink(relative.id, relative.id));
+          if (relative.source) li.append(node('span', 'Recorded in ' + display(relative.source), 'subtext'));
+          if (!algorithmById.has(relative.id)) li.append(node('span', 'Not indexed in this snapshot', 'subtext'));
+          ul.append(li);
+        }
+        if (relatives.length) card.append(ul); else card.append(node('p', 'None recorded.', 'subtext'));
+        columns.append(card);
+      }
+      lineage.append(columns); content.append(lineage);
+      const relatedProposals = proposals.filter(proposal => proposal.candidate_id === id || list(algorithm.proposal_ids).includes(proposal.id));
+      if (relatedProposals.length || list(algorithm.notes).length) {
+        const section = node('section', null, 'section'); section.append(node('h2', 'Proposals & notes')); const stack = node('div', null, 'stack');
+        for (const proposal of relatedProposals) {
+          const card = node('article', null, 'card'); const top = node('div', null, 'card-top');
+          top.append(sourceLink(proposal.title || proposal.id, proposal.path), badge(proposal.state)); card.append(top);
+          if (proposal.hypothesis) card.append(node('p', display(proposal.hypothesis), 'description'));
+          stack.append(card);
+        }
+        for (const note of list(algorithm.notes)) stack.append(noteCard(note));
+        section.append(stack); content.append(section);
+      }
+      const history = historyFor(algorithm); const section = node('section', null, 'section');
+      section.id = 'run-history'; section.tabIndex = -1;
+      section.append(node('h2', 'Run history (' + display(history.length) + ')'), node('p', 'All recorded runs for this algorithm, newest first, in pages of 75. Global search does not hide entries in this detail view.', 'history-note'), metricsNotice());
+      const historySlice = pageSlice(history, historyPage); historyPage = historySlice.page;
+      const stack = node('div', null, 'stack'); for (const run of historySlice.values) stack.append(runCard(run));
+      section.append(history.length ? stack : empty('No recorded runs', 'This snapshot contains no run history for this algorithm.'));
+      if (history.length) section.append(pagination(historySlice, value => { historyPage = value; render(); byId('run-history').focus(); }));
+      content.append(section);
+    };
+    const updateNavigation = () => {
+      for (const [id, link] of navLinks) {
+        if (id === currentView) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+        const count = views[id].values.filter(matches).length;
+        link.lastChild.textContent = display(count);
+        if (id === 'mixes') link.title = display(count) + ' recorded mix entries; mixture candidate search grouping shown separately';
+      }
+    };
+    const render = (resetFilter = false) => {
+      const fragment = location.hash.slice(1);
+      const detail = fragment.startsWith('algorithm=');
+      currentView = detail ? 'algorithms' : Object.hasOwn(views, fragment) ? fragment : 'algorithms';
+      const view = views[currentView]; const content = byId('content'); content.replaceChildren(); updateNavigation();
+      if (detail) {
+        let id; try { id = decodeURIComponent(fragment.slice(10)); } catch (_) { id = ''; }
+        renderAlgorithm(id); return;
+      }
+      byId('toolbar').hidden = false; byId('view-title').textContent = view.title; byId('view-description').textContent = view.description;
+      byId('filter-field').hidden = !view.filter;
+      byId('kind-field').hidden = currentView !== 'algorithms';
+      const kindSelect = byId('kind-filter');
+      if (!kindSelect.childNodes.length) {
+        const allKinds = node('option', 'All kinds'); allKinds.value = ''; kindSelect.append(allKinds);
+        for (const value of [...new Set(algorithms.map(item => String(item.kind || 'unknown')))].sort()) {
+          const option = node('option', label(value)); option.value = value; kindSelect.append(option);
+        }
+      }
+      const select = byId('filter');
+      if (resetFilter || select.dataset.view !== currentView) {
+        select.replaceChildren(); const all = node('option', 'All ' + (view.filter === 'outcome' ? 'outcomes' : 'states')); all.value = ''; select.append(all);
+        if (view.filter) for (const value of [...new Set(view.values.map(item => String(item[view.filter] || 'unknown')))].sort()) {
+          const option = node('option', label(value)); option.value = value; select.append(option);
+        }
+        select.dataset.view = currentView;
+      }
+      byId('filter-field').querySelector('label').textContent = view.filter === 'outcome' ? 'Outcome' : 'Recorded status';
+      const filtered = view.values.filter(item => matches(item) && (!view.filter || !select.value || String(item[view.filter] || 'unknown') === select.value) && (currentView !== 'algorithms' || !kindSelect.value || String(item.kind || 'unknown') === kindSelect.value));
+      byId('result-count').textContent = display(filtered.length) + ' of ' + display(view.values.length) + ' ' + (currentView === 'algorithms' ? 'algorithms' : currentView === 'mixes' ? 'mixes' : currentView === 'notes' ? 'notes' : 'run records') + (byId('search').value.trim() ? ' matching your search' : ' in this snapshot');
+      if (currentView === 'results' || currentView === 'running') content.append(metricsNotice());
+      const slice = pageSlice(filtered, page); page = slice.page;
+      if (currentView === 'mixes') content.append(node('h2', 'Recorded graphs & compositions'));
+      if (!filtered.length) content.append(empty(view.values.length ? 'No matches' : 'No records in this view', view.values.length ? 'Try another search or choose a broader filter.' : 'Records will appear when the local snapshot includes them.'));
+      else if (currentView === 'algorithms') content.append(algorithmTable(slice.values));
+      else {
+        const stack = node('div', null, 'stack');
+        const renderer = currentView === 'mixes' ? mixCard : currentView === 'notes' ? noteCard : runCard;
+        for (const item of slice.values) stack.append(renderer(item)); content.append(stack);
+      }
+      if (filtered.length) content.append(pagination(slice, value => { page = value; render(); byId('main').focus({preventScroll:true}); window.scrollTo(0,0); }));
+      if (currentView === 'mixes') {
+        const section = node('section', null, 'section'); section.id = 'mix-candidates'; section.tabIndex = -1;
+        section.append(node('h2', 'Candidates described as mixtures'), node('p', 'A search grouping based on words in recorded names and descriptions. These entries do not imply composition membership or a combined gain.', 'history-note'));
+        const candidates = mixCandidates.filter(matches); const candidateSlice = pageSlice(candidates, mixCandidatePage); mixCandidatePage = candidateSlice.page;
+        section.append(candidates.length ? algorithmTable(candidateSlice.values) : empty('No matching mixture candidates', 'No indexed candidates in this grouping match the current search.'));
+        if (candidates.length) section.append(pagination(candidateSlice, value => { mixCandidatePage = value; render(); byId('mix-candidates').focus(); }));
+        content.append(section);
+      }
+    };
+    const filterChanged = () => { page = 0; mixCandidatePage = 0; render(); };
+    byId('search').addEventListener('input', filterChanged);
+    byId('filter').addEventListener('change', filterChanged);
+    byId('kind-filter').addEventListener('change', filterChanged);
+    window.addEventListener('hashchange', () => { page = 0; historyPage = 0; mixCandidatePage = 0; render(true); byId('main').focus({preventScroll:true}); window.scrollTo(0,0); });
+    render(true);
+  })();
+  </script>
+</body>
+</html>

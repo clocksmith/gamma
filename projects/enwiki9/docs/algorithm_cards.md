@@ -1,5 +1,10 @@
 # Algorithm Cards
 
+Historical mechanism reference. Start with the [ledger](../ledger/README.md)
+for the consolidated index and recorded outcomes; rebuild it for current local
+jobs. The [objective contract](../contracts/research/v1/objective-contract.json)
+owns the active target. Dated status and next-action claims below remain historical.
+
 This file is the orientation layer for `enwiki9`. Each card answers:
 
 ```text
