@@ -17,13 +17,20 @@ import subprocess
 from dataclasses import dataclass
 from typing import Any
 
+try:
+    from projects.enwiki9.tools import research_contracts
+except ModuleNotFoundError:
+    import research_contracts
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
 RESULTS_DIR = ROOT / "results"
 OUT_MD = ROOT / "docs" / "evidence_matrix.md"
-FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 105_000_000  # Legacy schema name retained for compatibility.
+OBJECTIVE = research_contracts.validate_objective()
+FULL_INPUT_BYTES = OBJECTIVE["corpus"]["bytes"]
+TARGET_10_95 = OBJECTIVE["score"]["targetBytes"]  # Legacy name retained for compatibility.
+TARGET_PERCENT = 100.0 * TARGET_10_95 / FULL_INPUT_BYTES
 
 
 @dataclass(frozen=True)
@@ -271,7 +278,7 @@ def render(rows: list[Row], top_limit: int) -> str:
         "",
         "```text",
         "A row is artifact-backed only for its measured scope.",
-        "No prefix row proves 10.5%.",
+        f"No prefix row proves {TARGET_PERCENT:.7f}%.",
         "No forecast or inherited metadata is included here.",
         "```",
         "",
@@ -280,7 +287,8 @@ def render(rows: list[Row], top_limit: int) -> str:
         f"- Result JSON files scanned: `{len(rows)}`",
         f"- Roundtrip-passing rows: `{len(exact)}`",
         f"- Verified full `1G` rows in this checkout: `{len(full)}`",
-        f"- `10.5%` target reached by this matrix: `{str(hit)}`",
+        f"- Active target score: `{TARGET_10_95:,}` bytes (`{TARGET_PERCENT:.7f}%`)",
+        f"- `{TARGET_PERCENT:.7f}%` target reached by this matrix: `{str(hit)}`",
     ]
     if best_full is None:
         lines.append("- Best full `1G` score: `none present`")
