@@ -27,49 +27,27 @@ identities. No credential configuration was changed. Authentication must be
 restored before publishing these local commits. HORIZON and its sole observer
 remain unchanged, without partial scientific access.
 
-## 2026-09-05 - Public FX2 parent reproduction and argmax comparison
+## 2026-09-05 - Public FX2 reproduction and measured comparisons
 
-| Frozen gate | Population | Exact archive result |
+| Frozen gate | Population | Result and canonical evidence |
 |---|---|---|
-| `fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` | Public 50,051-byte profiling fixture | 3,223 bytes; inverse, repeat, malformed envelope and repeated kernel probabilities pass |
-| `fx2_cmix_transformer_transfer250k_q0_v2` | Canonical raw `[0,250000)` and `[500000000,500250000)` | 33,429 and 9,499 bytes; independent cold inverses/repeats pass |
-| `fx2_bytemodel_argmax_unit_q0_v1` | 32 synthetic families, 256 paths each | Original/P/K/D/C probabilities and state agree; D avoids 4,641,532 of 8,224,768 comparisons per repeat |
+| `fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` | Public 50,051-byte fixture | 3,223-byte exact archive/repeat; [audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json) |
+| `fx2_cmix_transformer_transfer250k_q0_v2` | Raw `[0,250000)` and `[500000000,500250000)` | 33,429/9,499-byte exact cold archives/repeats; [audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json) |
+| `fx2_bytemodel_argmax_unit_q0_v1` | 32 synthetic families, 256 paths each | Exact state/probabilities; 4,641,532 fewer comparisons; [audit](../operations/provenance/public_fx2_argmax_unit_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T211007Z_358c05f2db.json) |
+| `fx2_cmix_transformer_argmax_fixture50051_q0_v1` | Same public fixture, P/K/D/C | All archives 3,223 bytes; twelve complete coder traces identical; [audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json) |
+| `fx2_weight_pack_roundtrip_q0_v1` | Full pinned trained model, six synthetic populations | Exact inverse/repeat but model grows 2,930,652 to 2,938,887 bytes; [audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json) |
 
-The [fixture audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json)
-and [transfer audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json)
-bind the authenticated 205-symbol vocabulary, source, archive hashes and closed
-guards. Their reflections are [fixture](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json)
-and [transfer](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json).
-Transfer peak cgroup memory was 5,826,895,872 bytes. Conservative raw inventory
-was 9,403,013 bytes, including overlapping source/runtime assets; complete
-package closure and model licensing remain unresolved. These direct-WRT cold
-slices do not reproduce the public reorder/PHDA pipeline or establish a 1G score.
+Native argmax D/K diagnostic CPU ratio 0.9987045 missed the frozen 0.99 budget trigger: hold without a larger runtime gate.
+Retire preceding-symbol weight packing for 8,235 extra asset bytes before loader costs; neither result rejects its whole information source.
+Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
-The [unit audit](../operations/provenance/public_fx2_argmax_unit_terminal_20260905.json)
-and [validated unit reflection](../operations/adaptive/reflections/20260905T211007Z_358c05f2db.json)
-authorize preparing a native comparison, with no archive or speedup credit.
-`fx2_cmix_transformer_argmax_fixture50051_q0_v1` passed all four native
-roundtrips/repeats and twelve complete 259,824-bit coder-record streams. Every
-archive remains 3,223 bytes. [Native audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json)
-and [validated reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json)
-retain the exact traces and closed guard. D/K diagnostic CPU ratio was 0.9987045,
-missing the frozen 0.99 budget trigger. Hold this correct mechanism without a
-larger runtime gate. The following model-packing comparison also failed.
-This budget decision does not refute argmax reuse generally. Preserve
-[launcher-affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json)
-and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json)
-failures unchanged. Public FX2/CMIX/model authorship remains upstream; Gamma's
-framing, comparisons and prospective argmax change receive no compression credit.
+[Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
+The files total 100,420,830 bytes, including both model copies; [the official FAQ](https://www.hutter1.net/prize/hfaq.htm#addcomp) explains that intentional cost.
+Neither binary was executed for this inventory. Required options and committee acceptance remain unverified.
 
-
-`fx2_weight_pack_roundtrip_q0_v1` restores and repeats the full public model exactly,
-but grows it from 2,930,652 to 2,938,887 bytes. Six independent synthetic tensor
-fixtures and all negative controls pass; peak cgroup memory was 133,156,864 bytes.
-The [weight audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json)
-and [validated reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json)
-retire this exact preceding-symbol configuration before native integration.
-Its extra 8,235 asset bytes exclude added loader costs. Other weight coders remain
-untested; this result grants no full-corpus score or package qualification.
+Transfer peak cgroup memory: 5,826,895,872 bytes; weight probe: 133,156,864 bytes. Guards closed; concurrent timing is diagnostic.
+The conservative transfer inventory is 9,403,013 raw bytes with overlapping source/runtime assets; package closure and model licensing remain open.
+Direct-WRT cold slices do not reproduce the public reorder/PHDA pipeline or a 1G score. FX2/CMIX/model authorship remains upstream; Gamma has no full-corpus gain credit.
 
 ## 2026-09-05 - Restore missing terminal receipt links
 
