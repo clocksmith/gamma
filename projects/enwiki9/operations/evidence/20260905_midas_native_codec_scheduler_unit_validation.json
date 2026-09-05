@@ -1,0 +1,98 @@
+{
+  "schema": "enwiki9_implementation_validation_v1",
+  "id": "midas_native_codec_scheduler_unit_validation_20260905",
+  "recorded_at": "2026-09-05T18:19:00Z",
+  "owner": "codex-native-midas-codec",
+  "evidence_class": "synthetic_implementation_correctness",
+  "candidate_id": null,
+  "objective_credit_bytes": 0,
+  "hypothesis_verdict": "not-tested",
+  "source_bindings": [
+    {
+      "path": "lib/midas_native_codec.hpp",
+      "sha256": "ddf081862239099d17a97c23d4208813f83389ab26e9deb4acb24ac8cc3dd71a"
+    },
+    {
+      "path": "lib/midas_midpoint_schedule.hpp",
+      "sha256": "678d72299f58ecb7297522929be0c844f0e4595a1df566472c14635ce9e9b51a"
+    },
+    {
+      "path": "tests/native/midas_codec_fixture.cpp",
+      "sha256": "236720dd6c185264c8079944e5f5c96c64d5d053d5c0cf6b6cb0d92ce8798fbf"
+    },
+    {
+      "path": "tests/native/midas_schedule_fixture.cpp",
+      "sha256": "25931d83df45a3bfcf5ee837be08d9777232c624b29e3226c16f2f89445b5198"
+    },
+    {
+      "path": "tests/test_midas_native_codec.py",
+      "sha256": "a2d92cf086df7f962dd5035ce6651f9e68c33391f6ea8e4307bd56953c04cc84"
+    },
+    {
+      "path": "lib/predictor.py",
+      "sha256": "2291091f2f4eb2103eb98cc2b22900ce9cb001bcebab097d4076a56eef4b1bdb"
+    }
+  ],
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "unit_validation": {
+    "command": "python3 -m unittest discover -s tests -p test_midas_native_codec.py -v",
+    "exit_code": 0,
+    "output": "test_causal_scheduler_with_sentinel_backend (test_midas_native_codec.NativeMidasCodecTest.test_causal_scheduler_with_sentinel_backend) ... ok\ntest_native_payload_matches_independent_python_coder (test_midas_native_codec.NativeMidasCodecTest.test_native_payload_matches_independent_python_coder) ... ok\ntest_native_state_and_inverse_known_answers (test_midas_native_codec.NativeMidasCodecTest.test_native_state_and_inverse_known_answers) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 2.868s\n\nOK\n",
+    "compiler_flags": [
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic"
+    ]
+  },
+  "sanitizer_validation": {
+    "fixture_sources": [
+      "tests/native/midas_codec_fixture.cpp",
+      "tests/native/midas_schedule_fixture.cpp"
+    ],
+    "compiler_flags": [
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer"
+    ],
+    "invocations": [
+      "codec selftest",
+      "schedule"
+    ],
+    "per_fixture_stop_seconds": 60,
+    "exit_code": 0,
+    "output": "native codec fixture: exact inverses, coder states, checkpoints, probabilities, corruption rejection and replay passed\nsentinel-only midpoint scheduler: causal P/K/F/S, rebuild, exact state synchronization, checkpoints and inverse passed\n"
+  },
+  "established": [
+    "Native finite Q16 arithmetic payload matches the separately implemented Python counting fixture.",
+    "Raw-byte identity framing, exact fixture inverse, repeat, malformed archive rejection, and byte-prefix pending-state checks pass.",
+    "Encoder and decoder independently match normalized coder state; role-specific code and input cursor remain separately serialized.",
+    "All four scheduler arms pass independent decoder and exact checkpoint continuation tests on sentinel populations spanning 32/64-byte boundaries.",
+    "P/K probabilities, finite payload and authoritative predictive state match; K executes an isolated discarded update and rebuild.",
+    "F uses precisely the first 32 decoded targets; S rotates those causal targets left once while preserving decoded inputs.",
+    "All arms execute the common 64-byte parent update and rebuild; sentinel invalidation detects a missing rebuild."
+  ],
+  "not_established": [
+    "A real compact trainable parent, complete-model gradients, optimizer correctness or competitive compression.",
+    "An executable standalone MIDAS parent roundtrip or a paying native F archive.",
+    "A kernel-selected architecture, corpus experiment, complete package account or qualified resource evidence.",
+    "Cross-hardware floating-point determinism or any Hutter objective proof."
+  ],
+  "boundaries": {
+    "corpus_access": false,
+    "horizon_source_or_observer_modified": false,
+    "partial_horizon_science_access": false,
+    "new_experiment_launched": false,
+    "crc32_role": "Local framing error detection only; exact state comparisons and retained SHA-256 bindings carry validation, not CRC collision resistance.",
+    "candidate_source_ownership": "The unregistered programs/compact_midas_open_parent_q0_v1 tree belongs to another session and was left untouched.",
+    "next_gate": "Coordinate the compact predictor owner; integrate one real full-update backend, validate gradients and all future-affecting state, measure its exact dominant kernel, then freeze the smallest parent P/K/F/S archive gate before corpus access."
+  }
+}
