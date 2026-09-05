@@ -1074,7 +1074,8 @@ def build_certificate(
         "notes": [
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
-            "A 10.5000000% proof requires a full 1GB result with score <= 105000000.",
+            f"A {100.0 * TARGET_10_95 / FULL_INPUT_BYTES:.7f}% proof requires a full "
+            f"{FULL_INPUT_BYTES:,}-byte result with score <= {TARGET_10_95:,}.",
             (
                 "Canonical proof rows include only Git-tracked result JSON files; "
                 "ignored host-local artifacts are noncanonical."
@@ -1088,6 +1089,7 @@ def build_certificate(
 def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
     target = cert["target"]
     status = cert["proof_status"]
+    target_percent = 100.0 * target["target_score_10_95"] / target["input_size"]
     lines = [
         "# Hutter Upper-Bound Certificate",
         "",
@@ -1098,7 +1100,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "## Target",
         "",
         f"- Full input bytes: `{target['input_size']:,}`",
-        f"- 10.5000000% target score: `{target['target_score_10_95']:,}`",
+        f"- {target_percent:.7f}% target score: `{target['target_score_10_95']:,}`",
         f"- Calibrated baseline score: `{target['calibrated_baseline_score']:,}`",
         "- Required net gain from calibrated baseline: "
         f"`{target['required_net_gain_from_calibrated_baseline']:,}` bytes",
@@ -1109,7 +1111,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "",
         "- Full-corpus constructive result present: "
         f"`{status['has_full_corpus_constructive_result']}`",
-        "- 10.5000000% constructive upper bound present: "
+        f"- {target_percent:.7f}% constructive upper bound present: "
         f"`{status['has_10_95_constructive_upper_bound']}`",
         "",
     ]

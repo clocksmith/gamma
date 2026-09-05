@@ -6,7 +6,10 @@ from __future__ import annotations
 import argparse
 import pathlib
 
-import enwiki9_evidence_matrix as evidence
+try:
+    from projects.enwiki9.tools import enwiki9_evidence_matrix as evidence
+except ModuleNotFoundError:
+    import enwiki9_evidence_matrix as evidence
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -75,12 +78,14 @@ def render(rows: list[evidence.Row], top_limit: int) -> str:
         "",
         "```text",
         "Rows here are artifact-backed only for their measured scope.",
-        "No prefix row proves 10.5%.",
+        f"No prefix row proves {evidence.TARGET_PERCENT:.7f}%.",
         "No forecast or metadata-inherited row is included.",
         "```",
         "",
         f"- Result JSON files scanned: `{len(rows)}`",
         f"- Roundtrip-passing rows: `{len(exact)}`",
+        f"- Active target score: `{evidence.TARGET_10_95:,}` bytes "
+        f"(`{evidence.TARGET_PERCENT:.7f}%`)",
     ]
     for scope in SCOPES:
         lines.extend(section(rows, scope, top_limit))
