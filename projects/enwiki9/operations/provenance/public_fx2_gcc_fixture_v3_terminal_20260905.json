@@ -1,0 +1,359 @@
+{
+  "schema": "gamma.enwiki9.public-fx2-terminal-audit.v1",
+  "generated_at": "2026-09-05T16:57:29.287382+00:00",
+  "candidate_id": "fx2_cmix_transformer_gcc_fixture50051_q0_v3",
+  "job_id": "20260905T165224Z_8b937647e4",
+  "validity": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "localized_cause": "GCC build succeeds after explicit cstdint inclusion, but GCC fast-math adaptation produces reciprocal-estimate instructions rejected by the frozen portable-instruction guard before any preprocessing or codec invocation.",
+  "causal_scope": "Observed instruction-policy violation is exact; compiler documentation explains that GCC fast-math itself permits estimates without mrecip. No cross-vendor execution or source-level instruction attribution was performed.",
+  "compiler_reference": {
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/x86-Options.html",
+    "section": "mrecip",
+    "accessed_date": "2026-09-05",
+    "finding": "GCC documents reciprocal square root and vector division/sqrt estimates under fast-math without requiring mrecip."
+  },
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v3/20260905T165131887463Z_bfd77f4592ae.json",
+    "sha256": "sha256:b2002cd321f9b840b0acf712abb0059acbd14bca5da111d60e46aff181a89aff"
+  },
+  "candidate_tree_sha256": "sha256:bfd77f4592ae0a1e98bd5167b39e1f2547827fc765f191603a5ac324e2182728",
+  "fixture": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work/prof_input/input",
+    "bytes": 50051,
+    "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+  },
+  "binary": {
+    "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work/cmix",
+    "bytes": 487944,
+    "sha256": "d3a51af103baa2eb8dc7d01d0bfc7851088b17dd4566127e82bccaa6d2593dcb"
+  },
+  "binary_executed": false,
+  "scientific_measurements": {
+    "mapping_gate_pass": null,
+    "roundtrip_ok": null,
+    "deterministic_ok": null,
+    "archive_bytes": null
+  },
+  "executed_phases": [
+    "compile",
+    "read-only disassembly audit"
+  ],
+  "compile_execution": {
+    "command": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=5",
+      "600",
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -ffast-math -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+    ],
+    "cwd": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/work",
+    "returncode": 0,
+    "elapsed_seconds": 15.720235537039116,
+    "elapsed_cap_seconds": 600,
+    "timing_authority": "shared-host diagnostic only"
+  },
+  "instruction_policy": {
+    "pass": false,
+    "estimate_count": 46,
+    "instruction_counts": {
+      "vrsqrtss": 24,
+      "vrsqrtps": 12,
+      "vrcpps": 10
+    },
+    "all_estimate_lines": [
+      "    e16d:\tc5 d2 52 c5                                     \tvrsqrtss %xmm5,%xmm5,%xmm0",
+      "    e67b:\tc4 c1 7c 52 c6                                  \tvrsqrtps %ymm14,%ymm0",
+      "    e6a3:\tc5 7c 53 f0                                     \tvrcpps %ymm0,%ymm14",
+      "    e724:\tc5 f8 52 c2                                     \tvrsqrtps %xmm2,%xmm0",
+      "    e75f:\tc5 f8 53 d0                                     \tvrcpps %xmm0,%xmm2",
+      "    e88e:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    e9ca:\tc5 fc 52 e8                                     \tvrsqrtps %ymm0,%ymm5",
+      "    ea5a:\tc5 f8 52 d8                                     \tvrsqrtps %xmm0,%xmm3",
+      "    ead1:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    eb0c:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    eb44:\tc5 d2 52 d5                                     \tvrsqrtss %xmm5,%xmm5,%xmm2",
+      "    ec05:\tc5 fa 52 d0                                     \tvrsqrtss %xmm0,%xmm0,%xmm2",
+      "    f10b:\tc4 c1 7c 52 c6                                  \tvrsqrtps %ymm14,%ymm0",
+      "    f133:\tc5 7c 53 f0                                     \tvrcpps %ymm0,%ymm14",
+      "    f1b3:\tc5 f8 52 c2                                     \tvrsqrtps %xmm2,%xmm0",
+      "    f1ec:\tc5 f8 53 d0                                     \tvrcpps %xmm0,%xmm2",
+      "    f2de:\tc5 d2 52 c5                                     \tvrsqrtss %xmm5,%xmm5,%xmm0",
+      "    f38a:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    f68a:\tc5 fc 52 e8                                     \tvrsqrtps %ymm0,%ymm5",
+      "    f71a:\tc5 f8 52 d8                                     \tvrsqrtps %xmm0,%xmm3",
+      "    f791:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    f7d2:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "    f804:\tc5 d2 52 d5                                     \tvrsqrtss %xmm5,%xmm5,%xmm2",
+      "    fd3a:\tc5 fc 52 c5                                     \tvrsqrtps %ymm5,%ymm0",
+      "    fd5e:\tc5 fc 53 e8                                     \tvrcpps %ymm0,%ymm5",
+      "    fde4:\tc5 f8 52 c2                                     \tvrsqrtps %xmm2,%xmm0",
+      "    fe1d:\tc5 f8 53 d0                                     \tvrcpps %xmm0,%xmm2",
+      "    ff8a:\tc5 fc 52 e8                                     \tvrsqrtps %ymm0,%ymm5",
+      "   10019:\tc5 f8 52 d8                                     \tvrsqrtps %xmm0,%xmm3",
+      "   10094:\tc5 ea 52 ea                                     \tvrsqrtss %xmm2,%xmm2,%xmm5",
+      "   100d5:\tc5 ea 52 ea                                     \tvrsqrtss %xmm2,%xmm2,%xmm5",
+      "   1010b:\tc5 fa 52 d0                                     \tvrsqrtss %xmm0,%xmm0,%xmm2",
+      "   1029c:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "   11d9d:\tc5 d2 52 c5                                     \tvrsqrtss %xmm5,%xmm5,%xmm0",
+      "   122a6:\tc5 d2 52 cd                                     \tvrsqrtss %xmm5,%xmm5,%xmm1",
+      "   12520:\tc5 c2 52 cf                                     \tvrsqrtss %xmm7,%xmm7,%xmm1",
+      "   13264:\tc5 fa 52 c8                                     \tvrsqrtss %xmm0,%xmm0,%xmm1",
+      "   1362a:\tc5 fa 52 c8                                     \tvrsqrtss %xmm0,%xmm0,%xmm1",
+      "   13a02:\tc5 fa 52 c8                                     \tvrsqrtss %xmm0,%xmm0,%xmm1",
+      "   1413b:\tc5 fa 52 d0                                     \tvrsqrtss %xmm0,%xmm0,%xmm2",
+      "   14191:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "   141f4:\tc5 fa 52 d8                                     \tvrsqrtss %xmm0,%xmm0,%xmm3",
+      "   27c02:\tc5 fc 53 ce                                     \tvrcpps %ymm6,%ymm1",
+      "   27c1e:\tc5 fc 53 cd                                     \tvrcpps %ymm5,%ymm1",
+      "   4c157:\tc5 fc 53 ca                                     \tvrcpps %ymm2,%ymm1",
+      "   4c1ef:\tc5 f8 53 ca                                     \tvrcpps %xmm2,%xmm1"
+    ],
+    "avx512_register_hits": 0,
+    "disassembly_sha256": "2f3e3b3af761c3250d81433dd09451b124abc9041260722441a69659d3bca056"
+  },
+  "source_bindings": [
+    {
+      "path": "tools/fx2_cmix_transformer_gcc_fixture50051_q0_v3.py",
+      "bytes": 11254,
+      "sha256": "d90e30b08c375f1872952f59d269ba6e730257e7d16f5e0742f5cd97d79083d9"
+    },
+    {
+      "path": "operations/adaptive/experiments/fx2_cmix_transformer_gcc_fixture50051_q0_v3.json",
+      "bytes": 37519,
+      "sha256": "000b0d3635d30f9b3adf3365fcce77a14ca2349ce580aaee7f779ffc73c79137"
+    },
+    {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_gcc_fixture50051_q0_v3/20260905T165131887463Z_bfd77f4592ae.json",
+      "bytes": 2730,
+      "sha256": "b2002cd321f9b840b0acf712abb0059acbd14bca5da111d60e46aff181a89aff"
+    },
+    {
+      "path": "tools/run_with_resource_guard_v3.py",
+      "bytes": 31807,
+      "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    }
+  ],
+  "upstream_and_copied_source_hashes_verified": 131,
+  "guards": [
+    {
+      "artifact": {
+        "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.json",
+        "bytes": 20452,
+        "sha256": "6855d34458c4dcb43dd7d608bd0c79937305e89b09f9c198dd3812b228e8ab15"
+      },
+      "guards": {
+        "affinity_observed_abort": false,
+        "cgroup_memory_guard_exceeded": false,
+        "measurement_incomplete": false,
+        "official_decimal_memory_exceeded": false,
+        "phase_marker_invalid": false,
+        "rss_guard_exceeded": false,
+        "temporary_disk_observed_abort": false,
+        "wall_time_guard_exceeded": false
+      },
+      "measurements": {
+        "affinity_complete": true,
+        "cgroup_v2_complete": true,
+        "per_process_vmhwm_sampled": true,
+        "phase_markers_complete": true,
+        "process_tree_rss_complete": true,
+        "scratch_logical_and_allocated_complete": true,
+        "smaps_rollup_complete": true
+      },
+      "peaks": {
+        "cgroup_memory_peak_bytes": 381370368,
+        "max_observed_process_vmhwm_kib": 374832,
+        "max_sampled_allowed_cpu_count": 1,
+        "max_sampled_cgroup_current_bytes": 374554624,
+        "max_sampled_scratch_allocated_bytes": 7323648,
+        "max_sampled_scratch_logical_bytes": 6821852,
+        "max_sampled_single_rss_kib": 374832,
+        "max_sampled_tree_live_threads": 6,
+        "max_sampled_tree_rss_kib": 418120,
+        "max_sampled_tree_runnable_threads": 1
+      },
+      "cgroup_events_delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    {
+      "artifact": {
+        "path": "run_logs/adaptive/20260905T165224Z_8b937647e4.resources/guard.json",
+        "bytes": 7910,
+        "sha256": "b61991d309074fded607955096b4ff558913d9ba7d81375e008c64770e270dcd"
+      },
+      "guards": {
+        "cgroup_memory_guard_exceeded": false,
+        "logical_cpu_guard_exceeded": false,
+        "measurement_incomplete": false,
+        "official_decimal_memory_exceeded": false,
+        "phase_marker_invalid": false,
+        "rss_guard_exceeded": false,
+        "temporary_disk_guard_exceeded": false,
+        "wall_time_guard_exceeded": false
+      },
+      "measurements": {
+        "affinity_complete": true,
+        "cgroup_v2_complete": true,
+        "per_process_vmhwm_sampled": true,
+        "phase_markers_complete": true,
+        "process_tree_rss_complete": true,
+        "scratch_logical_and_allocated_complete": true,
+        "smaps_rollup_complete": true
+      },
+      "peaks": {
+        "cgroup_memory_peak_bytes": 23154688,
+        "max_observed_process_vmhwm_kib": 23308,
+        "max_sampled_allowed_cpu_count": 1,
+        "max_sampled_cgroup_current_bytes": 23011328,
+        "max_sampled_scratch_allocated_bytes": 7360512,
+        "max_sampled_scratch_logical_bytes": 6837244,
+        "max_sampled_single_rss_kib": 23308,
+        "max_sampled_tree_live_threads": 2,
+        "max_sampled_tree_rss_kib": 45444,
+        "max_sampled_tree_runnable_threads": 1
+      },
+      "cgroup_events_delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    }
+  ],
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "existing_guard": {
+        "inode": 222441,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v3"
+      },
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1100
+    },
+    "cgroup_inode": 222529,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T165224Z_8b937647e4",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": false,
+        "inode": 222441,
+        "kernel_cpuset": false,
+        "memory_bytes": 9899999232,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-fx2-transformer-fixture50051-q0-v3"
+      },
+      {
+        "created": true,
+        "inode": 222529,
+        "kernel_cpuset": false,
+        "memory_bytes": 99999744,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260905T165224Z_8b937647e4"
+      }
+    ],
+    "guard_command_sha256": "9d87e2ace75f9904b4bba6d47fc38d25da0b0c776185dd796db15002407883eb",
+    "guard_path": "run_logs/adaptive/20260905T165224Z_8b937647e4.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
+  "resource_guard_kill": false,
+  "objective_credit_bytes": 0,
+  "larger_gate_authorized": false,
+  "next_action": "A separately registered strict-math GCC adapter may replace fast-math while preserving the instruction audit and scientific gates; exact upstream-clang arithmetic equivalence is not claimed. No successor or additional launch by this audit.",
+  "artifacts": [
+    {
+      "path": "operations/adaptive/failed/999_20260905T165224Z_8b937647e4.json",
+      "bytes": 4479,
+      "sha256": "5c0a03fb7f65780f555e33d1f19fb187ba2cfe73a64f7f0acc13791a81fea373"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/compile.execution.json",
+      "bytes": 872,
+      "sha256": "ae0262b7aec4b19ac89e9819c13aaba25cd5bb33a1abceaac5ddfbf00b48c7ef"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/compile.stderr",
+      "bytes": 31007,
+      "sha256": "7f5e675f67930512590e32d8c91d65c845800b183c379f36f0dbc0bdc79e65c9"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/compile.stdout",
+      "bytes": 3573,
+      "sha256": "7e68324882974851a4446c92b2a7b99d3b9a50e8100f0ad72464577d43bec810"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/decision.json",
+      "bytes": 3299,
+      "sha256": "0a57377209bfc5bc4c5df26c6c62276ad7d025f7e86c2fa309fa4dfcca6d4531"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.json",
+      "bytes": 20452,
+      "sha256": "6855d34458c4dcb43dd7d608bd0c79937305e89b09f9c198dd3812b228e8ab15"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/guard.stdout",
+      "bytes": 21439,
+      "sha256": "699bfce2594780afbb93116c429131bc1062dd4f0472783e14821f524daa7100"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/instruction-audit.json",
+      "bytes": 3195,
+      "sha256": "0eff373430db331d205785ceda4acf79d8f74eb958009fa41fe371d69c80de88"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/phases.jsonl",
+      "bytes": 76,
+      "sha256": "0a541601c9a81f65b254a4f5cf2f43324bc18d0bf250f26bb62cc441395284f8"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_gcc_fixture50051_q0_v3/stage-decision.json",
+      "bytes": 1890,
+      "sha256": "1b22e3af2d2dec783ab0128b92d540a46dee4b6c1e85c24cdad95801cc81b70a"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T165224Z_8b937647e4.resources/guard.json",
+      "bytes": 7910,
+      "sha256": "b61991d309074fded607955096b4ff558913d9ba7d81375e008c64770e270dcd"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T165224Z_8b937647e4.resources/phases.jsonl",
+      "bytes": 106,
+      "sha256": "83ef954c5cff6b24d8dc44f4288fda05f73c9de46433fe8e352cb1835c2119f1"
+    },
+    {
+      "path": "run_logs/adaptive/20260905T165224Z_8b937647e4.log",
+      "bytes": 13938,
+      "sha256": "899c78e8bd8a36fda4f2d6627b7bc3373b24fbc873067631cf463d4f39be0230"
+    }
+  ]
+}
