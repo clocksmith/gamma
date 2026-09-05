@@ -156,6 +156,7 @@ class BytePrefix {
   }
   std::uint64_t position() const { return position_; }
   bool active() const { return active_; }
+  const Counts& distribution() const { return counts_; }
   Bytes serialize() const {
     Bytes out{'M', 'B', 'Y', 'T', 1};
     put(out, position_, 8); put(out, prefix_, 1); put(out, depth_, 1);

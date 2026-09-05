@@ -1,4 +1,4 @@
-#include "../../lib/midas_midpoint_schedule.hpp"
+#include "../../lib/midas_bit_predictor.hpp"
 
 #include <iostream>
 
@@ -80,6 +80,7 @@ struct Sentinel {
 };
 
 using Schedule = MidpointSchedule<Sentinel>;
+using BitPredictor = MidpointBitPredictor<Sentinel>;
 constexpr std::uint64_t component_bound = 1024 * 1024;
 
 template<class Function> void rejects(Function&& function) {
@@ -162,24 +163,26 @@ void check_update_law() {
 
 struct Encoded {
   Bytes payload;
-  std::vector<Bytes> model_states, adapter_states, coder_states;
+  std::vector<Bytes> model_states, identity_states, coder_states;
   std::vector<std::uint16_t> probabilities;
 };
 
 Encoded encode(const Bytes& raw, Arm arm) {
   Encoded result;
-  Schedule model(Sentinel{}, arm);
-  BytePrefix adapter;
+  BitPredictor model(Sentinel{}, arm);
   Encoder coder;
   for (auto byte : raw) {
-    adapter.begin_byte(model.predict_byte()); checkpoint(model);
     for (int shift = 7; shift >= 0; --shift) {
-      const auto p = adapter.predict(); result.probabilities.push_back(p);
+      const auto p = model.predict(); result.probabilities.push_back(p);
+      const auto pending = model.serialize();
+      model = BitPredictor::restore(pending, component_bound);
+      require(pending == model.serialize(), "pending joined checkpoint changed state");
+      rejects([&]() { model.predict(); });
       const auto bit = (byte >> shift) & 1U;
       coder.encode(bit, p);
-      if (const auto complete = adapter.observe(bit)) model.observe_byte(*complete);
+      model.observe(bit);
       result.model_states.push_back(model.serialize());
-      result.adapter_states.push_back(adapter.serialize());
+      result.identity_states.push_back(model.parent_identity_state());
       result.coder_states.push_back(coder.comparison_state());
     }
   }
@@ -187,32 +190,65 @@ Encoded encode(const Bytes& raw, Arm arm) {
 }
 
 void check_inverse(const Bytes& raw, Arm arm, const Encoded& encoded) {
-  Schedule model(Sentinel{}, arm);
-  BytePrefix adapter;
+  BitPredictor model(Sentinel{}, arm);
   Decoder coder(encoded.payload);
   Bytes restored;
   std::size_t position = 0;
   for (std::size_t byte = 0; byte != raw.size(); ++byte) {
-    adapter.begin_byte(model.predict_byte()); checkpoint(model);
+    unsigned decoded_byte = 0;
     for (unsigned bit = 0; bit != 8; ++bit, ++position) {
-      const auto p = adapter.predict();
+      const auto p = model.predict();
       require(p == encoded.probabilities[position], "decoder pre-truth probability differs");
-      if (const auto complete = adapter.observe(coder.decode(p))) {
-        restored.push_back(*complete); model.observe_byte(*complete);
-      }
+      model = BitPredictor::restore(model.serialize(), component_bound);
+      const auto truth = coder.decode(p); model.observe(truth);
+      decoded_byte = (decoded_byte << 1) | truth;
       require(model.serialize() == encoded.model_states[position],
               "decoder parameter, optimizer, recurrent or schedule state differs");
-      require(adapter.serialize() == encoded.adapter_states[position] &&
-              coder.comparison_state() == encoded.coder_states[position],
-              "decoder byte adapter or coder state differs");
-      checkpoint(model);
-      adapter = BytePrefix::restore(adapter.serialize());
+      require(coder.comparison_state() == encoded.coder_states[position],
+              "decoder coder state differs");
+      require(model.bit_position() == position + 1, "joined predictor bit clock differs");
+      model = BitPredictor::restore(model.serialize(), component_bound);
       coder = Decoder::restore(coder.serialize());
     }
+    restored.push_back(static_cast<std::uint8_t>(decoded_byte));
   }
   coder.finish();
   require(restored == raw, "scheduled arithmetic inverse failed");
   require(encode(restored, arm).payload == encoded.payload, "scheduled repeat failed");
+}
+
+void malformed_joined_checkpoints() {
+  // Each component can be valid in isolation and still be invalid as a pair.
+  const auto joined = [](const Schedule& schedule, const BytePrefix& prefix) {
+    Bytes out{'M', 'B', 'I', 'T', 1};
+    Sentinel::blob(out, schedule.serialize()); Sentinel::blob(out, prefix.serialize());
+    return out;
+  };
+  Schedule schedule(Sentinel{}, Arm::P);
+  BytePrefix prefix;
+  const auto initial = joined(schedule, prefix);
+  require(BitPredictor::restore(initial, component_bound).serialize() == initial,
+          "joined initial checkpoint changed state");
+  rejects([&]() { BitPredictor::restore(initial, initial.size() - 1); });
+  const auto counts = schedule.predict_byte();
+  rejects([&]() { BitPredictor::restore(joined(schedule, prefix), component_bound); });
+  BytePrefix::Counts wrong; wrong.fill(256); prefix.begin_byte(wrong);
+  rejects([&]() { BitPredictor::restore(joined(schedule, prefix), component_bound); });
+  prefix = BytePrefix{}; prefix.begin_byte(counts);
+  const auto pending_byte = joined(schedule, prefix);
+  require(BitPredictor::restore(pending_byte, component_bound).serialize() == pending_byte,
+          "joined pre-bit checkpoint changed state");
+  for (unsigned bit = 0; bit != 8; ++bit) { prefix.predict(); prefix.observe(0); }
+  rejects([&]() { BitPredictor::restore(joined(schedule, prefix), component_bound); });
+  schedule.observe_byte(0);
+  require(BitPredictor::restore(joined(schedule, prefix), component_bound).bit_position() == 8,
+          "joined completed byte checkpoint changed clock");
+  prefix = BytePrefix{};
+  rejects([&]() { BitPredictor::restore(joined(schedule, prefix), component_bound); });
+  auto truncated = initial; truncated.pop_back();
+  rejects([&]() { BitPredictor::restore(truncated, component_bound); });
+  auto trailing = initial; trailing.push_back(0);
+  rejects([&]() { BitPredictor::restore(trailing, component_bound); });
 }
 
 void malformed_checkpoints() {
@@ -236,7 +272,7 @@ void malformed_checkpoints() {
 
 int main() {
   try {
-    check_update_law(); malformed_checkpoints();
+    check_update_law(); malformed_checkpoints(); malformed_joined_checkpoints();
     for (unsigned length : {0, 1, 31, 32, 33, 63, 64, 65, 128, 129}) {
       Bytes raw;
       for (unsigned i = 0; i != length; ++i)
@@ -246,13 +282,14 @@ int main() {
         const auto encoded = encode(raw, arm);
         if (arm == Arm::K)
           require(parent.payload == encoded.payload &&
-                  parent.probabilities == encoded.probabilities,
-                  "P/K probability or finite payload identity failed");
+                  parent.probabilities == encoded.probabilities &&
+                  parent.identity_states == encoded.identity_states,
+                  "P/K probability, finite payload or predictive state identity failed");
         check_inverse(raw, arm, encoded);
       }
     }
     std::cout << "sentinel-only midpoint scheduler: causal P/K/F/S, rebuild, "
-                 "exact state synchronization, checkpoints and inverse passed\n";
+                 "exact state synchronization, joined checkpoints and inverse passed\n";
     return 0;
   } catch (const std::exception& error) {
     std::cerr << error.what() << '\n'; return 1;

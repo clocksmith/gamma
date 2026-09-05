@@ -2,6 +2,31 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-05 - Join the native MIDAS bit boundary and checkpoint state
+
+`lib/midas_bit_predictor.hpp` now connects the causal midpoint scheduler and
+byte adapter behind one pre-truth `predict()` / `observe(decoded_bit)` interface.
+Combined checkpoint restore rejects inconsistent byte/bit clocks, mismatched
+pending-byte ownership, differing pre-truth distributions, excess checkpoint
+size, truncation and trailing bytes. All P/K/F/S finite sentinel inverses and
+repeats pass through this interface with exact predictor and normalized coder
+state agreement. P/K probabilities, payloads and authoritative-state projections
+remain identical. Three regression tests and the joined address/undefined-behavior
+sanitizer fixture pass.
+
+Evidence: `operations/evidence/20260905_midas_bit_predictor_join_validation.json`.
+This is implementation correctness only, with zero score credit and no corpus
+access. A real complete-update trainable backend and its parent roundtrip remain
+missing; the other owner's compact predictor source was not changed. The prior
+source-bound infrastructure receipt remains unchanged and resolves at local
+commit `9d327137`.
+
+The user's `rdpush gamma` request created that commit but could not publish:
+GitHub rejected SSH public-key authentication and the agent had no loaded
+identities. No credential configuration was changed. Authentication must be
+restored before publishing these local commits. HORIZON and its sole observer
+remain unchanged, without partial scientific access.
+
 ## 2026-09-05 - Public FX2 parent reproduction and argmax comparison
 
 | Frozen gate | Population | Exact archive result |

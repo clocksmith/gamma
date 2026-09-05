@@ -65,6 +65,8 @@ class MidpointSchedule {
 
   const Model& model() const { return model_; }
   std::uint64_t position() const { return position_; }
+  bool pending_byte() const { return pending_; }
+  const BytePrefix::Counts& pending_distribution() const { return distribution_; }
   std::uint64_t parent_updates() const { return parent_updates_; }
   std::uint64_t midpoint_updates() const { return midpoint_updates_; }
   std::uint64_t shadow_updates() const { return shadow_updates_; }
