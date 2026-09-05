@@ -1,7 +1,7 @@
 # Physical specification
 
 `physical/` owns the game’s physical embodiment: component form, state
-encoding, dimensions, and box inventory. It is neither player-facing copy nor
+encoding, and dimensions. It is neither player-facing copy nor
 machine-enforced game data.
 
 ## Ownership
@@ -9,9 +9,10 @@ machine-enforced game data.
 - `component-spec.md` defines what each component physically is, how a player
   reads its state at the table, and how the shared Governance Board organizes
   the map and public information.
-- `component-inventory.md` is the human-readable supported-box inventory. It
-  separates Default Game requirements, the Advanced Play addendum, and
-  excluded deferred content without selecting an unresolved physical format.
+- [Supported box inventory](../dist/docs/component-inventory.md) is generated
+  from the `inventory` section of [rules.md](../rules.md). It separates Default
+  requirements, Advanced additions, and deferred content. Edit the rulebook or
+  its referenced component records, then build; there is no second authored inventory here.
 - `governance-ledger.md` specifies the single writable board panel for the
   current Mandate, Setup Collective Trust, and final public resolution. The
   retained Power cubes, not a written duplicate, are the latest Production
@@ -22,7 +23,8 @@ machine-enforced game data.
 The numeric rules limits remain in `components/game.json`. A physical
 specification may describe a double-sided Facility or a track cube, but may
 not quietly change how many Facilities a player owns, a resource cap, or a
-legal game state. Make that rules change in `content/data/` first.
+legal game state. Change the owning component record or shared variable and
+the affected rulebook procedure together.
 
 `dist/physical-kit/` is generated frozen output. Do not edit it.
 

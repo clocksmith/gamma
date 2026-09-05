@@ -32,7 +32,7 @@ test("current release declaration separates executable game from physical rules 
 test("physical authority separates profiles and preserves automatic blind Audit draws", async () => {
   const [spec, inventory, governanceLedger, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
-    readFile(new URL("physical/component-inventory.md", root), "utf8"),
+    readFile(new URL("dist/docs/component-inventory.md", root), "utf8"),
     readFile(new URL("physical/governance-ledger.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8"),
     readJson("content/data/content-manifest.json")
@@ -189,7 +189,7 @@ test("complexity positioning stays broad, unmeasured, and profile-scoped", async
 test("the thematic inventory matches the two-source Power contract", async () => {
   const [bible, inventory, specification] = await Promise.all([
     readFile(new URL("world.md", root), "utf8"),
-    readFile(new URL("physical/component-inventory.md", root), "utf8"),
+    readFile(new URL("dist/docs/component-inventory.md", root), "utf8"),
     readFile(new URL("physical/component-spec.md", root), "utf8")
   ]);
   assert.doesNotMatch(bible, /## Player-copy design inventory/);
@@ -202,7 +202,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(inventory, /10 Scrutiny cubes/);
   assert.match(inventory, /1 Mandate marker/);
   assert.match(inventory, /4 Era-labelled AGI Dossier cards/);
-  assert.match(inventory, /starting-grid identifier integrated into Facility 1/);
+  assert.match(inventory, /integrated starting-grid identifier on Facility 1/);
   assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
 });
 

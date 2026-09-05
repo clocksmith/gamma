@@ -69,7 +69,7 @@ release identities.
   - Closure: count post-cap or gross production according to one explicit ruling, apply it symmetrically to both partners, and add Runway/Compute contract regressions.
 
 - [x] **G2038-011 — Frontier Research grants an unprinted extra Capability.**
-  - Evidence: Frontier's complete visit effect is optional Runway plus Scrutiny in `content/templates/map-reference.md:79-83`. `lab/environment/selected-rules-match.js:2659-2661` grants one additional Capability after any successful Research ending at Frontier.
+  - Evidence: Frontier's complete visit effect is optional Runway plus Scrutiny in `rules.md` (§4, Map Reference excerpt). `lab/environment/selected-rules-match.js:2659-2661` grants one additional Capability after any successful Research ending at Frontier.
   - Problem: the executable contains a hidden location bonus with no card or rule authority.
   - Closure: remove the bonus or author it explicitly, then add a Frontier-versus-ordinary-location Research parity test.
 

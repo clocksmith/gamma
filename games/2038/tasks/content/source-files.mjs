@@ -7,6 +7,7 @@ export function contentSourceFiles(graph, {
     graph.variables,
     graph.world,
     provenancePath,
+    ...Object.values(graph.excerpts || {}),
     ...Object.values(graph.contexts || {}).map(descriptor =>
       typeof descriptor === "string" ? descriptor : descriptor.path),
     ...graph.artifacts.map(artifact => artifact.source)
