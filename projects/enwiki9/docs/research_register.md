@@ -116,6 +116,7 @@ Fixed-marginal P/K preserve the original 2,930,652 model bytes; each D/G restore
 The frozen size rule selected D; native integration now passes exact tensor, probability, inverse and repeat checks with 12,288 added executable bytes per copy.
 The standalone utility does not pay: D runtime/source inventories exceed the original model alone by 89,671/38,977 bytes; G exceeds it by 93,340/42,646 bytes.
 Native components save 20,070 bytes for two runtime copies, or 21,489 for the separate source-compressor/decoder alternative. Opening/distant transfer, complete package closure and full-corpus qualification remain missing; no full-score credit.
+Source-only successor considered: transmit the exact Q11 trees directly. Fourteen 11-bit values plus the constrained final node fit 20 bytes per tree; 112 tables would remove 4,480 header bytes per model before changed loader costs. This is byte arithmetic, without implementation, measured gain, or descendant selection.
 Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
 [Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
