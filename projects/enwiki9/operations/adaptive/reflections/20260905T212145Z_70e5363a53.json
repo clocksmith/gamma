@@ -1,0 +1,123 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Exactness passed with zero archive savings. D/K diagnostic CPU ratio 0.9987045 misses the frozen 0.99 budget trigger; this evidence does not qualify a runtime gain or refute the optimization generally."
+  },
+  "candidateId": "fx2_cmix_transformer_argmax_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_cmix_transformer_argmax_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:1cbf3f41e4f91de8f612e73b4981ab6032f299803032f20764837233ed96b7cc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_argmax_fixture50051_q0_v1/20260905T212134444719Z_1cbf3f41e4f9.json",
+      "sha256": "sha256:21836468a05d5ef24a723e3d96f9ecb48489c8cc60da89c602e93eea5cc871f3"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Retain the correct mechanism and complete evidence. The separate one-percent diagnostic CPU budget trigger was missed, so no larger runtime gate is allocated. Continue a separately frozen package-saving mechanism; no archive or prize credit.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/public_fx2_argmax_native_terminal_20260905.json",
+      "sha256": "sha256:8393e539fec062e809cff002b5d0332bee7878c5cf2cf583f9c4f938e1b0c154"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_argmax_fixture50051_q0_v1/coder-records.json",
+      "sha256": "sha256:f80ed62c58e0207cc57cbcd3f1cebdf1acb534fc053af43c3ea2a93e416d4b4b"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_argmax_fixture50051_q0_v1/decision.json",
+      "sha256": "sha256:f7f4b1d8edfe680562d0aa77734f125da06759538193af34d8709599ea480349"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_argmax_fixture50051_q0_v1/package.json",
+      "sha256": "sha256:69792fc043cab7af23060aaaadc3eed68e4451cda40884450d22680b56255477"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_argmax_fixture50051_q0_v1/timing.json",
+      "sha256": "sha256:a0fc0b6b55e89a44732f624cd7b3a2555cb61df29482f13954ed247643954ca1"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_cmix_transformer_argmax_fixture50051_q0_v1.json",
+    "sha256": "sha256:7de38df58182bd0cb145e7577db923ad3372133e3be09edd057e6bd4fc0f73ca"
+  },
+  "generatedUtc": "2026-09-05T21:33:50+00:00",
+  "hypothesis": {
+    "rationale": "Conditional argmax reuse preserved all 259824 coded probability/interval/bit records per phase and the original 3223-byte archive across same-binary P/K/D/C.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260905T212145Z_70e5363a53.json",
+    "sha256": "sha256:fea826500ba0d2bdf502ce43dbdc0cf8011d260d45a6de952552b7725a9913e8"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Local comparison-count savings can preserve exact native archives while contributing too little measured whole-codec benefit to earn another gate."
+    ],
+    "uncertainties": [
+      "Two shared-host observations per arm do not qualify runtime. Native package closure, model licensing, cross-vendor replay, large-history behavior and a full-corpus score remain unproved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/population/raw_bytes",
+      "source": {
+        "path": "operations/provenance/public_fx2_argmax_native_terminal_20260905.json",
+        "sha256": "sha256:8393e539fec062e809cff002b5d0332bee7878c5cf2cf583f9c4f938e1b0c154"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/modeled_bytes",
+      "source": {
+        "path": "operations/provenance/public_fx2_argmax_native_terminal_20260905.json",
+        "sha256": "sha256:8393e539fec062e809cff002b5d0332bee7878c5cf2cf583f9c4f938e1b0c154"
+      }
+    },
+    {
+      "field": "runtimeRatio",
+      "pointer": "/scientific_measurements/runtime_ratio_D_K",
+      "source": {
+        "path": "operations/provenance/public_fx2_argmax_native_terminal_20260905.json",
+        "sha256": "sha256:8393e539fec062e809cff002b5d0332bee7878c5cf2cf583f9c4f938e1b0c154"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": 0.9987045000145465,
+    "scopeBytes": 50051,
+    "scopeSymbols": 32478,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260905t212145z_70e5363a53",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All four exact native inverses and repeated archives, twelve complete coder streams, explicit arm activations, malformed-arm controls and 318 source inputs independently verify. The operational discovery guard closed within bounds and cleanup completed; qualification remains absent."
+    ],
+    "valid": true
+  }
+}
