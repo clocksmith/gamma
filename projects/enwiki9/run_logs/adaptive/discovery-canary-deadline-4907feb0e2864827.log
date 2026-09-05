@@ -1,0 +1,280 @@
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 222265,
+      "joined_before_exec": true,
+      "memory_max_bytes": 67108864,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-deadline-4907feb0e2864827",
+      "previous_memory_max": "67108864",
+      "requested_memory_max_bytes": 67108864
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "4",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tests/test_enwiki9_discovery_canary.py",
+      "--nested",
+      "deadline",
+      "--bundle",
+      "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/deadline",
+      "--inner",
+      "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-deadline-4907feb0e2864827-inner"
+    ],
+    "command_sha256": "25bd32d08970f5708aa2d5aa43f19562b4b620c60d7fcea902fe43c29a68f44a",
+    "elapsed_s": 3.0385,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "discovery-canary-deadline-4907feb0e2864827",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 106496,
+      "elapsed_s": 3.0372,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 212992,
+      "scratch_file_count": 29,
+      "scratch_logical_bytes": 113273,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 65536,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000
+    },
+    "official_decimal_limit_kib": 65536,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 2.5359,
+      "pid": 3231448,
+      "start_ticks": 172257183,
+      "vmhwm_kib": 32564
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        4
+      ],
+      "cgroup_current_bytes": 30744576,
+      "elapsed_s": 2.5359,
+      "max_single_rss_kib": 32564,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3231429,
+          "rss_kib": 22260,
+          "runnable_threads": 0,
+          "start_ticks": 172257177,
+          "vmhwm_kib": 22260
+        },
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3231448,
+          "rss_kib": 32564,
+          "runnable_threads": 0,
+          "start_ticks": 172257183,
+          "vmhwm_kib": 32564
+        }
+      ],
+      "scratch_allocated_bytes": 212992,
+      "scratch_file_count": 29,
+      "scratch_logical_bytes": 113271,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 54824,
+      "tree_runnable_threads": 0
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        4
+      ],
+      "cgroup_current_bytes": 30744576,
+      "elapsed_s": 2.5359,
+      "max_single_rss_kib": 32564,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3231429,
+          "rss_kib": 22260,
+          "runnable_threads": 0,
+          "start_ticks": 172257177,
+          "vmhwm_kib": 22260
+        },
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3231448,
+          "rss_kib": 32564,
+          "runnable_threads": 0,
+          "start_ticks": 172257183,
+          "vmhwm_kib": 32564
+        }
+      ],
+      "scratch_allocated_bytes": 212992,
+      "scratch_file_count": 29,
+      "scratch_logical_bytes": 113271,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 54824,
+      "tree_runnable_threads": 0
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 31272960,
+      "max_observed_process_vmhwm_kib": 32564,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 30744576,
+      "max_sampled_scratch_allocated_bytes": 212992,
+      "max_sampled_scratch_logical_bytes": 113273,
+      "max_sampled_single_rss_kib": 32564,
+      "max_sampled_tree_live_threads": 2,
+      "max_sampled_tree_rss_kib": 54824,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/discovery-canary-deadline-4907feb0e2864827.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0287,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": -9,
+    "sample_count": 7,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3",
+      "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/deadline",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/discovery-canary-deadline-4907feb0e2864827.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/discovery-canary-deadline-4907feb0e2864827.resources"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0287,
+        "processes": [
+          {
+            "pid": 3231429,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1436,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 44,
+              "Private_Dirty": 1436,
+              "Private_Hugetlb": 0,
+              "Pss": 1847,
+              "Pss_Anon": 1436,
+              "Pss_Dirty": 1436,
+              "Pss_File": 411,
+              "Pss_Shmem": 0,
+              "Referenced": 6368,
+              "Rss": 6368,
+              "Shared_Clean": 4888,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 172257177
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 6368
+      },
+      {
+        "elapsed_s": 3.0372,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 67108864,
+    "wall_time_limit_seconds": null
+  }
+}

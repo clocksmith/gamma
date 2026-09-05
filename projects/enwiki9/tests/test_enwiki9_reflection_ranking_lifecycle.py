@@ -83,8 +83,25 @@ def job(tmp_path: Path, state: str, job_id: str) -> None:
         / "adaptive"
         / state
         / f"000_{job_id}.json",
-        {"candidate_id": "candidate_v1", "job_id": job_id},
+        {"candidate_id": "candidate_v1", "job_id": job_id, "state": state},
     )
+
+
+def bind_reflection(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, job_id: str) -> Path:
+    job_path = tmp_path / "operations/adaptive/failed" / f"000_{job_id}.json"
+    path = tmp_path / "operations/adaptive/reflections" / f"{job_id}.json"
+    write_json(path, {"candidateId": "candidate_v1", "job": reflections.reference(job_path)})
+    meta_path = tmp_path / "programs/candidate_v1/meta.json"
+    metadata = json.loads(meta_path.read_text())
+    metadata["measured"]["reflections"][job_id] = reflections.reference(path)
+    write_json(meta_path, metadata)
+
+    def validate(receipt: Path, *, verify_files: bool) -> None:
+        assert receipt == path
+        assert verify_files is True
+
+    monkeypatch.setattr(reflections.research_contracts, "validate_artifact", validate)
+    return path
 
 
 @pytest.mark.parametrize(
@@ -149,12 +166,47 @@ def test_reflected_terminal_successor_remains_actionable(
     job_id = "20260904T000000Z_reflected"
     candidate_meta(tmp_path, status, [job_id])
     job(tmp_path, "failed", job_id)
+    bind_reflection(tmp_path, monkeypatch, job_id)
 
     row = rank_one(tmp_path, monkeypatch, proposal())
 
     assert row["eligible"] is True
     assert row["candidateLifecycle"]["schedulingBlock"] is None
     assert row["candidateLifecycle"]["latestTerminalJob"]["jobId"] == job_id
+
+
+@pytest.mark.parametrize("replacement", ["reflection", "job", "validation_failure"])
+def test_replaced_or_invalid_terminal_evidence_cannot_reschedule(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, replacement: str,
+) -> None:
+    configure_root(tmp_path, monkeypatch)
+    job_id = "20260904T000000Z_reflected"
+    candidate_meta(tmp_path, "candidate", [job_id])
+    job(tmp_path, "failed", job_id)
+    path = bind_reflection(tmp_path, monkeypatch, job_id)
+    if replacement == "reflection":
+        path.write_text(path.read_text() + "\n")
+    elif replacement == "job":
+        job_path = tmp_path / "operations/adaptive/failed" / f"000_{job_id}.json"
+        job_path.write_text(job_path.read_text() + "\n")
+    else:
+        def invalid(*_args, **_kwargs):
+            raise ValueError("bound evidence digest differs")
+        monkeypatch.setattr(reflections.research_contracts, "validate_artifact", invalid)
+    row = rank_one(tmp_path, monkeypatch, proposal())
+    assert row["eligible"] is False
+    assert row["candidateLifecycle"]["schedulingBlock"]["code"] == "terminal-job-awaiting-reflection"
+    assert row["candidateLifecycle"]["terminalReflectionError"]
+
+
+def test_metadata_reflection_key_without_receipt_is_not_authority(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    configure_root(tmp_path, monkeypatch)
+    candidate_meta(tmp_path, "candidate", ["job"])
+    job(tmp_path, "failed", "job")
+    row = rank_one(tmp_path, monkeypatch, proposal())
+    assert row["eligible"] is False
 
 
 def test_undeveloped_proposal_has_no_candidate_lifecycle_block(

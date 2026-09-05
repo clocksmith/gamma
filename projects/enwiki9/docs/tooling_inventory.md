@@ -7,7 +7,8 @@ maintenance and handoff, not a claim that every script is current.
 
 | Tool | Purpose |
 |---|---|
-| `enwiki9_ledger.py` | Builds disposable local HTML and JSON views of canonical candidates, explicit lineage, jobs, results, mixtures, and research notes; reads bounded records and process metadata without launching work or changing research state. |
+| [Predictor](../lib/predictor.py), [driver](../lib/driver.py) | Reusable causal predictor boundary and existing exact codec driver; explicit frontend adapters, same-build comparison arms, retained roundtrips/repeats, first-divergence diagnostics and atomic decisions. The predictor's arithmetic coder is a zero-credit fixture. |
+| `enwiki9_ledger.py` | Builds disposable local HTML and JSON views and implements the read-only `enwiki9_lab.py start` and `records` commands: agent orientation, bounded search, exact candidate history, and reflection-gap discovery over canonical records. |
 | `enwiki9_ledger.html` | Offline browser template used by the ledger generator; search, filters, source links, and paginated histories require no server or external dependencies. |
 
 ## Heavy-Gate And Driver Support
@@ -17,7 +18,7 @@ runner-adjacent.
 
 | Tool | Purpose |
 |---|---|
-| `enwiki9_lab.py` | Primary adaptive experiment loop: creates and clones candidates, records mutation lineage, selects the next exact gate, manages atomic durable jobs, fans out small gates, serializes heavy work, and refreshes inventories and reports after terminal batches. |
+| `enwiki9_lab.py` | Primary adaptive loop, read-only agent entry/search, validated ancestry, unique durable claims, and explicit discovery/qualification budgets through existing guards. Unknown ownership blocks admission; shared discovery timing is diagnostic and qualification requires calibrated isolation. |
 | `enwiki9_reflections.py` | Creates validated terminal reflections, projects retired dimensions into search memory, and ranks proposals with parent-evidence plus candidate-lifecycle gates; pending/running, held/negative/retired, and awaiting-reflection candidates are not eligible for duplicate scheduling. |
 | `run_with_rss_guard.py` | Wraps commands with RSS sampling and guard enforcement; writes live and final guard JSON. |
 | `cmix_filebacked_fxcm_100m_identity_resource.py` | Coordinates the opening-100M parent/q1 identity arms and observer-free q1 resource arm only after validating the distinct 149-member Python/schema harness closure and all retained q1 antecedents. It emits zero compression and score credit. |
@@ -29,11 +30,11 @@ runner-adjacent.
 | `wiki_pda_structural_replay_ceiling_q0_v2_authority_v3.py` | Preserves the frozen WIKI-PDA v2 scanner and causal controls while replacing its revoked q1-v4 authority with a future active-policy-v7-or-later q1-v3 receipt, exact stored verification, and fresh independent re-verification; it remains dormant and zero-credit while qm8 owns the full-1G namespace. |
 | `wiki_pda_structural_replay_ceiling_q0_v2_authority_v3_verify.py` | Cannot launch the scanner; independently rederives the frozen WIKI-PDA decision, resource and lease evidence, plus the active q1-v3 policy chain and v6 design-policy binding. |
 | `enwiki9_dependency_closure.py` | Stages a new exact candidate bundle, rejects implicit filesystem inputs, hashes and counts every package member, and emits the validated dependency/command/license closure without launching a compressor. |
-| `enwiki9_clean_room_replay.py` | Runs a frozen full-1G package through two fresh-build compression sandboxes and one corpus-blind fresh-build decode sandbox; all runtime phases use one-core process-tree, wall-time, memory, and temporary-disk guards, and only a complete second-host receipt can close cross-host identity. |
+| `enwiki9_clean_room_replay.py` | Runs a frozen full-1G package through two fresh-build compression sandboxes and one corpus-blind fresh-build decode sandbox. Explicit `--canary` exercises the same machinery on bounded synthetic data with separate zero-credit receipts; `--verify-canary` checks retained evidence and rejection boundaries. Only complete full-corpus resources and second-host evidence can close qualification. |
 | `enwiki9_release_receipts.py` | Regenerates the schema-valid structural router for canonical dependency bundles, successful run receipts, and failed clean-room attempts; it never upgrades structure-only discovery into artifact-verification credit. |
 | `enwiki9_python_source_closure.py` | Cannot launch a process; recursively resolves project-local Python imports under `tools/` and emits stable path/digest rows so prospective inputs and terminal source packages can share one exact code closure. |
 | `nncp_delta_midas_named_midpoint_gradient_q3.py` | Launches two closed-teacher F encodes for the zero-credit direct-F32 named-gradient retry, checks a distinct explicit-F32 reference path, and retains q2 comparison as a sensitivity diagnostic; it must run only as a revision-bound job under the process-tree memory and scratch guard. |
-| `nncp_libnc_profile_initial_fixture_65536_q0.py`, `nncp_libnc_profile_initial_fixture_65536_q0_v2.py` | Define the rejected legacy-parent registration and its standalone correction. The v2 runner launches two zero-credit LibNC initialization oracles only through a revision-bound guarded job; each exits before the first forward, gradient, update, or coded symbol and retains the exact 65,536-symbol population plus stripped block-zero parameters, optimizer state, and recurrent memory required by the open MIDAS replay. |
+| `nncp_libnc_profile_initial_fixture_65536_q0.py`, `nncp_libnc_profile_initial_fixture_65536_q0_v2.py`, `nncp_libnc_profile_initial_fixture_65536_closurefix_q0_v1.py` | Define the rejected legacy-parent registration and its standalone correction. The v2 runner launches two zero-credit LibNC initialization oracles only through a revision-bound guarded job; each exits before the first forward, gradient, update, or coded symbol and retains the exact 65,536-symbol population plus stripped block-zero parameters, optimizer state, and recurrent memory required by the open MIDAS replay. |
 | `materialize_nncp_named_midpoint_gradient_q3.py` | Cannot launch a process; replaces q2's BF16 product/reduction observation with LibNC's direct F32 squared-sum plus an explicit BF16-to-F32 multiply-and-sum reference without changing probabilities. |
 | `record_driver_result.py` | Records driver/guard evidence into candidate meta rows, including receipt paths, byte sizes, modified UTC stamps, and SHA-256 fingerprints. |
 | `cmix21_gate_decider.py` | Reads cmix21 driver and RSS guard receipts, prints the next safe action, and emits terminal apply commands for pass, RSS failure, and non-promotable terminal failures. |
@@ -73,6 +74,13 @@ heavy lane.
 | `cmix21_package_candidate.py` | Packages cmix21 variants into candidate directories. |
 
 ## cmix/fx2 Core Tuning And Reproduction
+
+`fx2_cmix_transformer_gcc_fixture50051_q0_v1.py` is the preserved unexecuted
+TEXT-tag mistake. `fx2_cmix_transformer_gcc_fixture50051_q0_v2.py` and
+`fx2_cmix_transformer_gcc_fixture50051_q0_v2_materializer.py` run its correction
+on the pinned public fixture with explicit vocabulary/instruction gates and
+bounded compile/roundtrip commands. External substrate results receive zero
+Gamma objective credit.
 
 | Tool | Purpose |
 |---|---|

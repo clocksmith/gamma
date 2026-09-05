@@ -336,6 +336,7 @@
       const meta = node('div', null, 'card-meta');
       meta.append(node('span', scopeText(run.scope)), node('span', dateText(run.date)), node('span', 'Recorded state: ' + label(run.state)));
       if (run.purpose) meta.append(node('span', label(run.purpose)));
+      if (run.execution_mode) meta.append(node('span', label(run.execution_mode)));
       card.append(meta);
       if (run.summary) card.append(node('p', run.summary, 'description'));
       if (list(run.metrics).length) {
@@ -358,6 +359,7 @@
       const detail = node('details'); detail.append(node('summary', 'Run details & sources'));
       const body = node('div', null, 'detail-body'); const facts = node('dl', null, 'facts');
       appendFact(facts, 'Kind', run.kind); appendFact(facts, 'Validity', run.validity); appendFact(facts, 'Hypothesis', run.hypothesis); appendFact(facts, 'Outcome', run.outcome);
+      appendFact(facts, 'Resource budget', run.resource_budget); appendFact(facts, 'Timing authority', run.timing_authority);
       if (run.scope && typeof run.scope === 'object') {
         appendFact(facts, 'Scope population', run.scope.population);
         appendFact(facts, 'Scope symbols', run.scope.symbols);
@@ -472,6 +474,7 @@
         const relatives = side === 'Parents' ? list(algorithm.parents) : list(algorithm.children).map(child => ({id:child}));
         for (const relative of relatives) {
           const li = node('li'); li.append(algorithmLink(relative.id, relative.id));
+          if (relative.kind === 'source-predecessor') li.append(node('span', 'Source predecessor; scientific eligibility is checked separately', 'subtext'));
           if (relative.source) li.append(node('span', 'Recorded in ' + display(relative.source), 'subtext'));
           if (!algorithmById.has(relative.id)) li.append(node('span', 'Not indexed in this snapshot', 'subtext'));
           ul.append(li);

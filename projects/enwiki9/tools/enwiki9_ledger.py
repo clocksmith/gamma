@@ -6,11 +6,14 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from datetime import datetime, timezone
+import importlib.util
 import json
 import math
 from pathlib import Path
 import re
+import shutil
 import socket
+import sys
 import tempfile
 
 
@@ -85,40 +88,15 @@ class Records:
         return sorted(self.root.glob(pattern))
 
 
-def process_identity(pid, start=None, command=None):
-    """A bounded metadata observation, never a compressor or trace reader."""
+def live_job(job, root=ROOT):
     try:
-        p = Path("/proc") / str(int(pid))
-        stat = p.joinpath("stat").read_text().rsplit(")", 1)[1].split()
-        if stat[0] in {"Z", "X", "x"}:
-            return False
-        if start is not None and int(stat[19]) != int(start):
-            return False
-        if command:
-            argv = p.joinpath("cmdline").read_bytes().split(b"\0")
-            if not any(x.decode(errors="replace") == command or
-                       x.decode(errors="replace").endswith("/" + command) for x in argv):
-                return False
-        return True
-    except (OSError, ValueError, IndexError, TypeError):
-        return False
-
-
-def live_job(job):
-    pid = job.get("worker_pid")
-    runner = job.get("tool") or job.get("runner", {}).get("path")
-    matched = bool(runner and process_identity(pid, command=runner))
-    if not matched and process_identity(pid):
-        # Lab workers execute their immutable, job-specific candidate snapshot.
-        pattern = r"/tmp/gamma-enwiki9-" + re.escape(text(job.get("job_id"))) + r"-[^/]+/" + re.escape(text(job.get("candidate_id"))) + r"/program\.py"
-        try:
-            argv = (Path("/proc") / str(int(pid)) / "cmdline").read_bytes().split(b"\0")
-            matched = any(re.fullmatch(pattern, arg.decode(errors="replace")) for arg in argv)
-        except (OSError, ValueError, TypeError):
-            pass
-    return {"state": "observed" if matched else "unverified", "pid": pid,
-            "observed_at": utc(), "detail": "Worker PID and runner or job-specific snapshot command observed on this host"
-            if matched else "Recorded running; matching worker was not verified on this host"}
+        from . import enwiki9_worker_identity as identity
+    except ImportError:
+        import enwiki9_worker_identity as identity
+    matched = identity.worker_pid_matches_job(root, root / "tools/candidate_triage.py", job)
+    return {"state": "live" if matched else "unknown", "pid": job.get("worker_pid"),
+            "observed_at": utc(), "detail": "Canonical worker identity matches on this host"
+            if matched else "Recorded running; exact worker identity was not verified on this host"}
 
 
 def metrics(data, definitions=None):
@@ -170,10 +148,10 @@ def build(root):
                 "proposal_ids": [], "notes": [], "updated_at": "", "coverage": []}
         return algorithms[cid]
 
-    def parent(cid, pid, source):
+    def parent(cid, pid, source, kind="recorded-parent"):
         a = candidate(cid)
         if a and isinstance(pid, str) and pid and pid != cid and "/" not in pid:
-            edge = {"id": pid, "source": source}
+            edge = {"id": pid, "source": source, "kind": kind}
             if not any(x["id"] == pid for x in a["parents"]):
                 a["parents"].append(edge)
 
@@ -192,6 +170,9 @@ def build(root):
         a["summary"] = text(m.get("verdict")) or text(m.get("outcome"))
         for field in ("parent", "parent_candidate_id", "parent_program_id", "parentCandidateId"):
             parent(a["id"], m.get(field), records.relative(str(p)))
+        predecessor = m.get("source_predecessor")
+        if isinstance(predecessor, dict):
+            parent(a["id"], predecessor.get("candidateId"), records.relative(str(p)), "source-predecessor")
     # Include source directories with missing metadata, as well as curated IDs.
     for p in records.files("programs/*"):
         if p.is_dir():
@@ -213,9 +194,13 @@ def build(root):
         if not a:
             continue
         proposal = {"id": pid, "candidate_id": d.get("candidate_id"), "title": d.get("title") or pid,
-            "hypothesis": d.get("hypothesis") or "", "state": p.parent.name,
+            "hypothesis": d.get("hypothesis") or "", "state": d.get("state") or p.parent.name,
+            "directory_state": p.parent.name, "operational_status": d.get("operational_status", "actionable"),
+            "owner": d.get("owner"), "activation_requirements": d.get("activation_requirements"),
             "parent": d.get("parent"), "parent_proposal_id": d.get("parent_proposal_id"),
             "path": records.relative(str(p))}
+        if p.parent.name in {"proposed", "claimed", "developed", "rejected"} and proposal["state"] != proposal["directory_state"]:
+            records.issues.append({"path": proposal["path"], "reason": "proposal state disagrees with directory; not a ready proposal"})
         proposals.append(proposal)
         a["proposal_ids"].append(pid)
         a["sources"].append(proposal["path"])
@@ -256,9 +241,11 @@ def build(root):
         decision = reflection.get("decision") or {}
         run = {"id": d["job_id"], "candidate_id": d["candidate_id"], "kind": "job",
             "state": "held" if p.parent.name == "pending" and (d.get("held") or d.get("hold")) else d.get("state", p.parent.name),
-            "date": d.get("finished_at") or d.get("started_at") or d.get("submitted_at") or "",
+            "date": d.get("finished_at") or d.get("cancelled_at") or d.get("started_at") or d.get("submitted_at") or "",
             "purpose": d.get("purpose", ""), "scope": scope, "source": source,
-            "revision": d.get("candidate_revision"),
+            "execution_mode": d.get("execution_mode", "legacy"),
+            "resource_budget": d.get("resource_budget"), "timing_authority": d.get("timing_authority", "unverified"),
+            "revision": d.get("candidate_revision"), "reflection_path": reflection_path or None,
             "outcome": decision.get("verdict", "unreviewed"),
             "validity": (reflection.get("validity") or {}).get("classification", "unreviewed"),
             "hypothesis": (reflection.get("hypothesis") or {}).get("verdict", "unreviewed"),
@@ -275,33 +262,32 @@ def build(root):
                 if rel:
                     run["links"].append({"label": Path(rel).name, "path": rel})
         if run["state"] == "running":
-            run["liveness"] = live_job(d)
+            run["liveness"] = live_job(d, root)
         runs.append(run)
         job_runs[run["id"]] = run
 
-    # Show the existing observer's receipt; never open active scientific output.
-    for cid in active:
-        rel = f"results/{cid}/progress.json"
-        progress = records.read(rel)
-        if progress.get("schema") != "gamma.enwiki9.endpoint428-horizon-orphan-adoption-progress.v1":
-            continue
-        stamp = progress.get("updatedUtc")
-        sample = progress.get("lastSample") or {}
-        processes = sample.get("processes") or {}
+    # Reuse the existing authoritative observer binding; no independent monitor.
+    if root.resolve() == ROOT.resolve():
         try:
-            fresh = 0 <= (datetime.now(timezone.utc) - datetime.fromisoformat(stamp.replace("Z", "+00:00"))).total_seconds() <= 120
-        except (TypeError, ValueError, AttributeError):
-            fresh = False
-        identity_pass = bool(processes) and all(process_identity(v.get("pid"), v.get("startTicks")) for v in processes.values())
-        source = job_runs.get(progress.get("sourceJobId"))
-        summary = {k: progress.get(k) for k in ("state", "updatedUtc", "traceBytes", "expectedTraceBytes", "sampleCount", "maximumObservedTreeRssBytes", "scienceAccessedBeforeTerminal", "failureReason")}
-        for run in runs:
-            if run["candidate_id"] == cid or run is source:
-                run["progress"] = summary
-                run["links"].append({"label": "Existing observer", "path": rel})
-        if source and fresh and identity_pass:
-            source["liveness"] = {"state": "observed", "observed_at": utc(), "pid": None,
-                "detail": "Existing observer receipt is fresh; recorded process identities match this host"}
+            try:
+                from . import enwiki9_status_receipt as status_reader
+            except ImportError:
+                import enwiki9_status_receipt as status_reader
+            status_jobs = [{**job, "path": records.relative(str(path)),
+                            "worker_pid_live": job_runs.get(job.get("job_id"), {}).get("liveness", {}).get("state") == "live"}
+                           for path, job in jobs if job.get("state") == "running"]
+            observer = status_reader.existing_horizon_observer_state({"running_jobs": status_jobs})
+            if observer:
+                source = job_runs.get(observer.get("adaptive_job_id"))
+                for run in runs:
+                    if run.get("id") in {observer.get("observer_job_id"), observer.get("adaptive_job_id")}:
+                        run["progress"] = observer["observer_progress"]
+                        run["links"].append({"label": "Existing observer", "path": records.relative(observer["observer_progress_path"])})
+                if source and observer.get("source_processes_live"):
+                    source["liveness"] = {"state": "live", "observed_at": utc(), "pid": None,
+                        "detail": "Existing observer plan binds live boot/PID/start/argv identities on this host"}
+        except (OSError, ValueError, KeyError) as exc:
+            records.issues.append({"path": "docs/status_receipt.json", "reason": f"observer binding unavailable: {exc}"})
 
     linked_results = set()
     for row in records.lines("results/run_ledger.jsonl"):
@@ -438,7 +424,8 @@ def build(root):
             title, content = match.groups()
             rel = records.relative(str(p))
             note = {"id": f"{rel}:{number}", "title": title, "path": rel,
-                    "excerpt": re.sub(r"\s+", " ", content.strip())[:900]}
+                    "line": body.count("\n", 0, match.start()) + 1,
+                    "text": content.strip(), "excerpt": re.sub(r"\s+", " ", content.strip())[:900]}
             notes.append(note)
             for cid in set(re.findall(r"`([a-z0-9_]+)`", content)) & algorithms.keys():
                 algorithms[cid]["notes"].append({"title": title, "path": rel})
@@ -453,11 +440,11 @@ def build(root):
             a["coverage"].append("artifact directory; algorithm identity unrecorded")
         if any(edge["id"] not in algorithms for edge in a["parents"]):
             a["coverage"].append("unresolved parent reference")
-    objective = records.read("contracts/research/v1/objective-contract.json")
+    objective = records.read("contracts/research/v2/objective-contract.json")
     data = {"generated_at": utc(), "host": socket.gethostname(),
         "objective": {"targetScoreBytes": objective.get("score", {}).get("targetBytes"),
                       "corpusBytes": objective.get("corpus", {}).get("bytes"),
-                      "path": "contracts/research/v1/objective-contract.json"},
+                      "path": "contracts/research/v2/objective-contract.json"},
         "algorithms": sorted(algorithms.values(), key=lambda a: a["id"]),
         "runs": runs, "proposals": proposals, "mixes": mixes, "notes": notes, "issues": records.issues,
         "mix_candidates": sorted(a["id"] for a in algorithms.values()
@@ -466,10 +453,149 @@ def build(root):
                 " ".join(text(a.get(k)) for k in ("id", "name", "description")).replace("_", " "), re.I))}
     data["counts"] = {"algorithms": len(algorithms), "programs": len([p for p in records.files("programs/*") if p.is_dir()]),
         "proposals": len(proposals), "runs": len(runs), "mixes": len(mixes), "notes": len(notes),
-        "running": sum(r["state"] == "running" and r["liveness"].get("state") == "observed" for r in runs),
-        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") != "observed" for r in runs),
+        "running": sum(r["state"] == "running" and r["liveness"].get("state") == "live" for r in runs),
+        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") != "live" for r in runs),
         "jobs": dict(Counter(d.get("state") for _, d in jobs)), "read_issues": len(records.issues)}
     return data
+
+
+def review_backlog(data):
+    """Latest terminal job per candidate, with presence checks, not verdicts."""
+    latest = {}
+    # Match the adaptive lifecycle's job-identity ordering, not finish time:
+    # an older cancelled job may have been reconciled after its successor.
+    for run in sorted(data["runs"], key=lambda r: (r["id"], r["source"]), reverse=True):
+        if run["kind"] == "job" and run["state"] in {"completed", "failed", "cancelled"}:
+            latest.setdefault(run["candidate_id"], run)
+    missing = [run for run in latest.values() if not run.get("reflection_path")]
+    return sorted(missing, key=lambda r: (r["state"] == "cancelled", not bool(r.get("revision"))))
+
+
+def record_options(parser):
+    parser.add_argument("--search", help="case-insensitive search; all words must match")
+    parser.add_argument("--view", choices=("algorithms", "runs", "notes", "mixes", "proposals", "reviews"),
+                        help="record collection (default: algorithms; candidate detail: runs)")
+    parser.add_argument("--candidate", help="exact candidate ID; include identity, lineage, sources, and history")
+    parser.add_argument("--state", action="append", help="recorded state or status; repeat to include alternatives")
+    parser.add_argument("--limit", type=int, default=20, help="records per page, 1–100 (default: 20)")
+    parser.add_argument("--offset", type=int, default=0, help="skip this many matching records")
+    parser.add_argument("--include-legacy", action="store_true", help="include unbound historical jobs in the reviews view")
+
+
+def record_query(data, args):
+    if not 1 <= args.limit <= 100 or args.offset < 0:
+        raise ValueError("--limit must be 1–100 and --offset must be nonnegative")
+    algorithm = None
+    if args.candidate:
+        algorithm = next((a for a in data["algorithms"] if a["id"] == args.candidate), None)
+        if algorithm is None:
+            raise ValueError(f"Candidate not found: {args.candidate}; use records --search to find an ID")
+    view = args.view or ("runs" if algorithm else "algorithms")
+    rows = review_backlog(data) if view == "reviews" else data[view]
+    if view == "reviews" and not args.include_legacy:
+        rows = [row for row in rows if row.get("revision")]
+    if algorithm:
+        def related(row):
+            if view == "algorithms":
+                return row["id"] == algorithm["id"]
+            if view in {"runs", "reviews"}:
+                return row.get("candidate_id") == algorithm["id"]
+            if view == "proposals":
+                return row["id"] in algorithm["proposal_ids"]
+            if view == "notes":
+                return any(n["path"] == row["path"] and n["title"] == row["title"] for n in algorithm["notes"])
+            return (row.get("composition") or {}).get("candidateId") == algorithm["id"]
+        rows = [row for row in rows if related(row)]
+    if args.state:
+        states = {state.casefold() for state in args.state}
+        rows = [row for row in rows if text(row.get("state", row.get("status"))).casefold() in states]
+    if args.search:
+        terms = args.search.casefold().split()
+        rows = [row for row in rows if all(term in json.dumps(row, ensure_ascii=False).casefold() for term in terms)]
+    page = rows[args.offset:args.offset + args.limit]
+    # Keep search over full research records, but bound what an agent receives.
+    if view == "algorithms":
+        keys = ("id", "name", "description", "kind", "family", "status", "parents", "coverage")
+        page = [{**{key: row.get(key) for key in keys}, "run_count": len(row["run_ids"]),
+                 "sources": row["sources"][:4]} for row in page]
+    elif view == "notes":
+        page = [{key: value for key, value in row.items() if key != "text"} for row in page]
+    result = {"schema": "enwiki9_record_query_v1", "generated_at": data["generated_at"],
+              "host": data["host"], "view": view, "total": len(rows), "offset": args.offset,
+              "limit": args.limit, "next_offset": args.offset + args.limit if args.offset + args.limit < len(rows) else None,
+              "records": page, "source_issues": data["issues"]}
+    if algorithm:
+        result["candidate"] = algorithm
+    if view == "reviews":
+        result["meaning"] = "Latest terminal job per candidate without a linked reflection, ordered by the adaptive lifecycle's job identity. Unbound legacy jobs appear only with --include-legacy. Presence is not validation; inspect original evidence before reflect."
+    return result
+
+
+def start_payload(data, root):
+    """Orient an agent without ranking, hashing evidence, or launching work."""
+    records = Records(root)
+    objective = records.read(data["objective"]["path"])
+    corpus_ref = text(objective.get("corpus", {}).get("repositoryPath")).removeprefix("projects/enwiki9/")
+    if not corpus_ref or Path(corpus_ref).is_absolute() or ".." in Path(corpus_ref).parts:
+        corpus_ref = "data/enwik9"
+    corpus = root / corpus_ref if corpus_ref else root / "data/enwik9"
+    try:
+        corpus_size = corpus.stat().st_size if corpus.is_file() else None
+    except OSError:
+        corpus_size = None
+    running = [r for r in data["runs"] if r["kind"] == "job" and r["state"] == "running"]
+    reviews = review_backlog(data)
+    bound_reviews = [r for r in reviews if r.get("revision")]
+    proposed = [p for p in data["proposals"] if p["state"] == p["directory_state"] == "proposed"
+                and p["operational_status"] == "actionable"]
+    lease_path = "operations/runtime/exclusive_full1g.json"
+    lease_present = (root / lease_path).exists()
+    issues = list(data["issues"])
+    expected = objective.get("corpus", {}).get("bytes")
+    if corpus_size != expected or expected is None:
+        issues.append({"path": corpus_ref or "data/enwik9", "reason": "canonical corpus is missing or its byte count differs; verify inputs before benchmarking"})
+    dependencies = {name: importlib.util.find_spec(name) is not None for name in ("jsonschema",)}
+    if not all(dependencies.values()):
+        issues.append({"path": "../../requirements.txt", "reason": "lab dependencies missing from this interpreter; use the provisioned project environment"})
+    status = records.read("docs/status_receipt.json")
+    operator = status.get("operator_summary") or {}
+    old_active = (status.get("gate_liveness") or {}).get("is_live")
+    if running and (old_active is False or operator.get("safe_to_launch_candidate_gate") is True):
+        issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while running jobs exist; inspect its timestamp and the existing observer before scheduling"})
+    keys = ("id", "candidate_id", "state", "purpose", "scope", "source", "liveness", "progress",
+            "execution_mode", "resource_budget", "timing_authority")
+    return {"schema": "enwiki9_agent_start_v1", "generated_at": data["generated_at"], "host": data["host"],
+        "project_root": str(root.resolve()), "objective": data["objective"],
+        "go": "Inspect evidence and ownership, choose one justified experiment or research question, use the adaptive workflow, record its outcome, and continue from the evidence.",
+        "entry_points": {"instructions": "AGENTS.md", "workbench": "workbench/README.md",
+            "prompts": "workbench/PROMPTS.md", "workflow": "ADAPTIVE_WORKFLOW.md", "record_map": "ledger/README.md"},
+        "environment": {"python": sys.executable, "python_version": sys.version.split()[0], "modules": dependencies,
+            "tools": {name: shutil.which(name) for name in ("git", "make", "g++", "bzip2")},
+            "corpus": {"path": corpus_ref, "bytes": corpus_size, "expected_bytes": expected, "hash_verified": False},
+            "note": "Availability only; each candidate declares its own dependencies and validates corpus hashes."},
+        "records": data["counts"], "running_jobs": [{key: run.get(key) for key in keys} for run in running],
+        "queue": {"held": sum(r["state"] == "held" for r in data["runs"]),
+            "pending_unheld": sum(r["state"] == "pending" for r in data["runs"]),
+            "exclusive_lease_file": lease_path if lease_present else None,
+            "launch_authorized": False,
+            "meaning": "This entry report grants no launch permission. Existing lease, guard, dependency, and proposal checks govern execution; preserve current observers."},
+        "review_backlog": {"latest_bound_jobs_without_reflection": len(bound_reviews),
+            "bound_by_state": dict(Counter(r["state"] for r in bound_reviews)),
+            "latest_legacy_jobs_without_reflection": len(reviews) - len(bound_reviews),
+            "meaning": "File-presence inventory, not validated scientific verdicts. Review relevant parent evidence; the entire historical backlog is not a prerequisite for independent research.",
+            "inspect": "python3 tools/enwiki9_lab.py records --view reviews --limit 10"},
+        "proposed_work": {"count": len(proposed), "examples": proposed[:5],
+            "meaning": "Recorded as proposed and actionable, not ranked or launch-qualified. Inspect parent evidence, exclusions, and dependencies before claiming."},
+        "next_commands": {"search": "python3 tools/enwiki9_lab.py records --search YOUR_MECHANISM",
+            "running": "python3 tools/enwiki9_lab.py records --view runs --state running",
+            "history": "python3 tools/enwiki9_lab.py records --candidate CANDIDATE_ID",
+            "research": "python3 tools/enwiki9_lab.py records --view notes --search YOUR_MECHANISM",
+            "benchmark": "python3 tools/enwiki9_lab.py enqueue --help",
+            "simulation": "python3 tools/enwiki9_lab.py enqueue-tool --help",
+            "record_result": "python3 tools/enwiki9_lab.py reflect --help"},
+        "competition": {"meaning": "The objective is a research target; check live rules and competing submissions before prize-facing promotion.",
+            "rules": "https://www.hutter1.net/prize/hrules.htm", "submissions": "https://mattmahoney.net/dc/text.html"},
+        "issues": issues + records.issues}
 
 
 def write_atomic(path, content):
@@ -486,8 +612,19 @@ def write_atomic(path, content):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--summary", action="store_true", help="print coverage without writing the browsing files")
+    parser.add_argument("--start", action="store_true", help="print agent entry report without writing files")
+    record_options(parser)
     args = parser.parse_args()
     data = build(ROOT)
+    try:
+        if args.start:
+            print(json.dumps(start_payload(data, ROOT), ensure_ascii=False, allow_nan=False, indent=2))
+            return 0
+        if args.search is not None or args.view or args.candidate or args.state or args.include_legacy:
+            print(json.dumps(record_query(data, args), ensure_ascii=False, allow_nan=False, indent=2))
+            return 0
+    except ValueError as exc:
+        parser.error(str(exc))
     if not args.summary:
         payload = json.dumps(data, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
         template = (ROOT / "tools/enwiki9_ledger.html").read_text()

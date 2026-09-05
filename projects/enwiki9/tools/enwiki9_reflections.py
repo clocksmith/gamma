@@ -466,16 +466,12 @@ def _candidate_lifecycle(
     )
     latest_terminal = terminal_jobs[-1] if terminal_jobs else None
 
-    reflected_job_ids: set[str] = set()
-    if metadata is not None:
-        measured = metadata.get("measured")
-        reflections = (
-            measured.get("reflections") if isinstance(measured, dict) else None
-        )
-        if isinstance(reflections, dict):
-            reflected_job_ids = {
-                job_id for job_id in reflections if isinstance(job_id, str)
-            }
+    terminal_reflection_error = None
+    if latest_terminal is not None:
+        try:
+            validated_terminal_reflection(candidate_id, latest_terminal, metadata or {})
+        except Exception as exc:
+            terminal_reflection_error = str(exc)
 
     scheduling_block: dict[str, Any] | None = None
     if metadata_error is not None:
@@ -496,7 +492,7 @@ def _candidate_lifecycle(
         }
     elif (
         latest_terminal is not None
-        and latest_terminal["jobId"] not in reflected_job_ids
+        and terminal_reflection_error is not None
     ):
         scheduling_block = {
             "code": "terminal-job-awaiting-reflection",
@@ -510,7 +506,48 @@ def _candidate_lifecycle(
         "schedulingBlock": scheduling_block,
         "liveJobs": live_jobs,
         "latestTerminalJob": latest_terminal,
+        "terminalReflectionError": terminal_reflection_error,
     }
+
+
+def validated_terminal_reflection(
+    candidate_id: str, job: dict[str, Any], metadata: dict[str, Any],
+) -> dict[str, Any]:
+    """Validate the recorded reflection digest and its exact terminal job binding."""
+    measured = metadata.get("measured") or {}
+    references = measured.get("reflections") or {}
+    ref = references.get(job["jobId"])
+    if not isinstance(ref, dict) or not isinstance(ref.get("path"), str):
+        raise ValueError("terminal job has no recorded reflection reference")
+    path = (ROOT / ref["path"]).resolve()
+    if not path.is_relative_to(ROOT.resolve()):
+        raise ValueError("reflection reference escapes the project")
+    expected = ref.get("sha256")
+    if reference(path)["sha256"] != expected:
+        raise ValueError("recorded reflection digest differs")
+    value = _load_json(path)
+    job_path = (ROOT / job["path"]).resolve()
+    unique_job_path, _ = terminal_job(job["jobId"])
+    if unique_job_path.resolve() != job_path:
+        raise ValueError("reflection terminal job path differs from the canonical record")
+    if (
+        value.get("candidateId") != candidate_id
+        or (value.get("job") or {}).get("path") != job["path"]
+        or (value.get("job") or {}).get("sha256") != reference(job_path)["sha256"]
+    ):
+        raise ValueError("reflection identifies a different terminal job")
+    terminal = _load_json(job_path)
+    if (
+        terminal.get("candidate_id") != candidate_id
+        or terminal.get("job_id") != job["jobId"]
+        or terminal.get("state") not in TERMINAL_STATES
+        or job_path.parent.name != terminal.get("state")
+    ):
+        raise ValueError("terminal job identity or state differs")
+    research_contracts.validate_artifact(path, verify_files=True)
+    if reference(path)["sha256"] != expected:
+        raise ValueError("reflection changed during validation")
+    return value
 
 
 def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -547,6 +584,17 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
             experiment_error = str(exc)
         parent = proposal.get("parent")
         reflection = latest.get(parent) if isinstance(parent, str) else None
+        parent_lifecycle = _candidate_lifecycle(parent, jobs_by_candidate)
+        parent_terminal_ready = (
+            parent_lifecycle.get("terminalReflectionError") is None
+            and not parent_lifecycle.get("liveJobs")
+        )
+        parent_terminal = parent_lifecycle.get("latestTerminalJob")
+        if parent_terminal is not None and (
+            reflection is None
+            or (reflection.get("job") or {}).get("path") != parent_terminal["path"]
+        ):
+            parent_terminal_ready = False
         decision = (
             reflection["decision"]["verdict"] if reflection is not None else "missing"
         )
@@ -593,7 +641,7 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
         operational = effective_status == "actionable"
         parent_evidence_valid = (
             parent is None
-            or (reflection is not None and reflection["validity"]["valid"])
+            or (reflection is not None and reflection["validity"]["valid"] and parent_terminal_ready)
         )
         experiment_valid = experiment is not None
         lifecycle_actionable = lifecycle["schedulingBlock"] is None
@@ -642,6 +690,7 @@ def rank_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "eligible": eligible,
                 "operationalStatus": effective_status,
                 "candidateLifecycle": lifecycle,
+                "parentLifecycle": parent_lifecycle,
                 "rankKey": list(rank_key[:-1]),
                 "searchPriority": proposal.get(
                     "search_priority", proposal.get("priority", 0)

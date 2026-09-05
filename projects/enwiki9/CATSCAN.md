@@ -4,13 +4,14 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Produce a Gamma-authored, self-contained codec that exactly reconstructs canonical enwik9 with a fully counted score at or below 105,000,000 bytes and satisfies the bound prize-resource rules.
+Produce a Gamma-authored, self-contained codec that exactly reconstructs canonical enwik9 with a fully counted score at or below 99,000,000 bytes and satisfies the bound prize-resource rules.
 
 ## Authority
 
 - Owns the enwiki9 objective, adaptive research state, candidate lineage, measurement contracts, and proof frontier.
 - Does not own live Hutter Prize rules or grant score credit to teachers, forecasts, traces, or external compressors.
 - `ledger/` is a generated browsing projection of canonical records; `workbench/` routes research actions through the adaptive workflow. Neither creates another registry, queue, or evidence authority.
+- `enwiki9_lab.py start` and `records` expose that projection to agents without creating jobs, ranking scientific claims, or granting launch authority. Benchmarks and simulations retain the existing queue and evidence contracts.
 
 ## Scope
 
@@ -18,7 +19,7 @@ Produce a Gamma-authored, self-contained codec that exactly reconstructs canonic
 
 ## Contracts
 
-- Input: Canonical [objective contract](contracts/research/v1/objective-contract.json) and immutable, hash-bound experiment evidence.
+- Input: Canonical [objective contract](contracts/research/v2/objective-contract.json) and immutable, hash-bound experiment evidence.
 - Output: Candidate packages, exact receipts, reflections, ledgers, and ultimately one independently replayable full-corpus proof.
 
 ## Invariants

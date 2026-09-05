@@ -1,0 +1,242 @@
+{
+  "cases": [
+    {
+      "case": "exact",
+      "controls": {
+        "bytes": 778,
+        "path": "results/discovery_canary_nested_20260905_v3/exact/controls.json",
+        "sha256": "90061d0cdffba165658894083296c15e651841dafae519ba733bf4f64b611bed"
+      },
+      "identities": {
+        "coordinator": {
+          "affinity": [
+            4
+          ],
+          "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-exact-8cdac80fce134de8",
+          "pid": 3231085,
+          "start_ticks": 172257054
+        },
+        "payload": {
+          "affinity": [
+            4
+          ],
+          "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-exact-8cdac80fce134de8-inner",
+          "pid": 3231130,
+          "start_ticks": 172257074
+        }
+      },
+      "job": {
+        "bytes": 2733,
+        "path": "results/discovery_canary_nested_20260905_v3/exact/job.json",
+        "sha256": "7b4b70fbc4d2973f8c402512aa4a0117bdefd2ce3152415596516cf56fd2b9b8"
+      },
+      "log": {
+        "bytes": 18995,
+        "path": "run_logs/adaptive/discovery-canary-exact-8cdac80fce134de8.log",
+        "sha256": "b92f36c619996255bc4504fa08a96b630c95c37f2f403ffa48813e9de634960f"
+      },
+      "outerGuard": {
+        "bytes": 8057,
+        "path": "run_logs/adaptive/discovery-canary-exact-8cdac80fce134de8.resources/guard.json",
+        "sha256": "2c0e782f5d636fe7b30a2ac3fbbe683439424ac3063667cc037dc6efd493be93"
+      },
+      "result": {
+        "archive": {
+          "bytes": 2998,
+          "path": "results/discovery_canary_nested_20260905_v3/exact/encode-a/archive.rle",
+          "sha256": "e3b781cfc0a4264c31f087c901b06dc3be4b1837f34d61db8b6c2195dfc8ab5d"
+        },
+        "commands": [
+          [
+            "/usr/bin/gcc",
+            "-std=c99",
+            "-O2",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-a/codec.c",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-a/codec"
+          ],
+          [
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-a/codec",
+            "c",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/synthetic.bin",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-a/archive.rle"
+          ],
+          [
+            "/usr/bin/gcc",
+            "-std=c99",
+            "-O2",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-b/codec.c",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-b/codec"
+          ],
+          [
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-b/codec",
+            "c",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/synthetic.bin",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-b/archive.rle"
+          ],
+          [
+            "/usr/bin/gcc",
+            "-std=c99",
+            "-O2",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/decode/codec.c",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/decode/codec"
+          ],
+          [
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/decode/codec",
+            "d",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/encode-a/archive.rle",
+            "/home/x/deco/gamma/projects/enwiki9/results/discovery_canary_nested_20260905_v3/exact/decode/restored.bin"
+          ]
+        ],
+        "evidenceClass": "synthetic-canary",
+        "exactRoundtrip": true,
+        "fullCorpusProof": false,
+        "independentBuilds": 3,
+        "input": {
+          "bytes": 7616,
+          "path": "results/discovery_canary_nested_20260905_v3/exact/synthetic.bin",
+          "sha256": "bc9a7be04deec4a427f99f9c53dd81eb799bb222d93b94d7f0508b49662bb9b4"
+        },
+        "objectiveCredit": false,
+        "officialScoreBytes": null,
+        "repeat": {
+          "bytes": 2998,
+          "path": "results/discovery_canary_nested_20260905_v3/exact/encode-b/archive.rle",
+          "sha256": "e3b781cfc0a4264c31f087c901b06dc3be4b1837f34d61db8b6c2195dfc8ab5d"
+        },
+        "repeatArchiveIdentity": true,
+        "restored": {
+          "bytes": 7616,
+          "path": "results/discovery_canary_nested_20260905_v3/exact/decode/restored.bin",
+          "sha256": "bc9a7be04deec4a427f99f9c53dd81eb799bb222d93b94d7f0508b49662bb9b4"
+        },
+        "separateDecodeProcess": true
+      },
+      "verdict": "pass"
+    },
+    {
+      "case": "deadline",
+      "controls": {
+        "bytes": 784,
+        "path": "results/discovery_canary_nested_20260905_v3/deadline/controls.json",
+        "sha256": "10f321a8bbe1d082706e26445c57efe5287d895a3ad64a475e02aa685861bc35"
+      },
+      "identities": {
+        "coordinator": {
+          "affinity": [
+            4
+          ],
+          "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-deadline-4907feb0e2864827",
+          "pid": 3231429,
+          "start_ticks": 172257177
+        },
+        "payload": {
+          "affinity": [
+            4
+          ],
+          "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-deadline-4907feb0e2864827-inner",
+          "pid": 3231474,
+          "start_ticks": 172257197
+        },
+        "residual": {
+          "affinity": [
+            4
+          ],
+          "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-discovery-canary-deadline-4907feb0e2864827-inner",
+          "pid": 3231499,
+          "start_ticks": 172257203
+        }
+      },
+      "job": {
+        "bytes": 2826,
+        "path": "results/discovery_canary_nested_20260905_v3/deadline/job.json",
+        "sha256": "4c2632d8db6725b75ecfd33242504460030d439054a74c8ced8290ee4ba84d6b"
+      },
+      "log": {
+        "bytes": 8667,
+        "path": "run_logs/adaptive/discovery-canary-deadline-4907feb0e2864827.log",
+        "sha256": "3a2647dd8d41878a9b12443cc81591503046c846bdbf92bc9db41b3ddac02c16"
+      },
+      "outerGuard": {
+        "bytes": 8089,
+        "path": "run_logs/adaptive/discovery-canary-deadline-4907feb0e2864827.resources/guard.json",
+        "sha256": "a417ff24e7999309d556e98861155162cec3ad08d32d520060c7c3e1b50eb274"
+      },
+      "result": {
+        "bothOwnedGroupsRemoved": true,
+        "deadlineReturncode": 124,
+        "guardFinalizationRequired": false,
+        "originalProcessesAbsentOrZombie": true,
+        "reason": "expected deadline interrupts guards; operational timeout evidence only"
+      },
+      "verdict": "pass"
+    }
+  ],
+  "cpuAuthority": {
+    "kernelCpuSetAvailable": false,
+    "tasksetInheritedAffinityVerified": true,
+    "timing": "diagnostic",
+    "v3SampledAffinityGuardVerified": true
+  },
+  "evidenceClass": "synthetic-infrastructure-canary",
+  "fullCorpusProof": false,
+  "objectiveCredit": false,
+  "officialScoreBytes": null,
+  "reproduce": [
+    "python3",
+    "tests/test_enwiki9_discovery_canary.py",
+    "--bundle",
+    "results/discovery_canary_NEW",
+    "--cgroup-parent",
+    "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+    "--cpu",
+    "4"
+  ],
+  "resourceBudget": {
+    "aggregateCgroupMemoryBytes": 201326592,
+    "cpus": [
+      4
+    ],
+    "maximumCaseDeadlineSeconds": 30,
+    "perProcessAddressSpaceBytes": 134217728,
+    "scratchBytes": 67108864,
+    "swapBytes": 0
+  },
+  "schema": "gamma.enwiki9.discovery-canary.v1",
+  "scope": "real nested guards and kernel containment; no corpus, candidate queue or score authority",
+  "sources": [
+    {
+      "bytes": 15481,
+      "path": "tests/test_enwiki9_discovery_canary.py",
+      "sha256": "a7e276fb4acf7d5e16b0c7e15c6d5a4a6bff0aa9b370d71fc69945f919a81ae5"
+    },
+    {
+      "bytes": 117361,
+      "path": "tools/enwiki9_lab.py",
+      "sha256": "dfe3ec344ddb35863af7f8055e63e89c45fccff0811220f72183ff7862c57b09"
+    },
+    {
+      "bytes": 31807,
+      "path": "tools/run_with_resource_guard_v3.py",
+      "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    },
+    {
+      "bytes": 134756,
+      "path": "tools/research_contracts.py",
+      "sha256": "32aa2f446c2c9fa8a1f22742c85cb6f6a2f57a71e85291f424bc99130935c474"
+    },
+    {
+      "bytes": 1332,
+      "path": "tests/fixtures/enwiki9_release_canary/package/codec.c",
+      "sha256": "80c1d249d50677a917538af5af6f5be1c443ace02cd5d56ce9a350f9fe4114ad"
+    },
+    {
+      "bytes": 1062,
+      "path": "tests/fixtures/enwiki9_release_canary/package/LICENSE",
+      "sha256": "1f748c27bac4bcdd487c3d95872cb7ce8e77cab1da1147b56e3db3907944e429"
+    }
+  ],
+  "verdict": "pass"
+}

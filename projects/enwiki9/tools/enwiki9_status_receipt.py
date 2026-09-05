@@ -71,13 +71,18 @@ def release_receipt_state(objective: dict[str, Any]) -> dict[str, Any]:
         verify_files=False,
     )
     value = load_json(RELEASE_RECEIPT_INDEX)
+    research_contracts._validate_objective_binding(value.get("objective", {}), "release receipt index")
+    summary = dict(result["summary"])
     if value.get("objective") != objective:
-        raise ValueError("release receipt index objective binding is stale")
+        summary["objectiveAchievedReceipts"] = 0
     return {
         "path": logical_rel(RELEASE_RECEIPT_INDEX),
         "sha256": sha256(RELEASE_RECEIPT_INDEX),
         "validation_mode": value.get("validationMode"),
-        "summary": result["summary"],
+        "source_objective": value.get("objective"),
+        "current_objective_match": value.get("objective") == objective,
+        "source_summary": result["summary"],
+        "summary": summary,
     }
 
 
@@ -1235,6 +1240,132 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
     }
 
 
+def bound_status_json(reference: dict[str, Any]) -> dict[str, Any]:
+    """Read a hash-bound control record inside this project."""
+    name = reference.get("path")
+    expected = reference.get("sha256") or reference.get("sha256_at_freeze")
+    if not isinstance(name, str) or not isinstance(expected, str):
+        return {}
+    if name.startswith("projects/enwiki9/"):
+        name = name.removeprefix("projects/enwiki9/")
+    path = (ROOT / name).resolve()
+    if not path.is_relative_to(ROOT) or sha256(path) != expected.removeprefix("sha256:"):
+        return {}
+    return load_json(path)
+
+
+def adopted_process_identity(expected: dict[str, Any], boot_id: str) -> bool:
+    """Check the frozen process identity without reading scientific outputs."""
+    pid = expected.get("pid")
+    if not isinstance(pid, int) or isinstance(pid, bool):
+        return False
+    try:
+        if pathlib.Path("/proc/sys/kernel/random/boot_id").read_text().strip() != boot_id:
+            return False
+        proc = pathlib.Path("/proc") / str(pid)
+        before = (proc / "stat").read_text().rsplit(")", 1)[1].split()
+        command_digest = hashlib.sha256((proc / "cmdline").read_bytes()).hexdigest()
+        after = (proc / "stat").read_text().rsplit(")", 1)[1].split()
+        return (
+            before[0] not in {"Z", "X", "x"}
+            and after[0] not in {"Z", "X", "x"}
+            and int(before[19]) == int(after[19]) == expected.get("start_ticks")
+            and int(before[1]) == int(after[1]) == expected.get("parent_pid_at_freeze")
+            and command_digest == expected.get("cmdline_sha256")
+        )
+    except (OSError, ValueError, IndexError):
+        return False
+
+
+def existing_horizon_observer_state(adaptive_state: dict[str, Any]) -> dict[str, Any] | None:
+    """Project the existing observer; never sample or analyze its trace/archive."""
+    jobs = adaptive_state.get("running_jobs", [])
+    by_id = {job.get("job_id"): job for job in jobs}
+    for observer in jobs:
+        cid = observer.get("candidate_id")
+        if not isinstance(cid, str) or pathlib.Path(cid).name != cid:
+            continue
+        progress_path = ROOT / "results" / cid / "progress.json"
+        progress = load_json(progress_path)
+        if progress.get("schema") != "gamma.enwiki9.endpoint428-horizon-orphan-adoption-progress.v1":
+            continue
+        experiment = bound_status_json(observer.get("experiment") or {})
+        plan_ref = next((row for row in experiment.get("inputs", [])
+                         if row.get("id") == "adoption-plan"), {})
+        plan = bound_status_json(plan_ref)
+        source_ref = plan.get("source_job") or {}
+        source_record = bound_status_json(source_ref.get("running_record") or {})
+        source = by_id.get(source_ref.get("job_id"))
+        identities = plan.get("adopted_processes") or {}
+        if (
+            not source_record or not source
+            or plan.get("candidate_id") != cid or progress.get("candidateId") != cid
+            or progress.get("sourceJobId") != source.get("job_id")
+            or source_record.get("candidate_id") != source.get("candidate_id")
+            or source_record.get("job_id") != source.get("job_id")
+            or not all(isinstance(identities.get(role), dict) for role in ("wrapper", "cmix"))
+        ):
+            continue
+        source_experiment = bound_status_json(source_record.get("experiment") or {})
+        if not source_experiment:
+            continue
+        sample = progress.get("lastSample") or {}
+        sampled_processes = sample.get("processes") or {}
+        sample_matches = all(
+            isinstance(sampled_processes.get(role), dict)
+            and all(sampled_processes[role].get(field) == identities[role].get(frozen)
+                    for field, frozen in (("pid", "pid"), ("startTicks", "start_ticks"),
+                                          ("cmdlineSha256", "cmdline_sha256")))
+            for role in ("wrapper", "cmix")
+        )
+        try:
+            stamp = dt.datetime.fromisoformat(progress["updatedUtc"].replace("Z", "+00:00"))
+            age = (dt.datetime.now(dt.timezone.utc) - stamp).total_seconds()
+            fresh = 0 <= age <= 120
+        except (KeyError, TypeError, ValueError, AttributeError):
+            fresh = False
+        process_matches = {
+            role: adopted_process_identity(identities[role], identities.get("boot_id", ""))
+            for role in ("wrapper", "cmix")
+        }
+        source_live = all(process_matches.values())
+        source["adopted_processes_live"] = source_live
+        source["observer_job_id"] = observer.get("job_id")
+        population = source_experiment.get("population") or {}
+        return {
+            "candidate": source.get("candidate_id"), "gate_size": source.get("gate_size"),
+            "scope_bytes": population.get("scopeBytes"),
+            "scope_symbols": population.get("scopeSymbols"), "scope_unit": population.get("unit"),
+            "source": "bound_existing_horizon_observer",
+            "verdict": "running" if source_live else "running_unverified",
+            "next_action": "wait_for_existing_observer" if source_live else "verify_recorded_running_jobs_on_host",
+            "adaptive_job_id": source.get("job_id"), "adaptive_job_path": source.get("path"),
+            "observer_job_id": observer.get("job_id"), "observer_candidate": cid,
+            "observer_worker_pid": observer.get("worker_pid"),
+            "observer_worker_live": observer.get("worker_pid_live") is True,
+            "observer_progress_path": logical_rel(progress_path),
+            "observer_progress_fresh": fresh, "observer_sample_identities_match": sample_matches,
+            "source_process_identities_match": process_matches,
+            "source_processes_live": source_live,
+            "observer_progress": {key: progress.get(key) for key in (
+                "state", "updatedUtc", "traceBytes", "expectedTraceBytes", "sampleCount",
+                "maximumObservedTreeRssBytes", "scienceAccessedBeforeTerminal",
+                "continuousResourceProofPass", "failureReason")},
+            "codec_progress": {
+                "trace_bytes": progress.get("traceBytes"),
+                "expected_trace_bytes": progress.get("expectedTraceBytes"),
+                "archive_bytes": (sample.get("archive") or {}).get("bytes"),
+                "observed_at": progress.get("updatedUtc"),
+                "fresh_identity_bound_sample": fresh and sample_matches,
+            },
+            "sample_count": progress.get("sampleCount"),
+            "driver_result_json_present": False, "rss_guard_json_present": False,
+            "terminal_authority": "existing observer terminal artifacts and frozen experiment only",
+            "claim_rule": "Existing observer metadata proves progress only; no score, continuous resource proof, or transition is inferred.",
+        }
+    return None
+
+
 def gate_liveness_state(
     candidate: str | None,
     scope: int | None,
@@ -1272,11 +1403,13 @@ def gate_liveness_state(
     live_worker_job = any(
         row.get("worker_pid_live") is True for row in matching_jobs
     )
-    persisted_running = receipt_running or live_worker_job
+    adopted_source_live = any(row.get("adopted_processes_live") is True for row in matching_jobs)
+    persisted_running = receipt_running or bool(matching_jobs)
     live = persisted_running and (
         driver_observed
         or bool(matching_controllers)
         or live_worker_job
+        or adopted_source_live
     )
     if live:
         classification = "live_observed_owner"
@@ -1300,9 +1433,10 @@ def gate_liveness_state(
         "matching_controller_count": len(matching_controllers),
         "matching_adaptive_job_count": len(matching_jobs),
         "matching_adaptive_worker_live": live_worker_job,
+        "matching_adopted_source_live": adopted_source_live,
         "claim_rule": (
             "A running receipt or registered adaptive job is live only with an "
-            "exact driver, owning controller, or matching live worker PID and command."
+            "exact driver, owning controller, matching live worker, or frozen adopted process identities."
         ),
     }
 
@@ -1313,6 +1447,8 @@ def reconcile_gate_liveness(
 ) -> dict[str, Any] | None:
     if not isinstance(gate, dict):
         return None
+    if gate.get("source") == "bound_existing_horizon_observer":
+        return gate
     if (
         liveness.get("is_live") is True
         and gate.get("verdict") in {None, "incomplete", "receipt_incomplete"}
@@ -1363,6 +1499,8 @@ def gate_evidence_status(
     live_guard_only = guard_present and not driver_present and gate.get("rss_guard_status") == "running"
     if verdict == "orphaned_running_receipt":
         claim_status = "orphaned_running_receipt"
+    elif gate.get("source") == "bound_existing_horizon_observer":
+        claim_status = "observer_progress_only"
     elif verdict == "cancelled_no_result":
         claim_status = "cancelled_no_score"
     elif scored:
@@ -1441,10 +1579,25 @@ def active_gate_status_state(
         "cgroup_memory_peak_bytes",
         "latest_cgroup_current_bytes",
         "cgroup_events_delta",
+        "scope_symbols",
+        "scope_unit",
+        "observer_job_id",
+        "observer_candidate",
+        "observer_worker_pid",
+        "observer_worker_live",
+        "observer_progress_path",
+        "observer_progress_fresh",
+        "observer_sample_identities_match",
+        "source_process_identities_match",
+        "source_processes_live",
+        "observer_progress",
+        "terminal_authority",
     ):
         if key in gate:
             row[key] = gate.get(key)
-    if verdict == "rss_fail":
+    if gate.get("source") == "bound_existing_horizon_observer":
+        row["evidence"] = gate.get("claim_rule")
+    elif verdict == "rss_fail":
         row["evidence"] = (
             "terminal RSS guard failure; no scored driver result was produced for this gate"
         )
@@ -1491,6 +1644,11 @@ def active_candidate_status_state(
         }
     )
     if isinstance(gate, dict):
+        if gate.get("source") == "bound_existing_horizon_observer":
+            row["evidence"] = (
+                "Frozen adoption-plan process identities and existing observer metadata identify the source run; "
+                "host visibility and observer freshness are reported separately."
+            )
         if isinstance(gate.get("scope_bytes"), int):
             row["scope_bytes"] = gate["scope_bytes"]
             row.pop("scope_symbols", None)
@@ -1657,6 +1815,33 @@ def operator_action(
     verdict = gate.get("verdict")
     next_action = gate.get("next_action")
 
+    if gate.get("source") == "bound_existing_horizon_observer":
+        observed = gate.get("source_processes_live") is True
+        monitor_healthy = (
+            gate.get("observer_worker_live") is True
+            and gate.get("observer_progress_fresh") is True
+            and gate.get("observer_sample_identities_match") is True
+            and (gate.get("observer_progress") or {}).get("state") == "observing"
+            and (gate.get("observer_progress") or {}).get("scienceAccessedBeforeTerminal") is False
+            and (gate.get("observer_progress") or {}).get("failureReason") is None
+        )
+        return {
+            "safe_to_launch_gate": False,
+            "action": "wait_for_existing_observer" if observed and monitor_healthy else "verify_existing_observer_on_host",
+            "reason": (
+                "The frozen HORIZON source identities remain live and its sole observer owns terminal routing."
+                if observed and monitor_healthy else
+                "Recorded HORIZON source/observer ownership is unresolved in this process view; verify it on the producing host."
+            ),
+            "allowed_work": ["independent work with its own frozen contract and resource authorization"],
+            "observer_job_id": gate.get("observer_job_id"),
+        }
+    if process_state.get("recorded_running_job_count", 0) and verdict not in {"running", "receipt_incomplete"}:
+        return {
+            "safe_to_launch_gate": False,
+            "action": "verify_recorded_running_jobs_on_host",
+            "reason": "Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.",
+        }
     if verdict == "orphaned_running_receipt":
         return {
             "safe_to_launch_gate": False,
@@ -1750,9 +1935,9 @@ def operator_action(
             "reason": "the gate state is incomplete and cannot drive a mutation yet",
         }
     return {
-        "safe_to_launch_gate": True,
+        "safe_to_launch_gate": False,
         "action": "inspect_queue_before_launch",
-        "reason": "no terminal receipt blocks the next candidate queue decision",
+        "reason": "This status snapshot does not establish candidate-specific launch authorization or available resources.",
     }
 
 
@@ -1818,7 +2003,7 @@ def handoff_state(
         "recommended_action": action.get("action"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
+        "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     }
     if isinstance(apply_command, list):
         out["apply_terminal_command"] = apply_command
@@ -1874,6 +2059,10 @@ def operator_summary_state(
         "active_stage": gate.get("active_stage"),
         "roundtrip_arm": gate.get("roundtrip_arm"),
         "codec_progress": gate.get("codec_progress"),
+        "observer_job_id": gate.get("observer_job_id"),
+        "observer_worker_live": gate.get("observer_worker_live"),
+        "source_processes_live": gate.get("source_processes_live"),
+        "observer_progress": gate.get("observer_progress"),
         "active_scorer_observed": process_state.get("active_scorer_observed"),
         "active_cmix_mode": process_state.get("active_cmix_mode"),
         "driver_result_present": gate.get("driver_result_json_present"),
@@ -1907,7 +2096,7 @@ def operator_summary_state(
         "command_source": handoff.get("command_source"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves the 10.5000000% full-corpus target.",
+        "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     }
     if isinstance(max_sampled_single_rss_kib, int):
         summary["max_sampled_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_single_rss_kib
@@ -1940,20 +2129,41 @@ def receipt() -> dict[str, Any]:
     labels = top_status_by_label(cert)
     proof = cert.get("proof_status", {}) if isinstance(cert.get("proof_status"), dict) else {}
     target = cert.get("target", {}) if isinstance(cert.get("target"), dict) else {}
-    if target.get("target_score_10_95") != objective["targetScoreBytes"]:
+    certificate_objective = cert.get("objective", {})
+    research_contracts._validate_objective_binding(certificate_objective, "upper-bound certificate")
+    if target.get("target_score_10_95") != certificate_objective["targetScoreBytes"]:
         raise ValueError("upper-bound certificate target differs from objective contract")
     if target.get("input_size") != objective["corpusBytes"]:
         raise ValueError("upper-bound certificate corpus scope differs from objective contract")
-    if cert.get("objective") != objective:
-        raise ValueError("upper-bound certificate objective binding is missing or stale")
+    current_objective_proved = (
+        certificate_objective == objective
+        and proof.get("has_10_95_constructive_upper_bound") is True
+    ) or release_receipts["summary"]["objectiveAchievedReceipts"] > 0
+    forecast = labels.get("best forecast")
+    if isinstance(forecast, dict) and isinstance(forecast.get("projected_score"), (int, float)):
+        forecast = dict(forecast)
+        forecast["source_target_score_bytes"] = forecast.get("target_score_bytes")
+        forecast["target_score_bytes"] = objective["targetScoreBytes"]
+        forecast["projected_margin_bytes"] = objective["targetScoreBytes"] - forecast["projected_score"]
+        forecast["planning_debt_bytes"] = forecast["projected_score"] - objective["targetScoreBytes"]
+        labels["best forecast"] = forecast
     process_state = active_process_state()
     adaptive_state = adaptive_running_jobs_state()
+    process_state["recorded_running_job_count"] = adaptive_state.get("running_job_count", 0)
+    observer_gate = existing_horizon_observer_state(adaptive_state)
+    process_state["existing_observer_source_live"] = (
+        observer_gate.get("source_processes_live") if observer_gate else False
+    )
     candidate, scope = active_candidate_from_cert(cert)
     live_q1_gate = live_q1_full_gate_from_process(process_state, adaptive_state)
     live_speedlab_gate = (
         None if live_q1_gate is not None else live_speedlab_gate_from_process(process_state)
     )
-    if live_q1_gate is not None:
+    if observer_gate is not None:
+        candidate = observer_gate.get("candidate")
+        scope = observer_gate.get("gate_size")
+        gate = observer_gate
+    elif live_q1_gate is not None:
         candidate = live_q1_gate.get("candidate")
         scope = live_q1_gate.get("gate_size")
         if not isinstance(scope, int):
@@ -2071,7 +2281,10 @@ def receipt() -> dict[str, Any]:
         "objective": objective,
         "operator_summary": operator_summary,
         "release_receipts": release_receipts,
-        "target_score_10_95": objective["targetScoreBytes"],
+        "certificate_objective": certificate_objective,
+        "target_score_bytes": objective["targetScoreBytes"],
+        "has_current_objective_constructive_upper_bound": current_objective_proved,
+        "target_score_10_95": target.get("target_score_10_95"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
         "best_exact_10m": labels.get("best exact 10M"),
@@ -2205,9 +2418,10 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Objective ID: `{data.get('objective', {}).get('objectiveId', 'unknown')}`",
         f"- Objective digest: `{data.get('objective', {}).get('objectiveDigest', 'unknown')}`",
         f"- Objective path: `{data.get('objective', {}).get('objectivePath', 'unknown')}`",
-        f"- `10.5000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
+        f"- Active `{100 * data['objective']['targetScoreBytes'] / data['objective']['corpusBytes']:.7f}%` target score: `{fmt_int(data.get('target_score_bytes'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
-        f"- `10.5000000%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
+        f"- Active objective constructive upper bound present: `{fmt_bool(data.get('has_current_objective_constructive_upper_bound'))}`",
+        f"- Historical certificate target: `{fmt_int(data.get('target_score_10_95'))}`; certificate upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
         "",
         "## Operator Summary",
         "",
@@ -2271,7 +2485,24 @@ def render_md(data: dict[str, Any]) -> str:
         if isinstance(gate.get("codec_progress"), dict)
         else {}
     )
-    if codec_progress:
+    observer_progress = gate.get("observer_progress") or {}
+    if observer_progress:
+        lines.extend([
+            f"- Existing observer job: `{gate.get('observer_job_id')}`",
+            f"- Observer worker verified on this host: `{fmt_bool(gate.get('observer_worker_live'))}`",
+            f"- Adopted source identities verified on this host: `{fmt_bool(gate.get('source_processes_live'))}`",
+            f"- Observer progress UTC: `{observer_progress.get('updatedUtc')}`",
+            f"- Observer progress fresh: `{fmt_bool(gate.get('observer_progress_fresh'))}`",
+            f"- Trace bytes: `{fmt_int(observer_progress.get('traceBytes'))}` / `{fmt_int(observer_progress.get('expectedTraceBytes'))}`",
+            f"- Archive bytes: `{fmt_int(codec_progress.get('archive_bytes'))}`",
+            f"- Observer samples: `{fmt_int(observer_progress.get('sampleCount'))}`",
+            f"- Maximum observed tree RSS bytes: `{fmt_int(observer_progress.get('maximumObservedTreeRssBytes'))}`",
+            f"- Continuous resource proof: `{fmt_bool(observer_progress.get('continuousResourceProofPass'))}`",
+            f"- Science accessed before terminal: `{fmt_bool(observer_progress.get('scienceAccessedBeforeTerminal'))}`",
+            f"- Observer state: `{observer_progress.get('state')}`",
+            f"- Progress source: `{gate.get('observer_progress_path')}`",
+        ])
+    elif codec_progress:
         lines.extend(
             [
                 f"- Codec progress: `{fmt_float(codec_progress.get('reported_scope_percent'), 2)}%`",
@@ -2688,7 +2919,7 @@ def render_md(data: dict[str, Any]) -> str:
             f"score `{fmt_int(row.get('hutter_score', row.get('projected_score')) )}`"
         )
     lines.extend(
-        ["", "## Claim Rule", "", "No prefix row proves the `10.5000000%` full-corpus target."]
+        ["", "## Claim Rule", "", f"No prefix row proves the `{100 * data['objective']['targetScoreBytes'] / data['objective']['corpusBytes']:.7f}%` full-corpus target."]
     )
     lines.append("")
     return "\n".join(lines)
