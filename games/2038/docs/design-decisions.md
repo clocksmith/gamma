@@ -1,16 +1,29 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.8.0-rc.19-test`
+**Rules reference:** `0.8.0-rc.21-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
-not repeat card text or resolve play: [`core-rules.md`](core-rules.md) is the
-only authority for the physical game.
+not repeat card text or resolve play: `rules.md` is the
+rulebook source for the physical game; component records own exact printed effects.
 
 The former complexity-proposal document was folded into this ledger after its
 five selected proposals were implemented. Earlier 19-tile, every-Era
 Realignment, Transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
+
+## Authoring consolidation — 2026-09-05
+
+Default procedures, map instructions, component states, and supported inventory
+prose now share one authored rulebook. Named excerpts generate the compact Core
+Rules and detailed references. Component records continue to own exact effects;
+reference layouts arrange those fields without rewriting them. The editing and
+build map is `content/README.md`.
+
+This changes authoring ownership and generated presentation, with no changes to
+selected mechanics, simulation code, or browser implementation. Runtime content
+changes only in release metadata. New local release identities preserve the
+previous immutable bundles; this is not a balance promotion or publication.
 
 ## Product identity
 
@@ -599,3 +612,9 @@ The current rules candidate closes the following previously implicit contracts:
   Orisonix’s printed Safety cap is four. Dovetalis gains one Runway when its
   Strategic Partnership forms. Influence Joint Venture proposals must use the
   acting piece’s destination Facility.
+
+<!-- profile-register:start -->
+This generated register is the current decision record for Default/Advanced
+scope. It records a change’s decision state separately from its implementation.
+Only the module IDs in `game-config.json` activate rules in a profile.
+<!-- profile-register:end -->

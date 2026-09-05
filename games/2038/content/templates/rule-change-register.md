@@ -1,8 +1,6 @@
 # ${content.ruleChangeRegister.title}
 
-This generated register is the current decision record for Default/Advanced
-scope. It records a change’s decision state separately from its implementation.
-Only the module IDs in `game-config.json` activate rules in a profile.
+${excerpts.design.profile-register}
 
 ## Active profile comparison
 

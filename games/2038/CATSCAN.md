@@ -23,6 +23,13 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 ## Invariants
 
 - Generated graph targets are never hand-edited.
+- Default procedures and inventory prose have one authored home in `rules.md`;
+  exact component effects remain in `components/`. Reference layouts may arrange
+  sourced excerpts and fields, but cannot independently author rule paragraphs
+  or numeric overrides. Named excerpts produce the compact Core Rules and the
+  detailed references without copying their source prose.
+- Physical specifications own form and state encoding; supported inventory
+  prose is projected from the rulebook, not maintained in a second physical file.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - Component records own their scenario notes. The Era-situation index and its

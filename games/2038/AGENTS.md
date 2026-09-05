@@ -25,18 +25,24 @@ systems and incentives, not jokes or allegations about real people.
 
 - `components/` owns complete component records: mechanics, IDs, wording, and
   author-only `$scenario` notes. Era cards also own structured `$era` notes.
-- `rules.md` owns the rulebook; `advanced.md` owns the Advanced Play companion.
+- `rules.md` owns Default procedures, map instructions, component states, and
+  supported inventory prose. Its named excerpts generate the map, component,
+  and inventory references; the compact Core Rules omit those detailed sections.
+  `advanced.md` owns the Advanced Play companion.
   `world.md` owns lore guidance and the marked player World companion section.
 - `ui.json` owns browser labels and tutorial wording. `content/runtime/`
-  owns simulation and strategy copy; `content/data/` owns shared variables
-  and the component inventory. `content/templates/` assembles player references.
-- `physical/` owns the physical component specification, state encoding, and
-  human-readable box inventory. Mechanical counts remain in `content/data/`;
+  owns simulation and strategy copy; `content/data/` owns shared variables.
+  `components/game.json` owns board and supply records. `content/templates/`
+  contains reference layouts: headings, field labels, and references to their
+  owners. Do not add independent procedural prose or numeric overrides there.
+- `physical/` owns component form, dimensions, and state encoding.
+  The human-readable box inventory is generated at `dist/docs/component-inventory.md`;
   generated physical-kit output remains in `dist/physical-kit/`.
 - `experimental/` owns deferred optional modules; its content is never part of
   baseline play unless the user explicitly activates it.
 - `content/graph.json` declares deployment profiles, authored sources, and every
   generated projection. Do not hand-edit any target it declares.
+- `content/README.md` is the editing and build-path map, not a parallel rules source.
 - `dist/runtime/` owns compiler-generated runtime JSON; `dist/docs/` owns the
   generated rulebooks; `dist/site/` owns rendered site output; and
   `dist/physical-kit/` owns frozen kit output.

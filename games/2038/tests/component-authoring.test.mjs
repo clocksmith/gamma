@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { documentSection, playerContent } from "../tasks/content/authored.mjs";
+import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "../tasks/content/authored.mjs";
+import { resolveString, resolveValue } from "../tasks/content/references.mjs";
 import { assembleScenarioIndex, scenarioSurfaces } from "../tasks/content/scenario-index.mjs";
 
 test("component notes never enter playable data or mutate authored records", () => {
@@ -16,6 +17,64 @@ test("component notes never enter playable data or mutate authored records", () 
     nested: { name: "Capacity" }
   });
   assert.deepEqual(source, before);
+});
+
+test("rule excerpts resolve nested component data once and reject broken references", () => {
+  const source = "<!-- map:start -->\nMove ${limits.steps} spaces.\n<!-- map:end -->\n";
+  const variables = { limits: { steps: 2 }, excerpts: { rules: documentSections(source) } };
+  assert.equal(resolveString("${excerpts.rules.map}", variables), "Move 2 spaces.\n");
+  variables.limits.steps = 3;
+  assert.equal(resolveString("${excerpts.rules.map}", variables), "Move 3 spaces.\n");
+  assert.throws(() => resolveString("${excerpts.rules.missing}", variables), /Unknown content reference/);
+  assert.throws(() => resolveString("${a}", {a:"${b}",b:"${a}"}), /Circular content reference/);
+  assert.throws(() => documentSections("<!-- broken:end -->"), /exactly one/);
+  assert.doesNotMatch(stripSectionMarkers(source), /<!--/);
+});
+
+test("compact documents omit only explicitly declared sections", () => {
+  const source = "Keep before.\n<!-- map:start -->\nMap detail.\n<!-- map:end -->\nKeep after.\n";
+  assert.equal(omitDocumentSections(source, ["map"]), "Keep before.\nKeep after.\n");
+  assert.equal(omitDocumentSections(source), source);
+  assert.throws(() => omitDocumentSections(source, ["missing"]), /exactly one/);
+  assert.throws(() => omitDocumentSections(source, "map"), /must be an array/);
+  assert.equal(resolveString("${section|headings-up}", {section:"### Decks\n#### Training\nKeep prose."}),
+    "## Decks\n### Training\nKeep prose.");
+});
+
+test("map, component and inventory readers reuse the rulebook's owned passages", async () => {
+  const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
+  const [source, rawVariables, rawGame, rawGraph] = await Promise.all([
+    read("rules.md"), read("content/data/variables.json"), read("components/game.json"), read("content/graph.json")
+  ]);
+  const variables = JSON.parse(rawVariables);
+  const context = {...resolveValue(variables, variables), content:{gameConfig:JSON.parse(rawGame)},
+    excerpts:{rules:documentSections(source)}};
+  for (const [section, slug] of [["map", "map-reference"], ["components", "component-reference"], ["inventory", "component-inventory"]]) {
+    const expected = stripSectionMarkers(resolveString(`\${excerpts.rules.${section}|headings-up}`, context)).trim();
+    const actual = (await read(`dist/docs/${slug}.md`)).split("\n").slice(1).join("\n").trim();
+    assert.equal(actual, expected, `${slug} has no independent procedural prose`);
+  }
+  const graph = JSON.parse(rawGraph);
+  assert.deepEqual(graph.artifacts.find(a => a.target === "dist/docs/core-rules.md").excludeSections, ["map", "components"]);
+  const core = await read("dist/docs/core-rules.md");
+  assert.doesNotMatch(core, /Build the jurisdiction|Exact printed-paper count|<!--/);
+  assert.match(core, /\/docs\/map-reference.html/);
+  assert.match(core, /\/docs\/component-reference.html/);
+  const cardReference = await read("dist/docs/card-reference.md");
+  const {headlines} = JSON.parse(await read("dist/runtime/headlines.json"));
+  for (const card of headlines) {
+    const section = cardReference.split(`### ${card.name}\n`)[1]?.split("\n### ")[0];
+    assert.ok(section?.includes(`**Duration:** ${variables.terms.durations[card.duration]}`), `${card.id} owns its duration`);
+  }
+});
+
+test("reference layouts refuse independently authored rules and quantities", () => {
+  validateReferenceLayout("# Map\n\n${excerpts.rules.map}\n**Duration:** ${card.duration}\n", "map.md");
+  for (const text of ["Move two spaces.", "Gain 10 ${terms.resources.runway}.", "| Cost | 10 |", "**Gain 10:**", "**Move two spaces.**", "| Move two spaces |"] ) {
+    assert.throws(() => validateReferenceLayout(text, "map.md"), /unsourced prose/);
+  }
+  assert.equal(resolveString("${card.duration|label:labels}", {card:{duration:"cycle"},labels:{cycle:"Current cycle"}}), "Current cycle");
+  assert.throws(() => resolveString("${card.duration|label:labels}", {card:{duration:"unknown"},labels:{}}), /Unknown content label/);
 });
 
 test("world companion extraction excludes editorial guidance and backlog", async () => {

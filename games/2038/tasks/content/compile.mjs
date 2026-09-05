@@ -1,6 +1,6 @@
 import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
-import { documentSection, playerContent } from "./authored.mjs";
+import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "./authored.mjs";
 import { buildScenarioIndex } from "./scenario-index.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
 
@@ -88,6 +88,13 @@ for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
 }
 variables = { ...variables, content: rawContexts };
 
+const excerpts = {};
+for (const [name, path] of Object.entries(graph.excerpts || {})) {
+  const sourcePath = resolveSourcePath(path, `excerpts ${name}`, sourceRoots);
+  excerpts[name] = documentSections(await readFile(sourcePath, "utf8"));
+}
+variables.excerpts = excerpts;
+
 const contexts = {};
 for (const [name, context] of Object.entries(rawContexts)) {
   const { byId: ignoredById, ...raw } = context;
@@ -110,6 +117,7 @@ for (const [name, context] of Object.entries(rawContexts)) {
   };
 }
 variables = { ...variables, content: contexts };
+variables.excerpts = resolveValue(excerpts, variables);
 assertNoReferences(variables, "content contexts");
 
 const targets = new Set();
@@ -133,7 +141,9 @@ for (const artifact of graph.artifacts) {
     output = `${JSON.stringify(resolved, null, 2)}\n`;
   } else if (artifact.format === "text") {
     const source = await readFile(sourcePath, "utf8");
-    output = resolveString(artifact.section ? documentSection(source, artifact.section) : source, variables);
+    if (artifact.layout) validateReferenceLayout(source, artifact.source);
+    const selected = artifact.section ? documentSection(source, artifact.section) : source;
+    output = stripSectionMarkers(resolveString(omitDocumentSections(selected, artifact.excludeSections), variables));
     assertNoReferences(output, artifact.source);
   } else if (artifact.format === "scenario-index") {
     output = `${JSON.stringify(await buildScenarioIndex(), null, 2)}\n`;

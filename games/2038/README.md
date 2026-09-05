@@ -52,9 +52,11 @@ This repository is a **prototype**, not a manufactured or published product.
   it generates the player documents, game data, prototype HTML, UI copy, and
   simulation descriptions.
 - Every declared Markdown projection under `dist/docs/` is rendered into the
-  Documentation reader during `npm run docs:html`. Author its source under
-  `content/templates/`, declare the projection in `content/graph.json`, and never
-  author directly in `dist/docs/`.
+  Documentation reader during `npm run docs:html`. Use the
+  [editing and build map](content/README.md) to find its owner: `rules.md` for
+  procedures, `components/` for exact effects, `world.md` for lore.
+  `content/templates/` arranges references to those owners; it does not own
+  separate rules. Never author directly in `dist/docs/`.
 - The sole lore authority, editorial backlog, research boundary, Era placement,
   and writing contract live in
   [`world.md`](world.md). Its
@@ -69,8 +71,8 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.8.0-rc.20-test`.
-Executable game `0.14.19` implements that candidate under
+`0.8.0-rc.21-test`.
+Executable game `0.14.20` implements that candidate under
 `nineteen-hex-simplified-v1`, including retained Production Power snapshots,
 one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
 Power contracts, Research Protection, four secret Era Dossier choices, and
@@ -107,9 +109,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.14.19` game and export its
+- `http://localhost:8038/` — play the synchronized `0.14.20` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.14.19` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.14.20` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -193,8 +195,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.14.19`
-bundle, its synchronized `0.8.0-rc.20-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.14.20`
+bundle, its synchronized `0.8.0-rc.21-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:
