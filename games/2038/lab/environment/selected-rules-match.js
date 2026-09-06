@@ -4715,7 +4715,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         ? {
           id: this.activeHeadline.id,
           name: this.activeHeadline.name,
-          strapline: this.activeHeadline.strapline,
           newswire: this.activeHeadline.newswire,
           text: this.activeHeadline.text,
           quote: this.activeHeadline.quote

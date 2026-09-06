@@ -118,7 +118,7 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.equal(manifest.deploymentProfile, "public-playtest");
     assert.equal(manifest.artifactKind, "firebase-public-playtest-site");
     assert.equal(manifest.deployable, true);
-    assert.equal(manifest.runtimeArtifacts.length, 9);
+    assert.equal(manifest.runtimeArtifacts.length, 8);
     assert.ok(
       manifest.runtimeArtifacts.every((target) => /^dist\/runtime\/[^/]+\.json$/.test(target))
     );
@@ -127,12 +127,16 @@ test("public playtest publication is an allowlist with release identity and feed
       { code: "ENOENT" }
     );
     const authority = JSON.parse(
-      await readFile(resolve(outputRoot, "dist/runtime/reference-cards.json"), "utf8")
+      await readFile(resolve(projectRoot, "dist/runtime/reference-cards.json"), "utf8")
     ).eraCards.find((era) => era.id === "era_narrative");
     assert.match(authority.unlockText, /Public Capability Covenant/);
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
     assert.match(baseline, /Public Capability Covenant/);
+    assert.doesNotMatch(baseline, /undefined escalation|Escalation actions|>Promise<|>Anxiety</);
+    const { eraCards } = JSON.parse(await readFile(resolve(projectRoot, "dist/runtime/reference-cards.json"), "utf8"));
+    for (const era of eraCards) assert.ok(baseline.includes(era.rulesText), `${era.id} prints its canonical rules`);
+
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /href="web\/index\.html">Play the game<\/a>/);
     assert.match(rootIndex, /class="primary-action"/);
@@ -184,7 +188,10 @@ test("public playtest publication is an allowlist with release identity and feed
       "dist/runtime/tactics.json",
       "dist/runtime/reserve-specialists.json",
       "dist/runtime/secret-objectives.json",
-      "web/simulation-app.js"
+      "web/simulation-app.js",
+      "web/first-game-guide.css",
+      "web/first-game-guide.js",
+      "dist/runtime/reference-cards.json"
     ]) {
       await assert.rejects(stat(resolve(outputRoot, forbidden)), { code: "ENOENT" });
     }
@@ -199,8 +206,7 @@ test("public playtest publication is an allowlist with release identity and feed
       "dist/runtime/simulation-copy.json",
       "release-identity.json",
       "robots.txt",
-      "web/first-game-guide.css",
-      "web/first-game-guide.js"
+      "first-game-guide.html"
     ]) {
       assert.ok((await stat(resolve(outputRoot, required))).isFile(), `publishes ${required}`);
     }

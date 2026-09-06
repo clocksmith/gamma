@@ -112,8 +112,6 @@ ${f.scoringRule.flavorText ? `<p class="flavor">${escapeHtml(f.scoringRule.flavo
         : "";
       const body = `${f.motto ? `<p class="flavor motto">“${escapeHtml(f.motto)}”</p>` : ""}
 ${textRows([
-        { label: "Promise", text: f.publicPromise },
-        { label: "Anxiety", text: f.privateAnxiety, kind: "flavor" },
         { text: f.introduction }
       ])}
 ${stats}
@@ -122,7 +120,7 @@ ${scoringRule}
       return card({
         accent: f.color,
         title: f.name,
-        subtitle: f.role,
+        subtitle: f.chiefExecutive,
         badgeList: [f.color ? "faction" : ""],
         bodyHtml: body
       });
@@ -167,14 +165,10 @@ function buildRounds(config, reference) {
       card({
         title: `${roman[r.number] || r.number}. ${era?.name || r.name}`,
         subtitle: era?.strapline,
-        badgeList: [
-          `${r.cycles} cycles`,
-          `Audit base ${r.auditBaseDraws}`,
-          `${r.escalationAvailability} escalation availability`
-        ],
-        bodyHtml: `${textRows([{ text: era?.loreText, kind: "flavor" }])}
-${listRows("New this era", era?.unlockText ? [era.unlockText] : [])}
-${listRows("Escalation actions", r.escalations)}`
+        bodyHtml: textRows([
+          { text: era.rulesText, kind: "rules" },
+          { label: "Unlocks", text: era.unlockText }
+        ])
       })
       );
     })
@@ -187,7 +181,6 @@ function buildHeadlines(data) {
     .map((h) =>
       card({
         title: h.name,
-        subtitle: h.strapline,
         badgeList: [
           roundBadge(h.round),
         ],
@@ -196,7 +189,6 @@ function buildHeadlines(data) {
           { text: h.text, kind: "rules" },
           { text: h.quote ? `“${h.quote}”` : "", kind: "flavor quote" }
         ])}`,
-        tagList: h.regimeTags
       })
     )
     .join("");

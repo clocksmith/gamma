@@ -24,11 +24,13 @@ systems and incentives, not jokes or allegations about real people.
 ## Canonical Boundaries
 
 - `components/` owns complete component records: mechanics, IDs, wording, and
-  author-only `$scenario` notes. Era cards also own structured `$era` notes.
+  author-only `$scenario` notes. Era panels own names, epigraphs, rules, unlocks,
+  and structured `$era` notes; the chapters own extended setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
   supported inventory prose. Its named excerpts generate the map, component,
   and inventory references; the compact Core Rules omit those detailed sections.
-  `world.md` owns lore guidance and the marked player World companion section.
+  `world.md` opens with the marked player World companion; concise writing notes
+  and the structured backlog follow it.
 - The game has one ruleset: a static map, local Power, and the sixteen current
   Headlines. There is no selectable rules profile, connected Network, Link,
   Power market, Realignment, or Volatility module. Simulation parameter research

@@ -182,7 +182,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   ]);
   assert.doesNotMatch(bible, /## Player-copy design inventory/);
   assert.doesNotMatch(bible, /## Physical quantity interpretation/);
-  assert.match(bible, /This Bible\s+does not repeat those counts/);
+  assert.doesNotMatch(bible, /## Concept inventory by Era/);
   assert.match(inventory, /1 three-panel foldout player aid/);
   assert.match(inventory, /6 shared Program cards/);
   assert.match(inventory, /2 Program markers/);
@@ -210,11 +210,10 @@ test("one thematic authority governs every lore-bearing surface", async () => {
     code: "ENOENT"
   });
   assert.match(bible, /sole editorial authority/);
-  assert.match(bible, /## Editorial authority and method/);
-  assert.match(bible, /### Research provenance and claim boundary/);
-  assert.match(bible, /## Whole-game lore atlas/);
-  assert.match(bible, /### Era-placement ledger/);
-  assert.match(bible, /### Retained editorial backlog/);
+  assert.match(bible, /## Writing contract/);
+  assert.match(bible, /## Authoring/);
+  assert.match(bible, /## Research provenance/);
+  assert.ok(bible.indexOf("<!-- player-world:start -->") < bible.indexOf("<!-- world-guide:start -->"));
   assert.doesNotMatch(bible, /GENERATED:ERA_SITUATION_LEDGER/);
   assert.equal(eraLedger.scenarios.length, 40);
   assert.equal(
@@ -635,7 +634,7 @@ test("the tone constitution keeps darkness institutional rather than voyeuristic
   const companion = world.replace(/\s+/g, " ");
   assert.match(bible, /Write consequences at institutional distance/);
   assert.match(bible, /Do not depict first-person torment, body horror, or voyeuristic suffering/);
-  assert.match(companion, /The Future Timeline is one compounding public record/);
+  assert.doesNotMatch(companion, /The Future Timeline is one compounding public record/);
   assert.doesNotMatch(companion, /\*\*Interpretation\.\*\*/);
 });
 
@@ -669,7 +668,7 @@ test("every player-facing content surface has complete copy", async () => {
   ]);
 
   for (const era of references.eraCards) {
-    for (const field of ["name", "strapline", "loreText", "rulesText", "unlockText"]) {
+    for (const field of ["name", "strapline", "rulesText", "unlockText"]) {
       assert.ok(era[field], `${era.id} has ${field}`);
     }
   }
@@ -700,7 +699,7 @@ test("every player-facing content surface has complete copy", async () => {
     }
   }
   for (const faction of factions.factions) {
-    for (const field of ["motto", "publicPromise", "privateAnxiety", "introduction", "victoryStatement", "agiDeclaration"]) {
+    for (const field of ["motto", "introduction", "agiDeclaration"]) {
       assert.ok(faction[field], `${faction.id} has ${field}`);
     }
     for (const ability of faction.abilities) {
@@ -710,7 +709,7 @@ test("every player-facing content surface has complete copy", async () => {
     }
   }
   for (const headline of headlines.headlines) {
-    for (const field of ["strapline", "newswire", "quote", "regimeTags"]) {
+    for (const field of ["newswire", "quote", "regimeTags"]) {
       assert.ok(headline[field], `${headline.id} has ${field}`);
     }
     assert.ok(headline.regimeTags.length >= 3, `${headline.id} has meaningful regime tags`);
@@ -826,7 +825,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     );
   }
   for (const headline of headlines) {
-    assert.equal(headline.strapline, headline.strapline.toUpperCase());
+    assert.equal(headline.strapline, undefined);
     assert.ok(headline.newswire.endsWith("."), `${headline.id} has complete newswire copy`);
     assert.ok(headline.quote.endsWith("."), `${headline.id} has complete quote copy`);
   }
@@ -856,16 +855,11 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(billionBloom.newswire, /bio-compute organism/i);
   assert.match(billionBloom.newswire, /one billion instances/i);
   assert.match(billionBloom.newswire, /glyph-shaped colonies/i);
-  assert.match(authorityEra.loreText, /bio-compute species/i);
-  assert.match(authorityEra.loreText, /instrument, infestation, language, or claimant/i);
-  assert.doesNotMatch(
-    eraCards.slice(0, 2).map((era) => era.loreText).join("\n"),
-    /bio-compute|glyph-shaped/i
-  );
+  const authorityChapter = companion.split("### Chapter III: Authority")[1].split("### Chapter IV:")[0].replace(/\s+/g, " ");
+  assert.match(authorityChapter, /bio-compute organism/i);
+  assert.match(authorityChapter, /instrument, infestation, language, or claimant/i);
+  assert.doesNotMatch(companion.split("### Chapter III:")[0], /glyph-shaped/i);
 
-  const progressEra = eraCards.find((era) => era.id === "era_demo");
-  const capacityEra = eraCards.find((era) => era.id === "era_scale");
-  const continuityEra = eraCards.find((era) => era.id === "era_claim");
   const clinic = headlines.find((headline) => headline.id === "professional_exam_sweep");
   const hazardShift = headlines.find((headline) => headline.id === "humanoid_factory_gate");
   const mindTrust = headlines.find((headline) => headline.id === "autonomous_corporation");
@@ -879,18 +873,10 @@ test("the selected lore inventory is complete and preserves era placement", asyn
 
   assert.match(clinic.newswire, /adaptive cybernetics/i);
   assert.match(clinic.newswire, /prescribed microbiomes/i);
-  assert.match(progressEra.loreText, /subscription microbiomes/i);
-  assert.match(progressEra.loreText, /repossess patented biological strains/i);
   assert.match(hazardShift.newswire, /gridlock streets, lifts, loading docks, pipes/i);
-  assert.match(capacityEra.loreText, /engineered coral seawalls/i);
-  assert.match(capacityEra.loreText, /jointly owned bridge/i);
   assert.match(capacityCompact.flavorText, /governments remain at war/i);
   assert.match(regionalCapacity.flavorText, /algae reactors, fungal utility meshes/i);
-  assert.match(authorityEra.loreText, /organs grown from licensed identity templates/i);
-  assert.match(authorityEra.loreText, /Pollinating swarms negotiate pesticide corridors/i);
   assert.match(mindTrust.newswire, /engineered roots, utility pipes, microbial sensors/i);
-  assert.match(continuityEra.loreText, /continental watershed/i);
-  assert.match(continuityEra.loreText, /standing, reproductive freedom, and compensation/i);
 
   assert.equal(world.worldPrimer, undefined);
   assert.equal(world.endings.length, 4);
@@ -919,7 +905,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /cryptographic snapshot/i,
     /matter compiler/i,
     /stellar collector making another collector/i,
-    /The Future Timeline is one compounding public record/
+    /instrument, infestation, language, or claimant/i
   ]) assert.match(narrative, concept);
 
   const allSelectedLore = JSON.stringify({ headlines, mandates, escalations, eraCards, factions, world })
@@ -989,11 +975,13 @@ test("browser renders canonical Headline copy without a rules selector", async (
   assert.match(app, /copy\.browser\.startingStatus/);
   assert.doesNotMatch(app, /config\.board\.prototypeNote/);
   assert.doesNotMatch(engine, /prototypeNote/);
-  for (const field of ["name", "strapline", "newswire", "text", "quote"]) {
+  for (const field of ["name", "newswire", "text", "quote"]) {
     assert.match(app, new RegExp(`headline\\?\\.${field}|headline\\.${field}`));
     assert.match(template, new RegExp(`id="headline-${field === "text" ? "consequence" : field}"`));
   }
 
+  assert.doesNotMatch(template, /id="headline-strapline"/);
+  assert.doesNotMatch(app, /headline-strapline/);
   assert.doesNotMatch(template, /id="play-profile"/);
   assert.doesNotMatch(template, /rc\.5-test|frontier-2038/);
   assert.match(uiCopy.prototype.browser.startingStatus, /deterministic browser opponents/);

@@ -27,7 +27,7 @@ const elements = Object.fromEntries([
   "connect-bridge", "decision-context", "decision-count", "decision-title",
   "decisions", "export", "faction", "game-status", "headline-consequence",
   "headline-label", "headline-name", "headline-newswire", "headline-quote",
-  "headline-strapline", "log", "max-llm-decisions", "model", "opponent-config",
+  "log", "max-llm-decisions", "model", "opponent-config",
   "phase", "player-count", "players", "round-title", "seed", "setup", "start-game"
 ].map((id) => [id, $(id)]));
 
@@ -727,15 +727,12 @@ function render() {
     ? copy.headline.current
     : copy.headline.unrevealed;
   elements["headline-name"].textContent = headline?.name || "";
-  elements["headline-strapline"].textContent = headline?.strapline || "";
-  elements["headline-newswire"].textContent = headline
-    ? `${copy.headline.newswire}: ${headline.newswire}`
-    : "";
+  elements["headline-newswire"].textContent = headline?.newswire || "";
   elements["headline-consequence"].textContent = headline
     ? `${copy.headline.consequence}: ${headline.text}`
     : "";
   elements["headline-quote"].textContent = headline?.quote
-    ? `${copy.headline.quote}: “${headline.quote}”`
+    ? `“${headline.quote}”`
     : "";
   elements.export.disabled = !game;
   renderBoard(state);

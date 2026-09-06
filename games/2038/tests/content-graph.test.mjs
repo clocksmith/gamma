@@ -307,8 +307,7 @@ test("world companion owns four ordered chapters and references canonical Era id
   assert.deepEqual(chapters.map((match) => match[1]), ["I", "II", "III", "IV"]);
   assert.deepEqual(chapters.map((match) => match[2]), eraCards.map((era) => era.name));
   for (const era of eraCards) {
-    assert.ok(era.loreText, `${era.id} retains its compact card summary`);
-    assert.ok(!world.includes(era.loreText), `${era.id} summary is not repeated in the companion`);
+    assert.equal(era.loreText, undefined, `${era.id} uses its epigraph without a second world summary`);
     for (const field of ["name", "strapline"]) {
       assert.ok(playerSource.includes(`\${content.referenceCards.byId.${era.id}.${field}}`));
     }
@@ -319,8 +318,52 @@ test("world companion owns four ordered chapters and references canonical Era id
     assert.ok(world.includes(name), `${name} participates in the chapters`);
   }
   assert.doesNotMatch(playerSource, /worldPrimer|\.loreText}/);
-  assert.match(world, /one possible history/);
+  assert.match(world, /^# [^\n]+\n\n### Chapter I:/);
+  assert.doesNotMatch(world, /Rules version:|The jurisdiction|This companion contains|two independent axes/);
   assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
+});
+
+test("prose trim preserves chapter text and retained component rules", async () => {
+  const previous = await readJson("versions/0.15.2/game-bundle.json");
+  const source = await readFile(new URL("world.md", root), "utf8");
+  const chapters = (text) => text.split("### Chapter I:")[1].split("## The four World Endings")[0];
+  assert.equal(chapters(source), chapters(previous.contentGraph["world.md"]));
+  const notes = source.split("<!-- world-guide:start -->")[1].split("<!-- world-guide:end -->")[0];
+  assert.ok(notes.split(/\s+/).length < 1000, "writing notes stay compact");
+
+  // Compare actual records, allowing only the explicitly selected copy changes.
+  for (const [file, collection, removed, rewritten] of [
+    ["factions.json", "factions", ["role", "publicPromise", "privateAnxiety", "victoryStatement"], ["introduction"]],
+    ["headlines.json", "headlines", ["strapline"], []],
+    ["reference-cards.json", "eraCards", ["loreText"], []],
+    ["world.json", "endings", [], ["text"]]
+  ]) {
+    const original = previous.contentGraph[`components/${file}`];
+    const current = await readJson(`components/${file}`);
+    const normalize = (document) => {
+      const result = structuredClone(document);
+      for (const row of result[collection]) {
+        for (const field of [...removed, ...rewritten]) delete row[field];
+      }
+      return result;
+    };
+    for (const row of current[collection]) {
+      for (const field of removed) assert.ok(!(field in row), `${file} drops ${field}`);
+    }
+    assert.deepEqual(normalize(current), normalize(original), `${file} preserves every retained field`);
+  }
+});
+
+test("closing scenes retain four rule-owned outcomes without procedural prose", async () => {
+  const { endings } = await readJson("dist/runtime/world-copy.json");
+  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
+  const config = await readJson("dist/runtime/game-config.json");
+  assert.deepEqual(endings.map((ending) => ending.name).sort(), Object.values(config.worldEnding.outcomes).sort());
+  for (const ending of endings) {
+    assert.ok(world.includes(ending.text));
+    assert.doesNotMatch(ending.text, /printed (?:threshold|test)|scoring|player count|Mandate/);
+  }
+  assert.doesNotMatch(world, /Rules version:|This companion contains|two independent axes|Open AGI|Closed Non-AGI/);
 });
 
 test("retained signature abilities project concrete continuity institutions", async () => {
@@ -435,14 +478,14 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(componentReference, /integrated starting-grid identifier/);
   assert.match(componentReference, /## Defined markers and effects/);
 
-  assert.match(world, /## The jurisdiction/);
+  assert.match(world, /### Chapter I: Progress/);
   assert.doesNotMatch(world, /\*\*Interpretation\.\*\*/);
   assert.doesNotMatch(world, /Nobody knows whether it works/);
   assert.match(world, /## The four World Endings/);
-  assert.match(world, /The Singularity — Open AGI/);
-  assert.match(world, /The Closed Loop — Closed AGI/);
-  assert.match(world, /The Plural Future — Open Continuity/);
-  assert.match(world, /Assured Continuity — Closed Non-AGI/);
+  assert.match(world, /### The Singularity/);
+  assert.match(world, /### The Closed Loop/);
+  assert.match(world, /### The Plural Future/);
+  assert.match(world, /### Assured Continuity/);
 
   const references = await readJson("dist/runtime/reference-cards.json");
   const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
@@ -472,8 +515,8 @@ test("numeric typography preserves exact card digits while prose may spell numbe
   ]);
   const normalizedBible = thematicBible.replace(/\s+/g, " ");
 
-  assert.match(normalizedBible, /Use Arabic digits in card rules, costs, quantities, thresholds/);
-  assert.match(normalizedBible, /Spell out ordinary whole numbers in narrative and explanatory prose/);
+  assert.match(normalizedBible, /preserve Arabic digits in exact rules, costs, thresholds/);
+  assert.match(normalizedBible, /Spell out ordinary whole numbers in prose/);
   assert.match(normalizedBible, /content compiler must not apply a spell-out filter/);
   assert.ok(headlines.every((headline) => /\d/.test(headline.text)));
   assert.match(

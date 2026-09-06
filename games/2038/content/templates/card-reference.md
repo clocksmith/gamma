@@ -10,8 +10,6 @@ ${excerpts.rules.era-panels}
 
 **${content.referenceCards.byId.era_demo.strapline}**
 
-${content.referenceCards.byId.era_demo.loreText}
-
 **Rules:** ${content.referenceCards.byId.era_demo.rulesText}
 
 **Unlocks:** ${content.referenceCards.byId.era_demo.unlockText}
@@ -19,8 +17,6 @@ ${content.referenceCards.byId.era_demo.loreText}
 ### ${content.referenceCards.byId.era_scale.name}
 
 **${content.referenceCards.byId.era_scale.strapline}**
-
-${content.referenceCards.byId.era_scale.loreText}
 
 **Rules:** ${content.referenceCards.byId.era_scale.rulesText}
 
@@ -30,8 +26,6 @@ ${content.referenceCards.byId.era_scale.loreText}
 
 **${content.referenceCards.byId.era_narrative.strapline}**
 
-${content.referenceCards.byId.era_narrative.loreText}
-
 **Rules:** ${content.referenceCards.byId.era_narrative.rulesText}
 
 **Unlocks:** ${content.referenceCards.byId.era_narrative.unlockText}
@@ -39,8 +33,6 @@ ${content.referenceCards.byId.era_narrative.loreText}
 ### ${content.referenceCards.byId.era_claim.name}
 
 **${content.referenceCards.byId.era_claim.strapline}**
-
-${content.referenceCards.byId.era_claim.loreText}
 
 **Rules:** ${content.referenceCards.byId.era_claim.rulesText}
 
@@ -319,7 +311,7 @@ ${excerpts.rules.headline-selection}
 
 ### ${content.headlines.byId.ten_dollar_intelligence.name}
 
-**${content.headlines.byId.ten_dollar_intelligence.resolutionType} · ${content.headlines.byId.ten_dollar_intelligence.strapline}**
+**${content.headlines.byId.ten_dollar_intelligence.resolutionType}**
 
 **Duration:** ${content.headlines.byId.ten_dollar_intelligence.duration|label:terms.durations}
 
@@ -331,7 +323,7 @@ ${content.headlines.byId.ten_dollar_intelligence.newswire}
 
 ### ${content.headlines.byId.employee_free_unicorn.name}
 
-**${content.headlines.byId.employee_free_unicorn.resolutionType} · ${content.headlines.byId.employee_free_unicorn.strapline}**
+**${content.headlines.byId.employee_free_unicorn.resolutionType}**
 
 **Duration:** ${content.headlines.byId.employee_free_unicorn.duration|label:terms.durations}
 
@@ -343,7 +335,7 @@ ${content.headlines.byId.employee_free_unicorn.newswire}
 
 ### ${content.headlines.byId.synthetic_celebrity.name}
 
-**${content.headlines.byId.synthetic_celebrity.resolutionType} · ${content.headlines.byId.synthetic_celebrity.strapline}**
+**${content.headlines.byId.synthetic_celebrity.resolutionType}**
 
 **Duration:** ${content.headlines.byId.synthetic_celebrity.duration|label:terms.durations}
 
@@ -355,7 +347,7 @@ ${content.headlines.byId.synthetic_celebrity.newswire}
 
 ### ${content.headlines.byId.open_weights_drop.name}
 
-**${content.headlines.byId.open_weights_drop.resolutionType} · ${content.headlines.byId.open_weights_drop.strapline}**
+**${content.headlines.byId.open_weights_drop.resolutionType}**
 
 **Duration:** ${content.headlines.byId.open_weights_drop.duration|label:terms.durations}
 
@@ -367,7 +359,7 @@ ${content.headlines.byId.open_weights_drop.newswire}
 
 ### ${content.headlines.byId.professional_exam_sweep.name}
 
-**${content.headlines.byId.professional_exam_sweep.resolutionType} · ${content.headlines.byId.professional_exam_sweep.strapline}**
+**${content.headlines.byId.professional_exam_sweep.resolutionType}**
 
 **Duration:** ${content.headlines.byId.professional_exam_sweep.duration|label:terms.durations}
 
@@ -379,7 +371,7 @@ ${content.headlines.byId.professional_exam_sweep.newswire}
 
 ### ${content.headlines.byId.humanoid_factory_gate.name}
 
-**${content.headlines.byId.humanoid_factory_gate.resolutionType} · ${content.headlines.byId.humanoid_factory_gate.strapline}**
+**${content.headlines.byId.humanoid_factory_gate.resolutionType}**
 
 **Duration:** ${content.headlines.byId.humanoid_factory_gate.duration|label:terms.durations}
 
@@ -391,7 +383,7 @@ ${content.headlines.byId.humanoid_factory_gate.newswire}
 
 ### ${content.headlines.byId.reactor_restart_one_model.name}
 
-**${content.headlines.byId.reactor_restart_one_model.resolutionType} · ${content.headlines.byId.reactor_restart_one_model.strapline}**
+**${content.headlines.byId.reactor_restart_one_model.resolutionType}**
 
 **Duration:** ${content.headlines.byId.reactor_restart_one_model.duration|label:terms.durations}
 
@@ -403,7 +395,7 @@ ${content.headlines.byId.reactor_restart_one_model.newswire}
 
 ### ${content.headlines.byId.export_controls.name}
 
-**${content.headlines.byId.export_controls.resolutionType} · ${content.headlines.byId.export_controls.strapline}**
+**${content.headlines.byId.export_controls.resolutionType}**
 
 **Duration:** ${content.headlines.byId.export_controls.duration|label:terms.durations}
 
@@ -415,7 +407,7 @@ ${content.headlines.byId.export_controls.newswire}
 
 ### ${content.headlines.byId.emergency_power_authority.name}
 
-**${content.headlines.byId.emergency_power_authority.resolutionType} · ${content.headlines.byId.emergency_power_authority.strapline}**
+**${content.headlines.byId.emergency_power_authority.resolutionType}**
 
 **Duration:** ${content.headlines.byId.emergency_power_authority.duration|label:terms.durations}
 
@@ -427,7 +419,7 @@ ${content.headlines.byId.emergency_power_authority.newswire}
 
 ### ${content.headlines.byId.ai_written_law.name}
 
-**${content.headlines.byId.ai_written_law.resolutionType} · ${content.headlines.byId.ai_written_law.strapline}**
+**${content.headlines.byId.ai_written_law.resolutionType}**
 
 **Duration:** ${content.headlines.byId.ai_written_law.duration|label:terms.durations}
 
@@ -439,7 +431,7 @@ ${content.headlines.byId.ai_written_law.newswire}
 
 ### ${content.headlines.byId.benchmark_is_economy.name}
 
-**${content.headlines.byId.benchmark_is_economy.resolutionType} · ${content.headlines.byId.benchmark_is_economy.strapline}**
+**${content.headlines.byId.benchmark_is_economy.resolutionType}**
 
 **Duration:** ${content.headlines.byId.benchmark_is_economy.duration|label:terms.durations}
 
@@ -451,7 +443,7 @@ ${content.headlines.byId.benchmark_is_economy.newswire}
 
 ### ${content.headlines.byId.weights_on_internet.name}
 
-**${content.headlines.byId.weights_on_internet.resolutionType} · ${content.headlines.byId.weights_on_internet.strapline}**
+**${content.headlines.byId.weights_on_internet.resolutionType}**
 
 **Duration:** ${content.headlines.byId.weights_on_internet.duration|label:terms.durations}
 
@@ -464,7 +456,7 @@ ${content.headlines.byId.weights_on_internet.newswire}
 
 ### ${content.headlines.byId.autonomous_corporation.name}
 
-**${content.headlines.byId.autonomous_corporation.resolutionType} · ${content.headlines.byId.autonomous_corporation.strapline}**
+**${content.headlines.byId.autonomous_corporation.resolutionType}**
 
 **Duration:** ${content.headlines.byId.autonomous_corporation.duration|label:terms.durations}
 
@@ -476,7 +468,7 @@ ${content.headlines.byId.autonomous_corporation.newswire}
 
 ### ${content.headlines.byId.recursive_self_improvement.name}
 
-**${content.headlines.byId.recursive_self_improvement.resolutionType} · ${content.headlines.byId.recursive_self_improvement.strapline}**
+**${content.headlines.byId.recursive_self_improvement.resolutionType}**
 
 **Duration:** ${content.headlines.byId.recursive_self_improvement.duration|label:terms.durations}
 
@@ -488,7 +480,7 @@ ${content.headlines.byId.recursive_self_improvement.newswire}
 
 ### ${content.headlines.byId.agent_swarm_escapes_scope.name}
 
-**${content.headlines.byId.agent_swarm_escapes_scope.resolutionType} · ${content.headlines.byId.agent_swarm_escapes_scope.strapline}**
+**${content.headlines.byId.agent_swarm_escapes_scope.resolutionType}**
 
 **Duration:** ${content.headlines.byId.agent_swarm_escapes_scope.duration|label:terms.durations}
 
@@ -500,7 +492,7 @@ ${content.headlines.byId.agent_swarm_escapes_scope.newswire}
 
 ### ${content.headlines.byId.agi_blog_post.name}
 
-**${content.headlines.byId.agi_blog_post.resolutionType} · ${content.headlines.byId.agi_blog_post.strapline}**
+**${content.headlines.byId.agi_blog_post.resolutionType}**
 
 **Duration:** ${content.headlines.byId.agi_blog_post.duration|label:terms.durations}
 
