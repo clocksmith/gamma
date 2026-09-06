@@ -595,7 +595,7 @@ function renderTradeDecisions(packet, stage) {
 function pieceName(pieceId) {
   if (pieceId === "ceo" || pieceId?.endsWith("-ceo")) return "CEO";
   const number = pieceId?.match(/team-(\d+)$/)?.[1];
-  return number ? `Team ${number}` : pieceId;
+  return number ? `Agent ${number}` : pieceId;
 }
 
 function tileName(tileId) {

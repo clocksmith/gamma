@@ -205,8 +205,6 @@ function firstMissingDomain(seen) {
 
 export function simulateTrainingRun(config, seed, options = {}) {
   const stopAt = Math.max(1, Number(options.stopAt || 3));
-  const startingProtection = Number(options.researchProtection || 0);
-  let researchProtection = startingProtection;
   let capability = 0;
   let trust = 0;
   let scrutiny = 0;
@@ -244,12 +242,11 @@ export function simulateTrainingRun(config, seed, options = {}) {
 
     if (duplicate) {
       crashProtectable = true;
-      if (researchProtection > 0) {
-        researchProtection -= 1;
+      if (options.scientificMethod) {
         protectedDuplicate = true;
-        outcome = "protected";
+        outcome = "scientific-method-banked";
       } else {
-        capability = 0;
+        capability = Math.min(capability, Number(options.crashRetain || 0));
         scrutiny += 1;
         outcome = "crashed";
       }
@@ -266,11 +263,11 @@ export function simulateTrainingRun(config, seed, options = {}) {
     seed: String(seed),
     stopAt,
     outcome,
-    capability,
+    capability: capability + (outcome === "crashed" ? 0 : Number(options.bankBonus || 0)),
     trust,
     scrutiny,
     runwaySpent: 0,
-    researchProtectionSpent: startingProtection - researchProtection,
+    protection: protectedDuplicate ? "scientific_method" : null,
     protectedDuplicate,
     crashProtectable,
     ordinaryDomains: [...ordinaryDomains],
@@ -297,11 +294,10 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     actionsUsed: [],
     escalationsUsed: [],
     pieces: [
-      { id: "ceo", name: "CEO", kind: "ceo", tileId: frontierTileId },
       ...Array.from({ length: 1 }, (_, index) => ({
-        id: `team-${index + 1}`,
-        name: `Team ${index + 1}`,
-        kind: "team",
+        id: `agent-${index + 1}`,
+        name: `Agent ${index + 1}`,
+        kind: "agent",
         tileId: frontierTileId
       }))
     ],
@@ -434,7 +430,7 @@ export function addScrutiny(config, player, amount) {
 }
 
 export function isAgiEligible(config, player) {
-  return player.compute >= config.agiDossier.computePerCommit;
+  return player.compute >= config.agiAchievement.computeCost;
 }
 
 function recordAgiEligibility(config, state, timing) {
@@ -463,15 +459,11 @@ function resolveCore(config, state, actionId, destination, options) {
     player.compute -= 1;
     const result = simulateTrainingRun(config, `${state.seed}:r${state.round}:c${state.cycle}`, {
       stopAt: options.stopAt,
-      researchProtection: player.researchProtection +
-        Number(destination.category === "research")
+      bankBonus: Number(destination.category === "research"),
+      crashRetain: player.factionId === "safety_laboratory" ? 1 : 0
     });
     addResource(config, player, "capability", result.capability);
     addResource(config, player, "trust", result.trust);
-    player.researchProtection -= Math.min(
-      player.researchProtection,
-      result.researchProtectionSpent
-    );
     addScrutiny(config, player, result.scrutiny);
     state.metrics.researchCapabilityGains.push({
       round: state.round,
@@ -654,7 +646,6 @@ function advanceRound(config, headlines, state) {
     state.cycle = 1;
     state.player.actionsUsed = [];
     state.player.programUses = config.rounds[state.round - 1].programUses;
-    state.player.researchProtection = state.player.factionId === "safety_laboratory" ? 2 : 1;
     state.headlines = shuffle(
       availableHeadlines(headlines, state.round),
       createRng(`${state.seed}:headlines:${state.round}`)

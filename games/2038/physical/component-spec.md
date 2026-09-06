@@ -7,7 +7,7 @@ limits remain authoritative in `components/game.json`.
 ## Colour allocation
 
 The six saturated RGB colours are reserved for player ownership. Every CEO,
-Team, Facility, Generator, Scrutiny cube, and Mandate marker uses
+Agent, Facility, Generator, Scrutiny cube, and Mandate marker uses
 its faction's colour.
 
 | Faction | Ownership colour | Hex value |
@@ -31,7 +31,7 @@ gold, silver, and bronze. Finish never creates an additional rules state.
 | Faction board | One institution's dashboard | Thick dual-layer board with six captive sliders | Runway, Compute, Capability, Customers, Trust, and Research Protection |
 | Player aid | Turn and scoring reminder | One three-panel foldout per faction tray | Three authored aid topics in one object |
 | CEO | Movable acting piece; one presence | Large faction-coloured pawn | District position |
-| Team | Movable acting piece; one presence | Small faction-coloured pawn | District position |
+| Agent | Movable acting piece; one presence | Small faction-coloured pawn | District position |
 | Facility | Stationary institutional site | Faction-coloured node, visibly numbered 1–4 | Stable Facility ID and district position |
 | Generator | Stationary Power source | Distinct faction-coloured power node | Its Energy-tile position selects the printed contract |
 | Starting grid | Dedicated Power for Facility 1 | Identifier integrated into Facility 1 | Travels with that Facility |
@@ -133,7 +133,7 @@ Each faction board provides:
   Research Protection;
 - two Program-marker wells and a compact once-per-game Program-use reminder;
 - six Core Action positions;
-- supply wells for the CEO, Teams, Facilities, Generator, Scrutiny, and
+- supply wells for the CEO, Agents, Facilities, Generator, Scrutiny, and
   Mandate marker; and
 - a nearby Dossier filing edge with an unambiguous direction toward the board
   center.

@@ -4,6 +4,7 @@ import {
   createRng,
   generateBoard,
   publicMandateAwards,
+  locallyEligibleFacilityIds,
   simulateTrainingRun
 } from "../../web/src/engine.js";
 import {
@@ -85,7 +86,7 @@ function createPlayer(
     capability: starts.capability,
     customers: starts.customers,
     trust: starts.trust,
-    researchProtection: starts.researchProtection,
+
     mandate: 0,
     scrutiny: starts.scrutiny,
     actionsUsed: [],
@@ -94,10 +95,9 @@ function createPlayer(
     generators: [],
     latestProductionSnapshot: null,
     pieces: [
-      { id: `s${seat}-ceo`, kind: "ceo", tileId: frontierId },
-      ...Array.from({ length: config.playerSupply.teams }, (_, index) => ({
-        id: `s${seat}-team-${index + 1}`,
-        kind: "team",
+      ...Array.from({ length: config.playerSupply.agents }, (_, index) => ({
+        id: `s${seat}-agent-${index + 1}`,
+        kind: "agent",
         tileId: frontierId
       }))
     ],
@@ -216,8 +216,7 @@ export class CoreEconomyMatch {
   }
 
   legalDestinations(player, piece) {
-    const current = this.board.find((tile) => tile.instanceId === piece.tileId);
-    return this.board.filter((tile) => axialDistance(current, tile) <= 2);
+    return [...this.board];
   }
 
   canDeploy(player) {
@@ -237,7 +236,7 @@ export class CoreEconomyMatch {
       capability: player.capability,
       customers: player.customers,
       trust: player.trust,
-      researchProtection: player.researchProtection,
+
       mandate: player.mandate,
       scrutiny: player.scrutiny,
       actionsUsed: [...player.actionsUsed],
@@ -292,7 +291,7 @@ export class CoreEconomyMatch {
         capability: player.capability,
         customers: player.customers,
         trust: player.trust,
-        researchProtection: player.researchProtection,
+
         scrutiny: player.scrutiny,
         facilities: player.facilities.length,
         generators: player.generators.length,
@@ -342,7 +341,6 @@ export class CoreEconomyMatch {
       .filter((action) => !player.actionsUsed.includes(action.id))
       .map((action) => {
         const availability = this.selectionAvailability(seat, action.id);
-        if (availability.status === "blocked") return null;
         return {
           decisionId: `select_${action.id}`,
           label: renderSimulationCopy(
@@ -598,6 +596,7 @@ export class CoreEconomyMatch {
     const player = this.players[seat];
     const parameters = decision.parameters || {};
     if (decision.consequences?.noOp) {
+      this.movePiece(player, parameters);
       player.actionsUsed.push(decision.actionId);
       player.metrics.actions[decision.actionId] =
         (player.metrics.actions[decision.actionId] || 0) + 1;
@@ -624,10 +623,6 @@ export class CoreEconomyMatch {
         cause: "research_training",
         conversionEligible: true
       });
-      player.researchProtection -= Math.min(
-        player.researchProtection,
-        result.researchProtectionSpent
-      );
       this.addScrutiny(player, result.scrutiny);
       player.metrics.researchCapability.push(result.capability);
     } else if (decision.actionId === "build") {
@@ -656,7 +651,6 @@ export class CoreEconomyMatch {
           id: `s${seat}-generator-${player.generators.length + 1}`,
           tileId: parameters.destinationId,
           sourceId: source.id,
-          capacity: source.capacity
         });
       }
     } else if (decision.actionId === "deploy") {
@@ -689,8 +683,9 @@ export class CoreEconomyMatch {
       `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:training`,
       {
         stopAt: parameters.stopAt,
-        researchProtection: player.researchProtection +
-          Number(parameters.destinationCategory === "research")
+
+        bankBonus: Number(parameters.destinationCategory === "research"),
+        crashRetain: player.factionId === "safety_laboratory" ? 1 : 0
       }
     );
   }
@@ -698,7 +693,7 @@ export class CoreEconomyMatch {
   recordEligibility(player, timing) {
     if (
       !player.metrics.earliestAgiEligibility &&
-      player.compute >= this.config.agiDossier.computePerCommit
+      player.compute >= this.config.agiAchievement.computeCost
     ) {
       player.metrics.earliestAgiEligibility = {
         round: this.round,
@@ -709,24 +704,16 @@ export class CoreEconomyMatch {
   }
 
   produce(player) {
-    const firstFacility = player.facilities[0];
-    const starter = firstFacility
-      ? this.config.board.startingGridConnection.capacity
-      : 0;
-    let generated = 0;
+    const connected = locallyEligibleFacilityIds(this.board, player);
     for (const generator of player.generators) {
-      const source = this.config.powerSources.find(
-        (candidate) => candidate.id === generator.sourceId
-      );
-      generated += generator.capacity;
-      if (source.scrutinyPerUse) this.addScrutiny(player, source.scrutinyPerUse);
+      const source = this.config.powerSources.find((candidate) => candidate.id === generator.sourceId);
+      const tile = this.board.find((candidate) => candidate.instanceId === generator.tileId);
+      if (source?.scrutinyPerUse && player.facilities.some((facility) => {
+        const target = this.board.find((candidate) => candidate.instanceId === facility.tileId);
+        return tile && target && axialDistance(tile, target) <= 1;
+      })) this.addScrutiny(player, source.scrutinyPerUse);
     }
-    let available = starter + generated;
-    for (const facility of player.facilities) {
-      const demand = 1;
-      facility.powered = available >= demand;
-      if (facility.powered) available -= demand;
-    }
+    for (const facility of player.facilities) facility.powered = connected.has(facility.id);
 
     for (const facility of player.facilities.filter((candidate) => candidate.powered)) {
       const multiplier = 1;
@@ -752,13 +739,13 @@ export class CoreEconomyMatch {
       offlineFacilityIds: player.facilities
         .filter((facility) => !poweredIds.includes(facility.id))
         .map((facility) => facility.id),
-      powerSupply: starter + generated
+      powerSupply: connected.size
     };
     player.metrics.poweredFacilityRounds.push({
       round: this.round,
       powered,
       facilities: player.facilities.length,
-      supply: starter + generated
+      supply: connected.size
     });
     for (const facility of player.facilities) facility.powered = false;
     this.recordEligibility(player, "after_production");

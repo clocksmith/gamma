@@ -41,7 +41,6 @@
       }
     },
     "localDelivery": "own-or-adjacent-facilities",
-    "megaClusterDemand": 2,
     "slotContention": "initiative-order-no-reservations"
   },
   "factionRules": {
@@ -77,7 +76,7 @@
       "name": "${content.referenceCards.byId.era_demo.name}",
       "escalations": [],
       "newThisEra": [
-        "Select → Move → Act",
+        "ReAct: Reason → Act → Observe",
         "Core Actions",
         "Training Runs",
         "the starting grid",
@@ -136,7 +135,7 @@
       ],
       "newThisEra": [
         "Agent Swarms",
-        "Publication Dossiers and deterministic claim resolution",
+        "Public AGI recognition achievement",
         "Fusion",
         "remaining faction abilities"
       ]
@@ -193,19 +192,18 @@
     {
       "id": "organize",
       "name": "${terms.actions.organize}",
-      "summary": "Recruit, redistribute Teams, or relocate a Facility.",
+      "summary": "Recruit an Agent or relocate a Facility.",
       "turnContract": {
         "cost": "Printed by mode",
         "modes": [
           "Recruit",
-          "Redistribute",
           "Relocate"
         ],
         "risk": "No inherent ${terms.playerTracks.scrutiny}"
       },
       "initiativeName": "Reallocate Institutional Capacity",
       "slogan": "Every successful transition begins with a revised operating model.",
-      "flavorText": "Move people, sites, and responsibilities to match the new operating model while presenting each loss of role as a successful transition."
+      "flavorText": "Assign institutional attention and relocate infrastructure as the world changes."
     },
     {
       "id": "deploy",
@@ -245,13 +243,13 @@
       "min": 0,
       "cap": 12,
       "name": "${terms.resources.runway}",
-      "microcopy": "Time, capital, and permission to continue."
+      "microcopy": "Money available to your institution."
     },
     "compute": {
       "min": 0,
       "cap": 10,
       "name": "${terms.resources.compute}",
-      "microcopy": "Allocated electrical and computational capacity."
+      "microcopy": "Processing capacity spent on Research, Deployment, and projects."
     },
     "capability": {
       "min": 0,
@@ -270,33 +268,26 @@
       "cap": 6,
       "name": "${terms.playerTracks.trust}",
       "microcopy": "Public standing to continue at scale."
-    },
-    "researchProtection": {
-      "min": 0,
-      "cap": 2,
-      "name": "${terms.resources.researchProtection}",
-      "microcopy": "One protected duplicate per Era; Orisonix receives two."
     }
   },
   "playerSupply": {
-    "ceos": 1,
-    "teams": 3,
     "facilities": 4,
     "generators": 1,
     "influenceCubes": 0,
     "scrutinyCubes": 10,
-    "factionBoardCaptiveSliders": 6,
+    "factionBoardCaptiveSliders": 5,
     "coreActionCards": 6,
     "escalationCards": 0,
     "programMarkers": 2,
-    "agiDossierCards": 4,
     "startingGridIdentifiers": 1,
     "facilityConstructionOrder": [
       1,
       2,
       3,
       4
-    ]
+    ],
+    "agents": 4,
+    "startingAgents": 2
   },
   "sharedSupply": {
     "jointVenturePairs": "${facts.shared.components.jointVenturePairs}",
@@ -307,7 +298,6 @@
     "playerAidFoldouts": 6,
     "governanceLedgers": 1,
     "sharedDryEraseMarkers": 1,
-    "powerAllocationMarkers": 36,
     "temporaryComputeTokens": 2,
     "mandateMarkers": 6,
     "sharedProgramCards": 6
@@ -326,9 +316,9 @@
     },
     "facilitySpacesPerHex": 2,
     "startingGridConnection": {
-      "capacity": 1,
       "target": "first_facility",
-      "restrictions": "Cannot supply ${terms.technology.megaCluster} demand and cannot be sold."
+      "restrictions": "Cannot supply ${terms.technology.megaCluster} demand and cannot be sold.",
+      "rule": "Facility 1 is always powered. Other Facilities require an own Generator on the same or an adjacent district."
     },
     "tiles": [
       {
@@ -357,7 +347,7 @@
           "outer": 2
         },
         "name": "${terms.locations.research}",
-        "visit": "Gain one additional ${terms.resources.researchProtection} for this Training Run.",
+        "visit": "Gain 1 additional ${terms.playerTracks.capability} when you successfully bank a ${terms.systems.trainingRun} here.",
         "production": "Gain 1 ${terms.resources.compute}.",
         "landmark": "Public Research Charter",
         "flavorText": "Publicly chartered inquiry remains nominally shared while institutions compete to privatize its results, standards, and future uses."
@@ -432,8 +422,8 @@
           "outer": 0
         },
         "name": "${terms.locations.talent}",
-        "visit": "Recruit costs 1 less ${terms.resources.runway}.",
-        "production": "Move one Team one hex.",
+        "visit": "Recruit an Agent with ${terms.actions.organize} for 1 less ${terms.resources.runway}.",
+        "production": "Move one Agent one hex.",
         "landmark": "Transition Services Campus",
         "flavorText": "Every transition program includes an exit path for the work it was created to preserve."
       },
@@ -477,7 +467,7 @@
           "outer": 0
         },
         "name": "${terms.locations.grid}",
-        "visit": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. Add 1 ${terms.playerTracks.scrutiny} each Production it operates. One ordinary Generator per player.",
+        "visit": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Add 1 ${terms.playerTracks.scrutiny} each Production it serves a Facility. One ordinary Generator per player.",
         "production": "Gain 1 ${terms.resources.compute}.",
         "landmark": "National Interconnection",
         "flavorText": "Every promised future submits one more request for transmission, cooling, and priority."
@@ -492,7 +482,7 @@
           "outer": 2
         },
         "name": "${terms.locations.renewable}",
-        "visit": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Capacity: 3 local ${terms.infrastructure.power}. Gain 1 ${terms.playerTracks.trust} when constructed. No recurring penalty. One ordinary Generator per player.",
+        "visit": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Gain 1 ${terms.playerTracks.trust} when constructed. One ordinary Generator per player.",
         "production": "Remove 1 ${terms.playerTracks.scrutiny} before Audit.",
         "landmark": "Basin Stewardship Authority",
         "flavorText": "Clean power, water, and thermal relief become one indivisible public ledger."
@@ -590,34 +580,31 @@
       "location": "renewable_basin",
       "round": 2,
       "runwayCost": 2,
-      "capacity": 3,
       "trust": 1,
       "scrutinyPerUse": 0,
       "physicalSurface": "renewable_basin_tile",
       "name": "${terms.technology.cleanInfrastructure}",
       "tagline": "Public capacity, maintained at grid scale.",
-      "rulesText": "Era II. Construct only on ${terms.locations.renewable} for 2 ${terms.resources.runway}. Capacity: 3 local ${terms.infrastructure.power}. Gain 1 ${terms.playerTracks.trust} when constructed. It operates automatically during Production when it has a legal recipient and has no recurring penalty. One ordinary Generator per player.",
-      "publicClaim": "Three permanent ${terms.infrastructure.power} under a visible public compact."
+      "rulesText": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Gain 1 ${terms.playerTracks.trust} when constructed. One ordinary Generator per player.",
+      "publicClaim": "Electricity supply connecting nearby Facilities."
     },
     {
       "id": "emergency_infrastructure",
       "location": "grid_reactor",
       "round": 2,
       "runwayCost": 1,
-      "capacity": 4,
       "trust": 0,
       "scrutinyPerUse": 1,
       "physicalSurface": "grid_reactor_tile",
       "name": "${terms.technology.emergencyInfrastructure}",
       "tagline": "Exceptional capacity under continuous renewal.",
-      "rulesText": "Era II. Construct only on ${terms.locations.grid} for 1 ${terms.resources.runway}. Capacity: 4 local ${terms.infrastructure.power}. It operates automatically during Production when it has a legal recipient and adds 1 ${terms.playerTracks.scrutiny} each Production it operates. One ordinary Generator per player.",
-      "publicClaim": "Four immediate ${terms.infrastructure.power} under a continuously renewed emergency."
+      "rulesText": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Add 1 ${terms.playerTracks.scrutiny} each Production it serves a Facility. One ordinary Generator per player.",
+      "publicClaim": "Electricity supply connecting nearby Facilities."
     },
     {
       "id": "fusion_demonstrator",
       "round": "${facts.shared.rounds}",
       "runwayCost": "${facts.shared.advancedGeneration.runwayCost}",
-      "capacity": "${facts.shared.advancedGeneration.power}",
       "mandate": "${facts.shared.advancedGeneration.mandate}",
       "scrutinyOnBuild": "${facts.shared.advancedGeneration.scrutiny}",
       "isProgram": true,
@@ -625,59 +612,10 @@
       "physicalSurface": "fusion_demonstrator_program",
       "name": "${terms.technology.advancedGeneration}",
       "tagline": "Continuity capacity, subject to an inherited public record.",
-      "rulesText": "Era IV Program. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Use the sole shared Fusion marker in one Generator slot. Capacity: ${facts.shared.advancedGeneration.power} local ${terms.infrastructure.power}. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny} when constructed. Once built, no other Fusion may be built.",
-      "publicClaim": "Six ${terms.infrastructure.power} under a demonstration that determines which future maintenance obligations can be refused."
+      "rulesText": "Era IV Program. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
+      "publicClaim": "Electricity supply connecting nearby Facilities."
     }
   ],
-  "agiDossier": {
-    "computePerCommit": "${facts.executable.agi.computePerCommit}",
-    "scrutinyPerCommit": "${facts.executable.agi.scrutinyPerCommit}",
-    "modules": [
-      {
-        "id": "benchmark_claim",
-        "round": 1,
-        "metric": "capability",
-        "threshold": "${facts.executable.agi.benchmarkCapability}"
-      },
-      {
-        "id": "deployment_claim",
-        "round": 2,
-        "metric": "poweredFacilities",
-        "threshold": "${facts.executable.agi.deploymentPoweredFacilities}"
-      },
-      {
-        "id": "authority_claim",
-        "round": 3,
-        "metric": "trust",
-        "threshold": "${facts.executable.agi.authorityTrust}"
-      },
-      {
-        "id": "publication_claim",
-        "round": 4,
-        "metric": "publication",
-        "threshold": 1
-      }
-    ],
-    "claimResolution": {
-      "method": "highest-supported-claim",
-      "minimumSupportedEvidenceClaims": 2,
-      "capabilityThresholds": [
-        3,
-        6,
-        9,
-        12
-      ],
-      "tieBreakers": [
-        "mandate",
-        "trust",
-        "customers",
-        "compute",
-        "initiative"
-      ]
-    },
-    "displayName": "File the General Intelligence Dossier",
-    "flavorText": "A private sequence of claims becomes history only when the final evidence review resolves."
-  },
   "scoring": {
     "mode": "public_event_track",
     "customerMandate": "${facts.shared.scoring.customerMandate.baseMandate}",
@@ -744,5 +682,16 @@
   "playRules": {
     "immediateTradeCounteroffers": false,
     "immediateTradeThirdPartyClaims": false
+  },
+  "agiAchievement": {
+    "capability": 9,
+    "poweredFacilities": 2,
+    "trust": 4,
+    "computeCost": 3,
+    "mandate": 4,
+    "scrutiny": 2,
+    "timing": "after-era-iv-production-before-audit",
+    "displayName": "Declare recognized AGI",
+    "flavorText": "The world accepts a qualifying institutional claim. Recognition does not establish a metaphysical fact about intelligence."
   }
 }
