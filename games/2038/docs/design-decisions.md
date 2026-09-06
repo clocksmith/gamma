@@ -674,3 +674,9 @@ Executable `0.17.0`, engine `0.19.0`, and candidate `0.10.0-rc.3-test` record th
 The World companion preserves every supplied vignette and the existing concepts, connects employment and intelligence access to later ownership, explains live-state migration limits alongside matter compilers, and keeps forecasts contested. The next human test records forgone destination benefits and preserved control. No human session or balance result is claimed by these implementation checks.
 
 Validation also reproduced a pre-existing report-archive collision: parallel LLM fixture matches with the same seed, job label, and millisecond timestamp shared a temporary and final filename. Each archive now receives a unique suffix and always cleans its own temporary file. A concurrency regression checks that every report survives independently. This changes evidence storage, not simulated outcomes; the archive implementation is included in the release engine identity.
+
+## Three cuts candidate
+
+The user selected three further simplifications after reviewing executable 0.17.0: immediate Headlines, removal of Programs with a Facility-plus-project Build, and one permanent mechanical idea per faction. Implementation and isolated checks follow that order. Existing lore, current map, Agent presence, ordinary Research, shared risk, and scored AGI remain. No AGI qualification or general scoring value is lowered to compensate without evidence. This is a design candidate, not a measured complexity or human-balance result.
+
+Headlines finish every choice before Core Action selection. Voluntary resource/risk offers, current control rewards, recruitment or retirement, and immediate connected Facility production preserve different incentives. They leave no price modifier, later trigger, permission, or reminder token. Narrative and event history remain.

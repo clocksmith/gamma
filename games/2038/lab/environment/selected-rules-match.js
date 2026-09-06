@@ -1257,44 +1257,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
 
-    const safety = this.players.find((player) =>
-      player.factionId === "safety_laboratory"
-    );
-    if (
-      safety &&
-      this.round === 4 &&
-      this.isEmergencyPauseEnabled(safety) &&
-      !safety.factionAbilityUsed.emergencyPause &&
-      safety.runway >= 1
-    ) {
-      const unlocked = this.config.rounds[this.round - 1].escalations;
-      const choice = await this.choose(policies, safety.seat, "emergency_pause_escalation_timing", [
-        {
-          decisionId: "emergency_pause_escalation_wait",
-          label: decisionLabel("emergencyPauseWait"),
-          actionId: "faction"
-        },
-        ...unlocked.map((escalationId) => ({
-          decisionId: `emergency_pause_escalation_${escalationId}`,
-          label: decisionLabel("pauseEscalation", { action: escalationId }),
-          actionId: "faction",
-          parameters: { escalationId }
-        }))
-      ]);
-      if (choice.parameters?.escalationId) {
-        const trustBefore = safety.trust;
-        this.spendRunway(safety, 1, { cause: "emergency_pause" });
-        this.addResource(safety, "trust", 2);
-        this.regime.cycle.disabledEscalation = choice.parameters.escalationId;
-        safety.factionAbilityUsed.emergencyPause = true;
-        this.recordFactionAbility(safety, "emergency_pause", {
-          runwaySpent: 1,
-          trustGained: safety.trust - trustBefore,
-          escalationsBlocked: 1
-        });
-      }
-    }
-
   }
 
   headlineAvailable(card, round) {
@@ -1304,84 +1266,133 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async prepareHeadline(policies) {
     this.activeHeadline = this.headlineDecks[this.round][this.cycle - 1];
-    this.regime.cycle = { id: this.activeHeadline.id };
+    // History is separate from rules state: no Headline leaves a modifier behind.
+    this.regime.cycle = {};
     const id = this.activeHeadline.id;
-    if (id === "emergency_power_authority") {
-      this.regime.round.emergencyPowerAuthority = true;
-    }
     increment(this.matchMetrics.headlines, id);
-    this.matchMetrics.futureTimeline.push({
-      round: this.round,
-      cycle: this.cycle,
-      id,
-      name: this.activeHeadline.name
-    });
-
+    this.matchMetrics.futureTimeline.push({ round: this.round, cycle: this.cycle,
+      id, name: this.activeHeadline.name });
+    this.recordEvent("headline_revealed", null, `${this.activeHeadline.name}: ${this.activeHeadline.text}`);
+    const ordered = this.initiativeOrder().map(seat => this.players[seat]);
+    const extreme = (key, direction) => {
+      const value = direction(...this.players.map(player => player[key]));
+      return this.players[this.nearestInitiative(this.players.filter(player => player[key] === value).map(player => player.seat))];
+    };
+    const offer = async (player, label, consequences, eligible = true, parameters = {}) => {
+      if (!eligible) return false;
+      const choice = await this.choose(policies, player.seat, `headline_${id}`, [
+        { decisionId: `${id}_pass`, label: "Decline the Headline offer", actionId: "headline" },
+        { decisionId: `${id}_accept`, label, actionId: "headline", consequences, parameters }
+      ]);
+      return choice.decisionId.endsWith("_accept");
+    };
+    const produce = async (player, optional = false) => {
+      const facilities = this.latestPoweredFacilities(player);
+      if (!facilities.length) return;
+      const choice = await this.choose(policies, player.seat, `headline_${id}_facility`, [
+        ...(optional ? [{ decisionId: `${id}_pass`, label: "Decline additional production", actionId: "headline" }] : []),
+        ...facilities.map(facility => ({ decisionId: `${id}_${facility.id}`,
+          label: `${optional ? "Add 1 Scrutiny; " : ""}produce ${facility.id} (${facility.category})`,
+          actionId: "headline", parameters: { facilityId: facility.id },
+          consequences: { scrutiny: Number(optional), produceFacility: true } }))
+      ]);
+      const facility = facilities.find(candidate => candidate.id === choice.parameters?.facilityId);
+      if (!facility) return;
+      if (optional) this.addScrutiny(player, 1);
+      await this.produceFacility(policies, player, facility, `headline_${id}`);
+    };
+    const addSystemicRisk = () => {
+      if (this.systemicRisk < this.config.sharedSupply.systemicRiskCubes) {
+        this.systemicRisk += 1;
+        this.matchMetrics.systemicRiskCreated += 1;
+      }
+    };
     if (id === "open_weights_drop") {
-      for (const player of this.players) this.addResource(player, "capability", 1);
-      const minimum = Math.min(...this.players.map((player) => player.customers));
-      const target = this.nearestInitiative(
-        this.players.filter((player) => player.customers === minimum).map((player) => player.seat)
-      );
-      this.addResource(this.players[target], "trust", 1);
+      for (const player of ordered) this.addResource(player, "capability", 1);
+      this.addResource(extreme("customers", Math.min), "trust", 1);
     } else if (id === "export_controls") {
       for (const category of ["chip", "government"]) {
         const seat = this.controller(category);
         if (seat !== null) this.addResource(this.players[seat], "runway", 1);
       }
-      this.regime.cycle.computeTradeBlocked = true;
-    } else if (id === "ai_written_law") {
-      const controller = this.controller("government") ?? this.initiativeSeat;
-      const choice = await this.choose(policies, controller, id, this.config.actions.map((action) => ({
-        decisionId: `${id}_${action.id}`,
-        label: decisionLabel("writeLaw", { action: action.name }),
-        actionId: "headline",
-        parameters: { actionId: action.id }
-      })));
-      this.regime.cycle.incentivizedAction = choice.parameters.actionId;
-      this.regime.cycle.lawController = this.controller("government");
     } else if (id === "weights_on_internet") {
-      const minimum = Math.min(...this.players.map((player) => player.capability));
-      const target = this.nearestInitiative(
-        this.players.filter((player) => player.capability === minimum).map((player) => player.seat)
-      );
-      const maximum = Math.max(...this.players.map((player) => player.capability));
-      const owner = this.nearestInitiative(
-        this.players.filter((player) => player.capability === maximum).map((player) => player.seat)
-      );
-      const powered = this.latestPoweredFacilities(this.players[target]);
-      if (powered.length) {
-        const choice = await this.choose(
-          policies,
-          target,
-          "weights_on_internet_facility",
-          powered.map((facility) => ({
-            decisionId: `weights_on_internet_${facility.id}`,
-            label: decisionLabel("chooseFacilityProduction", {
-              facility: facility.id
-            }),
-            actionId: "headline",
-            parameters: { facilityId: facility.id }
-          }))
-        );
-        const facility = powered.find(
-          (candidate) => candidate.id === choice.parameters.facilityId
-        );
-        await this.produceFacility(
-          policies,
-          this.players[target],
-          facility,
-          "weights_on_internet"
-        );
-      }
-      this.addResource(this.players[owner], "trust", 1);
+      const low = extreme("capability", Math.min), high = extreme("capability", Math.max);
+      await produce(low);
+      this.addResource(high, "trust", 1);
     } else if (id === "agi_blog_post") {
-      const maximum = Math.max(...this.players.map((player) => player.capability));
-      const target = this.nearestInitiative(this.players.filter((player) => player.capability === maximum).map((player) => player.seat));
-      this.addResource(this.players[target], "trust", 1);
+      this.addResource(extreme("capability", Math.max), "trust", 1);
+    } else if (id === "professional_exam_sweep") {
+      for (const player of ordered) {
+        if (player.capability >= 3) this.addResource(player, "trust", 1);
+        if (player.capability >= 5) this.removeScrutiny(player, 1);
+      }
+    } else if (id === "reactor_restart_one_model") {
+      for (const player of ordered) if (player.generators.some(generator => generator.sourceId === "clean_infrastructure")) {
+        this.awardMandate(player, 1, id);
+      }
+    } else if (id === "ai_written_law") {
+      const controller = this.controller("government");
+      let accepted = 0;
+      for (const player of ordered) if (await offer(player, "Pay 1 Runway; gain 1 Trust", { runway: -1, trust: 1 }, player.runway >= 1)) {
+        this.spendRunway(player, 1, { cause: id });
+        this.addResource(player, "trust", 1); accepted++;
+      }
+      if (controller !== null) this.addResource(this.players[controller], "runway", accepted);
+    } else if (id === "autonomous_corporation") {
+      const counts = this.players.map(player => this.board.filter(tile => this.districtController(tile.instanceId) === player.seat).length);
+      const player = this.players[this.nearestInitiative(this.players.filter(player => counts[player.seat] === Math.max(...counts)).map(player => player.seat))];
+      if (await offer(player, "Gain 2 Runway; add 1 Scrutiny", { runway: 2, scrutiny: 1 })) {
+        this.addResource(player, "runway", 2); this.addScrutiny(player, 1);
+      }
+    } else if (id === "employee_free_unicorn") {
+      for (const player of ordered) {
+        if (player.pieces.length <= 1) continue;
+        const choice = await this.choose(policies, player.seat, `headline_${id}`, [
+          { decisionId: `${id}_pass`, label: "Keep all Agents", actionId: "headline" },
+          ...player.pieces.map(piece => ({ decisionId: `${id}_${piece.id}`, label: `Return ${piece.id}; gain 2 Runway and add 2 Scrutiny`,
+            actionId: "headline", parameters: { pieceId: piece.id }, consequences: { runway: 2, scrutiny: 2, agents: -1 } }))
+        ]);
+        if (!choice.parameters?.pieceId) continue;
+        player.pieces = player.pieces.filter(piece => piece.id !== choice.parameters.pieceId);
+        player.agentsInSupply++; this.addResource(player, "runway", 2); this.addScrutiny(player, 2);
+      }
+    } else if (id === "humanoid_factory_gate") {
+      for (const player of ordered) {
+        if (!player.agentsInSupply || player.runway < 1) continue;
+        const destinations = [...new Set(player.pieces.map(piece => piece.tileId))];
+        const choice = await this.choose(policies, player.seat, `headline_${id}`, [
+          { decisionId: `${id}_pass`, label: "Decline recruitment", actionId: "headline" },
+          ...destinations.map(tileId => ({ decisionId: `${id}_${tileId}`, label: `Pay 1 Runway; recruit in ${this.board.find(tile => tile.instanceId === tileId).name}; add 1 Scrutiny`,
+            actionId: "headline", parameters: { tileId }, consequences: { runway: -1, agents: 1, scrutiny: 1 } }))
+        ]);
+        if (!choice.parameters?.tileId) continue;
+        const number = Array.from({length: this.config.playerSupply.agents}, (_, i) => i + 1).find(i => !player.pieces.some(piece => piece.id === `s${player.seat}-agent-${i}`));
+        this.spendRunway(player, 1, { cause: id });
+        player.pieces.push({ id: `s${player.seat}-agent-${number}`, kind: "agent", tileId: choice.parameters.tileId });
+        player.agentsInSupply--; this.addScrutiny(player, 1);
+      }
+    } else if (id === "agent_swarm_escapes_scope") {
+      for (const player of ordered) await produce(player, true);
+    } else {
+      for (const player of ordered) {
+        if (id === "ten_dollar_intelligence" && await offer(player, "Gain 1 Compute; add 1 Scrutiny", { compute: 1, scrutiny: 1 })) {
+          this.addResource(player, "compute", 1); this.addScrutiny(player, 1);
+        } else if (id === "synthetic_celebrity" && await offer(player, "Pay 1 Compute; gain 1 Capability and add 1 Scrutiny", { compute: -1, capability: 1, scrutiny: 1 }, player.compute >= 1)) {
+          player.compute--; this.addResource(player, "capability", 1); this.addScrutiny(player, 1);
+        } else if (id === "emergency_power_authority") {
+          const power = this.infrastructureState(player);
+          const eligible = power.connectedGenerators.some(generator => generator.sourceId === "emergency_infrastructure");
+          if (await offer(player, "Gain 2 Compute; add 1 Scrutiny", { compute: 2, scrutiny: 1 }, eligible)) {
+            this.addResource(player, "compute", 2); this.addScrutiny(player, 1);
+          }
+        } else if (id === "benchmark_is_economy" && await offer(player, "Gain 1 Capability; add 1 Systemic Risk", { capability: 1, systemicRisk: 1 })) {
+          this.addResource(player, "capability", 1); addSystemicRisk();
+        } else if (id === "recursive_self_improvement" && await offer(player, "Pay 2 Compute; gain 3 Capability, add 2 Scrutiny and 1 Systemic Risk", { compute: -2, capability: 3, scrutiny: 2, systemicRisk: 1 }, player.compute >= 2)) {
+          player.compute -= 2; this.addResource(player, "capability", 3); this.addScrutiny(player, 2); addSystemicRisk();
+        }
+      }
     }
-
-    this.recordEvent("headline_revealed", null, `${this.activeHeadline.name}: ${this.activeHeadline.text}`);
+    this.recordEvent("headline_resolved", null, `${this.activeHeadline.name}: all instructions complete; no continuing effect.`);
   }
 
   consumeTactic(player, id) {
@@ -1575,45 +1586,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   legalActionSelections(seat) {
-    const player = this.players[seat];
-    const core = super.legalActionSelections(seat);
-    const unlocked = new Set(this.config.rounds[this.round - 1].escalations);
-    const escalation = this.escalationDocument.escalations
-      .filter((action) => unlocked.has(action.id))
-      .filter((action) => !player.escalationsUsed.includes(action.id))
-      .filter((action) => action.id !== this.regime.cycle?.disabledEscalation)
-      .filter((action) =>
-        player.programUses > 0 ||
-        (action.id === "agent_swarm" && this.regime.cycle?.id === "agent_swarm_escapes_scope")
-      )
-      .map((action) => {
-        const availability = this.selectionAvailability(seat, action.id, {
-          isEscalation: true
-        });
-        return {
-          decisionId: `select_escalation_${action.id}`,
-          label: renderSimulationCopy(
-            simulationCopy.decisions.selectAction,
-            { action: action.name }
-          ),
-          actionId: action.id,
-          consequences: {
-            stage: "action_selection",
-            ...availability,
-            isEscalation: true,
-            escalation: action.id === "agent_swarm" &&
-              this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 0 : -1
-          }
-        };
-      })
-      .filter(Boolean);
-    return [...core, ...escalation];
+    return super.legalActionSelections(seat);
   }
 
   selectionResolutionCount(seat, actionId, { isEscalation = false } = {}) {
-    return isEscalation
-      ? this.legalEscalationResolutions(seat, actionId).length
-      : this.currentResolutionCountForSelection(seat, actionId);
+    return this.currentResolutionCountForSelection(seat, actionId);
   }
 
   selectionAvailability(seat, actionId, { isEscalation = false } = {}) {
@@ -1696,6 +1673,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   legalResolutions(seat, actionId) {
     const player = this.players[seat];
+    if (actionId === "build") return this.legalBuildResolutions(seat);
     let decisions = super.legalResolutions(seat, actionId, {
       skipAffordability: true
     });
@@ -2015,135 +1993,97 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return result;
   }
 
-  legalEscalationResolutions(seat, id) {
+
+
+  legalBuildResolutions(seat) {
     const player = this.players[seat];
-    const globalMoves = (builder) => this.assignmentVariants(
-      player,
-      (piece, destination) => builder(piece, destination)
-    );
-    if (id === "mega_cluster") {
-      if (this.megaClusters.length >= this.config.sharedSupply.megaClusterPairs) return [];
-      const pairs = [];
-      if (player.runway >= 3 && player.compute >= 2) {
-        for (const left of player.facilities) for (const right of player.facilities) {
-          if (
-            left.id < right.id &&
-            this.areAdjacent(left.tileId, right.tileId) &&
-            this.megaClusterHostsAvailable([left.id, right.id]) &&
-            this.megaClusterLocallyEligible(player, [left.id, right.id])
-          ) {
-            for (const piece of player.pieces) {
-              const destinations = this.legalDestinations(player, piece);
-              for (const host of [left, right].filter((candidate) =>
-                destinations.some((tile) => tile.instanceId === candidate.tileId)
-              )) {
-                pairs.push({
-                  decisionId: `escalation_mega_cluster_${left.id}_${right.id}_${piece.id}_${host.id}`,
-                  label: decisionLabel("constructMegaCluster", {
-                    left: left.id,
-                    right: right.id
-                  }),
-                  actionId: id,
-                  parameters: {
-                    leftId: left.id,
-                    rightId: right.id,
-                    pieceId: piece.id,
-                    destinationId: host.tileId
-                  }
-                });
-              }
+    const facilityChoices = super.legalResolutions(seat, "build", { skipAffordability: true });
+    return this.assignmentVariants(player, (piece, destination) => {
+      const base = { pieceId: piece.id, destinationId: destination.instanceId,
+        destinationCategory: destination.category };
+      const facilityChoice = facilityChoices
+        .find(choice => choice.parameters.buildMode === "facility" &&
+          choice.parameters.pieceId === piece.id && choice.parameters.destinationId === destination.instanceId);
+      const facilityCost = facilityChoice
+        ? this.adjustDecision(player, facilityChoice).parameters.actualRunwayCost : null;
+      const decisions = [];
+      for (const facility of [false, true]) {
+        if (facility && (facilityCost === null || player.runway < facilityCost)) continue;
+        const preview = { ...player, facilities: [...player.facilities], runway: player.runway - (facility ? facilityCost : 0) };
+        const newFacility = { id: `s${seat}-facility-${player.facilities.length + 1}`,
+          tileId: destination.instanceId, category: destination.category, powered: false };
+        if (facility) preview.facilities.push(newFacility);
+        const projects = [null];
+        if (this.round >= 2 && destination.category === "energy" &&
+            player.generators.filter(g => g.sourceId !== "fusion_demonstrator").length < this.config.singleGeneratorRule.ordinaryGeneratorLimit &&
+            this.generatorOccupancy(destination.instanceId) < 3) {
+          const location = this.config.singleGeneratorRule.locations[destination.id];
+          if (location) projects.push({ id: "generator", sourceId: location.sourceId, runway: location.constructionCost, compute: 0 });
+        }
+        if (this.round >= 2 && this.megaClusters.length < this.config.sharedSupply.megaClusterPairs) {
+          for (const left of preview.facilities) for (const right of preview.facilities) {
+            if (left.id >= right.id || ![left.tileId, right.tileId].includes(destination.instanceId)) continue;
+            if (this.megaClusterHostsAvailable([left.id, right.id]) && this.megaClusterLocallyEligible(preview, [left.id, right.id])) {
+              projects.push({ id: "mega_cluster", leftId: left.id, rightId: right.id, runway: 3, compute: 2 });
             }
           }
         }
-      }
-      return pairs;
-    }
-    if (id === "reorganization") {
-      return globalMoves((piece, destination) => [{
-        decisionId: `escalation_reorganization_${piece.id}_${destination.instanceId}`,
-        label: decisionLabel("reorganizeMove"),
-        actionId: id,
-        parameters: {
-          pieceId: piece.id,
-          destinationId: destination.instanceId
+        if (this.round >= 4 && destination.id === "grid_reactor" && this.fusionBuiltBy === null && this.generatorOccupancy(destination.instanceId) < 3) {
+          projects.push({ id: "fusion_demonstrator", runway: this.config.powerSources.find(source => source.id === "fusion_demonstrator").runwayCost, compute: 0 });
         }
-      }]);
+        for (const project of projects) {
+          if (!facility && !project) continue;
+          const runway = (facility ? facilityCost : 0) + (project?.runway || 0);
+          if (runway > player.runway || (project?.compute || 0) > player.compute) continue;
+          const parts = [facility ? "Facility" : null, project ? (project.id === "generator" ? this.config.powerSources.find(source => source.id === project.sourceId).name : this.escalationDocument.escalations.find(item => item.id === project.id).name) : null].filter(Boolean);
+          decisions.push({
+            decisionId: `build_${facility ? "facility" : "only"}_${project?.id || "none"}_${project?.leftId || ""}_${project?.rightId || ""}_${piece.id}_${destination.instanceId}`,
+            label: `Assign ${piece.id} to ${destination.name}: construct ${parts.join(" + ")} (${runway} Runway${project?.compute ? `, ${project.compute} Compute` : ""})`,
+            actionId: "build", parameters: { ...base, buildMode: "construction", facility, project, facilityCost: facility ? facilityCost : 0, actualRunwayCost: runway },
+            consequences: { runway: -runway, compute: -(project?.compute || 0), ...(facility ? { facility: destination.category } : {}), ...(project ? { project: project.id, connectsLocalFacilities: project.id !== "mega_cluster" } : {}) }
+          });
+        }
+      }
+      return decisions;
+    });
+  }
+
+  applyBuild(seat, decision) {
+    // Revalidate the complete plan against the board at resolution, including its total price.
+    const legal = this.legalBuildResolutions(seat).find(choice => choice.decisionId === decision.decisionId);
+    if (!legal) throw new RangeError("This construction plan is no longer legal.");
+    const player = this.players[seat];
+    const p = legal.parameters;
+    this.assignAgent(player, p);
+    this.spendRunway(player, p.actualRunwayCost, { cause: "build", conversionEligible: true });
+    player.compute -= p.project?.compute || 0;
+    if (p.facility) {
+      player.facilities.push({ id: `s${seat}-facility-${player.facilities.length + 1}`, tileId: p.destinationId, category: p.destinationCategory, powered: false });
+      if (this.hasFactionAbility(player, "industrial_velocity") && !player.roundMetrics.industrialVelocityUsed) {
+        player.roundMetrics.industrialVelocityUsed = true;
+        this.awardMandate(player, this.rulesVariant.verticalIndustrialVelocityMandate, "industrial_velocity");
+        this.recordFactionAbility(player, "industrial_velocity", { runwaySaved: this.rulesVariant.verticalIndustrialVelocityDiscount, mandateGained: this.rulesVariant.verticalIndustrialVelocityMandate });
+      }
     }
-    if (id === "open_weights") {
-      return globalMoves((piece, destination) => [{
-        decisionId: `escalation_open_weights_${piece.id}_${destination.instanceId}`,
-        label: decisionLabel("openWeights"),
-        actionId: id,
-        parameters: { pieceId: piece.id, destinationId: destination.instanceId }
-      }]);
+    const project = p.project;
+    if (project?.id === "generator") {
+      const source = this.config.powerSources.find(source => source.id === project.sourceId);
+      player.generators.push({ id: `s${seat}-generator-${player.generators.length + 1}`, tileId: p.destinationId, sourceId: source.id });
+      this.addResource(player, "trust", source.trust || 0);
+      this.addScrutiny(player, source.scrutinyOnBuild || 0);
+    } else if (project?.id === "mega_cluster") {
+      const cluster = { id: `mega-${this.megaClusters.length + 1}`, leadSeat: seat, leftId: project.leftId, rightId: project.rightId, powered: false, builtEra: this.round };
+      this.megaClusters.push(cluster); player.megaClusters.push(cluster);
+      this.addScrutiny(player, 2);
+    } else if (project?.id === "fusion_demonstrator") {
+      player.generators.push({ id: `s${seat}-fusion`, tileId: p.destinationId, sourceId: project.id });
+      this.fusionBuiltBy = seat; player.history.fusionBuilt = true;
+      this.awardMandate(player, 2, project.id); this.addScrutiny(player, 3);
     }
-    if (id === "narrative_capture") {
-      return globalMoves((piece, destination) => [
-        {
-          decisionId: `escalation_narrative_scrutiny_${piece.id}_${destination.instanceId}`,
-          label: decisionLabel("narrativeScrutiny"),
-          actionId: id,
-          parameters: {
-            mode: "scrutiny",
-            pieceId: piece.id,
-            destinationId: destination.instanceId
-          }
-        },
-        {
-          decisionId: `escalation_narrative_runway_${piece.id}_${destination.instanceId}`,
-          label: decisionLabel("narrativeRunway"),
-          actionId: id,
-          parameters: {
-            mode: "runway",
-            pieceId: piece.id,
-            destinationId: destination.instanceId
-          }
-        },
-        ...this.players.filter((rival) => rival.customers > player.customers).map((rival) => ({
-          decisionId:
-            `escalation_narrative_target_${rival.seat}_${piece.id}_${destination.instanceId}`,
-          label: decisionLabel("narrativeRival", { seat: rival.seat + 1 }),
-          actionId: id,
-          parameters: {
-            mode: "target",
-            targetSeat: rival.seat,
-            pieceId: piece.id,
-            destinationId: destination.instanceId
-          }
-        }))
-      ]);
-    }
-    if (id === "agent_swarm") {
-      return player.actionsUsed.length <= 4
-        ? globalMoves((piece, destination) => [{
-          decisionId: `escalation_agent_swarm_${piece.id}_${destination.instanceId}`,
-          label: simulationCopy.decisions.releaseAgentSwarm,
-          actionId: id,
-          parameters: { pieceId: piece.id, destinationId: destination.instanceId }
-        }])
-        : [];
-    }
-    if (id === "fusion_demonstrator") {
-      if (this.fusionBuiltBy !== null) return [];
-      const cost = this.config.powerSources.find(
-        (source) => source.id === "fusion_demonstrator"
-      ).runwayCost;
-      if (player.runway < cost) return [];
-      const grid = this.board.find((tile) => tile.id === "grid_reactor");
-      if (this.generatorOccupancy(grid.instanceId) >= 3) return [];
-      return player.pieces
-        .filter((piece) => this.legalDestinations(player, piece)
-          .some((tile) => tile.instanceId === grid.instanceId))
-        .map((piece) => ({
-          decisionId: `escalation_fusion_${piece.id}`,
-          label: renderSimulationCopy(simulationCopy.decisions.constructAdvancedGeneration, {
-            piece: piece.id
-          }),
-          actionId: id,
-          parameters: { pieceId: piece.id, destinationId: grid.instanceId, cost }
-        }));
-    }
-    return [];
+    (player.metrics.construction ||= []).push({ era: this.round, facility: p.facility, project: project?.id || null });
+    this.markAction(player, "build", legal.label);
+    this.synchronizePublicMandate(player, "build");
+    this.recordEligibility(player, "after_action");
   }
 
   areAdjacent(leftId, rightId) {
@@ -2288,8 +2228,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   applyResolution(seat, decision) {
-    if (decision.actionId === "build" && (decision.parameters?.buildMode !== undefined || !decision.consequences?.noOp) && !["facility", "generator"].includes(decision.parameters?.buildMode)) {
-      throw new RangeError(`Unknown build mode: ${decision.parameters?.buildMode}`);
+    if (decision.actionId === "build" && !decision.consequences?.noOp) {
+      return this.applyBuild(seat, decision);
     }
     const player = this.players[seat];
     this.beginRunwayConversionContext(player, decision);
@@ -2674,37 +2614,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.endRunwayConversionContext(player);
   }
 
-  suppressAgentSwarmDestinationBonus(player, decision) {
-    const resolution = clone(decision);
-    resolution.parameters.suppressDestinationBonus = true;
-    const category = resolution.parameters.destinationCategory;
-    if (resolution.actionId === "fund" && category === "capital") {
-      resolution.parameters.actualRunway -= 1;
-    }
-    if (resolution.actionId === "research" && category === "cloud" &&
-        this.regime.cycle?.id !== "ten_dollar_intelligence") {
-      resolution.parameters.actualComputeCost = 1;
-    }
-    if (resolution.actionId === "deploy" && category === "consumer" &&
-        this.regime.cycle?.id !== "ten_dollar_intelligence") {
-      resolution.parameters.computeCost = this.rulesVariant.deployComputeCost;
-    }
-    if (resolution.actionId === "build" &&
-        ["chip", "energy"].includes(category)) {
-      resolution.parameters.actualRunwayCost += 1;
-    }
-    const computeCost = resolution.actionId === "research"
-      ? resolution.parameters.actualComputeCost ?? 1
-      : resolution.actionId === "deploy"
-        ? resolution.parameters.computeCost
-        : 0;
-    const runwayCost = resolution.actionId === "build"
-      ? resolution.parameters.actualRunwayCost
-      : 0;
-    return player.compute >= computeCost && player.runway >= runwayCost
-      ? resolution
-      : null;
-  }
+
 
   provisionalWinnerSeats() {
     const standings = this.players.map((player) => ({
@@ -2796,171 +2706,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       winnerOverridden: false };
   }
 
-  async applyEscalation(policies, seat, id, decision) {
-    const player = this.players[seat];
-    if (
-      id === "mega_cluster" &&
-      this.megaClusters.length >= this.config.sharedSupply.megaClusterPairs
-    ) return;
-    if (id === "fusion_demonstrator" && this.fusionBuiltBy !== null) return;
-    if (id === "mega_cluster" && !this.megaClusterDecisionLocallyEligible(
-      seat,
-      decision.parameters
-    )) return;
-    this.commitEscalationSelection(player, id);
-    this.beginRunwayConversionContext(player, decision, "escalation");
-    this.assignAgent(player, decision.parameters || {});
 
-    if (id === "mega_cluster") {
-      if (player.runway >= 3 && player.compute >= 2) {
-        this.spendRunway(player, 3, {
-          cause: "mega_cluster",
-          conversionEligible: true
-        });
-        player.compute -= 2;
-        const cluster = {
-          id: `mega-${this.megaClusters.length + 1}`,
-          leadSeat: seat,
-          leftId: decision.parameters.leftId,
-          rightId: decision.parameters.rightId,
-          powered: false
-        };
-        this.megaClusters.push(cluster);
-        player.megaClusters.push(cluster);
-        this.addScrutiny(player, 2);
-      }
-    } else if (id === "reorganization") {
-      for (const agent of player.pieces.filter((piece) => piece.kind === "agent")) {
-          const choice = await this.choose(
-          policies,
-          seat,
-          `reorganization_move_${agent.id}`,
-          this.board.map((tile) => ({
-            decisionId: `reorganization_${agent.id}_${tile.instanceId}`,
-            label: decisionLabel("reorganizationAgentDestination", {
-              agent: agent.id,
-              destination: tile.name
-            }),
-            actionId: id,
-            parameters: { agentId: agent.id, destinationId: tile.instanceId }
-          }))
-        );
-        agent.tileId = choice.parameters.destinationId;
-      }
-      const agents = player.pieces.filter((piece) => piece.kind === "agent");
-      if (agents.length > 1) {
-        const choice = await this.choose(policies, seat, "reorganization_return", [
-          {
-            decisionId: "reorganization_return_none",
-            label: decisionLabel("reorganizationReturnNone"),
-            actionId: id,
-            parameters: { agentId: null }
-          },
-          ...agents.map((agent) => ({
-            decisionId: `reorganization_return_${agent.id}`,
-            label: decisionLabel("reorganizationReturnNamed", { agent: agent.id }),
-            actionId: id,
-            parameters: { agentId: agent.id }
-          }))
-        ]);
-        if (choice.parameters.agentId) {
-          player.pieces = player.pieces.filter(
-            (piece) => piece.id !== choice.parameters.agentId
-          );
-          player.agentsInSupply += 1;
-          this.addResource(player, "runway", 3);
-          this.addScrutiny(player, 1);
-        }
-      }
-    } else if (id === "open_weights") {
-      player.history.openWeightsCapabilitySnapshot = this.players.map((candidate) => candidate.capability);
-      for (const candidate of this.players) this.addResource(candidate, "capability", 1);
-      this.addResource(player, "trust", 2);
-      this.removeScrutiny(player, 1);
-    } else if (id === "narrative_capture") {
-      if (decision.parameters.mode === "scrutiny") this.removeScrutiny(player, 2);
-      else if (decision.parameters.mode === "runway") this.addResource(player, "runway", 2);
-      else this.addScrutiny(this.players[decision.parameters.targetSeat], 1);
-    } else if (id === "agent_swarm") {
-      const swarmDestination = decision.parameters.destinationId;
-      const swarmPiece = decision.parameters.pieceId;
-      for (let index = 0; index < 2; index += 1) {
-        const swarmResolutions = (actionId) => {
-          let resolutions = this.legalResolutions(seat, actionId)
-            .filter((candidate) =>
-              candidate.parameters?.destinationId === swarmDestination &&
-              candidate.parameters?.pieceId === swarmPiece
-            );
-          if (index === 1) {
-            resolutions = resolutions
-              .map((candidate) =>
-                this.suppressAgentSwarmDestinationBonus(player, candidate)
-              )
-              .filter(Boolean);
-          }
-          return resolutions;
-        };
-        const selections = this.config.actions
-          .filter((action) => !player.actionsUsed.includes(action.id))
-          .map((action) => {
-            const currentResolutionCount = swarmResolutions(action.id).length;
-            return {
-              decisionId: `agent_select_${action.id}`,
-              label: decisionLabel("agentSwarmSelects", { action: action.name }),
-              actionId: action.id,
-              parameters: { actionId: action.id },
-              consequences: {
-                stage: "action_selection",
-                currentResolutionCount,
-                resolvableWithoutTrade: currentResolutionCount > 0
-              }
-            };
-          })
-          .filter((selection) => selection.consequences.currentResolutionCount > 0);
-        if (!selections.length) break;
-        const selection = await this.choose(policies, seat, `agent_swarm_${index + 1}`, selections);
-        const legal = swarmResolutions(selection.parameters.actionId);
-        const resolution = clone(
-          await this.choose(policies, seat, `agent_resolve_${index + 1}`, legal)
-        );
-        const computeBeforeSubaction = player.compute;
-        await this.applyResolutionWithPolicies(policies, seat, resolution);
-        this.rewardFoundryComputeSpend(
-          seat,
-          computeBeforeSubaction - player.compute
-        );
-      }
-      this.addScrutiny(
-        player,
-        this.regime.cycle?.id === "agent_swarm_escapes_scope" ? 4 : 3
-      );
-    } else if (id === "fusion_demonstrator") {
-      this.assignAgent(player, decision.parameters);
-      this.spendRunway(player, decision.parameters.cost, {
-        cause: "fusion_demonstrator",
-        conversionEligible: true
-      });
-      player.generators.push({
-        id: `s${seat}-fusion`,
-        tileId: decision.parameters.destinationId,
-        sourceId: "fusion_demonstrator"
-      });
-      this.awardMandate(player, 2, "fusion_demonstrator");
-      player.history.fusionBuilt = true;
-      this.fusionBuiltBy = seat;
-      this.addScrutiny(player, 3);
-    }
-    this.recordEligibility(player, "after_escalation");
-    this.recordEvent(
-      "escalation_resolved",
-      seat,
-      renderSimulationCopy(simulationCopy.events.resolved, {
-        faction: player.factionName,
-        result: id
-      })
-    );
-    this.endRunwayConversionContext(player);
-  }
 
   infrastructureState(player) {
     const locallyEligible = locallyEligibleFacilityIds(this.board, {
@@ -3063,18 +2809,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
   }
 
-  commitEscalationSelection(player, id) {
-    if (player.escalationsUsed.includes(id)) return;
-    const tokenFree = id === "agent_swarm" &&
-      this.regime.cycle?.id === "agent_swarm_escapes_scope";
-    if (!tokenFree) player.programUses -= 1;
-    player.escalationsUsed.push(id);
-    if (!player.history.escalationRounds.includes(this.round)) {
-      player.history.escalationRounds.push(this.round);
-    }
-    increment(player.metrics.escalations, id);
-    increment(this.matchMetrics.escalations, id);
-  }
+
 
   async produceAll(policies) {
     const infrastructure = this.players.map((player) => this.infrastructureState(player));
@@ -3389,10 +3124,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   selectedActionResolutions(seat) {
     const player = this.players[seat];
     if (!player.selectedAction) return [];
-    if (player.selectedAction.startsWith("escalation_")) {
-      return this.legalEscalationResolutions(seat, player.selectedAction.slice(11));
-    }
-    if (player.selectedAction.startsWith("faction_")) return [];
     return this.legalResolutions(seat, player.selectedAction);
   }
 
@@ -3707,39 +3438,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.selectedAction = null;
       return;
     }
-    if (player.selectedAction.startsWith("escalation_")) {
-      const id = player.selectedAction.slice(11);
-      let legal = this.legalEscalationResolutions(seat, id);
-      if (!legal.length) {
-        player.metrics.forcedNoOps += 1;
-        player.metrics.blockedAfterCommitment += 1;
-        this.recordEvent(
-          "escalation_blocked",
-          seat,
-          renderSimulationCopy(simulationCopy.events.escalationBlocked, {
-            faction: player.factionName,
-            action: id
-          })
-        );
-        const assignment = await this.choose(policies, seat, "blocked_program_assignment", this.assignmentOnlyDecisions(player, id));
-        this.assignAgent(player, assignment.parameters);
-        player.selectedAction = null;
-        return;
-      }
-      let decision = await this.choose(policies, seat, `resolve_escalation_${id}`, legal);
-      decision = await this.maybePlayTacticForResolution(policies, seat, decision);
-      const computeBeforeAction = player.compute;
-      await this.applyEscalation(policies, seat, id, decision);
-      if (id !== "agent_swarm") {
-        this.rewardFoundryComputeSpend(
-          seat,
-          computeBeforeAction - player.compute
-        );
-      }
-      await this.resolveFrontierBridge(policies, seat, decision);
-      player.selectedAction = null;
-      return;
-    }
     let legal = this.legalResolutions(seat, player.selectedAction);
     if (!legal.length) {
       player.metrics.forcedNoOps += 1;
@@ -3915,12 +3613,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
       player.selectedAction = legal.decisionId.replace(/^select_/, "");
       player.metrics.selectionAvailability.resolvableNow += 1;
-      if (player.selectedAction.startsWith("escalation_")) {
-        this.commitEscalationSelection(
-          player,
-          player.selectedAction.slice("escalation_".length)
-        );
-      }
       selections[seat] = player.selectedAction;
       this.recordEvent(
         "action_selected",
