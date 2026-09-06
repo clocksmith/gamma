@@ -129,7 +129,7 @@ export class CoreEconomyMatch {
     projection = "rich",
     decisionContext = null
   }) {
-    if (playerCount < config.players.min || playerCount > config.players.max) {
+    if (!Number.isInteger(playerCount) || playerCount < config.players.min || playerCount > config.players.max) {
       throw new RangeError(`playerCount must be ${config.players.min}–${config.players.max}.`);
     }
     this.config = config;

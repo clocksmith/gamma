@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import test from "node:test";
+import { writeFile, rm } from "node:fs/promises";
 
 const execute = promisify(execFile);
 const root = new URL("../", import.meta.url);
@@ -146,12 +147,17 @@ test("local simulation archives can be listed and loaded through the Lab API", a
   const server = await startServer(port);
   const request = (path, options = {}) =>
     fetch(`http://127.0.0.1:${port}${path}`, options);
+  const auxiliary = new URL(`evidence/studies/simulation/test-auxiliary-${process.pid}.json`, root);
+  const partial = new URL(`evidence/studies/simulation/test-partial-${process.pid}.json`, root);
+  await writeFile(auxiliary, JSON.stringify([{ runIndex: 0, outcome: {} }]));
+  await writeFile(partial, "{");
 
   try {
     const listed = await request("/api/simulation-reports");
     assert.equal(listed.status, 200);
     const { reports } = await listed.json();
     assert.ok(reports.length > 0);
+    assert.ok(reports.every(report => !report.fileName.startsWith("test-auxiliary-") && !report.fileName.startsWith("test-partial-")));
     assert.match(reports[0].fileName, /\.json$/);
     assert.equal(typeof reports[0].modifiedAt, "string");
 
@@ -164,6 +170,7 @@ test("local simulation archives can be listed and loaded through the Lab API", a
     const rejected = await request("/api/simulation-reports/%2e%2e%2fpackage.json");
     assert.equal(rejected.status, 404);
   } finally {
+    await Promise.all([rm(auxiliary), rm(partial)]);
     server.kill("SIGTERM");
   }
 });

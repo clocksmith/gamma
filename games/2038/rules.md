@@ -429,11 +429,11 @@ select or construct Fusion.
 
 At the beginning of each cycle:
 
-1. Reveal a ${terms.systems.headline} and place it in the current Era’s ${terms.systems.futureTimeline} row.
-2. Everyone secretly **selects** one Action card.
-3. Reveal simultaneously.
-4. Resolve clockwise from Initiative: **move**, then **act**.
-5. Pass Initiative clockwise.
+1. Reveal a ${terms.systems.headline}, resolve all its instructions and choices, and place it in the current Era’s ${terms.systems.futureTimeline} row. Its effect is finished.
+2. **Reason:** everyone secretly selects one available, unlocked Core Action. Reveal simultaneously.
+3. **Act:** resolve clockwise from Initiative. After the optional immediate trade, assign one Agent to any district or leave it in place. Choose legal targets and pay costs using the current board, then resolve the selected action.
+4. **Observe:** apply the consequences and exhaust the action, even if no legal effect was possible. Observation adds no separate decision or reward.
+5. After everyone has acted, pass Initiative clockwise.
 
 #### Immediate resource trade
 
@@ -443,8 +443,7 @@ ${terms.resources.compute}, or one ${terms.resources.compute} for one
 ${terms.resources.runway}. The named rival accepts or rejects. Gifts, bundles,
 same-resource exchanges, unequal amounts, counteroffers, redirects, and
 third-party claims are not legal. Adjust both players' captive sliders
-immediately after acceptance. The active
-${terms.systems.headline} may prohibit a named resource from being traded.
+immediately after acceptance.
 
 The selected Action remains committed whether the offer is accepted or rejected.
 Check affordability and targets after the trade; a successful trade may make a speculative selection resolvable. There is no post-action trade window.
@@ -697,13 +696,16 @@ cards are used. Each player has one ordinary Generator, and each Energy hex
 still has three shared slots.
 <!-- power-contracts:end -->
 
-Every connected ordinary Generator operates automatically during Production.
+An ordinary Generator connects your Facilities on its own or adjacent hexes.
+Power has no numeric capacity and is never allocated. An emergency Generator
+adds its operating penalty only when it serves at least one of your Facilities
+at Production, including a first Facility already supplied by the starting grid.
 
 ### ${terms.technology.cleanInfrastructure}
 
 - Location: ${terms.locations.renewable}
 - Cost: two ${terms.resources.runway}
-- Capacity: three ${terms.infrastructure.power}
+- Connection: your Facilities on this hex or an adjacent hex
 - Gain one ${terms.playerTracks.trust} when constructed
 - No recurring penalty
 
@@ -711,8 +713,8 @@ Every connected ordinary Generator operates automatically during Production.
 
 - Location: ${terms.locations.grid}
 - Cost: one ${terms.resources.runway}
-- Capacity: four ${terms.infrastructure.power}
-- Add one ${terms.playerTracks.scrutiny} during every Production
+- Connection: your Facilities on this hex or an adjacent hex
+- Add one ${terms.playerTracks.scrutiny} at Production only when serving at least one of your Facilities
 
 ### ${terms.technology.advancedGeneration}
 
@@ -839,6 +841,7 @@ Generators do not count against the Facility limit.
 - 1 Initiative marker
 
 The six faction trays supply six Mandate markers and six player aids.
+Choose two through five factions for a game; leave every unchosen tray in the box.
 
 Fusion is a single shared project; its dedicated marker leaves the supply once
 constructed. Unused contract tokens cannot be reserved; create a Joint Venture

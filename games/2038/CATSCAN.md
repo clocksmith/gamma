@@ -59,6 +59,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   or hand-maintained binding registries. Editorial metadata never enters play.
 - Only the public-playtest publication profile is deployable; internal-review
   artifacts remain local evidence.
+- Playable counts are two through five. Six factions remain available choices; six-player requests are rejected. Historical evidence retains its original identity.
 - Fictional identities remain fictional and simulated sessions remain labeled.
 - Canonical rule changes update every affected authority and evidence surface together.
 

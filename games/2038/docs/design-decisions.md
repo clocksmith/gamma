@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.10.0-rc.3-test`
+**Rules reference:** `0.11.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -83,25 +83,25 @@ New systems are frozen until the controlled four-player test supplies evidence.
 
 ### Supported player counts
 
-The selected product permits two through six players and suggests three, four,
+The selected product permits two through five players and suggests three, four,
 and five. Four players is
 the authoritative balance configuration because it preserves negotiation,
 spatial competition, and clean parity while keeping sequential resolution
 bounded. Three and five players remain complete games, not variants: every
 selected four-player change must be rerun at both counts and rejected if it
 creates a credible integrity, faction, seat, strategy, negotiation, or
-congestion regression. Two and six players are playable exploratory
-configurations, but their reports are non-promotional diagnostics until they
-receive their own evidence contract.
+congestion regression. Two players remains a playable exploratory
+configuration whose reports are non-promotional diagnostics until it receives
+its own evidence contract. Six players is unavailable; old reports remain historical.
 
 ## Selected complexity contract
 
-### Select → Move → Act
+### ReAct: Reason → Act → Observe
 
-Every ordinary turn uses one visible grammar. Cost, destination, mode, risk,
-and exhaustion belong on the Action surface. Readying changes a future choice;
-it does not create an immediate action. Agent Swarm is the only compound-action
-exception.
+Every ordinary turn uses one visible grammar. Availability is checked at
+selection; assignment, targets, payment, risk, and exhaustion resolve using the
+current board. The six Core Actions are the complete menu. Build alone permits
+a Facility followed by one project from the same assignment.
 
 This preserves difficult opportunity costs while reducing procedural lookup.
 The challenge should come from choosing among scarce capabilities, not from
@@ -123,7 +123,7 @@ variation to test the central engine.
   Scrutiny.
 - **Capacity:** Generators, Mega-Clusters, and early Programs.
 - **Authority:** persistent agreements and competing public realities.
-- **Continuity:** Agent Swarm, Fusion, AGI, and the civilizational ending.
+- **Continuity:** Fusion, scored AGI, and the civilizational ending.
 
 Later systems remain visible from setup, but the Current Era panel is the sole unlock
 authority.
@@ -247,11 +247,12 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.17.0` implements `0.10.0-rc.3-test` under coverage
+Executable game `0.19.0` implements `0.11.0-rc.2-test` under coverage
 `react-agent-assignments-v1`: direct persistent Agent assignments, speculative
 selection, unprotected Research with printed faction exceptions, current local
 Power connections, and optional AGI recognition scored within Mandate. The
-nineteen-hex board, six shared Programs, forty-card Training deck, solo
+nineteen-hex board, six Core Actions, Facility-then-project Build, immediate
+Headlines, one permanent ability per faction, forty-card Training deck, solo
 Mega-Clusters, one direct 1-for-1 trade, and automatic Audit remain.
 
 Browser-native deterministic play, server-backed LLM play, replay, policies,
@@ -568,8 +569,8 @@ Measure before changing numbers:
 Four players is the authoritative balance target. Three- and five-player
 quality, deferred modules, and numerical balance remain open until controlled
 evidence exists. Three and five are the suggested full formats and mandatory
-regression guards for any selected four-player change. Two and six players are
-playable exploratory configurations, not current balance-authority formats.
+regression guards for any selected four-player change. Two players remains
+exploratory for balance evidence. Six-player play is unavailable.
 
 The deterministic
 [`lean balance and cooperative-AGI study`](../evidence/studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md)
@@ -707,3 +708,9 @@ whether preserving Agent presence warrants forgoing immediate destination bonuse
 The remaining old Power-demand Mandate was a correctness bug: its removed metric
 always read zero. It now counts connected Facilities plus operating Mega-Clusters
 on the current board, preserving its minimum of two and two-Mandate award.
+
+## Review closure and player limit: 0.19.0
+
+The user restricted play to two through five players. Six factions remain choices and their lore and components remain intact; six-player input is rejected by the shared configuration and runtime boundaries. Historical six-player evidence retains its identity. Four players remains the balance authority, three and five are regression guards, and two-player evidence is exploratory.
+
+Rules Sections 6 and 8 now agree with the existing implementation: ReAct uses assignment, Headlines finish before selection, and ordinary Generators provide local connections with emergency Scrutiny only when serving a Facility. These wording repairs change no prices, awards, or timing in the engine. Actual project-production telemetry and deliberate policies support a diagnostic comparison; they do not select new incentives. The current test protocol prepares a blind teach without claiming human results.

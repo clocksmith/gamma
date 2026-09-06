@@ -12,7 +12,7 @@ with the implementation; algorithms remain free inside those constraints.
 
 ## Product Intent
 
-Mandate 2038 is a 2–6 player medium-weight strategy board game about
+Mandate 2038 is a 2–5 player medium-weight strategy board game about
 institutions racing to build, deploy, regulate, and plausibly declare AGI.
 It combines spatial engine building, push-your-luck research, asymmetric
 institutions, negotiation, and shared public scrutiny.
@@ -149,9 +149,9 @@ updated together.
 Four players is the authoritative balance configuration. Three- and
 five-player games are the suggested fully supported configurations, not incidental variants:
 every promoted rules candidate must preserve their integrity, strategic
-diversity, faction viability, negotiation, and completion quality. Two- and
-six-player games are playable exploratory configurations; their reports are
+diversity, faction viability, negotiation, and completion quality. Two-player games are playable exploratory configurations; their reports are
 non-promotional diagnostics until their own evidence contract is approved.
+Six-player games are not playable; preserve their historical evidence only.
 
 No tournament average, strategy-evolution champion, rule-search recommendation,
 thin-cell maximum, or LLM anecdote may be described as balanced or promoted

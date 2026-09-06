@@ -5,7 +5,8 @@
 // No third-party Markdown dependency: the converter below covers exactly the
 // Markdown subset these documents use.
 
-import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { basename, resolve } from "node:path";
 import { stripSectionMarkers } from "./content/authored.mjs";
 
@@ -493,7 +494,13 @@ if (checkOnly) {
 } else {
   await mkdir(outDir, { recursive: true });
   for (const item of pages) {
-    await writeFile(item.path, item.html);
+    const temporary = `${item.path}.${randomUUID()}.tmp`;
+    try {
+      await writeFile(temporary, item.html, { flag: "wx" });
+      await rename(temporary, item.path);
+    } finally {
+      await rm(temporary, { force: true });
+    }
   }
   const expectedNames = new Set(pages.map((item) => basename(item.path)));
   for (const name of (await readdir(outDir)).filter((item) => item.endsWith(".html"))) {

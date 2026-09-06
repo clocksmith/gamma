@@ -29,8 +29,8 @@ function slug(value) {
 
 const input = argumentsFrom(process.argv.slice(2));
 const playerCount = Number(input.players || 4);
-if (!Number.isInteger(playerCount) || playerCount < 3 || playerCount > 5) {
-  throw new RangeError("--players must be an integer from 3 to 5.");
+if (!Number.isInteger(playerCount) || playerCount < 2 || playerCount > 5) {
+  throw new RangeError("--players must be an integer from 2 to 5.");
 }
 const evidenceType = input.type || "facilitated_playtest";
 if (!["facilitated_playtest", "blind_playtest"].includes(evidenceType)) {
@@ -181,9 +181,21 @@ For ordinary assignments, use the board at resolution. Record only legal alterna
 - No superior alternative / incomparable benefits / mistakes / no-effect commitments:
 - Later consequence of the preserved presence:
 
+## Reminders and production
+
+| Era / cycle | Rule question or reminder, in the player's words | Surface consulted | Resolved without intervention? | Intervention or unresolved gap |
+| --- | --- | --- | --- | --- |
+| | | | | |
+
+| Institution | Project | Era built | First Era actually operating | Actual production received | Why build, delay, or decline? |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | |
+
+Fusion grants its construction award and connects Facilities; it does not itself produce Compute. Record the first Facility it connects and its production separately from Mega-Cluster production.
+
 ## Postgame explanation
 
-Could every player explain why the winner won?
+Ask individually before group discussion: Why did the institution win? Why did this World Ending occur? Did the ending follow from your decisions? Record the answer and concrete example verbatim, including disagreement. Do not turn a positive answer into a validated enjoyment score.
 `;
 
 await Promise.all([

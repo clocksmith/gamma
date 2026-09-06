@@ -142,11 +142,11 @@ test("Audit profiles scale from the four-player base", () => {
   );
 });
 
-test("browser game permits two through six players while recommending three through five", async () => {
+test("browser game permits two through five players while recommending three through five", async () => {
   const [config, factions, headlines] = await load();
-  assert.deepEqual(config.players.playableCounts, [2, 3, 4, 5, 6]);
+  assert.deepEqual(config.players.playableCounts, [2, 3, 4, 5]);
   assert.deepEqual(config.players.supportedCounts, [3, 4, 5]);
-  assert.deepEqual(config.players.historicalOnlyCounts, [2, 6]);
+  assert.deepEqual(config.players.historicalOnlyCounts, [2]);
   for (const players of config.players.playableCounts) {
     assert.equal(
       createGame(config, factions, headlines, `playable-${players}`, "coalition_lab", players)
@@ -154,7 +154,7 @@ test("browser game permits two through six players while recommending three thro
       players
     );
   }
-  for (const players of [1, 7]) {
+  for (const players of [1, 6, 7]) {
     assert.throws(
       () => createGame(
         config,
@@ -164,7 +164,7 @@ test("browser game permits two through six players while recommending three thro
         "coalition_lab",
         players
       ),
-      /playerCount must be one of 2, 3, 4, 5, 6/
+      /playerCount must be one of 2, 3, 4, 5/
     );
   }
 });

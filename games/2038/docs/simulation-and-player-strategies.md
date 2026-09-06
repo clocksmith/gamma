@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.17.0` / `react-agent-assignments-v1`
-**Physical rules under review:** `0.10.0-rc.3-test`
+**Executable game:** `0.19.0` / `react-agent-assignments-v1`
+**Physical rules under review:** `0.11.0-rc.2-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -445,3 +445,9 @@ The three cuts candidate records each Build in `metrics.construction` with its
 Era, Facility step, and project. `projectCounts` counts Generators, Mega-Clusters,
 and Fusion. `meanShovelsIncome` now measures Corthaven's actual capped Production
 income. Historical reports retain their former fields and frozen rule identities.
+
+## Deliberate construction diagnostic
+
+`node lab/cli/construction-study.mjs calibration` and `holdout` run the preregistered comparison in [the construction protocol](../evidence/studies/2026-09-06-construction-preregistration.md). The two named deterministic policy treatments inspect public state and legal decisions. They do not alter the default personas or game rules. Both retain the ordinary Training stopping procedure, trade policy, and Headline choices. Raw outcomes record actual Mega-Cluster production, including clipped Compute gains. This does not measure human opportunity-cost reasoning or teachability.
+
+New games accept only two through five players. Historical report and playtest-receipt schemas retain six-player readability; those schemas do not authorize launching a game. Three and five remain the adjacent balance guards, and two remains playable with exploratory evidence.
