@@ -13,7 +13,7 @@ authority; the linked sources below own their actual text and rules.
 
 | Order | Source | What to pay attention to |
 | --- | --- | --- |
-| 1 | [world.md](../world.md) | The setting, voice, creative thesis, four Eras, thematic progression, and writing conventions. Start here before editing individual pieces. |
+| 1 | [world.md](../world.md) | Start with the four connected chapters in the Player World companion section, then review the voice, thematic progression, and editorial conventions. |
 | 2 | [reference-cards.json](reference-cards.json) | Era introductions and the public language on the Governance Board. Does each Era develop the world established by the previous one? This file also contains player aids. |
 | 3 | [factions.json](factions.json) | Institutional identities, fictional leaders, and distinct voices. Can a reader understand what each institution values and how it presents itself? |
 | 4 | [headlines.json](headlines.json) | Event titles, newswire prose, and quotations. Read the fiction beside the printed effect: does the event make its consequence understandable? |

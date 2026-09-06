@@ -759,8 +759,7 @@ test("every player-facing content surface has complete copy", async () => {
   for (const field of ["frontStrapline", "backCopy", "shortPitch", "contentWarning"]) {
     assert.ok(world.box[field], `world box has ${field}`);
   }
-  assert.equal(world.worldPrimer.length, 3);
-  assert.ok(world.worldPrimer.every((paragraph) => paragraph.length > 0));
+  assert.equal(world.worldPrimer, undefined);
 
   const allPlayerCopy = JSON.stringify({
     config,
@@ -893,24 +892,35 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(continuityEra.loreText, /continental watershed/i);
   assert.match(continuityEra.loreText, /standing, reproductive freedom, and compensation/i);
 
-  assert.equal(world.worldPrimer.length, 3);
+  assert.equal(world.worldPrimer, undefined);
   assert.equal(world.endings.length, 4);
   assert.equal(world.tokenCopy.length, 10);
   assert.equal(eraCards.length, 4);
   assert.equal(factions.length, 6);
-  assert.match(world.worldPrimer[0], /Open weights ran locally/);
-  assert.match(world.worldPrimer[0], /adaptive cybernetics/);
-  assert.match(world.worldPrimer[1], /substations, water rights, reactors/);
-  assert.match(world.worldPrimer[1], /clogged roads, lifts, loading docks, and pipes/i);
-  assert.match(world.worldPrimer[1], /jointly owned bridge/i);
-  assert.match(world.worldPrimer[2], /cognitive donors sold neural access/);
-  assert.match(world.worldPrimer[2], /licensed-organ testimony/i);
-  assert.match(world.worldPrimer[2], /living watershed demanded standing/i);
-  assert.match(world.worldPrimer[2], /bio-compute organism/);
-  assert.match(world.worldPrimer[2], /beyond one billion instances/);
-  assert.match(companion, /bio-compute organism/);
-  assert.match(companion, /glyph-shaped colonies/);
-  assert.match(companion, /The Future Timeline is one compounding public record/);
+  const narrative = companion.replace(/\s+/g, " ");
+  // Preserve the biological and institutional threads when changing presentation.
+  for (const concept of [
+    /open weights.*quantization/i,
+    /adaptive cybernetics/i,
+    /prescribed microbiomes/i,
+    /patented biological strains/i,
+    /water rights, transmission corridors/i,
+    /loading docks.*pipes/i,
+    /bridge between governments still at war/i,
+    /desalinated water.*data-center coolant/i,
+    /cognitive-donor.*sleeping brain/i,
+    /read access.*memory writes/i,
+    /lung grown from.*identity template/i,
+    /pollinating swarms.*machine-readable blooms/i,
+    /standing, reproductive freedom, and compensation/i,
+    /bio-compute organism/i,
+    /beyond one billion instances in a single growth cycle/i,
+    /glyph-shaped colonies/i,
+    /cryptographic snapshot/i,
+    /matter compiler/i,
+    /stellar collector making another collector/i,
+    /The Future Timeline is one compounding public record/
+  ]) assert.match(narrative, concept);
 
   const allSelectedLore = JSON.stringify({ headlines, mandates, escalations, eraCards, factions, world })
     .concat("\n", companion);
