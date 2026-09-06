@@ -1,0 +1,43 @@
+{
+  "schema": "enwiki9_implementation_evidence_v1",
+  "id": "wiki_schema_exact_unit_20260906",
+  "component": "Exact shared-schema diagnostic codec and malformed-input/publication safety",
+  "source_bindings": [
+    {
+      "path": "tools/wiki_schema_exact_codec_v1.py",
+      "bytes": 24882,
+      "sha256": "6b9666e4ae7e0fc08518ec62b2a086a0e1a4f4d21b2b5b0ac5a87d771b40bfac"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_codec.py",
+      "bytes": 15647,
+      "sha256": "fddf4a17f0aaffc2fcaac6033e4f815494de48b13e2d9644e7dd3526079bbb04"
+    }
+  ],
+  "validation": {
+    "command": "timeout --signal=TERM --kill-after=5s 120s taskset -c 2 prlimit --as=536870912 --cpu=120 --fsize=33554432 -- python3 -B -m unittest discover -s tests -p test_wiki_schema_exact_codec.py -v",
+    "returncode": 0,
+    "tests_passed": 14,
+    "output": "test_cli_exclusive_publication_and_no_output_on_bad_archive (test_wiki_schema_exact_codec.SchemaCodecTests.test_cli_exclusive_publication_and_no_output_on_bad_archive) ... ok\ntest_cli_rejects_fifo_device_directory_and_input_symlink (test_wiki_schema_exact_codec.SchemaCodecTests.test_cli_rejects_fifo_device_directory_and_input_symlink) ... ok\ntest_dictionary_eviction_and_hard_limits (test_wiki_schema_exact_codec.SchemaCodecTests.test_dictionary_eviction_and_hard_limits) ... ok\ntest_empty_binary_malformed_xml_and_whitespace (test_wiki_schema_exact_codec.SchemaCodecTests.test_empty_binary_malformed_xml_and_whitespace) ... ok\ntest_exact_insert_delete_substitute_and_invalid_edits (test_wiki_schema_exact_codec.SchemaCodecTests.test_exact_insert_delete_substitute_and_invalid_edits) ... ok\ntest_exact_scaffolds_and_holes_without_normalization (test_wiki_schema_exact_codec.SchemaCodecTests.test_exact_scaffolds_and_holes_without_normalization) ... ok\ntest_independent_wire_reference_and_missing_definition (test_wiki_schema_exact_codec.SchemaCodecTests.test_independent_wire_reference_and_missing_definition) ... ok\ntest_malformed_grammar_operands (test_wiki_schema_exact_codec.SchemaCodecTests.test_malformed_grammar_operands) ... ok\ntest_past_only_learning_cross_block_and_oversized_discard (test_wiki_schema_exact_codec.SchemaCodecTests.test_past_only_learning_cross_block_and_oversized_discard) ... ok\ntest_regular_input_exact_limit_and_oversize (test_wiki_schema_exact_codec.SchemaCodecTests.test_regular_input_exact_limit_and_oversize) ... ok\ntest_schema_association_control_and_exceptions (test_wiki_schema_exact_codec.SchemaCodecTests.test_schema_association_control_and_exceptions) ... ok\ntest_seeded_mixed_byte_records (test_wiki_schema_exact_codec.SchemaCodecTests.test_seeded_mixed_byte_records) ... ok\ntest_selected_grammar_blocks_reuse_paid_definitions (test_wiki_schema_exact_codec.SchemaCodecTests.test_selected_grammar_blocks_reuse_paid_definitions) ... ok\ntest_truncation_trailing_corruption_padding_and_expansion (test_wiki_schema_exact_codec.SchemaCodecTests.test_truncation_trailing_corruption_padding_and_expansion) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.335s\n\nOK\n"
+  },
+  "execution_bounds": {
+    "cpu_affinity": [2],
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "wall_seconds": 120,
+    "timeout_kill_grace_seconds": 5,
+    "per_file_bytes": 33554432
+  },
+  "corpus_executed": false,
+  "native_compilation_performed": false,
+  "resource_qualified": false,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "scope": "Synthetic exactness, dictionary causality/eviction, independently constructed grammar wire cases, framing arithmetic, bounded malformed input, and exclusive publication. No corpus compression, complete-package or isolated-resource claim.",
+  "review_limits": [
+    "Block fallback compares identically framed independently reset zlib streams, not uninterrupted zlib or FX2.",
+    "Control C rotates the target-selected best prior schema and tests association disruption; control activation must be counted only for selected grammar blocks.",
+    "Output and optional receipt publish separately; a failed receipt publication can leave a valid output that must be retained as failed-command evidence.",
+    "Serialized dictionary byte accounting is not a measurement of Python heap use."
+  ]
+}

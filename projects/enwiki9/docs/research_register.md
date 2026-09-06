@@ -2,6 +2,47 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Frozen exact-residual model gate and tensor diagnosis
+
+`root_explore` owns the [exact-residual model comparison](../operations/adaptive/experiments/fx2_weight_exact_residual_model_q0_v1.json)
+under held job `20260906T021414Z_3e6eef5746`. Its 21 bounded phases pack P/K/D,
+restore the original parameter stream, and independently encode, decode and
+repeat the public 50,051-byte fixture with the unchanged native predictor.
+The economic comparison includes the residual restorer, metadata and options;
+unchanged probability streams and exact archives are mandatory. The model has
+not run under this gate at registration. CPU2, memory, scratch and the 900-second
+aggregate execution stop are frozen; publication and fresh admission precede release.
+
+The separate [tensor-restoration diagnostic](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json)
+is held under job `20260906T012956Z_3b36cd0326`, behind exact packing. It restores
+each predefined tensor group independently from the failed even7 configuration
+and measures archive recovery, probability differences and package costs. It
+does not sum group effects or select a mixed-precision successor automatically.
+Both gates retain external FX2/CMIX authorship and grant zero full-corpus credit.
+
+## 2026-09-06 - Open MIDAS opening250KB terminal component result
+
+The [independent terminal audit](../operations/provenance/midas_open_incremental_corpus250k_terminal_20260906.json)
+closes job `20260906T011941Z_c572f1e842` with all 13 phases successful and the
+owned guard closed. On the fixed 250,000 raw bytes, archives are P/K 115,921,
+F 107,176 and S 119,779 bytes. F saves **8,745 archive bytes against P** and
+12,603 against S. These are component measurements; `netBytesSaved` and the
+complete package/full-corpus score remain null.
+
+Every arm independently reconstructs the input, repeats its archive and agrees
+on complete terminal state. P/K archives and authoritative parent projections
+match. Terminal equality does not establish unseen intermediate probability or
+state boundaries. The guard reports a 51,527,680-byte peak; shared-host timings
+remain diagnostic. The unchanged retained binary was authenticated without
+compilation; source and runtime inventory checks passed.
+
+The [validated canonical reflection](../operations/adaptive/reflections/20260906T011941Z_c572f1e842.json)
+supports this bounded hypothesis and **holds promotion** for missing detailed
+boundary traces, complete package accounting and isolated qualification. Four
+diagnostic P/K/F/S rows retain the measured archives in the
+[run ledger](../results/run_ledger.jsonl), with unknown package score preserved.
+No distant confirmation or successor launch follows automatically.
+
 ## 2026-09-06 - Open MIDAS opening250KB ownership and exact-residual unit
 
 `root_explore` owns `midas_open_incremental_corpus250k_q0_v1`, the first bounded
