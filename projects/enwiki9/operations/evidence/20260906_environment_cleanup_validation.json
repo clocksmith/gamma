@@ -1,0 +1,451 @@
+{
+  "schema": "gamma.enwiki9.environment-cleanup-validation.v1",
+  "createdUtc": "2026-09-06T19:18:38.527484+00:00",
+  "baseCommit": "253299b92a36a7788d736c7f13e3f12040f5718c",
+  "component": "projects/enwiki9 operational recording and generated views",
+  "intentPreserved": true,
+  "scoreCreditBytes": 0,
+  "promotionAuthority": false,
+  "sourceBindings": [
+    {
+      "path": "tools/record_driver_result.py",
+      "bytes": 28200,
+      "sha256": "4f1302bdab16fa9e7fb9eacffa3d19f524f0d1caee83b66627d55bdee23d8cac"
+    },
+    {
+      "path": "tools/enwiki9_normalize_receipts.py",
+      "bytes": 7888,
+      "sha256": "3e87142c43f108bc1116e5f8a1580ce0c41f7c30294851ab178529a3a00903b5"
+    },
+    {
+      "path": "tools/enwiki9_status_receipt.py",
+      "bytes": 134514,
+      "sha256": "bc7c29759fae474d0dd717446f322db31255c8497de11bfab5e8fffb5c207f88"
+    },
+    {
+      "path": "tests/test_record_driver_result.py",
+      "bytes": 27210,
+      "sha256": "06e6c47c86720839207c18fb0d58acfd7f0a41a5c6e4bd6f490e182964713b36"
+    },
+    {
+      "path": "tests/test_enwiki9_refresh_profiles.py",
+      "bytes": 7428,
+      "sha256": "61ee24762279de2e140777e60aa8df3aa4889446dbdd503a3cc3d2c24cacccd7"
+    },
+    {
+      "path": "tests/test_enwiki9_status_receipt_worker_liveness.py",
+      "bytes": 6520,
+      "sha256": "50e2b5d58be56a7738a13c3679dd9736cbedb2a031825d5d8316239fdc6002d6"
+    },
+    {
+      "path": "tests/test_enwiki9_ledger_navigation.py",
+      "bytes": 12330,
+      "sha256": "02215df60e80dca542f23c9ecd5befeceb62f191f91daf429bf12f0b9b216cde"
+    }
+  ],
+  "tests": {
+    "terminalRecorder": {
+      "tests": 22,
+      "passed": 22,
+      "skipped": 0,
+      "test_names": [
+        "test_changed_entire_arm_set_cannot_replace_interrupted_claim",
+        "test_check_is_read_only",
+        "test_check_rejects_conflicting_metadata_projection",
+        "test_check_rejects_evidence_replacement_after_ledger_read",
+        "test_completed_prefix_is_resumable_but_torn_line_preserved",
+        "test_concurrent_distinct_and_duplicate_recording",
+        "test_distinct_identical_archive_arms_and_idempotent_retry",
+        "test_duplicate_claim_and_replaced_index_after_recording_rejected",
+        "test_evidence_replaced_during_append_is_not_projected",
+        "test_failed_arm_can_preserve_missing_archive_without_inventing_claims",
+        "test_guard_command_and_job_identity_rejected",
+        "test_interruption_after_ledger_append_retries_metadata",
+        "test_legacy_result_cli_preserved",
+        "test_live_terminal_worker_rejected_and_zombie_is_not_live",
+        "test_missing_claim_evidence_and_alias_repeat_rejected",
+        "test_missing_cleanup_and_running_guard_rejected",
+        "test_missing_or_replaced_artifact_rejected_before_writes",
+        "test_replaced_result_reflection_and_validator_rejection",
+        "test_reserved_source_tags_cannot_bypass_interrupted_job_identity",
+        "test_retry_after_boot_change_preserves_recorded_bytes",
+        "test_running_or_duplicate_live_claim_rejected"
+      ],
+      "runner": "python3 -m unittest discover",
+      "cpu": 2
+    },
+    "refreshProfiles": {
+      "tests": 12,
+      "passed": 12,
+      "skipped": 0,
+      "test_names": [
+        "test_failed_audit_stops_before_reading_previous_snapshot",
+        "test_failed_generator_stops_and_cli_returns_failure",
+        "test_failed_status_validation_does_not_replace_existing_output",
+        "test_fresh_audit_invalid_json_cannot_return_success",
+        "test_full_audits_once_and_reuses_one_digest_in_status_and_check",
+        "test_malformed_wrong_project_and_naive_timestamp_fail_closed",
+        "test_missing_digest_and_missing_snapshot_fail_closed",
+        "test_missing_snapshot_cannot_report_success_or_start_an_implicit_audit",
+        "test_replaced_snapshot_is_rejected_without_silent_rescan",
+        "test_routine_runs_only_dependencies_and_discloses_omitted_views",
+        "test_skip_check_retains_refresh_notice",
+        "test_snapshot_is_hash_verified_but_never_claimed_fresh"
+      ],
+      "runner": "python3 -m unittest discover",
+      "cpu": 2
+    },
+    "existingLivenessAndLedger": {
+      "tests": 15,
+      "passed": 15,
+      "runner": "standard-library runpy harness with temporary directories, unittest.mock MonkeyPatch adapter, and original parametrize cases; pytest was not installed",
+      "coverage": {
+        "workerLivenessAndObserverOwnership": 6,
+        "ledgerNavigationAndBrowser": 9
+      },
+      "cpu": 2
+    },
+    "totalPassed": 49
+  },
+  "integration": {
+    "closedGrammarRecorderCheck": {
+      "candidate": "dualstream_grammar_development250k_q0_v1",
+      "job": "20260906T174841Z_181d2f2c47",
+      "arms": [
+        "P",
+        "S"
+      ],
+      "fullReflectionAndGuardValidation": true,
+      "mode": "disposable index/reflection/metadata projection; canonical files hash-checked before and after",
+      "canonicalWrites": false
+    },
+    "fullRefresh": {
+      "profile": "full",
+      "ok": true,
+      "checksRequested": true,
+      "checksRun": true,
+      "candidateInventoryScans": 1,
+      "commands": [
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/candidate_audit.py",
+            "--write"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/hutter_upper_bound_certificate.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/hutter_run_ledger.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_release_receipts.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_evidence_matrix.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_best_results.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/cmix21_memory_valve_report.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/cmix21_memory_surface_scan.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/fx2_residual_shadow_matrix.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_receipt_audit.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_block_regime_audit.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_mixer_plan.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_artifact_fingerprint_audit.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_status_receipt.py",
+            "--candidate-audit-snapshot",
+            "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+            "--candidate-audit-sha256",
+            "43ad443fa140fcbba39cd1d8784a924b752caedcd85f68e7229bf567130e02bd",
+            "--refresh-profile",
+            "full"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_tool_catalogue.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_ledger.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/backfill_run_ledger.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/hutter_run_ledger.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_release_receipts.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_best_results.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/cmix21_memory_valve_report.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/cmix21_memory_surface_scan.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/fx2_residual_shadow_matrix.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_receipt_audit.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_block_regime_audit.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/streaming_retrieval_mixer_plan.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_artifact_fingerprint_audit.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_status_receipt.py",
+            "--check",
+            "--candidate-audit-snapshot",
+            "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+            "--candidate-audit-sha256",
+            "43ad443fa140fcbba39cd1d8784a924b752caedcd85f68e7229bf567130e02bd",
+            "--refresh-profile",
+            "full"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+            "--check"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "projects/enwiki9/tools/enwiki9_doc_lint.py"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "json.tool",
+            "projects/enwiki9/upper_bound_certificate.json"
+          ],
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "json.tool",
+            "projects/enwiki9/docs/status_receipt.json"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    "routineRefresh": {
+      "ok": true,
+      "commandCount": 15,
+      "candidateInventoryScans": 0,
+      "omittedHistoricalGenerators": [
+        "cmix21_memory_valve_report.py",
+        "cmix21_memory_surface_scan.py",
+        "fx2_residual_shadow_matrix.py",
+        "streaming_retrieval_receipt_audit.py",
+        "streaming_retrieval_block_regime_audit.py",
+        "streaming_retrieval_mixer_plan.py",
+        "enwiki9_artifact_fingerprint_audit.py",
+        "enwiki9_tool_catalogue.py"
+      ]
+    }
+  },
+  "preservation": {
+    "canonicalRunLedger": {
+      "path": "results/run_ledger.jsonl",
+      "bytes": 1607888,
+      "sha256": "da078d68f1425e1ddfa357d0468db22dd64d4405834339765cfec1668d77a92a"
+    },
+    "runRows": 1023,
+    "uniqueRunIds": 1023,
+    "sealedSources": [
+      {
+        "path": "tools/enwiki9_lab.py",
+        "bytes": 117361,
+        "sha256": "dfe3ec344ddb35863af7f8055e63e89c45fccff0811220f72183ff7862c57b09"
+      },
+      {
+        "path": "tools/dualstream_grammar_v1.py",
+        "bytes": 27806,
+        "sha256": "9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd"
+      },
+      {
+        "path": "tools/dualstream_grammar_bounded_v1.py",
+        "bytes": 2364,
+        "sha256": "22a9fdb0d863154f3112061b28a71eabc4f5224bde7f4cf0eebf99281e26655e"
+      }
+    ],
+    "scientificCandidateSourcesModified": false,
+    "canonicalTrialsOrReflectionsModified": false,
+    "horizonIntervention": false,
+    "dependenciesInstalled": false
+  },
+  "reviews": {
+    "refresh": "Independent approval; 12 tests passed",
+    "recorder": "Independent approval after reserved-tag conflict bypass repair; all 22 tests passed"
+  },
+  "limits": [
+    "Recorder publication is recoverable append-then-projection, not an atomic transaction across files.",
+    "Other ledger and metadata writers require coordination because they do not share the recorder lock.",
+    "Torn ledger lines are preserved and rejected for explicit repair.",
+    "Discovery validates the frozen allocated cgroup budget; qualification retains the canonical schema. Neither grants qualification or launch authority.",
+    "Inventory snapshot identity is verified; source freshness and host occupancy are not inferred from its hash.",
+    "The sealed lab refresh wrapper reports child return codes without propagating failure in its own exit code; automation can invoke the normalizer directly."
+  ]
+}

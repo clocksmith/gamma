@@ -40,9 +40,9 @@ See `../ADAPTIVE_WORKFLOW.md` for the operating loop.
 | Current operator status | `enwiki9_status_receipt.py` |
 | Candidate filesystem audit | `candidate_audit.py` |
 | Candidate triage | `candidate_triage.py` |
-| Normalize receipts and generated views | `enwiki9_normalize_receipts.py` |
+| Refresh routine views / explicitly audit historical reports | `enwiki9_normalize_receipts.py --profile routine` / `--profile full` |
 | Run with process-tree resource guard | `run_with_rss_guard.py` |
-| Record a driver result | `record_driver_result.py` |
+| Record reviewed terminal arms / legacy driver metadata | `record_driver_result.py --terminal-index` / `--result` ([manual](../ADAPTIVE_WORKFLOW.md#record-a-closed-comparison)) |
 | Decide or continue a cmix21 gate | `cmix21_gate_decider.py`, `cmix21_continue_active_gate.py` |
 | Rebuild the run ledger | `backfill_run_ledger.py` |
 | Freeze a predicate-preserving implementation retry | `enwiki9_freeze_implementation_retry.py` |

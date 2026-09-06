@@ -31,6 +31,10 @@ lineage and runs. Lists are paginated. Follow source links before using a claim.
 Search includes reflection lessons, causes, retired dimensions, uncertainties,
 and next actions. Candidate history keeps their source reflection links and
 recorded validity; finding a lesson does not validate its evidence.
+Use the [terminal recorder](../ADAPTIVE_WORKFLOW.md#record-a-closed-comparison)
+to publish a reviewed arm set to the existing run ledger. Routine refresh already
+rebuilds this browser; a separate browser-generation command is only needed when
+you want to refresh this view alone.
 
 ## Record map
 

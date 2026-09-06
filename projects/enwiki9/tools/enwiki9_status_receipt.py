@@ -132,7 +132,38 @@ def operator_logs_state() -> dict[str, Any]:
     return state
 
 
-def candidate_audit_summary_state() -> dict[str, Any]:
+def candidate_audit_summary_state(
+    snapshot: pathlib.Path | None = None, expected_sha256: str | None = None,
+) -> dict[str, Any]:
+    if snapshot is not None:
+        state: dict[str, Any] = {
+            "returncode": 1, "mode": "inventory_snapshot",
+            "path": str(snapshot), "expected_sha256": expected_sha256,
+            "freshness": "not_revalidated",
+            "notice": "Snapshot identity is verified; inventory inputs were not rescanned. "
+                      "This is not live occupancy or launch authority.",
+        }
+        try:
+            raw = snapshot.read_bytes()
+            digest = hashlib.sha256(raw).hexdigest()
+            if not expected_sha256 or digest != expected_sha256:
+                raise ValueError("candidate inventory snapshot digest mismatch")
+            payload = json.loads(raw)
+            if (not isinstance(payload, dict)
+                    or payload.get("project_root") != ROOT.relative_to(REPO_ROOT).as_posix()
+                    or not isinstance(payload.get("summary"), dict)
+                    or not isinstance(payload.get("generated_at"), str)):
+                raise ValueError("candidate inventory snapshot has invalid structure or project")
+            generated = dt.datetime.fromisoformat(payload["generated_at"])
+            if generated.tzinfo is None:
+                raise ValueError("candidate inventory snapshot timestamp needs a timezone")
+            state.update(returncode=0, sha256=digest,
+                         generated_at=payload["generated_at"], summary=payload["summary"])
+        except (OSError, ValueError) as exc:
+            state["error"] = str(exc)
+        return state
+    if expected_sha256 is not None:
+        return {"returncode": 1, "error": "candidate audit digest requires a snapshot path"}
     proc = subprocess.run(
         [sys.executable, "projects/enwiki9/tools/candidate_audit.py", "--json"],
         cwd=REPO_ROOT,
@@ -140,18 +171,21 @@ def candidate_audit_summary_state() -> dict[str, Any]:
         capture_output=True,
         check=False,
     )
-    state: dict[str, Any] = {"returncode": proc.returncode}
+    state = {"returncode": proc.returncode, "mode": "fresh_audit"}
     if proc.returncode != 0:
         state["error"] = proc.stderr.strip() or proc.stdout.strip() or "candidate audit failed"
         return state
     try:
         payload = json.loads(proc.stdout)
     except json.JSONDecodeError as exc:
-        state["error"] = f"candidate audit emitted invalid JSON: {exc}"
+        state.update(returncode=1, error=f"candidate audit emitted invalid JSON: {exc}")
         return state
-    summary = payload.get("summary")
+    summary = payload.get("summary") if isinstance(payload, dict) else None
     if isinstance(summary, dict):
         state["summary"] = summary
+        state["generated_at"] = payload.get("generated_at")
+    else:
+        state.update(returncode=1, error="candidate audit summary is missing")
     return state
 
 
@@ -2132,7 +2166,10 @@ def operator_summary_state(
     return summary
 
 
-def receipt() -> dict[str, Any]:
+def receipt(
+    *, candidate_audit_snapshot: pathlib.Path | None = None,
+    candidate_audit_sha256: str | None = None, refresh_profile: str = "status-only",
+) -> dict[str, Any]:
     objective = research_contracts.objective_binding()
     release_receipts = release_receipt_state(objective)
     cert = load_json(CERT_PATH)
@@ -2323,7 +2360,16 @@ def receipt() -> dict[str, Any]:
         "blocker": blocker_status_state(certificate_blocker, gate, action),
         "certificate_blocker": certificate_blocker,
         "operator_logs": operator_logs_state(),
-        "candidate_audit": candidate_audit_summary_state(),
+        "candidate_audit": candidate_audit_summary_state(
+            candidate_audit_snapshot, candidate_audit_sha256),
+        "view_refresh": {
+            "profile": refresh_profile,
+            "historical_audits_requested": refresh_profile == "full",
+            "notice": ("Full historical audit requested; the normalization receipt records generation and check outcomes."
+                       if refresh_profile == "full" else
+                       "Historical reports were not refreshed by this routine/status operation and may be stale. "
+                       "Use enwiki9_normalize_receipts.py --profile full for historical audits."),
+        },
         "active_candidate_recent_artifacts": active_candidate_recent_artifacts(live_candidate),
         "adaptive_jobs": adaptive_state,
         "active_processes": process_state,
@@ -2749,6 +2795,11 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Audit return code: `{fmt_int(candidate_audit.get('returncode'))}`",
             ]
         )
+        lines.append(f"- Audit mode: `{candidate_audit.get('mode', 'legacy')}`")
+        if candidate_audit.get("generated_at"):
+            lines.append(f"- Inventory generated: `{candidate_audit['generated_at']}`")
+        if candidate_audit.get("notice"):
+            lines.append(f"- {candidate_audit['notice']}")
         if summary:
             status_counts = summary.get("candidate_status_counts")
             lines.extend(
@@ -2766,6 +2817,11 @@ def render_md(data: dict[str, Any]) -> str:
                 lines.append(f"- Candidate statuses: `{status_summary}`")
         elif candidate_audit.get("error"):
             lines.append(f"- Audit error: `{candidate_audit.get('error')}`")
+    refresh = data.get("view_refresh", {})
+    if refresh:
+        lines.extend(["", "## View Refresh", "",
+                      f"- Profile: `{refresh.get('profile')}`",
+                      f"- {refresh.get('notice')}"])
     active_rows = proc_state.get("active_rows") if isinstance(proc_state, dict) else None
     if isinstance(active_rows, list):
         lines.extend(
@@ -2935,14 +2991,24 @@ def render_md(data: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json-out", type=pathlib.Path, default=OUT_JSON)
     parser.add_argument("--md-out", type=pathlib.Path, default=OUT_MD)
     parser.add_argument("--check", action="store_true", help="validate current receipt can be rendered")
-    args = parser.parse_args()
+    parser.add_argument("--candidate-audit-snapshot", type=pathlib.Path,
+                        help="reuse an explicit inventory instead of scanning candidate history")
+    parser.add_argument("--candidate-audit-sha256", help="required digest of the reused inventory")
+    parser.add_argument("--refresh-profile", choices=("routine", "full", "status-only"),
+                        default="status-only")
+    args = parser.parse_args(argv)
 
-    data = receipt()
+    data = receipt(candidate_audit_snapshot=args.candidate_audit_snapshot,
+                   candidate_audit_sha256=args.candidate_audit_sha256,
+                   refresh_profile=args.refresh_profile)
+    if data["candidate_audit"].get("returncode") != 0:
+        print(data["candidate_audit"].get("error", "candidate audit failed"), file=sys.stderr)
+        return 1
     rendered_json = json.dumps(data, indent=2, sort_keys=True) + "\n"
     rendered_md = render_md(data)
     if args.check:

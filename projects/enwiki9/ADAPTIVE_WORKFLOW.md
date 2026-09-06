@@ -119,6 +119,49 @@ authoritative; the exclusion is searchable mechanism memory and grants no
 measurement or promotion credit. Backfill and audit the projection with
 `enwiki9_lab.py sync-reflection-exclusions`.
 
+### Record a closed comparison
+
+Use `record_driver_result.py --terminal-index` to record a reviewed set of arms
+in one command. Have the runner or terminal normalization step retain an index
+before creating its reflection, then include the index in `reflect --evidence`.
+The index is an evidence artifact alongside the results, not a separate registry.
+
+Its format is `gamma.enwiki9.terminal-result-index.v1`: `job` and `guard` are
+project-relative `{ "path": "...", "sha256": "..." }` references; `arms` is a
+nonempty list of `{ "arm": "P", "result": REF, "artifacts": { ... } }` objects.
+The optional `evidence` list binds additional files. Each result is a normalized
+driver receipt carrying its arm, candidate revision, and canonical job path as
+`run_source`. Artifacts named `archive`, `restored`, and `repeat` must substantiate
+the corresponding size, exact-inverse, and deterministic-repeat claims. Every
+claimed successful repeat needs a separately retained artifact. Missing optional
+diagnostics remain missing; missing evidence needed for a claim rejects recording.
+
+After the reflection validates:
+
+```bash
+python3 tools/record_driver_result.py CANDIDATE \
+  --terminal-index results/CANDIDATE/terminal-index.json --check
+python3 tools/record_driver_result.py CANDIDATE \
+  --terminal-index results/CANDIDATE/terminal-index.json
+python3 tools/enwiki9_normalize_receipts.py --profile routine --json
+```
+
+The recorder verifies the closed job and resource guard, existing reflection,
+and exact artifact hashes. It writes distinct job-and-arm ledger identities and
+a derived metadata projection; it does not choose a scientific verdict. A retry
+can finish an interrupted row set or metadata update without duplicating rows.
+Changed receipts and conflicting claims fail closed. A torn ledger line is
+preserved for explicit repair. Calls to this recorder serialize with one another;
+coordinate other ledger or metadata writers separately because they do not honor
+its lock.
+The legacy `--result`/`--label` metadata command remains available for historical
+formats and does not provide these terminal-publication guarantees.
+
+Diagnostic discovery guards are checked against their frozen cgroup allocation:
+the recorder adjusts the prize schema's fixed memory constant in memory and
+reports `discovery-budget-schema`. Qualification uses the unchanged validator.
+Neither recording mode grants resource qualification or launch permission.
+
 Rank actionable proposals after reflection with:
 
 ```bash
@@ -472,17 +515,11 @@ claiming a batch. Independent gates may run concurrently up to the configured
 worker and resource limits. Every job uses its own durable ID, log, and output
 paths.
 
-After each terminal batch, the runner serially refreshes:
-
-```text
-candidate_inventory.json
-CANDIDATE_INVENTORY.md
-results/run_ledger.jsonl-derived views
-evidence and best-result views
-memory and residual reports
-artifact fingerprint audit
-status receipt
-```
+After each terminal batch, the runner refreshes the candidate inventory once,
+then the routine views: upper-bound certificate, run ledger, release index,
+evidence matrix, best results, status, and searchable ledger. Status consumes
+the SHA-256-bound inventory snapshot instead of running the inventory scan
+again. Snapshot identity does not establish current filesystem or host state.
 
 Worker output is stored in `run_logs/adaptive/<job_id>.log`.
 
@@ -505,6 +542,23 @@ Refresh generated views without launching a gate:
 ```bash
 python3 tools/enwiki9_lab.py refresh
 ```
+
+To update routine views using the existing inventory, or explicitly regenerate
+and check all historical reports:
+
+```bash
+python3 tools/enwiki9_normalize_receipts.py --profile routine --json
+python3 tools/enwiki9_normalize_receipts.py --profile full --json
+```
+
+Routine refresh leaves historical memory, residual, retrieval, fingerprint,
+and tool-catalogue reports untouched. Its receipt lists omitted generators;
+status labels those reports as potentially stale. Full refresh scans the
+inventory once and reuses its exact snapshot for both status generation and
+validation. Normalization stops and exits nonzero at the first failed command.
+The legacy `lab refresh` wrapper prints child return codes; inspect them because
+its own exit code does not propagate failures. For an automation success gate,
+use the normalizer directly. `--skip-check` skips validation, not disclosure.
 
 Stop a continuous runner with the normal process interrupt. Pending and
 terminal job records remain durable.
@@ -531,7 +585,6 @@ After a terminal result or decisive research conclusion:
 
 ```bash
 python3 tools/enwiki9_lab.py refresh
-python3 tools/enwiki9_ledger.py
 cd ../../..
 ./rdpush.sh
 ```
