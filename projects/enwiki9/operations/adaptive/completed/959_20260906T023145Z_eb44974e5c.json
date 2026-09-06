@@ -5,27 +5,66 @@
     "sha256": "sha256:17d53536e24cf58720db50aa1eb07dbb7afeb04bc4e781c285747fcc37fc0e04"
   },
   "candidate_tree_sha256": "sha256:972f550b01953239dbdea0a5d246e2b1a2e6d52c8a8f7adf2e29c710ea9fdbd7",
+  "elapsed_seconds": 6.181,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 1800
+    },
+    "cgroup_inode": 227420,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T023145Z_eb44974e5c",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 227420,
+        "kernel_cpuset": false,
+        "memory_bytes": 2147483648,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T023145Z_eb44974e5c"
+      }
+    ],
+    "guard_command_sha256": "fa69f40f7c31d4e83814f96c1ee3419c70d41266c2eaffb9102abb3b6cd55983",
+    "guard_path": "run_logs/adaptive/20260906T023145Z_eb44974e5c.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/wiki_schema_exact_transfer250k_q0_v2.json",
     "sha256": "sha256:4d3396b7e79fb805ab3533c934db92f9413d43cb4f5358cd28c52ecd2d79711b"
   },
+  "finished_at": "2026-09-06T02:57:23+00:00",
   "gate_size": 500000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-06T02:31:44+00:00",
   "hold_history": [
     {
       "at": "2026-09-06T02:31:44+00:00",
       "held": true,
       "reason": "Held from initial queue publication to preserve CPU2 for the published group-restoration diagnostic. ROOT must publish ownership and explicitly release this job after fresh resource admission; no automatic launch."
+    },
+    {
+      "at": "2026-09-06T02:57:16+00:00",
+      "held": false,
+      "reason": "Ownership and all 186 frozen inputs published at 41c93034a; exact-packing and group-restoration jobs closed with validated reflections and removed cgroups. Fresh start at 2026-09-06T02:56:37Z confirms both HORIZON records live under the existing observer. ROOT assigns CPU2 to this bounded discovery; MIDAS observer remains source-only."
     }
   ],
-  "hold_reason": "Held from initial queue publication to preserve CPU2 for the published group-restoration diagnostic. ROOT must publish ownership and explicitly release this job after fresh resource admission; no automatic launch.",
   "job_id": "20260906T023145Z_eb44974e5c",
+  "log_path": "run_logs/adaptive/20260906T023145Z_eb44974e5c.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/931_wiki_schema_exact_transfer250k_q0_v2.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "wiki_schema_exact_transfer250k_q0_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-06T02:57:16+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1800
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/wiki_schema_exact_transfer250k_q0_v2.py",
     "sha256": "sha256:bbee0a1aa04b42b426d19fcf1369f3e97a77126cf66223d6e271a7ac238da1e1"
@@ -51,7 +92,8 @@
   "scratch_directories": [
     "results/wiki_schema_exact_transfer250k_q0_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-06T02:57:16+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-06T02:31:45+00:00",
   "tags": [
     "distant250k",
@@ -63,5 +105,8 @@
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/wiki_schema_exact_transfer250k_q0_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2754592,
+  "worker_proc_start_ticks": 175957497,
+  "worker_started_at": "2026-09-06T02:57:17+00:00"
 }

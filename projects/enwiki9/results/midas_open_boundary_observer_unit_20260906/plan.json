@@ -1,0 +1,80 @@
+{
+  "command": [
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=240",
+    "--fsize=33554432",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_midas_open_boundary_observer.py",
+    "-v"
+  ],
+  "corpus_executed": false,
+  "environment": {
+    "MIDAS_OBSERVER_UNIT_DIR": "/home/x/deco/gamma/projects/enwiki9/results/midas_open_boundary_observer_unit_20260906/fixtures"
+  },
+  "objective_credit_bytes": 0,
+  "owner": "root_explore",
+  "recorded_at": "2026-09-06T03:00:36+00:00",
+  "resource_envelope": {
+    "candidate_id": "midas_open_boundary_observer_unit_20260906",
+    "evidence_class": "synthetic unit validation only; not an adaptive scientific candidate",
+    "execution_guard": {
+      "path": "tools/run_with_resource_guard_v3.py",
+      "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    },
+    "execution_mode": "discovery",
+    "job_id": "20260906_midas_boundary_observer_unit_v1",
+    "resource_budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 536870912,
+      "swap_bytes": 0,
+      "wall_seconds": 240
+    },
+    "timing_authority": "diagnostic"
+  },
+  "schema": "enwiki9_synthetic_validation_plan_v1",
+  "source_bindings": [
+    {
+      "bytes": 16989,
+      "path": "tools/midas_open_boundary_observer_v1.cpp",
+      "sha256": "1570900c8a4c09e9cd2581fbfde2b7253c9f02f489c1f6862ac48771768ad20c"
+    },
+    {
+      "bytes": 17379,
+      "path": "tools/midas_open_boundary_observer_v1.py",
+      "sha256": "a8b0c5e457853b5a899f6f7480f983859567cdedb6f4d3a9b3b57cf8eb716db3"
+    },
+    {
+      "bytes": 15936,
+      "path": "tests/test_midas_open_boundary_observer.py",
+      "sha256": "96ee96acc788a50d3342d9b91f554e1b468ecb6fa97095b93f103cd4e3ea81c2"
+    },
+    {
+      "bytes": 3050,
+      "path": "docs/midas_open_boundary_observer_v1.md",
+      "sha256": "704b038f75f352d718283715403a85d4f7220c41407ce74c2691f475f3b4be3f"
+    },
+    {
+      "bytes": 117361,
+      "path": "tools/enwiki9_lab.py",
+      "sha256": "dfe3ec344ddb35863af7f8055e63e89c45fccff0811220f72183ff7862c57b09"
+    },
+    {
+      "bytes": 31807,
+      "path": "tools/run_with_resource_guard_v3.py",
+      "sha256": "044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+    }
+  ]
+}
