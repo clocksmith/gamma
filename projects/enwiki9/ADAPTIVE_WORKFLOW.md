@@ -55,6 +55,70 @@ evidence -> frozen experiment -> proposal -> claim -> develop/seal
 A held gate or unrelated reflection backlog does not stop independent research.
 Use this lifecycle rather than another launcher, queue, or chat-only notebook.
 
+## Resources, Parallel Work, And Event Timing
+
+```bash
+python3 tools/enwiki9_lab.py start
+python3 tools/enwiki9_lab.py status
+python3 tools/enwiki9_lab.py proposals
+free -h
+ps -eo pid,ppid,lstart,etime,pcpu,rss,nlwp,comm --sort=-pcpu
+df -h results
+```
+
+`start.resources` samples per-CPU activity over a bounded interval and reports
+logical CPUs, this process's allowed CPUs, load averages, available RAM, visible
+cgroup CPU/memory ceilings, and scratch filesystem space. CPU load averages are
+not utilization percentages. The `ps` CPU column is a process-lifetime average;
+RSS is in KiB. `MemAvailable` includes reclaimable memory, unlike free pages.
+Host capacity, this shell's affinity, and a job's resource assignment differ.
+Visible cgroup ancestors can further restrict capacity; hidden limits and other
+jobs' guards still need inspection. Unknown probes stay unknown.
+
+Choose the next move from current evidence and measured costs:
+
+1. Inspect live/unknown jobs, claims, leases, their CPU/thread assignments and
+   resource budgets. Preserve every owner and observer. Resolve conflicting or
+   unknown occupancy before launching work on those resources.
+   Compare mechanisms, ancestry, populations, and deliverables across proposals
+   and running jobs, not just candidate names. If another owner already covers
+   the experiment, choose a distinct path toward the same objective or an
+   explicitly coordinated contribution. Publish and recheck claims before launch.
+2. Use the candidate's recorded kernel/gate measurements to size CPU, RAM,
+   scratch, and an elapsed stop for the next population. Include causal warmup,
+   all controls, decoding, and repeats. If cost is unknown, start with an admitted
+   synthetic or smaller measured gate; do not extrapolate blindly across scales.
+3. Choose disjoint assigned CPUs for independent discovery; cap internal threads.
+   Reserve memory for each job's remaining growth plus explicit OS/observer
+   headroom, within both available RAM and applicable cgroup headroom. Check
+   aggregate scratch budgets too. Do not count current RSS twice or assume every
+   currently idle core and available byte is yours. Record the chosen budgets in
+   the existing proposal/job, publish ownership, and run admission checks.
+4. Prefer parallel independent implementation, tests, or admitted discovery when
+   those bounds fit. Shared-host timing is diagnostic; isolate qualifying runs.
+   If resources are occupied, advance source research, reflection, or a smaller
+   admitted task and revisit at the next recorded event or progress update.
+
+`running_jobs[].timeline` separates submission/start timestamps, elapsed time,
+the declared wall budget, and predictions. `budget_stop_reference_at` is recorded
+job start plus budget: consult the actual guard's timebase for enforcement.
+It is neither an expected finish nor permission to stop someone else's job.
+
+For running operations, estimate completion only from comparable timestamped
+counters: `rate = (units2 - units1) / (time2 - time1)`, then
+`finish = time2 + (total_units - units2) / rate`. Name the job, process identity,
+phase, units, sample window, and uncertainty. Use the owning runner or observer;
+do not create a second HORIZON monitor or inspect scientific partial outputs.
+The entry report applies this to HORIZON's existing operational trace counter
+and the prior status receipt when their bindings match, the sample interval is
+at most 3,600 seconds, and the current sample is at most 120 seconds old.
+Missing, stale, reset, zero-rate, changed-target, or unverified observations yield
+`unknown`. Trace completion does not predict later closure/analysis phases or
+the entire job's finish. Other jobs without comparable counters retain unknown
+estimates. Recompute after phase or throughput changes; an ETA grants no launch
+or scientific transition authority. Engineering tasks use concrete next actions,
+not duration estimates.
+
 ## Choose Testing, Mutation, Or Exploration
 
 Make this choice after reviewing a closed result, or when choosing independent

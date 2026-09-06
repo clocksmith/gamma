@@ -20,6 +20,11 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   discovery gates on assigned resources. Large launches and dependency/model
   installation require explicit user authorization; never auto-install them.
 - Inspect actual host occupancy before source changes or resource-intensive work.
+  Run `python3 tools/enwiki9_lab.py start` for sampled CPU use, available RAM,
+  affinity/cgroup limits, job starts, budgets, and available progress estimates.
+  Use the manual's [resource planning instructions](ADAPTIVE_WORKFLOW.md#resources-parallel-work-and-event-timing)
+  to size the next move; prefer admitted independent parallel work when capacity
+  permits. Refresh the sample before launching; available capacity is not a claim.
   Preserve claims, leases, workers, and existing sole observers, including
   HORIZON's observer. Missing controllers and unknown occupancy grant no launch
   permission. Committed status is a timestamped host snapshot.
@@ -28,6 +33,11 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   stop. Independent discovery may share a host; concurrent timing is diagnostic.
   Qualification requires isolated timing, calibration, and complete resource
   evidence. Its future certificate does not block implementing the candidate.
+- Assume other agents may pursue the same objective. Search current proposals,
+  claims, running jobs, and relevant lineage for the same mechanism and population
+  before implementing or launching. An owned experiment calls for a distinct
+  path or explicitly coordinated contribution; a new name does not make duplicate
+  work independent. Recheck published ownership before execution.
 - Do not distribute `docs/atlas_clockwork_seal_problem_set.md` to candidates
   unless `tools/atlas_clockwork_seal.py verify --require-bound` reports
   `VALID_BOUND`. Expert review of an `UNBOUND` draft is allowed.
