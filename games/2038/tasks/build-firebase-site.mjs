@@ -96,80 +96,23 @@ function escapeHtml(value) {
 }
 
 function pageListItem(page) {
-  const className = page.kind === "Playable interface"
-    ? ' class="primary-action"'
-    : "";
-  return `<li${className}>
-  <a href="${escapeHtml(page.href)}">${escapeHtml(page.title)}</a>
-  <span>${escapeHtml(page.kind)} · ${escapeHtml(page.description)}</span>
-</li>`;
-}
-
-const publicGroupOrder = [
-  "Start here",
-  "Required Play Kit",
-  "Learn the game",
-  "Optional play",
-  "Development and evidence",
-  "Component review"
-];
-
-const playKitOrder = new Map([
-  ["Core Rules", 0],
-  ["Map Reference", 1],
-  ["Component Reference", 2],
-  ["Card and Board Reference", 3]
-]);
-
-function renderPageGroups(pages) {
-  const grouped = new Map(publicGroupOrder.map((group) => [group, []]));
-  for (const page of pages) {
-    const group = grouped.has(page.group)
-      ? page.group
-      : "Development and evidence";
-    grouped.get(group).push(page);
-  }
-  return publicGroupOrder
-    .filter((group) => grouped.get(group).length)
-    .map((group) => {
-      const entries = grouped.get(group);
-      if (group === "Required Play Kit") {
-        entries.sort((left, right) =>
-          playKitOrder.get(left.title) -
-            playKitOrder.get(right.title)
-        );
-      }
-      return `<section class="page-group"><h2>${escapeHtml(group)}</h2><ul class="page-list">
-${entries.map(pageListItem).join("\n")}
-</ul></section>`;
-    })
-    .join("\n");
+  return `<li><a href="${escapeHtml(page.href)}">${escapeHtml(page.title)}</a></li>`;
 }
 
 export function buildIndexHtml({
-  identity,
   pages,
   feedbackUrl,
   profileId = defaultProfileId,
-  library = false,
-  worldCopy = null
+  library = false
 }) {
   const title = library
     ? "Mandate 2038 · Supporting material"
     : profileId === "internal-review"
       ? "Mandate 2038 · Internal review"
-      : "Mandate 2038 · Public playtest";
-  const introduction = library
-    ? "Supporting material, playable interfaces, optional rules, specifications, and project records."
-    : worldCopy?.box
-      ? `${worldCopy.box.frontStrapline} ${worldCopy.box.shortPitch}`
-      : "The four documents required to set up and play Mandate 2038.";
-  const routeLink = library
-    ? '<p><a href="../">Return to Mandate 2038.</a></p>'
-    : "";
-  const feedbackLink = feedbackUrl
-    ? `<p class="feedback"><a href="${escapeHtml(feedbackUrl)}">Send playtest feedback</a></p>`
-    : "";
+      : "Mandate 2038";
+  const links = [...pages];
+  if (library) links.push({ href: "../", title: "Return to Mandate 2038" });
+  if (feedbackUrl) links.push({ href: feedbackUrl, title: "Send playtest feedback" });
   return protectHtml(`<!doctype html>
 <html lang="en">
 <head>
@@ -178,38 +121,24 @@ export function buildIndexHtml({
   <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
   <title>${title}</title>
   <style>
-    :root { color-scheme: dark; --ink:#eeeae0; --muted:#a9afa7; --line:#3b443b; --accent:#e4b553; }
+    :root { color-scheme: light; }
     * { box-sizing: border-box; }
-    body { margin:0; background:#121712; color:var(--ink); font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; }
-    main { width:min(760px,calc(100% - 2rem)); margin:0 auto; padding:3rem 0 5rem; }
-    h1 { margin:0 0 .5rem; font:700 clamp(2.4rem,8vw,4.5rem)/1 Georgia,serif; }
-    h2 { margin:2.5rem 0 .7rem; color:var(--accent); font:700 1rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; text-transform:uppercase; }
-    p { margin:.5rem 0 2rem; color:var(--muted); }
-    ul { margin:0; padding:0; list-style:none; border-top:1px solid var(--line); }
-    li { padding:1rem 0; border-bottom:1px solid var(--line); }
-    li a { display:inline-block; color:var(--accent); font:700 1.12rem/1.3 Georgia,serif; }
-    li a:hover,li a:focus-visible { color:#fff0bd; }
-    li span { display:block; margin-top:.25rem; color:var(--muted); font-size:.8rem; }
-    li.primary-action { margin:.75rem 0; padding:1.2rem; border:1px solid var(--accent); background:rgba(228,181,83,.08); }
-    li.primary-action a { font-size:1.5rem; }
-    .feedback { margin-top:2.5rem; }
-    .feedback a { color:var(--accent); }
-    footer { margin-top:2.5rem; color:var(--muted); font-size:.72rem; overflow-wrap:anywhere; }
-    footer code { color:var(--ink); }
+    body { margin:0; background:#fff; color:#111; font:18px/1.6 system-ui,sans-serif; }
+    main { max-width:42rem; margin:0 auto; padding:clamp(1.5rem,6vw,4rem) 1.25rem; }
+    h1 { margin:0 0 1.5rem; font-size:clamp(1.8rem,6vw,2.4rem); line-height:1.2; }
+    ul { margin:0; padding:0; list-style:none; }
+    li { margin:0; }
+    a { display:block; width:fit-content; max-width:100%; padding:.5rem 0; color:inherit; text-underline-offset:.2em; overflow-wrap:anywhere; }
+    a:hover { text-decoration-thickness:2px; }
+    a:focus-visible { outline:2px solid currentColor; outline-offset:4px; }
   </style>
 </head>
 <body>
 <main>
   <h1>Mandate 2038</h1>
-  <p>${introduction}</p>
-  ${renderPageGroups(pages)}
-  ${routeLink}
-  ${feedbackLink}
-  <footer>
-    Rules <code>${escapeHtml(identity.rulesVersion)}</code> ·
-    Executable <code>${escapeHtml(identity.executableVersion)}</code> ·
-    Source <code>${escapeHtml(identity.sourceCommit)}</code>
-  </footer>
+  <ul>
+${links.map(pageListItem).join("\n")}
+  </ul>
 </main>
 </body>
 </html>`);
@@ -487,15 +416,10 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   }
   pages.unshift(...interfacePages);
 
-  const publishedWorldCopy = JSON.parse(
-    await readFile(resolve(projectRoot, "dist/runtime/world-copy.json"), "utf8")
-  );
   const rootHtml = buildIndexHtml({
-    identity,
     pages,
     feedbackUrl: profile.feedbackUrl,
-    profileId,
-    worldCopy: publishedWorldCopy
+    profileId
   });
   await writeFile(resolve(outputRoot, "index.html"), `${rootHtml}\n`);
   if (profileId === "internal-review") {
@@ -503,12 +427,10 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
       .filter((page) => page.group !== "Required Play Kit")
       .map((page) => ({ ...page, href: `../${page.href}` }));
     const libraryHtml = buildIndexHtml({
-      identity,
       pages: libraryPages,
       feedbackUrl: profile.feedbackUrl,
       profileId,
-      library: true,
-      worldCopy: publishedWorldCopy
+      library: true
     });
     await mkdir(resolve(outputRoot, "library"), { recursive: true });
     await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);

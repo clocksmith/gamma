@@ -55,7 +55,7 @@ test("internal review executable retains the Lab route and carries a deployment 
   assert.match(html, /not approved for public deployment/);
 });
 
-test("review index clusters public game material before development surfaces", () => {
+test("site index presents one flat list of titles without subtitles", () => {
   const html = buildIndexHtml({
     identity: {
       rulesVersion: "rules-test",
@@ -87,18 +87,17 @@ test("review index clusters public game material before development surfaces", (
       }
     ]
   });
-  assert.match(html, /rules-test/);
-  assert.match(html, /exec-test/);
-  assert.match(html, /commit-test/);
+  assert.doesNotMatch(html, /rules-test|exec-test|commit-test/);
   assert.match(html, /href="https:\/\/example\.test\/feedback"/);
   assert.match(html, /rel="icon" href="\/web\/favicon\.svg"/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
-  assert.match(html, /class="primary-action"/);
   assert.ok(html.indexOf('href="web/index.html"') < html.indexOf('href="docs/core-rules.html"'));
-  assert.match(html, /<h2>Learn the game<\/h2>/);
-  assert.match(html, /<h2>Component review<\/h2>/);
-  assert.equal((html.match(/<li(?: class="primary-action")?>/g) ?? []).length, 3);
+  const body = html.split("<body>")[1];
+  assert.equal((body.match(/<ul>/g) ?? []).length, 1);
+  assert.equal((body.match(/<li>/g) ?? []).length, 4);
+  assert.doesNotMatch(body, /<h[2-6]\b|<section\b|<p\b|<span\b|<footer\b|primary-action/);
+  assert.doesNotMatch(body, /Start here|Learn the game|Component review|Playable interface|Rules\./);
   assert.doesNotMatch(html, /class="surface"/);
   assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
@@ -139,13 +138,17 @@ test("public playtest publication is an allowlist with release identity and feed
 
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /href="web\/index\.html">Play the game<\/a>/);
-    assert.match(rootIndex, /class="primary-action"/);
+    assert.doesNotMatch(rootIndex, /primary-action|<h[2-6]\b|<section\b|<p\b|<span\b|<footer\b/);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
-    assert.match(rootIndex, /turning cheap intelligence into infrastructure, authority/);
+    assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
     assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
     const docsIndex = await readFile(resolve(projectRoot, "dist/site/docs/index.html"), "utf8");
     assert.doesNotMatch(docsIndex, /world-primer|adaptive cybernetics/);
     assert.match(docsIndex, /href="world-and-institutions\.html"/);
+    const docsBody = docsIndex.split("<body>")[1];
+    assert.equal((docsBody.match(/<ul\b/g) ?? []).length, 1);
+    assert.equal((docsBody.match(/<li>/g) ?? []).length, 5);
+    assert.doesNotMatch(docsBody, /<h[2-6]\b|<nav\b|<p\b|doc-card|Required play kit/);
     const worldCompanion = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
     for (const opening of [
       "Intelligence became cheap enough",
@@ -252,7 +255,7 @@ test("internal review build remains complete but explicitly non-deployable", asy
     assert.match(rootIndex, /Simulation lab/i);
     assert.match(rootIndex, /Complete content gallery/i);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
-    assert.match(rootIndex, /turning cheap intelligence into infrastructure, authority/);
+    assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
     assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });

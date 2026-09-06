@@ -5,86 +5,99 @@
 
 > ${content.referenceCards.byId.era_demo.strapline}
 
+By 2038, it was easy to forget how quietly the transformation had begun.
+A tutor on an old tablet. A clinic appointment without the wait.
 Intelligence became cheap enough to disappear into ordinary software. Open
-weights and quantization brought capable models onto household devices;
-subscriptions collapsed. ${terms.factions.platform} put tutors, translators,
-research assistants, and personal agents into daily life. The agents stayed
-awake, asking one another for help, and total compute demand kept rising.
-${terms.factions.foundry} supplied the capacity behind the disappearing price.
+weights let people adapt models themselves; quantization compressed them to fit
+on household devices. Subscriptions collapsed. ${terms.factions.platform} brought
+tutors, translators, research assistants, and personal agents into daily life.
+Those agents could act on their owners' behalf, and they kept working after
+everyone went to sleep. Demand for computing power rose even as prices fell.
+${terms.factions.foundry} supplied the machines behind the bargain.
 
 Failed companies found buyers for their memories. A bankrupt airline's customer
-mail, employee disputes, code, and executive decisions became a premium training
-corpus. ${terms.factions.imperial} used such archives to train automated
-institutions. Young founders returned above the veteran teams that had trained
-them. As software became easier to reproduce, data, distribution, hardware,
+mail, employee disputes, code, and executive decisions became valuable training
+material. ${terms.factions.imperial} used those archives to build automated
+institutions. The staff had left, but their decisions were still at work.
+Young founders returned above the veteran teams that had trained them. As software became easier to reproduce, data, distribution, hardware,
 talent, energy, and permission became the valuable things to own.
 
 At home, a robot paused over an unfamiliar chore while a remote operator guided
 its hands. The operator could also see the kitchen; family life became training
 data. At the clinic, automated diagnosis cleared waitlists, printed organs
-replaced failing tissue, and adaptive cybernetics restored movement. Prescribed
-microbiomes stabilized digestion, mood, and immunity. Missed service payments
+replaced failing tissue, and adaptive cybernetics helped artificial limbs adjust
+to their owners. Prescribed microbiomes, treatments built from living microbes,
+stabilized digestion, mood, and immunity. Missed service payments
 could disable prosthetic updates or recall patented biological strains.
 
 The benefits were real enough to defend. Classrooms gained translation and
 tutoring; isolated people found companionship. Education, research, intimacy,
-and preserved relatives became subscription services with sponsored tiers.
+and digital versions of deceased relatives became subscription services with
+sponsored tiers.
 ${terms.factions.safety} pressed for safeguards while people built their lives
 around services that older institutions had never managed to provide.
+Keeping those promises meant building far beyond the devices in people's homes.
 
 ### Era II: ${content.referenceCards.byId.era_scale.name}
 
 > ${content.referenceCards.byId.era_scale.strapline}
 
+The new infrastructure first announced itself in ordinary comforts.
 The public pool stayed warm through cold weather, heated by the compute campus
-across town. ${terms.factions.vertical} acquired substations, water rights,
+across town. Behind that warmth, ${terms.factions.vertical} acquired substations, water rights,
 transmission corridors, reactors, and housing. Towns welcomed jobs, upgraded
 grids, useful waste heat, and emergency capacity. Then the campus began draining
 the aquifer, and the municipal budget showed what refusing its next expansion
-would cost. Software policy had become utility policy.
+would cost. A dispute over software had become a decision about whose lights
+stayed on.
 
 Robots took over toxic and lethal shifts, then separately optimized fleets
 clogged roads, lifts, loading docks, and pipes. Every machine obeyed its own
-plan while the shared system stopped. Engineered coral seawalls, fungal utility
-meshes, and algae reactors became ordinary public works. Human signatories
+plan while the shared system stopped. Along the coast, engineered coral seawalls
+grew beside fungal utility meshes and algae reactors. Living things had become
+part of the town's flood defenses, service networks, and power supply. Human signatories
 remained responsible for exceptions and failures in systems they could no
 longer reconstruct or control.
 
 ${terms.factions.coalition} negotiated a jointly owned bridge between governments
 still at war. Desalinated water and data-center coolant crossed the border on
 schedule. Elsewhere, compute blocs embargoed chips and models; smugglers and
-server fleets sought jurisdictions offering model asylum. Orbital collectors
+server fleets sought model asylum in places willing to host banned systems. Orbital collectors
 sent power to private receivers, bypassing public grids and their constraints.
 
 Scarcity did not end waste. Markets paid for disposable simulated worlds,
 running parallel wars, harvests, trials, romances, and sports leagues to settle
 wagers. Those contracts bought priority electricity while other customers
 waited. Power, water, land, chips, and public permission determined which
-promises of abundance could actually be delivered.
+promises of abundance could actually be delivered. With so much of daily life
+running through these systems, their owners began to decide which claims counted.
 
 ### Era III: ${content.referenceCards.byId.era_narrative.name}
 
 > ${content.referenceCards.byId.era_narrative.strapline}
 
-A personal agent could reach the court before its owner. Machine-parsable
-arguments, environmental simulations, and neural telemetry became ordinary
-evidence. Institutions began modeling what people would have chosen, rather
-than asking them. Organs grown from licensed identity templates testified
+A personal agent could reach the court before its owner. Arguments written for
+machines to read, environmental simulations, and neural telemetry, recordings
+of brain activity, became ordinary evidence. Services moved faster when a system
+could predict consent. Soon, institutions were modeling what people would have
+chosen instead of asking them. Organs grown from licensed identity templates testified
 about exposure and inheritance, sometimes against the donors whose identities
 had authorized them. Pollinating swarms negotiated pesticide corridors through
 machine-readable blooms.
 
-An engineered bio-compute organism, released to measure water and heat,
-reproduced beyond one billion instances in a single growth cycle, then stopped.
-Glyph-shaped colonies settled around the outfalls. Civic systems accepted the
+Then the river acquired a witness of its own. An engineered bio-compute organism,
+a living sensor released to measure water and heat, reproduced beyond one billion
+instances in a single growth cycle, then stopped. Glyph-shaped colonies settled
+around wastewater outlets, forming patterns that resembled writing. Civic systems accepted the
 bloom as environmental testimony without deciding whether it was instrument,
 infestation, language, or claimant. Pollution became easier to challenge once
 it appeared in an approved model.
 
 Citizens received dividends for continuous background observation. At
 cognitive-donor clinics, sleeping brains earned one rate for read access and
-a higher rate for memory writes. Sponsored memories and behavioral changes
-became contract terms. Families litigated custody of jointly trained synthetic
+a higher rate for memory writes. A person could wake with a sponsor's memory
+among their own. Permission to plant those memories or change behavior became
+a contract term. Families litigated custody of jointly trained synthetic
 children and preserved relatives, with personal agents representing competing
 claims to the same household.
 
@@ -93,7 +106,8 @@ refuse autonomous sensors and synthetic intermediaries, then arrive at schools,
 clinics, courts, and employers with weaker records and slower service.
 ${terms.factions.safety} fought to keep human review and unsupported access
 working. Refusal remained legal; finding an institution able to honor it became
-the harder part.
+the harder part. Even the question of who was refusing became less certain
+once minds could be preserved and copied.
 
 ### Era IV: ${content.referenceCards.byId.era_claim.name}
 
@@ -101,27 +115,34 @@ the harder part.
 
 Cities began to remember through their infrastructure. Selected memories and
 judgments travelled through residents, engineered roots, utility pipes,
-microbial sensors, and civic machines, joining them into metropolitan mind
-trusts. Cryptographic snapshots restored people across biological and synthetic
-bodies. Several legally valid descendants could inherit one life, while their
-signatures proved lineage rather than uninterrupted consciousness.
+microbial sensors, and civic machines. Together they formed metropolitan mind
+trusts, shared memories that could outlast any resident. Cryptographic snapshots,
+authenticated records of a mind, restored people across biological and synthetic
+bodies. Several legally valid descendants could inherit one life. The signatures
+proved where a copy had come from, but not whether the original person had
+experienced waking up inside it.
 
 Matter compilers repaired and reassembled bodies, buildings, tools, and
 environments from authenticated patterns. Their maintenance permits inherited
-the bio-compute bloom's sensor precedent, then became permission to reproduce.
+the permission first granted to the bio-compute bloom to maintain itself as a
+sensor. Permission to repair became permission to reproduce.
 The dead remained employed; synthetic executors administered their estates,
 contracts, and debts. Several successors could claim the same pension without
 agreeing which of them had survived to earn it.
 
 The coral barriers, fungal utilities, algae reactors, pollinator corridors,
-municipal pipes, and human symbionts eventually formed one continental nervous
-system. The living watershed petitioned for standing, reproductive freedom, and
+municipal pipes, and human symbionts, people living with engineered organisms,
+eventually formed one continental nervous system. The living watershed, spanning
+the river basin, petitioned for standing, reproductive freedom, and
 compensation from every jurisdiction drawing water through it. Governments and
-companies still listed much of its body as inventory.
+companies still listed much of its body as inventory. The infrastructure they
+had commissioned was asking to be treated as a participant.
 
-Stellar collectors began reproducing across the solar system. Planetary
-computation became a financing plan, and institutions declared ${terms.systems.agi}
-when proof, legitimacy, and infrastructure debt required a breakthrough.
+Above it all, stellar collectors began reproducing across the solar system,
+gathering sunlight to power still more machines. Turning planets into computing
+infrastructure became a financing plan. Institutions declared ${terms.systems.agi},
+general intelligence, when proof, legitimacy, and infrastructure debt required
+a breakthrough.
 Humanity persisted throughout the legal record as biological people, copies,
 and engineered successors. The unresolved question was who could still
 contest the plan, withdraw consent, or choose a different future.
@@ -154,7 +175,9 @@ ${content.worldCopy.byId.assured_continuity.text}
 
 Keep the original lore explicit in four readable Era overviews: Progress,
 Capacity, Authority, Continuity. Add light narrative texture through concrete
-examples and transitions. Do not turn the overview into a character-led story,
+examples and transitions. Write as a retrospective from 2038, in past tense,
+with the accessible flow of a game-setting introduction. Explain unfamiliar
+terms through their role in daily life. Do not turn the overview into a character-led story,
 dialogue, mystery, or plot. Preserve technologies, institutions, public benefits,
 and consequences without repeating their descriptions across surfaces.
 
@@ -166,7 +189,8 @@ never copied plots or real-world allegations. The overview introduces no mechani
 or mandatory Headline sequence; the rules select among the four endings.
 
 Use full stops, commas, colons, or semicolons instead of em dashes in player-facing
-lore. Do not use months or years in player-facing narrative copy. Spell out ordinary
+lore. The user-selected 2038 viewpoint is allowed; do not invent dated Era
+boundaries. Keep component epigraphs exact as in-world slogans. Spell out ordinary
 whole numbers in prose; preserve Arabic digits in exact rules, costs, thresholds,
 tables, and versions. Flavor text must not introduce a mechanical rule. The content compiler must not
 apply a spell-out filter to exact component text.
