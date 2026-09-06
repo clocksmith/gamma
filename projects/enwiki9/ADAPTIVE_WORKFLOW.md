@@ -55,6 +55,38 @@ evidence -> frozen experiment -> proposal -> claim -> develop/seal
 A held gate or unrelated reflection backlog does not stop independent research.
 Use this lifecycle rather than another launcher, queue, or chat-only notebook.
 
+## Choose Testing, Mutation, Or Exploration
+
+Make this choice after reviewing a closed result, or when choosing independent
+work alongside an owned live gate. Preserve that gate's frozen plan and observer.
+Use validated reflections and the existing `next-experiment` ranking for eligible
+work. This table guides research choices; it changes neither ranking code nor
+admission, ownership, approval, or promotion requirements.
+
+| Evidence at the decision boundary | Next action |
+| --- | --- |
+| A frozen comparison has an unfinished, authorized correctness or control check | Finish that check before interpreting the candidate. |
+| Correctness, synchronization, causality, or mandatory evidence fails | Diagnose the implementation/evidence defect; test the smallest repair as a separate candidate where required. Do not infer an algorithmic loss. |
+| A valid gain pays its incremental package cost and survives the specified controls | Prefer fresh confirmation or the next justified population/scale. A useful specialist need not close the entire target gap alone. |
+| A valid negative result exposes a specific failure mechanism and development budget remains | Change one corresponding mechanism and run a discriminating comparison. Avoid another parameter sweep without a new question. |
+| The development budget is exhausted, or two valid attempts in the same development sequence neither improve package-adjusted results nor resolve their named uncertainty | Park that configuration and perform one creative discovery cycle. This is a search-budget rule, not a proof against the information source. |
+| A candidate is held by ownership, resources, missing dependencies, or approval | Preserve the hold. Advance admitted independent work; use source research or synthetic design when corpus execution is unavailable. |
+
+Count attempts within the declared development sequence, not across an entire
+algorithm family. Invalid runs require diagnosis and consume their declared
+budget; they do not count as valid negative evidence. Honor a frozen stop rule
+before these defaults. A new diagnosed premise can justify a separately budgeted
+successor; renaming a failed configuration cannot.
+
+For exploration, use [the shared creative cycle](workbench/PROMPTS.md#creative-discovery).
+Declare a finite allowance in candidate evaluations, input bytes, and resource
+ceilings. Randomize the design perspectives, then choose the experiment by its
+evidence, decoder feasibility, cost, and ability to distinguish explanations.
+Once selected, implement its smallest gate before generating another portfolio.
+Use development data for invention and tuning; keep confirmation sealed until
+selection is finished. Repeats need a named unresolved question about correctness,
+determinism, transfer, resources, or uncertainty.
+
 ## Record The Discovery Boundary
 
 Use the [canonical record map](ledger/README.md#record-map): considered ideas

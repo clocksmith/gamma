@@ -12,6 +12,7 @@ next justified action. A held gate can coexist with independent research.
 | --- | --- |
 | Find prior algorithms, failures, mixes, or tools | [Start and find records](../ADAPTIVE_WORKFLOW.md#start-and-find-records) |
 | Research and choose a mechanism | [Discover and propose](../ADAPTIVE_WORKFLOW.md#discover-and-propose-algorithms) |
+| Decide whether to keep testing, mutate, or change direction | [Decision rules](../ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration) and [creative prompts](PROMPTS.md#creative-discovery) |
 | Implement or change one mechanism | [Create](../ADAPTIVE_WORKFLOW.md#create) and [mutate](../ADAPTIVE_WORKFLOW.md#mutate) |
 | Benchmark an exact codec | [Queue](../ADAPTIVE_WORKFLOW.md#queue) and [run](../ADAPTIVE_WORKFLOW.md#run) |
 | Run a simulation, proxy, or diagnostic | [Queue a tool](../ADAPTIVE_WORKFLOW.md#queue) |
