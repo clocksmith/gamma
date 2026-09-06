@@ -31,10 +31,10 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   sourced excerpts and fields, but cannot independently author rule paragraphs
   or numeric overrides. Named excerpts produce the compact Core Rules and the
   detailed references without copying their source prose.
-- `world.md` opens with the four connected companion chapters and ending references;
+- `world.md` opens with the four concise Era overviews and ending references;
   concise editorial notes follow the fiction. Era panels own their name, epigraph,
   rules, and unlocks. Shared identities resolve from their existing owners.
-  Narrative witnesses and locations introduce no components or mandatory events.
+  The overview preserves lore without a character plot or mandatory events.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
 - Every admitted lore situation has one structured Era placement, and every

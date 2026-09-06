@@ -25,7 +25,7 @@ systems and incentives, not jokes or allegations about real people.
 
 - `components/` owns complete component records: mechanics, IDs, wording, and
   author-only `$scenario` notes. Era panels own names, epigraphs, rules, unlocks,
-  and structured `$era` notes; the chapters own extended setting prose.
+  and structured `$era` notes; the Era overviews own extended setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
   supported inventory prose. Its named excerpts generate the map, component,
   and inventory references; the compact Core Rules omit those detailed sections.

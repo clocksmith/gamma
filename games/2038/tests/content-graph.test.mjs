@@ -297,13 +297,13 @@ test("Card and Board Reference projects every other required card surface", asyn
   }
 });
 
-test("world companion owns four ordered chapters and references canonical Era identities", async () => {
+test("world companion owns four ordered Era overviews and references canonical Era identities", async () => {
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
   const variables = await readJson("content/data/variables.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const source = await readFile(new URL("world.md", root), "utf8");
   const playerSource = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
-  const chapters = [...world.matchAll(/^### Chapter ([IV]+): (.+)$/gm)];
+  const chapters = [...world.matchAll(/^### Era ([IV]+): (.+)$/gm)];
   assert.deepEqual(chapters.map((match) => match[1]), ["I", "II", "III", "IV"]);
   assert.deepEqual(chapters.map((match) => match[2]), eraCards.map((era) => era.name));
   for (const era of eraCards) {
@@ -315,19 +315,19 @@ test("world companion owns four ordered chapters and references canonical Era id
   }
   for (const [key, name] of Object.entries(variables.terms.factions)) {
     assert.ok(playerSource.includes(`\${terms.factions.${key}}`), `${name} uses shared identity`);
-    assert.ok(world.includes(name), `${name} participates in the chapters`);
+    assert.ok(world.includes(name), `${name} appears in the Era overviews`);
   }
   assert.doesNotMatch(playerSource, /worldPrimer|\.loreText}/);
-  assert.match(world, /^# [^\n]+\n\n### Chapter I:/);
+  assert.match(world, /^# [^\n]+\n\n### Era I:/);
   assert.doesNotMatch(world, /Rules version:|The jurisdiction|This companion contains|two independent axes/);
   assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
 });
 
-test("prose trim preserves chapter text and retained component rules", async () => {
+test("concise Era overviews preserve the simplified component records", async () => {
   const previous = await readJson("versions/0.15.2/game-bundle.json");
   const source = await readFile(new URL("world.md", root), "utf8");
-  const chapters = (text) => text.split("### Chapter I:")[1].split("## The four World Endings")[0];
-  assert.equal(chapters(source), chapters(previous.contentGraph["world.md"]));
+  const player = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
+  assert.doesNotMatch(player, /Mara|Lio|Southbank|Chapter/);
   const notes = source.split("<!-- world-guide:start -->")[1].split("<!-- world-guide:end -->")[0];
   assert.ok(notes.split(/\s+/).length < 1000, "writing notes stay compact");
 
@@ -354,7 +354,7 @@ test("prose trim preserves chapter text and retained component rules", async () 
   }
 });
 
-test("closing scenes retain four rule-owned outcomes without procedural prose", async () => {
+test("ending descriptions retain four rule-owned outcomes without procedural prose", async () => {
   const { endings } = await readJson("dist/runtime/world-copy.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const config = await readJson("dist/runtime/game-config.json");
@@ -478,7 +478,7 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(componentReference, /integrated starting-grid identifier/);
   assert.match(componentReference, /## Defined markers and effects/);
 
-  assert.match(world, /### Chapter I: Progress/);
+  assert.match(world, /### Era I: Progress/);
   assert.doesNotMatch(world, /\*\*Interpretation\.\*\*/);
   assert.doesNotMatch(world, /Nobody knows whether it works/);
   assert.match(world, /## The four World Endings/);

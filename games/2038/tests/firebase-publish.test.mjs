@@ -148,13 +148,13 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.match(docsIndex, /href="world-and-institutions\.html"/);
     const worldCompanion = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
     for (const opening of [
-      "The kitchen robot held the egg",
-      "Steam lifted from Southbank",
-      "The river wrote its first objection",
-      "Mara's access key worked"
+      "Intelligence became cheap enough",
+      "The public pool stayed warm",
+      "A personal agent could reach the court",
+      "Cities began to remember"
     ]) {
       assert.ok(!rootIndex.includes(opening), "home links to the setting without repeating its paragraphs");
-      assert.equal(worldCompanion.split(opening).length - 1, 1, "the companion presents each chapter once");
+      assert.equal(worldCompanion.split(opening).length - 1, 1, "the companion presents each Era overview once");
     }
     assert.match(rootIndex, /Send playtest feedback/);
     assert.doesNotMatch(rootIndex, /Simulation lab/i);
