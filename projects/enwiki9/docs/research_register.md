@@ -2,6 +2,30 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Open MIDAS opening250KB ownership and exact-residual unit
+
+`root_explore` owns `midas_open_incremental_corpus250k_q0_v1`, the first bounded
+raw corpus runner for the unchanged standalone incremental codec. Its
+[frozen experiment](../operations/adaptive/experiments/midas_open_incremental_corpus250k_q0_v1.json)
+binds the existing kernel measurements, retained executable, exact opening
+250,000-byte population, P/K/F/S controls, package components and CPU2 resource
+envelope. Eighteen [runner tests](../operations/evidence/20260906_midas_open_corpus_runner_unit.json)
+pass, including retained 65-byte archives and cache-drift rejection. No compiler
+runs in the corpus gate. No corpus result is available at registration.
+
+Each arm must independently invert, repeat and agree on complete terminal
+state; P/K authoritative parent projections must agree. The unchanged codec
+does not emit every-midpoint probability/state traces. That missing evidence
+blocks promotion and cannot be inferred from terminal equality. Complete package
+and calibrated resource qualification remain unresolved. HORIZON is unchanged.
+
+The [exact-residual probe unit](../operations/evidence/20260906_fx2_exact_residual_unit.json)
+passes seven synthetic tests, including independent goldens, exact signed XOR,
+exceptional floating-point payloads, malformed-input rejection and exclusive
+publication. Rejection tests now require the probe's exact error exit and
+diagnostic prefix; crashes cannot pass as expected codec rejection. The trained
+model package and probability comparison remain unmeasured.
+
 ## 2026-09-06 - Exact representation experiments and precision diagnosis
 
 The active target remains 99,000,000 complete bytes; the 10,389,323-byte distance

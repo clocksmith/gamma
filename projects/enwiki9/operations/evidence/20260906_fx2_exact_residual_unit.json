@@ -1,0 +1,97 @@
+{
+  "schema": "gamma.enwiki9.fx2-exact-residual-unit.v1",
+  "id": "fx2_exact_residual_unit_20260906",
+  "generatedUtc": "2026-09-06T01:16:14Z",
+  "source_bindings": [
+    {
+      "path": "tools/fx2_weight_exact_residual_probe_v1.cpp",
+      "bytes": 18418,
+      "sha256": "64ac452e0bf5acb0f1dee1487d509535104af5a0229d9b9457977be2d94d377f"
+    },
+    {
+      "path": "tests/test_fx2_weight_exact_residual.py",
+      "bytes": 12177,
+      "sha256": "5a364f1dcb30f8266b065fc8e3e967884bf02d2106ff34f72ef4cf1b011ec28d"
+    },
+    {
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "bytes": 20196,
+      "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "bytes": 21305,
+      "sha256": "f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    }
+  ],
+  "compile": {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "tools/fx2_weight_exact_residual_probe_v1.cpp",
+      "-o",
+      "/tmp/gamma_exact_residual_unit_g5h5emcd/probe"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "temporary_binary": {
+      "bytes": 103088,
+      "sha256": "9d1b3b8822cbbb0f3158390af7d48f74025c09f4c52a09f65d1b1a1fc9ca4d59",
+      "retained": false
+    }
+  },
+  "test": {
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_fx2_weight_exact_residual.py",
+      "-v"
+    ],
+    "environment": {
+      "FX2_EXACT_RESIDUAL_PROBE": "/tmp/gamma_exact_residual_unit_g5h5emcd/probe"
+    },
+    "returncode": 0,
+    "count": 7,
+    "all_pass": true,
+    "reported_elapsed_seconds": 2.858
+  },
+  "bounds": {
+    "cpus": [
+      2
+    ],
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "per_file_bytes": 33554432,
+    "wall_seconds": 120
+  },
+  "elapsed_seconds": 4.414279652060941,
+  "children_rusage_cpu_seconds": 4.16831,
+  "checks": [
+    "Independent parent populations, exact-residual goldens and fresh repeats",
+    "All prior malformed parent and marginal streams rejected",
+    "Exact malformed histograms, bounds and closure rejected",
+    "Exclusive publication and visible stdout failure",
+    "Native self-test",
+    "Mocked crashes, aborts, other exit codes and unrelated diagnostic prefixes cannot satisfy expected rejection",
+    "All 15 signed INT4 values invert the fixed signed-byte XOR"
+  ],
+  "review_fix": "Before this receipt, rejection tests were strengthened to require exit 1 and the exact probe diagnostic prefix; native source remained unchanged.",
+  "scope": "Synthetic model events only; no trained model, inference or corpus execution",
+  "objective_credit_bytes": 0,
+  "resource_qualified": false,
+  "measured_trained_model_bytes": null,
+  "probability_stream_identity": null,
+  "complete_package_bytes": null
+}

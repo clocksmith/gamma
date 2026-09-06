@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.enwiki9.midas-open-corpus-runner-unit.v1",
+  "id": "midas_open_corpus_runner_unit_20260906",
+  "generatedUtc": "2026-09-06T01:16:14Z",
+  "source_bindings": [
+    {
+      "path": "tools/midas_open_corpus_gate_v1.py",
+      "bytes": 28414,
+      "sha256": "992759d519d383e5a3b285a68703bfb42dbc4d01616f0b30906911e1838f6055"
+    },
+    {
+      "path": "tests/test_midas_open_corpus_gate.py",
+      "bytes": 19040,
+      "sha256": "bb53f3526ffc50ec717ae207bc909ace8a2e813dbe641264bc1c9055b92ba237"
+    },
+    {
+      "path": "tools/midas_open_codec_v1.py",
+      "bytes": 10093,
+      "sha256": "8e15d42cb28d007e45bb755f2979ce488bd059ab0b6682d7f3f165bea100bf3b"
+    },
+    {
+      "path": "lib/fx2_native_gate_v1.py",
+      "bytes": 11624,
+      "sha256": "b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "path": "operations/evidence/20260906_midas_relocatable_source_bundle_unit.json",
+      "bytes": 38878,
+      "sha256": "83a280ada11453171117056a658e6b94a5dcfaeb899b1bf3d034280e42de8d51"
+    }
+  ],
+  "command": [
+    "taskset",
+    "--cpu-list",
+    "2",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=120",
+    "--fsize=33554432",
+    "--",
+    "timeout",
+    "120s",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_midas_open_corpus_gate.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "output": "test_cached_all_arm_65_byte_replay_no_build_or_corpus (test_midas_open_corpus_gate.CachedSyntheticReplayTest.test_cached_all_arm_65_byte_replay_no_build_or_corpus) ... ok\ntest_retained_build_and_runtime_authorities_match_without_build (test_midas_open_corpus_gate.CachedSyntheticReplayTest.test_retained_build_and_runtime_authorities_match_without_build) ... ok\ntest_all_twelve_phases_and_distinct_success_fields (test_midas_open_corpus_gate.GateTest.test_all_twelve_phases_and_distinct_success_fields) ... ok\ntest_budget_failure_retains_phase_and_classification (test_midas_open_corpus_gate.GateTest.test_budget_failure_retains_phase_and_classification) ... ok\ntest_changed_build_source_and_unbound_dependency_are_rejected (test_midas_open_corpus_gate.GateTest.test_changed_build_source_and_unbound_dependency_are_rejected) ... ok\ntest_changed_population_digest_and_alias_are_rejected (test_midas_open_corpus_gate.GateTest.test_changed_population_digest_and_alias_are_rejected) ... ok\ntest_compression_loss_does_not_skip_controls_or_invalidate_infrastructure (test_midas_open_corpus_gate.GateTest.test_compression_loss_does_not_skip_controls_or_invalidate_infrastructure) ... ok\ntest_contract_and_output_identities_are_unique (test_midas_open_corpus_gate.GateTest.test_contract_and_output_identities_are_unique) ... ok\ntest_directional_and_pk_controls_are_separate_from_compression (test_midas_open_corpus_gate.GateTest.test_directional_and_pk_controls_are_separate_from_compression) ... ok\ntest_false_model_update_count_is_rejected (test_midas_open_corpus_gate.GateTest.test_false_model_update_count_is_rejected) ... ok\ntest_missing_fingerprint_and_index_publication_failure_keep_failed_stage (test_midas_open_corpus_gate.GateTest.test_missing_fingerprint_and_index_publication_failure_keep_failed_stage) ... ok\ntest_missing_output_or_false_update_count_fails_closed (test_midas_open_corpus_gate.GateTest.test_missing_output_or_false_update_count_fails_closed) ... ok\ntest_plan_rejects_unbounded_population_and_zero_wall (test_midas_open_corpus_gate.GateTest.test_plan_rejects_unbounded_population_and_zero_wall) ... ok\ntest_runtime_inventory_drift_is_rejected (test_midas_open_corpus_gate.GateTest.test_runtime_inventory_drift_is_rejected) ... ok\ntest_same_arm_state_mismatch_is_implementation_failure (test_midas_open_corpus_gate.GateTest.test_same_arm_state_mismatch_is_implementation_failure) ... ok\ntest_seeded_cache_miss_or_changed_bytes_never_compiles (test_midas_open_corpus_gate.GateTest.test_seeded_cache_miss_or_changed_bytes_never_compiles) ... ok\ntest_unclosed_children_publish_failed_decision_without_work_hashes (test_midas_open_corpus_gate.GateTest.test_unclosed_children_publish_failed_decision_without_work_hashes) ... ok\ntest_verification_child_must_close_before_indexing (test_midas_open_corpus_gate.GateTest.test_verification_child_must_close_before_indexing) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.435s\n\nOK\n",
+  "scope": "18 synthetic runner and retained 65-byte native fixture tests; no corpus run and no compilation",
+  "all_tests_pass": true,
+  "objective_credit_bytes": 0,
+  "resource_qualified": false,
+  "complete_package_bytes": null,
+  "synchronization_scope": "Same-arm complete terminal witnesses, P/K authoritative terminal projections; no every-midpoint trace supplied by the unchanged codec",
+  "ownership": "root_explore owns only this newly identified corpus runner and gate; existing model sources remain unchanged"
+}
