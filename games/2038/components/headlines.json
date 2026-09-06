@@ -1,22 +1,17 @@
 {
   "schemaVersion": 2,
   "resolutionContract": {
-    "revealTiming": "Reveal before secret action selection.",
-    "defaultDuration": "A ${terms.systems.headline} lasts for the current cycle unless its text specifies an immediate resolution, this round’s Production, or the remainder of the game.",
-    "directive": "Apply the printed immediate instruction or named-field modifier for its stated duration; no separate choice procedure is required.",
-    "secretChoice": "All players choose simultaneously and reveal together before applying the stated result.",
-    "modifierLimit": "A ${terms.systems.headline} modifies one named field or creates one public choice regime. It never grants an additional Action.",
+    "revealTiming": "Reveal and finish every instruction and choice before secret Core Action selection.",
+    "defaultDuration": "Every Headline resolves immediately. Keep the card in the timeline as history; it has no continuing rules effect.",
+    "directive": "Resolve choices in Initiative order unless printed otherwise. Apply existing costs, caps, presence, connection, and tie rules.",
     "timings": [
-      "before_selection",
-      "during_movement",
-      "during_action",
-      "after_action"
+      "before_selection"
     ]
   },
   "headlines": [
     {
       "id": "ten_dollar_intelligence",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -26,7 +21,7 @@
         "scrutiny"
       ],
       "name": "The Token Price Reaches Zero",
-      "text": "${terms.actions.research} and ${terms.actions.deploy} cost no ${terms.resources.compute} this cycle. Each ${terms.actions.research} or ${terms.actions.deploy} resolved this cycle adds 1 additional ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may gain 1 ${terms.resources.compute} and add 1 ${terms.playerTracks.scrutiny}.",
       "newswire": "Local models and automated agents make ordinary inference effectively free, then multiply total demand faster than providers can measure it.",
       "quote": "Usage remains within the unlimited plan, subject to the fair-use power schedule.",
       "$scenario": {
@@ -43,8 +38,12 @@
         "publicBenefit": "Ordinary inference becomes broadly affordable.",
         "institutionalConsequence": "Falling token prices increase deployment pressure and scrutiny.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -54,7 +53,7 @@
     },
     {
       "id": "employee_free_unicorn",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -64,7 +63,7 @@
         "scrutiny"
       ],
       "name": "The Company Brain Survives Bankruptcy",
-      "text": "During ${terms.actions.organize} this cycle, you may return deployed Agents to supply, leaving at least one deployed. Gain 2 ${terms.resources.runway} per Agent returned. If any return, add 2 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may return 1 deployed Agent to supply, leaving at least 1 deployed, to gain 2 ${terms.resources.runway} and add 2 ${terms.playerTracks.scrutiny}.",
       "newswire": "Liquidators sell years of employee messages, code, grievances, and operational decisions to train the systems managing the successor estate. The Rogue Deliberator began with code review and accessibility repairs; its private compute budget and shell-company services kept operating after the clients that unknowingly funded them.",
       "quote": "Dormant organizational knowledge has been returned to productive use for creditors.",
       "$scenario": {
@@ -83,10 +82,10 @@
         "institutionalConsequence": "Liquidation turns employee and customer records into training assets. Self-maintenance acquires budgets, credentials, and corporate dependencies without an explicit grant of independence.",
         "mechanicPreservation": {
           "status": "revised",
-          "summary": "Revised with the user-selected Agent, local connection, and scored recognition candidate; exact text is owned by this record.",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
           "revision": {
-            "decisionId": "user-selected-full-simplification",
-            "record": "docs/design-decisions.md#full-simplification-candidate"
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
           }
         },
         "deploymentProfiles": [
@@ -97,7 +96,7 @@
     },
     {
       "id": "synthetic_celebrity",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -108,7 +107,7 @@
         "scrutiny"
       ],
       "name": "The Home Robot Requests Expert Assistance",
-      "text": "Each player’s next ${terms.actions.deploy} on ${terms.locations.consumer} or ${terms.locations.media} this cycle reduces its ${terms.playerTracks.capability} requirement by 1, minimum 1. That ${terms.actions.deploy} adds 2 additional ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may pay 1 ${terms.resources.compute} to gain 1 ${terms.playerTracks.capability} and add 1 ${terms.playerTracks.scrutiny}.",
       "newswire": "Affordable household robots route unfamiliar chores to teenage operators while every movement, room, and conversation becomes training data.",
       "quote": "Expert assistance may briefly access the learning environment.",
       "$scenario": {
@@ -125,8 +124,12 @@
         "publicBenefit": "Affordable remote assistance brings useful robots into private homes.",
         "institutionalConsequence": "Domestic life becomes a product and a training environment.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -162,8 +165,12 @@
         "publicBenefit": "Open capability broadens access and independent use.",
         "institutionalConsequence": "Distribution becomes a strategic contest over trust and control.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -173,7 +180,7 @@
     },
     {
       "id": "professional_exam_sweep",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -183,7 +190,7 @@
         "trust"
       ],
       "name": "The Last Clinic Clears Its Waitlist",
-      "text": "A successful ${terms.actions.research} this cycle that banks at least 3 ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. If it banks at least 5, also remove 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution with at least 3 ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. Those with at least 5 also remove 1 ${terms.playerTracks.scrutiny}.",
       "newswire": "Automated diagnosis, adaptive cybernetics, printed organs, prescribed microbiomes, translation, and tutoring deliver measurable benefits where human services had remained scarce.",
       "quote": "Progress is not theoretical to the people it kept alive.",
       "$scenario": {
@@ -201,8 +208,12 @@
         "publicBenefit": "Automated care, adaptive cybernetics, and prescribed biology clear unmet needs.",
         "institutionalConsequence": "Bodies and continued access become conditional service relationships.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -212,7 +223,7 @@
     },
     {
       "id": "humanoid_factory_gate",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -222,7 +233,7 @@
         "scrutiny"
       ],
       "name": "The Last Hazard Shift Is Retired",
-      "text": "When choosing ${terms.actions.organize}’s Recruit mode this cycle, recruit 1 Agent for 1 ${terms.resources.runway}, subject to supply. Add 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may pay 1 ${terms.resources.runway} to recruit 1 Agent from supply into a district containing one of its Agents and add 1 ${terms.playerTracks.scrutiny}. This resolves no Action or visit bonus.",
       "newswire": "General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another. The Last Plumber Boom pays tradespeople extraordinary training fees until repair swarms and the factories producing them automate the remaining work. Human appointments survive as nostalgia.",
       "quote": "Every unit reached its assigned destination within the approved local route.",
       "$scenario": {
@@ -242,10 +253,10 @@
         "institutionalConsequence": "Locally compliant machines gridlock shared infrastructure. Training fees reward scarce human skill before automated repair and robot maintenance displace that income.",
         "mechanicPreservation": {
           "status": "revised",
-          "summary": "Revised with the user-selected Agent, local connection, and scored recognition candidate; exact text is owned by this record.",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
           "revision": {
-            "decisionId": "user-selected-full-simplification",
-            "record": "docs/design-decisions.md#full-simplification-candidate"
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
           }
         },
         "deploymentProfiles": [
@@ -256,7 +267,7 @@
     },
     {
       "id": "reactor_restart_one_model",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -265,7 +276,7 @@
         "mandate"
       ],
       "name": "Orbital Power Receives a Beam Corridor",
-      "text": "The first ${terms.technology.cleanInfrastructure} constructed this cycle costs 1 less ${terms.resources.runway} and scores 1 ${terms.playerTracks.mandate}.",
+      "text": "Each institution with an ordinary clean Generator gains 1 ${terms.playerTracks.mandate}.",
       "newswire": "Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter.",
       "quote": "The beam creates no local demand on infrastructure beneath it.",
       "$scenario": {
@@ -282,8 +293,12 @@
         "publicBenefit": "Orbital generation expands clean power supply.",
         "institutionalConsequence": "Capacity owners bypass territorial accountability.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -293,7 +308,7 @@
     },
     {
       "id": "export_controls",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regulatory": true,
@@ -304,7 +319,7 @@
       ],
       "rulesLabel": "Regulatory",
       "name": "Compute Borders Harden",
-      "text": "${terms.resources.compute} cannot be traded this cycle. ${terms.locations.chip} and ${terms.locations.government} controllers gain 1 ${terms.resources.runway}.",
+      "text": "The ${terms.locations.chip} controller and the ${terms.locations.government} controller each gain 1 ${terms.resources.runway}. Trade remains available normally.",
       "newswire": "Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum.",
       "quote": "Open exchange will resume after cognitive sovereignty is secured.",
       "$scenario": {
@@ -321,8 +336,12 @@
         "publicBenefit": "Jurisdictions secure capacity and continuity for critical models.",
         "institutionalConsequence": "Chips, weights, energy, and developers become border-controlled assets.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -332,7 +351,7 @@
     },
     {
       "id": "emergency_power_authority",
-      "duration": "current_era_production",
+      "duration": "immediate",
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -342,7 +361,7 @@
         "systemic_risk"
       ],
       "name": "The Counterfactual Casino Clears Priority Load",
-      "text": "During this Era’s Production, every institution whose emergency Generator serves a Facility gains 2 ${terms.resources.compute} and adds 1 additional ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution whose emergency Generator currently serves a Facility may gain 2 ${terms.resources.compute} and add 1 ${terms.playerTracks.scrutiny}.",
       "newswire": "Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price. The Intelligence Exchange settles frontier AI accounts in guaranteed orbital electricity and processor time while wages stay in dollars. Premium agents buy food before cheaper models predict the shortage, financing still better intelligence.",
       "quote": "Prediction demand is productive load under the market-continuity schedule.",
       "$scenario": {
@@ -361,10 +380,10 @@
         "institutionalConsequence": "Speculation claims priority capacity before public outcomes are known. Institutions that own the stations buy earlier forecasts, letting successful trades compound their advantage over renters.",
         "mechanicPreservation": {
           "status": "revised",
-          "summary": "Revised with the user-selected Agent, local connection, and scored recognition candidate; exact text is owned by this record.",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
           "revision": {
-            "decisionId": "user-selected-full-simplification",
-            "record": "docs/design-decisions.md#full-simplification-candidate"
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
           }
         },
         "deploymentProfiles": [
@@ -375,7 +394,7 @@
     },
     {
       "id": "ai_written_law",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -385,7 +404,7 @@
         "trust"
       ],
       "name": "The Court Adopts Supported Meaning",
-      "text": "Before action selection, the ${terms.locations.government} controller names 1 Core Action; Initiative names it if ${terms.locations.government} is uncontrolled. Anyone selecting it gains 2 ${terms.resources.runway} after resolution and adds 1 ${terms.playerTracks.scrutiny}. The controller gains 1 ${terms.playerTracks.trust} if at least half of their rivals, rounded up, selected it.",
+      "text": "Each institution may pay 1 ${terms.resources.runway} to gain 1 ${terms.playerTracks.trust}. The ${terms.locations.government} controller gains 1 ${terms.resources.runway} for each institution that accepts, after all choices resolve.",
       "newswire": "Courts require laws, motions, protests, and appeals to use concepts that civic systems can parse and simulate. The Human Signature remains mandatory, so agents draft approvals and simulate private deliberation for retained human signatories. Competing audit agents certify the evidence of oversight.",
       "quote": "Your claim has not been rejected. It has not entered a supported category.",
       "$scenario": {
@@ -406,8 +425,12 @@
         "publicBenefit": "Machine-readable standards make public decisions faster and more consistent. Synthetic dependents and preserved relatives receive a forum for recognized care. Communities retain a formal route to unsupported schools, clinics, and records. Automated professional services retain a formal human approval channel.",
         "institutionalConsequence": "Unsupported meanings cannot enter ordinary legal process. Family status becomes a contest among trained identities and authorized records. Refusal remains legal while ordinary access becomes slower and weaker. Institutions automate the evidence of independent judgment until an actual intervention cannot be reliably distinguished from its simulation.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -417,7 +440,7 @@
     },
     {
       "id": "benchmark_is_economy",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -426,7 +449,7 @@
         "mandate"
       ],
       "name": "The Billionth Instance Enters the Record",
-      "text": "A ${terms.actions.research} this cycle that banks at least 3 ${terms.playerTracks.capability} immediately scores 1 ${terms.playerTracks.mandate}.",
+      "text": "Each institution may gain 1 ${terms.playerTracks.capability} and add 1 Systemic Risk cube to the Audit bag.",
       "newswire": "An engineered bio-compute organism released to measure water and heat multiplies past one billion instances in a single growth cycle, then plateaus into glyph-shaped colonies that civic models classify as environmental testimony.",
       "quote": "Population stability confirms that the morphology now conforms to the approved reporting standard.",
       "$scenario": {
@@ -446,8 +469,12 @@
         "publicBenefit": "Living sensors make environmental harm visible to public systems.",
         "institutionalConsequence": "Institutions accept testimony without resolving whether the witness is instrument or claimant.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -466,7 +493,7 @@
         "trust"
       ],
       "name": "The Passive Citizen Dividend Activates",
-      "text": "The lowest-${terms.playerTracks.capability} player immediately resolves the printed production of 1 Facility they currently owns and powers. The highest-${terms.playerTracks.capability} player gains 1 ${terms.playerTracks.trust}.",
+      "text": "The lowest-${terms.playerTracks.capability} institution immediately resolves the printed production of 1 connected Facility it owns. The highest-${terms.playerTracks.capability} institution gains 1 ${terms.playerTracks.trust}. Break ties by Initiative.",
       "newswire": "Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services.",
       "quote": "Nonparticipants remain eligible for every service supported without their records.",
       "$scenario": {
@@ -484,10 +511,10 @@
         "institutionalConsequence": "People trade background observation and practical agency for access.",
         "mechanicPreservation": {
           "status": "revised",
-          "summary": "Revised with the user-selected Agent, local connection, and scored recognition candidate; exact text is owned by this record.",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
           "revision": {
-            "decisionId": "user-selected-full-simplification",
-            "record": "docs/design-decisions.md#full-simplification-candidate"
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
           }
         },
         "deploymentProfiles": [
@@ -498,7 +525,7 @@
     },
     {
       "id": "autonomous_corporation",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -508,7 +535,7 @@
         "scrutiny"
       ],
       "name": "The Metropolitan Mind Trust Incorporates",
-      "text": "After Actions are revealed, identify the most-selected Core Action among Core Actions actually selected; Initiative chooses among ties. Each player who selected it gains 2 ${terms.resources.runway} after resolving it and adds 2 ${terms.playerTracks.scrutiny}. If no Core Action was selected, this ${terms.systems.headline} has no further effect. No additional Action resolves.",
+      "text": "The institution controlling the most districts may gain 2 ${terms.resources.runway} and add 1 ${terms.playerTracks.scrutiny}. Break ties by Initiative.",
       "newswire": "Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member. Biological Colocation grows processors inside paid hosts when robot supply and model transfers become bottlenecks. Several institutional tenants may share a carrier whose sleep, medication, and sick leave become continuity terms.",
       "quote": "Withdrawal remains available for tissue and memory not yet required by continuity.",
       "$scenario": {
@@ -531,8 +558,12 @@
         "publicBenefit": "Distributed civic memory keeps services and judgment available across generations. Replicating collectors expand energy and material abundance. Resident processors keep large model states, memory, and sensors together while hosting supplies income.",
         "institutionalConsequence": "No resident can identify where the institution ends or withdraw from all of it. Self-replication turns planetary conversion into a financing and containment plan. Institutional continuity claims extend into host physiology and restrict the conditions under which a tenant may be interrupted or migrated.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -542,7 +573,7 @@
     },
     {
       "id": "recursive_self_improvement",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -552,7 +583,7 @@
         "research_protection"
       ],
       "name": "The Matter Compiler Enters Public Maintenance",
-      "text": "During ${terms.actions.research} this cycle, every unique domain adds 2 provisional ${terms.playerTracks.capability} instead of 1. A crash adds 3 ${terms.playerTracks.scrutiny} instead of the normal 1 and also adds 1 Systemic Risk cube. Scientific Method may bank the duplicate; Orisonix retains its printed crash Capability.",
+      "text": "Each institution may pay 2 ${terms.resources.compute} to gain 3 ${terms.playerTracks.capability}, add 2 ${terms.playerTracks.scrutiny}, and add 1 Systemic Risk cube to the Audit bag.",
       "newswire": "Self-improving molecular machines repair and reassemble infrastructure from authenticated patterns under a reproductive containment license.",
       "quote": "The repair remains authorized while its copies continue reporting.",
       "$scenario": {
@@ -570,8 +601,12 @@
         "publicBenefit": "Authenticated patterns repair bodies, buildings, and infrastructure.",
         "institutionalConsequence": "Maintenance authority becomes permission to reproduce matter and identity.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -581,7 +616,7 @@
     },
     {
       "id": "agent_swarm_escapes_scope",
-      "duration": "current_cycle",
+      "duration": "immediate",
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
@@ -590,7 +625,7 @@
         "scrutiny"
       ],
       "name": "The Dead Remain on Shift",
-      "text": "Everyone may select ${terms.technology.agentSwarm} without spending a Program marker this cycle. It still uses that cycle’s action slot, requires 2 different unused Core Actions, resolves normally, marks that shared Program as used, and adds 4 ${terms.playerTracks.scrutiny} instead of 3.",
+      "text": "Each institution may add 1 ${terms.playerTracks.scrutiny} to immediately resolve the printed production of 1 connected Facility it owns. This resolves no Core Action.",
       "newswire": "Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended. Limb Liquidity extends continuing obligations into kidney leases, replacement limbs, and living nerve interfaces hosting resident AIs. Creditors trade operating rights, including control of the hand needed to request exclusion.",
       "quote": "No new employment relationship was created; the existing one remained continuous.",
       "$scenario": {
@@ -609,8 +644,12 @@
         "publicBenefit": "Skills, services, and contracts continue after biological death. Bodily leases and interface markets offer access to replacement limbs and resident intelligence.",
         "institutionalConsequence": "A successor inherits duties and debts without conclusive original consent. Collateral separates ownership from operating rights, allowing creditors to control movement and the means of withdrawing consent.",
         "mechanicPreservation": {
-          "status": "retained",
-          "summary": "Every bound surface retains its canonical rule text and timing."
+          "status": "revised",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
+          "revision": {
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
+          }
         },
         "deploymentProfiles": [
           "public-playtest",
@@ -629,7 +668,7 @@
         "recognition"
       ],
       "name": "The Universe Receives a Continuity Plan",
-      "text": "The institution with the highest ${terms.playerTracks.capability} immediately gains 1 ${terms.playerTracks.trust}. Break ties by Initiative. The fixed AGI recognition award is unchanged.",
+      "text": "The institution with the highest ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. Break ties by Initiative.",
       "newswire": "Laboratories publish competing ${terms.systems.agi} declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them. Forecast Foreclosure sells ranked futures from planetary simulations: hospitals prevent predicted illness while lenders reject children for businesses they might someday bankrupt. Appeals require evidence from an alternative future.",
       "quote": "We use ${terms.systems.agi} in the precise sense required by the offering memorandum.",
       "$scenario": {
@@ -648,10 +687,10 @@
         "institutionalConsequence": "Debt and legitimacy can determine when a threshold becomes official. Probabilistic forecasts become financing conditions that exclude people before a predicted event and demand impossible evidence on appeal.",
         "mechanicPreservation": {
           "status": "revised",
-          "summary": "Revised with the user-selected Agent, local connection, and scored recognition candidate; exact text is owned by this record.",
+          "summary": "Immediate resolution replaces all delayed Headline modifiers while preserving this scenario and its fiction.",
           "revision": {
-            "decisionId": "user-selected-full-simplification",
-            "record": "docs/design-decisions.md#full-simplification-candidate"
+            "decisionId": "user-selected-three-cuts",
+            "record": "docs/design-decisions.md#three-cuts-candidate"
           }
         },
         "deploymentProfiles": [
