@@ -1,0 +1,3412 @@
+#!/usr/bin/env python3
+"""Validate the canonical enwik9 objective and its fail-closed receipts."""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import math
+import re
+import sys
+from pathlib import Path, PurePosixPath
+from typing import Any
+
+import jsonschema
+
+try:
+    from projects.enwiki9.tools.enwiki9_python_source_closure import (
+        local_source_closure,
+    )
+except ModuleNotFoundError:
+    from enwiki9_python_source_closure import local_source_closure
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_ROOT = PROJECT_ROOT.parents[1]
+CONTRACT_ROOT = PROJECT_ROOT / "contracts" / "research" / "v1"
+OBJECTIVE_PATHS = {
+    version: PROJECT_ROOT / "contracts" / "research" / version / "objective-contract.json"
+    for version in ("v1", "v2")
+}
+OBJECTIVE_PATH = OBJECTIVE_PATHS["v2"]
+SCHEMA_PATH = OBJECTIVE_PATH.with_name("objective-contract.schema.json")
+NAMED_GRADIENT_BLOCK_STRIDE = 64
+SCHEMA_PATHS = {
+    "gamma.enwiki9.adaptive-experiment-contract.v1": (
+        CONTRACT_ROOT / "adaptive-experiment-contract.schema.json"
+    ),
+    "gamma.enwiki9.adaptive-experiment-result.v1": (
+        CONTRACT_ROOT / "adaptive-experiment-result.schema.json"
+    ),
+    "gamma.enwiki9.adaptive-job.v3": CONTRACT_ROOT / "adaptive-job.schema.json",
+    "gamma.enwiki9.algorithm-proposal.v2": (
+        CONTRACT_ROOT / "algorithm-proposal.schema.json"
+    ),
+    **{f"gamma.enwiki9.objective-contract.{version}": path.with_name("objective-contract.schema.json")
+       for version, path in OBJECTIVE_PATHS.items()},
+    "gamma.enwiki9.candidate-revision.v1": (
+        CONTRACT_ROOT / "candidate-revision.schema.json"
+    ),
+    "gamma.enwiki9.clean-room-attempt.v1": (
+        CONTRACT_ROOT / "clean-room-attempt.schema.json"
+    ),
+    "gamma.enwiki9.clean-room-replay.v1": (
+        CONTRACT_ROOT / "clean-room-replay.schema.json"
+    ),
+    "gamma.enwiki9.dependency-closure.v1": (
+        CONTRACT_ROOT / "dependency-closure.schema.json"
+    ),
+    "gamma.enwiki9.driver-run-ledger-row.v2": (
+        CONTRACT_ROOT / "driver-run-ledger-row.schema.json"
+    ),
+    "gamma.enwiki9.delta-midas-probe-result.v1": (
+        CONTRACT_ROOT / "delta-midas-probe-result.schema.json"
+    ),
+    "gamma.enwiki9.experiment-contract.v1": (
+        CONTRACT_ROOT / "experiment-contract.schema.json"
+    ),
+    "gamma.enwiki9.experiment-result.v1": (
+        CONTRACT_ROOT / "experiment-result.schema.json"
+    ),
+    "gamma.enwiki9.mechanism-graph.v1": (
+        CONTRACT_ROOT / "mechanism-graph.schema.json"
+    ),
+    "gamma.enwiki9.named-gradient-detail.v1": (
+        CONTRACT_ROOT / "named-gradient-detail.schema.json"
+    ),
+    "gamma.enwiki9.cmix-obias-full1g-oom-terminal.v1": (
+        CONTRACT_ROOT / "cmix-obias-full1g-oom-terminal-receipt.schema.json"
+    ),
+    "gamma.enwiki9.cmix-obias-full1g-oom-terminal-verification.v1": (
+        CONTRACT_ROOT / "cmix-obias-full1g-oom-terminal-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-source-materialization.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-source-closure.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-command.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-receipt.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-build-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-build-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-compiler-invocation.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-compiler-invocation.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-compiler-trace-controls.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-negative-controls.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-program-lock.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-program-lock.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-program-lock-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-build.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v2": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-scope-identity-v2.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-cumulative-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-transfer-10m.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-identity-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-stage.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-stage.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-roundtrip.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-failure-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-soft-high-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity-arm.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-full-identity-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-runtime-qualification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-runtime-qualification-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-runtime-host-fingerprint.v1": (
+        CONTRACT_ROOT / "cmix-runtime-host-fingerprint.schema.json"
+    ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2": (
+        CONTRACT_ROOT / "cmix-memory-safe-parent-qualification-receipt-v2.schema.json"
+    ),
+    "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2": (
+        CONTRACT_ROOT
+        / "cmix-memory-safe-parent-qualification-verification-v2.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-identity-resource.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-identity-resource-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-build.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-build.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-calibration.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration-verification.v1": (
+        CONTRACT_ROOT
+        / "cmix-filebacked-fxcm-100m-observer-calibration-verification.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-release-stage.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-release-stage.schema.json"
+    ),
+    "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-arm.v1": (
+        CONTRACT_ROOT / "cmix-filebacked-fxcm-100m-identity-arm.schema.json"
+    ),
+    "gamma.enwiki9.resource-guard-receipt.v2": (
+        CONTRACT_ROOT / "resource-guard-receipt.schema.json"
+    ),
+    "gamma.enwiki9.resource-guard-receipt.v3": (
+        CONTRACT_ROOT / "resource-guard-receipt.v3.schema.json"
+    ),
+    "gamma.enwiki9.resource-guard-soft-high.v1": (
+        CONTRACT_ROOT / "resource-guard-soft-high.schema.json"
+    ),
+    "gamma.enwiki9.wiki-schema-vm-scan.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-scan.schema.json"
+    ),
+    "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-ceiling-decision.schema.json"
+    ),
+    "gamma.enwiki9.wiki-schema-vm-output-manifest.v1": (
+        CONTRACT_ROOT / "wiki-schema-vm-output-manifest.schema.json"
+    ),
+    "gamma.enwiki9.reflection-receipt.v1": (
+        CONTRACT_ROOT / "reflection-receipt.schema.json"
+    ),
+    "gamma.enwiki9.endpoint428-horizon-terminal-route.v1": (
+        CONTRACT_ROOT / "endpoint428-horizon-terminal-route.schema.json"
+    ),
+    "gamma.enwiki9.endpoint428-horizon-output-closure-receipt.v1": (
+        CONTRACT_ROOT / "endpoint428-horizon-output-closure-receipt-v1.schema.json"
+    ),
+    "gamma.enwiki9.release-receipt-index.v1": (
+        CONTRACT_ROOT / "release-receipt-index.schema.json"
+    ),
+    "gamma.enwiki9.run-receipt.v1": CONTRACT_ROOT / "run-receipt.schema.json",
+    "gamma.enwiki9.search-policy.v1": CONTRACT_ROOT / "search-policy.schema.json",
+}
+UNCOUNTED_PLATFORM_DEPENDENCY_KINDS = {
+    "standard-library",
+    "system",
+    "toolchain",
+}
+REPLAY_PLACEHOLDER = re.compile(r"\{([a-z_]+)\}")
+APPROVED_SPDX_LICENSES = {
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "GPL-3.0-or-later",
+    "ISC",
+    "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-only",
+    "LGPL-3.0-or-later",
+    "MIT",
+    "MPL-2.0",
+}
+
+
+def canonical_bytes(value: Any) -> bytes:
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        allow_nan=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+
+
+def file_digest(path: Path, algorithm: str) -> str:
+    digest = hashlib.new(algorithm)
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def load_json(path: Path) -> Any:
+    with path.open("r", encoding="utf-8") as stream:
+        return json.load(stream)
+
+
+def _objective_path(objective_path: str | Path | None = None) -> Path:
+    path = OBJECTIVE_PATH if objective_path is None else Path(objective_path)
+    if not path.is_absolute():
+        registered = {f"contracts/research/{version}/objective-contract.json": item
+                      for version, item in OBJECTIVE_PATHS.items()}
+        if path.as_posix() not in registered:
+            raise ValueError(f"unregistered objective version: {objective_path}")
+        path = registered[path.as_posix()]
+    path = path.resolve()
+    if path not in {item.resolve() for item in OBJECTIVE_PATHS.values()}:
+        raise ValueError(f"unregistered objective version: {objective_path}")
+    return path
+
+
+def validate_objective(verify_corpus: bool = False, *, objective_path: str | Path | None = None) -> dict[str, Any]:
+    path = _objective_path(objective_path)
+    schema = load_json(path.with_name("objective-contract.schema.json"))
+    objective = load_json(path)
+    jsonschema.Draft202012Validator.check_schema(schema)
+    jsonschema.Draft202012Validator(
+        schema,
+        format_checker=jsonschema.FormatChecker(),
+    ).validate(objective)
+
+    corpus = objective["corpus"]
+    if objective["correctness"]["restoredSha256"] != corpus["sha256"]:
+        raise ValueError("restored corpus SHA-256 differs from objective corpus")
+    if objective["correctness"]["restoredBytes"] != corpus["bytes"]:
+        raise ValueError("restored corpus size differs from objective corpus")
+
+    if verify_corpus:
+        corpus_path = REPOSITORY_ROOT / corpus["repositoryPath"]
+        if not corpus_path.is_file():
+            raise ValueError(f"canonical corpus is missing: {corpus_path}")
+        if corpus_path.stat().st_size != corpus["bytes"]:
+            raise ValueError(f"canonical corpus size differs: {corpus_path}")
+        if file_digest(corpus_path, "md5") != corpus["md5"]:
+            raise ValueError(f"canonical corpus MD5 differs: {corpus_path}")
+        if file_digest(corpus_path, "sha256") != corpus["sha256"]:
+            raise ValueError(f"canonical corpus SHA-256 differs: {corpus_path}")
+
+    return objective
+
+
+def objective_binding(verify_corpus: bool = False, *, objective_path: str | Path | None = None) -> dict[str, Any]:
+    path = _objective_path(objective_path)
+    objective = validate_objective(verify_corpus, objective_path=path)
+    digest = hashlib.sha256(canonical_bytes(objective)).hexdigest()
+    return {
+        "objectiveId": objective["objectiveId"],
+        "objectiveDigest": f"sha256:{digest}",
+        "objectivePath": next(f"contracts/research/{version}/objective-contract.json"
+                              for version, item in OBJECTIVE_PATHS.items() if item.resolve() == path),
+        "targetScoreBytes": objective["score"]["targetBytes"],
+        "corpusBytes": objective["corpus"]["bytes"],
+        "corpusSha256": objective["corpus"]["sha256"],
+    }
+
+
+def _require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _validate_schema(value: Any, schema_path: Path) -> None:
+    schema = load_json(schema_path)
+    jsonschema.Draft202012Validator.check_schema(schema)
+    jsonschema.Draft202012Validator(
+        schema,
+        format_checker=jsonschema.FormatChecker(),
+    ).validate(value)
+
+
+def validate_schemas() -> None:
+    for schema_path in set(SCHEMA_PATHS.values()):
+        jsonschema.Draft202012Validator.check_schema(load_json(schema_path))
+
+
+def _validate_objective_binding(value: dict[str, Any], context: str) -> None:
+    _require(
+        value == objective_binding(objective_path=value.get("objectivePath", "")),
+        f"{context}: objective binding differs from its immutable objective version",
+    )
+
+
+def _relative_path(base: Path, raw_path: str, context: str) -> Path:
+    path = Path(raw_path)
+    _require(not path.is_absolute(), f"{context}: absolute paths are not reproducible")
+    return (base / path).resolve()
+
+
+def _verify_file_record(base: Path, record: dict[str, Any], context: str) -> None:
+    relative_path = Path(record["path"])
+    _require(
+        not relative_path.is_absolute(),
+        f"{context}: absolute paths are not reproducible",
+    )
+    unresolved_path = base / relative_path
+    _require(
+        not unresolved_path.is_symlink(),
+        f"{context}: symlinks require explicit packaging",
+    )
+    path = unresolved_path.resolve()
+    _require(path.is_file(), f"{context}: file is missing: {path}")
+    _require(
+        path.stat().st_size == record["bytes"],
+        f"{context}: size differs: {path}",
+    )
+    _require(
+        file_digest(path, "sha256") == record["sha256"],
+        f"{context}: SHA-256 differs: {path}",
+    )
+
+
+def candidate_tree_digest(counted_files: list[dict[str, Any]]) -> str:
+    identity = [
+        {
+            "bytes": record["bytes"],
+            "path": record["path"],
+            "sha256": record["sha256"],
+        }
+        for record in sorted(counted_files, key=lambda item: item["path"])
+    ]
+    return f"sha256:{hashlib.sha256(canonical_bytes(identity)).hexdigest()}"
+
+
+def _project_receipt_reference(
+    reference: dict[str, Any],
+    expected_schema: str,
+    context: str,
+) -> tuple[Path, dict[str, Any]]:
+    path = _relative_path(PROJECT_ROOT, reference["path"], context)
+    _require(path.is_file(), f"{context}: referenced receipt is missing: {path}")
+    _require(
+        f"sha256:{file_digest(path, 'sha256')}" == reference["sha256"],
+        f"{context}: referenced receipt digest differs: {path}",
+    )
+    value = load_json(path)
+    _require(
+        value.get("schema") == expected_schema,
+        f"{context}: referenced receipt has wrong schema: {path}",
+    )
+    _validate_schema(value, SCHEMA_PATHS[expected_schema])
+    _validate_objective_binding(value["objective"], str(path))
+    return path, value
+
+
+def _project_file_reference(
+    reference: dict[str, Any],
+    context: str,
+) -> Path:
+    path = _relative_path(PROJECT_ROOT, reference["path"], context)
+    _require(path.is_file(), f"{context}: referenced evidence is missing: {path}")
+    _require(
+        f"sha256:{file_digest(path, 'sha256')}" == reference["sha256"],
+        f"{context}: referenced evidence digest differs: {path}",
+    )
+    return path
+
+
+def validate_project_reference(
+    reference: dict[str, Any],
+    expected_schemas: set[str],
+    context: str,
+) -> tuple[Path, dict[str, Any]]:
+    path = _project_file_reference(reference, context)
+    value = load_json(path)
+    _require(
+        value.get("schema") in expected_schemas,
+        f"{context}: referenced artifact has wrong schema: {path}",
+    )
+    validate_artifact(path)
+    return path, value
+
+
+def _validate_candidate_revision(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    records = value["files"]
+    paths = [record["path"] for record in records]
+    _require(len(paths) == len(set(paths)), f"{artifact_path}: duplicate source path")
+    _require("meta.json" in paths, f"{artifact_path}: candidate revision lacks metadata")
+    for record in records:
+        expected_normalization = (
+            "semantic-meta-v1" if record["path"] == "meta.json" else "verbatim"
+        )
+        _require(
+            record["normalization"] == expected_normalization,
+            f"{artifact_path}: unexpected normalization for {record['path']}",
+        )
+    _require(
+        candidate_tree_digest(records) == value["candidateTreeSha256"],
+        f"{artifact_path}: candidate tree digest differs from its file manifest",
+    )
+    expected_provenance = (
+        "legacy-current-state"
+        if value["change"]["kind"] == "legacy-adoption"
+        else "native"
+    )
+    _require(
+        value["provenanceClass"] == expected_provenance,
+        f"{artifact_path}: provenance class differs from change kind",
+    )
+    parent = value["parentRevision"]
+    if value["change"]["kind"] == "mutate":
+        _require(parent is not None, f"{artifact_path}: mutation lacks parent revision")
+    if parent is not None:
+        _require(
+            parent["candidateId"] != value["candidateId"],
+            f"{artifact_path}: candidate cannot be its own parent",
+        )
+        _, parent_value = _project_receipt_reference(
+            parent["receipt"],
+            "gamma.enwiki9.candidate-revision.v1",
+            f"{artifact_path}: parentRevision",
+        )
+        _require(
+            parent_value["candidateId"] == parent["candidateId"]
+            and parent_value["candidateTreeSha256"]
+            == parent["candidateTreeSha256"],
+            f"{artifact_path}: parent revision identity differs from its receipt",
+        )
+    previous = value["previousRevision"]
+    if previous is not None:
+        _, previous_value = _project_receipt_reference(
+            previous,
+            "gamma.enwiki9.candidate-revision.v1",
+            f"{artifact_path}: previousRevision",
+        )
+        _require(
+            previous_value["candidateId"] == value["candidateId"],
+            f"{artifact_path}: previous revision identifies another candidate",
+        )
+        _require(
+            previous_value["candidateTreeSha256"] != value["candidateTreeSha256"],
+            f"{artifact_path}: duplicate revision identity",
+        )
+    elif value["change"]["kind"] in {"implementation", "proposal-development"}:
+        raise ValueError(f"{artifact_path}: edit revision lacks previous revision")
+
+    if verify_files:
+        blob_root = (PROJECT_ROOT / "operations/adaptive/candidate-blobs/sha256").resolve()
+        for record in records:
+            blob = _relative_path(PROJECT_ROOT, record["blobPath"], str(artifact_path))
+            _require(
+                blob_root == blob.parent.parent or blob_root in blob.parents,
+                f"{artifact_path}: blob path escapes the content-addressed store",
+            )
+            expected_blob = blob_root / record["sha256"][:2] / record["sha256"]
+            _require(
+                blob == expected_blob,
+                f"{artifact_path}: blob path differs from its content address",
+            )
+            _require(blob.is_file(), f"{artifact_path}: immutable blob is missing: {blob}")
+            _require(
+                blob.stat().st_size == record["bytes"]
+                and file_digest(blob, "sha256") == record["sha256"],
+                f"{artifact_path}: immutable blob content differs: {blob}",
+            )
+    return {
+        "candidateId": value["candidateId"],
+        "candidateTreeSha256": value["candidateTreeSha256"],
+        "filesVerified": verify_files,
+        "provenanceClass": value["provenanceClass"],
+    }
+
+
+def json_pointer(value: Any, pointer: str, context: str = "artifact") -> Any:
+    current = value
+    for raw_token in pointer.lstrip("/").split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, dict) and token in current:
+            current = current[token]
+        elif isinstance(current, list) and token.isdigit() and int(token) < len(current):
+            current = current[int(token)]
+        else:
+            raise ValueError(f"{context}: JSON pointer does not resolve: {pointer}")
+    return current
+
+
+def _driver_scope_label(data_size: Any) -> str:
+    labels = {
+        1024: "1k",
+        250_000: "250k",
+        1_000_000: "1m",
+        10_000_000: "10m",
+        1_000_000_000: "full",
+    }
+    return labels.get(data_size, f"{data_size}B" if isinstance(data_size, int) else "unknown")
+
+
+def build_driver_run_ledger_row(
+    result: dict[str, Any],
+    result_path: Path,
+    *,
+    program_name: str | None,
+    recorded_utc: str | None = None,
+) -> dict[str, Any]:
+    resolved = result_path.resolve()
+    _require(
+        PROJECT_ROOT in resolved.parents and resolved.is_file(),
+        f"driver result escapes project or is missing: {result_path}",
+    )
+    relative = resolved.relative_to(PROJECT_ROOT).as_posix()
+    determinism = result.get("determinism")
+    determinism_ok = (
+        determinism.get("single_host_byte_equal")
+        if isinstance(determinism, dict)
+        else None
+    )
+    data_size = result.get("data_size")
+    purpose = result.get("run_purpose")
+    if not isinstance(purpose, str) or not purpose:
+        purpose = (
+            "verification"
+            if determinism_ok is not None
+            else "smoke"
+            if data_size in {1024, 250_000, 1_000_000, 10_000_000, 1_000_000_000}
+            else "candidate"
+        )
+    scope = result.get("run_scope_label")
+    if not isinstance(scope, str) or not scope:
+        scope = _driver_scope_label(data_size)
+    tags = result.get("run_tags")
+    if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
+        tags = []
+    compressed_md5 = result.get("compressed_md5")
+    run_suffix = compressed_md5[:8] if isinstance(compressed_md5, str) else "missing"
+    timestamp = result.get("timestamp")
+    _require(isinstance(timestamp, str) and timestamp, f"{result_path}: missing timestamp")
+    program_id = result.get("program_id")
+    _require(isinstance(program_id, str) and program_id, f"{result_path}: missing program_id")
+    memory = result.get("memory_kib")
+    if not isinstance(memory, dict):
+        memory = {}
+    stat = resolved.stat()
+    row = {
+        "schema": "gamma.enwiki9.driver-run-ledger-row.v2",
+        "run_id": f"{program_id}__{timestamp.replace(':', '')}__{run_suffix}",
+        "program_id": program_id,
+        "candidate_revision": result.get("candidate_revision"),
+        "algorithm_name": program_name or program_id,
+        "data_path": result.get("data_path"),
+        "data_size": data_size,
+        "data_md5": result.get("data_md5"),
+        "data_sha256": result.get("data_sha256"),
+        "compressed_md5": compressed_md5,
+        "compressed_sha256": result.get("compressed_sha256"),
+        "compressed_size": result.get("compressed_size"),
+        "program_size": result.get("program_size"),
+        "hutter_score": result.get("hutter_score"),
+        "bits_per_byte": result.get("bits_per_byte"),
+        "compress_time_s": result.get("compress_time_s"),
+        "decompress_time_s": result.get("decompress_time_s"),
+        "run_time_s": result.get("run_time_s"),
+        "run_purpose": purpose,
+        "run_scope_label": scope,
+        "run_context": result.get("run_context"),
+        "run_source": result.get("run_source"),
+        "run_tags": list(dict.fromkeys(tags)),
+        "determinism_ok": determinism_ok,
+        "roundtrip_ok": result.get("roundtrip_ok"),
+        "result_path": relative,
+        "result_bytes": stat.st_size,
+        "result_sha256": file_digest(resolved, "sha256"),
+        "archival_scope": "full",
+        "timestamp": timestamp,
+        "recorded_utc": recorded_utc
+        or dt.datetime.fromtimestamp(stat.st_mtime, dt.timezone.utc)
+        .replace(microsecond=0)
+        .isoformat(),
+        "host": result.get("host"),
+        "memory_kib_before": memory.get("before"),
+        "memory_kib_after": memory.get("after"),
+        "memory_kib_peak": memory.get("peak"),
+        "rss_sample_count": memory.get("sample_count"),
+    }
+    validate_driver_run_ledger_row(row)
+    return row
+
+
+def validate_driver_run_ledger_row(row: dict[str, Any]) -> None:
+    _validate_schema(row, SCHEMA_PATHS["gamma.enwiki9.driver-run-ledger-row.v2"])
+    result_path = PROJECT_ROOT / row["result_path"]
+    _require(result_path.is_file(), f"ledger result is missing: {result_path}")
+    _require(
+        result_path.stat().st_size == row["result_bytes"]
+        and file_digest(result_path, "sha256") == row["result_sha256"],
+        f"ledger result identity differs: {result_path}",
+    )
+    result = load_json(result_path)
+    _require(
+        result.get("program_id") == row["program_id"]
+        and result.get("timestamp") == row["timestamp"],
+        f"ledger row identifies another result: {result_path}",
+    )
+
+
+def _validate_reflection_receipt(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    candidate = value["candidateRevision"]
+    _require(
+        candidate["candidateId"] == value["candidateId"],
+        f"{artifact_path}: candidate revision identifies another candidate",
+    )
+    _, candidate_receipt = _project_receipt_reference(
+        candidate["receipt"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidateRevision",
+    )
+    _require(
+        candidate_receipt["candidateId"] == value["candidateId"]
+        and candidate_receipt["candidateTreeSha256"]
+        == candidate["candidateTreeSha256"],
+        f"{artifact_path}: candidate revision identity differs from receipt",
+    )
+
+    job_path = _project_file_reference(value["job"], f"{artifact_path}: job")
+    job = load_json(job_path)
+    _require(
+        job.get("schema") in {
+            "enwiki9_adaptive_job_v2",
+            "gamma.enwiki9.adaptive-job.v3",
+        },
+        f"{artifact_path}: reflection requires a revision-bound v2 or v3 job",
+    )
+    _require(
+        job.get("candidate_id") == value["candidateId"]
+        and job.get("candidate_tree_sha256") == candidate["candidateTreeSha256"]
+        and job.get("candidate_revision") == candidate["receipt"],
+        f"{artifact_path}: job and candidate revision bindings differ",
+    )
+    _require(
+        job.get("state") in {"completed", "failed", "cancelled"},
+        f"{artifact_path}: job is not terminal",
+    )
+    _require(
+        job_path.parent.name == job.get("state"),
+        f"{artifact_path}: job state differs from its queue directory",
+    )
+    experiment_path = _project_file_reference(
+        value["experiment"],
+        f"{artifact_path}: experiment",
+    )
+    experiment = load_json(experiment_path)
+    _require(
+        experiment.get("schema") in {
+            "gamma.enwiki9.experiment-contract.v1",
+            "gamma.enwiki9.adaptive-experiment-contract.v1",
+        },
+        f"{artifact_path}: experiment has an unsupported schema",
+    )
+    validate_artifact(experiment_path)
+    if job.get("schema") == "gamma.enwiki9.adaptive-job.v3":
+        _require(
+            job.get("experiment") == value["experiment"],
+            f"{artifact_path}: reflection and job experiment bindings differ",
+        )
+    evidence_paths = {
+        _project_file_reference(reference, f"{artifact_path}: evidence")
+        for reference in value["evidence"]
+    }
+
+    validity = value["validity"]
+    _require(
+        validity["valid"] == (validity["classification"] == "valid"),
+        f"{artifact_path}: validity boolean and classification differ",
+    )
+    if validity["valid"]:
+        _require(
+            job.get("state") == "completed" and job.get("returncode") == 0,
+            f"{artifact_path}: valid reflection requires successful process completion",
+        )
+
+    assertions = value["measurementAssertions"]
+    assertion_fields = [assertion["field"] for assertion in assertions]
+    _require(
+        len(assertion_fields) == len(set(assertion_fields)),
+        f"{artifact_path}: duplicate measurement assertion field",
+    )
+    for assertion in assertions:
+        source_path = _project_file_reference(
+            assertion["source"],
+            f"{artifact_path}: measurement assertion",
+        )
+        _require(
+            source_path in evidence_paths,
+            f"{artifact_path}: measurement assertion source is not listed evidence",
+        )
+        source_value = load_json(source_path)
+        measured_value = json_pointer(
+            source_value,
+            assertion["pointer"],
+            f"{artifact_path}: {assertion['field']}",
+        )
+        _require(
+            isinstance(measured_value, (int, float))
+            and not isinstance(measured_value, bool)
+            and measured_value == value["measurements"][assertion["field"]],
+            f"{artifact_path}: asserted measurement differs from source evidence",
+        )
+    for field, measured_value in value["measurements"].items():
+        _require(
+            (measured_value is None) == (field not in assertion_fields),
+            f"{artifact_path}: measurement {field} lacks exactly one source assertion",
+        )
+
+    decision = value["decision"]
+    hypothesis = value["hypothesis"]
+    attribution = value["attribution"]
+    invalid_attribution = {
+        "implementation-failure": "implementation-failure",
+        "infrastructure-failure": "infrastructure-failure",
+        "invalid-experiment": "invalid-experiment",
+        "incomplete-evidence": "inconclusive",
+    }
+    if not validity["valid"]:
+        _require(
+            attribution["failureClass"]
+            == invalid_attribution[validity["classification"]],
+            f"{artifact_path}: invalidity and attribution classes differ",
+        )
+        _require(
+            decision["verdict"] in {"retry", "hold"},
+            f"{artifact_path}: invalid experiment cannot change algorithm status",
+        )
+        _require(
+            hypothesis["verdict"] in {"inconclusive", "not-tested"},
+            f"{artifact_path}: invalid experiment cannot support or refute hypothesis",
+        )
+    else:
+        _require(
+            attribution["failureClass"]
+            not in {
+                "implementation-failure",
+                "infrastructure-failure",
+                "invalid-experiment",
+            },
+            f"{artifact_path}: valid experiment has a process-failure attribution",
+        )
+    if decision["verdict"] in {"promote", "next-gate"}:
+        _require(
+            validity["valid"]
+            and hypothesis["verdict"] == "supported"
+            and attribution["failureClass"] == "algorithmic-gain"
+            and attribution["controlsEquivalent"] is True
+            and decision["promotionPredicatesPass"] is True
+            and decision["killPredicatesPass"] is False,
+            f"{artifact_path}: promotion decision lacks causal gate antecedents",
+        )
+    if decision["verdict"] == "retire":
+        _require(
+            validity["valid"] and decision["killPredicatesPass"] is True,
+            f"{artifact_path}: retirement requires a valid kill predicate",
+        )
+    _require(
+        (decision["verdict"] == "next-gate")
+        == (decision["nextGateBytes"] is not None),
+        f"{artifact_path}: next gate is present for the wrong decision",
+    )
+    return {
+        "candidateId": value["candidateId"],
+        "decision": decision["verdict"],
+        "jobId": job.get("job_id"),
+        "netBytesSaved": value["measurements"]["netBytesSaved"],
+        "validExperiment": validity["valid"],
+    }
+
+
+def _validate_endpoint428_horizon_terminal_route(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    if verify_files and value["status"] == "TERMINAL_ROUTED":
+        for name, reference in value["bindings"].items():
+            path = _project_file_reference(
+                reference, f"{artifact_path}: bindings/{name}"
+            )
+            _require(
+                path.stat().st_size == reference["bytes"],
+                f"{artifact_path}: binding byte count differs: {path}",
+            )
+        for index, reference in enumerate(
+            value.get("output_closure", {}).get("artifacts", [])
+        ):
+            path = _project_file_reference(
+                reference,
+                f"{artifact_path}: output_closure/artifacts/{index}",
+            )
+            _require(
+                path.stat().st_size == reference["bytes"],
+                f"{artifact_path}: output artifact byte count differs: {path}",
+            )
+    return {
+        "candidateId": value["candidate_id"],
+        "status": value["status"],
+        "branch": value.get("branch"),
+        "hostLaneRelease": value.get("host_lane_release", False),
+        "filesVerified": verify_files and value["status"] == "TERMINAL_ROUTED",
+    }
+
+
+def _validate_endpoint428_horizon_output_closure(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    def verify(reference: dict[str, Any], context: str) -> Path:
+        path = _project_file_reference(reference, context)
+        _require(
+            path.stat().st_size == reference["bytes"],
+            f"{context}: artifact byte count differs: {path}",
+        )
+        return path
+
+    activation = value["activation"]
+    _require(
+        activation["terminal_route_receipt_hash_argument"]
+        == activation["terminal_route_receipt"]["sha256"],
+        f"{artifact_path}: activation hash argument differs from route receipt",
+    )
+    decision = value["decision_preservation"]
+    _require(
+        decision["source"] == value["immutable_bindings"]["decision"],
+        f"{artifact_path}: preserved source differs from terminal decision binding",
+    )
+    _require(
+        decision["preserved_copy"] == value["output_manifest"]["decision_entry"],
+        f"{artifact_path}: output decision entry differs from preserved copy",
+    )
+    _require(
+        decision["source"]["bytes"] == decision["preserved_copy"]["bytes"]
+        and decision["source"]["sha256"] == decision["preserved_copy"]["sha256"],
+        f"{artifact_path}: preserved decision identity differs from source",
+    )
+    source = value["source_namespace"]
+    source_names = [Path(row["path"]).name for row in source["artifacts"]]
+    _require(
+        sorted(source_names) == source["expected_names"]
+        and len(source_names) == len(set(source_names)),
+        f"{artifact_path}: source namespace artifacts differ from exact names",
+    )
+    if verify_files:
+        verify(
+            activation["terminal_route_receipt"],
+            f"{artifact_path}: activation/terminal_route_receipt",
+        )
+        for group_name in ("dependencies", "immutable_bindings"):
+            for name, reference in value[group_name].items():
+                verify(reference, f"{artifact_path}: {group_name}/{name}")
+        for index, reference in enumerate(source["artifacts"]):
+            verify(
+                reference,
+                f"{artifact_path}: source_namespace/artifacts/{index}",
+            )
+        verify(
+            decision["preserved_copy"],
+            f"{artifact_path}: decision_preservation/preserved_copy",
+        )
+    return {
+        "candidateId": value["candidate_id"],
+        "status": value["status"],
+        "scientificBranch": value["routing"]["recomputed_scientific_branch"],
+        "scoreCreditBytes": value["authority"]["score_credit_bytes"],
+        "filesVerified": verify_files,
+    }
+
+
+def _validate_adaptive_experiment_contract(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    parent = value["parent"]
+    if parent is not None:
+        _, revision = _project_receipt_reference(
+            parent["revision"],
+            "gamma.enwiki9.candidate-revision.v1",
+            f"{artifact_path}: parent revision",
+        )
+        _require(
+            revision["candidateId"] == parent["candidateId"],
+            f"{artifact_path}: parent candidate differs from revision receipt",
+        )
+    input_ids = [item["id"] for item in value["inputs"]]
+    _require(
+        len(input_ids) == len(set(input_ids)),
+        f"{artifact_path}: duplicate input identity",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+    input_paths = [item["path"] for item in value["inputs"]]
+    _require(
+        len(input_paths) == len(set(input_paths)),
+        f"{artifact_path}: distinct input identities alias one path",
+    )
+    closure_entries = value.get("pythonSourceClosureEntries")
+    if closure_entries is not None:
+        inputs_by_id = {item["id"]: item for item in value["inputs"]}
+        _require(
+            all(identifier in inputs_by_id for identifier in closure_entries),
+            f"{artifact_path}: Python closure entry is not a declared input",
+        )
+        entry_paths = [
+            PROJECT_ROOT / inputs_by_id[identifier]["path"]
+            for identifier in closure_entries
+        ]
+        closure_paths = {
+            path.relative_to(PROJECT_ROOT).as_posix()
+            for path in local_source_closure(entry_paths)
+        }
+        _require(
+            closure_paths.issubset(set(input_paths)),
+            f"{artifact_path}: declared inputs omit project-local runtime source dependencies",
+        )
+    control_ids = [item["id"] for item in value["controls"]]
+    _require(
+        len(control_ids) == len(set(control_ids)),
+        f"{artifact_path}: duplicate control identity",
+    )
+    roles = {item["role"] for item in value["controls"]}
+    _require(
+        {"treatment", "comparator"}.issubset(roles),
+        f"{artifact_path}: treatment and comparator controls are required",
+    )
+    population = value["population"]
+    _require(
+        population["scopeBytes"] is not None
+        or population["scopeSymbols"] is not None,
+        f"{artifact_path}: population has no exact byte or symbol scope",
+    )
+    budget = value["budget"]
+    _require(
+        budget["expectedNetSavingsBytes"]
+        == budget["expectedGrossSavingsBytes"]
+        - budget["maximumAddedPackageBytes"],
+        f"{artifact_path}: expected net savings differs from gross less package cost",
+    )
+    measurement_ids = [item["id"] for item in value["measurements"]]
+    _require(
+        len(measurement_ids) == len(set(measurement_ids)),
+        f"{artifact_path}: duplicate measurement identity",
+    )
+    known_measurements = set(measurement_ids)
+    predicate_ids: list[str] = []
+    for predicate_class in ("promotionPredicates", "killPredicates"):
+        for predicate in value[predicate_class]:
+            predicate_ids.append(predicate["id"])
+            _require(
+                predicate["measurement"] in known_measurements,
+                f"{artifact_path}: predicate names an unknown measurement",
+            )
+    _require(
+        len(predicate_ids) == len(set(predicate_ids)),
+        f"{artifact_path}: duplicate predicate identity",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "proposalId": value["proposalId"],
+        "expectedNetSavingsBytes": budget["expectedNetSavingsBytes"],
+    }
+
+
+def _validate_named_gradient_detail(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    revision_path, revision = _project_receipt_reference(
+        value["candidateRevision"]["receipt"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    candidate = value["candidateRevision"]
+    _require(
+        candidate["candidateId"] == experiment["proposalId"] == revision["candidateId"],
+        f"{artifact_path}: candidate identity differs across detail bindings",
+    )
+    _require(
+        candidate["candidateTreeSha256"] == revision["candidateTreeSha256"],
+        f"{artifact_path}: candidate tree differs from revision receipt",
+    )
+    for index, execution in enumerate(value["executions"]):
+        _project_file_reference(
+            execution["stderr"],
+            f"{artifact_path}: execution {index} stderr",
+        )
+
+    summary = value["summary"]
+    expected_rows = summary["blockCount"] * summary["parameterCount"]
+    reference_presence: set[bool] = set()
+    for run_index, rows in enumerate(value["runs"]):
+        _require(
+            len(rows) == expected_rows,
+            f"{artifact_path}: run {run_index} row count differs from summary",
+        )
+        blocks: dict[int, set[str]] = {}
+        for row in rows:
+            blocks.setdefault(row["block"], set()).add(row["name"])
+            reference_presence.add("referenceEnergy" in row)
+        _require(
+            len(blocks) == summary["blockCount"],
+            f"{artifact_path}: run {run_index} block count differs from summary",
+        )
+        _require(
+            sorted(blocks)
+            == list(
+                range(
+                    0,
+                    summary["blockCount"] * NAMED_GRADIENT_BLOCK_STRIDE,
+                    NAMED_GRADIENT_BLOCK_STRIDE,
+                )
+            ),
+            f"{artifact_path}: run {run_index} block coordinates differ from the 64-state population",
+        )
+        _require(
+            all(len(names) == summary["parameterCount"] for names in blocks.values()),
+            f"{artifact_path}: run {run_index} parameter coverage differs",
+        )
+        if run_index == 0:
+            parameter_sets = list(blocks.values())
+            same_parameter_set = all(
+                names == parameter_sets[0] for names in parameter_sets
+            )
+            _require(
+                summary["allBlocksSameParameterSet"] == same_parameter_set,
+                f"{artifact_path}: parameter-set summary differs",
+            )
+    _require(
+        len(reference_presence) == 1,
+        f"{artifact_path}: cross-path reference fields are only partially populated",
+    )
+    has_reference = True in reference_presence
+    _require(
+        has_reference == ("allDirectReferenceFinite" in summary),
+        f"{artifact_path}: cross-path row and summary fields differ",
+    )
+    _require(
+        summary["allGradientFinite"]
+        == all(row["finite"] for row in value["runs"][0]),
+        f"{artifact_path}: gradient finiteness summary differs",
+    )
+    if has_reference:
+        _require(
+            summary["allDirectReferenceFinite"]
+            == all(row["referenceFinite"] for row in value["runs"][0]),
+            f"{artifact_path}: reference finiteness summary differs",
+        )
+        _require(
+            summary["maxDirectReferenceRelativeDelta"]
+            == max(row["relativeDelta"] for row in value["runs"][0]),
+            f"{artifact_path}: maximum reference delta differs",
+        )
+    return {
+        "candidateId": candidate["candidateId"],
+        "candidateRevision": revision_path.relative_to(PROJECT_ROOT).as_posix(),
+        "runs": len(value["runs"]),
+        "rowsPerRun": expected_rows,
+        "crossPathReference": has_reference,
+    }
+
+
+def _validate_algorithm_proposal(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        experiment["proposalId"] == value["proposal_id"],
+        f"{artifact_path}: proposal and experiment identities differ",
+    )
+    experiment_parent = experiment["parent"]
+    experiment_parent_id = (
+        experiment_parent["candidateId"] if experiment_parent is not None else None
+    )
+    _require(
+        experiment_parent_id == value["parent"],
+        f"{artifact_path}: proposal and experiment parents differ",
+    )
+    budget = experiment["budget"]
+    _require(
+        value["expected_savings_bytes"] == budget["expectedGrossSavingsBytes"]
+        and value["max_program_bytes"] == budget["maximumAddedPackageBytes"],
+        f"{artifact_path}: proposal and experiment budgets differ",
+    )
+    _require(
+        value["hypothesis"] == experiment["hypothesis"]["claim"],
+        f"{artifact_path}: proposal and experiment hypotheses differ",
+    )
+    for evidence in value["evidence"]:
+        _project_file_reference(evidence, f"{artifact_path}: evidence")
+    return {
+        "proposalId": value["proposal_id"],
+        "experimentId": experiment["experimentId"],
+        "state": value["state"],
+    }
+
+
+def _validate_adaptive_job(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _, revision = _project_receipt_reference(
+        value["candidate_revision"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    _require(
+        revision["candidateId"] == value["candidate_id"]
+        and revision["candidateTreeSha256"] == value["candidate_tree_sha256"],
+        f"{artifact_path}: candidate identity differs from revision receipt",
+    )
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    _, proposal = validate_project_reference(
+        value["proposal"],
+        {"gamma.enwiki9.algorithm-proposal.v2"},
+        f"{artifact_path}: proposal",
+    )
+    _require(
+        proposal["proposal_id"] == value["proposal_id"]
+        and experiment["proposalId"] == value["proposal_id"],
+        f"{artifact_path}: job, proposal, and experiment identities differ",
+    )
+    _require(
+        proposal["experiment"] == value["experiment"],
+        f"{artifact_path}: job experiment differs from proposal binding",
+    )
+    _require(
+        proposal["state"] == "developed",
+        f"{artifact_path}: job proposal is not developed",
+    )
+    scratch_root = PurePosixPath("results") / value["candidate_id"]
+    for scratch_directory in value.get("scratch_directories", []):
+        scratch_path = PurePosixPath(scratch_directory)
+        _require(
+            scratch_path == scratch_root or scratch_root in scratch_path.parents,
+            f"{artifact_path}: scratch directory escapes candidate results",
+        )
+    _project_file_reference(value["runner"], f"{artifact_path}: runner")
+    return {
+        "jobId": value["job_id"],
+        "candidateId": value["candidate_id"],
+        "experimentId": experiment["experimentId"],
+    }
+
+
+def _validate_experiment_contract(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _require(
+        value["population"]["firstHalfLength"] * 2
+        == value["population"]["segmentLength"],
+        f"{artifact_path}: midpoint does not divide the segment into equal halves",
+    )
+    antecedent_ids = [item["id"] for item in value["antecedents"]]
+    _require(
+        len(antecedent_ids) == len(set(antecedent_ids)),
+        f"{artifact_path}: duplicate antecedent identity",
+    )
+    for antecedent in value["antecedents"]:
+        _project_file_reference(antecedent, f"{artifact_path}: antecedent")
+
+    arm_ids = [arm["id"] for arm in value["arms"]]
+    _require(
+        len(arm_ids) == len(set(arm_ids)),
+        f"{artifact_path}: duplicate arm identity",
+    )
+    roles = {arm["role"] for arm in value["arms"]}
+    _require(
+        {"treatment", "comparator"}.issubset(roles),
+        f"{artifact_path}: experiment requires treatment and comparator arms",
+    )
+    for arm in value["arms"]:
+        _project_file_reference(arm["trace"], f"{artifact_path}: arm {arm['id']}")
+
+    measurement_ids = [item["id"] for item in value["measurements"]]
+    _require(
+        len(measurement_ids) == len(set(measurement_ids)),
+        f"{artifact_path}: duplicate measurement identity",
+    )
+    gate_ids = [gate["id"] for gate in value["gates"]]
+    _require(
+        len(gate_ids) == len(set(gate_ids)),
+        f"{artifact_path}: duplicate gate identity",
+    )
+    known_measurements = set(measurement_ids)
+    for gate in value["gates"]:
+        for predicate in gate["all"]:
+            _require(
+                predicate["metric"] in known_measurements,
+                f"{artifact_path}: gate references undeclared measurement "
+                f"{predicate['metric']}",
+            )
+    protocol = value.get("protocol")
+    if protocol is not None:
+        partitions = protocol["partitions"]
+        partition_ids = [partition["id"] for partition in partitions]
+        _require(
+            len(partition_ids) == len(set(partition_ids)),
+            f"{artifact_path}: duplicate partition identity",
+        )
+        expected_first = 0
+        for partition in partitions:
+            _require(
+                partition["firstSegment"] == expected_first
+                and partition["endSegmentExclusive"] > expected_first,
+                f"{artifact_path}: partitions must be ordered and contiguous",
+            )
+            expected_first = partition["endSegmentExclusive"]
+        expected_segments = (
+            value["population"]["rowCount"]
+            // value["population"]["segmentLength"]
+        )
+        _require(
+            expected_first == expected_segments,
+            f"{artifact_path}: partitions do not cover the frozen population",
+        )
+        control_ids = [control["id"] for control in protocol["controls"]]
+        _require(
+            len(control_ids) == len(set(control_ids)),
+            f"{artifact_path}: duplicate control identity",
+        )
+    return {
+        "experimentId": value["experimentId"],
+        "evidenceClass": value["evidenceClass"],
+        "registrationTiming": value["registrationTiming"],
+    }
+
+
+def _predicate_pass(observed: Any, operator: str, threshold: Any) -> bool:
+    operations = {
+        "eq": lambda: observed == threshold,
+        "gt": lambda: observed > threshold,
+        "gte": lambda: observed >= threshold,
+        "lt": lambda: observed < threshold,
+        "lte": lambda: observed <= threshold,
+    }
+    try:
+        return bool(operations[operator]())
+    except TypeError as exc:
+        raise ValueError(
+            f"cannot compare observed {observed!r} {operator} {threshold!r}"
+        ) from exc
+
+
+def _validate_adaptive_experiment_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = validate_project_reference(
+        value["experiment"],
+        {"gamma.enwiki9.adaptive-experiment-contract.v1"},
+        f"{artifact_path}: experiment",
+    )
+    candidate = value["candidateRevision"]
+    _require(
+        candidate["candidateId"] == value["candidateId"],
+        f"{artifact_path}: candidate revision identifies another candidate",
+    )
+    _, revision = _project_receipt_reference(
+        candidate["receipt"],
+        "gamma.enwiki9.candidate-revision.v1",
+        f"{artifact_path}: candidate revision",
+    )
+    _require(
+        revision["candidateId"] == candidate["candidateId"]
+        and revision["candidateTreeSha256"] == candidate["candidateTreeSha256"],
+        f"{artifact_path}: candidate revision identity differs from receipt",
+    )
+    _require(
+        value["evidenceClass"] == experiment["evidenceClass"],
+        f"{artifact_path}: evidence class differs from the experiment",
+    )
+    measurement_ids = [item["id"] for item in experiment["measurements"]]
+    _require(
+        set(value["measurements"]) == set(measurement_ids),
+        f"{artifact_path}: result measurements differ from the contract",
+    )
+
+    def validate_evaluations(contract_field: str, result_field: str) -> bool:
+        predicates = experiment[contract_field]
+        evaluations = value[result_field]
+        _require(
+            len(predicates) == len(evaluations),
+            f"{artifact_path}: predicate evaluation count differs",
+        )
+        expected_rows: list[dict[str, Any]] = []
+        for predicate in predicates:
+            observed = value["measurements"][predicate["measurement"]]
+            expected_rows.append(
+                {
+                    **predicate,
+                    "observed": observed,
+                    "passed": _predicate_pass(
+                        observed,
+                        predicate["operator"],
+                        predicate["threshold"],
+                    ),
+                }
+            )
+        _require(
+            evaluations == expected_rows,
+            f"{artifact_path}: predicate evaluations differ from frozen contract",
+        )
+        return all(row["passed"] for row in expected_rows)
+
+    promotion_pass = validate_evaluations(
+        "promotionPredicates", "promotionPredicates"
+    )
+    kill_pass = validate_evaluations("killPredicates", "killPredicates")
+    _require(
+        value["promotionPass"] == promotion_pass and value["killPass"] == kill_pass,
+        f"{artifact_path}: aggregate predicate outcomes differ",
+    )
+    _require(
+        not (promotion_pass and kill_pass),
+        f"{artifact_path}: promotion and kill predicates both pass",
+    )
+    expected_decision = (
+        "authorize-successor"
+        if promotion_pass
+        else "retire"
+        if kill_pass
+        else "retry"
+    )
+    _require(
+        value["decision"] == expected_decision,
+        f"{artifact_path}: decision differs from predicate outcomes",
+    )
+    artifact_ids = [item["id"] for item in value["artifacts"]]
+    _require(
+        len(artifact_ids) == len(set(artifact_ids)),
+        f"{artifact_path}: duplicate artifact identity",
+    )
+    artifact_paths = [item["path"] for item in value["artifacts"]]
+    _require(
+        len(artifact_paths) == len(set(artifact_paths)),
+        f"{artifact_path}: distinct artifact identities alias one path",
+    )
+    for item in value["artifacts"]:
+        _project_file_reference(item, f"{artifact_path}: artifact {item['id']}")
+    artifacts_by_id = {item["id"]: item for item in value["artifacts"]}
+    detail_reference = artifacts_by_id.get("gradient-detail")
+    if detail_reference is not None:
+        detail_path = PROJECT_ROOT / detail_reference["path"]
+        detail_validation = validate_artifact(detail_path)
+        detail = load_json(detail_path)
+        _require(
+            detail_validation["candidateId"] == value["candidateId"],
+            f"{artifact_path}: gradient detail identifies another candidate",
+        )
+        summary = detail["summary"]
+        inputs_by_id = {item["id"]: item for item in experiment["inputs"]}
+        derived_measurements = {
+            "namedGradientDeterministic": detail["runs"][0] == detail["runs"][1],
+            "allBlocksSameParameterSet": summary["allBlocksSameParameterSet"],
+            "allGradientFinite": summary["allGradientFinite"],
+            "stableDominantNonHeadGroup": summary["stableDominantNonHeadGroup"],
+            "minimumThirdDominantNonHeadShare": summary[
+                "minimumThirdDominantNonHeadShare"
+            ],
+            "headGroupShare": summary["headGroupShare"],
+            "blockCount": summary["blockCount"],
+            "parameterCount": summary["parameterCount"],
+        }
+        for optional_measurement in (
+            "allDirectReferenceFinite",
+            "maxDirectReferenceRelativeDelta",
+        ):
+            if optional_measurement in summary:
+                derived_measurements[optional_measurement] = summary[
+                    optional_measurement
+                ]
+        for measurement, observed in derived_measurements.items():
+            _require(
+                value["measurements"].get(measurement) == observed,
+                f"{artifact_path}: {measurement} differs from gradient detail",
+            )
+        if "localizationFailed" in value["measurements"]:
+            localization_measurements = {
+                "stableDominantNonHeadGroup",
+                "minimumThirdDominantNonHeadShare",
+                "headGroupShare",
+            }
+            localization_predicates = [
+                predicate
+                for predicate in experiment["promotionPredicates"]
+                if predicate["measurement"] in localization_measurements
+            ]
+            _require(
+                len(localization_predicates) == len(localization_measurements)
+                and {
+                    predicate["measurement"]
+                    for predicate in localization_predicates
+                }
+                == localization_measurements,
+                f"{artifact_path}: localization predicates are incomplete",
+            )
+            localization_failed = not all(
+                _predicate_pass(
+                    summary[predicate["measurement"]],
+                    predicate["operator"],
+                    predicate["threshold"],
+                )
+                for predicate in localization_predicates
+            )
+            _require(
+                value["measurements"]["localizationFailed"]
+                == localization_failed,
+                f"{artifact_path}: localization failure differs from frozen predicates",
+            )
+        retained_reference = inputs_by_id.get("retained-f-archive")
+        if retained_reference is not None:
+            retained_path = PROJECT_ROOT / retained_reference["path"]
+            archive_references = [
+                artifacts_by_id.get(identifier)
+                for identifier in ("archive-1", "archive-2")
+            ]
+            _require(
+                all(reference is not None for reference in archive_references),
+                f"{artifact_path}: retained archive comparison is incomplete",
+            )
+            archive_identity = all(
+                reference["sha256"] == retained_reference["sha256"]
+                for reference in archive_references
+            )
+            _require(
+                value["measurements"].get("retainedArchiveIdentity")
+                == archive_identity,
+                f"{artifact_path}: retained archive identity differs from artifacts",
+            )
+            attribution_reference = inputs_by_id.get("production-attribution")
+            _require(
+                attribution_reference is not None,
+                f"{artifact_path}: retained archive has no attribution input",
+            )
+            attribution = load_json(PROJECT_ROOT / attribution_reference["path"])
+            legacy_retained = attribution["archives"]["F_clean"]
+            retained_relative = retained_path.relative_to(PROJECT_ROOT).as_posix()
+            legacy_path = Path(legacy_retained["path"]).as_posix()
+            legacy_identity = (
+                (
+                    legacy_path == retained_relative
+                    or legacy_path.endswith(f"/{retained_relative}")
+                )
+                and legacy_retained["bytes"] == retained_path.stat().st_size
+                and f"sha256:{legacy_retained['sha256']}"
+                == retained_reference["sha256"]
+            )
+            _require(
+                legacy_identity,
+                f"{artifact_path}: retained archive differs from attribution input",
+            )
+            expected_raw_inverse = bool(
+                archive_identity
+                and attribution["integrity"]["raw_inverse_exact"]["F"]
+            )
+            _require(
+                value["measurements"].get("rawInverseExact")
+                == expected_raw_inverse,
+                f"{artifact_path}: raw inverse transfer differs from bound evidence",
+            )
+        comparison_measurements = {
+            "lowPrecisionDominantGroupMatched",
+            "lowPrecisionThirdDominantGroupsMatched",
+            "lowPrecisionMinimumThirdShareAbsoluteDelta",
+            "lowPrecisionHeadShareAbsoluteDelta",
+        }
+        present_comparisons = comparison_measurements.intersection(
+            value["measurements"]
+        )
+        _require(
+            not present_comparisons or present_comparisons == comparison_measurements,
+            f"{artifact_path}: low-precision comparison is only partially populated",
+        )
+        if present_comparisons:
+            q2_reference = inputs_by_id.get("q2-gradient-detail")
+            _require(
+                q2_reference is not None,
+                f"{artifact_path}: low-precision comparison has no q2 detail input",
+            )
+            q2_detail_path = PROJECT_ROOT / q2_reference["path"]
+            validate_artifact(q2_detail_path)
+            q2_summary = load_json(q2_detail_path)["summary"]
+            expected_comparisons = {
+                "lowPrecisionDominantGroupMatched": (
+                    q2_summary["dominantNonHeadGroup"]
+                    == summary["dominantNonHeadGroup"]
+                ),
+                "lowPrecisionThirdDominantGroupsMatched": (
+                    q2_summary["thirdDominantNonHeadGroups"]
+                    == summary["thirdDominantNonHeadGroups"]
+                ),
+                "lowPrecisionMinimumThirdShareAbsoluteDelta": abs(
+                    q2_summary["minimumThirdDominantNonHeadShare"]
+                    - summary["minimumThirdDominantNonHeadShare"]
+                ),
+                "lowPrecisionHeadShareAbsoluteDelta": abs(
+                    q2_summary["headGroupShare"] - summary["headGroupShare"]
+                ),
+            }
+            for measurement, observed in expected_comparisons.items():
+                _require(
+                    value["measurements"][measurement] == observed,
+                    f"{artifact_path}: {measurement} differs from q2 detail",
+                )
+    if experiment.get("outputManifestPolicy") == "complete-result-artifacts-v1":
+        result_path = artifact_path.relative_to(PROJECT_ROOT).as_posix()
+        declared_outputs = set(experiment["outputs"])
+        _require(
+            result_path in declared_outputs,
+            f"{artifact_path}: strict output manifest omits its result path",
+        )
+        expected_artifacts = declared_outputs - {result_path}
+        _require(
+            set(artifact_paths) == expected_artifacts,
+            f"{artifact_path}: result artifacts differ from the strict output manifest",
+        )
+    return {
+        "candidateId": value["candidateId"],
+        "experimentId": experiment["experimentId"],
+        "decision": value["decision"],
+        "promotionPass": promotion_pass,
+        "killPass": kill_pass,
+    }
+
+
+def _validate_experiment_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = _project_receipt_reference(
+        value["experiment"],
+        "gamma.enwiki9.experiment-contract.v1",
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        value["experimentId"] == experiment["experimentId"],
+        f"{artifact_path}: result identifies another experiment",
+    )
+    _project_file_reference(value["analyzer"], f"{artifact_path}: analyzer")
+
+    expected_inputs = {
+        arm["id"]: {"path": arm["trace"]["path"], "sha256": arm["trace"]["sha256"]}
+        for arm in experiment["arms"]
+    }
+    observed_inputs = {
+        item["id"]: {"path": item["path"], "sha256": item["sha256"]}
+        for item in value["inputs"]
+    }
+    _require(
+        observed_inputs == expected_inputs,
+        f"{artifact_path}: result inputs differ from frozen experiment arms",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+
+    population = value["population"]
+    contract_population = experiment["population"]
+    expected_population = {
+        "rows": contract_population["rowCount"],
+        "branches": contract_population["branchCount"],
+        "segments": contract_population["rowCount"]
+        // contract_population["segmentLength"],
+        "segmentLength": contract_population["segmentLength"],
+        "firstHalfLength": contract_population["firstHalfLength"],
+    }
+    _require(
+        population == expected_population,
+        f"{artifact_path}: measured population differs from frozen contract",
+    )
+    metrics = value["metrics"]
+    _require(
+        value["alignment"]["complete"]
+        == all(value["alignment"][field] for field in (
+            "rowIdentity",
+            "symbolIdentity",
+            "treeIdentity",
+            "truthPathIdentity",
+        ))
+        == metrics["alignmentComplete"],
+        f"{artifact_path}: alignment claims differ",
+    )
+    _require(
+        metrics["changedBranchCount"] + metrics["unchangedBranchCount"]
+        == population["branches"],
+        f"{artifact_path}: branch-change totals differ from population",
+    )
+    _require(
+        metrics["secondHalfPositiveSegments"]
+        + metrics["secondHalfNegativeSegments"]
+        <= population["segments"],
+        f"{artifact_path}: segment-sign totals exceed the population",
+    )
+    _require(
+        math.isclose(
+            metrics["secondHalfPositiveSegmentFraction"],
+            metrics["secondHalfPositiveSegments"] / population["segments"],
+            rel_tol=1e-15,
+            abs_tol=0.0,
+        ),
+        f"{artifact_path}: positive-segment fraction differs from counts",
+    )
+    _require(
+        metrics["secondHalfThirdMinSavingsBits"]
+        == min(metrics["secondHalfThirdSavingsBits"]),
+        f"{artifact_path}: minimum third savings differs from third values",
+    )
+    _require(
+        math.isclose(
+            metrics["allIdealSavingsBits"],
+            metrics["firstHalfIdealSavingsBits"]
+            + metrics["secondHalfIdealSavingsBits"],
+            rel_tol=1e-12,
+            abs_tol=1e-9,
+        ),
+        f"{artifact_path}: total ideal savings differs from half totals",
+    )
+
+    expected_gate_rows: list[dict[str, Any]] = []
+    for gate in experiment["gates"]:
+        predicates: list[dict[str, Any]] = []
+        for predicate in gate["all"]:
+            observed = metrics[predicate["metric"]]
+            passed = _predicate_pass(
+                observed,
+                predicate["operator"],
+                predicate["threshold"],
+            )
+            predicates.append({**predicate, "observed": observed, "pass": passed})
+        expected_gate_rows.append(
+            {
+                "id": gate["id"],
+                "pass": all(item["pass"] for item in predicates),
+                "predicates": predicates,
+            }
+        )
+    _require(
+        value["gateEvaluations"] == expected_gate_rows,
+        f"{artifact_path}: gate evaluations differ from frozen predicates",
+    )
+    all_gates_pass = all(row["pass"] for row in expected_gate_rows)
+    expected_status = (
+        "invalid"
+        if not value["alignment"]["complete"]
+        else "pass"
+        if all_gates_pass
+        else "fail"
+    )
+    _require(
+        value["status"] == expected_status,
+        f"{artifact_path}: status differs from alignment and gate evidence",
+    )
+    expected_verdict = {
+        "pass": "authorize-deep-feature-instrumentation",
+        "fail": "retire-deep-residual-lineage",
+        "invalid": "invalid-experiment",
+    }[expected_status]
+    _require(
+        value["decision"]["verdict"] == expected_verdict,
+        f"{artifact_path}: decision differs from experiment status",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "status": value["status"],
+        "verdict": value["decision"]["verdict"],
+    }
+
+
+def _validate_delta_midas_probe_result(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, experiment = _project_receipt_reference(
+        value["experiment"],
+        "gamma.enwiki9.experiment-contract.v1",
+        f"{artifact_path}: experiment",
+    )
+    _require(
+        value["experimentId"] == experiment["experimentId"]
+        and experiment["registrationTiming"] == "prospective"
+        and experiment.get("protocol") is not None,
+        f"{artifact_path}: probe requires its prospective protocol contract",
+    )
+    _project_file_reference(value["analyzer"], f"{artifact_path}: analyzer")
+    dependency_ids = [item["id"] for item in value["analyzerDependencies"]]
+    _require(
+        len(dependency_ids) == len(set(dependency_ids)),
+        f"{artifact_path}: duplicate analyzer dependency",
+    )
+    for dependency in value["analyzerDependencies"]:
+        _project_file_reference(
+            dependency,
+            f"{artifact_path}: analyzer dependency {dependency['id']}",
+        )
+
+    expected_inputs = {
+        arm["id"]: {"path": arm["trace"]["path"], "sha256": arm["trace"]["sha256"]}
+        for arm in experiment["arms"]
+    }
+    observed_inputs = {
+        item["id"]: {"path": item["path"], "sha256": item["sha256"]}
+        for item in value["inputs"]
+    }
+    _require(
+        observed_inputs == expected_inputs,
+        f"{artifact_path}: result inputs differ from frozen experiment arms",
+    )
+    for item in value["inputs"]:
+        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+
+    contract_population = experiment["population"]
+    expected_population = {
+        "rows": contract_population["rowCount"],
+        "branches": contract_population["branchCount"],
+        "segments": contract_population["rowCount"]
+        // contract_population["segmentLength"],
+        "segmentLength": contract_population["segmentLength"],
+        "firstHalfLength": contract_population["firstHalfLength"],
+    }
+    _require(
+        value["population"] == expected_population,
+        f"{artifact_path}: measured population differs from frozen contract",
+    )
+    alignment = value["alignment"]
+    metrics = value["metrics"]
+    _require(
+        alignment["complete"]
+        == all(alignment[field] for field in (
+            "rowIdentity",
+            "symbolIdentity",
+            "treeIdentity",
+            "truthPathIdentity",
+        ))
+        == metrics["alignmentComplete"],
+        f"{artifact_path}: alignment claims differ",
+    )
+    audit = value["protocolAudit"]
+    for field in (
+        "decoderFeatureAuditPass",
+        "trainingLeakageAuditPass",
+        "quantizedEvaluationPass",
+    ):
+        _require(
+            audit[field] == metrics[field],
+            f"{artifact_path}: protocol audit and metric differ for {field}",
+        )
+
+    contract_partitions = experiment["protocol"]["partitions"]
+    expected_partition_segments = {
+        partition["id"]: (
+            partition["endSegmentExclusive"] - partition["firstSegment"]
+        )
+        for partition in contract_partitions
+    }
+    partition_rows = {row["id"]: row for row in value["partitions"]}
+    _require(
+        set(partition_rows) == set(expected_partition_segments),
+        f"{artifact_path}: result partitions differ from frozen protocol",
+    )
+    for partition_id, segment_count in expected_partition_segments.items():
+        row = partition_rows[partition_id]
+        _require(
+            row["segments"] == segment_count,
+            f"{artifact_path}: partition size differs for {partition_id}",
+        )
+        _require(
+            math.isclose(
+                row["gainIdealBits"],
+                row["baseIdealBits"] - row["correctedIdealBits"],
+                rel_tol=1e-12,
+                abs_tol=1e-9,
+            )
+            and math.isclose(
+                row["shiftedControlGainIdealBits"],
+                row["baseIdealBits"] - row["shiftedControlIdealBits"],
+                rel_tol=1e-12,
+                abs_tol=1e-9,
+            ),
+            f"{artifact_path}: partition gain arithmetic differs for {partition_id}",
+        )
+    _require(
+        metrics["validationIdealGainBits"] == partition_rows["validation"]["gainIdealBits"]
+        and metrics["testIdealGainBits"] == partition_rows["test"]["gainIdealBits"]
+        and metrics["testShiftedControlGainBits"]
+        == partition_rows["test"]["shiftedControlGainIdealBits"],
+        f"{artifact_path}: summary gains differ from partition evidence",
+    )
+    _require(
+        metrics["testThirdMinIdealGainBits"]
+        == min(metrics["testThirdIdealGainBits"]),
+        f"{artifact_path}: minimum test-third gain differs",
+    )
+    _require(
+        math.isclose(
+            metrics["testOverShiftedControlBits"],
+            metrics["testIdealGainBits"] - metrics["testShiftedControlGainBits"],
+            rel_tol=1e-12,
+            abs_tol=1e-9,
+        ),
+        f"{artifact_path}: shifted-control margin differs",
+    )
+    test_segments = expected_partition_segments["test"]
+    _require(
+        metrics["testPositiveSegments"] + metrics["testNegativeSegments"]
+        <= test_segments
+        and math.isclose(
+            metrics["testPositiveSegmentFraction"],
+            metrics["testPositiveSegments"] / test_segments,
+            rel_tol=1e-15,
+            abs_tol=0.0,
+        ),
+        f"{artifact_path}: test segment-sign evidence differs",
+    )
+
+    model = value["model"]
+    model_path = _project_file_reference(model["payload"], f"{artifact_path}: model")
+    _require(
+        model_path.stat().st_size == model["bytes"]
+        == metrics["modelPayloadBytes"]
+        and model["dimension"] == experiment["protocol"]["parameters"]["dimension"],
+        f"{artifact_path}: model payload accounting differs",
+    )
+
+    expected_gate_rows: list[dict[str, Any]] = []
+    for gate in experiment["gates"]:
+        predicates: list[dict[str, Any]] = []
+        for predicate in gate["all"]:
+            observed = metrics[predicate["metric"]]
+            passed = _predicate_pass(
+                observed,
+                predicate["operator"],
+                predicate["threshold"],
+            )
+            predicates.append({**predicate, "observed": observed, "pass": passed})
+        expected_gate_rows.append(
+            {
+                "id": gate["id"],
+                "pass": all(item["pass"] for item in predicates),
+                "predicates": predicates,
+            }
+        )
+    _require(
+        value["gateEvaluations"] == expected_gate_rows,
+        f"{artifact_path}: gate evaluations differ from frozen predicates",
+    )
+    all_gates_pass = all(row["pass"] for row in expected_gate_rows)
+    expected_status = "pass" if all_gates_pass else "fail"
+    expected_verdict = (
+        "authorize-open-base-integration"
+        if all_gates_pass
+        else "retire-hashed-linear-probe"
+    )
+    _require(
+        value["status"] == expected_status
+        and value["decision"]["verdict"] == expected_verdict,
+        f"{artifact_path}: status or decision differs from gate evidence",
+    )
+    return {
+        "experimentId": value["experimentId"],
+        "status": value["status"],
+        "verdict": value["decision"]["verdict"],
+    }
+
+
+def _validate_mechanism_graph(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    components = {component["id"]: component for component in value["components"]}
+    _require(
+        len(components) == len(value["components"]),
+        f"{artifact_path}: duplicate component identity",
+    )
+    for component in components.values():
+        if component["role"] != "open-codec":
+            _require(
+                component["scoreCreditBytes"] == 0,
+                f"{artifact_path}: non-codec component received score credit",
+            )
+        for evidence in component["evidence"]:
+            _project_file_reference(
+                evidence,
+                f"{artifact_path}: component {component['id']}",
+            )
+
+    interaction_ids: set[str] = set()
+    for interaction in value["interactions"]:
+        _require(
+            interaction["id"] not in interaction_ids,
+            f"{artifact_path}: duplicate interaction identity",
+        )
+        interaction_ids.add(interaction["id"])
+        _require(
+            set(interaction["components"]).issubset(components),
+            f"{artifact_path}: interaction references an unknown component",
+        )
+        if interaction["sharedProbabilityBoundary"] or interaction["overlappingCost"]:
+            _require(
+                interaction["jointReplayRequired"],
+                f"{artifact_path}: shared boundary or cost requires joint replay",
+            )
+
+    composition = value["composition"]
+    selected = [components[component_id] for component_id in composition["componentIds"]]
+    _require(
+        len(selected) == len(composition["componentIds"]),
+        f"{artifact_path}: composition references an unknown component",
+    )
+    exact_replay = composition["status"] == "exact-replay-present"
+    _require(
+        exact_replay == (composition["jointReplay"] is not None),
+        f"{artifact_path}: exact composition status differs from joint replay",
+    )
+    if exact_replay:
+        _require(
+            composition["candidateId"] is not None and selected,
+            f"{artifact_path}: exact composition lacks candidate or components",
+        )
+        _require(
+            not any(component["closedTeacherDependency"] for component in selected),
+            f"{artifact_path}: exact prize composition retains a closed teacher",
+        )
+        _project_receipt_reference(
+            composition["jointReplay"],
+            "gamma.enwiki9.run-receipt.v1",
+            f"{artifact_path}: joint replay",
+        )
+    if any(component["state"] == "retired" for component in selected):
+        _require(
+            composition["status"] == "prohibited",
+            f"{artifact_path}: composition includes a retired component",
+        )
+    if composition["status"] == "prohibited":
+        _require(
+            composition["candidateId"] is None,
+            f"{artifact_path}: prohibited composition names a candidate",
+        )
+    return {
+        "graphId": value["graphId"],
+        "components": len(components),
+        "compositionStatus": composition["status"],
+    }
+
+
+def validate_search_policy() -> dict[str, Any]:
+    path = CONTRACT_ROOT / "search-policy.json"
+    value = load_json(path)
+    _validate_schema(value, SCHEMA_PATHS["gamma.enwiki9.search-policy.v1"])
+    _validate_objective_binding(value["objective"], str(path))
+    return value
+
+
+def _validate_dependency_closure(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    counted_files = value["countedFiles"]
+    paths = [record["path"] for record in counted_files]
+    _require(len(paths) == len(set(paths)), f"{artifact_path}: duplicate counted path")
+    _require(
+        value["entryPoint"] in set(paths),
+        f"{artifact_path}: entry point is not a counted file",
+    )
+    _require(
+        sum(record["bytes"] for record in counted_files) == value["totalPackageBytes"],
+        f"{artifact_path}: totalPackageBytes differs from counted file bytes",
+    )
+    _require(
+        candidate_tree_digest(counted_files) == value["candidateTreeSha256"],
+        f"{artifact_path}: candidate tree digest differs from counted files",
+    )
+    _require(
+        sum(len(option.encode("utf-8")) for option in value["requiredOptions"])
+        == value["requiredOptionBytes"],
+        f"{artifact_path}: required option bytes differ from UTF-8 command text",
+    )
+    command_text = "\0".join(
+        token for command in value["commands"].values() for token in command
+    )
+    _require(
+        all(option in command_text for option in value["requiredOptions"]),
+        f"{artifact_path}: a required option is absent from the declared commands",
+    )
+    command_texts = {
+        name: "\0".join(command) for name, command in value["commands"].items()
+    }
+    _require(
+        "{corpus}" not in command_texts["build"]
+        and "{corpus}" not in command_texts["decompress"],
+        f"{artifact_path}: build or decompression command can access the corpus",
+    )
+    for placeholder, name in (
+        ("{corpus}", "compress"),
+        ("{archive}", "compress"),
+        ("{archive}", "decompress"),
+        ("{restored}", "decompress"),
+    ):
+        _require(
+            placeholder in command_texts[name],
+            f"{artifact_path}: {name} command lacks {placeholder}",
+        )
+    _require(
+        "{entry_point}" in command_text
+        or value["entryPoint"] in command_text,
+        f"{artifact_path}: declared commands never invoke the counted entry point",
+    )
+    accepted_platforms = validate_objective(objective_path=value["objective"]["objectivePath"])["distribution"][
+        "acceptedExecutableSystems"
+    ]
+    _require(
+        value["platform"] in accepted_platforms,
+        f"{artifact_path}: platform is outside the objective contract",
+    )
+
+    dependency_keys = [
+        (dependency["name"], dependency["provider"])
+        for dependency in value["dependencies"]
+    ]
+    _require(
+        len(dependency_keys) == len(set(dependency_keys)),
+        f"{artifact_path}: duplicate dependency identity",
+    )
+    _require(
+        all(
+            not dependency["counted"] or dependency["provider"] in set(paths)
+            for dependency in value["dependencies"]
+        ),
+        f"{artifact_path}: counted dependency provider is not a counted file",
+    )
+    uncounted = [
+        dependency["name"]
+        for dependency in value["dependencies"]
+        if not dependency["counted"]
+        and dependency["kind"] not in UNCOUNTED_PLATFORM_DEPENDENCY_KINDS
+    ]
+    unresolved = list(value["missing"]) + [
+        f"uncounted dependency: {name}" for name in uncounted
+    ]
+    if value["complete"]:
+        _require(not unresolved, f"{artifact_path}: complete closure has unresolved inputs")
+    else:
+        _require(
+            bool(unresolved),
+            f"{artifact_path}: incomplete closure does not identify what is missing",
+        )
+
+    if verify_files:
+        candidate_root = _relative_path(
+            artifact_path.parent,
+            value["candidateRoot"],
+            f"{artifact_path}: candidateRoot",
+        )
+        _require(candidate_root.is_dir(), f"{artifact_path}: candidate root is missing")
+        actual_paths: list[str] = []
+        for path in sorted(candidate_root.rglob("*")):
+            relative_path = path.relative_to(candidate_root).as_posix()
+            _require(
+                not path.is_symlink(),
+                f"{artifact_path}: candidate tree contains symlink: {relative_path}",
+            )
+            if path.is_file():
+                actual_paths.append(relative_path)
+        _require(
+            actual_paths == sorted(paths),
+            f"{artifact_path}: counted files do not exactly cover the candidate root",
+        )
+        for record in counted_files:
+            _verify_file_record(
+                candidate_root,
+                record,
+                f"{artifact_path}: countedFiles",
+            )
+
+    return {
+        "candidateId": value["candidateId"],
+        "complete": value["complete"],
+        "filesVerified": verify_files,
+        "totalPackageBytes": value["totalPackageBytes"],
+    }
+
+
+def dependency_license_audit(manifest: dict[str, Any]) -> dict[str, Any]:
+    license_files = sorted(
+        record["path"]
+        for record in manifest["countedFiles"]
+        if record["role"] == "license"
+    )
+    dependency_licenses = sorted(
+        {dependency["license"] for dependency in manifest["dependencies"]}
+    )
+    bundled_license_providers = {
+        dependency["provider"]
+        for dependency in manifest["dependencies"]
+        if dependency["kind"] == "bundled" and dependency["counted"]
+    }
+    issues: list[str] = []
+    if not manifest["complete"]:
+        issues.append("dependency closure is incomplete")
+    if not license_files:
+        issues.append("no counted package license file")
+    if license_files and not bundled_license_providers.intersection(license_files):
+        issues.append("no bundled dependency binds a counted license file")
+    unapproved = sorted(
+        license
+        for license in dependency_licenses
+        if license not in APPROVED_SPDX_LICENSES
+    )
+    if unapproved:
+        issues.append("unapproved or compound SPDX identifiers: " + ", ".join(unapproved))
+    return {
+        "approved": not issues,
+        "licenseFiles": license_files,
+        "dependencyLicenses": dependency_licenses,
+        "issues": issues,
+    }
+
+
+def _sandbox_binding_audit(
+    command: list[str],
+    artifact_path: Path,
+    phase: str,
+) -> dict[str, Any]:
+    context = f"{artifact_path}: {phase} sandbox"
+    try:
+        bwrap_index = command.index("/usr/bin/bwrap")
+        separator = command.index("--", bwrap_index)
+    except ValueError as exc:
+        raise ValueError(f"{context}: bubblewrap command boundary is missing") from exc
+    sandbox = command[bwrap_index:separator]
+    for option in (
+        "--unshare-all",
+        "--die-with-parent",
+        "--new-session",
+        "--clearenv",
+        "--proc",
+        "--dev",
+        "--tmpfs",
+    ):
+        _require(option in sandbox, f"{context}: required option {option} is missing")
+    _require("--share-net" not in sandbox, f"{context}: network was re-shared")
+
+    read_only = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--ro-bind"
+    ]
+    writable = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--bind"
+    ]
+    unsupported_bind_options = sorted(
+        {
+            token
+            for token in sandbox
+            if "bind" in token and token not in {"--bind", "--ro-bind"}
+        }
+    )
+    _require(
+        not unsupported_bind_options,
+        f"{context}: unsupported bind options: {unsupported_bind_options}",
+    )
+    _require(
+        len(writable) == 1 and writable[0][1] == "/work",
+        f"{context}: writable host bindings differ from /work",
+    )
+    corpus_bindings = [source for source, target in read_only if target == "/input/enwik9"]
+    non_corpus_read_only = [pair for pair in read_only if pair[1] != "/input/enwik9"]
+    _require(
+        non_corpus_read_only == [("/usr", "/usr")],
+        f"{context}: read-only system bindings differ from /usr",
+    )
+    compression_phase = phase in {"compression", "compression-replay"}
+    _require(
+        len(corpus_bindings) == (1 if compression_phase else 0),
+        f"{context}: corpus exposure differs from the phase contract",
+    )
+
+    environment_entries = [
+        (sandbox[index + 1], sandbox[index + 2])
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--setenv"
+    ]
+    environment = {
+        sandbox[index + 1]: sandbox[index + 2]
+        for index, token in enumerate(sandbox[:-2])
+        if token == "--setenv"
+    }
+    _require(
+        len(environment_entries) == 4
+        and environment
+        == {
+            "LC_ALL": "C",
+            "PATH": "/usr/bin:/bin",
+            "SOURCE_DATE_EPOCH": "0",
+            "TZ": "UTC",
+        },
+        f"{context}: environment differs from the clean-room contract",
+    )
+    return {
+        "corpusSource": corpus_bindings[0] if corpus_bindings else None,
+        "innerCommand": command[separator + 1 :],
+        "workSource": writable[0][0],
+    }
+
+
+def _expanded_replay_command(
+    manifest: dict[str, Any],
+    command_name: str,
+    archive_name: str,
+) -> list[str]:
+    values = {
+        "archive": f"/work/{archive_name}",
+        "corpus": "/input/enwik9",
+        "entry_point": f"/work/package/{manifest['entryPoint']}",
+        "package": "/work/package",
+        "restored": "/work/restored.enwik9",
+        "scratch": "/work/tmp",
+    }
+    expanded: list[str] = []
+    for raw_token in manifest["commands"][command_name]:
+        unknown = sorted(set(REPLAY_PLACEHOLDER.findall(raw_token)) - set(values))
+        _require(
+            not unknown,
+            f"dependency closure contains unknown placeholders: {unknown}",
+        )
+        token = raw_token
+        for name, replacement in values.items():
+            token = token.replace(f"{{{name}}}", replacement)
+        expanded.append(token)
+    return expanded
+
+
+def _validate_clean_room_replay(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    expected_phases = [
+        "build-first",
+        "compression",
+        "build-replay",
+        "compression-replay",
+        "build-decode",
+        "decompression",
+    ]
+    executions = value["executions"]
+    _require(
+        [execution["phase"] for execution in executions] == expected_phases,
+        f"{artifact_path}: clean-room phases are missing or out of order",
+    )
+    guard_phases = {
+        "compression": "compression",
+        "compression-replay": "compression",
+        "decompression": "decompression",
+    }
+    guard_checks: dict[str, bool] = {}
+    binding_audits: dict[str, dict[str, Any]] = {}
+    for execution in executions:
+        phase = execution["phase"]
+        reference = execution["guard"]
+        if verify_files:
+            _verify_file_record(
+                artifact_path.parent,
+                execution["log"],
+                f"{artifact_path}: {phase} log",
+            )
+        if phase not in guard_phases:
+            _require(
+                reference is None,
+                f"{artifact_path}: build phase unexpectedly carries a resource guard",
+            )
+            sandbox_command = execution["command"]
+        else:
+            _require(reference is not None, f"{artifact_path}: runtime phase lacks a guard")
+            _, guard, result = _verify_reference(
+                artifact_path,
+                reference,
+                "gamma.enwiki9.resource-guard-receipt.v2",
+                verify_files,
+            )
+            _require(
+                guard["phase"] == guard_phases[phase],
+                f"{artifact_path}: runtime phase has the wrong guard phase",
+            )
+            try:
+                separator = execution["command"].index("--")
+            except ValueError as exc:
+                raise ValueError(
+                    f"{artifact_path}: {phase} guard command boundary is missing"
+                ) from exc
+            _require(
+                execution["command"][separator + 1 :] == guard["command"],
+                f"{artifact_path}: {phase} execution differs from its guard command",
+            )
+            _require(
+                execution["returncode"] == guard["returncode"],
+                f"{artifact_path}: {phase} return code differs from its guard",
+            )
+            guard_checks[phase] = result["promotionReady"]
+            sandbox_command = guard["command"]
+        binding_audits[phase] = _sandbox_binding_audit(
+            sandbox_command,
+            artifact_path,
+            phase,
+        )
+
+    _require(
+        binding_audits["build-first"]["workSource"]
+        == binding_audits["compression"]["workSource"],
+        f"{artifact_path}: first build and compression use different package copies",
+    )
+    _require(
+        binding_audits["build-replay"]["workSource"]
+        == binding_audits["compression-replay"]["workSource"],
+        f"{artifact_path}: replay build and compression use different package copies",
+    )
+    _require(
+        binding_audits["build-decode"]["workSource"]
+        == binding_audits["decompression"]["workSource"],
+        f"{artifact_path}: decode build and execution use different package copies",
+    )
+    work_sources = {
+        binding_audits["build-first"]["workSource"],
+        binding_audits["build-replay"]["workSource"],
+        binding_audits["build-decode"]["workSource"],
+    }
+    _require(
+        len(work_sources) == value["packageCopiesVerified"],
+        f"{artifact_path}: package-copy count differs from command bindings",
+    )
+    _require(
+        binding_audits["compression"]["corpusSource"]
+        == binding_audits["compression-replay"]["corpusSource"],
+        f"{artifact_path}: compression runs use different corpus bindings",
+    )
+
+    device_paths = value["probe"]["devicePaths"]
+    gpu_visible = any(
+        marker in path.lower()
+        for path in device_paths
+        for marker in ("/dri", "kfd", "nvidia", "render", "vga")
+    )
+    network_used = any(
+        interface != "lo" for interface in value["probe"]["networkInterfaces"]
+    )
+    commands_succeeded = all(execution["returncode"] == 0 for execution in executions)
+    _require(
+        value["allCommandsSucceeded"] == commands_succeeded,
+        f"{artifact_path}: command-success summary differs from executions",
+    )
+    clean_room_ok = bool(
+        commands_succeeded
+        and value["scratchCleaned"]
+        and not value["decodeCorpusExposed"]
+        and not gpu_visible
+        and not network_used
+    )
+    return {
+        "candidateId": value["candidateId"],
+        "candidateTreeSha256": value["candidateTreeSha256"],
+        "cleanRoomReplayOk": clean_room_ok,
+        "gpuUsed": gpu_visible,
+        "hiddenInputs": value["sandbox"]["hostDataPathsVisible"],
+        "independentDecodeOk": bool(
+            executions[-1]["returncode"] == 0
+            and guard_checks.get("decompression") is True
+        ),
+        "licenseAudit": value["licenseAudit"],
+        "networkUsed": network_used,
+        "corpusSource": binding_audits["compression"]["corpusSource"],
+        "innerCommands": {
+            phase: audit["innerCommand"] for phase, audit in binding_audits.items()
+        },
+    }
+
+
+def _validate_clean_room_attempt(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    _, manifest, _ = _verify_reference(
+        artifact_path,
+        value["manifest"],
+        "gamma.enwiki9.dependency-closure.v1",
+        verify_files,
+    )
+    _require(
+        manifest["candidateId"] == value["candidateId"]
+        and manifest["candidateTreeSha256"] == value["candidateTreeSha256"],
+        f"{artifact_path}: attempt and manifest identify different candidates",
+    )
+    binding = value["objective"]
+    _require(
+        value["corpus"]["bytes"] == binding["corpusBytes"]
+        and value["corpus"]["sha256"] == binding["corpusSha256"],
+        f"{artifact_path}: attempt corpus is not canonical full enwik9",
+    )
+    expected_phases = [
+        "build-first",
+        "compression",
+        "build-replay",
+        "compression-replay",
+        "build-decode",
+        "decompression",
+    ]
+    actual_phases = [execution["phase"] for execution in value["executions"]]
+    _require(
+        actual_phases == expected_phases[: len(actual_phases)],
+        f"{artifact_path}: failed attempt phases are not a chronological prefix",
+    )
+    retained_paths = [record["path"] for record in value["retainedArtifacts"]]
+    _require(
+        len(retained_paths) == len(set(retained_paths)),
+        f"{artifact_path}: duplicate retained artifact path",
+    )
+    if verify_files:
+        _verify_run_artifact(artifact_path, value["corpus"], "attempt corpus")
+        for execution in value["executions"]:
+            _verify_run_artifact(
+                artifact_path,
+                execution["log"],
+                f"attempt {execution['phase']} log",
+            )
+        for record in value["retainedArtifacts"]:
+            _verify_run_artifact(artifact_path, record, "retained attempt artifact")
+    return {
+        "candidateId": value["candidateId"],
+        "executedPhases": actual_phases,
+        "filesVerified": verify_files,
+        "scratchCleaned": value["scratchCleaned"],
+    }
+
+
+def _validate_release_receipt_index(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    bundle_paths = [row["bundlePath"] for row in value["bundles"]]
+    _require(
+        bundle_paths == sorted(bundle_paths) and len(bundle_paths) == len(set(bundle_paths)),
+        f"{artifact_path}: release bundles are unsorted or duplicated",
+    )
+    for row in value["bundles"]:
+        _, manifest = _project_receipt_reference(
+            row["manifest"],
+            "gamma.enwiki9.dependency-closure.v1",
+            f"{artifact_path}: release manifest",
+        )
+        _require(
+            manifest["candidateId"] == row["candidateId"]
+            and manifest["complete"] == row["dependencyClosureComplete"],
+            f"{artifact_path}: release row differs from its manifest",
+        )
+        run = row["runReceipt"]
+        attempt = row["failedAttempt"]
+        _require(
+            run is None or attempt is None,
+            f"{artifact_path}: release bundle has both success and failure receipts",
+        )
+        if run is not None:
+            run_path, receipt = _project_receipt_reference(
+                run["reference"],
+                "gamma.enwiki9.run-receipt.v1",
+                f"{artifact_path}: release run receipt",
+            )
+            result = validate_artifact(run_path, verify_files=False)
+            _require(
+                receipt["candidateId"] == row["candidateId"]
+                and run["verdict"] == receipt["verdict"]
+                and run["officialScoreBytes"]
+                == receipt["accounting"]["officialScoreBytes"]
+                and run["targetDebtBytes"]
+                == receipt["accounting"]["targetDebtBytes"]
+                and run["objectiveCriteriaPass"] == result["objectiveCriteriaPass"],
+                f"{artifact_path}: release summary differs from its run receipt",
+            )
+        if attempt is not None:
+            attempt_path, attempt_receipt = _project_receipt_reference(
+                attempt["reference"],
+                "gamma.enwiki9.clean-room-attempt.v1",
+                f"{artifact_path}: release failure receipt",
+            )
+            validate_artifact(attempt_path, verify_files=False)
+            _require(
+                attempt_receipt["candidateId"] == row["candidateId"]
+                and attempt["error"] == attempt_receipt["error"]
+                and attempt["scratchCleaned"] == attempt_receipt["scratchCleaned"],
+                f"{artifact_path}: release summary differs from its failure receipt",
+            )
+    expected_summary = {
+        "bundles": len(value["bundles"]),
+        "completeClosures": sum(
+            row["dependencyClosureComplete"] for row in value["bundles"]
+        ),
+        "runReceipts": sum(row["runReceipt"] is not None for row in value["bundles"]),
+        "failedAttempts": sum(
+            row["failedAttempt"] is not None for row in value["bundles"]
+        ),
+        "objectiveAchievedReceipts": sum(
+            row["runReceipt"] is not None
+            and row["runReceipt"]["verdict"] == "objective-achieved"
+            for row in value["bundles"]
+        ),
+    }
+    _require(
+        value["summary"] == expected_summary,
+        f"{artifact_path}: release summary differs from indexed bundles",
+    )
+    return {"summary": expected_summary}
+
+
+def _resource_guard_checks(value: dict[str, Any]) -> dict[str, bool]:
+    objective = validate_objective(objective_path=value["objective"]["objectivePath"])
+    resources = objective["resources"]
+    wall_time_complete = value["wall_time_measurement_complete"]
+    wall_time_pass = (
+        wall_time_complete
+        and not value["wall_time_exceeded"]
+        and value["wall_time_limit_seconds"] is not None
+        and value["elapsed_s"] < value["wall_time_limit_seconds"]
+    )
+    memory_pass = (
+        value["limit_mode"] == "tree"
+        and value["official_decimal_limit_kib"]
+        == resources["memory"]["linuxGuardKiB"]
+        and not value["rss_guard_exceeded"]
+        and not value["official_decimal_memory_exceeded"]
+        and value["max_sampled_tree_rss_kib"]
+        < resources["memory"]["linuxGuardKiB"]
+    )
+    temporary_disk_pass = (
+        value["temporary_disk_measurement_complete"]
+        and value["temporary_disk_limit_bytes"]
+        == resources["temporaryDisk"]["maximumBytes"]
+        and not value["temporary_disk_guard_exceeded"]
+        and value["max_sampled_temporary_disk_bytes"]
+        < resources["temporaryDisk"]["maximumBytes"]
+    )
+    single_core_pass = (
+        value["max_logical_cpus"]
+        == resources["cpu"]["maximumPhysicalCores"]
+        and value["affinity_measurement_complete"]
+        and not value["logical_cpu_guard_exceeded"]
+        and 0 < value["max_sampled_allowed_cpu_count"] <= 1
+    )
+    command_pass = value["status"] == "complete" and value["returncode"] == 0
+    return {
+        "command": command_pass,
+        "memory": memory_pass,
+        "singleCore": single_core_pass,
+        "temporaryDisk": temporary_disk_pass,
+        "wallTime": wall_time_pass,
+    }
+
+
+def _validate_resource_guard(
+    value: dict[str, Any],
+    artifact_path: Path,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    objective = validate_objective(objective_path=value["objective"]["objectivePath"])
+    score = value["geekbench5_single_core_score"]
+    expected_wall_limit = (
+        objective["resources"]["wallTime"]["maximumSecondsNumerator"] / score
+        if score is not None
+        else None
+    )
+    _require(
+        value["wall_time_measurement_complete"]
+        == (value["phase"] in {"compression", "decompression"} and score is not None),
+        f"{artifact_path}: wall-time completeness differs from phase and score evidence",
+    )
+    if expected_wall_limit is None:
+        _require(
+            value["wall_time_limit_seconds"] is None,
+            f"{artifact_path}: wall-time limit lacks a Geekbench score",
+        )
+    else:
+        _require(
+            value["wall_time_limit_seconds"] is not None
+            and math.isclose(
+                value["wall_time_limit_seconds"],
+                expected_wall_limit,
+                rel_tol=1e-12,
+            ),
+            f"{artifact_path}: wall-time limit differs from the objective formula",
+        )
+
+    official_limit = value["official_decimal_limit_kib"]
+    expected_over = (
+        max(0, value["max_sampled_tree_rss_kib"] - official_limit)
+        if official_limit is not None
+        else None
+    )
+    _require(
+        value["official_decimal_over_limit_kib"] == expected_over,
+        f"{artifact_path}: official memory overage is inconsistent",
+    )
+    expected_flags = {
+        "rss_guard_exceeded": (
+            value["max_sampled_tree_rss_kib"] > value["limit_kib"]
+            if value["limit_mode"] == "tree"
+            else value["max_sampled_single_rss_kib"] > value["limit_kib"]
+        ),
+        "official_decimal_memory_exceeded": (
+            official_limit is not None
+            and value["max_sampled_tree_rss_kib"] >= official_limit
+        ),
+        "temporary_disk_guard_exceeded": (
+            value["temporary_disk_limit_bytes"] is not None
+            and value["max_sampled_temporary_disk_bytes"]
+            >= value["temporary_disk_limit_bytes"]
+        ),
+        "logical_cpu_guard_exceeded": (
+            value["max_logical_cpus"] is not None
+            and value["max_sampled_allowed_cpu_count"] > value["max_logical_cpus"]
+        ),
+        "wall_time_exceeded": (
+            value["wall_time_limit_seconds"] is not None
+            and value["elapsed_s"] >= value["wall_time_limit_seconds"]
+        ),
+    }
+    if value["status"] != "running":
+        for field, expected in expected_flags.items():
+            _require(
+                value[field] == expected,
+                f"{artifact_path}: {field} is inconsistent with measured maxima",
+            )
+        expected_status = "complete"
+        for field, status in (
+            ("rss_guard_exceeded", "rss_guard_exceeded"),
+            (
+                "official_decimal_memory_exceeded",
+                "aborted_official_decimal_memory_limit",
+            ),
+            ("temporary_disk_guard_exceeded", "temporary_disk_guard_exceeded"),
+            ("logical_cpu_guard_exceeded", "logical_cpu_guard_exceeded"),
+            ("wall_time_exceeded", "wall_time_guard_exceeded"),
+        ):
+            if value[field]:
+                expected_status = status
+                break
+        _require(
+            value["status"] == expected_status,
+            f"{artifact_path}: status differs from guard flags",
+        )
+        _require(value["returncode"] is not None, f"{artifact_path}: final receipt lacks return code")
+    else:
+        _require(value["returncode"] is None, f"{artifact_path}: running receipt has return code")
+
+    checks = _resource_guard_checks(value)
+    return {
+        "checks": checks,
+        "phase": value["phase"],
+        "promotionReady": all(checks.values()),
+        "status": value["status"],
+    }
+
+
+def _verify_reference(
+    receipt_path: Path,
+    reference: dict[str, Any],
+    expected_schema: str,
+    verify_files: bool,
+) -> tuple[Path, dict[str, Any], dict[str, Any]]:
+    path = _relative_path(receipt_path.parent, reference["path"], str(receipt_path))
+    _require(path.is_file(), f"{receipt_path}: referenced receipt is missing: {path}")
+    _require(
+        f"sha256:{file_digest(path, 'sha256')}" == reference["sha256"],
+        f"{receipt_path}: referenced receipt digest differs: {path}",
+    )
+    value = load_json(path)
+    _require(
+        value.get("schema") == expected_schema,
+        f"{receipt_path}: referenced receipt has the wrong schema: {path}",
+    )
+    result = validate_artifact(path, verify_files=verify_files)
+    return path, value, result
+
+
+def _verify_run_artifact(
+    receipt_path: Path,
+    record: dict[str, Any],
+    context: str,
+) -> None:
+    _verify_file_record(receipt_path.parent, record, context)
+
+
+def _validate_run_receipt(
+    value: dict[str, Any],
+    artifact_path: Path,
+    verify_files: bool,
+) -> dict[str, Any]:
+    _validate_objective_binding(value["objective"], str(artifact_path))
+    binding = value["objective"]
+    _require(
+        value["corpus"]["bytes"] == binding["corpusBytes"]
+        and value["corpus"]["sha256"] == binding["corpusSha256"],
+        f"{artifact_path}: corpus is not the canonical full enwik9",
+    )
+    _require(
+        value["correctness"]["restored"]["bytes"] == binding["corpusBytes"]
+        and value["correctness"]["restored"]["sha256"] == binding["corpusSha256"],
+        f"{artifact_path}: restored corpus identity differs from the objective",
+    )
+
+    manifest_reference = {
+        "path": value["package"]["manifestPath"],
+        "sha256": value["package"]["manifestSha256"],
+    }
+    _, manifest, manifest_result = _verify_reference(
+        artifact_path,
+        manifest_reference,
+        "gamma.enwiki9.dependency-closure.v1",
+        verify_files,
+    )
+    _require(
+        manifest["candidateId"] == value["candidateId"]
+        and manifest["candidateTreeSha256"] == value["candidateTreeSha256"],
+        f"{artifact_path}: package manifest identifies a different candidate",
+    )
+    _require(
+        value["package"]["bytes"] == manifest["totalPackageBytes"],
+        f"{artifact_path}: package bytes differ from dependency closure",
+    )
+    _require(
+        value["package"]["dependencyClosureComplete"] == manifest["complete"],
+        f"{artifact_path}: package closure status differs from its manifest",
+    )
+
+    accounting = value["accounting"]
+    expected_score = (
+        accounting["packageBytes"]
+        + accounting["archiveBytes"]
+        + accounting["requiredOptionBytes"]
+    )
+    _require(
+        accounting["packageBytes"] == value["package"]["bytes"],
+        f"{artifact_path}: accounting package bytes differ",
+    )
+    _require(
+        accounting["archiveBytes"] == value["archive"]["bytes"],
+        f"{artifact_path}: accounting archive bytes differ",
+    )
+    _require(
+        accounting["requiredOptionBytes"] == manifest["requiredOptionBytes"],
+        f"{artifact_path}: required option bytes differ",
+    )
+    _require(
+        accounting["officialScoreBytes"] == expected_score,
+        f"{artifact_path}: official score formula differs",
+    )
+    _require(
+        accounting["targetDebtBytes"]
+        == accounting["officialScoreBytes"] - binding["targetScoreBytes"],
+        f"{artifact_path}: target debt differs from the objective",
+    )
+    _require(
+        accounting["complete"] == manifest["complete"],
+        f"{artifact_path}: complete accounting requires complete dependency closure",
+    )
+    for command_name in ("build", "compress", "decompress"):
+        _require(
+            value["commands"][command_name] == manifest["commands"][command_name],
+            f"{artifact_path}: {command_name} command differs from the dependency closure",
+        )
+
+    _, compression_guard, compression_result = _verify_reference(
+        artifact_path,
+        value["resources"]["compressionGuard"],
+        "gamma.enwiki9.resource-guard-receipt.v2",
+        verify_files,
+    )
+    _, decompression_guard, decompression_result = _verify_reference(
+        artifact_path,
+        value["resources"]["decompressionGuard"],
+        "gamma.enwiki9.resource-guard-receipt.v2",
+        verify_files,
+    )
+    _require(
+        compression_guard["phase"] == "compression",
+        f"{artifact_path}: compression guard has wrong phase",
+    )
+    _require(
+        decompression_guard["phase"] == "decompression",
+        f"{artifact_path}: decompression guard has wrong phase",
+    )
+    if verify_files:
+        _verify_run_artifact(artifact_path, value["corpus"], "corpus")
+        _verify_run_artifact(artifact_path, value["archive"], "archive")
+        _verify_run_artifact(
+            artifact_path,
+            value["correctness"]["deterministicReplayArchive"],
+            "deterministic replay archive",
+        )
+        _verify_run_artifact(
+            artifact_path,
+            value["correctness"]["restored"],
+            "restored corpus",
+        )
+
+    correctness = value["correctness"]
+    replay_archive = correctness["deterministicReplayArchive"]
+    archive_identity = (
+        replay_archive["bytes"] == value["archive"]["bytes"]
+        and replay_archive["sha256"] == value["archive"]["sha256"]
+    )
+    _require(
+        correctness["determinismOk"] == archive_identity,
+        f"{artifact_path}: determinism verdict differs from replay archive identity",
+    )
+    _require(
+        correctness["roundtripOk"],
+        f"{artifact_path}: exact restored artifact is mislabeled as a failed roundtrip",
+    )
+
+    _, replay_compression_guard, replay_compression_result = _verify_reference(
+        artifact_path,
+        value["resources"]["replayCompressionGuard"],
+        "gamma.enwiki9.resource-guard-receipt.v2",
+        verify_files,
+    )
+    _require(
+        replay_compression_guard["phase"] == "compression",
+        f"{artifact_path}: replay compression guard has wrong phase",
+    )
+    guard_results = (
+        compression_result["checks"],
+        replay_compression_result["checks"],
+        decompression_result["checks"],
+    )
+    expected_resources = {
+        "wallTimePass": all(result["wallTime"] for result in guard_results),
+        "memoryPass": all(result["memory"] for result in guard_results),
+        "temporaryDiskPass": all(
+            result["temporaryDisk"] for result in guard_results
+        ),
+        "singleCorePass": all(result["singleCore"] for result in guard_results),
+    }
+    for field, expected in expected_resources.items():
+        _require(
+            value["resources"][field] == expected,
+            f"{artifact_path}: {field} differs from all three guard receipts",
+        )
+    expected_resource_complete = all(expected_resources.values()) and all(
+        result["command"] for result in guard_results
+    )
+    _require(
+        value["resources"]["complete"] == expected_resource_complete,
+        f"{artifact_path}: resource completeness differs from all three guards",
+    )
+
+    distribution = value["distribution"]
+    _, clean_room, clean_room_result = _verify_reference(
+        artifact_path,
+        distribution["cleanRoomReceipt"],
+        "gamma.enwiki9.clean-room-replay.v1",
+        verify_files,
+    )
+    _require(
+        clean_room["candidateId"] == value["candidateId"]
+        and clean_room["candidateTreeSha256"] == value["candidateTreeSha256"],
+        f"{artifact_path}: clean-room receipt identifies a different candidate",
+    )
+    expected_inner_commands = {
+        "build-first": _expanded_replay_command(manifest, "build", "archive.first"),
+        "compression": _expanded_replay_command(
+            manifest, "compress", "archive.first"
+        ),
+        "build-replay": _expanded_replay_command(
+            manifest, "build", "archive.replay"
+        ),
+        "compression-replay": _expanded_replay_command(
+            manifest, "compress", "archive.replay"
+        ),
+        "build-decode": _expanded_replay_command(
+            manifest, "build", "archive.first"
+        ),
+        "decompression": _expanded_replay_command(
+            manifest, "decompress", "archive.first"
+        ),
+    }
+    _require(
+        clean_room_result["innerCommands"] == expected_inner_commands,
+        f"{artifact_path}: executed commands differ from the dependency closure",
+    )
+    corpus_path = _relative_path(
+        artifact_path.parent,
+        value["corpus"]["path"],
+        f"{artifact_path}: corpus",
+    )
+    _require(
+        clean_room_result["corpusSource"] is not None
+        and Path(clean_room_result["corpusSource"]).resolve() == corpus_path,
+        f"{artifact_path}: sandbox corpus binding differs from the recorded corpus",
+    )
+    expected_license_audit = dependency_license_audit(manifest)
+    _require(
+        clean_room_result["licenseAudit"] == expected_license_audit,
+        f"{artifact_path}: clean-room license audit differs from the dependency closure",
+    )
+    expected_distribution = {
+        "cleanRoomReplayOk": clean_room_result["cleanRoomReplayOk"],
+        "networkUsed": clean_room_result["networkUsed"],
+        "gpuUsed": clean_room_result["gpuUsed"],
+        "hiddenInputs": clean_room_result["hiddenInputs"],
+        "licenseAuditOk": expected_license_audit["approved"],
+    }
+    expected_distribution["selfContained"] = bool(
+        manifest["complete"]
+        and expected_distribution["cleanRoomReplayOk"]
+        and not expected_distribution["networkUsed"]
+        and not expected_distribution["gpuUsed"]
+        and not expected_distribution["hiddenInputs"]
+    )
+    for field, expected in expected_distribution.items():
+        _require(
+            distribution[field] == expected,
+            f"{artifact_path}: {field} differs from bound clean-room evidence",
+        )
+    _require(
+        correctness["independentDecodeOk"]
+        == clean_room_result["independentDecodeOk"],
+        f"{artifact_path}: independent decode verdict differs from clean-room execution",
+    )
+
+    peer_reference = value["verification"]["peerReceipt"]
+    cross_host_ok = False
+    if peer_reference is not None:
+        _, peer, _ = _verify_reference(
+            artifact_path,
+            peer_reference,
+            "gamma.enwiki9.run-receipt.v1",
+            verify_files,
+        )
+        _require(
+            peer["verification"]["peerReceipt"] is None,
+            f"{artifact_path}: peer receipt must be a non-recursive primary receipt",
+        )
+        cross_host_ok = bool(
+            peer["candidateId"] == value["candidateId"]
+            and peer["candidateTreeSha256"] == value["candidateTreeSha256"]
+            and peer["archive"]["bytes"] == value["archive"]["bytes"]
+            and peer["archive"]["sha256"] == value["archive"]["sha256"]
+            and peer["correctness"]["roundtripOk"]
+            and peer["correctness"]["determinismOk"]
+            and peer["verification"]["host"] != value["verification"]["host"]
+        )
+    _require(
+        value["verification"]["crossHostArchiveIdentityOk"] == cross_host_ok,
+        f"{artifact_path}: cross-host verdict differs from the peer receipt",
+    )
+
+    objective_criteria = [
+        accounting["complete"],
+        accounting["officialScoreBytes"] <= binding["targetScoreBytes"],
+        value["package"]["dependencyClosureComplete"],
+        correctness["roundtripOk"],
+        correctness["determinismOk"],
+        correctness["independentDecodeOk"],
+        value["resources"]["complete"],
+        distribution["selfContained"],
+        distribution["cleanRoomReplayOk"],
+        not distribution["networkUsed"],
+        not distribution["gpuUsed"],
+        not distribution["hiddenInputs"],
+        distribution["licenseAuditOk"],
+        value["verification"]["crossHostArchiveIdentityOk"],
+    ]
+    if value["verdict"] == "objective-achieved":
+        _require(
+            all(objective_criteria),
+            f"{artifact_path}: objective-achieved verdict lacks required evidence",
+        )
+    return {
+        "candidateId": value["candidateId"],
+        "filesVerified": verify_files and manifest_result["filesVerified"],
+        "officialScoreBytes": accounting["officialScoreBytes"],
+        "objectiveCriteriaPass": all(objective_criteria),
+        "verdict": value["verdict"],
+    }
+
+
+def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
+    artifact_path = path.resolve()
+    value = load_json(artifact_path)
+    _require(isinstance(value, dict), f"{artifact_path}: artifact must be an object")
+    schema_id = value.get("schema")
+    _require(
+        schema_id in SCHEMA_PATHS,
+        f"{artifact_path}: unknown schema {schema_id!r}",
+    )
+    _validate_schema(value, SCHEMA_PATHS[schema_id])
+    if schema_id == "gamma.enwiki9.adaptive-experiment-contract.v1":
+        result = _validate_adaptive_experiment_contract(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.adaptive-experiment-result.v1":
+        result = _validate_adaptive_experiment_result(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.adaptive-job.v3":
+        result = _validate_adaptive_job(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.algorithm-proposal.v2":
+        result = _validate_algorithm_proposal(value, artifact_path)
+    elif schema_id in {"gamma.enwiki9.objective-contract.v1", "gamma.enwiki9.objective-contract.v2"}:
+        _require(
+            value == validate_objective(objective_path=OBJECTIVE_PATHS["v" + str(value["version"])]),
+            f"{artifact_path}: objective differs from canonical contract",
+        )
+        result: dict[str, Any] = {"objectiveId": value["objectiveId"]}
+    elif schema_id == "gamma.enwiki9.candidate-revision.v1":
+        result = _validate_candidate_revision(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.clean-room-attempt.v1":
+        result = _validate_clean_room_attempt(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.clean-room-replay.v1":
+        result = _validate_clean_room_replay(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.dependency-closure.v1":
+        result = _validate_dependency_closure(value, artifact_path, verify_files)
+    elif schema_id == "gamma.enwiki9.driver-run-ledger-row.v2":
+        validate_driver_run_ledger_row(value)
+        result = {
+            "programId": value["program_id"],
+            "resultPath": value["result_path"],
+            "runId": value["run_id"],
+        }
+    elif schema_id == "gamma.enwiki9.delta-midas-probe-result.v1":
+        result = _validate_delta_midas_probe_result(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.experiment-contract.v1":
+        result = _validate_experiment_contract(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.experiment-result.v1":
+        result = _validate_experiment_result(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.mechanism-graph.v1":
+        result = _validate_mechanism_graph(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.named-gradient-detail.v1":
+        result = _validate_named_gradient_detail(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.cmix-obias-full1g-oom-terminal.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "terminalStatus": value["terminal_status"],
+            "scoreCreditBytes": value["score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-obias-full1g-oom-terminal-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verified": value["verified"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "materialized": value["materialized"],
+            "files": len(value["files"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "entries": len(value["entries"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "buildId": value["build_id"],
+            "buildSucceeded": value["build_succeeded"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-build-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "independentBuildPass": value["independent_build_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-compiler-invocation.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "buildRole": value["build_role"],
+            "sequence": value["sequence"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-compiler-trace-controls.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "allControlsRejectedPass": value["all_controls_rejected_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "sharedSourceIdentityPass": value["shared_source_identity_pass"],
+            "controls": len(value["controls"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-program-lock.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "files": len(value["files"]),
+            "sourceImplementationFrozen": value["source_implementation_frozen"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verified": value["verified"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "packages": len(value["packages"]),
+            "packageAssetIdentityPass": value["package_asset_identity_pass"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "bytes": value["bytes"],
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "scopes": len(value["scopes"]),
+            "terminalPass": value["terminal_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "sourceSchema": value["source_schema"],
+            "scopes": value["scope_count"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-stage.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "mode": value["mode"],
+            "stagePass": value["stage_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "arm": value["arm"],
+            "terminalPass": value["terminal_pass"],
+            "runtimeEligibilityEstablished": value["resources"]["runtime_eligibility_established"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-soft-high-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "arm": value["arm"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-arm.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "role": value["role"],
+            "codedBits": value["coded_bits"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "calibrationPopulations": len(value["calibration"]),
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "geekbench5SingleCoreScore": value["benchmark"]["single_core_score"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-filebacked-fxcm-runtime-qualification-verification.v1":
+        result = {
+            "candidateId": value["candidate_id"],
+            "runtimeEligible": value["derived"]["runtime_eligible"],
+            "verificationPass": value["verification_pass"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-runtime-host-fingerprint.v1":
+        result = {
+            "unameMachine": value["uname_machine"],
+            "cpuModelNames": len(value["cpu_model_names"]),
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "artifactCount": len(value["artifacts"]),
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v2":
+        result = {
+            "candidateId": value["candidate_id"],
+            "qualified": value["qualified"],
+            "promotionAuthority": value["promotion_authority"],
+            "scoreCreditBytes": value["gamma_score_credit_bytes"],
+        }
+    elif schema_id == "gamma.enwiki9.resource-guard-receipt.v2":
+        result = _validate_resource_guard(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.resource-guard-receipt.v3":
+        result = {
+            "label": value["label"],
+            "phase": value["phase"],
+            "status": value["status"],
+            "returncode": value["returncode"],
+            "cgroupMemoryPeakBytes": value["peaks"]["cgroup_memory_peak_bytes"],
+            "processTreePeakRssKiB": value["peaks"]["max_sampled_tree_rss_kib"],
+            "maximumAllowedCpuCount": value["peaks"]["max_sampled_allowed_cpu_count"],
+        }
+    elif schema_id == "gamma.enwiki9.resource-guard-soft-high.v1":
+        result = {
+            "wrapperPass": value["wrapper_pass"],
+            "effectiveMemoryHighBytes": value["effective_memory_high_bytes"],
+            "guardStatus": value["guard_status"],
+        }
+    elif schema_id == "gamma.enwiki9.reflection-receipt.v1":
+        result = _validate_reflection_receipt(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.endpoint428-horizon-terminal-route.v1":
+        result = _validate_endpoint428_horizon_terminal_route(
+            value, artifact_path, verify_files
+        )
+    elif schema_id == "gamma.enwiki9.endpoint428-horizon-output-closure-receipt.v1":
+        result = _validate_endpoint428_horizon_output_closure(
+            value, artifact_path, verify_files
+        )
+    elif schema_id == "gamma.enwiki9.release-receipt-index.v1":
+        result = _validate_release_receipt_index(value, artifact_path)
+    elif schema_id == "gamma.enwiki9.search-policy.v1":
+        _require(
+            value == validate_search_policy(),
+            f"{artifact_path}: search policy differs from canonical policy",
+        )
+        result = {"ordering": value["ordering"]}
+    elif schema_id == "gamma.enwiki9.run-receipt.v1":
+        result = _validate_run_receipt(value, artifact_path, verify_files)
+    else:
+        raise AssertionError(schema_id)
+    return {"path": str(path), "schema": schema_id, "valid": True, **result}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--verify-corpus",
+        action="store_true",
+        help="also hash the local one-billion-byte corpus",
+    )
+    parser.add_argument(
+        "--structure-only",
+        action="store_true",
+        help="validate receipt structure without hashing referenced payload files",
+    )
+    parser.add_argument("artifacts", nargs="*", type=Path)
+    args = parser.parse_args()
+    try:
+        validate_schemas()
+        binding = objective_binding(args.verify_corpus)
+        artifacts = [
+            validate_artifact(path, verify_files=not args.structure_only)
+            for path in args.artifacts
+        ]
+    except (OSError, ValueError, json.JSONDecodeError, jsonschema.ValidationError) as exc:
+        print(f"research contract validation failed: {exc}", file=sys.stderr)
+        return 1
+    print(
+        json.dumps(
+            {
+                **binding,
+                "artifacts": artifacts,
+                "corpusVerified": args.verify_corpus,
+                "valid": True,
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

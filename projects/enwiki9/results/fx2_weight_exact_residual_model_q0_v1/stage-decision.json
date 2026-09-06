@@ -1,0 +1,725 @@
+{
+  "P_K_model_identity": true,
+  "archive_saved_bytes": 0,
+  "arms": {
+    "D": {
+      "archive_bytes": 3223,
+      "archive_delta_vs_parent_bytes": 0,
+      "exact_original_raw_inverse": true,
+      "fresh_archive_repeat": true,
+      "native_probability_and_coder_stream_identity": true,
+      "restored_original_model": {
+        "bytes": 2930652,
+        "path": "results/fx2_weight_exact_residual_model_q0_v1/work/models/D-restore.bin",
+        "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+      }
+    },
+    "K": {
+      "archive_bytes": 3223,
+      "archive_delta_vs_parent_bytes": 0,
+      "exact_original_raw_inverse": true,
+      "fresh_archive_repeat": true,
+      "native_probability_and_coder_stream_identity": true,
+      "restored_original_model": {
+        "bytes": 2930652,
+        "path": "results/fx2_weight_exact_residual_model_q0_v1/work/models/K-restore.bin",
+        "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+      }
+    },
+    "P": {
+      "archive_bytes": 3223,
+      "archive_delta_vs_parent_bytes": 0,
+      "exact_original_raw_inverse": true,
+      "fresh_archive_repeat": true,
+      "native_probability_and_coder_stream_identity": true,
+      "restored_original_model": {
+        "bytes": 2930652,
+        "path": "results/fx2_weight_exact_residual_model_q0_v1/work/models/P-restore.bin",
+        "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+      }
+    }
+  },
+  "artifact_index_diagnostics": {
+    "bytes": 349,
+    "path": "results/fx2_weight_exact_residual_model_q0_v1/artifact-index-diagnostics.json",
+    "sha256": "10da5b7fae997f969093faa15bc7012fcf438f2783a993888be8e999f591ce92"
+  },
+  "artifact_index_exclusions": [
+    {
+      "path": "results/fx2_weight_exact_residual_model_q0_v1/work/native/ppm.temp",
+      "reason": "metadata-only owned PPM transient cleanup",
+      "residual_present": false,
+      "role": "transient PPM scratch, not a mandatory codec artifact",
+      "status": "absent"
+    }
+  ],
+  "artifact_index_status": "complete",
+  "artifacts": {
+    "bytes": 113398,
+    "path": "results/fx2_weight_exact_residual_model_q0_v1/artifacts.json",
+    "sha256": "d82f2db787b74818c3bfb31162a655eb10f3afa5191b665a26e0193797b62872"
+  },
+  "candidate_id": "fx2_weight_exact_residual_model_q0_v1",
+  "child_closure_ok": true,
+  "closed_synthetic_suite_validated": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/source/tools/fx2_weight_exact_residual_probe_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 1.6076755130197853,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile-probe",
+      "returncode": 0,
+      "system_cpu_seconds": 0.060703,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.4510399999999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "--self-test"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10296230297535658,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "probe-self-test",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.002986000000000155
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "P",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-pack.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2081882590427995,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-pack",
+      "returncode": 0,
+      "system_cpu_seconds": 0.05922399999999999,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.069987
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "P",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-repeat.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2070138650014997,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.062017,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.0592759999999997
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "restore",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-pack.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-restore.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2066268948838115,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-restore",
+      "returncode": 0,
+      "system_cpu_seconds": 0.06872600000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.055408
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "K",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-pack.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2066211239434779,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-pack",
+      "returncode": 0,
+      "system_cpu_seconds": 0.06333699999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.1078290000000006
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "K",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-repeat.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2035455480217934,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.06819399999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.1065759999999996
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "restore",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-pack.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-restore.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.2036041570827365,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-restore",
+      "returncode": 0,
+      "system_cpu_seconds": 0.05652700000000005,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.0720679999999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "D",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-pack.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.51332030701451,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-pack",
+      "returncode": 0,
+      "system_cpu_seconds": 0.065048,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.4042580000000005
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "D",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/models/6m-q4-fp32.tfwc2",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-repeat.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.508682276820764,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.06196099999999993,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.3934549999999994
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "45",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/exact-residual-probe",
+        "restore",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-pack.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-restore.bin"
+      ],
+      "elapsed_cap_seconds": 45,
+      "elapsed_seconds": 1.4035181140061468,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-restore",
+      "returncode": 0,
+      "system_cpu_seconds": 0.062132000000000076,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 1.310080000000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "prof_input/input",
+        "fixture.stored"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10260532982647419,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "fixture-preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0010129999999999306,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.007629999999998915
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "P-encode.raw",
+        "P-encode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 19.025374755030498,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/P-encode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7836249999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 16.625149999999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "P-decode.cmix",
+        "P-decode.raw",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 20.625267217168584,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/P-decode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.9349249999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 18.430128000000003
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "P-reencode.raw",
+        "P-reencode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/P-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 21.330273237079382,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/P-reencode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.0416430000000005,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 19.015152
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "K-encode.raw",
+        "K-encode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 18.921581807080656,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/K-encode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8023989999999994,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 16.911699
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "K-decode.cmix",
+        "K-decode.raw",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 18.420871894806623,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/K-decode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8516950000000012,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 16.34216599999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "K-reencode.raw",
+        "K-reencode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/K-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 19.72758177900687,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/K-reencode.trace",
+        "GAMMA_FX2_WEIGHT_BOOKKEEPING": "1"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7829449999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 17.660537000000005
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "D-encode.raw",
+        "D-encode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 18.432956926058978,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/D-encode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8050359999999994,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 16.41886799999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "D-decode.cmix",
+        "D-decode.raw",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 22.730437073856592,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/D-decode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 2.013897,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 20.424536000000018
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "D-reencode.raw",
+        "D-reencode.cmix",
+        "--transformer",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/models/D-restore.bin"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 18.821606776909903,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_exact_residual_model_q0_v1/work/native/D-reencode.trace"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-reencode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8851080000000007,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 16.652124999999984
+    }
+  ],
+  "component_economic_pass": false,
+  "continuous_guard_decision": "pending canonical outer guard closure",
+  "dependency_closure_complete": false,
+  "deterministic_ok": true,
+  "economic_rule_is_infrastructure_requirement": false,
+  "engineering_disposition": "reject_this_standalone_realization_on_component_cost",
+  "exact_parameter_stream_restore": true,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_exact_residual_model_q0_v1.json",
+    "sha256": "sha256:88eb3378a95c635382833149f493597c9aaea70c91e087a7c4e5ea0849ef3e74"
+  },
+  "final_launcher_package_integration_measured": false,
+  "fresh_probe_self_test": true,
+  "full_corpus_reconstruction_proven": false,
+  "full_corpus_score_bytes": null,
+  "infrastructure_pass": true,
+  "isolated_resource_qualification_complete": false,
+  "larger_gate_authorized": false,
+  "license_audit_complete": false,
+  "model_component_bytes": {
+    "D": {
+      "compiled_component_improves": false,
+      "compiled_two_container_component_delta_bytes": 206212,
+      "conservative_component_delta_bytes": 206212,
+      "conservative_component_improves": false,
+      "generated_restored_model_scratch_bytes": 2930652,
+      "model_delta_vs_selected_marginal_bytes": -23,
+      "packed_model_bytes": 2908306,
+      "required_restore_binary_bytes_per_compiled_container": 103088,
+      "source_compressor_binary_decoder_raw_allowance_delta_bytes": 141866
+    },
+    "K": {
+      "compiled_component_improves": false,
+      "compiled_two_container_component_delta_bytes": 206258,
+      "conservative_component_delta_bytes": 206258,
+      "conservative_component_improves": false,
+      "generated_restored_model_scratch_bytes": 2930652,
+      "model_delta_vs_selected_marginal_bytes": 0,
+      "packed_model_bytes": 2908329,
+      "required_restore_binary_bytes_per_compiled_container": 103088,
+      "source_compressor_binary_decoder_raw_allowance_delta_bytes": 141912
+    },
+    "P": {
+      "compiled_component_improves": false,
+      "compiled_two_container_component_delta_bytes": 206258,
+      "conservative_component_delta_bytes": 206258,
+      "conservative_component_improves": false,
+      "generated_restored_model_scratch_bytes": 2930652,
+      "model_delta_vs_selected_marginal_bytes": 0,
+      "packed_model_bytes": 2908329,
+      "required_restore_binary_bytes_per_compiled_container": 103088,
+      "source_compressor_binary_decoder_raw_allowance_delta_bytes": 141912
+    }
+  },
+  "modeled_bytes": 32478,
+  "native_binary_reused_exactly": true,
+  "native_compiles": 0,
+  "native_phases": 9,
+  "native_probability_stream_identity": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "objective_credit_bytes": 0,
+  "planned_processes": 21,
+  "probe_compiles": 1,
+  "roundtrip_ok": true,
+  "schema": "gamma.enwiki9.fx2-weight-exact-residual-model-stage.v1",
+  "scope": "one fixed public model and exact restored-native comparison on public 50051-byte fixture",
+  "scope_bytes": 50051,
+  "status": "passed",
+  "transient_cleanup": {
+    "bytes": 466,
+    "path": "results/fx2_weight_exact_residual_model_q0_v1/transient-cleanup.json",
+    "sha256": "e65b66d173aea965ab1248342c9de6bd48a02b0f1848d8196190eff96dd9978e"
+  }
+}
