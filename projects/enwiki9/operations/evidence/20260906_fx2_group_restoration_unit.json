@@ -1,0 +1,42 @@
+{
+  "schema": "gamma.enwiki9.unit-validation.v1",
+  "date": "2026-09-06",
+  "owner": "root_explore",
+  "component": "tools/fx2_weight_restore_group_probe_v1.cpp",
+  "evidence_class": "synthetic-infrastructure",
+  "objective_credit_bytes": 0,
+  "corpus_launched": false,
+  "model_accessed": false,
+  "passed": true,
+  "groups": {
+    "E": "embedding, prior embedding and unembedding INT4 weights",
+    "A": "attention INT4 weights in blocks 3, 7 and 11",
+    "R": "recurrent-attention INT4 weights in the other nine blocks",
+    "U": "MLP up INT4 weights in all twelve blocks",
+    "V": "MLP down INT4 weights in all twelve blocks"
+  },
+  "anchors": {"P": "original", "Q": "unchanged even7", "K": "even7 with histogram bookkeeping"},
+  "validation": {
+    "arms": 8, "groups": 5, "signed_values_per_group": 15,
+    "exceptional_raw_bit_patterns": 6, "unknown_group_rejections": 4,
+    "independent_expected_group_checks": true,
+    "exact_parameter_comparison": true, "canonical_reencoding": true,
+    "floating_payload_arithmetic": false,
+    "probability_identity_or_archive_recovery_measured": false
+  },
+  "build": {
+    "command": ["g++", "-std=c++17", "-O2", "-Wall", "-Wextra", "-fno-fast-math", "-ffp-contract=off", "tools/fx2_weight_restore_group_probe_v1.cpp", "-o", "probe"],
+    "test_command": ["probe", "--self-test"],
+    "binary_bytes": 126864,
+    "binary_sha256": "4fa52d76be2c77155b5b9164799c163a98186570859e5292e0254eda06020fc3",
+    "binary_retained": false,
+    "failed_preparation": "Initial synthetic compilation lacked cstring for std::strlen; corrected before the passing source binding. No model or corpus was accessed."
+  },
+  "bounds": {"cpus": [2], "address_space_bytes": 536870912, "compile_cpu_seconds": 120, "compile_wall_seconds": 120, "self_test_cpu_seconds": 30, "self_test_wall_seconds": 30, "per_file_bytes": 33554432},
+  "source_bindings": [
+    {"path": "tools/fx2_weight_restore_group_probe_v1.cpp", "bytes": 9520, "sha256": "15db72ddf5f03a0dad75c2d7eb5fda10247fa59490a1ecead51557233fb4fc4d"},
+    {"path": "tools/fx2_weight_even7_probe_v1.cpp", "bytes": 15717, "sha256": "c34cdc271c8337ab4849fdb1fc41d44efe302897892872da2a8acbcd93deded5"},
+    {"path": "lib/fx2_weight_format_v1.hpp", "bytes": 20196, "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"}
+  ],
+  "next": "Freeze the diagnostic contract and publish ownership before trained-model restoration and native probability/archive comparisons. These synthetic checks grant no corpus launch or promotion authority."
+}
