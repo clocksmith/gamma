@@ -30,3 +30,4 @@
 - [part-026.md: 2026-08-09 - Local cmix-obias archive and source snapshot are hash-bound through 2026-08-10 - Production output-head attribution implementation reaches exact smoke parity](part-026.md)
 - [part-027.md: 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow](part-027.md)
 - [part-028.md: 2026-09-04 - Isolated open dP is terminal negative; only integrated replay remains](part-028.md)
+- [part-029.md: 2026-09-04 live rule authority through the sealed HORIZON recovery bridge](part-029.md)
