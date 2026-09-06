@@ -1,0 +1,71 @@
+{
+  "corpus_executed": false,
+  "evidence_class": "synthetic_runner_correctness",
+  "id": "midas_open_observed_sha_gate_unit_20260906",
+  "limitations": [
+    "Synthetic authority/process-output checks only.",
+    "Original driver remains unchanged; successor replaces authentication in a private module and reuses original execution/comparison/publication functions.",
+    "Native cost and complete package remain separate frozen evidence obligations."
+  ],
+  "log": {
+    "bytes": 1987,
+    "path": "operations/evidence/20260906_midas_open_observed_sha_gate_unit.log",
+    "sha256": "78c68ce7febc1794c9ba3970ebd3f2dc844370a6fdbe8c4516f15be28e93b342"
+  },
+  "native_executed": false,
+  "objective_credit_bytes": 0,
+  "owner": "root_explore",
+  "recorded_at": "2026-09-06T14:47:18.944284+00:00",
+  "schema": "enwiki9_implementation_evidence_v1",
+  "source_bindings": [
+    {
+      "bytes": 5580,
+      "path": "tools/midas_open_observed_sha_gate_v1.py",
+      "sha256": "fa48461e16e5cb2cee6caaaf551f6a395f2884a69034feb064987ab3a2e92c6c"
+    },
+    {
+      "bytes": 3347,
+      "path": "tests/test_midas_open_observed_sha_gate.py",
+      "sha256": "049b3ca38a81f317115ab28752488b33444119116607b9958822bdc7619f35eb"
+    },
+    {
+      "bytes": 12509,
+      "path": "tools/midas_open_observed_gate_v1.py",
+      "sha256": "baa28b7be164d858ffd812b6b523fa8476fcd50a3ebf6fe0be04cb77eee93037"
+    },
+    {
+      "bytes": 6946,
+      "path": "tests/test_midas_open_observed_gate.py",
+      "sha256": "47e9ffd23aca14b9a10911a3cb2c85e4c9ab5e50cfb5e8ba45a45c3a1dc22864"
+    },
+    {
+      "bytes": 507,
+      "path": "tools/midas_open_boundary_observer_sha_v1.py",
+      "sha256": "cecc1ff664c211809a13a4344e7d999a242e5f4475943e1bc2119461fed784cd"
+    },
+    {
+      "bytes": 31294,
+      "path": "operations/evidence/20260906_midas_open_boundary_observer_sha_unit.json",
+      "sha256": "38412444f05f63fd01cbd6f237abaaf324300ef599eabe6b97946cf51461d44e"
+    }
+  ],
+  "validation": {
+    "command": [
+      "taskset",
+      "-c",
+      "2",
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_midas_open_observed_sha_gate.py",
+      "-v"
+    ],
+    "purpose": "Five successor authority checks and six inherited synthetic process-matrix checks; no native build or corpus execution.",
+    "returncode": 0,
+    "tests_passed": 11
+  }
+}
