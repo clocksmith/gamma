@@ -2,6 +2,23 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - MIDAS observation cost gate frozen before execution
+
+ROOT owns `midas_open_observer_cost4096_q0_v1`, initially held job
+`20260906T133935Z_7bac5ae319`. The [runner tests](../operations/evidence/20260906_midas_open_observed_gate_unit.json)
+pass six synthetic cases, including probability divergence, missing boundary
+evidence, changed reference archives, and elapsed-budget exhaustion.
+The [frozen plan](../operations/provenance/midas_open_observer_cost4096_q0_v1_plan.json)
+binds a deterministic 4,096-byte synthetic population and both published cached
+codecs. Sixteen phases compare unchanged P/K/F/S encoding with independently
+observed encoding, decoding, and repeat encoding. CPU2, one thread, zero swap,
+2GiB outer memory, 256MiB scratch, 600-second aggregate and 120-second phase
+stops are explicit execution limits.
+
+This measures observation cost and exact archive/state parity. It supplies no
+corpus economics or full-score credit. Ownership and all frozen inputs must be
+published before release; HORIZON and measured codec sources remain unchanged.
+
 ## 2026-09-06 - MIDAS boundary observability passes exact synthetic checks
 
 The [new observer](midas_open_boundary_observer_v1.md) wraps the unchanged native
