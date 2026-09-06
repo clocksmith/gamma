@@ -60,6 +60,13 @@ regenerate snapshots. This view creates no registry, queue, verdict, or launch
 authority. Completed jobs and reported passes alone do not establish scientific
 success; missing metrics stay missing. Lineage uses explicit recorded references.
 
+A driver's `program_size` and `hutter_score` can count only its local candidate
+directory. Imported codec sources, runtimes, models and options may add required
+bytes. Read the linked terminal accounting and validated reflection before
+comparing package costs or choosing a descendant; a driver score is not a
+complete submission certificate. The [package workflow](../ADAPTIVE_WORKFLOW.md#compose-prize-facing-evidence)
+defines the separate package evidence.
+
 Unreadable or oversized summaries remain visible as source issues. The generator
 reads process metadata and may reuse HORIZON's existing operational receipt; it
 does not read raw traces or active scientific outputs, take observer ownership,

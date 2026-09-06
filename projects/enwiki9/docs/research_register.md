@@ -2,6 +2,33 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Earlier-field conditioning passes the synthetic codec gate
+
+ROOT coordinated implementation and independent decoder review of
+`causal_field_dependency_synthetic_q0_v1`. The [published plan](../operations/provenance/causal_field_dependency_synthetic_q0_v1_plan.json)
+binds a prefix-only flat-template parser, FIFO128 completed associations,
+uniform P/K, conditional T, recency R and shuffled-association S controls.
+The [executable codec](../tools/causal_field_dependency_v1.py) learns only after
+a complete valid invocation and independently reconstructs every coded byte.
+
+The [retained unit receipt](../operations/evidence/20260906_causal_field_dependency_unit.json)
+binds 19 passing tests and 15 independent encode/decode/repeat processes.
+All five arms invert exactly, repeat byte-identically and agree in their
+probability, state and synchronization digests; P/K archives also match.
+On the constructed **269-byte** dependency fixture, T produces **294 bytes**
+versus **347** for each control: 53 bytes saved, but every archive exceeds raw.
+This demonstrates the intended conditional mechanism only on that fixture.
+It establishes no corpus benefit, competitive-parent transfer or package gain.
+
+Independent review prompted checkpoint probability rederivation and work-cap
+checks before source freeze. Rejected checkpoints and a prior test-harness
+failure remain retained. Seven required local source files total **228,815 bytes**;
+Python/runtime licensing and complete package accounting remain unresolved.
+The implementation cap is 8,192 raw bytes. Any corpus successor needs its own
+identity, frontend/parent adapter, reviewed source, ownership and frozen resource
+and population bindings. No corpus job or larger launch is authorized by this
+synthetic result; HORIZON, MIDAS and other owners remain unchanged.
+
 ## 2026-09-06 - Causal word references lose the exact opcode/BZip2 comparison
 
 ROOT assigned the separate FIFO128 word-code lane to `refresh_cleanup_review`;
@@ -29,6 +56,9 @@ The [terminal audit](../operations/provenance/causal_wordcode_fifo128_terminal_2
 and [validated hold](../operations/adaptive/reflections/20260906T221245Z_f195ae35dd.json)
 bind four ledger rows and the passing 56,840,192-byte discovery guard. Hold this
 fixed realization without tuning, confirmation, scaling or full-score credit.
+Source inspection also found the existing `opcode_bz2_v1` literal-only codec
+(1,383 source bytes), with no indexed trial receipt. No duplicate source or run
+was created; its package economics remain unmeasured.
 
 The [FX2 readiness audit](../operations/evidence/20260906_fx2_weight_readiness_audit.json)
 confirms that trained exact-residual packing and tensor restorations already
@@ -758,37 +788,3 @@ fixture reuse; it does not authorize a new integrated codec gate.
 | `nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1` | [authorize-successor](../results/nncp_open_top_pre_ff_rmsnorm_output_order_64_q0_v1/decision.json) |
 | `nncp_open_top_pre_ff_total_adjoint_64_q0_v1` | [retire](../results/nncp_open_top_pre_ff_total_adjoint_64_q0_v1/decision.json) |
 | `nncp_open_w_o_weight_slice_post_add_64_q0_v1` | [authorize-successor](../results/nncp_open_w_o_weight_slice_post_add_64_q0_v1/decision.json) |
-
-## 2026-09-05 - Native MIDAS coder and causal scheduler pass synthetic checks
-
-`lib/midas_native_codec.hpp` provides native finite Q16 arithmetic encoding and
-decoding, explicit raw-byte identity framing, a pre-truth byte-to-bit adapter,
-complete coder checkpoints and an exact first-state-divergence comparison.
-`lib/midas_midpoint_schedule.hpp` provides the P/K/F/S update boundary: ordinary
-parent updates after each 64 decoded bytes, an additional F update after the
-first 32, and S with those already decoded targets cyclically shifted left once.
-Every update rebuilds the active prefix from its retained segment origin. K
-executes update and rebuild on a discarded copy, preserving the authoritative
-parent. These are reusable components, not a sealed corpus candidate.
-
-Three targeted tests pass with strict C++17 compilation. Separate address and
-undefined-behavior sanitizer executions also pass. The native counting-fixture
-payload equals the independently implemented Python payload; finite inverses,
-repeats, corruption rejection, checkpoint continuation, P/K probability and
-payload identity, and encoder/decoder state synchronization pass on synthetic
-fixtures. The scheduler's sentinel deliberately invalidates recurrent state at
-update, so prediction without rebuilding fails. These fixtures do not implement
-or prove a neural predictor, complete-model gradients, or a MIDAS gain.
-
-Evidence: `operations/evidence/20260905_midas_native_codec_scheduler_unit_validation.json`
-binds source SHA-256 values, test commands, compiler identity and observed output.
-Score credit is zero. The standalone trainable parent roundtrip remains missing.
-No corpus experiment was launched and no partial HORIZON science was read.
-
-The concurrent unregistered `programs/compact_midas_open_parent_q0_v1` source
-tree was left untouched. Coordinate its owner before integrating the one compact
-challenger: validate full gradients and optimizer/recurrent state, measure its
-dominant kernel, and prospectively freeze the bounded parent P/K/F/S archive
-gate. An independent eligible-parent explorer must preserve that ownership and
-HORIZON's sole observer, retain source/package/resource bindings, and produce
-exact finite archives without inheriting compression claims from a teacher.

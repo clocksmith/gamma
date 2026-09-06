@@ -47,3 +47,4 @@ Archived files preserve complete H2 records.
 - [part-029.md: 2026-09-04 live rule authority through the sealed HORIZON recovery bridge](archive/part-029.md)
 - [archive/part-030.md: 2026-09-04 independent opening gates through adaptive lifecycle ranking](archive/part-030.md)
 - [part-031.md: 2026-09-05 bounded frontier comparisons through 2026-09-04 Fiber-FOSSIL retirement](archive/part-031.md)
+- [part-032.md: 2026-09-05 native MIDAS coder and causal scheduler synthetic checks](archive/part-032.md)
