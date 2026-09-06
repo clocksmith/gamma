@@ -29,6 +29,15 @@ identity, frontend/parent adapter, reviewed source, ownership and frozen resourc
 and population bindings. No corpus job or larger launch is authorized by this
 synthetic result; HORIZON, MIDAS and other owners remain unchanged.
 
+Read-only native-gate review found no competing field integration. Reuse
+`lib/fx2_native_gate_v1.py` and the [held native transfer](../operations/adaptive/reflections/20260905T233740Z_c2a28dc2f7.json):
+its opening parent archive is 33,429 bytes. Missing code must emit raw parser
+bytes only after complete WRT events, bind donor spans to aligned WRT boundaries,
+and update donor odds from actual parent probabilities. The uniform-parent
+`2^matched_bits` rule cannot be inherited. Replay is diagnostic until a native
+decoder reproduces it; prune unused dependencies in a new candidate before
+package promotion. Cold opening250KB cannot establish mature-history benefit.
+
 ## 2026-09-06 - Causal word references lose the exact opcode/BZip2 comparison
 
 ROOT assigned the separate FIFO128 word-code lane to `refresh_cleanup_review`;
