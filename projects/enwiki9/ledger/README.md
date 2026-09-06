@@ -28,6 +28,9 @@ directly through the command manual's `enwiki9_lab.py records` interface.
 Current algorithm/result views keep active work visible. Enable history or
 search explicitly to find retired work; candidate detail retains complete indexed
 lineage and runs. Lists are paginated. Follow source links before using a claim.
+Search includes reflection lessons, causes, retired dimensions, uncertainties,
+and next actions. Candidate history keeps their source reflection links and
+recorded validity; finding a lesson does not validate its evidence.
 
 ## Record map
 

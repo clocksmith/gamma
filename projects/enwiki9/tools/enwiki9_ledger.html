@@ -375,6 +375,21 @@
         for (const [key, value] of Object.entries(run.progress)) appendFact(facts, 'Progress: ' + label(key), value);
       }
       body.append(facts);
+      if (run.reflection_path) {
+        const learning = node('section', null, 'section');
+        learning.append(node('h3', 'Recorded learning'), node('p', 'These are recorded reflection claims. Browsing does not validate their evidence or authorize the next action.', 'history-note'));
+        const learned = node('dl', null, 'facts');
+        for (const [title, field] of [['Lessons','lessons'], ['Retired dimensions','retired_dimensions'], ['Uncertainties','uncertainties']]) {
+          if (list(run[field]).length) appendFact(learned, title, run[field]);
+        }
+        appendFact(learned, 'Localized cause', run.localized_cause);
+        appendFact(learned, 'Failure class', run.failure_class);
+        const next = run.next_action || {};
+        appendFact(learned, 'Recorded decision', next.verdict);
+        appendFact(learned, 'Next action', next.rationale);
+        appendFact(learned, 'Next gate bytes', next.next_gate_bytes);
+        learning.append(learned); body.append(learning);
+      }
       if (list(run.ledger_records).length) {
         const records = node('section', null, 'section');
         records.append(node('h3', 'Canonical run records'), node('p', 'Values attributed to each canonical source record. Missing fields remain not reported; these records do not independently establish a validated score.', 'history-note'));

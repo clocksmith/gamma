@@ -5,26 +5,66 @@
     "sha256": "sha256:70562fa2c0d2d855907cf69f6a22b5477197789c3308af444b09c29dd4f0b492"
   },
   "candidate_tree_sha256": "sha256:c751feb41a6424379aa4ec9b943f37fb04f5b6eff00d93a51923ebbddc9f8931",
+  "elapsed_seconds": 141.371,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 900
+    },
+    "cgroup_inode": 235308,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T174841Z_181d2f2c47",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 235308,
+        "kernel_cpuset": false,
+        "memory_bytes": 2147483648,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T174841Z_181d2f2c47"
+      }
+    ],
+    "guard_command_sha256": "24e211c52796b5ae460d8e811f8c41488c4b2ee6bb708fcac188874380751193",
+    "guard_path": "run_logs/adaptive/20260906T174841Z_181d2f2c47.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/dualstream_grammar_development250k_q0_v1.json",
     "sha256": "sha256:db1bc3a2fcfeefe992183536c3045ec02bc85ca7654ff3f5e4e8dd2e6d31faa0"
   },
+  "finished_at": "2026-09-06T17:59:54+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-06T17:48:40+00:00",
   "hold_history": [
     {
       "at": "2026-09-06T17:48:40+00:00",
       "held": true,
       "reason": "Held from initial atomic write until root_explore ownership, the11 frozen inputs, all18 development arms and exact population are published. Require freshCPU2 admission and an outer taskset-pinned canonical launcher. No validation or confirmation data may be opened by this job."
+    },
+    {
+      "at": "2026-09-06T17:57:23+00:00",
+      "held": false,
+      "reason": "Published a46a8109f31f0d03ade9beaa799401992bc3025e; all 11 inputs and held ownership verified against origin. Fresh local admission shows only preserved live HORIZON source and observer, no competing queue or exclusive lease. CPU2 discovery with outer taskset; timing diagnostic."
     }
   ],
   "job_id": "20260906T174841Z_181d2f2c47",
+  "log_path": "run_logs/adaptive/20260906T174841Z_181d2f2c47.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/931_dualstream_grammar_development250k_q0_v1.json",
@@ -32,6 +72,7 @@
   },
   "proposal_id": "dualstream_grammar_development250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-06T17:57:23+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -42,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 900
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/dualstream_grammar_gate_v1.py",
     "sha256": "sha256:7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
@@ -50,7 +92,8 @@
   "scratch_directories": [
     "results/dualstream_grammar_development250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-06T17:57:32+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-06T17:48:41+00:00",
   "tags": [
     "development250k",
@@ -64,5 +107,8 @@
   "tool_args": [
     "--candidate",
     "dualstream_grammar_development250k_q0_v1"
-  ]
+  ],
+  "worker_pid": 141558,
+  "worker_proc_start_ticks": 181359089,
+  "worker_started_at": "2026-09-06T17:57:33+00:00"
 }

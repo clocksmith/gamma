@@ -18,25 +18,43 @@ The decoder only interprets exact byte programs. XMill's grouping and existing
 phrase grammars are precedent, not Gamma novelty. Prior XML deletion ledger
 losses and the retired schema-exception realization remain unchanged.
 
-Implement and test the byte interpreter first. Then publish one bounded
-development gate on opening 250KB with plain backend, split streams, recursive
-grammar and shared-argument templates, including every definition, argument,
-framing and backend byte. Use a separate 250KB validation population to select
-one configuration before freezing a 1MB confirmation. Do not inspect that
-confirmation for parameter selection. CPU2 only; no model dependencies or
-HORIZON access. Each measured source revision remains immutable, while bounded
-development configuration selection is permitted and recorded.
-
 The [18-test synthetic receipt](../operations/evidence/20260906_dualstream_grammar_v1_unit.json)
-now proves exact byte/interpreter behavior and the bounded runner checks.
+proves exact byte/interpreter behavior and the bounded runner checks.
 The [development plan](../operations/provenance/dualstream_grammar_development250k_q0_v1_plan.json)
-is frozen with 11 inputs, eight configurations, 18 arms and 54 separate
-encode/decode/repeat phases. ROOT holds job `20260906T174841Z_181d2f2c47` until
-publication and fresh CPU2 admission. Limits are 2GiB outer memory, 256MiB
-scratch, zero swap and a 900-second aggregate stop; each process has a
-60-CPU-second, 90-wall-second and 1GiB address-space bound. No corpus result
-exists yet. The [codec guide](dualstream_grammar_v1.md) explains direct use,
-the two logical streams, exact accounting and the confirmation boundary.
+binds 11 inputs, eight configurations, 18 arms and 54 separate phases. Ownership
+was published at `a46a8109f31f0d03ade9beaa799401992bc3025e` before release after
+fresh admission. CPU2, 2GiB memory, 256MiB scratch, zero swap and the frozen
+elapsed/phase stops were enforced. HORIZON and model campaigns stayed separate.
+
+The [terminal audit](../operations/provenance/dualstream_grammar_development250k_terminal_20260906.json)
+verifies all 54 phases, 18 exact inverses and repeats, 237 final outputs and
+complete additive archive accounting. P is 89,041 bytes; S is 113,406; matched
+G2 is 109,201; best T2 is 102,492. T6 ties T2, with the frozen stable-ID tie break
+selecting T2. Shared templates save 6,709 bytes against G2 but lose 13,451 bytes
+against plain Deflate. Each T activates 12 repeated argument references.
+T2's literal definitions cost 64,557 bytes, motivating a representation-cost
+diagnostic; the accounting does not isolate separate binding/template effects.
+
+The [validated reflection](../operations/adaptive/reflections/20260906T174841Z_181d2f2c47.json)
+records an algorithmic loss and authorizes only a separately identified
+development mutation. No validation or confirmation population was opened.
+All eight tested configurations remain retained; this is no impossibility claim
+about grammar compression. Eighteen normalized run rows are linked to unchanged
+arm receipts. The guard passed with 141.2443 seconds elapsed; shared-host timing
+and incomplete Python/zlib package accounting provide no qualification credit.
+The [codec guide](dualstream_grammar_v1.md) covers the implementation and results.
+
+## 2026-09-06 - Organization audit connects reflections to the agent loop
+
+The [parallel audit](organization_audit.md#organization-scorecard-2026-09-06)
+rates the pre-change environment 5.6/10, with experiment-loop simplicity the
+weakest dimension. The existing ledger now projects recorded lessons, causes,
+uncertainties, retired dimensions and next actions into CLI and browser search
+and candidate history. The workbench prompt requires the next experiment to name
+the lesson it applies or uncertainty it tests. This changes browsing and routing,
+not evidence validity or scientific status. Historical snapshots and source paths
+remain intact. The audit distinguishes implemented retrieval from recommended
+terminal-record consolidation and routine/full report refresh profiles.
 
 ## 2026-09-06 - SHA observer cost comparison reuses the sealed MIDAS driver
 

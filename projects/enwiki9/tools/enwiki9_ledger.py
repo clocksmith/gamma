@@ -148,6 +148,34 @@ def ledger_record(row, source):
             **{key: row.get(key) for key in ("compressed_size", "program_size", "hutter_score")}}
 
 
+def reflection_learning(reflection, issues=None, source=""):
+    """Project recorded claims for search; their presence does not validate them."""
+    def mapping(field):
+        value = reflection.get(field)
+        if isinstance(value, dict):
+            return value
+        if value is not None and issues is not None:
+            issues.append({"path": source,
+                           "reason": f"optional reflection field {field} must be an object; learning projection is missing"})
+        return {}
+
+    knowledge = mapping("knowledge")
+    attribution = mapping("attribution")
+    decision = mapping("decision")
+
+    def strings(value):
+        return [item for item in value if isinstance(item, str)] if isinstance(value, list) else []
+
+    return {"lessons": strings(knowledge.get("transferableLessons")),
+            "localized_cause": text(attribution.get("localizedCause")),
+            "failure_class": text(attribution.get("failureClass")),
+            "retired_dimensions": strings(knowledge.get("retiredDimensions")),
+            "uncertainties": strings(knowledge.get("uncertainties")),
+            "next_action": {"verdict": decision.get("verdict"),
+                            "rationale": text(decision.get("rationale")),
+                            "next_gate_bytes": decision.get("nextGateBytes")}}
+
+
 def project_browsing_state(algorithms, runs):
     """Hide recorded retired configurations, never infer scientific eligibility."""
     active = {r["candidate_id"] for r in runs if r["kind"] == "job"
@@ -177,7 +205,7 @@ def build(root):
             algorithms[cid] = {"id": cid, "name": cid, "description": "", "family": "unclassified",
                 "status": "unrecorded", "kind": kind, "registered": cid in indexed,
                 "parents": [], "children": [], "sources": [], "run_ids": [],
-                "proposal_ids": [], "notes": [], "updated_at": "", "coverage": []}
+                "proposal_ids": [], "notes": [], "reflections": [], "updated_at": "", "coverage": []}
         return algorithms[cid]
 
     def parent(cid, pid, source, kind="recorded-parent"):
@@ -282,6 +310,7 @@ def build(root):
             "validity": (reflection.get("validity") or {}).get("classification", "unreviewed"),
             "hypothesis": (reflection.get("hypothesis") or {}).get("verdict", "unreviewed"),
             "summary": decision.get("rationale") or text(d.get("hold_reason")) or "", "metrics": metrics(reflection, definitions),
+            **reflection_learning(reflection, records.issues, reflection_path),
             "links": [{"label": "Job", "path": source}], "liveness": {}, "progress": {}}
         for label, path in (("Reflection", reflection_path), ("Log", d.get("log_path")),
                             ("Experiment", exp_ref.get("path") if isinstance(exp_ref, dict) else None)):
@@ -463,6 +492,12 @@ def build(root):
                 algorithms[cid]["notes"].append({"title": title, "path": rel})
 
     runs.sort(key=lambda r: (text(r["date"]), r["id"]), reverse=True)
+    for run in runs:
+        if run.get("reflection_path"):
+            algorithms[run["candidate_id"]]["reflections"].append({
+                "run_id": run["id"], "source": run["reflection_path"], "scope": run["scope"],
+                **{key: run[key] for key in ("validity", "hypothesis", "outcome", "lessons",
+                    "localized_cause", "failure_class", "retired_dimensions", "uncertainties", "next_action")}})
     for a in algorithms.values():
         if a["kind"] == "candidate" and not (root / "programs" / a["id"] / "meta.json").is_file():
             a["coverage"].append("metadata missing")
@@ -583,6 +618,7 @@ def record_query(data, args):
     if view == "algorithms":
         keys = ("id", "name", "description", "kind", "family", "status", "parents", "coverage", "browsing_state")
         page = [{**{key: row.get(key) for key in keys}, "run_count": len(row["run_ids"]),
+                 "reflection_count": len(row.get("reflections", [])),
                  "sources": row["sources"][:4]} for row in page]
     elif view == "notes":
         page = [{key: value for key, value in row.items() if key != "text"} for row in page]
@@ -596,6 +632,7 @@ def record_query(data, args):
               "host": data["host"], "view": view, "total": len(rows), "offset": args.offset,
               "limit": args.limit, "next_offset": args.offset + args.limit if args.offset + args.limit < len(rows) else None,
               "records": page, "source_issues": data["issues"],
+              "reflection_authority": "Recorded claims and source links only; browsing does not validate reflection evidence or authorize the next action.",
               "history_included": history, "hidden_historical_records": hidden}
     if algorithm:
         result["candidate"] = algorithm
