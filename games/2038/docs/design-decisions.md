@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.9.0-rc.5-test`
+**Rules reference:** `0.9.0-rc.7-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -15,19 +15,26 @@ assumptions are historical only.
 ## Readable Era overviews
 
 The user wants the original lore with a light narrative touch. `world.md`
-therefore presents four concise Era overviews with concrete examples and clear
-transitions. All original technologies, institutional consequences, and six
+therefore presents four Era overviews as a past-tense retrospective from 2038.
+Concrete examples and causal transitions give the overview a game-setting
+introduction, while unfamiliar terms are explained in ordinary language. All original technologies, institutional consequences, and six
 fictional institutions remain explicit. A recurring family, dialogue, and plot
-are not part of this presentation. Endings again describe independent outcomes.
+are not part of this presentation. Endings describe independent outcomes in the same past tense.
 
 The earlier duplication cleanup remains: one source for extended setting prose,
 one introduction and motto per institution, compact Era panels, and Headline
 events with quotes and effects. Writing notes follow the fiction. The guided
 match retains its route; obsolete standalone lesson files remain removed.
 
-Executable `0.15.4` and candidate `0.9.0-rc.5-test` record the revised prose.
-Engine `0.17.3`, component mechanics, timing, costs, scoring, and ending conditions
-are unchanged. This is an editorial correction, not a balance promotion.
+The site home and documentation overview each present a title and a single list
+of links. Section groups, card descriptions, promotional introductions, and
+visible build metadata have been removed from those indexes. Existing pages
+remain available; release identity remains in build receipts.
+
+Executable `0.15.6` and candidate `0.9.0-rc.7-test` record the revised prose and
+indexes. Engine identity `0.17.4` records the site-builder change. Game mechanics,
+timing, costs, scoring, and ending conditions are unchanged. These are editorial
+and presentation changes, not a balance promotion.
 
 ## One ruleset — 2026-09-05
 
@@ -254,7 +261,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.15.4` implements `0.9.0-rc.5-test` under engine coverage
+Executable game `0.15.6` implements `0.9.0-rc.7-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,

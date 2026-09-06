@@ -319,6 +319,7 @@ test("world companion owns four ordered Era overviews and references canonical E
   }
   assert.doesNotMatch(playerSource, /worldPrimer|\.loreText}/);
   assert.match(world, /^# [^\n]+\n\n### Era I:/);
+  assert.match(world, /By 2038,/);
   assert.doesNotMatch(world, /Rules version:|The jurisdiction|This companion contains|two independent axes/);
   assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
 });

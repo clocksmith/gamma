@@ -34,7 +34,10 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - `world.md` opens with the four concise Era overviews and ending references;
   concise editorial notes follow the fiction. Era panels own their name, epigraph,
   rules, and unlocks. Shared identities resolve from their existing owners.
-  The overview preserves lore without a character plot or mandatory events.
+  The overview preserves lore in accessible past-tense narration from 2038,
+  without a character plot or mandatory events.
+- Site home pages present one flat list of linked titles without section groups,
+  subtitles, or duplicated navigation. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
 - Every admitted lore situation has one structured Era placement, and every
