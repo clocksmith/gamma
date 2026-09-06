@@ -920,13 +920,11 @@ trading, or update unrelated Facilities.
 <!-- era-panels:start -->
 These four panels are printed on the Governance Board. Move the Current Era
 marker between them; no separate Era cards are used. The board prints the
-rules and unlock text. The longer setting text is reproduced here and in the
-World and Institutions companion.
+Era name, epigraph, rules, and unlock text.
 <!-- era-panels:end -->
 
 <!-- player-aids:start -->
 Each player receives one foldout containing the following three panels: the turn sequence, local Power, and public Mandate.
-Each player uses one foldout.
 <!-- player-aids:end -->
 
 <!-- headline-selection:start -->

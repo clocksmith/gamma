@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.9.0-rc.3-test`
+**Rules reference:** `0.9.0-rc.4-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -12,24 +12,29 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
-## World companion as four chapters
+## Fiction first
 
-The user selected a connected narrative treatment for Progress, Capacity,
-Authority, and Continuity. `world.md` owns these chapters, following Mara Venn
-and Lio in Southbank while the six canonical institutions act within their
-existing identities. These witnesses and the neighborhood add no component,
-board district, required Headline sequence, or mechanical rule. The story ends
-before the four alternative World Endings are resolved.
+The user selected four connected chapters and a reduction of explanatory copy.
+`world.md` opens with the story and four component-owned closing scenes; concise
+writing notes, research references, and the structured backlog follow it.
+The six institutions retain one introduction and motto. Era panels retain names,
+epigraphs, rules, and unlocks. Headlines retain titles, events, quotes, and effects.
+Extended Era summaries, repeated institution descriptions, Headline subtitles,
+and the companion's procedural preamble are removed from sources and consumers.
+Era gallery panels now use their canonical rules and unlock text, replacing an
+undefined legacy availability field and a repeated list of internal Program IDs.
+The First Game Guide route already opens the guided browser match. Its unused
+standalone lesson script, stylesheet, and duplicate lesson copy are removed.
 
-The companion no longer repeats the compact Era-card summaries or a separate
-three-paragraph world primer. The homepage and documentation index keep their pitch and companion link.
-Era names, epigraphs, institution names, and ending text still resolve from
-existing owners. The science-fiction threads retain their Era progression.
+Mara Venn, Lio, and Southbank illustrate one possible history without introducing
+components or mandatory events. Costs, quantities, timing, scoring, and the four
+ending conditions are unchanged. Literary engagement requires human review.
 
-Executable `0.15.2`, engine `0.17.2`, and candidate `0.9.0-rc.3-test` preserve
-new fingerprints for the site presentation and narrative documents. No gameplay
-algorithm, cost, quantity, rule, or balance claim changes. Literary engagement
-requires human review; build and contract checks establish source consistency.
+Executable `0.15.3`, engine `0.17.3`, and candidate `0.9.0-rc.4-test` preserve the
+revised copy and display contracts. The existing mechanics projection includes
+the deleted descriptive faction `role` field, so its fingerprint changes despite
+unchanged play. Comparing retained fields against `0.15.2` isolates that removal;
+this is not a mechanics or balance promotion.
 
 ## One ruleset — 2026-09-05
 
@@ -256,7 +261,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.15.2` implements `0.9.0-rc.3-test` under engine coverage
+Executable game `0.15.3` implements `0.9.0-rc.4-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,

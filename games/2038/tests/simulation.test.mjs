@@ -151,7 +151,6 @@ test("interactive snapshots expose canonical Headline copy without a rules selec
   assert.deepEqual(defaultSnapshot.activeHeadline, {
     id: headline.id,
     name: headline.name,
-    strapline: headline.strapline,
     newswire: headline.newswire,
     text: headline.text,
     quote: headline.quote

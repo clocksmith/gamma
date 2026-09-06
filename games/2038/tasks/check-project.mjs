@@ -390,10 +390,14 @@ if (
   throw new Error("Current report, replay, and decision contract versions are inconsistent.");
 }
 const candidate = gameVersion.rulesCandidate;
-const requiredCandidateDocuments = [
+const proceduralCandidateDocuments = [
   "dist/docs/core-rules.md",
-  "dist/docs/world-and-institutions.md",
   "dist/docs/optional-tactics.md"
+];
+// The story carries its version through the candidate manifest and fingerprint.
+const requiredCandidateDocuments = [
+  ...proceduralCandidateDocuments,
+  "dist/docs/world-and-institutions.md"
 ];
 const candidateStatusValid = candidate?.implementationStatus === "not-synchronized"
   ? candidate.implementedByGameVersion === null
@@ -407,7 +411,7 @@ if (
 ) {
   throw new Error("Physical rules candidate identity is incomplete or conflated with the executable game.");
 }
-for (const path of requiredCandidateDocuments) {
+for (const path of proceduralCandidateDocuments) {
   const document = await readFile(resolve(root, path), "utf8");
   if (!document.includes(`**Rules version:** ${gameVersion.rulesCandidate.version}`)) {
     throw new Error(`Physical rules candidate version does not match ${path}.`);
