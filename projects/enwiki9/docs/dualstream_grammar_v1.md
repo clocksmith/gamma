@@ -1,5 +1,22 @@
 # Standalone two-stream grammar
 
+The fixed-program diagnostic uses `tools/dualstream_grammar_reserialize_v1.py`
+to parse already-transmitted v1/v2 programs and serialize each under both
+argument representations. Its tagged graph preserves frame modes, rule order,
+literal spellings, roots, supplied values, and argument boundaries across the
+two codecs' distinct Python classes. Same-format outputs must reproduce the
+entire input archive; program, root, and ordinary-content sections stay fixed.
+The [prospective plan](../operations/provenance/dualstream_grammar_reserialize250k_q0_v1_plan.json)
+limits this to four cells on existing opening250KB evidence. The canonical
+runner independently decodes each archive and repeats serialization from the
+same selected program. This repeat does not prove renewed raw-encoder discovery.
+Any useful cross cell still needs a separately frozen raw encoder.
+
+`tests/test_dualstream_selection_diagnostic_v1.py` supplies a constructed
+10,560-byte positive control: shared arguments save 73 complete v2 archive bytes
+against matched independent arguments, and automatic discovery selects them.
+This establishes synthetic capability, not transfer to Wikipedia.
+
 `tools/dualstream_grammar_v1.py` is a new local implementation of the supplied
 algorithm specification. The linked prototype ZIP was unavailable on this host;
 its code and reported measurements have not been verified or imported.
