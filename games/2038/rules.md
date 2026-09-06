@@ -1,7 +1,7 @@
 # ${content.worldCopy.title}
 ## A strategy game about institutions turning reliable AI capability into contested public authority as they build, deploy, regulate, and make rival claims on ${terms.systems.agi}
 
-**Suggested player count:** ${game.suggestedPlayerRange}
+**Players:** ${game.playerRange} · **Suggested player count:** ${game.suggestedPlayerRange}
 
 Use the browser **First Game Guide** for a guided introduction.
 

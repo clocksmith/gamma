@@ -109,3 +109,13 @@ The current local teaching kit contains the four authoritative documents,
 component masters, the world companion, and the current observer protocol.
 Session creation remains pending actual participants. No completed human receipt
 or measured learning/enjoyment score exists.
+
+## Final wording-only follow-up
+
+Executable `0.19.1`, rules `0.11.0-rc.3-test`, engine `0.21.0` print the full
+two-through-five player range on the Core Rules cover beside the suggested
+three-through-five range. The first kit check caught the omitted full range.
+No mechanics or policy changed. The study above remains attributed to `0.19.0`;
+its immutable release is preserved. The final kit uses the follow-up wording.
+
+Final follow-up validation: `npm run check`, generated documentation/build checks, and the contract/content/engine test subset passed. Ruleset, mechanics, and engine fingerprints exactly match the studied release, so no repeated strategy run was needed. The 278-test full suite passed before this wording-only delta.
