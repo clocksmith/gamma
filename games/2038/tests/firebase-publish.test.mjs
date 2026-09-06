@@ -136,8 +136,18 @@ test("public playtest publication is an allowlist with release identity and feed
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /href="web\/index\.html">Play the game<\/a>/);
     assert.match(rootIndex, /class="primary-action"/);
-    assert.match(rootIndex, /adaptive cybernetics/);
-    assert.match(rootIndex, /living watershed/);
+    assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
+    assert.match(rootIndex, /turning cheap intelligence into infrastructure, authority/);
+    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
+    const worldCompanion = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
+    for (const opening of [
+      "Intelligence became cheap enough",
+      "Once software stopped being scarce",
+      "The contest moved from capability to authority"
+    ]) {
+      assert.ok(!rootIndex.includes(opening), "home links to the setting without repeating its paragraphs");
+      assert.equal(worldCompanion.split(opening).length - 1, 1, "the companion preserves each setting paragraph once");
+    }
     assert.match(rootIndex, /Send playtest feedback/);
     assert.doesNotMatch(rootIndex, /Simulation lab/i);
     assert.doesNotMatch(rootIndex, /Complete content gallery/i);
@@ -231,6 +241,9 @@ test("internal review build remains complete but explicitly non-deployable", asy
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /Simulation lab/i);
     assert.match(rootIndex, /Complete content gallery/i);
+    assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
+    assert.match(rootIndex, /turning cheap intelligence into infrastructure, authority/);
+    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }
