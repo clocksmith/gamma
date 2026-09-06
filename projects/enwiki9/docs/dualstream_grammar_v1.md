@@ -78,3 +78,25 @@ sealed; a successor must diagnose representation cost under a new identity.
 Validation and confirmation populations remain unopened by this experiment.
 These counts exclude complete Python/zlib package costs and grant no full-corpus
 or resource-qualification credit.
+
+A subsequent independent review found that the original encoder accepted
+74,074 identical bytes with one-byte split frames, producing an archive above
+its decoder's 8,000,000-byte cap. The sealed v1 source is preserved.
+`tools/dualstream_grammar_bounded_v1.py` repairs this boundary by checking every
+archive write before it exceeds that cap. It reuses the pinned v1 implementation
+and format; successful archives remain byte-identical. Its file command also
+refuses to publish a rejected partial archive. The streaming API may leave a
+prefix on failure, as documented.
+
+The repair's synthetic suite includes the original 13 cases, both sides of the
+reported cap boundary, parent identity, partial-file rejection and short writes:
+
+```bash
+python3 -m unittest discover -s tests -p test_dualstream_grammar_bounded_v1.py -v
+python3 tools/dualstream_grammar_bounded_v1.py encode input.bin output.d2g --mode parameter
+```
+
+This is a correctness repair, with no new corpus gain established. Gemini's
+design request produced no model response because the installed client was
+rejected during authentication; the repair is locally authored and separately
+reviewed.
