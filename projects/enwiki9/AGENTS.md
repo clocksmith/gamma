@@ -10,6 +10,8 @@ Use [ADAPTIVE_WORKFLOW.md](ADAPTIVE_WORKFLOW.md) as the command manual and
 directory map; [ledger/README.md](ledger/README.md#record-map) maps canonical records.
 On “go”, inspect ownership and relevant evidence, carry the next justified action
 to a recorded result, and continue independent work when one gate is held.
+At each decision boundary, use the manual's [test/mutate/explore rules](ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
+and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changing direction.
 
 ## Authority and permissions
 
