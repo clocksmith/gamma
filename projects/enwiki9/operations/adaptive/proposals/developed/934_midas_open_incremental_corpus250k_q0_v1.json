@@ -1,0 +1,53 @@
+{
+  "candidate_id": "midas_open_incremental_corpus250k_q0_v1",
+  "claimed_at": "2026-09-06T01:19:30+00:00",
+  "created_at": "2026-09-06T01:19:30+00:00",
+  "developed_at": "2026-09-06T01:19:31+00:00",
+  "evidence": [
+    {
+      "path": "operations/evidence/20260906_midas_open_corpus_runner_unit.json",
+      "sha256": "sha256:8f0c7e6d28900d152cf2ccda02917b1d6d2361fd8e3a6f396e42cc68172ef5f1"
+    },
+    {
+      "path": "operations/evidence/20260906_midas_relocatable_source_bundle_unit.json",
+      "sha256": "sha256:83a280ada11453171117056a658e6b94a5dcfaeb899b1bf3d034280e42de8d51"
+    },
+    {
+      "path": "operations/evidence/20260905_midas_incremental_profile_identity_unit.json",
+      "sha256": "sha256:c957975f5d5e12e313e5f6937be42e9e3173a77941c5de88839f1244ac88255b"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/midas_open_incremental_corpus250k_q0_v1.json",
+    "sha256": "sha256:b746f6336cf30b863cc58f9b1a9c842264ad04e3c848ec55ff67c7e06de7f82b"
+  },
+  "hypothesis": "The unchanged incremental open MIDAS full-model midpoint update produces a smaller exact opening250KB archive than the parent P and misaligned-truth control S, with P/K identity and independent same-arm inverses, repeats and complete terminal state identity.",
+  "interfaces_exposed": [
+    "raw_identity_v1 open incremental P/K/F/S native encode/decode and complete terminal state witnesses"
+  ],
+  "kill_condition": "Hold this fixed comparison if F fails either strict archive comparison; execution failures retain separate infrastructure/resource classification.",
+  "max_program_bytes": 10000000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact same-arm inverses/repeats/state and P/K identity, F<P and F<S; complete promotion remains blocked by missing boundary/package evidence.",
+  "proposal_id": "midas_open_incremental_corpus250k_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 65,
+  "state": "developed",
+  "title": "Unchanged open MIDAS incremental parent versus midpoint opening250KB"
+}
