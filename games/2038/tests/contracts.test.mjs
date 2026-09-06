@@ -16,7 +16,7 @@ test("current release declaration separates executable game from physical rules 
   assert.match(current.gameVersion, /^\d+\.\d+\.\d+$/);
   assert.equal(packageDocument.name, "mandate-2038");
   assert.equal(packageDocument.version, current.gameVersion);
-  assert.match(current.rulesCandidate.version, /^0\.9\.0-rc\.\d+(-test)?$/);
+  assert.match(current.rulesCandidate.version, /^0\.10\.0-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
   assert.equal(current.contracts.mechanicsProjectionVersion, 2);
@@ -42,24 +42,24 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(spec, /same size, shape, material, and\s+weight/);
   assert.doesNotMatch(spec, /distinguishable by touch or sight/);
   assert.match(spec, /shared Mandate track/);
-  assert.match(spec, /AGI Dossier/);
+  assert.match(spec, /AGI recognition/);
   assert.match(spec, /Fusion Demonstrator/);
   assert.doesNotMatch(spec, /Economic Benchmark/);
   assert.doesNotMatch(spec, /Market Access/);
   assert.doesNotMatch(spec, /Influence cube/);
   assert.match(spec, /Initiative/);
   assert.match(spec, /visibly numbered 1–4/);
-  assert.match(spec, /Latest Production snapshot/);
-  assert.match(spec, /Thirty-six shared silver cubes/);
+  assert.match(spec, /Current connections/);
+  assert.match(spec, /use no Power cubes/);
   assert.match(spec, /Two distinct shared tokens/);
 
   assert.match(inventory, /## One prepacked faction tray per player/);
 
-  assert.match(inventory, /six captive sliders/);
+  assert.match(inventory, /five captive sliders/);
   assert.match(inventory, /6 shared Program cards/);
   assert.match(inventory, /twelve Program markers/);
   assert.match(inventory, /6 foldout player aids/);
-  assert.match(inventory, /36 silver Power cubes/);
+  assert.match(inventory, /4 Agents/);
   assert.match(inventory, /2 distinct Temporary Compute tokens/);
   assert.doesNotMatch(inventory, /final production copy count remains open/);
   assert.doesNotMatch(inventory, /Unresolved packing quantities/);
@@ -69,7 +69,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(governanceLedger, /Unresolved Systemic Risk/);
   assert.match(governanceLedger, /Final institutional winner/);
   assert.match(governanceLedger, /World Ending/);
-  assert.match(governanceLedger, /Do not transcribe Power/);
+  assert.match(governanceLedger, /Permanent Program use/);
 
   for (const staleClaim of [
     "Approximately 190 baseline cards",
@@ -80,7 +80,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /134 standard cards plus 6 foldouts/);
+  assert.match(manufacturing, /110 standard cards plus 6 foldouts/);
 
   assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
@@ -123,30 +123,28 @@ test("complexity-reduction review rules preserve precision and remove table acco
   for (const clause of [
     `**Rules version:** ${current.rulesCandidate.version}`,
     `synchronized with executable game ${current.gameVersion}`,
-    "Political control uses the CEO, Teams, and Facilities already on the board",
-    "A Mega-Cluster uses two adjacent Facilities you own",
-    "Each Facility may host at most one Mega-Cluster",
-    "The starting grid powers only its assigned first Facility",
-    "Facility at the acting piece’s destination",
+    "Political control uses Agents and Facilities already on the board",
+    "two adjacent connected Facilities you own",
+    "Each Facility may host only one Mega-Cluster",
+    "Facility 1 is always powered",
+    "acting Agent's district",
     "Every cross-player contract or jointly funded project requires the explicit",
     "Facilities sharing one hex are **co-located**. Adjacent host Facilities occupy hexes that share an edge",
     "### Universal costs and caps",
     "integrated starting-grid identifier",
-    "Every piece placed on the board during setup begins at Frontier",
+    "Place two Agents per player at Frontier",
     "Use nineteen tiles in a complete radius-two hexagon",
     "Every outer district touches its two outer neighbors",
     "These ring pools are fixed; shuffle tiles only within their listed ring",
     "All copies of one named district are mechanically identical",
-    "Every player board presents the same four Production boxes",
-    "Leave these cubes until the next Allocate step",
+    "### C. Production",
+    "No Power is assigned, spent, or marked.",
     "No separate Power Source cards are used",
-    "The secret AGI Dossier",
-    "There is no Prediction Bag",
-    "Do not run a second Production calculation",
+    "### D. Optional AGI recognition",
+    "Every qualifying institution may declare",
     "Every Faction has one persistent institutional identity and one signature ability",
     "each applicable Faction modifier",
-    "There is no hidden or deferred conversion",
-    "There is no other endgame scoring"
+    "There is no second winner procedure"
   ]) {
     assert.ok(normalizedRules.includes(clause), `canonical rules include ${clause}`);
   }
@@ -171,7 +169,7 @@ test("complexity positioning stays broad, unmeasured, and game-scoped", async ()
   assert.doesNotMatch(comparisons, /`3\.0–3\.2`/);
   assert.match(manufacturing, /ages 14\+, upper-medium strategy/);
   assert.match(decisions, /Presentation cannot create a new phase/);
-  assert.match(decisions, /Production remains the four numbered boxes,\s+followed by the separate Audit and Mandate phases/);
+  assert.match(decisions, /ReAct names Reason, Act, and Observe within the existing turn/);
 });
 
 test("the thematic inventory matches the two-source Power contract", async () => {
@@ -189,7 +187,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
   assert.match(inventory, /10 Scrutiny cubes/);
   assert.match(inventory, /1 Mandate marker/);
-  assert.match(inventory, /4 Era-labelled AGI Dossier cards/);
+  assert.match(inventory, /4 Agents/);
   assert.match(inventory, /integrated starting-grid identifier on Facility 1/);
   assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
 });
@@ -278,11 +276,10 @@ test("selected deck contracts have exact physical counts", async () => {
     config.sharedSupply.sharedProgramCards +
     defaultHeadlineCount +
     mandates.mandates.length +
-    trainingCount +
-    config.playerSupply.agiDossierCards * config.players.max;
+    trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  assert.equal(defaultStandardCards, 134);
-  assert.equal(defaultPrintedPieces, 140);
+  assert.equal(defaultStandardCards, 110);
+  assert.equal(defaultPrintedPieces, 116);
   assert.deepEqual(
     config.powerSources.filter((source) => !source.isProgram).map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -310,7 +307,6 @@ test("selected deck contracts have exact physical counts", async () => {
       playerAidFoldouts: config.sharedSupply.playerAidFoldouts,
       governanceLedgers: config.sharedSupply.governanceLedgers,
       sharedDryEraseMarkers: config.sharedSupply.sharedDryEraseMarkers,
-      powerAllocationMarkers: config.sharedSupply.powerAllocationMarkers,
       temporaryComputeTokens: config.sharedSupply.temporaryComputeTokens,
       mandateMarkers: config.sharedSupply.mandateMarkers
     },
@@ -320,7 +316,6 @@ test("selected deck contracts have exact physical counts", async () => {
       playerAidFoldouts: 6,
       governanceLedgers: 1,
       sharedDryEraseMarkers: 1,
-      powerAllocationMarkers: 36,
       temporaryComputeTokens: 2,
       mandateMarkers: 6
     }
@@ -346,25 +341,25 @@ test("factions and player supplies match the selected limits", async () => {
   assert.equal(new Set(factions.factions.map((faction) => faction.id)).size, 6);
   assert.deepEqual(
     {
-      teams: config.playerSupply.teams,
+      agents: config.playerSupply.agents,
+      startingAgents: config.playerSupply.startingAgents,
       facilities: config.playerSupply.facilities,
       generators: config.playerSupply.generators,
       influenceCubes: config.playerSupply.influenceCubes,
       scrutinyCubes: config.playerSupply.scrutinyCubes,
       factionBoardCaptiveSliders: config.playerSupply.factionBoardCaptiveSliders,
       programMarkers: config.playerSupply.programMarkers,
-      agiDossierCards: config.playerSupply.agiDossierCards,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
     {
-      teams: 3,
+      agents: 4,
+      startingAgents: 2,
       facilities: 4,
       generators: 1,
       influenceCubes: 0,
       scrutinyCubes: 10,
-      factionBoardCaptiveSliders: 6,
+      factionBoardCaptiveSliders: 5,
       programMarkers: 2,
-      agiDossierCards: 4,
       startingGridIdentifiers: 1
     }
   );
@@ -480,12 +475,12 @@ test("headline and board boundaries remain explicit", async () => {
       .reduce((sum, tile) => sum + tile.count, 0),
     3
   );
-  assert.equal(config.board.startingGridConnection.capacity, 1);
+  assert.ok(!Object.hasOwn(config.board.startingGridConnection, "capacity"));
   assert.deepEqual(config.playRules, {immediateTradeCounteroffers: false, immediateTradeThirdPartyClaims: false});
   assert.ok(!('playProfiles' in config));
   assert.ok(!('playRuleModules' in config));
   assert.ok(!('realignment' in config.board));
-  assert.equal(config.playerSupply.factionBoardCaptiveSliders, 6);
+  assert.equal(config.playerSupply.factionBoardCaptiveSliders, 5);
   assert.equal(config.playerSupply.programMarkers, 2);
   assert.deepEqual(
     Object.fromEntries(config.board.tiles.map((tile) => [tile.id, tile.name])),
@@ -528,8 +523,8 @@ test("headline and board boundaries remain explicit", async () => {
   );
 
   const blogPost = headlines.headlines.find((headline) => headline.id === "agi_blog_post");
-  assert.match(blogPost.text, /receives 2 Publication strength instead of 1/);
-  assert.match(blogPost.text, /does not change Dossier payment, Scrutiny/);
+  assert.match(blogPost.text, /gains 1 Trust/);
+  assert.match(blogPost.text, /fixed.*AGI.*unchanged/);
 });
 
 test("Headline deck contains the sixteen selected procedures", async () => {
@@ -609,7 +604,7 @@ test("Headline deck contains the sixteen selected procedures", async () => {
     headlines.every((headline) => headline.resolutionType !== "REGIME"),
     "standard Headline instructions use the procedural DIRECTIVE badge"
   );
-  assert.match(byId.emergency_power_authority.text, /Systemic Risk/);
+  assert.match(byId.emergency_power_authority.text, /2 Compute and adds 1 additional Scrutiny/);
   assert.match(byId.benchmark_is_economy.text, /immediately scores 1 Mandate/);
   assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
 
@@ -880,7 +875,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
 
   assert.equal(world.worldPrimer, undefined);
   assert.equal(world.endings.length, 4);
-  assert.equal(world.tokenCopy.length, 10);
+  assert.equal(world.tokenCopy.length, 9);
   assert.equal(eraCards.length, 4);
   assert.equal(factions.length, 6);
   const narrative = companion.replace(/\s+/g, " ");
@@ -896,7 +891,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /desalinated water.*data-center coolant/i,
     /cognitive-donor.*sleeping brains/i,
     /read access.*memory writes/i,
-    /organs grown from licensed identity templates/i,
+    /identity and treatment records.*replacement organs/i,
     /pollinating swarms.*machine-readable blooms/i,
     /standing, reproductive freedom, and compensation/i,
     /bio-compute organism/i,
@@ -937,7 +932,7 @@ test("new thematic decks and reference surfaces have complete draft inventories"
     world.endings.map((ending) => ending.id),
     ["singularity", "closed_loop", "plural_future", "assured_continuity"]
   );
-  assert.equal(world.tokenCopy.length, 10);
+  assert.equal(world.tokenCopy.length, 9);
 
   for (const card of [...tactics.tactics, ...reserve.specialists, ...objectives.objectives]) {
     assert.ok([1, 2, 3, 4].includes(card.era), `${card.id} has an Era classification`);

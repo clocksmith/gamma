@@ -1,5 +1,5 @@
 export const AGI_DECLARATION_WINDOW_SCENARIO_ID =
-  "agi_claim_window_v1";
+  "agi_recognition_window_v2";
 
 const ARMS = new Set(["eligible", "blocked_compute"]);
 
@@ -39,7 +39,7 @@ export function applyAgiDeclarationScenario(match) {
     scenario.id !== AGI_DECLARATION_WINDOW_SCENARIO_ID ||
     scenario.applied
   ) return;
-  if (match.round !== 4 || match.cycle !== 1) return;
+  if (match.round !== 4) return;
 
   const player = match.players[scenario.focalSeat];
   const requirements = match.currentAgiRequirements();
@@ -49,13 +49,20 @@ export function applyAgiDeclarationScenario(match) {
     customers: player.customers,
     trust: player.trust,
     compute: player.compute,
-    facilities: player.facilities.length,
-    dossierChoices: { ...player.agiDossier.choices }
+    facilities: player.facilities.length
   };
 
-  player.agiDossier.choices = Object.fromEntries(
-    match.config.agiDossier.modules.map((module) => [module.id, "commit"])
-  );
+  player.capability = Math.max(player.capability, requirements.capability);
+  player.trust = Math.max(player.trust, requirements.trust);
+  // A controlled scenario injects physical evidence explicitly, never a hidden powered flag.
+  // Its separately identified report cannot be pooled with ordinary-play evidence.
+  const source = match.board.find((tile) => tile.category === "energy");
+  const targets = match.board.filter((tile) => tile.category !== "frontier" &&
+    (tile.instanceId === source.instanceId || match.areAdjacent(source.instanceId, tile.instanceId)));
+  player.generators = [{ id: `s${player.seat}-scenario-generator`, sourceId: "clean_infrastructure", tileId: source.instanceId }];
+  player.facilities = targets.slice(0, requirements.poweredFacilities).map((tile, index) => ({
+    id: `s${player.seat}-facility-${index + 1}`, tileId: tile.instanceId, category: tile.category
+  }));
   player.compute = scenario.arm === "eligible"
     ? Math.max(player.compute, requirements.computeCost)
     : Math.max(0, requirements.computeCost - 1);
@@ -91,7 +98,6 @@ export function applyAgiDeclarationScenario(match) {
       trust: player.trust,
       compute: player.compute,
       facilities: player.facilities.length,
-      dossierChoices: { ...player.agiDossier.choices },
       legalDeclaration: readiness.ready,
       failingRequirement: readiness.failingRequirement
     },
@@ -129,7 +135,7 @@ export function finalizeAgiDeclarationScenario(match) {
     trust: player.trust,
     compute: player.compute,
     facilities: player.facilities.length,
-    dossier: structuredClone(player.agiDossier),
+    readiness: match.declarationReadiness(player),
     declared: player.agiDeclared
   };
 }

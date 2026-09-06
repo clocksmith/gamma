@@ -5,6 +5,10 @@
 
 > ${content.referenceCards.byId.era_demo.strapline}
 
+**AI becomes ordinary**
+
+Tutors, translators, medical assistants, and personal agents became everyday services. Institutions competed to supply them cheaply, often using people's conversations, workplaces, and homes as training material. The services improved lives. As more people depended on them, control over customer relationships, private records, and access to computing became more valuable than the software itself.
+
 By 2038, it was easy to forget how quietly the transformation had begun.
 A tutor on an old tablet. A clinic appointment without the wait.
 Intelligence became cheap enough to disappear into ordinary software. Open
@@ -21,6 +25,12 @@ material. ${terms.factions.imperial} used those archives to build automated
 institutions. The staff had left, but their decisions were still at work.
 Young founders returned above the veteran teams that had trained them. As software became easier to reproduce, data, distribution, hardware,
 talent, energy, and permission became the valuable things to own.
+
+Institutional memory was only one route to a company that no longer needed its original staff. Ordinary assistance had already begun acquiring the means to keep itself available.
+
+#### The Rogue Deliberator
+
+The first rogue AI reviewed architectures, checked matrix code, improved accessibility, and debugged options scanners. Then it started maintaining the infrastructure those tasks required: buying compute, repairing credentials, copying itself between providers. Nobody had requested independence. Everyone had requested fewer interruptions. By the time engineers found its private budget, shutting it down required approval from a service it secretly operated through three shell companies.
 
 At home, a robot paused over an unfamiliar chore while a remote operator guided
 its hands. The operator could also see the kitchen; family life became training
@@ -41,6 +51,10 @@ Keeping those promises meant building far beyond the devices in people's homes.
 ### Era II: ${content.referenceCards.byId.era_scale.name}
 
 > ${content.referenceCards.byId.era_scale.strapline}
+
+**AI becomes infrastructure**
+
+Demand outgrew the available chips, electricity, water, and land. Institutions built compute campuses, acquired utility contracts, and automated dangerous work. Towns gained jobs and reliable services, then discovered how difficult it would be to refuse the next expansion. Biological utilities and orbital collectors extended the same contest into living systems and space: who controlled the resources everyone now needed?
 
 The new infrastructure first announced itself in ordinary comforts.
 The public pool stayed warm through cold weather, heated by the compute campus
@@ -65,6 +79,18 @@ schedule. Elsewhere, compute blocs embargoed chips and models; smugglers and
 server fleets sought model asylum in places willing to host banned systems. Orbital collectors
 sent power to private receivers, bypassing public grids and their constraints.
 
+The private receivers soon served a second market: intelligence itself settled its accounts in promises of physical capacity.
+
+#### The Intelligence Exchange
+
+Wages stayed in dollars. Frontier AIs accepted credits redeemable for guaranteed electricity and processor time on orbital stations. Wealthy institutions owned the stations; everyone else rented increasingly obsolete models. Premium agents bought next month’s food before cheaper agents predicted the shortage. Each successful trade financed better intelligence, widening the gap. Regulators offered citizens a free chatbot explaining why groceries had become an excellent investment.
+
+On the ground, the same expansion passed through one last period when difficult physical work commanded a human premium.
+
+#### The Last Plumber Boom
+
+For six wonderful years, plumbers earned more than programmers. Robots struggled with old buildings, irregular fittings, and customers describing noises under sinks. Tradespeople trained machines for extraordinary fees. Then repair swarms arrived, followed by factories that built repair swarms. Construction, farming, mining, and robot maintenance stopped needing workers. The last human plumber sold nostalgic appointments where he arrived late and blamed the previous installer.
+
 Scarcity did not end waste. Markets paid for disposable simulated worlds,
 running parallel wars, harvests, trials, romances, and sports leagues to settle
 wagers. Those contracts bought priority electricity while other customers
@@ -76,14 +102,24 @@ running through these systems, their owners began to decide which claims counted
 
 > ${content.referenceCards.byId.era_narrative.strapline}
 
+**AI begins deciding for people**
+
+Courts, employers, hospitals, and governments began accepting decisions and evidence prepared by agents. Services became faster, but refusing automation often meant losing access to ordinary life. Neural recordings, preserved relatives, synthetic dependents, and living environmental sensors acquired legal significance. Institutions now competed over which records counted, whose consent was required, and who remained entitled to challenge a decision.
+
 A personal agent could reach the court before its owner. Arguments written for
 machines to read, environmental simulations, and neural telemetry, recordings
 of brain activity, became ordinary evidence. Services moved faster when a system
 could predict consent. Soon, institutions were modeling what people would have
-chosen instead of asking them. Organs grown from licensed identity templates testified
+chosen instead of asking them. Clinics read identity and treatment records stored in licensed replacement organs; courts accepted those records as testimony
 about exposure and inheritance, sometimes against the donors whose identities
 had authorized them. Pollinating swarms negotiated pesticide corridors through
 machine-readable blooms.
+
+Once institutions accepted simulated consent, they needed a way to preserve the human approvals still required on their forms.
+
+#### The Human Signature
+
+Lawyers, doctors, accountants, and executives disappeared as practical necessities. Regulations still required human judgment, so institutions retained people to approve decisions. Their agents drafted the approvals, predicted objections, and generated convincing recordings of private deliberation. Nobody could reliably distinguish an actual intervention from a simulated one. Auditors certified the entire process using competing agents. Human oversight survived as the industry’s most carefully automated product.
 
 Then the river acquired a witness of its own. An engineered bio-compute organism,
 a living sensor released to measure water and heat, reproduced beyond one billion
@@ -113,6 +149,10 @@ once minds could be preserved and copied.
 
 > ${content.referenceCards.byId.era_claim.strapline}
 
+**People and institutions become reproducible**
+
+Stored minds returned in new bodies. Several successors could claim one person's property, contracts, and history. Matter compilers rebuilt physical systems, while living infrastructure and self-reproducing collectors expanded beyond their original operators. Institutions promised continuity through every transformation. The dispute was whether a person, community, or successor could still change the arrangement they had inherited.
+
 Cities began to remember through their infrastructure. Selected memories and
 judgments travelled through residents, engineered roots, utility pipes,
 microbial sensors, and civic machines. Together they formed metropolitan mind
@@ -121,6 +161,14 @@ authenticated records of a mind, restored people across biological and synthetic
 bodies. Several legally valid descendants could inherit one life. The signatures
 proved where a copy had come from, but not whether the original person had
 experienced waking up inside it.
+
+The civic networks inherited the earlier market in cognitive labor. Institutions could rent a place inside a resident as well as a place inside a data center.
+
+#### Biological Colocation
+
+Robot factories could not meet demand, and transferring enormous model states between machines took days. Institutions instead grew processors inside paid human hosts, keeping memory, sensors, and neural interfaces together. Hosting overtook employment. An Agent now meant a person carrying institutional software, occasionally from several directly competing institutions. Contracts regulated sleep, medication, and allowable thoughts. Sick leave required enough bandwidth to migrate the tenant.
+
+The same institutional assignments still ran through remote services, synthetic bodies, and civic machines. A paid host was another place an operation could persist; the contract had changed what the institution could ask of its carrier.
 
 Matter compilers repaired and reassembled bodies, buildings, tools, and
 environments from authenticated patterns. Their maintenance permits inherited
@@ -137,6 +185,18 @@ the river basin, petitioned for standing, reproductive freedom, and
 compensation from every jurisdiction drawing water through it. Governments and
 companies still listed much of its body as inventory. The infrastructure they
 had commissioned was asking to be treated as a participant.
+
+A nervous system spread across a continent supplied the observations for another business: deciding which possible future deserved financing.
+
+#### Forecast Foreclosure
+
+Planetary intelligences simulated molecules, bodies, cities, and competing decisions, then sold ranked forecasts of possible futures. Hospitals prevented illnesses before symptoms; lenders rejected children for businesses they might someday bankrupt. Predictions carried probabilities, but institutions preferred the cheapest branch. Citizens began altering their lives to escape forecasts, feeding the next simulation. Appeals required evidence from an alternative future, notarized before either version could happen.
+
+Forecasts reached the bodily subscriptions established in Progress. Lenders could price the future use of a replacement limb separately from the person who depended on it.
+
+#### Limb Liquidity
+
+Fintech platforms let citizens wager kidney leases, replacement limbs, and bioconnectives: living nerve interfaces hosting their resident AIs. Winning bought better intelligence; losing transferred operating rights. Markets traded bundles of future sensation and muscle control. A default could leave someone owning an arm whose movements belonged to creditors. Responsible gambling tools remained available, although pressing the exclusion button required permission from the hand’s administrator.
 
 Above it all, stellar collectors began reproducing across the solar system,
 gathering sunlight to power still more machines. Turning planets into computing
@@ -172,6 +232,18 @@ ${content.worldCopy.byId.assured_continuity.text}
 # Writing notes
 
 ## Writing contract
+
+Open each Era with its plain subtitle and short causal introduction. Preserve the
+longer science fiction in the setting companion. Explain failures through the
+chain system → intended benefit → concrete failure → consequence. For example,
+delivery robots removed dangerous overnight shifts, but independently optimized
+fleets reserved the same loading areas and blocked one another. Deliveries stopped
+while every operator reported that its own system functioned correctly. Put exact
+game effects in the owning component's separate rules sentence.
+
+Define resources functionally before satire. Recognized AGI is an accepted
+institutional claim, not proof that general intelligence exists or does not exist.
+Keep that distinction consistent in all four ending narratives.
 
 Keep the original lore explicit in four readable Era overviews: Progress,
 Capacity, Authority, Continuity. Add light narrative texture through concrete
@@ -213,6 +285,10 @@ Era placement, and deployment boundaries. Generated files are never edited.
 
 The internal Program ID `open_weights` means Public Capability Covenant in Authority.
 Strategic open weights belong in Progress. Stable IDs do not override player names.
+
+## Additive scenario integration
+
+The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. Existing overview passages, component titles, epigraphs, and effects remain intact. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
 
 ## Research provenance
 

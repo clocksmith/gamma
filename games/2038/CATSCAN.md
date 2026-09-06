@@ -25,6 +25,15 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - Mandate 2038 has one ruleset. The map stays fixed; Power eligibility is local.
   Setup, components, references, runtime options, and publication expose no
   alternate rules mode. Retired mode selectors and module overrides are rejected.
+- The current candidate uses four identical Agents per faction, two starting.
+  Agents are persistent district assignments; CEOs remain characters, not pieces.
+- Core selections commit available cards without advance affordability proofs.
+  ReAct is Reason, Act, Observe; assignment is part of Act.
+- Research has no universal Protection quantity. Power is a current-board local
+  connection condition. Recognized AGI is a fixed Mandate achievement before the
+  final Audit; it never overrides the Mandate winner. The World Ending remains separate.
+- User-selected mechanic revisions retain scenario placement and require an
+  explicit design-decision receipt; they must not be labelled retained mechanics.
 - Generated graph targets are never hand-edited.
 - Game procedures and inventory prose have one authored home in `rules.md`;
   exact component effects remain in `components/`. Reference layouts may arrange

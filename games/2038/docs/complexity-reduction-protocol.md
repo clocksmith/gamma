@@ -19,12 +19,12 @@ after a candidate is accepted.
 
 | Accepted decision | Canonical change | Protected identity | Remaining evidence question |
 | --- | --- | --- | --- |
-| `single-generator-default` | One location-defined Generator per player | Energy geography, local Power, Scrutiny, and a visible retained allocation snapshot | Energy-site dominance or Initiative advantage |
-| `equal-presence-control` | CEO, Team, and Facility each contribute one presence; ties control nothing | Spatial politics, Trust, Scrutiny relief, Joint Ventures | Politics loses persistence or movement becomes universally optimal |
-| `shared-program-display` | Six public Program cards and two markers per player replace private copies and a track | Public escalation, timing pressure, and once-per-game choices | Programs become scripted or insufficiently contested |
-| `research-protection-refresh` | Research Protection refreshes each Era and Research visits protect only that run | Push-your-luck identity without a second spendable currency | Research becomes too safe or protection feels forgettable |
-| `deterministic-dossier` | Supported evidence and printed claim strength replace bag draws and comeback arithmetic | Secret commitments, uncertainty, evidence, and a dramatic endgame claim | Resolution becomes predictable too early |
-| `nineteen-hex-board` | One center, six inner, and twelve outer tiles form a complete radius-two board | Geographic specialization, movement and control | Added space weakens interaction or increases setup burden |
+| `single-generator-default` | One location-defined Generator per player, plus unique Fusion | Energy geography, current connections, and emergency Scrutiny | Energy-site or Initiative dominance |
+| `full-simplification` | Two starting Agents, four total; assign directly; one presence each | Persistent district control and infrastructure geography | Recruitment value and destination-bonus dominance |
+| `shared-program-display` | Six public Programs, returning Era markers, permanent named-use ledger | Public timing pressure and once-per-game choices | Scripted or insufficiently contested Programs |
+| `full-simplification` | No Research Protection; printed paid banking and crash-retention exceptions | Push-your-luck domain collection | Volatility across twelve ordinary selections |
+| `full-simplification` | Public AGI qualification, payment, fixed Mandate award, ordinary winner | Optional ambition and separate World Ending | Reward and qualification balance |
+| `nineteen-hex-board` | One center, six inner, twelve outer tiles | Generator and Facility geography | Interaction and setup burden |
 
 Selection authorizes implementation, not a balance claim. The original
 single-Generator candidate and its receipts remain in `experimental/` and

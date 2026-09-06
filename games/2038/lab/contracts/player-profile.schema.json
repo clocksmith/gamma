@@ -4,7 +4,12 @@
   "title": "Mandate 2038 Player Strategy Profile",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "persona", "strategy"],
+  "required": [
+    "id",
+    "name",
+    "persona",
+    "strategy"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -18,27 +23,57 @@
       "type": "string"
     },
     "defaultBackend": {
-      "enum": ["weighted", "greedy", "claude", "codex", "hybrid-claude", "hybrid-codex"]
+      "enum": [
+        "weighted",
+        "greedy",
+        "claude",
+        "codex",
+        "hybrid-claude",
+        "hybrid-codex"
+      ]
     },
     "persona": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["identity", "worldview", "riskPosture", "negotiationStyle"],
+      "required": [
+        "identity",
+        "worldview",
+        "riskPosture",
+        "negotiationStyle"
+      ],
       "properties": {
-        "identity": { "type": "string" },
-        "worldview": { "type": "string" },
-        "riskPosture": { "type": "string" },
-        "negotiationStyle": { "type": "string" },
-        "voice": { "type": "string" }
+        "identity": {
+          "type": "string"
+        },
+        "worldview": {
+          "type": "string"
+        },
+        "riskPosture": {
+          "type": "string"
+        },
+        "negotiationStyle": {
+          "type": "string"
+        },
+        "voice": {
+          "type": "string"
+        }
       }
     },
     "strategy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["selection", "negotiation", "actionWeights", "rules"],
+      "required": [
+        "selection",
+        "negotiation",
+        "actionWeights",
+        "rules"
+      ],
       "properties": {
         "selection": {
-          "enum": ["weighted", "greedy"]
+          "enum": [
+            "weighted",
+            "greedy"
+          ]
         },
         "negotiation": {
           "type": "object",
@@ -50,15 +85,29 @@
             "reciprocityWeight"
           ],
           "properties": {
-            "promiseWeight": { "type": "number", "minimum": 0 },
-            "fulfillWeight": { "type": "number", "minimum": 0 },
-            "betrayWeight": { "type": "number", "minimum": 0 },
-            "reciprocityWeight": { "type": "number", "minimum": 0 }
+            "promiseWeight": {
+              "type": "number",
+              "minimum": 0
+            },
+            "fulfillWeight": {
+              "type": "number",
+              "minimum": 0
+            },
+            "betrayWeight": {
+              "type": "number",
+              "minimum": 0
+            },
+            "reciprocityWeight": {
+              "type": "number",
+              "minimum": 0
+            }
           }
         },
         "objectives": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "actionWeights": {
           "type": "object",
@@ -90,19 +139,33 @@
         "resourceValues": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["runway", "compute", "researchProtection"],
+          "required": [
+            "runway",
+            "compute"
+          ],
           "properties": {
-            "runway": { "type": "number", "exclusiveMinimum": 0 },
-            "compute": { "type": "number", "exclusiveMinimum": 0 },
-            "researchProtection": { "type": "number", "exclusiveMinimum": 0 }
+            "runway": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "compute": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
           }
         },
         "spatialPreference": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["targetProfileId", "preferredDistance", "multiplier"],
+          "required": [
+            "targetProfileId",
+            "preferredDistance",
+            "multiplier"
+          ],
           "properties": {
-            "targetProfileId": { "type": "string" },
+            "targetProfileId": {
+              "type": "string"
+            },
             "preferredDistance": {
               "type": "integer",
               "minimum": 0,
@@ -123,17 +186,35 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["when", "target", "multiplier"],
+            "required": [
+              "when",
+              "target",
+              "multiplier"
+            ],
             "properties": {
               "when": {
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": ["path", "operator", "value"],
+                  "required": [
+                    "path",
+                    "operator",
+                    "value"
+                  ],
                   "properties": {
-                    "path": { "type": "string" },
+                    "path": {
+                      "type": "string"
+                    },
                     "operator": {
-                      "enum": ["eq", "ne", "lt", "lte", "gt", "gte", "includes"]
+                      "enum": [
+                        "eq",
+                        "ne",
+                        "lt",
+                        "lte",
+                        "gt",
+                        "gte",
+                        "includes"
+                      ]
                     },
                     "value": {}
                   }
@@ -142,8 +223,12 @@
               "target": {
                 "type": "object",
                 "properties": {
-                  "actionId": { "type": "string" },
-                  "decisionIdPrefix": { "type": "string" }
+                  "actionId": {
+                    "type": "string"
+                  },
+                  "decisionIdPrefix": {
+                    "type": "string"
+                  }
                 }
               },
               "multiplier": {

@@ -311,69 +311,46 @@ diagnostics rather than balance-authority evidence.
 - setup, cycle, Era, Production, Audit, scoring, and total duration;
 - facilitator interventions, deviations, and unresolved questions.
 
-### Actions and movement
+### Actions and assignments
 
-- every Core and Escalation selection, including blocked Actions;
-- acting piece, destination, and distance;
-- action-resolution and rules-lookup time;
-- Initiative effects and illegal-state recovery;
-- end-of-Era occupancy.
-- every Influence selection and chosen effect;
-- control changes at Media, Government, and Capital;
-- whether Teams or Facilities are used to hold political positions; and
-- whether players describe politics as strategic positioning or incidental
-  movement.
+- Every Core Action and Program selection, including speculative or blocked choices.
+- The assigned Agent and district, prior presence abandoned, and resulting control.
+- Availability at selection versus affordability and legal targets at resolution.
+- Whether blocked selections are deliberately used for assignment and whether that is enjoyable.
+- Recruitment, Agent count, Facility relocation, Initiative effects, and rules questions.
 
 ### Research and deployment
 
-- provisional and banked Capability for every Research;
-- crash and protection source;
-- separate Mirevanta Works, Research-campus, and all-other Research cohorts;
-- Customers and Capability after every Era;
-- each Customer’s immediate Mandate award and continuing Production income;
-- Mirevanta Works’ Capability-nine and Capability-twelve Peer Validation awards;
-- every Era Dossier orientation, whether later behavior made the hidden choice
-  inferable, and its final Compute and Scrutiny cost.
+- Provisional and banked Capability, each stopping decision, and duplicate crashes.
+- Scientific Method payment only on use; Orisonix retained Capability; Research-district bonus only on banking.
+- Separate faction and district cohorts, twelve-selection volatility, and Customer thresholds.
 
 ### Infrastructure and negotiation
 
-- Facilities, powered Facilities, and total satisfied demand after Production;
-- when every Generator is built, its clean or emergency source, its Scrutiny,
-  and its realized Audit cost;
-- every Build selection and whether Energy-slot Initiative causes frustration;
-- locally eligible Facilities, powered Facilities, and stranded capacity;
-- Joint Ventures, Mega-Clusters, immediate resource trades, and refusals;
-- whether local Generator scarcity creates meaningful placement choices;
-- whether a trailing institution treats Publication as a credible hidden pivot
-  rather than an automatic or irrelevant choice;
-- whether module, Capability, and comeback tokens are understandable at reveal
-  without calculating percentages;
-- all three Grid-slot occupancy before Era IV;
-- whether Fusion was built, declined, blocked, or denied by occupied slots;
-- immediate trades and persistent agreements.
+- Current Facility/Generator positions and connected Facilities, including changes between Productions.
+- Generator cost, recurring Scrutiny, Audit loss, and competition for Energy slots.
+- Mega-Cluster host adjacency, Joint Venture host legality, and their production.
+- Production handling time, rules lookups, and whether removed rationing mattered.
+- Each one-for-one trade, whether it enabled the committed action, and rejected offers.
+- Fusion built, declined, or blocked, with reasons.
 
 ### Risk, score, and ending
 
-- Scrutiny inserted, removed, drawn, and left unresolved;
-- Systemic Risk added, drawn, and remaining;
-- Audit penalties by player and source;
-- Trust and Mandate changes with causes;
-- every player's Mandate position after each Era, whether the Era I leader
-  ultimately wins, and whether the fourth-place player recovers;
-- whether a leader can pursue aggressive Deploy or Research paths without
-  enough pressure from contested Mandates, Audit, and opponent response;
-- Loopfold AI’s lead after every Production;
-- Corthaven’s Shovels income;
-- every Allocation Window offer, counteroffer, acceptance, and Corthaven
-  Runway gain from The Shovels;
-- every Industrial Velocity discount, whether it reduced the final paid cost
-  of a completed Facility, and any Mandate awarded;
-- Era Mandate qualification and result;
-- provisional Mandate winner;
-- every Dossier choice, payment, Scrutiny addition, supported evidence module,
-  Capability threshold, Publication strength, final Mandate rank, selected
-  institution, applied tiebreak, and whether the claim changed the winner;
-- final institutional winner and shared World Ending.
+- Scrutiny and Systemic Risk added, drawn, and remaining; Trust and Mandate changes.
+- Every faction ability's actual effect, Era Mandate qualification, and leader changes.
+- Public AGI qualification after final Production, acceptance or refusal, payment, award, and Scrutiny before Audit.
+- Final Mandate winner and ordinary ties; no separate AGI winner procedure.
+- Recognized AGI and Open/Closed continuity as separate World Ending axes.
+- Endgame explanation time and all questions or misinterpretations.
+
+### Candidate comparison order
+
+Compare Research first, Power second, AGI third, then Agent assignments against
+archived source identities; finally test the combined candidate. Four players
+is the primary human test. Validate three- and five-player integrity separately.
+Record implementation correctness separately from teaching burden and enjoyment.
+The current values are test hypotheses and no prior balance receipt promotes
+the combined candidate.
 
 ### Narrative
 

@@ -82,19 +82,17 @@ locked component specification.
 | Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
 | Player aids | 6 three-panel foldouts | replaces twenty-four separate reference cards |
 | Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its shared Program card | replaces three separate reference cards |
-| Total printed card-and-aid pieces | 140 | 134 standard cards plus 6 foldouts; manufacturing overage excluded |
-| CEO pieces | 6 | confirmed concept |
-| Team pieces | 18 | three per faction |
+| Total printed card-and-aid pieces | 116 | 110 standard cards plus 6 foldouts; manufacturing overage excluded |
+| Agent pieces | 24 | four identical markers per faction, two deployed at setup |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |
 | Starting-grid identifiers | 6 | integrated into each faction's first Facility |
 | Separate Grid-Ready pieces | 0 | no persistent Grid-Ready state exists |
-| Faction-board sliders | 36 captive sliders: Runway, Compute, Capability, Customers, Trust, and Research Protection on each board | integrated into boards; no loose track markers |
+| Faction-board sliders | 30 captive sliders: Runway, Compute, Capability, Customers, and Trust on each board | integrated into boards; no loose track markers |
 | Program markers | 12, two per faction | record each player's Era Program allowance on the shared display |
 | Mandate markers | 6 | one loose faction-coloured marker per faction for the shared track |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
-| AGI Dossier cards | 24 | four Era-labelled Commit / Hedge cards per faction |
-| Shared punchboard tokens | 36 retained Power cubes, 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/docs/component-inventory.md` | selected counts; layout unresolved |
+| Shared punchboard tokens | 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/docs/component-inventory.md` | selected counts; layout unresolved |
 | Shared dry-erase marker | 1 fine-tip marker | serves the Governance Board ledger |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Audit bag | 1 opaque cloth bag | confirmed concept |
@@ -165,10 +163,10 @@ Fusion on its shared Program. Generator pieces and Energy slots create scarcity.
 Fusion uses one dedicated shared marker. Shared token quantities are exact in
 the rulebook.
 
-One Governance Board ledger replaces six personal score sheets. The thirty-six
-Power cubes remain on the map as the latest Production snapshot until the next
-Allocate step. One shared marker records only the current Mandate criterion,
-Setup Collective Trust, and final public resolution.
+One Governance Board ledger records the current Mandate criterion, permanent
+named Program use, Setup Collective Trust, and final public recognition.
+Power uses current Generator adjacency and the integrated first-Facility grid;
+no allocation cubes or duplicate Power record are needed.
 
 Six labelled faction trays and four Era packets organize setup. Their exact insert material
 and construction remain quote variables.

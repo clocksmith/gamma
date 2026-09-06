@@ -22,7 +22,6 @@ async function makeMatch(options = {}) {
 test("interactive Training banks after one reveal and exposes every duplicate reaction", async () => {
   const match = await makeMatch({ factionId: "imperial_research_lab" });
   const player = match.players[0];
-  player.researchProtection = 1;
   player.runway = 4;
 
   match.trainingDrawPile = [trainingCard("code", "domain")];
@@ -36,7 +35,7 @@ test("interactive Training banks after one reveal and exposes every duplicate re
   });
   assert.equal(banked.outcome, "banked");
   assert.equal(banked.cardsDrawn, 1);
-  assert.equal(banked.capability, 1);
+  assert.equal(banked.capability, 2);
 
   match.trainingDrawPile = [
     trainingCard("science", "domain"),
@@ -58,11 +57,11 @@ test("interactive Training banks after one reveal and exposes every duplicate re
   });
   assert.deepEqual(
     duplicateChoices.map((decision) => decision.parameters.protection),
-    ["research_protection", "research_visit", "scientific_method", null]
+    ["scientific_method", null]
   );
   assert.equal(crashed.outcome, "crashed");
-  assert.equal(crashed.researchProtectionSpent, 0);
-  assert.equal(player.researchProtection, 1);
+  assert.equal(crashed.capability, 0);
+  assert.ok(!Object.hasOwn(player, "researchProtection"));
 });
 
 test("only banked ordinary Training domains drive domain-counting effects", async () => {
@@ -99,7 +98,7 @@ test("only banked ordinary Training domains drive domain-counting effects", asyn
   assert.equal(benchmarkOnly.capability, 2);
   assert.equal(benchmarkOnly.roundMetrics.bestTrainingDomains, 0);
 
-  const twoDomains = await run({ capability: 2, ordinaryDomainCount: 2 });
+  const twoDomains = await run({ capability: 4, ordinaryDomainCount: 2 });
   assert.equal(twoDomains.capability, 6);
   assert.equal(twoDomains.roundMetrics.bestTrainingDomains, 2);
 });
@@ -140,50 +139,17 @@ test("Fund records post-cap gain and Frontier Research has no hidden Capability"
   assert.equal(player.capability - before, 1);
 });
 
-test("Recruit and Redistribute retain exact sequential movement choices", async () => {
-  const match = await makeMatch({ seed: "organize-movement-paths" });
-  const player = match.players[0];
-  const [ceo, team] = player.pieces;
-  const starts = new Map(player.pieces.map((piece) => [piece.id, piece.tileId]));
-  let recruitStep = 0;
-  const recruitPath = [];
-  match.choose = async (_policies, _seat, stage, decisions) => {
-    if (stage === "organize_recruit_follow_up") {
-      return decisions.find((decision) => decision.parameters.pieceId === ceo.id);
-    }
-    if (stage.startsWith("organize_recruit_follow_up_step_")) {
-      recruitStep += 1;
-      const selected = decisions.find((decision) => decision.parameters.destinationId);
-      recruitPath.push(selected.parameters.destinationId);
-      return selected;
-    }
-    return decisions[0];
-  };
-  await match.resolveRecruitFollowUp([], 0);
-  assert.equal(recruitStep, 2);
-  assert.equal(recruitPath.length, 2);
-  assert.notEqual(recruitPath[0], starts.get(ceo.id));
-
-  const positionsBeforeRedistribute = new Map(
-    player.pieces.map((piece) => [piece.id, piece.tileId])
-  );
-  let movement = 0;
-  match.choose = async (_policies, _seat, _stage, decisions) => {
-    if (movement >= 2) {
-      return decisions.find((decision) => decision.parameters.finish);
-    }
-    const pieceId = movement++ === 0 ? ceo.id : team.id;
-    return decisions.find((decision) =>
-      decision.parameters.pieceId === pieceId && decision.parameters.destinationId
-    );
-  };
-  await match.resolveAdditionalMovement([], 0, {
-    stage: "organize_redistribute",
-    steps: 5
-  });
-  assert.notEqual(ceo.tileId, positionsBeforeRedistribute.get(ceo.id));
-  assert.notEqual(team.tileId, positionsBeforeRedistribute.get(team.id));
-  assert.equal(movement, 2);
+test("Recruit makes one new persistent assignment with no follow-up travel", async () => {
+ const match = await makeMatch(); const player = match.players[0];
+ const other = player.pieces[1]; const before = other.tileId;
+ const destination = match.board.find(tile => tile.category === "talent");
+ const decision = match.legalResolutions(0, "organize").find(choice => choice.parameters.mode === "recruit" && choice.parameters.pieceId === player.pieces[0].id && choice.parameters.destinationId === destination.instanceId);
+ match.choose = async () => { throw new Error("Recruit must not request movement"); };
+ await match.applyResolutionWithPolicies([], 0, decision);
+ assert.equal(other.tileId, before);
+ assert.equal(player.pieces.length, 3);
+ assert.equal(player.pieces[2].tileId, destination.instanceId);
+ assert.ok(!match.legalResolutions(0, "organize").some(choice => choice.parameters.mode === "redistribute"));
 });
 
 test("effective costs are applied before legality for Cloud and Foundry", async () => {
@@ -264,55 +230,22 @@ test("Production Compute includes Joint Ventures but excludes immediate Facility
   assert.equal(leftPlayer.roundMetrics.computeProduced, immediateBefore);
 });
 
-test("Headline supplemental Power is chosen before local allocation", async () => {
-  const match = await makeMatch({
-    seed: "supplemental-power-timing"
-  });
-  match.round = 3;
-  await match.beginRound([]);
-  match.regime.round.emergencyPowerAuthority = true;
-  const [buyer, supplier] = match.players;
-  const supplierTile = match.board.find((tile) => tile.id === "renewable_basin");
-  const buyerTile = match.board.find((tile) =>
-    tile.instanceId !== supplierTile.instanceId &&
-    match.areAdjacent(tile.instanceId, supplierTile.instanceId)
-  );
-  buyer.facilities = [{
-    id: "buyer-1",
-    tileId: buyerTile.instanceId,
-    category: buyerTile.category,
-    powered: false
-  }];
-  supplier.facilities = [{
-    id: "supplier-1",
-    tileId: supplierTile.instanceId,
-    category: supplierTile.category,
-    powered: false
-  }];
-  supplier.generators = [{
-    id: "supplier-generator",
-    tileId: supplierTile.instanceId,
-    sourceId: "clean_infrastructure",
-    capacity: 3
-  }];
-  buyer.runway = 3;
-  const stages = [];
-  match.choose = async (_policies, seat, stage, decisions) => {
-    stages.push(stage);
-    if (stage === "production_emergency_power") {
-      return decisions.find((decision) => decision.parameters.power === 0);
-    }
-    if (stage === "power_allocation") {
-      return [...decisions].sort((left, right) =>
-        (right.consequences.poweredFacilities || 0) -
-        (left.consequences.poweredFacilities || 0)
-      )[0];
-    }
-    return decisions[0];
-  };
-  await match.produceAll([]);
-  assert.ok(stages.every(stage => !/^power_(purchase|sale)/.test(stage)));
-  assert.ok(stages.indexOf("production_emergency_power") < stages.indexOf("power_allocation"));
+test("Emergency Power Headline rewards a serving emergency Generator without an allocation decision", async () => {
+ const match = await makeMatch(); match.round = 3;
+ match.regime.round = { emergencyPowerAuthority: true };
+ const [emergency, clean, idle] = match.players;
+ const tile = match.board.find(tile => tile.id === "grid_reactor");
+ for (const player of match.players) {
+  player.compute = 0; player.scrutiny = 0;
+  player.generators = [{id: `g${player.seat}`, tileId: tile.instanceId, sourceId: player === clean ? "clean_infrastructure" : "emergency_infrastructure"}];
+  player.facilities = player === idle ? [] : [{id: `f${player.seat}`, tileId: tile.instanceId, category: "energy"}];
+ }
+ match.choose = async (_p,_s,stage,choices) => { assert.doesNotMatch(stage,/power/); return choices[0]; };
+ await match.produceAll([]);
+ assert.equal(emergency.compute - clean.compute, 2);
+ assert.equal(emergency.scrutiny, 2);
+ assert.equal(clean.scrutiny, 0);
+ assert.equal(idle.compute, 0); assert.equal(idle.scrutiny, 0);
 });
 
 test("Export Controls blocks Allocation Window and AI law thresholds scale by rivals", async () => {
@@ -432,7 +365,7 @@ test("Mega-Clusters require two adjacent Facilities owned by the acting player",
   assert.equal(partner.scrutiny, before[1]);
 });
 
-test("Mega-Cluster Power is chosen in the same allocation as its host Facilities", async () => {
+test("Mega-Cluster operates automatically with connected adjacent hosts", async () => {
   const match = await makeMatch({ seed: "mega-power-allocation-choice" });
   match.round = 2;
   await match.beginRound([]);
@@ -462,24 +395,11 @@ test("Mega-Cluster Power is chosen in the same allocation as its host Facilities
   };
   match.megaClusters = [cluster];
   player.megaClusters = [cluster];
-  let allocations;
-  match.choose = async (_policies, seat, stage, decisions) => {
-    if (stage === "power_allocation" && seat === player.seat) {
-      allocations = decisions;
-      return decisions.find((decision) =>
-        decision.parameters.projectIds.includes(cluster.id)
-      );
-    }
-    if (stage === "power_allocation") return decisions[0];
+  match.choose = async (_policies, _seat, stage, decisions) => {
+    assert.notEqual(stage, "power_allocation");
     return decisions[0];
   };
   await match.produceAll([]);
-  assert.ok(allocations.some((decision) => decision.parameters.projectIds.length === 0));
-  assert.ok(allocations.some((decision) =>
-    decision.parameters.projectIds.includes(cluster.id) &&
-    decision.parameters.facilityIds.includes("mega-left") &&
-    decision.parameters.facilityIds.includes("mega-right")
-  ));
   assert.equal(cluster.powered, true);
 });
 
@@ -520,18 +440,18 @@ test("Employee-Free returns named Teams after ordinary Organize and Shovels does
   const foundry = match.players[0];
   const organizer = match.players[1];
   organizer.pieces.push({
-    id: `s${organizer.seat}-team-2`,
-    kind: "team",
+    id: `s${organizer.seat}-agent-3`,
+    kind: "agent",
     tileId: organizer.pieces[0].tileId
   });
-  organizer.teamsInSupply = 1;
+  organizer.agentsInSupply = 1;
   match.regime.cycle = { id: "employee_free_unicorn" };
-  const targetTeam = organizer.pieces.find((piece) => piece.id.endsWith("team-2"));
+  const targetTeam = organizer.pieces.find((piece) => piece.id.endsWith("agent-3"));
   match.choose = async (_policies, _seat, stage, decisions) => {
     assert.equal(stage, "employee_free_return");
     return decisions.find((decision) =>
-      decision.parameters.teamIds.length === 1 &&
-      decision.parameters.teamIds[0] === targetTeam.id
+      decision.parameters.agentIds.length === 1 &&
+      decision.parameters.agentIds[0] === targetTeam.id
     );
   };
   const runwayBefore = organizer.runway;
@@ -554,17 +474,17 @@ test("Reorganization exposes every Team destination and the exact optional retur
   const player = match.players[0];
   player.escalation = 1;
   const secondTeam = {
-    id: `s${player.seat}-team-2`,
-    kind: "team",
+    id: `s${player.seat}-agent-3`,
+    kind: "agent",
     tileId: player.pieces[0].tileId
   };
   player.pieces.push(secondTeam);
-  player.teamsInSupply = 1;
+  player.agentsInSupply = 1;
   const captured = [];
   match.choose = async (_policies, _seat, stage, decisions) => {
     captured.push({ stage, decisions });
     if (stage === "reorganization_return") {
-      return decisions.find((decision) => decision.parameters.teamId === secondTeam.id);
+      return decisions.find((decision) => decision.parameters.agentId === secondTeam.id);
     }
     return decisions.at(-1);
   };
@@ -580,8 +500,8 @@ test("Reorganization exposes every Team destination and the exact optional retur
     }
   });
   const movePackets = captured.filter((entry) => entry.stage.startsWith("reorganization_move_"));
-  assert.equal(movePackets.length, 2);
-  assert.ok(movePackets.every((entry) => entry.decisions.length > 1));
+  assert.equal(movePackets.length, 3);
+  assert.ok(movePackets.every((entry) => entry.decisions.length === 19));
   assert.equal(player.pieces.some((piece) => piece.id === secondTeam.id), false);
   assert.equal(player.runway, Math.min(12, runwayBefore + 3));
   assert.equal(player.scrutiny, scrutinyBefore + 1);
@@ -664,7 +584,7 @@ test("Tactic action context and exact target choices are retained", async () => 
   const talentPlayer = talent.players[0];
   talentPlayer.tactics = ["talent_raid"];
   talentPlayer.runway = 3;
-  talentPlayer.teamsInSupply = 1;
+  talentPlayer.agentsInSupply = 1;
   const talentDestination = talent.board.find((tile) => tile.category === "media");
   talent.choose = async (_policies, _seat, stage, decisions) =>
     stage === "tactic_resolution"
@@ -677,7 +597,7 @@ test("Tactic action context and exact target choices are retained", async () => 
     parameters: { destinationId: talentDestination.instanceId }
   });
   assert.ok(talentPlayer.pieces.some((piece) =>
-    piece.kind === "team" && piece.tileId === talentDestination.instanceId
+    piece.kind === "agent" && piece.tileId === talentDestination.instanceId
   ));
 
   const reshuffle = await createTacticMatch("tactic-board-target");
@@ -751,6 +671,7 @@ test("Tactic action context and exact target choices are retained", async () => 
     powerSupply: 2,
     powerDemandSatisfied: 2
   };
+  rival.generators = [{ id: "fixture-generator", tileId: firstTile.instanceId, sourceId: "clean_infrastructure" }];
   leakPlayer.tactics = ["weights_leak"];
   leakPlayer.runway = 0;
   let leakChoices;

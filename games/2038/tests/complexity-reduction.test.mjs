@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 import { effectiveRulesVariant } from "../lab/environment/rules-variant.js";
-import { canAllocateLocalPower } from "../lab/rules/local-power-allocation.js";
+import { connectedFacilityIds } from "../lab/rules/local-power-connections.js";
 
 const root = new URL("../", import.meta.url);
 const readJson = async (path) =>
@@ -40,48 +40,18 @@ test("single-generator contract is canonical and obsolete options fail closed", 
   assert.throws(()=>effectiveRulesVariant(config,{[key]:true}), /Unsupported rules option/);
 });
 
-test("precision patch prints final Generator prices and consolidated state", async () => {
-  const [config, factions, mapReference, coreRules, componentReference] = await Promise.all([
-    readJson("dist/runtime/game-config.json"),
-    readJson("dist/runtime/factions.json"),
-    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
-    readFile(new URL("dist/docs/component-reference.md", root), "utf8")
-  ]);
-  const locations = new Map(config.board.tiles.map((location) => [
-    location.id,
-    location
-  ]));
-
-  assert.equal(
-    locations.get("grid_reactor").visit,
-    "Build Emergency Power Complex here for 1 Runway. Capacity: 4 local Power. Add 1 Scrutiny each Production it operates. One ordinary Generator per player."
-  );
-  assert.equal(
-    locations.get("renewable_basin").visit,
-    "Build Civic Heat Battery here for 2 Runway. Capacity: 3 local Power. Gain 1 Trust when constructed. No recurring penalty. One ordinary Generator per player."
-  );
-  for (const location of locations.values()) {
-    assert.ok(mapReference.includes(`| ${location.name} | ${location.visit} | ${location.production} |`),
-      `${location.id} prints its owned district effects`);
-  }
-  assert.doesNotMatch(mapReference, /Infrastructure Build costs one less/);
-  assert.doesNotMatch(mapReference, /Civic Heat Battery costs one less/);
-
-  assert.match(coreRules, /four\s+Facilities/);
-  assert.match(coreRules, /one persistent institutional identity and one\s+signature ability/);
-  assert.doesNotMatch(coreRules, /Escalation token/);
-  assert.ok(componentReference.includes(`\n- ${config.playerSupply.facilities} Facilities, numbered 1–${config.playerSupply.facilities}\n`));
-  assert.doesNotMatch(componentReference, /^- .*Grid-Ready/m);
-  assert.ok(componentReference.includes(`- ${config.sharedSupply.sharedProgramCards} shared Program cards`));
-  assert.ok(componentReference.includes(`- ${config.playerSupply.programMarkers} Program markers`));
-  assert.doesNotMatch(componentReference, /^- .*(?:private Program hand|Escalation slider)/m);
-
-  const coalition = factions.factions.find((faction) => faction.id === "coalition_lab");
-  const vertical = factions.factions.find((faction) => faction.id === "vertical_empire");
-  assert.match(coalition.abilities[1].text, /both fixed host Facilities are powered and within 2 hexes/);
-  assert.match(vertical.abilities[1].text, /local Power eligibility/);
-  assert.doesNotMatch(vertical.abilities[1].text, /Recalculate its Network/);
+test("local connections retain exact construction prices and remove allocation components", async () => {
+ const config = await readJson("dist/runtime/game-config.json");
+ const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
+ assert.deepEqual(config.powerSources.map(s => s.runwayCost), [2, 1, 5]);
+ assert.ok(config.powerSources.every(s => !Object.hasOwn(s, "capacity")));
+ assert.equal(config.playerSupply.agents, 4);
+ assert.equal(config.playerSupply.startingAgents, 2);
+ assert.equal(config.playerSupply.factionBoardCaptiveSliders, 5);
+ for (const key of ["ceos", "teams", "agiDossierCards"]) assert.ok(!Object.hasOwn(config.playerSupply, key));
+ assert.ok(!Object.hasOwn(config.sharedSupply, "powerAllocationMarkers"));
+ assert.match(rules, /Reason → Act → Observe/);
+ assert.match(rules, /permanent six-box/);
 });
 
 test("single-generator contract fails explicitly when incomplete", async () => {
@@ -150,7 +120,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
   clean.applyResolution(0, cleanDecision);
   assert.equal(cleanPlayer.runway, 8);
   assert.equal(cleanPlayer.trust, cleanTrust + 1);
-  assert.equal(cleanPlayer.generators[0].capacity, 3);
+  assert.ok(!Object.hasOwn(cleanPlayer.generators[0], "capacity"));
   assert.equal(
     clean.legalResolutions(0, "build").some(
       (decision) => decision.parameters?.buildMode === "generator"
@@ -165,7 +135,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
   );
   emergency.applyResolution(0, emergencyDecision);
   assert.equal(emergencyPlayer.runway, 9);
-  assert.equal(emergencyPlayer.generators[0].capacity, 4);
+  assert.ok(!Object.hasOwn(emergencyPlayer.generators[0], "capacity"));
 
   emergencyPlayer.facilities = [{
     id: "s0-facility-1",
@@ -186,46 +156,23 @@ test("canonical Generator enforces one ordinary piece and source effects", async
     emergencyPlayer.latestProductionSnapshot.poweredFacilityIds,
     [emergencyPlayer.facilities[0].id]
   );
-  assert.equal(emergencyPlayer.facilities[0].powered, false);
+  assert.equal(emergencyPlayer.facilities[0].powered, true);
   assert.ok(!("gridReady" in emergencyPlayer.facilities[0]));
 });
 
-test("single-generator allocation cannot spend dedicated grid Power elsewhere", () => {
-  const board = [
-    { instanceId: "first-tile", q: 0, r: 0 },
-    { instanceId: "generator-tile", q: 2, r: 0 },
-    { instanceId: "local-a-tile", q: 2, r: -1 },
-    { instanceId: "local-b-tile", q: 1, r: 0 },
-    { instanceId: "local-c-tile", q: 2, r: 1 }
-  ];
-  const player = {
-    facilities: [
-      { id: "first", tileId: "first-tile" },
-      { id: "local-a", tileId: "local-a-tile" },
-      { id: "local-b", tileId: "local-b-tile" },
-      { id: "local-c", tileId: "local-c-tile" }
-    ]
-  };
-  const common = {
-    board,
-    player,
-    connectedGenerators: [{
-      id: "generator",
-      tileId: "generator-tile",
-      capacity: 2
-    }],
-    startingGridPower: 1,
-    supplementalPower: 0
-  };
-
-  assert.equal(canAllocateLocalPower({
-    ...common,
-    selectedFacilityIds: ["first", "local-a", "local-b"]
-  }), true);
-  assert.equal(canAllocateLocalPower({
-    ...common,
-    selectedFacilityIds: ["local-a", "local-b", "local-c"]
-  }), false);
+test("local connections cover every nearby Facility without capacity or propagation", () => {
+ const board = [
+  { instanceId: "starter", q: -2, r: 0 }, { instanceId: "source", q: 0, r: 0 },
+  { instanceId: "a", q: 1, r: 0 }, { instanceId: "b", q: 0, r: 1 },
+  { instanceId: "c", q: 1, r: -1 }, { instanceId: "far", q: 2, r: 0 }
+ ];
+ const player = { facilities: ["starter", "a", "b", "c", "far"].map(id => ({ id, tileId: id })),
+  generators: [{ tileId: "source" }] };
+ assert.deepEqual([...connectedFacilityIds(board, player)], ["starter", "a", "b", "c"]);
+ player.facilities[0].tileId = "far";
+ assert.ok(connectedFacilityIds(board, player).has("starter"), "starting grid travels with Facility 1");
+ player.generators = [];
+ assert.deepEqual([...connectedFacilityIds(board, player)], ["starter"]);
 });
 
 test("canonical simplification removes stored-token state and keeps two programs per faction", async () => {

@@ -179,11 +179,11 @@ test("action identity locks before piece and destination", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "cycle-contract", "coalition_lab");
   commitAction(state, "fund");
-  assert.equal(state.phase, "move");
+  assert.equal(state.phase, "act");
   assert.equal(state.selectedAction.id, "fund");
   assert.equal(state.selectedPieceId, null);
   assert.equal(state.selectedTileId, null);
-  assert.ok(legalDestinations(state, "ceo").length > 1);
+  assert.ok(legalDestinations(state, "agent-1").length > 1);
 });
 
 test("three different Core Actions advance exactly one era on the fixed map", async () => {
@@ -192,7 +192,7 @@ test("three different Core Actions advance exactly one era on the fixed map", as
   const frontier = state.board.find((tile) => tile.id === "frontier");
   for (const action of ["fund", "influence", "organize"]) {
     commitAction(state, action);
-    resolveSelectedAction(config, headlines, state, "ceo", frontier.instanceId);
+    resolveSelectedAction(config, headlines, state, "agent-1", frontier.instanceId);
   }
   assert.equal(state.phase, "select");
   assert.equal(state.round, 2);
@@ -213,13 +213,13 @@ test("the first Facility is powered by the basic starting grid connection", asyn
 
   for (const action of ["build", "fund", "influence"]) {
     commitAction(state, action);
-    resolveSelectedAction(config, headlines, state, "ceo", buildTile.instanceId, {
+    resolveSelectedAction(config, headlines, state, "agent-1", buildTile.instanceId, {
       buildMode: "facility"
     });
   }
 
   assert.equal(state.metrics.poweredFacilityRounds[0].powered, 1);
-  assert.equal(state.metrics.poweredFacilityRounds[0].supply, 1);
+  assert.ok(!Object.hasOwn(state.metrics.poweredFacilityRounds[0], "supply"));
   assert.equal(state.player.facilities[0].powered, true);
   assert.ok(!("gridReady" in state.player.facilities[0]));
 });
@@ -245,7 +245,7 @@ test("Loopfold AI's starting Customer is Customer one", async () => {
   state.player.capability = 3;
 
   commitAction(state, "deploy");
-  resolveSelectedAction(config, headlines, state, "ceo", consumer.instanceId);
+  resolveSelectedAction(config, headlines, state, "agent-1", consumer.instanceId);
 
   assert.equal(state.player.customers, 1);
   assert.ok(state.log.some((entry) => /Customer 2 needs Capability 4/.test(entry)));
@@ -298,7 +298,7 @@ test("Customer, Capability, and Trust Mandate are visible and awarded once", asy
   const frontier = state.board.find((tile) => tile.id === "frontier");
   state.player.capability = 3;
   commitAction(state, "fund");
-  resolveSelectedAction(config, headlines, state, "ceo", frontier.instanceId);
+  resolveSelectedAction(config, headlines, state, "agent-1", frontier.instanceId);
   assert.equal(state.player.mandate, 6);
   assert.equal(
     state.player.mandateAwards.filter((award) => award.id === "capability-3").length,
@@ -350,11 +350,11 @@ test("Training studies replay exactly under the same seed", async () => {
   const [config] = await load();
   const first = simulateTrainingRun(config, "training-42", {
     stopAt: 4,
-    researchProtection: 1
+    scientificMethod: true
   });
   const second = simulateTrainingRun(config, "training-42", {
     stopAt: 4,
-    researchProtection: 1
+    scientificMethod: true
   });
   assert.deepEqual(first, second);
   assert.ok(["banked", "crashed", "protected", "human-evaluation", "stopped"].includes(first.outcome));
@@ -383,12 +383,12 @@ test("the forty-card Training deck preserves its exact special-card contracts", 
 
   const protectedDuplicate = simulateTrainingRun(config, "protected-duplicate", {
     stopAt: 8,
-    researchProtection: 1,
+    scientificMethod: true,
     deck: [domain("code"), domain("code")]
   });
-  assert.equal(protectedDuplicate.outcome, "protected");
+  assert.equal(protectedDuplicate.outcome, "scientific-method-banked");
   assert.equal(protectedDuplicate.crashProtectable, true);
-  assert.equal(protectedDuplicate.researchProtectionSpent, 1);
+  assert.equal(protectedDuplicate.protection, "scientific_method");
   assert.deepEqual(protectedDuplicate.revealed, ["code", "code"]);
 
   const benchmarkThenHuman = simulateTrainingRun(config, "benchmark-human", {

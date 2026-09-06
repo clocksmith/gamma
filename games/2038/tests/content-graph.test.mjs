@@ -151,8 +151,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.equal(variables.facts.shared.roundsWord, "four");
   assert.deepEqual(variables.terms.resources, {
     runway: "Runway",
-    compute: "Compute",
-    researchProtection: "Research Protection"
+    compute: "Compute"
   });
   assert.deepEqual(variables.terms.playerTracks, {
     capability: "Capability",
@@ -165,7 +164,9 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.deepEqual(variables.terms.infrastructure, { power: "Power" });
   assert.deepEqual(variables.terms.components, {
     facility: "Facility",
-    facilities: "Facilities"
+    facilities: "Facilities",
+    agent: "Agent",
+    agents: "Agents"
   });
   const world = await readJson("dist/runtime/world-copy.json");
   assert.equal(config.title, world.title);
@@ -184,8 +185,8 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.ok(rules.includes(`#### ${advancedName}`));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
-  assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Power/);
-  assert.match(simulation.coverage.selectedRules.modeledAbstractions.join("\n"), /Local Power eligibility/);
+  assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Generator connections/);
+  assert.match(simulation.coverage.selectedRules.modeledAbstractions.join("\n"), /connection/i);
   assert.doesNotMatch(
     simulation.coverage.selectedRules.automated.join("\n"),
     /adjacency Networks/
@@ -324,34 +325,22 @@ test("world companion owns four ordered Era overviews and references canonical E
   assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
 });
 
-test("concise Era overviews preserve the simplified component records", async () => {
-  const previous = await readJson("versions/0.15.2/game-bundle.json");
+test("Era overviews retain institutions and scenarios alongside authorized mechanic revisions", async () => {
+  const previous = await readJson("versions/0.15.6/game-bundle.json");
   const source = await readFile(new URL("world.md", root), "utf8");
   const player = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
   assert.doesNotMatch(player, /Mara|Lio|Southbank|Chapter/);
-  const notes = source.split("<!-- world-guide:start -->")[1].split("<!-- world-guide:end -->")[0];
-  assert.ok(notes.split(/\s+/).length < 1000, "writing notes stay compact");
-
-  // Compare actual records, allowing only the explicitly selected copy changes.
-  for (const [file, collection, removed, rewritten] of [
-    ["factions.json", "factions", ["role", "publicPromise", "privateAnxiety", "victoryStatement"], ["introduction"]],
-    ["headlines.json", "headlines", ["strapline"], []],
-    ["reference-cards.json", "eraCards", ["loreText"], []],
-    ["world.json", "endings", [], ["text"]]
-  ]) {
-    const original = previous.contentGraph[`components/${file}`];
+  for (const subtitle of ["AI becomes ordinary", "AI becomes infrastructure", "AI begins deciding for people", "people and institutions become reproducible"]) assert.ok(player.toLowerCase().includes(subtitle.toLowerCase()));
+  for (const [file, collection] of [["factions.json", "factions"], ["headlines.json", "headlines"], ["reference-cards.json", "eraCards"], ["world.json", "endings"]]) {
     const current = await readJson(`components/${file}`);
-    const normalize = (document) => {
-      const result = structuredClone(document);
-      for (const row of result[collection]) {
-        for (const field of [...removed, ...rewritten]) delete row[field];
-      }
-      return result;
-    };
-    for (const row of current[collection]) {
-      for (const field of removed) assert.ok(!(field in row), `${file} drops ${field}`);
-    }
-    assert.deepEqual(normalize(current), normalize(original), `${file} preserves every retained field`);
+    const original = previous.contentGraph[`components/${file}`];
+    assert.deepEqual(current[collection].map(row => row.id), original[collection].map(row => row.id));
+  }
+  const { factions } = await readJson("components/factions.json");
+  for (const faction of factions) {
+    const old = previous.contentGraph["components/factions.json"].factions.find(row => row.id === faction.id);
+    assert.deepEqual(faction.ceo, old.ceo, "CEO remains the same faction character");
+    assert.deepEqual(faction.abilities.map(row => row.id), old.abilities.map(row => row.id));
   }
 });
 
@@ -397,9 +386,9 @@ test("retained signature abilities project concrete continuity institutions", as
     ]
   );
   assert.match(eraIvAbility("coalition_lab").text, /within 2 hexes/);
-  assert.match(eraIvAbility("platform_empire").text, /without moving there/);
+  assert.match(eraIvAbility("platform_empire").text, /after assigning your Agent/);
   assert.match(eraIvAbility("imperial_research_lab").text, /first 3 distinct domains/);
-  assert.match(eraIvAbility("vertical_empire").text, /move 1 Facility/);
+  assert.match(eraIvAbility("vertical_empire").text, /relocate 1 Facility/);
   assert.match(eraIvAbility("safety_laboratory").text, /cannot be selected this cycle/);
   assert.match(eraIvAbility("foundry").text, /create 2 temporary Compute/);
   assert.equal(
@@ -463,7 +452,7 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(rules, /## How to Play/);
   assert.match(rules, /## Rules Reference/);
   assert.ok(rules.indexOf("## How to Play") < rules.indexOf("## Rules Reference"));
-  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for an accelerated introduction/);
+  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for a guided introduction/);
   assert.match(rules, /## 9\. Printed card authorities/);
   assert.match(rules, /## 10\. Map and component reference/);
   assert.doesNotMatch(rules, /Advanced Play/);
@@ -491,15 +480,15 @@ test("Core Rules are compact while every moved authority has one table surface",
   const references = await readJson("dist/runtime/reference-cards.json");
   const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
   const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
-  assert.match(mandateReference.backText.join("\n"), /Highest strength wins/);
+  assert.match(mandateReference.backText.join("\n"), /Highest final Mandate wins/);
   assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
   assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock Era:\*\* 3; passive/);
   assert.match(cardReference, /Allocation Window[\s\S]*Unlock Era:\*\* 2; once when unlocked/);
   assert.doesNotMatch(cardReference, /Advanced Play/);
-  assert.match(cardReference, /Each Faction ability unlocks at the Era printed on its board/);
-  assert.match(cardReference, /latest Production snapshot/);
+  assert.match(cardReference, /Each Faction ability unlocks at the\s+Era printed on its board/);
+  assert.match(cardReference, /current.*connect/i);
 
   for (const tactic of tacticDocument.tactics) {
     assert.ok(tactics.includes(tactic.name));
@@ -524,7 +513,7 @@ test("numeric typography preserves exact card digits while prose may spell numbe
     headlines.find((headline) => headline.id === "ten_dollar_intelligence").text,
     /adds 1 additional/
   );
-  assert.match(mapReference, /CEO, Team, or Facility: one presence/);
+  assert.match(mapReference, /Agent or Facility: one presence/);
 });
 
 test("fictional institution identities are canonical across generated game surfaces", async () => {

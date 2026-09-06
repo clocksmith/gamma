@@ -32,29 +32,33 @@ scoring. The Mandate card is the authority.
 Leave the scored Mandate face up in its Era panel. Erase the rows only when the
 next Mandate is revealed.
 
-## Latest Production snapshot
+## Permanent Program use
 
-Do not transcribe Power. Silver cubes retained on Facilities and Mega-Clusters
-are the latest Production snapshot. A built Facility without a cube is
-offline. Collect the old snapshot only at the next Allocate step.
+Mark on selection, including blocked selections. Never erase during the game.
+Returning Program markers at Era end does not clear this record.
+
+| Faction | Mega-Cluster | Reorganization | Public Capability Covenant | Narrative Capture | Agent Swarm | Fusion |
+| --- | --- | --- | --- | --- | --- | --- |
+| Dovetalis Labs | | | | | | |
+| Loopfold AI | | | | | | |
+| Mirevanta Works | | | | | | |
+| Kestralyn | | | | | | |
+| Orisonix | | | | | | |
+| Corthaven | | | | | | |
 
 ## Final public record
+
+Paid AGI recognitions, by faction: _______________________________________
 
 Final Collective Trust: __________
 
 Open threshold, Setup Collective Trust + player count: __________
 
-Unresolved Systemic Risk: __________
+Unresolved Systemic Risk after final Audit: __________
 
-Provisional Mandate winner: _____________________________________________
+Final institutional winner, by Mandate and ordinary ties: _________________
 
-Eligible claims and strengths: _________________________________________
-
-Strongest supported claimant, if any: __________________________________
-
-Final institutional winner: ____________________________________________
-
-AGI: Emerges / Does Not Emerge
+AGI: Recognized / Not Recognized
 
 Continuity: Open / Closed
 

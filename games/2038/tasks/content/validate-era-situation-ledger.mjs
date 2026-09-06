@@ -311,7 +311,12 @@ export async function validateEraSituationLedger(ledger) {
       throw new Error(`Adopted scenario lacks a game-surface binding: ${scenario.id}`);
     }
     if (adopted && scenario.mechanicPreservation.status !== "retained") {
-      throw new Error(`Adopted scenario does not preserve its mechanic: ${scenario.id}`);
+      const revision = scenario.mechanicPreservation.revision;
+      if (scenario.mechanicPreservation.status !== "revised" ||
+          revision?.decisionId !== "user-selected-full-simplification" ||
+          revision?.record !== "docs/design-decisions.md#full-simplification-candidate") {
+        throw new Error(`Adopted scenario lacks an authorized mechanic revision: ${scenario.id}`);
+      }
     }
     if (adopted && !scenario.deploymentProfiles.includes("public-playtest")) {
       throw new Error(`Adopted scenario is absent from public-playtest: ${scenario.id}`);

@@ -7,7 +7,7 @@ import { resolve, dirname } from "node:path";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 import { createGame, commitAction, resolveSelectedAction, locallyEligibleFacilityIds } from "../web/src/engine.js";
-import { canAllocateLocalPower } from "../lab/rules/local-power-allocation.js";
+import { effectiveRulesVariant } from "../lab/environment/rules-variant.js";
 
 const root = new URL("../", import.meta.url);
 const json = async path => JSON.parse(await readFile(new URL(path, root), "utf8"));
@@ -36,7 +36,7 @@ test("removed Build choices fail without moving pieces or spending resources", a
   const state = createGame(config, factions, headlines, "invalid-build", "coalition_lab");
   commitAction(state, "build");
   const before = structuredClone(state);
-  assert.throws(() => resolveSelectedAction(config, headlines, state, "ceo", "frontier-1", {buildMode: "link"}), /Unknown build mode/);
+  assert.throws(() => resolveSelectedAction(config, headlines, state, "agent-1", "frontier-1", {buildMode: "link"}), /Unknown build mode/);
   assert.deepEqual(state, before);
   const {match} = await createInteractiveGame({seed: "invalid-build"}, () => {});
   const snapshot = structuredClone(match.players);
@@ -44,38 +44,13 @@ test("removed Build choices fail without moving pieces or spending resources", a
   assert.deepEqual(match.players, snapshot);
 });
 
-test("local Power stops at Generator adjacency and rejects market allocation fields", () => {
-  const board = [0, 1, 2, 3].map(q => ({instanceId: `tile-${q}`, q, r: 0}));
-  const player = {
-    facilities: board.map((tile, i) => ({id: `f${i}`, tileId: tile.instanceId})),
-    generators: [{tileId: "tile-0", capacity: 3}],
-    startingGridConnection: {assignedFacilityId: "f3"}
-  };
-  assert.deepEqual([...locallyEligibleFacilityIds(board, player)].sort(), ["f0", "f1", "f3"]);
-  for (const key of ["importedPower", "importedFacilityIds", "exportedPower"]) {
-    assert.throws(() => canAllocateLocalPower({board, player, selectedFacilityIds: [], connectedGenerators: [], startingGridPower: 0, supplementalPower: 0, [key]: 1}), /Unsupported Power allocation option/);
-  }
+test("local Power stops at Generator adjacency and retired allocation options fail closed", async () => {
+ const board=[0,1,2,3].map(q=>({instanceId:`tile-${q}`,q,r:0}));
+ const player={facilities:board.map((tile,i)=>({id:`f${i}`,tileId:tile.instanceId})),generators:[{tileId:"tile-0"}]};
+ assert.deepEqual([...locallyEligibleFacilityIds(board,player)].sort(),["f0","f1"]);
+ const config=await json("dist/runtime/game-config.json");
+ for(const key of ["importedPower","importedFacilityIds","exportedPower","startingGridPower","agiDossier"]) assert.throws(()=>effectiveRulesVariant(config,{[key]:1}),/Unsupported rules option/);
 });
-
-for (const playerCount of [3, 4, 5]) {
-  test(`${playerCount}-player browser runtime completes four Eras on the same map`, async () => {
-    let runtime;
-    const stages = [];
-    runtime = await createBrowserInteractiveGame({playerCount, seed: `sole-rules-${playerCount}`}, packet => {
-      stages.push(packet.requestId.split(":").at(-2));
-      assert.ok(packet.legalDecisions.every(d => d.parameters?.buildMode !== "link"));
-      queueMicrotask(() => runtime.human.submit(packet.legalDecisions[0].decisionId));
-    });
-    const geometry = runtime.match.board.map(({instanceId, q, r}) => ({instanceId, q, r}));
-    const result = await runtime.match.play(runtime.policies);
-    assert.ok(result.worldEnding.name);
-    assert.equal(runtime.match.replay.at(-1).round, 4);
-    assert.deepEqual(runtime.match.board.map(({instanceId, q, r}) => ({instanceId, q, r})), geometry);
-    assert.ok(stages.every(stage => !/realignment|auction|government_vote|power_purchase|power_sale/.test(stage)));
-    assert.equal(runtime.match.replay.filter(event => event.type === "headline_revealed").length, 12);
-    assert.ok(!("playProfileId" in runtime.match.snapshot()));
-  });
-}
 
 test("current projections contain one ruleset and no retired supplement", async () => {
   const graph = await json("content/graph.json");

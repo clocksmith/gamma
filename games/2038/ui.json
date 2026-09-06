@@ -26,9 +26,9 @@
       "unfunded": "No unused exceptional Program can be selected with the current Program markers."
     },
     "resolution": {
-      "move": "{action} is revealed. MOVE one acting piece, then ACT from a highlighted district.",
+      "move": "{action} is revealed. Assign an Agent to a district and resolve the Action there.",
       "complete": "The four-Era contest is complete. Read the Future Timeline, resolve the World Ending, then export the receipt or reset.",
-      "select": "SELECT one Action. You will MOVE one acting piece, then ACT from its district.",
+      "select": "REASON: select an available Action. ACT: assign an Agent and resolve it. OBSERVE: inspect the consequences.",
       "rejectedPrefix": "Resolution rejected"
     },
     "headline": {
@@ -40,10 +40,10 @@
       "ready": "Ready",
       "board": "The board",
       "startingStatus": "Choose personas and start a complete game with deterministic browser opponents. A local bridge is optional for Claude or Codex.",
-      "roundCycle": "Era {round} · cycle {cycle}",
+      "roundCycle": "Era {round} \u00b7 cycle {cycle}",
       "browserNative": "Browser-native",
       "localBridge": "Local bridge",
-      "gameStatus": "{mode} game {id} · {status}",
+      "gameStatus": "{mode} game {id} \u00b7 {status}",
       "downloadFile": "mandate-2038-{id}-game.json",
       "seat": "Seat {seat}",
       "you": "you",
@@ -53,30 +53,47 @@
       "greedy": "Greedy deterministic",
       "claude": "Claude CLI",
       "codex": "Codex CLI",
-      "hybridClaude": "Hybrid · weighted + Claude",
-      "hybridCodex": "Hybrid · weighted + Codex",
-      "dossier": "Dossier commitments",
-      "poweredThisProduction": "powered this Production",
+      "hybridClaude": "Hybrid \u00b7 weighted + Claude",
+      "hybridCodex": "Hybrid \u00b7 weighted + Codex",
       "offline": "offline",
-      "agiBlocked": "AGI Dossier not yet eligible: {requirement}",
+      "agiBlocked": "AGI recognition not yet eligible: {requirement}",
       "llmCallsLeft": "{count} LLM calls left",
       "decision": "decision",
-      "gameComplete": "Game complete · {ending}",
+      "gameComplete": "Game complete \u00b7 {ending}",
       "otherInstitutionsResolving": "Other institutions are resolving",
       "startGame": "Start a game",
-      "completeContext": "Read the Future Timeline in the ledger, then compare the institutional winner with the shared ending.",
-      "waitingContext": "The authoritative engine will pause here for your next legal decision.",
-      "decisionContext": "Era {round}, cycle {cycle}. Choose one enumerated legal result; the engine validates it before play resumes.",
+      "completeContext": "{winners} won with {score} final Mandate. Shared World Ending: {ending}.",
+      "waitingContext": "Watch the other institutions. Your next choice appears here.",
+      "decisionContext": "Era {round}, cycle {cycle}. Resolve your choice against the current board.",
       "legalChoices": "{count} legal choice{plural}",
-      "bridgeOptional": "Optional · required only for Claude, Codex, or hybrid opponents.",
-      "bridgeRequesting": "Requesting access to the local bridge…",
-      "bridgeConnected": "Connected · {maximum} maximum LLM decisions per opponent."
+      "bridgeOptional": "Optional \u00b7 required only for Claude, Codex, or hybrid opponents.",
+      "bridgeRequesting": "Requesting access to the local bridge\u2026",
+      "bridgeConnected": "Connected \u00b7 {maximum} maximum LLM decisions per opponent.",
+      "connectedNow": "connected now",
+      "agiGridReady": "Qualified for AGI recognition after Era IV Production",
+      "agiRecognized": "AGI recognized",
+      "stages": {
+        "select": "Reason \u2014 choose an Action",
+        "resolve": "Act \u2014 assign and resolve",
+        "blocked_program_assignment": "Act \u2014 assign your Agent",
+        "training_continue": "Research \u2014 bank or continue",
+        "training_duplicate": "Research \u2014 duplicate revealed",
+        "agi_achievement": "Declare recognized AGI"
+      },
+      "selectContext": "Read the Headline and board, then choose an available Action. Everyone reveals together; choose your Agent, destination, and payment when you act.",
+      "resolveContext": "Assign an Agent to a district and resolve your committed Action. It remains there as presence until reassigned. Observe the consequences before your next choice.",
+      "requirements": {
+        "capability": "Capability",
+        "poweredFacilities": "connected Facilities",
+        "trust": "Trust",
+        "compute": "Compute"
+      }
     },
     "power": {
       "title": "Local Power",
-      "summary": "{supply} supply / {demand} demand",
-      "detail": "{starting} starting-grid + {generated} generated ${terms.infrastructure.power} · {links}/{linkLimit} Links · {online}/{facilities} powered at last Production",
-      "reminder": "The starting grid powers its assigned Facility. A Generator can power Facilities on its own or adjacent districts; recalculate eligibility at Production."
+      "summary": "{online}/{facilities} Facilities connected",
+      "detail": "Read current Generator adjacency and Facility 1\u2019s starting grid.",
+      "reminder": "Facility 1 is always powered. Other Facilities require an own Generator on the same or an adjacent district. Recheck whenever infrastructure changes."
     },
     "metrics": {
       "auditProfile": "Audit profile",
@@ -84,15 +101,15 @@
       "researchRuns": "${terms.actions.research} runs",
       "auditHits": "Audit hits",
       "lastPowered": "Last powered",
-      "earliestAgi": "Earliest ${terms.systems.agi} Dossier funding window",
+      "earliestAgi": "Earliest ${terms.systems.agi} recognition qualification",
       "notYet": "Not yet"
     },
     "state": {
       "settled": "Settled",
       "cycle": "Cycle {cycle}/3",
-      "era": "Era {round} · {name} · New: {newSystems}",
+      "era": "Era {round} \u00b7 {name} \u00b7 New: {newSystems}",
       "noFurtherHeadline": "No further ${terms.systems.headline}",
-      "moveAct": "MOVE → ACT",
+      "moveAct": "ACT: assign \u2192 resolve",
       "secretVote": "Secret vote",
       "select": "SELECT",
       "unknownLocation": "unmapped district",
@@ -105,8 +122,8 @@
       "greedy": "Deterministic greedy",
       "claude": "Claude CLI",
       "codex": "Codex CLI",
-      "hybridClaude": "Hybrid · Claude",
-      "hybridCodex": "Hybrid · Codex"
+      "hybridClaude": "Hybrid \u00b7 Claude",
+      "hybridCodex": "Hybrid \u00b7 Codex"
     },
     "modes": {
       "tournament": {
@@ -184,7 +201,7 @@
       "seatBackend": "Seat {seat} backend",
       "matches": "Matches",
       "highestPersonaShare": "Highest persona share",
-      "agiEligibility": "${terms.systems.agi} Dossier eligibility",
+      "agiEligibility": "${terms.systems.agi} recognition eligibility",
       "llmFallbacks": "LLM fallbacks",
       "championFitness": "Champion fitness",
       "championWinShare": "Champion win share",
@@ -215,7 +232,7 @@
       "generator": "Generator",
       "auditHits": "Audit hits",
       "agiDeclared": "${terms.systems.agi} declared",
-      "agiEligible": "${terms.systems.agi} Dossier eligible",
+      "agiEligible": "${terms.systems.agi} recognition eligible",
       "shovelsIncome": "Mean Shovels income",
       "agiEmergence": "AGI emergence endings",
       "openContinuity": "Open Continuity endings",
@@ -239,13 +256,13 @@
       "target": "target {target}"
     },
     "replay": {
-      "step": "Step {step}/{steps} · Era {round}, Cycle {cycle} · {summary}",
+      "step": "Step {step}/{steps} \u00b7 Era {round}, Cycle {cycle} \u00b7 {summary}",
       "marker": "Seat {seat} {kind}",
-      "scoreRange": "Score {minimum}–{maximum}",
+      "scoreRange": "Score {minimum}\u2013{maximum}",
       "histogramEntry": "{score} ${terms.playerTracks.mandate}: {matches} matches"
     },
     "report": {
-      "subtitle": "Game {version} · {scope} · seed {seed} · {players} players · {boundary}",
+      "subtitle": "Game {version} \u00b7 {scope} \u00b7 seed {seed} \u00b7 {players} players \u00b7 {boundary}",
       "completedMatches": "{runs} completed matches"
     },
     "results": {
@@ -264,14 +281,14 @@
       "loadedWithoutArchive": "Loaded report; no new local archive was created.",
       "recentReports": "Recent local reports",
       "refreshReports": "Refresh reports",
-      "loadingReports": "Loading local reports…",
+      "loadingReports": "Loading local reports\u2026",
       "noRecentReports": "No completed local reports yet.",
       "openReport": "Open report",
       "loadReportError": "Could not load the selected local report."
     },
     "matrix": {
       "completed": "Unified evidence matrix completed",
-      "subtitle": "{runs} matches · {cells} sampled cells · seed {seed}",
+      "subtitle": "{runs} matches \u00b7 {cells} sampled cells \u00b7 seed {seed}",
       "frameNote": "one seven-axis frame",
       "halfWidthNote": "largest core confidence-sequence half-width",
       "betrayalNote": "matches with a broken non-binding promise",

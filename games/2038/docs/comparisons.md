@@ -49,7 +49,7 @@ the shared outcome more central.
 
 This is the closest spatial-economic reference. Asymmetric factions build
 adjacent infrastructure on a shared board, where position, networks, upgrades,
-and access constrain one another. In Mandate 2038, Teams move and Actions resolve on
+and access constrain one another. In Mandate 2038, Agents are assigned and Actions resolve on
 the board; the districts are contested civilizational jurisdictions, not
 literal geography.
 
