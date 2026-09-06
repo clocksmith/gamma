@@ -69,51 +69,16 @@ function labeledGallery(html, identity) {
     );
 }
 
-function protocol(identity) {
-  return `# Controlled physical-test protocol
+function protocol(identity, source) {
+  const section = source.slice(source.indexOf("## Construction comparison and next blind teach"));
+  if (!section.startsWith("## Construction comparison")) throw new Error("Missing canonical blind-teach protocol.");
+  return `# Physical-test preparation — human session pending
 
-Rules ${identity.rulesVersion}
-
-Executable reference ${identity.executableVersion}
-
+Rules ${identity.rulesVersion} · Executable ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
+Source published at origin/main: ${identity.sourcePublished}
 
-Use only components carrying this exact identity. Do not change numerical
-rules during a session. Record an issue and finish under the frozen rules.
-
-## Session A
-
-Mirevanta Works, Kestralyn, Corthaven, and Loopfold AI.
-
-Observe Peer Validation, realized Industrial Velocity Mandate, demand-coupled
-New Architecture, and diminishing Customer recognition.
-
-## Session B
-
-Dovetalis Labs, Orisonix, and two factions played by returning participants.
-Record the two returning factions in the generated receipt before play.
-
-Observe whether Dovetalis can form mutually rational deals and whether Orisonix feels
-powerful but contestable rather than passively advantaged.
-
-## Evidence priorities
-
-- Setup and total duration.
-- Rules lookups and facilitator interventions.
-- Whether choosing three of six Actions feels difficult rather than
-  restrictive.
-- Whether Power bargaining feels strategic, coerced, or kingmaking.
-- Whether local Power and fixed-map placement create meaningful choices.
-- Whether faction abilities are remembered and understood.
-- Whether the four promoted rules feel thematic without explanation.
-- Whether players recount the Future Timeline afterward.
-- Perceived fairness, excitement, regret, betrayal, and fun.
-
-Create each attributed receipt from this same source commit:
-
-\`\`\`bash
-npm run playtest:new -- --players 4 --seed <session-seed> --type facilitated_playtest
-\`\`\`
+${section}
 `;
 }
 
@@ -126,7 +91,8 @@ if (status) {
 
 const sourceCommit = await git("rev-parse", "HEAD");
 const remoteCommit = await git("rev-parse", "origin/main");
-if (sourceCommit !== remoteCommit) {
+const localOnly = process.argv.slice(2).includes("--local");
+if (sourceCommit !== remoteCommit && !localOnly) {
   throw new Error(
     `Physical-kit freeze requires HEAD to equal origin/main (${sourceCommit} != ${remoteCommit}).`
   );
@@ -150,6 +116,7 @@ const identity = {
   executableVersion: current.gameVersion,
   sourceCommit,
   sourceRemote: remoteUrl,
+  sourcePublished: sourceCommit === remoteCommit,
   rulesFingerprint: candidate.rulesFingerprint,
   rulesetFingerprint: current.rulesetFingerprint,
   mechanicsFingerprint: current.mechanicsFingerprint,
@@ -203,7 +170,7 @@ await writeFile(resolve(outputRoot, "card-reference.md"), cardReference);
 await writeFile(resolve(outputRoot, "world-and-institutions.md"), worldGuide);
 await writeFile(resolve(outputRoot, "governance-ledger.md"), governanceLedger);
 await writeFile(resolve(outputRoot, "component-masters.html"), gallery);
-await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity));
+await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity, await readFile(resolve(projectRoot, "docs/playtesting-and-evidence.md"), "utf8")));
 await writeFile(
   resolve(outputRoot, "KIT-LABEL.txt"),
   `Rules ${identity.rulesVersion}\nExecutable reference ${identity.executableVersion}\nSource commit ${identity.sourceCommit}\n`
@@ -239,7 +206,7 @@ Source commit ${identity.sourceCommit}
 This is a derived controlled-test kit, not a manufacturing package. It contains
 the four frozen Mandate 2038 documents, the world companion, baseline
 component masters, exact source data, release manifests, receipt contract, and
-two-session protocol. Deferred Tactics, secret objectives, and Reserve
+blind-test preparation protocol. Deferred Tactics, secret objectives, and Reserve
 Specialists are excluded from the component masters.
 
 Do not mix component revisions. Generate the actual session receipt with
@@ -288,8 +255,8 @@ const manifest = {
     "Eras",
     "Headlines",
     "Era Mandates",
-    "Escalations",
-    "Power Sources",
+    "Build projects",
+    "Local Power contracts",
     "Reference Cards",
     "Faction boards",
     "Training deck contract",
@@ -300,26 +267,9 @@ const manifest = {
     "secret objectives",
     "Reserve Specialists"
   ],
-  sessions: [
-    {
-      id: "session-a-four-lever",
-      factions: [
-        "Mirevanta Works",
-        "Kestralyn",
-        "Corthaven",
-        "Loopfold AI"
-      ]
-    },
-    {
-      id: "session-b-policy-sensitive",
-      factions: [
-        "Dovetalis Labs",
-        "Orisonix",
-        "returning faction 1",
-        "returning faction 2"
-      ]
-    }
-  ],
+  sessions: [],
+  sessionStatus: "not-scheduled",
+
   files
 };
 await writeFile(

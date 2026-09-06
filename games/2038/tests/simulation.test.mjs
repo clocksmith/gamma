@@ -2918,8 +2918,10 @@ test("paired faction arms receive their registered canonical prompt treatment", 
   );
 });
 
-test("simulation records two- and six-player games as exploratory non-promotional diagnostics", async () => {
-  for (const playerCount of [2, 6]) {
+test("simulation records two-player games as exploratory and rejects six-player requests", async () => {
+  await assert.rejects(createSimulation({ runs: 1, playerCount: 6 }), /playerCount must be an integer from 2 to 5/);
+  await assert.rejects(createInteractiveGame({ playerCount: 6 }), /playerCount must be one of 2, 3, 4, 5/);
+  for (const playerCount of [2]) {
     const report = await createSimulation({
       runs: 1,
       playerCount,

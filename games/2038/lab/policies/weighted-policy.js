@@ -1,12 +1,15 @@
 import { createRng } from "../../web/src/engine.js";
 import { validateDecisionPacket, validateDecisionResponse } from "../contracts/decision-contract.js";
 import { validatePlayerProfile } from "../personas/player-profile.js";
+import { constructionStudyScore } from "./construction-study-policy.js";
 
 export const TRADE_REQUIRED_SELECTION_WEIGHT = 0.02;
 export const BLOCKED_SELECTION_WEIGHT = 0.02;
 export const supportedPolicyTreatments = new Set([
   null,
-  "coalition_conversion_v1"
+  "coalition_conversion_v1",
+  "infrastructure_plan_v1",
+  "research_deploy_plan_v1"
 ]);
 
 export function validatePolicyTreatment(treatment) {
@@ -161,6 +164,8 @@ export class WeightedPlayerPolicy {
   }
 
   score(packet, decision) {
+    const planned = constructionStudyScore(packet, decision, this.treatment);
+    if (planned !== null) return planned;
     if (decision.decisionId === "agi_declare") return 4;
     if (decision.decisionId === "agi_pass") return 1;
     const strategy = this.profile.strategy;

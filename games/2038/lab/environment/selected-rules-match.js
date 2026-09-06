@@ -210,7 +210,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       negotiations: [],
       round4Start: null,
       futureTimeline: [],
-      productionSnapshots: []
+      productionSnapshots: [],
+      projectProduction: []
     };
     this.activeHeadline = null;
     this.regime = {};
@@ -2148,8 +2149,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     )) {
       if (!cluster.powered) continue;
       const lead = this.players[cluster.leadSeat];
+      const computeBefore = lead.compute;
       this.addResource(lead, "compute", 3);
       lead.roundMetrics.computeProduced += 3;
+      this.matchMetrics.projectProduction.push({
+        round: this.round, seat: lead.seat, projectId: cluster.id,
+        project: "mega_cluster", nominalCompute: 3,
+        gainedCompute: lead.compute - computeBefore
+      });
     }
 
     // Partner box: Joint Ventures always resolve after all Produce sub-steps.

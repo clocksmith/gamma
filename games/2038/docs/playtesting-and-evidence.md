@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.10.0-rc.3-test` / executable `0.17.0`
+**Rules under review:** `0.11.0-rc.2-test` / executable `0.19.0`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -113,7 +113,7 @@ rules variant, seed, and content hashes. There is one playable ruleset. Earlier
 results qualify only their frozen sources; implementation proof does not
 transfer simulation outcomes into human-play evidence.
 
-The current candidate retains direct Agent assignment, unprotected ordinary Research, current local Power connections, and scored public AGI recognition. Talent now produces one reassignment instead of the interim Runway gain. Its primary human evidence question is whether preserving presence is worth forgoing an immediate district benefit; the observation procedure below records that decision. The earlier protected-Research and Dossier results do not qualify this candidate.
+The current candidate has only six Core Actions, Facility-then-project Build, immediate Headlines, and one permanent ability per faction. It retains direct Agent assignment, unprotected ordinary Research, current local Power connections, and scored public AGI recognition. Talent now produces one reassignment instead of the interim Runway gain. Its primary human evidence question is whether preserving presence is worth forgoing an immediate district benefit; the observation procedure below records that decision. The earlier protected-Research and Dossier results do not qualify this candidate.
 
 ### Historical version boundaries
 
@@ -295,15 +295,14 @@ can make old reports readable; they cannot make them experimentally equivalent.
 2. Facilitated four-player tests until setup and rule ambiguities stabilize.
 3. Four-player blind test.
 4. Three-player negotiation, scarcity, and faction-omission test.
-5. Five-player congestion, negotiation, downtime, faction-omission, and Mirevanta
-   Capability-twelve Peer Validation regression.
+5. Five-player congestion, negotiation, downtime, and faction-omission regression.
 6. Repeat three- and five-player blind tests after every selected four-player
    balance change.
 
 Four players owns primary balance decisions. Three and five players are the
-suggested full formats and mandatory regression guards. Two and six players
-are playable exploratory formats; their current reports are non-promotional
-diagnostics rather than balance-authority evidence.
+suggested full formats and mandatory regression guards. Two-player play is
+available, with exploratory non-promotional evidence. Six-player play is
+unavailable; historical reports retain their original identity.
 
 ## Capture for every physical session
 
@@ -368,7 +367,7 @@ the combined candidate.
 
 - all twelve Future Timeline Headlines;
 - whether each Headline changed at least one intended action;
-- player recall of faction, Headline, Escalation, and location identities;
+- player recall of faction, Headline, project, and location identities;
 - moments described as surprising, funny, excessive, confusing, or flat.
 
 ### Strategy pressure
@@ -460,3 +459,13 @@ where a player knowingly forgoes the best destination bonus to preserve control.
 Do not change AGI thresholds merely because a removed effect supplied Capability.
 The automated comparisons are development diagnostics, not a human playtest or
 balance promotion. Three-, four-, and five-player completion checks remain required.
+
+## Construction comparison and next blind teach
+
+The [construction study preregistration](../evidence/studies/2026-09-06-construction-preregistration.md) compares deliberate infrastructure and Research/Deploy plans with the retained policy baseline. It is diagnostic, with no cost, scoring, or action changes. Actual Mega-Cluster production is recorded separately from construction and resource-cap clipping. Results and surface audit are recorded in the [construction receipt](../evidence/studies/2026-09-06-construction-comparison.md). Human evidence remains pending.
+
+Prepare the current four-document Play Kit linked in the README and the physical kit with `npm run physical-kit:freeze` after the source is published, or `npm run physical-kit:freeze -- --local` from a clean local commit. A local kit explicitly records whether its source is published. When a facilitator and four unfamiliar players are actually scheduled, create their observation sheets with `npm run playtest:new -- --players 4 --type blind_playtest --seed construction-blind-1`. Do not create a completed receipt or invent a played date before the session.
+
+Players receive the Core Rules, Map Reference, Component Reference, and Card and Board Reference, plus the frozen components. The optional World companion may accompany them. Do not give them the study results or a recommended construction sequence before play. A silent observer records questions and timings; any supplied rules answer makes the session facilitated and must be recorded. After an assignment resolves, neutrally ask for its reason without suggesting a preferred district or bonus.
+
+Use the generated notes tables to capture reminders, each project's first actual productive Era, meaningful presence sacrifices under the definition above, and individual postgame explanations of both outcomes. Fusion is a connection and construction award, not direct Compute production. Record games with no projects and unsuccessful explanations, too. There is no numerical pass threshold yet for enjoyment or teachability. Return the actual observations before selecting further cuts or changing incentives.

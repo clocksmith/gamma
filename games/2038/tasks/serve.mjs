@@ -175,9 +175,18 @@ async function recentSimulationReports() {
         bytes: metadata.size
       };
     }));
-  return reports
-    .sort((left, right) => right.modifiedAt.localeCompare(left.modifiedAt))
-    .slice(0, 24);
+  const readable = [];
+  for (const entry of reports.sort((left, right) => right.modifiedAt.localeCompare(left.modifiedAt))) {
+    try {
+      const report = JSON.parse(await readFile(join(simulationArchiveDirectory, entry.fileName), "utf8"));
+      if (report?.evidenceLabel !== "simulation" || typeof report.reportType !== "string") continue;
+      readable.push(entry);
+      if (readable.length === 24) break;
+    } catch {
+      // A partial write or an auxiliary study artifact is not a viewable report.
+    }
+  }
+  return readable;
 }
 
 async function sendArchivedSimulationReport(response, fileName) {

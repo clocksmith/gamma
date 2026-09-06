@@ -246,12 +246,13 @@ test("one thematic authority governs every lore-bearing surface", async () => {
 });
 
 test("selected deck contracts have exact physical counts", async () => {
-  const [config, tactics, escalation, headlines, mandates] = await Promise.all([
+  const [config, tactics, escalation, headlines, mandates, factions] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/tactics.json"),
     readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/headlines.json"),
-    readJson("dist/runtime/mandates.json")
+    readJson("dist/runtime/mandates.json"),
+    readJson("dist/runtime/factions.json")
   ]);
 
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
@@ -272,7 +273,7 @@ test("selected deck contracts have exact physical counts", async () => {
     [5, 4, 3, 4]
   );
   const defaultStandardCards =
-    config.playerSupply.coreActionCards * config.players.max +
+    config.playerSupply.coreActionCards * factions.factions.length +
     config.sharedSupply.projectReferences +
     defaultHeadlineCount +
     mandates.mandates.length +
