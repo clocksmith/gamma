@@ -2,6 +2,20 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Competing Gemini design and blind decoder review
+
+ROOT owns one bounded [Gemini design request](../operations/provenance/dualstream_gemini_design_20260906/request.md)
+using the installed CLI and existing authentication. Its request manifest binds
+the measured v1 source, synthetic tests, exact opening development input and
+terminal failure. It asks for one implementable successor, encoder/decoder
+procedures, termination and inversion arguments, complexity and a falsifying
+test. Model output is a proposal with zero evidence or score authority.
+Tools, extensions, MCP and hooks are disabled; validation/confirmation bytes and
+model-campaign artifacts are withheld. A separate reviewer starts from codec
+source and synthetic fixtures without result claims. Publication precedes the
+request; a returned design still needs implementation, independent inverse
+review and a separately frozen exact comparison before it can advance.
+
 ## 2026-09-06 - Standalone two-stream parameter grammar development
 
 ROOT owns the new standalone `dualstream_grammar_v1` implementation work. The
