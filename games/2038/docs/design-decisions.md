@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.11.0-rc.2-test`
+**Rules reference:** `0.11.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -247,7 +247,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.19.0` implements `0.11.0-rc.2-test` under coverage
+Executable game `0.19.1` implements `0.11.0-rc.3-test` under coverage
 `react-agent-assignments-v1`: direct persistent Agent assignments, speculative
 selection, unprotected Research with printed faction exceptions, current local
 Power connections, and optional AGI recognition scored within Mandate. The
@@ -714,3 +714,5 @@ on the current board, preserving its minimum of two and two-Mandate award.
 The user restricted play to two through five players. Six factions remain choices and their lore and components remain intact; six-player input is rejected by the shared configuration and runtime boundaries. Historical six-player evidence retains its identity. Four players remains the balance authority, three and five are regression guards, and two-player evidence is exploratory.
 
 Rules Sections 6 and 8 now agree with the existing implementation: ReAct uses assignment, Headlines finish before selection, and ordinary Generators provide local connections with emergency Scrutiny only when serving a Facility. These wording repairs change no prices, awards, or timing in the engine. Actual project-production telemetry and deliberate policies support a diagnostic comparison; they do not select new incentives. The current test protocol prepares a blind teach without claiming human results.
+
+The wording-only follow-up `0.19.1` / `0.11.0-rc.3-test` prints the complete two-through-five player range on the Core Rules cover beside the suggested three-through-five range. Engine `0.21.0` and all mechanics remain unchanged; the construction study retains its exact `0.19.0` identity.
