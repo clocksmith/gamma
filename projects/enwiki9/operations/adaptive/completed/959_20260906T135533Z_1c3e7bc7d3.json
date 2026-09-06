@@ -5,26 +5,66 @@
     "sha256": "sha256:ef25e27590579c05853d71cce4b1c128a7e20f55a25ae0fdd5536c4717a1950a"
   },
   "candidate_tree_sha256": "sha256:1b7b55808095a9f3feab15add0516d838d947cdea4b91e6317e273597cd3fd31",
+  "elapsed_seconds": 808.383,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 1200
+    },
+    "cgroup_inode": 232728,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T135533Z_1c3e7bc7d3",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 232728,
+        "kernel_cpuset": false,
+        "memory_bytes": 2147483648,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T135533Z_1c3e7bc7d3"
+      }
+    ],
+    "guard_command_sha256": "c08460d35891bff486f0bd45c9a5de1705b34a0e0ba874683d5002795d8f4e49",
+    "guard_path": "run_logs/adaptive/20260906T135533Z_1c3e7bc7d3.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/midas_open_observed_opening100k_q0_v1.json",
     "sha256": "sha256:95a5eca6a925f3e6113d735b5bab36205472e60576391b5d10d78d6e59bddab4"
   },
+  "finished_at": "2026-09-06T14:10:47+00:00",
   "gate_size": 100000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-06T13:55:33+00:00",
   "hold_history": [
     {
       "at": "2026-09-06T13:55:33+00:00",
       "held": true,
       "reason": "Held from initial write: publish root_explore ownership, frozen corpus source and all terminal predecessor evidence before fresh CPU2 admission."
+    },
+    {
+      "at": "2026-09-06T13:57:18+00:00",
+      "held": false,
+      "reason": "Published ownership, 232 frozen inputs and validated predecessor receipts at origin/main. Canonical HORIZON identities remain live, CPU2 discovery admitted; unchanged native bounds and 1200-second aggregate stop."
     }
   ],
   "job_id": "20260906T135533Z_1c3e7bc7d3",
+  "log_path": "run_logs/adaptive/20260906T135533Z_1c3e7bc7d3.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/939_midas_open_observed_opening100k_q0_v1.json",
@@ -32,6 +72,7 @@
   },
   "proposal_id": "midas_open_observed_opening100k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-06T13:57:18+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -42,12 +83,14 @@
     "swap_bytes": 0,
     "wall_seconds": 1200
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/midas_open_observed_gate_v1.py",
     "sha256": "sha256:baa28b7be164d858ffd812b6b523fa8476fcd50a3ebf6fe0be04cb77eee93037"
   },
   "schema": "gamma.enwiki9.adaptive-job.v3",
-  "state": "pending",
+  "started_at": "2026-09-06T13:57:18+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-06T13:55:33+00:00",
   "tags": [
     "held_initially",
@@ -60,5 +103,8 @@
   "tool_args": [
     "--candidate",
     "midas_open_observed_opening100k_q0_v1"
-  ]
+  ],
+  "worker_pid": 1582798,
+  "worker_proc_start_ticks": 179917665,
+  "worker_started_at": "2026-09-06T13:57:18+00:00"
 }
