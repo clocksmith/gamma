@@ -19,6 +19,29 @@ This measures observation cost and exact archive/state parity. It supplies no
 corpus economics or full-score credit. Ownership and all frozen inputs must be
 published before release; HORIZON and measured codec sources remain unchanged.
 
+The [terminal audit](../operations/provenance/midas_open_observer_cost4096_terminal_20260906.json)
+now closes all 16 phases, 227 inputs and 157 required outputs. Every arm
+independently reconstructs and repeats; all reference archives, complete final
+states, 32,768 probabilities and 130 boundary records agree within their
+required comparisons. P/K authoritative projections agree. Each synthetic
+archive is 4,143 bytes; this gives no corpus compression evidence.
+
+Observed/reference encoder CPU ratios are P 3.039, K 2.613, F 2.257 and S 2.219.
+The guard passes with 50,470,912-byte sampled tree RSS and 25,883,922-byte sampled
+logical scratch. The validated reflection holds automatic promotion: measure a
+smaller frozen corpus synchronization gate or optimize observation before
+attempting opening250KB under the unchanged native 120-CPU-second cap. Four
+canonical run rows retain unknown complete-package and full-score values.
+
+ROOT next owns `midas_open_observed_opening100k_q0_v1`, initially held job
+`20260906T135533Z_1c3e7bc7d3`. Its [frozen plan](../operations/provenance/midas_open_observed_opening100k_q0_v1_plan.json)
+reuses both codecs and the same runner for 16 phases on canonical opening100KB.
+This previously examined population is a boundary-observation replay, not fresh
+confirmation data. The reduced scope follows measured observation overhead;
+native limits stay unchanged. F must beat both P and S with complete identity
+evidence before a separately frozen transfer gate. Complete-package and
+full-corpus qualification remain unresolved.
+
 ## 2026-09-06 - MIDAS boundary observability passes exact synthetic checks
 
 The [new observer](midas_open_boundary_observer_v1.md) wraps the unchanged native

@@ -1,0 +1,1982 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "2097152", "--official-decimal-limit-kib", "2097152", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T133935Z_7bac5ae319", "--cgroup-memory-max-bytes", "2147483648", "--temporary-disk-limit-bytes", "268435456", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.resources/guard.json", "--label", "20260906T133935Z_7bac5ae319", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/midas_open_observer_cost4096_q0_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260906T133935Z_7bac5ae319-_j5kmk_3/midas_open_observer_cost4096_q0_v1", "--", "/usr/bin/taskset", "--cpu-list", "2", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/midas_open_observed_gate_v1.py", "--candidate", "midas_open_observer_cost4096_q0_v1"], "job": {"candidate_id": "midas_open_observer_cost4096_q0_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/midas_open_observer_cost4096_q0_v1/20260906T133935426061Z_fa64dc4fb00d.json", "sha256": "sha256:76393b7351fa610e7e1150d6cc74c06c324895d823e1818943dd7c4940622606"}, "candidate_tree_sha256": "sha256:fa64dc4fb00de1372816824b1ede3b54171246f8699c4b98d9c5dcd30c8312b7", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 2147483648, "scratch_bytes": 268435456, "swap_bytes": 0, "wall_seconds": 600}, "cgroup_inode": 232640, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T133935Z_7bac5ae319", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 232640, "kernel_cpuset": false, "memory_bytes": 2147483648, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T133935Z_7bac5ae319"}], "guard_command_sha256": "4d99d5f1dda6d60e6a4155f435d896d5e5fd9a1ff847b74c7dbf44864f9b97bb", "guard_path": "run_logs/adaptive/20260906T133935Z_7bac5ae319.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/midas_open_observer_cost4096_q0_v1.json", "sha256": "sha256:a1e3466f7b3da33b55498c70041a2c3246b3aad8b1b30ae03b5a79f8355f155c"}, "gate_size": 4096, "held": false, "held_at": "2026-09-06T13:39:35+00:00", "hold_history": [{"at": "2026-09-06T13:39:35+00:00", "held": true, "reason": "Held from initial publication. Publish root_explore ownership, all frozen sources and artifact identities before fresh CPU2 admission and explicit release."}, {"at": "2026-09-06T13:45:32+00:00", "held": false, "reason": "Ownership and all 227 frozen inputs published at origin/main 32642fe54. Fresh canonical observer identities live; CPU2 discovery admitted under existing bounds; HORIZON unchanged."}], "job_id": "20260906T133935Z_7bac5ae319", "priority": 40, "proposal": {"path": "operations/adaptive/proposals/developed/939_midas_open_observer_cost4096_q0_v1.json", "sha256": "sha256:3fba2107c1e644a5fb73444dadb542090199ad8dabc39c2321d225db50e60c6d"}, "proposal_id": "midas_open_observer_cost4096_q0_v1", "purpose": "infrastructure", "released_at": "2026-09-06T13:45:32+00:00", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 2147483648, "scratch_bytes": 268435456, "swap_bytes": 0, "wall_seconds": 600}, "runner": {"path": "tools/midas_open_observed_gate_v1.py", "sha256": "sha256:baa28b7be164d858ffd812b6b523fa8476fcd50a3ebf6fe0be04cb77eee93037"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/midas_open_observer_cost4096_q0_v1"], "started_at": "2026-09-06T13:45:39+00:00", "state": "running", "submitted_at": "2026-09-06T13:39:35+00:00", "tags": ["held_initially", "observed_midas", "owner_root_explore", "synthetic4096"], "timing_authority": "diagnostic", "tool": "tools/midas_open_observed_gate_v1.py", "tool_args": ["--candidate", "midas_open_observer_cost4096_q0_v1"]}}
+{"status": "passed", "infrastructure_pass": true, "candidate_id": "midas_open_observer_cost4096_q0_v1"}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 232640,
+      "joined_before_exec": true,
+      "memory_max_bytes": 2147483648,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T133935Z_7bac5ae319",
+      "previous_memory_max": "2147483648",
+      "requested_memory_max_bytes": 2147483648
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "2",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/midas_open_observed_gate_v1.py",
+      "--candidate",
+      "midas_open_observer_cost4096_q0_v1"
+    ],
+    "command_sha256": "9a17075cc88eb238d18b4da98694c1f10132bd1315f01a2c2a6d7a2f33ce484e",
+    "elapsed_s": 36.6769,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260906T133935Z_7bac5ae319",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 27557888,
+      "elapsed_s": 36.675,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 26443776,
+      "scratch_file_count": 157,
+      "scratch_logical_bytes": 25883922,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 2097152,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000
+    },
+    "official_decimal_limit_kib": 2097152,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 19.0968,
+      "pid": 1436867,
+      "start_ticks": 179847777,
+      "vmhwm_kib": 32444
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 44949504,
+      "elapsed_s": 31.6514,
+      "max_single_rss_kib": 29756,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 1436867,
+          "rss_kib": 29756,
+          "runnable_threads": 0,
+          "start_ticks": 179847777,
+          "vmhwm_kib": 32444
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "timeout",
+          "live_threads": 1,
+          "pid": 1443804,
+          "rss_kib": 7668,
+          "runnable_threads": 0,
+          "start_ticks": 179850897,
+          "vmhwm_kib": 7668
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "program",
+          "live_threads": 1,
+          "pid": 1443805,
+          "rss_kib": 5444,
+          "runnable_threads": 1,
+          "start_ticks": 179850897,
+          "vmhwm_kib": 9220
+        }
+      ],
+      "scratch_allocated_bytes": 23216128,
+      "scratch_file_count": 135,
+      "scratch_logical_bytes": 22733858,
+      "scratch_race_count": 0,
+      "tree_live_threads": 3,
+      "tree_rss_kib": 42868,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 40251392,
+      "elapsed_s": 16.5873,
+      "max_single_rss_kib": 29684,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 1436867,
+          "rss_kib": 29684,
+          "runnable_threads": 0,
+          "start_ticks": 179847777,
+          "vmhwm_kib": 31252
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "timeout",
+          "live_threads": 1,
+          "pid": 1440522,
+          "rss_kib": 7888,
+          "runnable_threads": 0,
+          "start_ticks": 179849319,
+          "vmhwm_kib": 7888
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "program",
+          "live_threads": 1,
+          "pid": 1440523,
+          "rss_kib": 11716,
+          "runnable_threads": 1,
+          "start_ticks": 179849319,
+          "vmhwm_kib": 12064
+        }
+      ],
+      "scratch_allocated_bytes": 12517376,
+      "scratch_file_count": 72,
+      "scratch_logical_bytes": 12257597,
+      "scratch_race_count": 0,
+      "tree_live_threads": 3,
+      "tree_rss_kib": 49288,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 53489664,
+      "max_observed_process_vmhwm_kib": 32444,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 50835456,
+      "max_sampled_scratch_allocated_bytes": 26443776,
+      "max_sampled_scratch_logical_bytes": 25883922,
+      "max_sampled_single_rss_kib": 29756,
+      "max_sampled_tree_live_threads": 3,
+      "max_sampled_tree_rss_kib": 49288,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0226,
+        "phase": "diagnostic",
+        "source_line": 1
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 0.5234,
+        "phase": "P-reference",
+        "source_line": 2
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 1.0263,
+        "phase": "P-reference",
+        "source_line": 3
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 1.0263,
+        "phase": "P-encode",
+        "source_line": 4
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 3.0323,
+        "phase": "P-encode",
+        "source_line": 5
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 3.0323,
+        "phase": "P-decode",
+        "source_line": 6
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 5.5409,
+        "phase": "P-decode",
+        "source_line": 7
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 5.5409,
+        "phase": "P-repeat",
+        "source_line": 8
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 7.549,
+        "phase": "P-repeat",
+        "source_line": 9
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 7.549,
+        "phase": "K-reference",
+        "source_line": 10
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 9.0557,
+        "phase": "K-reference",
+        "source_line": 11
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 9.0557,
+        "phase": "K-encode",
+        "source_line": 12
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 12.5691,
+        "phase": "K-encode",
+        "source_line": 13
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 12.5691,
+        "phase": "K-decode",
+        "source_line": 14
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 15.5823,
+        "phase": "K-decode",
+        "source_line": 15
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 15.5823,
+        "phase": "K-repeat",
+        "source_line": 16
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 19.0968,
+        "phase": "K-repeat",
+        "source_line": 17
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 19.0968,
+        "phase": "F-reference",
+        "source_line": 18
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 20.1006,
+        "phase": "F-reference",
+        "source_line": 19
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 20.1006,
+        "phase": "F-encode",
+        "source_line": 20
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 22.6119,
+        "phase": "F-encode",
+        "source_line": 21
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 22.6119,
+        "phase": "F-decode",
+        "source_line": 22
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 25.1226,
+        "phase": "F-decode",
+        "source_line": 23
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 25.1226,
+        "phase": "F-repeat",
+        "source_line": 24
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 27.6333,
+        "phase": "F-repeat",
+        "source_line": 25
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 27.6333,
+        "phase": "S-reference",
+        "source_line": 26
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 29.1401,
+        "phase": "S-reference",
+        "source_line": 27
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 29.1401,
+        "phase": "S-encode",
+        "source_line": 28
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 31.6514,
+        "phase": "S-encode",
+        "source_line": 29
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 31.6514,
+        "phase": "S-decode",
+        "source_line": 30
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 34.1628,
+        "phase": "S-decode",
+        "source_line": 31
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 34.1628,
+        "phase": "S-repeat",
+        "source_line": 32
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 36.675,
+        "phase": "S-repeat",
+        "source_line": 33
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 74,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/midas_open_observer_cost4096_q0_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T133935Z_7bac5ae319.resources",
+      "/tmp/gamma-enwiki9-20260906T133935Z_7bac5ae319-_j5kmk_3/midas_open_observer_cost4096_q0_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0226,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1772,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 44,
+              "Private_Dirty": 1772,
+              "Private_Hugetlb": 0,
+              "Pss": 2370,
+              "Pss_Anon": 1772,
+              "Pss_Dirty": 1772,
+              "Pss_File": 598,
+              "Pss_Shmem": 0,
+              "Referenced": 7336,
+              "Rss": 7336,
+              "Shared_Clean": 5520,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 6784
+      },
+      {
+        "elapsed_s": 0.5234,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 15828,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 15828,
+              "Private_Hugetlb": 0,
+              "Pss": 17014,
+              "Pss_Anon": 15828,
+              "Pss_Dirty": 15828,
+              "Pss_File": 1186,
+              "Pss_Shmem": 0,
+              "Referenced": 28052,
+              "Rss": 28052,
+              "Shared_Clean": 12200,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1436911,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 352,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3366,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2118,
+              "Pss_Shmem": 0,
+              "Referenced": 7760,
+              "Rss": 7760,
+              "Shared_Clean": 6160,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847800
+          },
+          {
+            "pid": 1436912,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 876,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 0,
+              "Private_Dirty": 1188,
+              "Private_Hugetlb": 0,
+              "Pss": 1327,
+              "Pss_Anon": 876,
+              "Pss_Dirty": 1188,
+              "Pss_File": 451,
+              "Pss_Shmem": 0,
+              "Referenced": 4920,
+              "Rss": 4920,
+              "Shared_Clean": 3732,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847801
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 40732
+      },
+      {
+        "elapsed_s": 1.0263,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 16968,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 16968,
+              "Private_Hugetlb": 0,
+              "Pss": 18173,
+              "Pss_Anon": 16968,
+              "Pss_Dirty": 16968,
+              "Pss_File": 1205,
+              "Pss_Shmem": 0,
+              "Referenced": 29256,
+              "Rss": 29256,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1437128,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 164,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3338,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2090,
+              "Pss_Shmem": 0,
+              "Referenced": 7828,
+              "Rss": 7828,
+              "Shared_Clean": 6416,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847872
+          },
+          {
+            "pid": 1437129,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1260,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 1624,
+              "Private_Hugetlb": 0,
+              "Pss": 1830,
+              "Pss_Anon": 1260,
+              "Pss_Dirty": 1624,
+              "Pss_File": 570,
+              "Pss_Shmem": 0,
+              "Referenced": 5668,
+              "Rss": 5668,
+              "Shared_Clean": 3988,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847872
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42444
+      },
+      {
+        "elapsed_s": 3.0323,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 16976,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 16976,
+              "Private_Hugetlb": 0,
+              "Pss": 18189,
+              "Pss_Anon": 16976,
+              "Pss_Dirty": 16976,
+              "Pss_File": 1213,
+              "Pss_Shmem": 0,
+              "Referenced": 29264,
+              "Rss": 29264,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1437635,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 448,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3447,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2199,
+              "Pss_Shmem": 0,
+              "Referenced": 7776,
+              "Rss": 7776,
+              "Shared_Clean": 6080,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848074
+          },
+          {
+            "pid": 1437636,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1316,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 1680,
+              "Private_Hugetlb": 0,
+              "Pss": 1905,
+              "Pss_Anon": 1316,
+              "Pss_Dirty": 1680,
+              "Pss_File": 589,
+              "Pss_Shmem": 0,
+              "Referenced": 5788,
+              "Rss": 5788,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848074
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42776
+      },
+      {
+        "elapsed_s": 5.5409,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 16984,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 16984,
+              "Private_Hugetlb": 0,
+              "Pss": 18182,
+              "Pss_Anon": 16984,
+              "Pss_Dirty": 16984,
+              "Pss_File": 1198,
+              "Pss_Shmem": 0,
+              "Referenced": 29272,
+              "Rss": 29272,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1438359,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 344,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3365,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2117,
+              "Pss_Shmem": 0,
+              "Referenced": 7784,
+              "Rss": 7784,
+              "Shared_Clean": 6192,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848286
+          },
+          {
+            "pid": 1438360,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1280,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 1644,
+              "Private_Hugetlb": 0,
+              "Pss": 1853,
+              "Pss_Anon": 1280,
+              "Pss_Dirty": 1644,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 5752,
+              "Rss": 5752,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848286
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42652
+      },
+      {
+        "elapsed_s": 7.549,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17008,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17008,
+              "Private_Hugetlb": 0,
+              "Pss": 18205,
+              "Pss_Anon": 17008,
+              "Pss_Dirty": 17008,
+              "Pss_File": 1197,
+              "Pss_Shmem": 0,
+              "Referenced": 29296,
+              "Rss": 29296,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1438780,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 452,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3423,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2175,
+              "Pss_Shmem": 0,
+              "Referenced": 7816,
+              "Rss": 7816,
+              "Shared_Clean": 6116,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848503
+          },
+          {
+            "pid": 1438781,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2916,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 0,
+              "Private_Dirty": 3212,
+              "Private_Hugetlb": 0,
+              "Pss": 3351,
+              "Pss_Anon": 2916,
+              "Pss_Dirty": 3212,
+              "Pss_File": 435,
+              "Pss_Shmem": 0,
+              "Referenced": 6944,
+              "Rss": 6944,
+              "Shared_Clean": 3732,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848503
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 44056
+      },
+      {
+        "elapsed_s": 9.0557,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17396,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17396,
+              "Private_Hugetlb": 0,
+              "Pss": 18592,
+              "Pss_Anon": 17396,
+              "Pss_Dirty": 17396,
+              "Pss_File": 1196,
+              "Pss_Shmem": 0,
+              "Referenced": 29684,
+              "Rss": 29684,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1439083,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 472,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3463,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2215,
+              "Pss_Shmem": 0,
+              "Referenced": 7816,
+              "Rss": 7816,
+              "Shared_Clean": 6096,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848635
+          },
+          {
+            "pid": 1439084,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2664,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 3028,
+              "Private_Hugetlb": 0,
+              "Pss": 3237,
+              "Pss_Anon": 2664,
+              "Pss_Dirty": 3028,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 7132,
+              "Rss": 7132,
+              "Shared_Clean": 4048,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848635
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 44632
+      },
+      {
+        "elapsed_s": 12.5691,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17396,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17396,
+              "Private_Hugetlb": 0,
+              "Pss": 18592,
+              "Pss_Anon": 17396,
+              "Pss_Dirty": 17396,
+              "Pss_File": 1196,
+              "Pss_Shmem": 0,
+              "Referenced": 29684,
+              "Rss": 29684,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1439774,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 2624,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 4436,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 3188,
+              "Pss_Shmem": 0,
+              "Referenced": 7588,
+              "Rss": 7588,
+              "Shared_Clean": 3716,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848987
+          },
+          {
+            "pid": 1439775,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 6976,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 7340,
+              "Private_Hugetlb": 0,
+              "Pss": 7549,
+              "Pss_Anon": 6976,
+              "Pss_Dirty": 7340,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 11448,
+              "Rss": 11448,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179848987
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 48720
+      },
+      {
+        "elapsed_s": 15.5823,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17396,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17396,
+              "Private_Hugetlb": 0,
+              "Pss": 18595,
+              "Pss_Anon": 17396,
+              "Pss_Dirty": 17396,
+              "Pss_File": 1199,
+              "Pss_Shmem": 0,
+              "Referenced": 29684,
+              "Rss": 29684,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1440522,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1244,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 336,
+              "Private_Dirty": 1244,
+              "Private_Hugetlb": 0,
+              "Pss": 3421,
+              "Pss_Anon": 1244,
+              "Pss_Dirty": 1244,
+              "Pss_File": 2177,
+              "Pss_Shmem": 0,
+              "Referenced": 7888,
+              "Rss": 7888,
+              "Shared_Clean": 6308,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849319
+          },
+          {
+            "pid": 1440523,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2664,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 3016,
+              "Private_Hugetlb": 0,
+              "Pss": 3225,
+              "Pss_Anon": 2664,
+              "Pss_Dirty": 3016,
+              "Pss_File": 561,
+              "Pss_Shmem": 0,
+              "Referenced": 7124,
+              "Rss": 7124,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849319
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 44696
+      },
+      {
+        "elapsed_s": 19.0968,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17424,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17424,
+              "Private_Hugetlb": 0,
+              "Pss": 18615,
+              "Pss_Anon": 17424,
+              "Pss_Dirty": 17424,
+              "Pss_File": 1191,
+              "Pss_Shmem": 0,
+              "Referenced": 29712,
+              "Rss": 29712,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1441183,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 116,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3120,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 1872,
+              "Pss_Shmem": 0,
+              "Referenced": 7412,
+              "Rss": 7412,
+              "Shared_Clean": 6048,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849659
+          },
+          {
+            "pid": 1441184,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 884,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 12,
+              "Private_Dirty": 1196,
+              "Private_Hugetlb": 0,
+              "Pss": 1351,
+              "Pss_Anon": 884,
+              "Pss_Dirty": 1196,
+              "Pss_File": 467,
+              "Pss_Shmem": 0,
+              "Referenced": 4928,
+              "Rss": 4928,
+              "Shared_Clean": 3720,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849660
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42040
+      },
+      {
+        "elapsed_s": 20.1006,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17424,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17424,
+              "Private_Hugetlb": 0,
+              "Pss": 18615,
+              "Pss_Anon": 17424,
+              "Pss_Dirty": 17424,
+              "Pss_File": 1191,
+              "Pss_Shmem": 0,
+              "Referenced": 29712,
+              "Rss": 29712,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1441405,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 116,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3243,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 1995,
+              "Pss_Shmem": 0,
+              "Referenced": 7732,
+              "Rss": 7732,
+              "Shared_Clean": 6368,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849771
+          },
+          {
+            "pid": 1441406,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 4944,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 5304,
+              "Private_Hugetlb": 0,
+              "Pss": 5515,
+              "Pss_Anon": 4944,
+              "Pss_Dirty": 5304,
+              "Pss_File": 571,
+              "Pss_Shmem": 0,
+              "Referenced": 9408,
+              "Rss": 9408,
+              "Shared_Clean": 4048,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179849771
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 46852
+      },
+      {
+        "elapsed_s": 22.6119,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17428,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17428,
+              "Private_Hugetlb": 0,
+              "Pss": 18620,
+              "Pss_Anon": 17428,
+              "Pss_Dirty": 17428,
+              "Pss_File": 1192,
+              "Pss_Shmem": 0,
+              "Referenced": 29716,
+              "Rss": 29716,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1441966,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 504,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3316,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2068,
+              "Pss_Shmem": 0,
+              "Referenced": 7472,
+              "Rss": 7472,
+              "Shared_Clean": 5720,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850023
+          },
+          {
+            "pid": 1441967,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2800,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 3164,
+              "Private_Hugetlb": 0,
+              "Pss": 3377,
+              "Pss_Anon": 2800,
+              "Pss_Dirty": 3164,
+              "Pss_File": 577,
+              "Pss_Shmem": 0,
+              "Referenced": 7272,
+              "Rss": 7272,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850023
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42932
+      },
+      {
+        "elapsed_s": 25.1226,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17428,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17428,
+              "Private_Hugetlb": 0,
+              "Pss": 18619,
+              "Pss_Anon": 17428,
+              "Pss_Dirty": 17428,
+              "Pss_File": 1191,
+              "Pss_Shmem": 0,
+              "Referenced": 29716,
+              "Rss": 29716,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1442452,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1244,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 640,
+              "Private_Dirty": 1244,
+              "Private_Hugetlb": 0,
+              "Pss": 3540,
+              "Pss_Anon": 1244,
+              "Pss_Dirty": 1244,
+              "Pss_File": 2296,
+              "Pss_Shmem": 0,
+              "Referenced": 7772,
+              "Rss": 7772,
+              "Shared_Clean": 5888,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850276
+          },
+          {
+            "pid": 1442453,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 4616,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 4980,
+              "Private_Hugetlb": 0,
+              "Pss": 5189,
+              "Pss_Anon": 4616,
+              "Pss_Dirty": 4980,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 9084,
+              "Rss": 9084,
+              "Shared_Clean": 4048,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850276
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 43216
+      },
+      {
+        "elapsed_s": 27.6333,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17464,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17464,
+              "Private_Hugetlb": 0,
+              "Pss": 18663,
+              "Pss_Anon": 17464,
+              "Pss_Dirty": 17464,
+              "Pss_File": 1199,
+              "Pss_Shmem": 0,
+              "Referenced": 29752,
+              "Rss": 29752,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1443097,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1244,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 640,
+              "Private_Dirty": 1244,
+              "Private_Hugetlb": 0,
+              "Pss": 3510,
+              "Pss_Anon": 1244,
+              "Pss_Dirty": 1244,
+              "Pss_File": 2266,
+              "Pss_Shmem": 0,
+              "Referenced": 7792,
+              "Rss": 7792,
+              "Shared_Clean": 5908,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850533
+          },
+          {
+            "pid": 1443099,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 876,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 0,
+              "Private_Dirty": 1184,
+              "Private_Hugetlb": 0,
+              "Pss": 1323,
+              "Pss_Anon": 876,
+              "Pss_Dirty": 1184,
+              "Pss_File": 447,
+              "Pss_Shmem": 0,
+              "Referenced": 4912,
+              "Rss": 4912,
+              "Shared_Clean": 3728,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850534
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42656
+      },
+      {
+        "elapsed_s": 29.1401,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17464,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17464,
+              "Private_Hugetlb": 0,
+              "Pss": 18660,
+              "Pss_Anon": 17464,
+              "Pss_Dirty": 17464,
+              "Pss_File": 1196,
+              "Pss_Shmem": 0,
+              "Referenced": 29752,
+              "Rss": 29752,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1443327,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1244,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 296,
+              "Private_Dirty": 1244,
+              "Private_Hugetlb": 0,
+              "Pss": 3222,
+              "Pss_Anon": 1244,
+              "Pss_Dirty": 1244,
+              "Pss_File": 1978,
+              "Pss_Shmem": 0,
+              "Referenced": 7512,
+              "Rss": 7512,
+              "Shared_Clean": 5972,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850645
+          },
+          {
+            "pid": 1443328,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 4228,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 56,
+              "Private_Dirty": 4592,
+              "Private_Hugetlb": 0,
+              "Pss": 4801,
+              "Pss_Anon": 4228,
+              "Pss_Dirty": 4592,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 8700,
+              "Rss": 8700,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850645
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 43016
+      },
+      {
+        "elapsed_s": 31.6514,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17468,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17468,
+              "Private_Hugetlb": 0,
+              "Pss": 18665,
+              "Pss_Anon": 17468,
+              "Pss_Dirty": 17468,
+              "Pss_File": 1197,
+              "Pss_Shmem": 0,
+              "Referenced": 29756,
+              "Rss": 29756,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1443804,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 568,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3469,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2221,
+              "Pss_Shmem": 0,
+              "Referenced": 7668,
+              "Rss": 7668,
+              "Shared_Clean": 5852,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850897
+          },
+          {
+            "pid": 1443805,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1000,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 420,
+              "Private_Dirty": 1000,
+              "Private_Hugetlb": 0,
+              "Pss": 1574,
+              "Pss_Anon": 1000,
+              "Pss_Dirty": 1000,
+              "Pss_File": 574,
+              "Pss_Shmem": 0,
+              "Referenced": 5484,
+              "Rss": 5484,
+              "Shared_Clean": 4064,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179850897
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 42868
+      },
+      {
+        "elapsed_s": 34.1628,
+        "processes": [
+          {
+            "pid": 1436867,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 17468,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 17468,
+              "Private_Hugetlb": 0,
+              "Pss": 18665,
+              "Pss_Anon": 17468,
+              "Pss_Dirty": 17468,
+              "Pss_File": 1197,
+              "Pss_Shmem": 0,
+              "Referenced": 29756,
+              "Rss": 29756,
+              "Shared_Clean": 12264,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179847777
+          },
+          {
+            "pid": 1444331,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1248,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 384,
+              "Private_Dirty": 1248,
+              "Private_Hugetlb": 0,
+              "Pss": 3384,
+              "Pss_Anon": 1248,
+              "Pss_Dirty": 1248,
+              "Pss_File": 2136,
+              "Pss_Shmem": 0,
+              "Referenced": 7812,
+              "Rss": 7812,
+              "Shared_Clean": 6180,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179851148
+          },
+          {
+            "pid": 1444332,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 948,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 420,
+              "Private_Dirty": 948,
+              "Private_Hugetlb": 0,
+              "Pss": 1521,
+              "Pss_Anon": 948,
+              "Pss_Dirty": 948,
+              "Pss_File": 573,
+              "Pss_Shmem": 0,
+              "Referenced": 5420,
+              "Rss": 5420,
+              "Shared_Clean": 4052,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 179851149
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 46984
+      },
+      {
+        "elapsed_s": 36.675,
+        "processes": [],
+        "reason": "phase_marker+terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 268435456,
+    "wall_time_limit_seconds": null
+  }
+}
