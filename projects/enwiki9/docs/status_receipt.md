@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-06T18:09:49+00:00`
+- Generated at UTC: `2026-09-06T19:20:09+00:00`
 
 ## Target State
 
@@ -28,7 +28,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `n/a`
-- RSS samples: `18,800`
+- RSS samples: `19,220`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `n/a`
@@ -69,11 +69,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Existing observer job: `20260904T134731Z_441f96254f`
 - Observer worker verified on this host: `true`
 - Adopted source identities verified on this host: `true`
-- Observer progress UTC: `2026-09-06T18:09:49+00:00`
+- Observer progress UTC: `2026-09-06T19:20:01+00:00`
 - Observer progress fresh: `true`
-- Trace bytes: `9,707,925,504` / `10,364,777,488`
-- Archive bytes: `109,920,256`
-- Observer samples: `18,800`
+- Trace bytes: `9,776,029,696` / `10,364,777,488`
+- Archive bytes: `110,731,264`
+- Observer samples: `19,220`
 - Maximum observed tree RSS bytes: `9,320,505,344`
 - Continuous resource proof: `false`
 - Science accessed before terminal: `false`
@@ -143,11 +143,19 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Candidate Audit
 
 - Audit return code: `0`
+- Audit mode: `inventory_snapshot`
+- Inventory generated: `2026-09-06T19:14:58+00:00`
+- Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `978`
 - Registered programs: `517`
-- Untracked nonignored entries: `22`
-- Modified tracked entries: `17`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `0`
 - Candidate statuses: `active=18, blocked_dependency=55, candidate=238, measured_negative=100, retired=567`
+
+## View Refresh
+
+- Profile: `routine`
+- Historical reports were not refreshed by this routine/status operation and may be stale. Use enwiki9_normalize_receipts.py --profile full for historical audits.
 
 ## Active Runner Process Table
 
@@ -159,9 +167,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,709,350,912 | `2026-09-06T18:11:18+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 109,936,640 | `2026-09-06T18:11:00+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 353,516 | `2026-09-06T18:10:38+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,776,152,576 | `2026-09-06T19:20:08+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 354,621 | `2026-09-06T19:20:04+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 110,731,264 | `2026-09-06T19:19:59+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-04T12:55:53+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |

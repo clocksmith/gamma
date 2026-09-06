@@ -130,17 +130,26 @@ Keep their paths stable; reuse maintained helpers when creating successors.
    projection now includes lessons, causes, retired dimensions, uncertainties,
    and next actions. [Navigation fixtures](../tests/test_enwiki9_ledger_navigation.py)
    cover searches, candidate history, pagination, and invalid or missing evidence.
-2. Add an opt-in terminal-record transaction to the existing driver-result
-   recorder. Validate a closed job and declared result index, use distinct arm
-   identities, append idempotently, and reuse reflection validation. Test receipt
-   replacement, duplicate calls, interruption, concurrent appends, live jobs,
-   and missing evidence before adopting it.
-3. Separate routine report refresh from complete historical audits in the
-   existing normalizer. Test generator selection, stale-view disclosure, and
-   failure propagation. `enwiki9_lab.py refresh` runs `candidate_audit.py`, and
-   `enwiki9_status_receipt.py` invokes it again; reuse a verified audit snapshot
-   within one refresh instead of repeating that filesystem scan.
+2. The existing [driver-result recorder](../tools/record_driver_result.py) now
+   accepts an explicit terminal arm index. It validates the closed job, resource
+   guard, artifacts, and existing reflection; distinct job-and-arm identities
+   make recording idempotent. Appending rows and replacing derived metadata is
+   recoverable across interruption, rather than one atomic transaction across
+   files. [Protocol fixtures](../tests/test_record_driver_result.py) cover live
+   jobs, missing and replaced evidence, conflicts, concurrent recorder calls,
+   interrupted publication, and preservation of torn ledger lines. Other ledger
+   or metadata writers require coordination because they do not honor its lock.
+3. The existing [normalizer](../tools/enwiki9_normalize_receipts.py) defaults to
+   routine views; `--profile full` explicitly runs historical reports and audits.
+   Status consumes a hash-verified inventory snapshot, avoiding a second scan.
+   It labels snapshot freshness separately from identity, and routine receipts
+   disclose omitted historical reports. [Refresh fixtures](../tests/test_enwiki9_refresh_profiles.py)
+   cover selection, replacement, missing evidence, and failure propagation.
+   Both profiles have been exercised on repository records.
 
-The latter two items are recommendations. Preserve immutable source, historical
-failures, and evidence paths. Improve the shared tools and generated projections
-without adding a registry, queue, or another mandatory planning document.
+These cleanup items are implemented in the existing tools and documented in the
+[command manual](../ADAPTIVE_WORKFLOW.md). The [validation receipt](../operations/evidence/20260906_environment_cleanup_validation.json)
+records 49 passing checks, both refresh profiles, and independent review.
+The historical scorecard remains a
+baseline, not a new assessment. Immutable source, failures, and evidence paths
+remain intact; no registry, queue, or mandatory planning document was added.
