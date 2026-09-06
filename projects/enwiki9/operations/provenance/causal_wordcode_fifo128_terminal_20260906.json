@@ -1,0 +1,95 @@
+{
+  "schema": "gamma.enwiki9.causal-wordcode-terminal.v1",
+  "candidate_id": "causal_wordcode_fifo128_bz2_q0_v1",
+  "job": {
+    "path": "operations/adaptive/completed/909_20260906T221245Z_f195ae35dd.json",
+    "sha256": "sha256:b1cc6b821720d0d8cf273a065c6d9ef1eb6a7d216f70de34f2483ff80e406749"
+  },
+  "experiment": {
+    "path": "operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json",
+    "sha256": "sha256:3705a8ef73a6a257ac05c1749590850e64e937c1f8c308984d659df83205973f"
+  },
+  "candidate_revision": {
+    "candidateId": "causal_wordcode_fifo128_bz2_q0_v1",
+    "candidateTreeSha256": "sha256:686d1e86990084b1ca36095a83c8142c05497118318319e1c0309b636cb57f24",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/causal_wordcode_fifo128_bz2_q0_v1/20260906T221230714600Z_686d1e869900.json",
+      "sha256": "sha256:1e4cf7e804a22da6278f59887078092897a6ad917a0ea535bda90579c3583540"
+    }
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260906T221245Z_f195ae35dd.resources/guard.json",
+    "sha256": "sha256:28662a411e0209c0642776cca4b58a5e893816f624c05ba01cdf07f0186ca0d4"
+  },
+  "stage": {
+    "path": "results/causal_wordcode_fifo128_bz2_q0_v1/stage-decision.json",
+    "sha256": "sha256:1c05465f1218181f8df2121babb0552d950461d9f8e91268eff5ccba0fb8b12b"
+  },
+  "comparison": {
+    "path": "results/causal_wordcode_fifo128_bz2_q0_v1/comparison/decision.json",
+    "sha256": "sha256:06428179678941edda42a068ed53977745dcbfa8315b142c3529f4acc7a43f89"
+  },
+  "admission": {
+    "published_commit": "af0c6df9b97ad5a0c4c185fdc39b583fc72acc2d",
+    "verified_published_inputs": 192,
+    "observed_at": "2026-09-06T22:17:27+00:00",
+    "available_host_memory_bytes": 66283003904,
+    "reserved_headroom_bytes": 17179869184,
+    "cpu": 4
+  },
+  "correctness_pass": true,
+  "closed_job_check": "same-boot-identities-checked",
+  "guard_validation": "discovery-budget-schema",
+  "resource": {
+    "elapsed_seconds": 12.5889,
+    "cgroup_peak_bytes": 56840192,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "cleanup_complete": true,
+    "timing": "shared-host diagnostic"
+  },
+  "measurements": {
+    "correctness_pass": true,
+    "frozen_inputs_reverified": true,
+    "artifact_closure_pass": true,
+    "continuous_guard_pass": true,
+    "accounting_pass": true,
+    "state_agreement_pass": true,
+    "parent_bookkeeping_identity_pass": true,
+    "local_cost_predicate_pass": false,
+    "promotion_authorized": false,
+    "raw_bytes": 250000,
+    "parent_archive_bytes": 71887,
+    "treatment_archive_bytes": 73603,
+    "literal_archive_bytes": 72243,
+    "incremental_local_source_bytes": 17171,
+    "net_bytes_saved_vs_parent": -18887,
+    "native_phases": 12
+  },
+  "netBytesSaved": -18887,
+  "archive_bytes": {
+    "K": 71887,
+    "L": 72243,
+    "P": 71887,
+    "T": 73603
+  },
+  "archive_loss_vs_parent_bytes": 1716,
+  "archive_loss_vs_literal_bytes": 1360,
+  "local_source_bytes": 18619,
+  "incremental_source_bytes": 17171,
+  "interpretation": "The fixed causal word-reference channel adds1360 compressed bytes over the literal-only control, and1716 over the parent. Its4979 references reduce the pre-BZip2 stream but do not reduce the complete archive. Exact source overhead increases the parent-relative loss to18887bytes. This rejects this fixed representation, not all causal dictionary or field-dependency models.",
+  "causal_limits": "The T/L ablation isolates enabling references under this FIFO policy and backend. It does not establish that eviction alone caused the loss. P/K both calculate lexical diagnostics, so their timings do not isolate bookkeeping.",
+  "repeat_scope": "independent-raw-encode-decode-repeat",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "next_action": "Hold this realization without tuning, validation or larger launch. Select a distinct mechanism only after this terminal reflection validates."
+}

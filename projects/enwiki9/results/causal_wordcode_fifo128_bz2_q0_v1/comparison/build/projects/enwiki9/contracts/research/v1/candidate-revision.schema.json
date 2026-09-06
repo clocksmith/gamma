@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/candidate-revision.schema.json",
+  "title": "gamma.enwiki9.candidate_revision.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "candidateId",
+    "candidateTreeSha256",
+    "treeDigestAlgorithm",
+    "files",
+    "parentRevision",
+    "previousRevision",
+    "change",
+    "provenanceClass",
+    "immutableBlobsComplete",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.candidate-revision.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "candidateId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+    "treeDigestAlgorithm": { "const": "sha256-canonical-counted-files-v1" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/file" }
+    },
+    "parentRevision": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/candidateReference" }
+      ]
+    },
+    "previousRevision": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/reference" }
+      ]
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "hypothesis", "summary", "evidence", "replacements"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "create",
+            "mutate",
+            "implementation",
+            "proposal-development",
+            "legacy-adoption"
+          ]
+        },
+        "hypothesis": { "type": "string", "minLength": 1 },
+        "summary": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "replacements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/replacement" }
+        }
+      }
+    },
+    "provenanceClass": { "enum": ["native", "legacy-current-state"] },
+    "immutableBlobsComplete": { "const": true },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "bareDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "$ref": "#/$defs/bareDigest" }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "blobPath", "normalization"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "$ref": "#/$defs/bareDigest" },
+        "blobPath": { "$ref": "#/$defs/relativePath" },
+        "normalization": { "enum": ["verbatim", "semantic-meta-v1"] }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "candidateReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateTreeSha256", "receipt"],
+      "properties": {
+        "candidateId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+        "receipt": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "replacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["oldSha256", "newSha256"],
+      "properties": {
+        "oldSha256": { "$ref": "#/$defs/bareDigest" },
+        "newSha256": { "$ref": "#/$defs/bareDigest" }
+      }
+    }
+  }
+}

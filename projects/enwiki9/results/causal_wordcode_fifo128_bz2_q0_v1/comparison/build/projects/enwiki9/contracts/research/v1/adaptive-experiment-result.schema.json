@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/adaptive-experiment-result.schema.json",
+  "title": "gamma.enwiki9.adaptive-experiment-result.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "experiment",
+    "candidateId",
+    "candidateRevision",
+    "evidenceClass",
+    "objectiveCreditBytes",
+    "measurements",
+    "promotionPredicates",
+    "killPredicates",
+    "promotionPass",
+    "killPass",
+    "decision",
+    "artifacts",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.adaptive-experiment-result.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "candidateId": { "$ref": "#/$defs/id" },
+    "candidateRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateTreeSha256", "receipt"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" },
+        "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+        "receipt": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "evidenceClass": { "enum": ["candidate-gate", "causal-shadow", "diagnostic", "oracle", "infrastructure"] },
+    "objectiveCreditBytes": { "const": 0 },
+    "measurements": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": ["boolean", "number"] }
+    },
+    "promotionPredicates": { "$ref": "#/$defs/evaluations" },
+    "killPredicates": { "$ref": "#/$defs/evaluations" },
+    "promotionPass": { "type": "boolean" },
+    "killPass": { "type": "boolean" },
+    "decision": { "enum": ["authorize-successor", "retire", "retry"] },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/namedReference" }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "namedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "measurement", "operator", "threshold", "observed", "passed"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "measurement": { "$ref": "#/$defs/id" },
+        "operator": { "enum": ["eq", "gt", "gte", "lt", "lte"] },
+        "threshold": { "type": ["boolean", "number"] },
+        "observed": { "type": ["boolean", "number"] },
+        "passed": { "type": "boolean" }
+      }
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evaluation" }
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

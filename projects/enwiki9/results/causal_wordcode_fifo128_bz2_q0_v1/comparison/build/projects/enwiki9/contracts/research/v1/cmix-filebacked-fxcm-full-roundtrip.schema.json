@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1",
+  "title": "CMIX file-backed FXCM guarded full-corpus roundtrip arm",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "authoritative_parent_id", "arm", "population",
+    "selected_logical_cpu", "result_filesystem_type", "scratch_filesystem_type",
+    "runner", "stage_runner", "resource_guard", "antecedents", "package",
+    "stages", "outputs", "identity", "resources", "accounting", "cleanup",
+    "lease", "errors", "terminal_pass", "memory_safe_parent_qualified",
+    "promotion_authorized", "claim_authority", "claim_boundary",
+    "execution_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-roundtrip.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "arm": {"enum": ["a", "b"]},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "selected_logical_cpu": {"type": "integer", "minimum": 0},
+    "result_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "scratch_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "runner": {"$ref": "#/$defs/file"},
+    "stage_runner": {"$ref": "#/$defs/file"},
+    "resource_guard": {"$ref": "#/$defs/file"},
+    "antecedents": {"$ref": "#/$defs/antecedents"},
+    "package": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/package"}]},
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encode", "decode"],
+      "properties": {
+        "encode": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/stage"}]},
+        "decode": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/stage"}]}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payload", "archive", "restored"],
+      "properties": {
+        "payload": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+        "archive": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+        "restored": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]}
+      }
+    },
+    "identity": {"$ref": "#/$defs/identity"},
+    "resources": {"$ref": "#/$defs/resources"},
+    "accounting": {"$ref": "#/$defs/accounting"},
+    "cleanup": {"$ref": "#/$defs/cleanup"},
+    "lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence", "transitions"],
+      "properties": {
+        "evidence": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+        "transitions": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]}
+      }
+    },
+    "errors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "terminal_pass": {"type": "boolean"},
+    "memory_safe_parent_qualified": {"const": false},
+    "promotion_authorized": {"const": false},
+    "claim_authority": {"enum": ["guarded_full_corpus_roundtrip_arm_a_only", "guarded_full_corpus_roundtrip_arm_b_only"]},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"arm": {"const": "a"}}},
+      "then": {"properties": {
+        "antecedents": {"properties": {"arm_a_reference": {"type": "null"}}},
+        "package": {"oneOf": [{"type": "null"}, {"allOf": [{"$ref": "#/$defs/package"}, {"properties": {"arm": {"const": "a"}}}]}]},
+        "identity": {"properties": {"arm_a": {"properties": {
+          "package_identity_pass": {"type": "null"},
+          "payload_identity_pass": {"type": "null"},
+          "archive_identity_pass": {"type": "null"},
+          "restored_identity_pass": {"type": "null"}
+        }}}},
+        "claim_authority": {"const": "guarded_full_corpus_roundtrip_arm_a_only"}
+      }},
+      "else": {"properties": {
+        "antecedents": {"properties": {"arm_a_reference": {"$ref": "#/$defs/file"}}},
+        "package": {"oneOf": [{"type": "null"}, {"allOf": [{"$ref": "#/$defs/package"}, {"properties": {"arm": {"const": "b"}}}]}]},
+        "identity": {"properties": {"arm_a": {"properties": {
+          "package_identity_pass": {"type": "boolean"},
+          "payload_identity_pass": {"type": "boolean"},
+          "archive_identity_pass": {"type": "boolean"},
+          "restored_identity_pass": {"type": "boolean"}
+        }}}},
+        "claim_authority": {"const": "guarded_full_corpus_roundtrip_arm_b_only"}
+      }}
+    },
+    {
+      "if": {"properties": {"terminal_pass": {"const": true}}},
+      "then": {"properties": {
+        "package": {"$ref": "#/$defs/package"},
+        "stages": {"properties": {
+          "encode": {"$ref": "#/$defs/passingStage"},
+          "decode": {"$ref": "#/$defs/passingStage"}
+        }},
+        "outputs": {"properties": {
+          "payload": {"allOf": [
+            {"$ref": "#/$defs/file"},
+            {"properties": {
+              "bytes": {"const": 107730531},
+              "sha256": {"const": "889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490"}
+            }}
+          ]},
+          "archive": {"$ref": "#/$defs/file"},
+          "restored": {"allOf": [
+            {"$ref": "#/$defs/file"},
+            {"properties": {
+              "bytes": {"const": 1000000000},
+              "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+            }}
+          ]}
+        }},
+        "identity": {"properties": {
+          "authoritative_parent_payload_identity_pass": {"const": true},
+          "exact_raw_inverse_pass": {"const": true}
+        }},
+        "resources": {"properties": {
+          "guard_count": {"const": 2},
+          "maximum_allowed_cpu_count": {"const": 1},
+          "all_guards_pass": {"const": true}
+        }},
+        "accounting": {"properties": {
+          "archive_bytes": {"type": "integer", "minimum": 1},
+          "program_bytes": {"type": "integer", "minimum": 1},
+          "counted_score_bytes": {"type": "integer", "minimum": 1}
+        }},
+        "cleanup": {"properties": {
+          "scratch_removed_on_success_pass": {"const": true},
+          "scratch_preserved_on_failure": {"const": false},
+          "cgroup_removed_pass": {"const": true},
+          "lease_removed_pass": {"const": true},
+          "lease_release_pass": {"const": true}
+        }},
+        "lease": {"properties": {
+          "evidence": {"$ref": "#/$defs/file"},
+          "transitions": {"$ref": "#/$defs/file"}
+        }},
+        "errors": {"maxItems": 0}
+      }}
+    },
+    {
+      "if": {"properties": {"terminal_pass": {"const": true}, "arm": {"const": "b"}}, "required": ["terminal_pass", "arm"]},
+      "then": {"properties": {"identity": {"properties": {"arm_a": {"properties": {
+        "package_identity_pass": {"const": true},
+        "payload_identity_pass": {"const": true},
+        "archive_identity_pass": {"const": true},
+        "restored_identity_pass": {"const": true}
+      }}}}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableInteger": {"type": ["integer", "null"]},
+    "nullableBoolean": {"type": ["boolean", "null"]},
+    "antecedents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_receipt", "build_verification", "scope_build_receipt",
+        "program_lock_verification", "transfer_receipt", "transfer_verification",
+        "authoritative_parent_payload", "arm_a_reference"
+      ],
+      "properties": {
+        "build_receipt": {"$ref": "#/$defs/file"},
+        "build_verification": {"$ref": "#/$defs/file"},
+        "scope_build_receipt": {"$ref": "#/$defs/file"},
+        "program_lock_verification": {"$ref": "#/$defs/file"},
+        "transfer_receipt": {"$ref": "#/$defs/file"},
+        "transfer_verification": {"$ref": "#/$defs/file"},
+        "authoritative_parent_payload": {
+          "allOf": [
+            {"$ref": "#/$defs/file"},
+            {"properties": {
+              "bytes": {"const": 107730531},
+              "sha256": {"const": "889aa8074e0a84eb89997986899f1ef9f7cc0e52e87d1d36f86899fc679f5490"}
+            }}
+          ]
+        },
+        "arm_a_reference": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]}
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm", "raw_binary", "dictionary_payload", "article_order_payload",
+        "header", "packaged_compressor", "head", "program_bytes",
+        "mechanical_concatenation_pass", "independent_release_build_pass",
+        "build_verification"
+      ],
+      "properties": {
+        "arm": {"enum": ["a", "b"]},
+        "raw_binary": {"$ref": "#/$defs/file"},
+        "dictionary_payload": {"$ref": "#/$defs/file"},
+        "article_order_payload": {"$ref": "#/$defs/file"},
+        "header": {"$ref": "#/$defs/file"},
+        "packaged_compressor": {"$ref": "#/$defs/file"},
+        "head": {"$ref": "#/$defs/file"},
+        "program_bytes": {"type": "integer", "minimum": 1},
+        "mechanical_concatenation_pass": {"const": true},
+        "independent_release_build_pass": {"const": true},
+        "build_verification": {"$ref": "#/$defs/file"}
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode", "outer_return_code", "guard_command_sha256",
+        "stage_command_sha256", "guard_receipt", "stage_receipt",
+        "guard_stdout", "guard_stderr", "guard_status", "guard_return_code",
+        "maximum_tree_rss_kib", "cgroup_memory_peak_bytes",
+        "maximum_temporary_disk_bytes", "maximum_allowed_cpu_count",
+        "stage_return_code", "backing_cleanup_pass", "exact_raw_inverse_pass",
+        "cgroup_cleanup_pass", "errors", "stage_and_guard_pass"
+      ],
+      "properties": {
+        "mode": {"enum": ["encode", "decode"]},
+        "outer_return_code": {"$ref": "#/$defs/nullableInteger"},
+        "guard_command_sha256": {"$ref": "#/$defs/sha256"},
+        "stage_command_sha256": {"$ref": "#/$defs/sha256"},
+        "guard_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+        "stage_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+        "guard_stdout": {"$ref": "#/$defs/logFile"},
+        "guard_stderr": {"$ref": "#/$defs/logFile"},
+        "guard_status": {"type": ["string", "null"]},
+        "guard_return_code": {"$ref": "#/$defs/nullableInteger"},
+        "maximum_tree_rss_kib": {"$ref": "#/$defs/nullableInteger"},
+        "cgroup_memory_peak_bytes": {"$ref": "#/$defs/nullableInteger"},
+        "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 0},
+        "maximum_allowed_cpu_count": {"$ref": "#/$defs/nullableInteger"},
+        "stage_return_code": {"$ref": "#/$defs/nullableInteger"},
+        "backing_cleanup_pass": {"$ref": "#/$defs/nullableBoolean"},
+        "exact_raw_inverse_pass": {"$ref": "#/$defs/nullableBoolean"},
+        "cgroup_cleanup_pass": {"type": "boolean"},
+        "errors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "stage_and_guard_pass": {"type": "boolean"}
+      }
+    },
+    "passingStage": {
+      "allOf": [
+        {"$ref": "#/$defs/stage"},
+        {"properties": {
+          "outer_return_code": {"const": 0},
+          "guard_receipt": {"$ref": "#/$defs/file"},
+          "stage_receipt": {"$ref": "#/$defs/file"},
+          "guard_status": {"const": "complete"},
+          "guard_return_code": {"const": 0},
+          "maximum_tree_rss_kib": {"type": "integer", "minimum": 1, "maximum": 9765624},
+          "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 1, "maximum": 10000000000},
+          "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 1, "maximum": 99999999999},
+          "maximum_allowed_cpu_count": {"const": 1},
+          "stage_return_code": {"const": 0},
+          "backing_cleanup_pass": {"const": true},
+          "cgroup_cleanup_pass": {"const": true},
+          "errors": {"maxItems": 0},
+          "stage_and_guard_pass": {"const": true}
+        }}
+      ]
+    },
+    "logFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authoritative_parent_payload_identity_pass", "exact_raw_inverse_pass",
+        "arm_a", "full_integer_probability_stream_identity_pass",
+        "full_persistent_state_trajectory_identity_pass"
+      ],
+      "properties": {
+        "authoritative_parent_payload_identity_pass": {"type": "boolean"},
+        "exact_raw_inverse_pass": {"type": "boolean"},
+        "arm_a": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "package_identity_pass", "payload_identity_pass",
+            "archive_identity_pass", "restored_identity_pass"
+          ],
+          "properties": {
+            "package_identity_pass": {"$ref": "#/$defs/nullableBoolean"},
+            "payload_identity_pass": {"$ref": "#/$defs/nullableBoolean"},
+            "archive_identity_pass": {"$ref": "#/$defs/nullableBoolean"},
+            "restored_identity_pass": {"$ref": "#/$defs/nullableBoolean"}
+          }
+        },
+        "full_integer_probability_stream_identity_pass": {"const": false},
+        "full_persistent_state_trajectory_identity_pass": {"const": false}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_count", "maximum_tree_rss_kib", "maximum_cgroup_memory_peak_bytes",
+        "maximum_temporary_disk_bytes", "maximum_allowed_cpu_count",
+        "all_guards_pass", "diagnostic_timing_only",
+        "geekbench5_single_core_score", "runtime_eligibility_established"
+      ],
+      "properties": {
+        "guard_count": {"type": "integer", "minimum": 0, "maximum": 2},
+        "maximum_tree_rss_kib": {"type": "integer", "minimum": 0, "maximum": 9765625},
+        "maximum_cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0, "maximum": 10000000000},
+        "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 0, "maximum": 100000000000},
+        "maximum_allowed_cpu_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "all_guards_pass": {"type": "boolean"},
+        "diagnostic_timing_only": {"const": true},
+        "geekbench5_single_core_score": {"type": "null"},
+        "runtime_eligibility_established": {"const": false}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_bytes", "program_bytes", "counted_score_bytes", "target_bytes",
+        "target_pass", "score_credit_bytes"
+      ],
+      "properties": {
+        "archive_bytes": {"$ref": "#/$defs/nullableInteger"},
+        "program_bytes": {"$ref": "#/$defs/nullableInteger"},
+        "counted_score_bytes": {"$ref": "#/$defs/nullableInteger"},
+        "target_bytes": {"const": 105000000},
+        "target_pass": {"type": "boolean"},
+        "score_credit_bytes": {"const": 0}
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scratch_root", "scratch_removed_on_success_pass",
+        "scratch_preserved_on_failure", "cgroup_removed_pass",
+        "lease_removed_pass", "lease_release_pass"
+      ],
+      "properties": {
+        "scratch_root": {"type": "string", "pattern": "^/"},
+        "scratch_removed_on_success_pass": {"type": "boolean"},
+        "scratch_preserved_on_failure": {"type": "boolean"},
+        "cgroup_removed_pass": {"type": "boolean"},
+        "lease_removed_pass": {"type": "boolean"},
+        "lease_release_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/run-receipt.schema.json",
+  "title": "gamma.enwiki9.run_receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "receiptId",
+    "candidateId",
+    "candidateTreeSha256",
+    "corpus",
+    "archive",
+    "package",
+    "accounting",
+    "correctness",
+    "resources",
+    "distribution",
+    "commands",
+    "verification",
+    "verdict",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.run-receipt.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "receiptId": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+$" },
+    "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+$" },
+    "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+    "corpus": { "$ref": "#/$defs/artifact" },
+    "archive": { "$ref": "#/$defs/artifact" },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifestPath", "manifestSha256", "bytes", "dependencyClosureComplete"],
+      "properties": {
+        "manifestPath": { "type": "string", "minLength": 1 },
+        "manifestSha256": { "$ref": "#/$defs/digest" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "dependencyClosureComplete": { "type": "boolean" }
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packageBytes", "archiveBytes", "requiredOptionBytes", "officialScoreBytes", "targetDebtBytes", "complete"],
+      "properties": {
+        "packageBytes": { "type": "integer", "minimum": 1 },
+        "archiveBytes": { "type": "integer", "minimum": 1 },
+        "requiredOptionBytes": { "type": "integer", "minimum": 0 },
+        "officialScoreBytes": { "type": "integer", "minimum": 1 },
+        "targetDebtBytes": { "type": "integer" },
+        "complete": { "type": "boolean" }
+      }
+    },
+    "correctness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roundtripOk", "determinismOk", "deterministicReplayArchive", "restored", "independentDecodeOk"],
+      "properties": {
+        "roundtripOk": { "type": "boolean" },
+        "determinismOk": { "type": "boolean" },
+        "deterministicReplayArchive": { "$ref": "#/$defs/artifact" },
+        "restored": { "$ref": "#/$defs/artifact" },
+        "independentDecodeOk": { "type": "boolean" }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compressionGuard", "replayCompressionGuard", "decompressionGuard", "wallTimePass", "memoryPass", "temporaryDiskPass", "singleCorePass", "complete"],
+      "properties": {
+        "compressionGuard": { "$ref": "#/$defs/reference" },
+        "replayCompressionGuard": { "$ref": "#/$defs/reference" },
+        "decompressionGuard": { "$ref": "#/$defs/reference" },
+        "wallTimePass": { "type": "boolean" },
+        "memoryPass": { "type": "boolean" },
+        "temporaryDiskPass": { "type": "boolean" },
+        "singleCorePass": { "type": "boolean" },
+        "complete": { "type": "boolean" }
+      }
+    },
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cleanRoomReceipt", "selfContained", "cleanRoomReplayOk", "networkUsed", "gpuUsed", "hiddenInputs", "licenseAuditOk"],
+      "properties": {
+        "cleanRoomReceipt": { "$ref": "#/$defs/reference" },
+        "selfContained": { "type": "boolean" },
+        "cleanRoomReplayOk": { "type": "boolean" },
+        "networkUsed": { "type": "boolean" },
+        "gpuUsed": { "type": "boolean" },
+        "hiddenInputs": { "type": "boolean" },
+        "licenseAuditOk": { "type": "boolean" }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build", "compress", "decompress", "independentVerify"],
+      "properties": {
+        "build": { "$ref": "#/$defs/command" },
+        "compress": { "$ref": "#/$defs/command" },
+        "decompress": { "$ref": "#/$defs/command" },
+        "independentVerify": { "$ref": "#/$defs/command" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "verifier", "peerReceipt", "crossHostArchiveIdentityOk"],
+      "properties": {
+        "host": { "type": "string", "minLength": 1 },
+        "verifier": { "type": "string", "minLength": 1 },
+        "peerReceipt": {
+          "oneOf": [
+            { "$ref": "#/$defs/reference" },
+            { "type": "null" }
+          ]
+        },
+        "crossHostArchiveIdentityOk": { "type": "boolean" }
+      }
+    },
+    "verdict": { "enum": ["diagnostic", "reject", "promote", "objective-achieved"] },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

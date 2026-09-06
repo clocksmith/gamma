@@ -1,0 +1,539 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/gamma-parent-fallback-archive-select-receipt.schema.json",
+  "title": "Gamma Parent-Fallback Archive Selection Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "created_utc",
+    "identity",
+    "population",
+    "alternatives",
+    "selection",
+    "package",
+    "resources",
+    "controls",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gamma-parent-fallback-archive-select-receipt.v1"
+    },
+    "candidate_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_sha256",
+        "wrapper_source_sha256",
+        "wrapper_binary_sha256",
+        "command_sha256",
+        "environment_sha256"
+      ],
+      "properties": {
+        "contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "wrapper_source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "wrapper_binary_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "command_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "environment_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_id",
+        "input_bytes",
+        "input_sha256",
+        "scope_manifest_sha256",
+        "sealed_before_execution"
+      ],
+      "properties": {
+        "population_id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "input_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scope_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sealed_before_execution": {
+          "const": true
+        }
+      }
+    },
+    "alternatives": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P",
+        "C"
+      ],
+      "properties": {
+        "P": {
+          "$ref": "#/$defs/alternative"
+        },
+        "C": {
+          "$ref": "#/$defs/alternative"
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "mode_byte",
+        "tie_break",
+        "mode_matches_recomputed",
+        "selected_payload_bytes",
+        "selected_payload_sha256",
+        "fixed_header_bytes",
+        "framed_archive_bytes",
+        "framed_archive_sha256",
+        "selection_arithmetic_pass",
+        "repeat_mode",
+        "repeat_archive_sha256",
+        "repeat_identity",
+        "decode_return_code",
+        "decoded_bytes",
+        "decoded_sha256",
+        "exact_inverse"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "P",
+            "C"
+          ]
+        },
+        "mode_byte": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "tie_break": {
+          "const": "P"
+        },
+        "mode_matches_recomputed": {
+          "type": "boolean"
+        },
+        "selected_payload_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected_payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "fixed_header_bytes": {
+          "const": 14
+        },
+        "framed_archive_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "framed_archive_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selection_arithmetic_pass": {
+          "type": "boolean"
+        },
+        "repeat_mode": {
+          "enum": [
+            "P",
+            "C"
+          ]
+        },
+        "repeat_archive_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "repeat_identity": {
+          "type": "boolean"
+        },
+        "decode_return_code": {
+          "type": "integer"
+        },
+        "decoded_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decoded_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "exact_inverse": {
+          "type": "boolean"
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "union_manifest_sha256",
+        "union_package_bytes",
+        "selected_archive_bytes",
+        "complete_counted_score_bytes",
+        "dependencies_sealed",
+        "untracked_inputs_empty"
+      ],
+      "properties": {
+        "union_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "union_package_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected_archive_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "complete_counted_score_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "dependencies_sealed": {
+          "type": "boolean"
+        },
+        "untracked_inputs_empty": {
+          "type": "boolean"
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource_guard_receipt_sha256",
+        "process_tree_peak_bytes",
+        "process_tree_limit_bytes",
+        "single_logical_cpu",
+        "scratch_peak_logical_bytes",
+        "scratch_peak_allocated_bytes",
+        "temporary_disk_pass",
+        "runtime_measured",
+        "runtime_eligible",
+        "cleanup_pass",
+        "resource_pass"
+      ],
+      "properties": {
+        "resource_guard_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "process_tree_peak_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "process_tree_limit_bytes": {
+          "const": 10000000000
+        },
+        "single_logical_cpu": {
+          "const": true
+        },
+        "scratch_peak_logical_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scratch_peak_allocated_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "temporary_disk_pass": {
+          "type": "boolean"
+        },
+        "runtime_measured": {
+          "type": "boolean"
+        },
+        "runtime_eligible": {
+          "type": "boolean"
+        },
+        "cleanup_pass": {
+          "type": "boolean"
+        },
+        "resource_pass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_frame_identity_pass",
+        "mode_flip_rejected",
+        "length_tamper_rejected",
+        "repeat_selection_pass"
+      ],
+      "properties": {
+        "parent_frame_identity_pass": {
+          "type": "boolean"
+        },
+        "mode_flip_rejected": {
+          "type": "boolean"
+        },
+        "length_tamper_rejected": {
+          "type": "boolean"
+        },
+        "repeat_selection_pass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "promotion_authorized",
+        "reason_codes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "invalid"
+          ]
+        },
+        "promotion_authorized": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonempty"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonempty": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alternative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "contract_sha256",
+        "binary_sha256",
+        "package_manifest_sha256",
+        "receipt_sha256",
+        "encode_return_code",
+        "payload_bytes",
+        "payload_sha256",
+        "decode_return_code",
+        "decoded_bytes",
+        "decoded_sha256",
+        "exact_inverse",
+        "dependency_closure_pass"
+      ],
+      "properties": {
+        "candidate_id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "binary_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "package_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "encode_return_code": {
+          "type": "integer"
+        },
+        "payload_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "decode_return_code": {
+          "type": "integer"
+        },
+        "decoded_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decoded_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "exact_inverse": {
+          "type": "boolean"
+        },
+        "dependency_closure_pass": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "properties": {
+              "promotion_authorized": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "alternatives": {
+            "properties": {
+              "P": {
+                "properties": {
+                  "encode_return_code": {
+                    "const": 0
+                  },
+                  "decode_return_code": {
+                    "const": 0
+                  },
+                  "exact_inverse": {
+                    "const": true
+                  },
+                  "dependency_closure_pass": {
+                    "const": true
+                  }
+                }
+              },
+              "C": {
+                "properties": {
+                  "encode_return_code": {
+                    "const": 0
+                  },
+                  "decode_return_code": {
+                    "const": 0
+                  },
+                  "exact_inverse": {
+                    "const": true
+                  },
+                  "dependency_closure_pass": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          },
+          "selection": {
+            "properties": {
+              "mode_matches_recomputed": {
+                "const": true
+              },
+              "selection_arithmetic_pass": {
+                "const": true
+              },
+              "repeat_identity": {
+                "const": true
+              },
+              "decode_return_code": {
+                "const": 0
+              },
+              "exact_inverse": {
+                "const": true
+              }
+            }
+          },
+          "package": {
+            "properties": {
+              "complete_counted_score_bytes": {
+                "maximum": 105000000
+              },
+              "dependencies_sealed": {
+                "const": true
+              },
+              "untracked_inputs_empty": {
+                "const": true
+              }
+            }
+          },
+          "resources": {
+            "properties": {
+              "process_tree_peak_bytes": {
+                "maximum": 10000000000
+              },
+              "temporary_disk_pass": {
+                "const": true
+              },
+              "runtime_measured": {
+                "const": true
+              },
+              "runtime_eligible": {
+                "const": true
+              },
+              "cleanup_pass": {
+                "const": true
+              },
+              "resource_pass": {
+                "const": true
+              }
+            }
+          },
+          "controls": {
+            "properties": {
+              "parent_frame_identity_pass": {
+                "const": true
+              },
+              "mode_flip_rejected": {
+                "const": true
+              },
+              "length_tamper_rejected": {
+                "const": true
+              },
+              "repeat_selection_pass": {
+                "const": true
+              }
+            }
+          },
+          "decision": {
+            "properties": {
+              "status": {
+                "const": "pass"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

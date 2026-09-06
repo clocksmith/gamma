@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/algorithm-proposal.schema.json",
+  "title": "gamma.enwiki9.algorithm-proposal.v2",
+  "type": "object",
+  "required": [
+    "schema",
+    "objective",
+    "proposal_id",
+    "title",
+    "hypothesis",
+    "mechanism_class",
+    "parent",
+    "expected_savings_bytes",
+    "max_program_bytes",
+    "promotion_condition",
+    "kill_condition",
+    "evidence",
+    "experiment",
+    "priority",
+    "state",
+    "created_at"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.algorithm-proposal.v2" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "proposal_id": { "$ref": "#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "hypothesis": { "type": "string", "minLength": 1 },
+    "mechanism_class": { "enum": ["substrate", "endpoint", "representation", "coder"] },
+    "parent": { "type": ["string", "null"] },
+    "expected_savings_bytes": { "type": "integer" },
+    "max_program_bytes": { "type": "integer", "minimum": 0 },
+    "promotion_condition": { "type": "string", "minLength": 1 },
+    "kill_condition": { "type": "string", "minLength": 1 },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/reference" }, "uniqueItems": true },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "priority": { "type": "integer" },
+    "state": { "enum": ["proposed", "claimed", "developed", "rejected"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

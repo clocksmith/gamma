@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-arm.v1",
+  "title": "CMIX q1 opening-100M instrumented identity-arm receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "arm",
+    "runner",
+    "receipt_schema",
+    "command_sha256",
+    "population",
+    "package",
+    "encode_guard",
+    "decode_guard",
+    "return_codes",
+    "probability_sha256",
+    "probability_summary",
+    "coder_checkpoints",
+    "persistent_state",
+    "arithmetic_payload",
+    "self_extracting_archive",
+    "transformed_input",
+    "decoded_transformed",
+    "raw_inverse",
+    "observer_geometry_pass",
+    "transformed_inverse_pass",
+    "raw_inverse_pass",
+    "backing_cleanup_pass",
+    "arm_pass",
+    "errors",
+    "claim_authority",
+    "execution_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-arm.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "arm": {"enum": ["I-P", "I-Q"]},
+    "runner": {"$ref": "#/$defs/artifact"},
+    "receipt_schema": {"$ref": "#/$defs/artifact"},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
+    "population": {"$ref": "#/$defs/artifact"},
+    "package": {"$ref": "#/$defs/artifact"},
+    "encode_guard": {"$ref": "#/$defs/artifact"},
+    "decode_guard": {"$ref": "#/$defs/artifact"},
+    "return_codes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encode", "decode", "raw_inverse"],
+      "properties": {
+        "encode": {"type": "integer"},
+        "decode": {"type": "integer"},
+        "raw_inverse": {"type": "integer"}
+      }
+    },
+    "probability_sha256": {"$ref": "#/$defs/sha256"},
+    "probability_summary": {"$ref": "#/$defs/artifact"},
+    "coder_checkpoints": {"$ref": "#/$defs/artifact"},
+    "persistent_state": {"$ref": "#/$defs/artifact"},
+    "arithmetic_payload": {"$ref": "#/$defs/artifact"},
+    "self_extracting_archive": {"$ref": "#/$defs/artifact"},
+    "transformed_input": {"$ref": "#/$defs/artifact"},
+    "decoded_transformed": {"$ref": "#/$defs/artifact"},
+    "raw_inverse": {"$ref": "#/$defs/artifact"},
+    "observer_geometry_pass": {"type": "boolean"},
+    "transformed_inverse_pass": {"type": "boolean"},
+    "raw_inverse_pass": {"type": "boolean"},
+    "backing_cleanup_pass": {"type": "boolean"},
+    "arm_pass": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "claim_authority": {"const": "opening_100m_instrumented_identity_arm_only"},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"arm_pass": {"const": true}}, "required": ["arm_pass"]},
+      "then": {
+        "properties": {
+          "return_codes": {
+            "properties": {
+              "encode": {"const": 0},
+              "decode": {"const": 0},
+              "raw_inverse": {"const": 0}
+            }
+          },
+          "observer_geometry_pass": {"const": true},
+          "transformed_inverse_pass": {"const": true},
+          "raw_inverse_pass": {"const": true},
+          "backing_cleanup_pass": {"const": true},
+          "errors": {"maxItems": 0}
+        }
+      }
+    }
+  ]
+}
