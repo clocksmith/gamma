@@ -65,6 +65,15 @@ to the same sealed observer. It retains the attributed public upstream block
 routine and scalar fallback. Synthetic parity tests must pass before this
 unmeasured implementation can enter a separately frozen corpus gate.
 
+The [accelerated observer unit receipt](../operations/evidence/20260906_midas_open_boundary_observer_sha_unit.json)
+now records six passing tests: five inherited observer cases and 138 digest
+vectors checked against both the unchanged scalar routine and Python hashlib.
+Every retained archive, probability trace, boundary record, final state and
+snapshot matches the original observer across all P/K/F/S phases. The native
+binary is 437,128 bytes; 540 observer and 521 hash-fixture compiler dependencies
+were rehashed. The guard and child cleanup pass. This remains synthetic
+correctness evidence; corpus-scale observation cost still needs measurement.
+
 ## 2026-09-06 - MIDAS boundary observability passes exact synthetic checks
 
 The [new observer](midas_open_boundary_observer_v1.md) wraps the unchanged native
