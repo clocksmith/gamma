@@ -1,0 +1,37 @@
+{
+  "candidate_id": "midas_open_observer_sha_cost4096_q0_v1",
+  "cause": "Initial guarded process was observed with inherited32-CPU affinity before inner taskset applied CPU2. The guard stopped the process before any phase marker.",
+  "cleanup_complete": true,
+  "codec_executed": false,
+  "elapsed_seconds": 0.0243,
+  "experiment": {
+    "path": "operations/adaptive/experiments/midas_open_observer_sha_cost4096_q0_v1.json",
+    "sha256": "sha256:5c78bd482486710b6651d9dd3bb3303261a466dd8679a8ae70e614195b7c1d8b"
+  },
+  "failure_class": "infrastructure-failure",
+  "generated_at": "2026-09-06T15:01:52.074722+00:00",
+  "guard": {
+    "bytes": 9401,
+    "path": "run_logs/adaptive/20260906T145045Z_48b35ff173.resources/guard.json",
+    "sha256": "6c414f670a8fd779c40870c8148a803d70b39d7ef52ff9be7c899154995ac7e5"
+  },
+  "hypothesis_verdict": "not-tested",
+  "job": {
+    "bytes": 4555,
+    "path": "operations/adaptive/failed/959_20260906T145045Z_48b35ff173.json",
+    "sha256": "60bf2bcb5f0674b01228e40b70ca4134a7b888d73712410bbb98098f39364777"
+  },
+  "job_id": "20260906T145045Z_48b35ff173",
+  "limits_unchanged": true,
+  "native_phases": 0,
+  "objective_credit_bytes": 0,
+  "observed_allowed_cpu_count": 32,
+  "phase_markers": {
+    "bytes": 0,
+    "path": "run_logs/adaptive/20260906T145045Z_48b35ff173.resources/phases.jsonl",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "remedy": "Retry the same unchanged frozen comparison using taskset -c2 around the canonical enwiki9_lab.py run invocation, so the guard child inherits CPU2 from startup. Preserve this failed job and use a new held job identity.",
+  "result_directory_empty": true,
+  "schema": "gamma.enwiki9.precodec-infrastructure-failure.v1"
+}

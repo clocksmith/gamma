@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Initial process affinity sampling precedes inner taskset execution; pin the canonical launcher itself to CPU2 so descendants inherit the frozen assignment."
+  },
+  "candidateId": "midas_open_observer_sha_cost4096_q0_v1",
+  "candidateRevision": {
+    "candidateId": "midas_open_observer_sha_cost4096_q0_v1",
+    "candidateTreeSha256": "sha256:e9e9a61cb0111c009e8ddeeb5040229e9445be95211eab0b1adf468db86fce3f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/midas_open_observer_sha_cost4096_q0_v1/20260906T145002324294Z_e9e9a61cb011.json",
+      "sha256": "sha256:de3916a8bddc10992b6d8540b96295930cfdc6be6bb6b9a201d589ded86c9bfd"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Use a new held job identity for the unchanged experiment after publishing this failure and new ownership. Empty output directory contains no measured source or artifacts to overwrite. Launch via outer taskset CPU2; unchanged memory/scratch/elapsed limits.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/midas_observer_sha_cost4096_admission_failure_20260906.json",
+      "sha256": "sha256:62c5baff132a86807ea39d36d22849f52bb1d2acee545add4cbde0f206795a62"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/midas_open_observer_sha_cost4096_q0_v1.json",
+    "sha256": "sha256:5c78bd482486710b6651d9dd3bb3303261a466dd8679a8ae70e614195b7c1d8b"
+  },
+  "generatedUtc": "2026-09-06T15:01:52+00:00",
+  "hypothesis": {
+    "rationale": "Zero native phases and no codec artifacts; no compression or parity measurement exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260906T145045Z_48b35ff173.json",
+    "sha256": "sha256:60bf2bcb5f0674b01228e40b70ca4134a7b888d73712410bbb98098f39364777"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Apply CPU affinity to the canonical launcher before fork so initial guard samples obey the same CPU policy as native phases; keep the strict guard."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260906t145045z_48b35ff173",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "The initial affinity guard stopped an inherited32-CPU launcher before any codec phase. Output directory remains empty; original failed job/guard retained and cgroup cleanup passes."
+    ],
+    "valid": false
+  }
+}

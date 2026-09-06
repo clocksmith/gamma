@@ -20,12 +20,30 @@ zero swap and a 180-second aggregate stop; native phase limits are unchanged.
 It grants no compression or qualification credit. Any corpus successor requires
 its own freeze using measured cost and complete boundary evidence.
 
+The [first attempt](../operations/provenance/midas_observer_sha_cost4096_admission_failure_20260906.json)
+stopped before any codec phase: the initial guard sampled inherited 32-CPU
+affinity before the inner `taskset` applied CPU2. No result file was created;
+cleanup passed. Its validated infrastructure-failure reflection permits a new
+held job for the unchanged experiment, with the entire canonical launcher
+pinned to CPU2 before fork. The strict guard and frozen budgets stay unchanged.
+
 During preparation, admission rejected an attempted edit to the older bound
 observer documentation. ROOT restored its exact bytes before enqueueing and
 reverified all 238 distant-gate and 304 cost-gate input hashes. Executable
 sources and cached binaries were unchanged; current guidance stays here.
 
-## 2026-09-06 - MIDAS distant100KB transfer is frozen and held
+## 2026-09-06 - MIDAS distant100KB passes exact observed transfer
+
+The [terminal audit](../operations/provenance/midas_open_observed_distant100k_terminal_20260906.json)
+closes all 16 phases. P/K produce 51,531 bytes, F 45,587, and S 50,882.
+F saves 5,944 bytes against P and 5,295 against S. All four raw inverses,
+repeated archives, fresh unobserved reference archives/final states, 800,000
+pre-truth probabilities and 3,127 boundary records pass their comparisons.
+The resource guard passes and the cgroup is removed. The [validated reflection](../operations/adaptive/reflections/20260906T143122Z_85238bbb11.json)
+permits a separately frozen 250KB gate after observation cost is measured under
+the unchanged native limits. Four new run rows bring the ledger to 1,001 unique
+identities. This previously examined cold population provides transfer evidence;
+complete-package, fresh-confirmation and full-corpus claims remain unproved.
 
 ROOT owns `midas_open_observed_distant100k_q0_v1`, initially held job
 `20260906T143122Z_85238bbb11`. The [plan](../operations/provenance/midas_open_observed_distant100k_q0_v1_plan.json)
