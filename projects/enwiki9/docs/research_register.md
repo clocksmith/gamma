@@ -2,6 +2,41 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Exact representation experiments and precision diagnosis
+
+The active target remains 99,000,000 complete bytes; the 10,389,323-byte distance
+from the best counted Gamma forecast is planning debt. HORIZON remains unchanged.
+The user selected exact-residual model packing, an independently framed schema
+codec with paid exceptions, and a predefined tensor-restoration diagnostic.
+These are separate experiments; existing component savings do not prove 99M.
+MIDAS independently advances the unchanged standalone codec toward a bounded
+P/K/F/S raw corpus comparison after synthetic runner validation and published
+ownership. No new corpus result is implied by these source assignments.
+
+The [run-ranked exception screen](../operations/provenance/public_fx2_xml_exception_geometry_screen_20260906.json)
+counts masks with n positions, e exceptions and r runs by
+`C(e-1,r-1) * C(n-e+1,r)`. The reviewer checked all 8,191 masks of lengths 0..12.
+On opening 250KB, 87 eligible prior-route pairs displace only 10.8837 parent ideal
+bytes; even optimistic mask/descriptor costs leave -301.479 bytes saved. No pair
+pays, and the distant cold population has no eligible explicit-key pairs.
+This rejects that screened realization on these populations, not grammar,
+cross-field dependencies or mature-history opportunities as information sources.
+
+A separate considered mechanism keys a later template field by an earlier
+field's decoded value, learned only from completed previous templates. Its
+conditional lookup differs from same-route value copying and outer-XML numeric
+dependencies. An exact equal mixture of two sequence models costs at most one
+ideal bit above the better model per activation; finite rounding and package
+cost remain unmeasured. [SQUISH](https://arxiv.org/abs/1602.04256v2) provides an
+attribute-dependency precedent, not transferable Gamma compression credit.
+It is considered evidence, not another queued specialist.
+
+For the selected schema realization, sequential reversible grammar construction
+has [published precedent](https://doi.org/10.1109/18.841161), while ambiguous
+grammars require a [paid derivation or deterministic resolution](https://arxiv.org/abs/2003.08097).
+The proposed block fallback is compared with an equivalently framed baseline;
+it does not inherit an overhead bound against uninterrupted FX2.
+
 ## 2026-09-06 - Open MIDAS source bundle survives relocation and exact replay
 
 `tools/midas_open_source_bundle_v1.py` materializes the unchanged default
