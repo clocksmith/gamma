@@ -2,6 +2,29 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - SHA observer cost comparison reuses the sealed MIDAS driver
+
+ROOT owns `midas_open_observer_sha_cost4096_q0_v1`, initially held job
+`20260906T145045Z_48b35ff173`. The explicit build-authority adapter
+`tools/midas_open_observed_sha_gate_v1.py` reuses the original driver's execution,
+comparison and publication functions in a private module. It authenticates the
+successor's actual six-test receipt. Its [eleven synthetic tests](../operations/evidence/20260906_midas_open_observed_sha_gate_unit.json)
+reject stale authority, changed source, missing parity, corrupt probabilities
+and incomplete boundaries, while preserving elapsed-stop classification.
+
+The [frozen plan](../operations/provenance/midas_open_observer_sha_cost4096_q0_v1_plan.json)
+binds 304 inputs, including original synthetic4096 witnesses, and 157 outputs.
+It runs on CPU2 only after the distant100KB gate closes, ownership is published
+and fresh admission passes. Limits are 2GiB outer memory, 256MiB scratch,
+zero swap and a 180-second aggregate stop; native phase limits are unchanged.
+It grants no compression or qualification credit. Any corpus successor requires
+its own freeze using measured cost and complete boundary evidence.
+
+During preparation, admission rejected an attempted edit to the older bound
+observer documentation. ROOT restored its exact bytes before enqueueing and
+reverified all 238 distant-gate and 304 cost-gate input hashes. Executable
+sources and cached binaries were unchanged; current guidance stays here.
+
 ## 2026-09-06 - MIDAS distant100KB transfer is frozen and held
 
 ROOT owns `midas_open_observed_distant100k_q0_v1`, initially held job
