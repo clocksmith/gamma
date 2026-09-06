@@ -72,7 +72,7 @@ locked component specification.
 | Modular hex tiles | 19, double-sided, 80–90 mm, 2 mm greyboard | selected complete radius-two footprint |
 | Faction/player boards | 6 dual-layer boards with 6 captive sliders each | selected physical authority; slider construction unresolved |
 | Core Action cards | 36, six per player | confirmed |
-| Shared Program cards | 6, one shared copy of each named Program | confirmed |
+| Infrastructure project references | 2, Mega-Cluster and Fusion | current test candidate |
 | Headline cards | 16 | Era packets contain 5 / 4 / 3 / 4 |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
 | Training cards | 40 | confirmed test contract |
@@ -80,15 +80,14 @@ locked component specification.
 | Secret objectives | 0 baseline; 18-card deferred module | excluded from first quote |
 | Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
 | Player aids | 6 three-panel foldouts | replaces twenty-four separate reference cards |
-| Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its shared Program card | replaces three separate reference cards |
-| Total printed card-and-aid pieces | 116 | 110 standard cards plus 6 foldouts; manufacturing overage excluded |
+| Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its project reference | replaces three separate reference cards |
+| Total printed card-and-aid pieces | 116 | 106 standard cards plus 6 foldouts; manufacturing overage excluded |
 | Agent pieces | 24 | four identical markers per faction, two deployed at setup |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |
 | Starting-grid identifiers | 6 | integrated into each faction's first Facility |
 | Separate Grid-Ready pieces | 0 | no persistent Grid-Ready state exists |
 | Faction-board sliders | 30 captive sliders: Runway, Compute, Capability, Customers, and Trust on each board | integrated into boards; no loose track markers |
-| Program markers | 12, two per faction | record each player's Era Program allowance on the shared display |
 | Mandate markers | 6 | one loose faction-coloured marker per faction for the shared track |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
 | Shared punchboard tokens | 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/docs/component-inventory.md` | selected counts; layout unresolved |
@@ -125,13 +124,11 @@ Tactics and secret objectives are excluded from the controlled baseline.
 Their 36-card and 18-card drafts remain optional future modules and should not
 be included in the first prototype quote.
 
-### Resolved: shared Program use
+### Current candidate: infrastructure references
 
-Six named Program cards remain face up on the Governance Board. Each player
-has two Program markers. The Era panels allow `0 / 1 / 1 / 2` Program uses;
-unused allowance expires at Era end. A player may use each named Program at
-most once per game. This removes thirty-six private cards and the captive
-Escalation track while preserving public timing and once-per-game identity.
+The three cuts candidate removes Programs and their twelve markers. Two public
+references show Mega-Cluster and Fusion construction and operation. Build may
+construct up to one Facility and one project; no separate use ledger is needed.
 
 ### Resolved: player component maxima
 
@@ -158,12 +155,11 @@ unresolved.
 
 Three Power contracts remain in the rules without separate cards: Emergency
 Infrastructure is printed on Grid, Clean Infrastructure on Renewable, and
-Fusion on its shared Program. Generator pieces and Energy slots create scarcity.
+Fusion on its project reference. Generator pieces and Energy slots create scarcity.
 Fusion uses one dedicated shared marker. Shared token quantities are exact in
 the rulebook.
 
-One Governance Board ledger records the current Mandate criterion, permanent
-named Program use, Setup Collective Trust, and final public recognition.
+One Governance Board ledger records the current Mandate criterion, Setup Collective Trust, and final public recognition.
 Power uses current Generator adjacency and the integrated first-Facility grid;
 no allocation cubes or duplicate Power record are needed.
 

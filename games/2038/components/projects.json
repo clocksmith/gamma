@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "constructionRule": "During Build, construct up to one Facility, then up to one unlocked project from the same Agent assignment. Pay each cost and check requirements after placing the Facility.",
+  "sharedCardCount": 2,
+  "projects": [
+    {
+      "id": "mega_cluster",
+      "unlockedRound": 2,
+      "timing": "during_action",
+      "name": "${terms.technology.megaCluster}",
+      "displayName": "Regional Capacity Project",
+      "text": "Spend 3 ${terms.resources.runway} and 2 ${terms.resources.compute} to place a ${terms.technology.megaCluster} across two adjacent connected Facilities you own. Add 2 ${terms.playerTracks.scrutiny}. It produces 3 ${terms.resources.compute} during Production while both hosts remain adjacent and connected. No additional Power is assigned.",
+      "flavorText": "The campus joins a substation, algae reactors, fungal utility meshes, and water rights into one regional obligation.",
+      "$scenario": {
+        "ref": "utility-capture"
+      }
+    },
+    {
+      "id": "fusion_demonstrator",
+      "unlockedRound": 4,
+      "timing": "during_action",
+      "name": "${terms.technology.advancedGeneration}",
+      "displayName": "Grid Continuity Demonstrator",
+      "text": "Era IV Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
+      "flavorText": "The device produces power, Mandate, and several competing definitions of public benefit.",
+      "$scenario": {
+        "ref": "matter-compiler"
+      }
+    }
+  ],
+  "institutionalHistory": [
+    {
+      "id": "reorganization",
+      "unlockedRound": 2,
+      "name": "Reorganization",
+      "displayName": "Institutional Continuity Program",
+      "flavorText": "Every eliminated role is recorded as a successful transfer of institutional memory to the system that made it redundant. One institutional exception converted into an ordinary operating program.",
+      "$scenario": {
+        "ref": "liability-custodians"
+      }
+    },
+    {
+      "id": "open_weights",
+      "unlockedRound": 3,
+      "name": "Public Capability Covenant",
+      "displayName": "Supported Access Standard",
+      "flavorText": "Every institution receives the capability. The author of the standard retains the trust, interpretation, and service relationship. The Human Signature certified access through approvals drafted by the same services being approved.",
+      "$scenario": {
+        "ref": "semantic-court-mandate"
+      }
+    },
+    {
+      "id": "narrative_capture",
+      "unlockedRound": 3,
+      "name": "Narrative Capture",
+      "displayName": "Public Standing Initiative",
+      "flavorText": "The ${terms.locations.media}, ${terms.locations.capital}, and ${terms.locations.government} adopt the institution’s preferred account of what has become necessary.",
+      "$scenario": {
+        "ref": "billion-instance-bloom"
+      }
+    },
+    {
+      "id": "agent_swarm",
+      "unlockedRound": 4,
+      "name": "${terms.technology.agentSwarm}",
+      "displayName": "Autonomous Operations Program",
+      "flavorText": "Bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives. Biological Colocation let those operations share a paid human host, even when their institutional employers competed.",
+      "$scenario": {
+        "ref": "metropolitan-mind-trust"
+      }
+    }
+  ]
+}

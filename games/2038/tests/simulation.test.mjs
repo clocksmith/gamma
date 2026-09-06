@@ -193,7 +193,7 @@ test("Scientific Method charges only when its protection is actually consumed", 
   });
   used.applyResolution(0, researchDecision);
   assert.equal(used.players[0].runway, 2);
-  assert.equal(used.players[0].roundMetrics.scientificMethodUsed, true);
+  assert.equal(used.players[0].roundMetrics.scientificMethodUsed, undefined);
   assert.ok(!Object.hasOwn(used.players[0], "researchProtection"));
   assert.deepEqual(
     used.players[0].metrics.factionAbilityValues.scientific_method,
@@ -202,10 +202,7 @@ test("Scientific Method charges only when its protection is actually consumed", 
       runwaySpent: 1,
       duplicatesProtected: 1,
       capabilityPreserved: 0,
-      capabilityPenalty: 0,
-      thresholdMandateWithheld: 0,
-      scrutinyAdded: 0
-    }
+          }
   );
 
   const unused = await createImperialMatch("unused");
@@ -251,299 +248,12 @@ test("legal-decision adjustments do not mutate their generated decision", async 
   assert.equal(adjusted.parameters.actualRunway, 3);
 });
 
-test("Scientific Method scrutiny taxes validation without reducing Capability", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-scrutiny-probe",
-      rulesVariant: { imperialScientificMethodScrutiny: 2 }
-    },
-    () => {}
-  );
-  const researcher = match.players[0];
-  match.resolveTrainingRun = () => ({
-    capability: 3,
-    trust: 0,
-    runwaySpent: 0,
-    protection: "scientific_method",
-    scrutiny: 0
-  });
-  match.applyResolution(0, {
-    decisionId: "fixture-scientific-method-scrutiny",
-    label: "Fixture Research saved by Scientific Method",
-    actionId: "research",
-    parameters: {
-      destinationCategory: "cloud",
-      destinationId: "frontier",
-      pieceId: "s0-agent-1",
-      stopAt: 3
-    }
-  });
-  assert.equal(researcher.capability, 3);
-  assert.equal(researcher.scrutiny, 2);
-  assert.equal(
-    researcher.metrics.factionAbilityValues.scientific_method.scrutinyAdded,
-    2
-  );
-});
 
-test("Mirevanta late validation changes Mandate without changing Capability", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "demis-late-public-validation"
-    },
-    () => {}
-  );
-  const researcher = match.players[0];
-  const mandateBefore = researcher.mandate;
-  match.addResource(researcher, "capability", 9);
-  assert.equal(researcher.capability, 9);
-  assert.equal(researcher.mandate - mandateBefore, 5);
-  assert.deepEqual(
-    researcher.metrics.factionAbilityValues.late_public_validation,
-    {
-      uses: 1,
-      mandateWithheld: 1,
-      thresholdsValidated: 1
-    }
-  );
-});
 
-test("four rival institutions restore Mirevanta's final validation point", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 5,
-      factionId: "imperial_research_lab",
-      seed: "demis-peer-validated-capability"
-    },
-    () => {}
-  );
-  const researcher = match.players[0];
-  const mandateBefore = researcher.mandate;
-  match.addResource(researcher, "capability", 12);
-  assert.equal(researcher.capability, 12);
-  assert.equal(researcher.mandate - mandateBefore, 7);
-  assert.deepEqual(
-    researcher.metrics.factionAbilityValues.late_public_validation,
-    {
-      uses: 1,
-      mandateWithheld: 1,
-      thresholdsValidated: 1
-    }
-  );
-});
 
-test("Mirevanta Peer Validation remains reduced at four players", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 4,
-      factionId: "imperial_research_lab",
-      seed: "demis-four-player-peer-validation"
-    },
-    () => {}
-  );
-  const researcher = match.players[0];
-  const mandateBefore = researcher.mandate;
-  match.addResource(researcher, "capability", 12);
-  assert.equal(researcher.capability, 12);
-  assert.equal(researcher.mandate - mandateBefore, 6);
-  assert.deepEqual(
-    researcher.mandateAwards
-      .filter((award) => award.id.startsWith("capability-"))
-      .map((award) => [award.id, award.points]),
-    [
-      ["capability-3", 2],
-      ["capability-6", 2],
-      ["capability-9", 1],
-      ["capability-12", 1]
-    ]
-  );
-});
 
-test("Safety Laboratory programs publish realized ability value", async () => {
-  const emergency = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "safety_laboratory",
-      seed: "safety-emergency-pause-telemetry"
-    },
-    () => {}
-  );
-  emergency.match.round = 4;
-  emergency.match.regime.cycle = {};
-  const safety = emergency.match.players[0];
-  const trustBeforePause = safety.trust;
-  const pausePolicies = emergency.match.players.map(() => fixturePolicy(
-    (packet) => packet.legalDecisions.find(
-      (decision) => decision.parameters?.escalationId === "fusion_demonstrator"
-    )
-  ));
-  await emergency.match.resolveFactionAction(
-    pausePolicies,
-    0,
-    "emergency_pause"
-  );
-  assert.deepEqual(
-    safety.metrics.factionAbilityValues.emergency_pause,
-    {
-      uses: 1,
-      runwaySpent: 1,
-      trustGained: safety.trust - trustBeforePause,
-      escalationsBlocked: 1
-    }
-  );
 
-  const audited = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "safety_laboratory",
-      seed: "safety-audited-deployment-telemetry"
-    },
-    () => {}
-  );
-  audited.match.round = 3;
-  const deployer = audited.match.players[0];
-  deployer.compute = 5;
-  deployer.capability = 2;
-  deployer.scrutiny = 2;
-  const deploy = audited.match.legalResolutions(0, "deploy")[0];
-  assert.ok(deploy, "the fixture should expose a legal Deploy");
-  audited.match.applyResolution(0, deploy);
-  assert.deepEqual(
-    deployer.metrics.factionAbilityValues.audited_deployment,
-    {
-      uses: 1,
-      scrutinyRemoved: 1,
-      deploymentsCovered: 1
-    }
-  );
 
-});
-
-test("Mega-Cluster construction rejects another player's Facility", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "coalition_lab",
-      seed: "mega-cluster-payment-revalidation"
-    },
-    () => {}
-  );
-  const lead = match.players[0];
-  const partner = match.players[1];
-  lead.runway = 2;
-  lead.compute = 1;
-  lead.programUses = 1;
-  partner.runway = 1;
-  partner.compute = 0;
-  const frontier = match.board.find((tile) => tile.category === "frontier");
-  const adjacent = match.board.find((tile) =>
-    tile.instanceId !== frontier.instanceId &&
-    match.areAdjacent(frontier.instanceId, tile.instanceId)
-  );
-  lead.facilities = [{
-    id: "lead-facility",
-    tileId: frontier.instanceId,
-    category: "cloud",
-    powered: true
-  }];
-  partner.facilities = [{
-    id: "partner-facility",
-    tileId: adjacent.instanceId,
-    category: "cloud",
-    powered: true
-  }];
-  const policies = match.players.map(() => ({
-    async decide(packet) {
-      return {
-        decision: packet.legalDecisions[0],
-        receipt: { provider: "fixture-policy" }
-      };
-    }
-  }));
-  await match.applyEscalation(policies, 0, "mega_cluster", {
-    actionId: "mega_cluster",
-    parameters: {
-      partnerSeat: 1,
-      leftId: "lead-facility",
-      rightId: "partner-facility",
-      pieceId: lead.pieces[0].id,
-      destinationId: frontier.instanceId
-    }
-  });
-  assert.equal(partner.compute, 0);
-  assert.equal(partner.runway, 1);
-  assert.equal(match.megaClusters.length, 0);
-});
-
-test("a stale Mega-Cluster selection cannot reuse a claimed solo host", async () => {
-  const { match } = await createInteractiveGame(
-    { playerCount: 3, seed: "mega-cluster-host-contention" },
-    () => {}
-  );
-  match.round = 2;
-  const lead = match.players[0];
-  lead.runway = 3;
-  lead.compute = 2;
-  lead.programUses = 1;
-  const frontier = match.board.find((tile) => tile.category === "frontier");
-  const adjacent = match.board.find((tile) =>
-    tile.instanceId !== frontier.instanceId &&
-    match.areAdjacent(frontier.instanceId, tile.instanceId)
-  );
-  lead.facilities = [
-    {
-      id: "contention-lead-host",
-      tileId: frontier.instanceId,
-      category: frontier.category,
-      powered: false
-    },
-    {
-      id: "contention-second-host",
-      tileId: adjacent.instanceId,
-      category: adjacent.category,
-      powered: false
-    }
-  ];
-  lead.generators = [{
-    id: "contention-generator",
-    tileId: frontier.instanceId,
-    sourceId: "clean_infrastructure",
-    capacity: 3
-  }];
-  const decision = {
-    actionId: "mega_cluster",
-    parameters: {
-      leftId: "contention-lead-host",
-      rightId: "contention-second-host",
-      pieceId: lead.pieces[0].id,
-      destinationId: frontier.instanceId
-    }
-  };
-  assert.equal(
-    match.megaClusterDecisionLocallyEligible(lead.seat, decision.parameters),
-    true
-  );
-  match.megaClusters.push({
-    id: "mega-earlier",
-    leadSeat: 2,
-    leftId: "earlier-other-host",
-    rightId: "contention-second-host",
-    powered: false
-  });
-
-  await match.applyEscalation([], lead.seat, "mega_cluster", decision);
-
-  assert.equal(match.megaClusters.length, 1);
-  assert.equal(match.megaClusterHostsAvailable(["contention-second-host"]), false);
-  assert.equal(lead.runway, 3);
-  assert.equal(lead.compute, 2);
-  assert.equal(lead.programUses, 1);
-  assert.ok(!lead.escalationsUsed.includes("mega_cluster"));
-});
 
 test("shared contract supplies cap construction and Joint Venture termination requires Facility presence", async () => {
   const { match } = await createInteractiveGame(
@@ -584,15 +294,11 @@ test("shared contract supplies cap construction and Joint Venture termination re
   assert.equal(player.jointVentures.some((venture) => venture.contractId === 1), false);
   assert.equal(partner.jointVentures.some((venture) => venture.contractId === 1), false);
 
-  player.programUses = 1;
   match.megaClusters = Array.from(
     { length: match.config.sharedSupply.megaClusterPairs },
     (_, index) => ({ id: `mega-${index + 1}` })
   );
-  assert.deepEqual(match.legalEscalationResolutions(0, "mega_cluster"), []);
-  await match.applyEscalation([], 0, "mega_cluster", { parameters: {} });
-  assert.equal(player.programUses, 1);
-  assert.deepEqual(player.escalationsUsed, []);
+  assert.deepEqual(match.legalResolutions(0, "build").filter(choice => choice.parameters.project?.id === "mega_cluster"), []);
 });
 
 test("Foundry starting Compute is an explicit one-lever rules variant", async () => {
@@ -620,18 +326,17 @@ test("Foundry starting Compute is an explicit one-lever rules variant", async ()
   ));
   assert.equal(
     canonical.match.rulesVariant.foundryShovelsPerRound,
-    2
+    undefined
   );
 });
 
-test("Safety study variants derive setup Mandate from Trust and can pause Emergency Pause", async () => {
+test("Safety setup probes derive Mandate from Trust without an Emergency Pause ability", async () => {
   const game = await createInteractiveGame({
     playerCount: 3,
     factionId: "safety_laboratory",
     seed: "safety-study-variants",
     rulesVariant: {
-      safetyStartingTrust: 3,
-      safetyEmergencyPauseEnabled: false
+      safetyStartingTrust: 3
     }
   }, () => {});
   const safety = game.match.players[0];
@@ -639,8 +344,8 @@ test("Safety study variants derive setup Mandate from Trust and can pause Emerge
   assert.equal(safety.mandate, 2, "setup Mandate follows the Trust threshold");
   game.match.round = 4;
   safety.runway = 3;
-  assert.equal(game.match.rulesVariant.safetyEmergencyPauseEnabled, false);
-  assert.equal(game.match.isEmergencyPauseEnabled(safety), false);
+  assert.equal(game.match.rulesVariant.safetyEmergencyPauseEnabled, undefined);
+  assert.equal(game.match.hasFactionAbility(safety, "emergency_pause"), false);
 });
 
 test("late Capability Mandate is an explicit one-lever rules variant", async () => {
@@ -813,412 +518,16 @@ test("faction mechanism probes remain isolated from canonical play", async () =>
     },
     () => {}
   );
-  const vertical = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "vertical_empire",
-      seed: "vertical-industrial-velocity-probe",
-      rulesVariant: {
-        verticalIndustrialVelocityBuildModes: ["facility", "generator", "link"]
-      }
-    },
-    () => {}
-  );
   assert.equal(coalition.match.players[0].runway, 7);
-  assert.deepEqual(
-    coalition.match.rulesVariant.verticalIndustrialVelocityBuildModes,
-    ["facility"]
-  );
-  assert.deepEqual(
-    vertical.match.rulesVariant.verticalIndustrialVelocityBuildModes,
-    ["facility", "generator", "link"]
-  );
-  assert.equal(vertical.match.rulesVariant.coalitionStartingRunway, null);
+  await assert.rejects(createInteractiveGame({ playerCount: 3, rulesVariant: { verticalIndustrialVelocityBuildModes: ["facility", "generator"] } }, () => {}), /Unsupported rules option/);
+
 });
 
-test("Scientific Method can be capped across the full game by a rules probe", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-lifetime-probe",
-      rulesVariant: { imperialScientificMethodLifetimeLimit: 1 }
-    },
-    () => {}
-  );
-  const player = match.players[0];
-  player.factionAbilityUsed.scientificMethodUses = 1;
-  player.roundMetrics.scientificMethodUsed = false;
-  match.resolveTrainingRun = () => ({
-    capability: 0,
-    trust: 0,
-    runwaySpent: 0,
-    protection: null,
-    scrutiny: 1
-  });
-  const runwayBefore = player.runway;
-  match.applyResolution(0, {
-    decisionId: "fixture-research-lifetime",
-    label: "Fixture Research",
-    actionId: "research",
-    parameters: {
-      destinationCategory: "cloud",
-      destinationId: "frontier",
-      pieceId: "s0-agent-1",
-      stopAt: 3
-    }
-  });
-  assert.equal(player.runway, runwayBefore);
-  assert.equal(player.factionAbilityUsed.scientificMethodUses, 1);
-});
 
-test("faction strength probes change only the targeted authored value", async () => {
-  const imperial = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-price-probe",
-      rulesVariant: {
-        imperialScientificMethodRunwayCost: 2,
-        imperialScientificMethodCapabilityPenalty: 1
-      }
-    },
-    () => {}
-  );
-  const vertical = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "vertical_empire",
-      seed: "industrial-velocity-strength-probe",
-      rulesVariant: {
-        verticalIndustrialVelocityDiscount: 2,
-        verticalIndustrialVelocityMandate: 1
-      }
-    },
-    () => {}
-  );
-  assert.equal(imperial.match.rulesVariant.imperialScientificMethodRunwayCost, 2);
-  assert.equal(imperial.match.rulesVariant.imperialScientificMethodCapabilityPenalty, 1);
-  assert.equal(imperial.match.rulesVariant.verticalIndustrialVelocityDiscount, 1);
-  assert.equal(imperial.match.rulesVariant.verticalIndustrialVelocityMandate, 1);
-  assert.equal(vertical.match.rulesVariant.verticalIndustrialVelocityDiscount, 2);
-  assert.equal(vertical.match.rulesVariant.verticalIndustrialVelocityMandate, 1);
-  assert.equal(vertical.match.rulesVariant.imperialScientificMethodRunwayCost, 1);
-  assert.equal(vertical.match.rulesVariant.imperialScientificMethodCapabilityPenalty, 0);
-});
 
-test("faction progress probes alter only realized protected Research and discounted Build", async () => {
-  const imperial = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-progress-probe",
-      rulesVariant: { imperialScientificMethodCapabilityPenalty: 1 }
-    },
-    () => {}
-  );
-  const researcher = imperial.match.players[0];
-  imperial.match.resolveTrainingRun = () => ({
-    capability: 3,
-    trust: 0,
-    runwaySpent: 0,
-    protection: "scientific_method",
-    scrutiny: 0
-  });
-  imperial.match.applyResolution(0, {
-    decisionId: "fixture-scientific-progress",
-    label: "Fixture protected Research",
-    actionId: "research",
-    parameters: {
-      destinationCategory: "cloud",
-      destinationId: "frontier",
-      pieceId: "s0-agent-1",
-      stopAt: 3
-    }
-  });
-  assert.equal(researcher.capability, 2);
-  assert.equal(researcher.lastTrainingResult.capability, 2);
 
-  const publicValidation = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-public-validation-probe",
-      rulesVariant: {
-        imperialScientificMethodThresholdMandatePenalty: 1
-      }
-    },
-    () => {}
-  );
-  const validatedResearcher = publicValidation.match.players[0];
-  validatedResearcher.capability = 2;
-  const mandateBeforeValidation = validatedResearcher.mandate;
-  publicValidation.match.resolveTrainingRun = () => ({
-    capability: 1,
-    trust: 0,
-    runwaySpent: 0,
-    protection: "scientific_method",
-    scrutiny: 0
-  });
-  publicValidation.match.applyResolution(0, {
-    decisionId: "fixture-scientific-public-validation",
-    label: "Fixture protected Research crossing a threshold",
-    actionId: "research",
-    parameters: {
-      destinationCategory: "cloud",
-      destinationId: "frontier",
-      pieceId: "s0-agent-1",
-      stopAt: 3
-    }
-  });
-  assert.equal(validatedResearcher.capability, 3);
-  assert.equal(validatedResearcher.lastTrainingResult.capability, 1);
-  assert.equal(validatedResearcher.mandate, mandateBeforeValidation + 1);
-  assert.equal(
-    validatedResearcher.metrics.factionAbilityValues.scientific_method
-      .thresholdMandateWithheld,
-    1
-  );
 
-  const unprotectedValidation = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "imperial_research_lab",
-      seed: "scientific-method-public-validation-unused",
-      rulesVariant: {
-        imperialScientificMethodThresholdMandatePenalty: 1
-      }
-    },
-    () => {}
-  );
-  const ordinaryResearcher = unprotectedValidation.match.players[0];
-  ordinaryResearcher.capability = 2;
-  const ordinaryMandateBefore = ordinaryResearcher.mandate;
-  unprotectedValidation.match.resolveTrainingRun = () => ({
-    capability: 1,
-    trust: 0,
-    runwaySpent: 0,
-    protection: null,
-    scrutiny: 0
-  });
-  unprotectedValidation.match.applyResolution(0, {
-    decisionId: "fixture-scientific-public-validation-unused",
-    label: "Fixture Research crossing a threshold without protection",
-    actionId: "research",
-    parameters: {
-      destinationCategory: "cloud",
-      destinationId: "frontier",
-      pieceId: "s0-agent-1",
-      stopAt: 3
-    }
-  });
-  assert.equal(ordinaryResearcher.capability, 3);
-  assert.equal(ordinaryResearcher.mandate, ordinaryMandateBefore + 2);
-  assert.ok(
-    !ordinaryResearcher.metrics.factionAbilityValues.scientific_method
-  );
 
-  const vertical = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "vertical_empire",
-      seed: "industrial-velocity-progress-probe",
-      rulesVariant: {}
-    },
-    () => {}
-  );
-  const builder = vertical.match.players[0];
-  const build = vertical.match.legalResolutions(0, "build").find(
-    (decision) => decision.parameters?.buildMode === "facility"
-  );
-  const mandateBefore = builder.mandate;
-  vertical.match.applyResolution(0, build);
-  assert.equal(builder.mandate, mandateBefore + 1);
-  assert.equal(
-    builder.metrics.factionAbilityValues.industrial_velocity.mandateGained,
-    1
-  );
-
-  const zeroSavings = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "vertical_empire",
-      seed: "industrial-velocity-zero-savings-probe",
-      rulesVariant: {}
-    },
-    () => {}
-  );
-  const zeroSavingsBuilder = zeroSavings.match.players[0];
-  const freeBuild = zeroSavings.match.legalResolutions(0, "build").find(
-    (decision) => decision.parameters?.buildMode === "facility"
-  );
-  freeBuild.parameters.actualRunwayCost = 0;
-  freeBuild.parameters.industrialVelocitySavings = 0;
-  const zeroSavingsMandateBefore = zeroSavingsBuilder.mandate;
-  zeroSavings.match.applyResolution(0, freeBuild);
-  assert.equal(zeroSavingsBuilder.mandate, zeroSavingsMandateBefore);
-  assert.equal(
-    zeroSavingsBuilder.metrics.factionAbilityValues.industrial_velocity.mandateGained,
-    0
-  );
-});
-
-test("the legacy pre-promotion overlay reproduces retained historical defaults", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 4,
-      factionId: "foundry",
-      seed: "legacy-pre-promotion-defaults",
-      rulesVariant: legacyPrePromotionRulesOverlay
-    },
-    () => {}
-  );
-  assert.equal(match.rulesVariant.customerMandateSchedule, null);
-  assert.equal(match.rulesVariant.imperialLateCapabilityThresholdMandate, null);
-  assert.equal(match.rulesVariant.verticalIndustrialVelocityMandate, 0);
-});
-
-test("Foundry Shovels observes two-Compute Programs and respects its round cap", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "foundry",
-      seed: "foundry-shovels-escalation",
-      rulesVariant: { foundryShovelsPerRound: 1 }
-    },
-    () => {}
-  );
-  const foundry = match.players[0];
-  const spender = match.players[1];
-  foundry.metrics.shovelsIncome = 0;
-  match.round = 2;
-  match.cycle = 1;
-  spender.runway = 3;
-  spender.compute = 2;
-  spender.programUses = 1;
-  spender.selectedAction = "escalation_mega_cluster";
-  const frontier = match.board.find((tile) => tile.category === "frontier");
-  const left = match.board.find((tile) =>
-    tile.category !== "frontier" &&
-    match.areAdjacent(frontier.instanceId, tile.instanceId)
-  );
-  const right = match.board.find((tile) =>
-    tile.category !== "frontier" &&
-    tile.instanceId !== left.instanceId &&
-    match.areAdjacent(left.instanceId, tile.instanceId)
-  );
-  spender.facilities = [
-    {
-      id: "spender-left",
-      tileId: left.instanceId,
-      category: left.category,
-      powered: true
-    },
-    {
-      id: "spender-right",
-      tileId: right.instanceId,
-      category: right.category,
-      powered: true
-    }
-  ];
-  spender.generators = [{
-    id: "spender-generator",
-    tileId: left.instanceId,
-    sourceId: "clean_infrastructure",
-    capacity: 2
-  }];
-  const policies = match.players.map(() => ({
-    async decide(packet) {
-      return {
-        decision: packet.legalDecisions[0],
-        receipt: { provider: "fixture-policy" }
-      };
-    }
-  }));
-  const runwayBefore = foundry.runway;
-
-  await match.resolveSelectedSeat(policies, spender.seat);
-
-  assert.equal(spender.compute, 0);
-  assert.equal(foundry.runway, runwayBefore + 1);
-  assert.equal(foundry.metrics.shovelsIncome, 1);
-  assert.equal(
-    foundry.metrics.factionAbilityValues.the_shovels.runwayGained,
-    1
-  );
-  match.rewardFoundryComputeSpend(spender.seat, 2);
-  assert.equal(foundry.runway, runwayBefore + 1);
-  assert.equal(foundry.metrics.shovelsIncome, 1);
-});
-
-test("Allocation Window uses its authored positive-price contract and one lower counteroffer", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "foundry",
-      seed: "allocation-window-contract"
-    },
-    () => {}
-  );
-  const foundry = match.players[0];
-  const buyer = match.players[1];
-  const observed = [];
-  match.round = 2;
-  buyer.runway = 3;
-  const runwayBefore = foundry.runway;
-  const computeBefore = buyer.compute;
-  const stageOf = (packet) => packet.requestId.split(":").at(-2);
-  const policies = match.players.map(() => ({
-    async decide(packet) {
-      observed.push(packet);
-      const stage = stageOf(packet);
-      const selected = stage === "allocation_window_timing"
-        ? packet.legalDecisions.find((decision) => decision.decisionId === "allocation_open")
-        : stage === "allocation_window_0"
-          ? packet.legalDecisions.find((decision) =>
-            decision.decisionId === `allocation_offer_0_${buyer.seat}_3`
-          )
-          : stage === "allocation_response_0"
-            ? packet.legalDecisions.find((decision) =>
-              decision.decisionId === "allocation_counter_0_2"
-            )
-            : stage === "allocation_counterparty_0"
-              ? packet.legalDecisions.find((decision) =>
-                decision.decisionId === "allocation_counter_accept_0"
-              )
-              : packet.legalDecisions.find((decision) =>
-                decision.decisionId === "allocation_hold_1"
-              ) || packet.legalDecisions[0];
-      return {
-        decision: selected,
-        receipt: { provider: "fixture-policy", requestId: packet.requestId }
-      };
-    }
-  }));
-
-  await match.preSelectionFactionPowers(policies);
-
-  const offer = observed.find((packet) => stageOf(packet) === "allocation_window_0");
-  const response = observed.find((packet) => stageOf(packet) === "allocation_response_0");
-  assert.deepEqual(match.config.factionRules.foundry.allocationWindow, {
-    temporaryCompute: 2,
-    paymentResource: "runway",
-    minimumPrice: 1
-  });
-  assert.ok(offer.legalDecisions.every((decision) =>
-    !decision.decisionId.startsWith(`allocation_offer_0_${buyer.seat}_0`)
-  ));
-  assert.ok(response.legalDecisions.every((decision) =>
-    decision.decisionId !== "allocation_counter_0_0"
-  ));
-  assert.equal(buyer.runway, 1);
-  assert.equal(buyer.compute, computeBefore + 1);
-  assert.equal(foundry.runway, runwayBefore + 2);
-  assert.equal(
-    foundry.metrics.factionAbilityValues.allocation_window.paymentReceived,
-    2
-  );
-});
 
 test("offline Facility penalties cannot reduce final Mandate below zero", async () => {
   const { match } = await createInteractiveGame(
@@ -1244,26 +553,6 @@ test("offline Facility penalties cannot reduce final Mandate below zero", async 
   assert.equal(standing.score, 0);
 });
 
-test("Agent Swarm suppresses the second destination bonus before affordability", async () => {
-  const { match } = await createInteractiveGame(
-    {
-      playerCount: 3,
-      factionId: "coalition_lab",
-      seed: "agent-swarm-second-action-payment"
-    },
-    () => {}
-  );
-  const player = match.players[0];
-  const cloud = match.board.find((tile) => tile.category === "cloud");
-  const research = match.legalResolutions(0, "research").find((decision) =>
-    decision.parameters.destinationId === cloud.instanceId
-  );
-  player.compute = 0;
-  const adjusted = match.suppressAgentSwarmDestinationBonus(player, research);
-  assert.equal(research.parameters.actualComputeCost, 0);
-  assert.equal(adjusted, null);
-  assert.equal(player.compute, 0);
-});
 
 test("Talent production reassigns one Agent anywhere without an Action, visit bonus, or payment", async () => {
   const { match } = await createInteractiveGame({ playerCount: 3, seed: "talent-production" }, () => {});
@@ -1393,7 +682,7 @@ test("Ownership Headline lets the affected player choose the producing Facility"
   match.headlineDecks[3][0] = headline;
   let captured;
   match.choose = async (_policies, seat, stage, decisions) => {
-    if (stage === "weights_on_internet_facility") {
+    if (stage === "headline_weights_on_internet_facility") {
       captured = { seat, stage, decisions };
       return decisions.find(
         (decision) => decision.parameters.facilityId === "capital-fixture"
@@ -1479,25 +768,6 @@ test("powered Facility Mandate probe scores only the latest Production snapshot"
   });
 });
 
-test("Fusion consumes the single shared project marker", async () => {
-  const { match } = await createInteractiveGame(
-    { playerCount: 3, seed: "single-fusion-marker" },
-    () => {}
-  );
-  match.round = 4;
-  const first = match.players[0];
-  const second = match.players[1];
-  for (const player of [first, second]) {
-    player.programUses = 1;
-    player.runway = 10;
-    player.compute = 10;
-  }
-  const firstChoice = match.legalEscalationResolutions(0, "fusion_demonstrator")[0];
-  assert.ok(firstChoice);
-  await match.applyEscalation([], 0, "fusion_demonstrator", firstChoice);
-  assert.equal(match.fusionBuiltBy, 0);
-  assert.deepEqual(match.legalEscalationResolutions(1, "fusion_demonstrator"), []);
-});
 
 test("Frontier never contributes control to category Mandates", async () => {
   const { match } = await createInteractiveGame(
@@ -1538,29 +808,6 @@ test("immediate exchanges are exactly one-for-one across Runway and Compute", as
   assert.equal(player.metrics.factionAbilityValues.deal_flow, undefined);
 });
 
-test("Loopfold stacks Social Graph with its destination-dependent Installed Base", async () => {
-  const { match } = await createInteractiveGame(
-    { playerCount: 3, factionId: "platform_empire", seed: "faction-modifier-stack" },
-    () => {}
-  );
-  match.round = 4;
-  const player = match.players[0];
-  player.compute = 1;
-  const decision = match.adjustDecision(player, {
-    decisionId: "deploy_social_graph_stack",
-    actionId: "deploy",
-    parameters: {
-      destinationCategory: "media",
-      socialGraph: true
-    },
-    consequences: {}
-  });
-
-  assert.equal(decision.parameters.computeCost, 0);
-  match.applyResolution(player.seat, decision);
-  assert.equal(player.roundMetrics.socialGraphUsed, true);
-  assert.equal(player.roundMetrics.installedBaseUsed, true);
-});
 
 test("Influence Joint Venture proposals use the acting destination Facility", async () => {
   const { match } = await createInteractiveGame(
@@ -1608,7 +855,7 @@ test("removed Build discounts cannot create otherwise unaffordable Builds", asyn
     "useBuildDiscount"
   )));
   assert.ok(decisions.every((decision) =>
-    decision.parameters.buildMode !== "facility"
+    !decision.parameters.facility
   ));
 });
 
@@ -1843,25 +1090,6 @@ test("Production recalculates powered Facilities without persistent Grid-Ready s
   assert.ok(!("gridReady" in player.facilities[0]));
 });
 
-test("selection accepts speculative cards and blocked Programs still assign and consume their use", async () => {
- const {match}=await createInteractiveGame({playerCount:4,seed:"speculative-program"},()=>{});
- await match.setup([]);
- const player=match.players[0];
- assert.deepEqual(match.legalActionSelections(0).map(choice=>choice.actionId),["fund","research","build","organize","deploy","influence"]);
- player.compute=0;
- assert.ok(match.legalActionSelections(0).some(choice=>choice.actionId==="research"));
- match.round=2;player.programUses=1;
- assert.ok(match.legalActionSelections(0).some(choice=>choice.actionId==="mega_cluster"));
- const destination=match.board.find(tile=>tile.category==="government");
- match.choose=async(_p,_s,stage,choices)=> stage==="blocked_program_assignment" ? choices.find(choice=>choice.parameters.destinationId===destination.instanceId) : choices[0];
- match.commitEscalationSelection(player,"mega_cluster");player.selectedAction="escalation_mega_cluster";
- await match.resolveSelectedSeat([],0);
- assert.equal(player.programUses,0);assert.ok(player.escalationsUsed.includes("mega_cluster"));
- assert.ok(player.pieces.some(piece=>piece.tileId===destination.instanceId));
- assert.equal(player.metrics.blockedAfterCommitment,1);
- player.programUses=1;
- assert.ok(!match.legalActionSelections(0).some(choice=>choice.actionId==="mega_cluster"));
-});
 
 test("pre-Act offers cannot make the selected action illegal", async () => {
   const runtime = await createInteractiveGame(
@@ -1906,29 +1134,7 @@ test("pre-Act offers cannot make the selected action illegal", async () => {
     [1]
   );
 
-  player.selectedAction = "deploy";
-  player.factionId = "vertical_empire";
-  player.capability = 4;
-  player.customers = 0;
-  player.compute = 0;
-  player.facilities = [{ id: "orbital-facility", tileId: player.pieces[0].tileId }];
-  match.round = 4;
-  assert.ok(match.selectedActionResolutions(0).length > 0);
-  let askedToUseOrbitalCompute = false;
-  const usedOrbitalCompute = await match.maybeUseOrbitalCompute([
-    {
-      async decide(packet) {
-        askedToUseOrbitalCompute = true;
-        return {
-          decision: { decisionId: packet.legalDecisions[0].decisionId },
-          receipt: { provider: "test", requestId: packet.requestId }
-        };
-      }
-    }
-  ], 0);
-  assert.equal(askedToUseOrbitalCompute, true);
-  assert.equal(usedOrbitalCompute, false);
-  assert.notEqual(player.factionAbilityUsed.orbitalCompute, true);
+
 });
 
 test("immediate trades skip impossible turns and package each offer", async () => {

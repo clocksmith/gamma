@@ -25,14 +25,14 @@ export async function createBrowserInteractiveGame(options = {}, onPending) {
     config,
     factions,
     headlines,
-    escalations,
+    projects,
     mandates,
     profiles
   ] = await Promise.all([
     readJson("game-config.json"),
     readJson("factions.json"),
     readJson("headlines.json"),
-    readJson("escalations.json"),
+    readJson("projects.json"),
     readJson("mandates.json"),
     loadPlayerProfiles()
   ]);
@@ -41,7 +41,7 @@ export async function createBrowserInteractiveGame(options = {}, onPending) {
       config,
       factions,
       headlines,
-      escalations,
+      projects,
       tactics: { schemaVersion: 1, copiesPerCard: 0, tactics: [] },
       mandates,
       objectives: { schemaVersion: 1, objectives: [] },

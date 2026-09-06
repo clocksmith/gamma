@@ -291,9 +291,7 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     ...structuredClone(faction.starts),
     mandate: 0,
     mandateAwards: [],
-    programUses: 0,
     actionsUsed: [],
-    escalationsUsed: [],
     pieces: [
       ...Array.from({ length: config.playerSupply.startingAgents }, (_, index) => ({
         id: `agent-${index + 1}`,
@@ -373,14 +371,6 @@ export function availableHeadlines(headlineDocument, round) {
 
 export function availableCoreActions(config, state) {
   return config.actions.filter((action) => !state.player.actionsUsed.includes(action.id));
-}
-
-export function availableEscalations(escalations, state) {
-  return escalations.escalations.filter((action) =>
-    action.unlockedRound <= state.round &&
-    !state.player.escalationsUsed.includes(action.id) &&
-    state.player.programUses > 0
-  );
 }
 
 export function legalDestinations(state, pieceId) {
@@ -625,7 +615,6 @@ function advanceRound(config, headlines, state) {
     state.round += 1;
     state.cycle = 1;
     state.player.actionsUsed = [];
-    state.player.programUses = config.rounds[state.round - 1].programUses;
     state.headlines = shuffle(
       availableHeadlines(headlines, state.round),
       createRng(`${state.seed}:headlines:${state.round}`)
@@ -639,6 +628,7 @@ function advanceRound(config, headlines, state) {
 
 export function commitAction(state, actionId, kind = "core") {
   if (state.phase !== "select") throw new Error("Action cannot be selected in the current phase.");
+  if (kind !== "core" || !["fund", "research", "build", "organize", "deploy", "influence"].includes(actionId)) throw new RangeError("Select one of the six Core Actions.");
   state.selectedAction = { id: actionId, kind };
   state.metrics.actionSelections.push({
     round: state.round,
@@ -647,7 +637,7 @@ export function commitAction(state, actionId, kind = "core") {
     kind
   });
   state.phase = "act";
-  state.log.unshift(`${kind === "escalation" ? "Escalation" : "Core"} Action revealed: ${actionId}. Acting piece remains undeclared.`);
+  state.log.unshift(`Core Action revealed: ${actionId}. Acting piece remains undeclared.`);
 }
 
 export function resolveSelectedAction(config, headlines, state, pieceId, tileId, options = {}) {
@@ -662,16 +652,8 @@ export function resolveSelectedAction(config, headlines, state, pieceId, tileId,
   const destination = state.board.find((entry) => entry.instanceId === tileId);
   piece.tileId = tileId;
 
-  let summary;
-  if (state.selectedAction.kind === "core") {
-    summary = resolveCore(config, state, state.selectedAction.id, destination, options);
-    state.player.actionsUsed.push(state.selectedAction.id);
-  } else {
-    if (state.player.programUses < 1) throw new Error("No Program use is currently available.");
-    state.player.programUses -= 1;
-    state.player.escalationsUsed.push(state.selectedAction.id);
-    summary = `${state.selectedAction.id} committed at ${destination.name}; detailed Escalation resolution is recorded for manual study.`;
-  }
+  const summary = resolveCore(config, state, state.selectedAction.id, destination, options);
+  state.player.actionsUsed.push(state.selectedAction.id);
 
   state.log.unshift(summary);
   recordAgiEligibility(config, state, "after_action");

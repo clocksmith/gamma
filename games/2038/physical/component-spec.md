@@ -36,14 +36,12 @@ gold, silver, and bronze. Finish never creates an additional rules state.
 | Scrutiny | Exposure in the Audit bag | Small faction-coloured cube | Owner supply or Audit bag |
 | Systemic Risk | Shared Audit danger | Black piece matching Scrutiny's concealed feel | Audit bag or shared supply |
 | Mandate | Public institutional score | One faction-coloured marker per faction | Shared Mandate-track position |
-| Program marker | Per-Era exceptional action allowance | Two faction-coloured markers per player | Available beside faction board or committed on one shared Program card |
 | Current Mandate ledger | Shared short-term counting aid and ending record | Writable panel integrated into Governance Board; one shared marker | Revealed criterion, six faction values, Setup Collective Trust, and final resolution |
 | AGI recognition | Public scored achievement | Final public ledger field | Paid declarations; no separate cards |
-| Temporary Compute | Allocation Window capacity | Two distinct shared tokens | Current holder; returned at cycle end |
 | Joint Venture / Mega-Cluster | Named shared project | Matched numbered token pair | Host positions and pair number; Mega-Clusters have one owner |
 | Initiative | Resolution and tie order | One shared marker | Current holder |
 | Fusion Demonstrator | Unique advanced-generation project | One shared marker | Grid position or unbuilt supply |
-| Headline, Mandate, Action, Program, Training | Information and choices | Cards | Face, orientation, markers, and printed text |
+| Headline, Mandate, Action, project reference, Training | Information and choices | Cards | Face, orientation, markers, and printed text |
 | Ordinary Power contract | Generator rules at point of construction | Printed in the Grid and Renewable tile visit boxes | Tile identity; no separate reference card |
 
 ## Governance Board
@@ -70,7 +68,7 @@ on the shuffled tile.
 Four printed Era panels run in order from I to IV. Each panel contains:
 
 - Era name and strapline;
-- ready / Program-marker / cycle / Audit summary;
+- ready / cycle / Audit summary;
 - complete **New this Era** unlock text;
 - one Headline-deck well;
 - one Mandate-deck well; and
@@ -103,11 +101,10 @@ values are not mechanically reused.
 
 ### Contract and supply field
 
-Provide six shared Program-card positions, six numbered Joint Venture pair
-bays, six numbered Mega-Cluster pair bays, one Fusion bay, and open labelled staging for Temporary
-Compute, the Audit bag, Scrutiny, and Systemic Risk. The board has no Power
+Provide two project-reference positions, six numbered Joint Venture pair
+bays, six numbered Mega-Cluster pair bays, one Fusion bay, and open labelled staging for shared components, the Audit bag, Scrutiny, and Systemic Risk. The board has no Power
 Source reference slots. Emergency and Clean Infrastructure are printed on
-their Energy tiles; Fusion is printed on its shared Program card.
+their Energy tiles; Fusion is printed on its project reference.
 
 ### Retention and materials
 
@@ -124,10 +121,8 @@ labelled board or insert channel.
 
 Each faction board provides:
 
-- faction identity, starts, scoring exception where applicable, and two
-  programs with exact unlock Era and timing;
+- faction identity, starts, and one permanent ability;
 - five captive sliders for Runway, Compute, Capability, Customers, and Trust;
-- two Program-marker wells and a compact once-per-game Program-use reminder;
 - six Core Action positions;
 - supply wells for four Agents, Facilities, Generator, Scrutiny, and
   Mandate marker; and
@@ -161,12 +156,7 @@ This one ledger replaces six four-Era score sheets. It retains the exact
 short-lived value players would otherwise have to remember without preserving
 unused historical arithmetic.
 
-### Persistent Program use and AGI recognition
-
-Print a separate six-box Program-use row for each faction on the Governance
-Board. Label boxes with all six Program names. Mark a box as soon as that Program
-is selected, even if its effect is blocked. Never erase it at Era end. The two
-Program markers return and count only current-Era availability.
+### AGI recognition
 
 The final ledger records every paid AGI recognition, final Mandate winner, final
 Collective Trust, and unresolved Systemic Risk. No Dossier cards or folio are

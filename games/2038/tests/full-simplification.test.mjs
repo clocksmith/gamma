@@ -106,7 +106,7 @@ test("interactive and automatic Research agree on crash retention and destinatio
   }
 });
 
-test("Scientific Method is an explicit paid banking choice once per Era", async () => {
+test("Scientific Method is an explicit paid banking choice bounded by the Research card", async () => {
   const match = await game("imperial_research_lab"); const player = match.players[0];
   player.runway = 4; player.compute = 4;
   const decision = match.legalResolutions(0, "research").find(choice => choice.parameters.destinationCategory === "research");
@@ -122,9 +122,10 @@ test("Scientific Method is an explicit paid banking choice once per Era", async 
   await match.applyResolutionWithPolicies([], 0, decision);
   assert.equal(player.runway, 3);
   assert.equal(player.capability, 2);
-  assert.equal(player.roundMetrics.scientificMethodUsed, true);
+  assert.equal(player.roundMetrics.scientificMethodUsed, undefined);
   assert.equal(player.pieces.find(piece => piece.id === decision.parameters.pieceId).tileId, decision.parameters.destinationId);
-  assert.equal(match.scientificMethodAvailable(player), false);
+  assert.equal(match.scientificMethodAvailable(player), true);
+  assert.ok(!match.legalActionSelections(0).some(choice => choice.actionId === "research"));
 });
 
 test("current connection changes affect claims and penalties without another Production", async () => {

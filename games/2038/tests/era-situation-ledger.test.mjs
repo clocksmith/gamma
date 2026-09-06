@@ -28,7 +28,7 @@ test("Era situation ledger makes later surface expression explicit", async () =>
   assert.deepEqual(scenario.surfaceBindings, [
     {
       surfaceId: "faction:coalition_lab:strategic_partnership",
-      copyReference: "components/factions.json#factions/coalition_lab/abilities/strategic_partnership",
+      copyReference: "components/factions.json#factions/coalition_lab/lore/strategic_partnership",
       eraRelation: "later-expression"
     }
   ]);
@@ -77,7 +77,7 @@ test("public deployment profile excludes internal and deferred material", async 
   assert.ok(!profile.interfaces.includes("simulation-lab"));
   assert.ok(!profile.documents.includes("*"));
   assert.ok(!profile.runtimeArtifacts.includes("*"));
-  assert.ok(profile.runtimeArtifacts.includes("dist/runtime/escalations.json"));
+  assert.ok(profile.runtimeArtifacts.includes("dist/runtime/projects.json"));
   assert.ok(profile.runtimeArtifacts.includes("dist/runtime/simulation-copy.json"));
   assert.ok(!profile.runtimeArtifacts.includes("dist/runtime/tactics.json"));
   assert.ok(!profile.runtimeArtifacts.includes("dist/runtime/secret-objectives.json"));

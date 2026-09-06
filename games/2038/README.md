@@ -15,8 +15,8 @@ The standard game lasts four rounds with three simultaneous action selections
 per player per round. Players build institutions across a complete nineteen-tile
 radius-two hex
 economy, push risky Training Runs, negotiate shared infrastructure, and manage
-public scrutiny without direct combat or elimination. Each Faction has two
-abilities, six shared Programs create public one-use opportunities, each player
+public scrutiny without direct combat or elimination. Each Faction has one permanent ability. Headlines finish before selection,
+and Build constructs up to one Facility and one project. Each player
 has one location-defined Generator, and political control
 uses visible Agent and Facility presence rather than Influence cubes.
 The jurisdiction stays fixed throughout the game, and Power eligibility is local.
@@ -72,13 +72,12 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.10.0-rc.3-test`.
-Executable game `0.17.0` implements that candidate under
+`0.11.0-rc.1-test`.
+Executable game `0.18.0` implements that candidate under
 `react-agent-assignments-v1`, including direct Agent assignments,
 current local Power connections, Research without universal Protection, one
 optional pre-resolution 1-for-1 trade, and scored public AGI recognition.
-The Governance Board records persistent named Program use separately from Era
-marker availability. CEOs remain faction characters; each faction has two
+CEOs remain faction characters; each faction has two
 starting Agents and four available in total. Synchronization means
 the browser and simulator execute the selected contract; it does not claim
 physical teachability, numerical balance, or that the AGI coda is enjoyable.
@@ -109,9 +108,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.17.0` game and export its
+- `http://localhost:8038/` — play the synchronized `0.18.0` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.17.0` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.18.0` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -195,8 +194,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.17.0`
-bundle, its synchronized `0.10.0-rc.3-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.18.0`
+bundle, its synchronized `0.11.0-rc.1-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

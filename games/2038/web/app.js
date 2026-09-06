@@ -593,7 +593,7 @@ function tileName(tileId) {
 }
 
 function renderAssignmentDecisions(packet, stage) {
-  if (stage !== "resolve" && stage !== "blocked_program_assignment" && stage !== "talent_assignment" && !stage.startsWith("resolve_escalation_")) return false;
+  if (stage !== "resolve" && stage !== "talent_assignment") return false;
   const decisions = packet.legalDecisions;
   if (!decisions.length || !decisions.every((decision) =>
     decision.parameters?.pieceId && decision.parameters?.destinationId

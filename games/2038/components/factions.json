@@ -1,14 +1,11 @@
 {
   "schemaVersion": 2,
   "abilityTimingContract": {
-    "unlocks": "An ability unlocks at the start of its named round.",
     "allowedTiming": [
-      "passive",
-      "once_per_round",
-      "once_when_unlocked",
-      "once_per_game"
+      "passive"
     ],
-    "persistence": "persistsAfterUnlock states whether the ability remains available after its named round."
+    "unlocks": "Each faction has one permanent ability available from setup.",
+    "persistence": "Abilities need no separate use markers or Era refresh."
   },
   "factionTruthContract": {
     "status": "selected_design_constraint",
@@ -109,7 +106,7 @@
           "coalitionLeverage": 4
         },
         "protectedStrength": "Compute abundance and supplier leverage.",
-        "balanceBottleneck": "Opponent-count scaling and dependence on other institutions spending Compute.",
+        "balanceBottleneck": "Income depends on rival infrastructure; its Production reward is capped at two regardless of player count.",
         "forbiddenCorrection": "Do not make the supplier compute-poor or indifferent to rivals' demand."
       }
     }
@@ -132,26 +129,29 @@
         {
           "id": "deal_flow",
           "round": 1,
-          "timing": "once_per_round",
+          "timing": "passive",
           "persistsAfterUnlock": true,
           "name": "Deal Flow",
           "displayName": "Mutual Upside Instrument",
-          "timingLabel": "once per Era",
-          "text": "Once per Era after you complete a one-for-one immediate trade, gain 1 ${terms.resources.runway}.",
+          "timingLabel": "permanent",
+          "text": "After completing the optional trade on your own turn, gain 1 ${terms.resources.runway}.",
           "flavorText": "Every resolved disagreement leaves behind a relationship suitable for capitalization.",
           "$scenario": {
             "ref": "cheap-token-rebound"
           }
-        },
+        }
+      ],
+      "name": "${terms.factions.coalition}",
+      "chiefExecutive": "${terms.chiefExecutives.coalition}",
+      "motto": "No frontier is shared until the terms are signed.",
+      "introduction": "${terms.chiefExecutives.coalition} keeps a room ready for rivals who refuse to meet. At ${terms.factions.coalition}, the water agreement can be signed while the border dispute continues outside.",
+      "agiDeclaration": "Following extensive consultation, we have reached broad alignment that the system has crossed the relevant threshold.",
+      "lore": [
         {
           "id": "strategic_partnership",
           "round": 3,
-          "timing": "passive",
-          "persistsAfterUnlock": true,
           "name": "Strategic Partnership",
           "displayName": "Shared Capacity Compact",
-          "timingLabel": "passive",
-          "text": "Joint Ventures may be formed with a player within 2 hexes. They remain active while both fixed host Facilities are powered and within 2 hexes. When you form one, gain 1 ${terms.resources.runway}.",
           "flavorText": "The governments remain at war. Their jointly owned bridge carries desalinated water and coolant on schedule.",
           "$scenario": {
             "id": "wartime-water-bridge",
@@ -167,8 +167,12 @@
             "publicBenefit": "Shared infrastructure keeps water and cooling available across a hostile border.",
             "institutionalConsequence": "Mutual necessity creates durable cooperation without reconciliation.",
             "mechanicPreservation": {
-              "status": "retained",
-              "summary": "The Capacity scenario appears on an Authority-unlocked ability without changing its distance, Power, or Runway rules."
+              "status": "revised",
+              "summary": "The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain.",
+              "revision": {
+                "decisionId": "user-selected-three-cuts",
+                "record": "docs/design-decisions.md#three-cuts-candidate"
+              }
             },
             "deploymentProfiles": [
               "public-playtest",
@@ -177,12 +181,7 @@
             "eraRelation": "later-expression"
           }
         }
-      ],
-      "name": "${terms.factions.coalition}",
-      "chiefExecutive": "${terms.chiefExecutives.coalition}",
-      "motto": "No frontier is shared until the terms are signed.",
-      "introduction": "${terms.chiefExecutives.coalition} keeps a room ready for rivals who refuse to meet. At ${terms.factions.coalition}, the water agreement can be signed while the border dispute continues outside.",
-      "agiDeclaration": "Following extensive consultation, we have reached broad alignment that the system has crossed the relevant threshold."
+      ]
     },
     {
       "id": "platform_empire",
@@ -203,29 +202,15 @@
         {
           "id": "installed_base",
           "round": 1,
-          "timing": "once_per_round",
+          "timing": "passive",
           "persistsAfterUnlock": true,
           "name": "Installed Base",
           "displayName": "The Default Interface",
-          "timingLabel": "once per Era",
-          "text": "The first ${terms.actions.deploy} each Era on ${terms.locations.consumer} or ${terms.locations.media} costs no ${terms.resources.compute}.",
+          "timingLabel": "permanent",
+          "text": "After you ${terms.actions.deploy}, gain 1 ${terms.resources.runway}.",
           "flavorText": "Distribution becomes efficient once the public experiences it as ordinary life.",
           "$scenario": {
             "ref": "bankruptcy-data-estates"
-          }
-        },
-        {
-          "id": "social_graph",
-          "round": 4,
-          "timing": "once_per_round",
-          "persistsAfterUnlock": true,
-          "name": "The Social Graph",
-          "displayName": "Substrate Continuity Layer",
-          "timingLabel": "once per Era",
-          "text": "Once per Era, when you ${terms.actions.deploy} from a ${terms.locations.consumer} or ${terms.locations.media} district you control after assigning your Agent, gain 1 ${terms.resources.runway}.",
-          "flavorText": "The account remains present after its holder changes body, jurisdiction, or supported reality.",
-          "$scenario": {
-            "ref": "metropolitan-mind-trust"
           }
         }
       ],
@@ -233,7 +218,19 @@
       "chiefExecutive": "${terms.chiefExecutives.platform}",
       "motto": "What everyone uses becomes the default.",
       "introduction": "The tutor, clinic queue, and message from home arrive through ${terms.factions.platform}. ${terms.chiefExecutives.platform} wants the interface familiar enough that nobody thinks to ask who owns it.",
-      "agiDeclaration": "General intelligence is now available to everyone by default. Settings may vary by region."
+      "agiDeclaration": "General intelligence is now available to everyone by default. Settings may vary by region.",
+      "lore": [
+        {
+          "id": "social_graph",
+          "round": 4,
+          "name": "The Social Graph",
+          "displayName": "Substrate Continuity Layer",
+          "flavorText": "The account remains present after its holder changes body, jurisdiction, or supported reality.",
+          "$scenario": {
+            "ref": "metropolitan-mind-trust"
+          }
+        }
+      ]
     },
     {
       "id": "imperial_research_lab",
@@ -248,47 +245,39 @@
         "scrutiny": 0,
         "startingPublicMandate": 2
       },
-      "scoringRule": {
-        "timing": "passive",
-        "name": "Peer Validation",
-        "text": "${terms.playerTracks.capability} ${facts.shared.factions.imperial.peerValidation.lateFromCapability} and ${facts.shared.factions.imperial.peerValidation.fullValidationCapability} score ${facts.shared.factions.imperial.peerValidation.baseMandate} ${terms.playerTracks.mandate}. In a five-player game, ${terms.playerTracks.capability} ${facts.shared.factions.imperial.peerValidation.fullValidationCapability} instead scores ${facts.shared.factions.imperial.peerValidation.fullMandate} ${terms.playerTracks.mandate}.",
-        "flavorText": "Four independent rivals transform an internal result into public history."
-      },
       "abilities": [
         {
           "id": "scientific_method",
           "round": 1,
-          "timing": "once_per_round",
+          "timing": "passive",
           "persistsAfterUnlock": true,
           "name": "Scientific Method",
           "displayName": "Controlled Negative Result",
-          "timingLabel": "once per Era",
-          "text": "Once per Era, when a duplicate would crash your ${terms.systems.trainingRun}, pay 1 ${terms.resources.runway} to discard it and immediately bank.",
+          "timingLabel": "permanent",
+          "text": "When a duplicate would crash your ${terms.systems.trainingRun}, you may pay 1 ${terms.resources.runway} to discard it and immediately bank.",
           "flavorText": "A failed run becomes knowledge when the correct institution writes the record.",
           "$scenario": {
             "ref": "supervised-autonomy-homes"
-          }
-        },
-        {
-          "id": "scaling_law_breakthrough",
-          "round": 4,
-          "timing": "once_per_game",
-          "persistsAfterUnlock": true,
-          "name": "Scaling-Law Breakthrough",
-          "displayName": "Substrate-Neutral Verification Standard",
-          "timingLabel": "once per game",
-          "text": "Once per game when resolving ${terms.actions.research}, each of the first 3 distinct domains banked grants 1 additional ${terms.playerTracks.capability}. Add 2 ${terms.playerTracks.scrutiny}. No additional Action resolves.",
-          "flavorText": "Evidence assembled across distinct domains becomes eligible for recognition across biological, synthetic, and distributed institutions.",
-          "$scenario": {
-            "ref": "matter-compiler"
           }
         }
       ],
       "name": "${terms.factions.imperial}",
       "chiefExecutive": "${terms.chiefExecutives.imperial}",
       "motto": "Results become history after replication.",
-      "introduction": "${terms.factions.imperial} keeps failed experiments beside its celebrated results. ${terms.chiefExecutives.imperial} makes visitors reproduce a finding before discussing the announcement; outside the laboratory, the parent institution waits for its return.",
-      "agiDeclaration": "The result exceeds every benchmark we still consider scientifically meaningful."
+      "introduction": "${terms.factions.imperial} keeps failed experiments beside its celebrated results. ${terms.chiefExecutives.imperial} makes visitors reproduce a finding before discussing the announcement; outside the laboratory, the parent institution waits for its return. Four independent rivals transform an internal result into public history.",
+      "agiDeclaration": "The result exceeds every benchmark we still consider scientifically meaningful.",
+      "lore": [
+        {
+          "id": "scaling_law_breakthrough",
+          "round": 4,
+          "name": "Scaling-Law Breakthrough",
+          "displayName": "Substrate-Neutral Verification Standard",
+          "flavorText": "Evidence assembled across distinct domains becomes eligible for recognition across biological, synthetic, and distributed institutions.",
+          "$scenario": {
+            "ref": "matter-compiler"
+          }
+        }
+      ]
     },
     {
       "id": "vertical_empire",
@@ -307,29 +296,15 @@
         {
           "id": "industrial_velocity",
           "round": 1,
-          "timing": "once_per_round",
+          "timing": "passive",
           "persistsAfterUnlock": true,
           "name": "Industrial Velocity",
           "displayName": "Operational Lead Time",
-          "timingLabel": "once per Era",
-          "text": "Your first Facility ${terms.actions.build} each Era costs 1 less ${terms.resources.runway}. When that discount actually reduces the ${terms.resources.runway} paid for a completed Facility, score ${facts.shared.factions.vertical.industrialVelocityMandate} ${terms.playerTracks.mandate}.",
+          "timingLabel": "permanent",
+          "text": "Your Facilities cost 1 less ${terms.resources.runway}, to a minimum of zero.",
           "flavorText": "The concrete cures while the permitting record learns to keep up.",
           "$scenario": {
             "ref": "strategic-open-weights"
-          }
-        },
-        {
-          "id": "orbital_compute",
-          "round": 4,
-          "timing": "once_per_game",
-          "persistsAfterUnlock": true,
-          "name": "Orbital ${terms.resources.compute}",
-          "displayName": "Extraterritorial Succession Transfer",
-          "timingLabel": "once per game",
-          "text": "Once per game before assigning your Agent, relocate 1 Facility to any legal open Facility space. It carries its attachments and starting-grid designation. If connected at its new location, immediately resolve its printed production once. Add 2 ${terms.playerTracks.scrutiny}, then assign your Agent and resolve the selected Action normally.",
-          "flavorText": "The institution changes jurisdiction before its contracts, liabilities, and dependent populations can object.",
-          "$scenario": {
-            "ref": "posthumous-labor"
           }
         }
       ],
@@ -337,7 +312,19 @@
       "chiefExecutive": "${terms.chiefExecutives.vertical}",
       "motto": "Capacity becomes real when it can be built.",
       "introduction": "${terms.chiefExecutives.vertical} brings a working delivery schedule to the permit hearing. ${terms.factions.vertical} has already reserved the chips, launch capacity, and transmission corridor. The remaining blank is the municipality's signature.",
-      "agiDeclaration": "The system is general, operational, and already scheduled for orbital deployment."
+      "agiDeclaration": "The system is general, operational, and already scheduled for orbital deployment.",
+      "lore": [
+        {
+          "id": "orbital_compute",
+          "round": 4,
+          "name": "Orbital ${terms.resources.compute}",
+          "displayName": "Extraterritorial Succession Transfer",
+          "flavorText": "The institution changes jurisdiction before its contracts, liabilities, and dependent populations can object.",
+          "$scenario": {
+            "ref": "posthumous-labor"
+          }
+        }
+      ]
     },
     {
       "id": "safety_laboratory",
@@ -354,14 +341,14 @@
       },
       "abilities": [
         {
-          "id": "audited_deployment",
+          "id": "crash_retention",
           "round": 1,
           "timing": "passive",
           "persistsAfterUnlock": true,
-          "name": "Audited Deployment",
-          "displayName": "Reviewed Release Channel",
-          "timingLabel": "passive",
-          "text": "Your first ${terms.actions.deploy} each Era adds no ${terms.playerTracks.scrutiny}. When your ${terms.systems.trainingRun} crashes, retain 1 provisional ${terms.playerTracks.capability}, up to the amount revealed.",
+          "name": "Reviewed Research",
+          "displayName": "Controlled Loss",
+          "timingLabel": "permanent",
+          "text": "When your ${terms.systems.trainingRun} crashes, keep 1 provisional ${terms.playerTracks.capability}, up to the amount revealed.",
           "flavorText": "Every consequence has been assigned an owner, a section number, and a review interval.",
           "$scenario": {
             "id": "reverse-acquihire-economy",
@@ -377,27 +364,17 @@
             "publicBenefit": "Experienced founders can redirect capital and expertise into new work.",
             "institutionalConsequence": "Institutions value the founder and archive above the displaced workforce.",
             "mechanicPreservation": {
-              "status": "retained",
-              "summary": "Every bound surface retains its canonical rule text and timing."
+              "status": "revised",
+              "summary": "The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain.",
+              "revision": {
+                "decisionId": "user-selected-three-cuts",
+                "record": "docs/design-decisions.md#three-cuts-candidate"
+              }
             },
             "deploymentProfiles": [
               "public-playtest",
               "internal-review"
             ]
-          }
-        },
-        {
-          "id": "emergency_pause",
-          "round": 4,
-          "timing": "once_per_game",
-          "persistsAfterUnlock": true,
-          "name": "Emergency Pause",
-          "displayName": "Certified Right of Refusal",
-          "timingLabel": "once per game",
-          "text": "Once per game before Action selection begins, pay 1 ${terms.resources.runway} and name 1 globally unlocked ${terms.systems.escalation}. It cannot be selected this cycle. Gain 2 ${terms.playerTracks.trust}. This cannot be declared after any player has selected an Action.",
-          "flavorText": "For one cycle, the maintained world must preserve a refusal it cannot process as another service request.",
-          "$scenario": {
-            "ref": "snapshot-continuity"
           }
         }
       ],
@@ -405,7 +382,19 @@
       "chiefExecutive": "${terms.chiefExecutives.safety}",
       "motto": "Capability must remain answerable to the people living with it.",
       "introduction": "${terms.factions.safety} sends reviewers to find out whether the stop control works. ${terms.chiefExecutives.safety} asks to meet the person authorized to press it, then stays for the demonstration.",
-      "agiDeclaration": "Subject to the safeguards described in Appendix M, we believe the responsible term is ${terms.systems.agi}."
+      "agiDeclaration": "Subject to the safeguards described in Appendix M, we believe the responsible term is ${terms.systems.agi}.",
+      "lore": [
+        {
+          "id": "emergency_pause",
+          "round": 4,
+          "name": "Emergency Pause",
+          "displayName": "Certified Right of Refusal",
+          "flavorText": "For one cycle, the maintained world must preserve a refusal it cannot process as another service request.",
+          "$scenario": {
+            "ref": "snapshot-continuity"
+          }
+        }
+      ]
     },
     {
       "id": "foundry",
@@ -428,25 +417,11 @@
           "persistsAfterUnlock": true,
           "name": "The Shovels",
           "displayName": "Demand-Linked Supply",
-          "timingLabel": "passive",
-          "text": "When another player spends at least 2 ${terms.resources.compute} in one Core Action or Program subaction, gain 1 ${terms.resources.runway}, at most ${facts.shared.factions.foundry.shovelsPerRound} times per Era. Resolve Agent Swarm's two Core Actions separately; spending 1 ${terms.resources.compute} in each does not trigger this ability.",
+          "timingLabel": "permanent",
+          "text": "During Production, gain 1 ${terms.resources.runway} for each rival with at least one Facility, to a maximum of 2 ${terms.resources.runway}.",
           "flavorText": "Every breakthrough produces an allocation request, a purchase order, or both.",
           "$scenario": {
             "ref": "abundance-constituency"
-          }
-        },
-        {
-          "id": "allocation_window",
-          "round": 2,
-          "timing": "once_when_unlocked",
-          "persistsAfterUnlock": false,
-          "name": "Allocation Window",
-          "displayName": "Priority Allocation Window",
-          "timingLabel": "once when unlocked",
-          "text": "Once during ${terms.eras.scale}, after a ${terms.systems.headline} resolves but before Action selection, create ${facts.shared.factions.foundry.allocationWindow.temporaryCompute} temporary ${terms.resources.compute}. For each token, make one complete offer naming a rival and a ${terms.resources.runway} price no greater than that rival's current ${terms.resources.runway}. The rival accepts, rejects, or makes one lower ${terms.resources.runway} counterprice; you accept or reject that counterprice. No replacement offer or further counter is allowed for that token. All temporary ${terms.resources.compute} remaining anywhere at cycle end disappears, sold or unsold.",
-          "flavorText": "Scarcity has been temporarily reprioritized for institutions able to decide immediately.",
-          "$scenario": {
-            "ref": "autonomy-queue-collapse"
           }
         }
       ],
@@ -454,7 +429,19 @@
       "chiefExecutive": "${terms.chiefExecutives.foundry}",
       "motto": "Every future requires an allocation window.",
       "introduction": "Rival institutions arrive at ${terms.factions.foundry} with incompatible futures and the same shortage. ${terms.chiefExecutives.foundry} opens the allocation calendar. Every proposal needs a window; the next architecture is already taking reservations.",
-      "agiDeclaration": "Whatever intelligence is, demand for it has entered volume production."
+      "agiDeclaration": "Whatever intelligence is, demand for it has entered volume production.",
+      "lore": [
+        {
+          "id": "allocation_window",
+          "round": 2,
+          "name": "Allocation Window",
+          "displayName": "Priority Allocation Window",
+          "flavorText": "Scarcity has been temporarily reprioritized for institutions able to decide immediately.",
+          "$scenario": {
+            "ref": "autonomy-queue-collapse"
+          }
+        }
+      ]
     }
   ]
 }

@@ -59,7 +59,7 @@ function normalizedEntropy(counts) {
 
 function summarizeEntries(entries, wins) {
   const actionCounts = {};
-  const escalationCounts = {};
+  const projectCounts = {};
   const providerCounts = {};
   const mandateCounts = {};
   let auditHits = 0;
@@ -80,7 +80,7 @@ function summarizeEntries(entries, wins) {
     powerSold += entry.metrics.powerSold || 0;
     powerTradeRunway += entry.metrics.powerTradeRunway || 0;
     mergeCounts(actionCounts, entry.metrics.actions);
-    mergeCounts(escalationCounts, entry.metrics.escalations);
+    mergeCounts(projectCounts, entry.metrics.projects);
     mergeCounts(providerCounts, entry.metrics.policyProviders);
     mergeCounts(mandateCounts, entry.metrics.mandatesWon);
     if (entry.metrics.earliestAgiEligibility) {
@@ -109,7 +109,7 @@ function summarizeEntries(entries, wins) {
       : null,
     actionCounts,
     actionDiversity: normalizedEntropy(actionCounts),
-    escalationCounts,
+    projectCounts,
     mandateCounts,
     providerCounts,
     policyFallbacks: fallbacks
@@ -295,7 +295,7 @@ function aggregateMatchMetrics(outcomes) {
     headlines: {},
     headlineOutcomes: {},
     mandates: {},
-    escalations: {},
+    projects: {},
     tactics: {},
 
     systemicRiskCreated: 0,
@@ -340,7 +340,7 @@ function aggregateMatchMetrics(outcomes) {
       "headlines",
       "headlineOutcomes",
       "mandates",
-      "escalations",
+      "projects",
       "tactics"
     ]) {
       mergeCounts(totals[key], metrics[key]);
@@ -511,7 +511,7 @@ function createSummaryAccumulator() {
     powerTradeRunway: 0,
     policyFallbacks: 0,
     actionCounts: {},
-    escalationCounts: {},
+    projectCounts: {},
     providerCounts: {},
     mandateCounts: {}
   };
@@ -532,7 +532,7 @@ function addSummaryEntry(accumulator, entry, winCredit) {
   accumulator.powerSold += entry.metrics.powerSold || 0;
   accumulator.powerTradeRunway += entry.metrics.powerTradeRunway || 0;
   mergeCounts(accumulator.actionCounts, entry.metrics.actions);
-  mergeCounts(accumulator.escalationCounts, entry.metrics.escalations);
+  mergeCounts(accumulator.projectCounts, entry.metrics.projects);
   mergeCounts(accumulator.providerCounts, entry.metrics.policyProviders);
   mergeCounts(accumulator.mandateCounts, entry.metrics.mandatesWon);
   if (entry.metrics.earliestAgiEligibility) {
@@ -564,7 +564,7 @@ function summarizeAccumulator(accumulator) {
       : null,
     actionCounts: accumulator.actionCounts,
     actionDiversity: normalizedEntropy(accumulator.actionCounts),
-    escalationCounts: accumulator.escalationCounts,
+    projectCounts: accumulator.projectCounts,
     mandateCounts: accumulator.mandateCounts,
     providerCounts: accumulator.providerCounts,
     policyFallbacks: accumulator.policyFallbacks
@@ -647,7 +647,7 @@ class BatchAccumulator {
       blockedAfterCommitment: 0
     };
     this.metrics = {
-      headlines: {}, headlineOutcomes: {}, mandates: {}, escalations: {}, tactics: {},
+      headlines: {}, headlineOutcomes: {}, mandates: {}, projects: {}, tactics: {},
       systemicRiskCreated: 0, declarations: 0, declarationPpaIterations: 0, declarationCapacityOps: 0,
       agiFunnel: {
         playerOpportunities: 0, coreRequirementsMet: 0,
@@ -768,7 +768,7 @@ class BatchAccumulator {
   addMetrics(outcome) {
     const totals = this.metrics;
     const metrics = outcome.matchMetrics || {};
-    for (const key of ["headlines", "headlineOutcomes", "mandates", "escalations", "tactics"]) {
+    for (const key of ["headlines", "headlineOutcomes", "mandates", "projects", "tactics"]) {
       mergeCounts(totals[key], metrics[key]);
     }
     totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;

@@ -1,5 +1,5 @@
 // Renders a single browsable "component gallery" of all Mandate 2038 game
-// content: factions, actions, eras, headlines, mandates, escalations, power
+// content: factions, actions, eras, headlines, mandates, projects, power
 // sources, tactics, specialists, secret objectives, and reference cards.
 //
 // Every card shows its rendered player-facing text from dist/runtime/*.json.
@@ -212,8 +212,8 @@ function buildMandates(data) {
   return section("mandates", "Era Mandates", data.mandates.length, cards, "Per-Era scoring races; the qualifying leader scores.");
 }
 
-function buildEscalations(data) {
-  const cards = data.escalations
+function buildProjects(data) {
+  const cards = data.projects
     .map((w) =>
       card({
         title: w.displayName || w.name,
@@ -226,7 +226,7 @@ function buildEscalations(data) {
       })
     )
     .join("");
-  return section("escalations", "Escalations", data.escalations.length, cards, "Once-per-game escalation plays unlocked by era.");
+  return section("projects", "Infrastructure projects", data.projects.length, cards, "Build constructs up to one Facility and one unlocked project.");
 }
 
 function buildPowerSources(config) {
@@ -241,7 +241,7 @@ function buildPowerSources(config) {
             ? "Renewable tile"
             : p.id === "emergency_infrastructure"
               ? "Grid tile"
-              : "Fusion Escalation",
+              : "Fusion project",
           `${p.runwayCost} Runway`,
           "Connects own and adjacent districts"
         ],
@@ -253,7 +253,7 @@ function buildPowerSources(config) {
       })
     )
     .join("");
-  return section("power", "Embedded Power Contracts", config.powerSources.length, cards, "Printed on the two Energy tiles and the Fusion Escalation; no separate reference cards.");
+  return section("power", "Embedded Power Contracts", config.powerSources.length, cards, "Printed on the two Energy tiles and the Fusion project; no separate reference cards.");
 }
 
 function buildTactics(data) {
@@ -403,7 +403,7 @@ async function build() {
       readData("game-config"),
       readData("headlines"),
       readData("mandates"),
-      readData("escalations"),
+      readData("projects"),
       readData("tactics"),
       readData("reserve-specialists"),
       readData("secret-objectives"),
@@ -416,7 +416,7 @@ async function build() {
     { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
     { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "escalations", label: "Escalations", html: buildEscalations(escalation), n: escalation.escalations.length },
+    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation), n: escalation.projects.length },
     { id: "power", label: "Embedded Power Contracts", html: buildPowerSources(config), n: config.powerSources.length },
     { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },

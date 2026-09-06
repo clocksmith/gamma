@@ -79,7 +79,7 @@ unknown alias. The environment alone mutates state. Player-owned assignments, He
 Infrastructure, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
-Selection packets contain every available Core Action and every unlocked, unused Program with an available Program marker. Current resolution counts and `resolvable_now` or `blocked` status inform the player; they do not exclude speculative commitments. After the optional trade, resolution chooses a legal Agent, district, mode, target, and payment from the current board. If no effect can resolve, assignment still occurs and the committed card exhausts or records its Program use. Talent production uses the same assignment destinations, grants no Action or visit bonus, and records its choice in the ordinary decision/replay contract.
+Selection packets contain every available Core Action . Current resolution counts and `resolvable_now` or `blocked` status inform the player; they do not exclude speculative commitments. After the optional trade, resolution chooses a legal Agent, district, mode, target, and payment from the current board. If no effect can resolve, assignment still occurs and the committed card exhausts. Talent production uses the same assignment destinations, grants no Action or visit bonus, and records its choice in the ordinary decision/replay contract.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 
@@ -430,7 +430,7 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 ## Current coverage and limits
 
 `react-agent-assignments-v1` covers the complete nineteen-tile board, four Eras,
-all baseline Headlines and shared Programs, factions, Training, two-source
+all immediate Headlines and Build projects, factions, Training, two-source
 Power, current local Generator connections, the bounded pre-resolution resource trade,
 Joint Ventures, Audit, visible scoring, scored AGI recognition,
 and the shared ending. Tactics and
@@ -440,3 +440,8 @@ Simulation can measure action pressure, faction/seat/backend interaction,
 declaration pathways, local infrastructure viability, and procedural integrity. Physical
 tests must still determine teachability, duration, negotiation quality,
 handling, fairness, and fun.
+
+The three cuts candidate records each Build in `metrics.construction` with its
+Era, Facility step, and project. `projectCounts` counts Generators, Mega-Clusters,
+and Fusion. `meanShovelsIncome` now measures Corthaven's actual capped Production
+income. Historical reports retain their former fields and frozen rule identities.

@@ -198,7 +198,7 @@ test("three different Core Actions advance exactly one era on the fixed map", as
   assert.equal(state.round, 2);
   assert.equal(state.cycle, 1);
   assert.deepEqual(state.player.actionsUsed, []);
-  assert.equal(state.player.programUses, 1);
+  assert.equal(state.player.programUses, undefined);
   assert.deepEqual(
     state.metrics.actionSelections.map((selection) => selection.actionId),
     ["fund", "influence", "organize"]
@@ -327,9 +327,9 @@ test("public Mandate schedules are canonical at three, four, and five players", 
   );
 
   for (const [playerCount, expected] of [
-    [3, [2, 2, 1, 1]],
-    [4, [2, 2, 1, 1]],
-    [5, [2, 2, 1, 2]]
+    [3, [2, 2, 2, 2]],
+    [4, [2, 2, 2, 2]],
+    [5, [2, 2, 2, 2]]
   ]) {
     const awards = publicMandateAwards(config, {
       factionId: "imperial_research_lab",
@@ -341,7 +341,7 @@ test("public Mandate schedules are canonical at three, four, and five players", 
     assert.deepEqual(
       awards.map((award) => award.points),
       expected,
-      `${playerCount}-player Peer Validation schedule`
+      `${playerCount}-player common Capability schedule`
     );
   }
 });

@@ -14,7 +14,7 @@ machine-enforced game data.
   requirements and deferred content. Edit the rulebook or
   its referenced component records, then build; there is no second authored inventory here.
 - `governance-ledger.md` specifies the single writable board panel for the
-  current Mandate, permanent Program-use history, Setup Collective Trust, and
+  current Mandate, Setup Collective Trust, and
   final public resolution. Read Power directly from current infrastructure positions.
 - `production/` is reserved for printer-ready specifications, dielines, and
   vendor-facing files once those are deliberately approved.

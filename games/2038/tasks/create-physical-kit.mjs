@@ -21,7 +21,7 @@ const sourceDataFiles = [
   "dist/runtime/headlines.json",
   "dist/runtime/mandates.json",
   "dist/runtime/reference-cards.json",
-  "dist/runtime/escalations.json",
+  "dist/runtime/projects.json",
   "dist/runtime/world-copy.json"
 ];
 
