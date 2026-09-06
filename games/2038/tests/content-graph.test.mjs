@@ -297,22 +297,30 @@ test("Card and Board Reference projects every other required card surface", asyn
   }
 });
 
-test("Era panel data is the single source for the world-companion escalation lore", async () => {
+test("world companion owns four ordered chapters and references canonical Era identities", async () => {
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
+  const variables = await readJson("content/data/variables.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
-  const worldSource = await readFile(
-    new URL("world.md", root),
-    "utf8"
-  );
-
+  const source = await readFile(new URL("world.md", root), "utf8");
+  const playerSource = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
+  const chapters = [...world.matchAll(/^### Chapter ([IV]+): (.+)$/gm)];
+  assert.deepEqual(chapters.map((match) => match[1]), ["I", "II", "III", "IV"]);
+  assert.deepEqual(chapters.map((match) => match[2]), eraCards.map((era) => era.name));
   for (const era of eraCards) {
-    assert.ok(era.loreText, `${era.id} owns its lore`);
-    assert.ok(world.includes(era.loreText), `world companion projects ${era.id} lore`);
-    assert.ok(
-      worldSource.includes(`\${content.referenceCards.byId.${era.id}.loreText}`),
-      `world companion template references ${era.id} lore`
-    );
+    assert.ok(era.loreText, `${era.id} retains its compact card summary`);
+    assert.ok(!world.includes(era.loreText), `${era.id} summary is not repeated in the companion`);
+    for (const field of ["name", "strapline"]) {
+      assert.ok(playerSource.includes(`\${content.referenceCards.byId.${era.id}.${field}}`));
+    }
+    assert.ok(world.includes(`> ${era.strapline}`));
   }
+  for (const [key, name] of Object.entries(variables.terms.factions)) {
+    assert.ok(playerSource.includes(`\${terms.factions.${key}}`), `${name} uses shared identity`);
+    assert.ok(world.includes(name), `${name} participates in the chapters`);
+  }
+  assert.doesNotMatch(playerSource, /worldPrimer|\.loreText}/);
+  assert.match(world, /one possible history/);
+  assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
 });
 
 test("retained signature abilities project concrete continuity institutions", async () => {

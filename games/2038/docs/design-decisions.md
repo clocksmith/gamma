@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.9.0-rc.2-test`
+**Rules reference:** `0.9.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -11,6 +11,25 @@ The former complexity-proposal document was folded into this ledger after its
 five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
+
+## World companion as four chapters
+
+The user selected a connected narrative treatment for Progress, Capacity,
+Authority, and Continuity. `world.md` owns these chapters, following Mara Venn
+and Lio in Southbank while the six canonical institutions act within their
+existing identities. These witnesses and the neighborhood add no component,
+board district, required Headline sequence, or mechanical rule. The story ends
+before the four alternative World Endings are resolved.
+
+The companion no longer repeats the compact Era-card summaries or a separate
+three-paragraph world primer. The homepage and documentation index keep their pitch and companion link.
+Era names, epigraphs, institution names, and ending text still resolve from
+existing owners. The science-fiction threads retain their Era progression.
+
+Executable `0.15.2`, engine `0.17.2`, and candidate `0.9.0-rc.3-test` preserve
+new fingerprints for the site presentation and narrative documents. No gameplay
+algorithm, cost, quantity, rule, or balance claim changes. Literary engagement
+requires human review; build and contract checks establish source consistency.
 
 ## One ruleset — 2026-09-05
 
@@ -237,7 +256,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.15.1` implements `0.9.0-rc.2-test` under engine coverage
+Executable game `0.15.2` implements `0.9.0-rc.3-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,
