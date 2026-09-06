@@ -39,8 +39,8 @@ standalone document; it changes no prose.
   The nested `inventory` excerpt also produces Supported Box Inventory.
 - Card and Board Reference projects component fields and selected rulebook passages.
   Duration and timing labels are selected from shared labels using the record's value.
-- The `player-world` excerpt becomes World and Institutions: four connected
-  chapters authored in `world.md`, followed by component-owned ending narratives.
+- The `player-world` excerpt becomes World and Institutions: four concise
+  Era overviews authored in `world.md`, followed by component-owned ending narratives.
   Era names and epigraphs resolve from Era panels, which contain no extended lore
   summaries. Writing notes and backlog follow the fiction in its source and stay
   outside the companion.

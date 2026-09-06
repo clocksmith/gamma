@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.9.0-rc.4-test`
+**Rules reference:** `0.9.0-rc.5-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -12,29 +12,22 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
-## Fiction first
+## Readable Era overviews
 
-The user selected four connected chapters and a reduction of explanatory copy.
-`world.md` opens with the story and four component-owned closing scenes; concise
-writing notes, research references, and the structured backlog follow it.
-The six institutions retain one introduction and motto. Era panels retain names,
-epigraphs, rules, and unlocks. Headlines retain titles, events, quotes, and effects.
-Extended Era summaries, repeated institution descriptions, Headline subtitles,
-and the companion's procedural preamble are removed from sources and consumers.
-Era gallery panels now use their canonical rules and unlock text, replacing an
-undefined legacy availability field and a repeated list of internal Program IDs.
-The First Game Guide route already opens the guided browser match. Its unused
-standalone lesson script, stylesheet, and duplicate lesson copy are removed.
+The user wants the original lore with a light narrative touch. `world.md`
+therefore presents four concise Era overviews with concrete examples and clear
+transitions. All original technologies, institutional consequences, and six
+fictional institutions remain explicit. A recurring family, dialogue, and plot
+are not part of this presentation. Endings again describe independent outcomes.
 
-Mara Venn, Lio, and Southbank illustrate one possible history without introducing
-components or mandatory events. Costs, quantities, timing, scoring, and the four
-ending conditions are unchanged. Literary engagement requires human review.
+The earlier duplication cleanup remains: one source for extended setting prose,
+one introduction and motto per institution, compact Era panels, and Headline
+events with quotes and effects. Writing notes follow the fiction. The guided
+match retains its route; obsolete standalone lesson files remain removed.
 
-Executable `0.15.3`, engine `0.17.3`, and candidate `0.9.0-rc.4-test` preserve the
-revised copy and display contracts. The existing mechanics projection includes
-the deleted descriptive faction `role` field, so its fingerprint changes despite
-unchanged play. Comparing retained fields against `0.15.2` isolates that removal;
-this is not a mechanics or balance promotion.
+Executable `0.15.4` and candidate `0.9.0-rc.5-test` record the revised prose.
+Engine `0.17.3`, component mechanics, timing, costs, scoring, and ending conditions
+are unchanged. This is an editorial correction, not a balance promotion.
 
 ## One ruleset — 2026-09-05
 
@@ -261,7 +254,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.15.3` implements `0.9.0-rc.4-test` under engine coverage
+Executable game `0.15.4` implements `0.9.0-rc.5-test` under engine coverage
 `nineteen-hex-simplified-v1`. Each Production replaces the prior Power
 allocation; its cubes remain on the map as the authoritative powered/offline
 snapshot for later rules. The executable uses the complete radius-two board,

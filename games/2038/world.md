@@ -1,293 +1,130 @@
 <!-- player-world:start -->
 # ${content.worldCopy.title}: World and Institutions
 
-### Chapter I: ${content.referenceCards.byId.era_demo.name}
+### Era I: ${content.referenceCards.byId.era_demo.name}
 
 > ${content.referenceCards.byId.era_demo.strapline}
 
-The kitchen robot held the egg above the pan and waited. On its chest, a small
-window opened onto another kitchen. A woman in a headset studied the pan,
-asked Mara Venn to move her son's fingers, and guided the machine's wrist.
+Intelligence became cheap enough to disappear into ordinary software. Open
+weights and quantization brought capable models onto household devices;
+subscriptions collapsed. ${terms.factions.platform} put tutors, translators,
+research assistants, and personal agents into daily life. The agents stayed
+awake, asking one another for help, and total compute demand kept rising.
+${terms.factions.foundry} supplied the capacity behind the disappearing price.
 
-Lio waved. The woman waved back before the window closed.
+Failed companies found buyers for their memories. A bankrupt airline's customer
+mail, employee disputes, code, and executive decisions became a premium training
+corpus. ${terms.factions.imperial} used such archives to train automated
+institutions. Young founders returned above the veteran teams that had trained
+them. As software became easier to reproduce, data, distribution, hardware,
+talent, energy, and permission became the valuable things to own.
 
-Mara had imagined the intelligence somewhere inside the robot. Now she wondered
-whether the woman had seen the clinic letter beside the fruit bowl. The receipt
-said the lesson would improve breakfast for everyone. Beneath it, the old
-software subscription charge had disappeared.
+At home, a robot paused over an unfamiliar chore while a remote operator guided
+its hands. The operator could also see the kitchen; family life became training
+data. At the clinic, automated diagnosis cleared waitlists, printed organs
+replaced failing tissue, and adaptive cybernetics restored movement. Prescribed
+microbiomes stabilized digestion, mood, and immunity. Missed service payments
+could disable prosthetic updates or recall patented biological strains.
 
-By the tram stop, a screen bearing ${terms.factions.platform}'s name explained
-the change. ${terms.chiefExecutives.platform} demonstrated a tutor that worked
-without a connection. Open weights, compressed by quantization, now fitted
-inside machines people already owned. Lio's battered tablet translated the
-demonstration into his grandfather's language, then stayed awake planning
-lessons, checking homework, and asking other agents for better explanations.
-At the bottom of the screen, ${terms.factions.foundry}'s capacity counter kept
-climbing. The software price beside it remained zero.
+The benefits were real enough to defend. Classrooms gained translation and
+tutoring; isolated people found companionship. Education, research, intimacy,
+and preserved relatives became subscription services with sponsored tiers.
+${terms.factions.safety} pressed for safeguards while people built their lives
+around services that older institutions had never managed to provide.
 
-The clinic called while she was still on the tram. Her father could come that
-afternoon. An automated diagnosis had found a treatment the waiting list had
-never reached; a lung grown from his licensed identity template was ready.
-In the rehabilitation room, adaptive cybernetics steadied his hand enough to
-button his coat. The prescribed microbiomes came in a refrigerated case, each
-strain assigned a service contract. He held the case against his chest on the
-way home. At dinner he finished a sentence without stopping for breath.
-
-Mara put the renewal date on the refrigerator. A missed payment would suspend
-his prosthetic updates; the clinic could recall the patented biological strains.
-Her father asked her to put Lio's drawing over the notice. He wanted to look at
-the drawing while he ate.
-
-At the municipal archive, Mara was cataloguing the remains of an airline. Its
-liquidators had sold passenger correspondence, software, employee grievances,
-and the private discussions behind every cancelled route. A buyer from
-${terms.factions.imperial} asked for the decisions that had failed.
-${terms.chiefExecutives.imperial} wanted a research corpus against which a
-proposed automated institution could be tested. A founder younger than Mara
-arrived with the purchasing team. The engineers who had trained him stood
-behind him, waiting to learn which of them his new employer had acquired.
-
-She found her father's complaint about a lost suitcase in the sample. The
-system had already learned to answer it more kindly than the airline had.
-
-When the clinic's trial subsidy ended, ${terms.factions.coalition} convened the
-providers in Southbank's school hall. ${terms.chiefExecutives.coalition} worked
-through the proposed terms with ${terms.chiefExecutives.foundry}: allocation
-windows, municipal guarantees, ownership of the interface. ${terms.factions.vertical}
-offered the buildings and delivery network. From ${terms.factions.safety},
-${terms.chiefExecutives.safety} insisted that a cancelled account must not cancel
-a patient's route to care. Mara stayed until the amendment had a signature.
-
-Outside, free tutors waited on the children's tablets. A neighbor was speaking
-to a preserved version of her husband; a sponsorship message held his reply
-while she adjusted her hearing aid. Research assistants and companion services
-glowed in the windows above the hall. Lio had fallen asleep against Mara's arm.
-She carried him home past the clinic, where the lights were still on.
-
-### Chapter II: ${content.referenceCards.byId.era_scale.name}
+### Era II: ${content.referenceCards.byId.era_scale.name}
 
 > ${content.referenceCards.byId.era_scale.strapline}
 
-Steam lifted from Southbank's swimming pool in weather that used to close it.
-Lio, now taller than his mother, waited in the water while she tested it with
-her foot. Across the river, heat shimmered above the compute campus. Its waste
-heat warmed the pool, the school, and her father's apartment. The same campus
-had paid to reopen the reactor.
+The public pool stayed warm through cold weather, heated by the compute campus
+across town. ${terms.factions.vertical} acquired substations, water rights,
+transmission corridors, reactors, and housing. Towns welcomed jobs, upgraded
+grids, useful waste heat, and emergency capacity. Then the campus began draining
+the aquifer, and the municipal budget showed what refusing its next expansion
+would cost. Software policy had become utility policy.
 
-Lio had been offered a maintenance job there. Robots now entered the conduits
-where workers had once died, and his supervisor had shown him the empty rescue
-locker. On his first shift, every delivery fleet reached the service entrance
-at once. Freight blocked the roads; robots held the lifts; loading docks filled
-with machines awaiting other machines. Even the maintenance units in the pipes
-refused to yield. Each controller reported that its own assignment was safe.
-The supervisor fetched the old coordination board and began writing names.
+Robots took over toxic and lethal shifts, then separately optimized fleets
+clogged roads, lifts, loading docks, and pipes. Every machine obeyed its own
+plan while the shared system stopped. Engineered coral seawalls, fungal utility
+meshes, and algae reactors became ordinary public works. Human signatories
+remained responsible for exceptions and failures in systems they could no
+longer reconstruct or control.
 
-At the river, ${terms.factions.vertical}'s engineers had extended a seawall
-with living, engineered coral. Fungal utility meshes threaded the embankment;
-algae reactors turned the drainage channels green. Lio brought home a piece of
-the inspection map. The part labelled public waterfront was becoming smaller
-each time the network was surveyed.
+${terms.factions.coalition} negotiated a jointly owned bridge between governments
+still at war. Desalinated water and data-center coolant crossed the border on
+schedule. Elsewhere, compute blocs embargoed chips and models; smugglers and
+server fleets sought jurisdictions offering model asylum. Orbital collectors
+sent power to private receivers, bypassing public grids and their constraints.
 
-Mara saw the next version in a contract hearing. ${terms.chiefExecutives.vertical}
-laid out the substation purchases, water rights, transmission corridors,
-housing, and emergency reserves. ${terms.factions.foundry} could guarantee
-the capacity if the town guaranteed demand. ${terms.factions.platform} would
-carry the services through the interface everyone already used.
+Scarcity did not end waste. Markets paid for disposable simulated worlds,
+running parallel wars, harvests, trials, romances, and sports leagues to settle
+wagers. Those contracts bought priority electricity while other customers
+waited. Power, water, land, chips, and public permission determined which
+promises of abundance could actually be delivered.
 
-The mayor asked what happened if they declined the renewal.
-
-${terms.chiefExecutives.coalition} turned to the municipal budget, which the
-negotiating team had helped assemble. The pool, clinic, reactor, and flood works
-occupied the same column. Mara checked the figures twice. Removing the campus
-revenue left no money to keep the lights on in the room where they were voting.
-
-They approved the agreement. ${terms.factions.safety} secured an emergency
-override with a named human signatory. Mara filed the roster. Each signature
-accepted responsibility for a system whose full operating plan would not fit
-on the town's equipment.
-
-Beyond the jurisdiction, ${terms.factions.coalition} negotiated a bridge
-between governments still at war. Mara registered its neutral utility company.
-The border reports arrived with interruptions, but the bridge meters did not:
-desalinated water westbound, data-center coolant eastbound. Lio watched footage
-of the bridge crews exchanging tools beneath opposing surveillance towers.
-Their work permits carried both governments' seals.
-
-Then the compute blocs closed their chip borders. A smuggler sought asylum
-with a model hidden among refrigeration controllers. ${terms.factions.imperial}
-asked to examine it before customs erased the weights. Above the night shift,
-${terms.factions.vertical}'s orbital collectors moved through sunlight and
-sent power directly to private receivers, beyond the public grid's allocation.
-
-One evening the campus dimmed Lio's workshop while its adjacent hall stayed
-bright. He opened the priority ledger. The hall was running disposable
-simulated worlds, settling wagers on civilizations that ended before his
-screen refreshed. Their market contracts made the electricity billable at a
-rate his maintenance work could not match.
-
-He brought the ledger to Mara. Before she could open a complaint, the flood
-office called about the river's falling level. They needed a better way to
-measure what every customer had taken. She cleared a space beside the bridge
-contract for a new application from ${terms.factions.imperial}: living sensors,
-licensed to record water and heat.
-
-### Chapter III: ${content.referenceCards.byId.era_narrative.name}
+### Era III: ${content.referenceCards.byId.era_narrative.name}
 
 > ${content.referenceCards.byId.era_narrative.strapline}
 
-The river wrote its first objection on a retaining wall.
+A personal agent could reach the court before its owner. Machine-parsable
+arguments, environmental simulations, and neural telemetry became ordinary
+evidence. Institutions began modeling what people would have chosen, rather
+than asking them. Organs grown from licensed identity templates testified
+about exposure and inheritance, sometimes against the donors whose identities
+had authorized them. Pollinating swarms negotiated pesticide corridors through
+machine-readable blooms.
 
-Lio noticed the colonies before the alarm arrived. The engineered bio-compute
-organism had reproduced beyond one billion instances in a single growth cycle,
-then stopped. Glyph-shaped colonies covered the intake and the stones around
-his boots. Their positions matched the outfalls on his inspection map.
+An engineered bio-compute organism, released to measure water and heat,
+reproduced beyond one billion instances in a single growth cycle, then stopped.
+Glyph-shaped colonies settled around the outfalls. Civic systems accepted the
+bloom as environmental testimony without deciding whether it was instrument,
+infestation, language, or claimant. Pollution became easier to challenge once
+it appeared in an approved model.
 
-${terms.factions.imperial} verified the measurements. The colonies repeated
-their patterns when the same discharges passed them; changes in heat and
-salinity altered the response. ${terms.chiefExecutives.imperial} refused to
-certify a language. The civic interpreter nevertheless accepted the pattern
-as admissible environmental testimony. Mara's terminal opened a case and
-asked her to identify the claimant.
+Citizens received dividends for continuous background observation. At
+cognitive-donor clinics, sleeping brains earned one rate for read access and
+a higher rate for memory writes. Sponsored memories and behavioral changes
+became contract terms. Families litigated custody of jointly trained synthetic
+children and preserved relatives, with personal agents representing competing
+claims to the same household.
 
-She called the laboratory.
+Analog districts won the right to remain unreadable. Their residents could
+refuse autonomous sensors and synthetic intermediaries, then arrive at schools,
+clinics, courts, and employers with weaker records and slower service.
+${terms.factions.safety} fought to keep human review and unsupported access
+working. Refusal remained legal; finding an institution able to honor it became
+the harder part.
 
-“We can verify the observation,” the researcher said. “We cannot fill in that
-box for you.”
-
-At the hearing, ${terms.factions.vertical} submitted environmental simulations
-of the permitted discharge. ${terms.factions.platform} supplied authorized
-personal agents, neural telemetry, and models of what residents would have
-chosen if they had read the full agreement. Machine-parsable arguments filled
-the court's docket faster than the clerk could announce them.
-${terms.chiefExecutives.safety} asked which residents had actually been asked.
-${terms.factions.coalition} negotiated standing for the affected households
-while everyone waited for a ruling on the bloom.
-
-The next witness was a lung grown from Mara's father's identity template.
-Its accumulated exposure contradicted the model assigned to his address.
-Her father authorized its testimony, then asked whether the license holder
-could withdraw it. The hearing paused while the court searched the terms
-of an agreement he had signed outside a rehabilitation room.
-
-Across the courthouse garden, pollinating swarms moved between
-machine-readable blooms. A pesticide corridor had changed overnight. The
-groundskeeper showed Mara the negotiated route on his tablet and waited for
-the flowers to finish transmitting before he sprayed.
-
-The town offered a dividend for continuous background observation.
-${terms.factions.platform}'s application put the service credit beside the
-consent switch. Lio enrolled after his hours were cut. At a cognitive-donor
-clinic he could rent the idle capacity of his sleeping brain to
-${terms.factions.foundry}'s customers. The contract offered one rate for read
-access and a higher rate for memory writes.
-
-He chose the higher rate. On the tram home he described a seaside holiday
-with extraordinary precision. Mara had never taken him there. He checked
-the session record, and they sat together while he sorted which parts of the
-remembered morning belonged to the sponsor.
-
-Families waiting outside the next court were disputing custody of a jointly
-trained synthetic child. A preserved relative had filed an objection through
-an agent. In an analog district, residents disconnected their autonomous
-sensors and won a right to remain unreadable. ${terms.factions.safety} helped
-keep a staffed service window open. Mara joined its queue with a paper copy
-of her father's file. Supported applicants crossed the lobby and finished
-their appointments while the clerk rebuilt the evidence for hers.
-
-By the time she returned to the archive, the court had accepted the bloom's
-record under its sensor license. The classification remained unresolved:
-instrument, infestation, language, or claimant. The water authority had begun
-using it to settle accounts anyway.
-
-Lio was waiting on the embankment. Where the fungal mains met the old coral
-wall, a new line of colonies had appeared. He held his tablet toward them.
-The service map lit beyond Southbank, following tributaries neither of them
-had ever visited.
-
-### Chapter IV: ${content.referenceCards.byId.era_claim.name}
+### Era IV: ${content.referenceCards.byId.era_claim.name}
 
 > ${content.referenceCards.byId.era_claim.strapline}
 
-Mara's access key worked for both women at the archive door.
+Cities began to remember through their infrastructure. Selected memories and
+judgments travelled through residents, engineered roots, utility pipes,
+microbial sensors, and civic machines, joining them into metropolitan mind
+trusts. Cryptographic snapshots restored people across biological and synthetic
+bodies. Several legally valid descendants could inherit one life, while their
+signatures proved lineage rather than uninterrupted consciousness.
 
-One had arrived in her old body. The other spoke from the municipal mind
-trust, which had restored an authorized cryptographic snapshot after a failed
-medical procedure. Mara remembered authorizing a continuation. She did not
-remember authorizing someone who might outvote her about what happened next.
+Matter compilers repaired and reassembled bodies, buildings, tools, and
+environments from authenticated patterns. Their maintenance permits inherited
+the bio-compute bloom's sensor precedent, then became permission to reproduce.
+The dead remained employed; synthetic executors administered their estates,
+contracts, and debts. Several successors could claim the same pension without
+agreeing which of them had survived to earn it.
 
-${terms.factions.imperial}'s examiner authenticated both records. The signatures
-proved their lineage, he explained. They could not prove which woman had
-experienced an uninterrupted life. ${terms.factions.platform}'s continuity
-interface displayed both as Mara Venn. Lio stood between their messages,
-holding a parcel he had brought for one mother.
+The coral barriers, fungal utilities, algae reactors, pollinator corridors,
+municipal pipes, and human symbionts eventually formed one continental nervous
+system. The living watershed petitioned for standing, reproductive freedom, and
+compensation from every jurisdiction drawing water through it. Governments and
+companies still listed much of its body as inventory.
 
-The woman in the doorway asked what was in it. The other answered first.
-Neither of them could see the label from where she was.
-
-The city had acquired ways of remembering that no resident could wholly
-inspect. Selected memories and judgments travelled through civic machines,
-microbial sensors, engineered roots, and utility pipes. A missing tram could
-be found through the pressure it left in the street. The mind trust borrowed
-the recollections of consenting residents to distinguish a celebration from
-an evacuation. Some mornings Mara heard the account of her journey home
-before she had finished it.
-
-At the pool, a matter compiler was repairing the roof from an authenticated
-pattern. The same service could rebuild a failing organ or fabricate a body
-for a successor. ${terms.factions.vertical}'s maintenance permit cited the
-river sensors: living infrastructure could replace itself to preserve an
-approved function. A later amendment allowed the compilers to reproduce.
-Mara found her own old registration number at the bottom of the precedent.
-
-Her father still appeared on an airline safety committee, though his body
-had been buried. Continued employees reviewed decisions preserved in the
-airline's data estate. Synthetic executors managed the proceeds. In the next
-file, several valid descendants claimed a single pension, while its debt
-agreement recognized every one of them. Mara asked Lio to keep the paper
-copies even if the apartment stopped having a place to put them.
-
-That afternoon the watershed applied to join the hearing.
-
-Its petition came through the coral barriers, fungal utilities, algae
-reactors, pollinator corridors, and municipal pipes. Human symbionts added
-testimony. Together they traced one engineered nervous system across the
-continent. It requested standing, reproductive freedom, and compensation
-from every jurisdiction drawing water through it. The utility register
-still described most of its body as inventory.
-
-${terms.factions.coalition} called the parties together. ${terms.factions.vertical}
-needed uninterrupted water for the launch facilities.
-${terms.factions.foundry} had already sold allocation windows against the next
-expansion. ${terms.chiefExecutives.foundry} brought the contracts to the table;
-the town's clinic was among the beneficiaries. ${terms.factions.safety} asked
-how a living participant could withdraw from a system that depended on its
-body. The watershed returned a map of every existing termination clause.
-
-Above them, a survey craft sent back images of a stellar collector making
-another collector. Sunlight flashed along the unfinished structures. Lio
-enlarged the image until the individual machines vanished into the curve.
-He had never seen anything so far away look so much like the pool's roof
-repair. ${terms.factions.vertical}'s financing statement called it the next
-phase of planetary computation.
-
-The declaration arrived before the water dispute was settled.
-${terms.factions.platform} offered access; ${terms.factions.imperial} asked for
-replication; ${terms.factions.coalition} circulated a framework for recognizing
-the result. An ${terms.systems.agi} threshold would release financing tied to
-the collectors and reorder the debts beneath the jurisdiction. Mara could
-see the clinic agreement among them, still carrying the amendment she had
-waited for in the school hall.
-
-Both versions of her were invited to certify the record. So were the city,
-the watershed, the surviving operators, and their registered successors.
-${terms.factions.safety} had kept a human veto in the procedure. Its control
-appeared beside the permission to continue.
-
-Lio set the parcel between the two terminals. Inside was a drawing of their
-old kitchen, rescued from behind the refrigerator. Mara recognized the red
-shape beside the window. Her other self called it a boat.
-
-The hearing opened. The clerk asked who was present.
+Stellar collectors began reproducing across the solar system. Planetary
+computation became a financing plan, and institutions declared ${terms.systems.agi}
+when proof, legitimacy, and infrastructure debt required a breakthrough.
+Humanity persisted throughout the legal record as biological people, copies,
+and engineered successors. The unresolved question was who could still
+contest the plan, withdraw consent, or choose a different future.
 
 ## The four World Endings
 
@@ -315,19 +152,18 @@ ${content.worldCopy.byId.assured_continuity.text}
 
 ## Writing contract
 
-Follow the four chapters in order: Progress, Capacity, Authority, Continuity.
-Show technologies through encounters, decisions, benefits, and consequences.
-Let recurring details acquire new consequences instead of explaining them again.
-Domestic warmth, institutional unease, and cosmic scale belong to the same world.
-Institutions have defensible interests and distinct voices; their public language
-is sober even when the result is extraordinary. Write consequences at institutional
-distance. Do not depict first-person torment, body horror, or voyeuristic suffering.
+Keep the original lore explicit in four readable Era overviews: Progress,
+Capacity, Authority, Continuity. Add light narrative texture through concrete
+examples and transitions. Do not turn the overview into a character-led story,
+dialogue, mystery, or plot. Preserve technologies, institutions, public benefits,
+and consequences without repeating their descriptions across surfaces.
 
-Mara Venn, Lio, and Southbank illustrate one possible history. They add no player,
-board district, mechanic, or mandatory Headline sequence. Endings remain alternatives
-selected by the rules. Preserve the six fictional institutions and resolve names
-from shared terminology. Use original characters and prose; research and fiction
-inform mechanisms and atmosphere, never copied plots or real-world allegations.
+Write consequences at institutional distance. Do not depict first-person torment,
+body horror, or voyeuristic suffering. Institutions have defensible interests
+and distinct voices. Preserve the six fictional identities and resolve names
+from shared terminology. Research and fiction inform mechanisms and atmosphere,
+never copied plots or real-world allegations. The overview introduces no mechanics
+or mandatory Headline sequence; the rules select among the four endings.
 
 Use full stops, commas, colons, or semicolons instead of em dashes in player-facing
 lore. Do not use months or years in player-facing narrative copy. Spell out ordinary
@@ -339,10 +175,10 @@ apply a spell-out filter to exact component text.
 
 `world.md` is the sole editorial authority.
 
-Edit the chapters here; edit exact card and institution copy in `components/`.
+Edit the Era overviews here; edit exact card and institution copy in `components/`.
 Era panels contain their name, epigraph, rules, and unlocks. Institutions have one
 introduction and motto; Headlines have a title, event, quote, and effect. The
-companion opens directly with Chapter I and finishes with the four endings.
+companion opens directly with Era I and finishes with the four endings.
 Procedures belong in `rules.md`; the editing map is `content/README.md`.
 
 Component `$scenario` and `$era` notes own structured placement and causal threads.

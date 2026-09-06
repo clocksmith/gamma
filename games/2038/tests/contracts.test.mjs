@@ -855,10 +855,10 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(billionBloom.newswire, /bio-compute organism/i);
   assert.match(billionBloom.newswire, /one billion instances/i);
   assert.match(billionBloom.newswire, /glyph-shaped colonies/i);
-  const authorityChapter = companion.split("### Chapter III: Authority")[1].split("### Chapter IV:")[0].replace(/\s+/g, " ");
+  const authorityChapter = companion.split("### Era III: Authority")[1].split("### Era IV:")[0].replace(/\s+/g, " ");
   assert.match(authorityChapter, /bio-compute organism/i);
   assert.match(authorityChapter, /instrument, infestation, language, or claimant/i);
-  assert.doesNotMatch(companion.split("### Chapter III:")[0], /glyph-shaped/i);
+  assert.doesNotMatch(companion.split("### Era III:")[0], /glyph-shaped/i);
 
   const clinic = headlines.find((headline) => headline.id === "professional_exam_sweep");
   const hazardShift = headlines.find((headline) => headline.id === "humanoid_factory_gate");
@@ -894,9 +894,9 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /loading docks.*pipes/i,
     /bridge between governments still at war/i,
     /desalinated water.*data-center coolant/i,
-    /cognitive-donor.*sleeping brain/i,
+    /cognitive-donor.*sleeping brains/i,
     /read access.*memory writes/i,
-    /lung grown from.*identity template/i,
+    /organs grown from licensed identity templates/i,
     /pollinating swarms.*machine-readable blooms/i,
     /standing, reproductive freedom, and compensation/i,
     /bio-compute organism/i,
@@ -904,7 +904,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /glyph-shaped colonies/i,
     /cryptographic snapshot/i,
     /matter compiler/i,
-    /stellar collector making another collector/i,
+    /stellar collectors.*reproducing across the solar system/i,
     /instrument, infestation, language, or claimant/i
   ]) assert.match(narrative, concept);
 
