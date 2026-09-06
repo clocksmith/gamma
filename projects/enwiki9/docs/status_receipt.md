@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-06T20:57:47+00:00`
+- Generated at UTC: `2026-09-06T22:14:31+00:00`
 
 ## Target State
 
@@ -28,7 +28,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `n/a`
-- RSS samples: `19,804`
+- RSS samples: `20,264`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `n/a`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `26`
-- Held pending adaptive jobs: `26`
+- Pending adaptive jobs: `27`
+- Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `2`
 - Validated release run receipts: `0`
@@ -69,11 +69,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Existing observer job: `20260904T134731Z_441f96254f`
 - Observer worker verified on this host: `true`
 - Adopted source identities verified on this host: `true`
-- Observer progress UTC: `2026-09-06T20:57:37+00:00`
+- Observer progress UTC: `2026-09-06T22:14:30+00:00`
 - Observer progress fresh: `true`
-- Trace bytes: `9,870,585,856` / `10,364,777,488`
-- Archive bytes: `111,828,992`
-- Observer samples: `19,804`
+- Trace bytes: `9,945,096,192` / `10,364,777,488`
+- Archive bytes: `112,680,960`
+- Observer samples: `20,264`
 - Maximum observed tree RSS bytes: `9,320,505,344`
 - Continuous resource proof: `false`
 - Science accessed before terminal: `false`
@@ -144,13 +144,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-06T20:47:40+00:00`
+- Inventory generated: `2026-09-06T22:14:28+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `979`
-- Registered programs: `518`
-- Untracked nonignored entries: `1`
-- Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=55, candidate=239, measured_negative=100, retired=567`
+- Program directories: `981`
+- Registered programs: `520`
+- Untracked nonignored entries: `30`
+- Modified tracked entries: `11`
+- Candidate statuses: `active=18, blocked_dependency=57, candidate=238, measured_negative=100, retired=567, track_source_before_evolution=1`
 
 ## View Refresh
 
@@ -167,9 +167,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,870,737,408 | `2026-09-06T20:57:47+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 356,168 | `2026-09-06T20:57:26+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 111,828,992 | `2026-09-06T20:57:10+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,945,100,288 | `2026-09-06T22:14:31+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 357,392 | `2026-09-06T22:14:26+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 112,680,960 | `2026-09-06T22:14:20+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-04T12:55:53+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |

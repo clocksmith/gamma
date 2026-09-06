@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-command-manifest.v1",
+  "title": "CMIX memory-safe parent exact command manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "workspace_root", "result_root", "steps", "step_command_sha256_rule", "manifest_sha256_rule", "claim_authority", "execution_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-command-manifest.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "workspace_root": {"const": "/home/x/deco/gamma"},
+    "result_root": {"type": "string", "minLength": 1},
+    "steps": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ordinal", "id", "cwd", "argv", "environment", "executable", "inputs", "generated_input_refs", "declared_outputs", "command_sha256"],
+        "properties": {
+          "ordinal": {"type": "integer", "minimum": 0},
+          "id": {
+            "enum": [
+              "source_closure",
+              "program_lock",
+              "build_a",
+              "build_b",
+              "build_verification",
+              "compiler_trace_controls",
+              "allocator_controls",
+              "scope_probability_identity",
+              "full_roundtrip_a",
+              "full_roundtrip_b",
+              "qualification_receipt",
+              "qualification_verification"
+            ]
+          },
+          "cwd": {"const": "/home/x/deco/gamma"},
+          "argv": {
+            "type": "array",
+            "minItems": 2,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "environment": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+          },
+          "executable": {"$ref": "#/$defs/file"},
+          "inputs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/file"}
+          },
+          "generated_input_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["producer_step", "path"],
+              "properties": {
+                "producer_step": {"type": "string", "minLength": 1},
+                "path": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          "declared_outputs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "command_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "step_command_sha256_rule": {"const": "SHA-256 of canonical compact ASCII JSON for the complete step object with command_sha256 omitted"},
+    "manifest_sha256_rule": {"const": "SHA-256 of canonical ASCII JSON with this field present and command_manifest_sha256 absent"},
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

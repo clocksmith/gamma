@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma-parent-fallback-frame-authority-verification.v1",
+  "title": "Gamma parent-fallback native frame authority verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "program_id", "verified", "errors", "computed"],
+  "properties": {
+    "schema": {
+      "const": "gamma-parent-fallback-frame-authority-verification.v1"
+    },
+    "program_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "computed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_manifest_sha256",
+        "binary_sha256",
+        "native_receipt_sha256",
+        "native_verification_sha256",
+        "control_evidence_manifest_sha256",
+        "control_verification_sha256"
+      ],
+      "properties": {
+        "authority_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "native_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "native_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "control_evidence_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "control_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

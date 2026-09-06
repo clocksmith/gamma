@@ -2,6 +2,59 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Causal word dictionary is an independent executable challenger
+
+ROOT assigned the separate FIFO128 word-code lane to `refresh_cleanup_review`;
+`grammar_blind_review` independently checked its decoder and resource bounds.
+The [prospective plan](../operations/provenance/causal_wordcode_fifo128_bz2_q0_v1_plan.json)
+freezes exact 5-32-byte alphabetic words, causal FIFO learning, and P/K/T/L.
+The [retained synthetic receipt](../operations/evidence/20260906_causal_wordcode_fifo128_bz2_unit.json)
+binds 17 passing tests and eight exact arm runs: reuse P/K 2,186, T 1,923,
+L 2,716 bytes; eviction P/K/L 3,808, T 4,157. State and transition digests agree.
+These gains do not pay the 16,656-byte conservative local-source increment.
+P/K both perform lexical diagnostics, so their timings do not isolate that cost.
+The unchanged opcode/BZip2 parent has a historical 71,887-byte opening250KB
+archive, which the new frozen corpus comparison must reproduce. The new codec
+has no corpus gain, package qualification or full-score credit at this boundary.
+
+The [driver integration receipt](../operations/evidence/20260906_causal_wordcode_fifo128_gate_unit.json)
+adds 25 passing synthetic tests and twelve fresh codec processes. Independent
+review passed. The [frozen corpus contract](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json)
+binds 192 inputs and the exact future adapter, with 18,619 local source bytes
+and a 17,171-byte conservative increment. ROOT/root_explore owns the held
+CPU4 job `20260906T221245Z_f195ae35dd`; publication and fresh admission precede execution.
+
+The [FX2 readiness audit](../operations/evidence/20260906_fx2_weight_readiness_audit.json)
+confirms that trained exact-residual packing and tensor restorations already
+completed and were held. Their original requests are not missing experiments.
+
+## 2026-09-06 - Fixed programs isolate the token-storage loss
+
+ROOT/root_explore completed `dualstream_grammar_reserialize250k_q0_v1` after
+publishing ownership, reviewed code and 20 frozen inputs at `43e1bbee8`.
+All 12 independently bounded processes passed exact reconstruction and fixed
+program reserialization repeats. The two diagonal archives reproduce their
+published sources; every frame, rule, literal, argument and fixed section agrees.
+
+| Selected program | Old argument storage | Token argument storage |
+| --- | ---: | ---: |
+| Old selection | 102,492 | 110,700 |
+| New selection | 109,098 | 109,170 |
+
+With old selection fixed, token storage adds **8,208 bytes**: definitions save
+17,184 bytes while argument references add 25,392. Under new selection it adds
+72 bytes. Changed selection recovers 1,530 bytes under token storage; it mitigates
+the loss. This closes the named attribution uncertainty and parks this exact
+storage realization. A separate constructed synthetic fixture demonstrates
+73 bytes of paid shared-binding gain; broader grammar mechanisms remain open.
+
+The [terminal audit](../operations/provenance/dualstream_grammar_reserialize250k_terminal_20260906.json)
+and [validated reflection](../operations/adaptive/reflections/20260906T213306Z_c8ad39e02a.json)
+bind the four recorded rows and the passing 36,098,048-byte discovery guard.
+Raw-encoder determinism and compression runtime remain null in those rows:
+their repeats start from fixed archives, not renewed raw-input discovery.
+No validation, confirmation, package qualification or full-score credit follows.
+
 ## 2026-09-06 - Shared token arguments lose the complete grammar comparison
 
 ROOT/root_explore published `dualstream_grammar_argtokens250k_q0_v2` ownership,
@@ -724,71 +777,3 @@ dominant kernel, and prospectively freeze the bounded parent P/K/F/S archive
 gate. An independent eligible-parent explorer must preserve that ownership and
 HORIZON's sole observer, retain source/package/resource bindings, and produce
 exact finite archives without inheriting compression claims from a teacher.
-
-## 2026-09-05 - Execute bounded comparisons against the updated frontier
-
-The active objective is now `gamma-enwiki9-hutter-99m-v2`: at most
-99,000,000 complete submission bytes. The 105M v1 contract and every historical
-objective digest remain unchanged. `operations/provenance/competitive_frontier_v1.json`
-retains September 5 source snapshots and separates the official displayed record
-from contingent published submission figures. Endpoint428's 109,389,323-byte
-forecast has 10,389,323 bytes of planning debt; no full-corpus deficit is measured.
-Committee reference/accounting questions are drafted in
-`workbench/committee-inquiry.eml` and have not been sent.
-
-The existing release tools passed a real synthetic canary:
-`results/release_canary_rle_q0_v1/release/20260905_acceptance_v1/canary-validation.json`.
-Three independently built copies encoded 7,616 bytes into 2,998 archive bytes,
-repeated the archive exactly, and decoded without corpus access. The counted
-canary total is 5,403 bytes, including package and options; objective credit is
-zero. Missing manifest/build files, tiny input presented as full enwik9, and a
-canary presented as an objective receipt were rejected. Guard logs and declared
-license notices are retained. This closes a release-machinery gate, not a
-compression hypothesis or full-corpus certificate.
-
-`lib/predictor.py` now supplies a reusable pre-truth Q16 bit interface with
-explicit frontend identity, decoded-bit updates, deterministic state serialization
-and trace-reuse bindings. Fixtures check encoder/decoder probability and state
-agreement and reject silent frontend exchange. The existing `lib/driver.py`
-runs frozen parent/bookkeeping/treatment/control arms from one candidate build,
-retains exact/repeat artifacts and first-divergence diagnostics, then publishes
-an atomic decision. Optional telemetry failures become missing diagnostics;
-mandatory evidence remains necessary for promotion. No fixture compression is
-credited to Gamma's competitive frontier.
-
-HORIZON retains its original experiment predicates and sole observer. Its
-recovery cannot recreate missing continuous resource certification. Independent
-public-transformer reproduction and the smallest missing deep-MIDAS initializer
-are bounded discovery work; shared-host timing is diagnostic. Fiber-FOSSIL's
-failed exact-retrieval configuration remains retired. No joint gain or new
-transformer compression inheritance is assumed.
-
-## 2026-09-04 - Fiber-FOSSIL exact semantic retrieval is retired
-
-The corrected opening-1M gate
-`wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1` completed with an
-authoritative decision. Every evidentiary control passed: the raw inverse and
-all eight finite-coder inverses were exact, the repeated semantic tape and
-probability construction were identical, `P == K`, the output manifest was
-complete, active-HORIZON access was denied, and the owned 512 MiB/zero-swap
-cgroup peaked at 273,793,024 bytes and was removed without residue.
-
-The scientific hypothesis was decisively refuted. Parent `P`, bookkeeping `K`,
-and inactive opening-scope physical control `G` each produced a 173,859-byte
-payload. Same-route exact-continuation `D` produced 173,937 bytes, a loss of 78
-bytes instead of the required 4,080-byte saving. Its minimum chronological-third
-saving was -42 bytes, its minimum control margin was -42 bytes, and it had zero
-positive virtual-distance buckets. Only 311 bytes activated `D`; 253 donor
-bytes were correct, confirming again that correct-byte counts do not establish
-retained information against a mature parent.
-
-This retires the frozen Fiber-FOSSIL same-route 16-byte exact-retrieval axis and
-its dependent Fiber-LOOM/route-fast-weight successors without a parameter
-sweep. It does not retire HARM-Delta. HARM-Delta remains a distinct experiment:
-it aligns complete prior route values through causal match/substitute/insert/
-delete state rather than requiring exact 16-byte lockstep. No Fiber result is
-credited to or subtracted from HARM-Delta.
-
-Evidence: `results/wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1/decision.json`,
-`results/wiki_fiber_fossil_endpoint428_opening1m_receiptfix_q0_v1/receipt.json`,
-and `operations/adaptive/reflections/20260904T212450Z_50c3d23da3.json`.
