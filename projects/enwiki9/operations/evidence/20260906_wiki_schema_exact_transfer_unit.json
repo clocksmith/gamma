@@ -1,0 +1,93 @@
+{
+  "schema": "enwiki9_implementation_evidence_v1",
+  "id": "wiki_schema_exact_transfer_unit_20260906",
+  "component": "Guarded schema transfer driver: synthetic phase/replay, accounting, control-activation and failed-artifact boundaries",
+  "source_bindings": [
+    {
+      "path": "tools/wiki_schema_exact_transfer250k_q0_v1.py",
+      "bytes": 24988,
+      "sha256": "ac9a9aa176e9a3e6a27f5a79e9b5ca4c20f1f0f899fd308625ab5d9091c4dfc9"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_transfer.py",
+      "bytes": 8029,
+      "sha256": "89b05a5f13c48cb5c3e27882e3f4990fd7e5f76b6177ee5cd2ace79f9fc4fc4b"
+    },
+    {
+      "path": "tools/wiki_schema_exact_codec_v1.py",
+      "bytes": 24882,
+      "sha256": "6b9666e4ae7e0fc08518ec62b2a086a0e1a4f4d21b2b5b0ac5a87d771b40bfac"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_codec.py",
+      "bytes": 15647,
+      "sha256": "fddf4a17f0aaffc2fcaac6033e4f815494de48b13e2d9644e7dd3526079bbb04"
+    },
+    {
+      "path": "lib/fx2_native_gate_v1.py",
+      "bytes": 11624,
+      "sha256": "b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "path": "lib/artifacts.py",
+      "bytes": 2129,
+      "sha256": "9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    }
+  ],
+  "codec_unit": {
+    "path": "operations/evidence/20260906_wiki_schema_exact_unit.json",
+    "bytes": 4296,
+    "sha256": "c4c1c61bb47bc29914a2897a258f4a68cecdbdde7c5403d6f7182aa3fb42b18e"
+  },
+  "validation": {
+    "command": "timeout --signal=TERM --kill-after=5s 120s taskset -c 2 prlimit --as=536870912 --cpu=120 --fsize=33554432 -- python3 -B -m unittest discover -s tests -p test_wiki_schema_exact_transfer.py -v",
+    "returncode": 0,
+    "tests_passed": 7,
+    "output": "test_accounting_rejects_omitted_envelope_byte (test_wiki_schema_exact_transfer.SchemaTransferTests.test_accounting_rejects_omitted_envelope_byte) ... ok\ntest_ambiguous_kill_is_not_budget_evidence (test_wiki_schema_exact_transfer.SchemaTransferTests.test_ambiguous_kill_is_not_budget_evidence) ... ok\ntest_dictionary_divergence_is_rejected (test_wiki_schema_exact_transfer.SchemaTransferTests.test_dictionary_divergence_is_rejected) ... ok\ntest_failed_receipt_retains_published_output_in_artifact_index (test_wiki_schema_exact_transfer.SchemaTransferTests.test_failed_receipt_retains_published_output_in_artifact_index) ... ok\ntest_twenty_four_fake_phases_and_no_false_control_activation (test_wiki_schema_exact_transfer.SchemaTransferTests.test_twenty_four_fake_phases_and_no_false_control_activation) ... ok\ntest_unclosed_child_prevents_artifact_reads (test_wiki_schema_exact_transfer.SchemaTransferTests.test_unclosed_child_prevents_artifact_reads) ... ok\ntest_unselected_grammar_queries_do_not_activate_control (test_wiki_schema_exact_transfer.SchemaTransferTests.test_unselected_grammar_queries_do_not_activate_control) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.043s\n\nOK\n"
+  },
+  "execution_bounds": {
+    "cpu_affinity": [
+      2
+    ],
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "wall_seconds": 120,
+    "timeout_kill_grace_seconds": 5,
+    "per_file_bytes": 33554432
+  },
+  "cpu2_release_before_tests": {
+    "job": {
+      "path": "operations/adaptive/completed/909_20260906T011941Z_c572f1e842.json",
+      "bytes": 3605,
+      "sha256": "534375dd0dce1694c4916b27eedb68f8b65b003a2db32ebd093ca8ef14d8f0f1"
+    },
+    "guard": {
+      "path": "run_logs/adaptive/20260906T011941Z_c572f1e842.resources/guard.json",
+      "bytes": 41663,
+      "sha256": "6557fb810d39257802f3300514a8ba2cf28256820924938fba193a61e762082c"
+    },
+    "job_completed_returncode": 0,
+    "cleanup_complete": true,
+    "group_absent": true,
+    "worker_pid_absent": true,
+    "all_guard_flags_false": true
+  },
+  "controls": [
+    "Two independent 65-byte synthetic work populations exercise all24 P/L/D/C encode/decode/repeat fake phases and exact archive/raw/dictionary comparisons.",
+    "Unselected grammar proposal counts cannot activate the stored-block C control.",
+    "A corrupted D decode dictionary digest is rejected.",
+    "Omitting one envelope byte from H accounting is rejected.",
+    "Unexplained SIGKILL remains resource_or_signal_stop; known timeout remains budget_exhausted.",
+    "A published output survives a missing receipt and is retained in a non-passing artifact index.",
+    "Unclosed owned children prevent execution-artifact reads and a passing stage."
+  ],
+  "corpus_executed": false,
+  "native_compilation_performed": false,
+  "codec_child_processes_launched": 0,
+  "phase_execution_scope": "NativeGate.run is replaced with a fake phase supervisor; the pinned codec main API operates only on temporary synthetic bytes. Canonical job admission and true separate-process corpus replay are not established by this suite.",
+  "resource_qualified": false,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "measurement_repeated_for_publication": false
+}
