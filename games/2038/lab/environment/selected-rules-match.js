@@ -238,15 +238,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
 
     for (const player of this.players) {
-      const deployedTeams = Math.max(
+      const deployedAgents = Math.max(
         0,
-        Math.min(config.playerSupply.teams, this.rulesVariant.startingTeamsDeployed)
+        Math.min(config.playerSupply.agents, this.rulesVariant.startingAgentsDeployed)
       );
       player.pieces = player.pieces.filter(
-        (piece) => piece.kind !== "team" ||
-          Number(piece.id.split("-").at(-1)) <= deployedTeams
+        (piece) => piece.kind !== "agent" ||
+          Number(piece.id.split("-").at(-1)) <= deployedAgents
       );
-      player.teamsInSupply = config.playerSupply.teams - deployedTeams;
+      player.agentsInSupply = config.playerSupply.agents - deployedAgents;
       player.programUses = 0;
       player.escalationsUsed = [];
       player.tactics = [];
@@ -997,7 +997,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         escalationsUsed: [...player.escalationsUsed],
         tactics: [...player.tactics],
         objectiveId: player.objectiveId,
-        teamsInSupply: player.teamsInSupply,
+        agentsInSupply: player.agentsInSupply,
         jointVentures: player.jointVentures.length,
         agiDeclared: player.agiDeclared,
         agiDossier: clone(player.agiDossier),
@@ -1028,7 +1028,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           programUses: candidate.programUses,
           escalationsUsed: [...candidate.escalationsUsed],
           factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
-          teamsInSupply: candidate.teamsInSupply,
+          agentsInSupply: candidate.agentsInSupply,
           jointVentures: this.copyPublic(candidate.jointVentures),
           megaClusters: this.copyPublic(candidate.megaClusters || []),
           temporaryCompute: candidate.temporaryCompute || 0,
@@ -1442,7 +1442,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         return decision.actionId === "deploy";
       }
       if (id === "talent_raid") {
-        return player.runway >= 1 && player.teamsInSupply > 0 &&
+        return player.runway >= 1 && player.agentsInSupply > 0 &&
           Boolean(decision.parameters?.destinationId);
       }
       if (id === "board_reshuffle") {
@@ -1511,19 +1511,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         conversionEligible: true
       });
       const usedNumbers = new Set(
-        player.pieces.filter((piece) => piece.kind === "team")
+        player.pieces.filter((piece) => piece.kind === "agent")
           .map((piece) => Number(piece.id.split("-").at(-1)))
       );
       const number = Array.from(
-        { length: this.config.playerSupply.teams },
+        { length: this.config.playerSupply.agents },
         (_, candidate) => candidate + 1
       ).find((candidate) => !usedNumbers.has(candidate));
       player.pieces.push({
-        id: `s${seat}-team-${number}`,
-        kind: "team",
+        id: `s${seat}-agent-${number}`,
+        kind: "agent",
         tileId: decision.parameters.destinationId
       });
-      player.teamsInSupply -= 1;
+      player.agentsInSupply -= 1;
     } else if (id === "board_reshuffle") {
       const readyable = [...new Set(player.actionsUsed.filter((action) =>
         ["organize", "influence"].includes(action)
@@ -1766,15 +1766,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           destinationCategory: destination.category
         };
         const result = [];
-        if (player.teamsInSupply > 0) {
+        if (player.agentsInSupply > 0) {
           const humanoid = this.regime.cycle?.id === "humanoid_factory_gate";
           const cost = humanoid ? 1 : Math.max(0, 2 - Number(destination.category === "talent"));
-          const maximum = humanoid ? Math.min(2, player.teamsInSupply) : 1;
+          const maximum = humanoid ? Math.min(2, player.agentsInSupply) : 1;
           if (player.runway >= cost) {
             for (let count = 1; count <= maximum; count += 1) {
               result.push({
                 decisionId: `organize_recruit_${count}_${piece.id}_${destination.instanceId}`,
-                label: decisionLabel("recruitTeams", {
+                label: decisionLabel("recruitAgents", {
                   count,
                   plural: count === 1 ? "" : "s",
                   cost
@@ -2388,20 +2388,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       for (let index = 0; index < decision.parameters.count; index += 1) {
         const usedNumbers = new Set(
           player.pieces
-            .filter((piece) => piece.kind === "team")
+            .filter((piece) => piece.kind === "agent")
             .map((piece) => Number(piece.id.split("-").at(-1)))
         );
         const number = Array.from(
-          { length: this.config.playerSupply.teams },
+          { length: this.config.playerSupply.agents },
           (_, candidate) => candidate + 1
         ).find((candidate) => !usedNumbers.has(candidate));
-        if (!number) throw new Error(`No Team piece remains in seat ${seat}'s supply.`);
+        if (!number) throw new Error(`No Agent piece remains in seat ${seat}'s supply.`);
         player.pieces.push({
-          id: `s${seat}-team-${number}`,
-          kind: "team",
+          id: `s${seat}-agent-${number}`,
+          kind: "agent",
           tileId: decision.parameters.destinationId
         });
-        player.teamsInSupply -= 1;
+        player.agentsInSupply -= 1;
       }
       if (this.regime.cycle?.id === "humanoid_factory_gate") {
         this.addScrutiny(player, decision.parameters.count);
@@ -2808,8 +2808,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
   }
 
-  teamSubsets(player) {
-    const teams = player.pieces.filter((piece) => piece.kind === "team");
+  agentSubsets(player) {
+    const teams = player.pieces.filter((piece) => piece.kind === "agent");
     const subsets = [];
     for (let mask = 1; mask < (1 << teams.length); mask += 1) {
       subsets.push(teams.filter((_, index) => mask & (1 << index)).map((team) => team.id));
@@ -2820,29 +2820,29 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   async resolveEmployeeFreeFollowUp(policies, seat) {
     if (this.regime.cycle?.id !== "employee_free_unicorn") return;
     const player = this.players[seat];
-    const subsets = this.teamSubsets(player);
+    const subsets = this.agentSubsets(player);
     if (!subsets.length) return;
     const choice = await this.choose(policies, seat, "employee_free_return", [
       {
         decisionId: "employee_free_return_none",
-        label: decisionLabel("returnNoTeams"),
+        label: decisionLabel("returnNoAgents"),
         actionId: "organize",
-        parameters: { teamIds: [] }
+        parameters: { agentIds: [] }
       },
-      ...subsets.map((teamIds) => ({
-        decisionId: `employee_free_return_${teamIds.join("_")}`,
-        label: decisionLabel("returnNamedTeams", {
-          teams: teamIds.join(", "),
-          runway: teamIds.length * 2
+      ...subsets.map((agentIds) => ({
+        decisionId: `employee_free_return_${agentIds.join("_")}`,
+        label: decisionLabel("returnNamedAgents", {
+          teams: agentIds.join(", "),
+          runway: agentIds.length * 2
         }),
         actionId: "organize",
-        parameters: { teamIds }
+        parameters: { agentIds }
       }))
     ]);
-    const returned = new Set(choice.parameters.teamIds);
+    const returned = new Set(choice.parameters.agentIds);
     if (!returned.size) return;
     player.pieces = player.pieces.filter((piece) => !returned.has(piece.id));
-    player.teamsInSupply += returned.size;
+    player.agentsInSupply += returned.size;
     this.addResource(player, "runway", returned.size * 2);
     this.addScrutiny(player, 2);
   }
@@ -3296,7 +3296,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.addScrutiny(player, 2);
       }
     } else if (id === "reorganization") {
-      for (const team of player.pieces.filter((piece) => piece.kind === "team")) {
+      for (const team of player.pieces.filter((piece) => piece.kind === "agent")) {
         const current = this.board.find((tile) => tile.instanceId === team.tileId);
         const choice = await this.choose(
           policies,
@@ -3304,7 +3304,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           `reorganization_move_${team.id}`,
           this.board.filter((tile) => axialDistance(current, tile) <= 1).map((tile) => ({
             decisionId: `reorganization_${team.id}_${tile.instanceId}`,
-            label: decisionLabel("reorganizationTeamDestination", {
+            label: decisionLabel("reorganizationAgentDestination", {
               team: team.id,
               destination: tile.name
             }),
@@ -3314,7 +3314,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         );
         team.tileId = choice.parameters.destinationId;
       }
-      const teams = player.pieces.filter((piece) => piece.kind === "team");
+      const teams = player.pieces.filter((piece) => piece.kind === "agent");
       if (teams.length) {
         const choice = await this.choose(policies, seat, "reorganization_return", [
           {
@@ -3334,7 +3334,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           player.pieces = player.pieces.filter(
             (piece) => piece.id !== choice.parameters.teamId
           );
-          player.teamsInSupply += 1;
+          player.agentsInSupply += 1;
           this.addResource(player, "runway", 3);
           this.addScrutiny(player, 1);
         }
@@ -3517,14 +3517,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         label: decisionLabel("declineTalentMovement"),
         actionId: "production"
       }];
-      for (const team of player.pieces.filter((piece) => piece.kind === "team")) {
+      for (const team of player.pieces.filter((piece) => piece.kind === "agent")) {
         const current = this.board.find((tile) => tile.instanceId === team.tileId);
         for (const destination of this.board.filter(
           (tile) => axialDistance(current, tile) === 1
         )) {
           decisions.push({
             decisionId: `${stage}_talent_${team.id}_${destination.instanceId}`,
-            label: decisionLabel("moveTalentTeam", {
+            label: decisionLabel("moveTalentAgent", {
               team: team.id,
               destination: destination.name
             }),

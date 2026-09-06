@@ -105,7 +105,7 @@ ${excerpts.rules.player-aids}
 
 **CEO:** ${content.factions.byId.coalition_lab.chiefExecutive}
 
-**Starts:** ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.coalition_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.coalition_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.coalition_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.coalition_lab.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.coalition_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.coalition_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.coalition_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.coalition_lab.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.coalition_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.coalition_lab.abilities.0.name} — ${content.factions.byId.coalition_lab.abilities.0.displayName}:** ${content.factions.byId.coalition_lab.abilities.0.text}
 
@@ -123,7 +123,7 @@ _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.platform_empire.chiefExecutive}
 
-**Starts:** ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.platform_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.platform_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.platform_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.platform_empire.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.platform_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.platform_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.platform_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.platform_empire.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.platform_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **Customer ordinal:** ${content.factions.byId.platform_empire.starts.customerOrdinal} ${terms.playerTracks.customer}; **Next Deploy Capability:** ${content.factions.byId.platform_empire.starts.nextCustomerCapability} ${terms.playerTracks.capability}.
 
@@ -143,7 +143,7 @@ _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.imperial_research_lab.chiefExecutive}
 
-**Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.imperial_research_lab.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.imperial_research_lab.scoringRule.name}:** ${content.factions.byId.imperial_research_lab.scoringRule.text}
 
@@ -163,7 +163,7 @@ _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.vertical_empire.chiefExecutive}
 
-**Starts:** ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.vertical_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.vertical_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.vertical_empire.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.vertical_empire.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.vertical_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.vertical_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.vertical_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.vertical_empire.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.vertical_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.vertical_empire.abilities.0.name} — ${content.factions.byId.vertical_empire.abilities.0.displayName}:** ${content.factions.byId.vertical_empire.abilities.0.text}
 
@@ -181,7 +181,7 @@ _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.safety_laboratory.chiefExecutive}
 
-**Starts:** ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${content.factions.byId.safety_laboratory.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.safety_laboratory.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.safety_laboratory.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.safety_laboratory.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${content.factions.byId.safety_laboratory.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.safety_laboratory.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.safety_laboratory.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.safety_laboratory.abilities.0.name} — ${content.factions.byId.safety_laboratory.abilities.0.displayName}:** ${content.factions.byId.safety_laboratory.abilities.0.text}
 
@@ -199,7 +199,7 @@ _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
 **CEO:** ${content.factions.byId.foundry.chiefExecutive}
 
-**Starts:** ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway}, ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, ${content.factions.byId.foundry.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.foundry.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.foundry.starts.trust} ${terms.playerTracks.trust}, ${content.factions.byId.foundry.starts.researchProtection} ${terms.resources.researchProtection}; **Starting public Mandate:** ${content.factions.byId.foundry.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+**Starts:** ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway}, ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, ${content.factions.byId.foundry.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.foundry.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.foundry.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.foundry.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
 **${content.factions.byId.foundry.abilities.0.name} — ${content.factions.byId.foundry.abilities.0.displayName}:** ${content.factions.byId.foundry.abilities.0.text}
 

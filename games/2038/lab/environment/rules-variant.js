@@ -46,9 +46,6 @@ function validateSingleGeneratorRule(config, rule) {
       throw new RangeError(`single-generator-default ${field} must be ${expected}.`);
     }
   }
-  if (rule.megaClusterDemand !== 2) {
-    throw new RangeError("single-generator-default keeps Mega-Cluster demand at two Power.");
-  }
   return structuredClone(rule);
 }
 
@@ -64,20 +61,16 @@ export function canonicalRulesVariant(config) {
     ventureScrutiny: 2,
     facilityCost: 2,
     deployComputeCost: 1,
-    startingGridPower: config.board.startingGridConnection.capacity,
     customerMandate: config.scoring.customerMandate,
     customerMandateSchedule: structuredClone(
       config.scoring.customerMandateSchedule
     ),
     capabilityThresholdMandate: null,
     lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
-    agiComputePerCommit: config.agiDossier.computePerCommit,
-    agiScrutinyPerCommit: config.agiDossier.scrutinyPerCommit,
-    agiMinimumSupportedEvidenceClaims:
-      config.agiDossier.claimResolution?.minimumSupportedEvidenceClaims ?? 2,
+    agiAchievement: structuredClone(config.agiAchievement),
     finalPoweredFacilityMandate: 0,
     customerCapabilityOffset: 0,
-    startingTeamsDeployed: 1,
+    startingAgentsDeployed: config.playerSupply.startingAgents,
     coalitionStartingRunway: null,
     imperialStartingCompute: null,
     imperialScientificMethodCapabilityPenalty: 0,

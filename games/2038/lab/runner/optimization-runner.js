@@ -14,7 +14,7 @@ const RULE_BOUNDS = {
   startingGridPower: [1, 3, 1],
   customerMandate: [1, 4, 1],
   customerCapabilityOffset: [-2, 2, 1],
-  startingTeamsDeployed: [0, 3, 1]
+  startingAgentsDeployed: [0, 3, 1]
 };
 
 const DEFAULT_RULE_VARIANT = {
@@ -27,7 +27,7 @@ const DEFAULT_RULE_VARIANT = {
   startingGridPower: 1,
   customerMandate: 2,
   customerCapabilityOffset: 0,
-  startingTeamsDeployed: 1
+  startingAgentsDeployed: 1
 };
 
 function clamp(value, minimum, maximum) {
