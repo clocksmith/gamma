@@ -2,6 +2,39 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Open MIDAS source bundle survives relocation and exact replay
+
+`tools/midas_open_source_bundle_v1.py` materializes the unchanged default
+incremental codec as a deterministic 84,030-byte source ZIP containing 30 local
+files and its source manifest. Compiler-discovered includes preserve the sealed
+forward translation unit; Python helpers and Gamma-relative LICENSE layout are
+retained. This is counted local source, not a complete submission package.
+
+A fresh extracted tree, isolated Python imports and a separate empty build cache
+produce the same native executable. Repacking from the extracted tree produces
+the identical source ZIP despite the intentionally different absolute-path cache
+identity. All four P/K/F/S arms reproduce the retained 65-byte fixture archives,
+decode without the raw source, and re-encode with exact same-arm final-state
+witnesses. P/K archives and authoritative parent-state projections match.
+The 105-byte archives exceed raw size; no compression gain is inferred.
+
+Nine new regressions and all 26 combined MIDAS tests pass. Review corrections reject noncanonical manifest
+bytes and file/directory prefix collisions, enforce aggregate bounds before
+loading excess source, and name the required `prlimit` and `ldd` utilities.
+Corruption, extra/missing members, path escapes, symlinks, FIFO input and existing
+output targets fail closed. No extracted code runs automatically. All 46 source
+bindings in the prior standalone evidence remain unchanged.
+
+Evidence: `operations/evidence/20260906_midas_relocatable_source_bundle_unit.json`.
+Usage: `docs/midas_open_source_bundle_v1.md`. Compiler/runtime distribution,
+license closure, accepted package accounting, composite resource qualification
+and full-corpus performance remain unproved. This source reconstruction and
+synthetic inversion result grants no queue or objective authority. HORIZON's
+worker, observer and partial scientific outputs were not changed or inspected;
+the concurrent external-derived FX2 lane was preserved. The compact predictor
+still needs a separately frozen compression and kernel-budget gate before a
+corpus claim or larger population launch.
+
 ## 2026-09-05 - Parallel build deduplication and standalone open MIDAS
 
 `lib/native_fixture_build_cache.py` now reuses unchanged C++ builds under a
@@ -152,7 +185,7 @@ Native components save 20,070 bytes for two runtime copies, or 21,489 for the se
 Source-only successor considered: transmit the exact Q11 trees directly. Fourteen 11-bit values plus the constrained final node fit 20 bytes per tree; 112 tables would remove 4,480 header bytes per model before changed loader costs. This is byte arithmetic, without implementation, measured gain, or descendant selection.
 [Dependency gap review](../operations/provenance/public_fx2_dependency_gap_review_20260905.json) retains versioned LLVM terms and declared CUDA/libdevice provenance; model permission evidence, runtime closure and two unsupported license identifiers remain explicit gaps, without an incompatibility finding.
 The existing dependency-closure tool now materializes an [incomplete bundle](../results/fx2_weight_native_fixture50051_q0_v1/release/incomplete_dependency_closure_v1/dependency-closure.json): 137 counted occurrences, 9,523,363 file bytes plus 99 declared unique-option bytes. The [receipt](../operations/provenance/fx2_native_dependency_closure_v1/receipt.json) preserves failed metadata attempts, repeated dictionary/model roles and exact unresolved licensing/build/option gaps; it is not the final two-package submission layout.
-The [frozen even7 gate](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) rounds each INT4 weight/2 ties-to-even, multiplies by 2 and clamps to [-6,6]; C rotates each mapped row left one position. The fixed map changes 3,119,371 of 5,868,864 symbols; retained histogram arithmetic suggests 872,951.59 fewer ideal global-entropy bytes per model, without a measured packed size or archive penalty. The reviewed source preserves original container decoding while changing learned weights; its bounded P/K/D/C archives, exact inverses/repeats and causal control remain unmeasured. Compare package deltas against the smaller validated marginal model as well as public original to avoid recounting earlier savings.
+The [even7 gate](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) is terminal: all 107 phases pass infrastructure checks, with exact raw inverses, deterministic repeats and twelve complete coder streams. P/K archives are 3,223 bytes, D is 4,430 and row-rotated C is 4,785. D changes 3,119,371 of 5,868,864 INT4 symbols and produces a 2,066,802-byte model. Against the selected marginal baseline, two model copies save 1,646,942 component bytes after 36,112 added source/option bytes. The +1,207-byte fixture archive penalty produces a frozen planning delta of +22,468,461 bytes: hold this exact configuration for budget reasons, with no full-score credit or futility claim. The [independent audit](../operations/provenance/public_fx2_weight_even7_terminal_20260906.json) binds 870 retained artifacts and the [validated reflection](../operations/adaptive/reflections/20260906T001115Z_fcb2f27fea.json). The closed guard records 476 samples, 5,577,420,800 peak cgroup bytes and 14,811,642,322 peak logical scratch bytes; concurrent timing remains diagnostic. The [closed probability diagnosis](../results/fx2_weight_even7_fixture50051_q0_v1/probability-loss-diagnosis.json) attributes +426.85/+5,621.31/+3,607.68 interval-code bits to chronological thirds. Sustained predictive loss is observed, but particular tensor sensitivity is unknown. A successor requires a changed mechanism, a separately frozen development budget, and fresh confirmation data.
 Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
 
 [Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
