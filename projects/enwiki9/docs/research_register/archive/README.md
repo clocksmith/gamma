@@ -31,3 +31,4 @@
 - [part-027.md: 2026-09-04 - PALIMPSEST-MARKET-v2 is frozen as a nested finite-coder shadow](part-027.md)
 - [part-028.md: 2026-09-04 - Isolated open dP is terminal negative; only integrated replay remains](part-028.md)
 - [part-029.md: 2026-09-04 live rule authority through the sealed HORIZON recovery bridge](part-029.md)
+- [part-030.md: 2026-09-04 independent opening gates through adaptive lifecycle ranking](part-030.md)
