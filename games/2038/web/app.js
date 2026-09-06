@@ -19,7 +19,6 @@ const factionColors = new Map(
   factions.factions.map((faction) => [faction.id, faction.color])
 );
 const firstGameGuideMode = new URLSearchParams(window.location.search).get("guide") === "first-game";
-const guideErasSeen = new Set();
 
 const $ = (id) => document.getElementById(id);
 const elements = Object.fromEntries([
@@ -151,8 +150,8 @@ function tilePosition(tile) {
   const compact = window.innerWidth <= 680;
   const hexWidth = compact ? 100 : 144;
   const hexHeight = compact ? 87 : 125;
-  const originX = compact ? 260 : 410;
-  const originY = compact ? 255 : 325;
+  const originX = elements.board.clientWidth / 2;
+  const originY = elements.board.clientHeight / 2;
   return pointyTopAxialPosition(tile, {
     width: hexWidth,
     height: hexHeight,
@@ -210,7 +209,7 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
     for (const [index, facility] of player.facilities.entries()) {
       if (facility.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
-      const status = facility.powered ? copy.browser.poweredThisProduction : copy.browser.offline;
+      const status = facility.powered ? copy.browser.connectedNow : copy.browser.offline;
       marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
         `" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
         `title="${escapeHtml(player.factionName)} Facility — ${status}"></i>`);
@@ -283,10 +282,12 @@ function renderPlayers(state) {
           : ` · ${formatCopy(copy.browser.llmCallsLeft, { count: opponent.remainingLlmDecisions })}`
       }</p>` : ""}
       <p class="readiness ${player.agiReadiness.ready ? "ready" : ""}">
-        ${player.agiReadiness.ready
+        ${player.agiDeclared
+          ? copy.browser.agiRecognized
+          : player.agiReadiness.ready
           ? copy.browser.agiGridReady
           : formatCopy(copy.browser.agiBlocked, {
-            requirement: escapeHtml(player.agiReadiness.failingRequirement)
+            requirement: escapeHtml(copy.browser.requirements[player.agiReadiness.failingRequirement])
           })}
       </p>
       <dl>
@@ -297,7 +298,7 @@ function renderPlayers(state) {
         <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
         <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
         <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
-        <dt>${copy.browser.dossier}</dt><dd>${player.agiReadiness.committedCount}</dd>
+        <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
       </dl>
     `;
     elements.players.append(card);
@@ -307,7 +308,7 @@ function renderPlayers(state) {
 function decisionStage(packet, state) {
   const stage = packet?.requestId?.split(":").at(-2) || copy.browser.decision;
 
-  return stage.replaceAll("_", " ");
+  return copy.browser.stages[stage] || stage.replaceAll("_", " ");
 }
 
 function syncClientGame(clientGame = game) {
@@ -339,16 +340,6 @@ async function startClientGame(options) {
     error: null
   };
   clientGame.runtime = await createBrowserInteractiveGame(options, (packet) => {
-    const era = packet.requestId.match(/:r(\d+):/)?.[1];
-    if (firstGameGuideMode && era && guideErasSeen.has(era)) {
-      setTimeout(() => {
-        if (clientGame.runtime.human.pending) {
-          clientGame.runtime.human.submit(packet.legalDecisions[0].decisionId, "Guided routine resolution.");
-        }
-      }, 90);
-      return;
-    }
-    if (firstGameGuideMode && era) guideErasSeen.add(era);
     clientGame.pending = packet;
     clientGame.status = "waiting";
     syncClientGame(clientGame);
@@ -593,8 +584,7 @@ function renderTradeDecisions(packet, stage) {
 }
 
 function pieceName(pieceId) {
-  if (pieceId === "ceo" || pieceId?.endsWith("-ceo")) return "CEO";
-  const number = pieceId?.match(/team-(\d+)$/)?.[1];
+  const number = pieceId?.match(/agent-(\d+)$/)?.[1];
   return number ? `Agent ${number}` : pieceId;
 }
 
@@ -602,8 +592,8 @@ function tileName(tileId) {
   return game?.state?.board?.find((tile) => tile.instanceId === tileId)?.name || tileId;
 }
 
-function renderMoveDecisions(packet, stage) {
-  if (stage !== "resolve") return false;
+function renderAssignmentDecisions(packet, stage) {
+  if (stage !== "resolve" && stage !== "blocked_program_assignment" && !stage.startsWith("resolve_escalation_")) return false;
   const decisions = packet.legalDecisions;
   if (!decisions.length || !decisions.every((decision) =>
     decision.parameters?.pieceId && decision.parameters?.destinationId
@@ -611,7 +601,7 @@ function renderMoveDecisions(packet, stage) {
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML = "<h3>Set the move</h3><p>Choose a piece and destination. The final field preserves every legal action outcome at that location.</p>";
+  builder.innerHTML = "<h3>Assign an Agent</h3><p>Choose an Agent, district, and action effect. The Agent remains as presence until reassigned.</p>";
   const fields = document.createElement("div");
   fields.className = "trade-fields";
   const piece = document.createElement("select");
@@ -623,7 +613,7 @@ function renderMoveDecisions(packet, stage) {
     field.append(control);
     fields.append(field);
   };
-  addField("Move", piece);
+  addField("Agent", piece);
   addField("To district", destination);
   addField("Action", outcome);
 
@@ -633,7 +623,7 @@ function renderMoveDecisions(packet, stage) {
   actions.className = "trade-actions";
   const submit = document.createElement("button");
   submit.type = "button";
-  submit.textContent = "Confirm move";
+  submit.textContent = "Confirm assignment";
   actions.append(submit);
 
   const refresh = () => {
@@ -650,7 +640,7 @@ function renderMoveDecisions(packet, stage) {
     );
     const selected = atDestination.find((decision) => decision.decisionId === outcome.value);
     submit.disabled = !selected;
-    summary.textContent = selected?.label || "No legal action matches this move.";
+    summary.textContent = selected?.label || "No legal action matches this assignment.";
     submit.onclick = selected
       ? () => submitDecision(selected.decisionId).catch((error) => {
         elements["game-status"].textContent = error.message;
@@ -675,7 +665,10 @@ function renderDecisions() {
       ? formatCopy(copy.browser.gameComplete, { ending: game.result.worldEnding.name })
       : game ? copy.browser.otherInstitutionsResolving : copy.browser.startGame;
     elements["decision-context"].textContent = game?.status === "complete"
-      ? copy.browser.completeContext
+      ? formatCopy(copy.browser.completeContext, {
+        winners: game.result.standings.filter(row => game.result.winnerSeats.includes(row.seat)).map(row => row.factionName).join(" and "),
+        score: game.result.standings[0].score, ending: game.result.worldEnding.name
+      })
       : copy.browser.waitingContext;
     elements["decision-count"].textContent = formatCopy(copy.browser.legalChoices, {
       count: 0,
@@ -685,7 +678,9 @@ function renderDecisions() {
   }
   elements["decision-title"].textContent = decisionStage(packet, game?.state);
   elements["decision-context"].textContent =
-    (formatCopy(copy.browser.decisionContext, packet));
+    packet.requestId.split(":").at(-2) === "select" ? copy.browser.selectContext
+      : packet.requestId.split(":").at(-2) === "resolve" ? copy.browser.resolveContext
+      : formatCopy(copy.browser.decisionContext, packet);
   elements["decision-count"].textContent =
     formatCopy(copy.browser.legalChoices, {
       count: packet.legalDecisions.length,
@@ -693,7 +688,7 @@ function renderDecisions() {
     });
   const stage = packet.requestId?.split(":").at(-2);
   if (renderTradeDecisions(packet, stage)) return;
-  if (renderMoveDecisions(packet, stage)) return;
+  if (renderAssignmentDecisions(packet, stage)) return;
   for (const [index, decision] of packet.legalDecisions.entries()) {
     elements.decisions.append(decisionButton(decision, index));
   }

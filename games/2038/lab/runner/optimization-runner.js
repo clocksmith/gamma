@@ -11,10 +11,9 @@ const RULE_BOUNDS = {
   ventureScrutiny: [1, 4, 1],
   facilityCost: [1, 4, 1],
   deployComputeCost: [0, 3, 1],
-  startingGridPower: [1, 3, 1],
   customerMandate: [1, 4, 1],
   customerCapabilityOffset: [-2, 2, 1],
-  startingAgentsDeployed: [0, 3, 1]
+  startingAgentsDeployed: [2, 4, 1]
 };
 
 const DEFAULT_RULE_VARIANT = {
@@ -24,10 +23,9 @@ const DEFAULT_RULE_VARIANT = {
   ventureScrutiny: 2,
   facilityCost: 2,
   deployComputeCost: 1,
-  startingGridPower: 1,
   customerMandate: 2,
   customerCapabilityOffset: 0,
-  startingAgentsDeployed: 1
+  startingAgentsDeployed: 2
 };
 
 function clamp(value, minimum, maximum) {

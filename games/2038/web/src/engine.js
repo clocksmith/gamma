@@ -1,3 +1,4 @@
+import { connectedFacilityIds } from "../../lab/rules/local-power-connections.js";
 export function seedToUint32(value) {
   let hash = 2166136261;
   for (const character of String(value)) {
@@ -223,13 +224,13 @@ export function simulateTrainingRun(config, seed, options = {}) {
       duplicate = ordinaryDomains.has(card.type);
       if (!duplicate) {
         ordinaryDomains.add(card.type);
-        capability += 1;
+        capability += Number(options.domainGain || 1);
       }
     } else if (card.type === "curated_corpus") {
       const domain = firstMissingDomain(ordinaryDomains);
       if (domain) {
         ordinaryDomains.add(domain);
-        capability += 1;
+        capability += Number(options.domainGain || 1);
       } else duplicate = true;
     } else if (card.type === "benchmark_leak") {
       capability += 2;
@@ -294,7 +295,7 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     actionsUsed: [],
     escalationsUsed: [],
     pieces: [
-      ...Array.from({ length: 1 }, (_, index) => ({
+      ...Array.from({ length: config.playerSupply.startingAgents }, (_, index) => ({
         id: `agent-${index + 1}`,
         name: `Agent ${index + 1}`,
         kind: "agent",
@@ -386,7 +387,7 @@ export function legalDestinations(state, pieceId) {
   const piece = state.player.pieces.find((entry) => entry.id === pieceId);
   const current = state.board.find((tile) => tile.instanceId === piece?.tileId);
   if (!current) return [];
-  return state.board.filter((tile) => axialDistance(current, tile) <= 2);
+  return [...state.board];
 }
 
 function cap(value, definition) {
@@ -430,7 +431,9 @@ export function addScrutiny(config, player, amount) {
 }
 
 export function isAgiEligible(config, player) {
-  return player.compute >= config.agiAchievement.computeCost;
+  const rule = config.agiAchievement;
+  return player.compute >= rule.computeCost && player.capability >= rule.capability &&
+    player.trust >= rule.trust && player.facilities.filter((facility) => facility.powered).length >= rule.poweredFacilities;
 }
 
 function recordAgiEligibility(config, state, timing) {
@@ -518,16 +521,29 @@ function resolveCore(config, state, actionId, destination, options) {
       player.generators.push({
         id: `generator-${player.generators.length + 1}`,
         tileId: destination.instanceId,
-        sourceId: source.id,
-        capacity: source.capacity
+        sourceId: source.id
       });
-      return `${source.name} constructed at ${destination.name}: ${source.capacity} Power.`;
+      return `${source.name} constructed at ${destination.name}: nearby Facilities are connected.`;
     }
 
   }
 
   if (actionId === "organize") {
-    return "Organization resolved. Additional multi-piece movement remains a manual study control.";
+    if (options.mode === "relocate") {
+      const facility = player.facilities.find((item) => item.id === options.facilityId && item.tileId === destination.instanceId);
+      const target = state.board.find((tile) => tile.instanceId === options.facilityDestinationId);
+      if (!facility || !target || target.category === "frontier" || axialDistance(destination, target) !== 1 ||
+          player.facilities.filter((item) => item.tileId === target.instanceId).length >= (target.facilitySpaces ?? config.board.facilitySpacesPerHex)) return "Relocation blocked.";
+      facility.tileId = target.instanceId; facility.category = target.category;
+      return "Facility relocated; local connections now follow its new district.";
+    }
+    const cost = 2 - Number(destination.category === "talent");
+    if (player.pieces.length >= config.playerSupply.agents || player.runway < cost) return "Recruitment blocked.";
+    const number = Array.from({ length: config.playerSupply.agents }, (_, index) => index + 1)
+      .find((value) => !player.pieces.some((piece) => piece.id === `agent-${value}`));
+    player.runway -= cost;
+    player.pieces.push({ id: `agent-${number}`, name: `Agent ${number}`, kind: "agent", tileId: destination.instanceId });
+    return "An Agent joins the assignment; no additional action is granted.";
   }
 
   if (actionId === "deploy") {
@@ -560,58 +576,22 @@ function resolveCore(config, state, actionId, destination, options) {
   return `${actionId} is recorded but not automated in this study.`;
 }
 
-function allocatePower(config, state) {
-  const player = state.player;
-  const startingFacility = player.facilities.find(
-    (facility) => facility.id === player.startingGridConnection.assignedFacilityId
-  );
-  const startingGridCapacity = startingFacility
-    ? player.startingGridConnection.capacity
-    : 0;
-  const generatedCapacity = player.generators.reduce((sum, item) => sum + item.capacity, 0);
-  const generation = startingGridCapacity + generatedCapacity;
-  const locallyEligible = locallyEligibleFacilityIds(state.board, player);
-  let available = generation;
-  let powered = 0;
-  for (const facility of player.facilities) {
-    const demand = 1;
-    facility.powered = locallyEligible.has(facility.id) && available >= demand;
-    if (facility.powered) {
-      available -= demand;
-      powered += 1;
-    }
-  }
-  return {
-    generation,
-    generatedCapacity,
-    startingGridCapacity,
-    powered,
-    demand: player.facilities.length
-  };
+function connectedPowerState(config, state) {
+  const connected = connectedFacilityIds(state.board, state.player);
+  for (const facility of state.player.facilities) facility.powered = connected.has(facility.id);
+  return { powered: connected.size };
 }
 
 export function locallyEligibleFacilityIds(board, player) {
-  const result = new Set();
-  const startingId = player.startingGridConnection?.assignedFacilityId;
-  if (startingId) result.add(startingId);
-  for (const facility of player.facilities) {
-    const tile = board.find(entry => entry.instanceId === facility.tileId);
-    if (player.generators.some(generator => {
-      const generatorTile = board.find(entry => entry.instanceId === generator.tileId);
-      return generatorTile && tile && axialDistance(generatorTile, tile) <= 1;
-    })) result.add(facility.id);
-  }
-  return result;
+  return connectedFacilityIds(board, player);
 }
 
 function finishRound(config, headlines, state) {
-  const power = allocatePower(config, state);
+  const power = connectedPowerState(config, state);
   state.metrics.poweredFacilityRounds.push({
     round: state.round,
     powered: power.powered,
     facilities: state.player.facilities.length,
-    supply: power.generation,
-    demand: power.demand
   });
   addResource(config, state.player, "runway", state.player.customers);
 
@@ -632,7 +612,7 @@ function finishRound(config, headlines, state) {
   }
 
   state.log.unshift(
-    `Production: ${power.powered}/${state.player.facilities.length} Facilities powered (${power.generation} supply / ${power.demand} demand, including ${power.startingGridCapacity} starting-grid Power). Audit profile drew ${draws}; ${penalties} active-seat cube(s) resolved.`
+    `Production: ${power.powered}/${state.player.facilities.length} Facilities powered. Audit profile drew ${draws}; ${penalties} active-seat cube(s) resolved.`
   );
   recordAgiEligibility(config, state, "after_production");
   synchronizePublicMandate(config, state, "production");
@@ -666,17 +646,17 @@ export function commitAction(state, actionId, kind = "core") {
     actionId,
     kind
   });
-  state.phase = "move";
+  state.phase = "act";
   state.log.unshift(`${kind === "escalation" ? "Escalation" : "Core"} Action revealed: ${actionId}. Acting piece remains undeclared.`);
 }
 
 export function resolveSelectedAction(config, headlines, state, pieceId, tileId, options = {}) {
-  if (state.phase !== "move" || !state.selectedAction) throw new Error("No revealed action is waiting for resolution.");
+  if (state.phase !== "act" || !state.selectedAction) throw new Error("No revealed action is waiting for resolution.");
   if (state.selectedAction.id === "build" && options.buildMode && !["facility", "generator"].includes(options.buildMode)) {
     throw new RangeError(`Unknown build mode: ${options.buildMode}`);
   }
   const legal = legalDestinations(state, pieceId);
-  if (!legal.some((entry) => entry.instanceId === tileId)) throw new Error("Destination is more than two hexes away.");
+  if (!legal.some((entry) => entry.instanceId === tileId)) throw new Error("Choose an owned Agent and an existing district.");
 
   const piece = state.player.pieces.find((entry) => entry.id === pieceId);
   const destination = state.board.find((entry) => entry.instanceId === tileId);

@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.9.0-rc.7-test`
+**Rules reference:** `0.10.0-rc.2-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -109,7 +109,7 @@ discovering a new resolution sequence on every card.
 
 ### One visible exception per authority layer
 
-An ordinary action may combine its printed rule, one destination bonus, one
+An ordinary action may combine its printed rule, one destination bonus, each applicable
 faction modifier, and applicable global state. Persistent Headlines use
 physical reminders. Every exception has a timing window. A current Headline
 overrides an older global effect only when both alter the same field.
@@ -119,7 +119,7 @@ variation to test the central engine.
 
 ### Eras teach the game
 
-- **Progress:** movement, Core Actions, Research, Facilities, Customers, and
+- **Progress:** Agent assignment, Core Actions, Research, Facilities, Customers, and
   Scrutiny.
 - **Capacity:** Generators, Mega-Clusters, and early Programs.
 - **Authority:** persistent agreements and competing public realities.
@@ -130,21 +130,18 @@ authority.
 
 ### Presentation cannot create a new phase
 
-The current player board may group End-of-Era Resolution into four visual
-bands—**Power** for Generate and Allocate; **Economy** for Produce and
-Partner; **Dossier** for the simultaneous secret filing; and **Consequences**
-for Audit and Mandate. This is a presentation
-hypothesis, not a rules change. Production remains the four numbered boxes,
-followed by the separate Audit and Mandate phases. Human testing must justify
-the visual grouping before it becomes a selected component layout.
+ReAct names Reason, Act, and Observe within the existing turn. It creates no
+extra event, reward, reaction window, or phase. Production reads current
+connections, produces, and resolves partnerships. Era IV recognition precedes
+the final Audit and ordinary Mandate scoring.
 
 ### Mandate stays public
 
 Customers, Capability thresholds, Trust thresholds, Era Mandates, Fusion, and
 faction awards score when they occur. Facilities and control create
 position and production rather than receiving automatic endgame points. Final
-calculation applies the offline penalty, names the provisional Mandate winner,
-and then resolves supported Dossier claims deterministically.
+calculation applies the offline penalty and ordinary score tie breakers.
+Public AGI recognition has already awarded its fixed Mandate before the Audit.
 
 This makes negotiation legible and lets every simulated score change retain a
 specific source.
@@ -179,12 +176,12 @@ exactly one Runway for one Compute, or the reverse, to a named counterparty.
 The counterparty accepts or rejects. Influence is required to propose or
 terminate a persistent Joint Venture and to change Trust or Scrutiny.
 
-Influence is an action, not a component supply. The acting CEO or Team must end
+Influence is an action, not a component supply. The acting Agent must be assigned
 at Media, Government, or Capital to change Trust or Scrutiny. Political control
-counts each CEO, Team, and Facility as one presence; ties remain
+counts each Agent and Facility as one presence; ties remain
 uncontrolled. A Joint Venture must be proposed or terminated by an acting piece
 at one of the player’s Facilities. Joint Ventures use numbered neutral host
-pairs. Their operation depends on printed range and the latest Production snapshot.
+pairs. Their operation depends on printed range and current Generator connections.
 
 Promises about later turns are not binding. The game supports negotiation
 without requiring a general contract-enforcement system.
@@ -197,7 +194,7 @@ register does not offer selectable combinations of procedures.
 
 Future complexity reductions are governed by the
 [`complexity-reduction-protocol.md`](complexity-reduction-protocol.md). The
-August 2026 simplification package is current: one location-defined Generator,
+August 2026 package established the previous baseline: one location-defined Generator,
 presence-only politics, two programs per Faction, removal of seven stored-token
 families, and one set of local Power and interaction procedures.
 The register records them as accepted current decisions.
@@ -208,25 +205,14 @@ Audit draws scale by player count. Scrutiny beyond a player’s ten physical
 cubes immediately becomes a Runway-or-Trust penalty. Era IV Audit converts
 risk into Runway or Mandate loss so late exposure remains consequential.
 
-AGI is a hidden four-Era Dossier rather than an Action or deterministic
-declaration. After each Production, every player secretly files Commit or
-Hedge for that Era. In Era IV all cards are revealed: every Commit costs one
-Compute and adds one Scrutiny before the final Audit; Publication must be
-committed and the full cost paid for a claim to be eligible.
-
-The ordinary final-scoring winner, including the printed tie breakers, is the
-provisional winner. The Audit bag is then rebuilt with all eighteen black
-no-AGI cubes plus each eligible claim's faction-coloured prediction tokens.
-Two cubes are drawn without replacement. Matching faction colours form AGI
-and make that claimant the sole winner; every other pair preserves the
-Mandate result. Claim tokens come from committed Dossier modules, Capability
-thresholds, and a bounded Mandate-rank comeback bonus. This produces zero or
-one declaration without a die, app, published percentage, or player-authored
-arithmetic. The ending is
-Open only when collective Trust improves
-beyond setup by the player count and unresolved Systemic Risk remains below the
-player count; otherwise it is Closed. Winning and building the preferable
-future are deliberately different achievements.
+AGI is an optional public achievement after Era IV Production. Qualification
+uses Capability, connected Facilities, and Trust; payment consumes Compute and
+awards fixed Mandate plus Scrutiny before the Audit. Each institution may
+declare once. The final Mandate winner uses the ordinary tie breakers; recognized
+AGI selects the separate World Ending axis and never replaces that winner.
+The ending is Open only when collective Trust improves beyond setup by the
+player count and unresolved Systemic Risk remains below the player count.
+Winning and building the preferable future remain separate achievements.
 
 ## Selected content boundary
 
@@ -261,12 +247,13 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.15.6` implements `0.9.0-rc.7-test` under engine coverage
-`nineteen-hex-simplified-v1`. Each Production replaces the prior Power
-allocation; its cubes remain on the map as the authoritative powered/offline
-snapshot for later rules. The executable uses the complete radius-two board,
-six shared Programs, Research Protection, a forty-card Training deck, solo
-Mega-Clusters, one direct 1-for-1 trade, automatic Audit penalties, local Power, and deterministic evidence-backed Dossier resolution.
+Executable game `0.16.1` implements `0.10.0-rc.2-test` under coverage
+`react-agent-assignments-v1`: direct persistent Agent assignments, speculative
+selection, unprotected Research with printed faction exceptions, current local
+Power connections, and optional AGI recognition scored within Mandate. The
+nineteen-hex board, six shared Programs, forty-card Training deck, solo
+Mega-Clusters, one direct 1-for-1 trade, and automatic Audit remain.
+
 Browser-native deterministic play, server-backed LLM play, replay, policies,
 and Monte Carlo share that contract. The published root now presents the
 playable game as its primary action. The public deployment now contains only
@@ -598,14 +585,12 @@ The current rules candidate closes the following previously implicit contracts:
 - The Card and Board Reference prints every Mandate minimum, every Faction ability’s
   printed unlock Era and timing, and every Headline’s procedure. The Era IV card introduces only abilities printed as Era IV; the
   Faction board remains authoritative for earlier abilities.
-- Production Power cubes remain on powered Facilities and satisfied
-  Mega-Cluster demand as the latest Production snapshot until the next
-  Allocate step. Built Facilities without cubes are offline. One shared
-  Governance Board ledger retains only the currently revealed Mandate's
-  criterion, Setup Collective Trust, and final resolution; scored Mandate
-  cards remain face up as history. The visible snapshot is authoritative for
-  the next Mandate, powered-Facility Headlines, the Era IV Dossier, and final
-  offline penalties.
+- Facility 1 is always powered. Other Facilities use current own-Generator
+  adjacency for production, contracts, Headlines, qualification, and penalties.
+  The shared ledger retains permanent Program use, the current Mandate criterion,
+  Setup Collective Trust, and final public recognition. Scored Mandate cards
+  remain face up as history.
+
 - Fusion has one dedicated shared marker and therefore one project. Mega-Cluster
   construction is resolved in Initiative order; each Facility has one
   Mega-Cluster host slot, hosts must be locally Power-eligible at proposal and
@@ -624,3 +609,55 @@ This generated register records selected design decisions and their
 implementation state. The canonical procedures are in the Core Rules; exact
 component effects remain with their component records.
 <!-- decision-register:end -->
+
+
+## Full simplification candidate
+
+Decision ID: `user-selected-full-simplification`. The user requested the complete
+redesign after reviewing executable 0.15.6 and rules 0.9.0-rc.7-test. This is a
+user-selected structural candidate, not a promotion motivated by simulated wins.
+
+- Replace CEO and Team piece types with four identical Agents, two initially
+  deployed. Assign directly to any district, retaining presence. CEOs remain
+  faction characters. Organize recruits one Agent or relocates a Facility.
+- Check only card availability and unlocks at simultaneous selection. Assign,
+  pay, and choose targets during resolution. A blocked selection assigns and
+  exhausts. Preserve six Actions and three cycles in each of four Eras.
+- Remove universal Research Protection. Retain paid Scientific Method banking;
+  Orisonix retains one revealed Capability on a crash; Research districts add
+  one Capability on a bank. Special Training cards remain.
+- Replace numeric Power and snapshot authority with current local connections.
+  Facility 1 stays powered; an own Generator connects its own and adjacent
+  districts. Mega-Clusters need two adjacent connected hosts, with no extra demand.
+- Recognize AGI after final Production at 9 Capability, 2 connected Facilities,
+  4 Trust, and a payment of 3 Compute. Award 4 Mandate and add 2 Scrutiny before
+  Audit. Every qualifying player may declare; ordinary final Mandate decides
+  the winner. Recognition persists through Audit and determines the AGI axis
+  of the separate World Ending.
+- Loopfold's Social Graph now gains one Runway on its first controlled Consumer
+  or Media Deployment in an Era. Orbital Compute relocates before assignment
+  and immediately produces only if connected. Reorganization reassigns Agents;
+  any recall leaves at least one deployed. Fusion is a second local connection
+  site with its existing cost and printed Mandate, subject to its shared supply.
+- Emergency Power Authority adds two Compute and one extra Scrutiny during
+  Production to institutions whose emergency Generator serves a Facility.
+  The AGI Blog Post grants the Capability leader one Trust immediately; it
+  never changes the fixed recognition award. These replace retired subsystems.
+- Record named Program use in permanent six-box faction rows; returning the
+  two Era markers does not erase history. The turn aid applies all applicable
+  faction modifiers and excludes Tactics from baseline play.
+
+All replacement values above are unbalanced test hypotheses. Validate rule and
+runtime agreement first; compare Research, Power, AGI, and Agent assignment
+separately against archived versions, then the combined candidate. At four
+players, human sessions must record rules questions, stopping decisions,
+Production handling, endgame explanation, and deliberately blocked selections.
+Three- and five-player completion and faction integrity need separate evidence.
+Simulation cannot establish teachability, enjoyment, or physical handling time.
+Historical release bundles and previous evidence remain immutable.
+
+## Additive institutional vignettes
+
+On 2026-09-06 the user supplied seven additional situations spanning Progress, Capacity, Authority, and Continuity. Their full prose joins the existing World companion, with connective passages and shorter echoes on seven existing Headlines, four Mandates, and two Programs. Existing scenario definitions and Era causal threads gain the corresponding concepts; all earlier lore, card titles, quotations, effects, identities, and quantities remain. Biological hosts extend the fiction of Agents without changing their assignment rules. Orbital credits, forecasts, and bodily operating rights are setting material, not new resources or procedures.
+
+Executable `0.16.1` and rules candidate `0.10.0-rc.2-test` record this content addition. The engine remains `0.18.0`; the mechanics are unchanged from executable `0.16.0`. Preservation checks compare the prior immutable bundle with the authored and generated content. This is a content release, with no new claim about balance or human playtest evidence.

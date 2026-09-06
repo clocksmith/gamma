@@ -243,7 +243,7 @@ function buildPowerSources(config) {
               ? "Grid tile"
               : "Fusion Escalation",
           `${p.runwayCost} Runway`,
-          `${p.capacity} Power`
+          "Connects own and adjacent districts"
         ],
         bodyHtml: textRows([
           { text: p.rulesText, kind: "rules" },

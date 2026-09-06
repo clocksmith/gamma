@@ -23,7 +23,7 @@
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--paper) url("./hex-background.svg") repeat;
   min-height: 100vh;
 }
 
@@ -88,9 +88,10 @@ a {
 
 .masthead::after {
   position: absolute;
-  inset: 0 0 0 auto;
-  width: min(37vw, 570px);
-  background: repeating-linear-gradient(135deg, transparent 0 18px, rgba(255, 255, 255, 0.12) 18px 19px);
+  inset: 0;
+  background: url("./hex-background.svg") repeat;
+  filter: invert(1);
+  opacity: 0.65;
   content: "";
   pointer-events: none;
 }
@@ -217,6 +218,7 @@ main {
 }
 
 .panel {
+  min-width: 0;
   border: 1px solid var(--line-dark);
   background: var(--paper);
   box-shadow: 5px 6px 0 var(--shadow);
@@ -421,6 +423,7 @@ input {
 }
 
 .board-window {
+  overflow: auto;
   padding: 0.65rem;
   border: 1px solid var(--night);
   background: var(--night);
@@ -480,7 +483,7 @@ input {
   animation-name: generator-arrival;
 }
 
-.dot.team { background: var(--faction-color, var(--ink)); }
+.dot.agent { background: var(--faction-color, var(--ink)); }
 
 .dot.facility {
   border-radius: 0;
@@ -495,7 +498,8 @@ input {
 
 .board {
   position: relative;
-  min-height: 760px;
+  min-width: 608px;
+  min-height: 657px;
   overflow: hidden;
   border: 1px solid rgba(255, 248, 236, 0.38);
   background:
@@ -719,6 +723,7 @@ input {
 .decision-card:focus-visible,
 .action-card:hover:not(:disabled),
 .action-card:focus-visible {
+  background: var(--ink);
   color: #ffffff;
 }
 
@@ -772,7 +777,7 @@ input {
 
 .public-player dl {
   display: grid;
-  grid-template-columns: repeat(4, auto 1fr);
+  grid-template-columns: repeat(2, auto 1fr);
   gap: 0.25rem 0.45rem;
   margin: 0;
   font-size: 0.7rem;
@@ -1084,7 +1089,7 @@ footer {
 @media (max-width: 1000px) {
   .live-dashboard,
   .decision-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .live-dashboard {
@@ -1130,10 +1135,13 @@ footer {
 
   .command-fields,
   .compact-grid,
-  .card-grid,
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
 
   .board {
-    min-height: 580px;
+    min-width: 432px;
+    min-height: 467px;
     overflow: auto;
   }
 

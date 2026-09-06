@@ -75,8 +75,8 @@ Every backend receives the same packet:
 Deterministic policies return a canonical legal `decisionId`. CLI providers see
 the same complete legal set and semantics, but choose a short deterministic
 alias; the caller resolves that alias to the canonical ID and rejects an
-unknown alias. The environment alone mutates state. Player-owned movement, Headline choices,
-Power allocation, contracts, promises, sales, betrayal, and declarations all
+unknown alias. The environment alone mutates state. Player-owned assignments, Headline choices,
+Infrastructure, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
 Selection packets contain every unused Core Action and unlocked Program that
@@ -102,14 +102,10 @@ deterministic tie draw and records the number of tied choices in its receipt.
 This keeps replay exact while preventing labels such as `commit` and `hedge`
 from acquiring accidental priority through lexicographic ordering.
 
-Each Dossier choice also carries a public-to-that-player assessment: the
-current evidence value and threshold, prior supported commitments, projected
-total payment, and whether the player can pay that total now. Deterministic
-policies prefer supported, affordable commitments and hedge unsupported or
-currently unaffordable claims. A profile's explicit decision weights can still
-authorize a forward-looking wager. This is decision semantics, not
-future-state access: later Actions may make an early Hedge or Commit look
-better or worse at reveal.
+The AGI achievement decision reports the same public qualification to every
+policy: 9 Capability, 2 currently connected Facilities, 4 Trust, and 3 Compute.
+It is offered after Era IV Production only. Every institution can pay for its
+fixed Mandate award; declining and declaring are explicit replayed decisions.
 
 `coalition_conversion_v1` is a bounded diagnostic treatment. It activates only
 for Coalition Lab while an earned Deal Flow Runway credit remains unspent. It
@@ -131,21 +127,19 @@ crash can therefore lose only an in-progress game. Provider failures and other
 quarantined matches retain their failure receipts in the aggregate but do not
 create a completed-game archive.
 
-## Paired deterministic AGI Dossier scenario
+## Paired deterministic AGI recognition scenario
 
-The registered `agi_claim_window_v1` compatibility ID now creates a fully
-committed four-card Dossier instead of waiting for natural coverage.
-Common-seed arms differ only by the final Compute needed to pay every Commit.
-The scenario verifies payment eligibility and policy choice; it cannot
-estimate natural Dossier strategy or natural claim frequency.
+`agi_recognition_window_v2` injects a separately labelled controlled qualification
+after Era IV Production. Both arms have the same Capability, Trust, and physical
+connection evidence; the blocked arm has one Compute less than the payment.
+The receipt records every injected field. This diagnoses eligibility and policy
+choice, not natural qualification frequency or balance. Historical Dossier and
+Grid-Ready scenario IDs retain their old meaning and are not accepted as current
+scenario aliases.
 
-Natural reports record every face-down choice, revealed commitments, Compute
-paid, Scrutiny added, module result, supported evidence count, Capability
-threshold, final claim strength, selected Mandate rank, and the deterministic
-winner. The
-historical `agi_declaration_window_v1` preregistration remains evidence for the
-superseded Grid-Ready declaration contract and must not be mixed with current
-claims.
+Natural reports record readiness, payment, Mandate, Scrutiny, every recognition,
+the ordinary Mandate winner, and the separate World Ending. Recognition does
+not override scoring and is not revoked by subsequent Audit losses.
 
 ## Negotiation model
 
@@ -441,11 +435,10 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits
 
-`nineteen-hex-simplified-v1` covers the complete nineteen-tile board, four Eras,
+`react-agent-assignments-v1` covers the complete nineteen-tile board, four Eras,
 all baseline Headlines and shared Programs, factions, Training, two-source
-Power, local Power, retained Power cubes
-replaced at each Allocate step, the bounded pre-resolution resource trade,
-Joint Ventures, Audit, visible scoring, deterministic Dossiers,
+Power, current local Generator connections, the bounded pre-resolution resource trade,
+Joint Ventures, Audit, visible scoring, scored AGI recognition,
 and the shared ending. Tactics and
 secret objectives remain deferred.
 

@@ -107,8 +107,7 @@ export class WeightedPlayerPolicy {
     if (!parameters?.giveResource || !parameters?.receiveResource) return 1;
     const values = this.profile.strategy.resourceValues || {
       runway: 1,
-      compute: 1,
-      researchProtection: 1
+      compute: 1
     };
     const responder = parameters.tradePerspective === "responder";
     const giveResource = responder
@@ -161,25 +160,9 @@ export class WeightedPlayerPolicy {
     return 1.25;
   }
 
-  dossierMultiplier(decision) {
-    if (decision.actionId !== "agi_dossier") return 1;
-    const assessment = decision.parameters?.dossierAssessment;
-    if (!assessment) return 1;
-
-    if (assessment.orientation === "hedge") {
-      return assessment.supportedNow && assessment.canPayProjectedCost
-        ? 0.65
-        : 2;
-    }
-
-    if (!assessment.canPayProjectedCost) return 0.05;
-    if (assessment.metric === "publication") {
-      return assessment.supportedNow ? 4 : 0.1;
-    }
-    return assessment.supportedNow ? 3 : 0.65;
-  }
-
   score(packet, decision) {
+    if (decision.decisionId === "agi_declare") return 4;
+    if (decision.decisionId === "agi_pass") return 1;
     const strategy = this.profile.strategy;
     const negotiation = strategy.negotiation;
     if (decision.decisionId === "trade_none") {
@@ -240,7 +223,6 @@ export class WeightedPlayerPolicy {
     weight *= Math.max(0.01, 1 + consequenceValue);
     weight *= this.partnerMultiplier(decision);
     weight *= this.spatialMultiplier(packet, decision);
-    weight *= this.dossierMultiplier(decision);
     for (const rule of strategy.rules) {
       if (
         ruleTargets(decision, rule.target) &&

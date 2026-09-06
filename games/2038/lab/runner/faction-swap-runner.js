@@ -732,7 +732,7 @@ export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
               `roster:${rotation}`
             ].join(":"),
             question:
-              "What is the paired outcome effect of a fully payable AGI Dossier " +
+              "What is the paired outcome effect of a qualifying public AGI recognition " +
               "versus an otherwise identical one-Compute-short state?",
             focalSeat,
             focalFactionId,
@@ -743,12 +743,12 @@ export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
             leftFactionIds: roster,
             rightFactionIds: roster,
             leftScenario: {
-              id: "agi_claim_window_v1",
+              id: "agi_recognition_window_v2",
               arm: "eligible",
               focalSeat
             },
             rightScenario: {
-              id: "agi_claim_window_v1",
+              id: "agi_recognition_window_v2",
               arm: "blocked_compute",
               focalSeat
             }

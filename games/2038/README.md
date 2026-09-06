@@ -18,7 +18,7 @@ economy, push risky Training Runs, negotiate shared infrastructure, and manage
 public scrutiny without direct combat or elimination. Each Faction has two
 abilities, six shared Programs create public one-use opportunities, each player
 has one location-defined Generator, and political control
-uses visible CEO, Team, and Facility presence rather than Influence cubes.
+uses visible Agent and Facility presence rather than Influence cubes.
 The jurisdiction stays fixed throughout the game, and Power eligibility is local.
 
 ## Status
@@ -72,15 +72,14 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
 The separated physical rules candidate is under controlled review at
-`0.9.0-rc.7-test`.
-Executable game `0.15.6` implements that candidate under
-`nineteen-hex-simplified-v1`, including retained Production Power snapshots,
-one optional pre-resolution 1-for-1 resource trade, two tile-printed ordinary
-Power contracts, Research Protection, four secret Era Dossier choices, and
-deterministic evidence-backed claim resolution. Its
-Governance Board now owns Era progression and the current Mandate ledger;
-the complete nineteen-district map, shared Program display, foldout aids, and
-captive sliders remove duplicate setup pieces. Synchronization means
+`0.10.0-rc.2-test`.
+Executable game `0.16.1` implements that candidate under
+`react-agent-assignments-v1`, including direct Agent assignments,
+current local Power connections, Research without universal Protection, one
+optional pre-resolution 1-for-1 trade, and scored public AGI recognition.
+The Governance Board records persistent named Program use separately from Era
+marker availability. CEOs remain faction characters; each faction has two
+starting Agents and four available in total. Synchronization means
 the browser and simulator execute the selected contract; it does not claim
 physical teachability, numerical balance, or that the AGI coda is enjoyable.
 
@@ -110,9 +109,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.15.6` game and export its
+- `http://localhost:8038/` — play the synchronized `0.16.1` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.15.6` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.16.1` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -196,8 +195,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.15.6`
-bundle, its synchronized `0.9.0-rc.7-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.16.1`
+bundle, its synchronized `0.10.0-rc.2-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

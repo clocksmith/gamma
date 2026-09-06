@@ -109,3 +109,13 @@ test("public deployment profile must close over browser imports and runtime data
     /omits imported lab module environment\/core-economy-match\.js/
   );
 });
+
+
+test("adopted mechanic revisions require the selected decision and its exact record", async () => {
+  for (const revision of [undefined, { decisionId: "unselected", record: "docs/design-decisions.md#full-simplification-candidate" }, { decisionId: "user-selected-full-simplification", record: "missing.md" }]) {
+    const ledger = clone(await loadEraSituationLedger());
+    const scenario = ledger.scenarios.find(row => row.mechanicPreservation.status === "revised");
+    scenario.mechanicPreservation.revision = revision;
+    await assert.rejects(validateEraSituationLedger(ledger), /lacks an authorized mechanic revision/);
+  }
+});

@@ -74,6 +74,11 @@ systems and incentives, not jokes or allegations about real people.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,
   counter-strategy, and promotion contract. Its machine authority is
   `lab/contracts/balance-contract.json`.
+- The user-selected simplification candidate replaces personnel movement with
+  persistent Agent assignments, removes Research Protection and numeric Power
+  allocation, and scores recognized AGI within ordinary Mandate. Preserve the
+  six Core Actions, simultaneous selection, fictional institutions, infrastructure
+  geography, four Eras, and separate World Ending.
 - `web/` owns the browser implementation.
 - `tests/` owns contract, determinism, and probability checks.
 - `evidence/playtests/` owns observed sessions and receipts. Never present a simulated

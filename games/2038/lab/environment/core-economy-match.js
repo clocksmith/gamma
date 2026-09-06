@@ -48,11 +48,8 @@ function immutableCopy(value) {
   return value;
 }
 
-function finalMandate(config, player) {
-  const poweredIds = new Set(
-    player.latestProductionSnapshot?.poweredFacilityIds ||
-    player.facilities.filter((facility) => facility.powered).map((facility) => facility.id)
-  );
+function finalMandate(config, board, player) {
+  const poweredIds = locallyEligibleFacilityIds(board, player);
   return (
     player.mandate +
     publicMandateAwards(config, player).reduce((sum, award) => sum + award.points, 0) -
@@ -95,7 +92,7 @@ function createPlayer(
     generators: [],
     latestProductionSnapshot: null,
     pieces: [
-      ...Array.from({ length: config.playerSupply.agents }, (_, index) => ({
+      ...Array.from({ length: config.playerSupply.startingAgents }, (_, index) => ({
         id: `s${seat}-agent-${index + 1}`,
         kind: "agent",
         tileId: frontierId
@@ -276,9 +273,7 @@ export class CoreEconomyMatch {
 
   publicObservation(seat) {
     const player = this.players[seat];
-    const powered = player.latestProductionSnapshot
-      ? player.latestProductionSnapshot.poweredFacilityIds.length
-      : player.facilities.filter((facility) => facility.powered).length;
+    const powered = locallyEligibleFacilityIds(this.board, player).size;
     const publicPlayers = this.players.map((candidate) => this.publicPlayerState(candidate));
     return {
       round: this.round,
@@ -374,7 +369,7 @@ export class CoreEconomyMatch {
     return this.legalResolutions(seat, actionId).length;
   }
 
-  movementVariants(player, build) {
+  assignmentVariants(player, build) {
     return player.pieces.flatMap((piece) =>
       this.legalDestinations(player, piece).flatMap((destination) =>
         build(piece, destination)
@@ -384,7 +379,7 @@ export class CoreEconomyMatch {
 
   legalResolutions(seat, actionId, { skipAffordability = false } = {}) {
     const player = this.players[seat];
-    const variants = this.movementVariants(player, (piece, destination) => {
+    const variants = this.assignmentVariants(player, (piece, destination) => {
       const base = {
         pieceId: piece.id,
         destinationId: destination.instanceId,
@@ -470,7 +465,7 @@ export class CoreEconomyMatch {
               parameters: { ...base, buildMode: "generator", sourceId: source.id },
               consequences: {
                 runway: -locationRule.constructionCost,
-                generation: source.capacity,
+                connectsLocalFacilities: true,
                 scrutiny: source.scrutinyOnBuild || 0
               }
             });
@@ -587,7 +582,7 @@ export class CoreEconomyMatch {
     }
   }
 
-  movePiece(player, parameters) {
+  assignAgent(player, parameters) {
     const piece = player.pieces.find((candidate) => candidate.id === parameters.pieceId);
     if (piece) piece.tileId = parameters.destinationId;
   }
@@ -596,7 +591,7 @@ export class CoreEconomyMatch {
     const player = this.players[seat];
     const parameters = decision.parameters || {};
     if (decision.consequences?.noOp) {
-      this.movePiece(player, parameters);
+      this.assignAgent(player, parameters);
       player.actionsUsed.push(decision.actionId);
       player.metrics.actions[decision.actionId] =
         (player.metrics.actions[decision.actionId] || 0) + 1;
@@ -607,7 +602,7 @@ export class CoreEconomyMatch {
       );
       return;
     }
-    this.movePiece(player, parameters);
+    this.assignAgent(player, parameters);
 
     if (decision.actionId === "fund") {
       this.addResource(player, "runway", parameters.mode === "venture" ? 4 : 2);
@@ -926,7 +921,7 @@ export class CoreEconomyMatch {
         factionId: player.factionId,
         factionName: player.factionName,
         profileId: player.profileId,
-        score: finalMandate(this.config, player),
+        score: finalMandate(this.config, this.board, player),
         trust: player.trust,
         customers: player.customers,
         compute: player.compute,
