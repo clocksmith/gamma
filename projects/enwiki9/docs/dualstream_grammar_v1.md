@@ -45,7 +45,7 @@ and phrase grammars have prior art; the tested hypothesis is their particular
 combination with paid exact argument bindings.
 
 ```bash
-python3 tools/dualstream_grammar_v1.py encode input.bin output.d2g --mode parameter
+python3 tools/dualstream_grammar_bounded_v1.py encode input.bin output.d2g --mode parameter
 python3 tools/dualstream_grammar_v1.py decode output.d2g restored.bin
 cmp input.bin restored.bin
 python3 -m unittest discover -s tests -p 'test_dualstream_grammar*.py' -v
@@ -100,3 +100,28 @@ This is a correctness repair, with no new corpus gain established. Gemini's
 design request produced no model response because the installed client was
 rejected during authentication; the repair is locally authored and separately
 reviewed.
+
+The separately frozen argument-token successor uses `D2GRAM02`: arguments are
+length-delimited sequences of exact shared literal tokens. It reuses the v1
+discovery and interpreter through explicit isolated adapters; both sources remain
+required dependencies. It rejects silent interchange with v1 archives.
+
+Its [five-arm opening250KB receipt](../operations/provenance/dualstream_grammar_argtokens250k_terminal_20260906.json)
+records **109,170 bytes** for the treatment, versus **102,492** for independently
+repeated v1 parameter grammar and **89,041** for plain Deflate. All 15 processes
+passed exact inverse/repeat and the discovery guard. Lower dictionary cost did
+not pay overall; selected programs used zero repeated bindings. This fixed
+realization is parked. Validation and confirmation remain unopened.
+
+For synthetic use, the separate bounded entry applies the existing archive-write
+guard to v2, preserving its accepted bytes and measured source:
+
+```bash
+python3 tools/dualstream_grammar_argtokens_bounded_v2.py encode input.bin output.d2g --mode parameter
+python3 tools/dualstream_grammar_argtokens_bounded_v2.py decode output.d2g restored.bin
+python3 -m unittest discover -s tests -p test_dualstream_grammar_argtokens_bounded_v2.py -v
+```
+
+Three boundary tests pass, including the last accepted one-byte-frame archive
+and refusal to publish its oversized successor. This API repair establishes no
+new corpus compression gain or package qualification.

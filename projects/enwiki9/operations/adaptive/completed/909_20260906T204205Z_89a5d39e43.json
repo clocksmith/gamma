@@ -5,27 +5,66 @@
     "sha256": "sha256:458d0399820298f5b41523f15c22ba405805dc983f76cff68fd853065212be5c"
   },
   "candidate_tree_sha256": "sha256:7cd1b51a47b5c442c911213e6ac6062179072982a5317f858fff28189109cadc",
+  "elapsed_seconds": 67.94,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 1073741824,
+      "scratch_bytes": 67108864,
+      "swap_bytes": 0,
+      "wall_seconds": 600
+    },
+    "cgroup_inode": 236848,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T204205Z_89a5d39e43",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 236848,
+        "kernel_cpuset": false,
+        "memory_bytes": 1073741824,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T204205Z_89a5d39e43"
+      }
+    ],
+    "guard_command_sha256": "923c50aa1741cbdf3bbfe694a9b7ddb5c3528b5df199ee70b88359940279ba00",
+    "guard_path": "run_logs/adaptive/20260906T204205Z_89a5d39e43.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/dualstream_grammar_argtokens250k_q0_v2.json",
     "sha256": "sha256:d9e0c6e6644b0e7b1b3853deef37fe2fe2ea1b34a0ee5fac6b3f5c9f13373095"
   },
+  "finished_at": "2026-09-06T20:46:12+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-06T20:42:22+00:00",
   "hold_history": [
     {
       "at": "2026-09-06T20:42:22+00:00",
       "held": true,
       "reason": "Publish root_explore ownership, fixed five-arm inputs and CPU2 budget before execution; recheck live assignments and preserve HORIZON."
+    },
+    {
+      "at": "2026-09-06T20:45:04+00:00",
+      "held": false,
+      "reason": "Published 85a3a06efef6b85c3d871797308d267a528bde93; all15 frozen inputs match origin/main. Entry at20:43:37UTC verifies only preserved HORIZON source/observer live,27 held jobs,no unheld work,no exclusive lease,68,473,446,400 available bytes,CPU2 sample idle. HORIZON retains all32 allowed CPUs: shared-host timing remains diagnostic. Root_explore owns CPU2 discovery,1GiB memory,64MiB scratch,600second stop; outer launcher pinned and16GiB free-memory admission floor."
     }
   ],
-  "hold_reason": "Publish root_explore ownership, fixed five-arm inputs and CPU2 budget before execution; recheck live assignments and preserve HORIZON.",
   "job_id": "20260906T204205Z_89a5d39e43",
+  "log_path": "run_logs/adaptive/20260906T204205Z_89a5d39e43.log",
   "priority": 90,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/941_dualstream_grammar_argtokens250k_q0_v2.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "dualstream_grammar_argtokens250k_q0_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-06T20:45:04+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 600
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/dualstream_grammar_argtokens_gate_v2.py",
     "sha256": "sha256:1812f2d807fbe9237c8df4a6aa573a64938e87001d9d06264c16f216396c933a"
@@ -51,7 +92,8 @@
   "scratch_directories": [
     "results/dualstream_grammar_argtokens250k_q0_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-06T20:45:04+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-06T20:42:05+00:00",
   "tags": [
     "development250k"
@@ -61,5 +103,8 @@
   "tool_args": [
     "--candidate",
     "dualstream_grammar_argtokens250k_q0_v2"
-  ]
+  ],
+  "worker_pid": 2395593,
+  "worker_proc_start_ticks": 182364279,
+  "worker_started_at": "2026-09-06T20:45:05+00:00"
 }
