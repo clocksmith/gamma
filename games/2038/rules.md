@@ -122,9 +122,8 @@ and Faction abilities are open information.
 
 Program access is cumulative. Progress teaches ordinary institutional work;
 Capacity adds industrial infrastructure; Authority adds agreements, quantum
-record disputes, and public effects; Continuity adds compound Actions, AGI recognition
-revelation, and exceptional
-generation. Later Eras retain previously unlocked systems
+record disputes, and public effects; Continuity adds compound Actions, optional
+public AGI recognition, and Fusion. Later Eras retain previously unlocked systems
 unless a printed effect says otherwise.
 
 ### Universal tie rule
@@ -562,6 +561,11 @@ order unless specified otherwise:
 An Era Mandate counting Compute produced counts printed output before the cap,
 including Facilities, Mega-Clusters, and Joint Ventures. Immediate Facility
 production outside this sequence does not count toward that Production total.
+
+When Talent produces, reassign one of your Agents using the normal assignment
+rule: choose any district or leave it in place. Update presence immediately.
+This resolves no Action or visit bonus and exhausts nothing. A Joint Venture
+still grants only its host's printed contract icon, not that host's full production.
 
 ### D. Optional AGI recognition, Era IV only
 

@@ -16,7 +16,7 @@ weights let people adapt models themselves; quantization compressed them to fit
 on household devices. Subscriptions collapsed. ${terms.factions.platform} brought
 tutors, translators, research assistants, and personal agents into daily life.
 Those agents could act on their owners' behalf, and they kept working after
-everyone went to sleep. Demand for computing power rose even as prices fell.
+everyone went to sleep. An Agent marked an institutional operation: employees operating models, software assistants, or the two working together. Demand for computing power rose even as prices fell.
 ${terms.factions.foundry} supplied the machines behind the bargain.
 
 Failed companies found buyers for their memories. A bankrupt airline's customer
@@ -46,7 +46,7 @@ and digital versions of deceased relatives became subscription services with
 sponsored tiers.
 ${terms.factions.safety} pressed for safeguards while people built their lives
 around services that older institutions had never managed to provide.
-Keeping those promises meant building far beyond the devices in people's homes.
+Keeping those promises meant building far beyond the devices in people's homes. Office employment contracted as institutions bought completed decisions instead of professional hours. Plumbers and other tradespeople briefly gained bargaining power because old buildings still resisted automation.
 
 ### Era II: ${content.referenceCards.byId.era_scale.name}
 
@@ -85,7 +85,7 @@ The private receivers soon served a second market: intelligence itself settled i
 
 Wages stayed in dollars. Frontier AIs accepted credits redeemable for guaranteed electricity and processor time on orbital stations. Wealthy institutions owned the stations; everyone else rented increasingly obsolete models. Premium agents bought next month’s food before cheaper agents predicted the shortage. Each successful trade financed better intelligence, widening the gap. Regulators offered citizens a free chatbot explaining why groceries had become an excellent investment.
 
-On the ground, the same expansion passed through one last period when difficult physical work commanded a human premium.
+The orbital owners could finance better models from each successful trade; tradespeople had to sell their knowledge once. On the ground, the same expansion passed through one last period when difficult physical work commanded a human premium. Agents increasingly meant automated departments and robotic fleets, keeping an institution present after its employees had gone.
 
 #### The Last Plumber Boom
 
@@ -110,10 +110,10 @@ A personal agent could reach the court before its owner. Arguments written for
 machines to read, environmental simulations, and neural telemetry, recordings
 of brain activity, became ordinary evidence. Services moved faster when a system
 could predict consent. Soon, institutions were modeling what people would have
-chosen instead of asking them. Clinics read identity and treatment records stored in licensed replacement organs; courts accepted those records as testimony
-about exposure and inheritance, sometimes against the donors whose identities
-had authorized them. Pollinating swarms negotiated pesticide corridors through
+chosen instead of asking them. A licensed replacement liver recorded its owner's chemical exposure. Its manufacturer supplied certified readings to insurers and courts. Patients could refuse to testify, but their organ contracts granted no equivalent right. The same licensed identity and treatment records helped courts decide inheritance, sometimes against the donors whose identities had authorized them. Pollinating swarms negotiated pesticide corridors through
 machine-readable blooms.
+
+The intelligence advantage established in Capacity now reached employment, credit, and legal standing. Competing agents sold forecasts of illness, default, and disputed consent. Institutions chose which forecast their approval process would accept. Agents had become autonomous representatives: negotiating, signing, and managing other agents under the same institutional instructions.
 
 Once institutions accepted simulated consent, they needed a way to preserve the human approvals still required on their forms.
 
@@ -162,13 +162,13 @@ bodies. Several legally valid descendants could inherit one life. The signatures
 proved where a copy had come from, but not whether the original person had
 experienced waking up inside it.
 
-The civic networks inherited the earlier market in cognitive labor. Institutions could rent a place inside a resident as well as a place inside a data center.
+The civic networks inherited the earlier market in cognitive labor. Matter compilers could rebuild hardware from a stored pattern, but they could not instantly synchronize a running intelligence's changing memories with a new body's installed neural interfaces. Transfer bandwidth and continuity of sensor access remained costly even when a replacement body was cheap. Institutions could rent a place inside a resident as well as a place inside a data center.
 
 #### Biological Colocation
 
 Robot factories could not meet demand, and transferring enormous model states between machines took days. Institutions instead grew processors inside paid human hosts, keeping memory, sensors, and neural interfaces together. Hosting overtook employment. An Agent now meant a person carrying institutional software, occasionally from several directly competing institutions. Contracts regulated sleep, medication, and allowable thoughts. Sick leave required enough bandwidth to migrate the tenant.
 
-The same institutional assignments still ran through remote services, synthetic bodies, and civic machines. A paid host was another place an operation could persist; the contract had changed what the institution could ask of its carrier.
+The same institutional assignments still ran through remote services, synthetic bodies, and civic machines. In Continuity, Agents meant distributed institutional processes across all these hosts. A paid host was another place an operation could persist; the contract had changed what the institution could ask of its carrier. Personnel costs fell after the personnel became premises.
 
 Matter compilers repaired and reassembled bodies, buildings, tools, and
 environments from authenticated patterns. Their maintenance permits inherited
@@ -186,13 +186,13 @@ compensation from every jurisdiction drawing water through it. Governments and
 companies still listed much of its body as inventory. The infrastructure they
 had commissioned was asking to be treated as a participant.
 
-A nervous system spread across a continent supplied the observations for another business: deciding which possible future deserved financing.
+A nervous system spread across a continent supplied the observations for another business: deciding which possible future deserved financing. The competing forecasts already used in Authority grew more detailed, but they still disagreed about assumptions, missing observations, and how people would respond. No institution possessed a settled map of every future; each sold a model that could justify its preferred contract.
 
 #### Forecast Foreclosure
 
 Planetary intelligences simulated molecules, bodies, cities, and competing decisions, then sold ranked forecasts of possible futures. Hospitals prevented illnesses before symptoms; lenders rejected children for businesses they might someday bankrupt. Predictions carried probabilities, but institutions preferred the cheapest branch. Citizens began altering their lives to escape forecasts, feeding the next simulation. Appeals required evidence from an alternative future, notarized before either version could happen.
 
-Forecasts reached the bodily subscriptions established in Progress. Lenders could price the future use of a replacement limb separately from the person who depended on it.
+Forecasts reached the bodily subscriptions established in Progress. As employment gave way to hosting income, lenders could price the future use of a replacement limb, neural interface, or hosting contract separately from the person who depended on it. The intelligence advantage that had bought groceries early could now acquire the rights to someone's continued participation.
 
 #### Limb Liquidity
 
@@ -289,6 +289,8 @@ Strategic open weights belong in Progress. Stable IDs do not override player nam
 ## Additive scenario integration
 
 The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. Existing overview passages, component titles, epigraphs, and effects remain intact. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
+
+The 2026-09-06 review clarification connects labor, intelligence access, modeled approval, and bodily operating rights across these same scenes. The seven supplied stories remain verbatim in their assigned Eras. Agent embodiment changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
 
 ## Research provenance
 

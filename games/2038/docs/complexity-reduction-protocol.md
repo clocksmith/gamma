@@ -31,6 +31,10 @@ single-Generator candidate and its receipts remain in `experimental/` and
 `evidence/` as historical provenance; the canonical contract now lives in
 `components/game.json` and player-facing rules.
 
+## Immediate human-test priority
+
+Use the current combined candidate to record how often players knowingly forgo the better immediate destination benefit to preserve presence. Follow the denominator, reasons, and separate Talent-production observations in [Playtesting and Evidence](playtesting-and-evidence.md#primary-next-test-presence-versus-destination-benefits). The session generator includes a blank assignment table. This is an unmeasured design question, not a reason to add travel rules or change bonuses before observing players.
+
 ## Test sequence
 
 1. **Freeze the baseline.** Record the executable version, rules fingerprint,

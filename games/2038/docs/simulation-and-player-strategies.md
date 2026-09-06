@@ -1,7 +1,7 @@
 # Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.14.18` / `nineteen-hex-simplified-v1`
-**Physical rules under review:** `0.8.0-rc.19-test`
+**Executable game:** `0.17.0` / `react-agent-assignments-v1`
+**Physical rules under review:** `0.10.0-rc.3-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -79,13 +79,7 @@ unknown alias. The environment alone mutates state. Player-owned assignments, He
 Infrastructure, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
-Selection packets contain every unused Core Action and unlocked Program that
-has a legal resolution now. A legal selection cannot depend on a future trade.
-Each choice reports `resolvable_now` and its current resolution count. A later
-target conflict may still block the committed choice; it then exhausts
-normally, and a selected Program has already spent one Era allowance and its
-once-per-game use. A choice that cannot resolve is not a legal decision and is
-never sent to deterministic or CLI-backed players.
+Selection packets contain every available Core Action and every unlocked, unused Program with an available Program marker. Current resolution counts and `resolvable_now` or `blocked` status inform the player; they do not exclude speculative commitments. After the optional trade, resolution chooses a legal Agent, district, mode, target, and payment from the current board. If no effect can resolve, assignment still occurs and the committed card exhausts or records its Program use. Talent production uses the same assignment destinations, grants no Action or visit bonus, and records its choice in the ordinary decision/replay contract.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 

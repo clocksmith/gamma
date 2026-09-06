@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.10.0-rc.2-test`
+**Rules reference:** `0.10.0-rc.3-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -247,7 +247,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.16.1` implements `0.10.0-rc.2-test` under coverage
+Executable game `0.17.0` implements `0.10.0-rc.3-test` under coverage
 `react-agent-assignments-v1`: direct persistent Agent assignments, speculative
 selection, unprotected Research with printed faction exceptions, current local
 Power connections, and optional AGI recognition scored within Mandate. The
@@ -556,7 +556,8 @@ Measure before changing numbers:
 - Are non-declaration strategies competitive?
 - Does emergency generation dominate after its actual Audit cost is attributed?
 - Does Loopfold AI lead after each Production?
-- Does Mirevanta Works or Research-campus protection flatten Research risk?
+- Do paid Scientific Method banking, Orisonix crash retention, or the Research-campus banking bonus flatten Research risk?
+- How often do players forgo an immediate destination bonus to preserve district presence?
 - Do all three Grid Generator slots fill before Era IV?
 - Is Influence selected for genuine political choices rather than efficient
   Trust scoring?
@@ -661,3 +662,15 @@ Historical release bundles and previous evidence remain immutable.
 On 2026-09-06 the user supplied seven additional situations spanning Progress, Capacity, Authority, and Continuity. Their full prose joins the existing World companion, with connective passages and shorter echoes on seven existing Headlines, four Mandates, and two Programs. Existing scenario definitions and Era causal threads gain the corresponding concepts; all earlier lore, card titles, quotations, effects, identities, and quantities remain. Biological hosts extend the fiction of Agents without changing their assignment rules. Orbital credits, forecasts, and bodily operating rights are setting material, not new resources or procedures.
 
 Executable `0.16.1` and rules candidate `0.10.0-rc.2-test` record this content addition. The engine remains `0.18.0`; the mechanics are unchanged from executable `0.16.0`. Preservation checks compare the prior immutable bundle with the authored and generated content. This is a content release, with no new claim about balance or human playtest evidence.
+
+## Review closure and Talent reassignment
+
+The review of commit `37745ed3` identified an incomplete transition. Commit `43557bd7` already synchronized Agent setup, speculative selection, Research, local connections, scored AGI, and the seven Era stories. This follow-up corrects surviving current-status and selection prose in the evidence and simulator documentation, while retaining historical receipts under their original identities. AGI labels and the automated AGI Candidate's instructions now describe scored recognition, immediate Compute trades, and connected Joint Ventures; they no longer teach Publication, winner replacement, or delivered Power.
+
+The user-selected Talent change replaces executable `0.16.1`'s interim one-Runway production with one Agent reassignment. The selected-rules engine offers the same Agent/district combinations as ordinary assignment, including staying. Presence updates immediately; the reward grants no Action, destination bonus, exhaustion, or additional resource. Only connected Talent Facilities produce, in normal Production order; effects that invoke printed Facility production also invoke this reward. Joint Ventures continue to grant their printed contract resource rather than full host production.
+
+Executable `0.17.0`, engine `0.19.0`, and candidate `0.10.0-rc.3-test` record this mechanical delta. The browser, simulator, generated tile/reference copy, and tests share that contract. The core-economy diagnostic remains a partial engine and explicitly excludes Talent reassignment. Physical components and supply counts need no change. No price, Research value, AGI threshold, or other balance parameter changes.
+
+The World companion preserves every supplied vignette and the existing concepts, connects employment and intelligence access to later ownership, explains live-state migration limits alongside matter compilers, and keeps forecasts contested. The next human test records forgone destination benefits and preserved control. No human session or balance result is claimed by these implementation checks.
+
+Validation also reproduced a pre-existing report-archive collision: parallel LLM fixture matches with the same seed, job label, and millisecond timestamp shared a temporary and final filename. Each archive now receives a unique suffix and always cleans its own temporary file. A concurrency regression checks that every report survives independently. This changes evidence storage, not simulated outcomes; the archive implementation is included in the release engine identity.

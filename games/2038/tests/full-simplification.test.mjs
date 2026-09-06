@@ -82,6 +82,30 @@ test("ordinary Research can crash; Orisonix retains one and the district only re
   assert.ok(!Object.hasOwn(match.players[0], "researchProtection"));
 });
 
+test("interactive and automatic Research agree on crash retention and destination banking bonuses", async () => {
+  for (const factionId of ["coalition_lab", "safety_laboratory"]) {
+    for (const destinationCategory of ["research", "government"]) {
+      for (const stopAt of [1, 8]) {
+        const match = await game(factionId);
+        const deck = [card("code"), card("science"), card("code")];
+        match.trainingDrawPile = structuredClone(deck); match.trainingDiscard = [];
+        match.choose = async (_policies, _seat, stage, choices) => {
+          assert.equal(stage, "training_continue", "ordinary duplicate crashes without an insurance decision");
+          return choices.find(choice => choice.parameters.continue === (stopAt > 1));
+        };
+        const interactive = await match.resolveTrainingRunWithPolicies([], 0, { destinationCategory });
+        const automatic = simulateTrainingRun(match.config, "parity", {
+          deck, stopAt, bankBonus: Number(destinationCategory === "research"),
+          crashRetain: Number(factionId === "safety_laboratory")
+        });
+        for (const field of ["outcome", "capability", "trust", "scrutiny", "cardsDrawn", "ordinaryDomains"]) {
+          assert.deepEqual(interactive[field], automatic[field], `${factionId}/${destinationCategory}/${stopAt}/${field}`);
+        }
+      }
+    }
+  }
+});
+
 test("Scientific Method is an explicit paid banking choice once per Era", async () => {
   const match = await game("imperial_research_lab"); const player = match.players[0];
   player.runway = 4; player.compute = 4;

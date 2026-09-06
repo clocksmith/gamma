@@ -593,7 +593,7 @@ function tileName(tileId) {
 }
 
 function renderAssignmentDecisions(packet, stage) {
-  if (stage !== "resolve" && stage !== "blocked_program_assignment" && !stage.startsWith("resolve_escalation_")) return false;
+  if (stage !== "resolve" && stage !== "blocked_program_assignment" && stage !== "talent_assignment" && !stage.startsWith("resolve_escalation_")) return false;
   const decisions = packet.legalDecisions;
   if (!decisions.length || !decisions.every((decision) =>
     decision.parameters?.pieceId && decision.parameters?.destinationId
@@ -602,6 +602,7 @@ function renderAssignmentDecisions(packet, stage) {
   const builder = document.createElement("section");
   builder.className = "move-builder";
   builder.innerHTML = "<h3>Assign an Agent</h3><p>Choose an Agent, district, and action effect. The Agent remains as presence until reassigned.</p>";
+  if (stage === "talent_assignment") builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
   fields.className = "trade-fields";
   const piece = document.createElement("select");
@@ -615,7 +616,7 @@ function renderAssignmentDecisions(packet, stage) {
   };
   addField("Agent", piece);
   addField("To district", destination);
-  addField("Action", outcome);
+  if (stage !== "talent_assignment") addField("Action", outcome);
 
   const summary = document.createElement("p");
   summary.className = "trade-summary";
