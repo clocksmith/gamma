@@ -26,8 +26,7 @@ four Eras, simultaneous action selection, a complete radius-two nineteen-hex
 economy, six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.8.0-rc.19-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.14.18`. That synchronization is
+The current prototype identity is declared in `versions/current-release.json`; its synchronized rules use identical Agents, local Power connections, and a scored AGI achievement. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.

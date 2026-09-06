@@ -1265,12 +1265,57 @@ test("Agent Swarm suppresses the second destination bonus before affordability",
   assert.equal(player.compute, 0);
 });
 
-test("Talent production grants Runway without moving Agents or opening another decision", async () => {
- const { match } = await createInteractiveGame({playerCount:3,seed:"talent-production"},()=>{});
- const player = match.players[0]; const before = structuredClone(player.pieces); player.runway=0;
- match.choose = async () => { throw new Error("No personnel movement window"); };
- await match.produceFacility([], player, {id:"talent",category:"talent",tileId:player.pieces[0].tileId});
- assert.equal(player.runway,1); assert.deepEqual(player.pieces,before);
+test("Talent production reassigns one Agent anywhere without an Action, visit bonus, or payment", async () => {
+  const { match } = await createInteractiveGame({ playerCount: 3, seed: "talent-production" }, () => {});
+  const [player, rival] = match.players;
+  const government = match.board.find(tile => tile.category === "government");
+  const capital = match.board.find(tile => tile.category === "capital");
+  player.pieces[0].tileId = government.instanceId;
+  rival.pieces[0].tileId = capital.instanceId;
+  const before = { runway: player.runway, compute: player.compute, capability: player.capability,
+    trust: player.trust, actions: [...player.actionsUsed], cycle: match.cycle, other: structuredClone(player.pieces[1]) };
+  let calls = 0;
+  match.choose = async (_policies, seat, stage, choices) => {
+    calls++;
+    assert.equal(seat, player.seat);
+    assert.equal(stage, "talent_assignment");
+    assert.equal(choices.length, player.pieces.length * match.board.length);
+    assert.ok(choices.some(choice => choice.parameters.pieceId === player.pieces[0].id &&
+      choice.parameters.destinationId === government.instanceId), "staying is legal");
+    return choices.find(choice => choice.parameters.pieceId === player.pieces[0].id &&
+      choice.parameters.destinationId === capital.instanceId);
+  };
+  await match.produceFacility([], player, { id: "talent", category: "talent" });
+  assert.equal(calls, 1);
+  assert.equal(player.pieces[0].tileId, capital.instanceId);
+  assert.equal(match.districtController(government.instanceId), null);
+  assert.equal(match.districtController(capital.instanceId), null, "rival presence can coexist");
+  assert.deepEqual({ runway: player.runway, compute: player.compute, capability: player.capability,
+    trust: player.trust, actions: player.actionsUsed, cycle: match.cycle, other: player.pieces[1] }, before);
+});
+
+test("only connected Talent Facilities reassign Agents during Production", async () => {
+  const { match } = await createInteractiveGame({ playerCount: 3, seed: "talent-power" }, () => {});
+  const player = match.players[0];
+  const talent = match.board.find(tile => tile.category === "talent");
+  const cloud = match.board.find(tile => tile.category === "cloud");
+  player.facilities = [
+    { id: "facility-1", tileId: cloud.instanceId, category: "cloud" },
+    { id: "facility-2", tileId: talent.instanceId, category: "talent" }
+  ];
+  match.choose = async () => { throw new Error("Offline Talent cannot reassign"); };
+  await match.produceAll([]);
+  player.facilities = [player.facilities[1]];
+  let assignments = 0;
+  match.choose = async (_policies, _seat, stage, choices) => {
+    assert.equal(stage, "talent_assignment"); assignments++;
+    return choices.find(choice => player.pieces.find(piece => piece.id === choice.parameters.pieceId)
+      .tileId === choice.parameters.destinationId);
+  };
+  const before = structuredClone(player.pieces);
+  await match.produceAll([]);
+  assert.equal(assignments, 1);
+  assert.deepEqual(player.pieces, before, "a player can leave the assignment unchanged");
 });
 
 test("LLM decision packets expose the public table without simulation-only state", async () => {
@@ -3944,12 +3989,31 @@ test("completed simulation reports archive under the central studies directory",
     });
     assert.match(
       archive.relativePath,
-      /^evidence\/studies\/simulation\/20260726T130325621Z-tournament-0-1-0-aaaaaaaaaaaa-archive-contract-100x4-job-123\.json$/
+      /^evidence\/studies\/simulation\/20260726T130325621Z-tournament-0-1-0-aaaaaaaaaaaa-archive-contract-100x4-job-123-[0-9a-f-]{36}\.json$/
     );
     assert.deepEqual(
       JSON.parse(await readFile(join(projectRoot, archive.relativePath), "utf8")),
       report
     );
+  } finally {
+    await rm(projectRoot, { recursive: true, force: true });
+  }
+});
+
+test("concurrent archive writes with identical timestamp and job labels preserve every report", async () => {
+  const projectRoot = await mkdtemp(join(tmpdir(), "frontier-archive-collision-"));
+  try {
+    const reports = Array.from({ length: 16 }, (_, index) => ({
+      evidenceLabel: "simulation", reportType: "tournament",
+      generatedAt: "2026-09-06T12:00:00.000Z", seed: "common-seed",
+      runs: 1, playerCount: 4, arm: index
+    }));
+    const archives = await Promise.all(reports.map(report =>
+      archiveSimulationReport(report, { projectRoot, jobId: "llm-match-0" })));
+    assert.equal(new Set(archives.map(archive => archive.relativePath)).size, reports.length);
+    for (const [index, archive] of archives.entries()) {
+      assert.deepEqual(JSON.parse(await readFile(join(projectRoot, archive.relativePath), "utf8")), reports[index]);
+    }
   } finally {
     await rm(projectRoot, { recursive: true, force: true });
   }

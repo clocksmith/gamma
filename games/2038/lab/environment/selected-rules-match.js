@@ -3034,7 +3034,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     } else if (facility.category === "capital") {
       this.addResource(player, "runway", 2);
     } else if (facility.category === "talent") {
-      this.addResource(player, "runway", 1);
+      const choices = this.assignmentVariants(player, (piece, destination) => [{
+        decisionId: `talent_assign_${facility.id}_${piece.id}_${destination.instanceId}`,
+        label: decisionLabel("talentAssignAgent", { agent: piece.id, destination: destination.name }),
+        actionId: "talent_assignment",
+        parameters: { pieceId: piece.id, destinationId: destination.instanceId,
+          destinationCategory: destination.category }
+      }]);
+      const choice = await this.choose(policies, player.seat, "talent_assignment", choices);
+      this.assignAgent(player, choice.parameters);
+      this.recordEvent("talent_assignment", player.seat, choice.label);
     } else if (facility.category === "media") {
       this.removeScrutiny(player, 1);
     } else if (facility.category === "government") {

@@ -500,9 +500,9 @@ function resolveCore(config, state, actionId, destination, options) {
       });
       if (!player.startingGridConnection.assignedFacilityId) {
         player.startingGridConnection.assignedFacilityId = player.facilities.at(-1).id;
-        return `Facility constructed at ${destination.name}; the basic starting grid connection supplies its first Power.`;
+        return `Facility constructed at ${destination.name}; the starting grid keeps Facility 1 powered.`;
       }
-      return `Facility constructed at ${destination.name}; it requires delivered Power.`;
+      return `Facility constructed at ${destination.name}; it needs a Generator in the same or an adjacent district.`;
     }
     if (mode === "generator") {
       if (state.round < 2) return "Generator failed: industrial Power unlocks in Capacity.";

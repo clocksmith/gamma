@@ -1,4 +1,5 @@
 import { mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { relative, resolve } from "node:path";
 import { cancellationError } from "./cancellation.js";
 
@@ -58,7 +59,8 @@ export async function archiveSimulationReport(
     identitySlug(report),
     slug(report.seed, "seed"),
     scale(report),
-    slug(jobId, "local")
+    slug(jobId, "local"),
+    randomUUID()
   ].join("-");
   const destination = resolve(archiveDirectory, `${stem}.json`);
   const temporary = resolve(archiveDirectory, `.${stem}.tmp`);
@@ -74,7 +76,7 @@ export async function archiveSimulationReport(
       throw cancellationError();
     }
   } finally {
-    if (!canPublish()) await rm(temporary, { force: true });
+    await rm(temporary, { force: true });
   }
   return {
     fileName: `${stem}.json`,

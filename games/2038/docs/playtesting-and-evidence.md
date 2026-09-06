@@ -1,6 +1,6 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.8.0-rc.19-test`
+**Rules under review:** `0.10.0-rc.3-test` / executable `0.17.0`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -112,6 +112,10 @@ Current executable and physical-candidate identities are declared in
 rules variant, seed, and content hashes. There is one playable ruleset. Earlier
 results qualify only their frozen sources; implementation proof does not
 transfer simulation outcomes into human-play evidence.
+
+The current candidate retains direct Agent assignment, unprotected ordinary Research, current local Power connections, and scored public AGI recognition. Talent now produces one reassignment instead of the interim Runway gain. Its primary human evidence question is whether preserving presence is worth forgoing an immediate district benefit; the observation procedure below records that decision. The earlier protected-Research and Dossier results do not qualify this candidate.
+
+### Historical version boundaries
 
 Candidate `0.7.0-rc.3-test` and executable `0.10.2` established the simplified
 baseline selected on 2026-08-08: one location-defined Generator, two programs
@@ -319,6 +323,14 @@ diagnostics rather than balance-authority evidence.
 - Whether blocked selections are deliberately used for assignment and whether that is enjoyable.
 - Recruitment, Agent count, Facility relocation, Initiative effects, and rules questions.
 
+### Primary next test: presence versus destination benefits
+
+At four players, observe the current combined candidate before proposing another assignment restriction. The recorder uses the board at resolution, after earlier institutions have acted. For each ordinary assignment, record the chosen Agent and district, a legal alternative with a better immediate benefit if one exists, the exact benefit forgone, and the presence or control retained or surrendered. Compare benefits within the selected action; record incomparable benefits separately rather than inventing a common value.
+
+After resolution, ask briefly why the player chose that assignment. Count a deliberate presence sacrifice only when the player identifies the better immediate alternative and says they declined it to preserve presence. Separate accidental choices, unavailable targets, no-effect commitments, future infrastructure plans, and choices with no superior immediate alternative. Record Talent Production reassignments separately because they have no selected action or visit bonus.
+
+Report deliberate presence sacrifices divided by eligible ordinary assignments with a legal superior immediate alternative, alongside both raw counts. Break results down by player, Era, action, and Agent count; include examples where retained presence later mattered and where it did not. Record rules questions, Research stopping decisions, Production handling, and endgame explanation as secondary observations. A single group or a high percentage is not a balance or enjoyment verdict. Do not add travel costs, Agent classes, or exhaustion before reviewing these observations.
+
 ### Research and deployment
 
 - Provisional and banked Capability, each stopping decision, and duplicate crashes.
@@ -345,7 +357,7 @@ diagnostics rather than balance-authority evidence.
 
 ### Candidate comparison order
 
-Compare Research first, Power second, AGI third, then Agent assignments against
+Begin the next four-player session with the presence question above using the current combined rules. If separate causal comparisons are needed afterward, compare Research first, Power second, AGI third, then Agent assignments against
 archived source identities; finally test the combined candidate. Four players
 is the primary human test. Validate three- and five-player integrity separately.
 Record implementation correctness separately from teaching burden and enjoyment.
@@ -361,7 +373,7 @@ the combined candidate.
 
 ### Strategy pressure
 
-- Influence, Reorganization, and Open-Weight Join/Refuse rates;
+- Influence, Reorganization, and Public Capability Covenant use and refusal rates;
 - whether a non-declaring infrastructure strategy wins;
 - perceived agency, runaway leaders, and negotiation quality;
 - decisions that felt compulsory or irrelevant.
