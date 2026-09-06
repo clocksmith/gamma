@@ -1,0 +1,48 @@
+{
+  "schema": "enwiki9_implementation_evidence_v1",
+  "id": "midas_open_observed_gate_unit_20260906",
+  "owner": "root_explore",
+  "candidate_id": null,
+  "objective_credit_bytes": 0,
+  "corpus_executed": false,
+  "native_processes_executed": 0,
+  "validation": {
+    "tests_passed": 6,
+    "returncode": 0,
+    "elapsed_test_seconds": 0.03,
+    "command": [
+      "taskset",
+      "-c",
+      "2",
+      "timeout",
+      "60",
+      "prlimit",
+      "--as=536870912",
+      "--cpu=60",
+      "--fsize=33554432",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_midas_open_observed_gate.py",
+      "-v"
+    ]
+  },
+  "source_bindings": [
+    {
+      "path": "tools/midas_open_observed_gate_v1.py",
+      "bytes": 12509,
+      "sha256": "baa28b7be164d858ffd812b6b523fa8476fcd50a3ebf6fe0be04cb77eee93037"
+    },
+    {
+      "path": "tests/test_midas_open_observed_gate.py",
+      "bytes": 6946,
+      "sha256": "47e9ffd23aca14b9a10911a3cb2c85e4c9ab5e50cfb5e8ba45a45c3a1dc22864"
+    }
+  ],
+  "scope": "Mock process-output tests use the real probability/boundary checker and test sixteen-phase parity, probability divergence, missing-boundary rejection, elapsed-stop classification and explicit bounds. Existing native observer fixtures remain the independent implementation authority."
+}
