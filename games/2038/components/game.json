@@ -44,16 +44,8 @@
     "slotContention": "initiative-order-no-reservations"
   },
   "factionRules": {
-    "imperial": {
-      "peerValidation": "${facts.shared.factions.imperial.peerValidation}"
-    },
-    "vertical": {
-      "industrialVelocityMandate": "${facts.shared.factions.vertical.industrialVelocityMandate}"
-    },
     "foundry": {
-      "startingCompute": "${facts.shared.factions.foundry.startingCompute}",
-      "shovelsPerRound": "${facts.shared.factions.foundry.shovelsPerRound}",
-      "allocationWindow": "${facts.shared.factions.foundry.allocationWindow}"
+      "startingCompute": "${facts.shared.factions.foundry.startingCompute}"
     }
   },
   "audit": {
@@ -72,9 +64,7 @@
       "id": "demo",
       "cycles": 3,
       "auditBaseDraws": 2,
-      "programUses": 0,
       "name": "${content.referenceCards.byId.era_demo.name}",
-      "escalations": [],
       "newThisEra": [
         "ReAct: Reason → Act → Observe",
         "Core Actions",
@@ -82,63 +72,43 @@
         "the starting grid",
         "${terms.playerTracks.customers}",
         "${terms.playerTracks.scrutiny}"
-      ]
+      ],
+      "unlocks": []
     },
     {
       "number": 2,
       "id": "scale",
       "cycles": 3,
       "auditBaseDraws": 3,
-      "programUses": 1,
       "name": "${content.referenceCards.byId.era_scale.name}",
-      "escalations": [
-        "mega_cluster",
-        "reorganization"
-      ],
       "newThisEra": [
         "Generators",
-        "Mega-Clusters",
-        "${terms.systems.escalations}"
-      ]
+        "Mega-Clusters"
+      ],
+      "unlocks": []
     },
     {
       "number": 3,
       "id": "narrative",
       "cycles": 3,
       "auditBaseDraws": 4,
-      "programUses": 1,
       "name": "${content.referenceCards.byId.era_narrative.name}",
-      "escalations": [
-        "mega_cluster",
-        "reorganization",
-        "open_weights",
-        "narrative_capture"
-      ],
       "newThisEra": [
         "Joint Ventures"
-      ]
+      ],
+      "unlocks": []
     },
     {
       "number": 4,
       "id": "claim",
       "cycles": 3,
       "auditBaseDraws": 5,
-      "programUses": 2,
       "name": "${content.referenceCards.byId.era_claim.name}",
-      "escalations": [
-        "mega_cluster",
-        "reorganization",
-        "open_weights",
-        "narrative_capture",
-        "agent_swarm",
-        "fusion_demonstrator"
-      ],
       "newThisEra": [
-        "Agent Swarms",
-        "Public AGI recognition achievement",
         "Fusion",
-        "remaining faction abilities"
-      ]
+        "Public AGI recognition achievement"
+      ],
+      "unlocks": []
     }
   ],
   "actions": [
@@ -176,14 +146,13 @@
     {
       "id": "build",
       "name": "${terms.actions.build}",
-      "summary": "Construct a Facility or Generator.",
+      "summary": "Construct up to one Facility, then up to one unlocked project, paying each cost from the same Agent assignment. Projects are Generators, Mega-Clusters, and Fusion.",
       "turnContract": {
-        "cost": "Printed by mode",
+        "cost": "Pay each printed construction cost",
         "modes": [
-          "Facility",
-          "Generator"
+          "Up to one Facility, then up to one project"
         ],
-        "risk": "Industrial modes unlock in ${terms.eras.scale}"
+        "risk": "Mega-Cluster and Fusion add printed Scrutiny"
       },
       "initiativeName": "Make the System Physical",
       "slogan": "A planned future requires sites, power, permits, and maintenance.",
@@ -277,8 +246,6 @@
     "scrutinyCubes": 10,
     "factionBoardCaptiveSliders": 5,
     "coreActionCards": 6,
-    "escalationCards": 0,
-    "programMarkers": 2,
     "startingGridIdentifiers": 1,
     "facilityConstructionOrder": [
       1,
@@ -299,9 +266,8 @@
     "playerAidFoldouts": 6,
     "governanceLedgers": 1,
     "sharedDryEraseMarkers": 1,
-    "temporaryComputeTokens": 2,
     "mandateMarkers": 6,
-    "sharedProgramCards": 6
+    "projectReferences": 2
   },
   "board": {
     "selectedTileCount": 19,
@@ -607,12 +573,11 @@
       "runwayCost": "${facts.shared.advancedGeneration.runwayCost}",
       "mandate": "${facts.shared.advancedGeneration.mandate}",
       "scrutinyOnBuild": "${facts.shared.advancedGeneration.scrutiny}",
-      "isProgram": true,
       "location": "grid_reactor",
-      "physicalSurface": "fusion_demonstrator_program",
+      "physicalSurface": "fusion_demonstrator_project",
       "name": "${terms.technology.advancedGeneration}",
       "tagline": "Continuity capacity, subject to an inherited public record.",
-      "rulesText": "Era IV Program. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
+      "rulesText": "Era IV Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
       "publicClaim": "Electricity supply connecting nearby Facilities."
     }
   ],
@@ -694,5 +659,19 @@
     "timing": "after-era-iv-production-before-audit",
     "displayName": "Declare recognized AGI",
     "flavorText": "The world accepts a qualifying institutional claim. Recognition does not establish a metaphysical fact about intelligence."
+  },
+  "construction": {
+    "maximumFacilities": 1,
+    "maximumProjects": 1,
+    "order": [
+      "facility",
+      "project"
+    ],
+    "assignment": "same-district",
+    "projects": [
+      "generator",
+      "mega_cluster",
+      "fusion_demonstrator"
+    ]
   }
 }

@@ -76,8 +76,7 @@ test("only banked ordinary Training domains drive domain-counting effects", asyn
     player.capability = 0;
     match.regime.cycle = { id: "recursive_self_improvement" };
     const decision = match.legalResolutions(0, "research")[0];
-    decision.parameters.scalingLawBreakthrough = true;
-    decision.parameters.trainingResult = {
+        decision.parameters.trainingResult = {
       outcome: "banked",
       capability,
       ordinaryDomainCount,
@@ -99,7 +98,7 @@ test("only banked ordinary Training domains drive domain-counting effects", asyn
   assert.equal(benchmarkOnly.roundMetrics.bestTrainingDomains, 0);
 
   const twoDomains = await run({ capability: 4, ordinaryDomainCount: 2 });
-  assert.equal(twoDomains.capability, 6);
+  assert.equal(twoDomains.capability, 4);
   assert.equal(twoDomains.roundMetrics.bestTrainingDomains, 2);
 });
 
@@ -165,7 +164,7 @@ test("effective costs are applied before legality for Cloud and Foundry", async 
   player.runway = 1;
   const foundryBuild = match.legalResolutions(0, "build").filter(
     (decision) =>
-      decision.parameters.buildMode === "facility" &&
+      decision.parameters.facility && !decision.parameters.project &&
       decision.parameters.destinationCategory === "chip"
   );
   assert.ok(foundryBuild.length > 0);
@@ -230,140 +229,9 @@ test("Production Compute includes Joint Ventures but excludes immediate Facility
   assert.equal(leftPlayer.roundMetrics.computeProduced, immediateBefore);
 });
 
-test("Emergency Power Headline rewards a serving emergency Generator without an allocation decision", async () => {
- const match = await makeMatch(); match.round = 3;
- match.regime.round = { emergencyPowerAuthority: true };
- const [emergency, clean, idle] = match.players;
- const tile = match.board.find(tile => tile.id === "grid_reactor");
- for (const player of match.players) {
-  player.compute = 0; player.scrutiny = 0;
-  player.generators = [{id: `g${player.seat}`, tileId: tile.instanceId, sourceId: player === clean ? "clean_infrastructure" : "emergency_infrastructure"}];
-  player.facilities = player === idle ? [] : [{id: `f${player.seat}`, tileId: tile.instanceId, category: "energy"}];
- }
- match.choose = async (_p,_s,stage,choices) => { assert.doesNotMatch(stage,/power/); return choices[0]; };
- await match.produceAll([]);
- assert.equal(emergency.compute - clean.compute, 2);
- assert.equal(emergency.scrutiny, 2);
- assert.equal(clean.scrutiny, 0);
- assert.equal(idle.compute, 0); assert.equal(idle.scrutiny, 0);
-});
 
-test("Export Controls blocks Allocation Window and AI law thresholds scale by rivals", async () => {
-  const blocked = await makeMatch({
-    factionId: "foundry",
-    seed: "allocation-export-controls"
-  });
-  blocked.round = 2;
-  blocked.regime.cycle = { computeTradeBlocked: true };
-  let timingChoices;
-  blocked.choose = async (_policies, _seat, stage, decisions) => {
-    if (stage === "allocation_window_timing") timingChoices = decisions;
-    return decisions[0];
-  };
-  await blocked.preSelectionFactionPowers([]);
-  assert.deepEqual(timingChoices.map((decision) => decision.decisionId), ["allocation_wait"]);
-  assert.equal(Boolean(blocked.players[0].factionAbilityUsed.allocationWindow), false);
 
-  for (const [playerCount, required] of [[3, 1], [6, 3]]) {
-    const match = await makeMatch({
-      playerCount,
-      seed: `law-threshold-${playerCount}`
-    });
-    await match.beginRound([]);
-    match.regime.cycle = { lawController: 0, incentivizedAction: "research" };
-    const controller = match.players[0];
-    const before = controller.trust;
-    const selections = Array.from({ length: playerCount }, () => "fund");
-    for (let index = 1; index <= required; index += 1) selections[index] = "research";
-    await match.postCycle([], selections);
-    assert.equal(controller.trust, Math.min(6, before + 1));
-  }
-});
 
-test("Allocation Window creates real unsold Compute and expires it at cycle end", async () => {
-  const match = await makeMatch({
-    factionId: "foundry",
-    seed: "allocation-unsold-temporary-compute"
-  });
-  match.round = 2;
-  const foundry = match.players[0];
-  foundry.compute = 0;
-  for (const rival of match.players.slice(1)) rival.runway = 2;
-  const computeBefore = foundry.compute;
-  const offerPackets = [];
-  match.choose = async (_policies, seat, stage, decisions) => {
-    if (stage === "allocation_window_timing") {
-      return decisions.find((decision) => decision.decisionId === "allocation_open");
-    }
-    if (stage.startsWith("allocation_window_")) {
-      offerPackets.push(decisions);
-      return decisions[0];
-    }
-    if (stage.startsWith("allocation_response_")) {
-      return decisions.find((decision) => decision.decisionId.startsWith("allocation_reject_"));
-    }
-    return decisions[0];
-  };
-  await match.preSelectionFactionPowers([]);
-  assert.equal(offerPackets.length, 2);
-  assert.ok(offerPackets.every((decisions) =>
-    decisions.length > 0 && decisions.every((decision) =>
-      decision.decisionId.startsWith("allocation_offer_")
-    )
-  ));
-  assert.equal(foundry.compute, computeBefore + 2);
-  assert.equal(foundry.temporaryCompute, 2);
-  await match.postCycle([], match.players.map(() => "fund"));
-  assert.equal(foundry.compute, computeBefore);
-  assert.equal(foundry.temporaryCompute, 0);
-});
-
-test("Mega-Clusters require two adjacent Facilities owned by the acting player", async () => {
-  const match = await makeMatch({ seed: "solo-mega-host-and-scrutiny" });
-  match.round = 2;
-  await match.beginRound([]);
-  const [lead, partner] = match.players;
-  const leftTile = match.board.find((tile) => tile.category === "research");
-  const rightTile = match.board.find((tile) =>
-    tile.instanceId !== leftTile.instanceId &&
-    match.areAdjacent(leftTile.instanceId, tile.instanceId)
-  );
-  lead.facilities = [
-    { id: "lead-host", tileId: leftTile.instanceId, category: leftTile.category },
-    { id: "lead-second-host", tileId: rightTile.instanceId, category: rightTile.category }
-  ];
-  partner.facilities = [{ id: "partner-host", tileId: rightTile.instanceId, category: rightTile.category }];
-  lead.generators = [{
-    id: "lead-generator",
-    tileId: leftTile.instanceId,
-    sourceId: "clean_infrastructure",
-    capacity: 3
-  }];
-  partner.generators = [{
-    id: "partner-generator",
-    tileId: rightTile.instanceId,
-    sourceId: "clean_infrastructure",
-    capacity: 3
-  }];
-  lead.pieces[0].tileId = leftTile.instanceId;
-  lead.runway = 4;
-  lead.compute = 3;
-  partner.runway = 3;
-  partner.compute = 2;
-  lead.programUses = 1;
-  const legal = match.legalEscalationResolutions(lead.seat, "mega_cluster");
-  assert.ok(legal.length > 0);
-  assert.ok(legal.every((decision) => decision.parameters.partnerSeat === undefined));
-  assert.ok(legal.some((decision) =>
-    new Set([decision.parameters.leftId, decision.parameters.rightId]).size === 2 &&
-    [decision.parameters.leftId, decision.parameters.rightId].includes("lead-host") &&
-    [decision.parameters.leftId, decision.parameters.rightId].includes("lead-second-host")
-  ));
-  const before = [lead.scrutiny, partner.scrutiny];
-  await match.applyEscalation([], lead.seat, "mega_cluster", legal[0]);
-  assert.equal(lead.scrutiny, before[0] + 2);
-  assert.equal(partner.scrutiny, before[1]);
-});
 
 test("Mega-Cluster operates automatically with connected adjacent hosts", async () => {
   const match = await makeMatch({ seed: "mega-power-allocation-choice" });
@@ -403,109 +271,8 @@ test("Mega-Cluster operates automatically with connected adjacent hosts", async 
   assert.equal(cluster.powered, true);
 });
 
-test("Agent Swarm filters known-unresolvable Core Actions without forced no-ops", async () => {
-  const match = await makeMatch({ seed: "agent-swarm-no-dead-actions" });
-  match.round = 4;
-  await match.beginRound([]);
-  const player = match.players[0];
-  player.actionsUsed = ["fund", "organize", "deploy", "influence"];
-  player.compute = 0;
-  player.runway = 0;
-  player.escalation = 1;
-  const before = player.metrics.forcedNoOps;
-  let selectionPackets = 0;
-  match.choose = async (_policies, _seat, stage, decisions) => {
-    if (stage.startsWith("agent_swarm_")) selectionPackets += 1;
-    return decisions[0];
-  };
-  await match.applyEscalation([], player.seat, "agent_swarm", {
-    decisionId: "agent-swarm-fixture",
-    label: "Agent Swarm",
-    actionId: "agent_swarm",
-    parameters: {
-      pieceId: player.pieces[0].id,
-      destinationId: player.pieces[0].tileId
-    }
-  });
-  assert.equal(selectionPackets, 0);
-  assert.equal(player.metrics.forcedNoOps, before);
-});
 
-test("Employee-Free returns named Teams after ordinary Organize and Shovels does not aggregate 1+1", async () => {
-  const match = await makeMatch({
-    factionId: "foundry",
-    seed: "employee-free-and-shovels"
-  });
-  await match.beginRound([]);
-  const foundry = match.players[0];
-  const organizer = match.players[1];
-  organizer.pieces.push({
-    id: `s${organizer.seat}-agent-3`,
-    kind: "agent",
-    tileId: organizer.pieces[0].tileId
-  });
-  organizer.agentsInSupply = 1;
-  match.regime.cycle = { id: "employee_free_unicorn" };
-  const targetTeam = organizer.pieces.find((piece) => piece.id.endsWith("agent-3"));
-  match.choose = async (_policies, _seat, stage, decisions) => {
-    assert.equal(stage, "employee_free_return");
-    return decisions.find((decision) =>
-      decision.parameters.agentIds.length === 1 &&
-      decision.parameters.agentIds[0] === targetTeam.id
-    );
-  };
-  const runwayBefore = organizer.runway;
-  await match.resolveEmployeeFreeFollowUp([], organizer.seat);
-  assert.equal(organizer.pieces.some((piece) => piece.id === targetTeam.id), false);
-  assert.equal(organizer.runway, Math.min(12, runwayBefore + 2));
 
-  const shovelsBefore = foundry.metrics.shovelsIncome;
-  match.rewardFoundryComputeSpend(organizer.seat, 1);
-  match.rewardFoundryComputeSpend(organizer.seat, 1);
-  assert.equal(foundry.metrics.shovelsIncome, shovelsBefore);
-  match.rewardFoundryComputeSpend(organizer.seat, 2);
-  assert.equal(foundry.metrics.shovelsIncome, shovelsBefore + 1);
-});
-
-test("Reorganization exposes every Team destination and the exact optional return", async () => {
-  const match = await makeMatch({ seed: "reorganization-explicit-choices" });
-  match.round = 2;
-  await match.beginRound([]);
-  const player = match.players[0];
-  player.escalation = 1;
-  const secondTeam = {
-    id: `s${player.seat}-agent-3`,
-    kind: "agent",
-    tileId: player.pieces[0].tileId
-  };
-  player.pieces.push(secondTeam);
-  player.agentsInSupply = 1;
-  const captured = [];
-  match.choose = async (_policies, _seat, stage, decisions) => {
-    captured.push({ stage, decisions });
-    if (stage === "reorganization_return") {
-      return decisions.find((decision) => decision.parameters.agentId === secondTeam.id);
-    }
-    return decisions.at(-1);
-  };
-  const runwayBefore = player.runway;
-  const scrutinyBefore = player.scrutiny;
-  await match.applyEscalation([], player.seat, "reorganization", {
-    decisionId: "reorganization-fixture",
-    label: "Reorganization",
-    actionId: "reorganization",
-    parameters: {
-      pieceId: player.pieces[0].id,
-      destinationId: player.pieces[0].tileId
-    }
-  });
-  const movePackets = captured.filter((entry) => entry.stage.startsWith("reorganization_move_"));
-  assert.equal(movePackets.length, 3);
-  assert.ok(movePackets.every((entry) => entry.decisions.length === 19));
-  assert.equal(player.pieces.some((piece) => piece.id === secondTeam.id), false);
-  assert.equal(player.runway, Math.min(12, runwayBefore + 3));
-  assert.equal(player.scrutiny, scrutinyBefore + 1);
-});
 
 test("Scrutiny overflow and Audit apply the same automatic Runway/Trust penalty", async () => {
   const match = await makeMatch({ seed: "scrutiny-and-audit-choices" });

@@ -51,11 +51,12 @@ test("local connections retain exact construction prices and remove allocation c
  for (const key of ["ceos", "teams", "agiDossierCards"]) assert.ok(!Object.hasOwn(config.playerSupply, key));
  assert.ok(!Object.hasOwn(config.sharedSupply, "powerAllocationMarkers"));
  assert.match(rules, /Reason → Act → Observe/);
- assert.match(rules, /permanent six-box/);
+ assert.doesNotMatch(rules, /Program markers|permanent six-box/);
 });
 
 test("single-generator contract fails explicitly when incomplete", async () => {
   const config = await readJson("dist/runtime/game-config.json");
+  assert.throws(() => effectiveRulesVariant(config, { singleGeneratorRule: null }), /rule is required/);
   const invalid = structuredClone(config.singleGeneratorRule);
   delete invalid.locations.renewable_basin;
 
@@ -74,7 +75,7 @@ test("canonical Generator derives source and cost from Energy location", async (
   match.players[0].runway = 10;
 
   const decisions = match.legalResolutions(0, "build").filter(
-    (decision) => decision.parameters?.buildMode === "generator"
+    (decision) => !decision.parameters?.facility && decision.parameters?.project?.id === "generator"
   );
   const byDestination = new Map();
   for (const decision of decisions) {
@@ -83,13 +84,10 @@ test("canonical Generator derives source and cost from Energy location", async (
     );
     const facts = byDestination.get(destination.id) || new Set();
     facts.add(JSON.stringify({
-      sourceId: decision.parameters.sourceId,
+      sourceId: decision.parameters.project.sourceId,
       cost: decision.parameters.actualRunwayCost
     }));
     byDestination.set(destination.id, facts);
-    assert.equal(decision.parameters.generatorRuleId, "single-generator-default");
-    assert.ok(!decision.decisionId.includes("clean_infrastructure"));
-    assert.ok(!decision.decisionId.includes("emergency_infrastructure"));
   }
 
   assert.deepEqual([...byDestination.get("grid_reactor")], [
@@ -114,7 +112,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
   const clean = await createMatch("clean");
   const cleanPlayer = clean.players[0];
   const cleanDecision = clean.legalResolutions(0, "build").find(
-    (decision) => decision.parameters?.sourceId === "clean_infrastructure"
+    (decision) => !decision.parameters?.facility && decision.parameters?.project?.sourceId === "clean_infrastructure"
   );
   const cleanTrust = cleanPlayer.trust;
   clean.applyResolution(0, cleanDecision);
@@ -123,7 +121,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
   assert.ok(!Object.hasOwn(cleanPlayer.generators[0], "capacity"));
   assert.equal(
     clean.legalResolutions(0, "build").some(
-      (decision) => decision.parameters?.buildMode === "generator"
+      (decision) => !decision.parameters?.facility && decision.parameters?.project?.id === "generator"
     ),
     false
   );
@@ -131,7 +129,7 @@ test("canonical Generator enforces one ordinary piece and source effects", async
   const emergency = await createMatch("emergency");
   const emergencyPlayer = emergency.players[0];
   const emergencyDecision = emergency.legalResolutions(0, "build").find(
-    (decision) => decision.parameters?.sourceId === "emergency_infrastructure"
+    (decision) => !decision.parameters?.facility && decision.parameters?.project?.sourceId === "emergency_infrastructure"
   );
   emergency.applyResolution(0, emergencyDecision);
   assert.equal(emergencyPlayer.runway, 9);
@@ -175,7 +173,7 @@ test("local connections cover every nearby Facility without capacity or propagat
  assert.deepEqual([...connectedFacilityIds(board, player)], ["starter"]);
 });
 
-test("canonical simplification removes stored-token state and keeps two programs per faction", async () => {
+test("canonical simplification removes stored-token state and keeps one permanent ability per faction", async () => {
   const [config, factions, componentReference] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/factions.json"),
@@ -184,7 +182,7 @@ test("canonical simplification removes stored-token state and keeps two programs
 
   assert.equal(config.playerSupply.generators, 1);
   assert.equal(config.playerSupply.influenceCubes, 0);
-  assert.ok(factions.factions.every((faction) => faction.abilities.length === 2));
+  assert.ok(factions.factions.every((faction) => faction.abilities.length === 1));
   assert.ok(factions.factions.every((faction) =>
     faction.abilities.every((ability) => typeof ability.id === "string")
   ));

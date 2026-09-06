@@ -369,8 +369,8 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
 
 test("package interaction matrices require and record multiple selected levers", async () => {
   const packageOverlay = {
-    verticalIndustrialVelocityMandate: 1,
-    foundryStartingCompute: 4
+    coalitionStartingRunway: 6,
+    foundryStartingCompute: 3
   };
   await assert.rejects(
     runUnifiedMatrix({

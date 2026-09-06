@@ -16,7 +16,7 @@ test("current release declaration separates executable game from physical rules 
   assert.match(current.gameVersion, /^\d+\.\d+\.\d+$/);
   assert.equal(packageDocument.name, "mandate-2038");
   assert.equal(packageDocument.version, current.gameVersion);
-  assert.match(current.rulesCandidate.version, /^0\.10\.0-rc\.\d+(-test)?$/);
+  assert.match(current.rulesCandidate.version, /^\d+\.\d+\.\d+-rc\.\d+(-test)?$/);
   assert.equal(current.rulesCandidate.implementationStatus, "synchronized");
   assert.equal(current.rulesCandidate.implementedByGameVersion, current.gameVersion);
   assert.equal(current.contracts.mechanicsProjectionVersion, 2);
@@ -51,16 +51,16 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(spec, /visibly numbered 1–4/);
   assert.match(spec, /Current connections/);
   assert.match(spec, /use no Power cubes/);
-  assert.match(spec, /Two distinct shared tokens/);
+  assert.doesNotMatch(spec, /Temporary Compute/);
 
   assert.match(inventory, /## One prepacked faction tray per player/);
 
   assert.match(inventory, /five captive sliders/);
-  assert.match(inventory, /6 shared Program cards/);
-  assert.match(inventory, /twelve Program markers/);
+  assert.match(inventory, /2 project references/);
+  assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /6 foldout player aids/);
   assert.match(inventory, /4 Agents/);
-  assert.match(inventory, /2 distinct Temporary Compute tokens/);
+  assert.doesNotMatch(inventory, /Temporary Compute/);
   assert.doesNotMatch(inventory, /final production copy count remains open/);
   assert.doesNotMatch(inventory, /Unresolved packing quantities/);
   assert.match(governanceLedger, /Current Mandate/);
@@ -69,7 +69,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(governanceLedger, /Unresolved Systemic Risk/);
   assert.match(governanceLedger, /Final institutional winner/);
   assert.match(governanceLedger, /World Ending/);
-  assert.match(governanceLedger, /Permanent Program use/);
+  assert.doesNotMatch(governanceLedger, /Permanent Program use/);
 
   for (const staleClaim of [
     "Approximately 190 baseline cards",
@@ -80,7 +80,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /110 standard cards plus 6 foldouts/);
+  assert.match(manufacturing, /106 standard cards plus 6 foldouts/);
 
   assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
@@ -143,7 +143,7 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "### D. Optional AGI recognition",
     "Every qualifying institution may declare",
     "Every Faction has one persistent institutional identity and one signature ability",
-    "each applicable Faction modifier",
+    "your faction's single permanent ability",
     "There is no second winner procedure"
   ]) {
     assert.ok(normalizedRules.includes(clause), `canonical rules include ${clause}`);
@@ -182,8 +182,8 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.doesNotMatch(bible, /## Physical quantity interpretation/);
   assert.doesNotMatch(bible, /## Concept inventory by Era/);
   assert.match(inventory, /1 three-panel foldout player aid/);
-  assert.match(inventory, /6 shared Program cards/);
-  assert.match(inventory, /2 Program markers/);
+  assert.match(inventory, /2 project references/);
+  assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
   assert.match(inventory, /10 Scrutiny cubes/);
   assert.match(inventory, /1 Mandate marker/);
@@ -249,7 +249,7 @@ test("selected deck contracts have exact physical counts", async () => {
   const [config, tactics, escalation, headlines, mandates] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/tactics.json"),
-    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/headlines.json"),
     readJson("dist/runtime/mandates.json")
   ]);
@@ -257,9 +257,9 @@ test("selected deck contracts have exact physical counts", async () => {
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
   assert.equal(trainingCount, 40);
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
-  assert.equal(escalation.escalations.length, 6);
-  assert.equal(escalation.cardsPerPlayer, 0);
-  assert.equal(escalation.sharedCardCount, 6);
+  assert.equal(escalation.projects.length, 2);
+  assert.equal(escalation.cardsPerPlayer, undefined);
+  assert.equal(escalation.sharedCardCount, 2);
   const defaultHeadlineCount = headlines.headlines.filter(
     (headline) => !headline.requiredRuleModules?.length
   ).length;
@@ -273,18 +273,18 @@ test("selected deck contracts have exact physical counts", async () => {
   );
   const defaultStandardCards =
     config.playerSupply.coreActionCards * config.players.max +
-    config.sharedSupply.sharedProgramCards +
+    config.sharedSupply.projectReferences +
     defaultHeadlineCount +
     mandates.mandates.length +
     trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  assert.equal(defaultStandardCards, 110);
-  assert.equal(defaultPrintedPieces, 116);
+  assert.equal(defaultStandardCards, 106);
+  assert.equal(defaultPrintedPieces, 112);
   assert.deepEqual(
-    config.powerSources.filter((source) => !source.isProgram).map((source) => source.id),
+    config.powerSources.filter((source) => source.id !== "fusion_demonstrator").map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
   );
-  for (const source of config.powerSources.filter((candidate) => !candidate.isProgram)) {
+  for (const source of config.powerSources.filter((candidate) => candidate.id !== "fusion_demonstrator")) {
     assert.equal(
       source.runwayCost,
       config.singleGeneratorRule.locations[source.location].constructionCost,
@@ -296,7 +296,7 @@ test("selected deck contracts have exact physical counts", async () => {
     {
       clean_infrastructure: "renewable_basin_tile",
       emergency_infrastructure: "grid_reactor_tile",
-      fusion_demonstrator: "fusion_demonstrator_program"
+      fusion_demonstrator: "fusion_demonstrator_project"
     }
   );
   assert.deepEqual(config.playerSupply.facilityConstructionOrder, [1, 2, 3, 4]);
@@ -316,7 +316,7 @@ test("selected deck contracts have exact physical counts", async () => {
       playerAidFoldouts: 6,
       governanceLedgers: 1,
       sharedDryEraseMarkers: 1,
-      temporaryComputeTokens: 2,
+      temporaryComputeTokens: undefined,
       mandateMarkers: 6
     }
   );
@@ -329,8 +329,8 @@ test("core action and shared Program contracts stay singular", async () => {
     ["fund", "research", "build", "organize", "deploy", "influence"]
   );
   assert.deepEqual(config.rounds.map((round) => round.cycles), [3, 3, 3, 3]);
-  assert.deepEqual(config.rounds.map((round) => round.programUses), [0, 1, 1, 2]);
-  assert.ok(config.rounds[3].escalations.includes("fusion_demonstrator"));
+  assert.ok(config.rounds.every(round => !Object.hasOwn(round, "programUses")));
+  assert.ok(config.construction.projects.includes("fusion_demonstrator"));
 });
 
 test("factions and player supplies match the selected limits", async () => {
@@ -359,7 +359,7 @@ test("factions and player supplies match the selected limits", async () => {
       influenceCubes: 0,
       scrutinyCubes: 10,
       factionBoardCaptiveSliders: 5,
-      programMarkers: 2,
+      programMarkers: undefined,
       startingGridIdentifiers: 1
     }
   );
@@ -381,7 +381,7 @@ test("factions and player supplies match the selected limits", async () => {
 
   const allowedTiming = new Set(factions.abilityTimingContract.allowedTiming);
   for (const faction of factions.factions) {
-    assert.equal(faction.abilities.length, 2);
+    assert.equal(faction.abilities.length, 1);
     for (const ability of faction.abilities) {
       assert.ok(ability.id, `${faction.id} ability has a stable id`);
       assert.ok(allowedTiming.has(ability.timing), `${faction.id}/${ability.id} has a timing tag`);
@@ -481,7 +481,7 @@ test("headline and board boundaries remain explicit", async () => {
   assert.ok(!('playRuleModules' in config));
   assert.ok(!('realignment' in config.board));
   assert.equal(config.playerSupply.factionBoardCaptiveSliders, 5);
-  assert.equal(config.playerSupply.programMarkers, 2);
+  assert.equal(config.playerSupply.programMarkers, undefined);
   assert.deepEqual(
     Object.fromEntries(config.board.tiles.map((tile) => [tile.id, tile.name])),
     {
@@ -524,7 +524,7 @@ test("headline and board boundaries remain explicit", async () => {
 
   const blogPost = headlines.headlines.find((headline) => headline.id === "agi_blog_post");
   assert.match(blogPost.text, /gains 1 Trust/);
-  assert.match(blogPost.text, /fixed.*AGI.*unchanged/);
+  assert.doesNotMatch(blogPost.text, /claim strength/);
 });
 
 test("Headline deck contains the sixteen selected procedures", async () => {
@@ -575,20 +575,8 @@ test("Headline deck contains the sixteen selected procedures", async () => {
   assert.equal(anchors.filter((id) => ids.has(id)).length, 5);
   assert.equal(replacements.filter((id) => ids.has(id)).length, 11);
 
-  for (const field of [
-    "revealTiming",
-    "defaultDuration",
-    "directive",
-    "secretChoice",
-    "modifierLimit",
-    "timings"
-  ]) {
-    assert.ok(resolutionContract[field], `Headline resolution defines ${field}`);
-  }
-
-  assert.match(resolutionContract.directive, /no separate choice procedure/);
-
-  assert.match(resolutionContract.modifierLimit, /never grants an additional Action/);
+  assert.deepEqual(resolutionContract.timings, ["before_selection"]);
+  assert.ok(headlines.every(card => card.duration === "immediate"));
 
   const byId = Object.fromEntries(headlines.map((headline) => [headline.id, headline]));
   const allowedResolutionTypes = new Set([
@@ -604,13 +592,13 @@ test("Headline deck contains the sixteen selected procedures", async () => {
     headlines.every((headline) => headline.resolutionType !== "REGIME"),
     "standard Headline instructions use the procedural DIRECTIVE badge"
   );
-  assert.match(byId.emergency_power_authority.text, /2 Compute and adds 1 additional Scrutiny/);
-  assert.match(byId.benchmark_is_economy.text, /immediately scores 1 Mandate/);
-  assert.match(byId.autonomous_corporation.text, /No additional Action resolves/);
+  assert.match(byId.emergency_power_authority.text, /2 Compute and add 1 Scrutiny/);
+  assert.match(byId.benchmark_is_economy.text, /1 Capability.*1 Systemic Risk/);
+  assert.match(byId.autonomous_corporation.text, /2 Runway.*1 Scrutiny/);
 
   assert.ok(
     headlines.every((headline) => !headline.regimeTags.includes("bonus_action")),
-    "Agent Swarm remains the only compound Action surface"
+    "No Headline grants a Core Action"
   );
   assert.equal(
     byId.agent_swarm_escapes_scope.name,
@@ -652,7 +640,7 @@ test("every player-facing content surface has complete copy", async () => {
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/headlines.json"),
     readJson("dist/runtime/tactics.json"),
-    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/reference-cards.json"),
     readJson("dist/runtime/mandates.json"),
     readJson("dist/runtime/world-copy.json"),
@@ -719,7 +707,7 @@ test("every player-facing content surface has complete copy", async () => {
       assert.ok(tactic[field], `${tactic.id} has ${field}`);
     }
   }
-  for (const action of escalation.escalations) {
+  for (const action of escalation.projects) {
     for (const field of ["displayName", "flavorText"]) {
       assert.ok(action[field], `${action.id} has ${field}`);
     }
@@ -789,7 +777,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   const [
     { headlines },
     { mandates },
-    { escalations },
+    { projects, institutionalHistory },
     { eraCards },
     { factions },
     world,
@@ -798,7 +786,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   ] = await Promise.all([
     readJson("dist/runtime/headlines.json"),
     readJson("dist/runtime/mandates.json"),
-    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/reference-cards.json"),
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/world-copy.json"),
@@ -832,10 +820,10 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(progressOpenWeights.name, /Open Weights/);
 
   const authorityEra = eraCards.find((era) => era.id === "era_narrative");
-  const authorityProgram = escalations.find(
+  const authorityProgram = institutionalHistory.find(
     (escalation) => escalation.id === "open_weights"
   );
-  assert.match(authorityEra.unlockText, /Public Capability Covenant/);
+  assert.match(authorityEra.unlockText, /Joint Ventures/);
   assert.doesNotMatch(authorityEra.unlockText, /Open Weights/i);
   assert.equal(authorityProgram.name, "Public Capability Covenant");
   assert.equal(authorityProgram.displayName, "Supported Access Standard");
@@ -859,10 +847,10 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   const hazardShift = headlines.find((headline) => headline.id === "humanoid_factory_gate");
   const mindTrust = headlines.find((headline) => headline.id === "autonomous_corporation");
   const coalition = factions.find((faction) => faction.id === "coalition_lab");
-  const capacityCompact = coalition.abilities.find(
+  const capacityCompact = coalition.lore.find(
     (ability) => ability.name === "Strategic Partnership"
   );
-  const regionalCapacity = escalations.find(
+  const regionalCapacity = projects.find(
     (escalation) => escalation.id === "mega_cluster"
   );
 
@@ -875,7 +863,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
 
   assert.equal(world.worldPrimer, undefined);
   assert.equal(world.endings.length, 4);
-  assert.equal(world.tokenCopy.length, 9);
+  assert.equal(world.tokenCopy.length, 8);
   assert.equal(eraCards.length, 4);
   assert.equal(factions.length, 6);
   const narrative = companion.replace(/\s+/g, " ");
@@ -904,7 +892,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     /instrument, infestation, language, or claimant/i
   ]) assert.match(narrative, concept);
 
-  const allSelectedLore = JSON.stringify({ headlines, mandates, escalations, eraCards, factions, world })
+  const allSelectedLore = JSON.stringify({ headlines, mandates, projects, eraCards, factions, world })
     .concat("\n", companion);
   assert.doesNotMatch(allSelectedLore, /Tracking Pixels|Ask before displaying external images|Trust Center/);
 });
@@ -933,7 +921,7 @@ test("new thematic decks and reference surfaces have complete draft inventories"
     world.endings.map((ending) => ending.id),
     ["singularity", "closed_loop", "plural_future", "assured_continuity"]
   );
-  assert.equal(world.tokenCopy.length, 9);
+  assert.equal(world.tokenCopy.length, 8);
 
   for (const card of [...tactics.tactics, ...reserve.specialists, ...objectives.objectives]) {
     assert.ok([1, 2, 3, 4].includes(card.era), `${card.id} has an Era classification`);

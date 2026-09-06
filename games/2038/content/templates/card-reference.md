@@ -114,11 +114,7 @@ ${excerpts.rules.player-aids}
 
 _${content.factions.byId.coalition_lab.abilities.0.flavorText}_
 
-**${content.factions.byId.coalition_lab.abilities.1.name} — ${content.factions.byId.coalition_lab.abilities.1.displayName}:** ${content.factions.byId.coalition_lab.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.coalition_lab.abilities.1.round}; ${content.factions.byId.coalition_lab.abilities.1.timingLabel}.
-
-_${content.factions.byId.coalition_lab.abilities.1.flavorText}_
+_${content.factions.byId.coalition_lab.lore.0.flavorText}_
 
 ### ${content.factions.byId.platform_empire.name}
 
@@ -134,11 +130,7 @@ _${content.factions.byId.coalition_lab.abilities.1.flavorText}_
 
 _${content.factions.byId.platform_empire.abilities.0.flavorText}_
 
-**${content.factions.byId.platform_empire.abilities.1.name} — ${content.factions.byId.platform_empire.abilities.1.displayName}:** ${content.factions.byId.platform_empire.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.platform_empire.abilities.1.round}; ${content.factions.byId.platform_empire.abilities.1.timingLabel}.
-
-_${content.factions.byId.platform_empire.abilities.1.flavorText}_
+_${content.factions.byId.platform_empire.lore.0.flavorText}_
 
 ### ${content.factions.byId.imperial_research_lab.name}
 
@@ -146,19 +138,13 @@ _${content.factions.byId.platform_empire.abilities.1.flavorText}_
 
 **Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
 
-**${content.factions.byId.imperial_research_lab.scoringRule.name}:** ${content.factions.byId.imperial_research_lab.scoringRule.text}
-
 **${content.factions.byId.imperial_research_lab.abilities.0.name} — ${content.factions.byId.imperial_research_lab.abilities.0.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.0.text}
 
 **Unlock Era:** ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timingLabel}.
 
 _${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
 
-**${content.factions.byId.imperial_research_lab.abilities.1.name} — ${content.factions.byId.imperial_research_lab.abilities.1.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.imperial_research_lab.abilities.1.round}; ${content.factions.byId.imperial_research_lab.abilities.1.timingLabel}.
-
-_${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
+_${content.factions.byId.imperial_research_lab.lore.0.flavorText}_
 
 ### ${content.factions.byId.vertical_empire.name}
 
@@ -172,11 +158,7 @@ _${content.factions.byId.imperial_research_lab.abilities.1.flavorText}_
 
 _${content.factions.byId.vertical_empire.abilities.0.flavorText}_
 
-**${content.factions.byId.vertical_empire.abilities.1.name} — ${content.factions.byId.vertical_empire.abilities.1.displayName}:** ${content.factions.byId.vertical_empire.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.vertical_empire.abilities.1.round}; ${content.factions.byId.vertical_empire.abilities.1.timingLabel}.
-
-_${content.factions.byId.vertical_empire.abilities.1.flavorText}_
+_${content.factions.byId.vertical_empire.lore.0.flavorText}_
 
 ### ${content.factions.byId.safety_laboratory.name}
 
@@ -190,11 +172,7 @@ _${content.factions.byId.vertical_empire.abilities.1.flavorText}_
 
 _${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
 
-**${content.factions.byId.safety_laboratory.abilities.1.name} — ${content.factions.byId.safety_laboratory.abilities.1.displayName}:** ${content.factions.byId.safety_laboratory.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.safety_laboratory.abilities.1.round}; ${content.factions.byId.safety_laboratory.abilities.1.timingLabel}.
-
-_${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
+_${content.factions.byId.safety_laboratory.lore.0.flavorText}_
 
 ### ${content.factions.byId.foundry.name}
 
@@ -208,11 +186,7 @@ _${content.factions.byId.safety_laboratory.abilities.1.flavorText}_
 
 _${content.factions.byId.foundry.abilities.0.flavorText}_
 
-**${content.factions.byId.foundry.abilities.1.name} — ${content.factions.byId.foundry.abilities.1.displayName}:** ${content.factions.byId.foundry.abilities.1.text}
-
-**Unlock Era:** ${content.factions.byId.foundry.abilities.1.round}; ${content.factions.byId.foundry.abilities.1.timingLabel}.
-
-_${content.factions.byId.foundry.abilities.1.flavorText}_
+_${content.factions.byId.foundry.lore.0.flavorText}_
 
 ## Core Action cards
 
@@ -254,58 +228,25 @@ ${content.gameConfig.actions.5.summary}
 
 _${content.gameConfig.actions.5.flavorText}_
 
-## Shared Program cards
+## Infrastructure project references
 
-${excerpts.rules.program-selection}
+${excerpts.rules.construction}
 
-### ${content.escalations.byId.mega_cluster.name} — ${content.escalations.byId.mega_cluster.displayName}
+### ${content.projects.byId.mega_cluster.name} — ${content.projects.byId.mega_cluster.displayName}
 
-**Unlock Era:** ${content.escalations.byId.mega_cluster.unlockedRound} · **Timing:** ${content.escalations.byId.mega_cluster.timing|label:terms.programTimings}
+**Unlock Era:** ${content.projects.byId.mega_cluster.unlockedRound}
 
-${content.escalations.byId.mega_cluster.text}
+${content.projects.byId.mega_cluster.text}
 
-_${content.escalations.byId.mega_cluster.flavorText}_
+_${content.projects.byId.mega_cluster.flavorText}_
 
-### ${content.escalations.byId.reorganization.name} — ${content.escalations.byId.reorganization.displayName}
+### ${content.projects.byId.fusion_demonstrator.name} — ${content.projects.byId.fusion_demonstrator.displayName}
 
-**Unlock Era:** ${content.escalations.byId.reorganization.unlockedRound} · **Timing:** ${content.escalations.byId.reorganization.timing|label:terms.programTimings}
+**Unlock Era:** ${content.projects.byId.fusion_demonstrator.unlockedRound}
 
-${content.escalations.byId.reorganization.text}
+${content.projects.byId.fusion_demonstrator.text}
 
-_${content.escalations.byId.reorganization.flavorText}_
-
-### ${content.escalations.byId.open_weights.name} — ${content.escalations.byId.open_weights.displayName}
-
-**Unlock Era:** ${content.escalations.byId.open_weights.unlockedRound} · **Timing:** ${content.escalations.byId.open_weights.timing|label:terms.programTimings}
-
-${content.escalations.byId.open_weights.text}
-
-_${content.escalations.byId.open_weights.flavorText}_
-
-### ${content.escalations.byId.narrative_capture.name} — ${content.escalations.byId.narrative_capture.displayName}
-
-**Unlock Era:** ${content.escalations.byId.narrative_capture.unlockedRound} · **Timing:** ${content.escalations.byId.narrative_capture.timing|label:terms.programTimings}
-
-${content.escalations.byId.narrative_capture.text}
-
-_${content.escalations.byId.narrative_capture.flavorText}_
-
-### ${content.escalations.byId.agent_swarm.name} — ${content.escalations.byId.agent_swarm.displayName}
-
-**Unlock Era:** ${content.escalations.byId.agent_swarm.unlockedRound} · **Timing:** ${content.escalations.byId.agent_swarm.timing|label:terms.programTimings}
-
-${content.escalations.byId.agent_swarm.text}
-
-_${content.escalations.byId.agent_swarm.flavorText}_
-
-### ${content.escalations.byId.fusion_demonstrator.name} — ${content.escalations.byId.fusion_demonstrator.displayName}
-
-**Unlock Era:** ${content.escalations.byId.fusion_demonstrator.unlockedRound} · **Timing:** ${content.escalations.byId.fusion_demonstrator.timing|label:terms.programTimings}
-
-${content.escalations.byId.fusion_demonstrator.text}
-
-_${content.escalations.byId.fusion_demonstrator.flavorText}_
-
+_${content.projects.byId.fusion_demonstrator.flavorText}_
 ## Headline cards
 
 ${excerpts.rules.headline-selection}
@@ -644,7 +585,7 @@ ${content.gameConfig.powerSources.1.publicClaim}
 
 ### ${content.gameConfig.powerSources.2.name}
 
-**Printed on Program card:** ${terms.technology.advancedGeneration}
+**Printed on project reference:** ${terms.technology.advancedGeneration}
 
 **${content.gameConfig.powerSources.2.tagline}**
 

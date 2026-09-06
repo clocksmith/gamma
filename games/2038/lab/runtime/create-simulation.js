@@ -32,7 +32,7 @@ import { archiveSimulationReport } from "../report-archive.js";
 const configUrl = new URL("../../dist/runtime/game-config.json", import.meta.url);
 const factionsUrl = new URL("../../dist/runtime/factions.json", import.meta.url);
 const headlinesUrl = new URL("../../dist/runtime/headlines.json", import.meta.url);
-const escalationsUrl = new URL("../../dist/runtime/escalations.json", import.meta.url);
+const escalationsUrl = new URL("../../dist/runtime/projects.json", import.meta.url);
 const tacticsUrl = new URL("../../dist/runtime/tactics.json", import.meta.url);
 const mandatesUrl = new URL("../../dist/runtime/mandates.json", import.meta.url);
 const objectivesUrl = new URL("../../dist/runtime/secret-objectives.json", import.meta.url);
@@ -232,7 +232,7 @@ export async function createSimulation(options = {}, onProgress) {
     config,
     factionDocument,
     headlineDocument,
-    escalationDocument,
+    projectDocument,
     tacticDocument,
     mandateDocument,
     objectiveDocument,
@@ -486,7 +486,7 @@ export async function createSimulation(options = {}, onProgress) {
         models: rotatedModels,
         reasoningEfforts: rotatedReasoningEfforts,
         headlines: headlineDocument,
-        escalations: escalationDocument,
+        projects: projectDocument,
         tactics: tacticDocument,
         mandates: mandateDocument,
         objectives: objectiveDocument,

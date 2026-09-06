@@ -4,7 +4,7 @@ const SINGLE_GENERATOR_POLICIES = Object.freeze({
 });
 
 function validateSingleGeneratorRule(config, rule) {
-  if (rule === undefined || rule === null) return null;
+  if (rule === undefined || rule === null) throw new TypeError("The local single-Generator rule is required.");
   if (!rule || typeof rule !== "object" || Array.isArray(rule)) {
     throw new TypeError("singleGeneratorRule must be an object.");
   }
@@ -73,22 +73,8 @@ export function canonicalRulesVariant(config) {
     startingAgentsDeployed: config.playerSupply.startingAgents,
     coalitionStartingRunway: null,
     imperialStartingCompute: null,
-    imperialScientificMethodCapabilityPenalty: 0,
-    imperialScientificMethodThresholdMandatePenalty: 0,
-    imperialScientificMethodScrutiny: 0,
-    imperialScientificMethodRunwayCost: 1,
-    imperialScientificMethodLifetimeLimit: null,
-    imperialLateCapabilityThresholdMandate: structuredClone(
-      config.factionRules.imperial.peerValidation
-    ),
     verticalStartingCompute: null,
-    verticalIndustrialVelocityDiscount: 1,
-    verticalIndustrialVelocityMandate:
-      config.factionRules.vertical.industrialVelocityMandate,
-    verticalIndustrialVelocityBuildModes: ["facility"],
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
-    foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
-    safetyEmergencyPauseEnabled: true,
     safetyStartingTrust: null,
     tacticsEnabled: false,
     // Simulation-only intervention surface. Each entry names the canonical
@@ -99,8 +85,6 @@ export function canonicalRulesVariant(config) {
 
 export const legacyPrePromotionRulesOverlay = Object.freeze({
   customerMandateSchedule: null,
-  imperialLateCapabilityThresholdMandate: null,
-  verticalIndustrialVelocityMandate: 0
 });
 
 export function effectiveRulesVariant(config, overlay = {}) {

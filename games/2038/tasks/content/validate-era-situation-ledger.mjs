@@ -212,7 +212,7 @@ async function assertDeferredTermsAbsentFromBaseline(scenarios) {
     "components/headlines.json",
     "components/mandates.json",
     "components/reference-cards.json",
-    "components/programs.json",
+    "components/projects.json",
     "components/factions.json",
     "components/world.json",
     "web/templates/prototype.html",

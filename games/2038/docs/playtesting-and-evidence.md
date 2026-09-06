@@ -317,7 +317,7 @@ diagnostics rather than balance-authority evidence.
 
 ### Actions and assignments
 
-- Every Core Action and Program selection, including speculative or blocked choices.
+- Every Core Action selection, including speculative or blocked choices.
 - The assigned Agent and district, prior presence abandoned, and resulting control.
 - Availability at selection versus affordability and legal targets at resolution.
 - Whether blocked selections are deliberately used for assignment and whether that is enjoyable.
@@ -449,3 +449,14 @@ ruleset, engine, and replay fingerprints.
 
 Sampled replays preserve resolved public state and decisions. A newer engine
 must not infer what an older engine would have done.
+
+## Three cuts candidate protocol — 2026-09-06
+
+Test immediate Headlines, then Build without Programs, then one permanent ability
+per faction. Record rules questions and reminders, time spent resolving Headlines
+and Production, the Era each Mega-Cluster first produces, AGI qualification and
+declarations, and final Scrutiny/Systemic Risk and World Ending. Count assignments
+where a player knowingly forgoes the best destination bonus to preserve control.
+Do not change AGI thresholds merely because a removed effect supplied Capability.
+The automated comparisons are development diagnostics, not a human playtest or
+balance promotion. Three-, four-, and five-player completion checks remain required.

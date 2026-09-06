@@ -154,8 +154,8 @@ export class WeightedPlayerPolicy {
     );
     if (runwayCost < 1 || runwayCost <= nonDealFlowRunway) return 1;
 
-    if (decision.parameters?.buildMode === "facility") return 4;
-    if (decision.parameters?.buildMode === "generator") return 3;
+    if (decision.parameters?.facility || decision.parameters?.buildMode === "facility") return 4;
+    if (decision.parameters?.project?.id === "generator" || decision.parameters?.buildMode === "generator") return 3;
     if (decision.parameters?.mode === "recruit") return 2;
     return 1.25;
   }

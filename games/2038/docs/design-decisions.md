@@ -680,3 +680,30 @@ Validation also reproduced a pre-existing report-archive collision: parallel LLM
 The user selected three further simplifications after reviewing executable 0.17.0: immediate Headlines, removal of Programs with a Facility-plus-project Build, and one permanent mechanical idea per faction. Implementation and isolated checks follow that order. Existing lore, current map, Agent presence, ordinary Research, shared risk, and scored AGI remain. No AGI qualification or general scoring value is lowered to compensate without evidence. This is a design candidate, not a measured complexity or human-balance result.
 
 Headlines finish every choice before Core Action selection. Voluntary resource/risk offers, current control rewards, recruitment or retirement, and immediate connected Facility production preserve different incentives. They leave no price modifier, later trigger, permission, or reminder token. Narrative and event history remain.
+
+Build places a Facility first, then one project from the same Agent assignment;
+requirements are checked after placement. The combined plan must be affordable.
+The two project references replace the six Program cards. No Program marker,
+permanent use ledger, temporary Compute token, or extra Core Action remains.
+Former Program and secondary ability fiction is retained in the existing Era
+companion and faction references as lore with no game effect.
+
+Provisional faction values: Dovetalis gains 1 Runway after its own optional trade;
+Loopfold gains 1 Runway after Deploy; Mirevanta pays 1 Runway to bank a duplicate;
+Kestralyn's Facilities cost 1 less Runway; Orisonix retains up to 1 provisional
+Capability on a crash; Corthaven gains 1 Runway per rival with a Facility during
+Production, capped at 2. Corthaven's board-state condition replaces a spending
+ledger and avoids uncapped player-count scaling. Starting assets are unchanged;
+all factions use common Capability scoring. These are test values, not a balance claim.
+
+The [dated implementation study](../evidence/studies/2026-09-06-three-cuts.md)
+records isolated Headline and construction diagnostics, the combined candidate,
+source/hash identities, and limits. The final small four-player sample built no
+advanced projects; the three- and five-player samples each built one Mega-Cluster.
+AGI was recognized in one of 24 final four-player games. No thresholds were tuned
+from these results. Human testing must establish construction attractiveness and
+whether preserving Agent presence warrants forgoing immediate destination bonuses.
+
+The remaining old Power-demand Mandate was a correctness bug: its removed metric
+always read zero. It now counts connected Facilities plus operating Mega-Clusters
+on the current board, preserving its minimum of two and two-Mandate award.

@@ -8,7 +8,7 @@ Read the fiction first:
    follow the story.
 2. [factions.json](factions.json): six institution introductions and mottos.
 3. [headlines.json](headlines.json): events and quotations beside their effects.
-4. [programs.json](programs.json) and [mandates.json](mandates.json): short component prose.
+4. [projects.json](projects.json) and [mandates.json](mandates.json): short component prose.
 5. [world.json](world.json): the four ending descriptions.
 6. [rules.md](../rules.md): procedures and terminology players need to act.
 

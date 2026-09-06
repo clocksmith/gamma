@@ -32,19 +32,6 @@ scoring. The Mandate card is the authority.
 Leave the scored Mandate face up in its Era panel. Erase the rows only when the
 next Mandate is revealed.
 
-## Permanent Program use
-
-Mark on selection, including blocked selections. Never erase during the game.
-Returning Program markers at Era end does not clear this record.
-
-| Faction | Mega-Cluster | Reorganization | Public Capability Covenant | Narrative Capture | Agent Swarm | Fusion |
-| --- | --- | --- | --- | --- | --- | --- |
-| Dovetalis Labs | | | | | | |
-| Loopfold AI | | | | | | |
-| Mirevanta Works | | | | | | |
-| Kestralyn | | | | | | |
-| Orisonix | | | | | | |
-| Corthaven | | | | | | |
 
 ## Final public record
 

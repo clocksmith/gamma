@@ -33,7 +33,7 @@ const required = [
   "dist/runtime/factions.json",
   "dist/runtime/headlines.json",
   "dist/runtime/tactics.json",
-  "dist/runtime/escalations.json",
+  "dist/runtime/projects.json",
   "dist/runtime/player-strategies.json",
   "dist/runtime/content-manifest.json",
   "dist/runtime/mandates.json",

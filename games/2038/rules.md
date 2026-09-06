@@ -27,18 +27,17 @@ numbered sections in order.
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside its Era
    panel.
-4. Place the six shared Program cards face up beside the Governance Board and
+4. Place the two infrastructure project references face up beside the Governance Board and
    stage the remaining shared supplies. Ordinary
    ${terms.infrastructure.power} contracts are printed on the Energy tiles;
-   Fusion's is on its shared Program card.
+   Fusion's is on its project reference.
 5. Each player takes one prepacked Faction tray and foldout aid. Set its captive
    sliders to their printed starts.
 6. Place two Agents per player at ${terms.locations.frontier}. Keep the other two Agents in
    supply. Keep all four Facilities and the Generator in supply; no Facility
    begins on the board. Facilities must be constructed in printed number order:
    Facility 1 first, then 2, 3, and 4. Facility 1 carries that Faction's
-   integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust}. Set each to its printed starting value. Each player takes
-   two Program markers.
+   integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust}. Set each to its printed starting value.
 7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
    printed on its Faction board. Put every player’s ten ${terms.playerTracks.scrutiny}
    cubes outside the bag; the bag begins empty.
@@ -63,20 +62,18 @@ Once played, a Core Action remains exhausted until the next Era:
 - ${terms.actions.influence}
 
 Choose three of six Actions each Era, in any order. The other three remain
-unused unless an ability readies one.
+unused until the next Era.
 
 ### The complete ordinary turn: ReAct — Reason → Act → Observe
 
-1. Reveal one ${terms.systems.headline} and apply its printed effect.
-2. **Reason:** everyone secretly selects an available Core Action or an unlocked,
-   unused Program with an available Program marker. Check card availability and
+1. Reveal one ${terms.systems.headline} and finish all its instructions and choices before selection.
+2. **Reason:** everyone secretly selects an available, unlocked Core Action. Check card availability and
    Era unlocks only; costs and targets need not be legal yet.
 3. Reveal selections simultaneously and resolve clockwise from Initiative.
 4. **Act:** after the optional permitted trade, assign one of your Agents to
    any district, or leave it where it is. Choose the selected Action's mode,
    target, and payment using the current board, and resolve it there.
-5. **Observe:** apply and inspect the consequences, then exhaust the Core Action
-   or record the Program's use. After all players resolve, pass Initiative
+5. **Observe:** apply and inspect the consequences, then exhaust the Core Action. After all players resolve, pass Initiative
    clockwise and begin the next cycle using the changed world.
 
 Observe adds no event draw, award, negotiation window, speech, or extra phase.
@@ -97,32 +94,20 @@ space limits, local connections, and partnership adjacency still apply.
 
 ### Effect precedence
 
-Apply these sources in order:
-
-- The Current Era panel determines globally unlocked actions.
-- A Faction board modifies those actions.
-- The current ${terms.systems.headline} supplies its printed global effect.
-- An ordinary turn may apply the Action, one destination bonus, each applicable
-  Faction modifier, and each applicable global effect. If multiple programs on
-  the same Faction board apply to that Action, resolve all of them unless one
-  explicitly requires a choice.
-- Every exception is timed **before selection**, **before assignment**, **during
-  action**, or **after action**.
-- A ${terms.systems.headline} changes one named field or calls one public choice procedure. It
-  grants no additional Action.
-- Readying a card makes it available for a later choice. Resolve nothing when
-  you ready it.
-- ${terms.technology.agentSwarm} is the sole compound-action exception.
+The Era panel states which systems are unlocked. Resolve the Headline completely
+before selection. During an action, apply its effect, the destination bonus, and
+your faction's single permanent ability when applicable. No effect readies or
+resolves another Core Action. Build's two construction steps are one action.
 
 ### What an Era teaches
 
 Systems are inactive before their printed Era panel lists them under **New this Era**.
-Read that strip aloud before revealing the Mandate. All Era panels, Programs,
+Read that strip aloud before revealing the Mandate. All Era panels, project references,
 and Faction abilities are open information.
 
-Program access is cumulative. Progress teaches ordinary institutional work;
+Progress teaches ordinary institutional work;
 Capacity adds industrial infrastructure; Authority adds agreements, quantum
-record disputes, and public effects; Continuity adds compound Actions, optional
+record disputes, and public effects; Continuity adds optional
 public AGI recognition, and Fusion. Later Eras retain previously unlocked systems
 unless a printed effect says otherwise.
 
@@ -136,34 +121,6 @@ all tied players, overrides this rule.
 Initiative is an order, not a resource. Passing it after each cycle changes who
 resolves first and who wins unresolved ties; it cannot be traded or retained.
 
-### Program markers and ${terms.systems.escalations}
-
-<!-- program-selection:start -->
-The six shared Program cards are public. At the start of each Era, each player
-sets aside the printed number of their two Program markers: zero, one, one,
-then two. Commit one available marker to select an Era-unlocked Program:
-
-- Select a Program instead of a Core Action.
-- Place your marker on that shared Program card when selected.
-- Each named Program is usable once per player per game.
-- Record each use permanently in that faction’s permanent six-box Program-use row on the Governance Board ledger.
-- At Era end, return committed markers; unused markers do not carry forward. Never erase the six-box use record during a game.
-- Previously unlocked unused Programs remain available later.
-<!-- program-selection:end -->
-
-**Global after assignment** means assign an Agent normally, then resolve the
-Action without a destination restriction.
-
-| Era | Program markers | Newly available Programs |
-| --- | ---: | --- |
-| I — ${terms.eras.demo} | 0 | None |
-| II — ${terms.eras.scale} | 1 | ${terms.technology.megaCluster}, Reorganization |
-| III — ${terms.eras.narrative} | 1 | Public Capability Covenant, Narrative Capture |
-| IV — ${terms.eras.claim} | 2 | ${terms.technology.agentSwarm}, ${terms.technology.advancedGeneration} |
-
-${terms.technology.agentSwarm} is the selected Program; it resolves and exhausts two
-different unused Core Actions.
-
 ### A committed Action that becomes blocked
 
 Selection commits only the Action. At resolution, choose a legal Agent,
@@ -172,8 +129,7 @@ The selected card cannot be replaced. An earlier player may consume the space,
 contract pair, or other target you expected to use; adapt within the same Action.
 
 If no legal effect remains, assign an Agent normally and exhaust the Action
-without effect or compensation. A blocked Program still spends its committed
-marker and counts as that Program's once-per-game use. A speculative selection
+without effect or compensation. A speculative selection
 may therefore become only an assignment; it still consumes one of the Era's
 three action selections.
 
@@ -320,7 +276,7 @@ or ${terms.playerTracks.mandate}.
 The two Energy-tile visit boxes are the complete ordinary Generator contracts.
 No separate Power Source reference cards are used. Each player may construct
 only one ordinary Generator; the full Fusion contract is printed on its Era IV
-Program card.
+project reference.
 <!-- map:end -->
 
 ### ${terms.infrastructure.power} connections
@@ -389,18 +345,16 @@ host, range, and resource requirements; both hosts must currently be connected.
 - Three turns per player
 - Only Core Actions
 - Beneficial or mildly disruptive ${terms.systems.headlines}
-- No Program markers
 
 Era I activates Agent assignment, Core Actions, Training, the starting grid,
 Facilities, Customers, and Scrutiny.
 
 ### Era II — ${terms.eras.scale}
 
-Each player receives one Program marker and unlocks:
+Build now also permits:
 
 - Generators
 - Mega-Clusters
-- ${terms.systems.escalations}
 
 #### ${terms.technology.megaCluster}
 
@@ -414,50 +368,14 @@ survives an earlier player's use of a required component.
 The project produces three ${terms.resources.compute} during Production while
 both hosts remain adjacent and connected. No additional Power is assigned.
 
-#### Reorganization
-
-Reorganization is global after assignment. Reassign each of your Agents to any
-district or leave it in place. You may then return one Agent to supply for three
-${terms.resources.runway} and one ${terms.playerTracks.scrutiny}, provided at least
-one Agent remains deployed. It never resolves or readies another Action.
-
 ### Era III — ${terms.eras.narrative}
 
-Each player receives one Program marker. Previous Programs remain
-unlocked. Joint Ventures now enter play.
-
-#### Public Capability Covenant
-
-Public Capability Covenant is global after assignment.
-
-Every player gains one ${terms.playerTracks.capability}. You also gain:
-
-- Two ${terms.playerTracks.trust}
-- Removal of one ${terms.playerTracks.scrutiny} cube
-
-#### Narrative Capture
-
-Narrative Capture is global after assignment.
-
-Choose one:
-
-- Remove two of your ${terms.playerTracks.scrutiny} cubes.
-- Gain two ${terms.resources.runway}.
-- Give a player with more ${terms.playerTracks.customers} than you one ${terms.playerTracks.scrutiny}.
+Joint Ventures now enter play. Previously unlocked infrastructure remains available.
 
 ### Era IV — ${terms.eras.claim}
 
-Each player receives two Program markers.
-
-Agent Swarms, Fusion, the Era IV faction abilities printed on the Faction boards,
-and AGI recognition now enter play. Each Faction ability unlocks at the
-Era printed on its board.
-
-#### ${terms.technology.agentSwarm}
-
-Select ${terms.technology.agentSwarm} only with two different unused Core Actions. Assign once;
-resolve both from that destination in either order and pay all costs. Apply the
-visit bonus to only one. Exhaust both, place your marker on ${terms.technology.agentSwarm}, and add three ${terms.playerTracks.scrutiny}.
+Build may construct Fusion. Public AGI recognition is offered after Production.
+All factions retain the same permanent ability they had at setup.
 
 #### Recognized ${terms.systems.agi}
 
@@ -506,7 +424,6 @@ select or construct Fusion.
   minimum. Start this-Era values at zero; evaluate current-state values when
   scored.
 - Ready all six Core Actions.
-- Make the Era's zero, one, one, or two Program markers available.
 
 ### B. Three action cycles
 
@@ -548,12 +465,13 @@ creates consent or forces a deal.
 
 ### C. Production
 
+Apply any permanent faction Production ability first.
 Use the current board's visible connections; no allocation choices or Power cubes
 are needed. Resolve each step for all players before continuing, in Initiative
 order unless specified otherwise:
 
 1. Apply recurring Scrutiny for each emergency Generator serving at least one
-   Facility. Resolve any printed Production Headline effect.
+   Facility.
 2. Produce each connected Facility, then Customer income, then active
    Mega-Clusters. Apply caps after each gain.
 3. Produce active Joint Ventures in ascending contract-number order.
@@ -688,19 +606,26 @@ explicitly.
 
 ### ${terms.actions.build}
 
-Choose one mode.
+<!-- construction:start -->
+Construct up to one Facility, then up to one unlocked infrastructure project,
+paying each cost. Both use the acting Agent's district. A project is an ordinary
+Generator, Mega-Cluster, or Fusion. Recheck requirements after placing the
+Facility. You may omit either step; resolve at least one construction if able.
+Exhaust Build once after completing both steps. There is no extra action,
+assignment, trade, or destination bonus between them.
 
-**Facility ${terms.actions.build}** means Construct a Facility. **Infrastructure ${terms.actions.build}** means
-Construct a Generator.
-${terms.technology.megaCluster} and
-${terms.technology.advancedGeneration} are ${terms.systems.escalations}.
+Facility spaces, Generator slots, numbered Facility order, unlocked Eras,
+adjacent connected hosts, and shared component supply still apply. Choose a
+plan you can fully afford on the current board when Build resolves. Facility 2
+and its Generator can be built together in Era II; an existing pair can receive
+a Mega-Cluster in Era III, leaving Era IV's Build available for Fusion.
+<!-- construction:end -->
 
 #### Construct a Facility
 
 Pay two ${terms.resources.runway} and place your lowest-numbered unbuilt Facility on the acting
 piece’s hex. Facility 1 must be built first, followed by Facilities 2, 3, and 4.
-It requires one
-${terms.infrastructure.power} during Production. Each non-${terms.locations.frontier} hex has only two Facility spaces;
+It produces while connected by the local Power rule. Each non-${terms.locations.frontier} hex has only two Facility spaces;
 ${terms.locations.frontier} has none and is never a legal Facility destination. Facilities cannot
 be destroyed by rivals.
 
@@ -727,8 +652,7 @@ After assigning an Agent, choose one mode:
   its attachments and starting-grid designation. Recheck connections and contracts
   immediately. This mode costs no Runway.
 
-There is no redistribution mode or additional personnel movement. Apply printed
-Headline exceptions only in their named windows.
+Agents have no additional movement procedure.
 
 ### ${terms.actions.deploy}
 
@@ -768,7 +692,7 @@ The two ordinary contracts are printed at their point of use. The
 ${terms.locations.grid} tile always constructs
 ${terms.technology.emergencyInfrastructure}; the ${terms.locations.renewable}
 tile always constructs ${terms.technology.cleanInfrastructure}. Fusion's full
-contract is printed on its Era IV Program card. No separate Power Source
+contract is printed on its Era IV project reference. No separate Power Source
 cards are used. Each player has one ordinary Generator, and each Energy hex
 still has three shared slots.
 <!-- power-contracts:end -->
@@ -792,40 +716,40 @@ Every connected ordinary Generator operates automatically during Production.
 
 ### ${terms.technology.advancedGeneration}
 
-The Era IV ${terms.systems.escalation} described above.
+The Era IV Build project described above.
 
 ## 9. Printed card authorities
 
 <!-- card-authority:start -->
 Faction boards, Governance Board Era panels, map-tile Power contracts, Core
-Action cards, shared Program cards, Mandate cards, Training cards, player aids, and
+Action cards, project references, Mandate cards, Training cards, player aids, and
 Headline cards are rules components. The [**Card and Board Reference**](/docs/card-reference.html)
 projects every authored face in one document; resolve that text or the matching
 physical surface. Printed text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
-Each Faction ability unlocks at the Era printed on its board.
+Each Faction has one permanent ability available from setup.
 <!-- card-authority:end -->
 
 All Factions and CEOs are fictional and imply no real-world claim or
 endorsement. Every Faction has one persistent institutional identity and one
-signature ability. Timing is **passive**, **once per Era**, **once when
-unlocked**, or **once per game**. “Persists” remains available; “named Era
-only” expires at Era end. Faction abilities modify named timing windows; they
-add no phase.
+signature ability. It modifies one familiar action or Production. It requires
+no separate use marker, frequency record, or refresh. Every faction uses the
+same public Mandate scoring.
 
 During setup, use each Faction board’s printed starts and place its already
 earned public ${terms.playerTracks.mandate}. Award that ${terms.playerTracks.mandate} once; never score it
 again. The Faction board is authoritative if a summary elsewhere differs.
 
-A Headline is revealed before secret action selection. Resolve its printed
-effect and duration. Leave it face up in its Era row. Three Headlines per Era
-form the twelve-card **${terms.systems.futureTimeline}**. A Headline grants no Action. Unless
-its text names this Era’s Production, its rules expire at the end of the
-current cycle.
+A Headline is revealed before secret action selection. Finish every printed
+instruction and choice, including any immediate production, before selecting
+actions. Resolve choices in Initiative order unless the card says otherwise.
+Then leave it face up in its Era row as history, with no continuing rules effect.
+Three per Era form the twelve-card **${terms.systems.futureTimeline}**.
 
-When an effect immediately resolves one Facility's printed production, resolve
-only that Facility. Do not run a second Production calculation, reopen Power
-trading, or update unrelated Facilities.
+When a Headline resolves a Facility's printed production, resolve only that
+currently connected Facility. Talent uses its normal immediate Agent reassignment.
+Do not produce Customers, Generators, Mega-Clusters, Joint Ventures, or faction
+Production income unless explicitly instructed. No Core Action resolves.
 
 <!-- era-panels:start -->
 These four panels are printed on the Governance Board. Move the Current Era
@@ -867,14 +791,13 @@ It provides:
   ledger with one row per faction;
 - Setup and final Collective Trust, unresolved Systemic Risk, AGI recognition,
   winner, and World Ending fields;
-- six shared Program-card positions;
+- two infrastructure project reference positions;
 - six numbered Joint Venture pair bays, six numbered Mega-Cluster pair bays,
   and one Fusion position; and
-- staging for the Audit bag, Scrutiny, Systemic Risk, Temporary
-  Compute, and unused contract pairs.
+- staging for the Audit bag, Scrutiny, Systemic Risk, and unused contract pairs.
 
 The Grid and Renewable tiles print ordinary Power contracts. Fusion's contract
-is printed on its shared Program card. Tile wells retain pieces but create no
+is printed on its project reference. Tile wells retain pieces but create no
 extra rules state.
 
 ### One prepacked faction tray per player
@@ -890,12 +813,10 @@ Each of the six trays contains:
   constructed in number order
 - ${content.gameConfig.playerSupply.scrutinyCubes} ${terms.playerTracks.scrutiny} cubes
 - 1 Mandate marker
-- ${content.gameConfig.playerSupply.programMarkers} Program markers
 - ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
 - 1 three-panel foldout player aid
 
-There is no private Program hand, Escalation slider, Safety
-currency, personal score sheet, Grid-Ready piece, Power Source selector,
+There is no Safety currency, personal score sheet, Grid-Ready piece, Power Source selector,
 Influence cube, Prediction Bag token, AGI chart, or AGI die.
 
 Generators do not count against the Facility limit.
@@ -904,7 +825,7 @@ Generators do not count against the Facility limit.
 
 - ${content.gameConfig.sharedSupply.governanceBoards} Governance Board
 - ${content.gameConfig.board.selectedTileCount} district tiles: Frontier, six operational, and twelve public
-- ${content.gameConfig.sharedSupply.sharedProgramCards} shared Program cards
+- ${content.gameConfig.sharedSupply.projectReferences} project references
 - ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era marker
 - ${content.gameConfig.sharedSupply.sharedDryEraseMarkers} shared fine-tip dry-erase marker
 - 16 Headline cards; reveal 12 per game
@@ -916,10 +837,8 @@ Generators do not count against the Facility limit.
 - 18 Systemic Risk pieces, tactually identical to Scrutiny while concealed
 - 1 opaque Audit bag
 - 1 Initiative marker
-- ${content.gameConfig.sharedSupply.temporaryComputeTokens} distinct Temporary Compute tokens for Allocation Window
 
-The six faction trays supply six Mandate markers, twelve Program markers, and
-six player aids.
+The six faction trays supply six Mandate markers and six player aids.
 
 Fusion is a single shared project; its dedicated marker leaves the supply once
 constructed. Unused contract tokens cannot be reserved; create a Joint Venture
@@ -928,22 +847,22 @@ or Mega-Cluster only while a matched pair is available.
 ### Setup packaging
 
 The insert provides six labelled faction trays, four labelled Era packets, one
-shared Program well, one Training well, and one contract/power well. Era packets
+project-reference well, one Training well, and one contract/power well. Era packets
 contain `5 / 4 / 3 / 4` Headlines plus three Mandates each.
 
 ### Exact printed-paper count
 
-The game contains 110 standard cards plus 6 foldout player aids:
+The game contains 106 standard cards plus 6 foldout player aids:
 
 - 36 Core Actions
-- 6 shared Programs
+- 2 infrastructure project references
 - 16 Headlines
 - 12 Mandates
 - 40 Training cards
 - 6 foldout player aids
 
 Printed Era panels and Power contracts are part of the Governance
-Board, tiles, and Program cards.
+Board, tiles, and project references.
 
 ### Excluded deferred content
 
@@ -954,8 +873,6 @@ Patrons.
 
 Power is read directly from Generator adjacency and Facility 1's integrated
 starting-grid identifier. No Power cube or allocation surface is supplied.
-The Governance Board keeps a permanent permanent six-box Program-use row per faction,
-separate from the two markers used to count the current Era's Program selections.
 Board dimensions, fold pattern, material, writable finish, and retention
 tolerances remain manufacturing decisions.
 
@@ -978,13 +895,11 @@ current card, shuffle the discard, and continue.
 Each Era deck contains every card for that Era. Reveal three each Era. Leave every resolved card face
 up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
 
-#### Shared Program display
+#### Infrastructure project references
 
-Place all six Program cards face up. They are public rules surfaces, not player
-hands. Each player tracks use with two faction-coloured Program markers. A
-marker on a Program records a selection this Era. Also mark the named Program
-in that faction’s permanent six-box ledger row. Return markers at Era end;
-never erase the row until the next game.
+Place both project references face up. They show Mega-Cluster and Fusion
+construction costs and operation. Build constructs these projects; the references
+are never selected, exhausted, or marked with use history.
 
 #### Deferred Tactic deck: 36 cards
 
@@ -996,7 +911,6 @@ Rules** for their contracts.
 - **Remove Scrutiny:** return up to the stated number of your cubes from the Audit bag.
 - **Connected/powered:** Facility 1, or an own Generator on the same or an adjacent district, evaluated on the current board.
 - **Current Mandate ledger:** record the revealed criterion and minimum. Keep only the per-faction value that this card needs; reset this-Era values and evaluate current-state criteria when scored.
-- **Program-use ledger:** six labelled boxes per faction, one per shared Program. Mark permanently on selection, including blocked selections. This is separate from Era marker availability.
 - **Recognized AGI:** record every paid declaration on the final public ledger. Recognition persists through the Audit.
 - **Offline recovery:** an infrastructure change can immediately reconnect a Facility. Facilities never flip.
 

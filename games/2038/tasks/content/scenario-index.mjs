@@ -12,7 +12,8 @@ export async function scenarioSurfaces() {
     ["components/headlines.json", "headlines", "headline", "round"],
     ["components/mandates.json", "mandates", "mandate", "era"],
     ["components/reference-cards.json", "eraCards", "reference", "round"],
-    ["components/programs.json", "escalations", "escalation", "unlockedRound"],
+    ["components/projects.json", "projects", "project", "unlockedRound"],
+    ["components/projects.json", "institutionalHistory", "history", "unlockedRound"],
     ["components/factions.json", "factions", "faction", "round"],
     ["components/world.json", "endings", "ending", null]
   ];
@@ -20,10 +21,10 @@ export async function scenarioSurfaces() {
   for (const [path, collection, kind, eraKey] of specifications) {
     const document = await readJson(path);
     for (const record of document[collection]) {
-      const entries = kind === "faction" ? record.abilities : [record];
+      const entries = kind === "faction" ? [...record.abilities, ...(record.lore || [])] : [record];
       for (const entry of entries) {
         const identity = kind === "faction" ? `${record.id}:${entry.id}` : entry.id;
-        const pointer = kind === "faction" ? `${record.id}/abilities/${entry.id}` : entry.id;
+        const pointer = kind === "faction" ? `${record.id}/${record.abilities.includes(entry) ? "abilities" : "lore"}/${entry.id}` : entry.id;
         surfaces.push({
           surfaceId: `${kind}:${identity}`,
           eraOrder: eraKey ? entry[eraKey] : 4,

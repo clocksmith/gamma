@@ -71,7 +71,7 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/runtime/game-config.json",
     "dist/runtime/factions.json",
     "dist/runtime/headlines.json",
-    "dist/runtime/escalations.json",
+    "dist/runtime/projects.json",
     "dist/runtime/mandates.json",
     "dist/runtime/reference-cards.json",
     "dist/runtime/player-strategies.json",
@@ -110,7 +110,7 @@ test("physical sources are projected from declared ownership roots", async () =>
     "components/headlines.json",
     "components/mandates.json",
     "components/reference-cards.json",
-    "components/programs.json",
+    "components/projects.json",
     "components/world.json"
   ];
 
@@ -130,7 +130,7 @@ test("physical sources are projected from declared ownership roots", async () =>
 test("shared semantic references construct current cards, rules, UI, and simulation copy", async () => {
   const variables = await readJson("content/data/variables.json");
   const config = await readJson("dist/runtime/game-config.json");
-  const escalation = await readJson("dist/runtime/escalations.json");
+  const escalation = await readJson("dist/runtime/projects.json");
   const ui = await readJson("dist/runtime/ui-copy.json");
   const simulation = await readJson("dist/runtime/simulation-copy.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
@@ -175,7 +175,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     advancedName
   );
   assert.equal(
-    escalation.escalations.find((action) => action.id === "fusion_demonstrator").name,
+    escalation.projects.find((action) => action.id === "fusion_demonstrator").name,
     advancedName
   );
   assert.equal(
@@ -236,9 +236,9 @@ test("Mandate cards own their exact text while the rulebook owns scoring timing"
 });
 
 test("Card and Board Reference projects every other required card surface", async () => {
-  const [factionDocument, escalationDocument, referenceDocument, config, cardReference] = await Promise.all([
+  const [factionDocument, projectDocument, referenceDocument, config, cardReference] = await Promise.all([
     readJson("dist/runtime/factions.json"),
-    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/reference-cards.json"),
     readJson("dist/runtime/game-config.json"),
     readFile(new URL("dist/docs/card-reference.md", root), "utf8")
@@ -254,7 +254,7 @@ test("Card and Board Reference projects every other required card surface", asyn
     }
   }
   assert.doesNotMatch(cardReference, /once_per_(?:round|game)|once_when_unlocked/);
-  for (const escalation of escalationDocument.escalations) {
+  for (const escalation of projectDocument.projects) {
     assert.ok(cardReference.includes(escalation.name));
     assert.ok(cardReference.includes(escalation.text));
     assert.ok(cardReference.includes(`**Unlock Era:** ${escalation.unlockedRound}`));
@@ -340,7 +340,8 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
   for (const faction of factions) {
     const old = previous.contentGraph["components/factions.json"].factions.find(row => row.id === faction.id);
     assert.deepEqual(faction.ceo, old.ceo, "CEO remains the same faction character");
-    assert.deepEqual(faction.abilities.map(row => row.id), old.abilities.map(row => row.id));
+    assert.equal(faction.abilities.length, 1);
+    for (const ability of old.abilities) assert.ok([...faction.abilities, ...faction.lore].some(row => row.flavorText === ability.flavorText), "institutional fiction is preserved");
   }
 });
 
@@ -365,7 +366,7 @@ test("retained signature abilities project concrete continuity institutions", as
   const factions = Object.fromEntries(
     factionsDocument.factions.map((faction) => [faction.id, faction])
   );
-  const eraIvAbility = (factionId) => factions[factionId].abilities.at(-1);
+  const eraIvAbility = (factionId) => factions[factionId].lore.at(-1);
 
   assert.deepEqual(
     [
@@ -385,12 +386,6 @@ test("retained signature abilities project concrete continuity institutions", as
       "Priority Allocation Window"
     ]
   );
-  assert.match(eraIvAbility("coalition_lab").text, /within 2 hexes/);
-  assert.match(eraIvAbility("platform_empire").text, /after assigning your Agent/);
-  assert.match(eraIvAbility("imperial_research_lab").text, /first 3 distinct domains/);
-  assert.match(eraIvAbility("vertical_empire").text, /relocate 1 Facility/);
-  assert.match(eraIvAbility("safety_laboratory").text, /cannot be selected this cycle/);
-  assert.match(eraIvAbility("foundry").text, /create 2 temporary Compute/);
   assert.equal(
     eraIvAbility("coalition_lab").flavorText,
     "The governments remain at war. Their jointly owned bridge carries desalinated water and coolant on schedule."
@@ -447,7 +442,7 @@ test("Core Rules are compact while every moved authority has one table surface",
     .split(/\s+/)
     .filter(Boolean).length;
 
-  assert.ok(wordCount >= 5000, "Default procedure retains enough authority");
+  assert.match(rules, /Construct up to one Facility, then up to one unlocked infrastructure project/);
   assert.ok(wordCount <= 6500, "Core Rules stay printable");
   assert.match(rules, /## How to Play/);
   assert.match(rules, /## Rules Reference/);
@@ -484,10 +479,9 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
   assert.match(cardReference, /Minimum qualification:\*\* 2/);
-  assert.match(cardReference, /Strategic Partnership[\s\S]*Unlock Era:\*\* 3; passive/);
-  assert.match(cardReference, /Allocation Window[\s\S]*Unlock Era:\*\* 2; once when unlocked/);
+  assert.match(cardReference, /Deal Flow[\s\S]*Unlock Era:\*\* 1; permanent/);
   assert.doesNotMatch(cardReference, /Advanced Play/);
-  assert.match(cardReference, /Each Faction ability unlocks at the\s+Era printed on its board/);
+  assert.match(cardReference, /Each Faction has one permanent ability available from setup/);
   assert.match(cardReference, /current.*connect/i);
 
   for (const tactic of tacticDocument.tactics) {
@@ -511,7 +505,7 @@ test("numeric typography preserves exact card digits while prose may spell numbe
   assert.ok(headlines.every((headline) => /\d/.test(headline.text)));
   assert.match(
     headlines.find((headline) => headline.id === "ten_dollar_intelligence").text,
-    /adds 1 additional/
+    /gain 1 Compute and add 1 Scrutiny/
   );
   assert.match(mapReference, /Agent or Facility: one presence/);
 });

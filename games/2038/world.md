@@ -98,6 +98,8 @@ waited. Power, water, land, chips, and public permission determined which
 promises of abundance could actually be delivered. With so much of daily life
 running through these systems, their owners began to decide which claims counted.
 
+_${content.institutionalHistory.byId.reorganization.name}: ${content.institutionalHistory.byId.reorganization.flavorText}_
+
 ### Era III: ${content.referenceCards.byId.era_narrative.name}
 
 > ${content.referenceCards.byId.era_narrative.strapline}
@@ -144,6 +146,10 @@ ${terms.factions.safety} fought to keep human review and unsupported access
 working. Refusal remained legal; finding an institution able to honor it became
 the harder part. Even the question of who was refusing became less certain
 once minds could be preserved and copied.
+
+_${content.institutionalHistory.byId.narrative_capture.name}: ${content.institutionalHistory.byId.narrative_capture.flavorText}_
+
+_${content.institutionalHistory.byId.open_weights.name}: ${content.institutionalHistory.byId.open_weights.flavorText}_
 
 ### Era IV: ${content.referenceCards.byId.era_claim.name}
 
@@ -206,6 +212,8 @@ a breakthrough.
 Humanity persisted throughout the legal record as biological people, copies,
 and engineered successors. The unresolved question was who could still
 contest the plan, withdraw consent, or choose a different future.
+
+_${content.institutionalHistory.byId.agent_swarm.name}: ${content.institutionalHistory.byId.agent_swarm.flavorText}_
 
 ## The four World Endings
 

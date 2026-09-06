@@ -34,6 +34,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   final Audit; it never overrides the Mandate winner. The World Ending remains separate.
 - User-selected mechanic revisions retain scenario placement and require an
   explicit design-decision receipt; they must not be labelled retained mechanics.
+- The six Core Actions are the only selections. Build places up to one Facility, then one project from one assignment. Programs and use records are retired.
+- Headlines finish all choices before selection and leave no continuing modifiers.
+- Each faction has one permanent ability and common scoring. Former abilities and Programs retain their fiction in lore-only records projected into the existing companion and references.
 - Generated graph targets are never hand-edited.
 - Game procedures and inventory prose have one authored home in `rules.md`;
   exact component effects remain in `components/`. Reference layouts may arrange
