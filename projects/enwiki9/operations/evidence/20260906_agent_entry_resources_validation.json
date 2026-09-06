@@ -1,0 +1,100 @@
+{
+  "schema": "gamma.enwiki9.agent-entry-resource-validation.v1",
+  "date": "2026-09-06",
+  "component": "existing agent entry and ledger projection",
+  "intent": "Expose live resource diagnostics and recorded event timing; guide independent admitted parallel research without a new scheduler or monitor.",
+  "source_sha256": {
+    "tools/enwiki9_ledger.py": "5ebcf92f377780095ccd7ea701483eef384351567f246d0a0fd5cc5c46580708",
+    "tests/test_enwiki9_entry_resources.py": "e062478ef4923ec4aab019aac7550b2da42a596b0d40e751e535fadad6f3a65f",
+    "AGENTS.md": "745d2fb325da3af01aac334d10e6c522bda6f9c60c1e03a1ccef74d27cadf017",
+    "ADAPTIVE_WORKFLOW.md": "5a6010e0dc843e63e3ec5e18f877f99cc90c26592d62e9b05ce33916acd61e85",
+    "workbench/PROMPTS.md": "2152a85825db0453e7d59e5ef467dd23a1ce83d6fb889b3b506ab5269aa64821",
+    "tools/enwiki9_lab.py": "dfe3ec344ddb35863af7f8055e63e89c45fccff0811220f72183ff7862c57b09"
+  },
+  "validation": {
+    "new_unittest_command": "taskset -c 2 python3 -m unittest discover -s tests -p test_enwiki9_entry_resources.py -v",
+    "new_unittest_cases_passed": 16,
+    "existing_navigation_liveness_cases_passed": 15,
+    "existing_test_method": "Standard-library runpy/temporary-directory/unittest.mock adapter for pytest-style functions; pytest is not installed.",
+    "existing_test_files": [
+      "tests/test_enwiki9_ledger_navigation.py",
+      "tests/test_enwiki9_status_receipt_worker_liveness.py"
+    ],
+    "routine_refresh": {
+      "command": "taskset -c 2 python3 tools/enwiki9_normalize_receipts.py --profile routine --json",
+      "commands_passed": 15,
+      "checks_passed": true
+    },
+    "actual_entry_command": "python3 tools/enwiki9_lab.py start"
+  },
+  "operational_sample": {
+    "observed_at": "2026-09-06T20:25:04+00:00",
+    "logical_cpus": 32,
+    "host_memory_available_bytes": 72209723392,
+    "visible_cpu_capacity_ceiling": 32,
+    "visible_memory_headroom_bytes": 72209723392,
+    "probe_issues": [],
+    "running_job_timelines": [
+      {
+        "id": "20260904T134731Z_441f96254f",
+        "timeline": {
+          "submitted_at": "2026-09-04T13:47:31+00:00",
+          "started_at": "2026-09-04T13:47:41+00:00",
+          "worker_started_at": "2026-09-04T13:47:41+00:00",
+          "elapsed_since_recorded_start_seconds": 196638.1,
+          "budget_seconds": null,
+          "budget_stop_reference_at": null,
+          "budget_note": "Recorded job start plus declared wall budget; consult the owning guard for its actual enforcement timebase. This is not a completion prediction.",
+          "expected_job_finish_at": null,
+          "phase_estimate": {
+            "state": "estimated",
+            "phase": "trace production",
+            "basis": "Current existing observer and prior docs/status_receipt.json gate_decision; matching job bindings and reported exact process identity checks.",
+            "sample_start_at": "2026-09-06T19:42:35+00:00",
+            "sample_end_at": "2026-09-06T20:24:52+00:00",
+            "sample_window_seconds": 2537,
+            "units": "transformed trace bytes",
+            "bytes_per_second": 16140.21,
+            "remaining_bytes": 525829136,
+            "expected_phase_finish_at": "2026-09-07T05:27:50.829265+00:00",
+            "uncertainty": "Linear extrapolation of two operational counters, not a confidence interval or job finish promise. Throughput and subsequent phases can change; refresh before acting."
+          }
+        }
+      },
+      {
+        "id": "20260830T224837Z_a120752fb5",
+        "timeline": {
+          "submitted_at": "2026-08-30T22:48:37+00:00",
+          "started_at": "2026-08-30T22:51:59+00:00",
+          "worker_started_at": "2026-08-30T22:51:59+00:00",
+          "elapsed_since_recorded_start_seconds": 595980.1,
+          "budget_seconds": null,
+          "budget_stop_reference_at": null,
+          "budget_note": "Recorded job start plus declared wall budget; consult the owning guard for its actual enforcement timebase. This is not a completion prediction.",
+          "expected_job_finish_at": null,
+          "phase_estimate": {
+            "state": "estimated",
+            "phase": "trace production",
+            "basis": "Current existing observer and prior docs/status_receipt.json gate_decision; matching job bindings and reported exact process identity checks.",
+            "sample_start_at": "2026-09-06T19:42:35+00:00",
+            "sample_end_at": "2026-09-06T20:24:52+00:00",
+            "sample_window_seconds": 2537,
+            "units": "transformed trace bytes",
+            "bytes_per_second": 16140.21,
+            "remaining_bytes": 525829136,
+            "expected_phase_finish_at": "2026-09-07T05:27:50.829265+00:00",
+            "uncertainty": "Linear extrapolation of two operational counters, not a confidence interval or job finish promise. Throughput and subsequent phases can change; refresh before acting."
+          }
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "Resource sampling grants no ownership, resource reservation, or launch permission.",
+    "HORIZON estimates reuse existing observer counters and prior status; phase completion is not job completion or scientific evidence.",
+    "Unknown, stale, changed, or unverified observations cannot become completion predictions.",
+    "Visible cgroups do not audit hidden ancestors or other jobs' guard assignments.",
+    "No codec, corpus gate, observer ownership, or scientific ledger was changed."
+  ],
+  "next_action": "Use start, proposals, relevant reflections, and existing admission controls to select one independent executable comparison."
+}

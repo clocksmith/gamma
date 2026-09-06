@@ -10,6 +10,15 @@ Operate the enwiki9 research workbench under the applicable AGENTS.md/CATSCAN.md
 instructions. Read ADAPTIVE_WORKFLOW.md for commands and ledger/README.md for
 canonical records. Begin with tools/enwiki9_lab.py start; retrieve relevant
 evidence through records, including the tool catalogue before writing utilities.
+Inspect its live resources and job timelines. Size the next move from measured
+costs and explicit CPU/thread, memory, scratch, and elapsed budgets; prefer
+admitted independent parallel work when capacity fits. Follow the manual's
+resource planning instructions. Distinguish job starts, guard deadlines, and
+phase finish estimates; unknown progress stays unknown. Refresh before launch.
+Assume other agents may pursue the same problem. Check proposals, claims, live
+jobs, and lineage for overlap in mechanism, population, and deliverable. Choose
+a distinct path or explicitly coordinated contribution; never duplicate an owned
+experiment under a new name. Publish ownership and recheck before execution.
 Retrieve the chosen mechanism's reflection history; state which recorded lesson
 the next experiment applies or which unresolved uncertainty it tests.
 At a closed-result or independent-work decision boundary, apply the manual's
