@@ -1,0 +1,91 @@
+{
+  "schema": "enwiki9_implementation_evidence_v1",
+  "id": "wiki_schema_exact_transfer_v2_unit_20260906",
+  "generatedUtc": "2026-09-06T02:20:50.926640+00:00",
+  "component": "Schema transfer runner accepts and authenticates empty Python runtime package files",
+  "source_bindings": [
+    {
+      "path": "tools/wiki_schema_exact_transfer250k_q0_v2.py",
+      "bytes": 24989,
+      "sha256": "bbee0a1aa04b42b426d19fcf1369f3e97a77126cf66223d6e271a7ac238da1e1"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_transfer_v2.py",
+      "bytes": 3062,
+      "sha256": "2beefa3f3bb59ac1a33aa7b7a633efe479f3917861ddd4820b63b894ce839f0a"
+    },
+    {
+      "path": "tools/wiki_schema_exact_transfer250k_q0_v1.py",
+      "bytes": 24988,
+      "sha256": "ac9a9aa176e9a3e6a27f5a79e9b5ca4c20f1f0f899fd308625ab5d9091c4dfc9"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_transfer.py",
+      "bytes": 8029,
+      "sha256": "89b05a5f13c48cb5c3e27882e3f4990fd7e5f76b6177ee5cd2ace79f9fc4fc4b"
+    },
+    {
+      "path": "tools/wiki_schema_exact_codec_v1.py",
+      "bytes": 24882,
+      "sha256": "6b9666e4ae7e0fc08518ec62b2a086a0e1a4f4d21b2b5b0ac5a87d771b40bfac"
+    },
+    {
+      "path": "tests/test_wiki_schema_exact_codec.py",
+      "bytes": 15647,
+      "sha256": "fddf4a17f0aaffc2fcaac6033e4f815494de48b13e2d9644e7dd3526079bbb04"
+    },
+    {
+      "path": "lib/fx2_native_gate_v1.py",
+      "bytes": 11624,
+      "sha256": "b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "path": "lib/artifacts.py",
+      "bytes": 2129,
+      "sha256": "9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    }
+  ],
+  "prerequisites": [
+    {
+      "path": "operations/evidence/20260906_wiki_schema_exact_unit.json",
+      "bytes": 4296,
+      "sha256": "c4c1c61bb47bc29914a2897a258f4a68cecdbdde7c5403d6f7182aa3fb42b18e"
+    },
+    {
+      "path": "operations/evidence/20260906_wiki_schema_exact_transfer_unit.json",
+      "bytes": 5064,
+      "sha256": "e0584217ee28de24e9305324ca564cbf9b55db93af157a699b607e206ccef46a"
+    }
+  ],
+  "validation": {
+    "command": "timeout --signal=TERM --kill-after=5s 120s taskset -c 2 prlimit --as=536870912 --cpu=120 --fsize=33554432 -- python3 -B -m unittest discover -s tests -p test_wiki_schema_exact_transfer_v2.py -v",
+    "returncode": 0,
+    "tests_passed": 9,
+    "output": "test_accounting_rejects_omitted_envelope_byte (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_accounting_rejects_omitted_envelope_byte) ... ok\ntest_ambiguous_kill_is_not_budget_evidence (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_ambiguous_kill_is_not_budget_evidence) ... ok\ntest_dictionary_divergence_is_rejected (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_dictionary_divergence_is_rejected) ... ok\ntest_empty_runtime_module_is_hash_bound_and_accepted (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_empty_runtime_module_is_hash_bound_and_accepted) ... ok\ntest_empty_runtime_module_size_and_hash_drift_reject (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_empty_runtime_module_size_and_hash_drift_reject) ... ok\ntest_failed_receipt_retains_published_output_in_artifact_index (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_failed_receipt_retains_published_output_in_artifact_index) ... ok\ntest_twenty_four_fake_phases_and_no_false_control_activation (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_twenty_four_fake_phases_and_no_false_control_activation) ... ok\ntest_unclosed_child_prevents_artifact_reads (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_unclosed_child_prevents_artifact_reads) ... ok\ntest_unselected_grammar_queries_do_not_activate_control (test_wiki_schema_exact_transfer_v2.SchemaTransferV2Tests.test_unselected_grammar_queries_do_not_activate_control) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.081s\n\nOK\n"
+  },
+  "execution_bounds": {
+    "cpu_affinity": [
+      2
+    ],
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "wall_seconds": 120,
+    "timeout_kill_grace_seconds": 5,
+    "per_file_bytes": 33554432
+  },
+  "change": "New v2 runner identity changes only candidate ID and runtime file byte admission from positive to nonnegative. An empty file retains its exact zero length and SHA256; byte/hash/content changes still reject. Original v1 source, tests and receipts remain unchanged.",
+  "controls": [
+    "All seven existing transfer-driver checks execute against v2 through a temporary module patch, without duplicated test implementation.",
+    "A real empty temporary __init__.py file passes exact runtime length/hash verification.",
+    "Incorrect declared size, incorrect declared SHA256 and changed runtime contents each reject."
+  ],
+  "corpus_executed": false,
+  "native_compilation_performed": false,
+  "codec_child_processes_launched": 0,
+  "phase_execution_scope": "Inherited fake NativeGate phases use only two temporary 65-byte synthetic populations. Runtime checks hash installed Python/process-supervisor files but do not execute them. No published corpus or trained model is decoded.",
+  "resource_qualified": false,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "measurement_repeated_for_publication": false
+}
