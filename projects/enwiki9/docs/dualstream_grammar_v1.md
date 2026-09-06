@@ -59,3 +59,22 @@ decode and repeat in a separate bounded process and retains all outcomes.
 Source revisions, populations, controls, budgets and ownership must be published
 before release. Pin the canonical launcher to CPU2 before fork. HORIZON and all
 model campaigns are independent of this codec.
+
+The [opening 250KB development receipt](../operations/provenance/dualstream_grammar_development250k_terminal_20260906.json)
+closes all 54 processes and all 18 independent inverses and deterministic repeats.
+
+| Arm | Complete archive bytes |
+| --- | ---: |
+| Plain framed Deflate | 89,041 |
+| Split streams | 113,406 |
+| Recursive grammar G2 | 109,201 |
+| Parameter grammar T2 | 102,492 |
+
+T2 wins the frozen development tie with T6. It improves its matched grammar by
+6,709 bytes but loses 13,451 bytes against plain Deflate. All eight parameter
+configurations lose to plain. Their 12 repeated argument references demonstrate
+activation, not isolated attribution or competitive gain. The source remains
+sealed; a successor must diagnose representation cost under a new identity.
+Validation and confirmation populations remain unopened by this experiment.
+These counts exclude complete Python/zlib package costs and grant no full-corpus
+or resource-qualification credit.

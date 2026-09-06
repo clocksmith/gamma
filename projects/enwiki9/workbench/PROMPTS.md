@@ -10,6 +10,8 @@ Operate the enwiki9 research workbench under the applicable AGENTS.md/CATSCAN.md
 instructions. Read ADAPTIVE_WORKFLOW.md for commands and ledger/README.md for
 canonical records. Begin with tools/enwiki9_lab.py start; retrieve relevant
 evidence through records, including the tool catalogue before writing utilities.
+Retrieve the chosen mechanism's reflection history; state which recorded lesson
+the next experiment applies or which unresolved uncertainty it tests.
 Carry the user's question through the smallest justified executable comparison
 or research decision. Preserve existing ownership, source identities, and evidence
 bindings. Use the canonical lifecycle and standing bounded-work permissions.

@@ -33,6 +33,11 @@ Use `--history` for retired, failed, rejected, or superseded candidates.
 An explicit `--search`, `--candidate`, or `--state` also retrieves matching history.
 Candidate detail retains lineage and run history. Search matches all words,
 ignoring case; page with `--offset` and the returned `next_offset`.
+Search also covers recorded reflection lessons, localized failure causes,
+retired dimensions, uncertainties, and next actions. Before choosing a successor,
+read the relevant candidate's reflection history and name the lesson being
+applied or the uncertainty being tested. These are linked browsing projections;
+validate the canonical reflection before using it to authorize a transition.
 Reviews identify bound terminal jobs missing reflections; `--include-legacy`
 also includes historical unbound jobs. Presence is not a scientific verdict.
 
