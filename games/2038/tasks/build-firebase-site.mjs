@@ -170,14 +170,6 @@ export function buildIndexHtml({
   const feedbackLink = feedbackUrl
     ? `<p class="feedback"><a href="${escapeHtml(feedbackUrl)}">Send playtest feedback</a></p>`
     : "";
-  const worldPrimer = !library && Array.isArray(worldCopy?.worldPrimer)
-    ? `<section class="world-primer" aria-labelledby="world-primer-title">
-  <h2 id="world-primer-title">The world of 2038</h2>
-  ${worldCopy.worldPrimer.map((paragraph) =>
-    `<p>${escapeHtml(paragraph)}</p>`
-  ).join("\n  ")}
-</section>`
-    : "";
   return protectHtml(`<!doctype html>
 <html lang="en">
 <head>
@@ -200,8 +192,6 @@ export function buildIndexHtml({
     li span { display:block; margin-top:.25rem; color:var(--muted); font-size:.8rem; }
     li.primary-action { margin:.75rem 0; padding:1.2rem; border:1px solid var(--accent); background:rgba(228,181,83,.08); }
     li.primary-action a { font-size:1.5rem; }
-    .world-primer { margin-top:3rem; padding-top:.5rem; border-top:1px solid var(--line); }
-    .world-primer p { margin:.65rem 0; color:var(--muted); }
     .feedback { margin-top:2.5rem; }
     .feedback a { color:var(--accent); }
     footer { margin-top:2.5rem; color:var(--muted); font-size:.72rem; overflow-wrap:anywhere; }
@@ -213,7 +203,6 @@ export function buildIndexHtml({
   <h1>Mandate 2038</h1>
   <p>${introduction}</p>
   ${renderPageGroups(pages)}
-  ${worldPrimer}
   ${routeLink}
   ${feedbackLink}
   <footer>
