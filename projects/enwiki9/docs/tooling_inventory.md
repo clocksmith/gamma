@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **999 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 892 .py, 3 .sh).
+Coverage: **1000 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 893 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -192,6 +192,7 @@ Coverage: **999 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 892 .py,
 | [`tools/cpp_comment_quotient.py`](../tools/cpp_comment_quotient.py) | Build the frozen CQQ-1 comment-quotiented SCC source payload. | none found |
 | [`tools/cpp_line_whitespace_quotient.py`](../tools/cpp_line_whitespace_quotient.py) | Canonicalize provably irrelevant C/C++ horizontal whitespace. | none found |
 | [`tools/delayed_raw_residual_gate.cpp`](../tools/delayed_raw_residual_gate.cpp) | unknown; inspect source and the selected experiment | none found |
+| [`tools/dualstream_grammar_bounded_v1.py`](../tools/dualstream_grammar_bounded_v1.py) | Archive-bound repair over the sealed D2GRAM01 codec; no coding change. Successful archives retain the parent's exact format and bytes. Reject a write before the complete archive would exceed the decoder's existing acceptance cap. The inherited file command publishes only closed, successful outputs. | none found |
 | [`tools/dualstream_grammar_gate_v1.py`](../tools/dualstream_grammar_gate_v1.py) | Bounded standalone grammar comparisons through the existing adaptive queue. Every configuration is explicit before this worker starts. Development may compare several configurations; confirmation evaluates one frozen selection. No model campaign, external parent or compiler is loaded by this runner. | [1](../operations/adaptive/experiments/dualstream_grammar_development250k_q0_v1.json) |
 | [`tools/dualstream_grammar_v1.py`](../tools/dualstream_grammar_v1.py) | Standalone exact two-stream grammar; frame lookahead, no learned decoder. The structure stream contains a shared literal pool, backward phrase programs, parameter templates and root instructions. The content stream contains lexical references and invocation arguments. Five separately Deflated sections make every byte category additive, including backend tables. There is no model or external codec dependency beyond Python's standard-library zlib. | [1](../operations/adaptive/experiments/dualstream_grammar_development250k_q0_v1.json) |
 | [`tools/embed_nncp_makefile_flags.py`](../tools/embed_nncp_makefile_flags.py) | Embed frozen NNCP CFLAGS in existing Makefile tar slack. | none found |

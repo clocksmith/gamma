@@ -1,0 +1,51 @@
+{
+  "author": "ROOT local implementation; no Gemini-authored proposal",
+  "command": "PYTHONDONTWRITEBYTECODE=1 taskset -c 2 timeout 120s python3 -m unittest discover -s tests -p test_dualstream_grammar_bounded_v1.py -v",
+  "files": [
+    {
+      "bytes": 27806,
+      "path": "tools/dualstream_grammar_v1.py",
+      "sha256": "9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd"
+    },
+    {
+      "bytes": 2364,
+      "path": "tools/dualstream_grammar_bounded_v1.py",
+      "sha256": "22a9fdb0d863154f3112061b28a71eabc4f5224bde7f4cf0eebf99281e26655e"
+    },
+    {
+      "bytes": 3231,
+      "path": "tests/test_dualstream_grammar_bounded_v1.py",
+      "sha256": "b22715bde64b493e7c1f05711432709b28ba545071d45e18932758ab127c8eae"
+    }
+  ],
+  "format": "unchanged D2GRAM01",
+  "gemini_status": "Authentication rejected as unsupported client; response empty. Request and failure retained under operations/provenance/dualstream_gemini_design_20260906/.",
+  "generated_at": "2026-09-06T18:29:53.773594+00:00",
+  "independent_review": {
+    "additional_cli_inverse_check": true,
+    "agent": "grammar_blind_review",
+    "blinded_to": [
+      "claimed improvements",
+      "model responses",
+      "corpus inputs",
+      "result receipts"
+    ],
+    "blockers": [],
+    "original_finding": "v1 accepts 74074 identical bytes with split mode and frame_size=1, producing8000016 archive bytes above its decoder cap.",
+    "repair_result": "Rejects before exceeding cap; CLI removes temporary output and publishes no partial archive. Neighboring74073-byte fixture produces7999908 bytes, matches v1 and decodes exactly.",
+    "reviewed_successor_sha256": "22a9fdb0d863154f3112061b28a71eabc4f5224bde7f4cf0eebf99281e26655e",
+    "tests_passed": 18
+  },
+  "limitations": [
+    "Synthetic correctness only; no new corpus experiment.",
+    "Fixture artifacts are recreated by the tests, not retained as package qualification evidence.",
+    "The stream API may retain a bounded prefix on failure; file publication is atomic.",
+    "Complete package must count the wrapper, pinned parent and Python/zlib dependencies."
+  ],
+  "objective_credit_bytes": 0,
+  "schema": "gamma.enwiki9.grammar-bound-repair-unit.v1",
+  "source_preservation": true,
+  "successful_archive_change": "byte identity checked on synthetic fixtures; no coding mechanism changed",
+  "test_output": "test_file_command_refuses_partial_archive_publication (test_dualstream_grammar_bounded_v1.ArchiveBoundRepair.test_file_command_refuses_partial_archive_publication) ... ok\ntest_last_accepted_fixture_inverts_and_matches_parent (test_dualstream_grammar_bounded_v1.ArchiveBoundRepair.test_last_accepted_fixture_inverts_and_matches_parent) ... ok\ntest_parent_globals_and_accepted_archives_are_unchanged (test_dualstream_grammar_bounded_v1.ArchiveBoundRepair.test_parent_globals_and_accepted_archives_are_unchanged) ... ok\ntest_reviewer_first_failing_fixture_is_rejected_before_cap (test_dualstream_grammar_bounded_v1.ArchiveBoundRepair.test_reviewer_first_failing_fixture_is_rejected_before_cap) ... ok\ntest_short_target_write_is_an_explicit_failure (test_dualstream_grammar_bounded_v1.ArchiveBoundRepair.test_short_target_write_is_an_explicit_failure) ... ok\ntest_acyclic_empty_expansion_still_has_a_global_work_limit (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_acyclic_empty_expansion_still_has_a_global_work_limit) ... ok\ntest_auto_fallback_and_every_selected_change_pays (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_auto_fallback_and_every_selected_change_pays) ... ok\ntest_backward_recursive_phrases_and_templates (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_backward_recursive_phrases_and_templates) ... ok\ntest_bounded_deflate_and_integer_reader (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_bounded_deflate_and_integer_reader) ... ok\ntest_cyclic_and_forward_phrase_rules_are_rejected (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_cyclic_and_forward_phrase_rules_are_rejected) ... ok\ntest_cyclic_structure_rules_are_rejected (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_cyclic_structure_rules_are_rejected) ... ok\ntest_empty_and_arbitrary_bytes (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_empty_and_arbitrary_bytes) ... ok\ntest_exact_records_span_separate_bounded_frames (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_exact_records_span_separate_bounded_frames) ... ok\ntest_missing_extra_and_invalid_arguments_are_rejected (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_missing_extra_and_invalid_arguments_are_rejected) ... ok\ntest_no_normalization_of_markup_whitespace_or_unicode (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_no_normalization_of_markup_whitespace_or_unicode) ... ok\ntest_repeated_argument_discovery_and_interpreter (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_repeated_argument_discovery_and_interpreter) ... ok\ntest_streaming_file_reconstruction_and_existing_output_refusal (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_streaming_file_reconstruction_and_existing_output_refusal) ... ok\ntest_truncation_checksum_trailing_data_and_output_limits (grammar_bounded_parent_fixtures.DualStreamGrammarTest.test_truncation_checksum_trailing_data_and_output_limits) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 5.438s\n\nOK\n",
+  "tests_passed": 18
+}
