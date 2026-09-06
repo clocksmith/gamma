@@ -29,6 +29,12 @@ cap and preserves accepted v1 archive bytes and source. Eighteen synthetic tests
 pass, including the reported boundary and atomic file rejection. This repair
 is locally authored; it is not a Gemini design or new corpus compression result.
 
+The user explicitly removed Gemini from the required workflow. This consultation
+attempt is closed; authentication or another provider is not a research blocker.
+Continue locally from the measured literal-definition cost, with independent
+review and exact benchmark comparisons. Keep the failed request as historical
+provenance and keep confirmation inputs withheld from development.
+
 ## 2026-09-06 - Standalone two-stream parameter grammar development
 
 ROOT owns the new standalone `dualstream_grammar_v1` implementation work. The

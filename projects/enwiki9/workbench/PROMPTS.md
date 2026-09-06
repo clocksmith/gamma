@@ -12,6 +12,8 @@ canonical records. Begin with tools/enwiki9_lab.py start; retrieve relevant
 evidence through records, including the tool catalogue before writing utilities.
 Retrieve the chosen mechanism's reflection history; state which recorded lesson
 the next experiment applies or which unresolved uncertainty it tests.
+Design and implementation can proceed with local tools and independent agent
+review. External model consultation is optional and creates no prerequisite.
 Carry the user's question through the smallest justified executable comparison
 or research decision. Preserve existing ownership, source identities, and evidence
 bindings. Use the canonical lifecycle and standing bounded-work permissions.
