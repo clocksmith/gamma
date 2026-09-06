@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/cmix-live-allocation-set.schema.json",
+  "title": "CMIX Live Allocation Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "codec_pid",
+    "codec_proc_start_ticks",
+    "marker_sequence",
+    "allocations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "cmix-live-allocation-set.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_source_labelled_memory_attribution_q0_v1"
+    },
+    "codec_pid": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "codec_proc_start_ticks": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "marker_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "allocations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allocation"
+      }
+    }
+  },
+  "$defs": {
+    "allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allocation_sequence",
+        "label",
+        "allocation_base",
+        "usable_pointer",
+        "allocation_bytes",
+        "usable_bytes",
+        "alignment",
+        "eligible_for_memory_successor"
+      ],
+      "properties": {
+        "allocation_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "label": {
+          "enum": [
+            "fxcm_alloc",
+            "fxcm_aligned_alloc",
+            "context_history",
+            "context_shared_map",
+            "context_indirect_1",
+            "context_indirect_2",
+            "context_indirect_3",
+            "mixer_slab",
+            "ppm_anonymous_arena",
+            "ppm_file_backed_arena"
+          ]
+        },
+        "allocation_base": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_pointer": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allocation_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "alignment": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "eligible_for_memory_successor": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

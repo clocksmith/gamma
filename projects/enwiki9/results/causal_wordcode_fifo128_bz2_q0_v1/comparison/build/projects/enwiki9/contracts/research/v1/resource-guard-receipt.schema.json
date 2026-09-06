@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/resource-guard-receipt.schema.json",
+  "title": "gamma.enwiki9.resource_guard_receipt.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "label",
+    "phase",
+    "command",
+    "sample_interval_seconds",
+    "geekbench5_single_core_score",
+    "wall_time_limit_seconds",
+    "wall_time_measurement_complete",
+    "wall_time_exceeded",
+    "limit_kib",
+    "limit_mode",
+    "official_decimal_limit_kib",
+    "official_decimal_over_limit_kib",
+    "scratch_paths",
+    "temporary_disk_limit_bytes",
+    "temporary_disk_measurement_complete",
+    "max_sampled_temporary_disk_bytes",
+    "max_logical_cpus",
+    "affinity_measurement_complete",
+    "max_sampled_allowed_cpu_count",
+    "logical_cpu_guard_exceeded",
+    "max_sampled_tree_live_threads",
+    "max_sampled_tree_runnable_threads",
+    "max_sampled_single_rss_kib",
+    "max_sampled_tree_rss_kib",
+    "peak_sample",
+    "peak_tree_sample",
+    "latest_sample",
+    "sample_count",
+    "rss_guard_exceeded",
+    "official_decimal_memory_exceeded",
+    "temporary_disk_guard_exceeded",
+    "returncode",
+    "status",
+    "elapsed_s"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.resource-guard-receipt.v2" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "label": { "type": ["string", "null"] },
+    "phase": { "enum": ["compression", "decompression", "diagnostic"] },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "sample_interval_seconds": { "type": "number", "minimum": 0.1 },
+    "geekbench5_single_core_score": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+    "wall_time_limit_seconds": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+    "wall_time_measurement_complete": { "type": "boolean" },
+    "wall_time_exceeded": { "type": "boolean" },
+    "limit_kib": { "type": "integer", "minimum": 1 },
+    "limit_mode": { "enum": ["max_single", "tree"] },
+    "official_decimal_limit_kib": { "type": ["integer", "null"], "minimum": 1 },
+    "official_decimal_over_limit_kib": { "type": ["integer", "null"], "minimum": 0 },
+    "scratch_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "temporary_disk_limit_bytes": { "type": ["integer", "null"], "minimum": 1 },
+    "temporary_disk_measurement_complete": { "type": "boolean" },
+    "latest_temporary_disk_bytes": { "type": "integer", "minimum": 0 },
+    "max_sampled_temporary_disk_bytes": { "type": "integer", "minimum": 0 },
+    "max_logical_cpus": { "type": ["integer", "null"], "minimum": 1 },
+    "affinity_measurement_complete": { "type": "boolean" },
+    "max_sampled_allowed_cpu_count": { "type": "integer", "minimum": 0 },
+    "logical_cpu_guard_exceeded": { "type": "boolean" },
+    "max_sampled_tree_live_threads": { "type": "integer", "minimum": 0 },
+    "max_sampled_tree_runnable_threads": { "type": "integer", "minimum": 0 },
+    "max_sampled_single_rss_kib": { "type": "integer", "minimum": 0 },
+    "max_sampled_tree_rss_kib": { "type": "integer", "minimum": 0 },
+    "peak_sample": { "$ref": "#/$defs/nullableSample" },
+    "peak_tree_sample": { "$ref": "#/$defs/nullableSample" },
+    "latest_sample": { "$ref": "#/$defs/nullableSample" },
+    "sample_count": { "type": "integer", "minimum": 1 },
+    "rss_guard_exceeded": { "type": "boolean" },
+    "official_decimal_memory_exceeded": { "type": "boolean" },
+    "temporary_disk_guard_exceeded": { "type": "boolean" },
+    "returncode": { "type": ["integer", "null"] },
+    "status": {
+      "enum": [
+        "running",
+        "complete",
+        "rss_guard_exceeded",
+        "aborted_official_decimal_memory_limit",
+        "temporary_disk_guard_exceeded",
+        "logical_cpu_guard_exceeded",
+        "wall_time_guard_exceeded"
+      ]
+    },
+    "elapsed_s": { "type": "number", "minimum": 0 },
+    "failure": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objectiveId",
+        "objectiveDigest",
+        "objectivePath",
+        "targetScoreBytes",
+        "corpusBytes",
+        "corpusSha256"
+      ],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pid", "rss_kib", "live_threads", "runnable_threads", "allowed_cpus"],
+      "properties": {
+        "pid": { "type": "integer", "minimum": 1 },
+        "rss_kib": { "type": "integer", "minimum": 0 },
+        "live_threads": { "type": "integer", "minimum": 0 },
+        "runnable_threads": { "type": "integer", "minimum": 0 },
+        "allowed_cpus": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processes",
+        "max_single_rss_kib",
+        "tree_rss_kib",
+        "tree_live_threads",
+        "tree_runnable_threads",
+        "allowed_cpu_union"
+      ],
+      "properties": {
+        "processes": { "type": "array", "items": { "$ref": "#/$defs/process" } },
+        "max_single_rss_kib": { "type": "integer", "minimum": 0 },
+        "tree_rss_kib": { "type": "integer", "minimum": 0 },
+        "tree_live_threads": { "type": "integer", "minimum": 0 },
+        "tree_runnable_threads": { "type": "integer", "minimum": 0 },
+        "allowed_cpu_union": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "nullableSample": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/sample" }
+      ]
+    }
+  }
+}

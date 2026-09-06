@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-causal-closure.v2",
+  "title": "Gamma Mechanism IR generalized causal closure v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "mechanism_ir",
+    "operational_status",
+    "events",
+    "source_availability",
+    "state_regions",
+    "arms",
+    "matched_opportunity_groups",
+    "resets",
+    "join",
+    "no_join_reason",
+    "truth_boundary_evidence",
+    "causal_invariants",
+    "claim_authority",
+    "execution_authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.gamma-mechanism-causal-closure.v2"
+    },
+    "mechanism_id": {"$ref": "#/$defs/id"},
+    "mechanism_ir": {"$ref": "#/$defs/artifact"},
+    "operational_status": {"const": "design_only"},
+    "events": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "ordinal", "phase", "boundary"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "ordinal": {"type": "integer", "minimum": 0},
+          "phase": {
+            "enum": ["before_truth", "truth_reveal", "after_truth"]
+          },
+          "boundary": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "source_availability": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "available_at_event",
+          "first_use_event",
+          "availability_class"
+        ],
+        "properties": {
+          "source_id": {"$ref": "#/$defs/id"},
+          "available_at_event": {"$ref": "#/$defs/id"},
+          "first_use_event": {"$ref": "#/$defs/id"},
+          "availability_class": {
+            "enum": [
+              "prior_decoded",
+              "derived_before_truth",
+              "current_truth_after_decode"
+            ]
+          }
+        }
+      }
+    },
+    "state_regions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "ir_state_id",
+          "source_location",
+          "authority",
+          "lifetime",
+          "readable_arms",
+          "writable_arms",
+          "outcome_partition",
+          "audit_hash"
+        ],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "ir_state_id": {
+            "anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
+          },
+          "source_location": {"type": "string", "minLength": 1},
+          "authority": {
+            "enum": [
+              "authoritative_parent",
+              "authoritative_coder",
+              "mechanism_persistent",
+              "mechanism_ephemeral",
+              "causal_evidence"
+            ]
+          },
+          "lifetime": {"enum": ["coordinate", "event", "segment", "persistent", "coder"]},
+          "readable_arms": {"$ref": "#/$defs/armIds"},
+          "writable_arms": {"$ref": "#/$defs/armIds"},
+          "outcome_partition": {
+            "enum": [
+              "none",
+              "arm_private_evidence",
+              "shared_pretruth_mechanism",
+              "shared_next_coordinate_mechanism",
+              "shared_posttruth_mechanism"
+            ]
+          },
+          "audit_hash": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm", "roles", "gate_behavior", "event_access"],
+        "properties": {
+          "arm": {"$ref": "#/$defs/armId"},
+          "roles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/role"}
+          },
+          "gate_behavior": {"type": "string", "minLength": 1},
+          "event_access": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "event",
+                "source_ids",
+                "read_state_ids",
+                "write_state_ids",
+                "action",
+                "truth_access"
+              ],
+              "properties": {
+                "event": {"$ref": "#/$defs/id"},
+                "source_ids": {"$ref": "#/$defs/ids"},
+                "read_state_ids": {"$ref": "#/$defs/ids"},
+                "write_state_ids": {"$ref": "#/$defs/ids"},
+                "action": {
+                  "enum": ["observe", "construct", "freeze", "score", "advance", "commit", "reset"]
+                },
+                "truth_access": {
+                  "enum": ["forbidden", "score_only", "transition_only"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "matched_opportunity_groups": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "treatment_arm",
+          "control_arms",
+          "manifest_state_id",
+          "prediction_freeze_event",
+          "truth_reveal_event",
+          "score_event"
+        ],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "treatment_arm": {"$ref": "#/$defs/armId"},
+          "control_arms": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/armId"}
+          },
+          "manifest_state_id": {"$ref": "#/$defs/id"},
+          "prediction_freeze_event": {"$ref": "#/$defs/id"},
+          "truth_reveal_event": {"$ref": "#/$defs/id"},
+          "score_event": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "resets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event", "state_ids", "reason"],
+        "properties": {
+          "event": {"$ref": "#/$defs/id"},
+          "state_ids": {"$ref": "#/$defs/nonEmptyIds"},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "join": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event", "retain_state_ids", "discard_state_ids", "forbidden_copy_pairs"],
+          "properties": {
+            "event": {"$ref": "#/$defs/id"},
+            "retain_state_ids": {"$ref": "#/$defs/ids"},
+            "discard_state_ids": {"$ref": "#/$defs/ids"},
+            "forbidden_copy_pairs": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["from", "to"],
+                "properties": {
+                  "from": {"$ref": "#/$defs/id"},
+                  "to": {"$ref": "#/$defs/id"}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "no_join_reason": {"type": ["string", "null"]},
+    "truth_boundary_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "source_artifact",
+        "physical_truth_visible_during_target_construction",
+        "target_dependency_rule",
+        "required_verification",
+        "native_codec_boundary_required"
+      ],
+      "properties": {
+        "mode": {"enum": ["native_predecode", "shadow_score_only_argument"]},
+        "source_artifact": {
+          "oneOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]
+        },
+        "physical_truth_visible_during_target_construction": {"type": "boolean"},
+        "target_dependency_rule": {"type": "string", "minLength": 1},
+        "required_verification": {"type": "string", "minLength": 1},
+        "native_codec_boundary_required": {"type": "boolean"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"mode": {"const": "shadow_score_only_argument"}}},
+          "then": {
+            "properties": {
+              "source_artifact": {"$ref": "#/$defs/artifact"},
+              "physical_truth_visible_during_target_construction": {"const": true},
+              "native_codec_boundary_required": {"const": true}
+            }
+          },
+          "else": {
+            "properties": {
+              "physical_truth_visible_during_target_construction": {"const": false}
+            }
+          }
+        }
+      ]
+    },
+    "causal_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pretruth_events",
+        "truth_reveal_event",
+        "posttruth_events",
+        "current_truth_source_id",
+        "pretruth_truth_access",
+        "control_outcomes_feed_treatment_state",
+        "arm_set_must_equal_ir",
+        "source_set_must_equal_ir",
+        "event_references_must_close",
+        "state_references_must_close",
+        "event_ordinals_must_be_strict"
+      ],
+      "properties": {
+        "pretruth_events": {"$ref": "#/$defs/nonEmptyIds"},
+        "truth_reveal_event": {"$ref": "#/$defs/id"},
+        "posttruth_events": {"$ref": "#/$defs/nonEmptyIds"},
+        "current_truth_source_id": {"$ref": "#/$defs/id"},
+        "pretruth_truth_access": {"const": "forbidden"},
+        "control_outcomes_feed_treatment_state": {"const": false},
+        "arm_set_must_equal_ir": {"const": true},
+        "source_set_must_equal_ir": {"const": true},
+        "event_references_must_close": {"const": true},
+        "state_references_must_close": {"const": true},
+        "event_ordinals_must_be_strict": {"const": true}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"join": {"type": "null"}}},
+      "then": {"properties": {"no_join_reason": {"type": "string", "minLength": 1}}},
+      "else": {"properties": {"no_join_reason": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "armId": {"type": "string", "pattern": "^[A-Z][A-Z0-9_-]*$"},
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/id"}
+    },
+    "nonEmptyIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/id"}
+    },
+    "armIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/armId"}
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^projects/enwiki9/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "role": {
+      "enum": [
+        "parent",
+        "zero_write_identity",
+        "treatment",
+        "treatment_component",
+        "mixed_treatment",
+        "random_direction",
+        "shifted_association",
+        "negated_output",
+        "causal_misalignment",
+        "ablation"
+      ]
+    }
+  }
+}

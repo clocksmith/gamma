@@ -1,0 +1,266 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "524288", "--official-decimal-limit-kib", "524288", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T221245Z_f195ae35dd", "--cgroup-memory-max-bytes", "536870912", "--temporary-disk-limit-bytes", "67108864", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.resources/guard.json", "--label", "20260906T221245Z_f195ae35dd", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/causal_wordcode_fifo128_bz2_q0_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260906T221245Z_f195ae35dd-91bm4ri7/causal_wordcode_fifo128_bz2_q0_v1", "--", "/usr/bin/taskset", "--cpu-list", "4", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/causal_wordcode_fifo128_gate_v1.py", "--candidate", "causal_wordcode_fifo128_bz2_q0_v1"], "job": {"candidate_id": "causal_wordcode_fifo128_bz2_q0_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/causal_wordcode_fifo128_bz2_q0_v1/20260906T221230714600Z_686d1e869900.json", "sha256": "sha256:1e4cf7e804a22da6278f59887078092897a6ad917a0ea535bda90579c3583540"}, "candidate_tree_sha256": "sha256:686d1e86990084b1ca36095a83c8142c05497118318319e1c0309b636cb57f24", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [4], "memory_bytes": 536870912, "scratch_bytes": 67108864, "swap_bytes": 0, "wall_seconds": 600}, "cgroup_inode": 237420, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T221245Z_f195ae35dd", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 237420, "kernel_cpuset": false, "memory_bytes": 536870912, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T221245Z_f195ae35dd"}], "guard_command_sha256": "90b6bcdff360ca37958f2fa00e41933941924f38aafce294266de0832bed9595", "guard_path": "run_logs/adaptive/20260906T221245Z_f195ae35dd.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json", "sha256": "sha256:3705a8ef73a6a257ac05c1749590850e64e937c1f8c308984d659df83205973f"}, "gate_size": 250000, "held": false, "held_at": "2026-09-06T22:12:45+00:00", "hold_history": [{"at": "2026-09-06T22:12:45+00:00", "held": true, "reason": "Publish frozen source, ownership, inputs and reviewed synthetic evidence before CPU4 execution."}, {"at": "2026-09-06T22:18:05+00:00", "held": false, "reason": "Published ownership and192 frozen inputs verified at af0c6df9b; fresh22:17:27Z admission shows only existing HORIZON jobs live, no unknown controllers, CPU4 available and16GiB reserved host headroom."}], "job_id": "20260906T221245Z_f195ae35dd", "priority": 90, "proposal": {"path": "operations/adaptive/proposals/developed/891_causal_wordcode_fifo128_bz2_q0_v1.json", "sha256": "sha256:7e4983b317083670e32ce8a0323ef36486c52d0d3b3e5205d1e0dbfc78efbfb0"}, "proposal_id": "causal_wordcode_fifo128_bz2_q0_v1", "purpose": "diagnostic", "released_at": "2026-09-06T22:18:05+00:00", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [4], "memory_bytes": 536870912, "scratch_bytes": 67108864, "swap_bytes": 0, "wall_seconds": 600}, "runner": {"path": "tools/causal_wordcode_fifo128_gate_v1.py", "sha256": "sha256:9123724220c21c1d70f9b32cf60e024eb7995f59cfd49098e7201d18ca62ef04"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/causal_wordcode_fifo128_bz2_q0_v1"], "started_at": "2026-09-06T22:18:06+00:00", "state": "running", "submitted_at": "2026-09-06T22:12:45+00:00", "tags": ["causal-wordcode"], "timing_authority": "diagnostic", "tool": "tools/causal_wordcode_fifo128_gate_v1.py", "tool_args": ["--candidate", "causal_wordcode_fifo128_bz2_q0_v1"]}}
+{"arms": {"K": {"archive_bytes": 71887, "archive_sha256": "2302f0c966ba4b5e4edce5b9ce672898f5846d6d71016c9826c1dcdef20f781e", "codec_seconds": {"decode": 0.46918655280023813, "encode": 1.03778354707174, "repeat": 1.0323208381887525}, "framing_bytes": 5, "payload_bytes": 71882, "state_digest": "b23e60517b096d10905122429ba727b5afca7c4d6b7358b50c3ed8325b1754a8", "transition_digest": "a59d8de2b414cc239e4895f548c1308ed4aa619fdf89ea745b96b07fc33a366a"}, "L": {"archive_bytes": 72243, "archive_sha256": "a8ad350f010e81a41f002768489df97c8f43557ffb21ada7b481bf1a2659f75b", "codec_seconds": {"decode": 0.4385854760184884, "encode": 0.3722781459800899, "repeat": 0.37071637506596744}, "framing_bytes": 5, "payload_bytes": 72238, "state_digest": "b23e60517b096d10905122429ba727b5afca7c4d6b7358b50c3ed8325b1754a8", "transition_digest": "a59d8de2b414cc239e4895f548c1308ed4aa619fdf89ea745b96b07fc33a366a"}, "P": {"archive_bytes": 71887, "archive_sha256": "2302f0c966ba4b5e4edce5b9ce672898f5846d6d71016c9826c1dcdef20f781e", "codec_seconds": {"decode": 0.47088407003320754, "encode": 1.0446108458563685, "repeat": 1.0427086830604821}, "framing_bytes": 5, "payload_bytes": 71882, "state_digest": "b23e60517b096d10905122429ba727b5afca7c4d6b7358b50c3ed8325b1754a8", "transition_digest": "a59d8de2b414cc239e4895f548c1308ed4aa619fdf89ea745b96b07fc33a366a"}, "T": {"archive_bytes": 73603, "archive_sha256": "9d4aae4ef3b8b63cc22c3fc6a8eba007bc33e28a3a6e998c05887b5949a79cac", "codec_seconds": {"decode": 0.43586898990906775, "encode": 0.3693339510355145, "repeat": 0.3729450630489737}, "framing_bytes": 5, "payload_bytes": 73598, "state_digest": "b23e60517b096d10905122429ba727b5afca7c4d6b7358b50c3ed8325b1754a8", "transition_digest": "a59d8de2b414cc239e4895f548c1308ed4aa619fdf89ea745b96b07fc33a366a"}}, "candidate_id": "causal_wordcode_fifo128_bz2_q0_v1", "comparison": {"path": "comparison/decision.json", "sha256": "06428179678941edda42a068ed53977745dcbfa8315b142c3529f4acc7a43f89"}, "complete_package_bytes": null, "correctness_pass": true, "experiment": {"path": "operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json", "sha256": "sha256:3705a8ef73a6a257ac05c1749590850e64e937c1f8c308984d659df83205973f"}, "frozen_inputs_reverified": true, "incremental_local_source_bytes": 17171, "local_cost_predicate_pass": false, "local_package_bytes": 18619, "objective_credit_bytes": 0, "processes": 12, "promotion_authorized": false, "qualification_complete": false, "schema": "gamma.enwiki9.causal-wordcode-stage.v1", "status": "held-nonpaying-realization", "synthetic_only": false, "timing_authority": "diagnostic"}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 237420,
+      "joined_before_exec": true,
+      "memory_max_bytes": 536870912,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T221245Z_f195ae35dd",
+      "previous_memory_max": "536870912",
+      "requested_memory_max_bytes": 536870912
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "4",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/causal_wordcode_fifo128_gate_v1.py",
+      "--candidate",
+      "causal_wordcode_fifo128_bz2_q0_v1"
+    ],
+    "command_sha256": "aac335a59395ca63abbda40d84270c81e56f9466fc8ef098c787fbde081c5eaa",
+    "elapsed_s": 12.5889,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260906T221245Z_f195ae35dd",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 4440064,
+      "elapsed_s": 12.5868,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 3575808,
+      "scratch_file_count": 252,
+      "scratch_logical_bytes": 2958093,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 524288,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+      "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+      "objectivePath": "contracts/research/v2/objective-contract.json",
+      "targetScoreBytes": 99000000
+    },
+    "official_decimal_limit_kib": 524288,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 1.0243,
+      "pid": 3559160,
+      "start_ticks": 182922422,
+      "vmhwm_kib": 44872
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        4
+      ],
+      "cgroup_current_bytes": 32436224,
+      "elapsed_s": 1.0243,
+      "max_single_rss_kib": 44872,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3559160,
+          "rss_kib": 44872,
+          "runnable_threads": 1,
+          "start_ticks": 182922422,
+          "vmhwm_kib": 44872
+        }
+      ],
+      "scratch_allocated_bytes": 40960,
+      "scratch_file_count": 5,
+      "scratch_logical_bytes": 14191,
+      "scratch_race_count": 0,
+      "tree_live_threads": 1,
+      "tree_rss_kib": 44872,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        4
+      ],
+      "cgroup_current_bytes": 55787520,
+      "elapsed_s": 6.55,
+      "max_single_rss_kib": 42104,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3559160,
+          "rss_kib": 42104,
+          "runnable_threads": 0,
+          "start_ticks": 182922422,
+          "vmhwm_kib": 44860
+        },
+        {
+          "allowed_cpus": [
+            4
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3560333,
+          "rss_kib": 37004,
+          "runnable_threads": 1,
+          "start_ticks": 182922969,
+          "vmhwm_kib": 37004
+        }
+      ],
+      "scratch_allocated_bytes": 2207744,
+      "scratch_file_count": 204,
+      "scratch_logical_bytes": 1689608,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 79108,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 56840192,
+      "max_observed_process_vmhwm_kib": 44872,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 55787520,
+      "max_sampled_scratch_allocated_bytes": 3575808,
+      "max_sampled_scratch_logical_bytes": 2958093,
+      "max_sampled_single_rss_kib": 44872,
+      "max_sampled_tree_live_threads": 2,
+      "max_sampled_tree_rss_kib": 79108,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.022,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 26,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/causal_wordcode_fifo128_bz2_q0_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260906T221245Z_f195ae35dd.resources",
+      "/tmp/gamma-enwiki9-20260906T221245Z_f195ae35dd-91bm4ri7/causal_wordcode_fifo128_bz2_q0_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.022,
+        "processes": [
+          {
+            "pid": 3559160,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2168,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 32,
+              "Private_Dirty": 2168,
+              "Private_Hugetlb": 0,
+              "Pss": 2785,
+              "Pss_Anon": 2168,
+              "Pss_Dirty": 2168,
+              "Pss_File": 617,
+              "Pss_Shmem": 0,
+              "Referenced": 7984,
+              "Rss": 7984,
+              "Shared_Clean": 5784,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 182922422
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 7584
+      },
+      {
+        "elapsed_s": 12.5868,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 67108864,
+    "wall_time_limit_seconds": null
+  }
+}

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1005 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 898 .py, 3 .sh).
+Coverage: **1007 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 900 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -41,6 +41,8 @@ Coverage: **1005 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 898 .py
 | [`tools/causal_block_expert_mixture.py`](../tools/causal_block_expert_mixture.py) | Exact replay screen for a bounded label-free block expert mixture. | none found |
 | [`tools/causal_copy_cover_gate.cpp`](../tools/causal_copy_cover_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/causal_state_screen.py`](../tools/causal_state_screen.py) | Rank causal XML/wiki parser states by online predictive information gain. This is a fast Lane B screening tool, not a compressor. It tests whether a deterministic state that can be reconstructed from already-decoded bytes has predictive value for the next byte after controlling for a simple local-history baseline. Promising states become candidates for fx2 SSE/mixer soft inputs. | none found |
+| [`tools/causal_wordcode_fifo128_bz2_v1.py`](../tools/causal_wordcode_fifo128_bz2_v1.py) | Bounded causal word coding over the unchanged opcode/BZip2 parent. P/K retain OWB1 archives byte-for-byte. OWF1t and OWF1l have equally sized five-byte headers and one BZip2 member. Only T emits FIFO slot references; L escapes literals and learns the same dictionary without using references. The decoder learns exclusively from bytes it has reconstructed. No corpus, trained model, grammar discovery or transmitted word table is needed to decode. | [1](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
+| [`tools/causal_wordcode_fifo128_gate_v1.py`](../tools/causal_wordcode_fifo128_gate_v1.py) | Authenticate one FIFO128 discovery gate and close the existing driver comparison. No arm subprocess runner or scientific ledger is created here. The candidate shim must emit DECODE_MARKER followed by its independent decoder statistics and bound each codec call with a 180-second alarm. The canonical envelope owns aggregate memory, scratch, CPU affinity and elapsed-stop enforcement. | [1](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
 | [`tools/chiron_residual_oracle.py`](../tools/chiron_residual_oracle.py) | Bounded ROCm oracle for a frozen causal endpoint428 residual model. | none found |
 | [`tools/clockwork_candidate_gate.py`](../tools/clockwork_candidate_gate.py) | Independently materialize and gate a bounded Clockwork residual expert. | none found |
 | [`tools/clockwork_contracts.py`](../tools/clockwork_contracts.py) | Validate and digest the public Clockwork contract set. | none found |
@@ -246,7 +248,7 @@ Coverage: **1005 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 898 .py
 | [`tools/enwiki9_omega.py`](../tools/enwiki9_omega.py) | OMEGA archive operations for the enwiki9 adaptive search loop. | none found |
 | [`tools/enwiki9_package_accounting.py`](../tools/enwiki9_package_accounting.py) | Seal official Hutter score and Gamma expanded-closure package accounting. | none found |
 | [`tools/enwiki9_page_shards.py`](../tools/enwiki9_page_shards.py) | Split an enwiki9 XML byte stream at deterministic page boundaries. | none found |
-| [`tools/enwiki9_python_source_closure.py`](../tools/enwiki9_python_source_closure.py) | Resolve and hash the project-local Python import closure for an entry tool. | [118](../operations/adaptive/experiments/cmix_obias_source_ppm_rss_env8192_diskbacked_q0_v5.json) |
+| [`tools/enwiki9_python_source_closure.py`](../tools/enwiki9_python_source_closure.py) | Resolve and hash the project-local Python import closure for an entry tool. | [119](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
 | [`tools/enwiki9_reflections.py`](../tools/enwiki9_reflections.py) | Create validated terminal reflections and rank successor proposals. | none found |
 | [`tools/enwiki9_release_receipts.py`](../tools/enwiki9_release_receipts.py) | Generate the canonical router for dependency bundles and release receipts. | none found |
 | [`tools/enwiki9_shard_container.py`](../tools/enwiki9_shard_container.py) | Pack independent codec archives into a small reversible shard container. | none found |
@@ -832,7 +834,7 @@ Coverage: **1005 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 898 .py
 | [`tools/random_window_novelty_screen.py`](../tools/random_window_novelty_screen.py) | Screen reversible Wikipedia transforms on deterministic random windows. This is a bounded representation-discovery probe. It deliberately uses two unrelated standard-library backends so a transform that only exploits one coder's quirks is visible. A positive result is proxy evidence only: it earns an exact target-substrate trace, never a Hutter score claim. Every candidate is decoder-rebuildable and carries no learned table payload: * wiki_graph_mtf: move-to-front references  | none found |
 | [`tools/record_driver_result.py`](../tools/record_driver_result.py) | Record driver results; --terminal-index records reviewed, closed arm sets. The terminal index is an ordinary evidence file, created before reflection: {"schema": "gamma.enwiki9.terminal-result-index.v1", "job": {"path": ..., "sha256": ...}, "guard": {"path": ..., "sha256": ...}, "arms": [{"arm": "P", "result": {...}, "artifacts": {"archive": {...}, "restored": {...}, "repeat": {...}}}], "evidence": []} References are project-relative and hash-bound. The validated reflection m | none found |
 | [`tools/renewal_hazard_gate.cpp`](../tools/renewal_hazard_gate.cpp) | unknown; inspect source and the selected experiment | none found |
-| [`tools/research_contracts.py`](../tools/research_contracts.py) | Validate the canonical enwik9 objective and its fail-closed receipts. | [116](../operations/adaptive/experiments/cmix_filebacked_fxcm_full_a_qm7_v1.json) |
+| [`tools/research_contracts.py`](../tools/research_contracts.py) | Validate the canonical enwik9 objective and its fail-closed receipts. | [117](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
 | [`tools/residual_odds_tree_gate.cpp`](../tools/residual_odds_tree_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/revlog_slot_bypass_oracle.py`](../tools/revlog_slot_bypass_oracle.py) | Measure REVLOG relational headroom on exact outer-XML WRT slots. | none found |
 | [`tools/route_d_timestamp_microblock_gate.py`](../tools/route_d_timestamp_microblock_gate.py) | Run the zero-credit Route D timestamp structural-microblock Q0 gate. | none found |
