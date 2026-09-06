@@ -5,26 +5,66 @@
     "sha256": "sha256:de3916a8bddc10992b6d8540b96295930cfdc6be6bb6b9a201d589ded86c9bfd"
   },
   "candidate_tree_sha256": "sha256:e9e9a61cb0111c009e8ddeeb5040229e9445be95211eab0b1adf468db86fce3f",
+  "elapsed_seconds": 24.287,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 180
+    },
+    "cgroup_inode": 233344,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T150251Z_ce40094662",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 233344,
+        "kernel_cpuset": false,
+        "memory_bytes": 2147483648,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260906T150251Z_ce40094662"
+      }
+    ],
+    "guard_command_sha256": "1376d2a6b3811606236293bcfcd6fdd45312383f28667e91cc9e18d7100c7dee",
+    "guard_path": "run_logs/adaptive/20260906T150251Z_ce40094662.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/midas_open_observer_sha_cost4096_q0_v1.json",
     "sha256": "sha256:5c78bd482486710b6651d9dd3bb3303261a466dd8679a8ae70e614195b7c1d8b"
   },
+  "finished_at": "2026-09-06T15:05:01+00:00",
   "gate_size": 4096,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-06T15:02:50+00:00",
   "hold_history": [
     {
       "at": "2026-09-06T15:02:50+00:00",
       "held": true,
       "reason": "Retry after validated infrastructure-failure reflection20260906T145045Z_48b35ff173: zero codec phases and empty result directory. Held until publication, previous launcher refresh closure and fresh CPU2 admission. Entire canonical launcher must inherit CPU2 via outer taskset before fork; frozen inputs and limits unchanged."
+    },
+    {
+      "at": "2026-09-06T15:04:36+00:00",
+      "held": false,
+      "reason": "Validated infrastructure-failure reflection and unchanged retry ownership published at6b161145db8d18c29114259c07387767e40297ba; all304 inputs reverified against disk and published HEAD, output directory empty. Previous launcher closed; fresh15:03:42Z admission shows only HORIZON, no lease or competing CPU2 gate. Execute taskset -c2 around canonical launcher to establish affinity before fork; all guard limits remain unchanged."
     }
   ],
   "job_id": "20260906T150251Z_ce40094662",
+  "log_path": "run_logs/adaptive/20260906T150251Z_ce40094662.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_midas_open_observer_sha_cost4096_q0_v1.json",
@@ -32,6 +72,7 @@
   },
   "proposal_id": "midas_open_observer_sha_cost4096_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-06T15:04:36+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -42,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 180
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/midas_open_observed_sha_gate_v1.py",
     "sha256": "sha256:fa48461e16e5cb2cee6caaaf551f6a395f2884a69034feb064987ab3a2e92c6c"
@@ -50,7 +92,8 @@
   "scratch_directories": [
     "results/midas_open_observer_sha_cost4096_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-06T15:04:36+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-06T15:02:51+00:00",
   "tags": [
     "held_initially",
@@ -64,5 +107,8 @@
   "tool_args": [
     "--candidate",
     "midas_open_observer_sha_cost4096_q0_v1"
-  ]
+  ],
+  "worker_pid": 2409261,
+  "worker_proc_start_ticks": 180321483,
+  "worker_started_at": "2026-09-06T15:04:37+00:00"
 }
