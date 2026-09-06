@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1",
+  "title": "CMIX file-backed FXCM opening/distant 10M identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "authoritative_parent_id", "population",
+    "fixed_scopes", "trajectory_semantics", "result_filesystem_type",
+    "scratch_filesystem_type", "selected_logical_cpu", "runner",
+    "scope_primitive", "antecedents", "scopes", "aggregate", "resources",
+    "decisions", "errors", "terminal_pass", "claim_authority",
+    "claim_boundary", "execution_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "fixed_scopes": {"const": [
+      {"offset": 0, "bytes": 10000000},
+      {"offset": 500000000, "bytes": 10000000}
+    ]},
+    "trajectory_semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opening", "distant", "persistent_byte_zero_state_claimed"],
+      "properties": {
+        "opening": {"const": "canonical_prefix_from_byte_zero"},
+        "distant": {"const": "cold_reset_fragment_at_corpus_offset"},
+        "persistent_byte_zero_state_claimed": {"const": false}
+      }
+    },
+    "result_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "scratch_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "selected_logical_cpu": {"type": "integer", "minimum": 0},
+    "runner": {"$ref": "#/$defs/file"},
+    "scope_primitive": {"$ref": "#/$defs/file"},
+    "antecedents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_build_receipt", "program_lock_verification",
+        "allocator_negative_controls", "allocator_positive_fixture",
+        "cumulative_identity_receipt"
+      ],
+      "properties": {
+        "scope_build_receipt": {"$ref": "#/$defs/file"},
+        "program_lock_verification": {"$ref": "#/$defs/file"},
+        "allocator_negative_controls": {"$ref": "#/$defs/file"},
+        "allocator_positive_fixture": {"$ref": "#/$defs/file"},
+        "cumulative_identity_receipt": {"$ref": "#/$defs/file"}
+      }
+    },
+    "scopes": {"type": "array", "maxItems": 2, "items": {"$ref": "#/$defs/scope"}},
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_probability_stream_sha256",
+        "candidate_probability_stream_sha256", "identity_pass"
+      ],
+      "properties": {
+        "parent_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_pass": {"type": "boolean"}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_count", "maximum_tree_rss_kib", "maximum_temporary_disk_bytes",
+        "maximum_allowed_cpu_count", "all_guards_pass"
+      ],
+      "properties": {
+        "guard_count": {"type": "integer", "minimum": 0},
+        "maximum_tree_rss_kib": {"type": "integer", "minimum": 0, "maximum": 9765625},
+        "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 0, "maximum": 100000000000},
+        "maximum_allowed_cpu_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "all_guards_pass": {"type": "boolean"}
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_fixed_scopes_complete", "exact_integer_probability_identity_pass",
+        "full_trace_identity_pass", "payload_identity_pass",
+        "opening_both_arms_exact_inverse_pass",
+        "distant_parent_candidate_decode_identity_pass",
+        "within_scope_state_trajectory_identity_pass",
+        "candidate_backing_cleanup_pass", "resource_guard_pass",
+        "opening_distant_10m_transfer_pass", "full_stream_identity_established",
+        "persistent_full_corpus_identity_established", "memory_safe_parent_qualified",
+        "promotion_authorized"
+      ],
+      "properties": {
+        "all_fixed_scopes_complete": {"type": "boolean"},
+        "exact_integer_probability_identity_pass": {"type": "boolean"},
+        "full_trace_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "opening_both_arms_exact_inverse_pass": {"type": "boolean"},
+        "distant_parent_candidate_decode_identity_pass": {"type": "boolean"},
+        "within_scope_state_trajectory_identity_pass": {"type": "boolean"},
+        "candidate_backing_cleanup_pass": {"type": "boolean"},
+        "resource_guard_pass": {"type": "boolean"},
+        "opening_distant_10m_transfer_pass": {"type": "boolean"},
+        "full_stream_identity_established": {"const": false},
+        "persistent_full_corpus_identity_established": {"const": false},
+        "memory_safe_parent_qualified": {"const": false},
+        "promotion_authorized": {"const": false}
+      }
+    },
+    "errors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "terminal_pass": {"type": "boolean"},
+    "claim_authority": {"const": "opening_and_distant_cold_reset_10m_identity_only"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"terminal_pass": {"const": true}}},
+    "then": {"properties": {
+      "scopes": {
+        "minItems": 2,
+        "maxItems": 2,
+        "prefixItems": [
+          {
+            "allOf": [
+              {"$ref": "#/$defs/scope"},
+              {"properties": {
+                "offset": {"const": 0},
+                "integer_probability_identity_pass": {"const": true},
+                "full_trace_identity_pass": {"const": true},
+                "payload_identity_pass": {"const": true},
+                "within_scope_state_trajectory_identity_pass": {"const": true},
+                "raw_slice_inverse_required": {"const": true},
+                "raw_slice_inverse_pass": {"const": true},
+                "parent_candidate_restored_identity_pass": {"const": true},
+                "diagnostic_decode_identity_pass": {"const": true},
+                "scope_pass": {"const": true}
+              }}
+            ]
+          },
+          {
+            "allOf": [
+              {"$ref": "#/$defs/scope"},
+              {"properties": {
+                "offset": {"const": 500000000},
+                "integer_probability_identity_pass": {"const": true},
+                "full_trace_identity_pass": {"const": true},
+                "payload_identity_pass": {"const": true},
+                "within_scope_state_trajectory_identity_pass": {"const": true},
+                "raw_slice_inverse_required": {"const": false},
+                "parent_candidate_restored_identity_pass": {"const": true},
+                "diagnostic_decode_identity_pass": {"const": true},
+                "scope_pass": {"const": true}
+              }}
+            ]
+          }
+        ],
+        "items": false
+      },
+      "errors": {"maxItems": 0},
+      "aggregate": {"properties": {"identity_pass": {"const": true}}},
+      "resources": {"properties": {
+        "guard_count": {"const": 8},
+        "maximum_allowed_cpu_count": {"const": 1},
+        "all_guards_pass": {"const": true}
+      }},
+      "decisions": {"properties": {
+        "all_fixed_scopes_complete": {"const": true},
+        "exact_integer_probability_identity_pass": {"const": true},
+        "full_trace_identity_pass": {"const": true},
+        "payload_identity_pass": {"const": true},
+        "opening_both_arms_exact_inverse_pass": {"const": true},
+        "distant_parent_candidate_decode_identity_pass": {"const": true},
+        "within_scope_state_trajectory_identity_pass": {"const": true},
+        "candidate_backing_cleanup_pass": {"const": true},
+        "resource_guard_pass": {"const": true},
+        "opening_distant_10m_transfer_pass": {"const": true}
+      }}
+    }}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format", "record_bytes", "bit_records", "byte_records", "truncated",
+        "integer_probability_stream_sha256", "residual_trace", "byte_trace", "metadata"
+      ],
+      "properties": {
+        "format": {"const": "res_v3"},
+        "record_bytes": {"const": 56},
+        "bit_records": {"type": "integer", "minimum": 8},
+        "byte_records": {"type": "integer", "minimum": 1},
+        "truncated": {"const": false},
+        "integer_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "residual_trace": {"$ref": "#/$defs/file"},
+        "byte_trace": {"$ref": "#/$defs/file"},
+        "metadata": {"$ref": "#/$defs/file"}
+      }
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm", "packaged_binary", "encode_return_code", "encode_guard",
+        "encode_guard_pass", "payload", "archive", "trace", "decode_return_code",
+        "decode_guard", "decode_guard_pass", "restored", "raw_slice_inverse_pass",
+        "backing_cleanup_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["parent", "candidate"]},
+        "packaged_binary": {"$ref": "#/$defs/file"},
+        "encode_return_code": {"const": 0},
+        "encode_guard": {"$ref": "#/$defs/file"},
+        "encode_guard_pass": {"const": true},
+        "payload": {"$ref": "#/$defs/file"},
+        "archive": {"$ref": "#/$defs/file"},
+        "trace": {"$ref": "#/$defs/trace"},
+        "decode_return_code": {"const": 0},
+        "decode_guard": {"$ref": "#/$defs/file"},
+        "decode_guard_pass": {"const": true},
+        "restored": {"$ref": "#/$defs/file"},
+        "raw_slice_inverse_pass": {"type": "boolean"},
+        "backing_cleanup_pass": {"const": true}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offset", "bytes", "slice_sha256", "arms",
+        "integer_probability_identity_pass", "full_trace_identity_pass",
+        "payload_identity_pass", "within_scope_state_trajectory_identity_pass",
+        "raw_slice_inverse_required", "raw_slice_inverse_pass",
+        "parent_candidate_restored_identity_pass", "diagnostic_decode_identity_pass",
+        "scope_pass"
+      ],
+      "properties": {
+        "offset": {"enum": [0, 500000000]},
+        "bytes": {"const": 10000000},
+        "slice_sha256": {"$ref": "#/$defs/sha256"},
+        "arms": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/arm"}},
+        "integer_probability_identity_pass": {"type": "boolean"},
+        "full_trace_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "within_scope_state_trajectory_identity_pass": {"type": "boolean"},
+        "raw_slice_inverse_required": {"type": "boolean"},
+        "raw_slice_inverse_pass": {"type": "boolean"},
+        "parent_candidate_restored_identity_pass": {"type": "boolean"},
+        "diagnostic_decode_identity_pass": {"type": "boolean"},
+        "scope_pass": {"type": "boolean"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"offset": {"const": 0}}},
+          "then": {"properties": {
+            "raw_slice_inverse_required": {"const": true},
+            "raw_slice_inverse_pass": {"const": true}
+          }}
+        },
+        {
+          "if": {"properties": {"offset": {"const": 500000000}}},
+          "then": {"properties": {"raw_slice_inverse_required": {"const": false}}}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "authoritative_parent_id", "population", "offset", "bytes", "slice_sha256", "result_filesystem_type", "scratch_filesystem_type", "selected_logical_cpu", "runner", "scope_primitive", "antecedents", "arms", "aggregate", "resources", "decisions", "errors", "terminal_pass", "claim_authority", "claim_boundary", "execution_authority", "gamma_compression_credit_bytes", "gamma_score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "population": {"allOf": [{"$ref": "#/$defs/file"}, {"properties": {"bytes": {"const": 1000000000}, "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}}}]},
+    "offset": {"const": 0}, "bytes": {"const": 1000000}, "slice_sha256": {"$ref": "#/$defs/sha256"},
+    "result_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "scratch_filesystem_type": {"type": "string", "minLength": 1, "not": {"enum": ["tmpfs", "ramfs"]}},
+    "selected_logical_cpu": {"type": "integer", "minimum": 0},
+    "runner": {"$ref": "#/$defs/file"}, "scope_primitive": {"$ref": "#/$defs/file"},
+    "antecedents": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_build_receipt", "program_lock_verification", "allocator_negative_controls", "allocator_positive_fixture", "scope_identity_receipt"],
+      "properties": {"scope_build_receipt": {"$ref": "#/$defs/file"}, "program_lock_verification": {"$ref": "#/$defs/file"}, "allocator_negative_controls": {"$ref": "#/$defs/file"}, "allocator_positive_fixture": {"$ref": "#/$defs/file"}, "scope_identity_receipt": {"$ref": "#/$defs/file"}}
+    },
+    "arms": {"type": "array", "maxItems": 2, "items": {"type": "object"}},
+    "aggregate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["parent_probability_stream_sha256", "candidate_probability_stream_sha256", "identity_pass"],
+      "properties": {"parent_probability_stream_sha256": {"$ref": "#/$defs/sha256"}, "candidate_probability_stream_sha256": {"$ref": "#/$defs/sha256"}, "identity_pass": {"type": "boolean"}}
+    },
+    "resources": {
+      "type": "object", "additionalProperties": false,
+      "required": ["guard_count", "maximum_tree_rss_kib", "maximum_temporary_disk_bytes", "maximum_allowed_cpu_count", "all_guards_pass"],
+      "properties": {"guard_count": {"type": "integer", "minimum": 0}, "maximum_tree_rss_kib": {"type": "integer", "minimum": 0}, "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 0}, "maximum_allowed_cpu_count": {"type": "integer", "minimum": 0}, "all_guards_pass": {"type": "boolean"}}
+    },
+    "decisions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exact_integer_probability_identity_pass", "full_trace_identity_pass", "payload_identity_pass", "both_arms_exact_inverse_pass", "candidate_backing_cleanup_pass", "resource_guard_pass", "cumulative_1m_identity_pass", "full_stream_identity_established", "memory_safe_parent_qualified", "promotion_authorized"],
+      "properties": {"exact_integer_probability_identity_pass": {"type": "boolean"}, "full_trace_identity_pass": {"type": "boolean"}, "payload_identity_pass": {"type": "boolean"}, "both_arms_exact_inverse_pass": {"type": "boolean"}, "candidate_backing_cleanup_pass": {"type": "boolean"}, "resource_guard_pass": {"type": "boolean"}, "cumulative_1m_identity_pass": {"type": "boolean"}, "full_stream_identity_established": {"const": false}, "memory_safe_parent_qualified": {"const": false}, "promotion_authorized": {"const": false}}
+    },
+    "errors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "terminal_pass": {"type": "boolean"}, "claim_authority": {"const": "cumulative_opening_1m_identity_only"},
+    "claim_boundary": {"type": "string", "minLength": 1}, "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0}, "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{"if": {"properties": {"terminal_pass": {"const": true}}}, "then": {"properties": {"arms": {"minItems": 2, "maxItems": 2}, "errors": {"maxItems": 0}, "aggregate": {"properties": {"identity_pass": {"const": true}}}, "resources": {"properties": {"guard_count": {"const": 4}, "all_guards_pass": {"const": true}, "maximum_allowed_cpu_count": {"const": 1}}}, "decisions": {"properties": {"exact_integer_probability_identity_pass": {"const": true}, "full_trace_identity_pass": {"const": true}, "payload_identity_pass": {"const": true}, "both_arms_exact_inverse_pass": {"const": true}, "candidate_backing_cleanup_pass": {"const": true}, "resource_guard_pass": {"const": true}, "cumulative_1m_identity_pass": {"const": true}}}}}}],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {"type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}}
+  }
+}

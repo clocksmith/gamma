@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma-parent-fallback-frame-authority-manifest.v1",
+  "title": "Gamma parent-fallback native frame authority manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "program_id",
+    "binary_sha256",
+    "native_receipt_sha256",
+    "native_verification_sha256",
+    "control_evidence_manifest_sha256",
+    "control_verification_sha256",
+    "native_verification_pass",
+    "control_verification_pass",
+    "execution_authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma-parent-fallback-frame-authority-manifest.v1"
+    },
+    "program_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "binary_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "native_receipt_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "native_verification_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "control_evidence_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "control_verification_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "native_verification_pass": {
+      "const": true
+    },
+    "control_verification_pass": {
+      "const": true
+    },
+    "execution_authority": {
+      "const": true
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1",
+  "title": "CMIX file-backed FXCM matched scope diagnostic builds",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "source_closure_sha256", "source_closure_receipt",
+    "trace_patch", "head_blob", "trace_patch_return_code", "trace_patch_stdout_sha256",
+    "trace_patch_stderr_sha256", "compiler_sha256", "compiler_proxy_sha256",
+    "linker_sha256", "builds", "packages", "package_asset_identity_pass",
+    "exact_probability_contract", "claim_authority",
+    "execution_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-scope-build.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "source_closure_sha256": {"$ref": "#/$defs/sha256"},
+    "source_closure_receipt": {"$ref": "#/$defs/file"},
+    "trace_patch": {"$ref": "#/$defs/file"},
+    "head_blob": {"$ref": "#/$defs/file"},
+    "trace_patch_return_code": {"const": 0},
+    "trace_patch_stdout_sha256": {"$ref": "#/$defs/sha256"},
+    "trace_patch_stderr_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_proxy_sha256": {"$ref": "#/$defs/sha256"},
+    "linker_sha256": {"$ref": "#/$defs/sha256"},
+    "builds": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm", "definitions", "binary", "compiler_invocations", "compiler_trace_manifest_sha256"],
+        "properties": {
+          "arm": {"enum": ["parent", "candidate"]},
+          "definitions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "binary": {"$ref": "#/$defs/file"},
+          "compiler_invocations": {"type": "integer", "minimum": 1},
+          "compiler_trace_manifest_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm", "commands", "packaged_binary", "dictionary_payload", "article_order_payload", "header", "backing_cleanup_pass"],
+        "properties": {
+          "arm": {"enum": ["parent", "candidate"]},
+          "commands": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["argv", "return_code", "stdout_sha256", "stderr_sha256"],
+              "properties": {
+                "argv": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+                "return_code": {"const": 0},
+                "stdout_sha256": {"$ref": "#/$defs/sha256"},
+                "stderr_sha256": {"$ref": "#/$defs/sha256"}
+              }
+            }
+          },
+          "packaged_binary": {"$ref": "#/$defs/file"},
+          "dictionary_payload": {"$ref": "#/$defs/file"},
+          "article_order_payload": {"$ref": "#/$defs/file"},
+          "header": {"$ref": "#/$defs/file"},
+          "backing_cleanup_pass": {"const": true}
+        }
+      }
+    },
+    "package_asset_identity_pass": {"const": true},
+    "exact_probability_contract": {"type": "string", "minLength": 1},
+    "claim_authority": {"const": "diagnostic_build_identity_only"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

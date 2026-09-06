@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/managed-exclusive-lease-verification.schema.json",
+  "title": "Managed Exclusive Lease Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "lease_id",
+    "verified",
+    "computed",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "managed-exclusive-lease-verification.v1"
+    },
+    "candidate_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lease_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "computed": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verified": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "candidate_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lease_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "computed": {
+            "type": "object"
+          },
+          "errors": {
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "errors": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

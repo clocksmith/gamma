@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1",
+  "title": "CMIX q1 100M observer opening/distant 10M calibration receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "antecedents",
+    "fixed_scopes",
+    "runs",
+    "comparisons",
+    "errors",
+    "terminal_pass",
+    "claim_authority",
+    "execution_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+    },
+    "antecedents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_contract",
+        "python_source_closure",
+        "observer_build",
+        "observer_build_schema",
+        "opening_distant_10m_receipt",
+        "opening_distant_10m_verification"
+      ],
+      "properties": {
+        "planning_contract": {"$ref": "#/$defs/artifact"},
+        "python_source_closure": {"$ref": "#/$defs/artifact"},
+        "observer_build": {"$ref": "#/$defs/artifact"},
+        "observer_build_schema": {"$ref": "#/$defs/artifact"},
+        "opening_distant_10m_receipt": {"$ref": "#/$defs/artifact"},
+        "opening_distant_10m_verification": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "fixed_scopes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["offset", "bytes", "slice_sha256"],
+          "properties": {
+            "offset": {"const": 0},
+            "bytes": {"const": 10000000},
+            "slice_sha256": {
+              "const": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["offset", "bytes", "slice_sha256"],
+          "properties": {
+            "offset": {"const": 500000000},
+            "bytes": {"const": 10000000},
+            "slice_sha256": {
+              "const": "17dfa1d4d228170583555711d5aab51a740475da194657f3db272a0b31a0d7af"
+            }
+          }
+        }
+      ]
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/run"}
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_runs_complete",
+        "opening_post_head_reference_pass",
+        "distant_post_head_reference_pass",
+        "parent_q1_probability_identity_pass",
+        "parent_q1_coder_identity_pass",
+        "parent_q1_state_identity_pass",
+        "pre_head_probability_negative_control_pass",
+        "pre_head_payload_identity_pass",
+        "pre_head_state_identity_pass",
+        "all_payload_reference_identity_pass",
+        "opening_all_raw_inverses_pass",
+        "opening_all_transformed_inverses_pass",
+        "state_mutation_control_pass",
+        "observer_calibration_pass"
+      ],
+      "properties": {
+        "all_runs_complete": {"type": "boolean"},
+        "opening_post_head_reference_pass": {"type": "boolean"},
+        "distant_post_head_reference_pass": {"type": "boolean"},
+        "parent_q1_probability_identity_pass": {"type": "boolean"},
+        "parent_q1_coder_identity_pass": {"type": "boolean"},
+        "parent_q1_state_identity_pass": {"type": "boolean"},
+        "pre_head_probability_negative_control_pass": {"type": "boolean"},
+        "pre_head_payload_identity_pass": {"type": "boolean"},
+        "pre_head_state_identity_pass": {"type": "boolean"},
+        "all_payload_reference_identity_pass": {"type": "boolean"},
+        "opening_all_raw_inverses_pass": {"type": "boolean"},
+        "opening_all_transformed_inverses_pass": {"type": "boolean"},
+        "state_mutation_control_pass": {"type": "boolean"},
+        "observer_calibration_pass": {"type": "boolean"}
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "terminal_pass": {"type": "boolean"},
+    "claim_authority": {
+      "const": "observer_calibration_on_retained_opening_and_distant_10m_only"
+    },
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/artifact"}
+      ]
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "offset",
+        "bytes",
+        "slice_sha256",
+        "probability_tap",
+        "package",
+        "reference_payload",
+        "encode_return_code",
+        "encode_guard",
+        "encode_guard_pass",
+        "probability_sha256",
+        "probability_summary",
+        "coder_checkpoints",
+        "persistent_state",
+        "transformed_input",
+        "arithmetic_payload",
+        "self_extracting_archive",
+        "payload_reference_identity_pass",
+        "observer_geometry_pass",
+        "decode_required",
+        "decode_return_code",
+        "decode_guard",
+        "decode_guard_pass",
+        "decoded_transformed",
+        "raw_inverse",
+        "transformed_inverse_pass",
+        "raw_inverse_pass",
+        "backing_cleanup_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["I-P", "I-Q", "N-P"]},
+        "offset": {"enum": [0, 500000000]},
+        "bytes": {"const": 10000000},
+        "slice_sha256": {"$ref": "#/$defs/sha256"},
+        "probability_tap": {"enum": ["post_head", "pre_head"]},
+        "package": {"$ref": "#/$defs/artifact"},
+        "reference_payload": {"$ref": "#/$defs/artifact"},
+        "encode_return_code": {"type": "integer"},
+        "encode_guard": {"$ref": "#/$defs/artifact"},
+        "encode_guard_pass": {"type": "boolean"},
+        "probability_sha256": {"$ref": "#/$defs/sha256"},
+        "probability_summary": {"$ref": "#/$defs/artifact"},
+        "coder_checkpoints": {"$ref": "#/$defs/artifact"},
+        "persistent_state": {"$ref": "#/$defs/artifact"},
+        "transformed_input": {"$ref": "#/$defs/artifact"},
+        "arithmetic_payload": {"$ref": "#/$defs/artifact"},
+        "self_extracting_archive": {"$ref": "#/$defs/artifact"},
+        "payload_reference_identity_pass": {"type": "boolean"},
+        "observer_geometry_pass": {"type": "boolean"},
+        "decode_required": {"type": "boolean"},
+        "decode_return_code": {"type": ["integer", "null"]},
+        "decode_guard": {"$ref": "#/$defs/nullableArtifact"},
+        "decode_guard_pass": {"type": ["boolean", "null"]},
+        "decoded_transformed": {"$ref": "#/$defs/nullableArtifact"},
+        "raw_inverse": {"$ref": "#/$defs/nullableArtifact"},
+        "transformed_inverse_pass": {"type": ["boolean", "null"]},
+        "raw_inverse_pass": {"type": ["boolean", "null"]},
+        "backing_cleanup_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

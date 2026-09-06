@@ -1,0 +1,47 @@
+{
+  "candidate_id": "causal_wordcode_fifo128_bz2_q0_v1",
+  "claimed_at": "2026-09-06T22:12:05+00:00",
+  "created_at": "2026-09-06T22:12:05+00:00",
+  "developed_at": "2026-09-06T22:12:06+00:00",
+  "evidence": [
+    {
+      "path": "operations/evidence/20260906_causal_wordcode_fifo128_bz2_unit.json",
+      "sha256": "sha256:bf995205324e6ebaf9d0c42a7a3bbc530f908ec28e0637c3890cca85826fa5dc"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json",
+    "sha256": "sha256:3705a8ef73a6a257ac05c1749590850e64e937c1f8c308984d659df83205973f"
+  },
+  "hypothesis": "Replacing the paid whole-input word table with a decoder-learned FIFO128 dictionary reduces complete opening250KB archive bytes sufficiently to pay the measured added local source.",
+  "interfaces_exposed": [
+    "compress_arm, decompress_arm and decoder-derived FIFO state with every-word transition digest"
+  ],
+  "kill_condition": "Hold this realization if T plus measured nonnegative source increment does not beat both P and L, or mandatory evidence fails. Resource exhaustion is a budget decision; implementation/evidence failure is not scientific rejection. No full-corpus or complete-package claim.",
+  "max_program_bytes": 32768,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 90,
+  "promotion_condition": "All exact gates pass and T plus measured source increment beats both P and L; separately frozen follow-up only.",
+  "proposal_id": "causal_wordcode_fifo128_bz2_q0_v1",
+  "retired_neighborhoods": [
+    "Independent of failed template argument storage, held FX2 residual packing and exact Fiber-FOSSIL retrieval; no MIDAS or HORIZON changes."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 108,
+  "state": "developed",
+  "title": "Causal FIFO128 word dictionary against exact opcode BZip2 parent"
+}

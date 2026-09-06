@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/adaptive-job.schema.json",
+  "title": "gamma.enwiki9.adaptive-job.v3",
+  "type": "object",
+  "required": [
+    "schema",
+    "job_id",
+    "candidate_id",
+    "candidate_tree_sha256",
+    "candidate_revision",
+    "experiment",
+    "proposal",
+    "proposal_id",
+    "runner",
+    "gate_size",
+    "priority",
+    "purpose",
+    "state",
+    "tags",
+    "submitted_at"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.adaptive-job.v3" },
+    "job_id": { "type": "string", "minLength": 1 },
+    "candidate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "candidate_tree_sha256": { "$ref": "#/$defs/digest" },
+    "candidate_revision": { "$ref": "#/$defs/reference" },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "proposal": { "$ref": "#/$defs/reference" },
+    "proposal_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "runner": { "$ref": "#/$defs/reference" },
+    "scratch_directories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "gate_size": { "type": "integer", "minimum": 1 },
+    "priority": { "type": "integer" },
+    "purpose": { "type": "string", "minLength": 1 },
+    "state": { "enum": ["pending", "running", "completed", "failed", "cancelled"] },
+    "tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "submitted_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-build-negative-controls-receipt.v1",
+  "title": "SAFE-MIX build-chain negative-controls receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "input_lock", "positive_fixture_pass", "exclusive_lease_absent_pass", "capture_controls", "verification_controls", "all_controls_rejected_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-build-negative-controls-receipt.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_sha256", "build_contract_sha256", "runner_sha256", "capture_sha256", "verifier_sha256", "python_executable_sha256", "synthetic_compiler_sha256", "synthetic_linker_sha256", "source_manifest_sha256"],
+      "properties": {
+        "contract_sha256": {"$ref": "#/$defs/sha256"},
+        "build_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"},
+        "capture_sha256": {"$ref": "#/$defs/sha256"},
+        "verifier_sha256": {"$ref": "#/$defs/sha256"},
+        "python_executable_sha256": {"$ref": "#/$defs/sha256"},
+        "synthetic_compiler_sha256": {"$ref": "#/$defs/sha256"},
+        "synthetic_linker_sha256": {"$ref": "#/$defs/sha256"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "positive_fixture_pass": {"const": true},
+    "exclusive_lease_absent_pass": {"const": true},
+    "capture_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pending_program_lock", "duplicate_program_lock_path", "program_lock_file_digest_mutation", "contract_digest_mismatch", "builder_digest_mismatch", "identity_probe_mutation", "command_order_mutation", "source_digest_mutation", "failed_compile", "failed_link", "live_source_path_retention"],
+      "properties": {
+        "pending_program_lock": {"const": true},
+        "duplicate_program_lock_path": {"const": true},
+        "program_lock_file_digest_mutation": {"const": true},
+        "contract_digest_mismatch": {"const": true},
+        "builder_digest_mismatch": {"const": true},
+        "identity_probe_mutation": {"const": true},
+        "command_order_mutation": {"const": true},
+        "source_digest_mutation": {"const": true},
+        "failed_compile": {"const": true},
+        "failed_link": {"const": true},
+        "live_source_path_retention": {"const": true}
+      }
+    },
+    "verification_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identical_build_root", "nested_build_root", "altered_artifact", "forged_artifact_digest", "wrong_build_role", "changed_input_lock", "changed_command_receipt", "omitted_artifact"],
+      "properties": {
+        "identical_build_root": {"const": true},
+        "nested_build_root": {"const": true},
+        "altered_artifact": {"const": true},
+        "forged_artifact_digest": {"const": true},
+        "wrong_build_role": {"const": true},
+        "changed_input_lock": {"const": true},
+        "changed_command_receipt": {"const": true},
+        "omitted_artifact": {"const": true}
+      }
+    },
+    "all_controls_rejected_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
