@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-06T14:12:16+00:00`
+- Generated at UTC: `2026-09-06T14:26:31+00:00`
 
 ## Target State
 
@@ -28,7 +28,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `n/a`
-- RSS samples: `17,378`
+- RSS samples: `17,464`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `n/a`
@@ -69,11 +69,11 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Existing observer job: `20260904T134731Z_441f96254f`
 - Observer worker verified on this host: `true`
 - Adopted source identities verified on this host: `true`
-- Observer progress UTC: `2026-09-06T14:12:08+00:00`
+- Observer progress UTC: `2026-09-06T14:26:31+00:00`
 - Observer progress fresh: `true`
-- Trace bytes: `9,474,359,296` / `10,364,777,488`
-- Archive bytes: `107,257,856`
-- Observer samples: `17,378`
+- Trace bytes: `9,488,416,768` / `10,364,777,488`
+- Archive bytes: `107,331,584`
+- Observer samples: `17,464`
 - Maximum observed tree RSS bytes: `9,320,505,344`
 - Continuous resource proof: `false`
 - Science accessed before terminal: `false`
@@ -145,8 +145,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Audit return code: `0`
 - Program directories: `975`
 - Registered programs: `514`
-- Untracked nonignored entries: `10`
-- Modified tracked entries: `6`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `2`
 - Candidate statuses: `active=18, blocked_dependency=54, candidate=236, measured_negative=100, retired=567`
 
 ## Active Runner Process Table
@@ -159,9 +159,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,475,887,104 | `2026-09-06T14:13:43+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 107,274,240 | `2026-09-06T14:13:24+00:00` |
-| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 349,691 | `2026-09-06T14:13:19+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1` | 9,489,838,080 | `2026-09-06T14:27:59+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace.log` | 349,912 | `2026-09-06T14:27:05+00:00` |
+| `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive` | 107,331,584 | `2026-09-06T14:26:20+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent-trace-guard.json` | 7,057 | `2026-09-04T12:55:53+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive.cmix.temp` | 647,798,592 | `2026-08-30T23:00:19+00:00` |
 | `projects/enwiki9/results/endpoint428_horizon_retained_parent_trace_q0_v1/.cmix9-PzZd3n/english.dic` | 411,996 | `2026-08-30T23:00:07+00:00` |

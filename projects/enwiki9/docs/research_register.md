@@ -2,6 +2,18 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - MIDAS distant100KB transfer is frozen and held
+
+ROOT owns `midas_open_observed_distant100k_q0_v1`, initially held job
+`20260906T143122Z_85238bbb11`. The [plan](../operations/provenance/midas_open_observed_distant100k_q0_v1_plan.json)
+reuses the exact opening-gate codecs and 16-phase runner at canonical raw offset
+500,000,000 for 100,000 bytes, with cold causal initialization and all P/K/F/S
+controls. Its 238 inputs include the validated opening reflection. CPU2, 2GiB
+outer memory, 256MiB scratch, zero swap and 1,200-second aggregate stop are bound;
+native limits stay unchanged. F must beat P and S with complete boundary
+evidence. This is a transfer test on previously examined data, not a sealed
+holdout or full-score claim. Publication precedes release and execution.
+
 ## 2026-09-06 - MIDAS opening100KB passes complete boundary observation
 
 The [terminal audit](../operations/provenance/midas_open_observed_opening100k_terminal_20260906.json)
