@@ -2,6 +2,42 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-06 - Standalone two-stream parameter grammar development
+
+ROOT owns the new standalone `dualstream_grammar_v1` implementation work. The
+user's `sandbox:/mnt/data/dualstream_grammar_v0.zip` is not accessible on this
+host and no local copy was found; this is a new implementation from the supplied
+specification, not a verified modification of that ZIP. The user-reported
+prototype measurements remain unverified external evidence.
+
+Hypothesis: jointly factoring exact phrases, parameterized byte templates and
+repeated invocation arguments can reduce complete framed archives against an
+identically framed Deflate baseline. All definitions precede use, references
+are backward-only, and independent frames permit bounded encoder lookahead.
+The decoder only interprets exact byte programs. XMill's grouping and existing
+phrase grammars are precedent, not Gamma novelty. Prior XML deletion ledger
+losses and the retired schema-exception realization remain unchanged.
+
+Implement and test the byte interpreter first. Then publish one bounded
+development gate on opening 250KB with plain backend, split streams, recursive
+grammar and shared-argument templates, including every definition, argument,
+framing and backend byte. Use a separate 250KB validation population to select
+one configuration before freezing a 1MB confirmation. Do not inspect that
+confirmation for parameter selection. CPU2 only; no model dependencies or
+HORIZON access. Each measured source revision remains immutable, while bounded
+development configuration selection is permitted and recorded.
+
+The [18-test synthetic receipt](../operations/evidence/20260906_dualstream_grammar_v1_unit.json)
+now proves exact byte/interpreter behavior and the bounded runner checks.
+The [development plan](../operations/provenance/dualstream_grammar_development250k_q0_v1_plan.json)
+is frozen with 11 inputs, eight configurations, 18 arms and 54 separate
+encode/decode/repeat phases. ROOT holds job `20260906T174841Z_181d2f2c47` until
+publication and fresh CPU2 admission. Limits are 2GiB outer memory, 256MiB
+scratch, zero swap and a 900-second aggregate stop; each process has a
+60-CPU-second, 90-wall-second and 1GiB address-space bound. No corpus result
+exists yet. The [codec guide](dualstream_grammar_v1.md) explains direct use,
+the two logical streams, exact accounting and the confirmation boundary.
+
 ## 2026-09-06 - SHA observer cost comparison reuses the sealed MIDAS driver
 
 ROOT owns `midas_open_observer_sha_cost4096_q0_v1`, initially held job
@@ -26,6 +62,14 @@ affinity before the inner `taskset` applied CPU2. No result file was created;
 cleanup passed. Its validated infrastructure-failure reflection permits a new
 held job for the unchanged experiment, with the entire canonical launcher
 pinned to CPU2 before fork. The strict guard and frozen budgets stay unchanged.
+
+The [retry terminal audit](../operations/provenance/midas_open_observer_sha_cost4096_terminal_20260906.json)
+passes all 16 phases, 304 input hashes and 60 retained original-observer file
+comparisons. All synthetic archives remain 4,143 bytes. Observed/reference
+encoder CPU ratios are P 1.600, K 1.399, F 1.369, S 1.373; the strict guard observed
+one allowed CPU from startup and cleanup completed. The validated reflection
+holds scientific promotion: these are implementation and cost results only.
+Four new normalized rows bring the ledger to 1,005 unique identities.
 
 During preparation, admission rejected an attempted edit to the older bound
 observer documentation. ROOT restored its exact bytes before enqueueing and

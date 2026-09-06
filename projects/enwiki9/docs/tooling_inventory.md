@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **997 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 890 .py, 3 .sh).
+Coverage: **999 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 892 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -192,6 +192,8 @@ Coverage: **997 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 890 .py,
 | [`tools/cpp_comment_quotient.py`](../tools/cpp_comment_quotient.py) | Build the frozen CQQ-1 comment-quotiented SCC source payload. | none found |
 | [`tools/cpp_line_whitespace_quotient.py`](../tools/cpp_line_whitespace_quotient.py) | Canonicalize provably irrelevant C/C++ horizontal whitespace. | none found |
 | [`tools/delayed_raw_residual_gate.cpp`](../tools/delayed_raw_residual_gate.cpp) | unknown; inspect source and the selected experiment | none found |
+| [`tools/dualstream_grammar_gate_v1.py`](../tools/dualstream_grammar_gate_v1.py) | Bounded standalone grammar comparisons through the existing adaptive queue. Every configuration is explicit before this worker starts. Development may compare several configurations; confirmation evaluates one frozen selection. No model campaign, external parent or compiler is loaded by this runner. | none found |
+| [`tools/dualstream_grammar_v1.py`](../tools/dualstream_grammar_v1.py) | Standalone exact two-stream grammar; frame lookahead, no learned decoder. The structure stream contains a shared literal pool, backward phrase programs, parameter templates and root instructions. The content stream contains lexical references and invocation arguments. Five separately Deflated sections make every byte category additive, including backend tables. There is no model or external codec dependency beyond Python's standard-library zlib. | none found |
 | [`tools/embed_nncp_makefile_flags.py`](../tools/embed_nncp_makefile_flags.py) | Embed frozen NNCP CFLAGS in existing Makefile tar slack. | none found |
 | [`tools/embedding_teacher_order.py`](../tools/embedding_teacher_order.py) | Use precomputed page embeddings as an offline teacher for page-order keys. The embedding model is never part of a counted decompressor. This tool only uses externally generated vectors to rank tiny deterministic page-order keys that can later be packaged by fx2_gepa_order_package.py. | none found |
 | [`tools/endpoint428_horizon_dualclock_source_census_q0_retry_v1.py`](../tools/endpoint428_horizon_dualclock_source_census_q0_retry_v1.py) | Retry HORIZON-DUALCLOCK with static identity-buffer storage only. | [1](../operations/adaptive/experiments/endpoint428_horizon_dualclock_source_census_q0_retry_v1.json) |
