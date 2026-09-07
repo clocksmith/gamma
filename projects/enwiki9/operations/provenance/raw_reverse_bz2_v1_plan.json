@@ -1,0 +1,15 @@
+{
+  "schema": "gamma.enwiki9.raw-reverse-bz2-implementation-plan.v1",
+  "candidate": "raw_reverse_bz2250k_q0_v1",
+  "owner": "root_explore",
+  "parent": "causal_bucket250k_q0_v1",
+  "objective_bytes": 99000000,
+  "hypothesis": "Reversing fixed250000-byte raw blocks reduces complete BZip2 level9 archives relative to forward blocks under identical framing.",
+  "mechanism": "Reverse the complete raw byte sequence inside each independent bounded block, encode it with installed standard-library BZip2 level9, then reverse the independently decoded bytes. No tokenization, dictionary, grammar, new entropy coder or inherited parent probabilities.",
+  "format": "Header <8sIIQ:magic D2REVB01,block_size,block_count,total_raw_size. Each block <IIB32s:raw_size,payload_size,direction,raw_SHA256 followed by exactly one BZip2 stream. Direction0 is forward and1 is reversed. Block size250000; maximum raw size1000000 and archive8000000. Count all headers, direction bytes and BZip2 termination.",
+  "controls": ["P: unchanged baseline_bz2 level9 compression of forward raw blocks inside matched framing", "K: compute reverse and inverse for bookkeeping, emit exact P", "D: encode reversed blocks even if larger, with independent inversion and deterministic raw re-encoding"],
+  "selection": "One configuration on already examined opening250KB development. P must be freshly produced: historical72658-byte BZip2 metadata lacks a retained archive hash. The89041-byte framed Deflate reference does not supply direction credit. No tuning on fresh validation or1MB confirmation.",
+  "bounds": "Synthetic correctness and kernel measurements first on separate CPU assignments,512MiB address space,32MiB per file, explicit CPU and elapsed stops. Corpus requires a separately frozen source/runtime/input contract, published ownership and queue, then fresh CPU2 admission under1GiB aggregate RAM,zeroSwap,64MiB scratch and300-second elapsed stop.",
+  "decision": "Require P/K identity and all three independently decoded raw inverses and repeats. D<P is only a small-sample direction result and must pay incremental source/package costs before a separately frozen fresh250KB comparison. D>=P ends this fixed direction test and continues independent search, not a parameter sweep.",
+  "preservation": "Keep earlier measured sources and receipts, HORIZON and neighboring lanes unchanged. Install nothing. Use project-owned temporary storage; /tmp writes are quota-limited."
+}
