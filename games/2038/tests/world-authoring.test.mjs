@@ -16,14 +16,14 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references", async () => {
   const { text, worldCopy, scenarios } = await readWorldDocument();
-  assert.equal(scenarios.length, 51);
+  assert.equal(scenarios.length, 53);
   assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 7);
   assert.equal(scenarios.filter(s => ["deferred", "research-backlog"].includes(s.disposition)).length, 16);
   const index = await buildScenarioIndex();
   assert.deepEqual(index.scenarios.map(({ surfaceBindings, ...s }) => s), [...scenarios].sort((a, b) => a.id.localeCompare(b.id, "en")));
   assert.deepEqual(JSON.parse(await read("dist/runtime/world-copy.json")), playerContent(worldCopy));
   assert.doesNotMatch(text, /```json|content\.worldCopy|scenario-backlog/);
-  const player = await read("dist/docs/world-and-institutions.md");
+  const player = await read("dist/review/docs/world-and-institutions.md");
   assert.doesNotMatch(player, /\$\{|<!--|Mechanic status|scenario-canon/);
   for (const ending of worldCopy.endings) assert.ok(player.includes(ending.text));
   const variables = JSON.parse(await read("content/data/variables.json"));
@@ -62,12 +62,12 @@ test("canon requires explicit unique identities, dispositions, and complete narr
   const withoutNarrative = text.replace(first.narrative, "");
   assert.throws(() => parseScenarioCanon(withoutNarrative), /Missing or malformed scenario narrative/);
   assert.deepEqual(parseScenarioCanon(text.replace(/\n/g, "\r\n")), parseScenarioCanon(text));
-  assert.equal(documentSection(text, "scenario-canon").match(/^### /gm).length, 51);
+  assert.equal(documentSection(text, "scenario-canon").match(/^### /gm).length, 53);
 });
 
 test("lore-only entries cannot gain mechanics, public deployment, or game bindings", async () => {
   const ledger = await buildScenarioIndex();
-  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 51, surfaces: 62 });
+  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 53, surfaces: 63 });
   for (const mutate of [
     s => { s.mechanicPreservation.status = "retained"; },
     s => { s.deploymentProfiles.push("public-playtest"); },
@@ -137,7 +137,7 @@ test("an edited lore record compiles while stale release publication and freezin
     await exec(process.execPath, ["tasks/content/compile.mjs", "--check"], {cwd:fixture});
     const runtime = JSON.parse(await readFile(resolve(fixture, "dist/runtime/headlines.json"), "utf8"));
     assert.ok(runtime.headlines.some(f => f.newswire.startsWith("Authoring fixture correction.")));
-    const cards = await readFile(resolve(fixture, "dist/docs/card-reference.md"), "utf8");
+    const cards = await readFile(resolve(fixture, "dist/review/docs/card-reference.md"), "utf8");
     assert.ok(cards.includes("Authoring fixture correction."));
     for (const artifact of graph.artifacts.filter(a => ["text", "json"].includes(a.format))) {
       const output = await readFile(resolve(fixture, artifact.target), "utf8");
@@ -145,7 +145,7 @@ test("an edited lore record compiles while stale release publication and freezin
     }
     await exec(process.execPath, ["tasks/render-gallery.mjs", "--baseline"], {cwd:fixture});
     await exec(process.execPath, ["tasks/render-docs.mjs"], {cwd:fixture});
-    for (const target of ["dist/site/gallery-baseline.html", "dist/site/docs/card-reference.html"]) {
+    for (const target of ["dist/site/gallery-baseline.html", "dist/site/review/card-reference.html"]) {
       const output = await readFile(resolve(fixture, target), "utf8");
       assert.ok(output.includes("Authoring fixture correction."));
       assert.doesNotMatch(output, /INTERNAL_COMPONENT_SENTINEL|INTERNAL_GUIDE_SENTINEL/);
@@ -154,7 +154,7 @@ test("an edited lore record compiles while stale release publication and freezin
     await assert.rejects(exec(process.execPath, ["tasks/build-firebase-site.mjs", "--profile", "public-playtest"], {cwd:fixture}), /Stale generated release artifact/);
     await assert.rejects(exec(process.execPath, ["tasks/create-physical-kit.mjs", "--local"], {cwd:fixture}), /Stale generated release artifact/);
     assert.equal(await readFile(resolve(fixture, `versions/${release.gameVersion}/manifest.json`), "utf8"), sealedManifest);
-    graph.artifacts.push({source: "world.md", target: "dist/docs/unselected-lore.md", format: "text"});
+    graph.artifacts.push({source: "world.md", target: "dist/docs/unselected-lore.md", format: "text", audience:"player"});
     await writeFile(resolve(fixture, "content/graph.json"), JSON.stringify(graph));
     await assert.rejects(exec(process.execPath, ["tasks/content/compile.mjs"], {cwd:fixture}), /author bible cannot be exported/);
   } finally {

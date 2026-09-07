@@ -247,6 +247,14 @@ _${content.projects.byId.mega_cluster.flavorText}_
 ${content.projects.byId.fusion_demonstrator.text}
 
 _${content.projects.byId.fusion_demonstrator.flavorText}_
+### ${content.projects.byId.quantum.name} — ${content.projects.byId.quantum.displayName}
+
+**Unlock Era:** ${content.projects.byId.quantum.unlockedRound}
+
+${content.projects.byId.quantum.text}
+
+_${content.projects.byId.quantum.flavorText}_
+
 ## Headline cards
 
 ${excerpts.rules.headline-selection}

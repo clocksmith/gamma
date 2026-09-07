@@ -52,16 +52,17 @@ test("map, component and inventory readers reuse the rulebook's owned passages",
     excerpts:{rules:documentSections(source)}};
   for (const [section, slug] of [["map", "map-reference"], ["components", "component-reference"], ["inventory", "component-inventory"]]) {
     const expected = stripSectionMarkers(resolveString(`\${excerpts.rules.${section}|headings-up}`, context)).trim();
-    const actual = (await read(`dist/docs/${slug}.md`)).split("\n").slice(1).join("\n").trim();
+    const actual = (await read(`dist/review/docs/${slug}.md`)).split("\n").slice(1).join("\n").trim();
     assert.equal(actual, expected, `${slug} has no independent procedural prose`);
   }
   const graph = JSON.parse(rawGraph);
-  assert.deepEqual(graph.artifacts.find(a => a.target === "dist/docs/core-rules.md").excludeSections, ["map", "components"]);
+  assert.equal(graph.artifacts.find(a => a.target === "dist/docs/core-rules.md").excludeSections, undefined);
   const core = await read("dist/docs/core-rules.md");
-  assert.doesNotMatch(core, /Build the jurisdiction|Exact printed-paper count|<!--/);
-  assert.match(core, /\/docs\/map-reference.html/);
-  assert.match(core, /\/docs\/component-reference.html/);
-  const cardReference = await read("dist/docs/card-reference.md");
+  assert.match(core, /Build the jurisdiction/);
+  assert.match(core, /Pack the components/);
+  assert.doesNotMatch(core, /<!--|\/docs\/(map-reference|component-reference|card-reference)\.html/);
+  assert.deepEqual(graph.deploymentProfiles["public-playtest"].documents, ["core-rules.html"]);
+  const cardReference = await read("dist/review/docs/card-reference.md");
   const {headlines} = JSON.parse(await read("dist/runtime/headlines.json"));
   for (const card of headlines) {
     const section = cardReference.split(`### ${card.name}\n`)[1]?.split("\n### ")[0];
@@ -98,7 +99,7 @@ test("scenario bindings derive from component identity and point to the complete
     "components/headlines.json#headlines/ten_dollar_intelligence"));
   assert.equal(event.surfaceBindings.length, 4);
   assert.equal(index.eras.length, 4);
-  assert.equal(index.scenarios.flatMap(s => s.surfaceBindings).length, 62);
+  assert.equal(index.scenarios.flatMap(s => s.surfaceBindings).length, 63);
 });
 
 test("authoring rejects missing, duplicate, and unresolved scenario definitions", async () => {

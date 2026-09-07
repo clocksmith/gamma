@@ -128,52 +128,25 @@ const identity = {
   engineFingerprint: executableManifest.engine.fingerprint
 };
 const kitId = `${identity.rulesVersion}-${sourceCommit.slice(0, 8)}`;
-  const outputRoot = resolve(buildRoot, kitId);
+const outputRoot = resolve(buildRoot, kitId);
 if (!outputRoot.startsWith(`${buildRoot}/`)) {
   throw new Error("Resolved physical-kit output escapes dist/physical-kit.");
 }
 
 await rm(outputRoot, { recursive: true, force: true });
-await mkdir(resolve(outputRoot, "source-data"), { recursive: true });
-await mkdir(resolve(outputRoot, "release"), { recursive: true });
-await mkdir(resolve(outputRoot, "contracts"), { recursive: true });
+await mkdir(resolve(outputRoot, "observer/source-data"), { recursive: true });
+await mkdir(resolve(outputRoot, "observer/release"), { recursive: true });
+await mkdir(resolve(outputRoot, "observer/contracts"), { recursive: true });
 
-const rulebook = labeledRulebook(
-  await readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
-  identity
-);
-const mapReference = labeledRulebook(
-  await readFile(resolve(projectRoot, "dist/docs/map-reference.md"), "utf8"),
-  identity
-);
-const componentReference = labeledRulebook(
-  await readFile(resolve(projectRoot, "dist/docs/component-reference.md"), "utf8"),
-  identity
-);
-const cardReference = labeledRulebook(
-  await readFile(resolve(projectRoot, "dist/docs/card-reference.md"), "utf8"),
-  identity
-);
-const worldGuide = labeledRulebook(
-  await readFile(resolve(projectRoot, "dist/docs/world-and-institutions.md"), "utf8"),
-  identity
-);
-const governanceLedger = labeledRulebook(
-  await readFile(resolve(projectRoot, "physical/governance-ledger.md"), "utf8"),
-  identity
-);
-const gallery = labeledGallery(
-  await readFile(resolve(projectRoot, "dist/site/gallery-baseline.html"), "utf8"),
-  identity
-);
-await writeFile(resolve(outputRoot, "core-rules.md"), rulebook);
-await writeFile(resolve(outputRoot, "map-reference.md"), mapReference);
-await writeFile(resolve(outputRoot, "component-reference.md"), componentReference);
-await writeFile(resolve(outputRoot, "card-reference.md"), cardReference);
-await writeFile(resolve(outputRoot, "world-and-institutions.md"), worldGuide);
-await writeFile(resolve(outputRoot, "governance-ledger.md"), governanceLedger);
-await writeFile(resolve(outputRoot, "component-masters.html"), gallery);
-await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity, await readFile(resolve(projectRoot, "docs/playtesting-and-evidence.md"), "utf8")));
+const graph = await readJson("content/graph.json");
+for (const file of graph.physicalKit.files) {
+  const source = await readFile(resolve(projectRoot, file.source), "utf8");
+  const transform = {markdown:labeledRulebook, gallery:labeledGallery,
+    protocol:(text, identity) => protocol(identity, text)}[file.transform];
+  if (!transform) throw new Error(`Unknown physical-kit transform: ${file.transform}`);
+  await mkdir(resolve(outputRoot, file.target, ".."), {recursive:true});
+  await writeFile(resolve(outputRoot, file.target), transform(source, identity));
+}
 await writeFile(
   resolve(outputRoot, "KIT-LABEL.txt"),
   `Rules ${identity.rulesVersion}\nExecutable reference ${identity.executableVersion}\nSource commit ${identity.sourceCommit}\n`
@@ -182,20 +155,20 @@ await writeFile(
 for (const path of sourceDataFiles) {
   await copyFile(
     resolve(projectRoot, path),
-    resolve(outputRoot, "source-data", path.slice("dist/runtime/".length))
+    resolve(outputRoot, "observer/source-data", path.slice("dist/runtime/".length))
   );
 }
 await copyFile(
   resolve(projectRoot, current.manifest),
-  resolve(outputRoot, "release", "executable-manifest.json")
+  resolve(outputRoot, "observer/release", "executable-manifest.json")
 );
 await copyFile(
   resolve(projectRoot, candidate.manifest),
-  resolve(outputRoot, "release", "rules-candidate-manifest.json")
+  resolve(outputRoot, "observer/release", "rules-candidate-manifest.json")
 );
 await copyFile(
   resolve(projectRoot, "lab/contracts/playtest-receipt.schema.json"),
-  resolve(outputRoot, "contracts", "playtest-receipt.schema.json")
+  resolve(outputRoot, "observer/contracts", "playtest-receipt.schema.json")
 );
 
 const readme = `# Mandate 2038 controlled physical kit
@@ -207,9 +180,9 @@ Executable reference ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
 
 This is a derived controlled-test kit, not a manufacturing package. It contains
-the four frozen Mandate 2038 documents, the world companion, baseline
-component masters, exact source data, release manifests, receipt contract, and
-blind-test preparation protocol. Deferred Tactics, secret objectives, and Reserve
+one complete rulebook, baseline component masters, the Governance Board ledger,
+exact source data, release manifests, receipt contract, and blind-test preparation
+protocol under \`observer/\`. Authoring documents and supplementary review books are excluded. Deferred Tactics, secret objectives, and Reserve
 Specialists are excluded from the component masters.
 
 Do not mix component revisions. Generate the actual session receipt with
@@ -218,20 +191,13 @@ Do not mix component revisions. Generate the actual session receipt with
 await writeFile(resolve(outputRoot, "README.md"), readme);
 
 const relativeFiles = [
+  ...graph.physicalKit.files.map(file => file.target),
   "KIT-LABEL.txt",
   "README.md",
-  "card-reference.md",
-  "component-masters.html",
-  "component-reference.md",
-  "contracts/playtest-receipt.schema.json",
-  "core-rules.md",
-  "map-reference.md",
-  "governance-ledger.md",
-  "world-and-institutions.md",
-  "playtest-protocol.md",
-  "release/executable-manifest.json",
-  "release/rules-candidate-manifest.json",
-  ...sourceDataFiles.map((path) => `source-data/${path.slice("dist/runtime/".length)}`)
+  "observer/contracts/playtest-receipt.schema.json",
+  "observer/release/executable-manifest.json",
+  "observer/release/rules-candidate-manifest.json",
+  ...sourceDataFiles.map((path) => `observer/source-data/${path.slice("dist/runtime/".length)}`)
 ].sort();
 const files = {};
 for (const path of relativeFiles) {
@@ -253,6 +219,7 @@ const manifest = {
   kitId,
   identity,
   kitFingerprint: `sha256:${kitFingerprint}`,
+  playerDocuments: graph.physicalKit.files.filter(file => file.audience === "player" && file.source === "dist/docs/core-rules.md").map(file => file.target),
   baselineModules: [
     "Core Actions",
     "Eras",

@@ -252,6 +252,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.objectiveId = null;
       player.jointVentures = [];
       player.megaClusters = [];
+      player.quantumCompleted = false;
       player.agiDeclared = false;
       player.agiClaimed = false;
       player.latestProductionSnapshot = null;
@@ -872,7 +873,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         objectiveId: player.objectiveId,
         agentsInSupply: player.agentsInSupply,
         jointVentures: player.jointVentures.length,
-        agiDeclared: player.agiDeclared,
+        quantumCompleted: player.quantumCompleted,
+          agiDeclared: player.agiDeclared,
         agiReadiness: this.declarationReadiness(player),
         dealFlowConversion: {
           unspentCredits: player.dealFlowRunwayCredits.reduce(
@@ -901,6 +903,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           agentsInSupply: candidate.agentsInSupply,
           jointVentures: this.copyPublic(candidate.jointVentures),
           megaClusters: this.copyPublic(candidate.megaClusters || []),
+          quantumCompleted: candidate.quantumCompleted,
           agiDeclared: candidate.agiDeclared,
           agiReadiness: this.declarationReadiness(candidate),
           currentScore: this.currentScore(candidate)
@@ -1699,8 +1702,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             }
           }
         }
-        if (this.round >= 4 && destination.id === "grid_reactor" && this.fusionBuiltBy === null && this.generatorOccupancy(destination.instanceId) < 3) {
+        if (this.round >= this.projectDocument.projects.find(p => p.id === "fusion_demonstrator").unlockedRound && destination.id === "grid_reactor" && this.fusionBuiltBy === null && this.generatorOccupancy(destination.instanceId) < 3) {
           projects.push({ id: "fusion_demonstrator", runway: this.config.powerSources.find(source => source.id === "fusion_demonstrator").runwayCost, compute: 0 });
+        }
+        const quantum = this.projectDocument.projects.find(project => project.id === "quantum");
+        if (this.round >= quantum.unlockedRound && !player.quantumCompleted &&
+            this.latestPoweredFacilities(preview).some(host => host.tileId === destination.instanceId)) {
+          projects.push({ id: quantum.id, runway: quantum.runwayCost, compute: quantum.computeCost });
         }
         for (const project of projects) {
           if (!facility && !project) continue;
@@ -1711,7 +1719,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             decisionId: `build_${facility ? `facility_${destination.category}` : project?.id === "generator" ? `generator_${project.sourceId}` : project?.id}_${project?.id || "none"}_${project?.leftId || ""}_${project?.rightId || ""}_${piece.id}_${destination.instanceId}`,
             label: `Assign ${piece.id} to ${destination.name}: construct ${parts.join(" + ")} (${runway} Runway${project?.compute ? `, ${project.compute} Compute` : ""})`,
             actionId: "build", parameters: { ...base, buildMode: "construction", facility, project, facilityCost: facility ? facilityCost : 0, actualRunwayCost: runway },
-            consequences: { runway: -runway, compute: -(project?.compute || 0), ...(facility ? { facility: destination.category } : {}), ...(project ? { project: project.id, connectsLocalFacilities: project.id !== "mega_cluster" } : {}) }
+            consequences: { runway: -runway, compute: -(project?.compute || 0), ...(facility ? { facility: destination.category } : {}), ...(project ? { project: project.id, connectsLocalFacilities: ["generator", "fusion_demonstrator"].includes(project.id) } : {}) }
           });
         }
       }
@@ -1747,6 +1755,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.generators.push({ id: `s${seat}-fusion`, tileId: p.destinationId, sourceId: project.id });
       this.fusionBuiltBy = seat; player.history.fusionBuilt = true;
       this.awardMandate(player, 2, project.id); this.addScrutiny(player, 3);
+    } else if (project?.id === "quantum") {
+      const quantum = this.projectDocument.projects.find(item => item.id === project.id);
+      player.quantumCompleted = true;
+      this.addResource(player, "capability", quantum.capabilityGain);
+      this.addScrutiny(player, quantum.scrutinyOnBuild);
     }
     (player.metrics.construction ||= []).push({ era: this.round, facility: p.facility, project: project?.id || null });
     this.markAction(player, "build", legal.label);
@@ -2961,6 +2974,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           objectiveId: player.objectiveId,
           jointVentures: clone(player.jointVentures || []),
           megaClusters: clone(player.megaClusters || []),
+          quantumCompleted: player.quantumCompleted,
           agiDeclared: player.agiDeclared,
           agiClaimed: player.agiClaimed,
           agiReadiness: this.declarationReadiness(player),
@@ -3003,7 +3017,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         facilities: player.facilities.length,
         poweredFacilityMandate,
         offlinePenalty,
-        agiDeclared: player.agiDeclared,
+        quantumCompleted: player.quantumCompleted,
+          agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,
         agiReadiness: this.declarationReadiness(player),
         metrics: clone(player.metrics)

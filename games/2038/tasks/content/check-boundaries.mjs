@@ -67,9 +67,19 @@ for (const artifact of graph.artifacts) {
   }
   if (artifact.format === "json") inspect(await readJson(artifact.target), artifact.target, false);
 }
-for (const target of ["dist/docs/map-reference.md", "dist/docs/component-reference.md", "dist/docs/component-inventory.md"]) {
-  const artifact = graph.artifacts.find(entry => entry.target === target);
-  if (!artifact?.layout) throw new Error(`Missing reference projection: ${target}`);
+const rulebook = graph.artifacts.find(entry => entry.target === "dist/docs/core-rules.md");
+if (rulebook?.source !== "rules.md" || rulebook.section || rulebook.excludeSections?.length) {
+  throw new Error("The player rulebook must include all of rules.md, including map and inventory.");
+}
+const publicDocuments = graph.deploymentProfiles["public-playtest"].documents;
+if (publicDocuments.length !== 1 || publicDocuments[0] !== "core-rules.html") {
+  throw new Error("Default player documents contain one complete rulebook; supplements belong to internal review.");
+}
+const release = await readJson("versions/current-release.json");
+const candidateDocuments = new Set(["dist/docs/core-rules.md", "physical/governance-ledger.md"]);
+if (release.rulesCandidate.files.length !== candidateDocuments.size ||
+    release.rulesCandidate.files.some(path => !candidateDocuments.has(path))) {
+  throw new Error("The physical candidate must contain the rulebook and writable ledger, without authoring documents.");
 }
 for (const descriptor of Object.values(graph.contexts)) {
   if (typeof descriptor === "object" && "overlays" in descriptor) throw new Error("Retired context overlay.");

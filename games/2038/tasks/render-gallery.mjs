@@ -10,7 +10,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const projectRoot = resolve(import.meta.dirname, "..");
-const dataDir = resolve(projectRoot, "dist/runtime");
+const graph = JSON.parse(await readFile(resolve(projectRoot, "content/graph.json"), "utf8"));
+const consumedInputs = new Set();
 const outDir = resolve(projectRoot, "dist/site");
 const checkOnly = process.argv.slice(2).includes("--check");
 const baselineOnly = process.argv.slice(2).includes("--baseline");
@@ -24,7 +25,10 @@ function escapeHtml(text) {
 }
 
 async function readData(name) {
-  return JSON.parse(await readFile(resolve(dataDir, `${name}.json`), "utf8"));
+  const source = graph.galleryRendering.inputs[name];
+  if (!source) throw new Error(`Undeclared gallery content: ${name}`);
+  consumedInputs.add(source);
+  return JSON.parse(await readFile(resolve(projectRoot, source), "utf8"));
 }
 
 // --- card primitives ---------------------------------------------------------
@@ -94,7 +98,7 @@ function buildFactions(data, config) {
               ? `<span class="trust-award-record" aria-label="Trust awards already scored"><small>Awards scored</small> ${config.scoring.trustThresholds
                 .map(({ value }) => `<span data-trust-threshold="${value}" data-scored="${v >= value}">${v >= value ? "[x]" : "[ ]"} ${value}</span>`).join(" ")}</span>`
               : ""}</dd></div>`)
-            .join("")}</dl>`
+            .join("")}</dl><p class="quantum-record">[ ] ${escapeHtml(config.quantumCompletionLabel)}</p>`
         : "";
       const abilities = (f.abilities || [])
         .map(
@@ -469,7 +473,8 @@ ${sections.map((s) => s.html).join("\n")}
 }
 
 const html = await build();
-const outName = baselineOnly ? "gallery-baseline.html" : "gallery.html";
+if (consumedInputs.size !== Object.keys(graph.galleryRendering.inputs).length) throw new Error("Unused gallery input declaration.");
+const outName = graph.galleryRendering.outputs[baselineOnly ? "baseline" : "complete"].target.replace(/^dist\/site\//, "");
 const outPath = resolve(outDir, outName);
 
 if (checkOnly) {

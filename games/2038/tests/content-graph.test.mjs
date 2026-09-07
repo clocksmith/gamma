@@ -63,11 +63,11 @@ test("semantic graph owns every player-facing construction surface", async () =>
   const targets = new Set(graph.artifacts.map((artifact) => artifact.target));
   for (const target of [
     "dist/docs/core-rules.md",
-    "dist/docs/map-reference.md",
-    "dist/docs/component-reference.md",
-    "dist/docs/card-reference.md",
-    "dist/docs/world-and-institutions.md",
-    "dist/docs/optional-tactics.md",
+    "dist/review/docs/map-reference.md",
+    "dist/review/docs/component-reference.md",
+    "dist/review/docs/card-reference.md",
+    "dist/review/docs/world-and-institutions.md",
+    "dist/review/docs/optional-tactics.md",
     "dist/contracts/era-situation-ledger.json",
     "dist/runtime/game-config.json",
     "dist/runtime/factions.json",
@@ -182,7 +182,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     config.powerSources.find((source) => source.id === "fusion_demonstrator").capacity,
     advancedFacts.power
   );
-  assert.ok(rules.includes(`#### Construct ${advancedName} (Era IV)`));
+  assert.ok(rules.includes(`#### Construct ${advancedName} (Era III onward)`));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
   assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Generator connections/);
@@ -205,9 +205,9 @@ test("shared semantic references construct current cards, rules, UI, and simulat
 test("Headline cards own their exact text while the rulebook owns timing", async () => {
   const { headlines } = await readJson("dist/runtime/headlines.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
-  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
+  const cardReference = await readFile(new URL("dist/review/docs/card-reference.md", root), "utf8");
   const componentReference = await readFile(
-    new URL("dist/docs/component-reference.md", root),
+    new URL("dist/review/docs/component-reference.md", root),
     "utf8"
   );
 
@@ -224,7 +224,7 @@ test("Headline cards own their exact text while the rulebook owns timing", async
 test("Mandate cards own their exact text while the rulebook owns scoring timing", async () => {
   const { mandates } = await readJson("dist/runtime/mandates.json");
   const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
-  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
+  const cardReference = await readFile(new URL("dist/review/docs/card-reference.md", root), "utf8");
 
   for (const mandate of mandates) {
     assert.ok(mandate.name && mandate.rulesText, `card owns ${mandate.id}`);
@@ -241,7 +241,7 @@ test("Card and Board Reference projects every other required card surface", asyn
     readJson("dist/runtime/projects.json"),
     readJson("dist/runtime/reference-cards.json"),
     readJson("dist/runtime/game-config.json"),
-    readFile(new URL("dist/docs/card-reference.md", root), "utf8")
+    readFile(new URL("dist/review/docs/card-reference.md", root), "utf8")
   ]);
 
   for (const faction of factionDocument.factions) {
@@ -301,7 +301,7 @@ test("Card and Board Reference projects every other required card surface", asyn
 test("world companion owns four ordered Era overviews and references canonical Era identities", async () => {
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
   const variables = await readJson("content/data/variables.json");
-  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
+  const world = await readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8");
   const source = await readFile(new URL("world.md", root), "utf8");
   const playerSource = Object.values(worldPassages(source)).join("\n");
   const chapters = [...world.matchAll(/^### Era ([IV]+): (.+)$/gm)];
@@ -356,7 +356,7 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
 
 test("ending descriptions retain four rule-owned outcomes without procedural prose", async () => {
   const { endings } = await readJson("dist/runtime/world-copy.json");
-  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
+  const world = await readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8");
   const config = await readJson("dist/runtime/game-config.json");
   assert.deepEqual(endings.map((ending) => ending.name).sort(), Object.values(config.worldEnding.outcomes).sort());
   for (const ending of endings) {
@@ -440,10 +440,10 @@ test("retained signature abilities project concrete continuity institutions", as
 test("Core Rules are compact while every moved authority has one table surface", async () => {
   const [rules, mapReference, componentReference, world, tactics, tacticDocument] = await Promise.all([
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
-    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/component-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
-    readFile(new URL("dist/docs/optional-tactics.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/map-reference.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/component-reference.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/optional-tactics.md", root), "utf8"),
     readJson("dist/runtime/tactics.json")
   ]);
   const wordCount = rules
@@ -482,7 +482,7 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(world, /### Assured Continuity/);
 
   const references = await readJson("dist/runtime/reference-cards.json");
-  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
+  const cardReference = await readFile(new URL("dist/review/docs/card-reference.md", root), "utf8");
   const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
   assert.match(mandateReference.backText.join("\n"), /Highest final Mandate wins/);
   assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
@@ -503,7 +503,7 @@ test("Core Rules are compact while every moved authority has one table surface",
 test("numeric typography preserves exact card digits while prose may spell numbers", async () => {
   const [{ headlines }, mapReference, thematicBible] = await Promise.all([
     readJson("dist/runtime/headlines.json"),
-    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/map-reference.md", root), "utf8"),
     readFile(new URL("world.md", root), "utf8")
   ]);
   const normalizedBible = thematicBible.replace(/\s+/g, " ");

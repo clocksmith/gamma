@@ -4,8 +4,9 @@ For human review of lore, voice, and rule clarity, begin with the
 [creative writer's review guide](../components/README.md). It gives the reading
 order and the questions to bring to each source.
 
-Start here to find a source. The printed play kit has several documents, but
-those documents are generated views of the sources below.
+Edit the sources below. The build produces one complete player rulebook, the
+actual game components, and the browser game. Templates are internal assembly
+code; writers do not need to navigate them to change prose or mechanics.
 
 | Change | Author here |
 | --- | --- |
@@ -35,20 +36,22 @@ map exposes named Markdown sections, such as `<!-- map:start -->` through
 `${excerpts.rules.map|headings-up}`. The formatter promotes heading levels for a
 standalone document; it changes no prose.
 
-- `rules.md` becomes `dist/docs/core-rules.md`. The graph's `excludeSections`
-  keeps detailed map and component sections out of this compact booklet.
-- The `map` and `components` excerpts become Map Reference and Component Reference.
-  The nested `inventory` excerpt also produces Supported Box Inventory.
-- Card and Board Reference projects component fields and selected rulebook passages.
+- All of `rules.md` becomes `dist/docs/core-rules.md`, including map instructions,
+  component usage, and inventory. Nothing is split out of the player rulebook.
+- Map, component, and inventory excerpts remain internal review outputs for
+  focused inspection and compatibility with existing author tools. They are
+  excluded from the public site and frozen player kit.
+- Card and Board Reference is an internal catalog projecting component fields
+  and selected rulebook passages. The final printed faces are the component masters.
   Duration and timing labels are selected from shared labels using the record's value.
-- World and Institutions uses an explicit layout selecting `world-setting` and
+- The optional World and Institutions companion uses an explicit layout selecting `world-setting` and
   `world-eras` passages, then the four compiled endings. The compiler exposes only
   those two world excerpts to templates. It never treats the whole author bible
   as a player document. Ending narratives live in Markdown; their conditions live
   in `components/game.json` under `worldEnding.$conditions`, beside the mechanical
   outcome configuration. They project into `world-copy.json`; the source-only map
   is stripped from game runtime data.
-- Rule Change Register combines the design ledger's `decision-register` introduction
+- The internal Rule Change Register combines the design ledger's `decision-register` introduction
   with the component change records.
 
 `content/templates/` owns headings, field labels, and arrangement. It has no
@@ -57,30 +60,38 @@ unsourced paragraph text and numeric overrides; reference resolution rejects
 missing fields, cycles, and invalid section markers. Layout checks do not judge
 whether prose in its owning source describes the intended game correctly.
 
-## Build paths
+## Source and distribution map
 
-```text
-rules.md / world.md / components/ / ui.json / content/data/
-  + content/graph.json + reference layouts
-  -> tasks/content/compile.mjs
-  -> dist/runtime/ (JSON consumed by lab/ and web/)
-  -> dist/docs/ (generated player documents)
-  -> dist/site/ (base site templates)
+[Generated content provenance](../dist/review/docs/content-provenance.md) lists
+content inputs, destinations, and audiences from `content/graph.json` and the
+references resolved during compilation. Shared variables are included when used.
+This is content provenance, not a complete dependency graph: rendering code,
+styles, image dependencies, and execution dependencies are outside its scope.
+Run `npm run content:build` to regenerate it; `npm run content:check` rejects drift.
 
-dist/docs/ + docs/*.md + physical/component-spec.md
-  -> tasks/render-docs.mjs -> dist/site/docs/ (Documentation reader)
+- `dist/docs/` contains the complete player rulebook.
+- `dist/review/docs/` contains generated review catalogs, extracts, the optional
+  lore companion, and the provenance map.
+- `dist/site/docs/` and `dist/site/review/` render player and review documents
+  separately. The local reader serves these at `/docs/` and `/review/`.
+- `dist/firebase/public/` is the default player site; `dist/review/site/` is the
+  separate local review package. Building it never replaces review sources.
+- Each frozen physical kit keeps the rulebook, component masters, and writable
+  ledger at its root. `observer/` contains the protocol, receipt schema, release
+  evidence, and compiled reference data. Actual session observations remain in
+  `evidence/playtests/`; kit creation never invents a completed receipt.
 
-runtime content -> tasks/render-gallery.mjs -> dist/site/ (Gallery)
-dist/site/ + public-playtest allowlist -> dist/firebase/public/
-dist/site/ + internal-review profile -> dist/review/
-```
+Templates and renderers assemble the declared outputs. Edit source content in
+its owning files; do not maintain a second handwritten path diagram.
 
-Generated outputs are not authoring locations. The former thematic-content-bible
-projection is retired; writing guidance is read directly in `world.md`. Core Rules
-and World and Institutions retain distinct procedural and setting purposes. Existing reader routes, including
-`/docs/core-rules.html`, `/docs/map-reference.html`, and
-`/docs/component-inventory.html`, stay stable. `docs/` contains rationale,
-evidence contracts, and research; it is not another player rulebook.
+Generated outputs are not authoring locations. The public document list contains
+only the complete rulebook; cards and boards are published as baseline component
+masters. The browser uses the same compiled records. Internal review exposes the
+supplementary extracts, card catalog, optional lore companion, and design records.
+They do not appear in the default player package. The physical candidate bundle
+contains the complete rulebook and writable Governance Board ledger. Authoring
+sources remain bound by the release content manifest, separately from player copy.
+Historical releases and frozen kits keep their original documents.
 
 ```bash
 npm run build:all

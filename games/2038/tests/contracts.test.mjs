@@ -22,17 +22,16 @@ test("current release declaration separates executable game from physical rules 
   assert.equal(current.contracts.mechanicsProjectionVersion, 2);
   assert.ok(current.rulesetFiles.includes("dist/runtime/game-config.json"));
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
-  assert.deepEqual(current.rulesCandidate.files.slice(0, 3), [
+  assert.deepEqual(current.rulesCandidate.files, [
     "dist/docs/core-rules.md",
-    "dist/docs/world-and-institutions.md",
-    "dist/docs/optional-tactics.md"
+    "physical/governance-ledger.md"
   ]);
 });
 
 test("physical authority defines one inventory and preserves automatic blind Audit draws", async () => {
   const [spec, inventory, governanceLedger, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
-    readFile(new URL("dist/docs/component-inventory.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/component-inventory.md", root), "utf8"),
     readFile(new URL("physical/governance-ledger.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8"),
     readJson("content/data/content-manifest.json")
@@ -56,7 +55,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(inventory, /## One prepacked faction tray per player/);
 
   assert.match(inventory, /five captive sliders/);
-  assert.match(inventory, /2 project references/);
+  assert.match(inventory, /3 project references/);
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /6 foldout player aids/);
   assert.match(inventory, /4 Agents/);
@@ -80,7 +79,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /114 standard cards plus 6 foldouts/);
+  assert.match(manufacturing, /115 standard cards plus 6 foldouts/);
 
   assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
@@ -116,8 +115,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   const current = await readJson("versions/current-release.json");
   const [rules, mapReference, componentReference] = await Promise.all([
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
-    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
-    readFile(new URL("dist/docs/component-reference.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/map-reference.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/component-reference.md", root), "utf8"),
   ]);
   const normalizedRules = [rules, mapReference, componentReference].join("\n").replace(/\s+/g, " ");
   for (const clause of [
@@ -175,14 +174,14 @@ test("complexity positioning stays broad, unmeasured, and game-scoped", async ()
 test("the thematic inventory matches the two-source Power contract", async () => {
   const [bible, inventory, specification] = await Promise.all([
     readFile(new URL("world.md", root), "utf8"),
-    readFile(new URL("dist/docs/component-inventory.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/component-inventory.md", root), "utf8"),
     readFile(new URL("physical/component-spec.md", root), "utf8")
   ]);
   assert.doesNotMatch(bible, /## Player-copy design inventory/);
   assert.doesNotMatch(bible, /## Physical quantity interpretation/);
   assert.doesNotMatch(bible, /## Concept inventory by Era/);
   assert.match(inventory, /1 three-panel foldout player aid/);
-  assert.match(inventory, /2 project references/);
+  assert.match(inventory, /3 project references/);
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
   assert.match(inventory, /10 Scrutiny cubes/);
@@ -213,10 +212,10 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   assert.match(bible, /## Research provenance/);
   assert.ok(bible.indexOf("<!-- world-setting:start -->") < bible.indexOf("<!-- world-guide:start -->"));
   assert.doesNotMatch(bible, /GENERATED:ERA_SITUATION_LEDGER/);
-  assert.equal(eraLedger.scenarios.length, 51);
+  assert.equal(eraLedger.scenarios.length, 53);
   assert.equal(
     eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
-    62
+    63
   );
   assert.match(bible, /Bankruptcy Data Estates/);
   const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
@@ -258,9 +257,9 @@ test("selected deck contracts have exact physical counts", async () => {
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
   assert.equal(trainingCount, 40);
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
-  assert.equal(escalation.projects.length, 2);
+  assert.equal(escalation.projects.length, 3);
   assert.equal(escalation.cardsPerPlayer, undefined);
-  assert.equal(escalation.sharedCardCount, 2);
+  assert.equal(escalation.sharedCardCount, 3);
   const defaultHeadlineCount = headlines.headlines.filter(
     (headline) => !headline.requiredRuleModules?.length
   ).length;
@@ -279,8 +278,8 @@ test("selected deck contracts have exact physical counts", async () => {
     mandates.mandates.length +
     trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  assert.equal(defaultStandardCards, 114);
-  assert.equal(defaultPrintedPieces, 120);
+  assert.equal(defaultStandardCards, 115);
+  assert.equal(defaultPrintedPieces, 121);
   assert.deepEqual(
     config.powerSources.filter((source) => source.id !== "fusion_demonstrator").map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -436,7 +435,7 @@ test("Faction boards project into Card and Board Reference without duplicating t
   const factions = await readJson("dist/runtime/factions.json");
   const [rules, cardReference] = await Promise.all([
     readFile(resolve(projectRoot, "dist/docs/core-rules.md"), "utf8"),
-    readFile(resolve(projectRoot, "dist/docs/card-reference.md"), "utf8")
+    readFile(resolve(projectRoot, "dist/review/docs/card-reference.md"), "utf8")
   ]);
 
   for (const faction of factions.factions) {
@@ -610,7 +609,7 @@ test("Headline deck preserves the original sixteen procedures", async () => {
 
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
   const [world, thematicBible] = await Promise.all([
-    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("world.md", root), "utf8")
   ]);
 
@@ -792,7 +791,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/world-copy.json"),
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
-    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8")
+    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8")
   ]);
 
   assert.equal(headlines.length, 24);

@@ -101,7 +101,7 @@ values are not mechanically reused.
 
 ### Contract and supply field
 
-Provide two project-reference positions, six numbered Joint Venture pair
+Provide three project-reference positions, six numbered Joint Venture pair
 bays, six numbered Mega-Cluster pair bays, one Fusion bay, and open labelled staging for shared components, the Audit bag, Scrutiny, and Systemic Risk. The board has no Power
 Source reference slots. Emergency and Clean Infrastructure are printed on
 their Energy tiles; Fusion is printed on its project reference.
@@ -124,6 +124,7 @@ Each faction board provides:
 - faction identity, starts, and one permanent ability;
 - five captive sliders for Runway, Compute, Capability, Customers, and Trust;
 - three labelled Trust award checkboxes beside the Trust slider: 2, 4, and 6;
+- one permanent-for-the-game Quantum completed checkbox, empty at setup;
 - six Core Action positions;
 - supply wells for four Agents, Facilities, Generator, Scrutiny, and
   Mandate marker; and

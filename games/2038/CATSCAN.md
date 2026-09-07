@@ -42,11 +42,19 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - Game procedures and inventory prose have one authored home in `rules.md`;
   exact component effects remain in `components/`. Reference layouts may arrange
   sourced excerpts and fields, but cannot independently author rule paragraphs
-  or numeric overrides. Named excerpts produce the compact Core Rules and the
-  detailed references without copying their source prose.
+  or numeric overrides. The complete Core Rules include map, components, and
+  inventory. Supplementary extracts and the card catalog are internal review
+  outputs, not required player books. Default public output is the rulebook,
+  actual game components, and browser game; the lore companion is optional.
+  Physical candidate files exclude authoring documents and deferred modules.
+  Source provenance remains in the executable release content manifest.
+  Generated review documents live in `dist/review/docs/` and render separately
+  into `dist/site/review/`. Each kit keeps observer support under `observer/`.
+  The content graph declares audiences and destinations and generates its own
+  content provenance map; that map does not claim complete code dependencies.
 - `world.md` is the sole authored source for world lore, World Endings, token
   microcopy, box copy, component creative prose, and scenario canon, projecting `dist/runtime/world-copy.json`
-  and the selected `dist/docs/world-and-institutions.md` companion. It is an internal
+  and the selected `dist/review/docs/world-and-institutions.md` companion. It is an internal
   author bible organized into setting/Eras, institutions and component copy,
   scenarios, endings, publishing copy, and editorial notes. Only explicitly selected
   passages and labeled player fields enter player projections. Ending conditions
@@ -54,8 +62,10 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   Era panels own their name, rules, and unlocks and reference Markdown epigraphs. Shared identities resolve
   from their existing owners. The overview preserves lore in accessible past-tense
   narration from 2038, without a character plot or mandatory events.
-- Site home pages present one flat list of linked titles without section groups,
-  subtitles, or duplicated navigation. Release identity remains in build receipts.
+- The public homepage presents final game materials first and a separate Sources
+  list below. Only explicitly selected mechanical and interface authoring files
+  are published; the author world bible and internal review documents remain
+  excluded. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
 - Every admitted lore situation has one structured Era placement, and every
