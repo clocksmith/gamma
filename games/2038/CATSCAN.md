@@ -43,8 +43,8 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   sourced excerpts and fields, but cannot independently author rule paragraphs
   or numeric overrides. Named excerpts produce the compact Core Rules and the
   detailed references without copying their source prose.
-- `world.md` opens with the four concise Era overviews and ending references;
-  concise editorial notes follow the fiction. Era panels own their name, epigraph,
+- `world.md` opens with the setting primer, the four concise Era overviews,
+  and ending references; concise editorial notes follow the fiction. Era panels own their name, epigraph,
   rules, and unlocks. Shared identities resolve from their existing owners.
   The overview preserves lore in accessible past-tense narration from 2038,
   without a character plot or mandatory events.
