@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { promisify } from "node:util";
@@ -286,25 +287,46 @@ async function registrationIdentity(path) {
   return { path: relativePath, registrationCommit: stdout.trim() };
 }
 
-async function loadKit(kitManifestPath) {
+export async function loadKit(kitManifestPath) {
   const manifestPath = resolve(kitManifestPath);
   const root = resolve(manifestPath, "..");
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
   if (manifest.artifactKind !== "controlled-physical-playtest-kit") {
     throw new TypeError("Codex session requires a controlled physical-playtest kit manifest.");
   }
-  const files = [
+  // Historical kits retain their original reading contract. New kits expose
+  // the complete rulebook plus the actual frozen component faces.
+  const files = manifest.playerDocuments ? [
+    ...manifest.playerDocuments.map(file => [file.replace(/\.md$/, ""), file]),
+    ["component-masters", "component-masters.html"]
+  ] : [
     ["core-rules", "core-rules.md"],
     ["map-reference", "map-reference.md"],
     ["component-reference", "component-reference.md"],
     ["card-reference", "card-reference.md"]
   ];
   const documents = await Promise.all(files.map(async ([id, fileName]) => {
-    const contents = await readFile(resolve(root, fileName), "utf8");
+    if (!manifest.files?.[fileName]) throw new Error(`Kit does not bind reading file: ${fileName}`);
+    let contents = await readFile(resolve(root, fileName), "utf8");
+    if (createHash("sha256").update(contents).digest("hex") !== manifest.files[fileName].sha256) {
+      throw new Error(`Frozen reading file hash mismatch: ${fileName}`);
+    }
+    if (id === "component-masters") {
+      const faces = contents.match(/<article\b[^]*?<\/article>/g);
+      if (!faces?.length) throw new Error("Frozen component masters contain no card faces.");
+      contents = faces.join("\n\n");
+    }
     return { id, fileName, contents, headings: headings(contents) };
   }));
   const readingDocuments = documents.flatMap((document) => chunkRulesDocument(document));
-  return { root, manifestPath, manifest, documents, readingDocuments };
+  const legacyInventory = documents.find(document => document.id === "component-reference");
+  const rulebook = documents.find(document => document.id === "core-rules");
+  const inventory = legacyInventory || {
+    ...rulebook,
+    contents: rulebook?.contents.split("\n## 9. Map and component reference\n")[1]?.split("\n## ")[0]
+  };
+  if (!inventory.contents) throw new Error("Frozen kit has no component inventory section.");
+  return { root, manifestPath, manifest, documents, readingDocuments, inventory };
 }
 
 function participantContext(participant) {
@@ -325,7 +347,7 @@ export function finalReadinessPrompt({
     `Final source-grounded answers:\n${JSON.stringify(answers, null, 2)}`,
     `Question ids still unresolved by the frozen documents:\n${JSON.stringify(unresolved)}`,
     "The following operational session facts are authoritative and resolve any conflicting inference in your follow-up record:",
-    `- This is a ${playerCount}-player Mandate 2038. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction entries in the Card and Board Reference do not apply to you.`,
+    `- This is a ${playerCount}-player Mandate 2038. Your registered faction is exactly ${participant.factionName} (${participant.factionId}); other faction boards do not apply to you.`,
     `- ${participant.profileId} is the simulator's decision persona, not a player ability, aid, restriction, or hidden rule.`,
     "- No Facility is placed during setup. All four begin in supply; the first Facility has the integrated starting-grid identifier and receives that Power after it is legally constructed.",
     "- Core Rules are the baseline authority. A Headline changes only its named rule while that specific Headline is currently revealed and active; unrelated Headline variants are not simultaneous alternatives.",
@@ -571,7 +593,7 @@ export async function runCodexControlledSession({
         participantContext(participant),
         "Record what you believe is present, how you would sort it, and concrete questions caused by the components alone.",
         `Kit identity:\n${JSON.stringify(kit.manifest, null, 2)}`,
-        fencedSources(kit.documents.filter((document) => document.id === "component-reference"))
+        fencedSources([kit.inventory])
       ].join("\n\n")
     }),
     (participant, _index, result) => onParticipantComplete?.({
@@ -617,7 +639,7 @@ export async function runCodexControlledSession({
       responseSchema: rulesResponseSchema,
       signal,
       prompt: [
-        "You are the same first-time participant after reading all four frozen Mandate 2038 documents.",
+        "You are the same first-time participant after reading the frozen Mandate 2038 rulebook and component sources.",
         "Do not use tools or outside knowledge. Synthesize only the recorded document-reading notes below.",
         participantContext(participant),
         `Document-reading records:\n${JSON.stringify(Object.fromEntries(

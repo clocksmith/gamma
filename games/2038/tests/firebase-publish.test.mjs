@@ -141,18 +141,20 @@ test("public playtest publication is an allowlist with release identity and feed
 
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /href="web\/index\.html">Play the game<\/a>/);
-    assert.doesNotMatch(rootIndex, /primary-action|<h[2-6]\b|<section\b|<p\b|<span\b|<footer\b/);
+    assert.doesNotMatch(rootIndex, /primary-action|<h[3-6]\b|<p\b|<span\b|<footer\b/);
+    assert.equal((rootIndex.match(/<h2\b/g) || []).length, 1);
+    assert.match(rootIndex, /id="sources-title">Sources/);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
-    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
+    assert.doesNotMatch(rootIndex, /href="docs\/(world-and-institutions|card-reference|map-reference|component-reference)\.html"/);
     const docsIndex = await readFile(resolve(fixture.root, "dist/site/docs/index.html"), "utf8");
     assert.doesNotMatch(docsIndex, /world-primer|adaptive cybernetics/);
-    assert.match(docsIndex, /href="world-and-institutions\.html"/);
+    assert.doesNotMatch(docsIndex, /href="world-and-institutions\.html"/);
     const docsBody = docsIndex.split("<body>")[1];
     assert.equal((docsBody.match(/<ul\b/g) ?? []).length, 1);
-    assert.equal((docsBody.match(/<li>/g) ?? []).length, 5);
+    assert.equal((docsBody.match(/<li>/g) ?? []).length, 1);
     assert.doesNotMatch(docsBody, /<h[2-6]\b|<nav\b|<p\b|doc-card|Required play kit/);
-    const worldCompanion = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
+    const worldCompanion = await readFile(resolve(fixture.root, "dist/site/review/world-and-institutions.html"), "utf8");
     for (const opening of [
       "Intelligence became cheap enough",
       "The public pool stayed warm",
@@ -182,10 +184,16 @@ test("public playtest publication is an allowlist with release identity and feed
       code: "ENOENT"
     });
     for (const forbidden of [
+      "sources/world.md",
+      "sources/docs/design-decisions.md",
       "lab.html",
       "gallery.html",
       "library/index.html",
       "docs/thematic-content-bible.html",
+      "docs/map-reference.html",
+      "docs/component-reference.html",
+      "docs/card-reference.html",
+      "docs/world-and-institutions.html",
       "docs/manufacturing-and-publishing-study.html",
       "docs/balance-and-exploitability.html",
       "docs/design-decisions.html",
@@ -203,10 +211,6 @@ test("public playtest publication is an allowlist with release identity and feed
     }
     for (const required of [
       "docs/core-rules.html",
-      "docs/map-reference.html",
-      "docs/component-reference.html",
-      "docs/card-reference.html",
-      "docs/world-and-institutions.html",
       "gallery-baseline.html",
       "dist/runtime/projects.json",
       "dist/runtime/simulation-copy.json",
@@ -215,6 +219,12 @@ test("public playtest publication is an allowlist with release identity and feed
       "first-game-guide.html"
     ]) {
       assert.ok((await stat(resolve(outputRoot, required))).isFile(), `publishes ${required}`);
+    }
+    assert.ok(rootIndex.indexOf('href="gallery-baseline.html"') < rootIndex.indexOf('id="sources-title"'));
+    for (const path of ["rules.md", "components/projects.json", "ui.json"]) {
+      assert.equal(await readFile(resolve(outputRoot, "sources", path), "utf8"),
+        await readFile(resolve(fixture.root, path), "utf8"), `source bytes: ${path}`);
+      assert.ok(rootIndex.includes(`href="sources/${path}"`));
     }
     const releaseIdentity = JSON.parse(
       await readFile(resolve(outputRoot, "release-identity.json"), "utf8")
@@ -242,11 +252,11 @@ test("internal review build remains complete but explicitly non-deployable", asy
       "gallery.html",
       "gallery-baseline.html",
       "library/index.html",
-      "docs/manufacturing-and-publishing-study.html",
-      "docs/balance-and-exploitability.html",
-      "docs/design-decisions.html",
-      "docs/defect-investigation-and-closure.html",
-      "docs/optional-tactics.html",
+      "review/manufacturing-and-publishing-study.html",
+      "review/balance-and-exploitability.html",
+      "review/design-decisions.html",
+      "review/defect-investigation-and-closure.html",
+      "review/optional-tactics.html",
       "dist/runtime/tactics.json",
       "dist/runtime/reserve-specialists.json",
       "dist/runtime/secret-objectives.json",
@@ -254,14 +264,23 @@ test("internal review build remains complete but explicitly non-deployable", asy
     ]) {
       assert.ok((await stat(resolve(outputRoot, required))).isFile(), `reviews ${required}`);
     }
-    await assert.rejects(stat(resolve(outputRoot, "docs/thematic-content-bible.html")), { code: "ENOENT" });
+    await assert.rejects(stat(resolve(outputRoot, "review/thematic-content-bible.html")), { code: "ENOENT" });
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /Simulation lab/i);
     assert.match(rootIndex, /Complete content gallery/i);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
-    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
+    assert.match(rootIndex, /href="review\/world-and-institutions\.html"/);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }
+});
+
+
+test("homepage puts public source links below finished materials", () => {
+  const html = buildIndexHtml({pages:[{title:"Play",href:"web/index.html"}],
+    sources:[{title:"Rulebook source",href:"sources/rules.md"}]});
+  assert.ok(html.indexOf('href="web/index.html"') < html.indexOf('id="sources-title"'));
+  assert.ok(html.indexOf('id="sources-title"') < html.indexOf('href="sources/rules.md"'));
+  assert.doesNotMatch(html, /world\.md|design-decisions/);
 });

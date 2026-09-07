@@ -4,7 +4,21 @@
     "dist/docs/advanced-play.md",
     "dist/site/docs/advanced-play.html",
     "dist/docs/thematic-content-bible.md",
-    "dist/site/docs/thematic-content-bible.html"
+    "dist/site/docs/thematic-content-bible.html",
+    "dist/docs/map-reference.md",
+    "dist/docs/component-reference.md",
+    "dist/docs/component-inventory.md",
+    "dist/docs/card-reference.md",
+    "dist/docs/world-and-institutions.md",
+    "dist/docs/rule-change-register.md",
+    "dist/docs/optional-tactics.md",
+    "dist/site/docs/map-reference.html",
+    "dist/site/docs/component-reference.html",
+    "dist/site/docs/component-inventory.html",
+    "dist/site/docs/card-reference.html",
+    "dist/site/docs/world-and-institutions.html",
+    "dist/site/docs/rule-change-register.html",
+    "dist/site/docs/optional-tactics.html"
   ],
   "variables": "content/data/variables.json",
   "contexts": {
@@ -39,7 +53,10 @@
     },
     "worldCopy": {
       "path": "world.md",
-      "collection": "endings"
+      "collection": "endings",
+      "inputs": [
+        "components/game.json"
+      ]
     },
     "uiCopy": "ui.json",
     "institutionalHistory": {
@@ -51,147 +68,173 @@
     {
       "source": "world.md",
       "target": "dist/contracts/era-situation-ledger.json",
-      "format": "scenario-index"
+      "format": "scenario-index",
+      "audience": "validation"
     },
     {
       "source": "content/data/content-manifest.json",
       "target": "dist/runtime/content-manifest.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/factions.json",
       "target": "dist/runtime/factions.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/game.json",
       "target": "dist/runtime/game-config.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/rule-changes.json",
       "target": "dist/runtime/rule-change-register.json",
-      "format": "json"
+      "format": "json",
+      "audience": "review"
     },
     {
       "source": "components/headlines.json",
       "target": "dist/runtime/headlines.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/mandates.json",
       "target": "dist/runtime/mandates.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "content/runtime/player-strategies.json",
       "target": "dist/runtime/player-strategies.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/reference-cards.json",
       "target": "dist/runtime/reference-cards.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "experimental/components/reserve-specialists.json",
       "target": "dist/runtime/reserve-specialists.json",
-      "format": "json"
+      "format": "json",
+      "audience": "review"
     },
     {
       "source": "experimental/components/secret-objectives.json",
       "target": "dist/runtime/secret-objectives.json",
-      "format": "json"
+      "format": "json",
+      "audience": "review"
     },
     {
       "source": "content/runtime/simulation-copy.json",
       "target": "dist/runtime/simulation-copy.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "experimental/components/tactics.json",
       "target": "dist/runtime/tactics.json",
-      "format": "json"
+      "format": "json",
+      "audience": "review"
     },
     {
       "source": "ui.json",
       "target": "dist/runtime/ui-copy.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "components/projects.json",
       "target": "dist/runtime/projects.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player"
     },
     {
       "source": "world.md",
       "target": "dist/runtime/world-copy.json",
-      "format": "json"
+      "format": "json",
+      "audience": "player",
+      "inputs": [
+        "components/game.json"
+      ]
     },
     {
       "source": "rules.md",
       "target": "dist/docs/core-rules.md",
       "format": "text",
-      "excludeSections": [
-        "map",
-        "components"
-      ]
+      "audience": "player"
     },
     {
       "source": "content/templates/map-reference.md",
-      "target": "dist/docs/map-reference.md",
+      "target": "dist/review/docs/map-reference.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "content/templates/component-reference.md",
-      "target": "dist/docs/component-reference.md",
+      "target": "dist/review/docs/component-reference.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "content/templates/component-inventory.md",
-      "target": "dist/docs/component-inventory.md",
+      "target": "dist/review/docs/component-inventory.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "content/templates/card-reference.md",
-      "target": "dist/docs/card-reference.md",
+      "target": "dist/review/docs/card-reference.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "content/templates/world-and-institutions.md",
-      "target": "dist/docs/world-and-institutions.md",
+      "target": "dist/review/docs/world-and-institutions.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "content/templates/rule-change-register.md",
-      "target": "dist/docs/rule-change-register.md",
+      "target": "dist/review/docs/rule-change-register.md",
       "format": "text",
-      "layout": true
+      "layout": true,
+      "audience": "review"
     },
     {
       "source": "experimental/tactics-rules.md",
-      "target": "dist/docs/optional-tactics.md",
-      "format": "text"
+      "target": "dist/review/docs/optional-tactics.md",
+      "format": "text",
+      "audience": "review"
     },
     {
       "source": "web/templates/prototype.html",
       "target": "dist/site/index.html",
-      "format": "text"
+      "format": "text",
+      "audience": "player"
     },
     {
       "source": "web/templates/simulation.html",
       "target": "dist/site/simulation.html",
-      "format": "text"
+      "format": "text",
+      "audience": "review"
     },
     {
       "source": "web/templates/first-game-guide.html",
       "target": "dist/site/first-game-guide.html",
-      "format": "text"
+      "format": "text",
+      "audience": "player"
     }
   ],
   "sourceRoots": [
@@ -202,7 +245,9 @@
     "world.md",
     "rules.md",
     "ui.json",
-    "docs/design-decisions.md"
+    "docs/design-decisions.md",
+    "physical/",
+    "docs/playtesting-and-evidence.md"
   ],
   "world": "world.md",
   "deploymentProfiles": {
@@ -216,11 +261,7 @@
         "first-game-guide"
       ],
       "documents": [
-        "core-rules.html",
-        "map-reference.html",
-        "component-reference.html",
-        "card-reference.html",
-        "world-and-institutions.html"
+        "core-rules.html"
       ],
       "galleries": [
         "baseline"
@@ -258,12 +299,50 @@
         "runtime/create-browser-interactive-game.js",
         "runtime/interactive-game-core.js",
         "scenarios/agi-declaration-window.js"
+      ],
+      "sourceFiles": [
+        {
+          "source": "rules.md",
+          "title": "Rulebook source"
+        },
+        {
+          "source": "components/game.json",
+          "title": "Board and action definitions"
+        },
+        {
+          "source": "components/factions.json",
+          "title": "Faction definitions"
+        },
+        {
+          "source": "components/headlines.json",
+          "title": "Headline definitions"
+        },
+        {
+          "source": "components/mandates.json",
+          "title": "Mandate definitions"
+        },
+        {
+          "source": "components/projects.json",
+          "title": "Project definitions"
+        },
+        {
+          "source": "components/reference-cards.json",
+          "title": "Era panels and player-aid definitions"
+        },
+        {
+          "source": "ui.json",
+          "title": "Interface copy source"
+        },
+        {
+          "source": "content/data/variables.json",
+          "title": "Shared terms and values"
+        }
       ]
     },
     "internal-review": {
       "deployable": false,
       "accessControlled": false,
-      "outputRoot": "dist/review",
+      "outputRoot": "dist/review/site",
       "feedbackUrl": "https://github.com/clocksmith/gamma/issues/new?labels=mandate-2038-review",
       "interfaces": [
         "playable-game",
@@ -319,5 +398,103 @@
     "rules": "rules.md",
     "design": "docs/design-decisions.md",
     "world": "world.md"
+  },
+  "supportingSources": [
+    "physical/component-spec.md",
+    "physical/governance-ledger.md",
+    "docs/playtesting-and-evidence.md"
+  ],
+  "documentRendering": [
+    {
+      "audience": "player",
+      "directories": [
+        "dist/docs"
+      ],
+      "files": [],
+      "target": "dist/site/docs"
+    },
+    {
+      "audience": "review",
+      "directories": [
+        "docs",
+        "dist/review/docs"
+      ],
+      "files": [
+        "physical/component-spec.md"
+      ],
+      "target": "dist/site/review"
+    }
+  ],
+  "provenanceTarget": "dist/review/docs/content-provenance.md",
+  "physicalKit": {
+    "files": [
+      {
+        "source": "dist/docs/core-rules.md",
+        "target": "core-rules.md",
+        "audience": "player",
+        "transform": "markdown"
+      },
+      {
+        "source": "dist/site/gallery-baseline.html",
+        "target": "component-masters.html",
+        "audience": "player",
+        "transform": "gallery"
+      },
+      {
+        "source": "physical/governance-ledger.md",
+        "target": "governance-ledger.md",
+        "audience": "player",
+        "transform": "markdown"
+      },
+      {
+        "source": "docs/playtesting-and-evidence.md",
+        "target": "observer/playtest-protocol.md",
+        "audience": "observer",
+        "transform": "protocol"
+      }
+    ]
+  },
+  "galleryRendering": {
+    "inputs": {
+      "factions": "dist/runtime/factions.json",
+      "game-config": "dist/runtime/game-config.json",
+      "headlines": "dist/runtime/headlines.json",
+      "mandates": "dist/runtime/mandates.json",
+      "projects": "dist/runtime/projects.json",
+      "tactics": "dist/runtime/tactics.json",
+      "reserve-specialists": "dist/runtime/reserve-specialists.json",
+      "secret-objectives": "dist/runtime/secret-objectives.json",
+      "reference-cards": "dist/runtime/reference-cards.json"
+    },
+    "outputs": {
+      "baseline": {
+        "target": "dist/site/gallery-baseline.html",
+        "audience": "player"
+      },
+      "complete": {
+        "target": "dist/site/gallery.html",
+        "audience": "review"
+      }
+    }
+  },
+  "interfaceArtifacts": {
+    "playable-game": {
+      "source": "dist/site/index.html",
+      "target": "web/index.html",
+      "kind": "game",
+      "title": "Play the game"
+    },
+    "first-game-guide": {
+      "source": "dist/site/first-game-guide.html",
+      "target": "first-game-guide.html",
+      "kind": "guide",
+      "title": "First Game Guide"
+    },
+    "simulation-lab": {
+      "source": "dist/site/simulation.html",
+      "target": "lab.html",
+      "kind": "simulation",
+      "title": "Simulation lab"
+    }
   }
 }

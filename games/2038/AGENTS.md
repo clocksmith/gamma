@@ -28,8 +28,9 @@ systems and incentives, not jokes or allegations about real people.
   in the internal author bible `world.md`. Era panels own names, rules, unlocks, and epigraph references,
   and structured `$era` notes; the Era overviews own extended setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
-  supported inventory prose. Its named excerpts generate the map, component,
-  and inventory references; the compact Core Rules omit those detailed sections.
+  supported inventory prose. The complete player rulebook includes all of these
+  sections. Named excerpts also generate internal review references; those are
+  not required player documents.
   `world.md` is an authoring document. A layout selects approved setting and Era
   passages and compiled ending fields for the player companion. The whole bible
   is never a player document. Internal means audience, not access control.
@@ -43,15 +44,20 @@ systems and incentives, not jokes or allegations about real people.
   contains reference layouts: headings, field labels, and references to their
   owners. Do not add independent procedural prose or numeric overrides there.
 - `physical/` owns component form, dimensions, and state encoding.
-  The human-readable box inventory is generated at `dist/docs/component-inventory.md`;
-  generated physical-kit output remains in `dist/physical-kit/`.
+  The human-readable box inventory is included in `dist/docs/core-rules.md`;
+  `dist/review/docs/component-inventory.md` is an internal review extract;
+  generated physical-kit output remains in `dist/physical-kit/`, with protocols,
+  receipt schemas, release evidence, and source data under each kit's `observer/`.
 - `experimental/` owns deferred optional modules; its content is never part of
   baseline play unless the user explicitly activates it.
 - `content/graph.json` declares deployment profiles, authored sources, and every
-  generated projection. Do not hand-edit any target it declares.
+  generated projection. Audience and packaging declarations generate
+  `dist/review/docs/content-provenance.md`; it is content provenance, not a complete
+  code dependency graph. Do not hand-edit any target it declares.
 - `content/README.md` is the editing and build-path map, not a parallel rules source.
 - `dist/runtime/` owns compiler-generated runtime JSON; `dist/docs/` owns the
-  generated rulebooks; `dist/site/` owns rendered site output; and
+  complete player rulebook; `dist/review/docs/` owns supplementary Markdown;
+  `dist/site/docs/` and `dist/site/review/` render those audiences separately; and
   `dist/physical-kit/` owns frozen kit output.
 - `versions/current-release.json` is the mutable release declaration.
   `versions/<version>/` contains immutable historical release evidence and

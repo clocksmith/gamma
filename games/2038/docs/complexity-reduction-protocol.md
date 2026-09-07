@@ -11,7 +11,7 @@ overlays are named, validated simulation inputs; they cannot introduce alternate
 play modes. Proposals require explicit selection before changing the game.
 
 The source of status is `components/rule-changes.json`; the generated
-ledger is `dist/docs/rule-change-register.md`. Rationale belongs in this protocol
+ledger is `dist/review/docs/rule-change-register.md`. Rationale belongs in this protocol
 and `docs/design-decisions.md`; player-facing rules belong in `rules.md` and `components/`
 after a candidate is accepted.
 

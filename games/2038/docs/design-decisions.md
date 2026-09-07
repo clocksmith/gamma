@@ -1,6 +1,6 @@
 # Mandate 2038 Design Decisions
 
-**Rules reference:** `0.11.0-rc.3-test`
+**Rules reference:** [current release declaration](../versions/current-release.json)
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -11,6 +11,34 @@ The former complexity-proposal document was folded into this ledger after its
 five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
+
+## Infrastructure progression
+
+The user selected Mega-Cluster II, Fusion III, and Quantum IV. This is implemented
+through the ordinary Build action, with earlier projects remaining available.
+There is no mandatory chain. AGI recognition and the World Ending stay separate.
+
+Fusion moves from Era IV to III with its existing cost, reward, unique supply,
+location, and slot requirements unchanged. Earlier local Power is an intended
+consequence; no improved balance is claimed.
+
+Quantum uses provisional values: 4 Runway and 2 Compute for 2 Capability and
+1 Scrutiny, once per institution. The Agent must be assigned to a district with
+an owned connected Facility, checked after any Facility built in the same action.
+Quantum occupies no host slot and needs no other project. A faction-board checkbox
+records completion permanently through Audit and restart snapshots. Ordinary
+Capability caps and permanent threshold awards apply immediately. Each institution
+may complete it, so it needs no contested shared marker or supplier.
+
+The quantities are implementation choices for playtesting, not measured balance.
+This replaces the earlier incomplete proposal. Three project cards, Era panels,
+rulebook, runtime decisions, public state, physical faction faces, and inventory
+are updated together. Original scenario placements and vignettes remain intact;
+Fusion Authority and Quantum Infrastructure provide explicit new project bindings.
+Entanglement Custody remains a separate lore-only discovery.
+
+The retained construction study still describes Fusion IV without Quantum. Human
+learning, enjoyment, and balance of this progression remain untested.
 
 ## Three Headline simplification
 
@@ -236,7 +264,7 @@ without requiring a general contract-enforcement system.
 
 ## Rule-change register
 
-The generated [rule-change register](../dist/docs/rule-change-register.md)
+The generated [rule-change register](../dist/review/docs/rule-change-register.md)
 records decisions and implementation state. The game has one ruleset; the
 register does not offer selectable combinations of procedures.
 

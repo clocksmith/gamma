@@ -6,8 +6,8 @@ const required = [
   "AGENTS.md",
   "README.md",
   "dist/docs/core-rules.md",
-  "dist/docs/world-and-institutions.md",
-  "dist/docs/optional-tactics.md",
+  "dist/review/docs/world-and-institutions.md",
+  "dist/review/docs/optional-tactics.md",
   "docs/design-decisions.md",
   "docs/manufacturing-and-publishing-study.md",
   "docs/playtesting-and-evidence.md",
@@ -389,15 +389,8 @@ if (
   throw new Error("Current report, replay, and decision contract versions are inconsistent.");
 }
 const candidate = gameVersion.rulesCandidate;
-const proceduralCandidateDocuments = [
-  "dist/docs/core-rules.md",
-  "dist/docs/optional-tactics.md"
-];
-// The story carries its version through the candidate manifest and fingerprint.
-const requiredCandidateDocuments = [
-  ...proceduralCandidateDocuments,
-  "dist/docs/world-and-institutions.md"
-];
+const proceduralCandidateDocuments = ["dist/docs/core-rules.md"];
+const requiredCandidateDocuments = [...proceduralCandidateDocuments, "physical/governance-ledger.md"];
 const candidateStatusValid = candidate?.implementationStatus === "not-synchronized"
   ? candidate.implementedByGameVersion === null
   : candidate?.implementationStatus === "synchronized"

@@ -5,8 +5,8 @@
 
 Use the browser **First Game Guide** for a guided introduction.
 
-The separately printed [**World and Institutions**](/docs/world-and-institutions.html) companion contains setting
-and ending narratives.
+This rulebook contains setup, map instructions, component usage, and inventory.
+Keep the printed cards, boards, and player aids beside it during play.
 
 ## How to Play
 
@@ -55,8 +55,7 @@ institutional dependencies rather than ordinary distance. The shuffled map
 remains fixed for all four Eras. Rival pieces coexist; there is no combat
 or player elimination.
 
-The detailed setup, district effects, and control procedure print in the
-[**Map Reference**](/docs/map-reference.html).
+The following sections explain map setup, district effects, and control.
 
 <!-- map:start -->
 ### Build the jurisdiction
@@ -138,7 +137,7 @@ or ${terms.playerTracks.mandate}.
 
 The two Energy-tile visit boxes are the complete ordinary Generator contracts.
 No separate Power Source reference cards are used. Each player may construct
-only one ordinary Generator; the full Fusion contract is printed on its Era IV
+only one ordinary Generator; the full Fusion contract is printed on its Era III
 project reference.
 <!-- map:end -->
 
@@ -253,8 +252,8 @@ Read that strip aloud before revealing the Mandate. All Era panels, project refe
 and Faction abilities are open information.
 
 Progress teaches ordinary institutional work;
-Capacity unlocks Generators and Mega-Clusters; Authority unlocks Joint Ventures;
-Continuity unlocks optional public AGI recognition and Fusion. Later Eras retain previously unlocked systems
+Capacity unlocks Generators and Mega-Clusters; Authority unlocks Joint Ventures and Fusion;
+Continuity unlocks Quantum and optional public AGI recognition. Later Eras retain previously unlocked systems
 unless a printed effect says otherwise.
 
 ### Universal tie rule
@@ -346,7 +345,7 @@ explicitly.
 <!-- construction:start -->
 Construct up to one Facility, then up to one unlocked infrastructure project,
 paying each cost. Both use the acting Agent's district. A project is an ordinary
-Generator, Mega-Cluster, or Fusion. Recheck requirements after placing the
+Generator, Mega-Cluster, Fusion, or Quantum. Recheck requirements after placing the
 Facility. You may omit either step; resolve at least one construction if able.
 Exhaust Build once after completing both steps. There is no extra action,
 assignment, trade, or destination bonus between them.
@@ -442,7 +441,7 @@ survives an earlier player's use of a required component.
 The project produces three ${terms.resources.compute} during Production while
 both hosts remain adjacent and connected. No additional Power is assigned.
 
-#### Construct ${terms.technology.advancedGeneration} (Era IV)
+#### Construct ${terms.technology.advancedGeneration} (Era III onward)
 
 The acting piece must be assigned to the ${terms.locations.grid}. Spend
 ${facts.shared.advancedGeneration.runwayCostWord} ${terms.resources.runway} and construct ${terms.technology.advancedGenerationShort} there. It uses a dedicated ${terms.technology.advancedGenerationShort} marker,
@@ -456,6 +455,15 @@ blocks construction.
 There is one shared ${terms.technology.advancedGenerationShort} marker and one
 Fusion project in the game. Once any player constructs it, no other player may
 select or construct Fusion.
+
+#### Construct Quantum (Era IV)
+
+${content.projects.byId.quantum.text}
+
+The Quantum checkbox starts empty and remains marked through every Era and Audit.
+It records completion for the whole game, not a new action or recurring effect.
+Mega-Clusters, Fusion, and Quantum are independent investments; none requires
+another project. Quantum does not occupy or reserve a Facility host slot.
 
 ### ${terms.actions.organize}
 
@@ -693,11 +701,11 @@ Build now also permits:
 
 ### Era III — ${terms.eras.narrative}
 
-Joint Ventures now enter play. Previously unlocked infrastructure remains available.
+Joint Ventures and Fusion now enter play. Previously unlocked infrastructure remains available.
 
 ### Era IV — ${terms.eras.claim}
 
-Build may construct Fusion. Public AGI recognition is offered after Production.
+Build may construct Quantum. Earlier projects remain available. Public AGI recognition is offered after Production.
 All factions retain the same permanent ability they had at setup.
 
 #### Recognized ${terms.systems.agi}
@@ -751,11 +759,7 @@ institutional continuity, not a hidden verdict on whether intelligence exists.
 | AGI recognized | **The Singularity** | **The Closed Loop** |
 | No AGI recognized | **The Plural Future** | **Assured Continuity** |
 
-Read the narrative in [World and Institutions](/docs/world-and-institutions.html).
 The institutional winner and the civilization's outcome are distinct.
-
-Find validation limits in [Balance and Exploitability](/docs/balance-and-exploitability.html)
-and human observation protocols in [Playtesting and Evidence](/docs/playtesting-and-evidence.html).
 
 ## Rules Reference
 
@@ -764,9 +768,8 @@ and human observation protocols in [Playtesting and Evidence](/docs/playtesting-
 <!-- card-authority:start -->
 Faction boards, Governance Board Era panels, map-tile Power contracts, Core
 Action cards, project references, Mandate cards, Training cards, player aids, and
-Headline cards are rules components. The [**Card and Board Reference**](/docs/card-reference.html)
-projects every authored face in one document; resolve that text or the matching
-physical surface. Printed text changes only the field or timing it
+Headline cards are rules components. Resolve the text printed on the matching
+card, board, or player aid. Printed text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
 Each Faction has one permanent ability available from setup.
 <!-- card-authority:end -->
@@ -808,10 +811,8 @@ Use all twenty-four Headlines in their printed Era decks. Resolve the listed pro
 
 ## 9. Map and component reference
 
-Use the [**Component Reference**](/docs/component-reference.html) for the
-supported inventory, deck contracts, and component states. The
-[**Card and Board Reference**](/docs/card-reference.html) prints exact effects
-from component records. Keep these references beside the Core Rules during play.
+The following sections list the supported inventory, deck contracts, and
+component states. Exact effects appear on the cards and boards.
 
 <!-- components:start -->
 <!-- inventory:start -->
@@ -891,10 +892,10 @@ contain `6 / 6 / 6 / 6` Headlines plus three Mandates each.
 
 ### Exact printed-paper count
 
-The game contains 114 standard cards plus 6 foldout player aids:
+The game contains 115 standard cards plus 6 foldout player aids:
 
 - 36 Core Actions
-- 2 infrastructure project references
+- 3 infrastructure project references
 - 24 Headlines
 - 12 Mandates
 - 40 Training cards
@@ -936,7 +937,7 @@ up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
 
 #### Infrastructure project references
 
-Place both project references face up. They show Mega-Cluster and Fusion
+Place all three project references face up. They show Mega-Cluster, Fusion, and Quantum
 construction costs and operation. Build constructs these projects; the references
 are never selected, exhausted, or marked with use history.
 

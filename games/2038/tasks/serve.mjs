@@ -525,6 +525,12 @@ createServer(async (request, response) => {
     response.end();
     return;
   }
+  if (url.pathname.startsWith("/docs/") && !existsSync(join(projectRoot, "dist/site", url.pathname)) &&
+      existsSync(join(projectRoot, "dist/site/review", url.pathname.slice("/docs/".length)))) {
+    response.writeHead(308, {location:url.pathname.replace("/docs/", "/review/"), "cache-control":"no-store"});
+    response.end();
+    return;
+  }
   const requested = url.pathname === "/"
     ? "/dist/site/index.html"
     : url.pathname === "/first-game-guide"
@@ -533,7 +539,9 @@ createServer(async (request, response) => {
       ? "/dist/site/simulation.html"
       : url.pathname === "/docs/"
         ? "/dist/site/docs/index.html"
-        : url.pathname.startsWith("/docs/")
+        : url.pathname === "/review/"
+          ? "/dist/site/review/index.html"
+        : url.pathname.startsWith("/docs/") || url.pathname.startsWith("/review/")
           ? `/dist/site${url.pathname}`
         : url.pathname === "/gallery" || url.pathname === "/gallery/"
           ? "/dist/site/gallery.html"

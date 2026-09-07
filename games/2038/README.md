@@ -25,19 +25,17 @@ The jurisdiction stays fixed throughout the game, and Power eligibility is local
 
 This repository is a **prototype**, not a manufactured or published product.
 
-- The required **Play Kit** is the generated
-  [Core Rules](dist/docs/core-rules.md),
-  [Map Reference](dist/docs/map-reference.md),
-  [Component Reference](dist/docs/component-reference.md), and
-  [Card and Board Reference](dist/docs/card-reference.md). Together, these four
-  documents contain the complete game procedure, board, component,
-  and card information needed to play.
+- The required **Play Kit** is one complete [rulebook](dist/docs/core-rules.md)
+  plus the actual cards, boards, tokens, and player aids. Map instructions,
+  component usage, and inventory are included in the rulebook.
+  [Component masters](dist/site/gallery-baseline.html) are generated from the
+  same component records and selected lore used by the browser game.
 - The browser’s First Game Guide teaches those rules interactively; it is an
   onboarding aid, not a second rules authority.
-- [World and Institutions](dist/docs/world-and-institutions.md) is the
+- [World and Institutions](dist/review/docs/world-and-institutions.md) is the
   optional setting companion for tone, Era fiction, and ending narratives.
 - The excluded Tactic module retains its complete contract in
-  [Optional Tactic Rules](dist/docs/optional-tactics.md).
+  [Optional Tactic Rules](dist/review/docs/optional-tactics.md).
 - Current rationale and implementation boundaries are recorded in
   [`docs/design-decisions.md`](docs/design-decisions.md).
 - Defect investigation, containment, regression, and closure rules are in
@@ -52,12 +50,12 @@ This repository is a **prototype**, not a manufactured or published product.
 - The canonical semantic content graph lives in [`content/`](content/README.md);
   it generates the player documents, game data, prototype HTML, UI copy, and
   simulation descriptions.
-- Every declared Markdown projection under `dist/docs/` is rendered into the
-  Documentation reader during `npm run docs:html`. Use the
+- Player Markdown under `dist/docs/` and review Markdown under
+  `dist/review/docs/` render into separate readers during `npm run docs:html`. Use the
   [editing and build map](content/README.md) to find its owner: `rules.md` for
   procedures, `components/` for exact effects, `world.md` for lore.
   `content/templates/` arranges references to those owners; it does not own
-  separate rules. Never author directly in `dist/docs/`.
+  separate rules. Never author directly in generated directories.
 - The sole lore authority, editorial backlog, research boundary, Era placement,
   and writing contract live in
   the internal author bible [`world.md`](world.md). Player components and the
@@ -89,7 +87,8 @@ physical teachability, numerical balance, or that the AGI coda is enjoyable.
 - [`components/`](components/) contains mechanical records with rule wording, Markdown prose references, and scenario links; deferred modules live under `experimental/components/`.
 - [`content/`](content/README.md) contains build declarations, reference templates, shared variables, simulation copy, and numeric provenance.
 - [`physical/`](physical/README.md) owns component form and state encoding. The supported box inventory is generated from `rules.md`.
-- [`dist/docs/`](dist/docs/) is compiler-owned Markdown projected from declared
+- [`dist/docs/`](dist/docs/) contains the complete player rulebook.
+- [`dist/review/docs/`](dist/review/docs/) contains review Markdown projected from declared
   sources; `npm run docs:html` turns every file there into the deployed
   Documentation reader.
 - [`dist/runtime/`](dist/runtime/) is compiler-owned runtime projection data.

@@ -102,6 +102,7 @@ function pageListItem(page) {
 
 export function buildIndexHtml({
   pages,
+  sources = [],
   feedbackUrl,
   profileId = defaultProfileId,
   library = false
@@ -127,6 +128,8 @@ export function buildIndexHtml({
     body { margin:0; background:#fff url("/web/hex-background.svg") repeat; color:#111; font:18px/1.6 system-ui,sans-serif; }
     main { max-width:42rem; margin:0 auto; padding:clamp(1.5rem,6vw,4rem) 1.25rem; }
     h1 { margin:0 0 1.5rem; font-size:clamp(1.8rem,6vw,2.4rem); line-height:1.2; }
+    h2 { margin:2.5rem 0 .75rem; font-size:1.15rem; }
+    .sources a { font-size:.9rem; color:#444; }
     ul { margin:0; padding:0; list-style:none; }
     li { margin:0; }
     a { display:block; width:fit-content; max-width:100%; padding:.5rem 0; color:inherit; text-underline-offset:.2em; overflow-wrap:anywhere; }
@@ -140,6 +143,7 @@ export function buildIndexHtml({
   <ul>
 ${links.map(pageListItem).join("\n")}
   </ul>
+${sources.length ? `<section class="sources" aria-labelledby="sources-title"><h2 id="sources-title">Sources</h2><ul>${sources.map(pageListItem).join("\n")}</ul></section>` : ""}
 </main>
 </body>
 </html>`);
@@ -232,6 +236,7 @@ async function copyWebSurface(outputRoot, profile) {
 }
 
 export async function buildFirebaseSite({ outputRoot, profileId = defaultProfileId } = {}) {
+  const graph = JSON.parse(await readFile(resolve(projectRoot, "content/graph.json"), "utf8"));
   const ledger = await loadEraSituationLedger();
   const profile = ledger.deploymentProfiles[profileId];
   if (!profile) throw new TypeError(`Unknown deployment profile: ${profileId}`);
@@ -257,61 +262,19 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   const identity = await sourceIdentity();
   const pages = [];
 
-  const docsSource = resolve(projectRoot, "dist/site/docs");
-  const docsTarget = resolve(outputRoot, "docs");
   const includeAllDocuments = profile.documents.includes("*");
-  const playKit = new Set([
-    "core-rules.html",
-    "map-reference.html",
-    "component-reference.html",
-    "card-reference.html"
-  ]);
-  await mkdir(docsTarget, { recursive: true });
-  for (const name of await htmlFiles(docsSource)) {
-    if (!includeAllDocuments && !profile.documents.includes(name)) continue;
-    await copyProtectedHtml(resolve(docsSource, name), resolve(docsTarget, name));
-    const title = name === "index.html"
-      ? "Documentation reader"
-      : name.replace(/\.html$/, "").split("-").map(
-        (word) => word[0].toUpperCase() + word.slice(1)
-      ).join(" ");
-    pages.push({
-      group: playKit.has(name)
-        ? "Required Play Kit"
-        : name === "world-and-institutions.html"
-        ? "Learn the game"
-        : name === "optional-tactics.html"
-          ? "Optional play"
-          : name === "component-spec.html" || name === "component-inventory.html"
-            ? "Component review"
-          : "Development and evidence",
-      kind: playKit.has(name)
-        ? "Required play-kit document"
-        : name === "index.html"
-        ? "Index"
-        : name === "component-spec.html" || name === "component-inventory.html"
-          ? "Physical specification"
-          : "Document",
-      title,
-      href: `docs/${name}`,
-      description: name === "core-rules.html"
-        ? "Complete setup, Eras, Actions, and scoring reference."
-        : name === "map-reference.html"
-          ? "The 19-district jurisdiction, adjacency, movement, and location effects."
-          : name === "component-reference.html"
-            ? "Every Mandate 2038 component, its purpose, and its setup location."
-            : name === "card-reference.html"
-              ? "Printable canonical faces for every Mandate 2038 card type."
-        : name === "world-and-institutions.html"
-          ? "Setting, tone, Era fiction, and ending narratives."
-        : name === "optional-tactics.html"
-            ? "An optional module for players who know the Default Play loop."
-            : name === "component-spec.html"
-              ? "What every physical component is and how its state is made visible."
-              : name === "component-inventory.html"
-                ? "Supported box contents and component quantities."
-        : "Design, testing, and implementation record."
-    });
+  for (const group of graph.documentRendering) {
+    if (group.audience !== "player" && !includeAllDocuments) continue;
+    const prefix = group.target.replace(/^dist\/site\//, "");
+    const sourceRoot = resolve(projectRoot, group.target);
+    for (const name of await htmlFiles(sourceRoot)) {
+      if (!includeAllDocuments && !profile.documents.includes(name)) continue;
+      await copyProtectedHtml(resolve(sourceRoot, name), resolve(outputRoot, prefix, name));
+      pages.push({group:group.audience === "player" ? "Required Play Kit" : "Development and evidence",
+        kind:name === "index.html" ? "Index" : "Document",
+        title:name.replace(/\.html$/, "").split("-").map(word => word[0].toUpperCase()+word.slice(1)).join(" "),
+        href:`${prefix}/${name}`, description:""});
+    }
   }
 
   for (const [galleryId, sourceName, targetName, title, description] of [
@@ -345,38 +308,19 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   }
 
   await copyWebSurface(outputRoot, profile);
-  const prototypeIndex = await readFile(
-    resolve(projectRoot, "dist/site/index.html"),
-    "utf8"
-  );
-  const firstGameGuide = await readFile(
-    resolve(projectRoot, "dist/site/first-game-guide.html"),
-    "utf8"
-  );
-  await writeFile(
-    resolve(outputRoot, "web/index.html"),
-    `${rewritePrototypeHtml(prototypeIndex, { kind: "game", profileId })}\n`
-  );
-  await writeFile(
-    resolve(outputRoot, "first-game-guide.html"),
-    `${rewritePrototypeHtml(firstGameGuide, { kind: "guide", profileId })}\n`
-  );
+  for (const id of profile.interfaces) {
+    const item = graph.interfaceArtifacts[id];
+    if (!item) throw new Error(`Undeclared interface: ${id}`);
+    const html = await readFile(resolve(projectRoot, item.source), "utf8");
+    await mkdir(dirname(resolve(outputRoot, item.target)), {recursive:true});
+    await writeFile(resolve(outputRoot, item.target), `${rewritePrototypeHtml(html, {kind:item.kind, profileId})}\n`);
+  }
   const rewrittenModules = profile.webFiles.filter((relative) => relative.endsWith(".js"));
   for (const moduleName of rewrittenModules) {
     const source = await readFile(resolve(projectRoot, "web", moduleName), "utf8");
     await writeFile(
       resolve(outputRoot, "web", moduleName),
       rewritePrototypeModule(source)
-    );
-  }
-  if (profile.interfaces.includes("simulation-lab")) {
-    const simulationIndex = await readFile(
-      resolve(projectRoot, "dist/site/simulation.html"),
-      "utf8"
-    );
-    await writeFile(
-      resolve(outputRoot, "lab.html"),
-      `${rewritePrototypeHtml(simulationIndex, { kind: "simulation", profileId })}\n`
     );
   }
   const runtimeArtifacts = await copyCanonicalRuntimeArtifacts(
@@ -388,38 +332,29 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
     await mkdir(dirname(target), { recursive: true });
     await cp(resolve(projectRoot, "lab", relative), target);
   }
-  const interfacePages = [];
-  if (profile.interfaces.includes("playable-game")) {
-    interfacePages.push({
-      group: "Start here",
-      kind: "Playable interface",
-      title: "Play the game",
-      href: "web/index.html",
-      description: "Play against browser-native deterministic opponents; the local bridge is optional for Claude or Codex."
-    });
-  }
-  if (profile.interfaces.includes("first-game-guide")) {
-    interfacePages.push({
-      group: "Start here",
-      kind: "Teaching interface",
-      title: "First Game Guide",
-      href: "first-game-guide.html",
-      description: "A fixed first-Era Default Play lesson using the canonical game components."
-    });
-  }
-  if (profile.interfaces.includes("simulation-lab")) {
-    interfacePages.push({
-      group: "Development and evidence",
-      kind: "Simulation interface",
-      title: "Simulation lab",
-      href: "lab.html",
-      description: "Run local simulations from the deployed browser or load and replay saved reports."
-    });
-  }
+  const interfacePages = profile.interfaces.map(id => ({
+    group:"Start here", kind:"Interface", title:graph.interfaceArtifacts[id].title,
+    href:graph.interfaceArtifacts[id].target, description:""
+  }));
   pages.unshift(...interfacePages);
+
+  const sources = [];
+  for (const entry of profile.sourceFiles || []) {
+    // Public source access is limited to mechanical data and interface/rule copy.
+    // The author bible, internal notes and experimental sources are never copied.
+    if (!/^(rules\.md|ui\.json|content\/data\/variables\.json|components\/(game|factions|headlines|mandates|projects|reference-cards)\.json)$/.test(entry.source)) {
+      throw new Error(`Source is not approved for public distribution: ${entry.source}`);
+    }
+    const href = `sources/${entry.source}`;
+    const target = resolve(outputRoot, href);
+    await mkdir(dirname(target), { recursive: true });
+    await cp(resolve(projectRoot, entry.source), target);
+    sources.push({ title: entry.title, href });
+  }
 
   const rootHtml = buildIndexHtml({
     pages,
+    sources,
     feedbackUrl: profile.feedbackUrl,
     profileId
   });

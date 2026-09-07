@@ -1208,6 +1208,16 @@ The first reactor is financed as a promise of better intelligence and quantum di
 
 <!-- lore-project-fusion-demonstrator:end -->
 
+### Quantum
+
+<!-- lore-project-quantum:start -->
+
+#### Flavor text
+
+The machine narrowed what could be measured. The institution decided what could be known.
+
+<!-- lore-project-quantum:end -->
+
 ### Institutional Continuity Program
 
 <!-- lore-projects-institutional-history-reorganization:start -->
@@ -1452,9 +1462,30 @@ Every scenario has an ID, Era, policy, benefit, consequence, and narrative. Conc
 | adopted-framing-revised | adopted-framing | public-playtest, internal-review | revised | The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain. | user-selected-three-cuts | docs/design-decisions.md#three-cuts-candidate |
 | adopted-headline-expansion | adopted | public-playtest, internal-review | revised | The six-per-Era expansion adds an immediate Headline adaptation; existing bindings retain their effects. | six-headlines-per-era | docs/design-decisions.md#six-headlines-per-era |
 | adopted-headline-simplification | adopted | public-playtest, internal-review | revised | Three Headline adaptations reuse payment, assignment, and adjacency; their original fiction remains. | three-headline-simplification | docs/design-decisions.md#three-headline-simplification |
+| infrastructure-progression | adopted | public-playtest, internal-review | revised | The selected project progression adds independent infrastructure choices using Build. | infrastructure-progression | docs/design-decisions.md#infrastructure-progression |
 <!-- scenario-policies:end -->
 
 <!-- scenario-canon:start -->
+### Fusion Authority
+
+* **ID**: fusion-authority
+* **Era**: authority
+* **Policy**: infrastructure-progression
+* **Public benefit**: Dependable generation keeps computational institutions operating.
+* **Institutional consequence**: Control of energy becomes authority over access to intelligence.
+
+Reactor operators sell continuity as a public guarantee. Institutions that secure the new supply acquire influence over every service whose promises require uninterrupted computation.
+
+### Quantum Infrastructure
+
+* **ID**: quantum-infrastructure
+* **Era**: continuity
+* **Policy**: infrastructure-progression
+* **Public benefit**: Specialized simulation improves scientific investigation.
+* **Institutional consequence**: Owners decide which discoveries become reproducible public capabilities.
+
+Institutions commission quantum computing infrastructure to investigate physical systems beyond their established methods. Useful results expand institutional capability; they do not guarantee AGI or confer ownership of every possible discovery. Entanglement Custody remains a separate dispute in the setting.
+
 ### Abundance Constituency
 
 * **ID**: abundance-constituency
@@ -2134,6 +2165,14 @@ The internal Program ID `open_weights` means Public Capability Covenant in Autho
 Strategic open weights belong in Progress. Stable IDs do not override player names.
 
 ## Connected breakthroughs and concealed machine conflict
+
+The intended infrastructure story progresses from concentrated computation in
+Capacity (Mega-Cluster), through control of dependable energy in Authority
+(Fusion), to specialized scientific computation in Continuity (Quantum).
+These are independent institutional investments, not a mandatory chain or an
+automatic route to AGI. The [infrastructure progression](docs/design-decisions.md#infrastructure-progression)
+records the implemented Era order and provisional Quantum parameters. Entanglement Custody remains a distinct discovery
+within the setting rather than the Quantum project's rules definition.
 
 The visible race connects fusion, general intelligence, and quantum computing. In this fiction, institutions believe that an early lead can buy or accelerate the other two. Present the dependencies through laboratories, physical infrastructure, investment, and bargaining. No breakthrough guarantees the other two, establishes universal quantum prediction, or determines the Mandate winner. Scientific progress, a public AGI claim, and legal control are different events.
 

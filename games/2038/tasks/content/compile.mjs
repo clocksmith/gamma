@@ -1,3 +1,4 @@
+import { provenanceMarkdown, referenceSources, validateProvenanceGraph } from "./content-provenance.mjs";
 import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
 import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "./authored.mjs";
@@ -54,6 +55,7 @@ function resolveSourcePath(source, label, sourceRoots) {
 
 const graphPath = resolve(projectRoot, "content/graph.json");
 const graph = await readJson(graphPath);
+validateProvenanceGraph(graph);
 const retiredTargets = (graph.retiredTargets || []).map((target) => {
   const path = resolve(projectRoot, target);
   if (!path.startsWith(`${resolve(projectRoot, "dist")}${sep}`) ||
@@ -63,6 +65,9 @@ const retiredTargets = (graph.retiredTargets || []).map((target) => {
   return { target, path };
 });
 const sourceRoots = sourceRootsFor(graph);
+for (const path of graph.supportingSources || []) {
+  await readFile(resolveSourcePath(path, "supporting source", sourceRoots));
+}
 const variablesPath = resolve(projectRoot, graph.variables);
 if (!insideProject(variablesPath) || !isCanonicalSource(variablesPath, sourceRoots)) {
   throw new Error(`Content variables must live under a graph source root: ${graph.variables}`);
@@ -108,13 +113,19 @@ for (const [name, path] of Object.entries(graph.excerpts || {})) {
 variables.excerpts = excerpts;
 variables.lore = parseComponentLore(await readFile(resolve(projectRoot, graph.world), "utf8"));
 
+const dependencySources = {};
+const traceSources = inputs => reference => {
+  for (const path of referenceSources(graph, reference, dependencySources)) inputs.add(path);
+};
 const contexts = {};
 for (const [name, context] of Object.entries(rawContexts)) {
   const descriptor = graph.contexts[name];
   const path = typeof descriptor === "string" ? descriptor : descriptor.path;
   const isMd = path.endsWith(".md");
   const { byId: ignoredById, ...raw } = context;
-  const resolved = isMd ? raw : resolveValue(raw, variables);
+  const inputs = new Set([path, ...(descriptor.inputs || [])]);
+  const resolved = isMd ? raw : resolveValue(raw, variables, [], traceSources(inputs));
+  dependencySources[`content.${name}`] = [...inputs];
   const collections = Object.values(resolved).filter(Array.isArray);
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
   const entries = collectionName
@@ -132,8 +143,18 @@ for (const [name, context] of Object.entries(rawContexts)) {
   };
 }
 variables = { ...variables, content: contexts };
-variables.excerpts = resolveValue(excerpts, variables);
-variables.lore = resolveValue(variables.lore, variables);
+variables.excerpts = Object.fromEntries(Object.entries(excerpts).map(([name, text]) => {
+  const inputs = new Set([graph.excerpts[name]]);
+  const resolved = resolveValue(text, variables, [], traceSources(inputs));
+  dependencySources[`excerpts.${name}`] = [...inputs];
+  return [name, resolved];
+}));
+variables.lore = Object.fromEntries(Object.entries(variables.lore).map(([name, copy]) => {
+  const inputs = new Set([graph.world]);
+  const resolved = resolveValue(copy, variables, [], traceSources(inputs));
+  dependencySources[`lore.${name}`] = [...inputs];
+  return [name, resolved];
+}));
 assertNoReferences(variables, "content contexts");
 
 const targets = new Set();
@@ -150,16 +171,19 @@ for (const artifact of graph.artifacts) {
   if (artifact.source === graph.world && artifact.format === "text") {
     throw new Error("The author bible cannot be exported as a text artifact; use the selected companion layout.");
   }
+  if (!["player", "review", "validation"].includes(artifact.audience)) throw new Error(`Missing audience: ${artifact.target}`);
+  const inputs = new Set([artifact.source, ...(artifact.inputs || [])]);
+  const trace = traceSources(inputs);
   let output;
   if (artifact.format === "json") {
     let resolved;
     if (artifact.source.endsWith(".md")) {
       const { worldCopy } = await readWorldDocument(sourcePath);
-      resolved = resolveValue(playerContent(worldCopy), variables);
+      resolved = resolveValue(playerContent(worldCopy), variables, [], trace);
     } else {
       resolved = resolveValue(
         playerContent(await readJson(sourcePath)),
-        variables
+        variables, [], trace
       );
     }
     assertNoReferences(resolved, artifact.source);
@@ -168,15 +192,22 @@ for (const artifact of graph.artifacts) {
     const source = await readFile(sourcePath, "utf8");
     if (artifact.layout) validateReferenceLayout(source, artifact.source);
     const selected = artifact.section ? documentSection(source, artifact.section) : source;
-    output = stripSectionMarkers(resolveString(omitDocumentSections(selected, artifact.excludeSections), variables));
+    output = stripSectionMarkers(resolveString(omitDocumentSections(selected, artifact.excludeSections), variables, [], trace));
     assertNoReferences(output, artifact.source);
   } else if (artifact.format === "scenario-index") {
+    for (const descriptor of Object.values(graph.contexts)) {
+      const path = typeof descriptor === "string" ? descriptor : descriptor.path;
+      if (path.startsWith("components/")) inputs.add(path);
+    }
     output = `${JSON.stringify(await buildScenarioIndex(), null, 2)}\n`;
   } else {
     throw new Error(`Unsupported content format: ${artifact.format}`);
   }
-  artifacts.push({ ...artifact, targetPath, output });
+  artifacts.push({ ...artifact, inputs: [...inputs].sort(), targetPath, output });
 }
+
+artifacts.push({target:graph.provenanceTarget, targetPath:resolve(projectRoot, graph.provenanceTarget),
+  output:await provenanceMarkdown(graph, artifacts, projectRoot)});
 
 if (validateOnly) {
   process.stdout.write(

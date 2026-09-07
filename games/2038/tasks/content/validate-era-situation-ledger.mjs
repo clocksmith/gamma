@@ -317,7 +317,10 @@ export async function validateEraSituationLedger(ledger) {
     if (adopted && scenario.mechanicPreservation.status !== "retained") {
       const revision = scenario.mechanicPreservation.revision;
       if (scenario.mechanicPreservation.status !== "revised" ||
-          !((revision?.decisionId === "user-selected-full-simplification" &&
+          !((revision?.decisionId === "infrastructure-progression" &&
+            revision?.record === "docs/design-decisions.md#infrastructure-progression" &&
+            ["fusion-authority", "quantum-infrastructure"].includes(scenario.id)) ||
+           (revision?.decisionId === "user-selected-full-simplification" &&
             revision?.record === "docs/design-decisions.md#full-simplification-candidate") ||
            (revision?.decisionId === "user-selected-three-cuts" &&
             revision?.record === "docs/design-decisions.md#three-cuts-candidate") ||

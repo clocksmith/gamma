@@ -1,5 +1,5 @@
-// Render generated dist/docs/ documents, internal docs/, and the physical form
-// specification into dist/site/docs/, served at /docs by tasks/serve.mjs.
+// Render player and review documents into separate graph-declared directories.
+// tasks/serve.mjs exposes /docs/ and /review/ for their respective readers.
 // content/graph.json declares player sources: rules.md, world.md, component
 // records, and reference layouts. This reader adds presentation only.
 // No third-party Markdown dependency: the converter below covers exactly the
@@ -7,14 +7,12 @@
 
 import { mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
-import { basename, resolve } from "node:path";
+import { basename, dirname, relative, resolve } from "node:path";
+import { documentSources } from "./content/content-provenance.mjs";
 import { stripSectionMarkers } from "./content/authored.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "..");
-const docsDir = resolve(projectRoot, "docs");
-const generatedDocsDir = resolve(projectRoot, "dist/docs");
-const physicalDir = resolve(projectRoot, "physical");
-const outDir = resolve(projectRoot, "dist/site/docs");
+const graph = JSON.parse(await readFile(resolve(projectRoot, "content/graph.json"), "utf8"));
 const checkOnly = process.argv.slice(2).includes("--check");
 
 function escapeHtml(text) {
@@ -31,7 +29,15 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
+const renderedPaths = new Map();
+let activeSourceDirectory;
+let activeOutputDirectory;
 function renderedDocHref(href) {
+  const [path, fragment = ""] = href.split("#");
+  if (activeSourceDirectory && path.endsWith(".md") && !/^[a-z]+:/i.test(path)) {
+    const target = renderedPaths.get(resolve(activeSourceDirectory, path));
+    if (target) return relative(activeOutputDirectory, target) + (fragment ? `#${fragment}` : "");
+  }
   return href.replace(/^(\.\/)?([^/?#]+)\.md([?#].*)?$/, "$1$2.html$3");
 }
 
@@ -343,7 +349,7 @@ function page({ title, docs, current, tocHtml, bodyHtml }) {
     .map((doc) => {
       const isCurrent = doc.slug === current;
       const toc = isCurrent ? tocHtml : "";
-      return `<a class="nav-link ${isCurrent ? "current" : ""}" href="${doc.slug}.html"><span>${escapeHtml(doc.label)}</span></a>${toc}`;
+      return `<a class="nav-link ${isCurrent ? "current" : ""}" href="${doc.href || `${doc.slug}.html`}"><span>${escapeHtml(doc.label)}</span></a>${toc}`;
     })
     .join("\n");
   return `<!doctype html>
@@ -379,27 +385,25 @@ function firstHeadingTitle(headings, fallback) {
   return h1 ? h1.text : fallback;
 }
 
-const sources = [
-  ...(await readdir(docsDir))
-    .filter((name) => name.endsWith(".md"))
-    .map((file) => ({ file, sourceDir: docsDir })),
-  ...(await readdir(generatedDocsDir))
-    .filter((name) => name.endsWith(".md"))
-    .map((file) => ({ file, sourceDir: generatedDocsDir })),
-  ...["component-spec.md"].map((file) => ({
-    file,
-    sourceDir: physicalDir
-  }))
-].sort((left, right) => left.file.localeCompare(right.file));
+const sources = (await documentSources(graph, projectRoot)).map(item => ({
+  file:basename(item.source), sourceDir:resolve(projectRoot, dirname(item.source)),
+  audience:item.audience, outputDir:resolve(projectRoot, dirname(item.target))
+}));
+sources.sort((a,b) => a.file.localeCompare(b.file));
 
+for (const source of sources) {
+  renderedPaths.set(resolve(source.sourceDir, source.file), resolve(source.outputDir, `${basename(source.file, ".md")}.html`));
+}
 const rendered = [];
-for (const { file, sourceDir } of sources) {
+for (const { file, sourceDir, audience, outputDir } of sources) {
+  activeSourceDirectory = sourceDir;
+  activeOutputDirectory = outputDir;
   const markdown = stripSectionMarkers(await readFile(resolve(sourceDir, file), "utf8"));
   const { body, headings } = markdownToHtml(markdown);
   const slug = basename(file, ".md");
   rendered.push({
     slug,
-    file,
+    file, audience, outputDir,
     body,
     headings,
     title: firstHeadingTitle(headings, slug),
@@ -407,12 +411,7 @@ for (const { file, sourceDir } of sources) {
   });
 }
 
-const playKit = [
-  "core-rules",
-  "map-reference",
-  "component-reference",
-  "card-reference"
-];
+const playKit = ["core-rules"];
 const playKitDocs = playKit
   .map((slug) => rendered.find((doc) => doc.slug === slug))
   .filter(Boolean);
@@ -433,11 +432,11 @@ function tocFor(headings) {
 const pages = [];
 for (const doc of rendered) {
   pages.push({
-    path: resolve(outDir, `${doc.slug}.html`),
-    label: `dist/site/docs/${doc.slug}.html`,
+    path: resolve(doc.outputDir, `${doc.slug}.html`),
+    label: `${doc.audience}: ${doc.slug}.html`,
     html: page({
       title: doc.label,
-      docs: docList,
+      docs: doc.audience === "player" ? docList : docList.map(link => ({...link, href:`../docs/${link.slug}.html`})),
       current: doc.slug,
       tocHtml: tocFor(doc.headings),
       bodyHtml: withoutLeadingH1(doc.body)
@@ -445,34 +444,23 @@ for (const doc of rendered) {
   });
 }
 
-const indexDocs = [...playKitDocs, rendered.find((doc) => doc.slug === "world-and-institutions")].filter(Boolean);
-const indexBody = `<ul class="article-list">
-${indexDocs.map((doc) => `<li><a href="${doc.slug}.html">${escapeHtml(doc.label)}</a></li>`).join("\n")}
-</ul>`;
-
-pages.push({
-  path: resolve(outDir, "index.html"),
-  label: "dist/site/docs/index.html",
-  html: page({
-    title: "Overview",
-    docs: docList,
-    current: "index",
-    tocHtml: "",
-    bodyHtml: indexBody
-  })
-});
+for (const group of graph.documentRendering) {
+  const indexDocs = rendered.filter(doc => doc.audience === group.audience);
+  const indexBody = `<ul class="article-list">${indexDocs.map(doc =>
+    `<li><a href="${doc.slug}.html">${escapeHtml(doc.label)}</a></li>`).join("\n")}</ul>`;
+  pages.push({path:resolve(projectRoot, group.target, "index.html"), label:`${group.target}/index.html`,
+    html:page({title:"Overview", docs:[], current:"index", tocHtml:"", bodyHtml:indexBody})});
+}
+const outputDirectories = graph.documentRendering.map(group => resolve(projectRoot, group.target));
 
 if (checkOnly) {
   const stale = [];
-  const expectedNames = new Set(pages.map((item) => basename(item.path)));
-  let actualNames = [];
-  try {
-    actualNames = (await readdir(outDir)).filter((name) => name.endsWith(".html"));
-  } catch {
-    actualNames = [];
-  }
-  for (const name of actualNames) {
-    if (!expectedNames.has(name)) stale.push(`dist/site/docs/${name} (orphaned)`);
+  for (const directory of outputDirectories) {
+    const expectedNames = new Set(pages.filter(page => dirname(page.path) === directory).map(page => basename(page.path)));
+    const names = await readdir(directory).catch(error => {if (error.code === "ENOENT") return []; throw error;});
+    for (const name of names.filter(name => name.endsWith(".html"))) {
+      if (!expectedNames.has(name)) stale.push(`${directory}/${name} (orphaned)`);
+    }
   }
   for (const item of pages) {
     let actual;
@@ -492,7 +480,7 @@ if (checkOnly) {
   }
   process.stdout.write(`docs-html: verified ${pages.length} rendered pages\n`);
 } else {
-  await mkdir(outDir, { recursive: true });
+  for (const directory of outputDirectories) await mkdir(directory, { recursive: true });
   for (const item of pages) {
     const temporary = `${item.path}.${randomUUID()}.tmp`;
     try {
@@ -502,11 +490,11 @@ if (checkOnly) {
       await rm(temporary, { force: true });
     }
   }
-  const expectedNames = new Set(pages.map((item) => basename(item.path)));
-  for (const name of (await readdir(outDir)).filter((item) => item.endsWith(".html"))) {
-    if (!expectedNames.has(name)) {
-      await rm(resolve(outDir, name), { force: true });
+  for (const directory of outputDirectories) {
+    const expectedNames = new Set(pages.filter(page => dirname(page.path) === directory).map(page => basename(page.path)));
+    for (const name of (await readdir(directory)).filter(name => name.endsWith(".html"))) {
+      if (!expectedNames.has(name)) await rm(resolve(directory, name), {force:true});
     }
   }
-  process.stdout.write(`docs-html: rendered ${pages.length} pages to dist/site/docs/\n`);
+  process.stdout.write(`docs-html: rendered ${pages.length} player and review pages\n`);
 }

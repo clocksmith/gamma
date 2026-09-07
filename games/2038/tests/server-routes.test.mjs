@@ -123,7 +123,7 @@ test("docs reader routes preserve their /docs/ base and serve rendered pages", a
     const design = await request("/docs/design-decisions.html").then(
       (response) => response.text()
     );
-    assert.match(design, /href="core-rules\.html"/);
+    assert.match(design, /href="\.\.\/docs\/core-rules\.html"/);
     assert.doesNotMatch(design, /href="core-rules\.md"/);
   } finally {
     server.kill("SIGTERM");

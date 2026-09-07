@@ -298,6 +298,7 @@ function renderPlayers(state) {
         <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
         <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
         <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
+        <dt>${escapeHtml(copy.browser.quantumCompleted)}</dt><dd>${player.quantumCompleted ? "Yes" : "No"}</dd>
         <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
       </dl>
     `;

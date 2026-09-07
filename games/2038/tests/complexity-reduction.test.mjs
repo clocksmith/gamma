@@ -177,7 +177,7 @@ test("canonical simplification removes stored-token state and keeps one permanen
   const [config, factions, componentReference] = await Promise.all([
     readJson("dist/runtime/game-config.json"),
     readJson("dist/runtime/factions.json"),
-    readFile(new URL("dist/docs/component-reference.md", root), "utf8")
+    readFile(new URL("dist/review/docs/component-reference.md", root), "utf8")
   ]);
 
   assert.equal(config.playerSupply.generators, 1);

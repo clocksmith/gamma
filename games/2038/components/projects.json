@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "constructionRule": "During Build, construct up to one Facility, then up to one unlocked project from the same Agent assignment. Pay each cost and check requirements after placing the Facility.",
-  "sharedCardCount": 2,
+  "sharedCardCount": 3,
   "projects": [
     {
       "id": "mega_cluster",
@@ -17,15 +17,33 @@
     },
     {
       "id": "fusion_demonstrator",
-      "unlockedRound": 4,
+      "unlockedRound": 3,
       "timing": "during_action",
       "name": "${terms.technology.advancedGeneration}",
       "displayName": "Grid Continuity Demonstrator",
-      "text": "Era IV Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
+      "text": "Era III onward Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion marker in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
       "$scenario": {
-        "ref": "matter-compiler"
+        "ref": "fusion-authority"
       },
       "loreRef": "project-fusion-demonstrator"
+    },
+    {
+      "id": "quantum",
+      "unlockedRound": 4,
+      "timing": "during_action",
+      "name": "Quantum",
+      "displayName": "Scientific Computing Project",
+      "runwayCost": 4,
+      "computeCost": 2,
+      "capabilityGain": 2,
+      "scrutinyOnBuild": 1,
+      "completionLimit": 1,
+      "completionLabel": "Quantum completed",
+      "text": "Era IV Build project. Assign an Agent to a district with a connected Facility you own; a Facility placed earlier in this Build may qualify. Pay ${content.projects.byId.quantum.runwayCost} Runway and ${content.projects.byId.quantum.computeCost} Compute. Gain ${content.projects.byId.quantum.capabilityGain} Capability, respecting the normal cap and threshold awards, and add ${content.projects.byId.quantum.scrutinyOnBuild} Scrutiny. Mark Quantum completed on your faction board. Once per institution per game; no shared limit and no other project prerequisite. This is an immediate gain, not Production income.",
+      "loreRef": "project-quantum",
+      "$scenario": {
+        "ref": "quantum-infrastructure"
+      }
     }
   ],
   "institutionalHistory": [

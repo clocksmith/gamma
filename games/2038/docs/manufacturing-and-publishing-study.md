@@ -72,7 +72,7 @@ locked component specification.
 | Modular hex tiles | 19, double-sided, 80–90 mm, 2 mm greyboard | selected complete radius-two footprint |
 | Faction/player boards | 6 dual-layer boards with 6 captive sliders each | selected physical authority; slider construction unresolved |
 | Core Action cards | 36, six per player | confirmed |
-| Infrastructure project references | 2, Mega-Cluster and Fusion | current test candidate |
+| Infrastructure project references | 3, Mega-Cluster, Fusion, and Quantum | current test candidate |
 | Headline cards | 24 | Six per Era; eight additions remain unqualified by human play |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
 | Training cards | 40 | confirmed test contract |
@@ -81,7 +81,7 @@ locked component specification.
 | Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
 | Player aids | 6 three-panel foldouts | replaces twenty-four separate reference cards |
 | Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its project reference | replaces three separate reference cards |
-| Total printed card-and-aid pieces | 120 | 114 standard cards plus 6 foldouts; manufacturing overage excluded |
+| Total printed card-and-aid pieces | 121 | 115 standard cards plus 6 foldouts; manufacturing overage excluded |
 | Agent pieces | 24 | four identical markers per faction, two deployed at setup |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |
@@ -90,7 +90,7 @@ locked component specification.
 | Faction-board sliders | 30 captive sliders: Runway, Compute, Capability, Customers, and Trust on each board | integrated into boards; no loose track markers |
 | Mandate markers | 6 | one loose faction-coloured marker per faction for the shared track |
 | Scrutiny cubes | 60 player-colored plus 18 Systemic Risk pieces | all Audit pieces must feel identical while concealed |
-| Shared punchboard tokens | 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/docs/component-inventory.md` | selected counts; layout unresolved |
+| Shared punchboard tokens | 2 Temporary Compute tokens, 1 Current Era marker, plus the exact contract pairs and markers in `dist/review/docs/component-inventory.md` | selected counts; layout unresolved |
 | Shared dry-erase marker | 1 fine-tip marker | serves the Governance Board ledger |
 | Punchboard sheets | 4–6 | quote placeholder |
 | Audit bag | 1 opaque cloth bag | confirmed concept |
@@ -127,7 +127,7 @@ be included in the first prototype quote.
 ### Current candidate: infrastructure references
 
 The three cuts candidate removes Programs and their twelve markers. Two public
-references show Mega-Cluster and Fusion construction and operation. Build may
+references show Mega-Cluster, Fusion, and Quantum construction and operation. Build may
 construct up to one Facility and one project; no separate use ledger is needed.
 
 ### Resolved: player component maxima

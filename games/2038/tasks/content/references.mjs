@@ -48,24 +48,26 @@ function formatValue(value, formatter, variables) {
   return `${firstCharacter.toUpperCase()}${remainingCharacters.join("")}`;
 }
 
-function resolveReference(reference, variables, stack) {
+function resolveReference(reference, variables, stack, onReference) {
   const { path, formatters } = parseReference(reference);
+  onReference?.(path);
+  for (const formatter of formatters) if (formatter.startsWith("label:")) onReference?.(formatter.slice(6));
   if (stack.includes(path)) {
     throw new Error(`Circular content reference: ${[...stack, path].join(" -> ")}`);
   }
-  const resolved = resolveValue(lookup(variables, path), variables, [...stack, path]);
+  const resolved = resolveValue(lookup(variables, path), variables, [...stack, path], onReference);
   return formatters.reduce((value, formatter) => formatValue(value, formatter, variables), resolved);
 }
 
-export function resolveString(value, variables, stack = []) {
+export function resolveString(value, variables, stack = [], onReference) {
   const exact = value.match(/^\$\{([^}]+)\}$/);
-  if (exact) return resolveReference(exact[1], variables, stack);
+  if (exact) return resolveReference(exact[1], variables, stack, onReference);
   return value.replace(/\$\{([^}]+)\}/g, (_, reference) => {
     const { path } = parseReference(reference);
     if (stack.includes(path)) {
       throw new Error(`Circular content reference: ${[...stack, path].join(" -> ")}`);
     }
-    const resolved = resolveReference(reference, variables, stack);
+    const resolved = resolveReference(reference, variables, stack, onReference);
     if (resolved === null || typeof resolved === "object") {
       throw new Error(`Embedded content reference must resolve to a scalar: \${${reference}}`);
     }
@@ -73,9 +75,9 @@ export function resolveString(value, variables, stack = []) {
   });
 }
 
-export function resolveValue(value, variables, stack = []) {
-  if (typeof value === "string") return resolveString(value, variables, stack);
-  if (Array.isArray(value)) return value.map((entry) => resolveValue(entry, variables, stack));
+export function resolveValue(value, variables, stack = [], onReference) {
+  if (typeof value === "string") return resolveString(value, variables, stack, onReference);
+  if (Array.isArray(value)) return value.map((entry) => resolveValue(entry, variables, stack, onReference));
   if (value && typeof value === "object") {
     if (Object.hasOwn(value, "loreRef")) {
       const { loreRef, ...record } = value;
@@ -87,13 +89,14 @@ export function resolveValue(value, variables, stack = []) {
         if (Object.hasOwn(record, key)) throw new Error(`Lore copy conflicts with component field: ${loreRef}/${key}`);
       }
       const reference = `lore.${loreRef}`;
+      onReference?.(reference);
       if (stack.includes(reference)) throw new Error(`Circular lore reference: ${loreRef}`);
-      value = { ...record, ...resolveValue(copy, variables, [...stack, reference]) };
+      value = { ...record, ...resolveValue(copy, variables, [...stack, reference], onReference) };
     }
     return Object.fromEntries(
       Object.entries(value).map(([key, entry]) => [
-        resolveString(key, variables, stack),
-        resolveValue(entry, variables, stack)
+        resolveString(key, variables, stack, onReference),
+        resolveValue(entry, variables, stack, onReference)
       ])
     );
   }
