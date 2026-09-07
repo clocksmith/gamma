@@ -179,7 +179,7 @@ part of this candidate.
 ## Packaging and setup order
 
 The insert has six faction trays, four Era packets, one Training deck well,
-and one shared-component well. The Era I–IV packets hold `5 / 4 / 3 / 4`
+and one shared-component well. The Era I–IV packets hold `6 / 6 / 6 / 6`
 Headlines respectively and three Mandates each.
 
 Labels must match the board's Era numerals and canonical component names. Trays

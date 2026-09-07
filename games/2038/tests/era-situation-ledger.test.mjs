@@ -12,7 +12,7 @@ function clone(value) {
 test("Era situation ledger binds every deployed era surface exactly once", async () => {
   const ledger = await loadEraSituationLedger();
   const result = await validateEraSituationLedger(ledger);
-  assert.deepEqual(result, { eras: 4, scenarios: 51, surfaces: 54 });
+  assert.deepEqual(result, { eras: 4, scenarios: 51, surfaces: 62 });
   assert.deepEqual(ledger.eras.map(({ id, order }) => [id, order]), [
     ["progress", 1],
     ["capacity", 2],
@@ -26,6 +26,10 @@ test("Era situation ledger makes later surface expression explicit", async () =>
   const scenario = ledger.scenarios.find((entry) => entry.id === "wartime-water-bridge");
   assert.equal(scenario.eraId, "capacity");
   assert.deepEqual(scenario.surfaceBindings, [
+    {
+      surfaceId: "headline:wartime_water_bridge",
+      copyReference: "components/headlines.json#headlines/wartime_water_bridge"
+    },
     {
       surfaceId: "faction:coalition_lab:strategic_partnership",
       copyReference: "components/factions.json#factions/coalition_lab/lore/strategic_partnership",

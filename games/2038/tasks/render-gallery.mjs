@@ -195,7 +195,7 @@ function buildHeadlines(data) {
       })
     )
     .join("");
-  return section("headlines", "Headlines", data.headlines.length, cards, "Sixteen Headlines, in Era packets of five, four, three, and four. Reveal three per Era.");
+  return section("headlines", "Headlines", data.headlines.length, cards, `Era packets: ${[1, 2, 3, 4].map(era => data.headlines.filter(card => card.round === era).length).join(" / ")}. Reveal three per Era.`);
 }
 
 function buildMandates(data) {

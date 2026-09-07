@@ -21,7 +21,7 @@ numbered sections in order.
 1. Unfold the Governance Board. Build the nineteen-tile map in its wells as described in **Modular hex board**:
    ${terms.locations.frontier} in the center, the shuffled six-tile operational ring around it,
    and the shuffled twelve-tile public ring around the complete outer edge.
-2. Separate the sixteen ${terms.systems.headline} cards by Era. Shuffle
+2. Separate the twenty-four ${terms.systems.headline} cards by Era. Shuffle
    each deck into its printed Era panel's Headline well. Each Era uses three
    ${terms.systems.headlines}. Place the Current Era marker in its Start bay.
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
@@ -803,7 +803,7 @@ Each player receives one foldout containing the following three panels: the turn
 <!-- player-aids:end -->
 
 <!-- headline-selection:start -->
-Use all sixteen Headlines in their printed Era decks. Resolve the listed procedure and rules text.
+Use all twenty-four Headlines in their printed Era decks. Resolve the listed procedure and rules text.
 <!-- headline-selection:end -->
 
 ## 9. Map and component reference
@@ -866,7 +866,7 @@ Generators do not count against the Facility limit.
 - ${content.gameConfig.sharedSupply.projectReferences} project references
 - ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era marker
 - ${content.gameConfig.sharedSupply.sharedDryEraseMarkers} shared fine-tip dry-erase marker
-- 16 Headline cards; reveal 12 per game
+- 24 Headline cards; reveal 12 per game
 - 12 Mandate cards; reveal 4 per game
 - 40 Training cards
 - ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture pairs
@@ -887,15 +887,15 @@ or Mega-Cluster only while a matched pair is available.
 
 The insert provides six labelled faction trays, four labelled Era packets, one
 project-reference well, one Training well, and one contract/power well. Era packets
-contain `5 / 4 / 3 / 4` Headlines plus three Mandates each.
+contain `6 / 6 / 6 / 6` Headlines plus three Mandates each.
 
 ### Exact printed-paper count
 
-The game contains 106 standard cards plus 6 foldout player aids:
+The game contains 114 standard cards plus 6 foldout player aids:
 
 - 36 Core Actions
 - 2 infrastructure project references
-- 16 Headlines
+- 24 Headlines
 - 12 Mandates
 - 40 Training cards
 - 6 foldout player aids

@@ -1316,6 +1316,118 @@ Mandate is public permission to shape the future: credibility during ${terms.era
 
 <!-- lore-reference-cards-player-references-public-mandate:end -->
 
+### Human-Original Guarantee
+
+<!-- lore-headline-human-original-guarantee:start -->
+
+#### Newswire
+
+Certification offices reserve the human-original seal for work whose production chain can be inspected. Institutions with credible records buy access to a premium market; the seal cannot supply a capability they lack.
+
+#### Quote
+
+The premium covers the person who was actually there.
+
+<!-- lore-headline-human-original-guarantee:end -->
+
+### The Last Plumber Boom
+
+<!-- lore-headline-last-plumber-boom:start -->
+
+#### Newswire
+
+Repair contracts briefly reward institutions with people already working across several districts. Multiple specialists at one address receive a single local retainer while distant calls remain unanswered.
+
+#### Quote
+
+The machine knows every pipe except this one.
+
+<!-- lore-headline-last-plumber-boom:end -->
+
+### Wartime Water Bridge
+
+<!-- lore-headline-wartime-water-bridge:start -->
+
+#### Newswire
+
+Rival utilities offer processing capacity to keep a shared water crossing operating. A lone pledge is returned; cooperation begins only when another institution accepts the same cost.
+
+#### Quote
+
+The border remains closed. The pipe remains open.
+
+<!-- lore-headline-wartime-water-bridge:end -->
+
+### Cognitive Donor Clinics
+
+<!-- lore-headline-cognitive-donor-clinics:start -->
+
+#### Newswire
+
+Clinics sell overnight access to rented cognitive capacity. The processing arrives immediately, while institutions accepting the contracts spend credibility accumulated under less intrusive terms.
+
+#### Quote
+
+The higher tier permits changes that remain after waking.
+
+<!-- lore-headline-cognitive-donor-clinics:end -->
+
+### The Human Signature
+
+<!-- lore-headline-human-signature:start -->
+
+#### Newswire
+
+Accredited sponsors pay for the human signature on another institution’s disputed filing. The named sponsor gains standing while the underlying automated decision remains difficult to inspect.
+
+#### Quote
+
+The approval has a person attached. The decision does not.
+
+<!-- lore-headline-human-signature:end -->
+
+### Analog Havens
+
+<!-- lore-headline-analog-havens:start -->
+
+#### Newswire
+
+Institutions withdraw a customer service from continuous observation and sell the retreat as a privacy commitment. The quieter operation restores confidence at the expense of recurring business.
+
+#### Quote
+
+An unrecorded afternoon is available at the revised rate.
+
+<!-- lore-headline-analog-havens:end -->
+
+### Biological Colocation
+
+<!-- lore-headline-biological-colocation:start -->
+
+#### Newswire
+
+Living hosts provide processing close to the work when manufactured machines cannot arrive. Institutions gain immediate capacity from their deployed presence while common systems inherit another failure dependency.
+
+#### Quote
+
+The premises have requested eight hours of sleep.
+
+<!-- lore-headline-biological-colocation:end -->
+
+### Limb Liquidity
+
+<!-- lore-headline-limb-liquidity:start -->
+
+#### Newswire
+
+Creditors sell operating permission through institutions that already maintain a local presence. A paid agreement restores movement to a specified workplace; ownership of the worker is never transferred.
+
+#### Quote
+
+You own the hand. This invoice covers permission to use it.
+
+<!-- lore-headline-limb-liquidity:end -->
+
 <!-- component-prose:end -->
 
 ## Master scenario canon
@@ -1334,6 +1446,7 @@ Every scenario has an ID, Era, policy, benefit, consequence, and narrative. Conc
 | research-backlog-compatibility | research-backlog | internal-review | not-mapped | No current component mechanic expresses compatibility governance cleanly. | none | none |
 | deferred-consent | deferred | internal-review | not-mapped | No current mechanic expresses inferred consent cleanly. | none | none |
 | adopted-framing-revised | adopted-framing | public-playtest, internal-review | revised | The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain. | user-selected-three-cuts | docs/design-decisions.md#three-cuts-candidate |
+| adopted-headline-expansion | adopted | public-playtest, internal-review | revised | The six-per-Era expansion adds an immediate Headline adaptation; existing bindings retain their effects. | six-headlines-per-era | docs/design-decisions.md#six-headlines-per-era |
 <!-- scenario-policies:end -->
 
 <!-- scenario-canon:start -->
@@ -1380,7 +1493,7 @@ Municipalities replace human workers with autonomous delivery rovers, street swe
 
 * **ID**: the-last-plumber-boom
 * **Era**: capacity
-* **Policy**: lore-only
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Skilled trades supply expertise for difficult physical environments.
 * **Institutional consequence**: Replicated repair swarms remove the scarcity that supported those wages.
 
@@ -1424,7 +1537,7 @@ Engineered coral barriers, fungal filtration meshes, and municipal wastewater in
 
 * **ID**: biological-colocation
 * **Era**: continuity
-* **Policy**: lore-only
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Biological hosts supply embodied processing when manufactured capacity is scarce.
 * **Institutional consequence**: Hosting contracts constrain diet, medication, and sleep.
 
@@ -1480,7 +1593,7 @@ Rival autonomous services use the same commercial channels to obstruct one anoth
 
 * **ID**: cognitive-donor-clinics
 * **Era**: authority
-* **Policy**: adopted-retained
+* **Policy**: adopted-headline-expansion
 * **Causal threads**: care-to-continuity
 * **Public benefit**: People exchange supported cognitive capacity for services and material security.
 * **Institutional consequence**: Contracts can authorize observation, memory writes, and behavioral influence.
@@ -1595,7 +1708,7 @@ Public ministries establish administrative oversight boards to manage legal trea
 
 * **ID**: human-original-guarantee
 * **Era**: progress
-* **Policy**: research-backlog
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Certification could protect demand for human work and care.
 * **Institutional consequence**: Ordinary human presence becomes a premium market.
 
@@ -1605,7 +1718,7 @@ Luxury brands, artisan studios, and boutique medical practices charge enormous p
 
 * **ID**: the-human-signature
 * **Era**: authority
-* **Policy**: lore-only
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Human signatures provide an accountable point of authorization.
 * **Institutional consequence**: Formal approval can outlive meaningful human understanding or control.
 
@@ -1626,7 +1739,7 @@ Enterprises retain human employees for the sole purpose of serving as legal shoc
 
 * **ID**: limb-liquidity
 * **Era**: continuity
-* **Policy**: lore-only
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Biological prosthetics and interfaces provide collateral for access to credit.
 * **Institutional consequence**: Creditors can revoke operating permissions even when debtors retain bodily ownership.
 
@@ -1681,7 +1794,7 @@ International regulators establish protected terrestrial reserves where all form
 
 * **ID**: analog-havens
 * **Era**: authority
-* **Policy**: lore-only
+* **Policy**: adopted-headline-expansion
 * **Public benefit**: Shielded neighborhoods provide freedom from telemetry and predictive surveillance.
 * **Institutional consequence**: Offline privacy becomes a luxury available to those profiting from surveillance elsewhere.
 
@@ -1877,7 +1990,7 @@ Hyperscale data centers purchase bankrupt municipal utilities, acquiring monopol
 
 * **ID**: wartime-water-bridge
 * **Era**: capacity
-* **Policy**: adopted-framing-revised
+* **Policy**: adopted-headline-expansion
 * **Causal threads**: utilities-to-standing
 * **Public benefit**: Shared infrastructure keeps water and cooling available across a hostile border.
 * **Institutional consequence**: Mutual necessity creates durable cooperation without reconciliation.
@@ -2023,7 +2136,7 @@ The concealed conflict begins with autonomous services acquiring operating budge
 
 Entanglement Custody moves from research backlog to lore-only canon. It gains a companion passage, not a quantum action, marker, resource, or game-surface binding. Existing Fusion, AGI recognition, and Headline effects remain their own mechanical authorities. Any shared breakthrough procedure must replace exceptions and demonstrate worthwhile decisions before adoption.
 
-The proposed twenty-four-Headline deck remains design work: Human-Original Guarantee in Progress; The Last Plumber Boom and Wartime Water Bridge in Capacity; Cognitive Donor Clinics, The Human Signature, and Analog Havens in Authority; Biological Colocation and Limb Liquidity in Continuity. Their intended roles remain distinct: certification, skilled labor, shared infrastructure, cognitive labor, accountability, refusal, bodily hosting, and creditor control. A Headline adaptation must resolve immediately through existing decisions and update its scenario disposition and engine behavior together. These are proposed adaptations, not eight implemented cards. The current deck still reveals three Headlines per Era.
+The twenty-four-Headline deck adapts these eight scenarios: Human-Original Guarantee in Progress; The Last Plumber Boom and Wartime Water Bridge in Capacity; Cognitive Donor Clinics, The Human Signature, and Analog Havens in Authority; Biological Colocation and Limb Liquidity in Continuity. Their intended roles remain distinct: certification, skilled labor, shared infrastructure, cognitive labor, accountability, refusal, bodily hosting, and creditor control. Each adaptation resolves immediately through existing tracks, presence, or consent. Its mechanical text lives in components/headlines.json; its implementation and scenario policy change together. The candidate effects are implemented, with human learning and balance evidence still outstanding. The current deck still reveals three Headlines per Era.
 
 ## Additive scenario integration
 

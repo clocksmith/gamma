@@ -18,8 +18,8 @@ async function headline(match, id) {
   await match.prepareHeadline([]);
 }
 
-test("all sixteen Headlines finish choices before selection without action use or continuing modifiers", async () => {
-  assert.equal(headlines.length, 16);
+test("all twenty-four Headlines finish choices before selection without action use or continuing modifiers", async () => {
+  assert.equal(headlines.length, 24);
   for (const card of headlines) {
     assert.equal(card.duration, "immediate", card.id);
     const match = await game();

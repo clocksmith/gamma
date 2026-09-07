@@ -17,8 +17,8 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 test("Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references", async () => {
   const { text, worldCopy, scenarios } = await readWorldDocument();
   assert.equal(scenarios.length, 51);
-  assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 12);
-  assert.equal(scenarios.filter(s => ["deferred", "research-backlog"].includes(s.disposition)).length, 17);
+  assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 7);
+  assert.equal(scenarios.filter(s => ["deferred", "research-backlog"].includes(s.disposition)).length, 16);
   const index = await buildScenarioIndex();
   assert.deepEqual(index.scenarios.map(({ surfaceBindings, ...s }) => s), [...scenarios].sort((a, b) => a.id.localeCompare(b.id, "en")));
   assert.deepEqual(JSON.parse(await read("dist/runtime/world-copy.json")), playerContent(worldCopy));
@@ -67,7 +67,7 @@ test("canon requires explicit unique identities, dispositions, and complete narr
 
 test("lore-only entries cannot gain mechanics, public deployment, or game bindings", async () => {
   const ledger = await buildScenarioIndex();
-  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 51, surfaces: 54 });
+  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 51, surfaces: 62 });
   for (const mutate of [
     s => { s.mechanicPreservation.status = "retained"; },
     s => { s.deploymentProfiles.push("public-playtest"); },
