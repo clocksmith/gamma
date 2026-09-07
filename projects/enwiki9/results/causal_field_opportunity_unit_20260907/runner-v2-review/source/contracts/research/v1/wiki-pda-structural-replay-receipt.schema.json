@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-structural-replay-receipt.v3",
+  "title": "WIKI-PDA structural replay receipt v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "mode",
+    "input_lock",
+    "scope",
+    "arms",
+    "comparisons",
+    "repeat",
+    "accounting",
+    "decision",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-structural-replay-receipt.v3"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"const": "wiki_pda_structural_replay_q0_v2"},
+    "mode": {"enum": ["debug_shadow", "archive_proof"]},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_contract_sha256",
+        "experiment_contract_sha256",
+        "program_lock_sha256",
+        "donor_commit",
+        "patched_source_tree_sha256",
+        "patch_sha256",
+        "build_receipt_sha256",
+        "binary_sha256",
+        "runtime_root_manifest_sha256",
+        "corpus_sha256",
+        "population_manifest_sha256",
+        "economics_receipt_sha256",
+        "memory_safe_parent_receipt_sha256"
+      ],
+      "properties": {
+        "planning_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "experiment_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "donor_commit": {"type": "string", "minLength": 1},
+        "patched_source_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "patch_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "corpus_sha256": {"$ref": "#/$defs/sha256"},
+        "population_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "economics_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "memory_safe_parent_receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_role",
+        "start_offset",
+        "end_offset_exclusive",
+        "raw_bytes",
+        "complete_population_pass",
+        "required_gross_archive_gain_bytes"
+      ],
+      "properties": {
+        "population_role": {"enum": ["diagnostic_250k", "calibration_1m", "opening_10m", "distant_10m", "promotion_100m", "canonical_1g"]},
+        "start_offset": {"type": "integer", "minimum": 0},
+        "end_offset_exclusive": {"type": "integer", "minimum": 1},
+        "raw_bytes": {"enum": [250000, 1000000, 10000000, 100000000, 1000000000]},
+        "complete_population_pass": {"type": "boolean"},
+        "required_gross_archive_gain_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "D", "R", "S"],
+      "properties": {
+        "P": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "P"}}}]},
+        "K": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "K"}}}]},
+        "D": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "D"}}}]},
+        "R": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "R"}}}]},
+        "S": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "S"}}}]}
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P_K_integer_probability_identity_pass",
+        "P_K_coder_state_identity_pass",
+        "P_K_payload_identity_pass",
+        "P_K_archive_identity_pass",
+        "P_K_parent_persistent_state_identity_pass",
+        "K_overlay_bookkeeping_live_pass",
+        "D_encoder_decoder_probability_identity_pass",
+        "D_encoder_decoder_state_identity_pass",
+        "D_gross_archive_gain_bytes",
+        "R_gross_archive_gain_bytes",
+        "S_gross_archive_gain_bytes",
+        "D_over_R_bytes",
+        "D_over_S_bytes",
+        "D_beats_P_pass",
+        "D_beats_R_pass",
+        "D_beats_S_pass",
+        "thirdwise_margins_bytes",
+        "all_thirds_positive_pass"
+        ,"all_arm_output_manifests_pass"
+      ],
+      "properties": {
+        "P_K_integer_probability_identity_pass": {"type": "boolean"},
+        "P_K_coder_state_identity_pass": {"type": ["boolean", "null"]},
+        "P_K_payload_identity_pass": {"type": ["boolean", "null"]},
+        "P_K_archive_identity_pass": {"type": ["boolean", "null"]},
+        "P_K_parent_persistent_state_identity_pass": {"type": "boolean"},
+        "K_overlay_bookkeeping_live_pass": {"type": "boolean"},
+        "D_encoder_decoder_probability_identity_pass": {"type": ["boolean", "null"]},
+        "D_encoder_decoder_state_identity_pass": {"type": ["boolean", "null"]},
+        "D_gross_archive_gain_bytes": {"type": ["integer", "null"]},
+        "R_gross_archive_gain_bytes": {"type": ["integer", "null"]},
+        "S_gross_archive_gain_bytes": {"type": ["integer", "null"]},
+        "D_over_R_bytes": {"type": ["integer", "null"]},
+        "D_over_S_bytes": {"type": ["integer", "null"]},
+        "D_beats_P_pass": {"type": ["boolean", "null"]},
+        "D_beats_R_pass": {"type": ["boolean", "null"]},
+        "D_beats_S_pass": {"type": ["boolean", "null"]},
+        "thirdwise_margins_bytes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"type": ["integer", "null"]}
+        },
+        "all_thirds_positive_pass": {"type": ["boolean", "null"]},
+        "all_arm_output_manifests_pass": {"type": "boolean"}
+      }
+    },
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["D_first_manifest_sha256", "D_second_manifest_sha256", "D_repeat_identity_pass"],
+      "properties": {
+        "D_first_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "D_second_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "D_repeat_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "incremental_package_bytes",
+        "maximum_added_package_bytes",
+        "package_pass",
+        "complete_counted_bytes",
+        "target_complete_counted_bytes",
+        "complete_score_pass",
+        "all_resource_receipts_pass",
+        "all_dependency_closure_receipts_pass"
+      ],
+      "properties": {
+        "incremental_package_bytes": {"type": "integer", "minimum": 0},
+        "maximum_added_package_bytes": {"const": 65536},
+        "package_pass": {"type": "boolean"},
+        "complete_counted_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "target_complete_counted_bytes": {"const": 105000000},
+        "complete_score_pass": {"type": ["boolean", "null"]},
+        "all_resource_receipts_pass": {"type": "boolean"},
+        "all_dependency_closure_receipts_pass": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode_has_promotion_authority",
+        "exactness_pass",
+        "bookkeeping_control_pass",
+        "random_control_pass",
+        "causal_control_pass",
+        "economic_gate_pass",
+        "resource_gate_pass",
+        "terminal_classification",
+        "authorized_successor",
+        "scientific_verdict"
+      ],
+      "properties": {
+        "mode_has_promotion_authority": {"type": "boolean"},
+        "exactness_pass": {"type": "boolean"},
+        "bookkeeping_control_pass": {"type": "boolean"},
+        "random_control_pass": {"type": "boolean"},
+        "causal_control_pass": {"type": "boolean"},
+        "economic_gate_pass": {"type": ["boolean", "null"]},
+        "resource_gate_pass": {"type": "boolean"},
+        "terminal_classification": {
+          "enum": [
+            "pass_next_preregistered_scope",
+            "pass_100m_promotion",
+            "pass_canonical_1g_target",
+            "pass_debug_exactness_only",
+            "fail_subscale_archive_gain",
+            "fail_bookkeeping_identity",
+            "fail_random_control",
+            "fail_causal_control",
+            "fail_encoder_decoder_synchronization",
+            "fail_archive_inverse_or_repeat",
+            "fail_package_resource_or_dependency",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {
+          "enum": [
+            "next_preregistered_scope",
+            "canonical_1g_qualification",
+            "one_correction_only_implementation_successor",
+            "one_materially_different_orthogonal_family",
+            "submission_audit",
+            "none"
+          ]
+        },
+        "scientific_verdict": {"enum": ["pass", "fail", "none", "invalid"]}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shadow_credit_bytes", "score_credit_bytes", "archive_promotion_authority", "submission_authority"],
+      "properties": {
+        "shadow_credit_bytes": {"const": 0},
+        "score_credit_bytes": {"type": "integer", "minimum": 0},
+        "archive_promotion_authority": {"type": "boolean"},
+        "submission_authority": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "armReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "command_sha256",
+        "return_codes",
+        "integer_probability_stream_sha256",
+        "coder_state_manifest_sha256",
+        "parent_persistent_state_manifest_sha256",
+        "wiki_pda_state_manifest_sha256",
+        "archive_size_bytes",
+        "archive_sha256",
+        "decoded_size_bytes",
+        "decoded_sha256",
+        "raw_inverse_size_bytes",
+        "raw_inverse_sha256",
+        "raw_inverse_pass",
+        "resource_receipt_sha256",
+        "resource_pass",
+        "dependency_closure_receipt_sha256",
+        "dependency_closure_pass"
+        ,"output_manifest_sha256"
+        ,"output_verification_sha256"
+        ,"output_verification_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["P", "K", "D", "R", "S"]},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "return_codes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["encode", "decode", "raw_inverse"],
+          "properties": {
+            "encode": {"type": ["integer", "null"]},
+            "decode": {"type": ["integer", "null"]},
+            "raw_inverse": {"type": ["integer", "null"]}
+          }
+        },
+        "integer_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_state_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "parent_persistent_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "wiki_pda_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "archive_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "archive_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "decoded_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "decoded_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "raw_inverse_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "raw_inverse_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "raw_inverse_pass": {"type": ["boolean", "null"]},
+        "resource_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "resource_pass": {"type": "boolean"},
+        "dependency_closure_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "dependency_closure_pass": {"type": "boolean"},
+        "output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "output_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "output_verification_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

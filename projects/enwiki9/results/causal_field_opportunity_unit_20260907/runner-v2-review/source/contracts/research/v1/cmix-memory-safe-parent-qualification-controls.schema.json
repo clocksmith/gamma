@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-controls.v1",
+  "title": "CMIX memory-safe parent qualification controls v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "errors", "verifier_sha256", "controls", "claim_authority", "promotion_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-controls.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "controls": {
+      "type": "object",
+      "minProperties": 10,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["return_code", "output_present", "observed_verified", "observed_qualified", "expected_verified", "expected_qualified", "pass", "stdout_sha256", "stderr_sha256"],
+        "properties": {
+          "return_code": {"type": "integer"},
+          "output_present": {"type": "boolean"},
+          "observed_verified": {"type": ["boolean", "null"]},
+          "observed_qualified": {"type": ["boolean", "null"]},
+          "expected_verified": {"type": ["boolean", "null"]},
+          "expected_qualified": {"type": ["boolean", "null"]},
+          "pass": {"type": "boolean"},
+          "stdout_sha256": {"$ref": "#/$defs/sha256"},
+          "stderr_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

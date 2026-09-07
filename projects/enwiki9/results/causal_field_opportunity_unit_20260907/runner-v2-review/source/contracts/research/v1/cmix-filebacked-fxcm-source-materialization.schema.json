@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1",
+  "title": "CMIX file-backed FXCM source materialization receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "tracked_tree",
+    "inputs",
+    "patch_steps",
+    "source_root",
+    "source_root_identity_sha256",
+    "files",
+    "entry_list",
+    "materialized",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-source-materialization.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "tracked_tree": {"const": "23de249ff899db5ba84dd3514a6a1bb52a83d0f5"},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_archive", "pgo_profile", "q0_patch", "q0_applicator", "q1_patch", "q1_applicator"],
+      "properties": {
+        "source_archive": {"$ref": "#/$defs/artifact"},
+        "pgo_profile": {"$ref": "#/$defs/artifact"},
+        "q0_patch": {"$ref": "#/$defs/artifact"},
+        "q0_applicator": {"$ref": "#/$defs/artifact"},
+        "q1_patch": {"$ref": "#/$defs/artifact"},
+        "q1_applicator": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "patch_steps": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "argv", "return_code", "stdout_sha256", "stderr_sha256"],
+        "properties": {
+          "id": {"enum": ["q0_memory_correction", "q1_filebacked_fxcm"]},
+          "argv": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
+          "return_code": {"const": 0},
+          "stdout_sha256": {"$ref": "#/$defs/sha256"},
+          "stderr_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "source_root": {"type": "string", "minLength": 1},
+    "source_root_identity_sha256": {"$ref": "#/$defs/sha256"},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256", "role"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "role": {"enum": ["shared_allocator_header", "source", "build_input"]}
+        }
+      }
+    },
+    "entry_list": {"$ref": "#/$defs/artifact"},
+    "materialized": {"const": true},
+    "authority": {"const": "source_identity_only"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

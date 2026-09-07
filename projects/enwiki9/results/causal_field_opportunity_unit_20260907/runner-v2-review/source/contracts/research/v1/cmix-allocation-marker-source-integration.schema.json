@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-allocation-marker-source-integration.v1",
+  "title": "CMIX allocation marker source integration manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "donor_commit", "donor_tree", "compile_gate", "marker_header_sha256", "source_integration_contract_sha256", "source_patch_sha256", "patched_source_tree_sha256", "compiler_sha256", "linker_sha256", "compile_flags_sha256", "binary_sha256", "insertions", "build", "fixture", "authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-allocation-marker-source-integration.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_allocation_markers_q0_v1"},
+    "donor_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "donor_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "compile_gate": {"const": "KH_ALLOCATION_MARKERS"},
+    "marker_header_sha256": {"$ref": "#/$defs/sha256"},
+    "source_integration_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "source_patch_sha256": {"$ref": "#/$defs/sha256"},
+    "patched_source_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_sha256": {"$ref": "#/$defs/sha256"},
+    "linker_sha256": {"$ref": "#/$defs/sha256"},
+    "compile_flags_sha256": {"$ref": "#/$defs/sha256"},
+    "binary_sha256": {"$ref": "#/$defs/sha256"},
+    "insertions": {
+      "type": "array",
+      "minItems": 11,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source", "symbol", "label", "events", "source_location_sha256", "record_expression_sha256", "before_first_model_use_pass", "compile_gate_pass"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
+          "symbol": {"type": "string", "minLength": 1},
+          "label": {"type": ["string", "null"]},
+          "events": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["allocation", "release", "pageout", "health_check"]}},
+          "source_location_sha256": {"$ref": "#/$defs/sha256"},
+          "record_expression_sha256": {"$ref": "#/$defs/sha256"},
+          "before_first_model_use_pass": {"type": "boolean"},
+          "compile_gate_pass": {"type": "boolean"}
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_sha256", "clean_source_pass", "warnings_as_errors_pass", "single_thread_marker_contract_pass", "unmarked_translation_identity_pass"],
+      "properties": {
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "clean_source_pass": {"type": "boolean"},
+        "warnings_as_errors_pass": {"type": "boolean"},
+        "single_thread_marker_contract_pass": {"type": "boolean"},
+        "unmarked_translation_identity_pass": {"type": "boolean"}
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_sha256", "fixed_record_layout_pass", "strict_sequence_pass", "short_write_pass", "invalid_fd_fail_closed_pass", "allocation_geometry_pass", "lifetime_order_pass", "parser_schema_pass"],
+      "properties": {
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "fixed_record_layout_pass": {"type": "boolean"},
+        "strict_sequence_pass": {"type": "boolean"},
+        "short_write_pass": {"type": "boolean"},
+        "invalid_fd_fail_closed_pass": {"type": "boolean"},
+        "allocation_geometry_pass": {"type": "boolean"},
+        "lifetime_order_pass": {"type": "boolean"},
+        "parser_schema_pass": {"type": "boolean"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_integration_pass", "execution_authority", "instrumented_memory_qualification", "compression_credit_bytes", "score_credit_bytes"],
+      "properties": {
+        "source_integration_pass": {"type": "boolean"},
+        "execution_authority": {"type": "boolean"},
+        "instrumented_memory_qualification": {"const": false},
+        "compression_credit_bytes": {"const": 0},
+        "score_credit_bytes": {"const": 0}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

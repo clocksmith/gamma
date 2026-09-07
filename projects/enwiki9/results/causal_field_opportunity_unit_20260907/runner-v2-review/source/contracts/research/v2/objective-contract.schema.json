@@ -1,0 +1,529 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v2/objective-contract.schema.json",
+  "title": "gamma.enwiki9.objective_contract.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "version",
+    "objectiveId",
+    "status",
+    "effectiveUtc",
+    "corpus",
+    "score",
+    "correctness",
+    "resources",
+    "distribution",
+    "evidence",
+    "epistemicPolicy",
+    "promotionLadders",
+    "authorities",
+    "migrationPolicy",
+    "migration"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.objective-contract.v2"
+    },
+    "version": {
+      "const": 2
+    },
+    "objectiveId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "superseded"
+      ]
+    },
+    "effectiveUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "corpus": {
+      "$ref": "#/$defs/corpus"
+    },
+    "score": {
+      "$ref": "#/$defs/score"
+    },
+    "correctness": {
+      "$ref": "#/$defs/correctness"
+    },
+    "resources": {
+      "$ref": "#/$defs/resources"
+    },
+    "distribution": {
+      "$ref": "#/$defs/distribution"
+    },
+    "evidence": {
+      "$ref": "#/$defs/evidence"
+    },
+    "epistemicPolicy": {
+      "$ref": "#/$defs/epistemicPolicy"
+    },
+    "promotionLadders": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/promotionLadder"
+      }
+    },
+    "authorities": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "$ref": "#/$defs/authority"
+      }
+    },
+    "migrationPolicy": {
+      "$ref": "#/$defs/migrationPolicy"
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "previousObjectivePath",
+        "previousObjectiveDigest",
+        "historicalMilestoneBytes",
+        "competitiveFrontierPath"
+      ],
+      "properties": {
+        "previousObjectivePath": {
+          "const": "contracts/research/v1/objective-contract.json"
+        },
+        "previousObjectiveDigest": {
+          "const": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8"
+        },
+        "historicalMilestoneBytes": {
+          "const": 105000000
+        },
+        "competitiveFrontierPath": {
+          "const": "operations/provenance/competitive_frontier_v1.json"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "bytes",
+        "md5",
+        "sha256",
+        "repositoryPath"
+      ],
+      "properties": {
+        "name": {
+          "const": "enwik9"
+        },
+        "bytes": {
+          "const": 1000000000
+        },
+        "md5": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "repositoryPath": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "targetBytes",
+        "comparison",
+        "submissionForm",
+        "formula",
+        "countedComponents",
+        "targetMeaning"
+      ],
+      "properties": {
+        "kind": {
+          "const": "fully-counted-submission-score"
+        },
+        "targetBytes": {
+          "const": 99000000
+        },
+        "comparison": {
+          "const": "<="
+        },
+        "submissionForm": {
+          "const": "self-extracting-archive"
+        },
+        "formula": {
+          "const": "comp9_or_source_package_bytes + archive9_bytes + required_option_bytes"
+        },
+        "countedComponents": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "targetMeaning": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "correctness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "restoredBytes",
+        "restoredSha256",
+        "exactRoundtripRequired",
+        "deterministicArchiveReplayRequired",
+        "independentDecodeRequired"
+      ],
+      "properties": {
+        "restoredBytes": {
+          "const": 1000000000
+        },
+        "restoredSha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "exactRoundtripRequired": {
+          "const": true
+        },
+        "deterministicArchiveReplayRequired": {
+          "const": true
+        },
+        "independentDecodeRequired": {
+          "const": true
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cpu",
+        "wallTime",
+        "memory",
+        "temporaryDisk"
+      ],
+      "properties": {
+        "cpu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximumPhysicalCores",
+            "gpuAllowed",
+            "networkAllowed",
+            "measurement"
+          ],
+          "properties": {
+            "maximumPhysicalCores": {
+              "const": 1
+            },
+            "gpuAllowed": {
+              "const": false
+            },
+            "networkAllowed": {
+              "const": false
+            },
+            "measurement": {
+              "const": "continuous-process-tree"
+            }
+          }
+        },
+        "wallTime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "appliesIndependentlyTo",
+            "geekbenchVersion",
+            "scoreSymbol",
+            "maximumHoursFormula",
+            "maximumSecondsNumerator",
+            "comparison"
+          ],
+          "properties": {
+            "appliesIndependentlyTo": {
+              "const": [
+                "compression",
+                "decompression"
+              ]
+            },
+            "geekbenchVersion": {
+              "const": 5
+            },
+            "scoreSymbol": {
+              "const": "T_single_core"
+            },
+            "maximumHoursFormula": {
+              "const": "70000 / T_single_core"
+            },
+            "maximumSecondsNumerator": {
+              "const": 252000000
+            },
+            "comparison": {
+              "const": "<"
+            }
+          }
+        },
+        "memory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximumBytes",
+            "comparison",
+            "linuxGuardKiB",
+            "measurement"
+          ],
+          "properties": {
+            "maximumBytes": {
+              "const": 10000000000
+            },
+            "comparison": {
+              "const": "<"
+            },
+            "linuxGuardKiB": {
+              "const": 9765625
+            },
+            "measurement": {
+              "const": "continuous-process-tree-peak-rss"
+            }
+          }
+        },
+        "temporaryDisk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximumBytes",
+            "comparison",
+            "measurement"
+          ],
+          "properties": {
+            "maximumBytes": {
+              "const": 100000000000
+            },
+            "comparison": {
+              "const": "<"
+            },
+            "measurement": {
+              "const": "continuous-candidate-scratch-tree-peak"
+            }
+          }
+        }
+      }
+    },
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selfContained",
+        "additionalInstallationsAllowed",
+        "completeDependencyClosureRequired",
+        "publicDocumentedSourceRequired",
+        "licenseClass",
+        "acceptedExecutableSystems"
+      ],
+      "properties": {
+        "selfContained": {
+          "const": true
+        },
+        "additionalInstallationsAllowed": {
+          "const": false
+        },
+        "completeDependencyClosureRequired": {
+          "const": true
+        },
+        "publicDocumentedSourceRequired": {
+          "const": true
+        },
+        "licenseClass": {
+          "const": "OSI-approved"
+        },
+        "acceptedExecutableSystems": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "linux-x86-32",
+              "linux-x86-64",
+              "windows-x86-32",
+              "windows-x86-64"
+            ]
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredArtifacts",
+        "referenceBinding",
+        "missingEvidenceDisposition"
+      ],
+      "properties": {
+        "requiredArtifacts": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "referenceBinding": {
+          "const": "sha256-canonical-json-v1"
+        },
+        "missingEvidenceDisposition": {
+          "const": "fail-closed-no-promotion"
+        }
+      }
+    },
+    "epistemicPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objectiveCredit",
+        "zeroCreditClasses",
+        "compositionRule"
+      ],
+      "properties": {
+        "objectiveCredit": {
+          "const": "exact-full-corpus-self-contained-package-only"
+        },
+        "zeroCreditClasses": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "compositionRule": {
+          "const": "joint-replay-required-never-add-component-forecasts"
+        }
+      }
+    },
+    "promotionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "population",
+        "objectiveCredit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "population": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objectiveCredit": {
+          "type": "boolean"
+        }
+      }
+    },
+    "promotionLadder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "gates",
+        "ordering"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "$ref": "#/$defs/promotionGate"
+          }
+        },
+        "ordering": {
+          "const": "all-prior-gates-required"
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "retrievedUtc",
+        "bytes",
+        "sha256",
+        "locators"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "retrievedUtc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "locators": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "migrationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleChangeAction",
+        "targetChangeAction",
+        "historicalReceiptPolicy"
+      ],
+      "properties": {
+        "ruleChangeAction": {
+          "const": "create-new-version-and-revalidate-before-promotion"
+        },
+        "targetChangeAction": {
+          "const": "create-new-objective-id"
+        },
+        "historicalReceiptPolicy": {
+          "const": "retain-original-objective-digest"
+        }
+      }
+    }
+  }
+}

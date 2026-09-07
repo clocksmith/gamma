@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-allocator-receipt.v1",
+  "title": "CMIX file-backed FXCM allocator receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receipt_id", "strategy_id", "input_lock", "attribution", "allocator", "pageout", "identity", "archive_inverse", "resources", "cleanup", "decision", "authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-allocator-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "strategy_id": {"const": "cmix_obias_filebacked_fxcm_allocator_strategy_q0_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planning_contract_sha256", "memory_parent_contract_sha256", "phase_attribution_receipt_sha256", "source_revision", "source_tree_sha256", "patch_sha256", "build_receipt_sha256", "binary_sha256", "runtime_root_manifest_sha256", "corpus_sha256", "population_manifest_sha256", "scratch_filesystem_identity_sha256", "cgroup_identity_sha256"],
+      "properties": {
+        "planning_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "memory_parent_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "phase_attribution_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "source_revision": {"type": "string", "minLength": 1},
+        "source_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "patch_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "corpus_sha256": {"$ref": "#/$defs/sha256"},
+        "population_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "scratch_filesystem_identity_sha256": {"$ref": "#/$defs/sha256"},
+        "cgroup_identity_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_peak_bytes", "parent_peak_phase", "eligible_anonymous_bytes_at_peak", "required_reclaimable_bytes", "eligible_lower_bound_sufficient_pass"],
+      "properties": {
+        "parent_peak_bytes": {"type": "integer", "minimum": 0},
+        "parent_peak_phase": {"type": "string", "minLength": 1},
+        "eligible_anonymous_bytes_at_peak": {"type": "integer", "minimum": 0},
+        "required_reclaimable_bytes": {"type": "integer", "minimum": 0},
+        "eligible_lower_bound_sufficient_pass": {"type": "boolean"}
+      }
+    },
+    "allocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_backed_allocation_bytes", "allocation_manifest_sha256", "allocation_count", "total_mapped_bytes", "all_files_exclusive_regular_0600_pass", "all_posix_fallocate_pass", "all_zero_semantics_pass", "all_alignment_pass", "fallback_absent_pass"],
+      "properties": {
+        "minimum_backed_allocation_bytes": {"const": 67108864},
+        "allocation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "allocation_count": {"type": "integer", "minimum": 1},
+        "total_mapped_bytes": {"type": "integer", "minimum": 67108864},
+        "all_files_exclusive_regular_0600_pass": {"type": "boolean"},
+        "all_posix_fallocate_pass": {"type": "boolean"},
+        "all_zero_semantics_pass": {"type": "boolean"},
+        "all_alignment_pass": {"type": "boolean"},
+        "fallback_absent_pass": {"type": "boolean"}
+      }
+    },
+    "pageout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cadence_bytes", "event_manifest_sha256", "event_count", "mapping_call_count", "all_calls_returned_zero_pass", "source_order_pass", "unsupported_kernel_preflight_pass"],
+      "properties": {
+        "cadence_bytes": {"const": 1048576},
+        "event_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "event_count": {"type": "integer", "minimum": 1},
+        "mapping_call_count": {"type": "integer", "minimum": 1},
+        "all_calls_returned_zero_pass": {"type": "boolean"},
+        "source_order_pass": {"type": "boolean"},
+        "unsupported_kernel_preflight_pass": {"type": "boolean"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_probability_sha256", "child_probability_sha256", "integer_probability_identity_pass", "parent_coder_state_manifest_sha256", "child_coder_state_manifest_sha256", "coder_state_identity_pass", "parent_persistent_state_manifest_sha256", "child_persistent_state_manifest_sha256", "persistent_state_identity_pass", "payload_identity_pass", "archive_identity_pass"],
+      "properties": {
+        "parent_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "child_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "integer_probability_identity_pass": {"type": "boolean"},
+        "parent_coder_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "child_coder_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_state_identity_pass": {"type": "boolean"},
+        "parent_persistent_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "child_persistent_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "persistent_state_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "archive_identity_pass": {"type": "boolean"}
+      }
+    },
+    "archive_inverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encode_return_code", "archive_bytes", "archive_sha256", "decode_return_code", "decoded_size_bytes", "decoded_sha256", "raw_inverse_return_code", "raw_size_bytes", "raw_sha256", "exact_inverse_pass", "repeat_manifest_sha256", "repeat_identity_pass"],
+      "properties": {
+        "encode_return_code": {"type": "integer"},
+        "archive_bytes": {"type": "integer", "minimum": 0},
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "decode_return_code": {"type": "integer"},
+        "decoded_size_bytes": {"type": "integer", "minimum": 0},
+        "decoded_sha256": {"$ref": "#/$defs/sha256"},
+        "raw_inverse_return_code": {"type": "integer"},
+        "raw_size_bytes": {"type": "integer", "minimum": 0},
+        "raw_sha256": {"$ref": "#/$defs/sha256"},
+        "exact_inverse_pass": {"type": "boolean"},
+        "repeat_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "repeat_identity_pass": {"type": "boolean"}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource_guard_receipt_sha256", "process_tree_peak_bytes", "largest_process_vmhwm_bytes", "cgroup_memory_peak_bytes", "gamma_limit_bytes", "engineering_target_bytes", "gamma_memory_pass", "engineering_target_pass", "temporary_disk_peak_bytes", "temporary_disk_limit_bytes", "temporary_disk_pass", "runtime_seconds", "runtime_eligible"],
+      "properties": {
+        "resource_guard_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "process_tree_peak_bytes": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_bytes": {"type": "integer", "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "gamma_limit_bytes": {"const": 10000000000},
+        "engineering_target_bytes": {"const": 9216000000},
+        "gamma_memory_pass": {"type": "boolean"},
+        "engineering_target_pass": {"type": "boolean"},
+        "temporary_disk_peak_bytes": {"type": "integer", "minimum": 0},
+        "temporary_disk_limit_bytes": {"const": 100000000000},
+        "temporary_disk_pass": {"type": "boolean"},
+        "runtime_seconds": {"type": "number", "minimum": 0},
+        "runtime_eligible": {"type": ["boolean", "null"]}
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scratch_before_cleanup_logical_bytes", "scratch_before_cleanup_allocated_bytes", "scratch_after_cleanup_logical_bytes", "scratch_after_cleanup_allocated_bytes", "all_registered_mappings_unmapped_pass", "all_registered_files_removed_pass", "foreign_files_unchanged_pass", "cleanup_pass"],
+      "properties": {
+        "scratch_before_cleanup_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_before_cleanup_allocated_bytes": {"type": "integer", "minimum": 0},
+        "scratch_after_cleanup_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_after_cleanup_allocated_bytes": {"type": "integer", "minimum": 0},
+        "all_registered_mappings_unmapped_pass": {"type": "boolean"},
+        "all_registered_files_removed_pass": {"type": "boolean"},
+        "foreign_files_unchanged_pass": {"type": "boolean"},
+        "cleanup_pass": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["probability_identical_pass", "memory_compilation_pass", "archive_inverse_repeat_pass", "resource_disk_cleanup_pass", "terminal_classification", "authorized_successor", "scientific_verdict"],
+      "properties": {
+        "probability_identical_pass": {"type": "boolean"},
+        "memory_compilation_pass": {"type": "boolean"},
+        "archive_inverse_repeat_pass": {"type": "boolean"},
+        "resource_disk_cleanup_pass": {"type": "boolean"},
+        "terminal_classification": {"enum": ["pass_probability_identical_memory_parent", "fail_probability_or_state_identity", "fail_memory_target", "fail_archive_inverse_or_repeat", "fail_runtime_disk_dependency_or_cleanup", "infrastructure_failure", "invalid_receipt"]},
+        "authorized_successor": {"enum": ["cmix_obias_memory_safe_parent_q0_v1", "one_correction_only_allocator_implementation_successor", "new_parent_candidate_restart_archive_ladder", "none"]},
+        "scientific_verdict": {"enum": ["pass", "fail", "none", "invalid"]}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compression_credit_bytes", "score_credit_bytes", "memory_parent_activation_authority"],
+      "properties": {
+        "compression_credit_bytes": {"const": 0},
+        "score_credit_bytes": {"const": 0},
+        "memory_parent_activation_authority": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

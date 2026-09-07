@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1",
+  "title": "CMIX file-backed FXCM full Arm A failure verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "source_receipt", "guard_receipt", "observed",
+    "checks", "errors", "verification_pass", "claim_boundary",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-failure-verification.v1"},
+    "candidate_id": {"const": "cmix_filebacked_fxcm_full_a_qm7_v2"},
+    "source_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+    "guard_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+    "observed": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "effective_cgroup_memory_max_bytes", "cgroup_memory_peak_bytes",
+            "cgroup_max_event_count", "process_tree_peak_rss_kib",
+            "last_progress_phase", "last_progress_percent"
+          ],
+          "properties": {
+            "effective_cgroup_memory_max_bytes": {"const": 9999998976},
+            "cgroup_memory_peak_bytes": {"const": 9999998976},
+            "cgroup_max_event_count": {"type": "integer", "minimum": 1},
+            "process_tree_peak_rss_kib": {"type": "integer", "minimum": 1, "maximum": 9765624},
+            "last_progress_phase": {"const": "pretraining"},
+            "last_progress_percent": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      ]
+    },
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "verification_pass": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verification_pass": {"const": true}}},
+      "then": {
+        "properties": {
+          "source_receipt": {"$ref": "#/$defs/file"},
+          "guard_receipt": {"$ref": "#/$defs/file"},
+          "observed": {"type": "object"},
+          "checks": {"minProperties": 1, "additionalProperties": {"const": true}},
+          "errors": {"maxItems": 0}
+        }
+      },
+      "else": {"properties": {"errors": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

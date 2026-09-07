@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1",
+  "title": "CMIX file-backed FXCM independent identity verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "source_schema", "source_receipt", "verifier",
+    "scope_count", "artifact_record_count", "unique_artifact_count",
+    "artifact_identity_pass", "trace_geometry_pass",
+    "integer_probability_rederivation_pass",
+    "full_trace_identity_rederivation_pass", "payload_identity_rederivation_pass",
+    "decoded_identity_rederivation_pass", "opening_inverse_rederivation_pass",
+    "aggregate_probability_rederivation_pass", "resource_guard_rederivation_pass",
+    "guard_count", "maximum_tree_rss_kib", "maximum_temporary_disk_bytes",
+    "maximum_allowed_cpu_count", "scratch_root", "scratch_root_absent_pass",
+    "verification_pass", "claim_authority", "execution_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-identity-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "source_schema": {"enum": [
+      "gamma.enwiki9.cmix-filebacked-fxcm-scope-identity.v2",
+      "gamma.enwiki9.cmix-filebacked-fxcm-cumulative-identity.v1",
+      "gamma.enwiki9.cmix-filebacked-fxcm-transfer-10m.v1"
+    ]},
+    "source_receipt": {"$ref": "#/$defs/file"},
+    "verifier": {"$ref": "#/$defs/file"},
+    "scope_count": {"type": "integer", "minimum": 1, "maximum": 3},
+    "artifact_record_count": {"type": "integer", "minimum": 1},
+    "unique_artifact_count": {"type": "integer", "minimum": 1},
+    "artifact_identity_pass": {"const": true},
+    "trace_geometry_pass": {"const": true},
+    "integer_probability_rederivation_pass": {"const": true},
+    "full_trace_identity_rederivation_pass": {"const": true},
+    "payload_identity_rederivation_pass": {"const": true},
+    "decoded_identity_rederivation_pass": {"const": true},
+    "opening_inverse_rederivation_pass": {"const": true},
+    "aggregate_probability_rederivation_pass": {"const": true},
+    "resource_guard_rederivation_pass": {"const": true},
+    "guard_count": {"type": "integer", "minimum": 4, "maximum": 12},
+    "maximum_tree_rss_kib": {"type": "integer", "minimum": 1, "maximum": 9765625},
+    "maximum_temporary_disk_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000000},
+    "maximum_allowed_cpu_count": {"const": 1},
+    "scratch_root": {"type": "string", "pattern": "^/"},
+    "scratch_root_absent_pass": {"const": true},
+    "verification_pass": {"const": true},
+    "claim_authority": {"const": "independent_identity_receipt_verification_only"},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

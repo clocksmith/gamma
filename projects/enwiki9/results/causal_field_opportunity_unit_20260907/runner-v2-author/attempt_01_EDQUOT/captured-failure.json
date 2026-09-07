@@ -1,0 +1,24 @@
+{
+  "schema": "gamma.enwiki9.synthetic-recorder-infrastructure-failure.v1",
+  "status": "failed-before-test-import",
+  "original_directory": "/tmp/gamma-field-opportunity-gate-v2-unit-20260907/attempt_01",
+  "retained_directory": "results/causal_field_opportunity_unit_20260907/runner-v2-author/attempt_01_EDQUOT",
+  "captured_from": "exec_command tool response; original recorder exited before it could write an execution receipt",
+  "original_command": "taskset --cpu-list 4 timeout --signal=TERM --kill-after=2 90 python3 -B /tmp/gamma-field-opportunity-gate-v2-unit-20260907/run.py attempt_01",
+  "exit_code": 1,
+  "observed_exec_wall_seconds": 0.140390038,
+  "exception": "OSError: [Errno 122] Disk quota exceeded",
+  "location": "run.py:29, (attempt / Path(name).name).write_bytes(raw)",
+  "partial_files": [
+    {"name": "causal_field_opportunity_gate_v2.py", "bytes": 15844, "sha256": "7c1d59db38db1fa55ae8078af14eb8f87e904f2d85cda74a987315c08efc8ffe"},
+    {"name": "test_causal_field_opportunity_gate_v2.py", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  ],
+  "tests_executed": 0,
+  "corpus_bytes": 0,
+  "classification": "infrastructure-failure",
+  "mount_observation": "/tmp is tmpfs with usrquota; df reported 13 GiB free there and 381 GiB on root filesystem. The failed directory occupied 20 KiB.",
+  "fallback_authority": "ROOT explicitly assigned results/causal_field_opportunity_unit_20260907/runner-v2-author with scratch/tmp and TMPDIR under the same bounded evidence directory.",
+  "originals_changed": false,
+  "shared_cleanup": false,
+  "scientific_authority": false
+}

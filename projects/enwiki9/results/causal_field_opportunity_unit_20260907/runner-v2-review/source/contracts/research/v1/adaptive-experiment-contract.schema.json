@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/adaptive-experiment-contract.schema.json",
+  "title": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "experimentId",
+    "proposalId",
+    "status",
+    "registrationTiming",
+    "evidenceClass",
+    "objectiveCreditBytes",
+    "parent",
+    "hypothesis",
+    "changedMechanism",
+    "invariants",
+    "controls",
+    "population",
+    "causalBoundary",
+    "inputs",
+    "budget",
+    "search",
+    "measurements",
+    "promotionPredicates",
+    "killPredicates",
+    "outputs",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.adaptive-experiment-contract.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "experimentId": { "$ref": "#/$defs/id" },
+    "proposalId": { "$ref": "#/$defs/id" },
+    "status": { "const": "frozen" },
+    "registrationTiming": { "const": "prospective" },
+    "evidenceClass": {
+      "enum": ["candidate-gate", "causal-shadow", "diagnostic", "oracle", "infrastructure"]
+    },
+    "objectiveCreditBytes": { "const": 0 },
+    "parent": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["candidateId", "revision"],
+          "properties": {
+            "candidateId": { "$ref": "#/$defs/id" },
+            "revision": { "$ref": "#/$defs/reference" }
+          }
+        }
+      ]
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim", "falsification"],
+      "properties": {
+        "claim": { "type": "string", "minLength": 1 },
+        "falsification": { "type": "string", "minLength": 1 }
+      }
+    },
+    "changedMechanism": { "type": "string", "minLength": 1 },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "role", "definition"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "role": { "enum": ["treatment", "comparator", "negative", "shifted", "replay"] },
+          "definition": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "scopeBytes", "scopeSymbols", "selection", "coordinate"],
+      "properties": {
+        "unit": { "type": "string", "minLength": 1 },
+        "scopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "scopeSymbols": { "type": ["integer", "null"], "minimum": 1 },
+        "selection": { "type": "string", "minLength": 1 },
+        "coordinate": { "type": "string", "minLength": 1 }
+      }
+    },
+    "causalBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availableInformation", "forbiddenInformation"],
+      "properties": {
+        "availableInformation": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "forbiddenInformation": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/namedReference" }
+    },
+    "pythonSourceClosureEntries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedGrossSavingsBytes", "maximumAddedPackageBytes", "expectedNetSavingsBytes"],
+      "properties": {
+        "expectedGrossSavingsBytes": { "type": "integer" },
+        "maximumAddedPackageBytes": { "type": "integer", "minimum": 0 },
+        "expectedNetSavingsBytes": { "type": "integer" }
+      }
+    },
+    "search": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedTransferRetention", "expectedRuntimeRatio", "expectedMemoryRatio", "uncertaintyRisk", "interactionRisk"],
+      "properties": {
+        "expectedTransferRetention": { "type": "number", "minimum": 0, "maximum": 1 },
+        "expectedRuntimeRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "expectedMemoryRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "uncertaintyRisk": { "type": "number", "minimum": 0, "maximum": 1 },
+        "interactionRisk": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "definition", "unit"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "definition": { "type": "string", "minLength": 1 },
+          "unit": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "promotionPredicates": { "$ref": "#/$defs/predicates" },
+    "killPredicates": { "$ref": "#/$defs/predicates" },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "outputManifestPolicy": {
+      "enum": ["complete-result-artifacts-v1"]
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "namedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "measurement", "operator", "threshold"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "measurement": { "$ref": "#/$defs/id" },
+        "operator": { "enum": ["eq", "gt", "gte", "lt", "lte"] },
+        "threshold": { "type": ["boolean", "number"] }
+      }
+    },
+    "predicates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/predicate" }
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-shadow-midpoint-oracle-receipt.v1",
+  "title": "CMIX shadow midpoint oracle receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "mode",
+    "input_lock",
+    "scope",
+    "midpoint_contract",
+    "arms",
+    "comparisons",
+    "repeat",
+    "decision",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-shadow-midpoint-oracle-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"const": "cmix_obias_shadow_midpoint_oracle64_q0_v2"},
+    "mode": {"enum": ["debug_shadow", "archive_proof"]},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_contract_sha256",
+        "experiment_contract_sha256",
+        "source_revision",
+        "source_tree_sha256",
+        "patch_sha256",
+        "build_receipt_sha256",
+        "binary_sha256",
+        "runtime_root_manifest_sha256",
+        "corpus_sha256",
+        "scope_manifest_sha256",
+        "economics_receipt_sha256",
+        "memory_safe_parent_receipt_sha256"
+      ],
+      "properties": {
+        "planning_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "experiment_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "source_revision": {"type": "string", "minLength": 1},
+        "source_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "patch_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "corpus_sha256": {"$ref": "#/$defs/sha256"},
+        "scope_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "economics_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "memory_safe_parent_receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_role",
+        "raw_bytes",
+        "start_offset",
+        "end_offset_exclusive",
+        "segment_bytes",
+        "midpoint_byte",
+        "complete_population_pass",
+        "required_gross_archive_gain_bytes"
+      ],
+      "properties": {
+        "population_role": {"enum": ["diagnostic_250k", "calibration_1m", "opening_10m", "distant_10m"]},
+        "raw_bytes": {"enum": [250000, 1000000, 10000000]},
+        "start_offset": {"type": "integer", "minimum": 0},
+        "end_offset_exclusive": {"type": "integer", "minimum": 1},
+        "segment_bytes": {"const": 64},
+        "midpoint_byte": {"const": 32},
+        "complete_population_pass": {"type": "boolean"},
+        "required_gross_archive_gain_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "midpoint_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "first_half_event_count_per_segment",
+        "truncated_bptt_event_count",
+        "selected_parameter_manifest_sha256",
+        "optimizer_equation_sha256",
+        "update_order_sha256",
+        "state_rebuild_sha256",
+        "parent_update_cadence_sha256",
+        "S_permutation_sha256",
+        "encoder_decoder_shared_contract_sha256",
+        "ordinary_parent_updates_unchanged_pass"
+      ],
+      "properties": {
+        "first_half_event_count_per_segment": {"type": "integer", "minimum": 1},
+        "truncated_bptt_event_count": {"type": "integer", "minimum": 1},
+        "selected_parameter_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "optimizer_equation_sha256": {"$ref": "#/$defs/sha256"},
+        "update_order_sha256": {"$ref": "#/$defs/sha256"},
+        "state_rebuild_sha256": {"$ref": "#/$defs/sha256"},
+        "parent_update_cadence_sha256": {"$ref": "#/$defs/sha256"},
+        "S_permutation_sha256": {"$ref": "#/$defs/sha256"},
+        "encoder_decoder_shared_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "ordinary_parent_updates_unchanged_pass": {"type": "boolean"}
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "F", "S"],
+      "properties": {
+        "P": {
+          "allOf": [
+            {"$ref": "#/$defs/armReceipt"},
+            {"type": "object", "properties": {"arm": {"const": "P"}}}
+          ]
+        },
+        "K": {
+          "allOf": [
+            {"$ref": "#/$defs/armReceipt"},
+            {"type": "object", "properties": {"arm": {"const": "K"}}}
+          ]
+        },
+        "F": {
+          "allOf": [
+            {"$ref": "#/$defs/armReceipt"},
+            {
+              "type": "object",
+              "required": ["update_manifest_sha256", "rolling_state_hash_manifest_sha256"],
+              "properties": {
+                "arm": {"const": "F"},
+                "update_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                "rolling_state_hash_manifest_sha256": {"$ref": "#/$defs/sha256"}
+              }
+            }
+          ]
+        },
+        "S": {
+          "allOf": [
+            {"$ref": "#/$defs/armReceipt"},
+            {
+              "type": "object",
+              "required": ["update_manifest_sha256", "rolling_state_hash_manifest_sha256"],
+              "properties": {
+                "arm": {"const": "S"},
+                "update_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                "rolling_state_hash_manifest_sha256": {"$ref": "#/$defs/sha256"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P_equals_K_integer_probabilities_pass",
+        "P_equals_K_payload_pass",
+        "P_equals_K_archive_pass",
+        "P_equals_K_persistent_state_pass",
+        "P_equals_K_optimizer_state_pass",
+        "P_equals_K_coder_state_pass",
+        "F_encoder_decoder_probability_identity_pass",
+        "F_encoder_decoder_state_identity_pass",
+        "S_encoder_decoder_probability_identity_pass",
+        "S_encoder_decoder_state_identity_pass",
+        "F_gross_archive_gain_bytes",
+        "S_gross_archive_gain_bytes",
+        "F_minus_S_archive_gain_bytes",
+        "F_beats_P_pass",
+        "F_beats_S_pass"
+      ],
+      "properties": {
+        "P_equals_K_integer_probabilities_pass": {"type": "boolean"},
+        "P_equals_K_payload_pass": {"type": ["boolean", "null"]},
+        "P_equals_K_archive_pass": {"type": ["boolean", "null"]},
+        "P_equals_K_persistent_state_pass": {"type": "boolean"},
+        "P_equals_K_optimizer_state_pass": {"type": "boolean"},
+        "P_equals_K_coder_state_pass": {"type": ["boolean", "null"]},
+        "F_encoder_decoder_probability_identity_pass": {"type": ["boolean", "null"]},
+        "F_encoder_decoder_state_identity_pass": {"type": ["boolean", "null"]},
+        "S_encoder_decoder_probability_identity_pass": {"type": ["boolean", "null"]},
+        "S_encoder_decoder_state_identity_pass": {"type": ["boolean", "null"]},
+        "F_gross_archive_gain_bytes": {"type": ["integer", "null"]},
+        "S_gross_archive_gain_bytes": {"type": ["integer", "null"]},
+        "F_minus_S_archive_gain_bytes": {"type": ["integer", "null"]},
+        "F_beats_P_pass": {"type": ["boolean", "null"]},
+        "F_beats_S_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "F_first_manifest_sha256",
+        "F_second_manifest_sha256",
+        "F_repeat_identity_pass",
+        "S_first_manifest_sha256",
+        "S_second_manifest_sha256",
+        "S_repeat_identity_pass"
+      ],
+      "properties": {
+        "F_first_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "F_second_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "F_repeat_identity_pass": {"type": ["boolean", "null"]},
+        "S_first_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "S_second_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "S_repeat_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode_has_scientific_authority",
+        "exactness_pass",
+        "bookkeeping_control_pass",
+        "causal_control_pass",
+        "economic_gate_pass",
+        "resource_gate_pass",
+        "terminal_classification",
+        "authorized_successor",
+        "scientific_verdict"
+      ],
+      "properties": {
+        "mode_has_scientific_authority": {"type": "boolean"},
+        "exactness_pass": {"type": "boolean"},
+        "bookkeeping_control_pass": {"type": "boolean"},
+        "causal_control_pass": {"type": "boolean"},
+        "economic_gate_pass": {"type": ["boolean", "null"]},
+        "resource_gate_pass": {"type": "boolean"},
+        "terminal_classification": {
+          "enum": [
+            "pass_target_scale_causal_midpoint_value",
+            "pass_diagnostic_exactness_only",
+            "fail_subscale_full_midpoint",
+            "fail_causal_alignment",
+            "fail_bookkeeping_identity",
+            "fail_encoder_decoder_synchronization",
+            "fail_archive_or_inverse",
+            "fail_repeat_identity",
+            "fail_resource_or_dependency",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {
+          "enum": [
+            "cmix_obias_deep_delta_midas64_q0_v2",
+            "next_preregistered_scope",
+            "one_correction_only_oracle_implementation_successor",
+            "none_retire_cmix_midas"
+          ]
+        },
+        "scientific_verdict": {"enum": ["pass", "fail", "none", "invalid"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compression_credit_bytes",
+        "score_credit_bytes",
+        "archive_promotion_authority",
+        "delta_midas_activation_authority"
+      ],
+      "properties": {
+        "compression_credit_bytes": {"const": 0},
+        "score_credit_bytes": {"const": 0},
+        "archive_promotion_authority": {"const": false},
+        "delta_midas_activation_authority": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "armReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm",
+        "command_sha256",
+        "return_code",
+        "integer_probability_stream_sha256",
+        "persistent_state_manifest_sha256",
+        "optimizer_state_manifest_sha256",
+        "rolling_state_hash_manifest_sha256",
+        "ideal_bits",
+        "archive_size_bytes",
+        "archive_sha256",
+        "decode_return_code",
+        "decoded_size_bytes",
+        "decoded_sha256",
+        "raw_inverse_pass",
+        "resource_receipt_sha256",
+        "resource_pass",
+        "dependency_closure_receipt_sha256",
+        "dependency_closure_pass"
+      ],
+      "properties": {
+        "arm": {"enum": ["P", "K", "F", "S"]},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "return_code": {"type": "integer"},
+        "integer_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "persistent_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "optimizer_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_state_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "ideal_bits": {"type": "number"},
+        "archive_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "archive_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "decode_return_code": {"type": ["integer", "null"]},
+        "decoded_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "decoded_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "raw_inverse_pass": {"type": ["boolean", "null"]},
+        "resource_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "resource_pass": {"type": "boolean"},
+        "dependency_closure_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "dependency_closure_pass": {"type": "boolean"},
+        "update_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "rolling_state_hash_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

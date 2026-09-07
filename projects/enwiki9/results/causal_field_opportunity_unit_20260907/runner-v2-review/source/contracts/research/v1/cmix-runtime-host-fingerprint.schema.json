@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-runtime-host-fingerprint.v1",
+  "title": "Stable host fingerprint for q1 runtime qualification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "machine_id_sha256", "uname_machine", "cpu_model_names"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-runtime-host-fingerprint.v1"},
+    "machine_id_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "uname_machine": {"type": "string", "minLength": 1},
+    "cpu_model_names": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

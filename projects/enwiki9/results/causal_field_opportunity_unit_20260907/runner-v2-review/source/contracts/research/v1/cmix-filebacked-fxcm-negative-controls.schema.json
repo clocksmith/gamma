@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2",
+  "title": "CMIX file-backed FXCM negative-control evidence v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "release_binary_sha256", "harness_binary_sha256", "shared_allocator_header_sha256", "release_build_receipt_sha256", "harness_build_receipt_sha256", "release_build_verification_sha256", "harness_build_verification_sha256", "release_source_closure_sha256", "harness_source_closure_sha256", "shared_source_identity_pass", "controls"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-negative-controls.v2"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "release_binary_sha256": {"$ref": "#/$defs/sha256"},
+    "harness_binary_sha256": {"$ref": "#/$defs/sha256"},
+    "shared_allocator_header_sha256": {"$ref": "#/$defs/sha256"},
+    "release_build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "harness_build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "release_build_verification_sha256": {"$ref": "#/$defs/sha256"},
+    "harness_build_verification_sha256": {"$ref": "#/$defs/sha256"},
+    "release_source_closure_sha256": {"$ref": "#/$defs/sha256"},
+    "harness_source_closure_sha256": {"$ref": "#/$defs/sha256"},
+    "shared_source_identity_pass": {"type": "boolean"},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "missing_environment",
+        "relative_path",
+        "dot_component",
+        "dotdot_component",
+        "repeated_separator",
+        "trailing_separator",
+        "symlink_component",
+        "nonempty_directory",
+        "filename_collision",
+        "reserve_failure",
+        "registry_overflow",
+        "interior_pointer_free",
+        "inode_replacement",
+        "pageout_failure",
+        "terminal_cleanup_failure"
+      ],
+      "properties": {
+        "missing_environment": {"$ref": "#/$defs/control"},
+        "relative_path": {"$ref": "#/$defs/control"},
+        "dot_component": {"$ref": "#/$defs/control"},
+        "dotdot_component": {"$ref": "#/$defs/control"},
+        "repeated_separator": {"$ref": "#/$defs/control"},
+        "trailing_separator": {"$ref": "#/$defs/control"},
+        "symlink_component": {"$ref": "#/$defs/control"},
+        "nonempty_directory": {"$ref": "#/$defs/control"},
+        "filename_collision": {"$ref": "#/$defs/control"},
+        "reserve_failure": {"$ref": "#/$defs/control"},
+        "registry_overflow": {"$ref": "#/$defs/control"},
+        "interior_pointer_free": {"$ref": "#/$defs/control"},
+        "inode_replacement": {"$ref": "#/$defs/control"},
+        "pageout_failure": {"$ref": "#/$defs/control"},
+        "terminal_cleanup_failure": {"$ref": "#/$defs/control"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command_sha256",
+        "return_code",
+        "stdout_bytes",
+        "stdout_sha256",
+        "stderr_bytes",
+        "stderr_sha256",
+        "scratch_before_sha256",
+        "scratch_after_sha256",
+        "expected_residual_names",
+        "residual_manifest_sha256",
+        "expected_failure_observed",
+        "output_artifact_absent",
+        "expected_residual_set_pass",
+        "expected_residual_shape_pass",
+        "preexisting_entries_unchanged",
+        "foreign_files_unchanged"
+      ],
+      "properties": {
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "return_code": {"type": "integer"},
+        "stdout_bytes": {"type": "integer", "minimum": 0},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr_bytes": {"type": "integer", "minimum": 0},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "scratch_before_sha256": {"$ref": "#/$defs/sha256"},
+        "scratch_after_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_residual_names": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "residual_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_failure_observed": {"type": "boolean"},
+        "output_artifact_absent": {"type": "boolean"},
+        "expected_residual_set_pass": {"type": "boolean"},
+        "expected_residual_shape_pass": {"type": "boolean"},
+        "preexisting_entries_unchanged": {"type": "boolean"},
+        "foreign_files_unchanged": {"type": "boolean"}
+      }
+    }
+  }
+}

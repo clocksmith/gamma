@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/cmix-allocation-range-page-state-manifest.schema.json",
+  "title": "CMIX Allocation-Range Page-State Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "codec_pid",
+    "codec_proc_start_ticks",
+    "attribution_checkpoint_index",
+    "marker_sequence",
+    "page_size_bytes",
+    "live_set_sha256",
+    "maps_sha256",
+    "smaps_sha256",
+    "encoding",
+    "total_page_entries",
+    "read_one",
+    "read_two",
+    "stopped_processes",
+    "stop_resume",
+    "allocations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "cmix-allocation-range-page-state-manifest.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_source_labelled_memory_attribution_q0_v1"
+    },
+    "codec_pid": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "codec_proc_start_ticks": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "attribution_checkpoint_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "marker_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "page_size_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "live_set_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "maps_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "smaps_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "encoding": {
+      "const": "one byte per fully contained page: bit 0 present, bit 1 swapped, bits 2 through 7 zero"
+    },
+    "total_page_entries": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "read_one": {
+      "$ref": "#/$defs/page_state_file"
+    },
+    "read_two": {
+      "$ref": "#/$defs/page_state_file"
+    },
+    "stopped_processes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/stopped_process"
+      }
+    },
+    "stop_resume": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "all_stopped",
+        "all_resumed",
+        "stop_duration_ns"
+      ],
+      "properties": {
+        "method": {
+          "const": "pidfd SIGSTOP/SIGCONT"
+        },
+        "all_stopped": {
+          "const": true
+        },
+        "all_resumed": {
+          "const": true
+        },
+        "stop_duration_ns": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "allocations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allocation"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonempty": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allocation_label": {
+      "enum": [
+        "fxcm_alloc",
+        "fxcm_aligned_alloc",
+        "context_history",
+        "context_shared_map",
+        "context_indirect_1",
+        "context_indirect_2",
+        "context_indirect_3",
+        "mixer_slab",
+        "ppm_anonymous_arena",
+        "ppm_file_backed_arena"
+      ]
+    },
+    "page_state_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basename",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "basename": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "stopped_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pid",
+        "proc_start_ticks"
+      ],
+      "properties": {
+        "pid": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "proc_start_ticks": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allocation_sequence",
+        "label",
+        "allocation_base",
+        "usable_pointer",
+        "allocation_bytes",
+        "usable_bytes",
+        "first_fully_contained_page",
+        "fully_contained_pages",
+        "entry_offset",
+        "vma_containment_pass",
+        "eligible_for_memory_successor"
+      ],
+      "properties": {
+        "allocation_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "label": {
+          "$ref": "#/$defs/allocation_label"
+        },
+        "allocation_base": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_pointer": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allocation_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "first_fully_contained_page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fully_contained_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entry_offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "vma_containment_pass": {
+          "type": "boolean"
+        },
+        "eligible_for_memory_successor": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

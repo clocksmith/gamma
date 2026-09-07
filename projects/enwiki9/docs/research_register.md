@@ -2,6 +2,25 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-07 - Explain inactive field selection without changing the predictor
+
+The [implementation plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
+follows the closed opening250KB comparison's inactive T/S result. The
+[observation adapter](../tools/causal_field_opportunity_v1.py) partitions prefix-visible
+eligibility and retained-table lookup misses, keeps bounded examples, and observes
+parser invalidation context outside the inherited predictive state.
+The [synthetic receipt](../operations/evidence/20260907_causal_field_opportunity_unit.json)
+retains fourteen author and two independent tests with 23,450 recorded P/K/T/R/S
+per-byte state/emission checks. This proves observation equivalence on fixtures.
+No corpus diagnostic or new compression result is asserted here yet. The first
+runner's seven pure tests passed; independent admission review required a separate
+runner revision before canonical execution. The [v2 runner receipt](../operations/evidence/20260907_causal_field_opportunity_runner_unit.json)
+retains fifteen author tests and one additional independent test, including six
+actual guard-matcher cases. The [frozen execution plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_execution.json)
+binds CPU2, 512MiB memory, 32MiB scratch, the independent wall stop, and owned
+workspace temporary storage. The registered job is held for publication under
+`root_explore`; confirmation remains untouched.
+
 ## 2026-09-07 - Align causal field donors with WRT and the real parent
 
 `fx2_causal_field_wrt_replay250k_q0_v1` implements the missing raw/WRT adapter
@@ -765,36 +784,3 @@ GitHub rejected SSH public-key authentication and the agent had no loaded
 identities. No credential configuration was changed. Authentication must be
 restored before publishing these local commits. HORIZON and its sole observer
 remain unchanged, without partial scientific access.
-
-## 2026-09-05 - Public FX2 reproduction and measured comparisons
-
-| Frozen gate | Population | Result and canonical evidence |
-|---|---|---|
-| `fx2_cmix_transformer_static_vocab_fixture50051_q0_v1` | Public 50,051-byte fixture | 3,223-byte exact archive/repeat; [audit](../operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T195118Z_c39265f90c.json) |
-| `fx2_cmix_transformer_transfer250k_q0_v2` | Raw `[0,250000)` and `[500000000,500250000)` | 33,429/9,499-byte exact cold archives/repeats; [audit](../operations/provenance/public_fx2_transfer250k_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T204313Z_bd6edb2ed4.json) |
-| `fx2_bytemodel_argmax_unit_q0_v1` | 32 synthetic families, 256 paths each | Exact state/probabilities; 4,641,532 fewer comparisons; [audit](../operations/provenance/public_fx2_argmax_unit_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T211007Z_358c05f2db.json) |
-| `fx2_cmix_transformer_argmax_fixture50051_q0_v1` | Same public fixture, P/K/D/C | All archives 3,223 bytes; twelve complete coder traces identical; [audit](../operations/provenance/public_fx2_argmax_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T212145Z_70e5363a53.json) |
-| `fx2_weight_pack_roundtrip_q0_v1` | Full pinned trained model, six synthetic populations | Exact inverse/repeat but model grows 2,930,652 to 2,938,887 bytes; [audit](../operations/provenance/public_fx2_weight_pack_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T215312Z_bd5e9a17b9.json) |
-| `fx2_weight_marginal_roundtrip_q0_v1` | Full pinned trained model, eight synthetic populations, P/K/D/G | D: 2,908,329 bytes, saving 22,323; G: 2,911,998 bytes, saving 18,654; exact inverse/repeat; [audit](../operations/provenance/public_fx2_weight_marginal_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T222955Z_5eb35a57d6.json) |
-| `fx2_weight_native_fixture50051_q0_v1` | Same public fixture, native P/K/D; all 434 tensors including RoPE | All archives 3,223 bytes and nine coder streams identical; native runtime-pair components save 20,070 bytes; [audit](../operations/provenance/public_fx2_weight_native_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T230139Z_d8475c03dc.json) |
-| `fx2_weight_native_transfer250k_q0_v1` | Same opening/distant 250KB populations, cached native P/K/D | All archives 33,429/9,499 bytes; exact inverse/repeat and all 18 coder streams identical; [audit](../operations/provenance/public_fx2_weight_native_transfer_terminal_20260905.json), [reflection](../operations/adaptive/reflections/20260905T233740Z_c2a28dc2f7.json) |
-
-Native argmax D/K diagnostic CPU ratio 0.9987045 missed the frozen 0.99 budget trigger: hold without a larger runtime gate.
-Retire preceding-symbol weight packing for 8,235 extra asset bytes before loader costs; neither result rejects its whole information source.
-Fixed-marginal P/K preserve the original 2,930,652 model bytes; each D/G restore and fresh repeat is exact. Both savings include all 7,169 extra side-information bytes.
-The frozen size rule selected D; native integration now passes exact tensor, probability, inverse and repeat checks with 12,288 added executable bytes per copy.
-The standalone utility does not pay: D runtime/source inventories exceed the original model alone by 89,671/38,977 bytes; G exceeds it by 93,340/42,646 bytes.
-Native components save 20,070 bytes for two runtime copies, or 21,489 for the separate source-compressor/decoder alternative. Opening/distant transfer now passes without recompilation or additional saving; complete package closure and full-corpus qualification remain missing. Transfer guard closed with 1,653 samples, 6,242,869,248 peak cgroup bytes and 15,354,466,504 peak logical scratch bytes; timing is diagnostic and full-score credit remains zero.
-Source-only successor considered: transmit the exact Q11 trees directly. Fourteen 11-bit values plus the constrained final node fit 20 bytes per tree; 112 tables would remove 4,480 header bytes per model before changed loader costs. This is byte arithmetic, without implementation, measured gain, or descendant selection.
-[Dependency gap review](../operations/provenance/public_fx2_dependency_gap_review_20260905.json) retains versioned LLVM terms and declared CUDA/libdevice provenance; model permission evidence, runtime closure and two unsupported license identifiers remain explicit gaps, without an incompatibility finding.
-The existing dependency-closure tool now materializes an [incomplete bundle](../results/fx2_weight_native_fixture50051_q0_v1/release/incomplete_dependency_closure_v1/dependency-closure.json): 137 counted occurrences, 9,523,363 file bytes plus 99 declared unique-option bytes. The [receipt](../operations/provenance/fx2_native_dependency_closure_v1/receipt.json) preserves failed metadata attempts, repeated dictionary/model roles and exact unresolved licensing/build/option gaps; it is not the final two-package submission layout.
-The [even7 gate](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) is terminal: all 107 phases pass infrastructure checks, with exact raw inverses, deterministic repeats and twelve complete coder streams. P/K archives are 3,223 bytes, D is 4,430 and row-rotated C is 4,785. D changes 3,119,371 of 5,868,864 INT4 symbols and produces a 2,066,802-byte model. Against the selected marginal baseline, two model copies save 1,646,942 component bytes after 36,112 added source/option bytes. The +1,207-byte fixture archive penalty produces a frozen planning delta of +22,468,461 bytes: hold this exact configuration for budget reasons, with no full-score credit or futility claim. The [independent audit](../operations/provenance/public_fx2_weight_even7_terminal_20260906.json) binds 870 retained artifacts and the [validated reflection](../operations/adaptive/reflections/20260906T001115Z_fcb2f27fea.json). The closed guard records 476 samples, 5,577,420,800 peak cgroup bytes and 14,811,642,322 peak logical scratch bytes; concurrent timing remains diagnostic. The [closed probability diagnosis](../results/fx2_weight_even7_fixture50051_q0_v1/probability-loss-diagnosis.json) attributes +426.85/+5,621.31/+3,607.68 interval-code bits to chronological thirds. Sustained predictive loss is observed, but particular tensor sensitivity is unknown. A successor requires a changed mechanism, a separately frozen development budget, and fresh confirmation data.
-Preserved failures: [launcher affinity](../operations/provenance/public_fx2_static_vocab_launch_failure_20260905.json) and [transfer-v1 preflight](../operations/provenance/public_fx2_transfer250k_preflight_v1_20260905.json).
-
-[Container authentication](../operations/provenance/public_fx2_container_pair_20260905.json) verifies both release hashes and identical binary, dictionary and model components.
-The files total 100,420,830 bytes, including both model copies; [the official FAQ](https://www.hutter1.net/prize/hfaq.htm#addcomp) explains that intentional cost.
-Neither binary was executed for this inventory. Required options and committee acceptance remain unverified.
-
-Transfer peak cgroup memory: 5,826,895,872 bytes; preceding-symbol weight probe: 133,156,864 bytes; fixed-marginal probe: 160,862,208 bytes. Guards closed; concurrent timing is diagnostic.
-The conservative transfer inventory is 9,403,013 raw bytes with overlapping source/runtime assets; package closure and model licensing remain open.
-Direct-WRT cold slices do not reproduce the public reorder/PHDA pipeline or a 1G score. FX2/CMIX/model authorship remains upstream; Gamma has no full-corpus gain credit.
