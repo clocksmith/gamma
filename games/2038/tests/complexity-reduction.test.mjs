@@ -47,7 +47,7 @@ test("local connections retain exact construction prices and remove allocation c
  assert.ok(config.powerSources.every(s => !Object.hasOwn(s, "capacity")));
  assert.equal(config.playerSupply.agents, 4);
  assert.equal(config.playerSupply.startingAgents, 2);
- assert.equal(config.playerSupply.factionBoardCaptiveSliders, 5);
+ assert.equal(config.playerSupply.factionBoardTrackCubes, 5);
  for (const key of ["ceos", "teams", "agiDossierCards"]) assert.ok(!Object.hasOwn(config.playerSupply, key));
  assert.ok(!Object.hasOwn(config.sharedSupply, "powerAllocationMarkers"));
  assert.match(rules, /Reason → Act → Observe/);

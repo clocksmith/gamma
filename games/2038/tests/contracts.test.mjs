@@ -54,7 +54,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
 
   assert.match(inventory, /## One prepacked faction tray per player/);
 
-  assert.match(inventory, /five captive sliders/);
+  assert.match(inventory, /five numbered tracks/);
   assert.match(inventory, /3 project references/);
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /6 foldout player aids/);
@@ -185,7 +185,7 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
   assert.match(inventory, /10 Scrutiny cubes/);
-  assert.match(inventory, /1 Mandate marker/);
+  assert.match(inventory, /1 Mandate cube/);
   assert.match(inventory, /4 Agents/);
   assert.match(inventory, /integrated starting-grid identifier on Facility 1/);
   assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
@@ -347,7 +347,7 @@ test("factions and player supplies match the selected limits", async () => {
       generators: config.playerSupply.generators,
       influenceCubes: config.playerSupply.influenceCubes,
       scrutinyCubes: config.playerSupply.scrutinyCubes,
-      factionBoardCaptiveSliders: config.playerSupply.factionBoardCaptiveSliders,
+      factionBoardTrackCubes: config.playerSupply.factionBoardTrackCubes,
       programMarkers: config.playerSupply.programMarkers,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
@@ -358,7 +358,7 @@ test("factions and player supplies match the selected limits", async () => {
       generators: 1,
       influenceCubes: 0,
       scrutinyCubes: 10,
-      factionBoardCaptiveSliders: 5,
+      factionBoardTrackCubes: 5,
       programMarkers: undefined,
       startingGridIdentifiers: 1
     }
@@ -480,7 +480,7 @@ test("headline and board boundaries remain explicit", async () => {
   assert.ok(!('playProfiles' in config));
   assert.ok(!('playRuleModules' in config));
   assert.ok(!('realignment' in config.board));
-  assert.equal(config.playerSupply.factionBoardCaptiveSliders, 5);
+  assert.equal(config.playerSupply.factionBoardTrackCubes, 5);
   assert.equal(config.playerSupply.programMarkers, undefined);
   assert.deepEqual(
     Object.fromEntries(config.board.tiles.map((tile) => [tile.id, tile.name])),

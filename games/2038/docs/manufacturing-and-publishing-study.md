@@ -63,6 +63,13 @@ per copy, not a measured result.
 
 ## Recommended provisional manufacturer BOM
 
+The quote assumptions below retain the earlier physical design. The selected
+component forms now use flat chips, Agent position tokens, and cubes, including
+five faction-track cubes in place of sliders. Use the current
+[physical specification](../physical/component-spec.md) and generated
+[inventory](../dist/review/docs/component-inventory.md) for a new quote; the
+historical quantities and slider estimates below are not the current bill of materials.
+
 Use this as a draft for preliminary quote conversations only. It is not a
 locked component specification.
 
