@@ -2,38 +2,38 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
-## 2026-09-07 - Explain inactive field selection without changing the predictor
+## 2026-09-07 - Adjacent field conditioning activates without control separation
 
-The [observation adapter](../tools/causal_field_opportunity_v1.py) follows the
-[implementation plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
-and partitions eligibility and lookup misses outside inherited predictive state.
-The [adapter receipt](../operations/evidence/20260907_causal_field_opportunity_unit.json)
-retains sixteen tests and 23,450 P/K/T/R/S per-byte state/emission checks; the
-[v2 runner receipt](../operations/evidence/20260907_causal_field_opportunity_runner_unit.json)
-retains sixteen tests and the superseded runner's review findings.
-The [execution plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_execution.json)
-binds CPU2, 512MiB memory, 32MiB scratch, an independent wall stop and workspace
-temporary storage. Ownership and inputs preceded execution at `ecfd7fbda`.
+The [observation-only diagnostic](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
+preserves all151210 modeled-byte states and the exact250000 raw bytes.
+Its141 value starts include106 eligible starts:56 lack a prior matching template
+and50 lack an exact first-value association. This explains original T inactivity;
+it does not prove globally unique values or reject all field relationships.
 
-The [closed report](../results/fx2_causal_field_opportunity_q0_v1/report.json)
-matches all 151,210 modeled-byte states, reconstructs the exact 250,000 raw bytes,
-and reproduces the original T terminal state. Of 141 value starts, 106 are eligible:
-56 have no matching earlier template and 50 have matching field structure but no
-exact first-value association. No eligible start is excluded by WRT entry-state
-compatibility; all 50 coarser recency matches are compatible. There are 84 parser
-invalidation transitions, whose contexts do not prove precise rejection causes.
-This diagnoses the frozen selector's inactivity; it does not establish globally
-unique first values or any compression benefit. The guard closes cleanly at
-4.5434 seconds with 38,920,192 peak cgroup bytes. The [terminal receipt](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
-binds the independent audit and validated observation/hold reflection. No new
-archive or score is asserted. The [sealed adjacent selector](../operations/evidence/20260907_causal_field_preceding_unit.json)
-has a separate [250KB wrapper and six-arm integration](../operations/evidence/20260907_fx2_causal_preceding_integration_unit.json).
-Thirteen codec tests,24 runner tests and four additional independent tests pass.
-The runner fixture gives T129 versus P/K/O/R/S138 bytes; all arms invert/repeat
-and synchronize. Source72134 bytes, external Q16 and one arm-option byte remain
-additional. The failed v1 runner test is retained; [v2](../tools/fx2_causal_field_preceding_gate_v2.py) is active.
-The [prospective opening250KB contract](../operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json)
-binds original O parity and matched adjacent controls; actual execution is pending.
+The [synthetic adjacent selector](../operations/evidence/20260907_causal_field_preceding_unit.json)
+changes only the conditioning field. Its [native-framed integration](../operations/evidence/20260907_fx2_causal_preceding_integration_unit.json)
+passes13 codec tests,24 runner tests and four additional independent tests.
+The failed v1 runner fixture remains retained; v2 is the reviewed active source.
+Synthetic savings establish favorable fixtures, not corpus or package benefit.
+
+`fx2_causal_preceding_wrt250k_q0_v1` [closed its six-arm comparison](../operations/provenance/fx2_causal_preceding_terminal_20260907.json)
+follows published source/contract `e1a048203` and ownership `b520befe4`.
+All18 independent phases invert, repeat and synchronize every modeled byte.
+P/K/T/O/S archives are33429 bytes; recency R is33433. T/S each select seven
+values and change280 probability bits, producing identical probabilities and
+archives. T differs from P in archive bytes despite tying its total size.
+Donors are present for42 modeled bytes in each injecting T/S arm; distinct
+changed-probability bytes and eligible-transition counts were not collected.
+Seven local codec sources cost72134 bytes; Q16/dictionary add2831356 and each
+arm needs one option byte. The matched counted subtotal is2936920 bytes except
+R2936924: T saves zero. Full runtime/package closure remains unknown.
+The independent audit verifies209 frozen inputs,153 guard samples and clean
+closure at76.3389 measured seconds with171331584 peak cgroup bytes.
+The [validated reflection](../operations/adaptive/reflections/20260907T153225Z_61daf1a29b.json)
+retires only this opening250KB adjacent/FIFO128/unchanged-mixture realization.
+Six canonical run rows are recorded. No larger replay, native integration or
+full-corpus credit follows; independent work must address a different measured
+failure and respect existing ownership.
 
 ## 2026-09-07 - Align causal field donors with WRT and the real parent
 

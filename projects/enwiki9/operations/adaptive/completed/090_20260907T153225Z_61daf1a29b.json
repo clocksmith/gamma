@@ -5,27 +5,66 @@
     "sha256": "sha256:1567a9174e90edf48cfd5e682a60017414d3aea550219f4c1b9626e89b5295bb"
   },
   "candidate_tree_sha256": "sha256:4afc40448e6b4f1cefbedf9e3efd5f4c41af34442ba98eee7041a0c4376bb312",
+  "elapsed_seconds": 76.456,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 1073741824,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 900
+    },
+    "cgroup_inode": 245199,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260907T153225Z_61daf1a29b",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 245199,
+        "kernel_cpuset": false,
+        "memory_bytes": 1073741824,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260907T153225Z_61daf1a29b"
+      }
+    ],
+    "guard_command_sha256": "abde84ef018024f8dd25e6c7e3d07301deadd7d945eb2120fe6d3b0b5131607c",
+    "guard_path": "run_logs/adaptive/20260907T153225Z_61daf1a29b.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json",
     "sha256": "sha256:fcfa667d4048e1a75a681844918ce2398ba4a94c0280550d87a5d50c825980d5"
   },
+  "finished_at": "2026-09-07T15:35:34+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-07T15:32:34+00:00",
   "hold_history": [
     {
       "at": "2026-09-07T15:32:34+00:00",
       "held": true,
       "reason": "Publish exact claim, candidate revision and held queue before fresh canonical admission and the six-arm corpus comparison."
+    },
+    {
+      "at": "2026-09-07T15:34:17+00:00",
+      "held": false,
+      "reason": "Source and contract e1a048203 plus exact ownership and held queue b520befe45000654b62638bc4ba7bdf00105abf4 published;214 references match local and origin bytes. Fresh admission reports no live or unknown jobs,CPU2 idle and76093046784 available RAM. Execute only the frozen six-arm opening250KB gate."
     }
   ],
-  "hold_reason": "Publish exact claim, candidate revision and held queue before fresh canonical admission and the six-arm corpus comparison.",
   "job_id": "20260907T153225Z_61daf1a29b",
+  "log_path": "run_logs/adaptive/20260907T153225Z_61daf1a29b.log",
   "priority": 909,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/080_fx2_causal_preceding_wrt250k_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_causal_preceding_wrt250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-07T15:34:17+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 900
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_causal_field_preceding_gate_v2.py",
     "sha256": "sha256:45fdf46247353a9c7889f9e216da4e5e204b133d6d8d89583252a0d3b7f6e29c"
@@ -51,12 +92,16 @@
   "scratch_directories": [
     "results/fx2_causal_preceding_wrt250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-07T15:34:17+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-07T15:32:25+00:00",
   "tags": [
     "preceding-field"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_causal_field_preceding_gate_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2158810,
+  "worker_proc_start_ticks": 189139588,
+  "worker_started_at": "2026-09-07T15:34:18+00:00"
 }
