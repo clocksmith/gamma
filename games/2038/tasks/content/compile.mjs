@@ -3,7 +3,7 @@ import { dirname, resolve, sep } from "node:path";
 import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "./authored.mjs";
 import { buildScenarioIndex } from "./scenario-index.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
-import { readWorldDocument } from "./world-parser.mjs";
+import { readWorldDocument, parseComponentLore, worldPassages } from "./world-parser.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
@@ -102,9 +102,11 @@ variables = { ...variables, content: rawContexts };
 const excerpts = {};
 for (const [name, path] of Object.entries(graph.excerpts || {})) {
   const sourcePath = resolveSourcePath(path, `excerpts ${name}`, sourceRoots);
-  excerpts[name] = documentSections(await readFile(sourcePath, "utf8"));
+  const text = await readFile(sourcePath, "utf8");
+  excerpts[name] = path === graph.world ? worldPassages(text) : documentSections(text);
 }
 variables.excerpts = excerpts;
+variables.lore = parseComponentLore(await readFile(resolve(projectRoot, graph.world), "utf8"));
 
 const contexts = {};
 for (const [name, context] of Object.entries(rawContexts)) {
@@ -131,6 +133,7 @@ for (const [name, context] of Object.entries(rawContexts)) {
 }
 variables = { ...variables, content: contexts };
 variables.excerpts = resolveValue(excerpts, variables);
+variables.lore = resolveValue(variables.lore, variables);
 assertNoReferences(variables, "content contexts");
 
 const targets = new Set();
@@ -144,6 +147,9 @@ for (const artifact of graph.artifacts) {
   if (targets.has(targetPath)) throw new Error(`Duplicate content target: ${artifact.target}`);
   targets.add(targetPath);
 
+  if (artifact.source === graph.world && artifact.format === "text") {
+    throw new Error("The author bible cannot be exported as a text artifact; use the selected companion layout.");
+  }
   let output;
   if (artifact.format === "json") {
     let resolved;

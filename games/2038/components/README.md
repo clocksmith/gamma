@@ -1,15 +1,21 @@
 # Creative writer's review
 
-Read and edit creative prose in [world.md](../world.md): the setting, Era overviews,
-endings, token and box copy, component prose, and scenario canon. Named excerpts
-keep card text editable as ordinary Markdown without JSON escaping.
+[world.md](../world.md) is the internal author bible. Read the setting and four
+Eras, institutions and component copy, scenario canon, endings, publishing copy,
+and editorial notes. This is an authoring order, not the order of a player book.
 
-Review the assembled [World and Institutions](../dist/docs/world-and-institutions.md)
-and [Card and Board Reference](../dist/docs/card-reference.md). These are reading
-copies generated from the same source. Writing guidance stays in `world.md`.
+Edit prose in the named lore entry. A component uses one `"loreRef"` to select
+that entry's labeled player fields, such as `#### Newswire` and `#### Quote`.
+An optional `#### Author notes` passage stays out of all player projections.
+The lore ID is stable even when a title changes. Keep exact costs, effects, and
+ending conditions in component JSON; use [rules.md](../rules.md) for procedures.
 
-Use [rules.md](../rules.md) for procedures. Inspect component JSON when reviewing
-mechanics, IDs, or scenario bindings; creative fields there are references.
-`$scenario` links to a scenario ID, while `$era` owns Era placement metadata.
-Neither enters playable output. The [editing map](../content/README.md) gives
-build commands and release verification requirements.
+Review the generated [World and Institutions](../dist/docs/world-and-institutions.md)
+and [Card and Board Reference](../dist/docs/card-reference.md) to judge what the
+player sees. Neither is an authoring location. Internal describes the source's
+audience; it does not mean access restrictions.
+
+`$scenario.ref` links a component to the scenario canon; `$era` records Era
+placement. Their usage and surface paths are derived from the component records.
+Both are stripped from playable data, as is the resolved `loreRef`.
+The [editing map](../content/README.md) gives the exact syntax and commands.

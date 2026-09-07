@@ -1,19 +1,20 @@
+import { createContentFixture } from "./helpers/content-fixture.mjs";
+import { resolveValue, resolveString } from "../tasks/content/references.mjs";
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
-import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import test from "node:test";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { resolve } from "node:path";
 import { verifyRelease } from "../tasks/release-artifacts.mjs";
-import { parseWorldCopyFromText, parseScenarioCanon, readWorldDocument } from "../tasks/content/world-parser.mjs";
+import { parseWorldCopyFromText, parseScenarioCanon, readWorldDocument, parseComponentLore, worldPassages } from "../tasks/content/world-parser.mjs";
 import { buildScenarioIndex } from "../tasks/content/scenario-index.mjs";
 import { validateEraSituationLedger } from "../tasks/content/validate-era-situation-ledger.mjs";
 import { playerContent, documentSection, documentSections, documentTable } from "../tasks/content/authored.mjs";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("Markdown is the complete source of runtime copy and scenario definitions", async () => {
+test("Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references", async () => {
   const { text, worldCopy, scenarios } = await readWorldDocument();
   assert.equal(scenarios.length, 51);
   assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 11);
@@ -114,34 +115,72 @@ test("shared policy tables reject malformed rows and preserve escaped punctuatio
   assert.throws(() => documentTable(source.replace("| sample | One \\| two |", "| sample | |"), "policies", ["Key", "Meaning"]), /Incomplete/);
 });
 
-test("an edited Markdown excerpt compiles while stale release publication and freezing are rejected", async () => {
-  const root = new URL("../", import.meta.url);
-  const fixture = await mkdtemp(join(tmpdir(), "mandate-world-authoring-"));
+test("an edited lore record compiles while stale release publication and freezing are rejected", async () => {
+  const {root: fixture, dispose} = await createContentFixture();
   const exec = promisify(execFile);
   try {
     const graph = JSON.parse(await read("content/graph.json"));
     const release = JSON.parse(await read("versions/current-release.json"));
-    const sources = new Set([...graph.sourceRoots, "tasks", "lab", "docs", "physical", "package.json",
-      "dist/runtime", "dist/docs", "versions/current-release.json"]);
-    for (const source of sources) await cp(new URL(source, root), resolve(fixture, source), {recursive:true});
-    await exec(process.execPath, ["tasks/create-game-release.mjs"], {cwd:fixture});
     await verifyRelease(fixture);
     const sealedManifest = await readFile(resolve(fixture, `versions/${release.gameVersion}/manifest.json`), "utf8");
     const path = resolve(fixture, "world.md");
     const original = await readFile(path, "utf8");
-    const id = Object.keys(documentSections(original)).find(key => key.startsWith("copy-") && key.endsWith("-motto"));
+    const id = Object.keys(parseComponentLore(original)).find(key => parseComponentLore(original)[key].newswire);
     assert.ok(id);
-    const marker = `<!-- ${id}:start -->`;
-    await writeFile(path, original.replace(marker, marker + "\nAuthoring fixture correction."));
+    const marker = `<!-- lore-${id}:start -->\n\n#### Newswire`;
+    assert.ok(original.includes(marker));
+    const edited = original.replace(marker, marker + "\n\nAuthoring fixture correction.")
+      .replace(`<!-- lore-${id}:end -->`, `#### Author notes\n\nINTERNAL_COMPONENT_SENTINEL \${missing.private.note}\n\n<!-- lore-${id}:end -->`)
+      .replace("<!-- world-guide:start -->", "<!-- world-guide:start -->\nINTERNAL_GUIDE_SENTINEL");
+    await writeFile(path, edited);
     await exec(process.execPath, ["tasks/content/compile.mjs"], {cwd:fixture});
     await exec(process.execPath, ["tasks/content/compile.mjs", "--check"], {cwd:fixture});
-    const runtime = JSON.parse(await readFile(resolve(fixture, "dist/runtime/factions.json"), "utf8"));
-    assert.ok(runtime.factions.some(f => f.motto.startsWith("Authoring fixture correction.")));
+    const runtime = JSON.parse(await readFile(resolve(fixture, "dist/runtime/headlines.json"), "utf8"));
+    assert.ok(runtime.headlines.some(f => f.newswire.startsWith("Authoring fixture correction.")));
+    const cards = await readFile(resolve(fixture, "dist/docs/card-reference.md"), "utf8");
+    assert.ok(cards.includes("Authoring fixture correction."));
+    for (const artifact of graph.artifacts.filter(a => ["text", "json"].includes(a.format))) {
+      const output = await readFile(resolve(fixture, artifact.target), "utf8");
+      assert.doesNotMatch(output, /INTERNAL_COMPONENT_SENTINEL|INTERNAL_GUIDE_SENTINEL|loreRef|missing.private.note/);
+    }
+    await exec(process.execPath, ["tasks/render-gallery.mjs", "--baseline"], {cwd:fixture});
+    await exec(process.execPath, ["tasks/render-docs.mjs"], {cwd:fixture});
+    for (const target of ["dist/site/gallery-baseline.html", "dist/site/docs/card-reference.html"]) {
+      const output = await readFile(resolve(fixture, target), "utf8");
+      assert.ok(output.includes("Authoring fixture correction."));
+      assert.doesNotMatch(output, /INTERNAL_COMPONENT_SENTINEL|INTERNAL_GUIDE_SENTINEL/);
+    }
     await assert.rejects(verifyRelease(fixture), /Stale generated release artifact/);
     await assert.rejects(exec(process.execPath, ["tasks/build-firebase-site.mjs", "--profile", "public-playtest"], {cwd:fixture}), /Stale generated release artifact/);
     await assert.rejects(exec(process.execPath, ["tasks/create-physical-kit.mjs", "--local"], {cwd:fixture}), /Stale generated release artifact/);
     assert.equal(await readFile(resolve(fixture, `versions/${release.gameVersion}/manifest.json`), "utf8"), sealedManifest);
+    graph.artifacts.push({source: "world.md", target: "dist/docs/unselected-lore.md", format: "text"});
+    await writeFile(resolve(fixture, "content/graph.json"), JSON.stringify(graph));
+    await assert.rejects(exec(process.execPath, ["tasks/content/compile.mjs"], {cwd:fixture}), /author bible cannot be exported/);
   } finally {
-    await rm(fixture, {recursive:true,force:true});
+    await dispose();
   }
+});
+
+
+test("lore references reject missing entries, ambiguous overrides, unapproved fields and internal excerpt access", async () => {
+  const text = await read("world.md");
+  const lore = parseComponentLore(text);
+  const id = Object.keys(lore).find(id => lore[id].motto);
+  const record = { id: "fixture", cost: 3, loreRef: id };
+  const variables = JSON.parse(await read("content/data/variables.json"));
+  const context = { ...resolveValue(variables, variables), lore, excerpts: {world: worldPassages(text)} };
+  const compiled = resolveValue(record, context);
+  assert.equal(compiled.cost, 3);
+  assert.equal(compiled.loreRef, undefined);
+  assert.ok(compiled.motto);
+  assert.equal(record.loreRef, id);
+  assert.throws(() => resolveValue({loreRef: "missing"}, context), /Unknown lore reference/);
+  assert.throws(() => resolveValue({...record, motto: "Override"}, context), /conflicts with component/);
+  assert.throws(() => resolveValue({loreRef: {}}, context), /Unknown lore reference/);
+  assert.throws(() => resolveString("${excerpts.world.world-guide}", context), /Unknown content reference/);
+  assert.throws(() => parseComponentLore(text.replace("#### Motto", "#### Mechanics")), /Unknown player field/);
+  assert.throws(() => parseComponentLore(text.replace("#### Motto", "#### Motto\n\nOne\n\n#### Motto")), /Duplicate/);
+  assert.throws(() => parseComponentLore(text.replace(`<!-- lore-${id}:end -->`, "")), /exactly one/);
+  assert.throws(() => parseWorldCopyFromText(text, {}), /Missing mechanical ending condition/);
 });

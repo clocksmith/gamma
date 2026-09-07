@@ -1,6 +1,8 @@
 import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
-import { documentSections, validateReferenceLayout } from "./authored.mjs";
+import { validateReferenceLayout } from "./authored.mjs";
+
+import { CREATIVE_FIELDS, parseComponentLore } from "./world-parser.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const readJson = async path => JSON.parse(await readFile(resolve(root, path), "utf8"));
@@ -11,7 +13,8 @@ const forbidden = new Set([
   "inventoryStatus", "potentialHook", "prototypeNote", "theme", "tone"
 ]);
 
-const creativeFields = new Set(["flavorText", "newswire", "quote", "motto", "introduction", "agiDeclaration", "strapline", "publicClaim"]);
+const creativeFields = new Set(CREATIVE_FIELDS.values());
+const lore = parseComponentLore(await readFile(resolve(root, graph.world), "utf8"));
 const copyReferences = new Set();
 
 function inspect(value, path, authored) {
@@ -19,10 +22,16 @@ function inspect(value, path, authored) {
   if (!value || typeof value !== "object") return;
   for (const [key, entry] of Object.entries(value)) {
     if (authored && path.startsWith("components/") && creativeFields.has(key)) {
-      const reference = typeof entry === "string" && /^\$\{excerpts\.world\.(copy-[a-z0-9-]+)\|trim\}$/.exec(entry);
-      if (!reference) throw new Error(`Creative prose belongs in world.md: ${path}/${key}`);
-      copyReferences.add(reference[1]);
+      throw new Error(`Creative prose belongs in world.md via loreRef: ${path}/${key}`);
     }
+    if (key === "loreRef") {
+      if (!authored || typeof entry !== "string" || !Object.hasOwn(lore, entry)) {
+        throw new Error(`Unknown or uncompiled lore reference: ${path}/${key} = ${entry}`);
+      }
+      copyReferences.add(entry);
+      continue;
+    }
+    if (authored && path === "components/game.json/worldEnding" && key === "$conditions") continue;
     if (key.startsWith("$")) {
       if (!authored || !["$scenario", "$era"].includes(key)) {
         throw new Error(`Unexpected editorial metadata: ${path}/${key}`);
@@ -47,10 +56,8 @@ for (const directory of ["components", "experimental/components"]) {
     count++;
   }
 }
-const sections = documentSections(await readFile(resolve(root, graph.world), "utf8"));
-for (const id of copyReferences) if (!sections[id]?.trim()) throw new Error(`Missing component prose excerpt: ${id}`);
-for (const id of Object.keys(sections).filter(id => id.startsWith("copy-"))) {
-  if (!copyReferences.has(id)) throw new Error(`Unreferenced component prose excerpt: ${id}`);
+for (const id of Object.keys(lore)) {
+  if (!copyReferences.has(id)) throw new Error(`Unreferenced component lore: ${id}`);
 }
 for (const artifact of graph.artifacts) {
   if ("overlays" in artifact) throw new Error(`Retired copy overlay in ${artifact.target}`);

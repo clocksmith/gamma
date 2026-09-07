@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "../tasks/content/authored.mjs";
 import { resolveString, resolveValue } from "../tasks/content/references.mjs";
-import { readWorldDocument } from "../tasks/content/world-parser.mjs";
+import { readWorldDocument, worldPassages } from "../tasks/content/world-parser.mjs";
 import { assembleScenarioIndex, scenarioSurfaces } from "../tasks/content/scenario-index.mjs";
 
 test("component notes never enter playable data or mutate authored records", () => {
@@ -80,7 +80,7 @@ test("reference layouts refuse independently authored rules and quantities", () 
 
 test("world companion extraction excludes editorial guidance and backlog", async () => {
   const world = await readFile(new URL("../world.md", import.meta.url), "utf8");
-  const player = documentSection(world, "player-world");
+  const player = Object.values(worldPassages(world)).join("\n");
   assert.match(player, /World and Institutions/);
   assert.doesNotMatch(player, /Research provenance|Unadopted scenarios|scenario-backlog/);
   assert.match(documentSection(world, "world-guide"), /Research provenance/);

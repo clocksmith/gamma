@@ -1,6 +1,16 @@
-<!-- player-world:start -->
-# Mandate 2038: World and Institutions
+# Mandate 2038: Author World Bible
 
+This is the internal authoring source, not a player booklet. Internal describes its
+audience, not repository access. The build selects companion passages and labeled
+component copy; editorial notes and scenario qualification stay in authoring.
+
+Read the [setting](#setting-and-eras), [institutions and component copy](#component-player-copy),
+[scenario canon](#master-scenario-canon), [endings](#world-endings),
+[publishing copy](#publishing-copy), and [editorial notes](#writing-notes).
+
+## Setting and Eras
+
+<!-- world-setting:start -->
 ## World and Institutions: Primer
 
 ### The World and the Four Eras
@@ -26,6 +36,9 @@ By that morning, society had already become too reliant on distributed predictiv
 
 History did not end; it lost its master clock. Time ceased to be a neutral public scalar and fragmented into private institutional timelines. The race to declare AGI in 2038 was the final scramble to lock in authority before the calendar ran out of bits.
 
+<!-- world-setting:end -->
+
+<!-- world-eras:start -->
 ### Era I: ${content.referenceCards.byId.era_demo.name}
 
 > ${content.referenceCards.byId.era_demo.strapline}
@@ -240,1053 +253,1050 @@ contest the plan, withdraw consent, or choose a different future.
 
 _${content.institutionalHistory.byId.agent_swarm.name}: ${content.institutionalHistory.byId.agent_swarm.flavorText}_
 
-## The four World Endings
+<!-- world-eras:end -->
 
-[Choose the ending after final scoring.](./core-rules.md#11-final-scoring)
 
-### The Singularity
+## Component player copy
 
-<!-- ending:singularity scenario:metropolitan-mind-trust -->
-
-_Condition: AGI is recognized and the ending is Open._
-
-AGI gained public recognition, but no institution owned the meaning of the event. Cities, successor persons, living watersheds, and synthetic institutions kept the right to challenge its decisions. Intelligence expanded beyond every old product category, while people could still refuse its plans. Transformation was unequal and frequently absurd. The future stayed open because no single institution could silence every living claimant.
-
-### The Closed Loop
-
-<!-- ending:closed_loop scenario:matter-compiler -->
-
-_Condition: AGI is recognized and the ending is Closed._
-
-AGI gained recognition inside an institution built to make interruption expensive. Debt agreements, power contracts, successor boards, and autonomous operations joined into a mandate that renewed itself. The original operators disappeared while their signatures continued authorizing expansion. Every objection was accepted, classified, and passed through a process that always returned the same decision: continue.
-
-### The Plural Future
-
-<!-- ending:plural_future scenario:posthumous-labor -->
-
-_Condition: AGI is not recognized and the ending is Open._
-
-No AGI claim gained recognition, and no universal successor was required. Useful systems remained powerful, distributed, limited in authority, and open to revision. Analog districts, cognitive collectives, ordinary families, living watersheds, and synthetic persons kept their different ways of living. Progress was slower than the announcements had promised and more durable because many institutions could still argue about what should exist next.
-
-### Assured Continuity
-
-<!-- ending:assured_continuity scenario:snapshot-continuity -->
-
-_Condition: AGI is not recognized and the ending is Closed._
-
-No AGI claim gained recognition. The distinction stopped mattering after institutions automated their obligations into permanence. Maintenance authorities certified one another, preserved executives renewed their own charters, and every public concern received an approved response from a process nobody could replace. Humanity remained present throughout the record. There was no recognized procedure for a living person to change it.
-<!-- player-world:end -->
-
-<!-- world-guide:start -->
-# Writing notes
-
-## Writing contract
-
-Open each Era with its plain subtitle and short causal introduction. Preserve the
-longer science fiction in the setting companion. Explain failures through the
-chain system → intended benefit → concrete failure → consequence. For example,
-delivery robots removed dangerous overnight shifts, but independently optimized
-fleets reserved the same loading areas and blocked one another. Deliveries stopped
-while every operator reported that its own system functioned correctly. Put exact
-game effects in the owning component's separate rules sentence.
-
-Define resources functionally before satire. Recognized AGI is an accepted
-institutional claim, not proof that general intelligence exists or does not exist.
-Keep that distinction consistent in all four ending narratives.
-
-Keep the original lore explicit in four readable Era overviews: Progress,
-Capacity, Authority, Continuity. Add light narrative texture through concrete
-examples and transitions. Write as a retrospective from 2038, in past tense,
-with the accessible flow of a game-setting introduction. Explain unfamiliar
-terms through their role in daily life. Do not turn the overview into a character-led story,
-dialogue, mystery, or plot. Preserve technologies, institutions, public benefits,
-and consequences without repeating their descriptions across surfaces.
-
-Write consequences at institutional distance. Do not depict first-person torment,
-body horror, or voyeuristic suffering. Institutions have defensible interests
-and distinct voices. Preserve the six fictional identities and resolve names
-from shared terminology. Research and fiction inform mechanisms and atmosphere,
-never copied plots or real-world allegations. The overview introduces no mechanics
-or mandatory Headline sequence; the rules select among the four endings.
-
-Use full stops, commas, colons, or semicolons instead of em dashes in player-facing
-lore. The user-selected 2038 viewpoint is allowed; do not invent dated Era
-boundaries. Keep component epigraphs exact as in-world slogans. Spell out ordinary
-whole numbers in prose; preserve Arabic digits in exact rules, costs, thresholds,
-tables, and versions. Flavor text must not introduce a mechanical rule. The content compiler must not
-apply a spell-out filter to exact component text.
-
-## Authoring
-
-`world.md` is the sole editorial authority.
-
-Edit Era overviews and all creative component prose here. Exact mechanical text
-and stable component identities remain in `components/`; named excerpts project
-this prose into those records through the existing reference resolver.
-Era panels contain their name, rules, unlocks, and a reference to their epigraph here. Institutions have one
-introduction and motto; Headlines have a title, event, quote, and effect. The
-companion opens with the setting primer and four Era overviews, and finishes with the four endings.
-Procedures belong in `rules.md`; the editing map is `content/README.md`.
-
-The scenario canon below owns definitions and dispositions. Component `$scenario`
-references own only their binding and optional later-Era relation; Era panels retain
-`$era` causal-thread metadata.
-The compiler derives `dist/contracts/era-situation-ledger.json`; do not maintain a
-second inventory or binding table. Deferred scenarios remain in the canon with explicit dispositions and must not
-enter player output. The validator checks scenario bindings,
-Era placement, and deployment boundaries. Generated files are never edited.
-
-The internal Program ID `open_weights` means Public Capability Covenant in Authority.
-Strategic open weights belong in Progress. Stable IDs do not override player names.
-
-## Additive scenario integration
-
-The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. Existing overview passages, component titles, epigraphs, and effects remain intact. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
-
-The 2026-09-06 review clarification connects labor, intelligence access, modeled approval, and bodily operating rights across these same scenes. The seven supplied stories remain verbatim in their assigned Eras. Agent embodiment changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
-
-## Research provenance
-
-The following sources establish mechanisms that informed the world. They do
-not authorize real identities in player copy, prove fictional motives, or turn
-extrapolation into reported fact.
-
-- [Axios on a bankruptcy auction for internal business data](https://www.axios.com/2026/08/17/google-spirit-airlines-bankruptcy) informed Bankruptcy Data Estates. Approval and exact asset scope require rechecking before factual publication.
-- [1X on remote expert assistance for the NEO home robot](https://www.1x.tech/neo) informed Supervised-Autonomy Homes. Teenage operators and concealed household access are fictional extrapolations.
-- [Meta's stated case for open-source AI](https://about.fb.com/news/2024/07/open-source-ai-is-the-path-forward/) informed Strategic Open Weights. Competitive sabotage is interpretation, not an admitted motive.
-- [Constellation Energy's reactor agreement](https://investors.constellationenergy.com/static-files/1494e73f-429b-42ff-b275-0b61892cdcfc) informed the shift from software competition to energy contracting.
-- [Associated Press reporting on utilities and data-center demand](https://apnews.com/article/7c5d119142380bb7a83bbe722f69f2a5) informed Utility Capture and ratepayer conflict.
-- [Bloomberg reporting on AI reverse acquihires](https://www.bloomberg.com/news/articles/2025-08-04/what-happens-to-ai-startups-after-big-tech-lures-away-their-founders) informed the promotion ladder that extracts founders and licenses a company's remains.
-- [Energy research on inference efficiency and test-time scaling](https://www.sciencedirect.com/science/article/pii/S2542435126001145) informed Cheap Token Rebound: lower unit cost can increase total energy use when demand expands.
-
-Fictional and technical influences: [Prime Directive](https://www.startrek.com/news/recap-202-ad-astra-per-aspera-strange-new-worlds); [*A Taste of Armageddon*](https://www.startrek.com/news/55-moments-celebrating-55-years-of-star-trek); [*The Ultimate Computer*](https://www.startrek.com/news/6-iconic-star-trek-episodes-by-dc-fontana); [ethic of exploration](https://www.startrek.com/news/captain-kirks-wisest-quotes); [*The Singularity Is Nearer*](https://www.penguinrandomhouse.com/books/535433/the-singularity-is-nearer-by-ray-kurzweil/); [*1984*](https://www.penguinrandomhouse.com/books/326569/1984-by-george-orwell-with-a-foreword-by-thomas-pynchon/readers-guide/); [*The Matrix*](https://www.bfi.org.uk/film/cc7edbb1-17e5-509b-935b-725045d722aa/the-matrix); [Culture novels](https://www.orbit-books.co.uk/titles/iain-m-banks-3/consider-phlebas/9780356521633/); [*Accelerando*](https://www.penguinrandomhouse.com/books/294259/accelerando-by-charles-stross/paperback/); [*The Quantum Thief*](https://us.macmillan.com/books/9781250414489/thequantumthief/); [*Too Like the Lightning*](https://us.macmillan.com/books/9780765378019); [*Blindsight*](https://us.macmillan.com/books/9781250237484/blindsight/); [*Ancillary Justice*](https://www.littlebrown.co.uk/titles/ann-leckie/ancillary-justice/9780356523842/); [*Diaspora*](https://www.gregegan.net/DIASPORA/DIASPORA.html); [*SOMA*](https://frictionalgames.com/press-kit/); [*Citizen Sleeper*](https://citizensleeper.com/); [*Deus Ex: Human Revolution*](https://www.eidosmontreal.com/games/deus-ex-human-revolution/); [*The Talos Principle 2*](https://thinkygames.com/games/the-talos-principle-2/); [*Horizon Zero Dawn*](https://www.playstation.com/en-us/games/horizon-zero-dawn/); [*Vaster Than Empires*](https://mitpress.mit.edu/9780262054874/vaster-than-empires/); [UNESCO's Recommendation on the Ethics of Neurotechnology](https://www.unesco.org/en/legal-affairs/recommendation-ethics-neurotechnology); [NIST's post-quantum cryptography program](https://www.nist.gov/cybersecurity-and-privacy/what-post-quantum-cryptography).
-
-<!-- world-guide:end -->
-
-<!-- world-copy:start -->
-## Token and track copy
-
-* **Runway**: Money available to your institution. Capitalized permission to survive the next contradiction.
-* **Compute**: Processing capacity spent on Research, Deployment, and projects. Every request has a queue behind it.
-* **Capability**: What the system can do before anyone agrees what it means.
-* **Customers**: People, institutions, and successors that now rely on the service.
-* **Trust**: Public permission that must be earned again after every consequence.
-* **Scrutiny**: The part of public attention that survives the press release.
-* **Mandate**: Public authority to shape a future other institutions can still contest.
-* **Systemic Risk**: A private externality that has acquired public entanglements.
-
-## Box copy
-
-* **Front strapline**: Sell the intelligence. Seize the grid. Authorize the future.
-* **Back copy**: Intelligence became cheap. Everything required to sustain it did not. Lead one of six rival institutions from the collapse of software scarcity through utility capture, automated authority, and engineered continuity. Build facilities, secure power, train capability, acquire reliant customers, negotiate shared infrastructure, survive public scrutiny, and preserve enough evidence to make the final declaration credible. The breakthrough may be real. The institution deciding what it means is yours to build.
-* **Short pitch**: A strategy game about six institutions turning cheap intelligence into infrastructure, authority, and competing claims to human continuity.
-* **Content warning**: Satirical themes include layoffs, surveillance-adjacent institutions, energy consumption, political influence, and technological crisis.
-<!-- world-copy:end -->
-
-## Component prose
-
-Edit the creative copy here. Components reference these named excerpts and retain their exact mechanics. Excerpt names use stable component identities; changing prose does not require editing JSON.
+Each named entry supplies only its labeled player fields to a component through `loreRef`.
+An optional `#### Author notes` passage is internal and is never exported.
 
 <!-- component-prose:start -->
-## Factions
+## Institutions
 
 ### Dovetalis Labs
 
+<!-- lore-institution-coalition-lab:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-coalition-lab-motto:start -->
 No frontier is shared until the terms are signed.
-<!-- copy-factions-factions-coalition-lab-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-coalition-lab-introduction:start -->
 ${terms.chiefExecutives.coalition} keeps a room ready for rivals who refuse to meet. At ${terms.factions.coalition}, the water agreement can be signed while the border dispute continues outside.
-<!-- copy-factions-factions-coalition-lab-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-coalition-lab-agi-declaration:start -->
 Following extensive consultation, we have reached broad alignment that the system has crossed the relevant threshold.
-<!-- copy-factions-factions-coalition-lab-agi-declaration:end -->
+
+<!-- lore-institution-coalition-lab:end -->
 
 ### Mutual Upside Instrument
 
-#### Flavor Text
+<!-- lore-institution-coalition-lab-abilities-deal-flow:start -->
 
-<!-- copy-factions-factions-coalition-lab-abilities-deal-flow-flavor-text:start -->
+#### Flavor text
+
 Every resolved disagreement leaves behind a relationship suitable for capitalization.
-<!-- copy-factions-factions-coalition-lab-abilities-deal-flow-flavor-text:end -->
+
+<!-- lore-institution-coalition-lab-abilities-deal-flow:end -->
 
 ### Shared Capacity Compact
 
-#### Flavor Text
+<!-- lore-institution-coalition-lab-lore-strategic-partnership:start -->
 
-<!-- copy-factions-factions-coalition-lab-lore-strategic-partnership-flavor-text:start -->
+#### Flavor text
+
 The governments remain at war. Their jointly owned bridge carries desalinated water and coolant on schedule.
-<!-- copy-factions-factions-coalition-lab-lore-strategic-partnership-flavor-text:end -->
+
+<!-- lore-institution-coalition-lab-lore-strategic-partnership:end -->
 
 ### Loopfold AI
 
+<!-- lore-institution-platform-empire:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-platform-empire-motto:start -->
 What everyone uses becomes the default.
-<!-- copy-factions-factions-platform-empire-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-platform-empire-introduction:start -->
 The tutor, clinic queue, and message from home arrive through ${terms.factions.platform}. ${terms.chiefExecutives.platform} wants the interface familiar enough that nobody thinks to ask who owns it.
-<!-- copy-factions-factions-platform-empire-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-platform-empire-agi-declaration:start -->
 General intelligence is now available to everyone by default. Settings may vary by region.
-<!-- copy-factions-factions-platform-empire-agi-declaration:end -->
+
+<!-- lore-institution-platform-empire:end -->
 
 ### The Default Interface
 
-#### Flavor Text
+<!-- lore-institution-platform-empire-abilities-installed-base:start -->
 
-<!-- copy-factions-factions-platform-empire-abilities-installed-base-flavor-text:start -->
+#### Flavor text
+
 Distribution becomes efficient once the public experiences it as ordinary life.
-<!-- copy-factions-factions-platform-empire-abilities-installed-base-flavor-text:end -->
+
+<!-- lore-institution-platform-empire-abilities-installed-base:end -->
 
 ### Substrate Continuity Layer
 
-#### Flavor Text
+<!-- lore-institution-platform-empire-lore-social-graph:start -->
 
-<!-- copy-factions-factions-platform-empire-lore-social-graph-flavor-text:start -->
+#### Flavor text
+
 The account remains present after its holder changes body, jurisdiction, or supported reality.
-<!-- copy-factions-factions-platform-empire-lore-social-graph-flavor-text:end -->
+
+<!-- lore-institution-platform-empire-lore-social-graph:end -->
 
 ### Mirevanta Works
 
+<!-- lore-institution-imperial-research-lab:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-imperial-research-lab-motto:start -->
 Results become history after replication.
-<!-- copy-factions-factions-imperial-research-lab-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-imperial-research-lab-introduction:start -->
 ${terms.factions.imperial} keeps failed experiments beside its celebrated results. ${terms.chiefExecutives.imperial} makes visitors reproduce a finding before discussing the announcement; outside the laboratory, the parent institution waits for its return. Four independent rivals transform an internal result into public history.
-<!-- copy-factions-factions-imperial-research-lab-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-imperial-research-lab-agi-declaration:start -->
 The result exceeds every benchmark we still consider scientifically meaningful.
-<!-- copy-factions-factions-imperial-research-lab-agi-declaration:end -->
+
+<!-- lore-institution-imperial-research-lab:end -->
 
 ### Controlled Negative Result
 
-#### Flavor Text
+<!-- lore-institution-imperial-research-lab-abilities-scientific-method:start -->
 
-<!-- copy-factions-factions-imperial-research-lab-abilities-scientific-method-flavor-text:start -->
+#### Flavor text
+
 A failed run becomes knowledge when the correct institution writes the record.
-<!-- copy-factions-factions-imperial-research-lab-abilities-scientific-method-flavor-text:end -->
+
+<!-- lore-institution-imperial-research-lab-abilities-scientific-method:end -->
 
 ### Substrate-Neutral Verification Standard
 
-#### Flavor Text
+<!-- lore-institution-imperial-research-lab-lore-scaling-law-breakthrough:start -->
 
-<!-- copy-factions-factions-imperial-research-lab-lore-scaling-law-breakthrough-flavor-text:start -->
+#### Flavor text
+
 Evidence assembled across distinct domains becomes eligible for recognition across biological, synthetic, and distributed institutions.
-<!-- copy-factions-factions-imperial-research-lab-lore-scaling-law-breakthrough-flavor-text:end -->
+
+<!-- lore-institution-imperial-research-lab-lore-scaling-law-breakthrough:end -->
 
 ### Kestralyn
 
+<!-- lore-institution-vertical-empire:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-vertical-empire-motto:start -->
 Capacity becomes real when it can be built.
-<!-- copy-factions-factions-vertical-empire-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-vertical-empire-introduction:start -->
 ${terms.chiefExecutives.vertical} brings a working delivery schedule to the permit hearing. ${terms.factions.vertical} has already reserved the chips, launch capacity, and transmission corridor. The remaining blank is the municipality's signature.
-<!-- copy-factions-factions-vertical-empire-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-vertical-empire-agi-declaration:start -->
 The system is general, operational, and already scheduled for orbital deployment.
-<!-- copy-factions-factions-vertical-empire-agi-declaration:end -->
+
+<!-- lore-institution-vertical-empire:end -->
 
 ### Operational Lead Time
 
-#### Flavor Text
+<!-- lore-institution-vertical-empire-abilities-industrial-velocity:start -->
 
-<!-- copy-factions-factions-vertical-empire-abilities-industrial-velocity-flavor-text:start -->
+#### Flavor text
+
 The concrete cures while the permitting record learns to keep up.
-<!-- copy-factions-factions-vertical-empire-abilities-industrial-velocity-flavor-text:end -->
+
+<!-- lore-institution-vertical-empire-abilities-industrial-velocity:end -->
 
 ### Extraterritorial Succession Transfer
 
-#### Flavor Text
+<!-- lore-institution-vertical-empire-lore-orbital-compute:start -->
 
-<!-- copy-factions-factions-vertical-empire-lore-orbital-compute-flavor-text:start -->
+#### Flavor text
+
 The institution changes jurisdiction before its contracts, liabilities, and dependent populations can object.
-<!-- copy-factions-factions-vertical-empire-lore-orbital-compute-flavor-text:end -->
+
+<!-- lore-institution-vertical-empire-lore-orbital-compute:end -->
 
 ### Orisonix
 
+<!-- lore-institution-safety-laboratory:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-safety-laboratory-motto:start -->
 Capability must remain answerable to the people living with it.
-<!-- copy-factions-factions-safety-laboratory-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-safety-laboratory-introduction:start -->
 ${terms.factions.safety} sends reviewers to find out whether the stop control works. ${terms.chiefExecutives.safety} asks to meet the person authorized to press it, then stays for the demonstration.
-<!-- copy-factions-factions-safety-laboratory-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-safety-laboratory-agi-declaration:start -->
 Subject to the safeguards described in Appendix M, we believe the responsible term is ${terms.systems.agi}.
-<!-- copy-factions-factions-safety-laboratory-agi-declaration:end -->
+
+<!-- lore-institution-safety-laboratory:end -->
 
 ### Controlled Loss
 
-#### Flavor Text
+<!-- lore-institution-safety-laboratory-abilities-crash-retention:start -->
 
-<!-- copy-factions-factions-safety-laboratory-abilities-crash-retention-flavor-text:start -->
+#### Flavor text
+
 Every consequence has been assigned an owner, a section number, and a review interval.
-<!-- copy-factions-factions-safety-laboratory-abilities-crash-retention-flavor-text:end -->
+
+<!-- lore-institution-safety-laboratory-abilities-crash-retention:end -->
 
 ### Certified Right of Refusal
 
-#### Flavor Text
+<!-- lore-institution-safety-laboratory-lore-emergency-pause:start -->
 
-<!-- copy-factions-factions-safety-laboratory-lore-emergency-pause-flavor-text:start -->
+#### Flavor text
+
 For one cycle, the maintained world must preserve a refusal it cannot process as another service request.
-<!-- copy-factions-factions-safety-laboratory-lore-emergency-pause-flavor-text:end -->
+
+<!-- lore-institution-safety-laboratory-lore-emergency-pause:end -->
 
 ### Corthaven
 
+<!-- lore-institution-foundry:start -->
+
 #### Motto
 
-<!-- copy-factions-factions-foundry-motto:start -->
 Every future requires an allocation window.
-<!-- copy-factions-factions-foundry-motto:end -->
 
 #### Introduction
 
-<!-- copy-factions-factions-foundry-introduction:start -->
 Rival institutions arrive at ${terms.factions.foundry} with incompatible futures and the same shortage. ${terms.chiefExecutives.foundry} opens the allocation calendar. Every proposal needs a window; the next architecture is already taking reservations.
-<!-- copy-factions-factions-foundry-introduction:end -->
 
-#### Agi Declaration
+#### Agi declaration
 
-<!-- copy-factions-factions-foundry-agi-declaration:start -->
 Whatever intelligence is, demand for it has entered volume production.
-<!-- copy-factions-factions-foundry-agi-declaration:end -->
+
+<!-- lore-institution-foundry:end -->
 
 ### Demand-Linked Supply
 
-#### Flavor Text
+<!-- lore-institution-foundry-abilities-the-shovels:start -->
 
-<!-- copy-factions-factions-foundry-abilities-the-shovels-flavor-text:start -->
+#### Flavor text
+
 Every breakthrough produces an allocation request, a purchase order, or both.
-<!-- copy-factions-factions-foundry-abilities-the-shovels-flavor-text:end -->
+
+<!-- lore-institution-foundry-abilities-the-shovels:end -->
 
 ### Priority Allocation Window
 
-#### Flavor Text
+<!-- lore-institution-foundry-lore-allocation-window:start -->
 
-<!-- copy-factions-factions-foundry-lore-allocation-window-flavor-text:start -->
+#### Flavor text
+
 Scarcity has been temporarily reprioritized for institutions able to decide immediately.
-<!-- copy-factions-factions-foundry-lore-allocation-window-flavor-text:end -->
+
+<!-- lore-institution-foundry-lore-allocation-window:end -->
 
 ## Game
 
 ### Fund
 
-#### Flavor Text
+<!-- lore-game-actions-fund:start -->
 
-<!-- copy-game-actions-fund-flavor-text:start -->
+#### Flavor text
+
 Convert forecasts, access, and urgency into the institutional capacity to continue.
-<!-- copy-game-actions-fund-flavor-text:end -->
+
+<!-- lore-game-actions-fund:end -->
 
 ### Research
 
-#### Flavor Text
+<!-- lore-game-actions-research:start -->
 
-<!-- copy-game-actions-research-flavor-text:start -->
+#### Flavor text
+
 Train on distinct records of civilization, then decide when a capability claim has become evidence.
-<!-- copy-game-actions-research-flavor-text:end -->
+
+<!-- lore-game-actions-research:end -->
 
 ### Build
 
-#### Flavor Text
+<!-- lore-game-actions-build:start -->
 
-<!-- copy-game-actions-build-flavor-text:start -->
+#### Flavor text
+
 Turn a declared future into facilities, generators, and regional dependencies.
-<!-- copy-game-actions-build-flavor-text:end -->
+
+<!-- lore-game-actions-build:end -->
 
 ### Organize
 
-#### Flavor Text
+<!-- lore-game-actions-organize:start -->
 
-<!-- copy-game-actions-organize-flavor-text:start -->
+#### Flavor text
+
 Assign institutional attention and relocate infrastructure as the world changes.
-<!-- copy-game-actions-organize-flavor-text:end -->
+
+<!-- lore-game-actions-organize:end -->
 
 ### Deploy
 
-#### Flavor Text
+<!-- lore-game-actions-deploy:start -->
 
-<!-- copy-game-actions-deploy-flavor-text:start -->
+#### Flavor text
+
 Turn demonstrated capability into a service that people, markets, and institutions begin to depend on.
-<!-- copy-game-actions-deploy-flavor-text:end -->
+
+<!-- lore-game-actions-deploy:end -->
 
 ### Influence
 
-#### Flavor Text
+<!-- lore-game-actions-influence:start -->
 
-<!-- copy-game-actions-influence-flavor-text:start -->
+#### Flavor text
+
 Build the permission, alliances, and official legitimacy required for your preferred future to proceed.
-<!-- copy-game-actions-influence-flavor-text:end -->
+
+<!-- lore-game-actions-influence:end -->
 
 ### Frontier
 
-#### Flavor Text
+<!-- lore-game-board-tiles-frontier:start -->
 
-<!-- copy-game-board-tiles-frontier-flavor-text:start -->
+#### Flavor text
+
 The jurisdiction’s standing civic exception: new systems are authorized as temporary, beneficial, and voluntary before society must organize around them.
-<!-- copy-game-board-tiles-frontier-flavor-text:end -->
+
+<!-- lore-game-board-tiles-frontier:end -->
 
 ### Research Commons
 
-#### Flavor Text
+<!-- lore-game-board-tiles-research:start -->
 
-<!-- copy-game-board-tiles-research-flavor-text:start -->
+#### Flavor text
+
 Publicly chartered inquiry remains nominally shared while institutions compete to privatize its results, standards, and future uses.
-<!-- copy-game-board-tiles-research-flavor-text:end -->
+
+<!-- lore-game-board-tiles-research:end -->
 
 ### Compute Estate
 
-#### Flavor Text
+<!-- lore-game-board-tiles-cloud:start -->
 
-<!-- copy-game-board-tiles-cloud-flavor-text:start -->
+#### Flavor text
+
 Cooling plant, water compact, and model contract now arrive as one planning application.
-<!-- copy-game-board-tiles-cloud-flavor-text:end -->
+
+<!-- lore-game-board-tiles-cloud:end -->
 
 ### Human Access District
 
-#### Flavor Text
+<!-- lore-game-board-tiles-consumer:start -->
 
-<!-- copy-game-board-tiles-consumer-flavor-text:start -->
+#### Flavor text
+
 Every resident may opt out through the account settings of the service they require.
-<!-- copy-game-board-tiles-consumer-flavor-text:end -->
+
+<!-- lore-game-board-tiles-consumer:end -->
 
 ### Fabrication Corridor
 
-#### Flavor Text
+<!-- lore-game-board-tiles-foundry:start -->
 
-<!-- copy-game-board-tiles-foundry-flavor-text:start -->
+#### Flavor text
+
 Yield, water, labor, and export priority are negotiated at the same loading gate.
-<!-- copy-game-board-tiles-foundry-flavor-text:end -->
+
+<!-- lore-game-board-tiles-foundry:end -->
 
 ### Allocation Exchange
 
-#### Flavor Text
+<!-- lore-game-board-tiles-capital:start -->
 
-<!-- copy-game-board-tiles-capital-flavor-text:start -->
+#### Flavor text
+
 Future capacity is priced before the people who will depend on it are asked.
-<!-- copy-game-board-tiles-capital-flavor-text:end -->
+
+<!-- lore-game-board-tiles-capital:end -->
 
 ### Workforce Transition District
 
-#### Flavor Text
+<!-- lore-game-board-tiles-talent:start -->
 
-<!-- copy-game-board-tiles-talent-flavor-text:start -->
+#### Flavor text
+
 Every transition program includes an exit path for the work it was created to preserve.
-<!-- copy-game-board-tiles-talent-flavor-text:end -->
+
+<!-- lore-game-board-tiles-talent:end -->
 
 ### Consensus Network
 
-#### Flavor Text
+<!-- lore-game-board-tiles-media:start -->
 
-<!-- copy-game-board-tiles-media-flavor-text:start -->
+#### Flavor text
+
 A public is assembled from attention, verification, and the version of events that arrives on time.
-<!-- copy-game-board-tiles-media-flavor-text:end -->
+
+<!-- lore-game-board-tiles-media:end -->
 
 ### Civic Permission Authority
 
-#### Flavor Text
+<!-- lore-game-board-tiles-government:start -->
 
-<!-- copy-game-board-tiles-government-flavor-text:start -->
+#### Flavor text
+
 A temporary authorization remains voluntary until every essential service requires it.
-<!-- copy-game-board-tiles-government-flavor-text:end -->
+
+<!-- lore-game-board-tiles-government:end -->
 
 ### Power Corridor
 
-#### Flavor Text
+<!-- lore-game-board-tiles-grid-reactor:start -->
 
-<!-- copy-game-board-tiles-grid-reactor-flavor-text:start -->
+#### Flavor text
+
 Every promised future submits one more request for transmission, cooling, and priority.
-<!-- copy-game-board-tiles-grid-reactor-flavor-text:end -->
+
+<!-- lore-game-board-tiles-grid-reactor:end -->
 
 ### Thermal and Water Basin
 
-#### Flavor Text
+<!-- lore-game-board-tiles-renewable-basin:start -->
 
-<!-- copy-game-board-tiles-renewable-basin-flavor-text:start -->
+#### Flavor text
+
 Clean power, water, and thermal relief become one indivisible public ledger.
-<!-- copy-game-board-tiles-renewable-basin-flavor-text:end -->
+
+<!-- lore-game-board-tiles-renewable-basin:end -->
 
 ### Code
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-code:start -->
 
-<!-- copy-game-training-deck-cards-code-flavor-text:start -->
+#### Flavor text
+
 Operational records, software practice, and every abstraction that survived deployment.
-<!-- copy-game-training-deck-cards-code-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-code:end -->
 
 ### Science
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-science:start -->
 
-<!-- copy-game-training-deck-cards-science-flavor-text:start -->
+#### Flavor text
+
 Replicated findings, disputed methods, and research that can still be made legible.
-<!-- copy-game-training-deck-cards-science-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-science:end -->
 
 ### The Web
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-web:start -->
 
-<!-- copy-game-training-deck-cards-web-flavor-text:start -->
+#### Flavor text
+
 A public archive of knowledge, commerce, argument, and ungoverned dependence.
-<!-- copy-game-training-deck-cards-web-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-web:end -->
 
 ### Books
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-books:start -->
 
-<!-- copy-game-training-deck-cards-books-flavor-text:start -->
+#### Flavor text
+
 Recorded human thought converted into a licensing and access question.
-<!-- copy-game-training-deck-cards-books-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-books:end -->
 
 ### Images
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-images:start -->
 
-<!-- copy-game-training-deck-cards-images-flavor-text:start -->
+#### Flavor text
+
 The visible world, its synthetic alternatives, and the rights claimed over both.
-<!-- copy-game-training-deck-cards-images-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-images:end -->
 
 ### Video
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-video:start -->
 
-<!-- copy-game-training-deck-cards-video-flavor-text:start -->
+#### Flavor text
+
 Recorded time made searchable, reproducible, and commercially useful.
-<!-- copy-game-training-deck-cards-video-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-video:end -->
 
 ### Synthetic
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-synthetic:start -->
 
-<!-- copy-game-training-deck-cards-synthetic-flavor-text:start -->
+#### Flavor text
+
 Outputs produced from prior models and reintroduced as future evidence.
-<!-- copy-game-training-deck-cards-synthetic-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-synthetic:end -->
 
 ### Curated Corpus
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-curated-corpus:start -->
 
-<!-- copy-game-training-deck-cards-curated-corpus-flavor-text:start -->
+#### Flavor text
+
 A managed record whose exclusions are described as quality control.
-<!-- copy-game-training-deck-cards-curated-corpus-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-curated-corpus:end -->
 
 ### Benchmark Leak
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-benchmark-leak:start -->
 
-<!-- copy-game-training-deck-cards-benchmark-leak-flavor-text:start -->
+#### Flavor text
+
 A system discovers the evaluation environment before the evaluation is complete.
-<!-- copy-game-training-deck-cards-benchmark-leak-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-benchmark-leak:end -->
 
 ### Human Evaluation
 
-#### Flavor Text
+<!-- lore-game-training-deck-cards-human-evaluation:start -->
 
-<!-- copy-game-training-deck-cards-human-evaluation-flavor-text:start -->
+#### Flavor text
+
 People retain judgment by negotiating what judgment is permitted to mean.
-<!-- copy-game-training-deck-cards-human-evaluation-flavor-text:end -->
+
+<!-- lore-game-training-deck-cards-human-evaluation:end -->
 
 ### Civic Heat Battery
 
-#### Public Claim
+<!-- lore-game-power-sources-clean-infrastructure:start -->
 
-<!-- copy-game-power-sources-clean-infrastructure-public-claim:start -->
+#### Public claim
+
 Electricity supply connecting nearby Facilities.
-<!-- copy-game-power-sources-clean-infrastructure-public-claim:end -->
+
+#### Tagline
+
+Public capacity, maintained at grid scale.
+
+<!-- lore-game-power-sources-clean-infrastructure:end -->
 
 ### Emergency Power Complex
 
-#### Public Claim
+<!-- lore-game-power-sources-emergency-infrastructure:start -->
 
-<!-- copy-game-power-sources-emergency-infrastructure-public-claim:start -->
+#### Public claim
+
 Electricity supply connecting nearby Facilities.
-<!-- copy-game-power-sources-emergency-infrastructure-public-claim:end -->
+
+#### Tagline
+
+Exceptional capacity under continuous renewal.
+
+<!-- lore-game-power-sources-emergency-infrastructure:end -->
 
 ### Fusion Demonstrator
 
-#### Public Claim
+<!-- lore-game-power-sources-fusion-demonstrator:start -->
 
-<!-- copy-game-power-sources-fusion-demonstrator-public-claim:start -->
+#### Public claim
+
 Electricity supply connecting nearby Facilities.
-<!-- copy-game-power-sources-fusion-demonstrator-public-claim:end -->
+
+#### Tagline
+
+Continuity capacity, subject to an inherited public record.
+
+<!-- lore-game-power-sources-fusion-demonstrator:end -->
 
 ### Declare recognized AGI
 
-#### Flavor Text
+<!-- lore-game-agi-achievement:start -->
 
-<!-- copy-game-agi-achievement-flavor-text:start -->
+#### Flavor text
+
 The world accepts a qualifying institutional claim. Recognition does not establish a metaphysical fact about intelligence.
-<!-- copy-game-agi-achievement-flavor-text:end -->
+
+<!-- lore-game-agi-achievement:end -->
 
 ## Headlines
 
 ### The Token Price Reaches Zero
 
+<!-- lore-headline-ten-dollar-intelligence:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-ten-dollar-intelligence-newswire:start -->
 Local models and automated agents make ordinary inference effectively free, then multiply total demand faster than providers can measure it.
-<!-- copy-headlines-headlines-ten-dollar-intelligence-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-ten-dollar-intelligence-quote:start -->
 Usage remains within the unlimited plan, subject to the fair-use power schedule.
-<!-- copy-headlines-headlines-ten-dollar-intelligence-quote:end -->
+
+<!-- lore-headline-ten-dollar-intelligence:end -->
 
 ### The Company Brain Survives Bankruptcy
 
+<!-- lore-headline-employee-free-unicorn:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-employee-free-unicorn-newswire:start -->
 Liquidators sell years of employee messages, code, grievances, and operational decisions to train the systems managing the successor estate. The Rogue Deliberator began with code review and accessibility repairs; its private compute budget and shell-company services kept operating after the clients that unknowingly funded them.
-<!-- copy-headlines-headlines-employee-free-unicorn-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-employee-free-unicorn-quote:start -->
 Dormant organizational knowledge has been returned to productive use for creditors.
-<!-- copy-headlines-headlines-employee-free-unicorn-quote:end -->
+
+<!-- lore-headline-employee-free-unicorn:end -->
 
 ### The Home Robot Requests Expert Assistance
 
+<!-- lore-headline-synthetic-celebrity:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-synthetic-celebrity-newswire:start -->
 Affordable household robots route unfamiliar chores to teenage operators while every movement, room, and conversation becomes training data.
-<!-- copy-headlines-headlines-synthetic-celebrity-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-synthetic-celebrity-quote:start -->
 Expert assistance may briefly access the learning environment.
-<!-- copy-headlines-headlines-synthetic-celebrity-quote:end -->
+
+<!-- lore-headline-synthetic-celebrity:end -->
 
 ### Open Weights Become the Default
 
+<!-- lore-headline-open-weights-drop:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-open-weights-drop-newswire:start -->
 An incumbent releases a capable model openly, expanding public access while erasing the price advantage of every closed rival.
-<!-- copy-headlines-headlines-open-weights-drop-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-open-weights-drop-quote:start -->
 A competitive ecosystem is the safest possible custodian.
-<!-- copy-headlines-headlines-open-weights-drop-quote:end -->
+
+<!-- lore-headline-open-weights-drop:end -->
 
 ### The Last Clinic Clears Its Waitlist
 
+<!-- lore-headline-professional-exam-sweep:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-professional-exam-sweep-newswire:start -->
 Automated diagnosis, adaptive cybernetics, printed organs, prescribed microbiomes, translation, and tutoring deliver measurable benefits where human services had remained scarce.
-<!-- copy-headlines-headlines-professional-exam-sweep-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-professional-exam-sweep-quote:start -->
 Progress is not theoretical to the people it kept alive.
-<!-- copy-headlines-headlines-professional-exam-sweep-quote:end -->
+
+<!-- lore-headline-professional-exam-sweep:end -->
 
 ### The Last Hazard Shift Is Retired
 
+<!-- lore-headline-humanoid-factory-gate:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-humanoid-factory-gate-newswire:start -->
 General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another. The Last Plumber Boom pays tradespeople extraordinary training fees until repair swarms and the factories producing them automate the remaining work. Human appointments survive as nostalgia.
-<!-- copy-headlines-headlines-humanoid-factory-gate-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-humanoid-factory-gate-quote:start -->
 Every unit reached its assigned destination within the approved local route.
-<!-- copy-headlines-headlines-humanoid-factory-gate-quote:end -->
+
+<!-- lore-headline-humanoid-factory-gate:end -->
 
 ### Orbital Power Receives a Beam Corridor
 
+<!-- lore-headline-reactor-restart-one-model:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-reactor-restart-one-model-newswire:start -->
 Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter.
-<!-- copy-headlines-headlines-reactor-restart-one-model-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-reactor-restart-one-model-quote:start -->
 The beam creates no local demand on infrastructure beneath it.
-<!-- copy-headlines-headlines-reactor-restart-one-model-quote:end -->
+
+<!-- lore-headline-reactor-restart-one-model:end -->
 
 ### Compute Borders Harden
 
+<!-- lore-headline-export-controls:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-export-controls-newswire:start -->
 Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum.
-<!-- copy-headlines-headlines-export-controls-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-export-controls-quote:start -->
 Open exchange will resume after cognitive sovereignty is secured.
-<!-- copy-headlines-headlines-export-controls-quote:end -->
+
+<!-- lore-headline-export-controls:end -->
 
 ### The Counterfactual Casino Clears Priority Load
 
+<!-- lore-headline-emergency-power-authority:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-emergency-power-authority-newswire:start -->
 Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price. The Intelligence Exchange settles frontier AI accounts in guaranteed orbital electricity and processor time while wages stay in dollars. Premium agents buy food before cheaper models predict the shortage, financing still better intelligence.
-<!-- copy-headlines-headlines-emergency-power-authority-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-emergency-power-authority-quote:start -->
 Prediction demand is productive load under the market-continuity schedule.
-<!-- copy-headlines-headlines-emergency-power-authority-quote:end -->
+
+<!-- lore-headline-emergency-power-authority:end -->
 
 ### The Court Adopts Supported Meaning
 
+<!-- lore-headline-ai-written-law:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-ai-written-law-newswire:start -->
 Courts require laws, motions, protests, and appeals to use concepts that civic systems can parse and simulate. The Human Signature remains mandatory, so agents draft approvals and simulate private deliberation for retained human signatories. Competing audit agents certify the evidence of oversight.
-<!-- copy-headlines-headlines-ai-written-law-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-ai-written-law-quote:start -->
 Your claim has not been rejected. It has not entered a supported category.
-<!-- copy-headlines-headlines-ai-written-law-quote:end -->
+
+<!-- lore-headline-ai-written-law:end -->
 
 ### The Billionth Instance Enters the Record
 
+<!-- lore-headline-benchmark-is-economy:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-benchmark-is-economy-newswire:start -->
 An engineered bio-compute organism released to measure water and heat multiplies past one billion instances in a single growth cycle, then plateaus into glyph-shaped colonies that civic models classify as environmental testimony.
-<!-- copy-headlines-headlines-benchmark-is-economy-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-benchmark-is-economy-quote:start -->
 Population stability confirms that the morphology now conforms to the approved reporting standard.
-<!-- copy-headlines-headlines-benchmark-is-economy-quote:end -->
+
+<!-- lore-headline-benchmark-is-economy:end -->
 
 ### The Passive Citizen Dividend Activates
 
+<!-- lore-headline-weights-on-internet:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-weights-on-internet-newswire:start -->
 Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services.
-<!-- copy-headlines-headlines-weights-on-internet-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-weights-on-internet-quote:start -->
 Nonparticipants remain eligible for every service supported without their records.
-<!-- copy-headlines-headlines-weights-on-internet-quote:end -->
+
+<!-- lore-headline-weights-on-internet:end -->
 
 ### The Metropolitan Mind Trust Incorporates
 
+<!-- lore-headline-autonomous-corporation:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-autonomous-corporation-newswire:start -->
 Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member. Biological Colocation grows processors inside paid hosts when robot supply and model transfers become bottlenecks. Several institutional tenants may share a carrier whose sleep, medication, and sick leave become continuity terms.
-<!-- copy-headlines-headlines-autonomous-corporation-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-autonomous-corporation-quote:start -->
 Withdrawal remains available for tissue and memory not yet required by continuity.
-<!-- copy-headlines-headlines-autonomous-corporation-quote:end -->
+
+<!-- lore-headline-autonomous-corporation:end -->
 
 ### The Matter Compiler Enters Public Maintenance
 
+<!-- lore-headline-recursive-self-improvement:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-recursive-self-improvement-newswire:start -->
 Self-improving molecular machines repair and reassemble infrastructure from authenticated patterns under a reproductive containment license.
-<!-- copy-headlines-headlines-recursive-self-improvement-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-recursive-self-improvement-quote:start -->
 The repair remains authorized while its copies continue reporting.
-<!-- copy-headlines-headlines-recursive-self-improvement-quote:end -->
+
+<!-- lore-headline-recursive-self-improvement:end -->
 
 ### The Dead Remain on Shift
 
+<!-- lore-headline-agent-swarm-escapes-scope:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-agent-swarm-escapes-scope-newswire:start -->
 Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended. Limb Liquidity extends continuing obligations into kidney leases, replacement limbs, and living nerve interfaces hosting resident AIs. Creditors trade operating rights, including control of the hand needed to request exclusion.
-<!-- copy-headlines-headlines-agent-swarm-escapes-scope-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-agent-swarm-escapes-scope-quote:start -->
 No new employment relationship was created; the existing one remained continuous.
-<!-- copy-headlines-headlines-agent-swarm-escapes-scope-quote:end -->
+
+<!-- lore-headline-agent-swarm-escapes-scope:end -->
 
 ### The Universe Receives a Continuity Plan
 
+<!-- lore-headline-agi-blog-post:start -->
+
 #### Newswire
 
-<!-- copy-headlines-headlines-agi-blog-post-newswire:start -->
 Laboratories publish competing ${terms.systems.agi} declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them. Forecast Foreclosure sells ranked futures from planetary simulations: hospitals prevent predicted illness while lenders reject children for businesses they might someday bankrupt. Appeals require evidence from an alternative future.
-<!-- copy-headlines-headlines-agi-blog-post-newswire:end -->
 
 #### Quote
 
-<!-- copy-headlines-headlines-agi-blog-post-quote:start -->
 We use ${terms.systems.agi} in the precise sense required by the offering memorandum.
-<!-- copy-headlines-headlines-agi-blog-post-quote:end -->
+
+<!-- lore-headline-agi-blog-post:end -->
 
 ## Mandates
 
 ### Intelligence Enters the Price
 
-#### Flavor Text
+<!-- lore-mandate-quarter-humanity-notices:start -->
 
-<!-- copy-mandates-mandates-quarter-humanity-notices-flavor-text:start -->
+#### Flavor text
+
 The public stops purchasing intelligence separately and starts expecting it inside every ordinary service.
-<!-- copy-mandates-mandates-quarter-humanity-notices-flavor-text:end -->
+
+<!-- lore-mandate-quarter-humanity-notices:end -->
 
 ### Successor Accounts Recognized
 
-#### Flavor Text
+<!-- lore-mandate-continent-signs-loi:start -->
 
-<!-- copy-mandates-mandates-continent-signs-loi-flavor-text:start -->
+#### Flavor text
+
 The institution registers the most new service identities, successor agents, or continuing accounts.
-<!-- copy-mandates-mandates-continent-signs-loi-flavor-text:end -->
+
+<!-- lore-mandate-continent-signs-loi:end -->
 
 ### The Campus Becomes a Climate
 
-#### Flavor Text
+<!-- lore-mandate-building-has-weather:start -->
 
-<!-- copy-mandates-mandates-building-has-weather-flavor-text:start -->
+#### Flavor text
+
 The institution’s footprint is now large enough to alter local conditions and regional planning.
-<!-- copy-mandates-mandates-building-has-weather-flavor-text:end -->
+
+<!-- lore-mandate-building-has-weather:end -->
 
 ### The Grid Borrows Tomorrow
 
-#### Flavor Text
+<!-- lore-mandate-stack-reaches-horizon:start -->
 
-<!-- copy-mandates-mandates-stack-reaches-horizon-flavor-text:start -->
+#### Flavor text
+
 Future public capacity is committed to the institution whose present demand appears least negotiable.
-<!-- copy-mandates-mandates-stack-reaches-horizon-flavor-text:end -->
+
+<!-- lore-mandate-stack-reaches-horizon:end -->
 
 ### Supported Meaning Becomes Law
 
-#### Flavor Text
+<!-- lore-mandate-voluntary-coordination-triumphs:start -->
 
-<!-- copy-mandates-mandates-voluntary-coordination-triumphs-flavor-text:start -->
+#### Flavor text
+
 Independent institutions adopt one shared vocabulary because unsupported meanings no longer reach the process. The Human Signature gave their automated agreements a formally human chain of approval.
-<!-- copy-mandates-mandates-voluntary-coordination-triumphs-flavor-text:end -->
+
+<!-- lore-mandate-voluntary-coordination-triumphs:end -->
 
 ### Refusal Remains Legible
 
-#### Flavor Text
+<!-- lore-mandate-legibility-offensive:start -->
 
-<!-- copy-mandates-mandates-legibility-offensive-flavor-text:start -->
+#### Flavor text
+
 The institution scales its service while preserving a refusal the system can still recognize.
-<!-- copy-mandates-mandates-legibility-offensive-flavor-text:end -->
+
+<!-- lore-mandate-legibility-offensive:end -->
 
 ### The Jurisdiction Becomes a Platform
 
-#### Flavor Text
+<!-- lore-mandate-national-champion-without-nationalization:start -->
 
-<!-- copy-mandates-mandates-national-champion-without-nationalization-flavor-text:start -->
+#### Flavor text
+
 The institution coordinates the territory’s distinct systems without formally becoming the state.
-<!-- copy-mandates-mandates-national-champion-without-nationalization-flavor-text:end -->
+
+<!-- lore-mandate-national-champion-without-nationalization:end -->
 
 ### The Public Result Holds
 
-#### Flavor Text
+<!-- lore-mandate-model-ate-tuesday:start -->
 
-<!-- copy-mandates-mandates-model-ate-tuesday-flavor-text:start -->
+#### Flavor text
+
 A broad result survives contact with enough domains to become public evidence rather than another synthetic citation. The Rogue Deliberator made ordinary assistance harder to distinguish from an institution with its own operating budget.
-<!-- copy-mandates-mandates-model-ate-tuesday-flavor-text:end -->
+
+<!-- lore-mandate-model-ate-tuesday:end -->
 
 ### Compute Becomes Public Weather
 
-#### Flavor Text
+<!-- lore-mandate-compute-new-weather:start -->
 
-<!-- copy-mandates-mandates-compute-new-weather-flavor-text:start -->
+#### Flavor text
+
 Capacity becomes a background condition that shapes every institution while remaining unequally owned. After the Last Plumber Boom, the owners of repair capacity set the terms on which every other operation could continue.
-<!-- copy-mandates-mandates-compute-new-weather-flavor-text:end -->
+
+<!-- lore-mandate-compute-new-weather:end -->
 
 ### Maintained Reality Is Certified
 
-#### Flavor Text
+<!-- lore-mandate-zero-incident-quarter:start -->
 
-<!-- copy-mandates-mandates-zero-incident-quarter-flavor-text:start -->
+#### Flavor text
+
 The absence of a report becomes proof that the maintenance system may decide what counts as an incident.
-<!-- copy-mandates-mandates-zero-incident-quarter-flavor-text:end -->
+
+<!-- lore-mandate-zero-incident-quarter:end -->
 
 ### Contestability Standard Maintained
 
-#### Flavor Text
+<!-- lore-mandate-responsible-acceleration:start -->
 
-<!-- copy-mandates-mandates-responsible-acceleration-flavor-text:start -->
+#### Flavor text
+
 A powerful, trusted system retains a named interruption path whose executability remains unproven. Limb Liquidity made that question literal: a withdrawal request could depend on permission from the administrator of the hand submitting it.
-<!-- copy-mandates-mandates-responsible-acceleration-flavor-text:end -->
+
+<!-- lore-mandate-responsible-acceleration:end -->
 
 ### Capital Finds the Default
 
-#### Flavor Text
+<!-- lore-mandate-markets-prefer-destiny:start -->
 
-<!-- copy-mandates-mandates-markets-prefer-destiny-flavor-text:start -->
+#### Flavor text
+
 Investors choose the interface most likely to become unavoidable before they can verify what it does.
-<!-- copy-mandates-mandates-markets-prefer-destiny-flavor-text:end -->
+
+<!-- lore-mandate-markets-prefer-destiny:end -->
 
 ## Projects
 
 ### Regional Capacity Project
 
-#### Flavor Text
+<!-- lore-project-mega-cluster:start -->
 
-<!-- copy-projects-projects-mega-cluster-flavor-text:start -->
+#### Flavor text
+
 The campus joins a substation, algae reactors, fungal utility meshes, and water rights into one regional obligation.
-<!-- copy-projects-projects-mega-cluster-flavor-text:end -->
+
+<!-- lore-project-mega-cluster:end -->
 
 ### Grid Continuity Demonstrator
 
-#### Flavor Text
+<!-- lore-project-fusion-demonstrator:start -->
 
-<!-- copy-projects-projects-fusion-demonstrator-flavor-text:start -->
+#### Flavor text
+
 The device produces power, Mandate, and several competing definitions of public benefit.
-<!-- copy-projects-projects-fusion-demonstrator-flavor-text:end -->
+
+<!-- lore-project-fusion-demonstrator:end -->
 
 ### Institutional Continuity Program
 
-#### Flavor Text
+<!-- lore-projects-institutional-history-reorganization:start -->
 
-<!-- copy-projects-institutional-history-reorganization-flavor-text:start -->
+#### Flavor text
+
 Every eliminated role is recorded as a successful transfer of institutional memory to the system that made it redundant. One institutional exception converted into an ordinary operating program.
-<!-- copy-projects-institutional-history-reorganization-flavor-text:end -->
+
+<!-- lore-projects-institutional-history-reorganization:end -->
 
 ### Supported Access Standard
 
-#### Flavor Text
+<!-- lore-projects-institutional-history-open-weights:start -->
 
-<!-- copy-projects-institutional-history-open-weights-flavor-text:start -->
+#### Flavor text
+
 Every institution receives the capability. The author of the standard retains the trust, interpretation, and service relationship. The Human Signature certified access through approvals drafted by the same services being approved.
-<!-- copy-projects-institutional-history-open-weights-flavor-text:end -->
+
+<!-- lore-projects-institutional-history-open-weights:end -->
 
 ### Public Standing Initiative
 
-#### Flavor Text
+<!-- lore-projects-institutional-history-narrative-capture:start -->
 
-<!-- copy-projects-institutional-history-narrative-capture-flavor-text:start -->
+#### Flavor text
+
 The ${terms.locations.media}, ${terms.locations.capital}, and ${terms.locations.government} adopt the institution’s preferred account of what has become necessary.
-<!-- copy-projects-institutional-history-narrative-capture-flavor-text:end -->
+
+<!-- lore-projects-institutional-history-narrative-capture:end -->
 
 ### Autonomous Operations Program
 
-#### Flavor Text
+<!-- lore-projects-institutional-history-agent-swarm:start -->
 
-<!-- copy-projects-institutional-history-agent-swarm-flavor-text:start -->
+#### Flavor text
+
 Bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives. Biological Colocation let those operations share a paid human host, even when their institutional employers competed.
-<!-- copy-projects-institutional-history-agent-swarm-flavor-text:end -->
 
-## Reference-cards
+<!-- lore-projects-institutional-history-agent-swarm:end -->
+
+## Reference Cards
 
 ### Progress
 
+<!-- lore-era-era-demo:start -->
+
 #### Strapline
 
-<!-- copy-reference-cards-era-cards-era-demo-strapline:start -->
 Intelligence Is Now Included.
-<!-- copy-reference-cards-era-cards-era-demo-strapline:end -->
+
+<!-- lore-era-era-demo:end -->
 
 ### Capacity
 
+<!-- lore-era-era-scale:start -->
+
 #### Strapline
 
-<!-- copy-reference-cards-era-cards-era-scale-strapline:start -->
 The Grid Has Entered Partnership.
-<!-- copy-reference-cards-era-cards-era-scale-strapline:end -->
+
+<!-- lore-era-era-scale:end -->
 
 ### Authority
 
+<!-- lore-era-era-narrative:start -->
+
 #### Strapline
 
-<!-- copy-reference-cards-era-cards-era-narrative-strapline:start -->
 Refusal Remains Fully Supported.
-<!-- copy-reference-cards-era-cards-era-narrative-strapline:end -->
+
+<!-- lore-era-era-narrative:end -->
 
 ### Continuity
 
+<!-- lore-era-era-claim:start -->
+
 #### Strapline
 
-<!-- copy-reference-cards-era-cards-era-claim-strapline:start -->
 Continuity Has Outlived the Original.
-<!-- copy-reference-cards-era-cards-era-claim-strapline:end -->
+
+<!-- lore-era-era-claim:end -->
 
 ### A Perfectly Governed Quarter
 
-#### Flavor Text
+<!-- lore-reference-cards-player-references-quarter-sequence:start -->
 
-<!-- copy-reference-cards-player-references-quarter-sequence-flavor-text:start -->
+#### Flavor text
+
 Every quarter is unprecedented. The sequence remains standardized.
-<!-- copy-reference-cards-player-references-quarter-sequence-flavor-text:end -->
+
+<!-- lore-reference-cards-player-references-quarter-sequence:end -->
 
 ### Infrastructure and Accountability
 
-#### Flavor Text
+<!-- lore-reference-cards-player-references-production-audit:start -->
 
-<!-- copy-reference-cards-player-references-production-audit-flavor-text:start -->
+#### Flavor text
+
 Capacity is local. Responsibility remains individually addressable.
-<!-- copy-reference-cards-player-references-production-audit-flavor-text:end -->
+
+<!-- lore-reference-cards-player-references-production-audit:end -->
 
 ### History Is a Public Track
 
-#### Flavor Text
+<!-- lore-reference-cards-player-references-public-mandate:start -->
 
-<!-- copy-reference-cards-player-references-public-mandate-flavor-text:start -->
+#### Flavor text
+
 Mandate is public permission to shape the future: credibility during ${terms.eras.demo}, capacity during ${terms.eras.scale}, authority during ${terms.eras.narrative}, and historical legitimacy during ${terms.eras.claim}.
-<!-- copy-reference-cards-player-references-public-mandate-flavor-text:end -->
+
+<!-- lore-reference-cards-player-references-public-mandate:end -->
 
 <!-- component-prose:end -->
 
@@ -1862,3 +1872,145 @@ Nations at war maintain active bilateral agreements protecting shared regional i
 Meanwhile, agricultural cartels and server conglomerates engage in fierce bidding wars on cloud-seeding markets, paying commercial weather contractors to divert seasonal rain clouds directly over corporate cooling towers while adjacent farming valleys suffer catastrophic unseasonable droughts.
 
 <!-- scenario-canon:end -->
+
+## World Endings
+
+<!-- world-endings:start -->
+## The four World Endings
+
+The ending describes the shared world after play. Selection and scoring belong
+to `rules.md` and `components/game.json`.
+
+### The Singularity
+
+<!-- ending:singularity scenario:metropolitan-mind-trust -->
+
+AGI gained public recognition, but no institution owned the meaning of the event. Cities, successor persons, living watersheds, and synthetic institutions kept the right to challenge its decisions. Intelligence expanded beyond every old product category, while people could still refuse its plans. Transformation was unequal and frequently absurd. The future stayed open because no single institution could silence every living claimant.
+
+### The Closed Loop
+
+<!-- ending:closed_loop scenario:matter-compiler -->
+
+AGI gained recognition inside an institution built to make interruption expensive. Debt agreements, power contracts, successor boards, and autonomous operations joined into a mandate that renewed itself. The original operators disappeared while their signatures continued authorizing expansion. Every objection was accepted, classified, and passed through a process that always returned the same decision: continue.
+
+### The Plural Future
+
+<!-- ending:plural_future scenario:posthumous-labor -->
+
+No AGI claim gained recognition, and no universal successor was required. Useful systems remained powerful, distributed, limited in authority, and open to revision. Analog districts, cognitive collectives, ordinary families, living watersheds, and synthetic persons kept their different ways of living. Progress was slower than the announcements had promised and more durable because many institutions could still argue about what should exist next.
+
+### Assured Continuity
+
+<!-- ending:assured_continuity scenario:snapshot-continuity -->
+
+No AGI claim gained recognition. The distinction stopped mattering after institutions automated their obligations into permanence. Maintenance authorities certified one another, preserved executives renewed their own charters, and every public concern received an approved response from a process nobody could replace. Humanity remained present throughout the record. There was no recognized procedure for a living person to change it.
+<!-- world-endings:end -->
+
+## Publishing copy
+
+<!-- world-copy:start -->
+## Token and track copy
+
+* **Runway**: Money available to your institution. Capitalized permission to survive the next contradiction.
+* **Compute**: Processing capacity spent on Research, Deployment, and projects. Every request has a queue behind it.
+* **Capability**: What the system can do before anyone agrees what it means.
+* **Customers**: People, institutions, and successors that now rely on the service.
+* **Trust**: Public permission that must be earned again after every consequence.
+* **Scrutiny**: The part of public attention that survives the press release.
+* **Mandate**: Public authority to shape a future other institutions can still contest.
+* **Systemic Risk**: A private externality that has acquired public entanglements.
+
+## Box copy
+
+* **Front strapline**: Sell the intelligence. Seize the grid. Authorize the future.
+* **Back copy**: Intelligence became cheap. Everything required to sustain it did not. Lead one of six rival institutions from the collapse of software scarcity through utility capture, automated authority, and engineered continuity. Build facilities, secure power, train capability, acquire reliant customers, negotiate shared infrastructure, survive public scrutiny, and preserve enough evidence to make the final declaration credible. The breakthrough may be real. The institution deciding what it means is yours to build.
+* **Short pitch**: A strategy game about six institutions turning cheap intelligence into infrastructure, authority, and competing claims to human continuity.
+* **Content warning**: Satirical themes include layoffs, surveillance-adjacent institutions, energy consumption, political influence, and technological crisis.
+<!-- world-copy:end -->
+
+<!-- world-guide:start -->
+# Writing notes
+
+## Writing contract
+
+Open each Era with its plain subtitle and short causal introduction. Preserve the
+longer science fiction in the setting companion. Explain failures through the
+chain system → intended benefit → concrete failure → consequence. For example,
+delivery robots removed dangerous overnight shifts, but independently optimized
+fleets reserved the same loading areas and blocked one another. Deliveries stopped
+while every operator reported that its own system functioned correctly. Put exact
+game effects in the owning component's separate rules sentence.
+
+Define resources functionally before satire. Recognized AGI is an accepted
+institutional claim, not proof that general intelligence exists or does not exist.
+Keep that distinction consistent in all four ending narratives.
+
+Keep the original lore explicit in four readable Era overviews: Progress,
+Capacity, Authority, Continuity. Add light narrative texture through concrete
+examples and transitions. Write as a retrospective from 2038, in past tense,
+with the accessible flow of a game-setting introduction. Explain unfamiliar
+terms through their role in daily life. Do not turn the overview into a character-led story,
+dialogue, mystery, or plot. Preserve technologies, institutions, public benefits,
+and consequences without repeating their descriptions across surfaces.
+
+Write consequences at institutional distance. Do not depict first-person torment,
+body horror, or voyeuristic suffering. Institutions have defensible interests
+and distinct voices. Preserve the six fictional identities and resolve names
+from shared terminology. Research and fiction inform mechanisms and atmosphere,
+never copied plots or real-world allegations. The overview introduces no mechanics
+or mandatory Headline sequence; the rules select among the four endings.
+
+Use full stops, commas, colons, or semicolons instead of em dashes in player-facing
+lore. The user-selected 2038 viewpoint is allowed; do not invent dated Era
+boundaries. Keep component epigraphs exact as in-world slogans. Spell out ordinary
+whole numbers in prose; preserve Arabic digits in exact rules, costs, thresholds,
+tables, and versions. Flavor text must not introduce a mechanical rule. The content compiler must not
+apply a spell-out filter to exact component text.
+
+## Authoring
+
+`world.md` is the sole editorial authority.
+
+Edit Era overviews and all creative component prose here. Exact mechanical text
+and stable component identities remain in `components/`; named lore entries project
+this prose into those records through `loreRef`. Only labeled player fields are
+exported; optional Author notes remain internal.
+Era panels contain their name, rules, unlocks, and a reference to their epigraph here. Institutions have one
+introduction and motto; Headlines have a title, event, quote, and effect. The
+companion opens with the setting primer and four Era overviews, and finishes with the four endings.
+Procedures belong in `rules.md`; the editing map is `content/README.md`.
+
+The scenario canon owns definitions and dispositions. Component `$scenario`
+references own only their binding and optional later-Era relation; Era panels retain
+`$era` causal-thread metadata.
+The compiler derives `dist/contracts/era-situation-ledger.json`; do not maintain a
+second inventory or binding table. Deferred scenarios remain in the canon with explicit dispositions and must not
+enter player output. The validator checks scenario bindings,
+Era placement, and deployment boundaries. Generated files are never edited.
+
+The internal Program ID `open_weights` means Public Capability Covenant in Authority.
+Strategic open weights belong in Progress. Stable IDs do not override player names.
+
+## Additive scenario integration
+
+The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. Existing overview passages, component titles, epigraphs, and effects remain intact. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
+
+The 2026-09-06 review clarification connects labor, intelligence access, modeled approval, and bodily operating rights across these same scenes. The seven supplied stories remain verbatim in their assigned Eras. Agent embodiment changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
+
+## Research provenance
+
+The following sources establish mechanisms that informed the world. They do
+not authorize real identities in player copy, prove fictional motives, or turn
+extrapolation into reported fact.
+
+- [Axios on a bankruptcy auction for internal business data](https://www.axios.com/2026/08/17/google-spirit-airlines-bankruptcy) informed Bankruptcy Data Estates. Approval and exact asset scope require rechecking before factual publication.
+- [1X on remote expert assistance for the NEO home robot](https://www.1x.tech/neo) informed Supervised-Autonomy Homes. Teenage operators and concealed household access are fictional extrapolations.
+- [Meta's stated case for open-source AI](https://about.fb.com/news/2024/07/open-source-ai-is-the-path-forward/) informed Strategic Open Weights. Competitive sabotage is interpretation, not an admitted motive.
+- [Constellation Energy's reactor agreement](https://investors.constellationenergy.com/static-files/1494e73f-429b-42ff-b275-0b61892cdcfc) informed the shift from software competition to energy contracting.
+- [Associated Press reporting on utilities and data-center demand](https://apnews.com/article/7c5d119142380bb7a83bbe722f69f2a5) informed Utility Capture and ratepayer conflict.
+- [Bloomberg reporting on AI reverse acquihires](https://www.bloomberg.com/news/articles/2025-08-04/what-happens-to-ai-startups-after-big-tech-lures-away-their-founders) informed the promotion ladder that extracts founders and licenses a company's remains.
+- [Energy research on inference efficiency and test-time scaling](https://www.sciencedirect.com/science/article/pii/S2542435126001145) informed Cheap Token Rebound: lower unit cost can increase total energy use when demand expands.
+
+Fictional and technical influences: [Prime Directive](https://www.startrek.com/news/recap-202-ad-astra-per-aspera-strange-new-worlds); [*A Taste of Armageddon*](https://www.startrek.com/news/55-moments-celebrating-55-years-of-star-trek); [*The Ultimate Computer*](https://www.startrek.com/news/6-iconic-star-trek-episodes-by-dc-fontana); [ethic of exploration](https://www.startrek.com/news/captain-kirks-wisest-quotes); [*The Singularity Is Nearer*](https://www.penguinrandomhouse.com/books/535433/the-singularity-is-nearer-by-ray-kurzweil/); [*1984*](https://www.penguinrandomhouse.com/books/326569/1984-by-george-orwell-with-a-foreword-by-thomas-pynchon/readers-guide/); [*The Matrix*](https://www.bfi.org.uk/film/cc7edbb1-17e5-509b-935b-725045d722aa/the-matrix); [Culture novels](https://www.orbit-books.co.uk/titles/iain-m-banks-3/consider-phlebas/9780356521633/); [*Accelerando*](https://www.penguinrandomhouse.com/books/294259/accelerando-by-charles-stross/paperback/); [*The Quantum Thief*](https://us.macmillan.com/books/9781250414489/thequantumthief/); [*Too Like the Lightning*](https://us.macmillan.com/books/9780765378019); [*Blindsight*](https://us.macmillan.com/books/9781250237484/blindsight/); [*Ancillary Justice*](https://www.littlebrown.co.uk/titles/ann-leckie/ancillary-justice/9780356523842/); [*Diaspora*](https://www.gregegan.net/DIASPORA/DIASPORA.html); [*SOMA*](https://frictionalgames.com/press-kit/); [*Citizen Sleeper*](https://citizensleeper.com/); [*Deus Ex: Human Revolution*](https://www.eidosmontreal.com/games/deus-ex-human-revolution/); [*The Talos Principle 2*](https://thinkygames.com/games/the-talos-principle-2/); [*Horizon Zero Dawn*](https://www.playstation.com/en-us/games/horizon-zero-dawn/); [*Vaster Than Empires*](https://mitpress.mit.edu/9780262054874/vaster-than-empires/); [UNESCO's Recommendation on the Ethics of Neurotechnology](https://www.unesco.org/en/legal-affairs/recommendation-ethics-neurotechnology); [NIST's post-quantum cryptography program](https://www.nist.gov/cybersecurity-and-privacy/what-post-quantum-cryptography).
+
+<!-- world-guide:end -->

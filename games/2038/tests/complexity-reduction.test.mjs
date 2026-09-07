@@ -195,7 +195,7 @@ test("canonical simplification removes stored-token state and keeps one permanen
     "Spotlight",
     "Public Research Grant"
   ]) assert.ok(!componentReference.includes(removed), `${removed} is absent`);
-  // The consolidated inventory mentions retired pieces only to exclude them.
-  assert.match(componentReference, /There is no[\s\S]*Influence cube/);
+  // Teaching and inventory describe current pieces without historical exclusions.
+  assert.doesNotMatch(componentReference, /Influence cube|Safety currency/);
   assert.doesNotMatch(componentReference, /^- .*Influence cube/m);
 });

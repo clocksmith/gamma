@@ -60,7 +60,8 @@ This repository is a **prototype**, not a manufactured or published product.
   separate rules. Never author directly in `dist/docs/`.
 - The sole lore authority, editorial backlog, research boundary, Era placement,
   and writing contract live in
-  [`world.md`](world.md). Its
+  the internal author bible [`world.md`](world.md). Player components and the
+  companion receive only selected passages and labeled copy through `loreRef`. Its
   machine-enforced scenario, surface, copy, mechanic, and deployment projection
   is [`dist/contracts/era-situation-ledger.json`](dist/contracts/era-situation-ledger.json).
   The generated surface inventory lives in

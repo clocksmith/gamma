@@ -12,6 +12,31 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Rules review closure — 2026-09-07
+
+This addresses the source review of `299b3e74`, on the current authoring tree.
+It is not a playtest or a balance promotion. The six Actions, four Eras,
+resources, and Production procedure remain intact.
+
+The two Government Headlines no longer select the first matching map tile.
+The provisional interpretation is one Government reward per institution that
+controls at least one Government district, without doubling for both districts.
+Compute Borders Harden pays its separate Chip reward as well. Court payments
+resolve only after every offer. Existing district presence and contested-control
+rules determine eligibility; no category-control system is introduced.
+
+Joint Venture hosting preserves executable permissions: multiple ventures per
+Facility, multiple separately consented contracts between the same two hosts,
+and coexistence with one Mega-Cluster. Each venture uses its own matched pair
+and produces independently; the shared supply remains the limit. This makes
+existing behavior explicit rather than silently imposing a new production cap.
+
+Trust award checkboxes persist for the game, including the thresholds already
+included in starting Mandate. They mirror the engine's retained award identities
+and remain separate from the resettable Era ledger. Reordered teaching, grouped
+Build instructions, and corrected aid text project these contracts to readers.
+Historical exclusions are removed from teaching; historical evidence is unchanged.
+
 ## Readable Era overviews
 
 The user wants the original lore with a light narrative touch. `world.md`
@@ -776,3 +801,31 @@ temporary test artifacts from racing the authoring scan. Release and evidence
 validation remain separate operations.
 
 This changes authoring and release boundaries, not mechanics or balance claims.
+
+## Internal lore and selective player projections
+
+The authoring boundary is intentionally changed: `world.md` is the internal
+world bible, organized for writers. The player companion is assembled by
+`content/templates/world-and-institutions.md` from two selected passages and
+compiled ending fields. The compiler rejects direct text export of the bible.
+
+Ninety component records use `loreRef` to select 121 labeled creative fields,
+including the three Generator taglines previously left in JSON. The resolver
+rejects missing IDs and field overrides; the Markdown parser rejects duplicate
+or unknown player labels. Optional Author notes never enter its copy map.
+Ending condition wording moves beside mechanical outcomes as
+`components/game.json#worldEnding/$conditions`, projecting into the existing
+world-copy output without adding a field to game runtime data.
+
+The 51 scenario definitions, seven shared qualification policies, and 54 derived
+bindings are retained. These fields serve existing traceability and deployment
+checks. Historical releases remain evidence of their original source layout;
+the redundant thematic reader was already retired. Mechanics, fictional
+identities, and existing player routes are preserved by this authoring change.
+
+Publication tests now compile and seal an isolated source fixture. This lets
+current authoring tests exercise the real release gate without rewriting a
+historical snapshot. Actual site publication and kit freezing still require a
+matching sealed release. Tests exercise source edits through runtime JSON,
+card-reference Markdown and HTML, and gallery cards, with internal sentinel
+text excluded and accidental whole-bible export rejected.

@@ -85,12 +85,15 @@ const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 
 // --- category builders -------------------------------------------------------
 
-function buildFactions(data) {
+function buildFactions(data, config) {
   const cards = data.factions
     .map((f) => {
       const stats = f.starts
         ? `<dl class="stats">${Object.entries(f.starts)
-            .map(([k, v]) => `<div><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`)
+            .map(([k, v]) => `<div><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}${k === "trust"
+              ? `<span class="trust-award-record" aria-label="Trust awards already scored"><small>Awards scored</small> ${config.scoring.trustThresholds
+                .map(({ value }) => `<span data-trust-threshold="${value}" data-scored="${v >= value}">${v >= value ? "[x]" : "[ ]"} ${value}</span>`).join(" ")}</span>`
+              : ""}</dd></div>`)
             .join("")}</dl>`
         : "";
       const abilities = (f.abilities || [])
@@ -369,6 +372,8 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .stats div { background: #f4f4f2; border-radius: 6px; padding: 0.2rem 0.45rem; text-align: center; min-width: 3.4rem; }
 .stats dt { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9aa3ad; margin: 0; }
 .stats dd { margin: 0; font-weight: 700; font-size: 0.95rem; }
+.trust-award-record { display: block; margin-top: 0.3rem; font-size: 0.8rem; }
+.trust-award-record small { display: block; font-weight: 400; }
 .abilities { display: flex; flex-direction: column; gap: 0.5rem; }
 .ability { border-left: 3px solid color-mix(in srgb, var(--accent) 45%, #d7d7d2); padding-left: 0.6rem; }
 .ability-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; }
@@ -411,7 +416,7 @@ async function build() {
     ]);
 
   const allSections = [
-    { id: "factions", label: "Factions", html: buildFactions(factions), n: factions.factions.length },
+    { id: "factions", label: "Factions", html: buildFactions(factions, config), n: factions.factions.length },
     { id: "actions", label: "Core Actions", html: buildActions(config), n: config.actions.length },
     { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },

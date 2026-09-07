@@ -77,6 +77,19 @@ export function resolveValue(value, variables, stack = []) {
   if (typeof value === "string") return resolveString(value, variables, stack);
   if (Array.isArray(value)) return value.map((entry) => resolveValue(entry, variables, stack));
   if (value && typeof value === "object") {
+    if (Object.hasOwn(value, "loreRef")) {
+      const { loreRef, ...record } = value;
+      if (typeof loreRef !== "string" || !variables.lore || !Object.hasOwn(variables.lore, loreRef)) {
+        throw new Error(`Unknown lore reference: ${loreRef}`);
+      }
+      const copy = variables.lore[loreRef];
+      for (const key of Object.keys(copy)) {
+        if (Object.hasOwn(record, key)) throw new Error(`Lore copy conflicts with component field: ${loreRef}/${key}`);
+      }
+      const reference = `lore.${loreRef}`;
+      if (stack.includes(reference)) throw new Error(`Circular lore reference: ${loreRef}`);
+      value = { ...record, ...resolveValue(copy, variables, [...stack, reference]) };
+    }
     return Object.fromEntries(
       Object.entries(value).map(([key, entry]) => [
         resolveString(key, variables, stack),

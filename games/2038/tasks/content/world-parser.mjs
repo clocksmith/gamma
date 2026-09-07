@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { documentSection, documentTable } from "./authored.mjs";
+import { documentSection, documentSections, documentTable } from "./authored.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const ENDING_IDS = ["singularity", "closed_loop", "plural_future", "assured_continuity"];
@@ -69,11 +69,11 @@ function identity(value, label) {
   return value;
 }
 
-export function parseWorldCopyFromText(worldText) {
+export function parseWorldCopyFromText(worldText, conditions) {
   worldText = worldText.replace(/\r\n/g, "\n");
-  const player = documentSection(worldText, "player-world");
-  const title = /^# ([^:\n]+): World and Institutions\r?$/m.exec(player)?.[1];
-  if (!title) throw new Error("Missing World and Institutions title in world.md");
+  const player = documentSection(worldText, "world-endings");
+  const title = /^# ([^:\n]+): Author World Bible\r?$/m.exec(worldText)?.[1];
+  if (!title) throw new Error("Missing Author World Bible title in world.md");
   const section = player.split("## The four World Endings\n");
   if (section.length !== 2) throw new Error("Expected one World Endings section");
   const firstEnding = section[1].search(/^### /m);
@@ -81,13 +81,17 @@ export function parseWorldCopyFromText(worldText) {
   const blocks = section[1].slice(firstEnding).trim().split(/\r?\n(?=### )/);
   const seen = new Set();
   const endings = blocks.map(block => {
-    const match = /^### ([^\n]+)\r?\n\s*<!-- ending:([a-z_]+) scenario:([a-z0-9-]+) -->\s*_Condition:\s*([^\n]+)_\s+([\s\S]+)$/.exec(block);
-    if (!match) throw new Error("Malformed World Ending: expected heading, identity, condition, and prose");
-    const [, name, id, ref, condition, prose] = match;
+    const match = /^### ([^\n]+)\r?\n\s*<!-- ending:([a-z_]+) scenario:([a-z0-9-]+) -->\s+([\s\S]+)$/.exec(block);
+    if (!match) throw new Error("Malformed World Ending: expected heading, identity, and prose");
+    const [, name, id, ref, prose] = match;
     if (!ENDING_IDS.includes(id)) throw new Error(`Unknown ending ID: ${id}`);
     unique(id, seen, "ending ID");
     if (!prose.trim() || /<!--|\$\{/.test(prose)) throw new Error(`Invalid ending prose: ${id}`);
-    return { id, name: name.trim(), condition: condition.trim(), text: prose.trim(), $scenario: { ref } };
+    if (conditions && (typeof conditions[id] !== "string" || !conditions[id].trim())) {
+      throw new Error(`Missing mechanical ending condition: ${id}`);
+    }
+    return { id, name: name.trim(), ...(conditions ? { condition: conditions[id] } : {}),
+      text: prose.trim(), $scenario: { ref } };
   });
   if (ENDING_IDS.some(id => !seen.has(id))) throw new Error("Missing required World Ending");
   const copy = documentSection(worldText, "world-copy");
@@ -145,10 +149,54 @@ export function parseScenarioCanon(worldText) {
 
 export async function readWorldDocument(worldPath = "world.md") {
   const text = await readFile(resolve(root, worldPath), "utf8");
-  const worldCopy = parseWorldCopyFromText(text);
+  const game = JSON.parse(await readFile(resolve(root, "components/game.json"), "utf8"));
+  const conditions = game.worldEnding?.$conditions;
+  if (!conditions || Object.keys(conditions).length !== ENDING_IDS.length) {
+    throw new Error("Game mechanics must own exactly four World Ending conditions");
+  }
+  const worldCopy = parseWorldCopyFromText(text, conditions);
   const scenarios = parseScenarioCanon(text);
   for (const ending of worldCopy.endings) {
     if (!scenarios.some(s => s.id === ending.$scenario.ref)) throw new Error(`Unknown ending scenario: ${ending.id}`);
   }
   return { text, worldCopy, scenarios };
+}
+
+// Only these prose passages and labeled fields may cross the author/player boundary.
+export const WORLD_PASSAGES = ["world-setting", "world-eras"];
+export const CREATIVE_FIELDS = new Map([
+  ["Flavor text", "flavorText"], ["Newswire", "newswire"], ["Quote", "quote"],
+  ["Motto", "motto"], ["Introduction", "introduction"], ["Agi declaration", "agiDeclaration"],
+  ["Strapline", "strapline"], ["Tagline", "tagline"], ["Public claim", "publicClaim"]
+]);
+
+export function worldPassages(text) {
+  return Object.fromEntries(WORLD_PASSAGES.map(id => [id, documentSection(text, id)]));
+}
+
+export function parseComponentLore(text) {
+  const sections = documentSections(documentSection(text.replace(/\r\n/g, "\n"), "component-prose"));
+  const entries = {};
+  for (const [marker, source] of Object.entries(sections)) {
+    if (!marker.startsWith("lore-")) throw new Error(`Unexpected component lore marker: ${marker}`);
+    const id = marker.slice(5);
+    identity(id, "component lore ID");
+    const fields = {};
+    const blocks = source.trim().split(/\n(?=#### )/);
+    const labels = new Set();
+    for (const block of blocks) {
+      const match = /^#### ([^\n]+)\n+([\s\S]*)$/.exec(block);
+      if (!match) throw new Error(`Malformed player field in lore: ${id}`);
+      const [, label, prose] = match;
+      unique(label, labels, `${id} field`);
+      if (label === "Author notes") continue;
+      const field = CREATIVE_FIELDS.get(label);
+      if (!field) throw new Error(`Unknown player field in lore: ${id}/${label}`);
+      if (!prose.trim() || /<!--|^#{1,6} /m.test(prose)) throw new Error(`Empty or malformed player copy: ${id}/${label}`);
+      fields[field] = prose.trim();
+    }
+    if (!Object.keys(fields).length) throw new Error(`Lore entry has no player copy: ${id}`);
+    entries[id] = fields;
+  }
+  return entries;
 }

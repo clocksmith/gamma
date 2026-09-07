@@ -1,3 +1,4 @@
+import { createContentFixture } from "./helpers/content-fixture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
@@ -112,8 +113,10 @@ test("Firebase deployment uses the Mandate project's root-hosting contract", asy
 
 test("public playtest publication is an allowlist with release identity and feedback", async () => {
   const outputRoot = await mkdtemp(join(tmpdir(), "mandate-2038-firebase-"));
+  const fixture = await createContentFixture();
   try {
-    const { manifest } = await buildFirebaseSite({ outputRoot });
+    await fixture.run("tasks/build-firebase-site.mjs", "--profile", "public-playtest", "--output-root", outputRoot);
+    const manifest = JSON.parse(await readFile(resolve(outputRoot, "site-manifest.json"), "utf8"));
     assert.equal(manifest.deploymentProfile, "public-playtest");
     assert.equal(manifest.artifactKind, "firebase-public-playtest-site");
     assert.equal(manifest.deployable, true);
@@ -126,14 +129,14 @@ test("public playtest publication is an allowlist with release identity and feed
       { code: "ENOENT" }
     );
     const authority = JSON.parse(
-      await readFile(resolve(projectRoot, "dist/runtime/reference-cards.json"), "utf8")
+      await readFile(resolve(fixture.root, "dist/runtime/reference-cards.json"), "utf8")
     ).eraCards.find((era) => era.id === "era_narrative");
     assert.match(authority.unlockText, /Joint Ventures/);
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
     assert.match(baseline, /Joint Ventures/);
     assert.doesNotMatch(baseline, /undefined escalation|Escalation actions|>Promise<|>Anxiety</);
-    const { eraCards } = JSON.parse(await readFile(resolve(projectRoot, "dist/runtime/reference-cards.json"), "utf8"));
+    const { eraCards } = JSON.parse(await readFile(resolve(fixture.root, "dist/runtime/reference-cards.json"), "utf8"));
     for (const era of eraCards) assert.ok(baseline.includes(era.rulesText), `${era.id} prints its canonical rules`);
 
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
@@ -142,7 +145,7 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
     assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
-    const docsIndex = await readFile(resolve(projectRoot, "dist/site/docs/index.html"), "utf8");
+    const docsIndex = await readFile(resolve(fixture.root, "dist/site/docs/index.html"), "utf8");
     assert.doesNotMatch(docsIndex, /world-primer|adaptive cybernetics/);
     assert.match(docsIndex, /href="world-and-institutions\.html"/);
     const docsBody = docsIndex.split("<body>")[1];
@@ -219,6 +222,7 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.equal(releaseIdentity.deploymentProfile, "public-playtest");
     assert.match(await readFile(resolve(outputRoot, "robots.txt"), "utf8"), /Disallow: \//);
   } finally {
+    await fixture.dispose();
     await rm(outputRoot, { recursive: true, force: true });
   }
 });

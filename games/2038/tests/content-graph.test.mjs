@@ -1,3 +1,4 @@
+import { worldPassages } from "../tasks/content/world-parser.mjs";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
@@ -181,7 +182,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     config.powerSources.find((source) => source.id === "fusion_demonstrator").capacity,
     advancedFacts.power
   );
-  assert.ok(rules.includes(`#### ${advancedName}`));
+  assert.ok(rules.includes(`#### Construct ${advancedName} (Era IV)`));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
   assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Generator connections/);
@@ -302,7 +303,7 @@ test("world companion owns four ordered Era overviews and references canonical E
   const variables = await readJson("content/data/variables.json");
   const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const source = await readFile(new URL("world.md", root), "utf8");
-  const playerSource = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
+  const playerSource = Object.values(worldPassages(source)).join("\n");
   const chapters = [...world.matchAll(/^### Era ([IV]+): (.+)$/gm)];
   assert.deepEqual(chapters.map((match) => match[1]), ["I", "II", "III", "IV"]);
   assert.deepEqual(chapters.map((match) => match[2]), eraCards.map((era) => era.name));
@@ -328,7 +329,7 @@ test("world companion owns four ordered Era overviews and references canonical E
 test("Era overviews retain institutions and scenarios alongside authorized mechanic revisions", async () => {
   const previous = await readJson("versions/0.15.6/game-bundle.json");
   const source = await readFile(new URL("world.md", root), "utf8");
-  const player = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
+  const player = Object.values(worldPassages(source)).join("\n");
   assert.doesNotMatch(player, /Mara|Lio|Southbank|Chapter/);
   for (const subtitle of ["AI becomes ordinary", "AI becomes infrastructure", "AI begins deciding for people", "people and institutions become reproducible"]) assert.ok(player.toLowerCase().includes(subtitle.toLowerCase()));
   for (const [file, collection] of [["factions.json", "factions"], ["headlines.json", "headlines"], ["reference-cards.json", "eraCards"]]) {
@@ -451,8 +452,8 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(rules, /## Rules Reference/);
   assert.ok(rules.indexOf("## How to Play") < rules.indexOf("## Rules Reference"));
   assert.match(rules, /Use the browser \*\*First Game Guide\*\* for a guided introduction/);
-  assert.match(rules, /## 9\. Printed card authorities/);
-  assert.match(rules, /## 10\. Map and component reference/);
+  assert.match(rules, /## 8\. Printed card authorities/);
+  assert.match(rules, /## 9\. Map and component reference/);
   assert.doesNotMatch(rules, /Advanced Play/);
   assert.doesNotMatch(rules, /Jurisdictional Realignment/);
   assert.doesNotMatch(rules, /Every recognized successor enters the quorum/);
