@@ -35,7 +35,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - User-selected mechanic revisions retain scenario placement and require an
   explicit design-decision receipt; they must not be labelled retained mechanics.
 - The six Core Actions are the only selections. Build places up to one Facility, then one project from one assignment. Programs and use records are retired.
-- Headlines finish all choices before selection and leave no continuing modifiers.
+- The deck contains six Headlines per Era and reveals three per Era. Headlines finish all choices before selection and leave no continuing modifiers.
 - Each faction has one permanent ability and common scoring. Former abilities and Programs retain their fiction in lore-only records projected into the existing companion and references.
 - Generated graph targets are never hand-edited. Authoring checks validate current
   sources; publication and kit freezing additionally verify immutable release identity.

@@ -1092,7 +1092,110 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.matchMetrics.systemicRiskCreated += 1;
       }
     };
-    if (id === "open_weights_drop") {
+    if (id === "human_original_guarantee") {
+      for (const player of ordered) {
+        if (await offer(player, "Pay 1 Runway; gain 1 Customer", { runway: -1, customers: 1 },
+          player.trust >= 3 && player.runway >= 1 && this.canDeploy(player))) {
+          this.spendRunway(player, 1, { cause: id });
+          this.addResource(player, "customers", 1);
+          this.synchronizePublicMandate(player, id);
+        }
+      }
+    } else if (id === "last_plumber_boom") {
+      for (const player of ordered) {
+        this.addResource(player, "runway", Math.min(2, new Set(player.pieces.map(piece => piece.tileId)).size));
+      }
+    } else if (id === "wartime_water_bridge") {
+      const contributors = [];
+      for (const player of ordered) {
+        if (await offer(player, "Contribute 1 Compute; gain 1 Trust and remove 1 Scrutiny if at least two contribute, otherwise receive a refund",
+          { compute: -1 }, player.compute >= 1 && this.latestPoweredFacilities(player).length > 0,
+          { contributorSeats: contributors.map(contributor => contributor.seat) })) {
+          player.compute--;
+          contributors.push(player);
+        }
+      }
+      for (const player of contributors) {
+        if (contributors.length < 2) this.addResource(player, "compute", 1);
+        else {
+          this.addResource(player, "trust", 1);
+          this.removeScrutiny(player, 1);
+        }
+      }
+      this.recordEvent("headline_contributions_settled", null,
+        `${contributors.length} water-bridge contributors: ${contributors.length >= 2 ? "cooperation funded" : "contributions refunded"}.`);
+    } else if (id === "cognitive_donor_clinics") {
+      for (const player of ordered) if (await offer(player, "Lose 1 Trust; gain 3 Compute",
+        { trust: -1, compute: 3 }, player.trust >= 1)) {
+        this.addResource(player, "trust", -1);
+        this.addResource(player, "compute", 3);
+      }
+    } else if (id === "human_signature") {
+      for (const player of ordered) {
+        if (player.runway < 1) continue;
+        const recipients = ordered.filter(other => other.seat !== player.seat && other.scrutiny >= 1);
+        if (!recipients.length) continue;
+        const choice = await this.choose(policies, player.seat, `headline_${id}`, [
+          { decisionId: `${id}_pass`, label: "Decline sponsorship", actionId: "headline" },
+          ...recipients.map(other => ({ decisionId: `${id}_${other.seat}`,
+            label: `Pay 1 Runway; remove 1 Scrutiny from ${other.factionName}; gain 1 Trust`,
+            actionId: "headline", parameters: { recipientSeat: other.seat },
+            consequences: { runway: -1, trust: 1 } }))
+        ]);
+        const recipient = recipients.find(other => other.seat === choice.parameters?.recipientSeat);
+        if (!recipient) continue;
+        this.spendRunway(player, 1, { cause: id });
+        this.removeScrutiny(recipient, 1);
+        this.addResource(player, "trust", 1);
+      }
+    } else if (id === "analog_havens") {
+      for (const player of ordered) if (await offer(player, "Lose 1 Customer; gain 2 Trust and remove 2 Scrutiny",
+        { customers: -1, trust: 2, scrutiny: -2 }, player.customers >= 1)) {
+        this.addResource(player, "customers", -1);
+        this.addResource(player, "trust", 2);
+        this.removeScrutiny(player, 2);
+      }
+    } else if (id === "biological_colocation") {
+      for (const player of ordered) {
+        const compute = Math.min(3, player.pieces.length);
+        if (await offer(player, `Gain ${compute} Compute; add 1 Systemic Risk`, { compute, systemicRisk: 1 })) {
+          this.addResource(player, "compute", compute);
+          addSystemicRisk();
+        }
+      }
+    } else if (id === "limb_liquidity") {
+      for (const player of ordered) {
+        if (player.runway < 1) continue;
+        const options = ordered.filter(other => other.seat !== player.seat).flatMap(other =>
+          [...new Set(other.pieces.map(piece => piece.tileId))].flatMap(tileId =>
+            player.pieces.filter(piece => piece.tileId !== tileId).map(piece => ({
+              decisionId: `${id}_${other.seat}_${piece.id}_${tileId}`,
+              label: `Offer ${other.factionName} 1 Runway to move ${piece.id} to ${this.board.find(tile => tile.instanceId === tileId).name}`,
+              actionId: "headline", parameters: { recipientSeat: other.seat, pieceId: piece.id, tileId },
+              consequences: { runway: -1 }
+            }))));
+        if (!options.length) continue;
+        const choice = await this.choose(policies, player.seat, `headline_${id}`, [
+          { decisionId: `${id}_pass`, label: "Decline reassignment", actionId: "headline" }, ...options
+        ]);
+        const { recipientSeat, pieceId, tileId } = choice.parameters || {};
+        const piece = player.pieces.find(piece => piece.id === pieceId);
+        if (!piece) continue;
+        const recipient = this.players[recipientSeat];
+        const consent = await this.choose(policies, recipientSeat, `headline_${id}_consent`, [
+          { decisionId: `${id}_refuse`, label: "Refuse payment and reassignment", actionId: "headline" },
+          { decisionId: `${id}_consent`,
+            label: `Receive 1 Runway from ${player.factionName}; permit their ${piece.id} to enter ${this.board.find(tile => tile.instanceId === tileId).name}`,
+            actionId: "headline", parameters: { proposerSeat: player.seat, pieceId, tileId }, consequences: { runway: 1 } }
+        ]);
+        if (consent.decisionId !== `${id}_consent`) continue;
+        this.spendRunway(player, 1, { cause: id });
+        this.addResource(recipient, "runway", 1);
+        piece.tileId = tileId;
+        this.recordEvent("headline_reassignment", player.seat,
+          `${piece.id} reassigned to ${tileId} with ${recipient.factionName}'s consent; 1 Runway paid.`);
+      }
+    } else if (id === "open_weights_drop") {
       for (const player of ordered) this.addResource(player, "capability", 1);
       this.addResource(extreme("customers", Math.min), "trust", 1);
     } else if (id === "export_controls") {

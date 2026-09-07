@@ -73,7 +73,7 @@ locked component specification.
 | Faction/player boards | 6 dual-layer boards with 6 captive sliders each | selected physical authority; slider construction unresolved |
 | Core Action cards | 36, six per player | confirmed |
 | Infrastructure project references | 2, Mega-Cluster and Fusion | current test candidate |
-| Headline cards | 16 | Era packets contain 5 / 4 / 3 / 4 |
+| Headline cards | 24 | Six per Era; eight additions remain unqualified by human play |
 | Tactic cards | 0 baseline; 36-card deferred module | excluded from first quote |
 | Training cards | 40 | confirmed test contract |
 | Mandate cards | 12 | selected wording; balance provisional |
@@ -81,7 +81,7 @@ locked component specification.
 | Printed Era panels | 4 on the Governance Board plus 1 Current Era marker | replaces four separate Era cards |
 | Player aids | 6 three-panel foldouts | replaces twenty-four separate reference cards |
 | Printed Power contracts | Emergency and Clean on their Energy tiles; Fusion on its project reference | replaces three separate reference cards |
-| Total printed card-and-aid pieces | 116 | 106 standard cards plus 6 foldouts; manufacturing overage excluded |
+| Total printed card-and-aid pieces | 120 | 114 standard cards plus 6 foldouts; manufacturing overage excluded |
 | Agent pieces | 24 | four identical markers per faction, two deployed at setup |
 | Facility pieces | 24 | four per faction |
 | Generator pieces | 6 | one per faction; Energy location determines source |

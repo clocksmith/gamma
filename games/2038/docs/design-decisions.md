@@ -64,7 +64,7 @@ and presentation changes, not a balance promotion.
 ## One ruleset — 2026-09-05
 
 The user selected removal of the alternate play layer. The game now uses a
-fixed map, local Power, sixteen Headlines, and three player-aid panels.
+fixed map, local Power, twenty-four Headlines, and three player-aid panels.
 Mode selection, extra infrastructure components, market requests, map ballots,
 and the supplemental Headline procedures are removed from authored sources,
 runtime, and generated references. Retired selectors fail before play begins.
@@ -837,12 +837,49 @@ computing, and a concealed conflict between autonomous systems using human
 intermediaries. `world.md` now carries that progression through the four Eras
 and into selected existing component copy. Entanglement Custody moves from
 research backlog to lore-only canon; no dedicated quantum mechanic is claimed.
-The canon still contains 51 scenarios and 54 component bindings: 12 lore-only
-scenarios and 17 deferred or research-backlog scenarios.
+At the end of that lore-only pass, the canon contained 51 scenarios and 54
+component bindings: 12 lore-only and 17 deferred or research-backlog scenarios.
 
-The 24-Headline proposal remains authored design intent in the internal guide.
-This lore pass preserves the current deck and its effects. It introduces no
+That lore-only pass left the 24-Headline proposal unimplemented and preserved
+the sixteen-card deck and its effects. The subsequent decision below implements
+the separately requested expansion. It introduces no
 breakthrough track, automatic technological cascade, secret player, new action,
 or scoring exception. A mechanical adaptation needs its own complete component
 and execution change; prose does not silently grant an effect. All earlier
 immutable releases and the original supplied vignettes remain preserved.
+
+## Six Headlines per Era
+
+The user requested twenty-four Headlines, six per Era, while continuing to reveal
+three per Era. The eight additions adapt existing canon rather than inventing
+more scenarios. The deck now has 62 scenario-to-component bindings; seven
+scenarios remain lore-only and sixteen remain deferred or research backlog.
+Original vignettes and the original sixteen Headline effects remain intact.
+
+The implementation choices are provisional playtest rules: certification gates
+Customer acquisition on existing Trust and Capability; skilled work rewards
+dispersed presence; the water bridge requires at least two paid contributions;
+cognitive leasing spends Trust for Compute; a human signature sponsors a rival's
+Scrutiny removal; an analog retreat sacrifices a Customer; bodily hosting scales
+Compute with deployed Agents; creditor permission funds a rival in exchange for
+immediate reassignment. Exact effects belong in components/headlines.json.
+
+Water-bridge contributions are refunded if the collective condition fails.
+Limb Liquidity requires the recipient's consent before either payment or movement;
+it grants no Action, visit, or Trade benefit. All Headline choices finish in
+Initiative order before selection. No permanent permission, debt, extra track,
+or breakthrough mechanism is created. These interpretations implement the requested
+card expansion; they have no human balance or learning evidence yet.
+
+Affected surfaces: the component deck and lore bindings, selected-rules engine,
+shared browser decision stream, generated cards and references, scenario ledger,
+physical inventory, gallery counts, and regression contracts. Setup still uses
+four Era packets and twelve reveals. The 114 standard cards plus six foldouts
+total 120 printed pieces; earlier manufacturing arithmetic and sixteen-card
+studies remain historical evidence, not qualification of the expanded deck.
+
+Acceptance checks cover consent and refusal, contributions and refunds, normal
+Customer requirements, resource caps, spent Trust awards, Agent presence, and
+unchanged action usage. A seeded game completes with three reveals per Era.
+No simulation result is a balance claim. Human review must still establish
+whether each new effect is understandable and worth its additional reading.

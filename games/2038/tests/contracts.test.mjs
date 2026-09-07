@@ -80,7 +80,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   ]) {
     assert.ok(!manufacturing.includes(staleClaim), `manufacturing retires ${staleClaim}`);
   }
-  assert.match(manufacturing, /106 standard cards plus 6 foldouts/);
+  assert.match(manufacturing, /114 standard cards plus 6 foldouts/);
 
   assert.match(manufacturing, /Three Power contracts remain in the rules without separate cards/);
 
@@ -216,7 +216,7 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   assert.equal(eraLedger.scenarios.length, 51);
   assert.equal(
     eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
-    54
+    62
   );
   assert.match(bible, /Bankruptcy Data Estates/);
   const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
@@ -270,7 +270,7 @@ test("selected deck contracts have exact physical counts", async () => {
         (headline) => headline.round === era && !headline.requiredRuleModules?.length
       ).length
     ),
-    [5, 4, 3, 4]
+    [6, 6, 6, 6]
   );
   const defaultStandardCards =
     config.playerSupply.coreActionCards * factions.factions.length +
@@ -279,8 +279,8 @@ test("selected deck contracts have exact physical counts", async () => {
     mandates.mandates.length +
     trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  assert.equal(defaultStandardCards, 106);
-  assert.equal(defaultPrintedPieces, 112);
+  assert.equal(defaultStandardCards, 114);
+  assert.equal(defaultPrintedPieces, 120);
   assert.deepEqual(
     config.powerSources.filter((source) => source.id !== "fusion_demonstrator").map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -462,9 +462,9 @@ test("headline and board boundaries remain explicit", async () => {
   const config = await readJson("dist/runtime/game-config.json");
   const headlines = await readJson("dist/runtime/headlines.json");
 
-  assert.equal(headlines.headlines.length, 16);
+  assert.equal(headlines.headlines.length, 24);
   for (const round of [1, 2, 3, 4]) {
-    assert.equal(headlines.headlines.filter((headline) => headline.round === round).length, [5, 4, 3, 4][round - 1]);
+    assert.equal(headlines.headlines.filter((headline) => headline.round === round).length, [6, 6, 6, 6][round - 1]);
   }
   const expandedTiles = config.board.tiles.reduce((sum, tile) => sum + tile.count, 0);
   assert.equal(config.board.selectedTileCount, 19);
@@ -528,7 +528,7 @@ test("headline and board boundaries remain explicit", async () => {
   assert.doesNotMatch(blogPost.text, /claim strength/);
 });
 
-test("Headline deck contains the sixteen selected procedures", async () => {
+test("Headline deck preserves the original sixteen procedures", async () => {
   const { headlines, resolutionContract } = await readJson("dist/runtime/headlines.json");
   const ids = new Set(headlines.map((headline) => headline.id));
   const anchors = [
@@ -795,11 +795,11 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8")
   ]);
 
-  assert.equal(headlines.length, 16);
+  assert.equal(headlines.length, 24);
   for (const era of [1, 2, 3, 4]) {
     assert.equal(
       headlines.filter((headline) => headline.round === era).length,
-      [5, 4, 3, 4][era - 1],
+      [6, 6, 6, 6][era - 1],
       `Era ${era} has its selected Headlines`
     );
     assert.equal(

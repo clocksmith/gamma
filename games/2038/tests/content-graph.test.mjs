@@ -335,7 +335,12 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
   for (const [file, collection] of [["factions.json", "factions"], ["headlines.json", "headlines"], ["reference-cards.json", "eraCards"]]) {
     const current = await readJson(`components/${file}`);
     const original = previous.contentGraph[`components/${file}`];
-    assert.deepEqual(current[collection].map(row => row.id), original[collection].map(row => row.id));
+    const originalIds = original[collection].map(row => row.id);
+    const currentIds = current[collection].map(row => row.id);
+    if (collection === "headlines") {
+      assert.deepEqual(currentIds.filter(id => originalIds.includes(id)), originalIds, "original deck identities and relative order remain");
+      assert.equal(currentIds.length - originalIds.length, 8, "eight separately authorized adaptations extend the deck");
+    } else assert.deepEqual(currentIds, originalIds);
   }
   const currentWorld = await readJson("dist/runtime/world-copy.json");
   const originalWorld = previous.contentGraph["components/world.json"];

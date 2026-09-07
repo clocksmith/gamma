@@ -320,7 +320,9 @@ export async function validateEraSituationLedger(ledger) {
           !((revision?.decisionId === "user-selected-full-simplification" &&
             revision?.record === "docs/design-decisions.md#full-simplification-candidate") ||
            (revision?.decisionId === "user-selected-three-cuts" &&
-            revision?.record === "docs/design-decisions.md#three-cuts-candidate"))) {
+            revision?.record === "docs/design-decisions.md#three-cuts-candidate") ||
+           (revision?.decisionId === "six-headlines-per-era" &&
+            revision?.record === "docs/design-decisions.md#six-headlines-per-era"))) {
         throw new Error(`Adopted scenario lacks an authorized mechanic revision: ${scenario.id}`);
       }
     }

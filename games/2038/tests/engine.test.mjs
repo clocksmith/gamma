@@ -45,8 +45,8 @@ test("game setup rejects obsolete rules selectors", async () => {
 
 test("one Headline deck supplies three draws in every Era", async () => {
  const [, , headlines]=await load();
- assert.deepEqual([1,2,3,4].map(round=>availableHeadlines(headlines,round).length),[5,4,3,4]);
- assert.equal(new Set(headlines.headlines.map(card=>card.id)).size,16);
+ assert.deepEqual([1,2,3,4].map(round=>availableHeadlines(headlines,round).length),[6,6,6,6]);
+ assert.equal(new Set(headlines.headlines.map(card=>card.id)).size,24);
  assert.ok(headlines.headlines.every(card=>!('requiredRuleModules' in card)&&!('profileText' in card)));
 });
 

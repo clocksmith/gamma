@@ -311,6 +311,18 @@ ${content.headlines.byId.professional_exam_sweep.newswire}
 
 > ${content.headlines.byId.professional_exam_sweep.quote}
 
+### ${content.headlines.byId.human_original_guarantee.name}
+
+**${content.headlines.byId.human_original_guarantee.resolutionType}**
+
+**Duration:** ${content.headlines.byId.human_original_guarantee.duration|label:terms.durations}
+
+${content.headlines.byId.human_original_guarantee.newswire}
+
+**Rules:** ${content.headlines.byId.human_original_guarantee.text}
+
+> ${content.headlines.byId.human_original_guarantee.quote}
+
 ### ${content.headlines.byId.humanoid_factory_gate.name}
 
 **${content.headlines.byId.humanoid_factory_gate.resolutionType}**
@@ -359,6 +371,30 @@ ${content.headlines.byId.emergency_power_authority.newswire}
 
 > ${content.headlines.byId.emergency_power_authority.quote}
 
+### ${content.headlines.byId.last_plumber_boom.name}
+
+**${content.headlines.byId.last_plumber_boom.resolutionType}**
+
+**Duration:** ${content.headlines.byId.last_plumber_boom.duration|label:terms.durations}
+
+${content.headlines.byId.last_plumber_boom.newswire}
+
+**Rules:** ${content.headlines.byId.last_plumber_boom.text}
+
+> ${content.headlines.byId.last_plumber_boom.quote}
+
+### ${content.headlines.byId.wartime_water_bridge.name}
+
+**${content.headlines.byId.wartime_water_bridge.resolutionType}**
+
+**Duration:** ${content.headlines.byId.wartime_water_bridge.duration|label:terms.durations}
+
+${content.headlines.byId.wartime_water_bridge.newswire}
+
+**Rules:** ${content.headlines.byId.wartime_water_bridge.text}
+
+> ${content.headlines.byId.wartime_water_bridge.quote}
+
 ### ${content.headlines.byId.ai_written_law.name}
 
 **${content.headlines.byId.ai_written_law.resolutionType}**
@@ -395,6 +431,42 @@ ${content.headlines.byId.weights_on_internet.newswire}
 **Rules:** ${content.headlines.byId.weights_on_internet.text}
 
 > ${content.headlines.byId.weights_on_internet.quote}
+
+### ${content.headlines.byId.cognitive_donor_clinics.name}
+
+**${content.headlines.byId.cognitive_donor_clinics.resolutionType}**
+
+**Duration:** ${content.headlines.byId.cognitive_donor_clinics.duration|label:terms.durations}
+
+${content.headlines.byId.cognitive_donor_clinics.newswire}
+
+**Rules:** ${content.headlines.byId.cognitive_donor_clinics.text}
+
+> ${content.headlines.byId.cognitive_donor_clinics.quote}
+
+### ${content.headlines.byId.human_signature.name}
+
+**${content.headlines.byId.human_signature.resolutionType}**
+
+**Duration:** ${content.headlines.byId.human_signature.duration|label:terms.durations}
+
+${content.headlines.byId.human_signature.newswire}
+
+**Rules:** ${content.headlines.byId.human_signature.text}
+
+> ${content.headlines.byId.human_signature.quote}
+
+### ${content.headlines.byId.analog_havens.name}
+
+**${content.headlines.byId.analog_havens.resolutionType}**
+
+**Duration:** ${content.headlines.byId.analog_havens.duration|label:terms.durations}
+
+${content.headlines.byId.analog_havens.newswire}
+
+**Rules:** ${content.headlines.byId.analog_havens.text}
+
+> ${content.headlines.byId.analog_havens.quote}
 
 ### ${content.headlines.byId.autonomous_corporation.name}
 
@@ -443,6 +515,30 @@ ${content.headlines.byId.agi_blog_post.newswire}
 **Rules:** ${content.headlines.byId.agi_blog_post.text}
 
 > ${content.headlines.byId.agi_blog_post.quote}
+
+### ${content.headlines.byId.biological_colocation.name}
+
+**${content.headlines.byId.biological_colocation.resolutionType}**
+
+**Duration:** ${content.headlines.byId.biological_colocation.duration|label:terms.durations}
+
+${content.headlines.byId.biological_colocation.newswire}
+
+**Rules:** ${content.headlines.byId.biological_colocation.text}
+
+> ${content.headlines.byId.biological_colocation.quote}
+
+### ${content.headlines.byId.limb_liquidity.name}
+
+**${content.headlines.byId.limb_liquidity.resolutionType}**
+
+**Duration:** ${content.headlines.byId.limb_liquidity.duration|label:terms.durations}
+
+${content.headlines.byId.limb_liquidity.newswire}
+
+**Rules:** ${content.headlines.byId.limb_liquidity.text}
+
+> ${content.headlines.byId.limb_liquidity.quote}
 
 ## Mandate cards
 
