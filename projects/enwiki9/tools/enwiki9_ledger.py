@@ -299,19 +299,23 @@ class Records:
 def live_job(job, root=ROOT):
     try:
         from . import enwiki9_worker_identity as identity
+        from . import enwiki9_lab as lab
     except ImportError:
         import enwiki9_worker_identity as identity
-    if isinstance(job.get("execution_resources"), dict):
-        try:
-            from . import enwiki9_lab as lab
-        except ImportError:
-            import enwiki9_lab as lab
+        import enwiki9_lab as lab
+    if root.resolve() == lab.ROOT.resolve():
+        state = lab.running_job_liveness(job)
+    elif isinstance(job.get("execution_resources"), dict):
         matched = lab.worker_pid_matches_job(job)
+        state = "live" if matched else "unknown"
     else:
         matched = identity.worker_pid_matches_job(root, root / "tools/candidate_triage.py", job)
-    return {"state": "live" if matched else "unknown", "pid": job.get("worker_pid"),
-            "observed_at": utc(), "detail": "Canonical worker identity matches on this host"
-            if matched else "Recorded running; exact worker identity was not verified on this host"}
+        state = "live" if matched else "unknown"
+    details = {"live": "Canonical worker identity matches on this host",
+               "terminal": "Canonical terminal counterpart and exact recorded reflection validate; original running record preserved",
+               "unknown": "Recorded running; exact worker identity and terminal reflection were not verified on this host"}
+    return {"state": state, "pid": job.get("worker_pid"),
+            "observed_at": utc(), "detail": details[state]}
 
 
 def metrics(data, definitions=None):
@@ -741,7 +745,7 @@ def build(root):
         "current_algorithms": sum(a["browsing_state"] == "current" for a in algorithms.values()),
         "historical_algorithms": sum(a["browsing_state"] == "historical" for a in algorithms.values()),
         "running": sum(r["state"] == "running" and r["liveness"].get("state") == "live" for r in runs),
-        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") != "live" for r in runs),
+        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") == "unknown" for r in runs),
         "jobs": dict(Counter(d.get("state") for _, d in jobs)), "read_issues": len(records.issues)}
     data["reviews"] = review_backlog(data)
     return data
@@ -851,7 +855,7 @@ def record_query(data, args):
 
 
 def start_payload(data, root):
-    """Orient an agent without ranking, hashing evidence, or launching work."""
+    """Orient an agent using canonical liveness without authorizing work."""
     records = Records(root)
     objective = records.read(data["objective"]["path"])
     corpus_ref = text(objective.get("corpus", {}).get("repositoryPath")).removeprefix("projects/enwiki9/")
@@ -879,8 +883,9 @@ def start_payload(data, root):
     status = records.read("docs/status_receipt.json")
     operator = status.get("operator_summary") or {}
     old_active = (status.get("gate_liveness") or {}).get("is_live")
-    if running and (old_active is False or operator.get("safe_to_launch_candidate_gate") is True):
-        issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while running jobs exist; inspect its timestamp and the existing observer before scheduling"})
+    if any(r["liveness"].get("state", "unknown") != "terminal" for r in running) and (
+            old_active is False or operator.get("safe_to_launch_candidate_gate") is True):
+        issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while live or unverified jobs exist; inspect its timestamp and the existing observer before scheduling"})
     keys = ("id", "candidate_id", "state", "purpose", "scope", "source", "liveness", "progress",
             "execution_mode", "resource_budget", "timing_authority", "timeline")
     return {"schema": "enwiki9_agent_start_v1", "generated_at": data["generated_at"], "host": data["host"],

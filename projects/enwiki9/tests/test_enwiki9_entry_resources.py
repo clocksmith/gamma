@@ -1,6 +1,7 @@
 """Resource diagnostics must not invent capacity, completion, or launch authority."""
 
 import copy
+from contextlib import contextmanager, ExitStack
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -231,6 +232,121 @@ class ResourceTests(unittest.TestCase):
             self.assertFalse(report["queue"]["launch_authorized"])
             self.assertFalse(report["resources"]["launch_authorized"])
             self.assertEqual(path.read_bytes(), original)
+
+
+class LivenessTests(unittest.TestCase):
+    @contextmanager
+    def terminal_fixture(self):
+        import enwiki9_lab as lab
+        reflections = lab.enwiki9_reflections
+        with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+            root = Path(directory)
+            stack.enter_context(patch.object(lab, "ROOT", root))
+            stack.enter_context(patch.object(lab, "PROGRAMS", root / "programs"))
+            stack.enter_context(patch.object(reflections, "ROOT", root))
+            stack.enter_context(patch.object(reflections, "ADAPTIVE", root / "operations/adaptive"))
+            stack.enter_context(patch.object(lab, "worker_pid_matches_job", return_value=False))
+            # The real terminal/reflection identity and digest checks run; this
+            # isolated fixture omits unrelated scientific schema requirements.
+            validation = stack.enter_context(patch.object(reflections.research_contracts, "validate_artifact"))
+            def write(name, value):
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(json.dumps(value))
+                return path
+            job = {"job_id": "source", "candidate_id": "example", "state": "running",
+                   "candidate_tree_sha256": "sha256:" + "a" * 64,
+                   "candidate_revision": {"path": "revision.json", "sha256": "sha256:" + "b" * 64},
+                   "experiment": {"path": "experiment.json", "sha256": "sha256:" + "c" * 64}}
+            running = write("operations/adaptive/running/source.json", job)
+            terminal = write("operations/adaptive/cancelled/source.json", {**job, "state": "cancelled"})
+            reflection = write("operations/adaptive/reflections/source.json", {
+                "candidateId": "example", "job": reflections.reference(terminal),
+                "validity": {"valid": False, "classification": "incomplete-evidence"},
+                "decision": {"verdict": "hold"}})
+            metadata = write("programs/example/meta.json", {
+                "id": "example", "measured": {"reflections": {"source": reflections.reference(reflection)}}})
+            write("docs/status_receipt.json", {
+                "gate_liveness": {"is_live": False},
+                "operator_summary": {"safe_to_launch_candidate_gate": True}})
+            yield lab, root, job, running, terminal, reflection, metadata, validation
+
+    def test_entry_reuses_exact_terminal_reflection_without_rewriting_running_record(self):
+        with self.terminal_fixture() as (_, root, job, running, terminal, reflection, metadata, validation):
+            originals = {path: path.read_bytes() for path in (running, terminal, reflection, metadata)}
+            with patch.object(ledger, "resource_snapshot", return_value={"launch_authorized": False}):
+                entry = ledger.start_payload(ledger.build(root), root)
+            row, = entry["running_jobs"]
+            self.assertEqual(row["state"], "running")
+            self.assertEqual(row["liveness"]["state"], "terminal")
+            self.assertIn("exact recorded reflection", row["liveness"]["detail"])
+            self.assertEqual(entry["records"]["running"], 0)
+            self.assertEqual(entry["records"]["unverified_running"], 0)
+            self.assertEqual(entry["records"]["jobs"]["running"], 1)
+            self.assertFalse(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
+            self.assertFalse(entry["queue"]["launch_authorized"])
+            self.assertEqual({path: path.read_bytes() for path in originals}, originals)
+            validation.assert_called_once_with(reflection, verify_files=True)
+
+    def test_missing_tampered_ambiguous_or_invalid_terminal_evidence_stays_unknown(self):
+        for failure in ("missing", "reflection_changed", "terminal_changed", "duplicate", "revision_changed", "schema_rejected"):
+            with self.subTest(failure=failure), self.terminal_fixture() as (_, root, job, _, terminal, reflection, _, validation):
+                if failure == "missing":
+                    reflection.unlink()
+                elif failure == "reflection_changed":
+                    reflection.write_bytes(reflection.read_bytes() + b"\n")
+                elif failure == "terminal_changed":
+                    terminal.write_bytes(terminal.read_bytes() + b"\n")
+                elif failure == "duplicate":
+                    other = root / "operations/adaptive/completed/source.json"
+                    other.parent.mkdir(parents=True)
+                    other.write_text(json.dumps({**job, "state": "completed"}))
+                elif failure == "revision_changed":
+                    terminal.write_text(json.dumps({**job, "state": "cancelled", "candidate_tree_sha256": "different"}))
+                else:
+                    validation.side_effect = ValueError("invalid reflection schema")
+                self.assertEqual(ledger.live_job(job, root)["state"], "unknown")
+                with patch.object(ledger, "resource_snapshot", return_value={"launch_authorized": False}):
+                    entry = ledger.start_payload(ledger.build(root), root)
+                self.assertEqual(entry["records"]["running"], 0)
+                self.assertEqual(entry["records"]["unverified_running"], 1)
+                self.assertTrue(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
+                self.assertFalse(entry["queue"]["launch_authorized"])
+
+    def test_exact_live_worker_takes_precedence_over_terminal_fallback(self):
+        with self.terminal_fixture() as (lab, root, job, _, _, reflection, _, validation):
+            reflection.unlink()
+            with patch.object(lab, "worker_pid_matches_job", return_value=True):
+                self.assertEqual(ledger.live_job(job, root)["state"], "live")
+                with patch.object(ledger, "resource_snapshot", return_value={"launch_authorized": False}):
+                    entry = ledger.start_payload(ledger.build(root), root)
+                self.assertEqual(entry["records"]["running"], 1)
+                self.assertEqual(entry["records"]["unverified_running"], 0)
+                self.assertTrue(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
+                self.assertFalse(entry["queue"]["launch_authorized"])
+            validation.assert_not_called()
+
+    def test_foreign_root_cannot_borrow_canonical_terminal_records(self):
+        import enwiki9_lab as lab
+        import enwiki9_worker_identity as identity
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            job = {"job_id": "source", "candidate_id": "example"}
+            with patch.object(lab, "running_job_liveness", side_effect=AssertionError("foreign root used canonical records")), \
+                    patch.object(identity, "worker_pid_matches_job", return_value=False) as matches:
+                self.assertEqual(ledger.live_job(job, root)["state"], "unknown")
+            matches.assert_called_once_with(root, root / "tools/candidate_triage.py", job)
+
+    def test_enveloped_foreign_view_preserves_exact_guard_identity_check(self):
+        import enwiki9_lab as lab
+        import enwiki9_worker_identity as identity
+        with tempfile.TemporaryDirectory() as directory:
+            job = {"job_id": "guarded", "candidate_id": "example", "execution_resources": {}}
+            with patch.object(lab, "running_job_liveness", side_effect=AssertionError("foreign canonical lookup")), \
+                    patch.object(lab, "worker_pid_matches_job", return_value=True) as matches, \
+                    patch.object(identity, "worker_pid_matches_job", side_effect=AssertionError("legacy matcher")):
+                self.assertEqual(ledger.live_job(job, Path(directory))["state"], "live")
+            matches.assert_called_once_with(job)
 
 
 if __name__ == "__main__":
