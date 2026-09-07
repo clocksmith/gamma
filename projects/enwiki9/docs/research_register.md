@@ -28,6 +28,15 @@ Inactive treatment or required controls is inconclusive, not a causal rejection.
 No confirmation, larger gate, standalone score or HORIZON transition follows
 from synthetic correctness. The sole HORIZON observer and other lanes remain owned.
 
+The [gate receipt](../operations/evidence/20260907_fx2_causal_field_wrt_gate_unit.json)
+retains 20 passing runner tests and 22 independent review tests, including the
+actual canonical timer semantics. The superseded runner is archived with its
+receipts; the [v2 entry point](../tools/fx2_causal_field_wrt_gate_v2.py) verifies
+the live outer controller before corpus buffers. The [frozen experiment](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json)
+binds 205 inputs and 134 outputs. ROOT owns job `20260907T130508Z_c3d4b66329`,
+held pending publication and fresh reconciliation of the completed HORIZON
+observer versus its original running record. No corpus result is yet asserted.
+
 ## 2026-09-06 - Earlier-field conditioning passes the synthetic codec gate
 
 ROOT coordinated implementation and independent decoder review of
