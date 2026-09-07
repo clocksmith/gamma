@@ -1,0 +1,1719 @@
+{
+  "accounting": {
+    "archive_sizes_include_full_prefix": true,
+    "complete_package_bytes": null,
+    "corpus_bytes": 0,
+    "external_parent_q16_dependency": true,
+    "full_corpus_score_bytes": null,
+    "historical_metadata_scope": "The retained plan review inspects historical native archive/trace metadata and pinned coder source only; historical sizes are neither new measurements nor score credit.",
+    "maximum_raw_fixture_bytes": 8192,
+    "native_model_execution": false,
+    "native_prefix_bytes": 46,
+    "objective_credit_bytes": 0,
+    "prefix_components_bytes": {
+      "GFV1": 4,
+      "literal_type_and_raw_length": 5,
+      "modeled_length_and_trained_flag": 5,
+      "vocabulary_bitmap": 32
+    },
+    "q16_scope": "Synthetic replay parent probabilities are explicit uncompressed external input, bound per fixture; source, dictionary and options remain additional dependencies.",
+    "standalone_decoder": false,
+    "synthetic_only": true,
+    "timing_qualification": false,
+    "timing_scope": "Shared-host synthetic diagnostics only."
+  },
+  "author_tests": {
+    "suites": [
+      {
+        "log": {
+          "bytes": 2083,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/coder/regression.log",
+          "sha256": "81e2c96217f495930a59b3a865160b612b7ac510e5e8e874e5c4033989528e8d"
+        },
+        "source": {
+          "bytes": 16666,
+          "path": "tests/test_causal_field_parent_coder_v1.py",
+          "sha256": "0604ba6a648fc7e3bc9d3605cf5876878c7a635bf68988b8df2f6896562a8021"
+        },
+        "status": "passed",
+        "suite": "parent_coder",
+        "tests": 14
+      },
+      {
+        "log": {
+          "bytes": 2341,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/adapter/regression.log",
+          "sha256": "59ad97119a44d0632e7dcdfb6aa7df2079f88a9f84a026d4ca5733df7a0c4773"
+        },
+        "source": {
+          "bytes": 17375,
+          "path": "tests/test_causal_field_wrt_adapter_v1.py",
+          "sha256": "430da8bf7d3481f385ce768ae8569763da9965b5d3f864ad51435ecd70c65d2c"
+        },
+        "status": "passed",
+        "suite": "wrt_adapter",
+        "tests": 16
+      },
+      {
+        "log": {
+          "bytes": 1243,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/core/attempt_01/regression.log",
+          "sha256": "7271e3be5b7ebcb2dc4063fc214b1ca77382fa762d976c8ba3e2b2926476cf0a"
+        },
+        "source": {
+          "bytes": 6405,
+          "path": "tests/test_fx2_causal_field_replay_v1.py",
+          "sha256": "52d450ce3af740e60068cfb192ea3794cdd29525c1ea183b2ed131485df606fc"
+        },
+        "status": "passed",
+        "suite": "replay_core",
+        "tests": 7
+      }
+    ],
+    "unique_tests": 37
+  },
+  "causality_and_bounds": [
+    "The modeled mode byte 7 is coded but not interpreted as an uppercase control.",
+    "Raw fields start only after an event whose final raw byte is equals; learned donor fields end only when the delimiter is the first raw byte of an event.",
+    "Donor entry capitalization state must match; zero-emission controls inside the value are retained as modeled bytes.",
+    "Donors commit only after completed valid flat invocations; future suffixes, duplicate keys and nesting cannot retroactively change prefix predictions.",
+    "FIFO128, raw value/name/key/field/invocation caps and modeled donor cap256 remain bounded.",
+    "The exact donor/parent posterior floors once and clamps Q16; parent mass updates with the unmixed parent truth probability; mismatch kills the donor.",
+    "Canonical native re-encoding plus raw length/hash enforces finite decoder acceptance, including native zero extension.",
+    "Every modeled-byte state chain and final adapter/mixture state matches within each encode/decode/repeat arm."
+  ],
+  "cli_validation": {
+    "author_aggregate": {
+      "child_cpu_seconds": 6.927482,
+      "coordinator_cpu_seconds": 0.103791034,
+      "max_child_rss_kib": 33596,
+      "resources": {
+        "address_space_bytes": 536870912,
+        "cpu_seconds": 60,
+        "cpus": [
+          4
+        ],
+        "scratch_bytes": 33554432,
+        "threads": 1,
+        "wall_seconds": 90
+      },
+      "wall_seconds": 7.327073564054444
+    },
+    "author_phases": 21,
+    "author_receipt": {
+      "bytes": 105113,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/cli/receipt.json",
+      "sha256": "33c63b233ca8e2f3908c59e8b87699835183fa3bc9b7168cd8c98c6e671ceef5"
+    },
+    "fixtures": [
+      {
+        "P_K_archive_identity": true,
+        "P_K_scope_note": null,
+        "arms": {
+          "K": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 254,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.archive",
+              "sha256": "aef6401ae5290d4da0785de10f25d385b7ae8ead39c26272f65ce5f6e53c638a"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2547,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.encode.stdout.json",
+              "sha256": "ec5386ac463d6226519fbba4a1e4e86c42759952824dc47ad1225cba73942400"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 208,
+            "synchronization_sha256": "32d554d2e5c987095793551ad7f0048cf7f7390acbfe619c3386ccb930cdc853"
+          },
+          "P": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 254,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.archive",
+              "sha256": "aef6401ae5290d4da0785de10f25d385b7ae8ead39c26272f65ce5f6e53c638a"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2546,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.encode.stdout.json",
+              "sha256": "82c958b513b142896d3ea6c918e61233abc0f827f8d21a313a883c4381e46bc2"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 208,
+            "synchronization_sha256": "11f850e47da45f05efd9d0061f43d0afe9b42c2785e962cc32ed0f789d8aae56"
+          },
+          "R": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 255,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.archive",
+              "sha256": "67f534b683dfb1669ec3414af03d596a6af43ecb71f31c6a75c1a2710e8b0bf9"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2541,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.encode.stdout.json",
+              "sha256": "6736014d2ba1395cd6361fa5fe69b97131514a891ee5ba23f5b8c915f249e698"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 209,
+            "synchronization_sha256": "027c76c4617e9da70cc672391c84bb77fcf0f5e50d78fe56aade059b2673b103"
+          },
+          "S": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 254,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.archive",
+              "sha256": "4ff4f281c73e3a1f7ab52de0dcb76d9c9bfbd431b9cae31c151c425c09b5ab09"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2549,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.encode.stdout.json",
+              "sha256": "c023b4e594587b201a6662b51c7ed4644fb349c303769b4f90d662651519148b"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 208,
+            "synchronization_sha256": "8d6371fb521a27ab27b287d6dd112aadc192d3706f0e3a6c37d8f22b0b1eeb23"
+          },
+          "T": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 198,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.archive",
+              "sha256": "52ccf3d03b3fc8a8bbef4dfa5663798e0793e0ccad069ae6d69f5950efab91eb"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2541,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.encode.stdout.json",
+              "sha256": "e9827761882a71c832438ebf61cab5e3dba08f354696e512c94b3f32ce3ec872"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 152,
+            "synchronization_sha256": "694659540194f28f0ca5f8abee78ee3444000a32e221a62fce4993bd57dc0158"
+          }
+        },
+        "dictionary": {
+          "bytes": 7,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/toy.dic",
+          "sha256": "2a37b3fecb9e5b1ea21167eae81c526f9a1449a226ccb1ce87b83e068ae79f23"
+        },
+        "external_q16": {
+          "bytes": 3168,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/parent.q16",
+          "sha256": "db44a38d836be7bef17c5c16a591a02bec3f68593e44d0f5e59eae659c609858"
+        },
+        "modeled": {
+          "bytes": 198,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/input.modeled",
+          "sha256": "40673f1825ee473416c3ac4a9fcdc1fc42dad895e3f6a045e0ecb5a90f7fb7a9"
+        },
+        "name": "author_small",
+        "prefix": {
+          "bytes": 46,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/prefix.bin",
+          "sha256": "0091b21c4aee767a403dfe34ff30cb037b0ebfd016b09c4e4c2efe0582b13ac3"
+        },
+        "raw": {
+          "bytes": 197,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/input.raw",
+          "sha256": "5d8e0f4b915f8bf03d0fae5989ddcff111ea5f4befe3337f0257f178302d34a1"
+        },
+        "synthetic_only": true
+      },
+      {
+        "P_K_archive_identity": null,
+        "P_K_scope_note": "K was not run on this fixture.",
+        "arms": {
+          "P": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 8754,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.archive",
+              "sha256": "8ea4b4b174570237ce84f99299e0d892530f4bd67f64ac54349f0769aec12947"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2548,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.encode.stdout.json",
+              "sha256": "90ab95e86d92a1a8cfbdb68cdb3c82472355161a7ffccca72d2a28d97e5d1922"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 8708,
+            "synchronization_sha256": "696fcea3ff32d3c0ce0f7b6063d572ab72bff60336d6e1f607f55e155a96a584"
+          },
+          "T": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 1843,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.archive",
+              "sha256": "c35911133b896ae821aeca959f0c36869320502d85ee1a9b142805e90faa8cd0"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2568,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.encode.stdout.json",
+              "sha256": "ab9a3e3d2ff3c0f448306a5d02b1f6bb65857ccdfceaefc8370543efe8d287d1"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 1797,
+            "synchronization_sha256": "d9441ef65b4977f9ff576c858b39d22c599b3ae53bab3c1ebe6e3b8a74497284"
+          }
+        },
+        "dictionary": {
+          "bytes": 7,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/toy.dic",
+          "sha256": "2a37b3fecb9e5b1ea21167eae81c526f9a1449a226ccb1ce87b83e068ae79f23"
+        },
+        "external_q16": {
+          "bytes": 131088,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/parent.q16",
+          "sha256": "3a6b651bef2494f292cc2a2da8f09f778e8fb972e64b07d9f514f2b192e58892"
+        },
+        "modeled": {
+          "bytes": 8193,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/input.modeled",
+          "sha256": "e5277ba6078ee001bc08aedaa6763d38f77083073c0bd45241b24414d615b3ad"
+        },
+        "name": "author_maximum8192",
+        "prefix": {
+          "bytes": 46,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/prefix.bin",
+          "sha256": "33835b4991a26ad519405f23cc05673481cf6fc5b733d47784e9574941bb666b"
+        },
+        "raw": {
+          "bytes": 8192,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/input.raw",
+          "sha256": "f2c778fc9ed6494cbfd6b78c3d76ea3c3fdb93124660affd4bd62127d898b24f"
+        },
+        "synthetic_only": true
+      },
+      {
+        "P_K_archive_identity": true,
+        "arms": {
+          "K": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 218,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/K-encode.bin",
+              "sha256": "8bd20e28d210121a95783e2c406760c67c54b89e5f08b918462c4cca96e9e831"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2570,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/K-encode.stdout",
+              "sha256": "34793ea8c598600e428d3cd2342b534ca02d6c4aebece33e4dc2adcd04dfb378"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 172,
+            "synchronization_sha256": "e6a8b7eb3a2225a67535df370d3e1e5259e17fa796ddb6d8893bdde985d8b0b4"
+          },
+          "P": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 218,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/P-encode.bin",
+              "sha256": "8bd20e28d210121a95783e2c406760c67c54b89e5f08b918462c4cca96e9e831"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2568,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/P-encode.stdout",
+              "sha256": "0bd1f542a961621c28ee0fc187e97648be07b9c186009e1f13abc304f0bdcca3"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 172,
+            "synchronization_sha256": "c735ae515af148cf3a40df4f9aac44c68b6c76264abbbb9882fc460742675f00"
+          },
+          "R": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 218,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/R-encode.bin",
+              "sha256": "f9c0255ed37e5d89d11e3445e50307576b54923b43b0c0a36c06cd9ff94b2951"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2560,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/R-encode.stdout",
+              "sha256": "4cd76e59e5b8a857df67db9fe0090a7006cef2e05dc81ad116d9f4a41cd3a3b3"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 172,
+            "synchronization_sha256": "d6273dc8ecd19500a64982fafcfc437ad5d0ace80ba317184c97c8db1f0b9ded"
+          },
+          "S": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 218,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/S-encode.bin",
+              "sha256": "f9c0255ed37e5d89d11e3445e50307576b54923b43b0c0a36c06cd9ff94b2951"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2570,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/S-encode.stdout",
+              "sha256": "a3e82f2e8c2cfbbb833ec9ddfea0083aad93c84112a1bf38459994851ad4d467"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 172,
+            "synchronization_sha256": "9c8e9ae5dbf5b1eb527c3242128ff92639cd644899a30e0d064ad6eef2d0c4ec"
+          },
+          "T": {
+            "all_byte_state_chains_identical": true,
+            "archive": {
+              "bytes": 191,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/T-encode.bin",
+              "sha256": "dc1bb1eba22f8c202ea87bd2a77b4cf08bf9479a94b55f4fd1c52ccd4648c60a"
+            },
+            "deterministic_repeat": true,
+            "encode_report": {
+              "bytes": 2571,
+              "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/T-encode.stdout",
+              "sha256": "4b98d9044dc2c36f498c497f82f10e1482ea4acf7be76e28e0f9983c8456b8bd"
+            },
+            "exact_inverse": true,
+            "final_state_digests_identical": true,
+            "payload_bytes": 145,
+            "synchronization_sha256": "561affae0d80ae9356f9cfb41e300c08f1d83b74d3a350c8c6e690a6b7933964"
+          }
+        },
+        "dictionary": {
+          "bytes": 27443,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/dictionary.txt",
+          "sha256": "9ccfa81abcff6bef25e8de6334e2f985a413ca4e2664e1d208ed24beb233a7d1"
+        },
+        "external_q16": {
+          "bytes": 864,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/q16.bin",
+          "sha256": "2255a211908d4d067c2c885f94198e6bcd771bdbcc06c8aed64c39fdb4a9a3f1"
+        },
+        "modeled": {
+          "bytes": 54,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/modeled.bin",
+          "sha256": "eaf8c48bb907223d6e3025f5a3424ce732a6bd18d6eae458f02fcc90dd8be6fa"
+        },
+        "name": "reviewer_event_tokens",
+        "prefix_bytes": 46,
+        "raw": {
+          "bytes": 63,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/raw.bin",
+          "sha256": "f0e4011b1795d433884076ede4d2990a4eabdd83f761d5faf30c5d0a2fc8eafd"
+        },
+        "synthetic_only": true
+      }
+    ],
+    "independent_decoder_processes": 12,
+    "per_phase_resources": [
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.009009680999999999,
+        "codec_wall_seconds": 0.009602589998394251,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 955,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.encode.execution.json",
+          "sha256": "d292734c362507d449758927a1bd76bc7c2a5f09beb18e79071a0e67c4e7c801"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.010907,
+        "process_user_cpu_seconds": 0.04958,
+        "process_wall_seconds": 0.06425672001205385,
+        "report": {
+          "bytes": 2546,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.encode.stdout.json",
+          "sha256": "82c958b513b142896d3ea6c918e61233abc0f827f8d21a313a883c4381e46bc2"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.007999731999999996,
+        "codec_wall_seconds": 0.008679821155965328,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 960,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.decode.execution.json",
+          "sha256": "cc0ec3c3636c0951e1e7ef5e16a3614b7f7f341df63e144c397de4ff70686bd7"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.004965999999999998,
+        "process_user_cpu_seconds": 0.054629,
+        "process_wall_seconds": 0.06422403804026544,
+        "report": {
+          "bytes": 2546,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.decode.stdout.json",
+          "sha256": "91417a2a68767cb5d2ccdd36fa2141364e620d960777caa3fd59444960513f6e"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.007000023000000001,
+        "codec_wall_seconds": 0.007532407995313406,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 954,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.repeat.execution.json",
+          "sha256": "91fd136d5b24bff174e200ddaa7d1f4aaa27366258a113b3b0308893c5a5e54f"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.008006,
+        "process_user_cpu_seconds": 0.050037,
+        "process_wall_seconds": 0.0640948039945215,
+        "report": {
+          "bytes": 2546,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/P.repeat.stdout.json",
+          "sha256": "49b1e9f92e4850d1077b866943ff75e4db8f217707c1b36aed05444eb13f1e88"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.008000444000000002,
+        "codec_wall_seconds": 0.008921707049012184,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 979,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.encode.execution.json",
+          "sha256": "b073bc8a108e53400e0bf0d0ff3638653e7114bc31fcf2a27b1999713d7bcb8a"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.009072999999999998,
+        "process_user_cpu_seconds": 0.05241699999999999,
+        "process_wall_seconds": 0.06417391402646899,
+        "report": {
+          "bytes": 2547,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.encode.stdout.json",
+          "sha256": "ec5386ac463d6226519fbba4a1e4e86c42759952824dc47ad1225cba73942400"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.009999101000000003,
+        "codec_wall_seconds": 0.010518066119402647,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 972,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.decode.execution.json",
+          "sha256": "f87ab499e1692c3acc1b3dccf57a0d68ac1fbe1fc9afe26d5f026e5617385b8c"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.006081000000000003,
+        "process_user_cpu_seconds": 0.054732999999999976,
+        "process_wall_seconds": 0.06419961201027036,
+        "report": {
+          "bytes": 2547,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.decode.stdout.json",
+          "sha256": "c071e8c258068711decb4550e4f18335e9524c6798139f5cb8b4e195809952fd"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.008999923,
+        "codec_wall_seconds": 0.009051932021975517,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 966,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.repeat.execution.json",
+          "sha256": "b76f607023d1a2c4ad0e387ed431047a0c77a9412abd4b3fcab5b15820e914b4"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.005049999999999999,
+        "process_user_cpu_seconds": 0.054537,
+        "process_wall_seconds": 0.0642495050560683,
+        "report": {
+          "bytes": 2538,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/K.repeat.stdout.json",
+          "sha256": "0a3a489909dfe872e60cf0c85b2d79bd367f7d40d6de8d444a47bcdbd578db94"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.018999886,
+        "codec_wall_seconds": 0.01907923282124102,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 968,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.encode.execution.json",
+          "sha256": "a3f501db3562e609b1a9fae6ada56e73c4fe2ee902dd02ae02ed0898cf9235cb"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.008902,
+        "process_user_cpu_seconds": 0.061329999999999996,
+        "process_wall_seconds": 0.11430020816624165,
+        "report": {
+          "bytes": 2541,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.encode.stdout.json",
+          "sha256": "e9827761882a71c832438ebf61cab5e3dba08f354696e512c94b3f32ce3ec872"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.020962154999999996,
+        "codec_wall_seconds": 0.020553031004965305,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 948,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.decode.execution.json",
+          "sha256": "8420b85de800e361d4a3a2652875fe04696ba468899bd95cc34d372eb34d9e24"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.009957,
+        "process_user_cpu_seconds": 0.063724,
+        "process_wall_seconds": 0.11433828994631767,
+        "report": {
+          "bytes": 2551,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.decode.stdout.json",
+          "sha256": "5931c1fed81676c586f791c253890c1e727f04681e5f5fc45447375095c8706f"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.020999015000000003,
+        "codec_wall_seconds": 0.020638172049075365,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 979,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.repeat.execution.json",
+          "sha256": "86ccee363133c4f2204f824b9202ef6651229c67a1bc6e88879c894a45193da5"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.010953000000000004,
+        "process_user_cpu_seconds": 0.060736999999999985,
+        "process_wall_seconds": 0.11436013109050691,
+        "report": {
+          "bytes": 2551,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/T.repeat.stdout.json",
+          "sha256": "a3ab0ff5fa603aba76435f5cb8b848aaa2ac69f60b5ad9c6384bcc5a84718501"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.010000044,
+        "codec_wall_seconds": 0.009423734154552221,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 978,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.encode.execution.json",
+          "sha256": "55d5cca4da6d71362bdd214bb8c1a718c477ae582739d57e0aba42086d916f43"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.007963999999999999,
+        "process_user_cpu_seconds": 0.05176400000000003,
+        "process_wall_seconds": 0.0642761760391295,
+        "report": {
+          "bytes": 2541,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.encode.stdout.json",
+          "sha256": "6736014d2ba1395cd6361fa5fe69b97131514a891ee5ba23f5b8c915f249e698"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.010999902999999998,
+        "codec_wall_seconds": 0.010443113977089524,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 971,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.decode.execution.json",
+          "sha256": "8c5e223e0f40b39581818fc4025cc48149416e97e1dc180915348b9fabd4dd70"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.011928999999999995,
+        "process_user_cpu_seconds": 0.05069999999999997,
+        "process_wall_seconds": 0.06419414095580578,
+        "report": {
+          "bytes": 2550,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.decode.stdout.json",
+          "sha256": "ec05d30e7880d82a9066acae3a3b867944a73c11b86831d662df97fc97d4cd29"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.009999071000000005,
+        "codec_wall_seconds": 0.009436918189749122,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 978,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.repeat.execution.json",
+          "sha256": "095b887c4c7c79f52c123d4aab8e8976afdc75add518b2d5e57c24b3e13e3439"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.005904999999999994,
+        "process_user_cpu_seconds": 0.05412899999999998,
+        "process_wall_seconds": 0.06416125991381705,
+        "report": {
+          "bytes": 2550,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/R.repeat.stdout.json",
+          "sha256": "f974b8080c7efc5da8a3da87e7149b6ee9d008304519d520e930ebd9291e9932"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.009000112999999997,
+        "codec_wall_seconds": 0.009084433084353805,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 979,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.encode.execution.json",
+          "sha256": "e527201df44b36f1d64d06daef3d1cf596c6f6e8296ef045aad6ef669a5296de"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.006034999999999999,
+        "process_user_cpu_seconds": 0.05431000000000008,
+        "process_wall_seconds": 0.06411642488092184,
+        "report": {
+          "bytes": 2549,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.encode.stdout.json",
+          "sha256": "c023b4e594587b201a6662b51c7ed4644fb349c303769b4f90d662651519148b"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.010999503,
+        "codec_wall_seconds": 0.010630857897922397,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 971,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.decode.execution.json",
+          "sha256": "7af26e85ca32119df5373f41ab2f17453f26c006f0df149c9dff4978add24ecd"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.008165000000000006,
+        "process_user_cpu_seconds": 0.05409699999999995,
+        "process_wall_seconds": 0.06415594881400466,
+        "report": {
+          "bytes": 2540,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.decode.stdout.json",
+          "sha256": "24d82670a0e35e679b866df5189f0a65b903c09cc9272489ad9b9ae976b755a9"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.008999912999999998,
+        "codec_wall_seconds": 0.009057201910763979,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 978,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.repeat.execution.json",
+          "sha256": "dab4c17f1b37d1878f4c5597ca5e8cd8d7be27819ca929f5b58e9010672b23de"
+        },
+        "fixture": "small",
+        "owner": "author",
+        "peak_rss_kib": 26032,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.005996000000000001,
+        "process_user_cpu_seconds": 0.05396100000000004,
+        "process_wall_seconds": 0.06412210501730442,
+        "report": {
+          "bytes": 2549,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/small/S.repeat.stdout.json",
+          "sha256": "04998ae71bc27fc24f2c171133b2f34d30e720343dee66a4e1247b42bcc5bcc7"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.292767146,
+        "codec_wall_seconds": 0.29263710998930037,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1015,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.encode.execution.json",
+          "sha256": "1e5bc84aca6ec07e635fd9059336102dfbf101baea6693fea6fef149596d08a0"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.007991999999999999,
+        "process_user_cpu_seconds": 0.3376739999999999,
+        "process_wall_seconds": 0.36471996107138693,
+        "report": {
+          "bytes": 2548,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.encode.stdout.json",
+          "sha256": "90ab95e86d92a1a8cfbdb68cdb3c82472355161a7ffccca72d2a28d97e5d1922"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.342704487,
+        "codec_wall_seconds": 0.343570846831426,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1008,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.decode.execution.json",
+          "sha256": "e60b26e410a5b756cc8469024d2717a2fdaccb197d14a50e6d8ba38e3df834b8"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.0070119999999999905,
+        "process_user_cpu_seconds": 0.38768100000000016,
+        "process_wall_seconds": 0.4148659319616854,
+        "report": {
+          "bytes": 2546,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.decode.stdout.json",
+          "sha256": "ef85e4ac9bcaa4a25893bcce5ecc0d62dd2cea72b45083ba5da9f709a7701329"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.28975536300000004,
+        "codec_wall_seconds": 0.2902545491233468,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1015,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.repeat.execution.json",
+          "sha256": "c60cc394cb31a9ac0fe790aaaabf0623e0a0c1141c01d5f8e4f14d157fbaedae"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.012015999999999999,
+        "process_user_cpu_seconds": 0.33241999999999994,
+        "process_wall_seconds": 0.36559159378521144,
+        "report": {
+          "bytes": 2555,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/P.repeat.stdout.json",
+          "sha256": "62104be57a93b719e1c95dccaf26d5222ac063c195d343fe92b382e27258e806"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 1.5647483050000002,
+        "codec_wall_seconds": 1.5660577318631113,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1004,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.encode.execution.json",
+          "sha256": "3d4f56e9814fc1888004d6ae84cc66877a2d4e0fbf085cf8337c6f44cb6792b4"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "encode",
+        "process_system_cpu_seconds": 0.008000000000000007,
+        "process_user_cpu_seconds": 1.611148,
+        "process_wall_seconds": 1.6678822338581085,
+        "report": {
+          "bytes": 2568,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.encode.stdout.json",
+          "sha256": "ab9a3e3d2ff3c0f448306a5d02b1f6bb65857ccdfceaefc8370543efe8d287d1"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 1.611760914,
+        "codec_wall_seconds": 1.6125208779703826,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1003,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.decode.execution.json",
+          "sha256": "9be782780663daf56de57fdedbbc1726cf14b546869c2237a644034ade841441"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "decode",
+        "process_system_cpu_seconds": 0.009003000000000011,
+        "process_user_cpu_seconds": 1.6564279999999996,
+        "process_wall_seconds": 1.6683496509213,
+        "report": {
+          "bytes": 2561,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.decode.stdout.json",
+          "sha256": "13184b28d392533eaa2410b1838fc4cf04d75730bd3ebf612de4e641be07e57f"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 1.565824891,
+        "codec_wall_seconds": 1.5663685600738972,
+        "cpus": [
+          4
+        ],
+        "execution": {
+          "bytes": 1012,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.repeat.execution.json",
+          "sha256": "0a6e56d1fc292b061a4809fe1a11e289cddcdd245e42130734f6789d56f20146"
+        },
+        "fixture": "maximum8192",
+        "owner": "author",
+        "peak_rss_kib": 33596,
+        "phase": "repeat",
+        "process_system_cpu_seconds": 0.00600199999999998,
+        "process_user_cpu_seconds": 1.6115320000000004,
+        "process_wall_seconds": 1.6686954081524163,
+        "report": {
+          "bytes": 2561,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/cli/maximum8192/T.repeat.stdout.json",
+          "sha256": "528aa5b907cf8d9aa9f96a403ccc3c6af9e187143b90b2e3f57fe28d1dad49fe"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.0030000510000000036,
+        "codec_wall_seconds": 0.002173726912587881,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "encode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2568,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/P-encode.stdout",
+          "sha256": "0bd1f542a961621c28ee0fc187e97648be07b9c186009e1f13abc304f0bdcca3"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.0030142379999999955,
+        "codec_wall_seconds": 0.0026257589925080538,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "decode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2569,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/P-decode.stdout",
+          "sha256": "233f7f7c12ded02aa6bcc2e01c8f25d81e9354a318c2cd9f537687c549134fff"
+        }
+      },
+      {
+        "arm": "P",
+        "codec_cpu_seconds": 0.0020002110000000017,
+        "codec_wall_seconds": 0.0021952379029244184,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "repeat",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2569,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/P-repeat.stdout",
+          "sha256": "595782c9c661d47076e89c1378b470a06fde18cce4e6acd2d074b897f3c6e318"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.0019996499999999987,
+        "codec_wall_seconds": 0.0025222140830010176,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "encode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2570,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/K-encode.stdout",
+          "sha256": "34793ea8c598600e428d3cd2342b534ca02d6c4aebece33e4dc2adcd04dfb378"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.003008737999999997,
+        "codec_wall_seconds": 0.002912009134888649,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "decode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2568,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/K-decode.stdout",
+          "sha256": "b50240b3cb936036090620033f68975e09ee5287750dec15a56e0a9a6cd39fc4"
+        }
+      },
+      {
+        "arm": "K",
+        "codec_cpu_seconds": 0.0020096689999999987,
+        "codec_wall_seconds": 0.0025450170505791903,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "repeat",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2570,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/K-repeat.stdout",
+          "sha256": "4e2ded3606273ad1ce605a8610ca3f43a9afdbfd3db87306c293adab937e894a"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.002999349999999998,
+        "codec_wall_seconds": 0.0026598628610372543,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "encode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2571,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/T-encode.stdout",
+          "sha256": "4b98d9044dc2c36f498c497f82f10e1482ea4acf7be76e28e0f9983c8456b8bd"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.0030096889999999994,
+        "codec_wall_seconds": 0.0029797470197081566,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "decode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2572,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/T-decode.stdout",
+          "sha256": "1cf4dec7927387651ba566abde69b3d662e660ee5d21788557678acb2b39d75b"
+        }
+      },
+      {
+        "arm": "T",
+        "codec_cpu_seconds": 0.0029996409999999973,
+        "codec_wall_seconds": 0.0026435628533363342,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "repeat",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2572,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/T-repeat.stdout",
+          "sha256": "fe92f4e46001e4c4b78336a86c92f11de4681f7dfe6bad5b066f0b824399b8cc"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.00201026,
+        "codec_wall_seconds": 0.0025558380875736475,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "encode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2560,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/R-encode.stdout",
+          "sha256": "4cd76e59e5b8a857df67db9fe0090a7006cef2e05dc81ad116d9f4a41cd3a3b3"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.003009989999999997,
+        "codec_wall_seconds": 0.002948497887700796,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "decode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2569,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/R-decode.stdout",
+          "sha256": "23aeabf6a373f7b800f299bdc61520acde2402d9e442d9175bf579252d69b01c"
+        }
+      },
+      {
+        "arm": "R",
+        "codec_cpu_seconds": 0.0029988890000000046,
+        "codec_wall_seconds": 0.002536881947889924,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "repeat",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2570,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/R-repeat.stdout",
+          "sha256": "a0fae8992cceb0e27aa0472c4d5171a786dd1acf1f0ebf71d303ba25190c6735"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.003009488999999997,
+        "codec_wall_seconds": 0.0025109529960900545,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "encode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2570,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/S-encode.stdout",
+          "sha256": "a3e82f2e8c2cfbbb833ec9ddfea0083aad93c84112a1bf38459994851ad4d467"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.0029996499999999995,
+        "codec_wall_seconds": 0.0029081518296152353,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "decode",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2571,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/S-decode.stdout",
+          "sha256": "b8e2824000e0222fe21a48c37ffe512914ecff984f3d8d488f9faddec262afb6"
+        }
+      },
+      {
+        "arm": "S",
+        "codec_cpu_seconds": 0.0019991290000000023,
+        "codec_wall_seconds": 0.0025384649634361267,
+        "cpus": [
+          3
+        ],
+        "fixture": "event_tokens",
+        "owner": "independent_reviewer",
+        "peak_rss_kib": 26840,
+        "phase": "repeat",
+        "process_system_cpu_seconds": null,
+        "process_timing_note": "Separate process totals were retained only as aggregate reviewer child CPU; codec phase metrics are retained here.",
+        "process_user_cpu_seconds": null,
+        "process_wall_seconds": null,
+        "report": {
+          "bytes": 2571,
+          "path": "results/fx2_causal_field_wrt_unit_20260907/review/independent-cli/S-repeat.stdout",
+          "sha256": "07c9d9b24adbe08183939c0127ed9fec1b6edf094e3cdad7f5d4b56fc625da25"
+        }
+      }
+    ],
+    "reviewer_aggregate": {
+      "affinity": [
+        3
+      ],
+      "child_cpu_seconds": 0.6127199999999999,
+      "child_max_rss_kib": 26840,
+      "elapsed_seconds": 1.203757612966001,
+      "limits": {
+        "address_space_bytes": 536870912,
+        "cpu_seconds": 60,
+        "raw_bytes_max": 8192,
+        "scratch_bytes": 33554432,
+        "wall_seconds": 90
+      },
+      "self_cpu_seconds": 0.354680406,
+      "self_max_rss_kib": 26840
+    },
+    "reviewer_aggregate_scope": "Includes adapter/core unit reruns, span checks and reviewer CLI processes.",
+    "reviewer_phases": 15,
+    "reviewer_receipt": {
+      "bytes": 40148,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/adapter-replay-review.json",
+      "sha256": "f491b71bcff42bca19fc2c01414e723af1d3693bf787b376de87320658526a65"
+    },
+    "scope": "Each fixture/arm has separate encode, decode and repeat processes. Decoder arguments receive archive, Q16, dictionary and public prefix/length/hash; no raw-source, modeled-source or native truth-trace input argument."
+  },
+  "independent_review": {
+    "adapter_replay_receipt": {
+      "bytes": 40148,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/adapter-replay-review.json",
+      "sha256": "f491b71bcff42bca19fc2c01414e723af1d3693bf787b376de87320658526a65"
+    },
+    "adapter_replay_script": {
+      "bytes": 11626,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/review_adapter_replay.py",
+      "sha256": "8e336466a34ecb5f9bf91b2632b0dba54692648a9a2428561c43891e5e997a64"
+    },
+    "author_test_rerun_scope": "These reruns are not additional unique test definitions.",
+    "author_tests_rerun": 37,
+    "coder_receipt": {
+      "bytes": 4003,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/coder-review.json",
+      "sha256": "93b94f56f43403193ed2fd763351dd3cc9b4b157e82be5fc1a912f987867f134"
+    },
+    "coder_script": {
+      "bytes": 7725,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/review_coder.py",
+      "sha256": "904ba17d0a9c7f9dea1cc41e04554e4036235297cd0f666d3bdeebaafe04af25"
+    },
+    "event_partition_span_oracle_cases": 66,
+    "exact_fraction_checks": 10880,
+    "extra_malformed_rejections": [
+      {
+        "error": "noncanonical, truncated or trailing arithmetic payload",
+        "name": "native_payload_extra_zero"
+      },
+      {
+        "error": "missing transform flag or incomplete WRT event",
+        "name": "native_payload_missing_flush"
+      },
+      {
+        "error": "exact raw inverse differs",
+        "name": "wrong_raw_hash"
+      },
+      {
+        "error": "invalid Q16 at bit 0",
+        "name": "q16_zero"
+      }
+    ],
+    "fixed_native_vectors": 5,
+    "maximum_rare_event_inputs": 2,
+    "maximum_rare_event_payload_bytes_each": 131073,
+    "maximum_rare_event_raw_bytes_each": 8192,
+    "native_oracle": {
+      "binary": {
+        "bytes": 22704,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/native-oracle/oracle",
+        "sha256": "94bc38c60a3de7aee03b40eecc26d29deea40e224e71e05b30b6020197395e81"
+      },
+      "bit_intervals_compared": 512,
+      "input": {
+        "bytes": 3376,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/native-oracle/input.txt",
+        "sha256": "458cf4d546d9cd1f55282eb16d9296342dc489f868a4bca203f3ad4b1d084ab4"
+      },
+      "method": "Compiled synthetic C++ oracle derived from the two pinned native coder methods; direct integer Q16 replaces only float discretization and trace instrumentation is removed.",
+      "output": {
+        "bytes": 23346,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/native-oracle/run.stdout",
+        "sha256": "5f569ea529441adcf47fbd43e80b78d762f677320f31c39486ad71c17b6d5520"
+      },
+      "payload": {
+        "bytes": 350,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/native-oracle/payload.bin",
+        "sha256": "d0f15be1985d9a3243ba86e43e8f02003ec893ad520272121adaf497ab78de04"
+      },
+      "source": {
+        "bytes": 2935,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/native-oracle/oracle.cpp",
+        "sha256": "a707c27b44c185cdd654fa921941673e842dae706610db305d74bd3b309ad99a"
+      }
+    },
+    "plan_review": {
+      "bytes": 4093,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/review/plan-review.json",
+      "sha256": "f8f15b33949feaeb61d5042923054b2e66bbc4a81607909237d13f1987e79d6b"
+    },
+    "status": "no_blocker_at_bound_sources"
+  },
+  "local_required_source_closure": {
+    "dynamic_source_loads": [
+      "causal_field_dependency_v1.py",
+      "wrt_exact.py"
+    ],
+    "excluded_old_module_imports": "The adapter does not execute causal_field_dependency_v1.py top-level imports, including streaming_retrieval_codec.",
+    "file_count": 5,
+    "files": [
+      {
+        "bytes": 12138,
+        "path": "tools/fx2_causal_field_replay_v1.py",
+        "sha256": "a722f84df5a6ddda454039bfcf859692217e24144b085b17349ca3ee300a36c3"
+      },
+      {
+        "bytes": 15341,
+        "path": "tools/causal_field_wrt_adapter_v1.py",
+        "sha256": "649acd80af3ac10e8c2273bde3c2007e07d677bd2941c939494bd0ab76f7c89a"
+      },
+      {
+        "bytes": 10266,
+        "path": "tools/causal_field_parent_coder_v1.py",
+        "sha256": "6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+      },
+      {
+        "bytes": 21470,
+        "path": "tools/causal_field_dependency_v1.py",
+        "sha256": "f34a42054ba151219c67060cf3420e06fb1e1aff8ea9f01aa408e116b495ec0a"
+      },
+      {
+        "bytes": 6839,
+        "path": "tools/wrt_exact.py",
+        "sha256": "ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a"
+      }
+    ],
+    "imports": [
+      {
+        "local": false,
+        "module": "__future__",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "argparse",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "hashlib",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "json",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "math",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "os",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "pathlib",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "resource",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "struct",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "sys",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "tempfile",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "time",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": true,
+        "module": "causal_field_wrt_adapter_v1",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": true,
+        "module": "causal_field_parent_coder_v1",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": true,
+        "module": "wrt_exact",
+        "source": "tools/fx2_causal_field_replay_v1.py"
+      },
+      {
+        "local": false,
+        "module": "__future__",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "ast",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "collections",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "hashlib",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "json",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "pathlib",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "struct",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "sys",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "types",
+        "source": "tools/causal_field_wrt_adapter_v1.py"
+      },
+      {
+        "local": false,
+        "module": "__future__",
+        "source": "tools/causal_field_parent_coder_v1.py"
+      },
+      {
+        "local": false,
+        "module": "hashlib",
+        "source": "tools/causal_field_parent_coder_v1.py"
+      },
+      {
+        "local": false,
+        "module": "json",
+        "source": "tools/causal_field_parent_coder_v1.py"
+      },
+      {
+        "local": false,
+        "module": "math",
+        "source": "tools/causal_field_parent_coder_v1.py"
+      },
+      {
+        "local": false,
+        "module": "re",
+        "source": "tools/causal_field_parent_coder_v1.py"
+      },
+      {
+        "local": false,
+        "module": "__future__",
+        "source": "tools/wrt_exact.py"
+      },
+      {
+        "local": false,
+        "module": "collections",
+        "source": "tools/wrt_exact.py"
+      },
+      {
+        "local": false,
+        "module": "dataclasses",
+        "source": "tools/wrt_exact.py"
+      },
+      {
+        "local": false,
+        "module": "pathlib",
+        "source": "tools/wrt_exact.py"
+      }
+    ],
+    "logical_source_bytes": 66054,
+    "scope": "Local source files only; interpreter/runtime, dictionary, retained Q16 and launch options are not a resolved complete package.",
+    "verification": "AST import audit of core, adapter, parent coder and WRT reference; the old parser contributes exactly nine selected AST definitions/constants and no top-level imports."
+  },
+  "plan": {
+    "bytes": 6936,
+    "path": "operations/provenance/fx2_causal_field_wrt_replay250k_q0_v1_plan.json",
+    "sha256": "46da8bedfffac3c941d1d0220d4afe906c2ee113f52b4a27dcf6b5a5ef079f7c"
+  },
+  "plan_publication_commit_prefix": "83aa88f2a",
+  "retention": {
+    "all_original_bytes_and_modes_preserved": true,
+    "artifact_index": {
+      "bytes": 94356,
+      "path": "results/fx2_causal_field_wrt_unit_20260907/inventory.json",
+      "sha256": "a892339abc587968e8834b187fd87a53022ec00c7104e03a27669d6b511c7dde"
+    },
+    "failure_retention": "All source-tree files are retained, including initial-regression.log, empty stderr files, rejection records and all receipt failure_history/failures fields; no source-tree artifact was excluded.",
+    "file_count": 278,
+    "logical_file_bytes": 3253311,
+    "original_absolute_paths_rewritten": false,
+    "original_receipts_rewritten": false,
+    "path_relocation_map": [
+      {
+        "original_prefix": "/tmp/gamma-field-parent-coder-20260907/attempt_01",
+        "retained_prefix": "results/fx2_causal_field_wrt_unit_20260907/coder"
+      },
+      {
+        "original_prefix": "/tmp/gamma-field-wrt-adapter-20260907",
+        "retained_prefix": "results/fx2_causal_field_wrt_unit_20260907/adapter"
+      },
+      {
+        "original_prefix": "/tmp/gamma-field-replay-unit-20260907",
+        "retained_prefix": "results/fx2_causal_field_wrt_unit_20260907/core"
+      },
+      {
+        "original_prefix": "/tmp/gamma-field-replay-cli-20260907",
+        "retained_prefix": "results/fx2_causal_field_wrt_unit_20260907/cli"
+      },
+      {
+        "original_prefix": "/tmp/gamma-field-wrt-review-20260907",
+        "retained_prefix": "results/fx2_causal_field_wrt_unit_20260907/review"
+      }
+    ],
+    "verification": "Every copied file was hashed against its original before and after copying; all original coder/adapter/CLI inventory entries were verified. No codec was rerun."
+  },
+  "retention_actions": {
+    "commits": false,
+    "corpus_payload_reads": false,
+    "installs": false,
+    "ledger_or_proposal_changes": false,
+    "model_runs": false,
+    "source_edits": false,
+    "test_reruns": false
+  },
+  "schema": "gamma.enwiki9.fx2-causal-field-wrt-unit.v1",
+  "source_files": [
+    {
+      "bytes": 12138,
+      "path": "tools/fx2_causal_field_replay_v1.py",
+      "sha256": "a722f84df5a6ddda454039bfcf859692217e24144b085b17349ca3ee300a36c3"
+    },
+    {
+      "bytes": 15341,
+      "path": "tools/causal_field_wrt_adapter_v1.py",
+      "sha256": "649acd80af3ac10e8c2273bde3c2007e07d677bd2941c939494bd0ab76f7c89a"
+    },
+    {
+      "bytes": 10266,
+      "path": "tools/causal_field_parent_coder_v1.py",
+      "sha256": "6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+    },
+    {
+      "bytes": 21470,
+      "path": "tools/causal_field_dependency_v1.py",
+      "sha256": "f34a42054ba151219c67060cf3420e06fb1e1aff8ea9f01aa408e116b495ec0a"
+    },
+    {
+      "bytes": 6839,
+      "path": "tools/wrt_exact.py",
+      "sha256": "ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a"
+    }
+  ],
+  "status": "passed_synthetic_only",
+  "test_files": [
+    {
+      "bytes": 16666,
+      "path": "tests/test_causal_field_parent_coder_v1.py",
+      "sha256": "0604ba6a648fc7e3bc9d3605cf5876878c7a635bf68988b8df2f6896562a8021"
+    },
+    {
+      "bytes": 17375,
+      "path": "tests/test_causal_field_wrt_adapter_v1.py",
+      "sha256": "430da8bf7d3481f385ce768ae8569763da9965b5d3f864ad51435ecd70c65d2c"
+    },
+    {
+      "bytes": 6405,
+      "path": "tests/test_fx2_causal_field_replay_v1.py",
+      "sha256": "52d450ce3af740e60068cfb192ea3794cdd29525c1ea183b2ed131485df606fc"
+    }
+  ],
+  "unit_resource_evidence": [
+    {
+      "cpu_seconds": 0.482269,
+      "cpus": [
+        5
+      ],
+      "peak_rss_kib": 90916,
+      "receipt": {
+        "bytes": 641,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/coder/execution.json",
+        "sha256": "965fcc15ef14704641a332123574b014eca01ecdb81528ce6c036ec1c68364a1"
+      },
+      "suite": "parent_coder",
+      "wall_seconds": 0.5157455331645906
+    },
+    {
+      "cpu_seconds": 0.251085,
+      "cpus": [
+        2
+      ],
+      "peak_rss_kib": 24880,
+      "receipt": {
+        "bytes": 1993,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/core/attempt_01/execution.json",
+        "sha256": "f076acc9242be58e03303af0cfd2175afe85d59ef0658d3f6e67597f53a86cf7"
+      },
+      "suite": "replay_core",
+      "wall_seconds": 0.2658171388320625
+    },
+    {
+      "cpu_seconds": 0.023001039,
+      "cpus": [
+        4
+      ],
+      "peak_rss_kib": 24836,
+      "receipt": {
+        "bytes": 14492,
+        "path": "results/fx2_causal_field_wrt_unit_20260907/adapter/receipt.json",
+        "sha256": "004aed1fbb24dec0c309957b2349c1e922199a5218249aa6f96ed7713d5e21e9"
+      },
+      "scope": "Receipt times only the retained ten paired adapter fixture replays. Full-suite CPU was not retained and is not inferred from wall time.",
+      "suite": "wrt_adapter",
+      "wall_seconds": 0.0228715599514544
+    }
+  ]
+}
