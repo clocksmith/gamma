@@ -33,9 +33,17 @@ retains 20 passing runner tests and 22 independent review tests, including the
 actual canonical timer semantics. The superseded runner is archived with its
 receipts; the [v2 entry point](../tools/fx2_causal_field_wrt_gate_v2.py) verifies
 the live outer controller before corpus buffers. The [frozen experiment](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json)
-binds 205 inputs and 134 outputs. ROOT owns job `20260907T130508Z_c3d4b66329`,
-held pending publication and fresh reconciliation of the completed HORIZON
-observer versus its original running record. No corpus result is yet asserted.
+binds 205 inputs and 134 outputs. ROOT owns job `20260907T130508Z_c3d4b66329`;
+its held ownership and inputs are published at `6a4385fdb`. No corpus result is
+yet asserted.
+
+The [operational reconciliation](../operations/provenance/endpoint428_horizon_terminal_occupancy_reconciliation_20260907.json)
+records the completed observer and exact process absence. Validated observer and
+incomplete-source reflections close administrative occupancy without claiming
+the lost controller's return code, scientific validity or continuous resource
+proof. The original frozen running record remains unchanged; its terminal
+counterpart supports independent discovery. The sealed HORIZON router and
+qualification still need compatibility repair. The `codex` recovery owner remains.
 
 ## 2026-09-06 - Earlier-field conditioning passes the synthetic codec gate
 
