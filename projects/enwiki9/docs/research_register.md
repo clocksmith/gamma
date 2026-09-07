@@ -26,10 +26,14 @@ This diagnoses the frozen selector's inactivity; it does not establish globally
 unique first values or any compression benefit. The guard closes cleanly at
 4.5434 seconds with 38,920,192 peak cgroup bytes. The [terminal receipt](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
 binds the independent audit and validated observation/hold reflection. No new
-archive or score is asserted. The [adjacent-field implementation plan](../operations/provenance/causal_field_preceding_synthetic_q0_v1_plan.json)
-changes only which completed field conditions the donor. Its synthetic fixture
-separates repeated adjacent categories from unique first-field IDs, recency, and
-rotated associations. No corpus execution is authorized by that plan.
+archive or score is asserted. The [adjacent selector](../tools/causal_field_preceding_selector_v1.py)
+now passes [14 author and six additional independent tests](../operations/evidence/20260907_causal_field_preceding_unit.json).
+On predefined 84/132-byte synthetic fixtures, T archives are 159/206 bytes versus
+P/K167/215, with exact inverses, repeats and state/probability agreement. Each adds
+two dictionary bytes and one arm-option byte; source/runtime costs remain separate.
+The [integration plan](../operations/provenance/fx2_causal_preceding_wrt250k_q0_v1_plan.json)
+binds one explicit factory and six controls against retained parent probabilities.
+Synthetic raw input remains capped at8192; corpus execution needs its own contract.
 
 ## 2026-09-07 - Align causal field donors with WRT and the real parent
 

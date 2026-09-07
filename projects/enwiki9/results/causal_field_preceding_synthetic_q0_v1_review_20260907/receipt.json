@@ -1,0 +1,101 @@
+{
+  "schema": "gamma-independent-synthetic-review-v1",
+  "date": "2026-09-07",
+  "reviewer": "/root/refresh_cleanup_review",
+  "candidate": "causal_field_preceding_synthetic_q0_v1",
+  "result": "cleared_for_separately_authorized_next_gate",
+  "concrete_blockers": [],
+  "source": {
+    "path": "tools/causal_field_preceding_selector_v1.py",
+    "bytes": 3536,
+    "sha256": "d48c6ac00defe186b3c2f9982140d78d88036c3ff8d11386cbbf690ae1c4dda9"
+  },
+  "tests": {
+    "path": "tests/test_causal_field_preceding_selector_v1.py",
+    "bytes": 27797,
+    "sha256": "1ba384e278e67994c649dcb595ba104dec71491789823a78089716ff321dc29c"
+  },
+  "plan": {
+    "path": "operations/provenance/causal_field_preceding_synthetic_q0_v1_plan.json",
+    "sha256": "ef4bbb7a566bfb913d58ccd7116b2708fc03d5a1fb4cf1f84f12ad56a56534c9",
+    "published_commit": "3847955f074ee1b7d2739f0477786cdc65a892ab"
+  },
+  "execution": {
+    "passed": 19,
+    "author_direct_library_tests": 13,
+    "independent_tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "cpu_affinity": [3],
+    "address_space_limit_bytes": 536870912,
+    "cpu_limit_seconds": 60,
+    "wall_limit_seconds": 120,
+    "scratch_limit_bytes": 33554432,
+    "measured_wall_seconds": 0.6370007749646902,
+    "measured_cpu_seconds": 0.63693009,
+    "reported_peak_rss_kib": 25900,
+    "source_unchanged": true,
+    "author_CPU4_CLI_child_test_executed": false,
+    "scope": "Synthetic direct-library execution on CPU3. Fresh encoder, decoder and repeat machines use the same review process; this review does not independently repeat the author's separate-process CLI phases."
+  },
+  "independent_fixture": {
+    "records": [
+      "{{t|anchor=fixed|decoy=x|kind=p|v=aaaaaaaa}}",
+      "{{t|anchor=fixed|decoy=x|kind=q|v=bbbbbbbb}}",
+      "{{t|anchor=fixed|decoy=y|kind=p|v=aaaaaaaa}}"
+    ],
+    "record_separator_bytes": 0,
+    "raw_bytes": 132,
+    "modeled_bytes": 133,
+    "interpretation": "The first field is constant while the second changes and the third supplies the adjacent selector. On the third target K/T select a8; O/R/S select b8. This distinguishes adjacent selection from original-first selection and from a hardcoded second-field shortcut.",
+    "fresh_machine_phases": 18,
+    "exact_inverse": true,
+    "deterministic_repeat": true,
+    "complete_probability_stream_equality_per_arm": true,
+    "complete_per_modeled_byte_state_chain_equality_per_arm": true,
+    "decoder_and_encoder_interval_equality_every_bit": true,
+    "P_K_complete_archive_identity": true,
+    "ordinary_P_decoder_inverts_K_archive": true,
+    "K_bookkeeping_independently_active": true,
+    "frame_bytes": 81,
+    "external_dictionary_bytes": 2,
+    "external_dictionary_exact_contents": "[]",
+    "explicit_external_arm_option_bytes": 1,
+    "archive_bytes": {"P": 215, "K": 215, "T": 206, "O": 214, "R": 214, "S": 215},
+    "archive_plus_dictionary_and_option_bytes": {"P": 218, "K": 218, "T": 209, "O": 217, "R": 217, "S": 218}
+  },
+  "additional_independent_checks": [
+    "An unaligned previous-field span blocks adjacent selection while original-first selection remains active; unaligned original-first with aligned adjacent remains eligible only for adjacent selection.",
+    "Overwrite changes recency serial without refreshing FIFO insertion order; conditional, recency and rotated donors agree with that distinction.",
+    "Seven valid, duplicate, nested, overlong and incomplete suffix cases preserve 5166 pre-divergence probability and complete-state boundaries. Only complete valid invocations commit adjacent pairs.",
+    "All 256 byte values plus a synthetic exceptional-byte field reconstruct exactly in all six framed codec arms; the arbitrary-byte fixture has 272 raw bytes."
+  ],
+  "static_review": [
+    "The mutation selects only fields[-1:] for K/T/R/S and delegates O to the original first-field selector.",
+    "Adjacent association insertion occurs only on a completed valid invocation and requires aligned previous and target WRT spans with a bounded target donor.",
+    "The predecessor parser, decoder and arithmetic coder sources remain hash-bound and unchanged.",
+    "FIFO capacity, deterministic serial replacement and policy-salted complete-state identity remain explicit.",
+    "The synthetic harness binds raw length/hash, dictionary hash, mode and payload length in an 81-byte header, counts dictionary bytes and the external K bookkeeping option separately, and checks canonical native re-encoding."
+  ],
+  "limits": {
+    "corpus_bytes_read": 0,
+    "corpus_gate_authorized": false,
+    "source_or_lifecycle_mutations": false,
+    "complete_package_bytes": null,
+    "full_corpus_score_bytes": null,
+    "compression_credit_bytes": 0,
+    "qualification": "Synthetic implementation correctness and selector separation only. Source, interpreter and dependency closure remain uncounted. Every measured synthetic archive is larger than the 132-byte raw fixture. These measurements establish neither corpus gain nor complete-package economics.",
+    "timing": "Shared-host diagnostic measurements; no isolated resource qualification."
+  },
+  "evidence": {
+    "script": "review.py",
+    "log": "regression.log",
+    "execution": "review-execution.json",
+    "supervisor": "supervisor.json",
+    "source_inventory": "source-inventory.json",
+    "independent_checks": "independent-evidence.json",
+    "author_library_checks": "author-library-checks.json",
+    "fixtures": "four-field",
+    "index": "artifacts.json"
+  }
+}

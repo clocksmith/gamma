@@ -1,0 +1,133 @@
+{
+  "schema": "gamma.enwiki9.preceding-selector-unit-validation.v1",
+  "generated_at": "2026-09-07T14:59:26.736218+00:00",
+  "candidate_id": "causal_field_preceding_synthetic_q0_v1",
+  "owner": "root_explore",
+  "status": "closed-independent-review-passed",
+  "implementation_scope": "Immediately preceding completed-field lookup and adjacent pair commits; inherited parser, WRT rules, FIFO limits and integer mixture remain unchanged.",
+  "author_tests": 14,
+  "review_tests": 19,
+  "review_test_scope": "13 repeated author library tests and6 additional independent tests; author CLI suite is excluded from review process.",
+  "unique_tests": 20,
+  "author_independent_cli_phases": 18,
+  "review_fresh_machine_phases": 18,
+  "review_phase_scope": "One review process, distinct encoder/decoder/repeat machines; not separate review processes.",
+  "fixtures": [
+    {
+      "name": "predefined-three-field",
+      "raw_bytes": 84,
+      "modeled_bytes": 85,
+      "archive_bytes": {
+        "P": 167,
+        "K": 167,
+        "T": 159,
+        "O": 167,
+        "R": 167,
+        "S": 167
+      },
+      "dictionary_bytes": 2,
+      "arm_option_bytes": 1
+    },
+    {
+      "name": "independent-four-field-constant-first",
+      "raw_bytes": 132,
+      "modeled_bytes": 133,
+      "archive_bytes": {
+        "P": 215,
+        "K": 215,
+        "T": 206,
+        "O": 214,
+        "R": 214,
+        "S": 215
+      },
+      "dictionary_bytes": 2,
+      "arm_option_bytes": 1
+    }
+  ],
+  "checks": [
+    "Each fixture and arm exactly reconstructs and repeats, with equal probability streams and complete shared state at modeled-byte boundaries.",
+    "P/K archives and probabilities match; explicit K option enables K bookkeeping and ordinary P mode also decodes the K archive.",
+    "Independent constant-first four-field fixture rules out first-field fallback and hard-coded second-field selection.",
+    "Future-prefix causality, FIFO insertion versus update recency, invalid/incomplete invocation commits, alignment in both directions, and all256 byte values pass."
+  ],
+  "scope_limits": [
+    "Both populations are synthetic and were defined before their measurements.",
+    "Raw input is capped at8192; this source confers no corpus launch authority.",
+    "The81-byte frame is counted; dictionary and one-byte arm option are additional.",
+    "The actual test decoder requires85249 local source bytes plus uncounted interpreter/runtime. These fixtures do not establish package-paying compression."
+  ],
+  "accounting": {
+    "actual_test_decoder_local_sources_bytes": 85249,
+    "complete_package_bytes": null,
+    "corpus_bytes": 0,
+    "full_corpus_score": null,
+    "interpreter_and_runtime_counted": false,
+    "objective_credit_bytes": 0,
+    "selector_and_reused_local_codec_sources_bytes": 57452,
+    "selector_module_bytes": 3536,
+    "test_codec_harness_bytes": 27797
+  },
+  "source_bindings": [
+    {
+      "path": "tools/causal_field_preceding_selector_v1.py",
+      "bytes": 3536,
+      "sha256": "sha256:d48c6ac00defe186b3c2f9982140d78d88036c3ff8d11386cbbf690ae1c4dda9"
+    },
+    {
+      "path": "tools/causal_field_wrt_adapter_v1.py",
+      "bytes": 15341,
+      "sha256": "sha256:649acd80af3ac10e8c2273bde3c2007e07d677bd2941c939494bd0ab76f7c89a"
+    },
+    {
+      "path": "tools/causal_field_dependency_v1.py",
+      "bytes": 21470,
+      "sha256": "sha256:f34a42054ba151219c67060cf3420e06fb1e1aff8ea9f01aa408e116b495ec0a"
+    },
+    {
+      "path": "tools/wrt_exact.py",
+      "bytes": 6839,
+      "sha256": "sha256:ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a"
+    },
+    {
+      "path": "tools/causal_field_parent_coder_v1.py",
+      "bytes": 10266,
+      "sha256": "sha256:6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+    },
+    {
+      "path": "tests/test_causal_field_preceding_selector_v1.py",
+      "bytes": 27797,
+      "sha256": "sha256:1ba384e278e67994c649dcb595ba104dec71491789823a78089716ff321dc29c"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "results/causal_field_preceding_synthetic_q0_v1_unit_20260907/summary.json",
+      "bytes": 16887,
+      "sha256": "sha256:5c9f0a932656f3726e2e83b54b6a532d69944e8c02ff7eff50e90e0b5f223eb8"
+    },
+    {
+      "path": "results/causal_field_preceding_synthetic_q0_v1_unit_20260907/inventory.json",
+      "bytes": 72471,
+      "sha256": "sha256:bab0db978b230dcc77e5034dc98c2e8be34b8b540fc061cdf38f52193117e7d6"
+    },
+    {
+      "path": "results/causal_field_preceding_synthetic_q0_v1_review_20260907/receipt.json",
+      "bytes": 5479,
+      "sha256": "sha256:97ecad73b91ba01cba10302aaf9c33c6d38a0c02c6833fae952c53cf0369e9f4"
+    },
+    {
+      "path": "results/causal_field_preceding_synthetic_q0_v1_review_20260907/artifacts.json",
+      "bytes": 18684,
+      "sha256": "sha256:58696ef73af553e576f75fd1216390634d214e5e18c19afa08a573e94ca3bd23"
+    },
+    {
+      "path": "operations/provenance/causal_field_preceding_synthetic_q0_v1_plan.json",
+      "bytes": 5547,
+      "sha256": "sha256:ef4bbb7a566bfb913d58ccd7116b2708fc03d5a1fb4cf1f84f12ad56a56534c9"
+    }
+  ],
+  "objective_credit_bytes": 0,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "next_action": "A separately identified integration may now test the same mechanism against the retained real parent Q16 on opening250KB; freeze its source, inputs, controls and bounds and publish ownership before execution."
+}
