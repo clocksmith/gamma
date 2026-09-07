@@ -278,10 +278,11 @@ export async function validateEraSituationLedger(ledger) {
   for (const scenario of ledger.scenarios) {
     requireString(scenario.id, "Scenario ID");
     requireString(scenario.title, `Scenario ${scenario.id} title`);
+    requireString(scenario.narrative, `Scenario ${scenario.id} narrative`);
     if (seenScenarioIds.has(scenario.id)) throw new Error(`Duplicate scenario ID: ${scenario.id}`);
     seenScenarioIds.add(scenario.id);
     if (!erasById.has(scenario.eraId)) throw new Error(`Unknown Era for scenario ${scenario.id}: ${scenario.eraId}`);
-    if (!adoptedDispositions.has(scenario.disposition) && !deferredDispositions.has(scenario.disposition)) {
+    if (!adoptedDispositions.has(scenario.disposition) && !deferredDispositions.has(scenario.disposition) && scenario.disposition !== "lore-only") {
       throw new Error(`Invalid scenario disposition for ${scenario.id}: ${scenario.disposition}`);
     }
     requireStringArray(scenario.concepts, `Scenario ${scenario.id} concepts`);
@@ -305,6 +306,9 @@ export async function validateEraSituationLedger(ledger) {
       }
     }
 
+    if (scenario.disposition === "lore-only" && scenario.mechanicPreservation.status !== "not-mapped") {
+      throw new Error(`Lore-only scenario must not assert a dedicated mechanic: ${scenario.id}`);
+    }
     const adopted = adoptedDispositions.has(scenario.disposition);
     if (adopted && scenario.surfaceBindings.length === 0) {
       throw new Error(`Adopted scenario lacks a game-surface binding: ${scenario.id}`);

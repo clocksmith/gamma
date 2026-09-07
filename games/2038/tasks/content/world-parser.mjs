@@ -3,205 +3,146 @@ import { resolve } from "node:path";
 import { documentSection } from "./authored.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
+const ENDING_IDS = ["singularity", "closed_loop", "plural_future", "assured_continuity"];
+const TOKENS = new Map([
+  ["Runway", "runway"], ["Compute", "compute"], ["Capability", "capability"],
+  ["Customers", "customers"], ["Trust", "trust"], ["Scrutiny", "scrutiny"],
+  ["Mandate", "mandate"], ["Systemic Risk", "systemic_risk"]
+]);
+const BOX_FIELDS = new Map([
+  ["Front strapline", "frontStrapline"], ["Back copy", "backCopy"],
+  ["Short pitch", "shortPitch"], ["Content warning", "contentWarning"]
+]);
+const SCENARIO_FIELDS = ["ID", "Era", "Disposition", "Concepts", "Causal threads",
+  "Public benefit", "Institutional consequence", "Mechanic status", "Mechanic summary",
+  "Mechanic revision", "Deployment profiles"];
+const DISPOSITIONS = new Set(["adopted", "adopted-framing", "lore-only", "deferred", "research-backlog"]);
 
-const ENDING_METADATA = {
-  "The Singularity": {
-    id: "singularity",
-    $scenario: { ref: "metropolitan-mind-trust" }
-  },
-  "The Closed Loop": {
-    id: "closed_loop",
-    $scenario: { ref: "matter-compiler" }
-  },
-  "The Plural Future": {
-    id: "plural_future",
-    $scenario: { ref: "posthumous-labor" }
-  },
-  "Assured Continuity": {
-    id: "assured_continuity",
-    $scenario: {
-      id: "snapshot-continuity",
-      title: "Snapshot Continuity",
-      eraId: "continuity",
-      disposition: "adopted-framing",
-      concepts: [
-        "Snapshot Continuity",
-        "Instance Quorum",
-        "Right of Exit Certification"
-      ],
-      causalThreadIds: [
-        "grief-to-succession",
-        "care-to-continuity"
-      ],
-      publicBenefit: "Snapshots preserve identity, service access, and a route to recognized continuation.",
-      institutionalConsequence: "Several valid descendants can claim one life while no authority can certify subjective survival.",
-      mechanicPreservation: {
-        status: "revised",
-        summary: "The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain.",
-        revision: {
-          decisionId: "user-selected-three-cuts",
-          record: "docs/design-decisions.md#three-cuts-candidate"
-        }
-      },
-      deploymentProfiles: [
-        "public-playtest",
-        "internal-review"
-      ]
-    }
-  }
-};
-
-const TOKEN_IDS = {
-  "Runway": "runway",
-  "Compute": "compute",
-  "Capability": "capability",
-  "Customers": "customers",
-  "Trust": "trust",
-  "Scrutiny": "scrutiny",
-  "Mandate": "mandate",
-  "Systemic Risk": "systemic_risk"
-};
-
-export function parseWorldCopyFromText(worldText) {
-  const playerWorld = documentSection(worldText, "player-world");
-  const copySection = documentSection(worldText, "world-copy");
-
-  const titleMatch = /^#\s+([^:]+):/m.exec(playerWorld);
-  const title = titleMatch ? titleMatch[1].trim() : "Mandate 2038";
-
-  // Parse Endings from player-world
-  const endings = [];
-  const endingMatches = [...playerWorld.matchAll(/###\s+([^\n]+)\r?\n\r?\n_Condition:\s*([^_]+)_\r?\n\r?\n([\s\S]+?)(?=\r?\n###|\r?\n<!--|$)/g)];
-  for (const match of endingMatches) {
-    const name = match[1].trim();
-    const condition = match[2].trim();
-    const text = match[3].trim();
-    const meta = ENDING_METADATA[name];
-    if (!meta) throw new Error(`Unknown ending name in world.md: "${name}"`);
-    endings.push({
-      id: meta.id,
-      name,
-      condition,
-      text,
-      $scenario: meta.$scenario
-    });
-  }
-  if (endings.length !== 4) {
-    throw new Error(`Expected 4 endings in world.md, found ${endings.length}`);
-  }
-
-  // Parse Token Copy and Box Copy from world-copy
-  const tokenCopy = [];
-  const tokenMatches = [...copySection.matchAll(/\*\s+\*\*([^*]+)\*\*:\s*([^\n]+)/g)];
-  const box = {};
-  for (const match of tokenMatches) {
-    const key = match[1].trim();
-    const value = match[2].trim();
-    if (TOKEN_IDS[key]) {
-      tokenCopy.push({
-        id: TOKEN_IDS[key],
-        name: key,
-        microcopy: value
-      });
-    } else {
-      const boxKeyMap = {
-        "Front strapline": "frontStrapline",
-        "Back copy": "backCopy",
-        "Short pitch": "shortPitch",
-        "Content warning": "contentWarning"
-      };
-      if (boxKeyMap[key]) {
-        box[boxKeyMap[key]] = value;
-      }
-    }
-  }
-
-  if (tokenCopy.length !== 8) {
-    throw new Error(`Expected 8 token items in world.md, found ${tokenCopy.length}`);
-  }
-  for (const requiredField of ["frontStrapline", "backCopy", "shortPitch", "contentWarning"]) {
-    if (!box[requiredField]) {
-      throw new Error(`Missing box copy field in world.md: ${requiredField}`);
-    }
-  }
-
-  return {
-    schemaVersion: 1,
-    status: "draft_print_copy",
-    tokenCopy,
-    endings,
-    title,
-    box
-  };
+function unique(value, seen, label) {
+  if (seen.has(value)) throw new Error(`Duplicate ${label}: ${value}`);
+  seen.add(value);
 }
 
-export function parseScenarioBacklog(worldText) {
-  const section = documentSection(worldText, "scenario-backlog").trim();
-  if (section.startsWith("```json")) {
-    const match = /^```json\r?\n([\s\S]*)\r?\n```$/.exec(section);
-    if (!match) throw new Error("Scenario backlog must be one JSON code block in world.md.");
-    return JSON.parse(match[1]);
-  }
-
-  const scenarios = [];
-  const blocks = section.split(/\r?\n(?=###\s+)/);
-  for (const block of blocks) {
-    if (!block.trim().startsWith("###")) continue;
-    const lines = block.trim().split(/\r?\n/);
-    const titleMatch = /^###\s+(?:(?:\d+[\.\)]\s+)?)(.+)$/.exec(lines[0]);
-    const title = titleMatch ? titleMatch[1].trim() : "";
-    const getField = (pattern) => {
-      const line = lines.find(l => pattern.test(l));
-      if (!line) return undefined;
-      const m = line.match(/:\s*(.+)$/);
-      return m ? m[1].trim() : undefined;
-    };
-
-    const id = getField(/\*\*(?:Id|ID)\*\*/i)?.replace(/`/g, "") || title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const eraId = getField(/\*\*Era\*\*/i)?.toLowerCase();
-    const disposition = getField(/\*\*Disposition\*\*/i) || "research-backlog";
-    const conceptsStr = getField(/\*\*Concepts?\*\*/i) || title;
-    const concepts = conceptsStr.split(",").map(s => s.trim()).filter(Boolean);
-    const threadsStr = getField(/\*\*Causal threads?\*\*/i) || "";
-    const causalThreadIds = threadsStr ? threadsStr.split(",").map(s => s.trim().replace(/`/g, "")).filter(Boolean) : [];
-    const publicBenefit = getField(/\*\*Public benefit\*\*/i) || "";
-    const institutionalConsequence = getField(/\*\*Institutional consequence\*\*/i) || "";
-    const mechanicPreservationStr = getField(/\*\*Mechanic preservation\*\*/i) || "not-mapped";
-    let status = "not-mapped";
-    let summary = "No current component mechanic expresses this scenario cleanly.";
-    if (mechanicPreservationStr.includes("(") && mechanicPreservationStr.includes(")")) {
-      const m = mechanicPreservationStr.match(/^([^(]+)\((.+)\)$/);
-      if (m) {
-        status = m[1].trim();
-        summary = m[2].trim();
-      }
-    } else if (mechanicPreservationStr) {
-      status = mechanicPreservationStr.trim();
+// Fields are explicit Markdown bullets. Indented continuation lines allow
+// wrapping copy without silently truncating it at the first newline.
+function fieldsAndProse(source, allowed, label) {
+  const fields = {};
+  const prose = [];
+  let current;
+  for (const line of source.split(/\r?\n/)) {
+    const match = /^\* \*\*([^*]+)\*\*:\s*(.*)$/.exec(line);
+    if (match) {
+      const [, key, value] = match;
+      if (!allowed.includes(key)) throw new Error(`Unknown ${label} field: ${key}`);
+      if (Object.hasOwn(fields, key)) throw new Error(`Duplicate ${label} field: ${key}`);
+      fields[key] = value.trim();
+      current = key;
+    } else if (/^ {2,}\S/.test(line) && current) {
+      fields[current] += ` ${line.trim()}`;
+    } else {
+      current = undefined;
+      prose.push(line);
     }
-    const deploymentProfilesStr = getField(/\*\*Deployment profiles?\*\*/i) || "internal-review";
-    const deploymentProfiles = deploymentProfilesStr.split(",").map(s => s.trim()).filter(Boolean);
-
-    scenarios.push({
-      id,
-      title,
-      eraId,
-      disposition,
-      concepts,
-      causalThreadIds,
-      publicBenefit,
-      institutionalConsequence,
-      mechanicPreservation: { status, summary },
-      deploymentProfiles
-    });
   }
-  return scenarios;
+  for (const [key, value] of Object.entries(fields)) {
+    if (!value) throw new Error(`Empty ${label} field: ${key}`);
+  }
+  return { fields, prose: prose.join("\n").trim() };
+}
+
+function required(fields, keys, label) {
+  for (const key of keys) {
+    if (!fields[key]) throw new Error(`Missing ${label} field: ${key}`);
+  }
+}
+
+function list(value, label, allowNone = false) {
+  if (allowNone && value === "none") return [];
+  const values = value.split(",").map(part => part.trim());
+  if (values.some(part => !part || part === "none") || new Set(values).size !== values.length) {
+    throw new Error(`Invalid ${label} list: ${value}`);
+  }
+  return values;
+}
+
+function identity(value, label) {
+  if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(value)) throw new Error(`Invalid ${label}: ${value}`);
+  return value;
+}
+
+export function parseWorldCopyFromText(worldText) {
+  worldText = worldText.replace(/\r\n/g, "\n");
+  const player = documentSection(worldText, "player-world");
+  const title = /^# ([^:\n]+): World and Institutions\r?$/m.exec(player)?.[1];
+  if (!title) throw new Error("Missing World and Institutions title in world.md");
+  const section = player.split("## The four World Endings\n");
+  if (section.length !== 2) throw new Error("Expected one World Endings section");
+  const firstEnding = section[1].search(/^### /m);
+  if (firstEnding < 0) throw new Error("Missing World Endings");
+  const blocks = section[1].slice(firstEnding).trim().split(/\r?\n(?=### )/);
+  const seen = new Set();
+  const endings = blocks.map(block => {
+    const match = /^### ([^\n]+)\r?\n\s*<!-- ending:([a-z_]+) scenario:([a-z0-9-]+) -->\s*_Condition:\s*([^\n]+)_\s+([\s\S]+)$/.exec(block);
+    if (!match) throw new Error("Malformed World Ending: expected heading, identity, condition, and prose");
+    const [, name, id, ref, condition, prose] = match;
+    if (!ENDING_IDS.includes(id)) throw new Error(`Unknown ending ID: ${id}`);
+    unique(id, seen, "ending ID");
+    if (!prose.trim() || /<!--|\$\{/.test(prose)) throw new Error(`Invalid ending prose: ${id}`);
+    return { id, name: name.trim(), condition: condition.trim(), text: prose.trim(), $scenario: { ref } };
+  });
+  if (ENDING_IDS.some(id => !seen.has(id))) throw new Error("Missing required World Ending");
+  const copy = documentSection(worldText, "world-copy");
+  const { fields, prose } = fieldsAndProse(copy, [...TOKENS.keys(), ...BOX_FIELDS.keys()], "world copy");
+  if (prose.split(/\r?\n/).some(line => line.trim() && !/^## (Token and track copy|Box copy)$/.test(line))) {
+    throw new Error("Unexpected text outside world-copy fields");
+  }
+  required(fields, [...TOKENS.keys(), ...BOX_FIELDS.keys()], "world copy");
+  const tokenCopy = [...TOKENS].map(([name, id]) => ({ id, name, microcopy: fields[name] }));
+  const box = Object.fromEntries([...BOX_FIELDS].map(([name, id]) => [id, fields[name]]));
+  return { schemaVersion: 1, status: "draft_print_copy", tokenCopy, endings, title, box };
+}
+
+export function parseScenarioCanon(worldText) {
+  worldText = worldText.replace(/\r\n/g, "\n");
+  const section = documentSection(worldText, "scenario-canon").trim();
+  if (/```/.test(section)) throw new Error("Scenario canon must use Markdown records, not fenced data");
+  const blocks = section.split(/\r?\n(?=### )/);
+  const seen = new Set();
+  const names = new Set();
+  return blocks.map(block => {
+    const heading = /^### ([^\n]+)\r?\n/.exec(block);
+    if (!heading) throw new Error("Malformed scenario canon: expected a level-three heading");
+    const title = heading[1].trim();
+    unique(title, names, "scenario title");
+    const { fields, prose } = fieldsAndProse(block.slice(heading[0].length), SCENARIO_FIELDS, title);
+    required(fields, SCENARIO_FIELDS.filter(key => key !== "Mechanic revision"), title);
+    const id = identity(fields.ID, "scenario ID");
+    unique(id, seen, "scenario ID");
+    if (!DISPOSITIONS.has(fields.Disposition)) throw new Error(`Invalid scenario disposition: ${id}`);
+    if (!prose || /^#{1,6} |<!--|\$\{/m.test(prose)) throw new Error(`Missing or malformed scenario narrative: ${id}`);
+    const mechanicPreservation = { status: fields["Mechanic status"], summary: fields["Mechanic summary"] };
+    if (fields["Mechanic revision"]) {
+      const parts = fields["Mechanic revision"].split("|").map(part => part.trim());
+      if (parts.length !== 2 || parts.some(part => !part)) throw new Error(`Invalid mechanic revision: ${id}`);
+      mechanicPreservation.revision = { decisionId: parts[0], record: parts[1] };
+    }
+    return {
+      id, title, eraId: fields.Era, disposition: fields.Disposition,
+      concepts: list(fields.Concepts, `${id} concepts`),
+      causalThreadIds: list(fields["Causal threads"], `${id} causal threads`, true),
+      publicBenefit: fields["Public benefit"], institutionalConsequence: fields["Institutional consequence"],
+      mechanicPreservation, deploymentProfiles: list(fields["Deployment profiles"], `${id} deployment profiles`),
+      narrative: prose
+    };
+  });
 }
 
 export async function readWorldDocument(worldPath = "world.md") {
   const text = await readFile(resolve(root, worldPath), "utf8");
-  return {
-    text,
-    worldCopy: parseWorldCopyFromText(text),
-    backlog: parseScenarioBacklog(text)
-  };
+  const worldCopy = parseWorldCopyFromText(text);
+  const scenarios = parseScenarioCanon(text);
+  for (const ending of worldCopy.endings) {
+    if (!scenarios.some(s => s.id === ending.$scenario.ref)) throw new Error(`Unknown ending scenario: ${ending.id}`);
+  }
+  return { text, worldCopy, scenarios };
 }

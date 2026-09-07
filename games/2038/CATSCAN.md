@@ -47,7 +47,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   microcopy, box copy, and scenario canon, projecting `dist/runtime/world-copy.json`
   and `dist/docs/world-and-institutions.md`. It opens with the setting primer,
   the four concise Era overviews, and the four World Endings; publishing copy,
-  concise editorial notes, the 50-scenario canon, and unadopted backlog follow the fiction.
+  concise editorial notes, the scenario canon and its explicit dispositions follow the fiction.
   Era panels own their name, epigraph, rules, and unlocks. Shared identities resolve
   from their existing owners. The overview preserves lore in accessible past-tense
   narration from 2038, without a character plot or mandatory events.
@@ -57,7 +57,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   prose is projected from the rulebook, not maintained in a second physical file.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
-- Component records own their scenario notes. The Era-situation index and its
+- World Markdown owns all scenario definitions. Components own only scenario
+  references and surface-specific Era relations; Era panels retain `$era` metadata.
+  Lore-only scenarios assert no dedicated mechanic or game binding. The Era-situation index and its
   source-path bindings are derived outputs; there are no separate copy overlays
   or hand-maintained binding registries. Editorial metadata never enters play.
 - Only the public-playtest publication profile is deployable; internal-review

@@ -716,3 +716,34 @@ The user restricted play to two through five players. Six factions remain choice
 Rules Sections 6 and 8 now agree with the existing implementation: ReAct uses assignment, Headlines finish before selection, and ordinary Generators provide local connections with emergency Scrutiny only when serving a Facility. These wording repairs change no prices, awards, or timing in the engine. Actual project-production telemetry and deliberate policies support a diagnostic comparison; they do not select new incentives. The current test protocol prepares a blind teach without claiming human results.
 
 The wording-only follow-up `0.19.1` / `0.11.0-rc.3-test` prints the complete two-through-five player range on the Core Rules cover beside the suggested three-through-five range. Engine `0.21.0` and all mechanics remain unchanged; the construction study retains its exact `0.19.0` identity.
+
+## World source consolidation and release custody repair
+
+On 2026-09-07, world authoring moved entirely into `world.md`: endings,
+resource microcopy, box copy, and scenario definitions. Components retain exact
+mechanics and wording with scenario references; the compiler owns projection.
+The fifty catalog headings previously covered forty indexed scenarios. Eleven
+stories now have explicit lore-only records, and the combined water/weather entry
+is split to preserve its distinct adopted and deferred dispositions. The resulting
+canon has fifty-one records and the original fifty-four game-surface bindings.
+No new game mechanic or balance evidence is asserted.
+
+The first committed `0.19.2` and `0.11.0-rc.4-test` artifacts were recorded in
+Gamma commit `c9c62ffe`. Later commits modified those same immutable paths;
+`00f25145` retains the changed versions in Git history. This repair restores the
+first committed bytes rather than presenting later source as the earlier release.
+The new source is captured under executable `0.19.3` and candidate
+`0.11.0-rc.5-test`, using the existing immutable artifact writer.
+
+| Restored historical artifact | SHA-256 of original bytes | SHA-256 before repair |
+| --- | --- | --- |
+| `versions/0.19.2/manifest.json` | `1ddcc4c5031641fd8c35c03d1e3e389ca9748922cad520714cc3fe77eb6aeb2f` | `6f7a14896884fae9c85934665457b5e2eac0751a4a2e797d8d502f1c2b1bea77` |
+| `versions/0.19.2/game-bundle.json` | `7d145fad46d5220dfac89210dec0fb6426f27bbeeb747448e5fc988904f655cf` | `a17953e997f18a80962b186ef106adccccd4119d72a4d3acf9ae9fabbf17f64b` |
+| `versions/0.11.0-rc.4-test/manifest.json` | `925aa12914c663d1b71a69f7aeeface1fc6b8e67def60008bcd2564030b2d506` | `95bb50ae54e29d09d35ed4e9c97041d5afeb382fa105a1470d282b362d5b08c4` |
+| `versions/0.11.0-rc.4-test/rules-candidate-bundle.json` | `5b5bd45469ce4430fed65de4451c7fc6c9687ff76b5cc3675781fdb9f6d1c4d0` | `7e53cc521fc8b0110941075ef64d68400795900bb2a5ee2489f0f9995455fff8` |
+
+The subsequent teaching correction removes the unsupported six-player column
+from the current Audit table and points current README/protocol guidance to the
+release declaration. Historical six-player studies remain unchanged. These
+additional source edits are captured as executable `0.19.4` and candidate
+`0.11.0-rc.6-test`; the intermediate consolidation artifacts remain intact.

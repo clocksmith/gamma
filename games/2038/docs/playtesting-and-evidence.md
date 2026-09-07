@@ -1,6 +1,8 @@
 # Mandate 2038 Playtesting And Evidence
 
-**Rules under review:** `0.11.0-rc.3-test` / executable `0.19.1`
+**Rules under review:** the synchronized candidate and executable in the
+[current release declaration](../versions/current-release.json). Historical study
+versions below retain their original evidence identities.
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 

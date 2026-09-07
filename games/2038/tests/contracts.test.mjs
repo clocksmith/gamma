@@ -213,7 +213,7 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   assert.match(bible, /## Research provenance/);
   assert.ok(bible.indexOf("<!-- player-world:start -->") < bible.indexOf("<!-- world-guide:start -->"));
   assert.doesNotMatch(bible, /GENERATED:ERA_SITUATION_LEDGER/);
-  assert.equal(eraLedger.scenarios.length, 40);
+  assert.equal(eraLedger.scenarios.length, 51);
   assert.equal(
     eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
     54
