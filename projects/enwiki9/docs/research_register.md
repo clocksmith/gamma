@@ -2,6 +2,34 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-07 - Literal-first templates reach a bounded executable comparison
+
+`dualstream_literal_first250k_q0_v1` replaces whole-input grammar conversion
+with selected raw spans, exact template arguments and untouched literal runs.
+The Deflate backend and 65,536-byte frame partition remain fixed. P uses the
+unchanged plain codec; K discovers and measures without admitting replacements;
+D admits only strict whole-frame byte reductions and re-evaluates afterward.
+Every repeat starts from raw input and repeats discovery. All-plain archives
+retain exact P bytes. Definitions exist only for selected templates; one-off
+arguments and ordinary text do not enter a global dictionary.
+
+Thirty-three synthetic tests pass across the codec, independent interpreter
+review and runner, including 18 actual runner encode/decode/repeat phases. A
+constructed 250KB shared-field fixture produces P/K 84,187 bytes and D 67,158;
+the arbitrary-byte fixture falls back exactly. These are implementation checks,
+not Wikipedia gains. Decoder costs include canonical re-Deflation, repeated
+interpreter execution and prefix hashing. Complete compressed payload/framing
+costs are distinct from pre-Deflate definition/call/argument byte counts.
+
+Ownership: `operations/provenance/dualstream_literal_first_v1_plan.json`.
+Usage and limits: `docs/dualstream_literal_first_v1.md`. The separately frozen
+opening250KB P/K/D gate requires published source and fresh resource admission.
+Fallback equality grants no confirmation. A strict archive reduction may justify
+a separately frozen fresh population; complete package and 99M remain unproved.
+Enumeration, interpreter-context tuning and neighboring campaigns stay parked
+or with their existing owners. Two complete older records moved to archive 036
+with their evidence text preserved.
+
 ## 2026-09-07 - Interpreter context fails the fixed-grammar prediction gate
 
 `dualstream_event250k_q0_v1` [completed the frozen P/B/R/G/X comparison](../operations/provenance/dualstream_event_terminal_20260907.json)
@@ -732,67 +760,3 @@ worker, observer and partial scientific outputs were not changed or inspected;
 the concurrent external-derived FX2 lane was preserved. The compact predictor
 still needs a separately frozen compression and kernel-budget gate before a
 corpus claim or larger population launch.
-
-## 2026-09-05 - Parallel build deduplication and standalone open MIDAS
-
-`lib/native_fixture_build_cache.py` now reuses unchanged C++ builds under a
-compiler/toolchain, flag, environment and transitive source/header identity.
-Per-key locking prevents duplicate compilation; corrupt entries are quarantined
-and rebuilt. Stricter inherited resource ceilings are preserved. Sixteen cache
-tests pass, including the inherited-file-limit failure found during integration.
-This is a local build cache, not a hermetic package or resource certificate.
-
-`tools/midas_open_codec_v1.py` exposes bounded build, inventory, encode and decode
-commands through a new C++ driver using the unchanged incremental predictor.
-Output directories publish without overwrite only after coding and validation.
-FIFO, symlink, corrupted-input, stale-build, no-overwrite and interrupted-operation
-checks pass. Inventory reports local source and resolved runtime bytes separately
-and leaves complete-package qualification explicitly unknown.
-
-Seventeen combined MIDAS tests pass, for 33 tests with the parallel cache suite.
-The standalone driver retains all original 65-byte P/K/F/S archive known answers.
-On 1,024 synthetic bytes, incremental and reference F produce the same 1,043-byte
-archive and model/optimizer projection after 32 updates. Independent decoding
-after source removal and deterministic re-encoding reproduce exact bytes and
-same-arm final-state witnesses. The archive is larger than raw; no compression
-gain, corpus result, package qualification or objective credit is claimed.
-
-Evidence: `operations/evidence/20260905_parallel_native_cache_standalone_midas_unit.json`.
-Usage: `docs/midas_open_codec_v1.md`. One complete older record moved to archive
-part 028 with link targets preserved, keeping this register within its line cap.
-Neither implementation lane waited for HORIZON; its process, observer and partial
-scientific output remained untouched. The other agent's FX2 work was preserved.
-A corpus successor still needs frozen architecture, population, control, package
-and composite resource budgets before launch.
-
-## 2026-09-05 - Incremental open MIDAS preserves the retained reference
-
-`lib/midas_open_profile_incremental_fixture.hpp` adds a separate cached-forward
-implementation of the fixed one-layer integration fixture. The original parent
-and sealed neural kernels remain unchanged. Its translation unit includes the
-original forward source instead of linking it twice, preserving the arithmetic
-helpers. Future zero-symbol K/V placeholders and the full masked softmax row are
-retained; the reference exponential floor does not make masked weights zero.
-Every parameter update invalidates the cache and replays the causal prefix.
-
-Nine regression tests pass. On 65- and 129-byte synthetic populations, all
-P/K/F/S F32 rows, Q16 probabilities and finite archives match the reference.
-Model, optimizer, detached memory and discarded K-shadow states also match.
-Encoder/decoder checkpoints include the complete incremental cache, including
-pending predictions at every bit offset around midpoint and segment boundaries.
-Cross-decoding, deterministic repeats, partial-segment inverses and corrupted
-cache rejection pass. No corpus data or teacher state enters these tests.
-
-The paired 129-byte F diagnostic records reference encode/decode CPU of
-0.243620/0.229980 seconds versus incremental 0.034700/0.034990 seconds, with
-13,996 KiB cumulative process peak RSS. Initialization, full updates and cache
-resets are included. This is shared-host diagnostic evidence, not qualification.
-The synthetic F/S archives are 170 bytes versus P/K's 169; no gain is claimed.
-
-Evidence: `operations/evidence/20260905_midas_incremental_profile_identity_unit.json`.
-The receipt distinguishes implementation validation from budget exhaustion and
-retains exact finite bytes, source bindings and sanitizer outcomes. This adds no
-compression, package, resource-qualification or full-corpus score credit. Before
-a corpus successor, coordinate the compact-parent owner and freeze the chosen
-architecture, population, package, memory and kernel/runtime budgets. HORIZON
-and the other agent's FX2 work remain unchanged by this implementation.

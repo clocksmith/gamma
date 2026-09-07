@@ -1,0 +1,26 @@
+timeout 90s python3 -B - <<'PY'
+from pathlib import Path
+import hashlib,json,os,resource,time,unittest
+os.sched_setaffinity(0,{5})
+resource.setrlimit(resource.RLIMIT_CPU,(60,120))
+resource.setrlimit(resource.RLIMIT_AS,(512*1024*1024,512*1024*1024))
+resource.setrlimit(resource.RLIMIT_FSIZE,(32*1024*1024,32*1024*1024))
+root=Path.cwd()
+out=root/'results/dualstream_literal_first_review_unit_20260907/attempt_01'
+out.mkdir(parents=True,exist_ok=False)
+inputs=[]
+for name in ['tools/dualstream_literal_first_v1.py','tools/dualstream_grammar_v1.py','tools/dualstream_grammar_argtokens_v2.py','tests/test_dualstream_literal_first_review_v1.py']:
+ data=(root/name).read_bytes()
+ target=out/'source'/name
+ target.parent.mkdir(parents=True,exist_ok=True)
+ target.write_bytes(data)
+ inputs.append({'path':name,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)})
+start,cpu=time.monotonic(),time.process_time()
+suite=unittest.defaultTestLoader.discover('tests',pattern='test_dualstream_literal_first_review_v1.py')
+with (out/'tests.log').open('x') as log:
+ result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+receipt={'schema':'gamma.enwiki9.literal-first-independent-unit.v1','source_inputs':inputs,'sources_unchanged':all(hashlib.sha256((root/r['path']).read_bytes()).hexdigest()==r['sha256'] for r in inputs),'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'passed':result.wasSuccessful(),'cpu_seconds':time.process_time()-cpu,'elapsed_seconds':time.monotonic()-start,'peak_rss_kib':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,'limits':{'cpus':[5],'soft_cpu_seconds':60,'hard_cpu_seconds':120,'wall_seconds':90,'address_space_bytes':512*1024*1024,'file_bytes':32*1024*1024},'synthetic_only':True,'corpus_bytes':0,'objective_credit_bytes':0}
+(out/'receipt.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+print(json.dumps(receipt,sort_keys=True))
+raise SystemExit(0 if receipt['passed'] else 1)
+PY
