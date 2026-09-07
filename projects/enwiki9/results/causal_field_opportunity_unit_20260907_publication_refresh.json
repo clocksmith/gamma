@@ -1,0 +1,201 @@
+{
+  "receipt_type": "normalization_run",
+  "project": "enwiki9",
+  "profile": "routine",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/hutter_upper_bound_certificate.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py"
+      ],
+      "returncode": 0,
+      "stdout": "wrote /home/x/deco/gamma/projects/enwiki9/docs/hutter_run_ledger.json\nwrote /home/x/deco/gamma/projects/enwiki9/docs/hutter_run_ledger.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py"
+      ],
+      "returncode": 0,
+      "stdout": "{\"bundles\": 2, \"completeClosures\": 1, \"failedAttempts\": 0, \"objectiveAchievedReceipts\": 0, \"runReceipts\": 0}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py"
+      ],
+      "returncode": 0,
+      "stdout": "wrote /home/x/deco/gamma/projects/enwiki9/docs/evidence_matrix.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py"
+      ],
+      "returncode": 0,
+      "stdout": "wrote /home/x/deco/gamma/projects/enwiki9/docs/best_results.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--candidate-audit-snapshot",
+        "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+        "--candidate-audit-sha256",
+        "2f923a9a7a771d6810b1d2d675a1e17280cf4a0791c665458da40ec17bfe5e14",
+        "--refresh-profile",
+        "routine"
+      ],
+      "returncode": 0,
+      "stdout": "wrote projects/enwiki9/docs/status_receipt.json\nwrote projects/enwiki9/docs/status_receipt.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_ledger.py"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"generated_at\": \"2026-09-07T14:21:39+00:00\",\n  \"algorithms\": 1532,\n  \"programs\": 983,\n  \"proposals\": 419,\n  \"runs\": 2230,\n  \"mixes\": 4,\n  \"notes\": 525,\n  \"tools\": 1014,\n  \"current_algorithms\": 847,\n  \"historical_algorithms\": 685,\n  \"running\": 0,\n  \"unverified_running\": 0,\n  \"jobs\": {\n    \"pending\": 27,\n    \"running\": 1,\n    \"completed\": 337,\n    \"failed\": 158,\n    \"cancelled\": 313\n  },\n  \"read_issues\": 2\n}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "up_to_date /home/x/deco/gamma/projects/enwiki9/docs/hutter_run_ledger.json\nup_to_date /home/x/deco/gamma/projects/enwiki9/docs/hutter_run_ledger.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "{\"bundles\": 2, \"completeClosures\": 1, \"failedAttempts\": 0, \"objectiveAchievedReceipts\": 0, \"runReceipts\": 0}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "up_to_date /home/x/deco/gamma/projects/enwiki9/docs/evidence_matrix.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "up_to_date /home/x/deco/gamma/projects/enwiki9/docs/best_results.md",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check",
+        "--candidate-audit-snapshot",
+        "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+        "--candidate-audit-sha256",
+        "2f923a9a7a771d6810b1d2d675a1e17280cf4a0791c665458da40ec17bfe5e14",
+        "--refresh-profile",
+        "routine"
+      ],
+      "returncode": 0,
+      "stdout": "status_receipt_render_ok",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0,
+      "stdout": "doc_lint_ok",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0,
+      "stdout": "json_ok projects/enwiki9/upper_bound_certificate.json",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0,
+      "stdout": "json_ok projects/enwiki9/docs/status_receipt.json",
+      "stderr": ""
+    }
+  ],
+  "ok": true,
+  "checks_requested": true,
+  "checks_run": true,
+  "not_refreshed": [
+    [
+      "python3",
+      "projects/enwiki9/tools/cmix21_memory_valve_report.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/cmix21_memory_surface_scan.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/fx2_residual_shadow_matrix.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/streaming_retrieval_receipt_audit.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/streaming_retrieval_block_regime_audit.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/streaming_retrieval_mixer_plan.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/enwiki9_artifact_fingerprint_audit.py"
+    ],
+    [
+      "python3",
+      "projects/enwiki9/tools/enwiki9_tool_catalogue.py"
+    ]
+  ],
+  "historical_view_notice": "Unselected historical views were not refreshed and may be stale. Run --profile full to regenerate and check them."
+}

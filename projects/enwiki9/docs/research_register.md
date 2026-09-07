@@ -4,22 +4,32 @@
 
 ## 2026-09-07 - Explain inactive field selection without changing the predictor
 
-The [implementation plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
-follows the closed opening250KB comparison's inactive T/S result. The
-[observation adapter](../tools/causal_field_opportunity_v1.py) partitions prefix-visible
-eligibility and retained-table lookup misses, keeps bounded examples, and observes
-parser invalidation context outside the inherited predictive state.
-The [synthetic receipt](../operations/evidence/20260907_causal_field_opportunity_unit.json)
-retains fourteen author and two independent tests with 23,450 recorded P/K/T/R/S
-per-byte state/emission checks. This proves observation equivalence on fixtures.
-No corpus diagnostic or new compression result is asserted here yet. The first
-runner's seven pure tests passed; independent admission review required a separate
-runner revision before canonical execution. The [v2 runner receipt](../operations/evidence/20260907_causal_field_opportunity_runner_unit.json)
-retains fifteen author tests and one additional independent test, including six
-actual guard-matcher cases. The [frozen execution plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_execution.json)
-binds CPU2, 512MiB memory, 32MiB scratch, the independent wall stop, and owned
-workspace temporary storage. The registered job is held for publication under
-`root_explore`; confirmation remains untouched.
+The [observation adapter](../tools/causal_field_opportunity_v1.py) follows the
+[implementation plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
+and partitions eligibility and lookup misses outside inherited predictive state.
+The [adapter receipt](../operations/evidence/20260907_causal_field_opportunity_unit.json)
+retains sixteen tests and 23,450 P/K/T/R/S per-byte state/emission checks; the
+[v2 runner receipt](../operations/evidence/20260907_causal_field_opportunity_runner_unit.json)
+retains sixteen tests and the superseded runner's review findings.
+The [execution plan](../operations/provenance/fx2_causal_field_opportunity_q0_v1_execution.json)
+binds CPU2, 512MiB memory, 32MiB scratch, an independent wall stop and workspace
+temporary storage. Ownership and inputs preceded execution at `ecfd7fbda`.
+
+The [closed report](../results/fx2_causal_field_opportunity_q0_v1/report.json)
+matches all 151,210 modeled-byte states, reconstructs the exact 250,000 raw bytes,
+and reproduces the original T terminal state. Of 141 value starts, 106 are eligible:
+56 have no matching earlier template and 50 have matching field structure but no
+exact first-value association. No eligible start is excluded by WRT entry-state
+compatibility; all 50 coarser recency matches are compatible. There are 84 parser
+invalidation transitions, whose contexts do not prove precise rejection causes.
+This diagnoses the frozen selector's inactivity; it does not establish globally
+unique first values or any compression benefit. The guard closes cleanly at
+4.5434 seconds with 38,920,192 peak cgroup bytes. The [terminal receipt](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
+binds the independent audit and validated observation/hold reflection. No new
+archive or score is asserted. The [adjacent-field implementation plan](../operations/provenance/causal_field_preceding_synthetic_q0_v1_plan.json)
+changes only which completed field conditions the donor. Its synthetic fixture
+separates repeated adjacent categories from unique first-field IDs, recency, and
+rotated associations. No corpus execution is authorized by that plan.
 
 ## 2026-09-07 - Align causal field donors with WRT and the real parent
 
