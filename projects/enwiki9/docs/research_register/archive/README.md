@@ -39,3 +39,4 @@
 - [part-035.md: 2026-09-05 open MIDAS parent and native boundary/checkpoint integration](part-035.md)
 - [part-036.md: 2026-09-05 standalone MIDAS build caching and incremental prediction](part-036.md)
 - [part-037.md: 2026-09-06 MIDAS ownership and source bundle, exact representation experiments](part-037.md)
+- [part-038.md: 2026-09-06 tensor restoration and schema gates, exact-residual and MIDAS terminal records](part-038.md)
