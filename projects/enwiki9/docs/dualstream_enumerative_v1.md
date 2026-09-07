@@ -42,7 +42,7 @@ Run synthetic correctness with:
 python3 -B -m unittest discover -s tests -p 'test_dualstream_enumerative*.py' -v
 ```
 
-The published candidate invokes `tools/dualstream_enumerative_gate_v1.py`
+The published v2 candidate invokes `tools/dualstream_enumerative_gate_v2.py`
 through the existing adaptive queue. The direct codec interface is:
 
 ```bash

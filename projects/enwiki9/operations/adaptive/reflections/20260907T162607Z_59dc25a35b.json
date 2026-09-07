@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "V1 runner drops caught subprocess OSError and classifies following ValueError as codec failure."
+  },
+  "candidateId": "dualstream_enumerative250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "dualstream_enumerative250k_q0_v1",
+    "candidateTreeSha256": "sha256:f03115c7eb17389133d2be66617f5457f527f8c608b5b2d1fa5161dfd6ae577f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/dualstream_enumerative250k_q0_v1/20260907T162607013578Z_f03115c7eb17.json",
+      "sha256": "sha256:429833a4ac451d4ae4044d750adf6222e93cbb873414aae137883165f57c7e69"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Use separately identified v2 runner with tested failure routing; scientific population and codec are unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/evidence/20260907_dualstream_enumerative_runner_v2_unit.json",
+      "sha256": "sha256:9a00849d9efb76c2f4d0d87b44fe4420a4201e5fca81c26655e2876df2e0d834"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/dualstream_enumerative250k_q0_v1.json",
+    "sha256": "sha256:93e22ae364862f734ce0cc66698881af5e339a9442eadcb66370f20b136d706a"
+  },
+  "generatedUtc": "2026-09-07T16:29:13+00:00",
+  "hypothesis": {
+    "rationale": "No corpus execution occurred.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/cancelled/909_20260907T162607Z_59dc25a35b.json",
+    "sha256": "sha256:94140ae821087211310ae006e2706d408390970a4d0bf4837c523294af42e8c5"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Preserve subprocess error type when recording failure outcomes; synthetic codec correctness alone does not validate runner routing."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260907t162607z_59dc25a35b",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Independent prelaunch review found OSError failure-routing defect; job cancelled before any corpus phase."
+    ],
+    "valid": false
+  }
+}
