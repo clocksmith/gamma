@@ -31,7 +31,8 @@ export function documentSections(source) {
 }
 
 export function stripSectionMarkers(source) {
-  return source.replace(/^<!-- [a-z][a-z0-9-]*:(?:start|end) -->\r?\n/gm, "");
+  return source.replace(/^<!-- [a-z][a-z0-9-]*:(?:start|end) -->\r?\n/gm, "")
+    .replace(/^<!-- ending:[a-z_]+ scenario:[a-z0-9-]+ -->\r?\n/gm, "");
 }
 
 export function omitDocumentSections(source, names = []) {

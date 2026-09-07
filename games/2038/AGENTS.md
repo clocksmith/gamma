@@ -24,13 +24,13 @@ systems and incentives, not jokes or allegations about real people.
 ## Canonical Boundaries
 
 - `components/` owns complete component records: mechanics, IDs, wording, and
-  author-only `$scenario` notes. Era panels own names, epigraphs, rules, unlocks,
+  author-only `$scenario` references. Era panels own names, epigraphs, rules, unlocks,
   and structured `$era` notes; the Era overviews own extended setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
   supported inventory prose. Its named excerpts generate the map, component,
   and inventory references; the compact Core Rules omit those detailed sections.
   `world.md` opens with the marked player World companion; concise writing notes
-  and the structured backlog follow it.
+  and the structured scenario canon follow it.
 - The game has one ruleset: a static map, local Power, and the sixteen current
   Headlines. There is no selectable rules profile, connected Network, Link,
   Power market, Realignment, or Volatility module. Simulation parameter research
@@ -66,8 +66,8 @@ systems and incentives, not jokes or allegations about real people.
   traceability and deployment projection, not a parallel lore authority. Do
   not create a parallel lore scratchpad or thematic authority.
 - Scenario bindings are generated from component records, never maintained
-  separately. Shared scenarios have one definition and `$scenario.ref` links.
-  Deferred scenario notes live in the marked backlog section of `world.md`.
+  separately. Shared scenarios have one Markdown definition and `$scenario.ref` links.
+  Scenario definitions and dispositions live in the marked canon section of `world.md`.
   The compiler strips `$scenario` and `$era` from all playable outputs.
 - `docs/simulation-and-player-strategies.md` documents the executable
   simulation surface and must name any gap from the canonical rulebook.

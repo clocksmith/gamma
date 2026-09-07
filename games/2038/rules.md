@@ -505,12 +505,12 @@ counts, calculate each Era’s draw count as:
 
 Era halves upward. The resulting Audit profiles are:
 
-| Era | 2 players | 3 players | 4 players | 5 players | 6 players |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| I | 1 | 2 | 2 | 3 | 3 |
-| II | 2 | 2 | 3 | 4 | 5 |
-| III | 2 | 3 | 4 | 5 | 6 |
-| IV | 3 | 4 | 5 | 6 | 8 |
+| Era | 2 players | 3 players | 4 players | 5 players |
+| --- | ---: | ---: | ---: | ---: |
+| I | 1 | 2 | 2 | 3 |
+| II | 2 | 2 | 3 | 4 |
+| III | 2 | 3 | 4 | 5 |
+| IV | 3 | 4 | 5 | 6 |
 
 Draw the listed number of cubes or stop when the bag is empty.
 

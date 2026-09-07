@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "../tasks/content/authored.mjs";
 import { resolveString, resolveValue } from "../tasks/content/references.mjs";
+import { readWorldDocument } from "../tasks/content/world-parser.mjs";
 import { assembleScenarioIndex, scenarioSurfaces } from "../tasks/content/scenario-index.mjs";
 
 test("component notes never enter playable data or mutate authored records", () => {
@@ -90,7 +91,8 @@ test("world companion extraction excludes editorial guidance and backlog", async
 
 test("scenario bindings derive from component identity and point to the complete record", async () => {
   const surfaces = await scenarioSurfaces();
-  const index = assembleScenarioIndex({ surfaces, backlog: [], deploymentProfiles: {} });
+  const { scenarios: definitions } = await readWorldDocument();
+  const index = assembleScenarioIndex({ surfaces, definitions, deploymentProfiles: {} });
   const event = index.scenarios.find(s => s.id === "cheap-token-rebound");
   assert.ok(event.surfaceBindings.some(b => b.copyReference ===
     "components/headlines.json#headlines/ten_dollar_intelligence"));
@@ -101,18 +103,19 @@ test("scenario bindings derive from component identity and point to the complete
 
 test("authoring rejects missing, duplicate, and unresolved scenario definitions", async () => {
   const original = await scenarioSurfaces();
-  const assemble = surfaces => assembleScenarioIndex({ surfaces, backlog: [], deploymentProfiles: {} });
+  const { scenarios: definitions } = await readWorldDocument();
+  const assemble = surfaces => assembleScenarioIndex({ surfaces, definitions, deploymentProfiles: {} });
   const missing = structuredClone(original);
   delete missing[0].record.$scenario;
   assert.throws(() => assemble(missing), /Missing scenario notes/);
   const unknown = structuredClone(original);
   unknown.find(s => s.record.$scenario.ref).record.$scenario.ref = "missing";
   assert.throws(() => assemble(unknown), /Unknown scenario reference/);
-  const duplicate = structuredClone(original);
-  const owner = duplicate.find(s => s.record.$scenario.id);
-  duplicate.find(s => s.record.$scenario.ref).record.$scenario = structuredClone(owner.record.$scenario);
-  assert.throws(() => assemble(duplicate), /Duplicate or missing scenario definition/);
-  const manualBindings = structuredClone(original);
-  manualBindings.find(s => s.record.$scenario.id).record.$scenario.surfaceBindings = [];
-  assert.throws(() => assemble(manualBindings), /bindings must be generated/);
+  assert.throws(() => assembleScenarioIndex({ surfaces: original, definitions: [...definitions, definitions[0]], deploymentProfiles: {} }), /Duplicate or missing scenario definition/);
+  const redefinition = structuredClone(original);
+  redefinition[0].record.$scenario = { id: definitions[0].id, title: "Parallel lore" };
+  assert.throws(() => assemble(redefinition), /must not redefine/);
+  const manualBindings = structuredClone(definitions);
+  manualBindings[0].surfaceBindings = [];
+  assert.throws(() => assembleScenarioIndex({ surfaces: original, definitions: manualBindings, deploymentProfiles: {} }), /bindings must be generated/);
 });

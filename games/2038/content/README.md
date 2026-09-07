@@ -13,14 +13,14 @@ those documents are generated views of the sources below.
 | A card, faction, action, ending, or district's exact effect | [components/](../components/) |
 | Board geometry and component supply records | [components/game.json](../components/game.json) |
 | Shared terminology and numeric variables | [data/variables.json](data/variables.json) |
-| Lore, tone, research, World companion, deferred scenario backlog | [world.md](../world.md) |
+| Lore, endings, token/box copy, research, and all scenario definitions | [world.md](../world.md) |
 | Browser labels and first-game tutorial | [ui.json](../ui.json) |
 | Component form, dimensions, and state encoding | [physical/](../physical/README.md) |
 | Rationale and open design questions | [docs/design-decisions.md](../docs/design-decisions.md) |
 
 Each component record keeps its own mechanics and wording together. For example,
 `components/headlines.json` holds each Headline's Era, timing, effect, title,
-newswire, quote, and scenario notes. Change a quantity where it is defined;
+newswire, quote, and scenario references. Change a quantity where it is defined;
 references such as `${content.gameConfig.playerSupply.facilities}` reuse that
 value in prose. Simulation and strategy copy remain in `content/runtime/`;
 deferred modules remain in `experimental/`.
@@ -40,9 +40,9 @@ standalone document; it changes no prose.
 - Card and Board Reference projects component fields and selected rulebook passages.
   Duration and timing labels are selected from shared labels using the record's value.
 - The `player-world` excerpt becomes World and Institutions: four concise
-  Era overviews authored in `world.md`, followed by component-owned ending narratives.
+  Era overviews authored in `world.md`, followed by Markdown-owned ending narratives.
   Era names and epigraphs resolve from Era panels, which contain no extended lore
-  summaries. Writing notes and backlog follow the fiction in its source and stay
+  summaries. Writing notes and the scenario canon follow the fiction in its source and stay
   outside the companion.
 - Rule Change Register combines the design ledger's `decision-register` introduction
   with the component change records.
@@ -90,14 +90,18 @@ not current sources. Historical bundles retain their original source layout.
 
 ## Scenario notes
 
-A component's `$scenario` defines its scenario once. Other records use
+The marked `scenario-canon` section in `world.md` defines every scenario once,
+including its narrative, ID, Era, disposition, concepts, public benefit, institutional
+consequence, mechanic qualification, and deployment profiles. Components use
 `{"$scenario": {"ref": "cheap-token-rebound"}}` to share it. Later expressions
 also set `"eraRelation": "later-expression"`; Era cards own `$era` metadata.
 The compiler generates the scenario index and
 `dist/contracts/era-situation-ledger.json`. Never maintain source-path bindings
 or copy overlays separately. Validation rejects missing or duplicate definitions,
 unknown references, Era mismatches, omitted surfaces, and deferred scenarios
-entering baseline play. `$scenario` and `$era` never enter playable JSON or
+entering baseline play. Lore-only entries carry no dedicated game binding and do
+not assert implemented mechanics. The former combined water/weather entry is split
+so its adopted and deferred dispositions remain distinct. `$scenario` and `$era` never enter playable JSON or
 reference contexts.
 
 Component IDs remain stable for saved games and strategy policies. Numeric

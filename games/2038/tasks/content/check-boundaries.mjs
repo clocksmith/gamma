@@ -19,6 +19,9 @@ function inspect(value, path, authored) {
       if (!authored || !["$scenario", "$era"].includes(key)) {
         throw new Error(`Unexpected editorial metadata: ${path}/${key}`);
       }
+      if (key === "$scenario" && (!entry?.ref || Object.keys(entry).some(field => !["ref", "eraRelation"].includes(field)))) {
+        throw new Error(`Scenario definitions belong in world.md: ${path}/${key}`);
+      }
       continue;
     }
     if (forbidden.has(key)) throw new Error(`Authoring-only field outside editorial metadata: ${path}/${key}`);

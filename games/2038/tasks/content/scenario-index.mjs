@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { documentSection } from "./authored.mjs";
 import { readWorldDocument } from "./world-parser.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
@@ -46,7 +45,7 @@ export async function scenarioSurfaces() {
   return surfaces;
 }
 
-export function assembleScenarioIndex({ surfaces, backlog, deploymentProfiles }) {
+export function assembleScenarioIndex({ surfaces, definitions, deploymentProfiles }) {
   const scenarios = new Map();
   const eras = [];
   const addScenario = notes => {
@@ -55,13 +54,12 @@ export function assembleScenarioIndex({ surfaces, backlog, deploymentProfiles })
     const { eraRelation, ...definition } = notes;
     scenarios.set(notes.id, { ...definition, surfaceBindings: [] });
   };
-  for (const scenario of backlog) addScenario(scenario);
+  for (const scenario of definitions) addScenario(scenario);
   for (const { surfaceId, record } of surfaces) {
     if (record.$era) eras.push({ ...record.$era, referenceSurface: surfaceId });
     const notes = record.$scenario;
     if (!notes || typeof notes !== "object") throw new Error(`Missing scenario notes: ${surfaceId}`);
-    if (!notes.ref) addScenario(notes);
-    else if (Object.keys(notes).some(key => !["ref", "eraRelation"].includes(key))) {
+    if (!notes.ref || Object.keys(notes).some(key => !["ref", "eraRelation"].includes(key))) {
       throw new Error(`Scenario reference must not redefine its scenario: ${surfaceId}`);
     }
   }
@@ -86,8 +84,8 @@ export function assembleScenarioIndex({ surfaces, backlog, deploymentProfiles })
 export async function buildScenarioIndex() {
   const graph = await readJson("content/graph.json");
   if (graph.world !== "world.md") throw new Error("The world source must be world.md.");
-  const { backlog } = await readWorldDocument(graph.world);
+  const { scenarios: definitions } = await readWorldDocument(graph.world);
   return assembleScenarioIndex({
-    surfaces: await scenarioSurfaces(), backlog, deploymentProfiles: graph.deploymentProfiles
+    surfaces: await scenarioSurfaces(), definitions, deploymentProfiles: graph.deploymentProfiles
   });
 }
