@@ -1,0 +1,248 @@
+{
+  "arms": [
+    {
+      "backend": "deflate",
+      "id": "P",
+      "selection": "plain",
+      "storage": "new"
+    },
+    {
+      "backend": "deflate",
+      "id": "B",
+      "selection": "old",
+      "storage": "old"
+    },
+    {
+      "backend": "event",
+      "context_enabled": false,
+      "id": "R",
+      "selection": "raw"
+    },
+    {
+      "backend": "event",
+      "context_enabled": false,
+      "id": "G",
+      "selection": "old"
+    },
+    {
+      "backend": "event",
+      "context_enabled": true,
+      "id": "X",
+      "selection": "old"
+    }
+  ],
+  "candidate_id": "dualstream_event250k_q0_v1",
+  "expected_frames": [
+    {
+      "model_sha256": "d4161065424d3c6b16173580342ecf825b715dd5e94b0c192969f447d273475d",
+      "raw_bytes": 65536,
+      "raw_sha256": "05fc5f44993ef0557959db76bf47e45badb2dd9c69d93ce08911935b5e52bf40",
+      "repeated_argument_references": 0
+    },
+    {
+      "model_sha256": "fe39e7aae54efab678ea967cc649fe5b6b7e947dd9d11f996835e1c479b32711",
+      "raw_bytes": 65536,
+      "raw_sha256": "4d92d9d221fa161b668aa141e7d4161d19811564c7cb798b645231128b097727",
+      "repeated_argument_references": 0
+    },
+    {
+      "model_sha256": "a6981e7ae1e15b89637600f64b1f67aed41e8e7d82e86b1de24e6a02e16471f1",
+      "raw_bytes": 65536,
+      "raw_sha256": "45e441d79f8316060670db5b860956026d01dc470fee1d9ba7eddc2d148a7216",
+      "repeated_argument_references": 12
+    },
+    {
+      "model_sha256": "a8baca3a2621a5b423a8de51471627a473071a531c7b09865864eaaaf292ef6b",
+      "raw_bytes": 53392,
+      "raw_sha256": "3c2f001c36d0c5717a2c807ac1ca674ea7b7f51b25339d0b774e30c5797e1305",
+      "repeated_argument_references": 0
+    }
+  ],
+  "frame_size": 65536,
+  "kernel_basis": "operations/evidence/20260907_dualstream_event_unit.json: bounded synthetic raw8192 and fixed-grammar4928 encode/decode/repeat, kernel/state/malformed tests, full15phase synthetic runner. Limits are enforced stops, not completion predictions.",
+  "model_spec": {
+    "arithmetic_bits": 32,
+    "backoff_probability": "floor((specific_one*65536+8*base_q16)/(specific_total+8)); clamp1..65535",
+    "backoff_strength": 8,
+    "base_cells": 4096,
+    "base_initial_counts": [
+      1,
+      1
+    ],
+    "base_key": [
+      "kind",
+      "alphabet",
+      "binary_tree_prefix"
+    ],
+    "base_probability": "floor(base_one*65536/base_total); clamp1..65535",
+    "checksum": "SHA256 symmetric complete state digest appended after canonical arithmetic body",
+    "common_trace": "event schedule, contexts and categories, every count replacement/update, probabilities, decoded bits, common arithmetic state and emitted output",
+    "cost_attribution": "whole arithmetic bytes charged to event category when emitted; final partial byte, four zero lookahead bytes and32-byte state digest charged to framing",
+    "decoder_lookahead": "decoder-only code register excluded from symmetric digest; common interval checked against encoder shadow after every bit",
+    "format": "gamma-dualstream-event-channel-v1",
+    "hash": "BLAKE2b64, little-endian words, explicit domains; zero tag maps to1",
+    "max_alphabet": 1048576,
+    "max_binary_events": 20000000,
+    "max_categories": 16,
+    "max_context_items": 16,
+    "max_events": 1000000,
+    "max_output_bytes": 1000000,
+    "max_payload_bytes": 8000000,
+    "probability_denominator": 65536,
+    "probability_maximum": 65535,
+    "probability_minimum": 1,
+    "replacement": "direct mapped; new64-bit tag resets counts to the table's initial counts",
+    "specific_cells": 65536,
+    "specific_initial_counts": [
+      0,
+      0
+    ],
+    "specific_key": [
+      "base_key",
+      "two_previous_kind_value_hashes",
+      "last_four_output_bytes",
+      "output_history_length",
+      "X_only_context"
+    ],
+    "tree": "balanced halves of [0,alphabet); floor midpoint; zero chooses lower half",
+    "update": "after each decoded bit, increment both matching counts; at total>=32768 ceil-half each count"
+  },
+  "phase_address_bytes": 536870912,
+  "phase_cpu_seconds": 120,
+  "phase_wall_seconds": 180,
+  "population": {
+    "bytes": 250000,
+    "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+    "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+  },
+  "resources": {
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 1073741824,
+    "scratch_bytes": 67108864,
+    "swap_bytes": 0,
+    "wall_seconds": 1200
+  },
+  "runtime_files": [
+    {
+      "bytes": 7481192,
+      "path": "/usr/bin/python3.14",
+      "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+    },
+    {
+      "bytes": 776672,
+      "path": "/usr/lib/python3/dist-packages/rpds/rpds.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "f1da8f85c5da2e29b73b09cee9b4c900d7dda3d43b95d8b82e79097346050fa9"
+    },
+    {
+      "bytes": 32192,
+      "path": "/usr/lib/python3.14/lib-dynload/_bz2.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "a8efcaf8ba8c19a17920f72ee22a1cf0189c3e16ec47ca4772d2ce01c8b4de99"
+    },
+    {
+      "bytes": 64448,
+      "path": "/usr/lib/python3.14/lib-dynload/_hashlib.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "ece140fbf8c03040cc64a8218277d96a9d1e3b7a9f0eae84c417c08a7b5a6714"
+    },
+    {
+      "bytes": 45216,
+      "path": "/usr/lib/python3.14/lib-dynload/_lzma.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "6c2a89b80b3d0d699bb72afa1d79496b76c3dd35232716da83a50b0f98e8bd45"
+    },
+    {
+      "bytes": 236736,
+      "path": "/usr/lib/python3.14/lib-dynload/_ssl.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "fac429734db604656c50109ae2e57fc3e7217c99bf43535c53e243a95aa79ac3"
+    },
+    {
+      "bytes": 14800,
+      "path": "/usr/lib/python3.14/lib-dynload/_uuid.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "03858f1d2ffa55a01e8ea52271966b668465b349de56344bcb8ef89635a8097c"
+    },
+    {
+      "bytes": 63136,
+      "path": "/usr/lib/python3.14/lib-dynload/_zstd.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "42c30cebd7f926e67ce55d8b92c33bcfa505fe2a013b97d5990c79d7a0bee893"
+    },
+    {
+      "bytes": 23664,
+      "path": "/usr/lib/python3.14/lib-dynload/resource.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "e87b1e5980555d38ed92b3c2ff897dac86fa03a43fc624e1cd307f50a3f92d55"
+    },
+    {
+      "bytes": 254864,
+      "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c5e80a563850d6ab5c2f2482e4202d9c1b71fbf44854b8c399e63527202c64e1"
+    },
+    {
+      "bytes": 83120,
+      "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+      "sha256": "7138aeb748f73c150b1d34d67de69139a441910cd7b269076ba3c8b986dea9a7"
+    },
+    {
+      "bytes": 2186512,
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "a3947513a02831ec692ebf13053c07614882ab54a2101fb91a1b15724062ed0c"
+    },
+    {
+      "bytes": 6386528,
+      "path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "sha256": "7cf7da0a671c553b7140d40ed0ee8f07d12d0fceedff87c930d1918d205b106f"
+    },
+    {
+      "bytes": 182608,
+      "path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.11.2",
+      "sha256": "093e973baf0b0c786d32fd89d1f6904b794af28e489d20198b9fe0729fd39765"
+    },
+    {
+      "bytes": 187120,
+      "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "9d339ecb409578d6a5d587e6c537a8f9589b8a13fefba30d167433a4b5758bee"
+    },
+    {
+      "bytes": 215448,
+      "path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.8.3",
+      "sha256": "64550dc7a4dc9159d32c00d9e78ce86e0951d02b7b24827df97f090dae101a19"
+    },
+    {
+      "bytes": 1198376,
+      "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "beea4eeacfcfa2cd96011b959a826c97cf4a774017e214f6a34d7eea3d49cd88"
+    },
+    {
+      "bytes": 1106088,
+      "path": "/usr/lib/x86_64-linux-gnu/libssl.so.3",
+      "sha256": "a78c54c7203f51eb49c3d9acc5e935e5402a147f75abf3152b628a9753cfea70"
+    },
+    {
+      "bytes": 35112,
+      "path": "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0",
+      "sha256": "aef01d22b409ace7db97357b8b47332cd3e10c262ffa3c4014f3eeb44b968620"
+    },
+    {
+      "bytes": 121272,
+      "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3.1",
+      "sha256": "47b61967895b30e8c0c6818dd633ffeb87711cf637c688f981896f0dd84ce23b"
+    },
+    {
+      "bytes": 796824,
+      "path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.7",
+      "sha256": "060eeb79531d435306665fd78329d8a9dd579f95876c5960bb67937825362a80"
+    }
+  ],
+  "schema": "gamma.enwiki9.event-gate-plan.v1",
+  "selected_archives": {
+    "old": {
+      "bytes": 102492,
+      "path": "results/dualstream_grammar_argtokens250k_q0_v2/B.d2g",
+      "sha256": "01128be5c84b4ea4c9625dfa638d82b3c630d52dcbe5608d24328684ff3da626"
+    },
+    "plain": {
+      "bytes": 89041,
+      "path": "results/dualstream_grammar_argtokens250k_q0_v2/P.d2g",
+      "sha256": "1c67e760d01c45398bbbd74882ee0026baf0e6995f6a7c782a305dad572c729a"
+    }
+  },
+  "stage": "development"
+}

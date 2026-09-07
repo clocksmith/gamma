@@ -1,0 +1,54 @@
+{
+  "schema": "gamma.enwiki9.independent-synthetic-review.v1",
+  "reviewer": "refresh_cleanup_review",
+  "result": "passed",
+  "tests_passed": 4,
+  "source_sha256": {
+    "tools/dualstream_event_codec_v1.py": "632ed865d46d5d77e1c4262c4cc1b0726b6fe67dfc0f68eb0037694b0344eb29",
+    "tools/dualstream_event_coder_v1.py": "e6ea00ec70f2991a956d78a0e06f9f87d821051b9268ab89656cbd25deed1166",
+    "tests/test_dualstream_event_interpreter_review_v1.py": "1cf64f61a72284bb69f785f1be75885139f8b0221f35a07c7b703a787e28c38e"
+  },
+  "source_unchanged_during_tests": true,
+  "findings": [
+    "A content phrase spanning four lexical leaves survives intervening literal and template roots; the reconstructed graph remains identical, including its original content reference and argument order.",
+    "Nonmonotonic first-use argument order 2,0,1, empty argument values, and four repeated references reconstruct exactly in both modes.",
+    "G and X execute identical 86-event schedules, contexts and values. Only the kernel prediction-context flag differs; both decoders agree with their encoders and deterministic re-encodings.",
+    "Changing only the future argument bytes preserves full channel state before the first differing truth. Definitions are transmitted before use; this is bounded-lookahead fixed-graph encoding, not grammar discovery or zero-buffer streaming.",
+    "The new root-boundary chain distinguishes retained definitions before output and a changed pending cursor without any emitted-byte difference. It binds the canonical pending derivation through content and phrase prefix digests plus cursor, rather than hashing arbitrary mutable-cache memory.",
+    "An exponential empty-phrase graph is rejected at the declared expansion limit: 131072 retained leaves, at most 262144 references in the next temporary expansion, and 17 retained phrases.",
+    "Actual emitted arithmetic bytes sum to each complete archive. Literal spelling definitions and grammar program definitions are explicitly distinguished in cost_meanings. Deferred termination is charged to framing."
+  ],
+  "fixture": {
+    "raw_bytes": 27,
+    "events_per_mode": 86,
+    "repeated_argument_references": 4,
+    "root_boundaries": 8,
+    "G_archive_bytes": 167,
+    "X_archive_bytes": 168,
+    "G_costs": {"definitions": 12, "program": 10, "content": 1, "arguments": 9, "framing": 135},
+    "X_costs": {"definitions": 12, "program": 12, "content": 0, "arguments": 8, "framing": 136},
+    "interpretation": "Synthetic correctness only. X is one byte larger on this fixture; this is not a corpus result or compression claim."
+  },
+  "execution": {
+    "path": "attempt_01/execution.json",
+    "cpu": 3,
+    "address_space_limit_bytes": 536870912,
+    "cpu_limit_seconds": 120,
+    "wall_limit_seconds": 180,
+    "file_limit_bytes": 33554432,
+    "scratch_budget_bytes": 33554432,
+    "scratch_measurement": "Final retained-file inventory; no continuous cgroup scratch guard claimed.",
+    "child_cpu_seconds": 0.10950499999999999,
+    "elapsed_seconds": 0.11610071803443134,
+    "child_peak_rss_kib": 32684,
+    "timing_authority": "shared-host synthetic diagnostic"
+  },
+  "limitations": [
+    "Independent library instances in one bounded test process; separate CLI process coverage belongs to the author's runner evidence.",
+    "No corpus, retained corpus archive, HORIZON or other-lane payload was read; no corpus execution or lifecycle action occurred.",
+    "Complete submission package, resource qualification, full-corpus compression and confirmation transfer remain unproved."
+  ],
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "remaining_blockers_in_reviewed_scope": []
+}
